@@ -1,11 +1,11 @@
-name: inductiva/inductiva_env
+name: inductiva
 
 channels:
   - conda-forge
   - defaults
 
 dependencies:
-  - python==3.9
+  - python==3.11
   - yapf
   - pylint
   - pytest
@@ -13,3 +13,4 @@ dependencies:
   - pip:
     - -r requirements.txt
     - -r docs/requirements.txt
+    - -e .
