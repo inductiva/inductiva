@@ -1,6 +1,6 @@
-[![Python package](https://github.com/{{GITHUB_REPOSITORY}}/actions/workflows/python-package.yml/badge.svg)](https://github.com/{{GITHUB_REPOSITORY}}/actions/workflows/python-package.yml)
+[![Python package](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml/badge.svg)](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml)
 
-[![Documentation Status](https://readthedocs.com/projects/inductiva-research-labs-{{GITHUB_REPOSITORY}}/badge/?version=latest&token=a7a7344c5bc9e511ca715449f94612e4bb7c2dff4c90931778b9c85dbbf5480c)](https://inductiva-research-labs-{{GITHUB_REPOSITORY}}.readthedocs-hosted.com/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.com/projects/inductiva-research-labs-inductiva/inductiva/badge/?version=latest&token=a7a7344c5bc9e511ca715449f94612e4bb7c2dff4c90931778b9c85dbbf5480c)](https://inductiva-research-labs-inductiva/inductiva.readthedocs-hosted.com/en/latest/?badge=latest)
 
 # Start a project
 
@@ -153,7 +153,7 @@ name: startaproject_env
 ```
 
 Note: If you are starting a new project from this template repo, it might work 
-automatically for you, because we use the placeholder `name: {{GITHUB_REPOSITORY}}_env`
+automatically for you, because we use the placeholder `name: inductiva/inductiva_env`
 that gets auto-filled with the repo name.
 
 Now, if you have conda installed, just run:
