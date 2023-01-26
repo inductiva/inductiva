@@ -1,0 +1,15 @@
+name: {{GITHUB_REPOSITORY}}_env
+
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python==3.9
+  - yapf
+  - pylint
+  - pytest
+  - pip
+  - pip:
+    - -r requirements.txt
+    - -r docs/requirements.txt

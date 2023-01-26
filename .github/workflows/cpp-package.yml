@@ -1,0 +1,32 @@
+# Workflow to check C++ code.
+
+name: C++ package
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install cpplint
+    - name: Lint with cpplint
+      if: ${{ always() }}
+      run: |
+        if [[ -n "$(git ls-files -- '*.cpp' '*.cc' '*.h')" ]]; then cpplint --filter=-legal/copyright $(git ls-files -- '*.cpp' '*.cc' '*.h'); fi
