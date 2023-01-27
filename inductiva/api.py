@@ -17,7 +17,7 @@ configuration = Configuration()
 def init(address):
     global configuration
     configuration = Configuration(host=address)
-    # Note: `init` should probably perform additional validations,
+    # TODO: `init` should probably perform additional validations,
     # such as some kind of "ping" to check if the address is valid.
 
 
@@ -50,7 +50,7 @@ def invoke_api(params, function_ptr):
                 body=task_request,)
             logging.debug(api_response)
 
-        # Currently, the API uses error code 400 if the requested
+        # TODO: Currently, the API uses error code 400 if the requested
         # method doesn't exist,
         # and error 403 if the client has no permission/credits
         # to execute the requested task
@@ -61,7 +61,7 @@ def invoke_api(params, function_ptr):
                 "Exception when calling TasksApi->submit_task: %s", e)
             raise e
 
-        # Response should have information if any large data
+        # TODO: Response should have information if any large data
         # should be uploaded as file.
         # That's WIP; right it is assumed that the request contains
         # everything needed to perform the task
@@ -92,13 +92,14 @@ def invoke_api(params, function_ptr):
         except ApiException as e:
             raise e
 
-    # So far, experimented only with the dummy.sum endpoint,
+    # TODO: So far, experimented only with the dummy.sum endpoint,
     # which specifies the result in a `c` field.
     # All endpoints that return a single result
     # should use the same field (e.g. `result`).
     # Need to figure out how to handle endpoints that generate multiple outputs.
     result = api_response.body["c"]
 
+    # TODO: handle correct unpacking of files
     return_type = type_annotations["return"]
     if return_type == np.ndarray:
         return_value = np.frombuffer(result)
