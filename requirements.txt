@@ -1,3 +1,3 @@
 absl-py
 numpy
-git+https://github.com/inductiva/inductiva-web-api-client.git
+git+https://${BOT_REPO_ACCESS}@github.com/inductiva/inductiva-web-api-client.git

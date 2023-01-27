@@ -1,3 +1,6 @@
+"""
+Sample usage of the inductiva package.
+"""
 import inductiva
 from absl import logging
 
