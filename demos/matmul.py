@@ -2,6 +2,8 @@
 Sample usage of the inductiva package.
 """
 import inductiva
+import numpy as np
+
 from absl import logging
 
 if __name__ == "__main__":
@@ -9,6 +11,10 @@ if __name__ == "__main__":
 
     inductiva.init(address="http://192.168.1.50:8000")
 
-    result = inductiva.dummy.sum(a=1, b=1)
+    m = np.random.randint(10, size=(10, 10))
+    n = np.identity(10)
 
-    logging.info("Result = %s", result)
+    result = inductiva.math.matmul(m=m, n=n)
+
+    logging.info("Success: %s", np.allclose(m, result))
+

@@ -1,17 +1,17 @@
 """
 Functions that call `dummy` endpoints.
 """
-from .api import invoke_api
+import numpy as np
 
+from .api import invoke_api
 # pylint: disable=unused-argument, disable=redefined-builtin
 
 
 def sum(a: float, b: float) -> float:
     return invoke_api(locals(), sum)
 
+def matmul(m: np.ndarray, n: np.ndarray) -> np.ndarray:
+    return invoke_api(locals(), matmul)
 
-# TODO: this one creates a file. How to specify it as output?
-#def gen_file(size: int, sleep_s: int) -> float:
-#   return invoke_api(locals(), gen_file)
 
 # pylint: enable=unused-argument, enable=redefined-builtin
