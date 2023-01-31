@@ -2,7 +2,6 @@
 Functions that call `dummy` endpoints.
 """
 import numpy as np
-
 from .api import invoke_api
 # pylint: disable=unused-argument, disable=redefined-builtin
 
@@ -10,7 +9,8 @@ from .api import invoke_api
 def sum(a: float, b: float) -> float:
     return invoke_api(locals(), sum)
 
-def matmul(m: np.ndarray, n: np.ndarray) -> np.ndarray:
+
+def matmul(m: np.ndarray, n: np.ndarray) -> tuple[np.ndarray, str]:
     return invoke_api(locals(), matmul)
 
 
