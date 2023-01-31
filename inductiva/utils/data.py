@@ -1,3 +1,7 @@
+"""
+Util functions to handle input and output data
+when performing requests to the API.
+"""
 import os
 import json
 import zipfile
@@ -9,7 +13,7 @@ from absl import logging
 
 
 def get_validate_request_params(original_params: dict, type_annotations):
-    params = dict()
+    params = {}
 
     for variable in original_params:
         param_type = type_annotations[variable]
@@ -24,10 +28,10 @@ def get_validate_request_params(original_params: dict, type_annotations):
     return params
 
 
-def pack_value(name, value, type, dir):
-    if type == np.ndarray:
+def pack_value(name, value, var_type, dst_dir):
+    if var_type == np.ndarray:
         param_filename = f"{name}.npy"
-        param_fullpath = os.path.join(dir, param_filename)
+        param_fullpath = os.path.join(dst_dir, param_filename)
         np.save(param_fullpath, value)
         logging.debug("Stored %s to %s", name, param_fullpath)
         return param_filename
@@ -37,14 +41,14 @@ def pack_value(name, value, type, dir):
 
 def pack_input(params, type_annotations, zip_name: str) -> str:
     with tempfile.TemporaryDirectory() as tmpdir_path:
-        input_params = dict()
+        input_params = {}
 
         for variable in params:
             input_params[variable] = pack_value(
                 name=variable,
                 value=params[variable],
-                type=type_annotations[variable],
-                dir=tmpdir_path,
+                var_type=type_annotations[variable],
+                dst_dir=tmpdir_path,
             )
 
         input_json_path = os.path.join(tmpdir_path, "input.json")
@@ -59,8 +63,8 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
     return zip_path
 
 
-def unpack_value(value: str, type, output_path: str):
-    if type == np.ndarray:
+def unpack_value(value: str, var_type, output_path: str):
+    if var_type == np.ndarray:
         return np.load(os.path.join(output_path, value))
 
     return type(value)
@@ -72,7 +76,8 @@ def unpack_output(zip_path: str, output_path: str, return_type) -> any:
 
     logging.info("Extracted output to %s", output_path)
 
-    with open(os.path.join(output_path, 'output.json'), "r") as fp:
+    output_json_path = os.path.join(output_path, "output.json")
+    with open(output_json_path, "r", encoding="UTF-8") as fp:
         result_list = json.load(fp)
 
     if return_type.__name__ == "tuple":
