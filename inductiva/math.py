@@ -11,7 +11,7 @@ def sum(a: float, b: float) -> float:
     return invoke_api(locals(), sum)
 
 
-def matmul(m: np.ndarray, n: np.ndarray) -> tuple[np.ndarray, str]:
+def matmul(m: np.ndarray, n: np.ndarray) -> np.ndarray:
     return invoke_api(locals(), matmul)
 
 
