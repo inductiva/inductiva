@@ -15,4 +15,7 @@ if __name__ == "__main__":
     n = np.identity(10)
 
     result = inductiva.math.matmul(m=m, n=n)
-    logging.info("Success: %s", np.allclose(m, result))
+
+
+    logging.debug("Operation successful" if np.allclose(m, result) else \
+        "Operation unsuccessful")

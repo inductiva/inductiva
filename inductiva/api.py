@@ -35,6 +35,93 @@ def is_initialized():
     return configuration is not None
 
 
+def submit_request(api_instance, original_params, function_ptr):
+    """
+    Submits a task request to the API.
+
+    Args:
+        api_instance: Instance of TasksApi used to send necessary requests.
+        original_params: Params of the request passed by the user.
+        function_ptr: Pointer to the function that defines the requested method.
+
+    Return: Body of the HTTP response. Contains two fields, "id" and "status".
+    """
+    request_params = get_validate_request_params(
+        original_params=original_params,
+        type_annotations=get_type_annotations(function_ptr),
+    )
+
+    task_request = TaskRequest(
+        method=get_method_name(function_ptr),
+        params=request_params,
+    )
+
+    try:
+        api_response = api_instance.submit_task_task_submit_post(
+            body=task_request,)
+    except ApiException as e:
+        logging.exception("Exception when calling TasksApi->submit_task: %s", e)
+        raise e
+
+    logging.debug("Request status: %s", api_response.body["status"])
+
+    return api_response.body
+
+
+def upload_input(api_instance, task_id, original_params, type_annotations):
+    """
+    Uploads the inputs of a given task to the API.
+
+    Args:
+        api_instance: Instance of TasksApi used to send necessary requests.
+        task_id: ID of the task.
+        original_params: Params of the request passed by the user.
+        type_annotations: Annotations of the params' types.
+    """
+    input_zip_path = pack_input(
+        params=original_params,
+        type_annotations=type_annotations,
+        zip_name=task_id,
+    )
+
+    logging.debug("Uploading input zip ...")
+    try:
+        with open(input_zip_path, "rb") as zip_fp:
+            _ = api_instance.upload_task_input_task_task_id_input_post(
+                path_params=dict(task_id=task_id),
+                body=dict(file=zip_fp),
+            )
+    except ApiException as e:
+        logging.exception(
+            "Exception when calling TasksApi->upload_task_inputs: %s", e)
+        raise e
+
+    os.remove(input_zip_path)
+
+
+def download_output(api_instance, task_id):
+    """
+    Downloads the output of a given task from the API.
+
+    Args:
+        api_instance: Instance of TasksApi used to send necessary requests.
+        task_id: ID of the task.
+
+    Returns: Path to the downloaded ZIP file.
+    """
+    try:
+        api_response = api_instance.get_task_output_task_task_id_output_get(
+            path_params=dict(task_id=task_id),
+            stream=True,
+        )
+    except ApiException as e:
+        raise e
+
+    logging.debug("Downloaded output to %s", api_response.body.name)
+
+    return api_response.body.name
+
+
 def block_until_finish(api_instance, task_id: str, sleep_secs=0.5):
     """
     Block execution of the script until a task executing remotely
@@ -45,15 +132,19 @@ def block_until_finish(api_instance, task_id: str, sleep_secs=0.5):
         task_id: ID of the task to wait for.
         sleep_secs: Time in secs between polling requests. Defaults to 0.5.
 
-    Return: Last API response to the "GET task/status" request
+    Return: Body of the last API response to the "GET task/status" request.
+        Contains two files, "id" and "status".
     """
+
+    logging.debug("Blocking until task is finished ...")
     while True:
         try:
             api_response = \
                 api_instance.get_task_status_task_task_id_status_get(
                     path_params={"task_id": task_id},
                     )
-            logging.debug(api_response)
+
+            logging.debug("Request status: %s", api_response.body["status"])
         except ApiException as e:
             raise e
 
@@ -63,86 +154,74 @@ def block_until_finish(api_instance, task_id: str, sleep_secs=0.5):
 
         time.sleep(sleep_secs)
 
-    return api_response
+    return api_response.body
 
 
 def invoke_api(params, function_ptr):
+    """
+    Perform a task remotely via Inductiva's Web API.
+    Currently, the implementation handles the whole flow of the task execution,
+    and blocks until the task finishes execution.
+    The flow is summarized as follows:
+        1. Transform request params into the params used to
+        validate permission to execute the request.
+        2. Submit task via the "POST task/submit" endpoint.
+            Note: HTTP status code 400 informs the requested method is invalid,
+                and HTTP status code 403 informs that the user is not authorized
+                to post such request.
+        3. If the status returned by the previous HTTP request is
+            "pending-input", ZIP inputs and send them via
+            "POST task/{task_id}/input".
+        4. Block execution, polling using the "GET task/{task_id}/status"
+            endpoint until the returned status is "success".
+        5. Download output ZIP with "GET task/{task_id}/output".
+        6. Unpack output ZIP and return correct value based on the
+            type annotations of `function_ptr`.
+
+    Args:
+        params: Input params passed by the user.
+        function_ptr: Pointer to the function that defines the method
+            to be requested to the API.
+
+    Returns: Output of the task.
+    """
     if not is_initialized():
-        raise Exception("Inductiva not initialized.")
+        raise Exception("Connection to the Inductiva Web API not initialized.")
 
     type_annotations = get_type_annotations(function_ptr)
-
-    request_params = get_validate_request_params(
-        original_params=params,
-        type_annotations=type_annotations,
-    )
 
     with ApiClient(configuration.api_config) as client:
         api_instance = TasksApi(client)
 
-        task_request = TaskRequest(
-            method=get_method_name(function_ptr),
-            params=request_params,
+        response = submit_request(
+            api_instance=api_instance,
+            original_params=params,
+            function_ptr=function_ptr,
         )
 
-        # Submit task
-        try:
-            api_response = api_instance.submit_task_task_submit_post(
-                body=task_request,)
-            logging.debug(api_response)
-        except ApiException as e:
-            logging.exception(
-                "Exception when calling TasksApi->submit_task: %s", e)
-            raise e
+        task_id = response["id"]
+        task_status = response["status"]
 
-        task_id = api_response.body["id"]
-
-        # Upload input as zip if required
-        if api_response.body["status"] == "pending-input":
-            input_zip_path = pack_input(
-                params=params,
+        if task_status == "pending-input":
+            upload_input(
+                api_instance=api_instance,
+                task_id=task_id,
+                original_params=params,
                 type_annotations=type_annotations,
-                zip_name=task_id,
             )
-
-            logging.debug("Uploading input zip ...")
-            try:
-                with open(input_zip_path, "rb") as zip_fp:
-                    api_response = \
-                        api_instance.upload_task_input_task_task_id_input_post(
-                            path_params=dict(task_id=task_id),
-                            body=dict(file=zip_fp),
-                        )
-                    logging.info(api_response)
-            except ApiException as e:
-                logging.exception(
-                    "Exception when calling TasksApi->upload_task_inputs: %s",
-                    e)
-                raise e
-
-            os.remove(input_zip_path)
 
         response = block_until_finish(
             api_instance=api_instance,
             task_id=task_id,
         )
 
-        logging.debug("Request status: %s", response.body["status"])
-
-        # Download output
-        try:
-            api_response = api_instance.get_task_output_task_task_id_output_get(
-                path_params=dict(task_id=task_id),
-                stream=True,
-            )
-            logging.debug(api_response)
-        except ApiException as e:
-            raise e
-
-    logging.debug("Downloaded output to %s", api_response.body.name)
+        output_zip_path = download_output(
+            api_instance=api_instance,
+            task_id=task_id,
+        )
 
     return unpack_output(
-        zip_path=api_response.body.name,
+        zip_path=output_zip_path,
         output_dir=os.path.join(configuration.output_dir, task_id),
         return_type=type_annotations["return"],
     )

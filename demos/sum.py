@@ -12,4 +12,4 @@ if __name__ == "__main__":
 
     result = inductiva.math.sum(a=1, b=1)
 
-    logging.info("Result = %s", result)
+    logging.debug("Result = %s", result)
