@@ -17,15 +17,36 @@ configuration = None
 
 
 def init(address, output_dir):
+    """
+    Initialize the Web API's connection configuration.
+
+    Args:
+        address: Address (including port) where to connect to the API.
+        output_dir: Path in which to store outputs of the executed tasks.
+            Outputs of a given task will be stored in a child directory of
+            `output_dir` with the name equal to the ID of the task.
+    """
     global configuration
     configuration = Configuration(address=address, output_dir=output_dir)
 
 
 def is_initialized():
+    """Check if the API configuration is initialized."""
     return configuration is not None
 
 
-def block_until_finish(api_instance, task_id, sleep_secs=0.5):
+def block_until_finish(api_instance, task_id: str, sleep_secs=0.5):
+    """
+    Block execution of the script until a task executing remotely
+    finishes execution.
+
+    Args:
+        api_instance: Instance of TasksApi used to send necessary requests.
+        task_id: ID of the task to wait for.
+        sleep_secs: Time in secs between polling requests. Defaults to 0.5.
+
+    Return: Last API response to the "GET task/status" request
+    """
     while True:
         try:
             api_response = \
@@ -122,6 +143,6 @@ def invoke_api(params, function_ptr):
 
     return unpack_output(
         zip_path=api_response.body.name,
-        output_path=os.path.join(configuration.output_dir, task_id),
+        output_dir=os.path.join(configuration.output_dir, task_id),
         return_type=type_annotations["return"],
     )

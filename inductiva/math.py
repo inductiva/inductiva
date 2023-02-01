@@ -1,5 +1,6 @@
 """
-Functions that call `dummy` endpoints.
+Functions that use the API to perform basic
+`math` operations. Used for proof-of-concept and testing.
 """
 import numpy as np
 from .api import invoke_api
