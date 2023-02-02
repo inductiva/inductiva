@@ -1,6 +1,7 @@
-"""
-Functions that use the API to perform basic
-`math` operations. Used for proof-of-concept and testing.
+"""Functions that use the API to perform basic math operations.
+
+These functions are meant for proof-of-concept and testing.
+For example usage, refer to the demos directory of this repository.
 """
 import numpy as np
 from .api import invoke_api

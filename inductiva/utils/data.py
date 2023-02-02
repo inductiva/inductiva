@@ -1,6 +1,9 @@
-"""
-Util functions to handle input and output data
-when performing requests to the API.
+"""Util functions to handle input and output data for API requests.
+
+This module contains several functions related to packing and unpacking
+of inputs and ouputs for Web API requests.
+Additionally, it contains some global constant variables defining
+configurations related to paths where certain files are expected to be.
 """
 import os
 import json
@@ -11,10 +14,14 @@ import numpy as np
 
 from absl import logging
 
+INPUPT_FILENAME = "input.json"
+OUTPUT_FILENAME = "output.json"
+
 
 def get_validate_request_params(original_params: dict,
                                 type_annotations: dict) -> dict:
-    """
+    """Convert original request params to the params used for request validation.
+
     Convert a dictionary with the request params into the params that
     are used to validate the request.
     For instance, a numpy array is replaced by its shape,
@@ -27,7 +34,8 @@ def get_validate_request_params(original_params: dict,
             the request by the user.
         type_annotations: Dict with the type annotation of each param.
 
-    Return: dictionary with the params for request validation.
+    Return:
+        Returns a dictionary with the params for request validation.
     """
     params = {}
 
@@ -45,9 +53,7 @@ def get_validate_request_params(original_params: dict,
 
 
 def pack_param(name: str, value, param_type, dst_dir):
-    """
-    Pack a single parameter to the format used when passing the inputs
-    to the web API.
+    """Pack a single parameter to the format expected by the Web API.
 
     Args:
         name: Name of the parameter.
@@ -56,7 +62,8 @@ def pack_param(name: str, value, param_type, dst_dir):
         dst_dir: Directory in which to store files that may be required for
             some param types.
 
-    Return: Value that is passed to the API in a JSON file. For params
+    Return:
+        Returns a value that is passed to the API in a JSON file. For params
         that are sent as a file, the value is the path of the file relative
         to `dst_dir`.
     """
@@ -71,7 +78,8 @@ def pack_param(name: str, value, param_type, dst_dir):
 
 
 def pack_input(params, type_annotations, zip_name: str) -> str:
-    """
+    """Pack all inputs into a zip file.
+
     Pack all input params and compress all files into a zip file.
     All required files are created in a temporary directory which is then
     compressed with "zip" format. The path of the resulting zip file is
@@ -83,7 +91,8 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
         type_annotations: Dict with the type annotation of each param.
         zip_name: Name to use for the zip file (excluding the file extension).
 
-    Return: Path to zip file with the compressed input. The zip will be located
+    Return
+        Returns a path to zip file with the compressed input. The zip will be located
         in the temporary directory of the OS (`/tmp` in linux).
     """
     with tempfile.TemporaryDirectory() as tmpdir_path:
@@ -98,7 +107,7 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
             )
 
         # Write input dictionary with packed params to a JSON file
-        input_json_path = os.path.join(tmpdir_path, "input.json")
+        input_json_path = os.path.join(tmpdir_path, INPUPT_FILENAME)
         with open(input_json_path, "w", encoding="UTF-8") as fp:
             json.dump(input_params, fp)
 
@@ -112,7 +121,8 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
 
 
 def unpack_value(value: str, var_type, output_dir: str):
-    """
+    """Unpack a single output value return by the Web API.
+
     Unpack a single output value, returning it as the correct type
     given the type annotation.
 
@@ -122,7 +132,8 @@ def unpack_value(value: str, var_type, output_dir: str):
         var_type: Type annotation of the value to unpack.
         output_dir: Directory where values packed as files are located.
 
-    Return: Unpacked value with the type defined by `var_type`.
+    Return:
+        Returns the unpacked value with the type defined by `var_type`.
     """
     if var_type == np.ndarray:
         return np.load(os.path.join(output_dir, value))
@@ -131,8 +142,7 @@ def unpack_value(value: str, var_type, output_dir: str):
 
 
 def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
-    """
-    Unpack zip with the outputs of a task executed remotely in the API.
+    """Unpack zip with the outputs of a task executed remotely in the API.
 
     Args:
         zip_path: Path to the zip file with the compressed outputs.
@@ -148,7 +158,7 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
 
     logging.debug("Extracted output to %s", output_dir)
 
-    output_json_path = os.path.join(output_dir, "output.json")
+    output_json_path = os.path.join(output_dir, OUTPUT_FILENAME)
     with open(output_json_path, "r", encoding="UTF-8") as fp:
         result_list = json.load(fp)
 

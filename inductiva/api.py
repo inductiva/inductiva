@@ -7,7 +7,7 @@ from absl import logging
 
 from inductiva_web_api_client import ApiClient, ApiException
 from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
-from inductiva_web_api_client.models import TaskRequest
+from inductiva_web_api_client.models import TaskRequest, TaskStatus
 
 from inductiva.utils.data import get_validate_request_params, pack_input, unpack_output
 from inductiva.utils.meta import get_type_annotations, get_method_name
@@ -35,7 +35,7 @@ def is_initialized():
     return configuration is not None
 
 
-def submit_request(api_instance, original_params, function_ptr):
+def submit_request(api_instance: TasksApi, original_params, function_ptr) -> TaskStatus:
     """
     Submits a task request to the API.
 
@@ -58,7 +58,7 @@ def submit_request(api_instance, original_params, function_ptr):
 
     try:
         api_response = api_instance.submit_task_task_submit_post(
-            body=task_request,)
+            body=task_request)
     except ApiException as e:
         logging.exception("Exception when calling TasksApi->submit_task: %s", e)
         raise e
@@ -193,16 +193,15 @@ def invoke_api(params, function_ptr):
     with ApiClient(configuration.api_config) as client:
         api_instance = TasksApi(client)
 
-        response = submit_request(
+        task = submit_request(
             api_instance=api_instance,
             original_params=params,
             function_ptr=function_ptr,
         )
 
-        task_id = response["id"]
-        task_status = response["status"]
+        task_id = task["id"]
 
-        if task_status == "pending-input":
+        if task["status"] == "pending-input":
             upload_input(
                 api_instance=api_instance,
                 task_id=task_id,
@@ -210,7 +209,7 @@ def invoke_api(params, function_ptr):
                 type_annotations=type_annotations,
             )
 
-        response = block_until_finish(
+        _ = block_until_finish(
             api_instance=api_instance,
             task_id=task_id,
         )

@@ -12,9 +12,12 @@ if __name__ == "__main__":
     inductiva.init(address="http://192.168.1.50:8000", output_dir="output")
 
     m = np.random.randint(10, size=(10, 10))
-    n = np.identity(10)
+    n = np.random.randint(10, size=(10, 10))
 
-    result = inductiva.math.matmul(m=m, n=n)
+    local_result = np.matmul(m, n)
+    remote_result = inductiva.math.matmul(m=m, n=n)
 
-    logging.debug("Operation successful" if np.allclose(m, result) else \
+    success = np.allclose(local_result, remote_result)
+
+    logging.debug("Operation successful" if success else \
         "Operation unsuccessful")
