@@ -91,8 +91,8 @@ def upload_input(api_instance, task_id, original_params, type_annotations):
     try:
         with open(input_zip_path, "rb") as zip_fp:
             _ = api_instance.upload_task_input_task_task_id_input_post(
-                path_params=dict(task_id=task_id),
-                body=dict(file=zip_fp),
+                path_params={"task_id":task_id},
+                body={"file": zip_fp},
             )
     except ApiException as e:
         logging.exception(
@@ -114,7 +114,7 @@ def download_output(api_instance, task_id):
     """
     try:
         api_response = api_instance.get_task_output_task_task_id_output_get(
-            path_params=dict(task_id=task_id),
+            path_params={"task_id": task_id},
             stream=True,
         )
     except ApiException as e:
@@ -191,7 +191,7 @@ def invoke_api(params, function_ptr):
         Returns the output of the task.
     """
     if not is_initialized():
-        raise Exception("Connection to the Inductiva Web API not initialized.")
+        raise ConnectionError("Connection to the Inductiva Web API not initialized.")
 
     type_annotations = get_type_annotations(function_ptr)
 
