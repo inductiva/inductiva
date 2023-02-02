@@ -1,5 +1,8 @@
-"""
-Methods that interact with the lower-level inductiva-web-api-client.
+"""Methods that interact with the lower-level inductiva-web-api-client.
+
+The most relevant functions that for usage outside of this file
+are init() and invoke_api(). Check the demos directory and the `math.py`
+file for examples on how they are used.
 """
 import os
 import time
@@ -17,8 +20,7 @@ configuration = None
 
 
 def init(address, output_dir):
-    """
-    Initialize the Web API's connection configuration.
+    """Initialize the Web API's connection configuration.
 
     Args:
         address: Address (including port) where to connect to the API.
@@ -35,16 +37,18 @@ def is_initialized():
     return configuration is not None
 
 
-def submit_request(api_instance: TasksApi, original_params, function_ptr) -> TaskStatus:
-    """
-    Submits a task request to the API.
+def submit_request(api_instance: TasksApi, original_params,
+                   function_ptr) -> TaskStatus:
+    """Submits a task request to the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         original_params: Params of the request passed by the user.
         function_ptr: Pointer to the function that defines the requested method.
 
-    Return: Body of the HTTP response. Contains two fields, "id" and "status".
+    Return:
+        Returns the body of the HTTP response.
+        Contains two fields, "id" and "status".
     """
     request_params = get_validate_request_params(
         original_params=original_params,
@@ -69,8 +73,7 @@ def submit_request(api_instance: TasksApi, original_params, function_ptr) -> Tas
 
 
 def upload_input(api_instance, task_id, original_params, type_annotations):
-    """
-    Uploads the inputs of a given task to the API.
+    """Uploads the inputs of a given task to the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
@@ -100,14 +103,14 @@ def upload_input(api_instance, task_id, original_params, type_annotations):
 
 
 def download_output(api_instance, task_id):
-    """
-    Downloads the output of a given task from the API.
+    """Downloads the output of a given task from the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
 
-    Returns: Path to the downloaded ZIP file.
+    Return:
+        Returns the path to the downloaded ZIP file.
     """
     try:
         api_response = api_instance.get_task_output_task_task_id_output_get(
@@ -122,18 +125,19 @@ def download_output(api_instance, task_id):
     return api_response.body.name
 
 
-def block_until_finish(api_instance, task_id: str, sleep_secs=0.5):
-    """
-    Block execution of the script until a task executing remotely
-    finishes execution.
+def block_until_finish(api_instance,
+                       task_id: str,
+                       sleep_secs=0.5) -> TaskRequest:
+    """Block until a task executing remotely finishes execution.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task to wait for.
         sleep_secs: Time in secs between polling requests. Defaults to 0.5.
 
-    Return: Body of the last API response to the "GET task/status" request.
-        Contains two files, "id" and "status".
+    Return
+        Returns info related to the task, containing two fields,
+        "id" and "status".
     """
 
     logging.debug("Blocking until task is finished ...")
@@ -158,8 +162,8 @@ def block_until_finish(api_instance, task_id: str, sleep_secs=0.5):
 
 
 def invoke_api(params, function_ptr):
-    """
-    Perform a task remotely via Inductiva's Web API.
+    """Perform a task remotely via Inductiva's Web API.
+
     Currently, the implementation handles the whole flow of the task execution,
     and blocks until the task finishes execution.
     The flow is summarized as follows:
@@ -183,7 +187,8 @@ def invoke_api(params, function_ptr):
         function_ptr: Pointer to the function that defines the method
             to be requested to the API.
 
-    Returns: Output of the task.
+    Return:
+        Returns the output of the task.
     """
     if not is_initialized():
         raise Exception("Connection to the Inductiva Web API not initialized.")

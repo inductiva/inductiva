@@ -20,7 +20,7 @@ OUTPUT_FILENAME = "output.json"
 
 def get_validate_request_params(original_params: dict,
                                 type_annotations: dict) -> dict:
-    """Convert original request params to the params used for request validation.
+    """Convert original params to the params used for request validation.
 
     Convert a dictionary with the request params into the params that
     are used to validate the request.
@@ -91,9 +91,9 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
         type_annotations: Dict with the type annotation of each param.
         zip_name: Name to use for the zip file (excluding the file extension).
 
-    Return
-        Returns a path to zip file with the compressed input. The zip will be located
-        in the temporary directory of the OS (`/tmp` in linux).
+    Return:
+        Returns a path to zip file with the compressed input. The zip will be
+        located in the temporary directory of the OS (`/tmp` in linux).
     """
     with tempfile.TemporaryDirectory() as tmpdir_path:
         input_params = {}
@@ -151,7 +151,8 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
             is a tuple, the return is also a tuple with the all output values
             unpacked.
 
-    Return: Unpacked output of the method.
+    Return:
+        Returns the unpacked output of the method.
     """
     with zipfile.ZipFile(zip_path, "r") as zip_fp:
         zip_fp.extractall(output_dir)
