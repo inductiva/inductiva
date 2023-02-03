@@ -2,7 +2,6 @@
 Sample usage of the inductiva package.
 """
 import inductiva
-import numpy as np
 import scipy
 
 from absl import logging

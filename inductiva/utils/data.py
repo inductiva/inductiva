@@ -85,8 +85,6 @@ def pack_param(name: str, value, param_type, dst_dir):
     return value
 
 
-
-
 def pack_input(params, type_annotations, zip_name: str) -> str:
     """Pack all inputs into a zip file.
 
