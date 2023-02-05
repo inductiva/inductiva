@@ -9,6 +9,9 @@ from .api import invoke_api
 # pylint: disable=unused-argument, disable=redefined-builtin
 
 
-def eigensolver(matrix: scipy.sparse,
-                num_eigenpairs: int) -> tuple[np.ndarray, np.ndarray]:
-    return invoke_api(locals(), eigensolver)
+def eigs(matrix: scipy.sparse,
+         num_eigenpairs: int) -> tuple[np.ndarray, np.ndarray]:
+    return invoke_api(locals(), eigs)
+
+
+# pylint: enable=unused-argument, enable=redefined-builtin

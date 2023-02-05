@@ -1,5 +1,8 @@
-"""
-Sample usage of the inductiva package.
+"""Sample usage of the inductiva linalg package.
+
+This is an example on how to initialize a connection the Inductiva
+Web API and call a function from linalg package to find eigenvalues
+and eigenvectors of a given matrix.
 """
 import inductiva
 import scipy
@@ -13,6 +16,6 @@ if __name__ == "__main__":
 
     m = scipy.sparse.random(10, 10, density=0.01)
 
-    remote_result = inductiva.linalg.eigensolver(matrix=m, num_eigenpairs=10)
+    remote_result = inductiva.linalg.eigs(matrix=m, num_eigenpairs=10)
 
-    logging.info(remote_result)
+    logging.info("Resulting eigenvalues and eigenvectors %s", str(remote_result))
