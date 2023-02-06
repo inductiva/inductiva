@@ -6,7 +6,7 @@ sparse metrices with the corresponding solvers.
 import numpy as np
 import scipy
 from .api import invoke_api
-# pylint: disable=unused-argument, disable=redefined-builtin
+# pylint: disable=unused-argument
 
 
 def eigs(matrix: scipy.sparse,
@@ -14,4 +14,4 @@ def eigs(matrix: scipy.sparse,
     return invoke_api(locals(), eigs)
 
 
-# pylint: enable=unused-argument, enable=redefined-builtin
+# pylint: enable=unused-argument
