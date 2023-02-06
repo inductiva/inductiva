@@ -12,9 +12,9 @@ from inductiva_web_api_client import ApiClient, ApiException
 from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
 from inductiva_web_api_client.models import TaskRequest, TaskStatus
 
-from .utils.data import get_validate_request_params, pack_input, unpack_output
-from .utils.meta import get_type_annotations, get_method_name
-from .config import Configuration
+from inductiva.utils.data import get_validate_request_params, pack_input, unpack_output
+from inductiva.utils.meta import get_type_annotations, get_method_name
+from inductiva.config import Configuration
 
 configuration = None
 
