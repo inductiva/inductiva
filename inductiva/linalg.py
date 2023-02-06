@@ -5,6 +5,7 @@ sparse metrices with the corresponding solvers.
 """
 import numpy as np
 import scipy
+import scipy.sparse
 from .api import invoke_api
 # pylint: disable=unused-argument
 
