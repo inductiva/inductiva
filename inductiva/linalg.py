@@ -9,8 +9,11 @@ from .api import invoke_api
 # pylint: disable=unused-argument
 
 
-def eigs(matrix: scipy.sparse,
-         num_eigenpairs: int) -> tuple[np.ndarray, np.ndarray]:
+# def eigs(matrix: scipy.sparse,
+#          num_eigenpairs: int) -> tuple[np.ndarray, np.ndarray]:
+#     return invoke_api(locals(), eigs)
+
+def eigs(m: scipy.sparse) -> tuple[np.ndarray, np.ndarray]:
     return invoke_api(locals(), eigs)
 
 
