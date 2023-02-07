@@ -171,7 +171,10 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
     with open(output_json_path, "r", encoding="UTF-8") as fp:
         result_list = json.load(fp)
 
-    if return_type.__name__ == "tuple":
+
+    logging.info(return_type.__name__)
+
+    if return_type.__name__ == "Tuple":
         all_types = return_type.__args__
 
         return tuple(

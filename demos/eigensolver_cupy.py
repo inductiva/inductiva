@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     logging.info("size ...")
 
-    size = 10000000
+    size = 1000
     logging.info("random ...")
 
     diags = [
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     logging.info("Starting ...")
 
     time_start = time.perf_counter()
-    remote_result = inductiva.linalg.eigs_cupy(m=m)
+    remote_result = inductiva.linalg.eigs(m=m)
     logging.info(time.perf_counter() - time_start)
 
 

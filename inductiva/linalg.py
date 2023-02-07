@@ -7,6 +7,8 @@ import numpy as np
 import scipy
 import scipy.sparse
 from .api import invoke_api
+
+from typing import Tuple
 # pylint: disable=unused-argument
 
 
@@ -14,7 +16,7 @@ from .api import invoke_api
 #          num_eigenpairs: int) -> tuple[np.ndarray, np.ndarray]:
 #     return invoke_api(locals(), eigs)
 
-def eigs(m: scipy.sparse) -> tuple[np.ndarray, np.ndarray]:
+def eigs(m: scipy.sparse) -> Tuple[np.ndarray, np.ndarray]:
     return invoke_api(locals(), eigs)
 
 
