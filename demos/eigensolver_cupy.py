@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     logging.info("size ...")
 
-    size = 1000
+    size = 10000000
     logging.info("random ...")
 
     diags = [
@@ -37,11 +37,11 @@ if __name__ == "__main__":
 
     time_start = time.perf_counter()
     remote_result = inductiva.linalg.eigs(m=m)
-    logging.info(time.perf_counter() - time_start)
+    logging.info("API time: %s", time.perf_counter() - time_start)
 
 
     time_start = time.perf_counter()
     local_result = scipy.sparse.linalg.eigsh(m)
-    logging.info(time.perf_counter() - time_start)
+    logging.info("Local time (scipy): %s", time.perf_counter() - time_start)
 
     logging.info(np.allclose(remote_result[0], local_result[0]))

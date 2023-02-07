@@ -10,6 +10,7 @@ REQUIRES = [
     "absl-py",
     "numpy",
     "scipy",
+    "inductiva_web_api_client @ git+https://github.com/inductiva/inductiva-web-api-client.git",
 ]
 
 setup(
