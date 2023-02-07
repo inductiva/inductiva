@@ -12,7 +12,7 @@ def get_type_annotations(function_ptr) -> dict:
         Returns a dict with type annotations. "return" key specifies
         the type annotation of the return.
     """
-    return inspect.get_annotations(function_ptr)
+    return inspect.getfullargspec(function_ptr).annotations
 
 
 def get_method_name(function_ptr) -> str:
