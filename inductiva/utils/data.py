@@ -15,6 +15,8 @@ import scipy
 
 from absl import logging
 
+from .meta import is_tuple
+
 INPUPT_FILENAME = "input.json"
 OUTPUT_FILENAME = "output.json"
 
@@ -172,7 +174,7 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
         result_list = json.load(fp)
 
 
-    if return_type._name == "Tuple":
+    if is_tuple(return_type):
         all_types = return_type.__args__
 
         return tuple(

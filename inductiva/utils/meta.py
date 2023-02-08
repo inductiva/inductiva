@@ -1,6 +1,14 @@
 """Utils related to metaprogramming."""
 import inspect
 
+def is_tuple(type_annotation) -> bool:
+    if hasattr(type_annotation, "_name"):
+        return type_annotation._name == "Tuple"
+    if hasattr(type_annotation, "__name__"):
+        return type_annotation.__name__ == "Tuple"
+    return False
+
+
 
 def get_type_annotations(function_ptr) -> dict:
     """Get type annotations of a given function.

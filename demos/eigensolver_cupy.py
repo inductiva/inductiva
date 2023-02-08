@@ -14,12 +14,9 @@ from absl import logging
 if __name__ == "__main__":
     logging.set_verbosity(logging.DEBUG)
 
-    inductiva.init(address="http://localhost:8080", output_dir="output")
-
-    logging.info("size ...")
+    inductiva.init(address="http://localhost:8000", output_dir="output")
 
     size = 10000000
-    logging.info("random ...")
 
     diags = [
         np.random.normal(size=size - 1),
@@ -29,11 +26,8 @@ if __name__ == "__main__":
 
     m = scipy.sparse.diags(diagonals=diags, offsets=[-1, 0, 1], format="csr")
 
-    logging.info("sum ...")
-
     m = m + m.transpose()
 
-    logging.info("Starting ...")
 
     time_start = time.perf_counter()
     remote_result = inductiva.linalg.eigs(m=m)
