@@ -99,7 +99,7 @@ def upload_input(api_instance, task_id, original_params, type_annotations):
             "Exception when calling TasksApi->upload_task_inputs: %s", e)
         raise e
 
-    # os.remove(input_zip_path)
+    os.remove(input_zip_path)
 
 
 def download_output(api_instance, task_id):
