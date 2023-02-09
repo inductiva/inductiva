@@ -11,7 +11,6 @@ import scipy
 import numpy as np
 import time
 
-
 if __name__ == "__main__":
     logging.set_verbosity(logging.DEBUG)
 
