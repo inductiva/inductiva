@@ -11,6 +11,7 @@ import zipfile
 import tempfile
 import shutil
 import numpy as np
+import scipy
 
 from absl import logging
 
@@ -42,7 +43,7 @@ def get_validate_request_params(original_params: dict,
     for variable in original_params:
         param_type = type_annotations[variable]
 
-        if param_type == np.ndarray:
+        if param_type in (np.ndarray, scipy.sparse):
             params[variable] = {
                 "shape": original_params[variable].shape,
             }
@@ -71,6 +72,13 @@ def pack_param(name: str, value, param_type, dst_dir):
         param_filename = f"{name}.npy"
         param_fullpath = os.path.join(dst_dir, param_filename)
         np.save(param_fullpath, value)
+        logging.debug("Stored %s to %s", name, param_fullpath)
+        return param_filename
+
+    if param_type == scipy.sparse:
+        param_filename = f"{name}.npz"
+        param_fullpath = os.path.join(dst_dir, param_filename)
+        scipy.sparse.save_npz(param_fullpath, value)
         logging.debug("Stored %s to %s", name, param_fullpath)
         return param_filename
 
