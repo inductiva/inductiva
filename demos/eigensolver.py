@@ -18,4 +18,5 @@ if __name__ == "__main__":
 
     remote_result = inductiva.linalg.eigs(matrix=m, num_eigenpairs=10)
 
-    logging.info("Resulting eigenvalues and eigenvectors %s", str(remote_result))
+    logging.info("Resulting eigenvalues and eigenvectors %s",
+                 str(remote_result))

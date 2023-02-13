@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     inductiva.init(address="http://localhost:8000", output_dir="output")
 
-    size = 10000000
+    size = 1000
 
     diags = [
         np.random.normal(size=size - 1),
@@ -28,11 +28,9 @@ if __name__ == "__main__":
 
     m = m + m.transpose()
 
-
     time_start = time.perf_counter()
-    remote_result = inductiva.linalg.eigs(m=m)
+    remote_result = inductiva.cupy.linalg.eigs(m=m)
     logging.info("API time: %s", time.perf_counter() - time_start)
-
 
     time_start = time.perf_counter()
     local_result = scipy.sparse.linalg.eigsh(m)

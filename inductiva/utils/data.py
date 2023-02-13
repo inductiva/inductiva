@@ -173,7 +173,6 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
     with open(output_json_path, "r", encoding="UTF-8") as fp:
         result_list = json.load(fp)
 
-
     if is_tuple(return_type):
         all_types = return_type.__args__
 

@@ -12,11 +12,8 @@ from typing import Tuple
 # pylint: disable=unused-argument
 
 
-# def eigs(matrix: scipy.sparse,
-#          num_eigenpairs: int) -> tuple[np.ndarray, np.ndarray]:
-#     return invoke_api(locals(), eigs)
-
-def eigs(m: scipy.sparse) -> Tuple[np.ndarray, np.ndarray]:
+def eigs(matrix: scipy.sparse,
+         num_eigenpairs: int) -> Tuple[np.ndarray, np.ndarray]:
     return invoke_api(locals(), eigs)
 
 

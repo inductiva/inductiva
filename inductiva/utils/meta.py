@@ -1,13 +1,19 @@
 """Utils related to metaprogramming."""
 import inspect
 
+# pylint: disable=protected-access
+
+
 def is_tuple(type_annotation) -> bool:
+
     if hasattr(type_annotation, "_name"):
         return type_annotation._name == "Tuple"
     if hasattr(type_annotation, "__name__"):
         return type_annotation.__name__ == "Tuple"
     return False
 
+
+# pylint: enable=protected-access
 
 
 def get_type_annotations(function_ptr) -> dict:
