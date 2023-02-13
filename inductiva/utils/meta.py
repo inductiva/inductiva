@@ -5,11 +5,24 @@ import inspect
 
 
 def is_tuple(type_annotation) -> bool:
+    """Check if a type annotation is a tuple.
 
+    Note: the current implementation of this function may not work for all
+    python versions.
+
+    Args:
+        type_annotation: Type annotation to check.
+
+    Returns:
+        Bool that reflects if a type annotation is a tuple.
+    """
+    # Some of the Python versions tested have the attribute _name while others
+    # have __name__
     if hasattr(type_annotation, "_name"):
         return type_annotation._name == "Tuple"
     if hasattr(type_annotation, "__name__"):
         return type_annotation.__name__ == "Tuple"
+
     return False
 
 
