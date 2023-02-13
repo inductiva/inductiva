@@ -5,6 +5,8 @@ from setuptools import setup, find_packages  # noqa: H301
 NAME = "inductiva"
 VERSION = "0.1"
 
+# pylint: disable=line-too-long
+
 REQUIRES = [
     "setuptools >= 21.0.0",
     "absl-py",
