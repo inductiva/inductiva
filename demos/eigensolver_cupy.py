@@ -1,4 +1,4 @@
-"""Sample usage of the inductiva linalg package.
+"""Sample usage of the eigensolver method using CuPy.
 
 This is an example on how to initialize a connection the Inductiva
 Web API and call a function from linalg package to find eigenvalues
@@ -8,25 +8,26 @@ import inductiva
 import scipy
 import numpy as np
 import time
+import utils
 
 from absl import logging
+from absl import app
+from absl import flags
 
-if __name__ == "__main__":
+FLAGS = flags.FLAGS
+
+flags.DEFINE_integer("size", 1000, "Size of the square matrix to use.")
+
+flags.DEFINE_string("api_url", "http://localhost:8000",
+                    "Base URL of the Inductiva API.")
+
+
+def main(_):
     logging.set_verbosity(logging.DEBUG)
 
-    inductiva.init(address="http://localhost:8000", output_dir="output")
+    inductiva.init(address=FLAGS.api_url)
 
-    size = 1000
-
-    diags = [
-        np.random.normal(size=size - 1),
-        np.random.normal(size=size),
-        np.random.normal(size=size - 1),
-    ]
-
-    m = scipy.sparse.diags(diagonals=diags, offsets=[-1, 0, 1], format="csr")
-
-    m = m + m.transpose()
+    m = utils.get_square_tridiagonal_h_matrix(FLAGS.size)
 
     time_start = time.perf_counter()
     remote_result = inductiva.cupy.linalg.eigs(m=m)
@@ -37,3 +38,7 @@ if __name__ == "__main__":
     logging.info("Local time (scipy): %s", time.perf_counter() - time_start)
 
     logging.info(np.allclose(remote_result[0], local_result[0]))
+
+
+if __name__ == "__main__":
+    app.run(main)
