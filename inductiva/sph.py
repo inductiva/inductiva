@@ -10,7 +10,7 @@ from .api import invoke_api
 
 
 def run_simulation(config: dict) -> None:
-    """Run generic SPH simulation in the API.
+    """Run SplishSplash in the API.
 
     Args:
         config: JSON object for configuration of the simulation.
