@@ -1,4 +1,3 @@
-from inductiva import fluids
 import inductiva_sph
 from inductiva_sph import sph_core
 
@@ -20,22 +19,22 @@ COLUMN_POSITION = [0.0, 0.0, 0.0]
 class DamBreak:
     """Physical scenario of a dam break simulation."""
 
-    def __init__(self, fluid: fluids.WATER, fluid_block: list[float, 
-                                                              float]) -> None:
+    def __init__(self, fluid: sph_core.fluids.FluidProperties, 
+                 fluid_dimentions: list[float, float, float]) -> None:
         """Initializes a `DamBreak` object.
 
         Args:
             fluid: A fluid type of the simulation.
-            fluid_blocks: A list containing the fluid block's length and
-              height relative to the tank's dimentions."""
+            fluid_dimentions: A list containing the fluid column dimentions relative to the tank's dimentions."""
 
         self.fluid = fluid
-        self.fluid_block = fluid_block
 
         #  Set fluid block dimentions according to the input
-        if max(fluid_block) <= 1:
-            self.column_dimention = [
-                fluid_block * TANK_LENGTH, TANK_WIDTH, fluid_block * TANK_HEIGHT
+        if max(fluid_dimentions) <= 1:
+            self.fluid_dimention = [
+                fluid_dimentions[0] * TANK_LENGTH, 
+                fluid_dimentions[1] * TANK_WIDTH, 
+                fluid_dimentions[2] * TANK_HEIGHT
             ]
 
     def simulate(self):
@@ -58,17 +57,16 @@ class DamBreak:
         simulation._create_input_file()
 
         # Invoke API
+        # run_simulation()
 
     def __create_scenario(self):
-        fluid_properties = sph_core.fluids.FluidProperties(
-            density=fluids.WATER.density,
-            kinematic_viscosity=fluids.WATER.kinematic_viscosity)
+        fluid_properties = sph_core.fluids.FluidProperties(self.fluid)
 
         # Create fluid column
         fluid_block = sph_core.fluids.BoxFluidBlock(
             fluid_properties=fluid_properties,
             position=COLUMN_POSITION,
-            dimensions=self.column_dimention,
+            dimensions=self.fluid_dimention,
             initial_velocity=COLUMN_VELOCITY)
 
         # Set up scenario
