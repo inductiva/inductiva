@@ -3,6 +3,7 @@ import tempfile
 
 import inductiva
 from inductiva.types import DirPath
+from inductiva.fluids import SimulationOutput
 import inductiva_sph
 from inductiva_sph import sph_core
 
@@ -68,13 +69,14 @@ class DamBreak:
         simulation.create_input_file()
         #  Invoke API
 
-        # pylint: disable=unused-variable
         sim_output_dir: DirPath = inductiva.sph.run_simulation(
             DirPath(input_temp_dir.name))
-        # pylint: enable=unused-variable
 
         # Delete temporary input directory
         input_temp_dir.cleanup()
+
+        return SimulationOutput(sim_output_dir)
+        
 
     def __create_scenario(self):
 
