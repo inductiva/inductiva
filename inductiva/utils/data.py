@@ -186,7 +186,7 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
     output_json_path = os.path.join(output_dir, OUTPUT_FILENAME)
     with open(output_json_path, "r", encoding="UTF-8") as fp:
         result_list = json.load(fp)
-    
+
     if return_type == None:
         return
 

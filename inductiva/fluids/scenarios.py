@@ -36,7 +36,8 @@ class DamBreak:
         #  Set fluid block dimensions according to the input
         #  We need to set checks here and provide with an error message
         if max(fluid_dimensions) > 1:
-            raise ValueError("The values of `fluid_dimensions` cannot exceed 1.")
+            raise ValueError(
+                "The values of `fluid_dimensions` cannot exceed 1.")
         if len(fluid_dimensions) != 3:
             raise ValueError("Fluid dimensions must to have 3 values.")
 
