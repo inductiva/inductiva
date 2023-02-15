@@ -15,6 +15,7 @@ import scipy
 
 from absl import logging
 
+from inductiva.meta import is_tuple
 from inductiva.types import DirPath
 
 INPUPT_FILENAME = "input.json"
@@ -186,7 +187,7 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
     with open(output_json_path, "r", encoding="UTF-8") as fp:
         result_list = json.load(fp)
 
-    if return_type.__name__ == "tuple":
+    if is_tuple(return_type):
         all_types = return_type.__args__
 
         return tuple(
