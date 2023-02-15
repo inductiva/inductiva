@@ -52,7 +52,7 @@ class DamBreak:
         # Create a dam break scenario
         scenario = self.__create_scenario()
 
-        # Create a temporary directory to store simulation inputs files
+        # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
 
         # Create simulation
@@ -68,7 +68,7 @@ class DamBreak:
         simulation.create_input_file()
         #  Invoke API
         inductiva.sph.run_simulation(DirPath(input_temp_dir.name))
-        # Delete temporary directory
+        # Delete temporary input directory
         input_temp_dir.cleanup()
 
     def __create_scenario(self):
