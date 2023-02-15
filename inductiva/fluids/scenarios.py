@@ -53,7 +53,7 @@ class DamBreak:
         scenario = self.__create_scenario()
 
         # Create a temporary directory to store simulation inputs files
-        temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
+        input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
 
         # Create simulation
         simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
@@ -62,14 +62,14 @@ class DamBreak:
             particle_radius=PARTICLE_RADIUS,
             boundary_resolution=BOUNDARY_RESOLUTION,
             output_time_step=OUTPUT_TIME_STEP,
-            output_directory=temp_dir.name)
+            output_directory=input_temp_dir.name)
 
         # Create input file
         simulation.create_input_file()
         #  Invoke API
-        inductiva.sph.run_simulation(DirPath(temp_dir.name))
+        inductiva.sph.run_simulation(DirPath(input_temp_dir.name))
         # Delete temporary directory
-        temp_dir.cleanup()
+        input_temp_dir.cleanup()
 
     def __create_scenario(self):
 
