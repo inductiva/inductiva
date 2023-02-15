@@ -4,3 +4,5 @@ from . import math
 from . import linalg
 from . import fluids
 from . import sph
+from . import utils
+from . import cupy

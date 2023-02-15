@@ -19,7 +19,7 @@ from inductiva.config import Configuration
 configuration = None
 
 
-def init(address, output_dir):
+def init(address, output_dir="output"):
     """Initialize the Web API's connection configuration.
 
     Args:
