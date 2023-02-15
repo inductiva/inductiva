@@ -15,7 +15,7 @@ import scipy
 
 from absl import logging
 
-from ..types import DirPath
+from inductiva.types import DirPath
 
 INPUPT_FILENAME = "input.json"
 OUTPUT_FILENAME = "output.json"
