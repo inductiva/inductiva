@@ -64,7 +64,7 @@ class DamBreak:
             output_time_step=OUTPUT_TIME_STEP,
             output_directory=temp_dir.name)
 
-        # Create input JSON
+        # Create input file
         simulation.create_input_file()
         #  Invoke API
         inductiva.sph.run_simulation(DirPath(temp_dir.name))
