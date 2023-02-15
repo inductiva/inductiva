@@ -5,17 +5,16 @@ Inductiva client. For instance, `scenario.simulate()` uses the `run_simulation`
 function.
 """
 from .api import invoke_api
+from .types import DirPath
 
 # pylint: disable=unused-argument
 
 
-def run_simulation(config: dict) -> None:
+def run_simulation(sim_dir: DirPath) -> None:
     """Run SplishSplash in the API.
 
     Args:
-        config: JSON object for configuration of the simulation.
-            Note: Probably we should create a Type specific for params that
-            should be sent serialized as JSON.
+        sim_dir: Path to the directory containing the simulation inputs.
 
     Returns:
         TODO: once we have a class for holding the outputs of the simulation,
