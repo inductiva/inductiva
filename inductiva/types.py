@@ -1,6 +1,7 @@
 """Simple classes used for type definitions."""
 import os
 
+
 class DirPath():
     """Util class to represent paths to directories.
 
@@ -11,7 +12,8 @@ class DirPath():
     Properties:
         path: String that represents the path to the directory.
     """
+
     def __init__(self, path: str):
         if not os.path.isdir(path):
             raise ValueError("The provided path is not a directory.")
-        self.path = os.path(path)
+        self.path = path
