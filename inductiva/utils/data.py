@@ -162,6 +162,9 @@ def unpack_value(value: str, var_type, output_dir: str):
     if var_type == np.ndarray:
         return np.load(os.path.join(output_dir, value))
 
+    if var_type == DirPath:
+        return DirPath(os.path.join(output_dir, value))
+
     return type(value)
 
 

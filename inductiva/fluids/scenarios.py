@@ -67,7 +67,12 @@ class DamBreak:
         # Create input file
         simulation.create_input_file()
         #  Invoke API
-        inductiva.sph.run_simulation(DirPath(input_temp_dir.name))
+
+        # pylint: disable=unused-variable
+        sim_output_dir: DirPath = inductiva.sph.run_simulation(
+            DirPath(input_temp_dir.name))
+        # pylint: enable=unused-variable
+
         # Delete temporary input directory
         input_temp_dir.cleanup()
 
