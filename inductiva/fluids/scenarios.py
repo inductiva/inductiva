@@ -36,11 +36,11 @@ class DamBreak:
         #  Set fluid block dimensions according to the input
         #  We need to set checks here and provide with an error message
         if max(fluid_dimensions) > 1:
-            raise ValueError("The values of fluid_dimensions cannot exceed 1.")
+            raise ValueError("The values of `fluid_dimensions` cannot exceed 1.")
         if len(fluid_dimensions) != 3:
-            raise ValueError("Fluid dimensions need to have 3 values.")
+            raise ValueError("Fluid dimensions must to have 3 values.")
 
-        self.fluid_dimension = [
+        self.fluid_dimensions = [
             fluid_dimensions[0] * TANK_LENGTH, fluid_dimensions[1] * TANK_WIDTH,
             fluid_dimensions[2] * TANK_HEIGHT
         ]
@@ -76,7 +76,7 @@ class DamBreak:
         fluid_block = sph_core.fluids.BoxFluidBlock(
             fluid_properties=self.fluid,
             position=COLUMN_POSITION,
-            dimensions=self.fluid_dimension,
+            dimensions=self.fluid_dimensions,
             initial_velocity=COLUMN_VELOCITY)
 
         # Set up scenario
