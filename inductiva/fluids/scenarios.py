@@ -73,7 +73,6 @@ class DamBreak:
             DirPath(input_temp_dir.name))
         # pylint: enable=unused-variable
 
-
         # Delete temporary input directory
         input_temp_dir.cleanup()
 
