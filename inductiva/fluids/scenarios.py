@@ -37,12 +37,11 @@ class DamBreak:
         #  We need to set checks here and provide with an error message
         if max(fluid_dimensions) > 1:
             raise ValueError("The values of fluid_dimensions cannot exceed 1.")
-        if len(fluid_dimensions)!=3:
+        if len(fluid_dimensions) != 3:
             raise ValueError("Fluid dimensions need to have 3 values.")
 
         self.fluid_dimension = [
-            fluid_dimensions[0] * TANK_LENGTH,
-            fluid_dimensions[1] * TANK_WIDTH,
+            fluid_dimensions[0] * TANK_LENGTH, fluid_dimensions[1] * TANK_WIDTH,
             fluid_dimensions[2] * TANK_HEIGHT
         ]
 
@@ -53,7 +52,7 @@ class DamBreak:
         scenario = self.__create_scenario()
 
         # Create a temporary directory to store simulation inputs files
-        temp_dir = tempfile.TemporaryDirectory() #pylint: disable=consider-using-with
+        temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
 
         # Create simulation
         simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
