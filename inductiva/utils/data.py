@@ -15,7 +15,7 @@ import scipy
 
 from absl import logging
 
-from inductiva.meta import is_tuple
+from .meta import is_tuple
 from inductiva.types import DirPath
 
 INPUPT_FILENAME = "input.json"
@@ -93,10 +93,10 @@ def pack_param(name: str, value, param_type, dst_dir):
         dst_dir_name = name
         dst_fullpath = os.path.join(dst_dir, dst_dir_name)
 
-        shutil.copytree(value, dst_fullpath)
+        shutil.copytree(value.path, dst_fullpath)
 
         logging.debug("Copied %s to %s", value, dst_fullpath)
-        return
+        return dst_dir_name
 
     return value
 
@@ -186,6 +186,9 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
     output_json_path = os.path.join(output_dir, OUTPUT_FILENAME)
     with open(output_json_path, "r", encoding="UTF-8") as fp:
         result_list = json.load(fp)
+
+    if return_type is None:
+        return
 
     if is_tuple(return_type):
         all_types = return_type.__args__

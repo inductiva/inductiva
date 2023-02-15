@@ -1,4 +1,8 @@
 """Describes the physical scenarios and runs its simulation via API."""
+import tempfile
+
+import inductiva
+from inductiva.types import DirPath
 import inductiva_sph
 from inductiva_sph import sph_core
 
@@ -23,40 +27,49 @@ class DamBreak:
         """Initializes a `DamBreak` object.
 
         Args:
-            fluid: A fluid type of the simulation.
+            fluid: A fluid type of the simulation. Ex.: fluids.WATER
             fluid_dimensions: A list containing the fluid column dimensions
             relative to the tank dimensions."""
 
         self.fluid = fluid
 
         #  Set fluid block dimensions according to the input
-        if max(fluid_dimensions) <= 1:
-            self.fluid_dimension = [
-                fluid_dimensions[0] * TANK_LENGTH,
-                fluid_dimensions[1] * TANK_WIDTH,
-                fluid_dimensions[2] * TANK_HEIGHT
-            ]
+        #  We need to set checks here and provide with an error message
+        if max(fluid_dimensions) > 1:
+            raise ValueError(
+                "The values of `fluid_dimensions` cannot exceed 1.")
+        if len(fluid_dimensions) != 3:
+            raise ValueError("Fluid dimensions must to have 3 values.")
+
+        self.fluid_dimensions = [
+            fluid_dimensions[0] * TANK_LENGTH, fluid_dimensions[1] * TANK_WIDTH,
+            fluid_dimensions[2] * TANK_HEIGHT
+        ]
 
     def simulate(self):
-        """Runs SPH simulation of the Dam Break simulation."""
+        """Runs SPH simulation of the Dam Break scenario."""
 
         # Create a dam break scenario
         scenario = self.__create_scenario()
 
+        # Create a temporary directory to store simulation input files
+        input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
+
         # Create simulation
-        # pylint: disable=unused-variable
         simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
             scenario=scenario,
             time_max=TIME_MAX,
             particle_radius=PARTICLE_RADIUS,
             boundary_resolution=BOUNDARY_RESOLUTION,
-            output_time_step=OUTPUT_TIME_STEP)
+            output_time_step=OUTPUT_TIME_STEP,
+            output_directory=input_temp_dir.name)
 
-        #  TODO
-        # Create input JSON
-        # input_json = simulation.create_input_json()
-        # Invoke API
-        # inductiva.sph(input_json)
+        # Create input file
+        simulation.create_input_file()
+        #  Invoke API
+        inductiva.sph.run_simulation(DirPath(input_temp_dir.name))
+        # Delete temporary input directory
+        input_temp_dir.cleanup()
 
     def __create_scenario(self):
 
@@ -64,7 +77,7 @@ class DamBreak:
         fluid_block = sph_core.fluids.BoxFluidBlock(
             fluid_properties=self.fluid,
             position=COLUMN_POSITION,
-            dimensions=self.fluid_dimension,
+            dimensions=self.fluid_dimensions,
             initial_velocity=COLUMN_VELOCITY)
 
         # Set up scenario
