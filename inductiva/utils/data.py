@@ -15,6 +15,8 @@ import scipy
 
 from absl import logging
 
+from ..types import DirPath
+
 INPUPT_FILENAME = "input.json"
 OUTPUT_FILENAME = "output.json"
 
@@ -47,6 +49,10 @@ def get_validate_request_params(original_params: dict,
             params[variable] = {
                 "shape": original_params[variable].shape,
             }
+        elif param_type == DirPath:
+            # TODO: what kind of information do we want to send for validation
+            # of a SplishSplash simulation?
+            params[variable] = original_params[variable].path
         else:
             params[variable] = original_params[variable]
 
@@ -81,6 +87,15 @@ def pack_param(name: str, value, param_type, dst_dir):
         scipy.sparse.save_npz(param_fullpath, value)
         logging.debug("Stored %s to %s", name, param_fullpath)
         return param_filename
+
+    if param_type == DirPath:
+        dst_dir_name = name
+        dst_fullpath = os.path.join(dst_dir, dst_dir_name)
+
+        shutil.copytree(value, dst_fullpath)
+
+        logging.debug("Copied %s to %s", value, dst_fullpath)
+        return
 
     return value
 
