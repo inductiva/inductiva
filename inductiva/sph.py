@@ -10,7 +10,7 @@ from .types import DirPath
 # pylint: disable=unused-argument
 
 
-def run_simulation(sim_dir: DirPath) -> None:
+def run_simulation(sim_dir: DirPath) -> DirPath:
     """Run SplishSplash in the API.
 
     Args:
