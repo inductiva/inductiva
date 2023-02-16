@@ -10,8 +10,13 @@ from inductiva_data import visualizers
 
 
 class SimulationOutput:
+    """Post process SPlisHSPlasH simulation outputs."""
 
     def __init__(self, sim_output_path: DirPath) -> None:
+        """Initializes a `SimulationOutput` object.
+
+        Args:
+            sim_output_path: Path to simulation output files."""
         self.sim_output_dir = sim_output_path.path
 
     def render(self):
@@ -22,14 +27,14 @@ class SimulationOutput:
         particle_data = reader.read_dir(
             os.path.join(self.sim_output_dir, "hdf5"))
 
-        visaulizer = visualizers.TimeVaryingParticleData3DScatterVisualizer(
+        visualizer = visualizers.TimeVaryingParticleData3DScatterVisualizer(
             data=particle_data,
             x_quantity="x",
             y_quantity="y",
             z_quantity="z",
         )
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
-        visaulizer.create_time_movie(movie_path)
+        visualizer.create_time_movie(movie_path)
 
         mp4 = open(movie_path, "rb").read()
         movie_url = "data:video/mp4;base64," + b64encode(mp4).decode()
