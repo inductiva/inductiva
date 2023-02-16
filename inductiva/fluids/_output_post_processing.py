@@ -26,9 +26,9 @@ class SimulationOutput:
         movie_dir = os.path.join(self.sim_output_dir, "movie.mp4")
         visaulizer.create_time_movie(movie_dir)
 
-        return HTML("""
+        return HTML(f"""
             <video alt="test" controls>
-                <source src="movie_dir" type="video/mp4">
+                <source src="{movie_dir}" type="video/mp4">
             </video>
         """)
 
