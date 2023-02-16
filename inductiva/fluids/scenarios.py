@@ -64,19 +64,19 @@ class DamBreak:
 
         # Create input file
         simulation.create_input_file()
-        #  Invoke API
 
-        sim_output_path = inductiva.sph.run_simulation(DirPath(input_temp_dir.name))
+        #  Invoke API
+        sim_output_path = inductiva.sph.run_simulation(
+            DirPath(input_temp_dir.name))
         simulation._output_directory = sim_output_path.path
-        
-        simulation._convert_output_files(False)
+
+        simulation._convert_output_files()
 
         # Delete temporary input directory
-        # input_temp_dir.cleanup()
-        print(input_temp_dir.name)
+        input_temp_dir.cleanup()
 
         return SimulationOutput(sim_output_path)
-        
+
     def __create_scenario(self):
 
         # Create fluid column

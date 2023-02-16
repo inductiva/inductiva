@@ -1,22 +1,26 @@
+"""Post process SPlisHSPlasH simulation outputs."""
 import os
 
-from inductiva.types import DirPath
 from IPython.display import HTML
+from base64 import b64encode
+
+from inductiva.types import DirPath
 from inductiva_data.data import ParticleDataReader
 from inductiva_data import visualizers
-from base64 import b64encode
 
 
 class SimulationOutput:
 
     def __init__(self, sim_output_path: DirPath) -> None:
-        self.sim_output_dir=sim_output_path.path
+        self.sim_output_dir = sim_output_path.path
 
     def render(self):
+        """Generate a simulation movie."""
+
         # Read simulation particle data
         reader = ParticleDataReader()
-
-        particle_data = reader.read_dir(os.path.join(self.sim_output_dir, "hdf5"))
+        particle_data = reader.read_dir(
+            os.path.join(self.sim_output_dir, "hdf5"))
 
         visaulizer = visualizers.TimeVaryingParticleData3DScatterVisualizer(
             data=particle_data,
@@ -26,6 +30,7 @@ class SimulationOutput:
         )
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
         visaulizer.create_time_movie(movie_path)
+
         mp4 = open(movie_path, "rb").read()
         movie_url = "data:video/mp4;base64," + b64encode(mp4).decode()
 
@@ -34,5 +39,3 @@ class SimulationOutput:
                 <source src="{movie_url}" type="video/mp4">
             </video>
         """)
-
-
