@@ -8,13 +8,14 @@ from inductiva_data import visualizers
 
 class SimulationOutput:
 
-    def __init__(self, sim_output_dir: DirPath) -> None:
-        self.sim_output_dir=sim_output_dir.path
-        
+    def __init__(self, sim_output_path: DirPath) -> None:
+        self.sim_output_dir=sim_output_path.path
+
     def render(self):
         # Read simulation particle data
         reader = ParticleDataReader()
-        particle_data = reader.read_dir(self.sim_output_dir)
+
+        particle_data = reader.read_dir(os.path.join(self.sim_output_dir, "hdf5"))
 
         visaulizer = visualizers.TimeVaryingParticleData3DScatterVisualizer(
             data=particle_data,
