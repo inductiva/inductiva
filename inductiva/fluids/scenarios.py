@@ -68,9 +68,9 @@ class DamBreak:
         #  Invoke API
         sim_output_path = inductiva.sph.run_simulation(
             DirPath(input_temp_dir.name))
-        simulation._output_directory = sim_output_path.path
+        simulation._output_directory = sim_output_path.path  #pylint: disable=protected-access
 
-        simulation._convert_output_files()
+        simulation._convert_output_files()  #pylint: disable=protected-access
 
         # Delete temporary input directory
         input_temp_dir.cleanup()
