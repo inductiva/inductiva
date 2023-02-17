@@ -9,7 +9,6 @@ from ._output_post_processing import SimulationOutput
 import inductiva_sph
 from inductiva_sph import sph_core
 
-
 # Glabal variables to define a scenario
 TIME_MAX = 0.6
 PARTICLE_RADIUS = 0.02
