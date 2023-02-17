@@ -6,15 +6,15 @@ import numpy as np
 
 from absl import logging
 from absl import flags
+from absl import app
 
 FLAGS = flags.FLAGS
 
 flags.DEFINE_string("api_url", "http://api.inductiva.ai",
                     "Base URL of the Inductiva API.")
 
-if __name__ == "__main__":
-    logging.set_verbosity(logging.DEBUG)
 
+def main(_):
     inductiva.api_url = FLAGS.api_url
 
     m = np.random.randint(10, size=(10, 10))
@@ -27,3 +27,8 @@ if __name__ == "__main__":
 
     logging.debug("Operation successful" if success else \
         "Operation unsuccessful")
+
+
+if __name__ == "__main__":
+    logging.set_verbosity(logging.DEBUG)
+    app.run(main)

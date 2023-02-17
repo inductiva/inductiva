@@ -22,8 +22,6 @@ flags.DEFINE_string("api_url", "http://api.inductiva.ai",
 
 
 def main(_):
-    logging.set_verbosity(logging.DEBUG)
-
     inductiva.api_url = FLAGS.api_url
 
     m = utils.get_square_tridiagonal_h_matrix(FLAGS.size)
@@ -40,4 +38,5 @@ def main(_):
 
 
 if __name__ == "__main__":
+    logging.set_verbosity(logging.DEBUG)
     app.run(main)
