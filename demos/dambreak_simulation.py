@@ -1,5 +1,4 @@
-"""
-Sample usage of the inductiva package.
+"""Sample usage of SPlisHSPlasH simulation via API.
 """
 import inductiva
 
@@ -10,6 +9,7 @@ if __name__ == "__main__":
 
     inductiva.init(address="http://192.168.1.50:8000", output_dir="output")
 
-    simulation = inductiva.fluids.DamBreak(fluid=inductiva.fluids.WATER,
-                                           fluid_dimensions=[0.1, 0.2, 0.2])
-    simulation.simulate()
+    scenario = inductiva.fluids.DamBreak(fluid=inductiva.fluids.WATER,
+                                         fluid_dimensions=[0.05, 0.8, 0.8])
+    simulation_output = scenario.simulate()
+    simulation_output.render()

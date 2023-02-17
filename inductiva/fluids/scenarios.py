@@ -3,19 +3,19 @@ import tempfile
 
 import inductiva
 from inductiva.types import DirPath
+from ._output_post_processing import SimulationOutput
 import inductiva_sph
 from inductiva_sph import sph_core
 
 # Glabal variables to define a scenario
 TIME_MAX = 0.6
-PARTICLE_RADIUS = 0.002
+PARTICLE_RADIUS = 0.02
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
-BOUNDARY_RESOLUTION = [20, 20, 20]
 OUTPUT_TIME_STEP = 1. / 60.
-TANK_LENGTH = 0.84
-TANK_WIDTH = 0.5715
-TANK_HEIGHT = 0.12
-TANK_DIMENSION = [0.84, 0.05715, 0.12]
+TANK_LENGTH = 1
+TANK_WIDTH = 1
+TANK_HEIGHT = 1
+TANK_DIMENSION = [TANK_LENGTH, TANK_WIDTH, TANK_HEIGHT]
 COLUMN_POSITION = [0.0, 0.0, 0.0]
 
 
@@ -34,12 +34,11 @@ class DamBreak:
         self.fluid = fluid
 
         #  Set fluid block dimensions according to the input
-        #  We need to set checks here and provide with an error message
         if max(fluid_dimensions) > 1:
             raise ValueError(
                 "The values of `fluid_dimensions` cannot exceed 1.")
         if len(fluid_dimensions) != 3:
-            raise ValueError("Fluid dimensions must to have 3 values.")
+            raise ValueError("`fluid_dimensions` must have 3 values.")
 
         self.fluid_dimensions = [
             fluid_dimensions[0] * TANK_LENGTH, fluid_dimensions[1] * TANK_WIDTH,
@@ -54,27 +53,28 @@ class DamBreak:
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
-
         # Create simulation
         simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
             scenario=scenario,
             time_max=TIME_MAX,
             particle_radius=PARTICLE_RADIUS,
-            boundary_resolution=BOUNDARY_RESOLUTION,
             output_time_step=OUTPUT_TIME_STEP,
             output_directory=input_temp_dir.name)
 
         # Create input file
         simulation.create_input_file()
-        #  Invoke API
 
-        # pylint: disable=unused-variable
-        sim_output_dir: DirPath = inductiva.sph.run_simulation(
+        #  Invoke API
+        sim_output_path = inductiva.sph.run_simulation(
             DirPath(input_temp_dir.name))
-        # pylint: enable=unused-variable
+        simulation._output_directory = sim_output_path.path  #pylint: disable=protected-access
+
+        simulation._convert_output_files()  #pylint: disable=protected-access
 
         # Delete temporary input directory
         input_temp_dir.cleanup()
+
+        return SimulationOutput(sim_output_path)
 
     def __create_scenario(self):
 

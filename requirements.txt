@@ -2,3 +2,5 @@ absl-py
 numpy
 scipy
 git+https://github.com/inductiva/inductiva-web-api-client.git
+git+https://github.com/inductiva/inductiva-sph.git
+git+https://github.com/inductiva/inductiva-data.git
