@@ -16,7 +16,7 @@ from inductiva.utils.data import get_validate_request_params, pack_input, unpack
 from inductiva.utils.meta import get_type_annotations, get_method_name
 from inductiva.config import Configuration
 
-DEFAULT_OUTPUT_DIR = "inductiva_tasks"
+DEFAULT_OUTPUT_DIR = "inductiva_output"
 DEFAULT_API_URL = "http://api.inductiva.ai"
 
 configuration = Configuration(address=DEFAULT_API_URL,
