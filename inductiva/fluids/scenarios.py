@@ -1,11 +1,14 @@
 """Describes the physical scenarios and runs its simulation via API."""
 import tempfile
 
+from typing import List
+
 import inductiva
 from inductiva.types import DirPath
 from ._output_post_processing import SimulationOutput
 import inductiva_sph
 from inductiva_sph import sph_core
+
 
 # Glabal variables to define a scenario
 TIME_MAX = 0.6
@@ -23,7 +26,7 @@ class DamBreak:
     """Physical scenario of a dam break simulation."""
 
     def __init__(self, fluid: sph_core.fluids.FluidProperties,
-                 fluid_dimensions: list[float, float, float]) -> None:
+                 fluid_dimensions: List[float, float, float]) -> None:
         """Initializes a `DamBreak` object.
 
         Args:
