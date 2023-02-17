@@ -1,6 +1,7 @@
 """Describes the physical scenarios and runs its simulation via API."""
 import tempfile
 import numpy as np
+from typing import List
 
 import inductiva
 from inductiva.types import DirPath
@@ -22,8 +23,8 @@ class DamBreak:
     """Physical scenario of a dam break simulation."""
 
     def __init__(self, fluid: sph_core.fluids.FluidProperties,
-                 fluid_dimensions: list[float, float, float],
-                 fluid_position: list[float, float,
+                 fluid_dimensions: List[float, float, float],
+                 fluid_position: List[float, float,
                                       float], particle_radius: float) -> None:
         """Initializes a `DamBreak` object.
 
@@ -52,6 +53,7 @@ class DamBreak:
 
         if particle_radius < 0.01:
             raise ValueError("`particle_radius` must be larger than 0.01.")
+
         self.particle_radius = particle_radius
 
         if len(fluid_position) != 3:
@@ -59,6 +61,7 @@ class DamBreak:
         if np.greater(np.add(self.fluid_dimensions, fluid_position),
                       np.array(TANK_DIMENSION)).any():
             raise ValueError("Fluid cannot exceed tank borders.")
+
         self.fluid_position = fluid_position
 
     def simulate(self):
