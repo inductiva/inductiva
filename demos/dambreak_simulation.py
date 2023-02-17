@@ -10,6 +10,7 @@ if __name__ == "__main__":
     inductiva.init(address="http://192.168.1.50:8000", output_dir="output")
 
     scenario = inductiva.fluids.DamBreak(fluid=inductiva.fluids.WATER,
-                                         fluid_dimensions=[0.05, 0.8, 0.8])
+                                         fluid_dimensions=[0.2, 0.8, 0.8],
+                                         fluid_position=[0, 0.0, 0.4], particle_radius=0.01)
     simulation_output = scenario.simulate()
-    simulation_output.render()
+    simulation_output.render(color_quantity="y")
