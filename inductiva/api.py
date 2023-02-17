@@ -16,11 +16,15 @@ from inductiva.utils.data import get_validate_request_params, pack_input, unpack
 from inductiva.utils.meta import get_type_annotations, get_method_name
 from inductiva.config import Configuration
 
-configuration = None
+
+DEFAULT_OUTPUT_DIR = "inductiva_tasks"
+DEFAULT_API_URL = "http://api.inductiva.ai"
+
+configuration = Configuration(address=DEFAULT_API_URL, output_dir=DEFAULT_OUTPUT_DIR)
 
 
-def init(address, output_dir="output"):
-    """Initialize the Web API's connection configuration.
+def update_config(address=DEFAULT_API_URL, output_dir=DEFAULT_OUTPUT_DIR):
+    """Update the configuration.
 
     Args:
         address: Address (including port) where to connect to the API.
@@ -30,11 +34,6 @@ def init(address, output_dir="output"):
     """
     global configuration
     configuration = Configuration(address=address, output_dir=output_dir)
-
-
-def is_initialized():
-    """Check if the API configuration is initialized."""
-    return configuration is not None
 
 
 def submit_request(api_instance: TasksApi, original_params,
