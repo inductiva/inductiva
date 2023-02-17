@@ -26,7 +26,7 @@ class DamBreak:
     """Physical scenario of a dam break simulation."""
 
     def __init__(self, fluid: sph_core.fluids.FluidProperties,
-                 fluid_dimensions: List[float, float, float]) -> None:
+                 fluid_dimensions: List[float]) -> None:
         """Initializes a `DamBreak` object.
 
         Args:
