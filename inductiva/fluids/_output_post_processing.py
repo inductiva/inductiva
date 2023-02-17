@@ -36,7 +36,7 @@ class SimulationOutput:
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
         visualizer.create_time_movie(movie_path)
 
-        with open(movie_path, "r", encoding="utf-8") as fp:
+        with open(movie_path, "rb") as fp:
             mp4 = fp.read()
         movie_url = "data:video/mp4;base64," + b64encode(mp4).decode()
 
