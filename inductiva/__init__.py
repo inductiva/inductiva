@@ -1,7 +1,6 @@
 """Client for Inductiva's web API."""
 import os
 
-from .api import update_config
 from . import math
 from . import fluids
 from . import sph
