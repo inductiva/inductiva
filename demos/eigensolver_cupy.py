@@ -18,7 +18,7 @@ FLAGS = flags.FLAGS
 
 flags.DEFINE_integer("size", 1000, "Size of the square matrix to use.")
 
-flags.DEFINE_string("api_url", "http://localhost:8000",
+flags.DEFINE_string("api_url", "http://api.inductiva.ai",
                     "Base URL of the Inductiva API.")
 
 
