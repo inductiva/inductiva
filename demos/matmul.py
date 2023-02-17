@@ -15,7 +15,7 @@ flags.DEFINE_string("api_url", "http://api.inductiva.ai",
 if __name__ == "__main__":
     logging.set_verbosity(logging.DEBUG)
 
-    inductiva.update_config(address=FLAGS.api_url)
+    inductiva.api_url = FLAGS.api_url
 
     m = np.random.randint(10, size=(10, 10))
     n = np.random.randint(10, size=(10, 10))

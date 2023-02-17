@@ -14,7 +14,7 @@ flags.DEFINE_string("api_url", "http://api.inductiva.ai",
 if __name__ == "__main__":
     logging.set_verbosity(logging.DEBUG)
 
-    inductiva.update_config(FLAGS.api_url)
+    inductiva.api_url = FLAGS.api_url
 
     result = inductiva.math.sum(a=1, b=1)
 

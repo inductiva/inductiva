@@ -8,32 +8,18 @@ import os
 import time
 from absl import logging
 
+import inductiva
+
+from inductiva_web_api_client import Configuration
 from inductiva_web_api_client import ApiClient, ApiException
 from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
 from inductiva_web_api_client.models import TaskRequest, TaskStatus
 
 from inductiva.utils.data import get_validate_request_params, pack_input, unpack_output
 from inductiva.utils.meta import get_type_annotations, get_method_name
-from inductiva.config import Configuration
 
 DEFAULT_OUTPUT_DIR = "inductiva_output"
 DEFAULT_API_URL = "http://api.inductiva.ai"
-
-configuration = Configuration(address=DEFAULT_API_URL,
-                              output_dir=DEFAULT_OUTPUT_DIR)
-
-
-def update_config(address=DEFAULT_API_URL, output_dir=DEFAULT_OUTPUT_DIR):
-    """Update the configuration.
-
-    Args:
-        address: Address (including port) where to connect to the API.
-        output_dir: Path in which to store outputs of the executed tasks.
-            Outputs of a given task will be stored in a child directory of
-            `output_dir` with the name equal to the ID of the task.
-    """
-    global configuration
-    configuration = Configuration(address=address, output_dir=output_dir)
 
 
 def submit_request(api_instance: TasksApi, original_params,
@@ -191,7 +177,9 @@ def invoke_api(params, function_ptr):
     """
     type_annotations = get_type_annotations(function_ptr)
 
-    with ApiClient(configuration.api_config) as client:
+    api_config = Configuration(host=inductiva.api_url)
+
+    with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
 
         task = submit_request(
@@ -222,6 +210,6 @@ def invoke_api(params, function_ptr):
 
     return unpack_output(
         zip_path=output_zip_path,
-        output_dir=os.path.join(configuration.output_dir, task_id),
+        output_dir=os.path.join(inductiva.output_dir, task_id),
         return_type=type_annotations["return"],
     )

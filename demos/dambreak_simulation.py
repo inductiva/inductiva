@@ -13,7 +13,7 @@ flags.DEFINE_string("api_url", "http://api.inductiva.ai",
 if __name__ == "__main__":
     logging.set_verbosity(logging.DEBUG)
 
-    inductiva.update_config(FLAGS.api_url)
+    inductiva.api_url = FLAGS.api_url
 
     scenario = inductiva.fluids.DamBreak(fluid=inductiva.fluids.WATER,
                                          fluid_dimensions=[0.05, 0.8, 0.8])
