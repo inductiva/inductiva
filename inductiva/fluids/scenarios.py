@@ -24,7 +24,7 @@ class DamBreak:
 
     def __init__(self,
                  fluid: sph_core.fluids.FluidProperties,
-                 fluid_dimensions: List[float, float, float],
+                 fluid_dimensions: List[float],
                  fluid_position: List[float] = [0.0, 0.0, 0.0],
                  particle_radius: float = 0.02) -> None:
         """Initializes a `DamBreak` object.
