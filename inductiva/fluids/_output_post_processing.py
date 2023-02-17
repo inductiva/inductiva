@@ -21,7 +21,7 @@ class SimulationOutput:
 
     def render(self, color_quantity: str = None):
         """Generate a simulation movie.
-        
+
         Args:
             color_quantity: Quantity to represent in the color scale of the
                 scatter plot."""
