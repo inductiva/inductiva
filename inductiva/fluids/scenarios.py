@@ -22,10 +22,11 @@ TANK_DIMENSION = [TANK_LENGTH, TANK_WIDTH, TANK_HEIGHT]
 class DamBreak:
     """Physical scenario of a dam break simulation."""
 
-    def __init__(self, fluid: sph_core.fluids.FluidProperties,
+    def __init__(self,
+                 fluid: sph_core.fluids.FluidProperties,
                  fluid_dimensions: List[float, float, float],
-                 fluid_position: List[float, float,
-                                      float], particle_radius: float) -> None:
+                 fluid_position: List[float] = [0.0, 0.0, 0.0],
+                 particle_radius: float = 0.02) -> None:
         """Initializes a `DamBreak` object.
 
         Args:
