@@ -34,10 +34,10 @@ class DamBreak:
             fluid: A fluid type of the simulation. Ex.: fluids.WATER
             fluid_dimensions: A list containing the fluid column dimensions,
               expressed as fractions of the tank dimensions.
-            fluid_position: Position of the fluid column in the tank.
+            fluid_position: Position (in meters) of the fluid column in the tank.
             particle_radius: Radius of the discretization particles, in meters.
               Used to control particle spacing. Smaller particle radius means a
-              finer discretization, hence more particles. """
+              finer discretization, hence more particles."""
 
         self.fluid = fluid
 
@@ -58,16 +58,17 @@ class DamBreak:
 
         self.particle_radius = particle_radius
 
-        if fluid_position is None:
+        if fluid_position is not None:
+            if len(fluid_position) != 3:
+                raise ValueError("`fluid_position` must have 3 values.")
+            else:
+                self.fluid_position = fluid_position
+        else:
             self.fluid_position = [0.0, 0.0, 0.0]
 
-        if len(fluid_position) != 3:
-            raise ValueError("`fluid_position` must have 3 values.")
         if np.greater(np.add(self.fluid_dimensions, fluid_position),
                       np.array(TANK_DIMENSIONS)).any():
             raise ValueError("Fluid cannot exceed tank borders.")
-
-        self.fluid_position = fluid_position
 
     def simulate(self):
         """Runs SPH simulation of the Dam Break scenario."""
