@@ -32,8 +32,8 @@ class DamBreak:
 
         Args:
             fluid: A fluid type of the simulation. Ex.: fluids.WATER
-            fluid_dimensions: A list containing the fluid column dimensions
-              fraction of the tank dimensions.
+            fluid_dimensions: A list containing the fluid column dimensions,
+              expressed as fractions of the tank dimensions.
             fluid_position: Position of the fluid column in the tank.
             particle_radius: Radius of the discretization particles, in meters.
               Used to control particle spacing. Smaller particle radius means a
