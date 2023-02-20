@@ -1,11 +1,12 @@
 """Describes the physical scenarios and runs its simulation via API."""
 import tempfile
 import numpy as np
-from typing import List
+from typing import List, Optional
 
 import inductiva
 from inductiva.types import DirPath
 from ._output_post_processing import SimulationOutput
+from _fluid_types import WATER
 import inductiva_sph
 from inductiva_sph import sph_core
 
@@ -16,23 +17,23 @@ OUTPUT_TIME_STEP = 1. / 60.
 TANK_LENGTH = 1
 TANK_WIDTH = 1
 TANK_HEIGHT = 1
-TANK_DIMENSION = [TANK_LENGTH, TANK_WIDTH, TANK_HEIGHT]
+TANK_DIMENSIONS = [TANK_LENGTH, TANK_WIDTH, TANK_HEIGHT]
 
 
 class DamBreak:
     """Physical scenario of a dam break simulation."""
 
     def __init__(self,
-                 fluid: sph_core.fluids.FluidProperties,
                  fluid_dimensions: List[float],
-                 fluid_position: List[float] = [0.0, 0.0, 0.0],
+                 fluid: sph_core.fluids.FluidProperties = WATER,
+                 fluid_position: Optional(List[float]) = None,
                  particle_radius: float = 0.02) -> None:
         """Initializes a `DamBreak` object.
 
         Args:
             fluid: A fluid type of the simulation. Ex.: fluids.WATER
             fluid_dimensions: A list containing the fluid column dimensions
-            relative to the tank dimensions.
+              fraction of the tank dimensions.
             fluid_position: Position of the fluid column in the tank.
             particle_radius: Radius of the discretization particles, in meters.
               Used to control particle spacing. Smaller particle radius means a
@@ -57,10 +58,13 @@ class DamBreak:
 
         self.particle_radius = particle_radius
 
+        if fluid_position is None:
+            self.fluid_position = [0.0, 0.0, 0.0]
+
         if len(fluid_position) != 3:
             raise ValueError("`fluid_position` must have 3 values.")
         if np.greater(np.add(self.fluid_dimensions, fluid_position),
-                      np.array(TANK_DIMENSION)).any():
+                      np.array(TANK_DIMENSIONS)).any():
             raise ValueError("Fluid cannot exceed tank borders.")
 
         self.fluid_position = fluid_position
@@ -84,12 +88,12 @@ class DamBreak:
         # Create input file
         simulation.create_input_file()
 
-        #  Invoke API
+        # Invoke API
         sim_output_path = inductiva.sph.run_simulation(
             DirPath(input_temp_dir.name))
         simulation._output_directory = sim_output_path.path  #pylint: disable=protected-access
 
-        simulation._convert_output_files()  #pylint: disable=protected-access
+        simulation._convert_output_files(False)  #pylint: disable=protected-access
 
         # Delete temporary input directory
         input_temp_dir.cleanup()
@@ -107,6 +111,6 @@ class DamBreak:
 
         # Set up scenario
         scenario = sph_core.scenarios.DamBreakSPHScenario(
-            dimensions=TANK_DIMENSION, fluid_blocks=[fluid_block])
+            dimensions=TANK_DIMENSIONS, fluid_blocks=[fluid_block])
 
         return scenario
