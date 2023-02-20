@@ -6,12 +6,12 @@ from typing import List, Optional
 import inductiva
 from inductiva.types import DirPath
 from ._output_post_processing import SimulationOutput
-from _fluid_types import WATER
+from ._fluid_types import WATER
 import inductiva_sph
 from inductiva_sph import sph_core
 
 # Glabal variables to define a scenario
-TIME_MAX = 0.6
+TIME_MAX = 1
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
 OUTPUT_TIME_STEP = 1. / 60.
 TANK_DIMENSIONS = [1, 1, 1]
