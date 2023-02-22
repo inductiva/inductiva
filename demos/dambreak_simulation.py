@@ -1,5 +1,4 @@
-"""Sample usage of SPlisHSPlasH simulation via API.
-"""
+"""Sample usage of SPlisHSPlasH simulation via API."""
 from absl import logging
 from absl import flags
 from absl import app
@@ -9,6 +8,8 @@ import inductiva_utils
 
 FLAGS = flags.FLAGS
 
+flags.DEFINE_string("api_url", "http://api.inductiva.ai",
+                    "Base URL of the Inductiva API.")
 flags.DEFINE_list("fluid_dimensions", [0.2, 0.8, 0.8],
                   "Dimensions of the fluid column.")
 flags.DEFINE_list("fluid_position", [0.0, 0.0, 0.0],
@@ -21,7 +22,7 @@ flags.DEFINE_string(
 
 
 def main(_):
-    inductiva.init(address="http://192.168.1.50:8000", output_dir="output")
+    inductiva.api_url = FLAGS.api_url
 
     scenario = inductiva.fluids.DamBreak(
         fluid=inductiva.fluids.WATER,

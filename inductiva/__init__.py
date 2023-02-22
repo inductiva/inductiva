@@ -1,7 +1,11 @@
 """Client for Inductiva's web API."""
-from .api import init
+import os
+
 from . import math
 from . import fluids
 from . import sph
 from . import utils
 from . import cupy
+
+api_url = os.environ.get("INDUCTIVA_API_URL", "http://api.inductiva.ai")
+output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")

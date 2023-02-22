@@ -18,14 +18,12 @@ FLAGS = flags.FLAGS
 
 flags.DEFINE_integer("size", 1000, "Size of the square matrix to use.")
 
-flags.DEFINE_string("api_url", "http://localhost:8000",
+flags.DEFINE_string("api_url", "http://api.inductiva.ai",
                     "Base URL of the Inductiva API.")
 
 
 def main(_):
-    logging.set_verbosity(logging.DEBUG)
-
-    inductiva.init(address=FLAGS.api_url)
+    inductiva.api_url = FLAGS.api_url
 
     m = utils.get_square_tridiagonal_h_matrix(FLAGS.size)
 
@@ -41,4 +39,5 @@ def main(_):
 
 
 if __name__ == "__main__":
+    logging.set_verbosity(logging.DEBUG)
     app.run(main)

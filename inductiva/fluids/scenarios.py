@@ -1,6 +1,7 @@
 """Describes the physical scenarios and runs its simulation via API."""
 import tempfile
 import numpy as np
+
 from typing import List, Optional
 
 import inductiva
