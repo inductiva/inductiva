@@ -19,8 +19,12 @@ class SimulationOutput:
             sim_output_path: Path to simulation output files."""
         self.sim_output_dir = sim_output_path.path
 
-    def render(self):
-        """Generate a simulation movie."""
+    def render(self, color_quantity: str = None):
+        """Generate a simulation movie.
+
+        Args:
+            color_quantity: Quantity to represent in the color scale of the
+                scatter plot."""
 
         # Read simulation particle data
         reader = ParticleDataReader()
@@ -32,7 +36,7 @@ class SimulationOutput:
             x_quantity="x",
             y_quantity="y",
             z_quantity="z",
-        )
+            color_quantity=color_quantity)
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
         visualizer.create_time_movie(movie_path)
 
