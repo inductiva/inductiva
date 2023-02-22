@@ -1,9 +1,8 @@
 """Describes the physical scenarios and runs its simulation via API."""
 import tempfile
 import numpy as np
-from typing import List, Optional
 
-from typing import List
+from typing import List, Optional
 
 import inductiva
 from inductiva.types import DirPath
@@ -21,7 +20,6 @@ TANK_DIMENSIONS = [1, 1, 1]
 
 class DamBreak:
     """Physical scenario of a dam break simulation."""
-
 
     def __init__(self,
                  fluid_dimensions: List[float],

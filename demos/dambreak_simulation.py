@@ -6,7 +6,6 @@ from absl import app
 import inductiva
 import inductiva_utils
 
-
 FLAGS = flags.FLAGS
 
 flags.DEFINE_string("api_url", "http://api.inductiva.ai",
