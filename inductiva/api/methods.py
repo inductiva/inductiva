@@ -3,20 +3,20 @@
 The relevant function for usage outside of this file is invoke_api().
 Check the demos directory for examples on how it is used.
 """
-from contextlib import contextmanager
 import os
+import signal
 import time
+from contextlib import contextmanager
+
 from absl import logging
-
-import inductiva
-
-from inductiva_web_api_client import Configuration
-from inductiva_web_api_client import ApiClient, ApiException
+from inductiva_web_api_client import ApiClient, ApiException, Configuration
 from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
 from inductiva_web_api_client.models import TaskRequest, TaskStatus
 
-from inductiva.utils.data import get_validate_request_params, pack_input, unpack_output
-from inductiva.utils.meta import get_type_annotations, get_method_name
+import inductiva
+from inductiva.utils.data import (get_validate_request_params, pack_input,
+                                  unpack_output)
+from inductiva.utils.meta import get_method_name, get_type_annotations
 
 
 def submit_request(api_instance: TasksApi, original_params,
@@ -155,12 +155,27 @@ def block_until_status_is(api_instance,
     return api_response.body
 
 
+def sigint_handler(api_instance, task_id):
+    logging.debug("Received SIGINT: terminating blocking task ...")
+    kill_task(api_instance, task_id)
+    raise KeyboardInterrupt
+
+
 @contextmanager
 def blocking_task_context(api_instance, task_id) -> None:
+    original_sigint_handler = signal.getsignal(signal.SIGINT)
+
+    signal.signal(signal.SIGINT,
+                  lambda *args: sigint_handler(api_instance, task_id))
+
     try:
         yield None
-    finally:
+    except Exception as err:
+        logging.debug("Caught exception: terminating blocking task ...")
         kill_task(api_instance, task_id)
+        raise err
+    finally:
+        signal.signal(signal.SIGINT, original_sigint_handler)
 
 
 def invoke_api(params, function_ptr):
