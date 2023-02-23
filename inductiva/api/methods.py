@@ -1,9 +1,9 @@
 """Methods that interact with the lower-level inductiva-web-api-client.
 
-The most relevant functions that for usage outside of this file
-are init() and invoke_api(). Check the demos directory and the `math.py`
-file for examples on how they are used.
+The relevant function for usage outside of this file is invoke_api().
+Check the demos directory for examples on how it is used.
 """
+from contextlib import contextmanager
 import os
 import time
 from absl import logging
@@ -17,9 +17,6 @@ from inductiva_web_api_client.models import TaskRequest, TaskStatus
 
 from inductiva.utils.data import get_validate_request_params, pack_input, unpack_output
 from inductiva.utils.meta import get_type_annotations, get_method_name
-
-DEFAULT_OUTPUT_DIR = "inductiva_output"
-DEFAULT_API_URL = "http://api.inductiva.ai"
 
 
 def submit_request(api_instance: TasksApi, original_params,
@@ -110,22 +107,34 @@ def download_output(api_instance, task_id):
     return api_response.body.name
 
 
-def block_until_finish(api_instance,
-                       task_id: str,
-                       sleep_secs=0.5) -> TaskRequest:
+def block_until_finish(api_instance, task_id: str) -> TaskRequest:
     """Block until a task executing remotely finishes execution.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task to wait for.
-        sleep_secs: Time in secs between polling requests. Defaults to 0.5.
 
     Return
         Returns info related to the task, containing two fields,
         "id" and "status".
     """
-
     logging.debug("Blocking until task is finished ...")
+    return block_until_status_is(api_instance, task_id, "success")
+
+
+def kill_task(api_instance, task_id: str):
+    logging.debug("Sending kill task request ...")
+    _ = api_instance.kill_task_task_task_id_kill_post(
+        path_params={"task_id": task_id},)
+
+    logging.debug("Blocking until task is killed ...")
+    return block_until_status_is(api_instance, task_id, "killed")
+
+
+def block_until_status_is(api_instance,
+                          task_id,
+                          desired_status,
+                          sleep_secs=0.5):
     while True:
         try:
             api_response = \
@@ -138,12 +147,20 @@ def block_until_finish(api_instance,
             raise e
 
         # If status is success, then stop polling
-        if api_response.body["status"] == "success":
+        if api_response.body["status"] == desired_status:
             break
 
         time.sleep(sleep_secs)
 
     return api_response.body
+
+
+@contextmanager
+def blocking_task_context(api_instance, task_id) -> None:
+    try:
+        yield None
+    finally:
+        kill_task(api_instance, task_id)
 
 
 def invoke_api(params, function_ptr):
@@ -190,18 +207,19 @@ def invoke_api(params, function_ptr):
 
         task_id = task["id"]
 
-        if task["status"] == "pending-input":
-            upload_input(
+        with blocking_task_context(api_instance, task_id):
+            if task["status"] == "pending-input":
+                upload_input(
+                    api_instance=api_instance,
+                    task_id=task_id,
+                    original_params=params,
+                    type_annotations=type_annotations,
+                )
+
+            _ = block_until_finish(
                 api_instance=api_instance,
                 task_id=task_id,
-                original_params=params,
-                type_annotations=type_annotations,
             )
-
-        _ = block_until_finish(
-            api_instance=api_instance,
-            task_id=task_id,
-        )
 
         output_zip_path = download_output(
             api_instance=api_instance,
