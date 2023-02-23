@@ -222,6 +222,8 @@ def invoke_api(params, function_ptr):
 
         task_id = task["id"]
 
+        # While the task is executing, use a context manager that kills the
+        # task if some exception or SIGINT is caught.
         with blocking_task_context(api_instance, task_id):
             if task["status"] == "pending-input":
                 upload_input(
