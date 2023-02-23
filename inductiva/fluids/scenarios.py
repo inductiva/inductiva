@@ -15,6 +15,9 @@ from inductiva_sph import sph_core
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
 OUTPUT_TIME_STEP = 1. / 60.
 TANK_DIMENSIONS = [1, 1, 1]
+HIGH_RESOLUTION = 0.001
+MEDIUM_RESOLUTION = 0.02
+LOW_RESOLUTION = 0.04
 
 
 class DamBreak:
@@ -69,11 +72,13 @@ class DamBreak:
             raise ValueError("Fluid cannot exceed tank borders.")
         self.fluid_position = fluid_position
 
-        # TODO set a particle radius upper and lower boudnries
-        # if particle_radius < 0.01:
-        #     raise ValueError("`particle_radius` must be larger than 0.01.")
+        if resolution == "high":
+            self.particle_radius = HIGH_RESOLUTION
+        elif resolution == "medium":
+            self.particle_radius = MEDIUM_RESOLUTION
+        else:
+            self.particle_radius = LOW_RESOLUTION
 
-        self.particle_radius = particle_radius
         self.time_max = time_max
 
     def simulate(self):
