@@ -15,9 +15,11 @@ from inductiva_sph import sph_core
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
 OUTPUT_TIME_STEP = 1. / 60.
 TANK_DIMENSIONS = [1, 1, 1]
-HIGH_RESOLUTION = 0.001
-MEDIUM_RESOLUTION = 0.02
-LOW_RESOLUTION = 0.04
+FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
+FLUID_DIMENSION_UPPER_BOUNDARY = 1
+HIGH_RESOLUTION_PARTICLE_RADIUS = 0.001
+MEDIUM_RESOLUTION_PARTICLE_RADIUS = 0.02
+LOW_RESOLUTION_PARTICLE_RADIUS = 0.04
 
 
 class DamBreak:
@@ -42,18 +44,18 @@ class DamBreak:
               finer discretization, hence more particles.
             resolution: Sets the fluid resolution to simulate.
               Available options are (the default is "medium"):
-              - 'high'
-              - 'medium'
-              - 'low' 
+              - "high"
+              - "medium"
+              - "low" 
             time_max: Maximum time of simulation, in seconds."""
 
         self.fluid = fluid
 
         #  Set fluid block dimensions according to the input
-        if max(fluid_dimensions) > 1:
+        if max(fluid_dimensions) > FLUID_DIMENSION_UPPER_BOUNDARY:
             raise ValueError(
                 "The values of `fluid_dimensions` cannot exceed 1.")
-        if min(fluid_dimensions) < 0.1:
+        if min(fluid_dimensions) < FLUID_DIMENSION_LOWER_BOUNDARY:
             raise ValueError(
                 "The values of `fluid_dimensions` must be larger than 0.1.")
         if len(fluid_dimensions) != 3:
@@ -73,11 +75,11 @@ class DamBreak:
         self.fluid_position = fluid_position
 
         if resolution == "high":
-            self.particle_radius = HIGH_RESOLUTION
+            self.particle_radius = HIGH_RESOLUTION_PARTICLE_RADIUS
         elif resolution == "medium":
-            self.particle_radius = MEDIUM_RESOLUTION
+            self.particle_radius = MEDIUM_RESOLUTION_PARTICLE_RADIUS
         else:
-            self.particle_radius = LOW_RESOLUTION
+            self.particle_radius = LOW_RESOLUTION_PARTICLE_RADIUS
 
         self.time_max = time_max
 
