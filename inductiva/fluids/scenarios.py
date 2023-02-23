@@ -2,7 +2,7 @@
 import tempfile
 import numpy as np
 
-from typing import List, Optional
+from typing import List, Optional, Literal
 
 import inductiva
 from inductiva.types import DirPath
@@ -24,7 +24,8 @@ class DamBreak:
                  fluid_dimensions: List[float],
                  fluid: sph_core.fluids.FluidProperties = WATER,
                  fluid_position: Optional[List[float]] = None,
-                 particle_radius: float = 0.02,
+                 resolution: Literal["high", "medium", 
+                                     "low"] = "medium",
                  time_max: float = 1) -> None:
         """Initializes a `DamBreak` object.
 
@@ -36,6 +37,11 @@ class DamBreak:
             particle_radius: Radius of the discretization particles, in meters.
               Used to control particle spacing. Smaller particle radius means a
               finer discretization, hence more particles.
+            resolution: Sets the fluid resolution to simulate.
+              Available options are (the default is "medium"):
+              - 'high'
+              - 'medium'
+              - 'low' 
             time_max: Maximum time of simulation, in seconds."""
 
         self.fluid = fluid
