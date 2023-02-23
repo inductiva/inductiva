@@ -1,5 +1,6 @@
-"""Simple classes used for type definitions."""
+"""Type definitions."""
 import os
+from typing import TypeAlias, Union
 
 
 class DirPath():
@@ -17,3 +18,6 @@ class DirPath():
         if not os.path.isdir(path):
             raise ValueError("The provided path is not a directory.")
         self.path = path
+
+
+Path: TypeAlias = Union[os.PathLike[str], str]

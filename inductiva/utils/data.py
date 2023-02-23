@@ -7,6 +7,7 @@ configurations related to paths where certain files are expected to be.
 """
 import os
 import json
+import pathlib
 import zipfile
 import tempfile
 import shutil
@@ -16,7 +17,7 @@ import scipy
 from absl import logging
 
 from .meta import is_tuple
-from inductiva.types import DirPath
+from inductiva.types import Path
 
 INPUPT_FILENAME = "input.json"
 OUTPUT_FILENAME = "output.json"
@@ -45,15 +46,16 @@ def get_validate_request_params(original_params: dict,
 
     for variable in original_params:
         param_type = type_annotations[variable]
+        print(variable)
 
         if param_type in (np.ndarray, scipy.sparse):
             params[variable] = {
                 "shape": original_params[variable].shape,
             }
-        elif param_type == DirPath:
+        elif param_type == Path:
             # TODO: what kind of information do we want to send for validation
             # of a SplishSplash simulation?
-            params[variable] = original_params[variable].path
+            params[variable] = str(original_params[variable])
         else:
             params[variable] = original_params[variable]
 
@@ -89,14 +91,14 @@ def pack_param(name: str, value, param_type, dst_dir):
         logging.debug("Stored %s to %s", name, param_fullpath)
         return param_filename
 
-    if param_type == DirPath:
+    if param_type == Path:
         dst_dir_name = name
         dst_fullpath = os.path.join(dst_dir, dst_dir_name)
 
-        shutil.copytree(value.path, dst_fullpath)
+        shutil.copytree(value, dst_fullpath)
 
         logging.debug("Copied %s to %s", value, dst_fullpath)
-        return dst_dir_name
+        return str(dst_dir_name)
 
     return value
 
@@ -162,13 +164,13 @@ def unpack_value(value: str, var_type, output_dir: str):
     if var_type == np.ndarray:
         return np.load(os.path.join(output_dir, value))
 
-    if var_type == DirPath:
-        return DirPath(os.path.join(output_dir, value))
+    if var_type == pathlib.Path:
+        return pathlib.Path(os.path.join(output_dir, value))
 
     return type(value)
 
 
-def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
+def unpack_output(zip_path: str, output_dir: str, return_type):
     """Unpack zip with the outputs of a task executed remotely in the API.
 
     Args:
