@@ -26,7 +26,7 @@ def main(_):
     inductiva.api_url = FLAGS.api_url
 
     time_start = time.perf_counter()
-    
+
     scenario = inductiva.fluids.DamBreak(
         fluid=inductiva.fluids.WATER,
         fluid_dimensions=inductiva_utils.flags.cast_list_to_float(
