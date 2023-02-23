@@ -20,6 +20,7 @@ FLUID_DIMENSION_UPPER_BOUNDARY = 1
 HIGH_RESOLUTION_PARTICLE_RADIUS = 0.001
 MEDIUM_RESOLUTION_PARTICLE_RADIUS = 0.02
 LOW_RESOLUTION_PARTICLE_RADIUS = 0.04
+# TIME_MAX = 5
 
 
 class DamBreak:
@@ -29,8 +30,7 @@ class DamBreak:
                  fluid_dimensions: List[float],
                  fluid: sph_core.fluids.FluidProperties = WATER,
                  fluid_position: Optional[List[float]] = None,
-                 resolution: Literal["high", "medium", 
-                                     "low"] = "medium",
+                 resolution: Literal["high", "medium", "low"] = "medium",
                  time_max: float = 1) -> None:
         """Initializes a `DamBreak` object.
 
@@ -54,10 +54,12 @@ class DamBreak:
         #  Set fluid block dimensions according to the input
         if max(fluid_dimensions) > FLUID_DIMENSION_UPPER_BOUNDARY:
             raise ValueError(
-                "The values of `fluid_dimensions` cannot exceed 1.")
+                "The values of `fluid_dimensions` cannot exceed %s.", 
+                FLUID_DIMENSION_UPPER_BOUNDARY)
         if min(fluid_dimensions) < FLUID_DIMENSION_LOWER_BOUNDARY:
             raise ValueError(
-                "The values of `fluid_dimensions` must be larger than 0.1.")
+                "The values of `fluid_dimensions` must be larger than %s.", 
+                FLUID_DIMENSION_LOWER_BOUNDARY)
         if len(fluid_dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
 
@@ -80,7 +82,9 @@ class DamBreak:
             self.particle_radius = MEDIUM_RESOLUTION_PARTICLE_RADIUS
         else:
             self.particle_radius = LOW_RESOLUTION_PARTICLE_RADIUS
-
+        
+        # if time_max > TIME_MAX:
+        #     raise ValueError("`time_max` cannot exceed %s seconds.", TIME_MAX)
         self.time_max = time_max
 
     def simulate(self):
