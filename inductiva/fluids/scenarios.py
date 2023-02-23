@@ -46,13 +46,13 @@ class DamBreak:
                 "The values of `fluid_dimensions` cannot exceed 1.")
         if min(fluid_dimensions) < 0.1:
             raise ValueError(
-                "The values of `fluid_dimensions` must be larger than 0.01.")
+                "The values of `fluid_dimensions` must be larger than 0.1.")
         if len(fluid_dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
 
         self.fluid_dimensions = fluid_dimensions
 
-        if fluid_position is not None:
+        if fluid_position is None:
             self.fluid_position = [0.0, 0.0, 0.0]
 
         if len(fluid_position) != 3:
