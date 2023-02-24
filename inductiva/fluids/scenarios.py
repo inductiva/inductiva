@@ -22,11 +22,10 @@ FLUID_DIMENSION_UPPER_BOUNDARY = 1
 
 
 class ParticleRadius(Enum):
-    # pylint: disable=invalid-name
-    high = 0.001
-    medium = 0.02
-    low = 0.04
-    # pylint: enable=invalid-name
+    """Sets particle radius according to resolution."""
+    HIGH = 0.001
+    MEDIUM = 0.02
+    LOW = 0.04
 
 
 class DamBreak:
@@ -81,7 +80,7 @@ class DamBreak:
             raise ValueError("Fluid cannot exceed tank borders.")
         self.fluid_position = fluid_position
 
-        self.particle_radius = ParticleRadius[resolution].value
+        self.particle_radius = ParticleRadius[resolution.upper()].value
 
         # if time_max > TIME_MAX:
         #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
