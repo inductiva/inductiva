@@ -15,7 +15,7 @@ flags.DEFINE_list("fluid_dimensions", [0.2, 0.8, 0.8],
                   "Dimensions of the fluid column.")
 flags.DEFINE_list("fluid_position", [0.0, 0.0, 0.0],
                   "Position of the fluid column in the tank.")
-flags.DEFINE_float("resolution", "medium", ["high", "medium", "low"],
+flags.DEFINE_enum("resolution", "medium", ["high", "medium", "low"],
                    "Sets the fluid resolution to simulate..")
 flags.DEFINE_string(
     "color_quantity", None, " Quantity to represent in the color scale of the"
