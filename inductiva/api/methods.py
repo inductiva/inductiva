@@ -114,7 +114,7 @@ def block_until_finish(api_instance, task_id: str) -> TaskRequest:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task to wait for.
 
-    Return
+    Returns:
         Returns info related to the task, containing two fields,
         "id" and "status".
     """
@@ -123,6 +123,22 @@ def block_until_finish(api_instance, task_id: str) -> TaskRequest:
 
 
 def kill_task(api_instance, task_id: str):
+    """Kill a task that is executing remotely.
+
+    The function sends a Kill request to the API and then polls until the
+    status of the task is killed.
+    TODO: should polling be done here? Or should the API endpoint make sure
+    that the task is killed instead of the client having to wait for
+    confirmation?
+
+    Args:
+        api_instance: Instance of TasksApi used to send necessary requests.
+        task_id: ID of the task to kill.
+
+    Returns:
+        Returns info related to the task, containing two fields,
+        "id" and "status".
+    """
     logging.debug("Sending kill task request ...")
     _ = api_instance.kill_task_task_task_id_kill_post(
         path_params={"task_id": task_id},)
@@ -135,6 +151,17 @@ def block_until_status_is(api_instance,
                           task_id,
                           desired_status,
                           sleep_secs=0.5):
+    """Block until the status of a task becomes the desired status.
+
+    Args:
+        api_instance: Instance of TasksApi used to send necessary requests.
+        task_id: ID of the task to wait for.
+        desired_status: Task status to wait for.
+        sleep_secs: Polling interval.
+
+    Returns:
+        Returns info related to the task, containing two fields,
+    """
     while True:
         try:
             api_response = \
@@ -155,18 +182,23 @@ def block_until_status_is(api_instance,
     return api_response.body
 
 
-def sigint_handler(api_instance, task_id):
-    logging.debug("Received SIGINT: terminating blocking task ...")
-    kill_task(api_instance, task_id)
-    raise KeyboardInterrupt
-
-
 @contextmanager
-def blocking_task_context(api_instance, task_id) -> None:
-    original_sigint_handler = signal.getsignal(signal.SIGINT)
+def blocking_task_context(api_instance, task_id):
+    """Context to handle execution of a blocking task.
 
-    signal.signal(signal.SIGINT,
-                  lambda *args: sigint_handler(api_instance, task_id))
+    The context handles exceptions and the SIGINT signal, issuing a request
+    to the API to kill the executing task.
+    Info on the implementation:
+    - https://docs.python.org/3/library/contextlib.html
+
+    Args:
+        api_instance: Instance of TasksApi used to send necessary requests.
+        task_id: ID of the task being executed.
+    """
+    # Other imported modules can make changes to the SIGINT handler, so we set
+    # the default int handler to make sure that KeyboardInterrupt is raised
+    # if the user presses Ctrl+C.
+    original_sig = signal.signal(signal.SIGINT, signal.default_int_handler)
 
     try:
         yield None
@@ -174,8 +206,13 @@ def blocking_task_context(api_instance, task_id) -> None:
         logging.debug("Caught exception: terminating blocking task ...")
         kill_task(api_instance, task_id)
         raise err
+    except KeyboardInterrupt as err:
+        logging.debug("Caught SIGINT: terminating blocking task ...")
+        kill_task(api_instance, task_id)
+        raise err
     finally:
-        signal.signal(signal.SIGINT, original_sigint_handler)
+        # Reset original SIGINT handler
+        signal.signal(signal.SIGINT, original_sig)
 
 
 def invoke_api(params, function_ptr):
