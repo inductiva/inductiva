@@ -1,20 +1,31 @@
 """Describes the physical scenarios and runs its simulation via API."""
 import tempfile
 import numpy as np
+from enum import Enum
 
-from typing import List, Optional
+from typing import List, Optional, Literal
 
 import inductiva
+import inductiva_sph
+from inductiva_sph import sph_core
 from inductiva.types import DirPath
 from ._output_post_processing import SimulationOutput
 from ._fluid_types import WATER
-import inductiva_sph
-from inductiva_sph import sph_core
 
 # Glabal variables to define a scenario
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
 OUTPUT_TIME_STEP = 1. / 60.
 TANK_DIMENSIONS = [1, 1, 1]
+FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
+FLUID_DIMENSION_UPPER_BOUNDARY = 1
+# TIME_MAX = 5
+
+
+class ParticleRadius(Enum):
+    """Sets particle radius according to resolution."""
+    HIGH = 0.001
+    MEDIUM = 0.02
+    LOW = 0.04
 
 
 class DamBreak:
@@ -24,7 +35,7 @@ class DamBreak:
                  fluid_dimensions: List[float],
                  fluid: sph_core.fluids.FluidProperties = WATER,
                  fluid_position: Optional[List[float]] = None,
-                 particle_radius: float = 0.02,
+                 resolution: Literal["high", "medium", "low"] = "medium",
                  time_max: float = 1) -> None:
         """Initializes a `DamBreak` object.
 
@@ -36,17 +47,23 @@ class DamBreak:
             particle_radius: Radius of the discretization particles, in meters.
               Used to control particle spacing. Smaller particle radius means a
               finer discretization, hence more particles.
+            resolution: Sets the fluid resolution to simulate.
+              Available options are (the default is "medium"):
+              - "high"
+              - "medium"
+              - "low"
             time_max: Maximum time of simulation, in seconds."""
 
         self.fluid = fluid
 
         #  Set fluid block dimensions according to the input
-        if max(fluid_dimensions) > 1:
+        if max(fluid_dimensions) > FLUID_DIMENSION_UPPER_BOUNDARY:
+            raise ValueError("The values of `fluid_dimensions` cannot exceed \
+                {FLUID_DIMENSION_UPPER_BOUNDARY}.")
+        if min(fluid_dimensions) < FLUID_DIMENSION_LOWER_BOUNDARY:
             raise ValueError(
-                "The values of `fluid_dimensions` cannot exceed 1.")
-        if min(fluid_dimensions) < 0.1:
-            raise ValueError(
-                "The values of `fluid_dimensions` must be larger than 0.1.")
+                "The values of `fluid_dimensions` must be larger than \
+                {FLUID_DIMENSION_LOWER_BOUNDARY}.")
         if len(fluid_dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
 
@@ -63,11 +80,10 @@ class DamBreak:
             raise ValueError("Fluid cannot exceed tank borders.")
         self.fluid_position = fluid_position
 
-        # TODO set a particle radius upper and lower boudnries
-        # if particle_radius < 0.01:
-        #     raise ValueError("`particle_radius` must be larger than 0.01.")
+        self.particle_radius = ParticleRadius[resolution.upper()].value
 
-        self.particle_radius = particle_radius
+        # if time_max > TIME_MAX:
+        #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
         self.time_max = time_max
 
     def simulate(self):
