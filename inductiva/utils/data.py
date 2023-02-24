@@ -193,7 +193,6 @@ def unpack_output(zip_path: str, output_dir: str, return_type):
         # Special case for if the output is a single directory, in which case
         # write it directly to the specified output_dir.
         if return_type == pathlib.Path:
-            # Add / to end of the dir path if the path doesn't have it
             dir_name = result_list[0]
             extract_subdir_files(zip_fp, dir_name, output_dir)
 
@@ -212,7 +211,17 @@ def unpack_output(zip_path: str, output_dir: str, return_type):
     return unpack_value(result_list[0], return_type, output_dir)
 
 
-def extract_subdir_files(zip_fp, dir_name, output_dir):
+def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name, output_dir):
+    """Util function to extract the contents of a directory in a ZIP archive.
+
+    For instance, if a ZIP archive contains a directory called `dir_name`,
+    the contents of that directory are extracted directly to `output_dir`.
+
+    Args:
+        zip_fp: ZipFile from which to extract the directory.
+        dir_name: Name of the directory inside the ZIP archive.
+        output_dir: Destination directory of the contents of `data_dir`.
+    """
     for member in zip_fp.namelist():
         is_dir = not os.path.basename(member)
 
