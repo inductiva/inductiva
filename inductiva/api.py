@@ -212,7 +212,7 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
         )
 
     if output_dir is None:
-        output_dir = os.path.join(inductiva.output_dir, task_id) \
+        output_dir = os.path.join(inductiva.output_dir, task_id)
 
     return unpack_output(
         zip_path=output_zip_path,
