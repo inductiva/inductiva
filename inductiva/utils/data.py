@@ -183,17 +183,24 @@ def unpack_output(zip_path: str, output_dir: str, return_type):
     Return:
         Returns the unpacked output of the method.
     """
-    with zipfile.ZipFile(zip_path, "r") as zip_fp:
-        zip_fp.extractall(output_dir)
-
-    logging.debug("Extracted output to %s", output_dir)
-
-    output_json_path = os.path.join(output_dir, OUTPUT_FILENAME)
-    with open(output_json_path, "r", encoding="UTF-8") as fp:
-        result_list = json.load(fp)
-
     if return_type is None:
         return
+
+    with zipfile.ZipFile(zip_path, "r") as zip_fp:
+        output_json = zip_fp.read(OUTPUT_FILENAME)
+        result_list = json.loads(output_json)
+
+        # Special case for if the output is a single directory, in which case
+        # write it directly to the specified output_dir.
+        if return_type == pathlib.Path:
+            # Add / to end of the dir path if the path doesn't have it
+            dir_name = result_list[0]
+            extract_subdir_files(zip_fp, dir_name, output_dir)
+
+            return pathlib.Path(output_dir)
+
+        # Handle general case
+        zip_fp.extractall(output_dir)
 
     if is_tuple(return_type):
         all_types = return_type.__args__
@@ -203,3 +210,20 @@ def unpack_output(zip_path: str, output_dir: str, return_type):
             for value, type in zip(result_list, all_types))
 
     return unpack_value(result_list[0], return_type, output_dir)
+
+
+def extract_subdir_files(zip_fp, dir_name, output_dir):
+    for member in zip_fp.namelist():
+        is_dir = not os.path.basename(member)
+
+        if not member.startswith(dir_name) or is_dir:
+            continue
+
+        src_file = zip_fp.open(member)
+        target_relative_path = pathlib.Path(member).relative_to(dir_name)
+        target_path = os.path.join(output_dir, target_relative_path)
+
+        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+
+        with open(target_path, "wb") as f:
+            shutil.copyfileobj(src_file, f)
