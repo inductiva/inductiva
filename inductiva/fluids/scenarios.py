@@ -1,4 +1,5 @@
 """Describes the physical scenarios and runs its simulation via API."""
+from absl import logging
 import tempfile
 import numpy as np
 from enum import Enum
@@ -19,6 +20,7 @@ TANK_DIMENSIONS = [1, 1, 1]
 FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 # TIME_MAX = 5
+logging.use_absl_handler()
 
 
 class ParticleRadius(Enum):
@@ -89,6 +91,7 @@ class DamBreak:
     def simulate(self):
         """Runs SPH simulation of the Dam Break scenario."""
 
+        logging.info("Preparing simulation input data...")
         # Create a dam break scenario
         scenario = self.__create_scenario()
 
@@ -104,12 +107,16 @@ class DamBreak:
 
         # Create input file
         simulation.create_input_file()
+        num_particles = simulation.estimate_num_particles()
+        logging.info("Estimated number of particles %s", num_particles)
 
+        logging.info("Running SPlisHSPlasH simulation ...")
         # Invoke API
         sim_output_path = inductiva.sph.run_simulation(
             DirPath(input_temp_dir.name))
         simulation._output_directory = sim_output_path.path  #pylint: disable=protected-access
 
+        logging.info("Finished running SPlisHSPlasH simulation.")
         simulation._convert_output_files(False)  #pylint: disable=protected-access
 
         # Delete temporary input directory
