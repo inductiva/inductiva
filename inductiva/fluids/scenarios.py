@@ -20,7 +20,7 @@ TANK_DIMENSIONS = [1, 1, 1]
 FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 # TIME_MAX = 5
-logging.use_absl_handler()
+logging.set_verbosity(logging.INFO)
 
 
 class ParticleRadius(Enum):
