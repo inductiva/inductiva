@@ -85,7 +85,7 @@ class DamBreak:
         #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
         self.time_max = time_max
 
-    def simulate(self):
+    def simulate(self, output_dir=None):
         """Runs SPH simulation of the Dam Break scenario."""
 
         # Create a dam break scenario
@@ -106,7 +106,7 @@ class DamBreak:
 
         # Invoke API
         sim_output_path = inductiva.sph.splishsplash.run_simulation(
-            input_temp_dir.name)
+            input_temp_dir.name, output_dir=output_dir)
         simulation._output_directory = sim_output_path  #pylint: disable=protected-access
 
         simulation._convert_output_files(False)  #pylint: disable=protected-access
