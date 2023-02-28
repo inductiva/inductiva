@@ -19,9 +19,9 @@ OUTPUT_TIME_STEP = 1. / 60.
 TANK_DIMENSIONS = [1, 1, 1]
 FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
-# TIME_MAX = 5
-logging.use_absl_handler()
+TIME_MAX = 3
 
+logging.set_verbosity(logging.INFO)
 
 class ParticleRadius(Enum):
     """Sets particle radius according to resolution."""
@@ -38,7 +38,7 @@ class DamBreak:
                  fluid: sph_core.fluids.FluidProperties = WATER,
                  fluid_position: Optional[List[float]] = None,
                  resolution: Literal["high", "medium", "low"] = "medium",
-                 time_max: float = 1) -> None:
+                 sim_duration: float = 1) -> None:
         """Initializes a `DamBreak` object.
 
         Args:
@@ -54,7 +54,7 @@ class DamBreak:
               - "high"
               - "medium"
               - "low"
-            time_max: Maximum time of simulation, in seconds."""
+            sim_duration: Simulation duration in seconds."""
 
         self.fluid = fluid
 
@@ -84,14 +84,13 @@ class DamBreak:
 
         self.particle_radius = ParticleRadius[resolution.upper()].value
 
-        # if time_max > TIME_MAX:
-        #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
-        self.time_max = time_max
+        if sim_duration > TIME_MAX:
+            raise ValueError("`sim_duration` cannot exceed {TIME_MAX} seconds.")
+        self.sim_duration = sim_duration
 
     def simulate(self):
         """Runs SPH simulation of the Dam Break scenario."""
 
-        logging.info("Preparing simulation input data...")
         # Create a dam break scenario
         scenario = self.__create_scenario()
 
@@ -107,8 +106,10 @@ class DamBreak:
 
         # Create input file
         simulation.create_input_file()
-        num_particles = simulation.estimate_num_particles()
-        logging.info("Estimated number of particles %s", num_particles)
+        logging.info("Estimated number of particles %s",
+                     self.estimate_num_particles())
+        logging.info("Number of time steps to simulate %s", 
+                     (OUTPUT_TIME_STEP*self.sim_duration))
 
         logging.info("Running SPlisHSPlasH simulation ...")
         # Invoke API
@@ -138,3 +139,17 @@ class DamBreak:
             dimensions=TANK_DIMENSIONS, fluid_blocks=[fluid_block])
 
         return scenario
+
+    def estimate_num_particles(self):
+        """Estimate of the number of SPH particles contained in fluid blocks."""
+
+        # Calculate number of particles for a fluid block
+        n_particles_x = round(self.fluid_dimensions[0] /
+                                (2 * self.particle_radius)) - 1
+        n_particles_y = round(self.fluid_dimensions[1] /
+                                (2 * self.particle_radius)) - 1
+        n_particles_z = round(self.fluid_dimensions[2] /
+                                (2 * self.particle_radius)) - 1
+
+        # Add number of particles to the total sum
+        return n_particles_x * n_particles_y * n_particles_z
