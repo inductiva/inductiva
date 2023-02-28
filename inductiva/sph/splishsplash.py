@@ -4,7 +4,6 @@ These functions are to be used inside the higher level constructs of the
 Inductiva client. For instance, `scenario.simulate()` uses the `run_simulation`
 function.
 """
-import os
 import pathlib
 from inductiva.api import invoke_api
 from inductiva.types import Path
