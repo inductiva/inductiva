@@ -23,9 +23,9 @@ FLUID_DIMENSION_UPPER_BOUNDARY = 1
 
 class ParticleRadius(Enum):
     """Sets particle radius according to resolution."""
-    HIGH = 0.001
-    MEDIUM = 0.02
-    LOW = 0.04
+    HIGH = 0.008
+    MEDIUM = 0.012
+    LOW = 0.02
 
 
 class DamBreak:
