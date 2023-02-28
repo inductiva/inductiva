@@ -99,7 +99,7 @@ class DamBreak:
         # Create simulation
         simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
             scenario=scenario,
-            time_max=self.time_max,
+            time_max=self.sim_duration,
             particle_radius=self.particle_radius,
             output_time_step=OUTPUT_TIME_STEP,
             output_directory=input_temp_dir.name)
