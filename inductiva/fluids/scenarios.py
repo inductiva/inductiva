@@ -3,6 +3,7 @@ from absl import logging
 import tempfile
 import numpy as np
 from enum import Enum
+import math
 
 from typing import List, Optional, Literal
 
@@ -110,7 +111,7 @@ class DamBreak:
         logging.info("Estimated number of particles %s",
                      self.estimate_num_particles())
         logging.info("Number of time steps to simulate %s",
-                     round(self.sim_duration / OUTPUT_TIME_STEP))
+                     math.ceil(self.sim_duration / OUTPUT_TIME_STEP))
 
         logging.info("Running SPlisHSPlasH simulation ...")
         # Invoke API
