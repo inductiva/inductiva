@@ -8,9 +8,8 @@ from typing import List, Optional, Literal
 import inductiva
 import inductiva_sph
 from inductiva_sph import sph_core
-from inductiva.types import DirPath
-from ._output_post_processing import SimulationOutput
-from ._fluid_types import WATER
+from inductiva.fluids._output_post_processing import SimulationOutput
+from inductiva.fluids._fluid_types import WATER
 
 # Glabal variables to define a scenario
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
@@ -106,9 +105,9 @@ class DamBreak:
         simulation.create_input_file()
 
         # Invoke API
-        sim_output_path = inductiva.sph.run_simulation(
-            DirPath(input_temp_dir.name))
-        simulation._output_directory = sim_output_path.path  #pylint: disable=protected-access
+        sim_output_path = inductiva.sph.splishsplash.run_simulation(
+            input_temp_dir.name)
+        simulation._output_directory = sim_output_path  #pylint: disable=protected-access
 
         simulation._convert_output_files(False)  #pylint: disable=protected-access
 
