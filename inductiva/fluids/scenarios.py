@@ -23,6 +23,7 @@ TIME_MAX = 3
 
 logging.set_verbosity(logging.INFO)
 
+
 class ParticleRadius(Enum):
     """Sets particle radius according to resolution."""
     HIGH = 0.001
@@ -108,8 +109,8 @@ class DamBreak:
         simulation.create_input_file()
         logging.info("Estimated number of particles %s",
                      self.estimate_num_particles())
-        logging.info("Number of time steps to simulate %s", 
-                     (OUTPUT_TIME_STEP*self.sim_duration))
+        logging.info("Number of time steps to simulate %s",
+                     round(self.sim_duration / OUTPUT_TIME_STEP))
 
         logging.info("Running SPlisHSPlasH simulation ...")
         # Invoke API
@@ -145,11 +146,11 @@ class DamBreak:
 
         # Calculate number of particles for a fluid block
         n_particles_x = round(self.fluid_dimensions[0] /
-                                (2 * self.particle_radius)) - 1
+                              (2 * self.particle_radius)) - 1
         n_particles_y = round(self.fluid_dimensions[1] /
-                                (2 * self.particle_radius)) - 1
+                              (2 * self.particle_radius)) - 1
         n_particles_z = round(self.fluid_dimensions[2] /
-                                (2 * self.particle_radius)) - 1
+                              (2 * self.particle_radius)) - 1
 
         # Add number of particles to the total sum
         return n_particles_x * n_particles_y * n_particles_z
