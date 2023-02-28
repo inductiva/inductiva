@@ -184,7 +184,7 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
     with zipfile.ZipFile(zip_path, "r") as zip_fp:
         zip_fp.extractall(output_dir)
 
-    logging.debug("Extracted output to %s", output_dir)
+    logging.info("Extracted output to %s", output_dir)
 
     output_json_path = os.path.join(output_dir, OUTPUT_FILENAME)
     with open(output_json_path, "r", encoding="UTF-8") as fp:
