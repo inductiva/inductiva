@@ -118,7 +118,6 @@ class DamBreak:
             DirPath(input_temp_dir.name))
         simulation._output_directory = sim_output_path.path  #pylint: disable=protected-access
 
-        logging.info("Finished running SPlisHSPlasH simulation.")
         simulation._convert_output_files(False)  #pylint: disable=protected-access
 
         # Delete temporary input directory
