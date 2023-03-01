@@ -14,7 +14,7 @@ from inductiva.types import Path
 
 
 def run_simulation(sim_dir: Path,
-                   input_file_name: str = "splishsplash_input.json",
+                   input_filename: str = "splishsplash_input.json",
                    output_dir: Optional[Path] = None) -> pathlib.Path:
     """Run SplishSplash in the API.
 

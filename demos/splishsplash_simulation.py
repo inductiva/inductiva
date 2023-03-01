@@ -13,7 +13,7 @@ flags.DEFINE_string("sim_dir",
                     None,
                     "Directory with the simulation inputs.",
                     required=True)
-flags.DEFINE_string("input_file_name",
+flags.DEFINE_string("input_filename",
                     None,
                     "Name of the input file.",
                     required=True)
@@ -30,7 +30,7 @@ def main(_):
 
     sph_sim = inductiva.fluids.SPlisHSPlasH(
         sim_dir=FLAGS.sim_dir,
-        input_file_name=FLAGS.input_file_name,
+        input_filename=FLAGS.input_filename,
     )
 
     output_path = sph_sim.simulate(output_dir=FLAGS.output_dir)
