@@ -22,6 +22,7 @@ flags.DEFINE_string(
     "scatter plot.")
 flags.DEFINE_string("output_dir", None,
                     "Destination directory for output files.")
+flags.DEFINE_integer("simulation_time", 2, "Simulation time in seconds.")
 
 
 def main(_):

@@ -55,7 +55,7 @@ class DamBreak:
               - "high"
               - "medium"
               - "low"
-            simulation_time: Simulation duration in seconds."""
+            simulation_time: Simulation time in seconds."""
 
         self.fluid = fluid
 
@@ -116,7 +116,9 @@ class DamBreak:
         simulation.create_input_file()
         logging.info("Estimated number of particles %d",
                      self.estimate_num_particles())
-        logging.info("Number of time steps to simulate %s",
+        logging.info("Estimated number of time steps %s", 
+                     math.ceil(self.simulation_time /simulation.time_step))
+        logging.info("Number of output time steps %s",
                      math.ceil(self.simulation_time / OUTPUT_TIME_STEP))
 
         logging.info("Running SPlisHSPlasH simulation.")
