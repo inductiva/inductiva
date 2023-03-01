@@ -19,7 +19,7 @@ from absl import logging
 from .meta import is_tuple
 from inductiva.types import Path
 
-INPUPT_FILENAME = "input.json"
+INPUT_FILENAME = "input.json"
 OUTPUT_FILENAME = "output.json"
 
 
@@ -132,7 +132,7 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
             )
 
         # Write input dictionary with packed params to a JSON file
-        input_json_path = os.path.join(tmpdir_path, INPUPT_FILENAME)
+        input_json_path = os.path.join(tmpdir_path, INPUT_FILENAME)
         with open(input_json_path, "w", encoding="UTF-8") as fp:
             json.dump(input_params, fp)
 
