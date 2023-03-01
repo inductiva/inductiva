@@ -46,7 +46,6 @@ def get_validate_request_params(original_params: dict,
 
     for variable in original_params:
         param_type = type_annotations[variable]
-        print(variable)
 
         if param_type in (np.ndarray, scipy.sparse):
             params[variable] = {

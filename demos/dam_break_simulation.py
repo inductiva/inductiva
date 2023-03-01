@@ -11,7 +11,7 @@ FLAGS = flags.FLAGS
 
 flags.DEFINE_string("api_url", "http://api.inductiva.ai",
                     "Base URL of the Inductiva API.")
-flags.DEFINE_list("fluid_dimensions", [0.2, 0.8, 0.8],
+flags.DEFINE_list("fluid_dimensions", [0.1, 0.1, 0.1],
                   "Dimensions of the fluid column.")
 flags.DEFINE_list("fluid_position", [0.0, 0.0, 0.0],
                   "Position of the fluid column in the tank.")
@@ -25,6 +25,7 @@ flags.DEFINE_string("output_dir", None,
 
 
 def main(_):
+    """Run a Dam Break simulation using SPlisHSPlasH via the API."""
     inductiva.api_url = FLAGS.api_url
 
     time_start = time.perf_counter()

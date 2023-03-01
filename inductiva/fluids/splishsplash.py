@@ -7,11 +7,11 @@ from inductiva.types import Path
 
 
 class SPlisHSPlasH:
-    """Class to invoke a generic SplishSplash simulation on the API.
+    """Class to invoke a generic SPlisHSPlasH simulation on the API.
 
     Attributes:
         sim_dir: Path to the directory with all the simulation input files.
-        input_file_name: Name of the SplishSplash input file. The file should
+        input_file_name: Name of the SPlisHSPlasH input file. The file should
             be present in `sim_dir`, and the name is relative to that
             directory.
     """

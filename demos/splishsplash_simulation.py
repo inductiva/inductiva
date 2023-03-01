@@ -24,6 +24,8 @@ flags.DEFINE_string("output_dir",
 
 
 def main(_):
+    """Run a SPlisHSPlasH simulation using user-provided input files."""
+
     inductiva.api_url = FLAGS.api_url
 
     sph_sim = inductiva.fluids.SPlisHSPlasH(

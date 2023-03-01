@@ -5,10 +5,10 @@ Inductiva client. For instance, `scenario.simulate()` uses the `run_simulation`
 function.
 """
 import pathlib
+from typing import Optional
+
 from inductiva.api import invoke_api
 from inductiva.types import Path
-
-from typing import Optional
 
 # pylint: disable=unused-argument
 

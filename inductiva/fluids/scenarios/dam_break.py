@@ -10,6 +10,7 @@ import inductiva_sph
 from inductiva_sph import sph_core
 from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.fluids._fluid_types import WATER
+from inductiva.types import Path
 
 # Glabal variables to define a scenario
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
@@ -85,8 +86,14 @@ class DamBreak:
         #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
         self.time_max = time_max
 
-    def simulate(self, output_dir=None):
-        """Runs SPH simulation of the Dam Break scenario."""
+    def simulate(self, output_dir: Optional[Path] = None):
+        """Runs SPH simulation of the Dam Break scenario.
+
+        Args:
+            output_dir: Directory in which the output files will be saved. If
+                not specified, then the default directory used for API tasks
+                (based on an internal ID of the task) will be used.
+        """
 
         # Create a dam break scenario
         scenario = self.__create_scenario()
