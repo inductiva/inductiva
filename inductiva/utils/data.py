@@ -121,6 +121,7 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
         located in the temporary directory of the OS (`/tmp` in linux).
     """
     with tempfile.TemporaryDirectory() as tmpdir_path:
+        logging.debug("PACKING INPUT")
         input_params = {}
 
         for variable in params:

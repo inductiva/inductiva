@@ -5,7 +5,7 @@ Inductiva client. For instance, `scenario.simulate()` uses the `run_simulation`
 function.
 """
 import pathlib
-from typing import Optional
+from typing import Literal, Optional
 
 from inductiva.api import invoke_api
 from inductiva.types import Path
@@ -15,6 +15,7 @@ from inductiva.types import Path
 
 def run_simulation(sim_dir: Path,
                    input_filename: str = "splishsplash_input.json",
+                   device: Literal["gpu", "cpu"] = "cpu",
                    output_dir: Optional[Path] = None) -> pathlib.Path:
     """Run SplishSplash in the API.
 
