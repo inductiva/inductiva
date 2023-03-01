@@ -11,7 +11,7 @@ FLAGS = flags.FLAGS
 
 flags.DEFINE_string("api_url", "http://api.inductiva.ai",
                     "Base URL of the Inductiva API.")
-flags.DEFINE_list("fluid_dimensions", [0.1, 0.1, 0.1],
+flags.DEFINE_list("fluid_dimensions", [0.2, 1, 1],
                   "Dimensions of the fluid column.")
 flags.DEFINE_list("fluid_position", [0.0, 0.0, 0.0],
                   "Position of the fluid column in the tank.")
