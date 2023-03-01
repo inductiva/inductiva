@@ -62,11 +62,11 @@ class DamBreak:
 
         #  Set fluid block dimensions according to the input
         if max(fluid_dimensions) > FLUID_DIMENSION_UPPER_BOUNDARY:
-            raise ValueError("The values of `fluid_dimensions` cannot exceed \
+            raise ValueError(f"The values of `fluid_dimensions` cannot exceed \
                 {FLUID_DIMENSION_UPPER_BOUNDARY}.")
         if min(fluid_dimensions) < FLUID_DIMENSION_LOWER_BOUNDARY:
             raise ValueError(
-                "The values of `fluid_dimensions` must be larger than \
+                f"The values of `fluid_dimensions` must be larger than \
                 {FLUID_DIMENSION_LOWER_BOUNDARY}.")
         if len(fluid_dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
@@ -87,7 +87,7 @@ class DamBreak:
         self.particle_radius = ParticleRadius[resolution.upper()].value
 
         if sim_duration > TIME_MAX:
-            raise ValueError("`sim_duration` cannot exceed {TIME_MAX} seconds.")
+            raise ValueError(f"`sim_duration` cannot exceed {TIME_MAX} seconds.")
         self.sim_duration = sim_duration
 
     def simulate(self):
