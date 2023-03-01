@@ -18,11 +18,14 @@ flags.DEFINE_list("fluid_position", [0.0, 0.0, 0.0],
 flags.DEFINE_enum("resolution", "medium", ["high", "medium", "low"],
                   "Sets the fluid resolution to simulate..")
 flags.DEFINE_string(
-    "color_quantity", None, " Quantity to represent in the color scale of the"
+    "color_quantity", None, "Quantity to represent in the color scale of the"
     "scatter plot.")
+flags.DEFINE_string("output_dir", None,
+                    "Destination directory for output files.")
 
 
 def main(_):
+    """Run a Dam Break simulation using SPlisHSPlasH via the API."""
     inductiva.api_url = FLAGS.api_url
 
     time_start = time.perf_counter()
@@ -35,7 +38,7 @@ def main(_):
             FLAGS.fluid_position),
         resolution=FLAGS.resolution)
 
-    simulation_output = scenario.simulate()
+    simulation_output = scenario.simulate(output_dir=FLAGS.output_dir)
     simulation_output.render(color_quantity=FLAGS.color_quantity)
 
     logging.info("Local time: %s", time.perf_counter() - time_start)

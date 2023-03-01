@@ -7,6 +7,7 @@ configurations related to paths where certain files are expected to be.
 """
 import os
 import json
+import pathlib
 import zipfile
 import tempfile
 import shutil
@@ -16,9 +17,9 @@ import scipy
 from absl import logging
 
 from .meta import is_tuple
-from inductiva.types import DirPath
+from inductiva.types import Path
 
-INPUPT_FILENAME = "input.json"
+INPUT_FILENAME = "input.json"
 OUTPUT_FILENAME = "output.json"
 
 
@@ -50,10 +51,10 @@ def get_validate_request_params(original_params: dict,
             params[variable] = {
                 "shape": original_params[variable].shape,
             }
-        elif param_type == DirPath:
+        elif param_type == Path:
             # TODO: what kind of information do we want to send for validation
             # of a SplishSplash simulation?
-            params[variable] = original_params[variable].path
+            params[variable] = str(original_params[variable])
         else:
             params[variable] = original_params[variable]
 
@@ -89,14 +90,14 @@ def pack_param(name: str, value, param_type, dst_dir):
         logging.debug("Stored %s to %s", name, param_fullpath)
         return param_filename
 
-    if param_type == DirPath:
+    if param_type == Path:
         dst_dir_name = name
         dst_fullpath = os.path.join(dst_dir, dst_dir_name)
 
-        shutil.copytree(value.path, dst_fullpath)
+        shutil.copytree(value, dst_fullpath)
 
         logging.debug("Copied %s to %s", value, dst_fullpath)
-        return dst_dir_name
+        return str(dst_dir_name)
 
     return value
 
@@ -131,7 +132,7 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
             )
 
         # Write input dictionary with packed params to a JSON file
-        input_json_path = os.path.join(tmpdir_path, INPUPT_FILENAME)
+        input_json_path = os.path.join(tmpdir_path, INPUT_FILENAME)
         with open(input_json_path, "w", encoding="UTF-8") as fp:
             json.dump(input_params, fp)
 
@@ -162,13 +163,13 @@ def unpack_value(value: str, var_type, output_dir: str):
     if var_type == np.ndarray:
         return np.load(os.path.join(output_dir, value))
 
-    if var_type == DirPath:
-        return DirPath(os.path.join(output_dir, value))
+    if var_type == pathlib.Path:
+        return pathlib.Path(os.path.join(output_dir, value))
 
     return type(value)
 
 
-def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
+def unpack_output(zip_path: str, output_dir: str, return_type):
     """Unpack zip with the outputs of a task executed remotely in the API.
 
     Args:
@@ -181,17 +182,23 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
     Return:
         Returns the unpacked output of the method.
     """
-    with zipfile.ZipFile(zip_path, "r") as zip_fp:
-        zip_fp.extractall(output_dir)
-
-    logging.debug("Extracted output to %s", output_dir)
-
-    output_json_path = os.path.join(output_dir, OUTPUT_FILENAME)
-    with open(output_json_path, "r", encoding="UTF-8") as fp:
-        result_list = json.load(fp)
-
     if return_type is None:
         return
+
+    with zipfile.ZipFile(zip_path, "r") as zip_fp:
+        output_json = zip_fp.read(OUTPUT_FILENAME)
+        result_list = json.loads(output_json)
+
+        # Special case for if the output is a single directory, in which case
+        # write it directly to the specified output_dir.
+        if return_type == pathlib.Path:
+            dir_name = result_list[0]
+            extract_subdir_files(zip_fp, dir_name, output_dir)
+
+            return pathlib.Path(output_dir)
+
+        # Handle general case
+        zip_fp.extractall(output_dir)
 
     if is_tuple(return_type):
         all_types = return_type.__args__
@@ -201,3 +208,30 @@ def unpack_output(zip_path: str, output_dir: str, return_type) -> any:
             for value, type in zip(result_list, all_types))
 
     return unpack_value(result_list[0], return_type, output_dir)
+
+
+def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name, output_dir):
+    """Util function to extract the contents of a directory in a ZIP archive.
+
+    For instance, if a ZIP archive contains a directory called `dir_name`,
+    the contents of that directory are extracted directly to `output_dir`.
+
+    Args:
+        zip_fp: ZipFile from which to extract the directory.
+        dir_name: Name of the directory inside the ZIP archive.
+        output_dir: Destination directory of the contents of `data_dir`.
+    """
+    for member in zip_fp.namelist():
+        is_dir = not os.path.basename(member)
+
+        if not member.startswith(dir_name) or is_dir:
+            continue
+
+        src_file = zip_fp.open(member)
+        target_relative_path = pathlib.Path(member).relative_to(dir_name)
+        target_path = os.path.join(output_dir, target_relative_path)
+
+        os.makedirs(os.path.dirname(target_path), exist_ok=True)
+
+        with open(target_path, "wb") as f:
+            shutil.copyfileobj(src_file, f)

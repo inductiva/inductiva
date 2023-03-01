@@ -8,10 +8,12 @@ import signal
 import time
 from contextlib import contextmanager
 
+from typing import Optional
 from absl import logging
 from inductiva_web_api_client import ApiClient, ApiException, Configuration
 from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
 from inductiva_web_api_client.models import TaskRequest, TaskStatus
+from inductiva.types import Path
 
 import inductiva
 from inductiva.utils.data import (get_validate_request_params, pack_input,
@@ -215,7 +217,7 @@ def blocking_task_context(api_instance, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def invoke_api(params, function_ptr):
+def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -244,6 +246,7 @@ def invoke_api(params, function_ptr):
     Return:
         Returns the output of the task.
     """
+
     type_annotations = get_type_annotations(function_ptr)
 
     api_config = Configuration(host=inductiva.api_url)
@@ -280,8 +283,11 @@ def invoke_api(params, function_ptr):
             task_id=task_id,
         )
 
+    if output_dir is None:
+        output_dir = os.path.join(inductiva.output_dir, task_id)
+
     return unpack_output(
         zip_path=output_zip_path,
-        output_dir=os.path.join(inductiva.output_dir, task_id),
+        output_dir=output_dir,
         return_type=type_annotations["return"],
     )

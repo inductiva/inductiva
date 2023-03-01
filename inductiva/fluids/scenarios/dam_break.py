@@ -8,9 +8,9 @@ from typing import List, Optional, Literal
 import inductiva
 import inductiva_sph
 from inductiva_sph import sph_core
-from inductiva.types import DirPath
-from ._output_post_processing import SimulationOutput
-from ._fluid_types import WATER
+from inductiva.fluids._output_post_processing import SimulationOutput
+from inductiva.fluids._fluid_types import WATER
+from inductiva.types import Path
 
 # Glabal variables to define a scenario
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
@@ -87,8 +87,14 @@ class DamBreak:
         #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
         self.time_max = time_max
 
-    def simulate(self):
-        """Runs SPH simulation of the Dam Break scenario."""
+    def simulate(self, output_dir: Optional[Path] = None):
+        """Runs SPH simulation of the Dam Break scenario.
+
+        Args:
+            output_dir: Directory in which the output files will be saved. If
+                not specified, then the default directory used for API tasks
+                (based on an internal ID of the task) will be used.
+        """
 
         # Create a dam break scenario
         scenario = self.__create_scenario()
@@ -108,9 +114,9 @@ class DamBreak:
         simulation.create_input_file()
 
         # Invoke API
-        sim_output_path = inductiva.sph.run_simulation(
-            DirPath(input_temp_dir.name))
-        simulation._output_directory = sim_output_path.path  #pylint: disable=protected-access
+        sim_output_path = inductiva.sph.splishsplash.run_simulation(
+            input_temp_dir.name, output_dir=output_dir)
+        simulation._output_directory = sim_output_path  #pylint: disable=protected-access
 
         simulation._convert_output_files(False)  #pylint: disable=protected-access
 

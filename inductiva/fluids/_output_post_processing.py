@@ -4,7 +4,7 @@ import os
 from IPython.display import HTML
 from base64 import b64encode
 
-from inductiva.types import DirPath
+from inductiva.types import Path
 from inductiva_data.data import ParticleDataReader
 from inductiva_data import visualizers
 
@@ -12,12 +12,13 @@ from inductiva_data import visualizers
 class SimulationOutput:
     """Post process SPlisHSPlasH simulation outputs."""
 
-    def __init__(self, sim_output_path: DirPath) -> None:
+    def __init__(self, sim_output_path: Path) -> None:
         """Initializes a `SimulationOutput` object.
 
         Args:
-            sim_output_path: Path to simulation output files."""
-        self.sim_output_dir = sim_output_path.path
+            sim_output_path: Path to simulation output files.
+            """
+        self.sim_output_dir = sim_output_path
 
     def render(self, color_quantity: str = None):
         """Generate a simulation movie.
