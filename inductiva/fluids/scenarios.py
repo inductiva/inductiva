@@ -15,9 +15,10 @@ from ._fluid_types import WATER
 # Glabal variables to define a scenario
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
 OUTPUT_TIME_STEP = 1. / 60.
-TANK_DIMENSIONS = [1, 1, 1]
+TANK_DIMENSIONS = [1.5, 1, 1]
 FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
+VISCOSITY_SOLVER = "Weiler-2018"
 # TIME_MAX = 5
 
 
@@ -100,6 +101,7 @@ class DamBreak:
             time_max=self.time_max,
             particle_radius=self.particle_radius,
             output_time_step=OUTPUT_TIME_STEP,
+            viscosity_method=VISCOSITY_SOLVER,
             output_directory=input_temp_dir.name)
 
         # Create input file
