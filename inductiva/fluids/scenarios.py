@@ -40,7 +40,7 @@ class DamBreak:
                  fluid: sph_core.fluids.FluidProperties = WATER,
                  fluid_position: Optional[List[float]] = None,
                  resolution: Literal["high", "medium", "low"] = "medium",
-                 sim_duration: float = 1) -> None:
+                 simulation_time: float = 1) -> None:
         """Initializes a `DamBreak` object.
 
         Args:
@@ -56,7 +56,7 @@ class DamBreak:
               - "high"
               - "medium"
               - "low"
-            sim_duration: Simulation duration in seconds."""
+            simulation_time: Simulation duration in seconds."""
 
         self.fluid = fluid
 
@@ -86,9 +86,9 @@ class DamBreak:
 
         self.particle_radius = ParticleRadius[resolution.upper()].value
 
-        if sim_duration > TIME_MAX:
-            raise ValueError(f"`sim_duration` cannot exceed {TIME_MAX} seconds.")
-        self.sim_duration = sim_duration
+        if simulation_time > TIME_MAX:
+            raise ValueError(f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
+        self.simulation_time = simulation_time
 
     def simulate(self):
         """Runs SPH simulation of the Dam Break scenario."""
@@ -101,19 +101,19 @@ class DamBreak:
         # Create simulation
         simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
             scenario=scenario,
-            time_max=self.sim_duration,
+            time_max=self.simulation_time,
             particle_radius=self.particle_radius,
             output_time_step=OUTPUT_TIME_STEP,
             output_directory=input_temp_dir.name)
 
         # Create input file
         simulation.create_input_file()
-        logging.info("Estimated number of particles %s",
+        logging.info("Estimated number of particles %d",
                      self.estimate_num_particles())
         logging.info("Number of time steps to simulate %s",
-                     math.ceil(self.sim_duration / OUTPUT_TIME_STEP))
+                     math.ceil(self.simulation_time / OUTPUT_TIME_STEP))
 
-        logging.info("Running SPlisHSPlasH simulation ...")
+        logging.info("Running SPlisHSPlasH simulation.")
         # Invoke API
         sim_output_path = inductiva.sph.run_simulation(
             DirPath(input_temp_dir.name))
