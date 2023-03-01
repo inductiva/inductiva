@@ -14,7 +14,7 @@ OLIVE_OIL = FluidProperties(
 
 TEST = FluidProperties(
     density = 2e3,
-    kinematic_viscosity = 1e-8,
+    kinematic_viscosity = 1e-3,
 )
 
 LIQUID_PROPANE = FluidProperties(
