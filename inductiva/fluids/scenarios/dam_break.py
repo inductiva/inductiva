@@ -10,9 +10,9 @@ from typing import List, Optional, Literal
 import inductiva
 import inductiva_sph
 from inductiva_sph import sph_core
-from inductiva.types import DirPath
-from ._output_post_processing import SimulationOutput
-from ._fluid_types import WATER
+from inductiva.fluids._output_post_processing import SimulationOutput
+from inductiva.fluids._fluid_types import WATER
+from inductiva.types import Path
 
 # Glabal variables to define a scenario
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
@@ -20,16 +20,15 @@ OUTPUT_TIME_STEP = 1. / 60.
 TANK_DIMENSIONS = [1, 1, 1]
 FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
-TIME_MAX = 3
-
-logging.set_verbosity(logging.INFO)
+VISCOSITY_SOLVER = "Weiler-2018"
+TIME_MAX = 5
 
 
 class ParticleRadius(Enum):
     """Sets particle radius according to resolution."""
-    HIGH = 0.001
-    MEDIUM = 0.02
-    LOW = 0.04
+    HIGH = 0.008
+    MEDIUM = 0.012
+    LOW = 0.02
 
 
 class DamBreak:
@@ -90,8 +89,14 @@ class DamBreak:
             raise ValueError(f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
         self.simulation_time = simulation_time
 
-    def simulate(self):
-        """Runs SPH simulation of the Dam Break scenario."""
+    def simulate(self, output_dir: Optional[Path] = None):
+        """Runs SPH simulation of the Dam Break scenario.
+
+        Args:
+            output_dir: Directory in which the output files will be saved. If
+                not specified, then the default directory used for API tasks
+                (based on an internal ID of the task) will be used.
+        """
 
         # Create a dam break scenario
         scenario = self.__create_scenario()
@@ -104,6 +109,7 @@ class DamBreak:
             time_max=self.simulation_time,
             particle_radius=self.particle_radius,
             output_time_step=OUTPUT_TIME_STEP,
+            viscosity_method=VISCOSITY_SOLVER,
             output_directory=input_temp_dir.name)
 
         # Create input file
@@ -115,9 +121,9 @@ class DamBreak:
 
         logging.info("Running SPlisHSPlasH simulation.")
         # Invoke API
-        sim_output_path = inductiva.sph.run_simulation(
-            DirPath(input_temp_dir.name))
-        simulation._output_directory = sim_output_path.path  #pylint: disable=protected-access
+        sim_output_path = inductiva.sph.splishsplash.run_simulation(
+            input_temp_dir.name, output_dir=output_dir)
+        simulation._output_directory = sim_output_path  #pylint: disable=protected-access
 
         simulation._convert_output_files(False)  #pylint: disable=protected-access
 
