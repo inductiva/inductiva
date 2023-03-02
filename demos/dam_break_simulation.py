@@ -5,7 +5,6 @@ from absl import logging
 from absl import flags
 from absl import app
 
-
 import inductiva
 import inductiva_utils
 
