@@ -17,12 +17,13 @@ flags.DEFINE_list("fluid_dimensions", [0.2, 1, 1],
 flags.DEFINE_list("fluid_position", [0.0, 0.0, 0.0],
                   "Position of the fluid column in the tank.")
 flags.DEFINE_enum("resolution", "medium", ["high", "medium", "low"],
-                  "Sets the fluid resolution to simulate..")
+                  "Sets the fluid resolution to simulate.")
 flags.DEFINE_string(
     "color_quantity", None, "Quantity to represent in the color scale of the"
     "scatter plot.")
 flags.DEFINE_string("output_dir", None,
                     "Destination directory for output files.")
+flags.DEFINE_integer("simulation_time", 2, "Simulation time in seconds.")
 flags.DEFINE_string("device", "cpu",
                     "Device in which device the simulation will run.")
 
