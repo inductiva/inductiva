@@ -4,7 +4,6 @@ import tempfile
 from enum import Enum
 import math
 from typing import List, Literal, Optional
-import inductiva_sph
 import numpy as np
 
 import inductiva_sph
@@ -14,7 +13,7 @@ from inductiva.fluids._fluid_types import WATER
 from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
 
-# Glabal variables to define a scenario
+# Global variables to define a scenario
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
 OUTPUT_TIME_STEP = 1. / 60.
 TANK_DIMENSIONS = [1, 1, 1]
