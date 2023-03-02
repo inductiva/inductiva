@@ -81,7 +81,7 @@ class DamBreak:
                  device: Literal["cpu", "gpu"] = "cpu",
                  resolution: Literal["high", "medium", "low"] = "medium",
                  time_max: float = 1.,
-                 cfl_method: str = "no",
+                 cfl_method: Literal["no", "cfl", "cfl_p"] = "no",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of the Dam Break scenario.
 
@@ -93,6 +93,15 @@ class DamBreak:
               - "medium"
               - "low"
             time_max: Maximum time of simulation, in seconds.
+            cfl_method: cfl_method: Courant-Friedrichs-Lewy (CFL) method used for adaptive
+              time stepping. Used to find a time step as large as possible to
+              achieve high performance but sufficiently small to maintain
+              stability. 
+              The available options are:
+              - 'no': No adaptive time-stepping is used.
+              - 'cfl': Use CFL condition.
+              - 'cfl_p': Use CFL condition and consider number of pressure
+                solver iterations.
             output_dir: Directory in which the output files will be saved. If
                 not specified, then the default directory used for API tasks
                 (based on an internal ID of the task) will be used.
