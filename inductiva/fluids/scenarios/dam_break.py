@@ -23,6 +23,8 @@ FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
 TIME_MAX = 5
 
+logging.set_verbosity(logging.INFO)
+
 
 class ParticleRadius(Enum):
     """Sets particle radius according to resolution."""
@@ -86,7 +88,8 @@ class DamBreak:
         self.particle_radius = ParticleRadius[resolution.upper()].value
 
         if simulation_time > TIME_MAX:
-            raise ValueError(f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
+            raise ValueError(
+                f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
         self.simulation_time = simulation_time
 
     def simulate(self, output_dir: Optional[Path] = None):
@@ -94,7 +97,7 @@ class DamBreak:
 
         Args:
             output_dir: Directory in which the output files will be saved. If
-                not specified, then the default directory used for API tasks
+                not specified, the default directory used for API tasks
                 (based on an internal ID of the task) will be used.
         """
 
@@ -116,8 +119,8 @@ class DamBreak:
         simulation.create_input_file()
         logging.info("Estimated number of particles %d",
                      self.estimate_num_particles())
-        logging.info("Estimated number of time steps %s", 
-                     math.ceil(self.simulation_time /simulation.time_step))
+        logging.info("Estimated number of time steps %s",
+                     math.ceil(self.simulation_time / simulation.time_step))
         logging.info("Number of output time steps %s",
                      math.ceil(self.simulation_time / OUTPUT_TIME_STEP))
 
@@ -135,7 +138,6 @@ class DamBreak:
         return SimulationOutput(sim_output_path)
 
     def __create_scenario(self):
-
         # Create fluid column
         fluid_block = sph_core.fluids.BoxFluidBlock(
             fluid_properties=self.fluid,
