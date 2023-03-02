@@ -7,7 +7,6 @@ from typing import List, Literal, Optional
 
 import inductiva_sph
 import numpy as np
-from absl import logging
 from inductiva_sph import sph_core
 
 import inductiva
