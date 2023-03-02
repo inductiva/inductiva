@@ -4,11 +4,11 @@ import tempfile
 from enum import Enum
 import math
 from typing import List, Literal, Optional
-
 import inductiva_sph
 import numpy as np
-from inductiva_sph import sph_core
 
+import inductiva_sph
+from inductiva_sph import sph_core
 import inductiva
 from inductiva.fluids._fluid_types import WATER
 from inductiva.fluids._output_post_processing import SimulationOutput
@@ -21,7 +21,7 @@ TANK_DIMENSIONS = [1, 1, 1]
 FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
-TIME_MAX = 5
+TIME_MAX = 3
 
 logging.set_verbosity(logging.INFO)
 
@@ -39,9 +39,7 @@ class DamBreak:
     def __init__(self,
                  fluid_dimensions: List[float],
                  fluid: sph_core.fluids.FluidProperties = WATER,
-                 fluid_position: Optional[List[float]] = None,
-                 resolution: Literal["high", "medium", "low"] = "medium",
-                 simulation_time: float = 1) -> None:
+                 fluid_position: Optional[List[float]] = None) -> None:
         """Initializes a `DamBreak` object.
 
         Args:
@@ -52,12 +50,7 @@ class DamBreak:
             particle_radius: Radius of the discretization particles, in meters.
               Used to control particle spacing. Smaller particle radius means a
               finer discretization, hence more particles.
-            resolution: Sets the fluid resolution to simulate.
-              Available options are (the default is "medium"):
-              - "high"
-              - "medium"
-              - "low"
-            simulation_time: Simulation time in seconds."""
+            """
 
         self.fluid = fluid
 
@@ -85,19 +78,21 @@ class DamBreak:
             raise ValueError("Fluid cannot exceed tank borders.")
         self.fluid_position = fluid_position
 
-        self.particle_radius = ParticleRadius[resolution.upper()].value
-
-        if simulation_time > TIME_MAX:
-            raise ValueError(
-                f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
-        self.simulation_time = simulation_time
-
     def simulate(self,
                  device: Literal["cpu", "gpu"] = "cpu",
+                 resolution: Literal["high", "medium", "low"] = "medium",
+                 simulation_time: float = 1.,
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of the Dam Break scenario.
 
         Args:
+            device: Sets the device for a simulation to be run.
+            resolution: Sets the fluid resolution to simulate.
+              Available options are (the default is "medium"):
+              - "high"
+              - "medium"
+              - "low"
+            time_max: Maximum time of simulation, in seconds.
             output_dir: Directory in which the output files will be saved. If
                 not specified, the default directory used for API tasks
                 (based on an internal ID of the task) will be used.
@@ -105,6 +100,13 @@ class DamBreak:
 
         # Create a dam break scenario
         scenario = self.__create_scenario()
+
+        self.particle_radius = ParticleRadius[resolution.upper()].value
+
+        if simulation_time > TIME_MAX:
+            raise ValueError(
+                f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
+        self.simulation_time = simulation_time
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with

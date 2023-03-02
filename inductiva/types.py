@@ -1,5 +1,6 @@
 """Type definitions."""
 import os
-from typing import TypeAlias, Union
+from typing import Union
+from typing_extensions import TypeAlias
 
-Path: TypeAlias = Union[os.PathLike[str], str]
+Path: TypeAlias = Union[os.PathLike, str]
