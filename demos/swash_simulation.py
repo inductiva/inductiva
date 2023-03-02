@@ -7,25 +7,37 @@ import inductiva
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string("api_url", "http://localhost:8000",
+flags.DEFINE_string("api_url", "http://api.inductiva.ai",
                     "Base URL of the Inductiva API.")
-flags.DEFINE_string("sim_dir", "testcases/a11stwav",
-                    "Directory with the simulation inputs.")
-flags.DEFINE_string("input", "a11stw01", "Name of the input .sws file.")
-flags.DEFINE_string("output_dir", "testing",
+flags.DEFINE_string("sim_dir",
+                    None,
+                    "Directory with the simulation inputs.",
+                    required=True)
+flags.DEFINE_string("input_filename",
+                    None,
+                    "Name of the input .sws file.",
+                    required=True)
+flags.DEFINE_string("output_dir", None,
                     "Directory where the outputs will be stored.")
-flags.DEFINE_integer("n_cores", 4, "Number of cores to use.")
+flags.DEFINE_integer("n_cores", 1, "Number of cores to use.")
 
 
 def main(_):
+    """Run a SPlisHSPlasH simulation using user-provided input files."""
+
     inductiva.api_url = FLAGS.api_url
 
-    inductiva.swash.run_simulation(
-        FLAGS.sim_dir,
-        n_cores=FLAGS.n_cores,
-        input=FLAGS.input,
-        output_dir=FLAGS.output_dir,
+    swash_sim = inductiva.fluids.Swash(
+        sim_dir=FLAGS.sim_dir,
+        input_filename=FLAGS.input_filename,
     )
+
+    output_path = swash_sim.simulate(
+        output_dir=FLAGS.output_dir,
+        n_cores=FLAGS.n_cores,
+    )
+
+    logging.info("Outputs stored in %s", output_path)
 
 
 if __name__ == "__main__":
