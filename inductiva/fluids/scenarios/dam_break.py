@@ -22,7 +22,6 @@ TANK_DIMENSIONS = [1, 1, 1]
 FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
-CFL_METHOD = "no"
 # TIME_MAX = 5
 
 
@@ -82,6 +81,7 @@ class DamBreak:
                  device: Literal["cpu", "gpu"] = "cpu",
                  resolution: Literal["high", "medium", "low"] = "medium",
                  time_max: float = 1.,
+                 cfl_method: str = "no",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of the Dam Break scenario.
 
@@ -106,6 +106,7 @@ class DamBreak:
         # if time_max > TIME_MAX:
         #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
         self.time_max = time_max
+        self.cfl_method = cfl_method
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
@@ -114,7 +115,7 @@ class DamBreak:
             scenario=scenario,
             time_max=self.time_max,
             particle_radius=self.particle_radius,
-            cfl_method=CFL_METHOD,
+            cfl_method=self.cfl_method,
             output_time_step=OUTPUT_TIME_STEP,
             viscosity_method=VISCOSITY_SOLVER,
             output_directory=input_temp_dir.name)
