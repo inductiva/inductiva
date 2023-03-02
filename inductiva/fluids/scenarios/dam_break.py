@@ -77,7 +77,6 @@ class DamBreak:
             raise ValueError("Fluid cannot exceed tank borders.")
         self.fluid_position = fluid_position
 
-
     def simulate(self,
                  device: Literal["cpu", "gpu"] = "cpu",
                  resolution: Literal["high", "medium", "low"] = "medium",

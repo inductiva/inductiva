@@ -1,8 +1,10 @@
 """Sample usage of SPlisHSPlasH simulation via API."""
+import time
+
 from absl import logging
 from absl import flags
 from absl import app
-import time
+
 
 import inductiva
 import inductiva_utils
@@ -37,11 +39,12 @@ def main(_):
         fluid_dimensions=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_dimensions),
         fluid_position=inductiva_utils.flags.cast_list_to_float(
-            FLAGS.fluid_position),
-        resolution=FLAGS.resolution)
+            FLAGS.fluid_position))
 
     simulation_output = scenario.simulate(output_dir=FLAGS.output_dir,
+                                          resolution=FLAGS.resolution,
                                           device=FLAGS.device)
+
     simulation_output.render(color_quantity=FLAGS.color_quantity)
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
