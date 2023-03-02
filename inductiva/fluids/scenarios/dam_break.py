@@ -4,7 +4,6 @@ import tempfile
 from enum import Enum
 import math
 from typing import List, Literal, Optional
-import inductiva_sph
 import numpy as np
 
 import inductiva_sph
@@ -14,7 +13,7 @@ from inductiva.fluids._fluid_types import WATER
 from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
 
-# Glabal variables to define a scenario
+# Global variables to define a scenario
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
 OUTPUT_TIME_STEP = 1. / 60.
 TANK_DIMENSIONS = [1, 1, 1]
@@ -82,6 +81,7 @@ class DamBreak:
                  device: Literal["cpu", "gpu"] = "cpu",
                  resolution: Literal["high", "medium", "low"] = "medium",
                  simulation_time: float = 1.,
+                 cfl_method: Literal["no", "cfl", "cfl_p"] = "no",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of the Dam Break scenario.
 
@@ -93,6 +93,15 @@ class DamBreak:
               - "medium"
               - "low"
             time_max: Maximum time of simulation, in seconds.
+            cfl_method: cfl_method: Courant-Friedrichs-Lewy (CFL) method used
+              for adaptive time stepping. Used to find a time step as large
+              as possible to achieve high performance but sufficiently small
+              to maintain stability.
+              The available options are:
+              - 'no': No adaptive time-stepping is used.
+              - 'cfl': Use CFL condition.
+              - 'cfl_p': Use CFL condition and consider number of pressure
+                solver iterations.
             output_dir: Directory in which the output files will be saved. If
                 not specified, the default directory used for API tasks
                 (based on an internal ID of the task) will be used.
@@ -107,6 +116,9 @@ class DamBreak:
             raise ValueError(
                 f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
         self.simulation_time = simulation_time
+        # if time_max > TIME_MAX:
+        #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
+        self.cfl_method = cfl_method
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
@@ -115,6 +127,7 @@ class DamBreak:
             scenario=scenario,
             time_max=self.simulation_time,
             particle_radius=self.particle_radius,
+            cfl_method=self.cfl_method,
             output_time_step=OUTPUT_TIME_STEP,
             viscosity_method=VISCOSITY_SOLVER,
             output_directory=input_temp_dir.name)
