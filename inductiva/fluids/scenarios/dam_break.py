@@ -114,7 +114,7 @@ class DamBreak:
             scenario=scenario,
             time_max=self.time_max,
             particle_radius=self.particle_radius,
-            cfl_method = CFL_METHOD,
+            cfl_method=CFL_METHOD,
             output_time_step=OUTPUT_TIME_STEP,
             viscosity_method=VISCOSITY_SOLVER,
             output_directory=input_temp_dir.name)
