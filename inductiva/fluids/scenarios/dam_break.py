@@ -93,10 +93,10 @@ class DamBreak:
               - "medium"
               - "low"
             time_max: Maximum time of simulation, in seconds.
-            cfl_method: cfl_method: Courant-Friedrichs-Lewy (CFL) method used for adaptive
-              time stepping. Used to find a time step as large as possible to
-              achieve high performance but sufficiently small to maintain
-              stability. 
+            cfl_method: cfl_method: Courant-Friedrichs-Lewy (CFL) method used for
+              adaptive time stepping. Used to find a time step as large as
+              possible to achieve high performance but sufficiently small to
+              maintain stability.
               The available options are:
               - 'no': No adaptive time-stepping is used.
               - 'cfl': Use CFL condition.
