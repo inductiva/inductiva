@@ -1,6 +1,7 @@
 """SplishSplash module of the API."""
 import os
 import pathlib
+from typing import Literal
 
 import inductiva
 from inductiva.types import Path
@@ -27,7 +28,9 @@ class SPlisHSPlasH:
         if not os.path.isdir(sim_dir):
             raise ValueError("The provided path is not a directory.")
 
-    def simulate(self, output_dir=None) -> Path:
+    def simulate(self,
+                 device: Literal["gpu", "cpu"] = "cpu",
+                 output_dir=None) -> Path:
         """Run the simulation.
 
         Args:
@@ -35,4 +38,5 @@ class SPlisHSPlasH:
         """
         return inductiva.sph.splishsplash.run_simulation(self.sim_dir,
                                                          self.input_filename,
+                                                         device=device,
                                                          output_dir=output_dir)

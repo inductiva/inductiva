@@ -1,17 +1,18 @@
 """Describes the physical scenarios and runs its simulation via API."""
 from absl import logging
 import tempfile
-import numpy as np
 from enum import Enum
 import math
+from typing import List, Literal, Optional
 
-from typing import List, Optional, Literal
+import inductiva_sph
+import numpy as np
+from absl import logging
+from inductiva_sph import sph_core
 
 import inductiva
-import inductiva_sph
-from inductiva_sph import sph_core
-from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.fluids._fluid_types import WATER
+from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
 
 # Glabal variables to define a scenario
@@ -92,7 +93,9 @@ class DamBreak:
                 f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
         self.simulation_time = simulation_time
 
-    def simulate(self, output_dir: Optional[Path] = None):
+    def simulate(self,
+                 device: Literal["cpu", "gpu"] = "cpu",
+                 output_dir: Optional[Path] = None):
         """Runs SPH simulation of the Dam Break scenario.
 
         Args:
@@ -115,6 +118,8 @@ class DamBreak:
             viscosity_method=VISCOSITY_SOLVER,
             output_directory=input_temp_dir.name)
 
+        logging.info(input_temp_dir)
+
         # Create input file
         simulation.create_input_file()
         logging.info("Estimated number of particles %d",
@@ -127,7 +132,7 @@ class DamBreak:
         logging.info("Running SPlisHSPlasH simulation.")
         # Invoke API
         sim_output_path = inductiva.sph.splishsplash.run_simulation(
-            input_temp_dir.name, output_dir=output_dir)
+            sim_dir=input_temp_dir.name, device=device, output_dir=output_dir)
         simulation._output_directory = sim_output_path  #pylint: disable=protected-access
 
         simulation._convert_output_files(False)  #pylint: disable=protected-access

@@ -23,6 +23,8 @@ flags.DEFINE_string(
 flags.DEFINE_string("output_dir", None,
                     "Destination directory for output files.")
 flags.DEFINE_integer("simulation_time", 2, "Simulation time in seconds.")
+flags.DEFINE_string("device", "cpu",
+                    "Device in which device the simulation will run.")
 
 
 def main(_):
@@ -39,7 +41,8 @@ def main(_):
             FLAGS.fluid_position),
         resolution=FLAGS.resolution)
 
-    simulation_output = scenario.simulate(output_dir=FLAGS.output_dir)
+    simulation_output = scenario.simulate(output_dir=FLAGS.output_dir,
+                                          device=FLAGS.device)
     simulation_output.render(color_quantity=FLAGS.color_quantity)
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
