@@ -1,9 +1,9 @@
 """Describes the physical scenarios and runs its simulation via API."""
 import tempfile
-import numpy as np
 from enum import Enum
-
 from typing import List, Optional, Literal
+
+import numpy as np
 
 import inductiva
 import inductiva_sph
@@ -35,9 +35,7 @@ class DamBreak:
     def __init__(self,
                  fluid_dimensions: List[float],
                  fluid: sph_core.fluids.FluidProperties = WATER,
-                 fluid_position: Optional[List[float]] = None,
-                 resolution: Literal["high", "medium", "low"] = "medium",
-                 time_max: float = 1) -> None:
+                 fluid_position: Optional[List[float]] = None) -> None:
         """Initializes a `DamBreak` object.
 
         Args:
@@ -48,12 +46,7 @@ class DamBreak:
             particle_radius: Radius of the discretization particles, in meters.
               Used to control particle spacing. Smaller particle radius means a
               finer discretization, hence more particles.
-            resolution: Sets the fluid resolution to simulate.
-              Available options are (the default is "medium"):
-              - "high"
-              - "medium"
-              - "low"
-            time_max: Maximum time of simulation, in seconds."""
+        """
 
         self.fluid = fluid
 
@@ -81,17 +74,30 @@ class DamBreak:
             raise ValueError("Fluid cannot exceed tank borders.")
         self.fluid_position = fluid_position
 
+
+    def simulate(self,
+                 resolution: Literal["high", "medium", "low"] = "medium",
+                 time_max: float = 1) -> SimulationOutput:
+        """Runs SPH simulation of the Dam Break scenario.
+
+        Args:
+            resolution: Sets the fluid resolution to simulate.
+                Available options are (the default is "medium"):
+                - "high"
+                - "medium"
+                - "low"
+            time_max: Maximum time of simulation, in seconds.
+        """
+
+        # Create a dam break scenario
+        scenario = self.__create_scenario()
+
+        # Set particle radius in terms of a pre-defined scale
         self.particle_radius = ParticleRadius[resolution.upper()].value
 
         # if time_max > TIME_MAX:
         #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
         self.time_max = time_max
-
-    def simulate(self):
-        """Runs SPH simulation of the Dam Break scenario."""
-
-        # Create a dam break scenario
-        scenario = self.__create_scenario()
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
