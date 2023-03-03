@@ -19,10 +19,12 @@ class DualSPHysics:
     def __init__(
         self,
         sim_dir: Path,
-        input_filename="InputCase_Def.xml",
+        input_filename: str,
+        device: str
     ):
         self.input_filename = input_filename
         self.sim_dir = pathlib.Path(sim_dir)
+        self.device = device
 
         if not os.path.isdir(sim_dir):
             raise ValueError("The provided path is not a directory.")
@@ -35,4 +37,5 @@ class DualSPHysics:
         """
         return inductiva.sph.dualsphysics.run_simulation(self.sim_dir,
                                                          self.input_filename,
+                                                         self.device,
                                                          output_dir=output_dir)
