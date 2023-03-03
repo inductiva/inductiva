@@ -1,4 +1,4 @@
-"""Sample usage of SPlisHSPlasH simulation via the API."""
+"""Sample usage of SWASH simulator via the API."""
 from absl import logging
 from absl import flags
 from absl import app
@@ -23,11 +23,11 @@ flags.DEFINE_integer("n_cores", 1, "Number of cores to use.")
 
 
 def main(_):
-    """Run a SPlisHSPlasH simulation using user-provided input files."""
+    """Run a SWASH simulation using user-provided input files."""
 
     inductiva.api_url = FLAGS.api_url
 
-    swash_sim = inductiva.fluids.Swash(
+    swash_sim = inductiva.fluids.SWASH(
         sim_dir=FLAGS.sim_dir,
         input_filename=FLAGS.input_filename,
     )

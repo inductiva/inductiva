@@ -5,4 +5,4 @@ from .scenarios import DamBreak
 from . import scenarios
 from ._output_post_processing import SimulationOutput
 from .splishsplash import SPlisHSPlasH
-from .swash import Swash
+from .swash import SWASH

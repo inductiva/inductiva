@@ -1,4 +1,4 @@
-"""Swash module of the API."""
+"""SWASH module of the API."""
 import os
 import pathlib
 
@@ -6,14 +6,14 @@ import inductiva
 from inductiva.types import Path
 
 
-class Swash:
-    """Class to invoke a generic SPlisHSPlasH simulation on the API.
+class SWASH:
+    """Class to invoke a generic SWASH simulation on the API.
 
     Attributes:
         sim_dir: Path to the directory with all the simulation input files.
-        input_filename: Name of the SPlisHSPlasH input file. The file should
+        input_filename: Name of the SWASH input file. The file should
             be present in `sim_dir`, and the name is relative to that
-            directory. By default it is `splishsplash_input.json`.
+            directory.
     """
 
     def __init__(
@@ -33,7 +33,7 @@ class Swash:
         Args:
             output_dir: Directory where the generated files will be stored.
         """
-        return inductiva.sph.swash.run_simulation(self.sim_dir,
-                                                  self.input_filename,
-                                                  n_cores=n_cores,
-                                                  output_dir=output_dir)
+        return inductiva.shallow.swash.run_simulation(self.sim_dir,
+                                                      self.input_filename,
+                                                      n_cores=n_cores,
+                                                      output_dir=output_dir)

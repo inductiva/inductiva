@@ -1,4 +1,4 @@
-"""Low-level method that interact with the API for SWASH computation."""
+"""Low-level method that interacts with the API for SWASH computation."""
 import pathlib
 from ..api import invoke_api
 from ..types import Path
@@ -12,7 +12,7 @@ def run_simulation(sim_dir: Path,
                    input_filename: str,
                    n_cores: int,
                    output_dir: Optional[Path] = None) -> pathlib.Path:
-    """Run swash simulation in the API.
+    """Run SWASH simulation in the API.
 
     Args:
         sim_dir: Path to the directory containing the simulation inputs.

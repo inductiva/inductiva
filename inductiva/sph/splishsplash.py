@@ -1,4 +1,4 @@
-"""Low-level method that interact with the API for SPH computation.
+"""Low-level method that interacts with the API for SPlisHSPlasH computation.
 
 These functions are to be used inside the higher level constructs of the
 Inductiva client. For instance, `scenario.simulate()` uses the `run_simulation`
