@@ -19,7 +19,7 @@ class DualSPHysics:
     def __init__(
         self,
         sim_dir: Path,
-        input_filename = "InputCase_Def.xml",
+        input_filename="InputCase_Def.xml",
     ):
         self.input_filename = input_filename
         self.sim_dir = pathlib.Path(sim_dir)

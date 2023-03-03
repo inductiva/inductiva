@@ -14,7 +14,7 @@ from inductiva.types import Path
 
 
 def run_simulation(sim_dir: Path,
-                   input_filename = "InputCase_Def.xml",
+                   input_filename="InputCase_Def.xml",
                    output_dir: Optional[Path] = None) -> pathlib.Path:
     """Run DualSPHysics in the API.
 
