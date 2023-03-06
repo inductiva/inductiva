@@ -16,12 +16,7 @@ class DualSPHysics:
             directory. By default it is `DualSPHysics_input.xml`.
     """
 
-    def __init__(
-        self,
-        sim_dir: Path,
-        input_filename: str,
-        device: str
-    ):
+    def __init__(self, sim_dir: Path, input_filename: str, device: str):
         self.input_filename = input_filename
         self.sim_dir = pathlib.Path(sim_dir)
         self.device = device

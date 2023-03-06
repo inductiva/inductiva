@@ -21,7 +21,7 @@ flags.DEFINE_string("output_dir",
                     None,
                     "Directory where the outputs will be stored.",
                     required=True)
-flags.DEFINE_string("device", "cpu",
+flags.DEFINE_string("device", "gpu",
                     "Device in which device the simulation will run.")
 
 
@@ -30,11 +30,9 @@ def main(_):
 
     inductiva.api_url = FLAGS.api_url
 
-    sph_sim = inductiva.fluids.DualSPHysics(
-        sim_dir=FLAGS.sim_dir,
-        input_filename=FLAGS.input_filename,
-        device = FLAGS.device
-    )
+    sph_sim = inductiva.fluids.DualSPHysics(sim_dir=FLAGS.sim_dir,
+                                            input_filename=FLAGS.input_filename,
+                                            device=FLAGS.device)
 
     output_path = sph_sim.simulate(output_dir=FLAGS.output_dir)
 
