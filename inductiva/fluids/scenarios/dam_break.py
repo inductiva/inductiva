@@ -22,8 +22,6 @@ FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
 TIME_MAX = 3
 
-logging.set_verbosity(logging.INFO)
-
 
 class ParticleRadius(Enum):
     """Sets particle radius according to resolution."""
