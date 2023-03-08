@@ -1,4 +1,4 @@
-"""Sample usage of SPlisHSPlasH simulation via API."""
+"""Sample usage of dam break simulation via API."""
 import time
 
 from absl import logging
@@ -18,6 +18,8 @@ flags.DEFINE_list("fluid_position", [0.0, 0.0, 0.0],
                   "Position of the fluid column in the tank.")
 flags.DEFINE_enum("resolution", "medium", ["high", "medium", "low"],
                   "Sets the fluid resolution to simulate.")
+flags.DEFINE_enum("engine", "DualSPHysics", ["DualSPHysics", "SPlisHSPlasH"],
+                  "Sets the fluid resolution to simulate.")
 flags.DEFINE_string(
     "color_quantity", None, "Quantity to represent in the color scale of the"
     "scatter plot.")
@@ -29,7 +31,7 @@ flags.DEFINE_string("device", "cpu",
 
 
 def main(_):
-    """Run a Dam Break simulation using SPlisHSPlasH via the API."""
+    """Run a Dam Break simulation using via the API."""
     inductiva.api_url = FLAGS.api_url
 
     time_start = time.perf_counter()
@@ -41,11 +43,14 @@ def main(_):
         fluid_position=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_position))
 
+    # pylint: disable=unused-variable
     simulation_output = scenario.simulate(output_dir=FLAGS.output_dir,
                                           resolution=FLAGS.resolution,
+                                          engine=FLAGS.engine,
                                           device=FLAGS.device)
 
-    simulation_output.render(color_quantity=FLAGS.color_quantity)
+    # Note: video rendering only works with SPlisHSPlasH for now
+    # simulation_output.render(color_quantity=FLAGS.color_quantity)
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 
