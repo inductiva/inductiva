@@ -23,6 +23,7 @@ FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
 TIME_MAX = 3
+INPUT_XML_PATH = "inductiva/fluids/scenarios/xml_files/InputCase.xml"
 
 logging.set_verbosity(logging.INFO)
 
@@ -180,7 +181,7 @@ class DamBreak:
             input_dir: Directory where the input file will be stored.
         """
         # Upload XML file of dam break scenario
-        input_file = ET.parse("xml_files/InputCase.xml")
+        input_file = ET.parse(INPUT_XML_PATH)
         root = input_file.getroot()
 
         # Set simulation parameters according to user input
