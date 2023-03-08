@@ -146,7 +146,9 @@ def kill_task(api_instance, task_id: str):
         path_params={"task_id": task_id},)
 
     logging.debug("Blocking until task is killed ...")
-    return block_until_status_is(api_instance, task_id, "killed")
+    out = block_until_status_is(api_instance, task_id, "killed")
+    logging.info("Task terminated.")
+    return out
 
 
 def block_until_status_is(api_instance,
@@ -164,6 +166,10 @@ def block_until_status_is(api_instance,
     Returns:
         Returns info related to the task, containing two fields,
     """
+    prev_queue_info = None
+
+    prev_status = None
+
     while True:
         try:
             api_response = \
@@ -171,12 +177,34 @@ def block_until_status_is(api_instance,
                     path_params={"task_id": task_id},
                     )
 
-            logging.debug("Request status: %s", api_response.body["status"])
+            status = api_response.body["status"]
+
+            logging.debug("Request status: %s", status)
         except ApiException as e:
             raise e
 
-        # If status is success, then stop polling
-        if api_response.body["status"] == desired_status:
+        if status == "submitted":
+            queue_info = api_response.body["queue"]
+
+            if status != prev_status:
+                logging.info("Waiting for resources...")
+
+            if queue_info != prev_queue_info:
+                logging.info("\t> %d/%d executers busy.",
+                             queue_info["running_tasks"],
+                             queue_info["num_executers"])
+                logging.info("\t> %d requests ahead in the queue.",
+                             queue_info["tasks_ahead"])
+
+                prev_queue_info = queue_info
+        elif status == "started" and status != prev_status:
+            logging.info("An executer has picked up the request.")
+            logging.info("The requested task is being executed remotely...")
+
+        prev_status = status
+
+        # If status reaches the desired status, then stop polling
+        if status == desired_status:
             break
 
         time.sleep(sleep_secs)
@@ -205,11 +233,11 @@ def blocking_task_context(api_instance, task_id):
     try:
         yield None
     except Exception as err:
-        logging.debug("Caught exception: terminating blocking task ...")
+        logging.info("Caught exception: terminating blocking task...")
         kill_task(api_instance, task_id)
         raise err
     except KeyboardInterrupt as err:
-        logging.debug("Caught SIGINT: terminating blocking task ...")
+        logging.info("Caught SIGINT: terminating blocking task...")
         kill_task(api_instance, task_id)
         raise err
     finally:
@@ -273,10 +301,14 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
                     type_annotations=type_annotations,
                 )
 
+            logging.info("Request submitted.")
+
             _ = block_until_finish(
                 api_instance=api_instance,
                 task_id=task_id,
             )
+
+            logging.info("Task finished executing.")
 
         output_zip_path = download_output(
             api_instance=api_instance,
