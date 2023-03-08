@@ -124,7 +124,7 @@ class FluidBlock:
             viscosity_method = VISCOSITY_SOLVER,
             boundary_handling_method=BOUNDARY_HANDLING_METHOD,
             cfl_method=cfl_method,
-            time_step=output_time_step,
+            output_time_step=output_time_step,
             output_directory=input_temp_dir.name)
 
         logging.info(input_temp_dir)
