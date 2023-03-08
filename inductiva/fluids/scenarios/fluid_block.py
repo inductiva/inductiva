@@ -22,7 +22,7 @@ VISCOSITY_SOLVER = "Weiler-2018"
 BOUNDARY_HANDLING_METHOD = "particle-based"
 
 
-class FluidBlock():
+class FluidBlock:
     """Physical scenario of a general fluid block simulation."""
 
     def __init__(self,
