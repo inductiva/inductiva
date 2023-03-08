@@ -146,7 +146,9 @@ def kill_task(api_instance, task_id: str):
         path_params={"task_id": task_id},)
 
     logging.debug("Blocking until task is killed ...")
-    return block_until_status_is(api_instance, task_id, "killed")
+    out = block_until_status_is(api_instance, task_id, "killed")
+    logging.info("Task terminated.")
+    return out
 
 
 def block_until_status_is(api_instance,
@@ -185,8 +187,7 @@ def block_until_status_is(api_instance,
             queue_info = api_response.body["queue"]
 
             if status != prev_status:
-                logging.info("Waiting for resources ...")
-                prev_status = status
+                logging.info("Waiting for resources...")
 
             if queue_info != prev_queue_info:
                 logging.info("\t> %d/%d executers busy.",
@@ -200,10 +201,10 @@ def block_until_status_is(api_instance,
             logging.info("An executer has picked up the request.")
             logging.info("The requested task is being executed remotely...")
 
-            prev_status = status
+        prev_status = status
 
-        # If status is success, then stop polling
-        if api_response.body["status"] == desired_status:
+        # If status reaches the desired status, then stop polling
+        if status == desired_status:
             break
 
         time.sleep(sleep_secs)
@@ -232,11 +233,11 @@ def blocking_task_context(api_instance, task_id):
     try:
         yield None
     except Exception as err:
-        logging.debug("Caught exception: terminating blocking task ...")
+        logging.info("Caught exception: terminating blocking task...")
         kill_task(api_instance, task_id)
         raise err
     except KeyboardInterrupt as err:
-        logging.debug("Caught SIGINT: terminating blocking task ...")
+        logging.info("Caught SIGINT: terminating blocking task...")
         kill_task(api_instance, task_id)
         raise err
     finally:
@@ -300,7 +301,7 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
                     type_annotations=type_annotations,
                 )
 
-            logging.info("Request submitted to a queue.")
+            logging.info("Request submitted.")
 
             _ = block_until_finish(
                 api_instance=api_instance,
