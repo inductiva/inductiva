@@ -112,6 +112,8 @@ class FluidBlock:
         # Create a dam break scenario
         scenario = self.__create_scenario()
 
+        self.particle_radius=particle_radius
+
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
         # Create simulation
@@ -119,7 +121,7 @@ class FluidBlock:
             scenario=scenario,
             time_max=simulation_time,
             time_step=output_time_step,
-            particle_radius=particle_radius,
+            particle_radius=self.particle_radius,
             simulation_method=SIMULATION_METHOD,
             viscosity_method = VISCOSITY_SOLVER,
             boundary_handling_method=BOUNDARY_HANDLING_METHOD,
