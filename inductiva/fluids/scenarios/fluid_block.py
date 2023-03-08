@@ -113,13 +113,14 @@ class FluidBlock:
         scenario = self.__create_scenario()
 
         self.particle_radius=particle_radius
+        self.simulation_time=simulation_time
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
         # Create simulation
         simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
             scenario=scenario,
-            time_max=simulation_time,
+            time_max=self.simulation_time,
             time_step=output_time_step,
             particle_radius=self.particle_radius,
             simulation_method=SIMULATION_METHOD,
