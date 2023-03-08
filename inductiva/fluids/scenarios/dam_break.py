@@ -1,28 +1,28 @@
 """Describes the physical scenarios and runs its simulation via API."""
+from absl import logging
 import tempfile
 from enum import Enum
+import math
 from typing import List, Literal, Optional
-
-from absl import logging
-
 import numpy as np
 
 import inductiva_sph
 from inductiva_sph import sph_core
-
 import inductiva
 from inductiva.fluids._fluid_types import WATER
 from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
 
-# Glabal variables to define a scenario
+# Global variables to define a scenario
 COLUMN_VELOCITY = [0.0, 0.0, 0.0]
 OUTPUT_TIME_STEP = 1. / 60.
 TANK_DIMENSIONS = [1, 1, 1]
 FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
-# TIME_MAX = 5
+TIME_MAX = 3
+
+logging.set_verbosity(logging.INFO)
 
 
 class ParticleRadius(Enum):
@@ -55,11 +55,11 @@ class DamBreak:
 
         #  Set fluid block dimensions according to the input
         if max(fluid_dimensions) > FLUID_DIMENSION_UPPER_BOUNDARY:
-            raise ValueError("The values of `fluid_dimensions` cannot exceed \
+            raise ValueError(f"The values of `fluid_dimensions` cannot exceed \
                 {FLUID_DIMENSION_UPPER_BOUNDARY}.")
         if min(fluid_dimensions) < FLUID_DIMENSION_LOWER_BOUNDARY:
             raise ValueError(
-                "The values of `fluid_dimensions` must be larger than \
+                f"The values of `fluid_dimensions` must be larger than \
                 {FLUID_DIMENSION_LOWER_BOUNDARY}.")
         if len(fluid_dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
@@ -80,7 +80,8 @@ class DamBreak:
     def simulate(self,
                  device: Literal["cpu", "gpu"] = "cpu",
                  resolution: Literal["high", "medium", "low"] = "medium",
-                 time_max: float = 1.,
+                 simulation_time: float = 1.,
+                 cfl_method: Literal["no", "cfl", "cfl_p"] = "no",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of the Dam Break scenario.
 
@@ -92,8 +93,17 @@ class DamBreak:
               - "medium"
               - "low"
             time_max: Maximum time of simulation, in seconds.
+            cfl_method: cfl_method: Courant-Friedrichs-Lewy (CFL) method used
+              for adaptive time stepping. Used to find a time step as large
+              as possible to achieve high performance but sufficiently small
+              to maintain stability.
+              The available options are:
+              - 'no': No adaptive time-stepping is used.
+              - 'cfl': Use CFL condition.
+              - 'cfl_p': Use CFL condition and consider number of pressure
+                solver iterations.
             output_dir: Directory in which the output files will be saved. If
-                not specified, then the default directory used for API tasks
+                not specified, the default directory used for API tasks
                 (based on an internal ID of the task) will be used.
         """
 
@@ -102,17 +112,22 @@ class DamBreak:
 
         self.particle_radius = ParticleRadius[resolution.upper()].value
 
+        if simulation_time > TIME_MAX:
+            raise ValueError(
+                f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
+        self.simulation_time = simulation_time
         # if time_max > TIME_MAX:
         #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
-        self.time_max = time_max
+        self.cfl_method = cfl_method
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
         # Create simulation
         simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
             scenario=scenario,
-            time_max=self.time_max,
+            time_max=self.simulation_time,
             particle_radius=self.particle_radius,
+            cfl_method=self.cfl_method,
             output_time_step=OUTPUT_TIME_STEP,
             viscosity_method=VISCOSITY_SOLVER,
             output_directory=input_temp_dir.name)
@@ -121,7 +136,14 @@ class DamBreak:
 
         # Create input file
         simulation.create_input_file()
+        logging.info("Estimated number of particles %d",
+                     self.estimate_num_particles())
+        logging.info("Estimated number of time steps %s",
+                     math.ceil(self.simulation_time / simulation.time_step))
+        logging.info("Number of output time steps %s",
+                     math.ceil(self.simulation_time / OUTPUT_TIME_STEP))
 
+        logging.info("Running SPlisHSPlasH simulation.")
         # Invoke API
         sim_output_path = inductiva.sph.splishsplash.run_simulation(
             sim_dir=input_temp_dir.name, device=device, output_dir=output_dir)
@@ -135,7 +157,6 @@ class DamBreak:
         return SimulationOutput(sim_output_path)
 
     def __create_scenario(self):
-
         # Create fluid column
         fluid_block = sph_core.fluids.BoxFluidBlock(
             fluid_properties=self.fluid,
@@ -148,3 +169,17 @@ class DamBreak:
             dimensions=TANK_DIMENSIONS, fluid_blocks=[fluid_block])
 
         return scenario
+
+    def estimate_num_particles(self):
+        """Estimate of the number of SPH particles contained in fluid blocks."""
+
+        # Calculate number of particles for a fluid block
+        n_particles_x = round(self.fluid_dimensions[0] /
+                              (2 * self.particle_radius)) - 1
+        n_particles_y = round(self.fluid_dimensions[1] /
+                              (2 * self.particle_radius)) - 1
+        n_particles_z = round(self.fluid_dimensions[2] /
+                              (2 * self.particle_radius)) - 1
+
+        # Add number of particles to the total sum
+        return n_particles_x * n_particles_y * n_particles_z
