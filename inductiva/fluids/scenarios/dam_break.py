@@ -136,10 +136,9 @@ class DamBreak:
         input_temp_dir.cleanup()
 
         inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(sim_output_path, "particles"),
+            data_dir=os.path.join(sim_output_path, "vtk"),
             output_time_step=OUTPUT_TIME_STEP,
-            netcdf_data_dir=os.path.join(sim_output_path, "particles",
-                                         "netcdf"))
+            netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
 
         return SimulationOutput(sim_output_path)
 
@@ -171,7 +170,6 @@ class DamBreak:
         logging.info("Number of output time steps %s",
                      math.ceil(self.simulation_time / OUTPUT_TIME_STEP))
 
-        # Invoke API
         sim_output_path = inductiva.sph.splishsplash.run_simulation(
             sim_dir=input_dir.name,
             device=self.device,
@@ -208,7 +206,6 @@ class DamBreak:
         # Create input file
         input_file.write(os.path.join(input_dir.name, "InputCase.xml"))
 
-        # Invoke API
         return inductiva.sph.dualsphysics.run_simulation(
             sim_dir=input_dir.name,
             input_filename="InputCase",

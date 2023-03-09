@@ -43,8 +43,7 @@ def main(_):
         fluid_position=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_position))
 
-    # pylint: disable=unused-variable
-    simulation_output = scenario.simulate(output_dir=FLAGS.output_dir,
+    _ = scenario.simulate(output_dir=FLAGS.output_dir,
                                           resolution=FLAGS.resolution,
                                           engine=FLAGS.engine,
                                           device=FLAGS.device)
