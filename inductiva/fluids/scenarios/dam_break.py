@@ -23,9 +23,8 @@ FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
 TIME_MAX = 3
-INPUT_XML_PATH = "inductiva/fluids/scenarios/xml_files/InputCase.xml"
-
-logging.set_verbosity(logging.INFO)
+INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), 
+                              "xml_files/InputCase.xml")
 
 
 class ParticleRadius(Enum):
@@ -135,6 +134,12 @@ class DamBreak:
 
         # Delete temporary input directory
         input_temp_dir.cleanup()
+
+        inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
+            data_dir=os.path.join(sim_output_path, "particles"), 
+            output_time_step=OUTPUT_TIME_STEP, 
+            netcdf_data_dir=os.path.join(sim_output_path, "particles", "netcdf"))
+        
         return SimulationOutput(sim_output_path)
 
     def _splishsplash_simulation(self, input_dir):
@@ -170,7 +175,6 @@ class DamBreak:
             sim_dir=input_dir.name,
             device=self.device,
             output_dir=self.output_dir)
-        simulation._output_directory = sim_output_path  #pylint: disable=protected-access
 
         return sim_output_path
 
