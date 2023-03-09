@@ -192,16 +192,13 @@ class DamBreak:
         root.find("./execution/parameters/parameter[@key='TimeMax']").set(
             "value", str(self.simulation_time))
 
-        fluid_size = root.find(".//drawbox[boxfill='solid']/size")
-        fluid_size.set("x", str(self.fluid_dimensions[0]))
-        fluid_size.set("y", str(self.fluid_dimensions[1]))
-        fluid_size.set("z", str(self.fluid_dimensions[2]))
-
-        fluid_point = root.find(".//drawbox[boxfill='solid']/point")
-        fluid_point.set("x", str(self.fluid_position[0]))
-        fluid_point.set("y", str(self.fluid_position[1]))
-        fluid_point.set("z", str(self.fluid_position[2]))
-
+        self.update_axis_values_in_xml(root=root,
+                                       parameter=".//drawbox[boxfill='solid']/size", 
+                                       value=self.fluid_position)
+        self.update_axis_values_in_xml(root=root,
+                                       parameter=".//drawbox[boxfill='solid']/point", 
+                                       value=self.fluid_dimensions)
+        
         particle_size = root.find(".//definition")
         particle_size.set("dp", str(self.particle_radius * 2))
 
@@ -242,3 +239,11 @@ class DamBreak:
 
         # Add number of particles to the total sum
         return n_particles_x * n_particles_y * n_particles_z
+    
+    def update_axis_values_in_xml(root: ET.Element, 
+                                  parameter: str, 
+                                  value: list):
+        param = root.find(parameter)
+        param.set("x", str(value[0]))
+        param.set("y", str(value[1]))
+        param.set("z", str(value[2]))
