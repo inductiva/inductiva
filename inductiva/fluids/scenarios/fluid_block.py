@@ -82,6 +82,7 @@ class FluidBlock:
                  simulation_time: float = 1.,
                  output_time_step: float = 1. / 60.,
                  particle_radius: float = 0.015,
+                 z_sort: bool = True,
                  cfl_method: Literal["no", "cfl", "cfl_p"] = "no",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of the Fluid Block scenario.
@@ -93,7 +94,7 @@ class FluidBlock:
                 - "medium"
                 - "low"
             time_max: Maximum time of simulation, in seconds.
-            Simulation data is exported and saved every
+            output_time_step: Simulation data is exported and saved every
                 `output_time_step` seconds.
             cfl_method: cfl_method: Courant-Friedrichs-Lewy (CFL) method used
                 for adaptive time stepping. Used to find a time step as large
@@ -126,7 +127,7 @@ class FluidBlock:
             simulation_method=SIMULATION_METHOD,
             viscosity_method = VISCOSITY_SOLVER,
             boundary_handling_method=BOUNDARY_HANDLING_METHOD,
-            z_sort=False,
+            z_sort=z_sort,
             cfl_method=cfl_method,
             output_time_step=output_time_step,
             output_directory=input_temp_dir.name)
