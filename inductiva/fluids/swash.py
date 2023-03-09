@@ -33,7 +33,7 @@ class SWASH:
         Args:
             output_dir: Directory where the generated files will be stored.
         """
-        return inductiva.shallow.swash.run_simulation(self.sim_dir,
+        return inductiva.sw.swash.run_simulation(self.sim_dir,
                                                       self.input_filename,
                                                       n_cores=n_cores,
                                                       output_dir=output_dir)
