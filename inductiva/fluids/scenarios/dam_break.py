@@ -23,7 +23,7 @@ FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
 TIME_MAX = 3
-INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), 
+INPUT_XML_PATH = os.path.join(os.path.dirname(__file__),
                               "xml_files/InputCase.xml")
 
 
@@ -136,10 +136,11 @@ class DamBreak:
         input_temp_dir.cleanup()
 
         inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(sim_output_path, "particles"), 
-            output_time_step=OUTPUT_TIME_STEP, 
-            netcdf_data_dir=os.path.join(sim_output_path, "particles", "netcdf"))
-        
+            data_dir=os.path.join(sim_output_path, "particles"),
+            output_time_step=OUTPUT_TIME_STEP,
+            netcdf_data_dir=os.path.join(sim_output_path, "particles",
+                                         "netcdf"))
+
         return SimulationOutput(sim_output_path)
 
     def _splishsplash_simulation(self, input_dir):
@@ -192,13 +193,15 @@ class DamBreak:
         root.find("./execution/parameters/parameter[@key='TimeMax']").set(
             "value", str(self.simulation_time))
 
-        self.update_axis_values_in_xml(root=root,
-                                       parameter=".//drawbox[boxfill='solid']/size", 
-                                       value=self.fluid_position)
-        self.update_axis_values_in_xml(root=root,
-                                       parameter=".//drawbox[boxfill='solid']/point", 
-                                       value=self.fluid_dimensions)
-        
+        self.update_axis_values_in_xml(
+            root=root,
+            parameter=".//drawbox[boxfill='solid']/size",
+            value=self.fluid_position)
+        self.update_axis_values_in_xml(
+            root=root,
+            parameter=".//drawbox[boxfill='solid']/point",
+            value=self.fluid_dimensions)
+
         particle_size = root.find(".//definition")
         particle_size.set("dp", str(self.particle_radius * 2))
 
@@ -239,10 +242,10 @@ class DamBreak:
 
         # Add number of particles to the total sum
         return n_particles_x * n_particles_y * n_particles_z
-    
-    def update_axis_values_in_xml(root: ET.Element, 
-                                  parameter: str, 
+
+    def update_axis_values_in_xml(self, root: ET.Element, parameter: str,
                                   value: list):
+        """Sets X, Y, Z values of a given parameter in an ElementTree."""
         param = root.find(parameter)
         param.set("x", str(value[0]))
         param.set("y", str(value[1]))
