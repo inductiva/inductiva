@@ -31,7 +31,7 @@ flags.DEFINE_string("device", "cpu",
 
 
 def main(_):
-    """Run a Dam Break simulation via the API."""
+    """Run a dam break simulation via the API."""
     inductiva.api_url = FLAGS.api_url
 
     time_start = time.perf_counter()
