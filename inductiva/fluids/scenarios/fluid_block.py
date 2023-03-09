@@ -84,7 +84,7 @@ class FluidBlock:
                  particle_radius: float = 0.015,
                  cfl_method: Literal["no", "cfl", "cfl_p"] = "no",
                  output_dir: Optional[Path] = None):
-        """Runs SPH simulation of the Dam Break scenario.
+        """Runs SPH simulation of the Fluid Block scenario.
         Args:
             device: Sets the device for a simulation to be run.
             resolution: Sets the fluid resolution to simulate.
@@ -126,6 +126,7 @@ class FluidBlock:
             simulation_method=SIMULATION_METHOD,
             viscosity_method = VISCOSITY_SOLVER,
             boundary_handling_method=BOUNDARY_HANDLING_METHOD,
+            z_sort=False,
             cfl_method=cfl_method,
             output_time_step=output_time_step,
             output_directory=input_temp_dir.name)
