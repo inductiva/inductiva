@@ -4,16 +4,16 @@ This is an example on how to initialize a connection with the Inductiva
 Web API and call a function from linalg package to find eigenvalues
 and eigenvectors of a given matrix.
 """
-import inductiva
 import scipy
 import numpy as np
 import time
 
-import utils
-
 from absl import logging
 from absl import flags
 from absl import app
+
+import inductiva
+from demos import utils
 
 FLAGS = flags.FLAGS
 
@@ -24,7 +24,7 @@ flags.DEFINE_string("api_url", "http://api.inductiva.ai",
 def main(_):
     inductiva.api_url = FLAGS.api_url
 
-    m = utils.get_square_tridiagonal_h_matrix(FLAGS.size)
+    m = utils.get_square_tridiagonal_h_matrix(10)
 
     time_start = time.perf_counter()
     remote_result = inductiva.slepc.linalg.eigs(matrix=m, num_eigenpairs=10)
