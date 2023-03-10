@@ -42,14 +42,6 @@ class DamBreak(FluidBlock):
               Used to control particle spacing. Smaller particle radius means a
               finer discretization, hence more particles.
             """
-        #  Set fluid block dimensions according to the input
-        if max(dimensions) > FLUID_DIMENSION_UPPER_BOUNDARY:
-            raise ValueError(f"The values of `fluid_dimensions` cannot exceed \
-                {FLUID_DIMENSION_UPPER_BOUNDARY}.")
-        if min(dimensions) < FLUID_DIMENSION_LOWER_BOUNDARY:
-            raise ValueError(
-                f"The values of `fluid_dimensions` must be larger than \
-                {FLUID_DIMENSION_LOWER_BOUNDARY}.")
 
         if len(dimensions) != 3:
             raise ValueError("`dimensions` must have 3 values.")
@@ -61,6 +53,15 @@ class DamBreak(FluidBlock):
             self.fluid_position = [0.0, 0.0, 0.0]
         if dimensions is None:
             dimensions = [0.3, 0.5, 1.]
+
+        #  Set fluid block dimensions according to the input
+        if max(dimensions) > FLUID_DIMENSION_UPPER_BOUNDARY:
+            raise ValueError(f"The values of `fluid_dimensions` cannot exceed \
+                {FLUID_DIMENSION_UPPER_BOUNDARY}.")
+        if min(dimensions) < FLUID_DIMENSION_LOWER_BOUNDARY:
+            raise ValueError(
+                f"The values of `fluid_dimensions` must be larger than \
+                {FLUID_DIMENSION_LOWER_BOUNDARY}.")
 
         if np.greater(np.add(dimensions, position),
                       np.array(TANK_DIMENSIONS)).any():
