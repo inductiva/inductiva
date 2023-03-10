@@ -45,7 +45,7 @@ class DamBreak(FluidBlock):
 
         # Initialize a class even if no values are provided
         if position is None:
-            self.fluid_position = [0.0, 0.0, 0.0]
+            position = [0.0, 0.0, 0.0]
         if dimensions is None:
             dimensions = [0.3, 0.5, 1.]
 
