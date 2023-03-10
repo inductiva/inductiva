@@ -1,8 +1,9 @@
 """Describes the physical scenarios and runs its simulation via API."""
-from absl import logging
 import tempfile
 import math
 from typing import List, Literal, Optional
+
+from absl import logging
 import numpy as np
 
 import inductiva_sph
@@ -12,11 +13,7 @@ from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
 
 # Global variables to define a scenario
-COLUMN_VELOCITY = [0.0, 0.0, 0.0]
-OUTPUT_TIME_STEP = 1. / 60.
 TANK_DIMENSIONS = [1, 1, 1]
-FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
-FLUID_DIMENSION_UPPER_BOUNDARY = 1
 SIMULATION_METHOD = "divergence-free-SPH"
 VISCOSITY_SOLVER = "Weiler-2018"
 BOUNDARY_HANDLING_METHOD = "particle-based"
@@ -26,56 +23,47 @@ class FluidBlock:
     """Physical scenario of a general fluid block simulation."""
 
     def __init__(self,
-                 fluid_density: float,
-                 fluid_kinematic_viscosity: float,
-                 fluid_dimensions: List[float],
-                 fluid_position: Optional[List[float]]= None,
-                 fluid_inital_velocity: Optional[List[float]] = None) -> None:
+                 density: float,
+                 kinematic_viscosity: float,
+                 dimensions: List[float],
+                 position: Optional[List[float]]= None,
+                 inital_velocity: Optional[List[float]] = None) -> None:
         """Initializes a `FluidBlock` object.
         
         Args:
-            fluid_density: Density of the fluid in kg/m^3.
-            fluid_kinematic_viscosity: Kinematic viscosity of the fluid,
+            density: Density of the fluid in kg/m^3.
+            kinematic_viscosity: Kinematic viscosity of the fluid,
                 in m^2/s.
-            fluid_dimensions: A list containing fluid column dimensions,
+            dimensions: A list containing fluid column dimensions,
                 in meters.
-            fluid: A fluid type to simulate.
-            fluid_position: Position of the fluid column in the tank,
+            position: Position of the fluid column in the tank,
                 in meters.
-            fluid_initial_velocity: Initial velocity of the fluid block
+            initial_velocity: Initial velocity of the fluid block
                 in the [x, y, z] axes, in m/s.
         """
 
         self.fluid = sph_core.fluids.FluidProperties(
-            density=fluid_density,
-            kinematic_viscosity=fluid_kinematic_viscosity)
+            density=density,
+            kinematic_viscosity=kinematic_viscosity)
 
-        #  Set fluid block dimensions according to the input
-        if max(fluid_dimensions) > FLUID_DIMENSION_UPPER_BOUNDARY:
-            raise ValueError(f"The values of `fluid_dimensions` cannot exceed \
-                {FLUID_DIMENSION_UPPER_BOUNDARY}.")
-        if min(fluid_dimensions) < FLUID_DIMENSION_LOWER_BOUNDARY:
-            raise ValueError(
-                f"The values of `fluid_dimensions` must be larger than \
-                {FLUID_DIMENSION_LOWER_BOUNDARY}.")
-        if len(fluid_dimensions) != 3:
+        if len(dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
 
-        self.fluid_dimensions = fluid_dimensions
+        self.dimensions = dimensions
 
-        if fluid_position is None:
-            fluid_position = [0.0, 0.0, 0.0]
+        if position is None:
+            self.position = [0.0, 0.0, 0.0]
+        else:
+            self.position = position
 
-        if np.greater(np.add(self.fluid_dimensions, fluid_position),
+        if np.greater(np.add(self.dimensions, position),
                         np.array(TANK_DIMENSIONS)).any():
             raise ValueError("Fluid cannot exceed tank borders.")
 
-        self.fluid_position = fluid_position
-
-        if fluid_inital_velocity is None:
-            self.fluid_initial_velocity = [0., 0., 0.]
+        if inital_velocity is None:
+            self.initial_velocity = [0., 0., 0.]
         else:
-            self.fluid_initial_velocity = fluid_inital_velocity
+            self.initial_velocity = inital_velocity
 
     def simulate(self,
                  device: Literal["cpu", "gpu"] = "cpu",
@@ -88,14 +76,15 @@ class FluidBlock:
         """Runs SPH simulation of the Fluid Block scenario.
         Args:
             device: Sets the device for a simulation to be run.
-            resolution: Sets the fluid resolution to simulate.
-                Available options are (the default is "medium"):
-                - "high"
-                - "medium"
-                - "low"
+            particle_radius: Radius of the discretization particles, in meters.
+              Used to control particle spacing. Smaller particle radius means a
+              finer discretization, hence more particles.
             time_max: Maximum time of simulation, in seconds.
             output_time_step: Simulation data is exported and saved every
                 `output_time_step` seconds.
+            z_sort: Enable z-sort, i.e. periodic particle sorting according to
+              their z position. Improves cache hits and therefore the
+              performance of the simulation.
             cfl_method: cfl_method: Courant-Friedrichs-Lewy (CFL) method used
                 for adaptive time stepping. Used to find a time step as large
                 as possible to achieve high performance but sufficiently small
@@ -141,7 +130,7 @@ class FluidBlock:
         logging.info("Estimated number of time steps %s",
                      math.ceil(self.simulation_time / simulation.time_step))
         logging.info("Number of output time steps %s",
-                     math.ceil(self.simulation_time / OUTPUT_TIME_STEP))
+                     math.ceil(self.simulation_time / output_time_step))
 
         logging.info("Running SPlisHSPlasH simulation.")
         # Invoke API
@@ -160,9 +149,9 @@ class FluidBlock:
         # Create fluid column
         fluid_block = sph_core.fluids.BoxFluidBlock(
             fluid_properties=self.fluid,
-            position=self.fluid_position,
-            dimensions=self.fluid_dimensions,
-            initial_velocity=self.fluid_initial_velocity)
+            position=self.position,
+            dimensions=self.dimensions,
+            initial_velocity=self.initial_velocity)
 
         # Set up scenario
         scenario = sph_core.scenarios.DamBreakSPHScenario(
@@ -174,11 +163,11 @@ class FluidBlock:
         """Estimate of the number of SPH particles contained in fluid blocks."""
 
         # Calculate number of particles for a fluid block
-        n_particles_x = round(self.fluid_dimensions[0] /
+        n_particles_x = round(self.dimensions[0] /
                               (2 * self.particle_radius)) - 1
-        n_particles_y = round(self.fluid_dimensions[1] /
+        n_particles_y = round(self.dimensions[1] /
                               (2 * self.particle_radius)) - 1
-        n_particles_z = round(self.fluid_dimensions[2] /
+        n_particles_z = round(self.dimensions[2] /
                               (2 * self.particle_radius)) - 1
 
         # Add number of particles to the total sum
