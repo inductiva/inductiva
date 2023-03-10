@@ -43,16 +43,16 @@ class DamBreak(FluidBlock):
               finer discretization, hence more particles.
             """
 
-        if len(dimensions) != 3:
-            raise ValueError("`dimensions` must have 3 values.")
-        if len(position) != 3:
-            raise ValueError("`position` must have 3 values.")
-
         # Initialize a class even if no values are provided
         if position is None:
             self.fluid_position = [0.0, 0.0, 0.0]
         if dimensions is None:
             dimensions = [0.3, 0.5, 1.]
+
+        if len(dimensions) != 3:
+            raise ValueError("`dimensions` must have 3 values.")
+        if len(position) != 3:
+            raise ValueError("`position` must have 3 values.")
 
         #  Set fluid block dimensions according to the input
         if max(dimensions) > FLUID_DIMENSION_UPPER_BOUNDARY:
