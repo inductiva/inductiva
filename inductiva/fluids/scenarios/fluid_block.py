@@ -16,7 +16,7 @@ from inductiva.types import Path
 TANK_DIMENSIONS = [1, 1, 1]
 SIMULATION_METHOD = "divergence-free-SPH"
 VISCOSITY_SOLVER = "Weiler-2018"
-BOUNDARY_HANDLING_METHOD = "particle-based"
+BOUNDARY_HANDLING_METHOD = "volume-maps"
 
 
 class FluidBlock:
@@ -61,7 +61,7 @@ class FluidBlock:
             raise ValueError("Fluid cannot exceed tank borders.")
 
         if inital_velocity is None:
-            self.initial_velocity = [0., 0., 0.]
+            self.initial_velocity = [0.0, 0.0, 0.0]
         else:
             self.initial_velocity = inital_velocity
 
@@ -114,7 +114,7 @@ class FluidBlock:
             time_step=output_time_step,
             particle_radius=self.particle_radius,
             simulation_method=SIMULATION_METHOD,
-            viscosity_method = VISCOSITY_SOLVER,
+            viscosity_method=VISCOSITY_SOLVER,
             boundary_handling_method=BOUNDARY_HANDLING_METHOD,
             z_sort=z_sort,
             cfl_method=cfl_method,

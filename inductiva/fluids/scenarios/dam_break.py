@@ -16,7 +16,6 @@ FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 
 
-
 class ParticleRadius(Enum):
     """Sets particle radius according to resolution."""
     HIGH = 0.008
@@ -47,7 +46,7 @@ class DamBreak(FluidBlock):
         if position is None:
             position = [0.0, 0.0, 0.0]
         if dimensions is None:
-            dimensions = [0.3, 0.5, 1.]
+            dimensions = [0.5, 0.5, 0.5]
 
         if len(dimensions) != 3:
             raise ValueError("`dimensions` must have 3 values.")
@@ -99,7 +98,7 @@ class DamBreak(FluidBlock):
         particle_radius = ParticleRadius[resolution.upper()].value
 
         return FluidBlock.simulate(self,
-                                    device=device,
-                                    particle_radius=particle_radius,
-                                    simulation_time=simulation_time,
-                                    output_dir=output_dir)
+                                   device=device,
+                                   particle_radius=particle_radius,
+                                   simulation_time=simulation_time,
+                                   output_dir=output_dir)
