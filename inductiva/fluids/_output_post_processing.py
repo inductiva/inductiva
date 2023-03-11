@@ -37,7 +37,7 @@ class SimulationOutput:
 
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
 
-        visualization.create_3d_sccatter_movie(
+        visualization.create_3d_scatter_movie(
             dataset=particle_data,
             x_var="x",
             y_var="y",
