@@ -21,6 +21,8 @@ class SimulationOutput:
             """
         self.sim_output_dir = sim_output_path
 
+        
+
     def render(self):
         """Generate a simulation movie.
 
