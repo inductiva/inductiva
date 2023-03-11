@@ -16,7 +16,7 @@ from inductiva.types import Path
 TANK_DIMENSIONS = [1, 1, 1]
 SIMULATION_METHOD = "divergence-free-SPH"
 VISCOSITY_SOLVER = "Weiler-2018"
-BOUNDARY_HANDLING_METHOD = "volume-maps"
+BOUNDARY_HANDLING_METHOD = "particle-based"
 
 
 class FluidBlock:
@@ -70,7 +70,7 @@ class FluidBlock:
                  simulation_time: float = 1.,
                  output_time_step: float = 1. / 60.,
                  particle_radius: float = 0.015,
-                 z_sort: bool = True,
+                 z_sort: bool = False,
                  cfl_method: Literal["no", "cfl", "cfl_p"] = "no",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of the Fluid Block scenario.

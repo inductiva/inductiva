@@ -14,7 +14,7 @@ REQUIRES = [
     "scipy",
     "inductiva_web_api_client @ git+https://github.com/inductiva/inductiva-web-api-client.git",
     "inductiva_sph @ git+https://github.com/inductiva/inductiva-sph.git@673f06311dd78846c7c2ed3b7344e292f85868eb",
-    "inductiva_data @ git+https://github.com/inductiva/inductiva-data.git",
+    "inductiva_data @ git+https://github.com/inductiva/inductiva-data.git@40b32c0207a828ba976eed1ad490984c1985e911",
     "inductiva_utils @ git+https://github.com/inductiva/inductiva-utils.git",
 ]
 
