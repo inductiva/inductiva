@@ -138,8 +138,6 @@ class FluidBlock:
             sim_dir=input_temp_dir.name, device=device, output_dir=output_dir)
         simulation._output_directory = sim_output_path  #pylint: disable=protected-access
 
-        simulation._convert_output_files(False)  #pylint: disable=protected-access
-
         # Delete temporary input directory
         input_temp_dir.cleanup()
 
