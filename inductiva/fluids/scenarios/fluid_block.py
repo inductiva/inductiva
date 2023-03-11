@@ -1,5 +1,6 @@
 """Describes the physical scenarios and runs its simulation via API."""
 import tempfile
+import os
 import math
 from typing import List, Literal, Optional
 
@@ -140,6 +141,11 @@ class FluidBlock:
 
         # Delete temporary input directory
         input_temp_dir.cleanup()
+
+        inductiva.sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
+            data_dir=os.path.join(input_temp_dir.name, "vtk"),
+            output_time_step=output_time_step,
+            netcdf_data_dir=os.path.join(input_temp_dir.name, "netcdf"))
 
         return SimulationOutput(sim_output_path)
 

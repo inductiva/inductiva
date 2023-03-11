@@ -29,8 +29,7 @@ class SimulationOutput:
                 scatter plot."""
 
         # Read simulation particle data
-        particle_data_dir = os.path.join(self.sim_output_dir,
-                                         os.path.join("sph_run", "netcdf"))
+        particle_data_dir = os.path.join(self.sim_output_dir, "netcdf")
 
         particle_data = xr.open_mfdataset(os.path.join(particle_data_dir, "*.nc"))
 
