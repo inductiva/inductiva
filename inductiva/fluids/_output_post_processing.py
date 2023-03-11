@@ -39,6 +39,7 @@ class SimulationOutput:
 
         visualization.create_3d_scatter_movie(
             dataset=particle_data,
+            iter_var="time",
             x_var="x",
             y_var="y",
             z_var="z",
