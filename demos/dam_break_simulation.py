@@ -38,8 +38,7 @@ def main(_):
         fluid=inductiva.fluids.WATER,
         dimensions=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_dimensions),
-        position=inductiva_utils.flags.cast_list_to_float(
-            FLAGS.fluid_position))
+        position=inductiva_utils.flags.cast_list_to_float(FLAGS.fluid_position))
 
     simulation_output = scenario.simulate(output_dir=FLAGS.output_dir,
                                           resolution=FLAGS.resolution,
