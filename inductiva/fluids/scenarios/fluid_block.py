@@ -72,7 +72,7 @@ class FluidBlock:
                  output_time_step: float = 1. / 60.,
                  particle_radius: float = 0.015,
                  z_sort: bool = False,
-                 cfl_method: Literal["no", "cfl", "cfl_p"] = "no",
+                 cfl_method: Literal["no", "cfl", "cfl_p"] = "cfl",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of the Fluid Block scenario.
         Args:
@@ -139,13 +139,13 @@ class FluidBlock:
             sim_dir=input_temp_dir.name, device=device, output_dir=output_dir)
         simulation._output_directory = sim_output_path  #pylint: disable=protected-access
 
-        # Delete temporary input directory
-        input_temp_dir.cleanup()
-
         inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(sim_output_path, "vtk"),
             output_time_step=output_time_step,
             netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
+
+        # Delete temporary input directory
+        input_temp_dir.cleanup()
 
         return SimulationOutput(sim_output_path)
 

@@ -21,9 +21,7 @@ class SimulationOutput:
             """
         self.sim_output_dir = sim_output_path
 
-        
-
-    def render(self):
+    def render(self, movie_fps: int=10):
         """Generate a simulation movie.
 
         Args:
@@ -37,13 +35,14 @@ class SimulationOutput:
 
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
 
-        visualization.create_3d_scatter_movie(
+        visualization.create_3d_scatter_plot_movie(
             dataset=particle_data,
             iter_var="time",
             x_var="x",
             y_var="y",
             z_var="z",
             movie_path=movie_path,
+            movie_fps=movie_fps,
             x_limits=[0., 1.],
             y_limits=[0., 1.],
             z_limits=[0., 1.])
