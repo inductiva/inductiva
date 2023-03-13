@@ -23,8 +23,9 @@ FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
 TIME_MAX = 3
+XML_INPUT_FILENAME = "InputCase.xml"
 INPUT_XML_PATH = os.path.join(os.path.dirname(__file__),
-                              "xml_files/InputCase.xml")
+                              "xml_files", XML_INPUT_FILENAME)
 
 
 class ParticleRadius(Enum):
@@ -124,6 +125,7 @@ class DamBreak:
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
+        print(input_temp_dir)
 
         if engine == "SPlisHSPlasH":
             sim_output_path = self._splishsplash_simulation(
@@ -131,6 +133,8 @@ class DamBreak:
         elif engine == "DualSPHysics":
             sim_output_path = self._dualsphysics_simulation(
                 input_dir=input_temp_dir)
+        else:
+            raise ValueError(f"{engine} does not exist.")
 
         # Delete temporary input directory
         input_temp_dir.cleanup()
@@ -183,32 +187,36 @@ class DamBreak:
         Args:
             input_dir: Directory where the input file will be stored.
         """
-        # Upload XML file of dam break scenario
+        # Parse XML file of a dam break scenario
         input_file = ET.parse(INPUT_XML_PATH)
         root = input_file.getroot()
 
         # Set simulation parameters according to user input
         root.find("./execution/parameters/parameter[@key='TimeMax']").set(
             "value", str(self.simulation_time))
+        root.find(".//rhop0").set(
+            "value", str(self.fluid.density))
+        root.find("./execution/parameters/parameter[@key='Visco']").set(
+            "value", str(self.fluid.kinematic_viscosity))
 
         self.update_axis_values_in_xml(
             root=root,
             parameter=".//drawbox[boxfill='solid']/size",
-            value=self.fluid_position)
+            value=self.fluid_dimensions)
         self.update_axis_values_in_xml(
             root=root,
             parameter=".//drawbox[boxfill='solid']/point",
-            value=self.fluid_dimensions)
+            value=self.fluid_position)
 
         particle_size = root.find(".//definition")
         particle_size.set("dp", str(self.particle_radius * 2))
 
         # Create input file
-        input_file.write(os.path.join(input_dir.name, "InputCase.xml"))
+        input_file.write(os.path.join(input_dir.name, XML_INPUT_FILENAME))
 
         return inductiva.sph.dualsphysics.run_simulation(
             sim_dir=input_dir.name,
-            input_filename="InputCase",
+            input_filename=XML_INPUT_FILENAME[:-4],
             device=self.device,
             output_dir=self.output_dir)
 

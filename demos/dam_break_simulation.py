@@ -20,12 +20,9 @@ flags.DEFINE_enum("resolution", "medium", ["high", "medium", "low"],
                   "Sets the fluid resolution to simulate.")
 flags.DEFINE_enum("engine", "DualSPHysics", ["DualSPHysics", "SPlisHSPlasH"],
                   "Sets the fluid resolution to simulate.")
-flags.DEFINE_string(
-    "color_quantity", None, "Quantity to represent in the color scale of the"
-    "scatter plot.")
-flags.DEFINE_string("output_dir", None,
+flags.DEFINE_string("output_dir", "test_1",
                     "Destination directory for output files.")
-flags.DEFINE_integer("simulation_time", 2, "Simulation time in seconds.")
+flags.DEFINE_float("simulation_time", 1, "Simulation time in seconds.")
 flags.DEFINE_string("device", "cpu",
                     "Device in which device the simulation will run.")
 
@@ -44,12 +41,12 @@ def main(_):
             FLAGS.fluid_position))
 
     _ = scenario.simulate(output_dir=FLAGS.output_dir,
-                                          resolution=FLAGS.resolution,
-                                          engine=FLAGS.engine,
-                                          device=FLAGS.device)
+                          resolution=FLAGS.resolution,
+                          engine=FLAGS.engine,
+                          device=FLAGS.device)
 
     # Note: video rendering only works with SPlisHSPlasH for now
-    # simulation_output.render(color_quantity=FLAGS.color_quantity)
+    # simulation_output.render()
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 
