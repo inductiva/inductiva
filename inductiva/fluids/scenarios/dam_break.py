@@ -65,7 +65,8 @@ class DamBreak(FluidBlock):
                       np.array(TANK_DIMENSIONS)).any():
             raise ValueError("Fluid cannot exceed tank borders.")
 
-        FluidBlock.__init__(self, density=fluid.density,
+        FluidBlock.__init__(self,
+                            density=fluid.density,
                             kinematic_viscosity=fluid.kinematic_viscosity,
                             dimensions=dimensions,
                             position=position)
