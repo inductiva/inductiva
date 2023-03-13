@@ -21,7 +21,7 @@ class SimulationOutput:
             """
         self.sim_output_dir = sim_output_path
 
-    def render(self, movie_fps: int=10):
+    def render(self, movie_fps: int = 60):
         """Generate a simulation movie.
 
         Args:
@@ -31,21 +31,21 @@ class SimulationOutput:
         # Read simulation particle data
         particle_data_dir = os.path.join(self.sim_output_dir, "netcdf")
 
-        particle_data = xr.open_mfdataset(os.path.join(particle_data_dir, "*.nc"))
+        particle_data = xr.open_mfdataset(
+            os.path.join(particle_data_dir, "*.nc"))
 
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
 
-        visualization.create_3d_scatter_plot_movie(
-            dataset=particle_data,
-            iter_var="time",
-            x_var="x",
-            y_var="y",
-            z_var="z",
-            movie_path=movie_path,
-            movie_fps=movie_fps,
-            x_limits=[0., 1.],
-            y_limits=[0., 1.],
-            z_limits=[0., 1.])
+        visualization.create_3d_scatter_plot_movie(dataset=particle_data,
+                                                   iter_var="time",
+                                                   x_var="x",
+                                                   y_var="y",
+                                                   z_var="z",
+                                                   movie_path=movie_path,
+                                                   movie_fps=movie_fps,
+                                                   x_limits=[0., 1.],
+                                                   y_limits=[0., 1.],
+                                                   z_limits=[0., 1.])
 
         with open(movie_path, "rb") as file_path:
             mp4 = file_path.read()

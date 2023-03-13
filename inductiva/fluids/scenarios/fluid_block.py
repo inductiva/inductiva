@@ -27,8 +27,8 @@ class FluidBlock:
                  density: float,
                  kinematic_viscosity: float,
                  dimensions: List[float],
-                 position: Optional[List[float]]= None,
-                 inital_velocity: Optional[List[float]] = None) -> None:
+                 position: Optional[List[float]] = None,
+                 inital_velocity: Optional[List[float]] = None):
         """Initializes a `FluidBlock` object.
         
         Args:
@@ -44,8 +44,7 @@ class FluidBlock:
         """
 
         self.fluid = sph_core.fluids.FluidProperties(
-            density=density,
-            kinematic_viscosity=kinematic_viscosity)
+            density=density, kinematic_viscosity=kinematic_viscosity)
 
         if len(dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
@@ -58,7 +57,7 @@ class FluidBlock:
             self.position = position
 
         if np.greater(np.add(self.dimensions, position),
-                        np.array(TANK_DIMENSIONS)).any():
+                      np.array(TANK_DIMENSIONS)).any():
             raise ValueError("Fluid cannot exceed tank borders.")
 
         if inital_velocity is None:
@@ -103,8 +102,8 @@ class FluidBlock:
         # Create a dam break scenario
         scenario = self.__create_scenario()
 
-        self.particle_radius=particle_radius
-        self.simulation_time=simulation_time
+        self.particle_radius = particle_radius
+        self.simulation_time = simulation_time
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with

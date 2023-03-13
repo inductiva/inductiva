@@ -9,7 +9,6 @@ from inductiva.fluids.scenarios.fluid_block import FluidBlock
 from inductiva.fluids._fluid_types import WATER
 from inductiva.types import Path
 
-
 # Global variables to define a scenario
 TANK_DIMENSIONS = [1., 1., 1.]
 FLUID_DIMENSION_LOWER_BOUNDARY = 0.1

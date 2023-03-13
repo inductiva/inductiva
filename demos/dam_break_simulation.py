@@ -36,16 +36,16 @@ def main(_):
 
     scenario = inductiva.fluids.DamBreak(
         fluid=inductiva.fluids.WATER,
-        fluid_dimensions=inductiva_utils.flags.cast_list_to_float(
+        dimensions=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_dimensions),
-        fluid_position=inductiva_utils.flags.cast_list_to_float(
+        position=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_position))
 
     simulation_output = scenario.simulate(output_dir=FLAGS.output_dir,
                                           resolution=FLAGS.resolution,
                                           device=FLAGS.device)
 
-    simulation_output.render(color_quantity=FLAGS.color_quantity)
+    simulation_output.render()
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 
