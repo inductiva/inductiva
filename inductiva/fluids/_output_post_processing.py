@@ -43,7 +43,10 @@ class SimulationOutput:
             x_var="x",
             y_var="y",
             z_var="z",
-            movie_path=movie_path)
+            movie_path=movie_path,
+            x_limits=[0., 1.],
+            y_limits=[0., 1.],
+            z_limits=[0., 1.])
 
         with open(movie_path, "rb") as file_path:
             mp4 = file_path.read()
