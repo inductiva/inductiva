@@ -24,8 +24,8 @@ FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
 TIME_MAX = 3
 XML_INPUT_FILENAME = "InputCase.xml"
-INPUT_XML_PATH = os.path.join(os.path.dirname(__file__),
-                              "xml_files", XML_INPUT_FILENAME)
+INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), "xml_files",
+                              XML_INPUT_FILENAME)
 
 
 class ParticleRadius(Enum):
@@ -194,10 +194,11 @@ class DamBreak:
         # Set simulation parameters according to user input
         root.find("./execution/parameters/parameter[@key='TimeMax']").set(
             "value", str(self.simulation_time))
-        root.find(".//rhop0").set(
-            "value", str(self.fluid.density))
+        root.find(".//rhop0").set("value", str(self.fluid.density))
         root.find("./execution/parameters/parameter[@key='Visco']").set(
             "value", str(self.fluid.kinematic_viscosity))
+        root.find("./execution/parameters/parameter[@key='TimeOut']").set(
+            "value", str(OUTPUT_TIME_STEP))
 
         self.update_axis_values_in_xml(
             root=root,
