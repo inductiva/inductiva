@@ -6,6 +6,7 @@ from absl import flags
 from absl import app
 
 import inductiva
+from inductiva.fluids.scenarios import DualSPHysicsParameters
 import inductiva_utils
 
 FLAGS = flags.FLAGS
@@ -40,10 +41,13 @@ def main(_):
         fluid_position=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_position))
 
+    params = DualSPHysicsParameters(simulation_time=FLAGS.simulation_time,
+                                    device=FLAGS.device)
+
     _ = scenario.simulate(output_dir=FLAGS.output_dir,
                           resolution=FLAGS.resolution,
                           engine=FLAGS.engine,
-                          device=FLAGS.device)
+                          engine_parameters=params)
 
     # Note: video rendering only works with SPlisHSPlasH for now
     # simulation_output.render()
