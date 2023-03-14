@@ -1,10 +1,12 @@
 """Describes the physical scenarios and runs its simulation via API."""
 from absl import logging
-import tempfile
-from enum import Enum
-import math
 from typing import List, Literal, Optional
+import os
+import math
+import tempfile
 import numpy as np
+from enum import Enum
+import xml.etree.ElementTree as ET
 
 import inductiva_sph
 from inductiva_sph import sph_core
@@ -21,6 +23,9 @@ FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 VISCOSITY_SOLVER = "Weiler-2018"
 TIME_MAX = 3
+XML_INPUT_FILENAME = "InputCase.xml"
+INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), "xml_files",
+                              XML_INPUT_FILENAME)
 
 
 class ParticleRadius(Enum):
@@ -44,9 +49,6 @@ class DamBreak:
               in meters.
             fluid: A fluid type to simulate.
             fluid_position: Position of the fluid column in the tank, in meters.
-            particle_radius: Radius of the discretization particles, in meters.
-              Used to control particle spacing. Smaller particle radius means a
-              finer discretization, hence more particles.
             """
 
         self.fluid = fluid
@@ -76,15 +78,21 @@ class DamBreak:
         self.fluid_position = fluid_position
 
     def simulate(self,
-                 device: Literal["cpu", "gpu"] = "cpu",
+                 engine: Literal["SPlisHSPlasH",
+                                 "DualSPHysics"] = "DualSPHysics",
                  resolution: Literal["high", "medium", "low"] = "medium",
                  simulation_time: float = 1.,
+                 device: Literal["cpu", "gpu"] = "cpu",
                  cfl_method: Literal["no", "cfl", "cfl_p"] = "no",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of the Dam Break scenario.
 
         Args:
             device: Sets the device for a simulation to be run.
+            engine: The software platform to be used for the simulation.
+              Available options are (the default is DualSPHysics):
+              - SPlisHSPlasH
+              - DualSPHysics
             resolution: Sets the fluid resolution to simulate.
               Available options are (the default is "medium"):
               - "high"
@@ -105,21 +113,48 @@ class DamBreak:
                 (based on an internal ID of the task) will be used.
         """
 
-        # Create a dam break scenario
-        scenario = self.__create_scenario()
-
         self.particle_radius = ParticleRadius[resolution.upper()].value
 
         if simulation_time > TIME_MAX:
             raise ValueError(
                 f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
         self.simulation_time = simulation_time
-        # if time_max > TIME_MAX:
-        #     raise ValueError("`time_max` cannot exceed {TIME_MAX} seconds.")
         self.cfl_method = cfl_method
+        self.device = device
+        self.output_dir = output_dir
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
+        print(input_temp_dir)
+
+        if engine == "SPlisHSPlasH":
+            sim_output_path = self._splishsplash_simulation(
+                input_dir=input_temp_dir)
+        elif engine == "DualSPHysics":
+            sim_output_path = self._dualsphysics_simulation(
+                input_dir=input_temp_dir)
+        else:
+            raise ValueError(f"{engine} does not exist.")
+
+        # Delete temporary input directory
+        input_temp_dir.cleanup()
+
+        inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
+            data_dir=os.path.join(sim_output_path, "vtk"),
+            output_time_step=OUTPUT_TIME_STEP,
+            netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
+
+        return SimulationOutput(sim_output_path)
+
+    def _splishsplash_simulation(self, input_dir):
+        """Runs simulation on SPlisHSPlasH via API.
+
+        Args:
+            input_dir: Directory where the input file will be stored.
+        """
+        # Create a dam break scenario
+        scenario = self._create_scenario()
+
         # Create simulation
         simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
             scenario=scenario,
@@ -128,9 +163,7 @@ class DamBreak:
             cfl_method=self.cfl_method,
             output_time_step=OUTPUT_TIME_STEP,
             viscosity_method=VISCOSITY_SOLVER,
-            output_directory=input_temp_dir.name)
-
-        logging.info(input_temp_dir)
+            output_directory=input_dir.name)
 
         # Create input file
         simulation.create_input_file()
@@ -141,20 +174,54 @@ class DamBreak:
         logging.info("Number of output time steps %s",
                      math.ceil(self.simulation_time / OUTPUT_TIME_STEP))
 
-        logging.info("Running SPlisHSPlasH simulation.")
-        # Invoke API
         sim_output_path = inductiva.sph.splishsplash.run_simulation(
-            sim_dir=input_temp_dir.name, device=device, output_dir=output_dir)
-        simulation._output_directory = sim_output_path  #pylint: disable=protected-access
+            sim_dir=input_dir.name,
+            device=self.device,
+            output_dir=self.output_dir)
 
-        simulation._convert_output_files(False)  #pylint: disable=protected-access
+        return sim_output_path
 
-        # Delete temporary input directory
-        input_temp_dir.cleanup()
+    def _dualsphysics_simulation(self, input_dir):
+        """Runs simulation on DualSPHysics via API.
 
-        return SimulationOutput(sim_output_path)
+        Args:
+            input_dir: Directory where the input file will be stored.
+        """
+        # Parse XML file of a dam break scenario
+        input_file = ET.parse(INPUT_XML_PATH)
+        root = input_file.getroot()
 
-    def __create_scenario(self):
+        # Set simulation parameters according to user input
+        root.find("./execution/parameters/parameter[@key='TimeMax']").set(
+            "value", str(self.simulation_time))
+        root.find(".//rhop0").set("value", str(self.fluid.density))
+        root.find("./execution/parameters/parameter[@key='Visco']").set(
+            "value", str(self.fluid.kinematic_viscosity))
+        root.find("./execution/parameters/parameter[@key='TimeOut']").set(
+            "value", str(OUTPUT_TIME_STEP))
+
+        self.update_axis_values_in_xml(
+            root=root,
+            parameter=".//drawbox[boxfill='solid']/size",
+            value=self.fluid_dimensions)
+        self.update_axis_values_in_xml(
+            root=root,
+            parameter=".//drawbox[boxfill='solid']/point",
+            value=self.fluid_position)
+
+        particle_size = root.find(".//definition")
+        particle_size.set("dp", str(self.particle_radius * 2))
+
+        # Create input file
+        input_file.write(os.path.join(input_dir.name, XML_INPUT_FILENAME))
+
+        return inductiva.sph.dualsphysics.run_simulation(
+            sim_dir=input_dir.name,
+            input_filename=XML_INPUT_FILENAME[:-4],
+            device=self.device,
+            output_dir=self.output_dir)
+
+    def _create_scenario(self):
         # Create fluid column
         fluid_block = sph_core.fluids.BoxFluidBlock(
             fluid_properties=self.fluid,
@@ -181,3 +248,11 @@ class DamBreak:
 
         # Add number of particles to the total sum
         return n_particles_x * n_particles_y * n_particles_z
+
+    def update_axis_values_in_xml(self, root: ET.Element, parameter: str,
+                                  value: list):
+        """Sets X, Y, Z values of a given parameter in an ElementTree."""
+        param = root.find(parameter)
+        param.set("x", str(value[0]))
+        param.set("y", str(value[1]))
+        param.set("z", str(value[2]))
