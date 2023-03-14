@@ -1,6 +1,6 @@
 """Input parameters of SPH simulators."""
 from enum import Enum
-from typing import NamedTuple, Literal
+from typing import NamedTuple
 
 
 class ParticleRadius(Enum):
@@ -17,10 +17,10 @@ class SplishSPlasHParameters(NamedTuple):
             viscosity_solver: Method used to model the viscosity of the fluid.
              The available options are (the default is 'standard'):
                 - 'None': Fluid is simulated with no viscosity.
-                - 'Standard': Standard SPH formulation of viscosity. 
+                - 'Standard': Standard SPH formulation of viscosity.
                 - 'Weiler-2018': This method is based on the paper "A Physically
-            cfl_method: cfl_method: Courant-Friedrichs-Lewy (CFL) method used for adaptive
-              time stepping.
+            cfl_method: cfl_method: Courant-Friedrichs-Lewy (CFL) method used
+              for adaptive time stepping.
               The available options are (default is 'no'):
                 - 'no': No adaptive time-stepping is used.
                 - 'cfl': Use CFL condition.
