@@ -24,8 +24,8 @@ FLUID_DIMENSION_LOWER_BOUNDARY = 0.1
 FLUID_DIMENSION_UPPER_BOUNDARY = 1
 TIME_MAX = 3
 XML_INPUT_FILENAME = "InputCase.xml"
-INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), "xml_files",
-                              XML_INPUT_FILENAME)
+INPUT_XML_PATH = os.path.join(os.path.dirname(__file__),
+                              "xml_files", XML_INPUT_FILENAME)
 
 
 class DamBreak:
@@ -70,16 +70,15 @@ class DamBreak:
             raise ValueError("Fluid cannot exceed tank borders.")
         self.fluid_position = fluid_position
 
-    def simulate(
-        self,
-        engine: Literal["SPlisHSPlasH", "DualSPHysics"] = "DualSPHysics",
-        resolution: Literal["high", "medium", "low"] = "medium",
-        simulation_time: float = 1.,
-        device: Literal["cpu", "gpu"] = "cpu",
-        output_dir: Optional[Path] = None,
-        output_time_step: float = 1. / 60.,
-        engine_parameters: Optional[Union[SplishSPlasHParameters,
-                                          DualSPHysicsParameters]] = None):
+    def simulate(self,
+                 engine: Literal["SPlisHSPlasH",
+                                 "DualSPHysics"] = "DualSPHysics",
+                 resolution: Literal["high", "medium", "low"] = "medium",
+                 simulation_time: float = 1.,
+                 device: Literal["cpu", "gpu"] = "cpu",
+                 output_dir: Optional[Path] = None,
+                 output_time_step: float = 1. / 60.,
+                 engine_parameters: Optional[Union[SplishSPlasHParameters, DualSPHysicsParameters]] = None):
         """Runs SPH simulation of the Dam Break scenario.
 
         Args:
@@ -124,10 +123,12 @@ class DamBreak:
 
         if engine == "SPlisHSPlasH":
             sim_output_path = self._splishsplash_simulation(
-                input_dir=input_temp_dir, params=engine_parameters)
+                input_dir=input_temp_dir,
+                params = engine_parameters)
         elif engine == "DualSPHysics":
             sim_output_path = self._dualsphysics_simulation(
-                input_dir=input_temp_dir, params=engine_parameters)
+                input_dir=input_temp_dir,
+                params = engine_parameters)
         else:
             raise ValueError(f"{engine} does not exist.")
 
@@ -141,8 +142,7 @@ class DamBreak:
 
         return SimulationOutput(sim_output_path)
 
-    def _splishsplash_simulation(self, input_dir,
-                                 params: SplishSPlasHParameters):
+    def _splishsplash_simulation(self, input_dir, params: SplishSPlasHParameters):
         """Runs simulation on SPlisHSPlasH via API.
 
         Args:
@@ -181,8 +181,7 @@ class DamBreak:
 
         return sim_output_path
 
-    def _dualsphysics_simulation(self, input_dir,
-                                 params: DualSPHysicsParameters):
+    def _dualsphysics_simulation(self, input_dir, params: DualSPHysicsParameters):
         """Runs simulation on DualSPHysics via API.
 
         Args:
@@ -199,12 +198,14 @@ class DamBreak:
         # Set simulation parameters according to user input
         root.find("./execution/parameters/parameter[@key='TimeMax']").set(
             "value", str(self.simulation_time))
-        root.find(".//rhop0").set("value", str(self.fluid.density))
+        root.find(".//rhop0").set(
+            "value", str(self.fluid.density))
         root.find("./execution/parameters/parameter[@key='Visco']").set(
             "value", str(self.fluid.kinematic_viscosity))
         root.find("./execution/parameters/parameter[@key='TimeOut']").set(
             "value", str(self.output_time_step))
-        root.find(".//cflnumber").set("value", str(params.cflnumber))
+        root.find(".//cflnumber").set(
+            "value", str(params.cflnumber))
 
         self.update_axis_values_in_xml(
             root=root,
