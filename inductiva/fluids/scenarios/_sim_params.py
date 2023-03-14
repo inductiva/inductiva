@@ -1,6 +1,5 @@
 """Input parameters of SPH simulators."""
 from enum import Enum
-from typing import Literal
 from dataclasses import dataclass
 
 
@@ -12,14 +11,13 @@ class ParticleRadius(Enum):
 
 
 @dataclass
-class GeneralParameters:
+class SPHSimulatorParameters:
     output_time_step: float = 1. / 60.
     simulation_time: int = 2
-    device: Literal["cpu", "gpu"] = "cpu"
 
 
 @dataclass
-class SplishSPlasHParameters(GeneralParameters):
+class SPlishSPlasHParameters(SPHSimulatorParameters):
     """Set of parameters for SPLisHSPlasH.
 
         Args:
@@ -41,7 +39,7 @@ class SplishSPlasHParameters(GeneralParameters):
 
 
 @dataclass
-class DualSPHysicsParameters(GeneralParameters):
+class DualSPHysicsParameters(SPHSimulatorParameters):
     """Set of parameters for DualSPHysics.
 
         Args:
