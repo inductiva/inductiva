@@ -277,7 +277,11 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
 
     type_annotations = get_type_annotations(function_ptr)
 
+    if inductiva.api_key is None:
+        raise ValueError("No API Key specified.")
+
     api_config = Configuration(host=inductiva.api_url)
+    api_config.api_key["APIKeyHeader"] = inductiva.api_key
 
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)

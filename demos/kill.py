@@ -9,6 +9,7 @@ import inductiva
 
 from absl import flags
 from absl import app
+from absl import logging
 
 FLAGS = flags.FLAGS
 
@@ -25,4 +26,5 @@ def main(_):
 
 
 if __name__ == "__main__":
+    logging.set_verbosity(logging.DEBUG)
     app.run(main)
