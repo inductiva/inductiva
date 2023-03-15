@@ -76,7 +76,8 @@ class DamBreak:
                  device: Literal["cpu", "gpu"] = "cpu",
                  simulation_time: float = 1,
                  output_dir: Optional[Path] = None,
-                 engine_parameters: Union[SPlishSPlasHParameters,
+                 engine_parameters: Union[
+                     SPlishSPlasHParameters,
                      DualSPHysicsParameters] = SPlishSPlasHParameters()):
         """Runs SPH simulation of the Dam Break scenario.
 
@@ -91,7 +92,7 @@ class DamBreak:
               - "high"
               - "medium"
               - "low"
-            simulation_time: 
+            simulation_time: Simulation time.
             output_dir: Directory in which the output files will be saved. If
                 not specified, the default directory used for API tasks
                 (based on an internal ID of the task) will be used.
@@ -153,10 +154,8 @@ class DamBreak:
         simulation.create_input_file()
         logging.info("Estimated number of particles %d",
                      self.estimate_num_particles())
-        logging.info(
-            "Estimated number of time steps %s",
-            math.ceil(self.simulation_time /
-                      simulation.time_step))
+        logging.info("Estimated number of time steps %s",
+                     math.ceil(self.simulation_time / simulation.time_step))
         logging.info(
             "Number of output time steps %s",
             math.ceil(
@@ -187,7 +186,7 @@ class DamBreak:
         root.find("./execution/parameters/parameter[@key='Visco']").set(
             "value", str(self.fluid.kinematic_viscosity))
         root.find("./execution/parameters/parameter[@key='TimeOut']").set(
-            "value", str(self.engine_parameters.output_time_step))
+            "value", str(self.engine_parameters.time_out))
         root.find(".//cflnumber").set("value",
                                       str(self.engine_parameters.cflnumber))
 
