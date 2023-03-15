@@ -11,7 +11,7 @@ class ParticleRadius(Enum):
 
 
 @dataclass
-class SPlishSPlasHParameters:
+class SPlisHSPlasHParameters:
     """Set of parameters for SPLisHSPlasH.
 
         Args:

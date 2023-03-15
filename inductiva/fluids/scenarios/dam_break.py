@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 import inductiva_sph
 from inductiva_sph import sph_core
 import inductiva
-from inductiva.fluids.scenarios._sim_params import SPlishSPlasHParameters, \
+from inductiva.fluids.scenarios._sim_params import SPlisHSPlasHParameters, \
                                     DualSPHysicsParameters, ParticleRadius
 from inductiva.fluids._fluid_types import WATER
 from inductiva.fluids._output_post_processing import SimulationOutput
@@ -76,9 +76,8 @@ class DamBreak:
                  device: Literal["cpu", "gpu"] = "cpu",
                  simulation_time: float = 1,
                  output_dir: Optional[Path] = None,
-                 engine_parameters: Union[
-                     SPlishSPlasHParameters,
-                     DualSPHysicsParameters] = SPlishSPlasHParameters()):
+                 engine_parameters: Union[SPlisHSPlasHParameters,
+                                          DualSPHysicsParameters] = None):
         """Runs SPH simulation of the Dam Break scenario.
 
         Args:
@@ -112,10 +111,14 @@ class DamBreak:
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
 
-        if engine == "SPlisHSPlasH":
+        if engine.lower() == "splishsplash":
+            if engine_parameters is None:
+                self.engine_parameters = SPlisHSPlasHParameters()
             sim_output_path = self._splishsplash_simulation(
                 input_dir=input_temp_dir)
-        elif engine == "DualSPHysics":
+        elif engine.lower() == "dualsphysics":
+            if engine_parameters is None:
+                self.engine_parameters = DualSPHysicsParameters()
             sim_output_path = self._dualsphysics_simulation(
                 input_dir=input_temp_dir)
         else:
