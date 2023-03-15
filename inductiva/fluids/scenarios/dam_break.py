@@ -1,6 +1,6 @@
 """Describes the physical scenarios and runs its simulation via API."""
 from absl import logging
-from typing import List, Literal, Optional, Type
+from typing import List, Literal, Optional, Union
 import os
 import math
 import tempfile
@@ -11,7 +11,7 @@ import inductiva_sph
 from inductiva_sph import sph_core
 import inductiva
 from inductiva.fluids.scenarios._sim_params import SPlishSPlasHParameters, \
-                                    SPHSimulatorParameters, ParticleRadius
+                                    DualSPHysicsParameters, ParticleRadius
 from inductiva.fluids._fluid_types import WATER
 from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
@@ -71,12 +71,13 @@ class DamBreak:
 
     def simulate(self,
                  engine: Literal["SPlisHSPlasH",
-                                 "DualSPHysics"] = "DualSPHysics",
+                                 "DualSPHysics"] = "SPlisHSPlasH",
                  resolution: Literal["high", "medium", "low"] = "medium",
                  device: Literal["cpu", "gpu"] = "cpu",
+                 simulation_time: float = 1,
                  output_dir: Optional[Path] = None,
-                 engine_parameters: Type[
-                     SPHSimulatorParameters] = SPlishSPlasHParameters()):
+                 engine_parameters: Union[SPlishSPlasHParameters,
+                     DualSPHysicsParameters] = SPlishSPlasHParameters()):
         """Runs SPH simulation of the Dam Break scenario.
 
         Args:
@@ -90,19 +91,21 @@ class DamBreak:
               - "high"
               - "medium"
               - "low"
+            simulation_time: 
             output_dir: Directory in which the output files will be saved. If
                 not specified, the default directory used for API tasks
                 (based on an internal ID of the task) will be used.
-            engine_parameters: TODO
+            engine_parameters: Simulator specific parameters.
         """
 
         self.particle_radius = ParticleRadius[resolution.upper()].value
 
-        if engine_parameters.simulation_time > TIME_MAX:
+        if simulation_time > TIME_MAX:
             raise ValueError(
                 f"`simulation_time` cannot exceed {TIME_MAX} seconds.")
         self.device = device
         self.output_dir = output_dir
+        self.simulation_time = simulation_time
         self.engine_parameters = engine_parameters
 
         # Create a temporary directory to store simulation input files
@@ -139,7 +142,7 @@ class DamBreak:
         # Create simulation
         simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
             scenario=scenario,
-            time_max=self.engine_parameters.simulation_time,
+            time_max=self.simulation_time,
             particle_radius=self.particle_radius,
             cfl_method=self.engine_parameters.cfl_method,
             output_time_step=self.engine_parameters.output_time_step,
@@ -152,7 +155,7 @@ class DamBreak:
                      self.estimate_num_particles())
         logging.info(
             "Estimated number of time steps %s",
-            math.ceil(self.engine_parameters.simulation_time /
+            math.ceil(self.simulation_time /
                       simulation.time_step))
         logging.info(
             "Number of output time steps %s",
@@ -179,7 +182,7 @@ class DamBreak:
 
         # Set simulation parameters according to user input
         root.find("./execution/parameters/parameter[@key='TimeMax']").set(
-            "value", str(self.engine_parameters.simulation_time))
+            "value", str(self.simulation_time))
         root.find(".//rhop0").set("value", str(self.fluid.density))
         root.find("./execution/parameters/parameter[@key='Visco']").set(
             "value", str(self.fluid.kinematic_viscosity))
