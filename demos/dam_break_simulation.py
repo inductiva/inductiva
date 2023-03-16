@@ -21,7 +21,7 @@ flags.DEFINE_enum("resolution", "medium", ["high", "medium", "low"],
                   "Sets the fluid resolution to simulate.")
 flags.DEFINE_enum("engine", "DualSPHysics", ["DualSPHysics", "SPlisHSPlasH"],
                   "Sets the fluid resolution to simulate.")
-flags.DEFINE_string("output_dir", "test_1",
+flags.DEFINE_string("output_dir", None,
                     "Destination directory for output files.")
 flags.DEFINE_float("simulation_time", 1, "Simulation time in seconds.")
 flags.DEFINE_string("device", "cpu",
@@ -41,13 +41,11 @@ def main(_):
         fluid_position=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_position))
 
-    params = DualSPHysicsParameters(simulation_time=FLAGS.simulation_time,
-                                    device=FLAGS.device)
-
     _ = scenario.simulate(output_dir=FLAGS.output_dir,
                           resolution=FLAGS.resolution,
                           engine=FLAGS.engine,
-                          engine_parameters=params)
+                          simulation_time=FLAGS.simulation_time,
+                          device=FLAGS.device)
 
     # Note: video rendering only works with SPlisHSPlasH for now
     # simulation_output.render()
