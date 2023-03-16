@@ -70,7 +70,7 @@ class FluidTank:
         inlet: Optional[BaseTankInlet] = CircularTankInlet(radius=0.1,
                                                            position=[0, 0]),
         outlet: Optional[BaseTankOutlet] = CylindricalTankOutlet(
-            radius=0.1, height=0.1, top_base_position=[0, 0, -0.1]),
+            radius=0.1, height=0.1, top_base_position=[0, 0]),
     ):
         self.shape = shape
         self.fluid = fluid
