@@ -6,7 +6,6 @@ from absl import flags
 from absl import app
 
 import inductiva
-from inductiva.fluids.scenarios import DualSPHysicsParameters
 import inductiva_utils
 
 FLAGS = flags.FLAGS
