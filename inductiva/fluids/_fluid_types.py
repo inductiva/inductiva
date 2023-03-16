@@ -7,6 +7,11 @@ WATER = FluidProperties(
     kinematic_viscosity=1e-6,
 )
 
+HONEY = FluidProperties(
+    density=1360,
+    kinematic_viscosity=7.36e-5,
+)
+
 OLIVE_OIL = FluidProperties(
     density=905,
     kinematic_viscosity=4.32e-5,
