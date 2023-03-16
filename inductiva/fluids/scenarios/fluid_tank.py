@@ -13,42 +13,6 @@ from inductiva.fluids.shapes import Cylinder
 from inductiva.fluids._fluid_types import WATER
 
 
-# Tank shapes.
-@dataclass
-class BaseShape:
-    """Base shape."""
-    pass
-
-
-@dataclass
-class Rectangle(BaseShape):
-    """Rectangular shape."""
-    dimensions: List[float] = field(default_factory=lambda: [1, 1])
-    position: List[float] = field(default_factory=lambda: [0, 0])
-
-
-@dataclass
-class Circle(BaseShape):
-    """Circular shape."""
-    radius: float = 1
-    position: List[float] = field(default_factory=lambda: [0, 0])
-
-
-@dataclass
-class Cube(BaseShape):
-    """Cubic shape."""
-    dimensions: List[float] = field(default_factory=lambda: [1, 1, 1])
-    position: List[float] = field(default_factory=lambda: [0, 0, 0])
-
-
-@dataclass
-class Cylinder(BaseShape):
-    """Cylindrical shape."""
-    radius: float = 0.5
-    height: float = 1
-    position: List[float] = field(default_factory=lambda: [0, 0, 0])
-
-
 # Tank inlets.
 @dataclass
 class BaseTankInlet:
