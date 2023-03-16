@@ -81,3 +81,6 @@ class FluidTank:
     fluid_level: float = 0
     inlet: Optional[Type[BaseTankInlet]] = CircularTankInlet()
     outlet: Optional[Type[BaseTankOutlet]] = CylindricalTankOutlet()
+
+    def simulate(self):
+        pass
