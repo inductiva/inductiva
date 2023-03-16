@@ -71,20 +71,21 @@ class FluidBlock:
                      DualSPHysicsParameters,
                      SPlisHSPlasHParameters] = SPlisHSPlasHParameters):
         """Runs SPH simulation of the Fluid Block scenario.
-        Args:
-            device: Sets the device for a simulation to be run.
-            engine: The software platform to be used for the simulation.
-              Available options are (the default is DualSPHysics):
-              - SPlisHSPlasH
-              - DualSPHysics
-            particle_radius: Radius of the discretization particles, in meters.
-              Used to control particle spacing. Smaller particle radius means a
-              finer discretization, hence more particles.
-            time_max: Maximum time of simulation, in seconds.
-            output_dir: Directory in which the output files will be saved. If
-                not specified, the default directory used for API tasks
-                (based on an internal ID of the task) will be used.
-            engine_parameters: Simulator specifix parameters.
+
+            Args:
+                device: Sets the device for a simulation to be run.
+                engine: The software platform to be used for the simulation.
+                Available options are (the default is DualSPHysics):
+                - SPlisHSPlasH
+                - DualSPHysics
+                particle_radius: Radius of the discretization particles, in meters.
+                Used to control particle spacing. Smaller particle radius means a
+                finer discretization, hence more particles.
+                time_max: Maximum time of simulation, in seconds.
+                output_dir: Directory in which the output files will be saved. If
+                    not specified, the default directory used for API tasks
+                    (based on an internal ID of the task) will be used.
+                engine_parameters: Simulator specifix parameters.
         """
         self.particle_radius = particle_radius
         self.simulation_time = simulation_time
