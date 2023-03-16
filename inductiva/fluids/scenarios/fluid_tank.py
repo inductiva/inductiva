@@ -1,30 +1,49 @@
 """Classes that define a fluid tank scenario and simulate it via API."""
 
-from dataclasses import dataclass, field
-from typing import List, Optional
+from dataclasses import dataclass
+from typing import Optional
 
 from inductiva_sph import sph_core
 
+from inductiva.fluids.shapes import BaseShape
+from inductiva.fluids.shapes import Rectangle
+from inductiva.fluids.shapes import Circle
+from inductiva.fluids.shapes import Cube
+from inductiva.fluids.shapes import Cylinder
 from inductiva.fluids._fluid_types import WATER
 
 
 # Tank shapes.
 @dataclass
-class BaseTankShape:
-    """Base tank shape."""
+class BaseShape:
+    """Base shape."""
     pass
 
 
 @dataclass
-class CubicShape(BaseTankShape):
-    """Cubic tank shape."""
-    dimensions: List[float] = field(default_factory=lambda: [1, 1, 1])
-    position: List[float] = field(default_factory=lambda: [-0.5, -0.5, -0.5])
+class Rectangle(BaseShape):
+    """Rectangular shape."""
+    dimensions: List[float] = field(default_factory=lambda: [1, 1])
+    position: List[float] = field(default_factory=lambda: [0, 0])
 
 
 @dataclass
-class CylindricalShape(BaseTankShape):
-    """Cylindrical tank shape."""
+class Circle(BaseShape):
+    """Circular shape."""
+    radius: float = 1
+    position: List[float] = field(default_factory=lambda: [0, 0])
+
+
+@dataclass
+class Cube(BaseShape):
+    """Cubic shape."""
+    dimensions: List[float] = field(default_factory=lambda: [1, 1, 1])
+    position: List[float] = field(default_factory=lambda: [0, 0, 0])
+
+
+@dataclass
+class Cylinder(BaseShape):
+    """Cylindrical shape."""
     radius: float = 0.5
     height: float = 1
     position: List[float] = field(default_factory=lambda: [0, 0, 0])
@@ -38,17 +57,14 @@ class BaseTankInlet:
 
 
 @dataclass
-class RectangularTankInlet(BaseTankInlet):
-    """Cubic tank inlet."""
-    dimensions: List[float] = field(default_factory=lambda: [0.1, 0.1])
-    position: List[float] = field(default_factory=lambda: [-0.05, -0.05])
+class RectangularTankInlet(BaseTankInlet, Rectangle):
+    """Rectangular tank inlet."""
+    pass
 
 
 @dataclass
-class CircularTankInlet(BaseTankInlet):
-    """Cylindrical tank inlet."""
-    radius: float = 0.1
-    position: List[float] = field(default_factory=lambda: [0, 0])
+class CircularTankInlet(BaseTankInlet, Circle):
+    """Circular tank inlet."""
 
 
 # Tank outlets.
@@ -59,28 +75,27 @@ class BaseTankOutlet:
 
 
 @dataclass
-class CubicTankOutlet(BaseTankOutlet):
+class CubicTankOutlet(BaseTankOutlet, Cube):
     """Cubic tank outlet."""
-    dimensions: List[float] = field(default_factory=lambda: [0.1, 0.1, 0.1])
-    position: List[float] = field(default_factory=lambda: [-0.05, -0.05])
+    pass
 
 
 @dataclass
-class CylindricalTankOutlet(BaseTankOutlet):
+class CylindricalTankOutlet(BaseTankOutlet, Cylinder):
     """Cylindrical tank outlet."""
-    radius: float = 0.1
-    height: float = 0.1
-    position: List[float] = field(default_factory=lambda: [0, 0])
+    pass
 
 
 @dataclass
 class FluidTank:
     """Fluid tank."""
-    shape: BaseTankShape = CubicShape()
+    shape: BaseShape = Cube(position=[-0.5, -0.5, -0.5], dimensions=[1, 1, 1])
     fluid: sph_core.fluids.FluidProperties = WATER
     fluid_level: float = 0
-    inlet: Optional[BaseTankInlet] = CircularTankInlet()
-    outlet: Optional[BaseTankOutlet] = CylindricalTankOutlet()
+    inlet: Optional[BaseTankInlet] = \
+        CircularTankInlet(radius=0.1, position=[0, 0])
+    outlet: Optional[BaseTankOutlet] = \
+        CylindricalTankOutlet(radius=0.1, height=0.1, position=[0, 0, -0.1])
 
     def simulate(self):
         pass
