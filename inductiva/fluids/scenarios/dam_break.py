@@ -58,8 +58,8 @@ class DamBreak(FluidBlock):
 
         particle_radius = ParticleRadius[resolution.upper()].value
 
-        super().simulate(device=device,
-                         engine=engine,
-                         simulation_time=simulation_time,
-                         particle_radius=particle_radius,
-                         output_dir=output_dir)
+        FluidBlock.simulate(device=device,
+                            engine=engine,
+                            simulation_time=simulation_time,
+                            particle_radius=particle_radius,
+                            output_dir=output_dir)
