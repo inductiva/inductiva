@@ -6,7 +6,8 @@ from absl import flags
 from absl import app
 
 import inductiva
-from inductiva.fluids.scenarios import fluid_tank
+from inductiva.fluids.scenarios.fluid_tank import FluidTank
+from inductiva.fluids.shapes import Cylinder
 
 FLAGS = flags.FLAGS
 
@@ -29,10 +30,9 @@ def main(_):
 
     time_start = time.perf_counter()
 
-    scenario = fluid_tank.FluidTank(
+    scenario = FluidTank(
         fluid=inductiva.fluids.WATER,
-        shape=fluid_tank.CylindricalShape(radius=FLAGS.tank_radius,
-                                          height=FLAGS.tank_height),
+        shape=Cylinder(radius=FLAGS.tank_radius, height=FLAGS.tank_height),
         fluid_level=FLAGS.fluid_level,
     )
 
