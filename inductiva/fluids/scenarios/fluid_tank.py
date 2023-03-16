@@ -81,19 +81,3 @@ class FluidTank:
     fluid_level: float = 0
     inlet: Optional[Type[BaseTankInlet]] = CylindricalTankInlet()
     outlet: Optional[Type[BaseTankOutlet]] = CylindricalTankOutlet()
-
-    def set_inlet(
-            self,
-            inlet: Type[BaseTankInlet] = CylindricalTankInlet(),
-    ):
-        if self.inlet is not None:
-            raise ValueError("A fluid tank can only contain one inlet.")
-        self.inlet = inlet
-
-    def set_outlet(
-            self,
-            outlet: Type[BaseTankOutlet] = CylindricalTankOutlet(),
-    ):
-        if self.outlet is not None:
-            raise ValueError("A fluid tank can only contain one outlet.")
-        self.outlet = outlet
