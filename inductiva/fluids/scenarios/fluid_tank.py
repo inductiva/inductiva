@@ -1,7 +1,7 @@
 """Classes that define a fluid tank scenario and simulate it via API."""
 
-from dataclasses import dataclass
-from typing import Optional
+from dataclasses import dataclass, field
+from typing import List, Optional
 
 from inductiva_sph import sph_core
 
@@ -18,6 +18,7 @@ from inductiva.fluids._fluid_types import WATER
 class BaseTankInlet:
     """Base tank inlet."""
     fluid_velocity: float = 1
+    position: List[float] = field(default_factory=lambda: [0, 0])
 
 
 @dataclass
@@ -36,7 +37,7 @@ class CircularTankInlet(BaseTankInlet, Circle):
 @dataclass
 class BaseTankOutlet:
     """Base tank outlet."""
-    pass
+    top_base_position: List[float] = field(default_factory=lambda: [0, 0])
 
 
 @dataclass
@@ -54,13 +55,15 @@ class CylindricalTankOutlet(BaseTankOutlet, Cylinder):
 @dataclass
 class FluidTank:
     """Fluid tank."""
-    shape: BaseShape = Cube(position=[-0.5, -0.5, -0.5], dimensions=[1, 1, 1])
+    shape: BaseShape = Cube(dimensions=[1, 1, 1])
     fluid: sph_core.fluids.FluidProperties = WATER
     fluid_level: float = 0
     inlet: Optional[BaseTankInlet] = \
         CircularTankInlet(radius=0.1, position=[0, 0])
     outlet: Optional[BaseTankOutlet] = \
-        CylindricalTankOutlet(radius=0.1, height=0.1, position=[0, 0, -0.1])
+        CylindricalTankOutlet(radius=0.1,
+                              height=0.1,
+                              top_base_position=[0, 0, -0.1])
 
     def simulate(self):
         pass
