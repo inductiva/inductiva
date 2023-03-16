@@ -79,8 +79,8 @@ class FluidTank:
     shape: Type[BaseTankShape] = CubicShape()
     fluid: sph_core.fluids.FluidProperties = WATER
     fluid_level: float = 0
-    inlet: Optional[Type[BaseTankInlet]] = None
-    outlet: Optional[Type[BaseTankOutlet]] = None
+    inlet: Optional[Type[BaseTankInlet]] = CylindricalTankInlet()
+    outlet: Optional[Type[BaseTankOutlet]] = CylindricalTankOutlet()
 
     def set_inlet(
             self,
