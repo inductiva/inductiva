@@ -13,6 +13,11 @@ import inductiva
 from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
 
+
+XML_INPUT_FILENAME = "InputCase.xml"
+INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), "xml_files",
+                              XML_INPUT_FILENAME)
+
 # Global variables to define a scenario
 TANK_DIMENSIONS = [1, 1, 1]
 SIMULATION_METHOD = "divergence-free-SPH"
@@ -48,7 +53,6 @@ class FluidBlock:
 
         if len(dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
-
         self.dimensions = dimensions
 
         if position is None:
