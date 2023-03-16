@@ -97,4 +97,3 @@ class FluidTank:
         if self.outlet is not None:
             raise ValueError("A fluid tank can only contain one outlet.")
         self.outlet = outlet
-
