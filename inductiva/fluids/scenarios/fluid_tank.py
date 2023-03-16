@@ -29,6 +29,7 @@ class RectangularTankInlet(BaseTankInlet, Rectangle):
 @dataclass
 class CircularTankInlet(BaseTankInlet, Circle):
     """Circular tank inlet."""
+    pass
 
 
 # Tank outlets.
