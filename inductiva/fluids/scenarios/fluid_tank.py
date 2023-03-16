@@ -52,18 +52,24 @@ class CylindricalTankOutlet(BaseTankOutlet, Cylinder):
     pass
 
 
-@dataclass
 class FluidTank:
     """Fluid tank."""
-    shape: BaseShape = Cube(dimensions=[1, 1, 1])
-    fluid: sph_core.fluids.FluidProperties = WATER
-    fluid_level: float = 0
-    inlet: Optional[BaseTankInlet] = \
-        CircularTankInlet(radius=0.1, position=[0, 0])
-    outlet: Optional[BaseTankOutlet] = \
-        CylindricalTankOutlet(radius=0.1,
-                              height=0.1,
-                              top_base_position=[0, 0, -0.1])
+
+    def __init__(
+        self,
+        shape: BaseShape = Cube(dimensions=[1, 1, 1]),
+        fluid: sph_core.fluids.FluidProperties = WATER,
+        fluid_level: float = 0,
+        inlet: Optional[BaseTankInlet] = CircularTankInlet(radius=0.1,
+                                                           position=[0, 0]),
+        outlet: Optional[BaseTankOutlet] = CylindricalTankOutlet(
+            radius=0.1, height=0.1, top_base_position=[0, 0, -0.1]),
+    ):
+        self.shape = shape
+        self.fluid = fluid
+        self.fluid_level = fluid_level
+        self.inlet = inlet
+        self.outlet = outlet
 
     def simulate(self):
         pass
