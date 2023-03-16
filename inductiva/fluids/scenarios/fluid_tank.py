@@ -38,14 +38,14 @@ class BaseTankInlet:
 
 
 @dataclass
-class CubicTankInlet(BaseTankInlet):
+class RectangularTankInlet(BaseTankInlet):
     """Cubic tank inlet."""
     dimensions: List[float] = field(default_factory=lambda: [0.1, 0.1])
     position: List[float] = field(default_factory=lambda: [-0.05, -0.05])
 
 
 @dataclass
-class CylindricalTankInlet(BaseTankInlet):
+class CircularTankInlet(BaseTankInlet):
     """Cylindrical tank inlet."""
     radius: float = 0.1
     position: List[float] = field(default_factory=lambda: [0, 0])
@@ -79,5 +79,5 @@ class FluidTank:
     shape: Type[BaseTankShape] = CubicShape()
     fluid: sph_core.fluids.FluidProperties = WATER
     fluid_level: float = 0
-    inlet: Optional[Type[BaseTankInlet]] = CylindricalTankInlet()
+    inlet: Optional[Type[BaseTankInlet]] = CircularTankInlet()
     outlet: Optional[Type[BaseTankOutlet]] = CylindricalTankOutlet()
