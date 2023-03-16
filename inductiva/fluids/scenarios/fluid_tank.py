@@ -40,7 +40,7 @@ class BaseTankInlet:
 @dataclass
 class CubicTankInlet(BaseTankInlet):
     """Cubic tank inlet."""
-    dimensions: List[float] = field(default_factory=lambda: [0.1, 0.1, 0.1])
+    dimensions: List[float] = field(default_factory=lambda: [0.1, 0.1])
     position: List[float] = field(default_factory=lambda: [-0.05, -0.05])
 
 
@@ -61,7 +61,7 @@ class BaseTankOutlet:
 @dataclass
 class CubicTankOutlet(BaseTankOutlet):
     """Cubic tank outlet."""
-    dimensions: List[float] = field(default_factory=lambda: [0.1, 0.1])
+    dimensions: List[float] = field(default_factory=lambda: [0.1, 0.1, 0.1])
     position: List[float] = field(default_factory=lambda: [-0.05, -0.05])
 
 
