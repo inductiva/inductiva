@@ -82,7 +82,7 @@ class FluidTank:
     inlet: Optional[Type[BaseTankInlet]] = None
     outlet: Optional[Type[BaseTankOutlet]] = None
 
-    def add_inlet(
+    def set_inlet(
             self,
             inlet: Type[BaseTankInlet] = CylindricalTankInlet(),
     ):
@@ -90,7 +90,7 @@ class FluidTank:
             raise ValueError("A fluid tank can only contain one inlet.")
         self.inlet = inlet
 
-    def add_outlet(
+    def set_outlet(
             self,
             outlet: Type[BaseTankOutlet] = CylindricalTankOutlet(),
     ):

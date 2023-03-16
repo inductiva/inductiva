@@ -36,8 +36,8 @@ def main(_):
         fluid_level=FLAGS.fluid_level,
     )
 
-    scenario.add_inlet()
-    scenario.add_outlet()
+    scenario.set_inlet()
+    scenario.set_outlet()
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 
