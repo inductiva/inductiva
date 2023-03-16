@@ -1,23 +1,18 @@
-"""Low-level method that interacts with the API for SPlisHSPlasH computation.
-
-These functions are to be used inside the higher level constructs of the
-Inductiva client. For instance, `scenario.simulate()` uses the `run_simulation`
-function.
-"""
+"""Low-level method that interacts with the API for SWASH computation."""
 import pathlib
-from typing import Literal, Optional
+from ..api import invoke_api
+from ..types import Path
 
-from inductiva.api import invoke_api
-from inductiva.types import Path
+from typing import Optional
 
 # pylint: disable=unused-argument
 
 
 def run_simulation(sim_dir: Path,
-                   input_filename: str = "splishsplash_input.json",
-                   device: Literal["gpu", "cpu"] = "cpu",
+                   input_filename: str,
+                   n_cores: int,
                    output_dir: Optional[Path] = None) -> pathlib.Path:
-    """Run SplishSplash in the API.
+    """Run SWASH simulation in the API.
 
     Args:
         sim_dir: Path to the directory containing the simulation inputs.
