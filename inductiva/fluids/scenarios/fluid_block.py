@@ -102,7 +102,7 @@ class FluidBlock:
             isinstance(engine_parameters, DualSPHysicsParameters):
             sim_output_path = self._dualsphysics_simulation()
         else:
-            raise ValueError(f"Entered `engine` does not exist or it \
+            raise ValueError("Entered `engine` does not exist or it \
                              does not match with `engine_parameters` class")
 
         # Delete temporary input directory
@@ -115,12 +115,9 @@ class FluidBlock:
 
         return SimulationOutput(sim_output_path)
 
-    def _splishsplash_simulation(self, input_dir):
-        """Runs simulation on SPlisHSPlasH via API.
+    def _splishsplash_simulation(self):
+        """Runs simulation on SPlisHSPlasH via API."""
 
-        Args:
-            input_dir: Directory where the input file will be stored.
-        """
         # Create a dam break scenario
         scenario = self._create_scenario()
 
@@ -150,18 +147,15 @@ class FluidBlock:
                       self.engine_parameters.output_time_step))
 
         sim_output_path = inductiva.sph.splishsplash.run_simulation(
-            sim_dir=input_dir.name,
+            sim_dir=self.input_temp_dir.name,
             device=self.device,
             output_dir=self.output_dir)
 
         return sim_output_path
 
-    def _dualsphysics_simulation(self, input_dir):
-        """Runs simulation on DualSPHysics via API.
+    def _dualsphysics_simulation(self):
+        """Runs simulation on DualSPHysics via API."""
 
-        Args:
-            input_dir: Directory where the input file will be stored.
-        """
         # Parse XML file of a dam break scenario
         input_file = ET.parse(INPUT_XML_PATH)
         root = input_file.getroot()
@@ -188,10 +182,10 @@ class FluidBlock:
         particle_size.set("dp", str(self.particle_radius * 2))
 
         # Create input file
-        input_file.write(os.path.join(input_dir.name, XML_INPUT_FILENAME))
+        input_file.write(os.path.join(self.input_dir.name, XML_INPUT_FILENAME))
 
         return inductiva.sph.dualsphysics.run_simulation(
-            sim_dir=input_dir.name,
+            sim_dir=self.input_temp_dir.name,
             input_filename=XML_INPUT_FILENAME[:-4],
             device=self.device,
             output_dir=self.output_dir)
