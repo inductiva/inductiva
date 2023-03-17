@@ -30,9 +30,10 @@ def main(_):
 
     inductiva.api_url = FLAGS.api_url
 
-    sph_sim = inductiva.fluids.DualSPHysics(sim_dir=FLAGS.sim_dir,
-                                            input_filename=FLAGS.input_filename,
-                                            device=FLAGS.device)
+    sph_sim = inductiva.fluids.simulators.DualSPHysics(
+        sim_dir=FLAGS.sim_dir,
+        input_filename=FLAGS.input_filename,
+        device=FLAGS.device)
 
     output_path = sph_sim.simulate(output_dir=FLAGS.output_dir)
 
