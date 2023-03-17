@@ -13,18 +13,22 @@ class DamBreak(FluidBlock):
 
     def __init__(self,
                  fluid: sph_core.fluids.FluidProperties = WATER,
-                 dimensions: Optional[List[float]] = None):
+                 dimensions: Optional[List[float]] = None,
+                 position: Optional[List[float]] = None,):
         """Initializes a `DamBreak` object.
 
         Args:
             fluid: A fluid type to simulate.
-            fluid_dimensions: A list containing fluid column dimensions,
+            dimensions: A list containing fluid column dimensions,
+              in meters.
+            pisition: A list containing fluid column position in a tank,
               in meters.
             """
         FluidBlock.__init__(self,
                             density=fluid.density,
                             kinematic_viscosity=fluid.kinematic_viscosity,
-                            dimensions=dimensions)
+                            dimensions=dimensions,
+                            position=position)
 
     def simulate(self,
                  engine: Literal["SPlisHSPlasH",
