@@ -185,7 +185,8 @@ class FluidBlock:
         particle_size.set("dp", str(self.particle_radius * 2))
 
         # Create input file
-        input_file.write(os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
+        input_file.write(
+            os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
 
         return inductiva.sph.dualsphysics.run_simulation(
             sim_dir=self.input_temp_dir.name,

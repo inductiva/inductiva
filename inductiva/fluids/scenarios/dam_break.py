@@ -7,8 +7,9 @@ from inductiva_sph import sph_core
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
 from inductiva.fluids._fluid_types import WATER
 from inductiva.types import Path
-from inductiva.fluids.simulators import (SPlisHSPlasHParameters, 
+from inductiva.fluids.simulators import (SPlisHSPlasHParameters,
                                          DualSPHysicsParameters)
+
 
 @dataclass
 class ParticleRadius(Enum):
@@ -17,13 +18,16 @@ class ParticleRadius(Enum):
     MEDIUM = 0.012
     LOW = 0.02
 
+
 class DamBreak(FluidBlock):
     """Physical scenario of a dam break simulation."""
 
-    def __init__(self,
-                 fluid: sph_core.fluids.FluidProperties = WATER,
-                 dimensions: Optional[List[float]] = None,
-                 position: Optional[List[float]] = None,):
+    def __init__(
+        self,
+        fluid: sph_core.fluids.FluidProperties = WATER,
+        dimensions: Optional[List[float]] = None,
+        position: Optional[List[float]] = None,
+    ):
         """Initializes a `DamBreak` object.
 
         Args:
@@ -73,7 +77,8 @@ class DamBreak(FluidBlock):
 
         if engine.lower() == "splishsplash":
             engine_params = SPlisHSPlasHParameters()
-        else: engine_params = DualSPHysicsParameters()
+        else:
+            engine_params = DualSPHysicsParameters()
 
         FluidBlock.simulate(self,
                             device=device,
