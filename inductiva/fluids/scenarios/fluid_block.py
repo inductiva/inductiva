@@ -10,6 +10,8 @@ from absl import logging
 import inductiva_sph
 from inductiva_sph import sph_core
 import inductiva
+from inductiva.fluids.simulators import (SPlisHSPlasHParameters,
+                                         DualSPHysicsParameters)
 from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
 
@@ -85,7 +87,7 @@ class FluidBlock:
             output_dir: Directory in which the output files will be saved. If
                 not specified, the default directory used for API tasks
                 (based on an internal ID of the task) will be used.
-            engine_parameters: Simulator specifix parameters.
+            engine_parameters: Simulator specific parameters.
         """
         self.particle_radius = particle_radius
         self.simulation_time = simulation_time
@@ -127,7 +129,7 @@ class FluidBlock:
             scenario=scenario,
             time_max=self.simulation_time,
             particle_radius=self.particle_radius,
-            simulation_method=self.simulation_time,
+            simulation_method=self.engine_parameters.simulation_method,
             viscosity_method=self.engine_parameters.viscosity_solver,
             boundary_handling_method=self.engine_parameters.
             boundary_handling_method,
@@ -168,22 +170,22 @@ class FluidBlock:
         root.find("./execution/parameters/parameter[@key='Visco']").set(
             "value", str(self.fluid.kinematic_viscosity))
         root.find("./execution/parameters/parameter[@key='TimeOut']").set(
-            "value", str(self.engine_parameters.output_time_spet))
+            "value", str(self.engine_parameters.output_time_step))
 
         self.update_axis_values_in_xml(
             root=root,
             parameter=".//drawbox[boxfill='solid']/size",
-            value=self.fluid_dimensions)
+            value=self.dimensions)
         self.update_axis_values_in_xml(
             root=root,
             parameter=".//drawbox[boxfill='solid']/point",
-            value=self.fluid_position)
+            value=self.position)
 
         particle_size = root.find(".//definition")
         particle_size.set("dp", str(self.particle_radius * 2))
 
         # Create input file
-        input_file.write(os.path.join(self.input_dir.name, XML_INPUT_FILENAME))
+        input_file.write(os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
 
         return inductiva.sph.dualsphysics.run_simulation(
             sim_dir=self.input_temp_dir.name,
@@ -195,9 +197,9 @@ class FluidBlock:
         # Create fluid column
         fluid_block = sph_core.fluids.BoxFluidBlock(
             fluid_properties=self.fluid,
-            position=self.fluid_position,
-            dimensions=self.fluid_dimensions,
-            initial_velocity=self.engine_parameters.column_velocity)
+            position=self.position,
+            dimensions=self.dimensions,
+            initial_velocity=self.initial_velocity)
 
         return sph_core.scenarios.DamBreakSPHScenario(
             dimensions=TANK_DIMENSIONS, fluid_blocks=[fluid_block])
@@ -206,11 +208,11 @@ class FluidBlock:
         """Estimate of the number of SPH particles contained in fluid blocks."""
 
         # Calculate number of particles for a fluid block
-        n_particles_x = round(self.fluid_dimensions[0] /
+        n_particles_x = round(self.dimensions[0] /
                               (2 * self.particle_radius)) - 1
-        n_particles_y = round(self.fluid_dimensions[1] /
+        n_particles_y = round(self.dimensions[1] /
                               (2 * self.particle_radius)) - 1
-        n_particles_z = round(self.fluid_dimensions[2] /
+        n_particles_z = round(self.dimensions[2] /
                               (2 * self.particle_radius)) - 1
 
         # Add number of particles to the total sum

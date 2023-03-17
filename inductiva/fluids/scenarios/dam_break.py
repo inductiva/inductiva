@@ -1,12 +1,21 @@
 """Describes the physical scenarios and runs its simulation via API."""
 from typing import List, Literal, Optional
+from enum import Enum
+from dataclasses import dataclass
 
 from inductiva_sph import sph_core
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
 from inductiva.fluids._fluid_types import WATER
 from inductiva.types import Path
-from inductiva.fluids.simulators import ParticleRadius
+from inductiva.fluids.simulators import (SPlisHSPlasHParameters, 
+                                         DualSPHysicsParameters)
 
+@dataclass
+class ParticleRadius(Enum):
+    """Sets particle radius according to resolution."""
+    HIGH = 0.008
+    MEDIUM = 0.012
+    LOW = 0.02
 
 class DamBreak(FluidBlock):
     """Physical scenario of a dam break simulation."""
@@ -62,9 +71,14 @@ class DamBreak(FluidBlock):
 
         particle_radius = ParticleRadius[resolution.upper()].value
 
+        if engine.lower() == "splishsplash":
+            engine_params = SPlisHSPlasHParameters()
+        else: engine_params = DualSPHysicsParameters()
+
         FluidBlock.simulate(self,
                             device=device,
                             engine=engine,
                             simulation_time=simulation_time,
                             particle_radius=particle_radius,
-                            output_dir=output_dir)
+                            output_dir=output_dir,
+                            engine_parameters=engine_params)
