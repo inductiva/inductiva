@@ -1,5 +1,4 @@
 """Input parameters of SPH simulators."""
-from enum import Enum
 from dataclasses import dataclass
 
 
