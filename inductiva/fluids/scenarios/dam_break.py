@@ -80,10 +80,10 @@ class DamBreak(FluidBlock):
         else:
             engine_params = DualSPHysicsParameters()
 
-        FluidBlock.simulate(self,
-                            device=device,
-                            engine=engine,
-                            simulation_time=simulation_time,
-                            particle_radius=particle_radius,
-                            output_dir=output_dir,
-                            engine_parameters=engine_params)
+        return FluidBlock.simulate(self,
+                                   device=device,
+                                   engine=engine,
+                                   simulation_time=simulation_time,
+                                   particle_radius=particle_radius,
+                                   output_dir=output_dir,
+                                   engine_parameters=engine_params)

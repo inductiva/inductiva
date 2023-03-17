@@ -111,11 +111,6 @@ class FluidBlock:
         # Delete temporary input directory
         self.input_temp_dir.cleanup()
 
-        inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(sim_output_path, "vtk"),
-            output_time_step=self.engine_parameters.output_time_step,
-            netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
-
         return SimulationOutput(sim_output_path)
 
     def _splishsplash_simulation(self):
@@ -132,7 +127,7 @@ class FluidBlock:
             simulation_method=self.engine_parameters.simulation_method,
             viscosity_method=self.engine_parameters.viscosity_solver,
             boundary_handling_method=self.engine_parameters.
-                boundary_handling_method,
+            boundary_handling_method,
             z_sort=self.engine_parameters.z_sort,
             cfl_method=self.engine_parameters.cfl_method,
             output_time_step=self.engine_parameters.output_time_step,
@@ -153,6 +148,11 @@ class FluidBlock:
             sim_dir=self.input_temp_dir.name,
             device=self.device,
             output_dir=self.output_dir)
+
+        inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
+            data_dir=os.path.join(sim_output_path, "vtk"),
+            output_time_step=self.engine_parameters.output_time_step,
+            netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
 
         return sim_output_path
 
