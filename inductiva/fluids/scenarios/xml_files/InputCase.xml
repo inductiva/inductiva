@@ -4,7 +4,7 @@
         <constantsdef>
             <gravity x="0" y="0" z="-9.81" comment="Gravitational acceleration" units_comment="m/s^2" />
             <rhop0 value="1000" comment="Reference density of the fluid" units_comment="kg/m^3" />
-            <hswl value="0" auto="true" comment="Maximum still water level to calculate speed of sound using coefsound" units_comment="metres (m)" />
+            <hswl value="0" auto="true" comment="Maximum still water level to calculate speed of sound using coefsound" units_comment="m" />
             <gamma value="7" comment="Polytropic constant for water used in the state equation" />
             <speedsystem value="0" auto="true" comment="Maximum system speed (by default the dam-break propagation is used)" />
             <coefsound value="20" comment="Coefficient to multiply speedsystem" />
@@ -14,7 +14,7 @@
         </constantsdef>
         <mkconfig boundcount="240" fluidcount="9" />
         <geometry>
-            <definition dp="0.0085" units_comment="metres (m)">
+            <definition dp="0.0085" units_comment="m">
                 <pointmin x="-0.05" y="-0.05" z="-0.05" />
                 <pointmax x="2" y="2" z="3" />
             </definition>
@@ -32,7 +32,7 @@
                     <drawbox>
                         <boxfill>bottom | left | right | front | back</boxfill>
                         <point x="0" y="0" z="0" />
-                        <size x="1.3" y="1" z="1" />
+                        <size x="1" y="1" z="1" />
                     </drawbox>
                     <shapeout file="Box" />
                     <setmkvoid />
@@ -51,7 +51,7 @@
             <parameter key="DtMin" value="0" comment="Minimum time step. Use 0 to defult use (default=coefdtmin*h/speedsound)" units_comment="seconds" />
             <parameter key="TimeMax" value="1.6" comment="Time of simulation" units_comment="seconds" />
             <parameter key="TimeOut" value="0.01" comment="Time out data" units_comment="seconds" />
-            <simulationdomain comment="Defines domain of simulation (default=Uses minimun and maximum position of the generated particles)">
+            <simulationdomain comment="Defines domain of simulation (default=Uses minimum and maximum position of the generated particles)">
                 <posmin x="default" y="default" z="default" comment="e.g.: x=0.5, y=default-1, z=default-10%" />
                 <posmax x="default" y="default" z="default + 50%" />
             </simulationdomain>
