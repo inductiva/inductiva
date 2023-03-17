@@ -23,7 +23,7 @@ flags.DEFINE_enum("engine", "DualSPHysics", ["DualSPHysics", "SPlisHSPlasH"],
 flags.DEFINE_string("output_dir", None,
                     "Destination directory for output files.")
 flags.DEFINE_float("simulation_time", 1, "Simulation time in seconds.")
-flags.DEFINE_string("device", "cpu",
+flags.DEFINE_string("device", "gpu",
                     "Device in which device the simulation will run.")
 
 
@@ -35,10 +35,9 @@ def main(_):
 
     scenario = inductiva.fluids.DamBreak(
         fluid=inductiva.fluids.WATER,
-        fluid_dimensions=inductiva_utils.flags.cast_list_to_float(
+        dimensions=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_dimensions),
-        fluid_position=inductiva_utils.flags.cast_list_to_float(
-            FLAGS.fluid_position))
+        position=inductiva_utils.flags.cast_list_to_float(FLAGS.fluid_position))
 
     _ = scenario.simulate(output_dir=FLAGS.output_dir,
                           resolution=FLAGS.resolution,

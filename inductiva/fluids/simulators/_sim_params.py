@@ -1,13 +1,5 @@
 """Input parameters of SPH simulators."""
-from enum import Enum
 from dataclasses import dataclass
-
-
-class ParticleRadius(Enum):
-    """Sets particle radius according to resolution."""
-    HIGH = 0.008
-    MEDIUM = 0.012
-    LOW = 0.02
 
 
 @dataclass
@@ -28,8 +20,11 @@ class SPlisHSPlasHParameters:
             - 'no'
             - 'cfl'
             - 'cfl_p'
+        z_sort: Enable z-sort, i.e. periodic particle sorting according to
+              their z position. Improves cache hits and therefore the
+              performance of the simulation.
         simulation_method: Pressure solver to use.
-        boundry_handling_method: Method to handle boundary interactions
+        boundary_handling_method: Method to handle boundary interactions
           with particles. The available options are:
             - 'particle-based'
             - 'volume-maps'
@@ -38,8 +33,9 @@ class SPlisHSPlasHParameters:
     viscosity_solver: str = "Weiler-2018"
     output_time_step: float = 1. / 60.
     cfl_method: str = "no"
+    z_sort: bool = False
     simulation_method: str = "divergence-free-SPH"
-    boundry_handling_method: str = "particle-based"
+    boundary_handling_method: str = "particle-based"
 
 
 @dataclass
@@ -51,4 +47,4 @@ class DualSPHysicsParameters:
         time_out: Time step to export the data.
     """
     cflnumber: float = 0.2
-    time_out: float = 1. / 60.
+    output_time_step: float = 0.01
