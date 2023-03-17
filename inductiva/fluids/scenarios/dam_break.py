@@ -45,7 +45,7 @@ class DamBreak(FluidBlock):
 
     def simulate(self,
                  engine: Literal["SPlisHSPlasH",
-                                 "DualSPHysics"] = "DualSPHysics",
+                                 "DualSPHysics"] = "SPlisHSPlasH",
                  resolution: Literal["high", "medium", "low"] = "medium",
                  simulation_time: float = 1.,
                  device: Literal["cpu", "gpu"] = "cpu",

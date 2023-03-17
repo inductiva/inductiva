@@ -132,7 +132,7 @@ class FluidBlock:
             simulation_method=self.engine_parameters.simulation_method,
             viscosity_method=self.engine_parameters.viscosity_solver,
             boundary_handling_method=self.engine_parameters.
-            boundary_handling_method,
+                boundary_handling_method,
             z_sort=self.engine_parameters.z_sort,
             cfl_method=self.engine_parameters.cfl_method,
             output_time_step=self.engine_parameters.output_time_step,
