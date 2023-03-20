@@ -3,23 +3,31 @@ import tempfile
 import os
 import math
 from typing import List, Literal, Optional, Union
+import shutil
+
 import xml.etree.ElementTree as ET
 
 from absl import logging
 
-import inductiva_sph
-from inductiva_sph import sph_core
+# import inductiva_sph
+# from inductiva_sph import sph_core
+
 import inductiva
-from inductiva.fluids.simulators import (SPlisHSPlasHParameters,
-                                         DualSPHysicsParameters)
+from inductiva.fluids.fluid_types import FluidType
+from inductiva.fluids.simulators import SPlisHSPlasHParameters
+from inductiva.fluids.simulators import DualSPHysicsParameters
 from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
+from inductiva.utils.templates import replace_params_in_template_file
 
 # Global variables to define a scenario
 TANK_DIMENSIONS = [1, 1, 1]
 XML_INPUT_FILENAME = "InputCase.xml"
 INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), "xml_files",
                               XML_INPUT_FILENAME)
+
+SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash"
+SPLISHSPLASH_INPUT_FILENAME = "fluid_block.json"
 
 
 class FluidBlock:
@@ -45,8 +53,8 @@ class FluidBlock:
                 in the [x, y, z] axes, in m/s.
         """
 
-        self.fluid = sph_core.fluids.FluidProperties(
-            density=density, kinematic_viscosity=kinematic_viscosity)
+        self.fluid = FluidType(density=density,
+                               kinematic_viscosity=kinematic_viscosity)
 
         if len(dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
@@ -98,6 +106,7 @@ class FluidBlock:
         # Create a temporary directory to store simulation input files
         self.input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
 
+
         if engine.lower() == "splishsplash" and \
             isinstance(engine_parameters, SPlisHSPlasHParameters):
             sim_output_path = self._splishsplash_simulation()
@@ -111,99 +120,119 @@ class FluidBlock:
         # Delete temporary input directory
         self.input_temp_dir.cleanup()
 
-        return SimulationOutput(sim_output_path)
+        return sim_output_path  # SimulationOutput(sim_output_path)
 
     def _splishsplash_simulation(self):
         """Runs simulation on SPlisHSPlasH via API."""
 
-        # Create a dam break scenario
-        scenario = self._create_scenario()
+        # # Create a dam break scenario
+        # scenario = self._create_scenario()
 
-        # Create simulation
-        simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
-            scenario=scenario,
-            time_max=self.simulation_time,
-            particle_radius=self.particle_radius,
-            simulation_method=self.engine_parameters.simulation_method,
-            viscosity_method=self.engine_parameters.viscosity_solver,
-            boundary_handling_method=self.engine_parameters.
-            boundary_handling_method,
-            z_sort=self.engine_parameters.z_sort,
-            cfl_method=self.engine_parameters.cfl_method,
-            output_time_step=self.engine_parameters.output_time_step,
-            output_directory=self.input_temp_dir.name)
+        # # Create simulation
+        # simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
+        #     scenario=scenario,
+        #     time_max=self.simulation_time,
+        #     particle_radius=self.particle_radius,
+        #     simulation_method=self.engine_parameters.simulation_method,
+        #     viscosity_method=self.engine_parameters.viscosity_solver,
+        #     boundary_handling_method=self.engine_parameters.
+        #     boundary_handling_method,
+        #     z_sort=self.engine_parameters.z_sort,
+        #     cfl_method=self.engine_parameters.cfl_method,
+        #     output_time_step=self.engine_parameters.output_time_step,
+        #     output_directory=self.input_temp_dir.name)
 
-        # Create input file
-        simulation.create_input_file()
-        logging.info("Estimated number of particles %d",
-                     self.estimate_num_particles())
-        logging.info("Estimated number of time steps %s",
-                     math.ceil(self.simulation_time / simulation.time_step))
-        logging.info(
-            "Number of output time steps %s",
-            math.ceil(self.simulation_time /
-                      self.engine_parameters.output_time_step))
+        # # Create input file
+        # simulation.create_input_file()
+        # logging.info("Estimated number of particles %d",
+        #              self.estimate_num_particles())
+        # logging.info("Estimated number of time steps %s",
+        #              math.ceil(self.simulation_time / simulation.time_step))
+        # logging.info(
+        #     "Number of output time steps %s",
+        #     math.ceil(self.simulation_time /
+        #               self.engine_parameters.output_time_step))
+
+        input_dir = self.input_temp_dir.name
+
+        shutil.copy(os.path.join(os.path.dirname(__file__), "unit_box.obj"),
+                    input_dir)
+
+        data_export_fps = 1 / self.engine_parameters.output_time_step
+
+        replace_params_in_template_file(
+            template_file_path=os.path.join(os.path.dirname(__file__),
+                                            SPLISHSPLASH_TEMPLATE_FILENAME),
+            params={
+                "__SIMULATION_TIME__": self.simulation_time,
+                "__TIME_STEP": 0.001,
+                "__PARTICLE_RADIUS__": self.particle_radius,
+                "__DATA_EXPORT_FPS__": data_export_fps,
+                "__TANK_FILENAME__": "unit_box.obj",
+                "__TANK_DIMENSIONS_X__": TANK_DIMENSIONS[0],
+                "__TANK_DIMENSIONS_Y__": TANK_DIMENSIONS[1],
+                "__TANK_DIMENSIONS_Z__": TANK_DIMENSIONS[2],
+                "__FLUID_FILENAME__": "unit_box.obj",
+                "__FLUID_DENSITY__": self.fluid.density,
+                "__FLUID_VISCOSITY__": self.fluid.kinematic_viscosity,
+                "__FLUID_DIMENSIONS_X__": self.dimensions[0],
+                "__FLUID_DIMENSIONS_Y__": self.dimensions[1],
+                "__FLUID_DIMENSIONS_Z__": self.dimensions[2],
+            },
+            output_file_path=os.path.join(input_dir,
+                                          SPLISHSPLASH_INPUT_FILENAME),
+        )
 
         sim_output_path = inductiva.sph.splishsplash.run_simulation(
             sim_dir=self.input_temp_dir.name,
+            input_filename=SPLISHSPLASH_INPUT_FILENAME,
             device=self.device,
             output_dir=self.output_dir)
 
-        inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(sim_output_path, "vtk"),
-            output_time_step=self.engine_parameters.output_time_step,
-            netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
+        # inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
+        #     data_dir=os.path.join(sim_output_path, "vtk"),
+        #     output_time_step=self.engine_parameters.output_time_step,
+        #     netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
 
         return sim_output_path
 
-    def _dualsphysics_simulation(self):
-        """Runs simulation on DualSPHysics via API."""
+    # def _dualsphysics_simulation(self):
+    #     """Runs simulation on DualSPHysics via API."""
 
-        # Parse XML file of a dam break scenario
-        input_file = ET.parse(INPUT_XML_PATH)
-        root = input_file.getroot()
+    #     # Parse XML file of a dam break scenario
+    #     input_file = ET.parse(INPUT_XML_PATH)
+    #     root = input_file.getroot()
 
-        # Set simulation parameters according to user input
-        root.find("./execution/parameters/parameter[@key='TimeMax']").set(
-            "value", str(self.simulation_time))
-        root.find(".//rhop0").set("value", str(self.fluid.density))
-        root.find("./execution/parameters/parameter[@key='Visco']").set(
-            "value", str(self.fluid.kinematic_viscosity))
-        root.find("./execution/parameters/parameter[@key='TimeOut']").set(
-            "value", str(self.engine_parameters.output_time_step))
+    #     # Set simulation parameters according to user input
+    #     root.find("./execution/parameters/parameter[@key='TimeMax']").set(
+    #         "value", str(self.simulation_time))
+    #     root.find(".//rhop0").set("value", str(self.fluid.density))
+    #     root.find("./execution/parameters/parameter[@key='Visco']").set(
+    #         "value", str(self.fluid.kinematic_viscosity))
+    #     root.find("./execution/parameters/parameter[@key='TimeOut']").set(
+    #         "value", str(self.engine_parameters.output_time_step))
 
-        self.update_axis_values_in_xml(
-            root=root,
-            parameter=".//drawbox[boxfill='solid']/size",
-            value=self.dimensions)
-        self.update_axis_values_in_xml(
-            root=root,
-            parameter=".//drawbox[boxfill='solid']/point",
-            value=self.position)
+    #     self.update_axis_values_in_xml(
+    #         root=root,
+    #         parameter=".//drawbox[boxfill='solid']/size",
+    #         value=self.dimensions)
+    #     self.update_axis_values_in_xml(
+    #         root=root,
+    #         parameter=".//drawbox[boxfill='solid']/point",
+    #         value=self.position)
 
-        particle_size = root.find(".//definition")
-        particle_size.set("dp", str(self.particle_radius * 2))
+    #     particle_size = root.find(".//definition")
+    #     particle_size.set("dp", str(self.particle_radius * 2))
 
-        # Create input file
-        input_file.write(
-            os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
+    #     # Create input file
+    #     input_file.write(
+    #         os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
 
-        return inductiva.sph.dualsphysics.run_simulation(
-            sim_dir=self.input_temp_dir.name,
-            input_filename=XML_INPUT_FILENAME[:-4],
-            device=self.device,
-            output_dir=self.output_dir)
-
-    def _create_scenario(self):
-        # Create fluid column
-        fluid_block = sph_core.fluids.BoxFluidBlock(
-            fluid_properties=self.fluid,
-            position=self.position,
-            dimensions=self.dimensions,
-            initial_velocity=self.initial_velocity)
-
-        return sph_core.scenarios.DamBreakSPHScenario(
-            dimensions=TANK_DIMENSIONS, fluid_blocks=[fluid_block])
+    #     return inductiva.sph.dualsphysics.run_simulation(
+    #         sim_dir=self.input_temp_dir.name,
+    #         input_filename=XML_INPUT_FILENAME[:-4],
+    #         device=self.device,
+    #         output_dir=self.output_dir)
 
     def estimate_num_particles(self):
         """Estimate of the number of SPH particles contained in fluid blocks."""

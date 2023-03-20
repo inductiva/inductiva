@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from inductiva_sph import sph_core
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
-from inductiva.fluids._fluid_types import WATER
+from inductiva.fluids.fluid_types import WATER
 from inductiva.types import Path
 from inductiva.fluids.simulators import (SPlisHSPlasHParameters,
                                          DualSPHysicsParameters)
