@@ -7,7 +7,10 @@ import math
 import tempfile
 from typing import List, Literal, Optional
 
-from inductiva_sph import sph_core
+from inductiva_sph.sph_core.fluids import FluidProperties
+from inductiva_sph.sph_core.fluids import CylindricalFluidBlock
+from inductiva_sph.sph_core.scenarios import BaseSPHScenario
+from inductiva_sph.sph_core.inlets import CylindricalInlet
 from inductiva_sph.splishsplash import SPlisHSPlasHSimulation
 
 from inductiva.types import Path
@@ -65,7 +68,7 @@ class FluidTank:
     def __init__(
         self,
         shape: BaseShape = Cube(dimensions=[1, 1, 1]),
-        fluid: sph_core.fluids.FluidProperties = WATER,
+        fluid: FluidProperties = WATER,
         fluid_level: float = 0,
         inlet: Optional[BaseTankInlet] = CircularTankInlet(radius=0.1,
                                                            position=[0, 0]),
@@ -84,7 +87,7 @@ class FluidTank:
         device: Literal["CPU", "GPU"] = "CPU",
         output_dir: Optional[Path] = None,
     ):
-        """TODO."""
+        """Runs simulation via API."""
 
         # Create a temporary directory to store simulation input files
         input_temp_dir = tempfile.TemporaryDirectory()  # pylint: disable=consider-using-with
@@ -101,17 +104,11 @@ class FluidTank:
         # Delete temporary input directory
         input_temp_dir.cleanup()
 
-        # inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
-        #     data_dir=os.path.join(sim_output_path, "vtk"),
-        #     output_time_step=OUTPUT_TIME_STEP,
-        #     netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
-
-        # return SimulationOutput(sim_output_path)
         return sim_output_path
 
     def _splishsplash_simulation(self, device, input_dir, output_dir):
-        """TODO."""
-        # Create a dam break scenario
+        """Runs SPlisHSPlasH simulation via API."""
+
         scenario = self._create_scenario()
 
         # Create simulation
@@ -126,13 +123,9 @@ class FluidTank:
         )
 
         # Create input file
-        # simulation.create_input_file()
-        # logging.info("Estimated number of particles %d",
-        #              self.estimate_num_particles())
-        # logging.info("Estimated number of time steps %s",
-        #              math.ceil(self.simulation_time / simulation.time_step))
-        # logging.info("Number of output time steps %s",
-        #              math.ceil(self.simulation_time / OUTPUT_TIME_STEP))
+        simulation.create_input_file()
+        # TODO: add logs of estimated number of particles, number of time steps
+        # and number of output time steps.
 
         sim_output_path = splishsplash.run_simulation(sim_dir=input_dir.name,
                                                       device=device,
@@ -140,18 +133,43 @@ class FluidTank:
 
         return sim_output_path
 
-    # def _create_scenario(self):
-    #     scenario = None
+    def _create_scenario(self):
 
-    #     # Create fluid column
-    #     # fluid_block = sph_core.fluids.BoxFluidBlock(
-    #     #     fluid_properties=self.fluid,
-    #     #     position=self.fluid_position,
-    #     #     dimensions=self.fluid_dimensions,
-    #     #     initial_velocity=COLUMN_VELOCITY)
+        inlets = []
+        if self.inlet is not None:
+            if isinstance(self.inlet, RectangularTankInlet):
+                raise NotImplementedError()
+            if isinstance(self.inlet, CircularTankInlet):
+                inlet = CylindricalInlet(
+                    radius=self.inlet.radius,
+                    height=0,
+                    position=self.inlet.position + [self.tank_height],
+                    fluid_properties=self.fluid,
+                    rotation_axis=[1, 0, 0],
+                    rotation_angle=math.pi,
+                    fluid_velocity=self.inlet.fluid_velocity,
+                    start_time=0,
+                )
+            else:
+                raise NotImplementedError()
+            inlets.append(inlet)
 
-    #     # # Set up scenario
-    #     # scenario = sph_core.scenarios.DamBreakSPHScenario(
-    #     #     dimensions=TANK_DIMENSIONS, fluid_blocks=[fluid_block])
+        fluid_blocks = []
+        if self.fluid_level > 0:
+            if isinstance(self.shape, Cube):
+                raise NotImplementedError()
+            elif isinstance(self.shape, Cylinder):
+                fluid_block = CylindricalFluidBlock(
+                    position=[0, 0, 0],
+                    radius=self.shape.radius,
+                    height=self.fluid_level,
+                    initial_velocity=[0, 0, 0],
+                    fluid_properties=self.fluid,
+                )
+            else:
+                raise NotImplementedError()
+            fluid_blocks.append(fluid_block)
 
-    #     return scenario
+        scenario = BaseSPHScenario(fluid_blocks=fluid_blocks, inlets=inlets)
+
+        return scenario
