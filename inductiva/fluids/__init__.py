@@ -6,3 +6,4 @@ from .scenarios import FluidBlock
 from . import scenarios
 from ._output_post_processing import SimulationOutput
 from .swash import SWASH
+from .xbeach import XBeach
