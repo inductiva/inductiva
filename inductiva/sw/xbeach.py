@@ -1,4 +1,4 @@
-"""Low-level method that interacts with the API for xBeach computation."""
+"""Low-level method that interacts with the API for XBeach computation."""
 import pathlib
 from ..api import invoke_api
 from ..types import Path
@@ -10,7 +10,7 @@ def run_simulation(sim_dir: Path,
                    input_filename: str,
                    n_cores: int,
                    output_dir: Optional[Path] = None) -> pathlib.Path:
-    """Run xBeach simulation in the API.
+    """Run XBeach simulation in the API.
 
     Args:
         sim_dir: Path to the directory containing the simulation inputs.
