@@ -13,7 +13,7 @@ def replace_params_in_template_file(
     params: Dict,
     output_file_path: str,
 ) -> None:
-    """TODO."""
+    """Replaces parameters in a template file."""
 
     with open(template_file_path, "r", encoding="utf-8") as template_file:
         template_str = template_file.read()
