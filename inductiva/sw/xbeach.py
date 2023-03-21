@@ -16,8 +16,8 @@ def run_simulation(sim_dir: Path,
         sim_dir: Path to the directory containing the simulation inputs.
 
     Returns:
-        TODO: once we have a class for holding the outputs of the simulation,
-        it should be used here
+        TODO(https://github.com/inductiva/inductiva/issues/99): Add class
+            for holding the outputs of the simulation.
     """
     params = locals()
     del params["output_dir"]
