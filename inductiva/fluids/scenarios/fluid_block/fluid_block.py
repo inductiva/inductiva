@@ -23,7 +23,7 @@ from inductiva.utils.templates import replace_params_in_template_file
 TANK_DIMENSIONS = [1, 1, 1]
 TIME_STEP = 0.001
 
-SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash"
+SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_INPUT_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
 
@@ -136,33 +136,25 @@ class FluidBlock:
 
         fluid_margin = 2 * self.particle_radius
 
-        params = {
-            "__SIMULATION_TIME__": self.simulation_time,
-            "__TIME_STEP__": TIME_STEP,
-            "__PARTICLE_RADIUS__": self.particle_radius,
-            "__DATA_EXPORT_FPS__": 1 / self.engine_parameters.output_time_step,
-            "__TANK_FILENAME__": UNIT_BOX_MESH_FILENAME,
-            "__TANK_DIMENSIONS_X__": TANK_DIMENSIONS[0],
-            "__TANK_DIMENSIONS_Y__": TANK_DIMENSIONS[1],
-            "__TANK_DIMENSIONS_Z__": TANK_DIMENSIONS[2],
-            "__FLUID_FILENAME__": UNIT_BOX_MESH_FILENAME,
-            "__FLUID_DENSITY__": self.fluid.density,
-            "__FLUID_VISCOSITY__": self.fluid.kinematic_viscosity,
-            "__FLUID_POSITION_X__": fluid_margin,
-            "__FLUID_POSITION_Y__": fluid_margin,
-            "__FLUID_POSITION_Z__": fluid_margin,
-            "__FLUID_DIMENSIONS_X__": self.dimensions[0] - 2 * fluid_margin,
-            "__FLUID_DIMENSIONS_Y__": self.dimensions[1] - 2 * fluid_margin,
-            "__FLUID_DIMENSIONS_Z__": self.dimensions[2] - 2 * fluid_margin,
-            "__FLUID_VELOCITY_X__": self.initial_velocity[0],
-            "__FLUID_VELOCITY_Y__": self.initial_velocity[1],
-            "__FLUID_VELOCITY_Z__": self.initial_velocity[2],
-        }
-
         replace_params_in_template_file(
-            template_file_path=os.path.join(fluid_block_dir,
-                                            SPLISHSPLASH_TEMPLATE_FILENAME),
-            params=params,
+            templates_dir=fluid_block_dir,
+            template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
+            params=dict(
+                simulation_time=self.simulation_time,
+                time_step=TIME_STEP,
+                particle_radius=self.particle_radius,
+                data_export_rate=1 / self.engine_parameters.output_time_step,
+                tank_filename=UNIT_BOX_MESH_FILENAME,
+                tank_dimensions=TANK_DIMENSIONS,
+                fluid_filename=UNIT_BOX_MESH_FILENAME,
+                fluid=self.fluid,
+                fluid_position=[fluid_margin] * 3,
+                fluid_dimensions=[
+                    dimension - 2 * fluid_margin
+                    for dimension in self.dimensions
+                ],
+                fluid_velocity=self.initial_velocity,
+            ),
             output_file_path=os.path.join(input_dir,
                                           SPLISHSPLASH_INPUT_FILENAME),
         )
