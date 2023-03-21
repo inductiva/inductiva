@@ -164,20 +164,46 @@ class FluidBlock:
             template_file_path=os.path.join(os.path.dirname(__file__),
                                             SPLISHSPLASH_TEMPLATE_FILENAME),
             params={
-                "__SIMULATION_TIME__": self.simulation_time,
-                "__TIME_STEP": 0.001,
-                "__PARTICLE_RADIUS__": self.particle_radius,
-                "__DATA_EXPORT_FPS__": data_export_fps,
-                "__TANK_FILENAME__": "unit_box.obj",
-                "__TANK_DIMENSIONS_X__": TANK_DIMENSIONS[0],
-                "__TANK_DIMENSIONS_Y__": TANK_DIMENSIONS[1],
-                "__TANK_DIMENSIONS_Z__": TANK_DIMENSIONS[2],
-                "__FLUID_FILENAME__": "unit_box.obj",
-                "__FLUID_DENSITY__": self.fluid.density,
-                "__FLUID_VISCOSITY__": self.fluid.kinematic_viscosity,
-                "__FLUID_DIMENSIONS_X__": self.dimensions[0],
-                "__FLUID_DIMENSIONS_Y__": self.dimensions[1],
-                "__FLUID_DIMENSIONS_Z__": self.dimensions[2],
+                "__SIMULATION_TIME__":
+                    self.simulation_time,
+                "__TIME_STEP__":
+                    0.001,
+                "__PARTICLE_RADIUS__":
+                    self.particle_radius,
+                "__DATA_EXPORT_FPS__":
+                    data_export_fps,
+                "__TANK_FILENAME__":
+                    "unit_box.obj",
+                "__TANK_DIMENSIONS_X__":
+                    TANK_DIMENSIONS[0],
+                "__TANK_DIMENSIONS_Y__":
+                    TANK_DIMENSIONS[1],
+                "__TANK_DIMENSIONS_Z__":
+                    TANK_DIMENSIONS[2],
+                "__FLUID_FILENAME__":
+                    "unit_box.obj",
+                "__FLUID_DENSITY__":
+                    self.fluid.density,
+                "__FLUID_VISCOSITY__":
+                    self.fluid.kinematic_viscosity,
+                "__FLUID_POSITION_X__":
+                    2 * self.particle_radius,
+                "__FLUID_POSITION_Y__":
+                    2 * self.particle_radius,
+                "__FLUID_POSITION_Z__":
+                    2 * self.particle_radius,
+                "__FLUID_DIMENSIONS_X__":
+                    self.dimensions[0] - 4 * self.particle_radius,
+                "__FLUID_DIMENSIONS_Y__":
+                    self.dimensions[1] - 4 * self.particle_radius,
+                "__FLUID_DIMENSIONS_Z__":
+                    self.dimensions[2] - 4 * self.particle_radius,
+                "__FLUID_VELOCITY_X__":
+                    self.initial_velocity[0],
+                "__FLUID_VELOCITY_Y__":
+                    self.initial_velocity[1],
+                "__FLUID_VELOCITY_Z__":
+                    self.initial_velocity[2],
             },
             output_file_path=os.path.join(input_dir,
                                           SPLISHSPLASH_INPUT_FILENAME),
