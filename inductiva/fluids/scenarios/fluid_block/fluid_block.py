@@ -131,8 +131,6 @@ class FluidBlock:
         shutil.copy(os.path.join(os.path.dirname(__file__), "unit_box.obj"),
                     input_dir)
 
-        data_export_fps = 1 / self.engine_parameters.output_time_step
-
         replace_params_in_template_file(
             template_file_path=os.path.join(os.path.dirname(__file__),
                                             SPLISHSPLASH_TEMPLATE_FILENAME),
@@ -144,7 +142,7 @@ class FluidBlock:
                 "__PARTICLE_RADIUS__":
                     self.particle_radius,
                 "__DATA_EXPORT_FPS__":
-                    data_export_fps,
+                    1 / self.engine_parameters.output_time_step,
                 "__TANK_FILENAME__":
                     "unit_box.obj",
                 "__TANK_DIMENSIONS_X__":
