@@ -126,34 +126,6 @@ class FluidBlock:
     def _splishsplash_simulation(self):
         """Runs simulation on SPlisHSPlasH via API."""
 
-        # # Create a dam break scenario
-        # scenario = self._create_scenario()
-
-        # # Create simulation
-        # simulation = inductiva_sph.splishsplash.SPlisHSPlasHSimulation(
-        #     scenario=scenario,
-        #     time_max=self.simulation_time,
-        #     particle_radius=self.particle_radius,
-        #     simulation_method=self.engine_parameters.simulation_method,
-        #     viscosity_method=self.engine_parameters.viscosity_solver,
-        #     boundary_handling_method=self.engine_parameters.
-        #     boundary_handling_method,
-        #     z_sort=self.engine_parameters.z_sort,
-        #     cfl_method=self.engine_parameters.cfl_method,
-        #     output_time_step=self.engine_parameters.output_time_step,
-        #     output_directory=self.input_temp_dir.name)
-
-        # # Create input file
-        # simulation.create_input_file()
-        # logging.info("Estimated number of particles %d",
-        #              self.estimate_num_particles())
-        # logging.info("Estimated number of time steps %s",
-        #              math.ceil(self.simulation_time / simulation.time_step))
-        # logging.info(
-        #     "Number of output time steps %s",
-        #     math.ceil(self.simulation_time /
-        #               self.engine_parameters.output_time_step))
-
         input_dir = self.input_temp_dir.name
 
         shutil.copy(os.path.join(os.path.dirname(__file__), "unit_box.obj"),
@@ -168,7 +140,7 @@ class FluidBlock:
                 "__SIMULATION_TIME__":
                     self.simulation_time,
                 "__TIME_STEP__":
-                    0.001,
+                    TIME_STEP,
                 "__PARTICLE_RADIUS__":
                     self.particle_radius,
                 "__DATA_EXPORT_FPS__":
