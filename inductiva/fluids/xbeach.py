@@ -1,4 +1,4 @@
-"""XBeach module of the API."""
+"""Xbeach module of the API."""
 import os
 import pathlib
 
@@ -6,8 +6,8 @@ import inductiva
 from inductiva.types import Path
 
 
-class XBeach:
-    """Class to invoke a generic xbeach simulation on the API.
+class Xbeach:
+    """Class to invoke a generic Xbeach simulation on the API.
     Attributes:
         sim_dir: Path to the directory with all the simulation input files.
         input_filename: Name of the xbeach input file. The file should
