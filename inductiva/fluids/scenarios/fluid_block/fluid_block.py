@@ -9,8 +9,7 @@ import xml.etree.ElementTree as ET
 
 from absl import logging
 
-# import inductiva_sph
-# from inductiva_sph import sph_core
+from inductiva_sph.splishsplash.io_utils import convert_vtk_data_dir_to_netcdf
 
 import inductiva
 from inductiva.fluids.fluid_types import FluidType
@@ -215,10 +214,10 @@ class FluidBlock:
             device=self.device,
             output_dir=self.output_dir)
 
-        # inductiva_sph.splishsplash.io_utils.convert_vtk_data_dir_to_netcdf(
-        #     data_dir=os.path.join(sim_output_path, "vtk"),
-        #     output_time_step=self.engine_parameters.output_time_step,
-        #     netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
+        convert_vtk_data_dir_to_netcdf(
+            data_dir=os.path.join(sim_output_path, "vtk"),
+            output_time_step=self.engine_parameters.output_time_step,
+            netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
 
         return sim_output_path
 
