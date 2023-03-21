@@ -5,6 +5,7 @@ from ..types import Path
 
 from typing import Optional
 
+
 # pylint: disable=unused-argument
 def run_simulation(sim_dir: Path,
                    input_filename: str,
