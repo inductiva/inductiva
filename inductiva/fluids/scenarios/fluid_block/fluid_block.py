@@ -82,7 +82,7 @@ class FluidBlock:
                  engine_parameters: Union[
                      DualSPHysicsParameters,
                      SPlisHSPlasHParameters] = SPlisHSPlasHParameters):
-        """Runs SPH simulation of the Fluid Block scenario.
+        """Runs SPH simulation of the fluid block scenario.
 
         Args:
             device: Sets the device for a simulation to be run.
@@ -125,7 +125,7 @@ class FluidBlock:
         return SimulationOutput(sim_output_path)
 
     def _splishsplash_simulation(self):
-        """Runs simulation on SPlisHSPlasH via API."""
+        """Runs SPlisHSPlasH simulation via API."""
 
         input_dir = self.input_temp_dir.name
 
