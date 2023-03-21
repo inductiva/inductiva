@@ -1,38 +1,45 @@
 """Physical properties of different fluid types."""
 
-from inductiva_sph.sph_core.fluids import FluidProperties
+from dataclasses import dataclass
 
-WATER = FluidProperties(
+
+@dataclass
+class FluidType:
+    density: float
+    kinematic_viscosity: float
+
+
+WATER = FluidType(
     density=1e3,
     kinematic_viscosity=1e-6,
 )
 
-HONEY = FluidProperties(
+HONEY = FluidType(
     density=1360,
     kinematic_viscosity=7.36e-5,
 )
 
-OLIVE_OIL = FluidProperties(
+OLIVE_OIL = FluidType(
     density=905,
     kinematic_viscosity=4.32e-5,
 )
 
-LIQUID_PROPANE = FluidProperties(
+LIQUID_PROPANE = FluidType(
     density=580,
     kinematic_viscosity=2.73e-7,
 )
 
-JET_FUEL = FluidProperties(
+JET_FUEL = FluidType(
     density=802.5,
     kinematic_viscosity=7.6e-6,
 )
 
-BEER = FluidProperties(
+BEER = FluidType(
     density=1.007e3,
     kinematic_viscosity=1.8e-6,
 )
 
-GEAR_OIL = FluidProperties(
+GEAR_OIL = FluidType(
     density=860,
     kinematic_viscosity=4.2e-6,
 )
