@@ -10,7 +10,7 @@ from inductiva.fluids.shapes import Rectangle
 from inductiva.fluids.shapes import Circle
 from inductiva.fluids.shapes import Cube
 from inductiva.fluids.shapes import Cylinder
-from inductiva.fluids._fluid_types import WATER
+from inductiva.fluids.fluid_types import WATER
 
 
 # Tank inlets.
