@@ -204,43 +204,43 @@ class FluidBlock:
 
         return sim_output_path
 
-    # def _dualsphysics_simulation(self):
-    #     """Runs simulation on DualSPHysics via API."""
+    def _dualsphysics_simulation(self):
+        """Runs simulation on DualSPHysics via API."""
 
-    #     # Parse XML file of a dam break scenario
-    #     input_file = ET.parse(INPUT_XML_PATH)
-    #     root = input_file.getroot()
+        # Parse XML file of a dam break scenario
+        input_file = ET.parse(INPUT_XML_PATH)
+        root = input_file.getroot()
 
-    #     # Set simulation parameters according to user input
-    #     root.find("./execution/parameters/parameter[@key='TimeMax']").set(
-    #         "value", str(self.simulation_time))
-    #     root.find(".//rhop0").set("value", str(self.fluid.density))
-    #     root.find("./execution/parameters/parameter[@key='Visco']").set(
-    #         "value", str(self.fluid.kinematic_viscosity))
-    #     root.find("./execution/parameters/parameter[@key='TimeOut']").set(
-    #         "value", str(self.engine_parameters.output_time_step))
+        # Set simulation parameters according to user input
+        root.find("./execution/parameters/parameter[@key='TimeMax']").set(
+            "value", str(self.simulation_time))
+        root.find(".//rhop0").set("value", str(self.fluid.density))
+        root.find("./execution/parameters/parameter[@key='Visco']").set(
+            "value", str(self.fluid.kinematic_viscosity))
+        root.find("./execution/parameters/parameter[@key='TimeOut']").set(
+            "value", str(self.engine_parameters.output_time_step))
 
-    #     self.update_axis_values_in_xml(
-    #         root=root,
-    #         parameter=".//drawbox[boxfill='solid']/size",
-    #         value=self.dimensions)
-    #     self.update_axis_values_in_xml(
-    #         root=root,
-    #         parameter=".//drawbox[boxfill='solid']/point",
-    #         value=self.position)
+        self.update_axis_values_in_xml(
+            root=root,
+            parameter=".//drawbox[boxfill='solid']/size",
+            value=self.dimensions)
+        self.update_axis_values_in_xml(
+            root=root,
+            parameter=".//drawbox[boxfill='solid']/point",
+            value=self.position)
 
-    #     particle_size = root.find(".//definition")
-    #     particle_size.set("dp", str(self.particle_radius * 2))
+        particle_size = root.find(".//definition")
+        particle_size.set("dp", str(self.particle_radius * 2))
 
-    #     # Create input file
-    #     input_file.write(
-    #         os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
+        # Create input file
+        input_file.write(
+            os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
 
-    #     return inductiva.sph.dualsphysics.run_simulation(
-    #         sim_dir=self.input_temp_dir.name,
-    #         input_filename=XML_INPUT_FILENAME[:-4],
-    #         device=self.device,
-    #         output_dir=self.output_dir)
+        return inductiva.sph.dualsphysics.run_simulation(
+            sim_dir=self.input_temp_dir.name,
+            input_filename=XML_INPUT_FILENAME[:-4],
+            device=self.device,
+            output_dir=self.output_dir)
 
     def estimate_num_particles(self):
         """Estimate of the number of SPH particles contained in fluid blocks."""
