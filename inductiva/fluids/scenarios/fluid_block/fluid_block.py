@@ -21,12 +21,14 @@ from inductiva.utils.templates import replace_params_in_template_file
 
 # Global variables to define a scenario
 TANK_DIMENSIONS = [1, 1, 1]
-XML_INPUT_FILENAME = "InputCase.xml"
-INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), "xml_files",
-                              XML_INPUT_FILENAME)
+TIME_STEP = 0.001
 
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash"
 SPLISHSPLASH_INPUT_FILENAME = "fluid_block.json"
+
+XML_INPUT_FILENAME = "InputCase.xml"
+INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), "xml_files",
+                              XML_INPUT_FILENAME)
 
 
 class FluidBlock:
@@ -119,7 +121,7 @@ class FluidBlock:
         # Delete temporary input directory
         self.input_temp_dir.cleanup()
 
-        return sim_output_path  # SimulationOutput(sim_output_path)
+        return SimulationOutput(sim_output_path)
 
     def _splishsplash_simulation(self):
         """Runs simulation on SPlisHSPlasH via API."""
@@ -207,6 +209,15 @@ class FluidBlock:
             output_file_path=os.path.join(input_dir,
                                           SPLISHSPLASH_INPUT_FILENAME),
         )
+
+        logging.info("Estimated number of particles %d",
+                     self.estimate_num_particles())
+        logging.info("Estimated number of time steps %s",
+                     math.ceil(self.simulation_time / TIME_STEP))
+        logging.info(
+            "Number of output time steps %s",
+            math.ceil(self.simulation_time /
+                      self.engine_parameters.output_time_step))
 
         sim_output_path = inductiva.sph.splishsplash.run_simulation(
             sim_dir=self.input_temp_dir.name,
