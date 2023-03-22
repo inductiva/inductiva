@@ -1,9 +1,11 @@
 """Classes that define a fluid tank scenario and simulate it via API."""
 
 from dataclasses import dataclass, field
+import os
 import tempfile
 from typing import List, Literal, Optional, Union
-import shutil
+
+from inductiva_sph.splishsplash.io_utils import convert_vtk_data_dir_to_netcdf
 
 from inductiva.types import Path
 from inductiva.fluids.shapes import BaseShape
@@ -15,6 +17,22 @@ from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
+from inductiva.utils.templates import replace_params_in_template_file
+
+from inductiva.fluids._output_post_processing import SimulationOutput
+from inductiva.sph.splishsplash import run_simulation
+
+from . import gmsh_utils
+
+SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_tank_template.splishsplash.json.jinja"
+SPLISHSPLASH_INPUT_FILENAME = "fluid_tank.json"
+TANK_MESH_FILENAME = "tank.obj"
+FLUID_MESH_FILENAME = "fluid.obj"
+
+SIMULATION_TIME = 1
+TIME_STEP = 0.005
+PARTICLE_RADIUS = 0.02
+Z_SORT = False
 
 
 # Tank inlets.
@@ -80,84 +98,220 @@ class FluidTank:
         device: Literal["cpu", "gpu"] = "cpu",
         engine: Literal["DualSPHysics", "SPlisHSPlasH"] = "SPlisHSPlasH",
         output_dir: Optional[Path] = None,
-        engine_parameters: Union[
-            DualSPHysicsParameters,
-            SPlisHSPlasHParameters] = SPlisHSPlasHParameters,
+        engine_params: Union[DualSPHysicsParameters,
+                             SPlisHSPlasHParameters] = SPlisHSPlasHParameters(),
     ):
         # Create a temporary directory to store simulation input files
         self.input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
 
-        if engine.lower() == "splishsplash" and \
-            isinstance(engine_parameters, SPlisHSPlasHParameters):
-            sim_output_path = self._splishsplash_simulation()
-        elif engine.lower() == "dualsphysics" and \
-            isinstance(engine_parameters, DualSPHysicsParameters):
-            sim_output_path = self._dualsphysics_simulation()
+        if engine.lower() == "splishsplash":
+            sim_output_path = self._splishsplash_simulation(
+                device=device,
+                engine_params=engine_params,
+                output_dir=output_dir)
+        elif engine.lower() == "dualsphysics":
             raise NotImplementedError(
-                f"Simulations of the fluid tank scenario with engine `{engine}` are not supported."
-            )
+                f"Engine `{engine}` is not supported for this scenario.")
         else:
-            raise ValueError("Entered `engine` does not exist or it \
-                             does not match with `engine_parameters` class")
+            raise ValueError(f"Invalid engine `{engine}`.")
 
         # Delete temporary input directory
         self.input_temp_dir.cleanup()
 
-        return ""  # SimulationOutput(sim_output_path)
+        return SimulationOutput(sim_output_path)
 
-    def _splishsplash_simulation(self):
+    def _splishsplash_simulation(self, device, engine_params, output_dir):
         """Runs SPlisHSPlasH simulation via API."""
+
+        if not isinstance(engine_params, SPlisHSPlasHParameters):
+            raise ValueError(f"Invalid engine parameters `{engine_params}`.")
 
         input_dir = self.input_temp_dir.name
 
-        fluid_block_dir = os.path.dirname(__file__)
-        unit_box_file_path = os.path.join(fluid_block_dir,
-                                          UNIT_BOX_MESH_FILENAME)
-        shutil.copy(unit_box_file_path, input_dir)
+        tank_file_path = os.path.join(input_dir, TANK_MESH_FILENAME)
+        fluid_file_path = os.path.join(input_dir, FLUID_MESH_FILENAME)
 
-        fluid_margin = 2 * self.particle_radius
+        _create_tank_mesh_file(shape=self.shape,
+                               outlet=self.outlet,
+                               path=tank_file_path)
+
+        _create_fluid_mesh_file(shape=self.shape,
+                                fluid_level=self.fluid_level,
+                                margin=2 * PARTICLE_RADIUS,
+                                path=fluid_file_path)
 
         replace_params_in_template_file(
-            templates_dir=fluid_block_dir,
+            templates_dir=os.path.dirname(__file__),
             template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
             params={
-                "simulation_time": self.simulation_time,
-                "time_step": TIME_STEP,
-                "particle_radius": self.particle_radius,
-                "data_export_rate": 1 / self.engine_parameters.output_time_step,
-                "tank_filename": UNIT_BOX_MESH_FILENAME,
-                "tank_dimensions": TANK_DIMENSIONS,
-                "fluid_filename": UNIT_BOX_MESH_FILENAME,
-                "fluid": self.fluid,
-                "fluid_position": [fluid_margin] * 3,
-                "fluid_dimensions": [
-                    dimension - 2 * fluid_margin
-                    for dimension in self.dimensions
+                "simulation_time":
+                    SIMULATION_TIME,
+                "time_step":
+                    TIME_STEP,
+                "particle_radius":
+                    PARTICLE_RADIUS,
+                "data_export_rate":
+                    1 / engine_params.output_time_step,
+                "z_sort":
+                    Z_SORT,
+                "tank_filename":
+                    TANK_MESH_FILENAME,
+                "fluid_filename":
+                    FLUID_MESH_FILENAME,
+                "fluid":
+                    self.fluid,
+                "inlet_position": [
+                    self.inlet.position[0],
+                    self.inlet.position[1],
+                    self.shape.height,
                 ],
-                "fluid_velocity": self.initial_velocity,
+                "inlet_width":
+                    int(self.inlet.radius / PARTICLE_RADIUS),
+                "inlet_fluid_velocity":
+                    self.inlet.fluid_velocity,
+                "bounding_box_min": [
+                    -self.shape.radius,
+                    -self.shape.radius,
+                    -self.outlet.height,
+                ],
+                "bounding_box_max": [
+                    self.shape.radius,
+                    self.shape.radius,
+                    self.shape.height,
+                ],
             },
             output_file_path=os.path.join(input_dir,
                                           SPLISHSPLASH_INPUT_FILENAME),
         )
 
-        logging.info("Estimated number of particles %d",
-                     self.estimate_num_particles())
-        logging.info("Estimated number of time steps %s",
-                     math.ceil(self.simulation_time / TIME_STEP))
-        logging.info(
-            "Number of output time steps %s",
-            math.ceil(self.simulation_time /
-                      self.engine_parameters.output_time_step))
-
-        sim_output_path = inductiva.sph.splishsplash.run_simulation(
+        sim_output_path = run_simulation(
             sim_dir=input_dir,
             input_filename=SPLISHSPLASH_INPUT_FILENAME,
-            device=self.device,
-            output_dir=self.output_dir)
+            device=device,
+            output_dir=output_dir)
 
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(sim_output_path, "vtk"),
-            output_time_step=self.engine_parameters.output_time_step,
+            output_time_step=engine_params.output_time_step,
             netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
 
         return sim_output_path
+
+
+def _create_tank_mesh_file(shape, outlet, path: str):
+    """Creates obj file with the simulation box of the fluid tank scenario.
+
+    The simulation box of a fluid tank simulation as two main components:
+    - a main cylinder representing the tank itself;
+    - an optional smaller cylinder representing a fluid outlet. When
+    present, the top base of this cylinder connects with the bottom base of
+    the tank cylinder, such that fluid flows freely from the tank to the
+    outlet. The bottom base of the outlet is also open, such that flow exits
+    the outlet.
+
+    Both cylinders are assumed to have their main axes aligned with the z
+    axis.
+    """
+
+    with gmsh_utils.gmshAPIWrapper():
+        tank_base_hole_loops = []
+
+        # Check if outlet is present.
+        if outlet is not None:
+
+            # Add a circle arc representing the top base of the outlet
+            # cylinder.
+            # A circle arc is used instead of a circle because this face is
+            # not filled, i.e. it is not a surface.
+            p_top_outlet, c_top_outlet, l_top_outlet = \
+                gmsh_utils.add_circle_arc(
+                    x=outlet.top_base_position[0],
+                    y=outlet.top_base_position[1],
+                    z=0,
+                    r=outlet.radius,
+                )
+
+            # Add a circle arc representing the bottom base of the outlet
+            # cylinder.
+            p_base_outlet, c_base_outlet, _ = gmsh_utils.add_circle_arc(
+                x=outlet.top_base_position[0],
+                y=outlet.top_base_position[1],
+                z=-outlet.height,
+                r=outlet.radius,
+            )
+
+            # Add the walls of the outlet cylinder.
+            gmsh_utils.add_cylinder_walls(p_base_outlet, c_base_outlet,
+                                          p_top_outlet, c_top_outlet)
+
+            # Add the loop representing the top base of the outlet cylinder
+            # to the list of loops representing holes in the bottom base of
+            # the tank cylinder.
+            tank_base_hole_loops.append(l_top_outlet)
+
+        # Add the top base of the tank cylinder.
+        p_top, c_top, _, _ = gmsh_utils.add_circle(
+            x=0,
+            y=0,
+            z=shape.height,
+            r=shape.radius,
+            hole_loops=[],
+        )
+
+        # Add the bottom base of the tank cylinder, setting the loop
+        # representing the top base of the outlet cylinder as a hole.
+        p_base, c_base, _, _ = gmsh_utils.add_circle(
+            x=0,
+            y=0,
+            z=0,
+            r=shape.radius,
+            hole_loops=tank_base_hole_loops,
+        )
+
+        # Add the walls of the tank cylinder.
+        gmsh_utils.add_cylinder_walls(p_base, c_base, p_top, c_top)
+
+    # Convert the msh file generated by gmsh to obj format.
+    gmsh_utils.convert_msh_to_obj_file(path)
+
+
+def _create_fluid_mesh_file(shape, fluid_level, margin, path: str):
+    """Creates obj file with the simulation box of the fluid tank scenario.
+
+    The simulation box of a fluid tank simulation as two main components:
+    - a main cylinder representing the tank itself;
+    - an optional smaller cylinder representing a fluid outlet. When
+    present, the top base of this cylinder connects with the bottom base of
+    the tank cylinder, such that fluid flows freely from the tank to the
+    outlet. The bottom base of the outlet is also open, such that flow exits
+    the outlet.
+
+    Both cylinders are assumed to have their main axes aligned with the z
+    axis.
+    """
+
+    if isinstance(shape, Cube):
+        with gmsh_utils.gmshAPIWrapper():
+            gmsh_utils.add_box(
+                -shape.dimensions[0] / 2 + margin,
+                -shape.dimensions[1] / 2 + margin,
+                margin,
+                shape.dimensions[0] - margin,
+                shape.dimensions[1] - margin,
+                fluid_level - margin,
+            )
+
+    elif isinstance(shape, Cylinder):
+        with gmsh_utils.gmshAPIWrapper():
+            gmsh_utils.add_cylinder(
+                0,
+                0,
+                0 + margin,
+                shape.radius - margin,
+                fluid_level - margin,
+            )
+    else:
+        raise NotImplementedError()
+
+    # Convert the msh file generated by gmsh to obj format.
+    gmsh_utils.convert_msh_to_obj_file(path)
