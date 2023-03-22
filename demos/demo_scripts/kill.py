@@ -7,7 +7,6 @@ Usage: python kill.py secs={SLEEP_SECS}
 """
 import inductiva
 
-from absl import logging
 from absl import flags
 from absl import app
 
@@ -26,5 +25,4 @@ def main(_):
 
 
 if __name__ == "__main__":
-    logging.set_verbosity(logging.DEBUG)
     app.run(main)

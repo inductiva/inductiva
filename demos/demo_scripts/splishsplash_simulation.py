@@ -28,7 +28,7 @@ def main(_):
 
     inductiva.api_url = FLAGS.api_url
 
-    sph_sim = inductiva.fluids.SPlisHSPlasH(
+    sph_sim = inductiva.fluids.simulators.SPlisHSPlasH(
         sim_dir=FLAGS.sim_dir,
         input_filename=FLAGS.input_filename,
     )
@@ -39,5 +39,4 @@ def main(_):
 
 
 if __name__ == "__main__":
-    logging.set_verbosity(logging.DEBUG)
     app.run(main)

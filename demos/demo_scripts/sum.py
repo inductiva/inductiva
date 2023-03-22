@@ -18,9 +18,8 @@ def main(_):
 
     result = inductiva.math.sum(a=1, b=1)
 
-    logging.debug("Result = %s", result)
+    logging.info("Result = %s", result)
 
 
 if __name__ == "__main__":
-    logging.set_verbosity(logging.DEBUG)
     app.run(main)

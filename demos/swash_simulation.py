@@ -1,4 +1,4 @@
-"""Sample usage of DualSPHysics simulation via the API."""
+"""Sample usage of SWASH simulator via the API."""
 from absl import logging
 from absl import flags
 from absl import app
@@ -15,30 +15,31 @@ flags.DEFINE_string("sim_dir",
                     required=True)
 flags.DEFINE_string("input_filename",
                     None,
-                    "Name of the input file.",
+                    "Name of the input .sws file.",
                     required=True)
-flags.DEFINE_string("output_dir",
-                    None,
-                    "Directory where the outputs will be stored.",
-                    required=True)
-flags.DEFINE_string("device", "gpu",
-                    "Device in which device the simulation will run.")
+flags.DEFINE_string("output_dir", None,
+                    "Directory where the outputs will be stored.")
+flags.DEFINE_integer("n_cores", 1, "Number of cores to use.")
 
 
 def main(_):
-    """Run a DualSPHysics simulation using user-provided input files."""
+    """Run a SWASH simulation using user-provided input files."""
 
     inductiva.api_url = FLAGS.api_url
 
-    sph_sim = inductiva.fluids.simulators.DualSPHysics(
+    swash_sim = inductiva.fluids.SWASH(
         sim_dir=FLAGS.sim_dir,
         input_filename=FLAGS.input_filename,
-        device=FLAGS.device)
+    )
 
-    output_path = sph_sim.simulate(output_dir=FLAGS.output_dir)
+    output_path = swash_sim.simulate(
+        output_dir=FLAGS.output_dir,
+        n_cores=FLAGS.n_cores,
+    )
 
     logging.info("Outputs stored in %s", output_path)
 
 
 if __name__ == "__main__":
+    logging.set_verbosity(logging.DEBUG)
     app.run(main)

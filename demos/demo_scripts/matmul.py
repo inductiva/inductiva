@@ -25,10 +25,9 @@ def main(_):
 
     success = np.allclose(local_result, remote_result)
 
-    logging.debug("Operation successful" if success else \
+    logging.info("Operation successful" if success else \
         "Operation unsuccessful")
 
 
 if __name__ == "__main__":
-    logging.set_verbosity(logging.DEBUG)
     app.run(main)
