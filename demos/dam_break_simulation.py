@@ -7,6 +7,7 @@ from absl import app
 
 import inductiva
 import inductiva_utils
+from inductiva.fluids.fluid_types import WATER, get_fluid_color
 
 FLAGS = flags.FLAGS
 
@@ -34,19 +35,19 @@ def main(_):
     time_start = time.perf_counter()
 
     scenario = inductiva.fluids.DamBreak(
-        fluid=inductiva.fluids.HONEY,
+        fluid=WATER,
         dimensions=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_dimensions),
         position=inductiva_utils.flags.cast_list_to_float(FLAGS.fluid_position))
 
     simulation_output = scenario.simulate(output_dir=FLAGS.output_dir,
-                          resolution=FLAGS.resolution,
-                          engine=FLAGS.engine,
-                          simulation_time=FLAGS.simulation_time,
-                          device=FLAGS.device)
+                                          resolution=FLAGS.resolution,
+                                          engine=FLAGS.engine,
+                                          simulation_time=FLAGS.simulation_time,
+                                          device=FLAGS.device)
 
     # Note: video rendering only works with SPlisHSPlasH for now
-    simulation_output.render()
+    simulation_output.render(color=get_fluid_color(WATER), alpha=0.8)
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 

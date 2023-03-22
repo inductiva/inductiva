@@ -13,14 +13,13 @@ from inductiva.types import Path
 class SimulationOutput:
     """Post process SPH simulation outputs."""
 
-    def __init__(self, sim_output_path: Path, color: str = "viridis"):
+    def __init__(self, sim_output_path: Path):
         """Initializes a `SimulationOutput` object.
 
         Args:
             sim_output_path: Path to simulation output files.
             """
         self.sim_output_dir = sim_output_path
-        self.color = color
 
     def render(self,
                movie_fps: int = 60,
