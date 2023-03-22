@@ -30,20 +30,18 @@ class SimulationOutput:
         """Render the simulation as a movie.
 
         Args:
-        movie_fps: The frames per second (fps) to be used in the movie. 
+        movie_fps: The frames per second (fps) to be used in the movie.
           Default is 60 fps.
         color: The color of the markers in the simulation.
           If None, the default color is used.
         marker_size: The size of the markers in the simulation. Default is 20.0.
-        alpha: The opacity of the markers in the simulation. 
+        alpha: The opacity of the markers in the simulation.
           Default is 1.0 (fully opaque)
         """
 
         # Read simulation particle data
-        particle_data_dir = os.path.join(self.sim_output_dir, "netcdf")
-
         particle_data = xr.open_mfdataset(
-            os.path.join(particle_data_dir, "*.nc"))
+            os.path.join(self.sim_output_dir, "netcdf", "*.nc"))
 
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
 
