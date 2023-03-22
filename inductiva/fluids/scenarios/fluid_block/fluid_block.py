@@ -15,7 +15,6 @@ import inductiva
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
-from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
 from inductiva.utils.templates import replace_params_in_template_file
 

@@ -46,7 +46,7 @@ def main(_):
                           device=FLAGS.device)
 
     # Note: video rendering only works with SPlisHSPlasH for now
-    simulation_output.render(color="red", alpha=0.5)
+    simulation_output.render()
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 
