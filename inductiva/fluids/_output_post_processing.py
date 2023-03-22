@@ -44,9 +44,6 @@ class SimulationOutput:
 
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
 
-        if color is None:
-            color = self.color
-
         visualization.create_3d_scatter_plot_movie(dataset=particle_data,
                                                    iter_var="time",
                                                    x_var="x",
