@@ -1,8 +1,4 @@
-"""Utils related to template files.
-
-NB: These are temporary, and should be removed when we transition to a template
-engine like jinja2.
-"""
+"""Utils related to template files."""
 
 from typing import Dict
 
