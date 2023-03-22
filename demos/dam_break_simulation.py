@@ -16,9 +16,9 @@ flags.DEFINE_list("fluid_dimensions", [0.2, 1, 1],
                   "Dimensions of the fluid column.")
 flags.DEFINE_list("fluid_position", [0.0, 0.0, 0.0],
                   "Position of the fluid column in the tank.")
-flags.DEFINE_enum("resolution", "medium", ["high", "medium", "low"],
+flags.DEFINE_enum("resolution", "low", ["high", "medium", "low"],
                   "Sets the fluid resolution to simulate.")
-flags.DEFINE_enum("engine", "DualSPHysics", ["DualSPHysics", "SPlisHSPlasH"],
+flags.DEFINE_enum("engine", "SPlisHSPlasH", ["DualSPHysics", "SPlisHSPlasH"],
                   "Sets the fluid resolution to simulate.")
 flags.DEFINE_string("output_dir", None,
                     "Destination directory for output files.")
@@ -34,19 +34,19 @@ def main(_):
     time_start = time.perf_counter()
 
     scenario = inductiva.fluids.DamBreak(
-        fluid=inductiva.fluids.WATER,
+        fluid=inductiva.fluids.HONEY,
         dimensions=inductiva_utils.flags.cast_list_to_float(
             FLAGS.fluid_dimensions),
         position=inductiva_utils.flags.cast_list_to_float(FLAGS.fluid_position))
 
-    _ = scenario.simulate(output_dir=FLAGS.output_dir,
+    simulation_output = scenario.simulate(output_dir=FLAGS.output_dir,
                           resolution=FLAGS.resolution,
                           engine=FLAGS.engine,
                           simulation_time=FLAGS.simulation_time,
                           device=FLAGS.device)
 
     # Note: video rendering only works with SPlisHSPlasH for now
-    # simulation_output.render()
+    simulation_output.render(color="red", alpha=0.5)
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 

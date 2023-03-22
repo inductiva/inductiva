@@ -122,7 +122,7 @@ class FluidBlock:
         # Delete temporary input directory
         self.input_temp_dir.cleanup()
 
-        return SimulationOutput(sim_output_path)
+        return sim_output_path
 
     def _splishsplash_simulation(self):
         """Runs SPlisHSPlasH simulation via API."""

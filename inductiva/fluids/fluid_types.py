@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class FluidType:
     density: float
     kinematic_viscosity: float
@@ -43,3 +43,17 @@ GEAR_OIL = FluidType(
     density=860,
     kinematic_viscosity=4.2e-6,
 )
+
+
+def get_fluid_color(fluid):
+    colors = {
+        WATER: "Blues",
+        HONEY: "YlOrBr",
+        OLIVE_OIL: "gist_earth",
+        BEER: "Wistia",
+        GEAR_OIL: "copper",
+        JET_FUEL: "pink",
+        LIQUID_PROPANE: "BuPu"
+    }
+
+    return colors[fluid]

@@ -5,10 +5,12 @@ from dataclasses import dataclass
 
 from inductiva_sph import sph_core
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
-from inductiva.fluids.fluid_types import WATER
+from inductiva.fluids.fluid_types import WATER, get_fluid_color
 from inductiva.types import Path
 from inductiva.fluids.simulators import (SPlisHSPlasHParameters,
                                          DualSPHysicsParameters)
+
+from inductiva.fluids._output_post_processing import SimulationOutput
 
 
 @dataclass
@@ -80,10 +82,12 @@ class DamBreak(FluidBlock):
         else:
             engine_params = DualSPHysicsParameters()
 
-        return FluidBlock.simulate(self,
-                                   device=device,
-                                   engine=engine,
-                                   simulation_time=simulation_time,
-                                   particle_radius=particle_radius,
-                                   output_dir=output_dir,
-                                   engine_parameters=engine_params)
+        sim_output_path = FluidBlock.simulate(self,
+                                              device=device,
+                                              engine=engine,
+                                              simulation_time=simulation_time,
+                                              particle_radius=particle_radius,
+                                              output_dir=output_dir,
+                                              engine_parameters=engine_params)
+
+        return SimulationOutput(sim_output_path, get_fluid_color(self.fluid))
