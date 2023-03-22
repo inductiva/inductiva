@@ -7,6 +7,7 @@ from . import sph
 from . import sw
 from . import utils
 from . import cupy
+from . import openfoam
 from . import test
 
 from absl import logging
