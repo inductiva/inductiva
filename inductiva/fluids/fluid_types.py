@@ -47,13 +47,13 @@ GEAR_OIL = FluidType(
 
 def get_fluid_color(fluid):
     colors = {
-        WATER: "Blues",
-        HONEY: "YlOrBr",
-        OLIVE_OIL: "gist_earth",
-        BEER: "Wistia",
-        GEAR_OIL: "copper",
-        JET_FUEL: "pink",
-        LIQUID_PROPANE: "BuPu"
+        WATER: "blue",
+        HONEY: "darkgoldenrod",
+        OLIVE_OIL: "olivedrab",
+        BEER: "goldenrod",
+        GEAR_OIL: "peru",
+        JET_FUEL: "darkgoldenrod",
+        LIQUID_PROPANE: "blueviolet"
     }
 
     return colors[fluid]
