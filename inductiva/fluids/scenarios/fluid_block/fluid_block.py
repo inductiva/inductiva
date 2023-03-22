@@ -139,22 +139,22 @@ class FluidBlock:
         replace_params_in_template_file(
             templates_dir=fluid_block_dir,
             template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
-            params=dict(
-                simulation_time=self.simulation_time,
-                time_step=TIME_STEP,
-                particle_radius=self.particle_radius,
-                data_export_rate=1 / self.engine_parameters.output_time_step,
-                tank_filename=UNIT_BOX_MESH_FILENAME,
-                tank_dimensions=TANK_DIMENSIONS,
-                fluid_filename=UNIT_BOX_MESH_FILENAME,
-                fluid=self.fluid,
-                fluid_position=[fluid_margin] * 3,
-                fluid_dimensions=[
+            params={
+                "simulation_time": self.simulation_time,
+                "time_step": TIME_STEP,
+                "particle_radius": self.particle_radius,
+                "data_export_rate": 1 / self.engine_parameters.output_time_step,
+                "tank_filename": UNIT_BOX_MESH_FILENAME,
+                "tank_dimensions": TANK_DIMENSIONS,
+                "fluid_filename": UNIT_BOX_MESH_FILENAME,
+                "fluid": self.fluid,
+                "fluid_position": [fluid_margin] * 3,
+                "fluid_dimensions": [
                     dimension - 2 * fluid_margin
                     for dimension in self.dimensions
                 ],
-                fluid_velocity=self.initial_velocity,
-            ),
+                "fluid_velocity": self.initial_velocity,
+            },
             output_file_path=os.path.join(input_dir,
                                           SPLISHSPLASH_INPUT_FILENAME),
         )
