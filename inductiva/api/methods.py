@@ -13,11 +13,12 @@ from absl import logging
 from inductiva_web_api_client import ApiClient, ApiException, Configuration
 from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
 from inductiva_web_api_client.models import TaskRequest, TaskStatus
+from inductiva.exceptions import RemoteExecutionError
 from inductiva.types import Path
 
 import inductiva
-from inductiva.utils.data import (get_validate_request_params, pack_input,
-                                  unpack_output)
+from inductiva.utils.data import (extract_output, get_validate_request_params,
+                                  pack_input, unpack_output)
 from inductiva.utils.meta import get_method_name, get_type_annotations
 
 
@@ -121,7 +122,7 @@ def block_until_finish(api_instance, task_id: str) -> TaskRequest:
         "id" and "status".
     """
     logging.debug("Blocking until task is finished ...")
-    return block_until_status_is(api_instance, task_id, "success")
+    return block_until_status_is(api_instance, task_id, {"success", "failed"})
 
 
 def kill_task(api_instance, task_id: str):
@@ -146,7 +147,7 @@ def kill_task(api_instance, task_id: str):
         path_params={"task_id": task_id},)
 
     logging.debug("Blocking until task is killed ...")
-    out = block_until_status_is(api_instance, task_id, "killed")
+    out = block_until_status_is(api_instance, task_id, {"killed"})
     logging.info("Task terminated.")
     return out
 
@@ -204,12 +205,12 @@ def block_until_status_is(api_instance,
         prev_status = status
 
         # If status reaches the desired status, then stop polling
-        if status == desired_status:
+        if status in desired_status:
             break
 
         time.sleep(sleep_secs)
 
-    return api_response.body
+    return api_response.body["status"]
 
 
 @contextmanager
@@ -303,12 +304,15 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
 
             logging.info("Request submitted.")
 
-            _ = block_until_finish(
+            status = block_until_finish(
                 api_instance=api_instance,
                 task_id=task_id,
             )
 
-            logging.info("Task finished executing.")
+            if status == "success":
+                logging.info("Task executed successfuly.")
+            else:
+                logging.info("Task failed.")
 
         output_zip_path = download_output(
             api_instance=api_instance,
@@ -318,8 +322,10 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
     if output_dir is None:
         output_dir = os.path.join(inductiva.output_dir, task_id)
 
-    return unpack_output(
-        zip_path=output_zip_path,
-        output_dir=output_dir,
-        return_type=type_annotations["return"],
-    )
+    result_list = extract_output(output_zip_path, output_dir)
+
+    if status == "failed":
+        raise RemoteExecutionError(f"""Remote execution failed.
+    Find more details in: \"{os.path.abspath(output_dir)}\".""")
+
+    return unpack_output(result_list, output_dir, type_annotations["return"])

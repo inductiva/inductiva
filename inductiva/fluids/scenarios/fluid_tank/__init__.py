@@ -1,3 +1,2 @@
 #pylint: disable=missing-module-docstring
-from . import swash
-from . import xbeach
+from .fluid_tank import FluidTank
