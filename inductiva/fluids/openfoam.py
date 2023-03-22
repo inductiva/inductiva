@@ -22,7 +22,7 @@ class OpenFOAM:
         sim_dir: Path,
         openfoam_solver: str,
     ):
-        self.openfoam_solver= openfoam_solver
+        self.openfoam_solver = openfoam_solver
         self.sim_dir = pathlib.Path(sim_dir)
 
         if not os.path.isdir(sim_dir):

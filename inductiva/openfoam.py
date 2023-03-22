@@ -1,7 +1,7 @@
 """Low-level method that interacts with the API for OpenFoam computation."""
 import pathlib
-from ..api import invoke_api
-from ..types import Path
+from .api import invoke_api
+from .types import Path
 
 from typing import Optional
 
