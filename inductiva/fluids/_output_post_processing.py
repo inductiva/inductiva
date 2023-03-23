@@ -3,10 +3,11 @@ import os
 
 from IPython.display import HTML
 from base64 import b64encode
+import xarray as xr
+
+from inductiva_data.visualization import create_3d_scatter_plot_movie
 
 from inductiva.types import Path
-from inductiva_data.data import ParticleDataReader
-from inductiva_data import visualizers
 
 
 class SimulationOutput:
@@ -27,19 +28,19 @@ class SimulationOutput:
             color_quantity: Quantity to represent in the color scale of the
                 scatter plot."""
 
-        # Read simulation particle data
-        reader = ParticleDataReader()
-        particle_data = reader.read_dir(
-            os.path.join(self.sim_output_dir, "hdf5"))
+        particle_data = xr.open_mfdataset(
+            os.path.join(self.sim_output_dir, "netcdf", "*.nc"))
 
-        visualizer = visualizers.TimeVaryingParticleData3DScatterVisualizer(
-            data=particle_data,
-            x_quantity="x",
-            y_quantity="y",
-            z_quantity="z",
-            color_quantity=color_quantity)
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
-        visualizer.create_time_movie(movie_path)
+        create_3d_scatter_plot_movie(
+            particle_data,
+            iter_var="time",
+            x_var="x",
+            y_var="y",
+            z_var="z",
+            color_var=color_quantity,
+            movie_path=movie_path,
+        )
 
         with open(movie_path, "rb") as fp:
             mp4 = fp.read()
