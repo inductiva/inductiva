@@ -15,7 +15,6 @@ import inductiva
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
-from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
 from inductiva.utils.templates import replace_params_in_template_file
 
@@ -122,7 +121,7 @@ class FluidBlock:
         # Delete temporary input directory
         self.input_temp_dir.cleanup()
 
-        return SimulationOutput(sim_output_path)
+        return sim_output_path
 
     def _splishsplash_simulation(self):
         """Runs SPlisHSPlasH simulation via API."""
