@@ -83,10 +83,15 @@ class FluidTank:
         shape: BaseShape = Cube(dimensions=[1, 1, 1]),
         fluid: FluidType = WATER,
         fluid_level: float = 0,
-        inlet: Optional[BaseTankInlet] = CircularTankInlet(radius=0.1,
-                                                           position=[0, 0]),
+        inlet: Optional[BaseTankInlet] = CircularTankInlet(
+            radius=0.1,
+            position=[0, 0],
+        ),
         outlet: Optional[BaseTankOutlet] = CylindricalTankOutlet(
-            radius=0.1, height=0.1, top_base_position=[0, 0]),
+            radius=0.1,
+            height=0.1,
+            top_base_position=[0, 0],
+        ),
     ):
         self.shape = shape
         self.fluid = fluid
