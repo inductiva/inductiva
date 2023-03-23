@@ -1,2 +1,2 @@
-include *.jinja
-include *.obj
+global-include *.jinja
+global-include *.obj
