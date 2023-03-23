@@ -258,9 +258,9 @@ def add_box(x, y, z, lx, ly, lz):
         x,
         y,
         z,
-        x + lx,
-        y + ly,
-        z + lz,
+        lx,
+        ly,
+        lz,
     )
 
 
