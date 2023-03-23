@@ -1,4 +1,4 @@
-"""Classes that define a fluid tank scenario and simulate it via API."""
+"""Classes describing fluid tank scenarios."""
 
 from dataclasses import dataclass, field
 import os
@@ -93,6 +93,15 @@ class FluidTank:
             top_base_position=[0, 0],
         ),
     ):
+        """Initializes a fluid tank.
+        
+        Args:
+            shape: Shape of the tank.
+            fluid: Fluid type.
+            fluid_level: Fluid level initially in the tank.
+            inlet: Inlet of the tank.
+            outlet: Outlet of the tank.
+        """
         self.shape = shape
         self.fluid = fluid
         self.fluid_level = fluid_level
@@ -102,22 +111,31 @@ class FluidTank:
     def simulate(
         self,
         device: Literal["cpu", "gpu"] = "cpu",
-        engine: Literal["DualSPHysics", "SPlisHSPlasH"] = "SPlisHSPlasH",
-        output_dir: Optional[Path] = None,
+        engine: Literal["SPlisHSPlasH"] = "SPlisHSPlasH",
         engine_params: Union[DualSPHysicsParameters,
                              SPlisHSPlasHParameters] = SPlisHSPlasHParameters(),
+        output_dir: Optional[Path] = None,
     ):
+        """Simulates the fluid tank.
+        
+        Args:
+            device: Device to run the simulation on.
+            engine: Simulation engine to use.
+            engine_params: Engine parameters.
+            output_dir: Directory to store simulation output.
+
+        Returns:
+            Simulation output.
+        """
+
         # Create a temporary directory to store simulation input files
         self.input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
 
         if engine.lower() == "splishsplash":
-            sim_output_path = self._splishsplash_simulation(
+            sim_output_path = self._simulate_with_splishsplash(
                 device=device,
                 engine_params=engine_params,
                 output_dir=output_dir)
-        elif engine.lower() == "dualsphysics":
-            raise NotImplementedError(
-                f"Engine `{engine}` is not supported for this scenario.")
         else:
             raise ValueError(f"Invalid engine `{engine}`.")
 
@@ -126,25 +144,26 @@ class FluidTank:
 
         return SimulationOutput(sim_output_path)
 
-    def _splishsplash_simulation(self, device, engine_params, output_dir):
-        """Runs SPlisHSPlasH simulation via API."""
+    def _simulate_with_splishsplash(self, device, engine_params, output_dir):
+        """Simulates the fluid tank with SPlisHSPlasH."""
 
         if not isinstance(engine_params, SPlisHSPlasHParameters):
             raise ValueError(f"Invalid engine parameters `{engine_params}`.")
 
         input_dir = self.input_temp_dir.name
 
-        tank_file_path = os.path.join(input_dir, TANK_MESH_FILENAME)
-        fluid_file_path = os.path.join(input_dir, FLUID_MESH_FILENAME)
+        _create_tank_mesh_file(
+            shape=self.shape,
+            outlet=self.outlet,
+            path=os.path.join(input_dir, TANK_MESH_FILENAME),
+        )
 
-        _create_tank_mesh_file(shape=self.shape,
-                               outlet=self.outlet,
-                               path=tank_file_path)
-
-        _create_fluid_mesh_file(shape=self.shape,
-                                fluid_level=self.fluid_level,
-                                margin=2 * PARTICLE_RADIUS,
-                                path=fluid_file_path)
+        _create_fluid_mesh_file(
+            shape=self.shape,
+            fluid_level=self.fluid_level,
+            margin=2 * PARTICLE_RADIUS,
+            path=os.path.join(input_dir, FLUID_MESH_FILENAME),
+        )
 
         bounding_box_min, bounding_box_max = self._get_bounding_box()
         inlet_position = [
@@ -152,6 +171,7 @@ class FluidTank:
             self.inlet.position[1],
             bounding_box_max[2],
         ]
+
         replace_params_in_template_file(
             templates_dir=os.path.dirname(__file__),
             template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
@@ -188,6 +208,14 @@ class FluidTank:
         return sim_output_path
 
     def _get_bounding_box(self):
+        """Gets the bounding box of the tank.
+        
+        Returns:
+            Tuple of two lists representing the minimum and maximum coordinates
+            of the bounding box of the tank, respectively.
+        """
+
+        # Get the bounding box of the tank.
         if isinstance(self.shape, Cylinder):
             bounding_box_min = [
                 -self.shape.radius,
@@ -199,6 +227,7 @@ class FluidTank:
                 self.shape.radius,
                 self.shape.height,
             ]
+
         elif isinstance(self.shape, Cube):
             bounding_box_min = [
                 -self.shape.dimensions[0] / 2,
@@ -213,6 +242,7 @@ class FluidTank:
         else:
             raise ValueError(f"Invalid tank shape `{self.shape}`.")
 
+        # Extend the bounding box to include the outlet.
         if self.outlet is not None:
             if isinstance(self.outlet, Cylinder):
                 bounding_box_min[2] = -self.outlet.height
@@ -225,30 +255,32 @@ class FluidTank:
 
 
 def _create_tank_mesh_file(shape, outlet, path: str):
-    """Creates obj file with the simulation box of the fluid tank scenario.
-
-    The simulation box of a fluid tank simulation as two main components:
-    - a main cylinder representing the tank itself;
-    - an optional smaller cylinder representing a fluid outlet. When
-    present, the top base of this cylinder connects with the bottom base of
-    the tank cylinder, such that fluid flows freely from the tank to the
-    outlet. The bottom base of the outlet is also open, such that flow exits
-    the outlet.
-
-    Both cylinders are assumed to have their main axes aligned with the z
+    """Creates a mesh file for the tank.
+    
+    The tank is composed of two blocks:
+    - a main (cylindrical/cubic) block representing the tank itself;
+    - an optional smaller (cylindrical/cubic) block representing a fluid outlet.
+      When present, the top base of this block connects with the bottom base of
+      the tank, such that fluid flows freely from the tank to the outlet. The
+      bottom base of the outlet is also open, such that flow exits the outlet.
+    
+    Both blocks are assumed to have their main axes aligned with the z
     axis.
+    
+    Args:
+        shape: Shape of the tank.
+        outlet: Shape of the outlet. If `None`, no outlet is present.
+        path: Path of the file to be created.
     """
 
     with gmsh_utils.gmshAPIWrapper():
         tank_base_hole_loops = []
 
-        # Check if outlet is present.
         if outlet is not None:
 
-            # Add a circle arc representing the top base of the outlet
-            # cylinder.
-            # A circle arc is used instead of a circle because this face is
-            # not filled, i.e. it is not a surface.
+            # Add a circle arc/rectangle loop representing the top base of the
+            # outlet. An arc/loop is used instead of a circle/rectangle because
+            # this face is not filled, i.e. it is not a surface.
             if isinstance(outlet, Cylinder):
                 p_top_outlet, c_top_outlet, l_top_outlet = \
                     gmsh_utils.add_circle_arc(
@@ -267,17 +299,17 @@ def _create_tank_mesh_file(shape, outlet, path: str):
                         ly=outlet.dimensions[1],
                     )
 
-            # Add a circle arc representing the bottom base of the outlet
-            # cylinder.
+            # Add a circle arc/rectangle loop representing the bottom base of
+            # the outlet.
             if isinstance(outlet, Cylinder):
-                p_base_outlet, c_base_outlet, _ = gmsh_utils.add_circle_arc(
+                p_bottom_outlet, c_bottom_outlet, _ = gmsh_utils.add_circle_arc(
                     x=outlet.top_base_position[0],
                     y=outlet.top_base_position[1],
                     z=-outlet.height,
                     r=outlet.radius,
                 )
             elif isinstance(outlet, Cube):
-                p_base_outlet, c_base_outlet, _ = \
+                p_bottom_outlet, c_bottom_outlet, _ = \
                     gmsh_utils.add_z_rectangle_loop(
                         x=outlet.top_base_position[0],
                         y=outlet.top_base_position[1],
@@ -285,17 +317,19 @@ def _create_tank_mesh_file(shape, outlet, path: str):
                         lx=outlet.dimensions[0],
                         ly=outlet.dimensions[1],
                     )
-            # Add the walls of the outlet cylinder.
-            gmsh_utils.add_cylinder_walls(p_base_outlet, c_base_outlet,
+
+            # Add the walls of the outlet (cylindrical/cubic) block.
+            gmsh_utils.add_cylinder_walls(p_bottom_outlet, c_bottom_outlet,
                                           p_top_outlet, c_top_outlet)
 
-            # Add the loop representing the top base of the outlet cylinder
-            # to the list of loops representing holes in the bottom base of
-            # the tank cylinder.
+            # Add the loop representing the top base of the outlet to the list
+            # of loops representing holes in the bottom base of the tank
+            # cylinder.
             tank_base_hole_loops.append(l_top_outlet)
 
+        # Add the top and bottom bases of the tank block, setting the loop
+        # representing the top base of the outlet as a hole.
         if isinstance(shape, Cylinder):
-            # Add the top base of the tank cylinder.
             p_top, c_top, _, _ = gmsh_utils.add_circle(
                 x=0,
                 y=0,
@@ -303,10 +337,7 @@ def _create_tank_mesh_file(shape, outlet, path: str):
                 r=shape.radius,
                 hole_loops=[],
             )
-
-            # Add the bottom base of the tank cylinder, setting the loop
-            # representing the top base of the outlet cylinder as a hole.
-            p_base, c_base, _, _ = gmsh_utils.add_circle(
+            p_bottom, c_bottom, _, _ = gmsh_utils.add_circle(
                 x=0,
                 y=0,
                 z=0,
@@ -315,7 +346,6 @@ def _create_tank_mesh_file(shape, outlet, path: str):
             )
 
         elif isinstance(shape, Cube):
-            # Add the top base of the tank cylinder.
             p_top, c_top, _, _ = gmsh_utils.add_z_rectangle(
                 x=-shape.dimensions[0] / 2,
                 y=-shape.dimensions[1] / 2,
@@ -324,10 +354,7 @@ def _create_tank_mesh_file(shape, outlet, path: str):
                 ly=shape.dimensions[1],
                 hole_loops=[],
             )
-
-            # Add the bottom base of the tank cylinder, setting the loop
-            # representing the top base of the outlet cylinder as a hole.
-            p_base, c_base, _, _ = gmsh_utils.add_z_rectangle(
+            p_bottom, c_bottom, _, _ = gmsh_utils.add_z_rectangle(
                 x=-shape.dimensions[0] / 2,
                 y=-shape.dimensions[1] / 2,
                 z=0,
@@ -336,26 +363,24 @@ def _create_tank_mesh_file(shape, outlet, path: str):
                 hole_loops=tank_base_hole_loops,
             )
 
-        # Add the walls of the tank cylinder.
-        gmsh_utils.add_cylinder_walls(p_base, c_base, p_top, c_top)
+        # Add the walls of the tank (cylindrical/cubic) block.
+        gmsh_utils.add_cylinder_walls(p_bottom, c_bottom, p_top, c_top)
 
     # Convert the msh file generated by gmsh to obj format.
     gmsh_utils.convert_msh_to_obj_file(path)
 
 
 def _create_fluid_mesh_file(shape, fluid_level, margin, path: str):
-    """Creates obj file with the simulation box of the fluid tank scenario.
+    """Creates a mesh file for the fluid.
+    
+    The fluid is represented by a block with the same shape as the tank, but
+    with a smaller height.
 
-    The simulation box of a fluid tank simulation as two main components:
-    - a main cylinder representing the tank itself;
-    - an optional smaller cylinder representing a fluid outlet. When
-    present, the top base of this cylinder connects with the bottom base of
-    the tank cylinder, such that fluid flows freely from the tank to the
-    outlet. The bottom base of the outlet is also open, such that flow exits
-    the outlet.
-
-    Both cylinders are assumed to have their main axes aligned with the z
-    axis.
+    Args:
+        shape: Shape of the tank.
+        fluid_level: Height of the fluid.
+        margin: Margin to be added to the fluid block.
+        path: Path of the file to be created.
     """
 
     if isinstance(shape, Cube):
