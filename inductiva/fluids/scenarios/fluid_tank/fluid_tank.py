@@ -30,6 +30,7 @@ TANK_MESH_FILENAME = "tank.obj"
 FLUID_MESH_FILENAME = "fluid.obj"
 
 SIMULATION_TIME = 5
+OUTPUT_TIME_STEP = 0.1
 TIME_STEP = 0.005
 PARTICLE_RADIUS = 0.02
 Z_SORT = False
@@ -153,7 +154,7 @@ class FluidTank:
                 "simulation_time": SIMULATION_TIME,
                 "time_step": TIME_STEP,
                 "particle_radius": PARTICLE_RADIUS,
-                "data_export_rate": 1 / engine_params.output_time_step,
+                "data_export_rate": 1 / OUTPUT_TIME_STEP,
                 "z_sort": Z_SORT,
                 "tank_filename": TANK_MESH_FILENAME,
                 "fluid_filename": FLUID_MESH_FILENAME,
@@ -176,7 +177,7 @@ class FluidTank:
 
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(sim_output_path, "vtk"),
-            output_time_step=engine_params.output_time_step,
+            output_time_step=OUTPUT_TIME_STEP,
             netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
 
         return sim_output_path
