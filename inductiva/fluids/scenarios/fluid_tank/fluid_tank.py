@@ -136,6 +136,10 @@ class FluidTank:
                 device=device,
                 engine_params=engine_params,
                 output_dir=output_dir)
+        elif engine.lower() == "dualsphysics":
+            raise NotImplementedError(
+                "The engine 'DualSPHysics' is not supported yet "
+                "for fluid tank simulations.")
         else:
             raise ValueError(f"Invalid engine `{engine}`.")
 
