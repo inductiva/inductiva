@@ -18,6 +18,7 @@ REQUIRES = [
     "jinja2",
     "tqdm",
     "gmsh",
+    "meshio",
     "vtk",
     "xarray",
 ]
