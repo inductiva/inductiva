@@ -15,12 +15,12 @@ from inductiva.fluids.shapes import Cube
 from inductiva.fluids.shapes import Cylinder
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
+from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
 from inductiva.utils.templates import replace_params_in_template_file
 
 from inductiva.fluids._output_post_processing import SimulationOutput
-from inductiva.sph.splishsplash import run_simulation
 
 from . import gmsh_utils
 
@@ -198,18 +198,17 @@ class FluidTank:
                                           SPLISHSPLASH_INPUT_FILENAME),
         )
 
-        sim_output_path = run_simulation(
-            sim_dir=input_dir,
-            input_filename=SPLISHSPLASH_INPUT_FILENAME,
-            device=device,
-            output_dir=output_dir)
+        simulator = SPlisHSPlasH(sim_dir=input_dir,
+                                 input_filename=SPLISHSPLASH_INPUT_FILENAME)
+
+        output_path = simulator.simulate(device=device, output_dir=output_dir)
 
         convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(sim_output_path, "vtk"),
+            data_dir=os.path.join(output_path, "vtk"),
             output_time_step=OUTPUT_TIME_STEP,
-            netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
+            netcdf_data_dir=os.path.join(output_path, "netcdf"))
 
-        return sim_output_path
+        return output_path
 
     def _get_bounding_box(self):
         """Gets the bounding box of the tank.
