@@ -13,9 +13,8 @@ import inductiva
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
-from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
-from inductiva.utils.templates import replace_params_in_template_file
+from inductiva.utils.templates import replace_params_in_template
 
 # Global variables to define a scenario
 TANK_DIMENSIONS = [1, 1, 1]
@@ -120,7 +119,7 @@ class FluidBlock:
         # Delete temporary input directory
         self.input_temp_dir.cleanup()
 
-        return SimulationOutput(sim_output_path)
+        return sim_output_path
 
     def _splishsplash_simulation(self):
         """Runs SPlisHSPlasH simulation via API."""
@@ -133,7 +132,7 @@ class FluidBlock:
 
         fluid_margin = 2 * self.particle_radius
 
-        replace_params_in_template_file(
+        replace_params_in_template(
             templates_dir=self.fluid_block_dir,
             template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
             params={
