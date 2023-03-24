@@ -187,8 +187,8 @@ class FluidTank:
         self._create_splishsplash_aux_files(input_dir)
         self._replace_params_in_splishsplash_template(input_dir)
 
-        simulator = SPlisHSPlasH(sim_dir=input_dir,
-                                 input_filename=SPLISHSPLASH_INPUT_FILENAME)
+        simulator = SPlisHSPlasH(
+            sim_dir=input_dir, sim_config_filename=SPLISHSPLASH_INPUT_FILENAME)
 
         output_path = simulator.simulate(device=device, output_dir=output_dir)
 

@@ -3,8 +3,6 @@ import abc
 import pathlib
 from typing import Optional
 
-from inductiva_web_api_client.models import TaskRequest
-
 from inductiva.api.methods import invoke_api
 from inductiva.types import Path
 

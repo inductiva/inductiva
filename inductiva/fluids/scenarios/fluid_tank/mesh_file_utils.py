@@ -8,17 +8,17 @@ from inductiva.fluids.shapes import Cylinder
 
 def create_tank_mesh_file(shape, outlet, path: str):
     """Creates a mesh file for the tank.
-    
+
     The tank is composed of two blocks:
     - a main (cylindrical/cubic) block representing the tank itself;
     - an optional smaller (cylindrical/cubic) block representing a fluid outlet.
       When present, the top base of this block connects with the bottom base of
       the tank, such that fluid flows freely from the tank to the outlet. The
       bottom base of the outlet is also open, such that flow exits the outlet.
-    
+
     Both blocks are assumed to have their main axes aligned with the z
     axis.
-    
+
     Args:
         shape: Shape of the tank.
         outlet: Shape of the outlet. If `None`, no outlet is present.
@@ -124,7 +124,7 @@ def create_tank_mesh_file(shape, outlet, path: str):
 
 def create_tank_fluid_mesh_file(shape, fluid_level, margin, path: str):
     """Creates a mesh file for the fluid.
-    
+
     The fluid is represented by a block with the same shape as the tank, but
     with a smaller height.
 
