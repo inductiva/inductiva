@@ -11,10 +11,12 @@ from absl import logging
 
 from inductiva_sph.splishsplash.io_utils import convert_vtk_data_dir_to_netcdf
 
-import inductiva
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
+from inductiva.fluids.simulators import SPlisHSPlasH
+from inductiva.fluids.simulators import DualSPHysics
+
 from inductiva.types import Path
 from inductiva.utils.templates import replace_params_in_template
 
@@ -167,11 +169,9 @@ class FluidBlock:
             math.ceil(self.simulation_time /
                       self.engine_parameters.output_time_step))
 
-        sim_output_path = inductiva.sph.splishsplash.run_simulation(
-            sim_dir=input_dir,
-            input_filename=SPLISHSPLASH_INPUT_FILENAME,
-            device=self.device,
-            output_dir=self.output_dir)
+        sim = SPlisHSPlasH(sim_dir=input_dir,
+                           sim_config_filename=SPLISHSPLASH_INPUT_FILENAME)
+        sim.simulate(device=self.device, output_dir=self.output_dir)
 
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(sim_output_path, "vtk"),
@@ -212,11 +212,9 @@ class FluidBlock:
         input_file.write(
             os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
 
-        return inductiva.sph.dualsphysics.run_simulation(
-            sim_dir=self.input_temp_dir.name,
-            input_filename=XML_INPUT_FILENAME[:-4],
-            device=self.device,
-            output_dir=self.output_dir)
+        sim = DualSPHysics(sim_dir=self.input_temp_dir.name,
+                           input_filename=XML_INPUT_FILENAME[:-4])
+        return sim.simulate(device=self.device, output_dir=self.output_dir)
 
     def estimate_num_particles(self):
         """Estimate of the number of SPH particles contained in fluid blocks."""
