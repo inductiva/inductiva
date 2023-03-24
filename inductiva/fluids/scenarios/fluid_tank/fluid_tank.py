@@ -57,22 +57,54 @@ class CircularTankInlet(BaseTankInlet, Circle):
 
 
 # Tank outlets.
-@dataclass
 class BaseTankOutlet:
     """Base tank outlet."""
-    top_base_position: List[float] = field(default_factory=lambda: [0, 0])
+    pass
 
 
-@dataclass
-class CubicTankOutlet(BaseTankOutlet, Cube):
+class CubicTankOutlet(BaseTankOutlet):
     """Cubic tank outlet."""
-    pass
+
+    def __init__(
+        self,
+        dimensions: List[float],
+        top_base_position: List[float],
+    ):
+        """Initializes a cubic tank outlet.
+        
+        Args:
+            dimensions: Dimensions of the outlet.
+            top_base_position: Position of the top base of the outlet.
+        """
+        self.shape = Cube(
+            dimensions=dimensions,
+            position=[*top_base_position, -dimensions[2]],
+        )
 
 
-@dataclass
-class CylindricalTankOutlet(BaseTankOutlet, Cylinder):
+class CylindricalTankOutlet(BaseTankOutlet):
     """Cylindrical tank outlet."""
-    pass
+
+    def __init__(
+        self,
+        radius: float,
+        height: float,
+        top_base_position: Optional[List[float]] = None,
+    ):
+        """Initializes a cylindrical tank outlet.
+        
+        Args:
+            radius: Radius of the outlet.
+            height: Height of the outlet.
+            top_base_position: Position of the top base of the outlet.
+        """
+        top_base_position = top_base_position or [0, 0]
+
+        self.shape = Cylinder(
+            radius=radius,
+            height=height,
+            position=[*top_base_position, -height],
+        )
 
 
 class FluidTank:
@@ -80,18 +112,12 @@ class FluidTank:
 
     def __init__(
         self,
-        shape: BaseShape = Cube(dimensions=[1, 1, 1]),
+        shape: BaseShape = Cylinder(radius=0.5, height=1),
         fluid: FluidType = WATER,
         fluid_level: float = 0,
-        inlet: Optional[BaseTankInlet] = CircularTankInlet(
-            radius=0.1,
-            position=[0, 0],
-        ),
-        outlet: Optional[BaseTankOutlet] = CylindricalTankOutlet(
-            radius=0.1,
-            height=0.1,
-            top_base_position=[0, 0],
-        ),
+        inlet: Optional[BaseTankInlet] = CircularTankInlet(radius=0.1),
+        outlet: Optional[BaseTankOutlet] = CylindricalTankOutlet(radius=0.1,
+                                                                 height=0.1),
     ):
         """Initializes a fluid tank.
         
@@ -227,41 +253,12 @@ class FluidTank:
             of the bounding box of the tank, respectively.
         """
 
-        # Get the bounding box of the tank.
-        if isinstance(self.shape, Cylinder):
-            bounding_box_min = [
-                -self.shape.radius,
-                -self.shape.radius,
-                0,
-            ]
-            bounding_box_max = [
-                self.shape.radius,
-                self.shape.radius,
-                self.shape.height,
-            ]
-
-        elif isinstance(self.shape, Cube):
-            bounding_box_min = [
-                -self.shape.dimensions[0] / 2,
-                -self.shape.dimensions[1] / 2,
-                0,
-            ]
-            bounding_box_max = [
-                self.shape.dimensions[0] / 2,
-                self.shape.dimensions[1] / 2,
-                self.shape.dimensions[2],
-            ]
-        else:
-            raise ValueError(f"Invalid tank shape `{self.shape}`.")
+        bounding_box_min, bounding_box_max = self.shape.get_bounding_box()
 
         # Extend the bounding box to include the outlet.
         if self.outlet is not None:
-            if isinstance(self.outlet, Cylinder):
-                bounding_box_min[2] = -self.outlet.height
-            elif isinstance(self.outlet, Cube):
-                bounding_box_min[2] = -self.outlet.dimensions[2]
-            else:
-                raise ValueError(f"Invalid outlet shape `{self.outlet}`.")
+            outlet_bounding_box_min, _ = self.outlet.shape.get_bounding_box()
+            bounding_box_min[2] = outlet_bounding_box_min[2]
 
         return bounding_box_min, bounding_box_max
 
@@ -293,41 +290,41 @@ def _create_tank_mesh_file(shape, outlet, path: str):
             # Add a circle arc/rectangle loop representing the top base of the
             # outlet. An arc/loop is used instead of a circle/rectangle because
             # this face is not filled, i.e. it is not a surface.
-            if isinstance(outlet, Cylinder):
+            if isinstance(outlet.shape, Cylinder):
                 p_top_outlet, c_top_outlet, l_top_outlet = \
                     gmsh_utils.add_circle_arc(
-                        x=outlet.top_base_position[0],
-                        y=outlet.top_base_position[1],
+                        x=outlet.shape.position[0],
+                        y=outlet.shape.position[1],
                         z=0,
-                        r=outlet.radius,
+                        r=outlet.shape.radius,
                     )
-            elif isinstance(outlet, Cube):
+            elif isinstance(outlet.shape, Cube):
                 p_top_outlet, c_top_outlet, l_top_outlet = \
                     gmsh_utils.add_z_rectangle_loop(
-                        x=outlet.top_base_position[0],
-                        y=outlet.top_base_position[1],
+                        x=outlet.shape.position[0],
+                        y=outlet.shape.position[1],
                         z=0,
-                        lx=outlet.dimensions[0],
-                        ly=outlet.dimensions[1],
+                        lx=outlet.shape.dimensions[0],
+                        ly=outlet.shape.dimensions[1],
                     )
 
             # Add a circle arc/rectangle loop representing the bottom base of
             # the outlet.
-            if isinstance(outlet, Cylinder):
+            if isinstance(outlet.shape, Cylinder):
                 p_bottom_outlet, c_bottom_outlet, _ = gmsh_utils.add_circle_arc(
-                    x=outlet.top_base_position[0],
-                    y=outlet.top_base_position[1],
-                    z=-outlet.height,
-                    r=outlet.radius,
+                    x=outlet.shape.position[0],
+                    y=outlet.shape.position[1],
+                    z=-outlet.shape.height,
+                    r=outlet.shape.radius,
                 )
-            elif isinstance(outlet, Cube):
+            elif isinstance(outlet.shape, Cube):
                 p_bottom_outlet, c_bottom_outlet, _ = \
                     gmsh_utils.add_z_rectangle_loop(
-                        x=outlet.top_base_position[0],
-                        y=outlet.top_base_position[1],
-                        z=-outlet.dimensions[2],
-                        lx=outlet.dimensions[0],
-                        ly=outlet.dimensions[1],
+                        x=outlet.shape.position[0],
+                        y=outlet.shape.position[1],
+                        z=-outlet.shape.dimensions[2],
+                        lx=outlet.shape.dimensions[0],
+                        ly=outlet.shape.dimensions[1],
                     )
 
             # Add the walls of the outlet (cylindrical/cubic) block.
