@@ -6,5 +6,6 @@ git+https://github.com/inductiva/inductiva-data.git
 git+https://github.com/inductiva/inductiva-utils.git
 jinja2
 tqdm
+gmsh
 vtk
 xarray

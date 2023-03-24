@@ -17,6 +17,7 @@ REQUIRES = [
     "inductiva_utils @ git+https://github.com/inductiva/inductiva-utils.git",
     "jinja2",
     "tqdm",
+    "gmsh",
     "vtk",
     "xarray",
 ]
