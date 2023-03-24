@@ -16,7 +16,7 @@ from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
 from inductiva.types import Path
-from inductiva.utils.templates import replace_params_in_template_file
+from inductiva.utils.templates import replace_params_in_template
 
 # Global variables to define a scenario
 TANK_DIMENSIONS = [1, 1, 1]
@@ -135,7 +135,7 @@ class FluidBlock:
 
         fluid_margin = 2 * self.particle_radius
 
-        replace_params_in_template_file(
+        replace_params_in_template(
             templates_dir=fluid_block_dir,
             template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
             params={

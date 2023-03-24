@@ -3,8 +3,8 @@ from typing import List, Literal, Optional
 from enum import Enum
 from dataclasses import dataclass
 
-from inductiva_sph import sph_core
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
+from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.types import Path
 from inductiva.fluids.simulators import (SPlisHSPlasHParameters,
@@ -26,7 +26,7 @@ class DamBreak(FluidBlock):
 
     def __init__(
         self,
-        fluid: sph_core.fluids.FluidProperties = WATER,
+        fluid: FluidType = WATER,
         dimensions: Optional[List[float]] = None,
         position: Optional[List[float]] = None,
     ):
