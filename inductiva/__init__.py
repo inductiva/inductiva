@@ -2,6 +2,7 @@
 import os
 
 from . import fluids
+from . import core
 
 from absl import logging
 

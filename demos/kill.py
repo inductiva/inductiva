@@ -21,7 +21,7 @@ flags.DEFINE_integer("secs", 5, "Num. secs to sleep.")
 def main(_):
     inductiva.api_url = FLAGS.api_url
 
-    inductiva.test.sleep(secs=FLAGS.secs)
+    inductiva.core.test.sleep(secs=FLAGS.secs)
 
 
 if __name__ == "__main__":

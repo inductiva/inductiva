@@ -16,7 +16,7 @@ flags.DEFINE_string("api_url", "http://api.inductiva.ai",
 def main(_):
     inductiva.api_url = FLAGS.api_url
 
-    result = inductiva.math.sum(a=1, b=1)
+    result = inductiva.core.math.sum(a=1, b=1)
 
     logging.info("Result = %s", result)
 

@@ -27,7 +27,8 @@ def main(_):
     m = utils.get_square_tridiagonal_h_matrix(FLAGS.size)
 
     time_start = time.perf_counter()
-    remote_result = inductiva.slepc.linalg.eigs(matrix=m, num_eigenpairs=10)
+    remote_result = \
+        inductiva.core.slepc.linalg.eigs(matrix=m, num_eigenpairs=10)
     logging.info("API time: %s", time.perf_counter() - time_start)
 
     time_start = time.perf_counter()
