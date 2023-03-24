@@ -5,8 +5,6 @@ import os
 import tempfile
 from typing import List, Literal, Optional, Union
 
-from inductiva_sph.splishsplash.io_utils import convert_vtk_data_dir_to_netcdf
-
 from inductiva.types import Path
 from inductiva.fluids.shapes import BaseShape
 from inductiva.fluids.shapes import Rectangle
@@ -18,6 +16,7 @@ from inductiva.fluids.fluid_types import WATER
 from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
+from inductiva.fluids.simulators.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.utils.templates import replace_params_in_template
 
 from inductiva.fluids._output_post_processing import SimulationOutput
