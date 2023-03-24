@@ -5,8 +5,6 @@ import math
 from typing import List, Literal, Optional, Union
 import shutil
 
-import xml.etree.ElementTree as ET
-
 from absl import logging
 
 from inductiva_sph.splishsplash.io_utils import convert_vtk_data_dir_to_netcdf
@@ -197,7 +195,7 @@ class FluidBlock:
             },
             output_file_path=os.path.join(self.input_temp_dir.name,
                                           DUALSPHYSICS_INPUT_FILENAME),
-                )
+        )
 
         return inductiva.sph.dualsphysics.run_simulation(
             sim_dir=self.input_temp_dir.name,
