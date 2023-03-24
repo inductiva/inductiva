@@ -1,30 +1,17 @@
 """DualSPHysics module of the API."""
-import os
-import pathlib
+from typing import Literal
 
 import inductiva
 from inductiva.types import Path
+from inductiva.fluids.simulators._base_simulator import BaseSimulator
 
 
-class DualSPHysics:
-    """Class to invoke a generic DualSPHysics simulation on the API.
+class DualSPHysics(BaseSimulator):
+    """Class to invoke a generic DualSPHysics simulation on the API."""
 
-    Attributes:
-        sim_dir: Path to the directory with all the simulation input files.
-        input_filename: Name of the DualSPHysics input file. The file should
-            be present in `sim_dir`, and the name is relative to that
-            directory. By default it is `DualSPHysics_input.xml`.
-    """
-
-    def __init__(self, sim_dir: Path, input_filename: str, device: str):
-        self.input_filename = input_filename
-        self.sim_dir = pathlib.Path(sim_dir)
-        self.device = device
-
-        if not os.path.isdir(sim_dir):
-            raise ValueError("The provided path is not a directory.")
-
-    def simulate(self, output_dir=None) -> Path:
+    def simulate(self,
+                 device: Literal["gpu", "cpu"] = "cpu",
+                 output_dir=None) -> Path:
         """Run the simulation.
 
         Args:
@@ -32,5 +19,5 @@ class DualSPHysics:
         """
         return inductiva.sph.dualsphysics.run_simulation(self.sim_dir,
                                                          self.input_filename,
-                                                         self.device,
+                                                         device,
                                                          output_dir=output_dir)

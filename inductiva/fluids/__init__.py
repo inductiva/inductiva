@@ -12,5 +12,9 @@ from .scenarios import DamBreak
 from .scenarios import FluidBlock
 from . import scenarios
 from ._output_post_processing import SimulationOutput
-from .swash import SWASH
-from .xbeach import XBeach
+from .simulators import (
+    SWASH,
+    XBeach,
+    DualSPHysics,
+    SPlisHSPlasH,
+)
