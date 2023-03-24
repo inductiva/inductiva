@@ -13,7 +13,7 @@ import inductiva
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
-from inductiva.fluids.simulators.splishsplash import convert_vtk_data_dir_to_netcdf
+from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.types import Path
 from inductiva.utils.templates import replace_params_in_template
 

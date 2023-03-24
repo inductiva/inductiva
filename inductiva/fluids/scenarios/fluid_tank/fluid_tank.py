@@ -16,7 +16,7 @@ from inductiva.fluids.fluid_types import WATER
 from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
-from inductiva.fluids.simulators.splishsplash import convert_vtk_data_dir_to_netcdf
+from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.utils.templates import replace_params_in_template
 
 from inductiva.fluids._output_post_processing import SimulationOutput
