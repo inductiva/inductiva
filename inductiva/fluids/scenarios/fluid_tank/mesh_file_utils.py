@@ -38,7 +38,7 @@ def create_tank_mesh_file(shape, outlet, path: str):
                     gmsh_utils.add_circle_arc(
                         x=outlet.shape.position[0],
                         y=outlet.shape.position[1],
-                        z=0,
+                        z=outlet.shape.position[2] + outlet.shape.height,
                         r=outlet.shape.radius,
                     )
             elif isinstance(outlet.shape, Cube):
@@ -46,7 +46,7 @@ def create_tank_mesh_file(shape, outlet, path: str):
                     gmsh_utils.add_z_rectangle_loop(
                         x=outlet.shape.position[0],
                         y=outlet.shape.position[1],
-                        z=0,
+                        z=outlet.shape.position[2] + outlet.shape.dimensions[2],
                         lx=outlet.shape.dimensions[0],
                         ly=outlet.shape.dimensions[1],
                     )
@@ -57,7 +57,7 @@ def create_tank_mesh_file(shape, outlet, path: str):
                 p_bottom_outlet, c_bottom_outlet, _ = gmsh_utils.add_circle_arc(
                     x=outlet.shape.position[0],
                     y=outlet.shape.position[1],
-                    z=-outlet.shape.height,
+                    z=outlet.shape.position[2],
                     r=outlet.shape.radius,
                 )
             elif isinstance(outlet.shape, Cube):
@@ -65,7 +65,7 @@ def create_tank_mesh_file(shape, outlet, path: str):
                     gmsh_utils.add_z_rectangle_loop(
                         x=outlet.shape.position[0],
                         y=outlet.shape.position[1],
-                        z=-outlet.shape.dimensions[2],
+                        z=outlet.shape.position[2],
                         lx=outlet.shape.dimensions[0],
                         ly=outlet.shape.dimensions[1],
                     )
@@ -83,33 +83,33 @@ def create_tank_mesh_file(shape, outlet, path: str):
         # representing the top base of the outlet as a hole.
         if isinstance(shape, Cylinder):
             p_top, c_top, _, _ = gmsh_utils.add_circle(
-                x=0,
-                y=0,
-                z=shape.height,
+                x=shape.position[0],
+                y=shape.position[1],
+                z=shape.position[2] + shape.height,
                 r=shape.radius,
                 hole_loops=[],
             )
             p_bottom, c_bottom, _, _ = gmsh_utils.add_circle(
-                x=0,
-                y=0,
-                z=0,
+                x=shape.position[0],
+                y=shape.position[1],
+                z=shape.position[2],
                 r=shape.radius,
                 hole_loops=tank_base_hole_loops,
             )
 
         elif isinstance(shape, Cube):
             p_top, c_top, _, _ = gmsh_utils.add_z_rectangle(
-                x=-shape.dimensions[0] / 2,
-                y=-shape.dimensions[1] / 2,
-                z=shape.dimensions[2],
+                x=shape.position[0],
+                y=shape.position[1],
+                z=shape.position[2] + shape.dimensions[2],
                 lx=shape.dimensions[0],
                 ly=shape.dimensions[1],
                 hole_loops=[],
             )
             p_bottom, c_bottom, _, _ = gmsh_utils.add_z_rectangle(
-                x=-shape.dimensions[0] / 2,
-                y=-shape.dimensions[1] / 2,
-                z=0,
+                x=shape.position[0],
+                y=shape.position[1],
+                z=shape.position[2],
                 lx=shape.dimensions[0],
                 ly=shape.dimensions[1],
                 hole_loops=tank_base_hole_loops,
@@ -138,9 +138,9 @@ def create_tank_fluid_mesh_file(shape, fluid_level, margin, path: str):
     if isinstance(shape, Cube):
         with gmsh_utils.gmshAPIWrapper():
             gmsh_utils.add_box(
-                -shape.dimensions[0] / 2 + margin,
-                -shape.dimensions[1] / 2 + margin,
-                margin,
+                shape.position[0] + margin,
+                shape.position[1] + margin,
+                shape.position[2] + margin,
                 shape.dimensions[0] - 2 * margin,
                 shape.dimensions[1] - 2 * margin,
                 fluid_level - 2 * margin,
@@ -149,9 +149,9 @@ def create_tank_fluid_mesh_file(shape, fluid_level, margin, path: str):
     elif isinstance(shape, Cylinder):
         with gmsh_utils.gmshAPIWrapper():
             gmsh_utils.add_cylinder(
-                0,
-                0,
-                0 + margin,
+                shape.position[0],
+                shape.position[1],
+                shape.position[2] + margin,
                 shape.radius - margin,
                 fluid_level - margin,
             )

@@ -68,7 +68,7 @@ class CubicTankOutlet(BaseTankOutlet):
     def __init__(
         self,
         dimensions: List[float],
-        top_base_position: List[float],
+        top_base_position: Optional[List[float]] = None,
     ):
         """Initializes a cubic tank outlet.
         
@@ -76,6 +76,8 @@ class CubicTankOutlet(BaseTankOutlet):
             dimensions: Dimensions of the outlet.
             top_base_position: Position of the top base of the outlet.
         """
+        top_base_position = top_base_position or [0, 0]
+
         self.shape = Cube(
             dimensions=dimensions,
             position=[*top_base_position, -dimensions[2]],
