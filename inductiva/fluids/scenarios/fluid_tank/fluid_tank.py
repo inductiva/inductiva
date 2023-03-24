@@ -22,7 +22,7 @@ from inductiva.utils.templates import replace_params_in_template
 
 from inductiva.fluids._output_post_processing import SimulationOutput
 
-from . import gmsh_utils
+from . import mesh_file_utils
 
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_tank_template.splishsplash.json.jinja"
 SPLISHSPLASH_INPUT_FILENAME = "fluid_tank.json"
@@ -200,13 +200,13 @@ class FluidTank:
     def _create_splishsplash_aux_files(self, input_dir):
         """Creates auxiliary files for SPlisHSPlasH simulation."""
 
-        _create_tank_mesh_file(
+        mesh_file_utils.create_tank_mesh_file(
             shape=self.shape,
             outlet=self.outlet,
             path=os.path.join(input_dir, TANK_MESH_FILENAME),
         )
 
-        _create_fluid_mesh_file(
+        mesh_file_utils.create_tank_fluid_mesh_file(
             shape=self.shape,
             fluid_level=self.fluid_level,
             margin=2 * PARTICLE_RADIUS,
@@ -261,159 +261,3 @@ class FluidTank:
             bounding_box_min[2] = outlet_bounding_box_min[2]
 
         return bounding_box_min, bounding_box_max
-
-
-def _create_tank_mesh_file(shape, outlet, path: str):
-    """Creates a mesh file for the tank.
-    
-    The tank is composed of two blocks:
-    - a main (cylindrical/cubic) block representing the tank itself;
-    - an optional smaller (cylindrical/cubic) block representing a fluid outlet.
-      When present, the top base of this block connects with the bottom base of
-      the tank, such that fluid flows freely from the tank to the outlet. The
-      bottom base of the outlet is also open, such that flow exits the outlet.
-    
-    Both blocks are assumed to have their main axes aligned with the z
-    axis.
-    
-    Args:
-        shape: Shape of the tank.
-        outlet: Shape of the outlet. If `None`, no outlet is present.
-        path: Path of the file to be created.
-    """
-
-    with gmsh_utils.gmshAPIWrapper():
-        tank_base_hole_loops = []
-
-        if outlet is not None:
-
-            # Add a circle arc/rectangle loop representing the top base of the
-            # outlet. An arc/loop is used instead of a circle/rectangle because
-            # this face is not filled, i.e. it is not a surface.
-            if isinstance(outlet.shape, Cylinder):
-                p_top_outlet, c_top_outlet, l_top_outlet = \
-                    gmsh_utils.add_circle_arc(
-                        x=outlet.shape.position[0],
-                        y=outlet.shape.position[1],
-                        z=0,
-                        r=outlet.shape.radius,
-                    )
-            elif isinstance(outlet.shape, Cube):
-                p_top_outlet, c_top_outlet, l_top_outlet = \
-                    gmsh_utils.add_z_rectangle_loop(
-                        x=outlet.shape.position[0],
-                        y=outlet.shape.position[1],
-                        z=0,
-                        lx=outlet.shape.dimensions[0],
-                        ly=outlet.shape.dimensions[1],
-                    )
-
-            # Add a circle arc/rectangle loop representing the bottom base of
-            # the outlet.
-            if isinstance(outlet.shape, Cylinder):
-                p_bottom_outlet, c_bottom_outlet, _ = gmsh_utils.add_circle_arc(
-                    x=outlet.shape.position[0],
-                    y=outlet.shape.position[1],
-                    z=-outlet.shape.height,
-                    r=outlet.shape.radius,
-                )
-            elif isinstance(outlet.shape, Cube):
-                p_bottom_outlet, c_bottom_outlet, _ = \
-                    gmsh_utils.add_z_rectangle_loop(
-                        x=outlet.shape.position[0],
-                        y=outlet.shape.position[1],
-                        z=-outlet.shape.dimensions[2],
-                        lx=outlet.shape.dimensions[0],
-                        ly=outlet.shape.dimensions[1],
-                    )
-
-            # Add the walls of the outlet (cylindrical/cubic) block.
-            gmsh_utils.add_cylinder_walls(p_bottom_outlet, c_bottom_outlet,
-                                          p_top_outlet, c_top_outlet)
-
-            # Add the loop representing the top base of the outlet to the list
-            # of loops representing holes in the bottom base of the tank
-            # cylinder.
-            tank_base_hole_loops.append(l_top_outlet)
-
-        # Add the top and bottom bases of the tank block, setting the loop
-        # representing the top base of the outlet as a hole.
-        if isinstance(shape, Cylinder):
-            p_top, c_top, _, _ = gmsh_utils.add_circle(
-                x=0,
-                y=0,
-                z=shape.height,
-                r=shape.radius,
-                hole_loops=[],
-            )
-            p_bottom, c_bottom, _, _ = gmsh_utils.add_circle(
-                x=0,
-                y=0,
-                z=0,
-                r=shape.radius,
-                hole_loops=tank_base_hole_loops,
-            )
-
-        elif isinstance(shape, Cube):
-            p_top, c_top, _, _ = gmsh_utils.add_z_rectangle(
-                x=-shape.dimensions[0] / 2,
-                y=-shape.dimensions[1] / 2,
-                z=shape.dimensions[2],
-                lx=shape.dimensions[0],
-                ly=shape.dimensions[1],
-                hole_loops=[],
-            )
-            p_bottom, c_bottom, _, _ = gmsh_utils.add_z_rectangle(
-                x=-shape.dimensions[0] / 2,
-                y=-shape.dimensions[1] / 2,
-                z=0,
-                lx=shape.dimensions[0],
-                ly=shape.dimensions[1],
-                hole_loops=tank_base_hole_loops,
-            )
-
-        # Add the walls of the tank (cylindrical/cubic) block.
-        gmsh_utils.add_cylinder_walls(p_bottom, c_bottom, p_top, c_top)
-
-    # Convert the msh file generated by gmsh to obj format.
-    gmsh_utils.convert_msh_to_obj_file(path)
-
-
-def _create_fluid_mesh_file(shape, fluid_level, margin, path: str):
-    """Creates a mesh file for the fluid.
-    
-    The fluid is represented by a block with the same shape as the tank, but
-    with a smaller height.
-
-    Args:
-        shape: Shape of the tank.
-        fluid_level: Height of the fluid.
-        margin: Margin to be added to the fluid block.
-        path: Path of the file to be created.
-    """
-
-    if isinstance(shape, Cube):
-        with gmsh_utils.gmshAPIWrapper():
-            gmsh_utils.add_box(
-                -shape.dimensions[0] / 2 + margin,
-                -shape.dimensions[1] / 2 + margin,
-                margin,
-                shape.dimensions[0] - 2 * margin,
-                shape.dimensions[1] - 2 * margin,
-                fluid_level - 2 * margin,
-            )
-
-    elif isinstance(shape, Cylinder):
-        with gmsh_utils.gmshAPIWrapper():
-            gmsh_utils.add_cylinder(
-                0,
-                0,
-                0 + margin,
-                shape.radius - margin,
-                fluid_level - margin,
-            )
-    else:
-        raise ValueError(f"Invalid fluid shape `{shape}`.")
-
-    # Convert the msh file generated by gmsh to obj format.
-    gmsh_utils.convert_msh_to_obj_file(path)
