@@ -7,7 +7,6 @@ from inductiva_web_api_client.models import TaskRequest
 
 from inductiva.api.methods import invoke_api
 from inductiva.types import Path
-from inductiva.utils.data import pack_input
 
 
 class BaseSimulator(abc.ABC):
@@ -43,13 +42,14 @@ class BaseSimulator(abc.ABC):
 
     def simulate(self, output_dir: Optional[Path] = None, **kwargs):
         params = {
-            "sim_dir": str(self.sim_dir),
+            "sim_dir": self.sim_dir,
             "input_filename": self.sim_config_filename,
             **kwargs
         }
 
-        request = TaskRequest(method=self.api_method_name, params=params)
+        type_annotations = {"sim_dir": Path}
 
-        input_zip = pack_input(params, {"sim_dir": Path})
-
-        return invoke_api(request, input_zip, output_dir=output_dir)
+        return invoke_api(self.api_method_name,
+                          params,
+                          type_annotations,
+                          output_dir=output_dir)

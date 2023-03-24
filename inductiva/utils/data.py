@@ -46,8 +46,7 @@ def get_validate_request_params(original_params: dict,
     params = {}
 
     for variable in original_params:
-        param_type = type_annotations[variable]
-
+        param_type = type_annotations.get(variable, None)
         if param_type in (np.ndarray, scipy.sparse):
             params[variable] = {
                 "shape": original_params[variable].shape,
@@ -103,7 +102,7 @@ def pack_param(name: str, value, param_type, dst_dir):
     return value
 
 
-def pack_input(params, type_annotations) -> str:
+def pack_input(params, type_annotations, zip_name) -> str:
     """Pack all inputs into a zip file.
 
     Pack all input params and compress all files into a zip file.
@@ -139,7 +138,7 @@ def pack_input(params, type_annotations) -> str:
 
         # Zip inputs
         zip_path = shutil.make_archive(
-            os.path.join(tempfile.gettempdir(), "input"), "zip", tmpdir_path)
+            os.path.join(tempfile.gettempdir(), zip_name), "zip", tmpdir_path)
 
         logging.debug("Compressed inputs to %s", zip_path)
 

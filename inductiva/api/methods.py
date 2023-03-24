@@ -9,7 +9,7 @@ import signal
 import time
 from contextlib import contextmanager
 
-from typing import Optional, Type
+from typing import Any, Optional, Type
 from absl import logging
 from inductiva_web_api_client import ApiClient, ApiException, Configuration
 from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
@@ -44,14 +44,20 @@ def submit_request(api_instance: TasksApi, request: TaskRequest) -> TaskStatus:
     return api_response.body
 
 
-def upload_input(api_instance, task_id, input_zip_path):
+def upload_input(api_instance, task_id, original_params, type_annotations):
     """Uploads the inputs of a given task to the API.
-
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
-        input_dir: Directory to upload.
+        original_params: Params of the request passed by the user.
+        type_annotations: Annotations of the params' types.
     """
+    input_zip_path = pack_input(
+        params=original_params,
+        type_annotations=type_annotations,
+        zip_name=task_id,
+    )
+
     logging.debug("Uploading input zip ...")
     try:
         with open(input_zip_path, "rb") as zip_fp:
@@ -232,30 +238,16 @@ def invoke_api_from_fn_ptr(params,
     """Perform a task remotely defined by a function pointer."""
     type_annotations = get_type_annotations(function_ptr)
     method_name = get_method_name(function_ptr)
-
-    request_params = get_validate_request_params(
-        original_params=params,
-        type_annotations=type_annotations,
-    )
-
-    task_request = TaskRequest(
-        method=method_name,
-        params=request_params,
-    )
-
-    input_zip = pack_input(
-        params=params,
-        type_annotations=type_annotations,
-    )
-
-    return invoke_api(task_request,
-                      input_zip,
+    return invoke_api(method_name,
+                      params,
                       output_dir=output_dir,
+                      type_annotations=type_annotations,
                       return_type=type_annotations["return"])
 
 
-def invoke_api(request: TaskRequest,
-               input_zip: Path,
+def invoke_api(method_name: str,
+               params,
+               type_annotations: dict[Any, Type],
                output_dir: Optional[Path] = None,
                return_type: Type = pathlib.Path):
     """Perform a task remotely via Inductiva's Web API.
@@ -287,15 +279,24 @@ def invoke_api(request: TaskRequest,
     Return:
         Returns the output of the task.
     """
-
     api_config = Configuration(host=inductiva.api_url)
+
+    request_params = get_validate_request_params(
+        original_params=params,
+        type_annotations=type_annotations,
+    )
+
+    task_request = TaskRequest(
+        method=method_name,
+        params=request_params,
+    )
 
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
 
         task = submit_request(
             api_instance=api_instance,
-            request=request,
+            request=task_request,
         )
 
         task_id = task["id"]
@@ -306,8 +307,9 @@ def invoke_api(request: TaskRequest,
             if task["status"] == "pending-input":
                 upload_input(
                     api_instance=api_instance,
+                    original_params=params,
                     task_id=task_id,
-                    input_zip_path=input_zip,
+                    type_annotations=type_annotations,
                 )
 
             logging.info("Request submitted.")
