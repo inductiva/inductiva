@@ -29,7 +29,7 @@ def main(_):
 
     swash_sim = inductiva.fluids.SWASH(
         sim_dir=FLAGS.sim_dir,
-        input_filename=FLAGS.input_filename,
+        sim_config_filename=FLAGS.input_filename,
     )
 
     output_path = swash_sim.simulate(

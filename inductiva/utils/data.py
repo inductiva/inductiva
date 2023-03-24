@@ -103,7 +103,7 @@ def pack_param(name: str, value, param_type, dst_dir):
     return value
 
 
-def pack_input(params, type_annotations, zip_name: str) -> str:
+def pack_input(params, type_annotations) -> str:
     """Pack all inputs into a zip file.
 
     Pack all input params and compress all files into a zip file.
@@ -115,8 +115,8 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
         params: Dict with the params that are passed into
             the request by the user.
         type_annotations: Dict with the type annotation of each param.
-        zip_name: Name to use for the zip file (excluding the file extension).
-
++           If a type annotation doesn't exist for a param, it is
+            assumed that it is JSON encodable.
     Return:
         Returns a path to zip file with the compressed input. The zip will be
         located in the temporary directory of the OS (`/tmp` in linux).
@@ -128,7 +128,7 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
             input_params[variable] = pack_param(
                 name=variable,
                 value=params[variable],
-                param_type=type_annotations[variable],
+                param_type=type_annotations.get(variable, None),
                 dst_dir=tmpdir_path,
             )
 
@@ -139,7 +139,7 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
 
         # Zip inputs
         zip_path = shutil.make_archive(
-            os.path.join(tempfile.gettempdir(), zip_name), "zip", tmpdir_path)
+            os.path.join(tempfile.gettempdir(), "input"), "zip", tmpdir_path)
 
         logging.debug("Compressed inputs to %s", zip_path)
 
@@ -234,3 +234,13 @@ def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name: str,
 
         with open(target_path, "wb") as f:
             shutil.copyfileobj(src_file, f)
+
+
+def zip_dir(dir_path, zip_name):
+    """Compress a directory into a zip file."""
+    zip_path = shutil.make_archive(
+        os.path.join(tempfile.gettempdir(), zip_name), "zip", dir_path)
+
+    logging.debug("Compressed inputs to %s", zip_path)
+
+    return zip_path
