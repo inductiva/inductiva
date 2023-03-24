@@ -5,7 +5,7 @@ from typing import Dict
 from jinja2 import Environment, FileSystemLoader
 
 
-def replace_params_in_template_file(
+def replace_params_in_template(
     templates_dir: str,
     template_filename: str,
     params: Dict,

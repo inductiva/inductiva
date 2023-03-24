@@ -18,7 +18,7 @@ from inductiva.fluids.fluid_types import WATER
 from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
-from inductiva.utils.templates import replace_params_in_template_file
+from inductiva.utils.templates import replace_params_in_template
 
 from inductiva.fluids._output_post_processing import SimulationOutput
 
@@ -156,6 +156,24 @@ class FluidTank:
 
         input_dir = self.input_temp_dir.name
 
+        self._create_splishsplash_aux_files(input_dir)
+        self._replace_params_in_splishsplash_template(input_dir)
+
+        simulator = SPlisHSPlasH(sim_dir=input_dir,
+                                 input_filename=SPLISHSPLASH_INPUT_FILENAME)
+
+        output_path = simulator.simulate(device=device, output_dir=output_dir)
+
+        convert_vtk_data_dir_to_netcdf(
+            data_dir=os.path.join(output_path, "vtk"),
+            output_time_step=OUTPUT_TIME_STEP,
+            netcdf_data_dir=os.path.join(output_path, "netcdf"))
+
+        return output_path
+
+    def _create_splishsplash_aux_files(self, input_dir):
+        """Creates auxiliary files for SPlisHSPlasH simulation."""
+
         _create_tank_mesh_file(
             shape=self.shape,
             outlet=self.outlet,
@@ -169,6 +187,9 @@ class FluidTank:
             path=os.path.join(input_dir, FLUID_MESH_FILENAME),
         )
 
+    def _replace_params_in_splishsplash_template(self, input_dir):
+        """Replaces parameters in SPlisHSPlasH template input file."""
+
         bounding_box_min, bounding_box_max = self._get_bounding_box()
         inlet_position = [
             self.inlet.position[0],
@@ -176,7 +197,7 @@ class FluidTank:
             bounding_box_max[2],
         ]
 
-        replace_params_in_template_file(
+        replace_params_in_template(
             templates_dir=os.path.dirname(__file__),
             template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
             params={
@@ -197,18 +218,6 @@ class FluidTank:
             output_file_path=os.path.join(input_dir,
                                           SPLISHSPLASH_INPUT_FILENAME),
         )
-
-        simulator = SPlisHSPlasH(sim_dir=input_dir,
-                                 input_filename=SPLISHSPLASH_INPUT_FILENAME)
-
-        output_path = simulator.simulate(device=device, output_dir=output_dir)
-
-        convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(output_path, "vtk"),
-            output_time_step=OUTPUT_TIME_STEP,
-            netcdf_data_dir=os.path.join(output_path, "netcdf"))
-
-        return output_path
 
     def _get_bounding_box(self):
         """Gets the bounding box of the tank.
