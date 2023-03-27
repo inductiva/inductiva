@@ -15,6 +15,8 @@ class BaseSimulator(abc.ABC):
         main_config_filename: Name of the main simulation config file. The file
             should be present in `sim_dir`, and the name is relative to that
             directory.
+        api_method_name: Name of the API method that will be invoked to run the
+            simulation.
     """
 
     @abc.abstractmethod
