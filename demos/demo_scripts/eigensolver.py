@@ -13,7 +13,7 @@ from absl import flags
 from absl import app
 
 import inductiva
-from demos.demo_scripts import utils
+from . import utils
 
 FLAGS = flags.FLAGS
 
