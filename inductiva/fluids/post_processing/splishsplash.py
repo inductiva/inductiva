@@ -41,7 +41,7 @@ def convert_vtk_data_dir_to_netcdf(
     netcdf_data_dir: str,
 ):
     """Converts simulation output files to netcdf format.
-   
+
     Args:
         data_dir: Data directory.
         output_time_step: Time step between output files, in seconds.
@@ -63,7 +63,7 @@ def convert_vtk_data_dir_to_netcdf(
 
 def read_vtk_file_to_xr_dataset(file_path: str, time: float) -> xr.Dataset:
     """Reads a single simulation output file to an xarray Dataset.
-    
+
     Args:
         file_path: File path.
         time: Time instant, in seconds, associated with the data in the file.

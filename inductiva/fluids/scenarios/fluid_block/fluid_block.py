@@ -9,7 +9,6 @@ import xml.etree.ElementTree as ET
 
 from absl import logging
 
-import inductiva
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
