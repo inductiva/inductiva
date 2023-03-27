@@ -1,4 +1,5 @@
 """DualSPHysics module of the API."""
+from dataclasses import dataclass
 from typing import Literal
 
 import inductiva
@@ -21,3 +22,15 @@ class DualSPHysics(BaseSimulator):
                                                          self.input_filename,
                                                          device,
                                                          output_dir=output_dir)
+
+
+@dataclass
+class DualSPHysicsParameters:
+    """Set of parameters for DualSPHysics.
+
+    Args:
+        cfl_number: Coefficient to multiply dt.
+        time_out: Time step to export the data.
+    """
+    cflnumber: float = 0.2
+    output_time_step: float = 0.01
