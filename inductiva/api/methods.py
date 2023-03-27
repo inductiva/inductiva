@@ -9,7 +9,7 @@ import signal
 import time
 from contextlib import contextmanager
 
-from typing import Any, Optional, Type
+from typing import Any, Dict, Optional, Type
 from absl import logging
 from inductiva_web_api_client import ApiClient, ApiException, Configuration
 from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
@@ -247,7 +247,7 @@ def invoke_api_from_fn_ptr(params,
 
 def invoke_api(method_name: str,
                params,
-               type_annotations: dict[Any, Type],
+               type_annotations: Dict[Any, Type],
                output_dir: Optional[Path] = None,
                return_type: Type = pathlib.Path):
     """Perform a task remotely via Inductiva's Web API.
