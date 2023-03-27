@@ -1,13 +1,13 @@
 """Base class for low-level simulators."""
-import abc
+from abc import ABC, abstractmethod
 import pathlib
 from typing import Optional
 
 from inductiva.api.methods import invoke_api
-from inductiva.types import Path
+from inductiva import types
 
 
-class BaseSimulator(abc.ABC):
+class Simulator(ABC):
     """Base class for the low-level simulator classes.
 
     Attributes:
@@ -19,16 +19,13 @@ class BaseSimulator(abc.ABC):
             simulation.
     """
 
-    @abc.abstractmethod
     def __init__(
         self,
-        sim_dir: Path,
+        sim_dir: types.Path,
         sim_config_filename: str,
-        api_method_name: str,
     ):
         self.sim_dir = pathlib.Path(sim_dir)
         self.sim_config_filename = sim_config_filename
-        self.api_method_name = api_method_name
 
         if not self.sim_dir.is_dir():
             raise ValueError(
@@ -40,14 +37,21 @@ class BaseSimulator(abc.ABC):
             raise ValueError(f"\"{sim_config_filename}\" input file not found "
                              f" in \"{self.sim_dir}\" simulation directory.")
 
-    def simulate(self, output_dir: Optional[Path] = None, **kwargs):
+    @property
+    @abstractmethod
+    def api_method_name(self) -> str:
+        pass
+
+    def simulate(self,
+                 output_dir: Optional[types.Path] = None,
+                 **kwargs) -> pathlib.Path:
         params = {
             "sim_dir": self.sim_dir,
             "input_filename": self.sim_config_filename,
             **kwargs
         }
 
-        type_annotations = {"sim_dir": Path}
+        type_annotations = {"sim_dir": types.Path}
 
         return invoke_api(self.api_method_name,
                           params,
