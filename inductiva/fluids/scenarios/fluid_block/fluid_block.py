@@ -82,7 +82,7 @@ class FluidBlock:
                  output_dir: Optional[Path] = None,
                  engine_parameters: Union[
                      DualSPHysicsParameters,
-                     SPlisHSPlasHParameters] = SPlisHSPlasHParameters):
+                     SPlisHSPlasHParameters] = SPlisHSPlasHParameters()):
         """Runs SPH simulation of the fluid block scenario.
 
         Args:
@@ -171,7 +171,8 @@ class FluidBlock:
 
         sim = SPlisHSPlasH(sim_dir=input_dir,
                            sim_config_filename=SPLISHSPLASH_INPUT_FILENAME)
-        sim.simulate(device=self.device, output_dir=self.output_dir)
+        sim_output_path = sim.simulate(device=self.device,
+                                       output_dir=self.output_dir)
 
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(sim_output_path, "vtk"),
@@ -213,7 +214,7 @@ class FluidBlock:
             os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
 
         sim = DualSPHysics(sim_dir=self.input_temp_dir.name,
-                           input_filename=XML_INPUT_FILENAME[:-4])
+                           sim_config_filename=XML_INPUT_FILENAME[:-4])
         return sim.simulate(device=self.device, output_dir=self.output_dir)
 
     def estimate_num_particles(self):
