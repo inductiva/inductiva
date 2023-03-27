@@ -1,22 +1,21 @@
-"""Sample usage of the eigensolver method using CuPy.
+"""Sample usage of SLEPc eigensolver provided by Inductiva's Web API.
 
-This is an example on how to initialize a connection the Inductiva
+This is an example on how to initialize a connection with the Inductiva
 Web API and call a function from linalg package to find eigenvalues
 and eigenvectors of a given matrix.
 """
-import inductiva
 import scipy
 import numpy as np
 import time
-import utils
 
 from absl import logging
-from absl import app
 from absl import flags
+from absl import app
+
+import inductiva
+from . import utils
 
 FLAGS = flags.FLAGS
-
-flags.DEFINE_integer("size", 1000, "Size of the square matrix to use.")
 
 flags.DEFINE_string("api_url", "http://api.inductiva.ai",
                     "Base URL of the Inductiva API.")
@@ -25,10 +24,11 @@ flags.DEFINE_string("api_url", "http://api.inductiva.ai",
 def main(_):
     inductiva.api_url = FLAGS.api_url
 
-    m = utils.get_square_tridiagonal_h_matrix(FLAGS.size)
+    m = utils.get_square_tridiagonal_h_matrix(10)
 
     time_start = time.perf_counter()
-    remote_result = inductiva.core.cupy.linalg.eigs(m=m)
+    remote_result = \
+        inductiva.core.slepc.linalg.eigs(matrix=m, num_eigenpairs=10)
     logging.info("API time: %s", time.perf_counter() - time_start)
 
     time_start = time.perf_counter()

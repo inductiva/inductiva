@@ -9,14 +9,13 @@ import xml.etree.ElementTree as ET
 
 from absl import logging
 
-from inductiva_sph.splishsplash.io_utils import convert_vtk_data_dir_to_netcdf
-
+import inductiva
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
 from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.simulators import DualSPHysics
-
+from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.types import Path
 from inductiva.utils.templates import replace_params_in_template
 
