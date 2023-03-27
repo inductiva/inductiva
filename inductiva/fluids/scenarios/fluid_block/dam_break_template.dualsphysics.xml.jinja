@@ -4,10 +4,10 @@
         <constantsdef>
             <gravity x="0" y="0" z="-9.81" comment="Gravitational acceleration" units_comment="m/s^2" />
             <rhop0 value="{{ fluid.density }}" comment="Reference density of the fluid" units_comment="kg/m^3" />
-            <hswl value="0" auto="true" comment="Maximum still water level to calculate speed of sound using coefsound" units_comment="m" />
+            <hswl value="0" auto="true" comment="Maximum still water level to calculate the speed of sound using `coefsound`" units_comment="m" />
             <gamma value="7" comment="Polytropic constant for water used in the state equation" />
             <speedsystem value="0" auto="true" comment="Maximum system speed (by default the dam-break propagation is used)" />
-            <coefsound value="20" comment="Coefficient to multiply speedsystem" />
+            <coefsound value="20" comment="Coefficient to multiply `speedsystem`" />
             <speedsound value="0" auto="true" comment="Speed of sound to use in the simulation (by default speedofsound=coefsound*speedsystem)" />
             <coefh value="1.0" comment="Coefficient to calculate the smoothing length (h=coefh*sqrt(3*dp^2) in 3D)" />
             <cflnumber value="0.2" comment="Coefficient to multiply dt" />
@@ -50,7 +50,7 @@
             <parameter key="DtIni" value="0" comment="Initial time step. Use 0 to defult use (default=h/speedsound)" units_comment="seconds" />
             <parameter key="DtMin" value="0" comment="Minimum time step. Use 0 to defult use (default=coefdtmin*h/speedsound)" units_comment="seconds" />
             <parameter key="TimeMax" value="{{ simulation_time }}" comment="Time of simulation" units_comment="seconds" />
-            <parameter key="TimeOut" value="{{ output_time_step }}" comment="Time out data" units_comment="seconds" />
+            <parameter key="TimeOut" value="{{ output_time_step }}" comment="Time frequency in which the data is exported" units_comment="seconds" />
             <simulationdomain comment="Defines domain of simulation (default=Uses minimum and maximum position of the generated particles)">
                 <posmin x="default" y="default" z="default" comment="e.g.: x=0.5, y=default-1, z=default-10%" />
                 <posmax x="default" y="default" z="default + 50%" />

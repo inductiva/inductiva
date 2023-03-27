@@ -4,6 +4,7 @@ import os
 import math
 from typing import List, Literal, Optional, Union
 import shutil
+from pathlib import PurePosixPath
 
 from absl import logging
 
@@ -13,9 +14,8 @@ import inductiva
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
-from inductiva.fluids._output_post_processing import SimulationOutput
 from inductiva.types import Path
-from inductiva.utils.templates import replace_params_in_template_file
+from inductiva.utils.templates import replace_params_in_template
 
 # Global variables to define a scenario
 TANK_DIMENSIONS = [1, 1, 1]
@@ -26,7 +26,7 @@ SPLISHSPLASH_INPUT_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
 
 DUALSPHYSICS_TEMPLATE_FILENAME = "dam_break_template.dualsphysics.xml.jinja"
-DUALSPHYSICS_INPUT_FILENAME = "InputCase.xml"
+DUALSPHYSICS_INPUT_FILENAME = "dam_break.xml"
 
 
 class FluidBlock:
@@ -120,7 +120,7 @@ class FluidBlock:
         # Delete temporary input directory
         self.input_temp_dir.cleanup()
 
-        return SimulationOutput(sim_output_path)
+        return sim_output_path
 
     def _splishsplash_simulation(self):
         """Runs SPlisHSPlasH simulation via API."""
@@ -133,7 +133,7 @@ class FluidBlock:
 
         fluid_margin = 2 * self.particle_radius
 
-        replace_params_in_template_file(
+        replace_params_in_template(
             templates_dir=self.fluid_block_dir,
             template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
             params={
@@ -181,7 +181,7 @@ class FluidBlock:
     def _dualsphysics_simulation(self):
         """Runs simulation on DualSPHysics via API."""
 
-        replace_params_in_template_file(
+        replace_params_in_template(
             templates_dir=self.fluid_block_dir,
             template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
             params={
@@ -199,7 +199,7 @@ class FluidBlock:
 
         return inductiva.sph.dualsphysics.run_simulation(
             sim_dir=self.input_temp_dir.name,
-            input_filename=DUALSPHYSICS_INPUT_FILENAME[:-4],
+            input_filename=PurePosixPath(DUALSPHYSICS_INPUT_FILENAME).stem,
             device=self.device,
             output_dir=self.output_dir)
 
