@@ -114,8 +114,10 @@ def pack_input(params, type_annotations, zip_name) -> str:
         params: Dict with the params that are passed into
             the request by the user.
         type_annotations: Dict with the type annotation of each param.
-+           If a type annotation doesn't exist for a param, it is
+            If a type annotation doesn't exist for a param, it is
             assumed that it is JSON encodable.
+        zip_name: Name of the zip file to be created.
+
     Return:
         Returns a path to zip file with the compressed input. The zip will be
         located in the temporary directory of the OS (`/tmp` in linux).
