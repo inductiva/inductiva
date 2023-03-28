@@ -21,7 +21,7 @@ def main(_):
     n = np.random.randint(10, size=(10, 10))
 
     local_result = np.matmul(m, n)
-    remote_result = inductiva.math.matmul(m=m, n=n)
+    remote_result = inductiva.core.math.matmul(m=m, n=n)
 
     success = np.allclose(local_result, remote_result)
 

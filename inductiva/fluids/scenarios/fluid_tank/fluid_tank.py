@@ -70,7 +70,7 @@ class CubicTankOutlet(BaseTankOutlet):
         top_base_position: Optional[List[float]] = None,
     ):
         """Initializes a cubic tank outlet.
-        
+
         Args:
             dimensions: Dimensions of the outlet.
             top_base_position: Position of the top base of the outlet.
@@ -93,7 +93,7 @@ class CylindricalTankOutlet(BaseTankOutlet):
         top_base_position: Optional[List[float]] = None,
     ):
         """Initializes a cylindrical tank outlet.
-        
+
         Args:
             radius: Radius of the outlet.
             height: Height of the outlet.
@@ -121,7 +121,7 @@ class FluidTank:
                                                                  height=0.1),
     ):
         """Initializes a fluid tank.
-        
+
         Args:
             shape: Shape of the tank.
             fluid: Fluid type.
@@ -144,7 +144,7 @@ class FluidTank:
         output_dir: Optional[Path] = None,
     ):
         """Simulates the fluid tank.
-        
+
         Args:
             device: Device to run the simulation on.
             engine: Simulation engine to use.
@@ -186,8 +186,8 @@ class FluidTank:
         self._create_splishsplash_aux_files(input_dir)
         self._replace_params_in_splishsplash_template(input_dir)
 
-        simulator = SPlisHSPlasH(sim_dir=input_dir,
-                                 input_filename=SPLISHSPLASH_INPUT_FILENAME)
+        simulator = SPlisHSPlasH(
+            sim_dir=input_dir, sim_config_filename=SPLISHSPLASH_INPUT_FILENAME)
 
         output_path = simulator.simulate(device=device, output_dir=output_dir)
 
@@ -248,7 +248,7 @@ class FluidTank:
 
     def _get_bounding_box(self):
         """Gets the bounding box of the tank.
-        
+
         Returns:
             Tuple of two lists representing the minimum and maximum coordinates
             of the bounding box of the tank, respectively.

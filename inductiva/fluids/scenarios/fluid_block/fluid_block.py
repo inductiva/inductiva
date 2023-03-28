@@ -11,6 +11,12 @@ from absl import logging
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.scenarios import SPlisHSPlasHScenario
 from inductiva.fluids.scenarios import DualSPHysicsScenario
+from inductiva.fluids.simulators import SPlisHSPlasHParameters
+from inductiva.fluids.simulators import DualSPHysicsParameters
+from inductiva.fluids.simulators import SPlisHSPlasH
+from inductiva.fluids.simulators import DualSPHysics
+from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
+from inductiva.types import Path
 from inductiva.utils.templates import replace_params_in_template
 
 # Global variables to define a scenario

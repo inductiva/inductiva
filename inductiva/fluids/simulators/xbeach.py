@@ -1,19 +1,26 @@
-"""XBeach module of the API."""
+"""DualSPHysics module of the API."""
+import pathlib
+from typing import Optional
 
-import inductiva
-from inductiva.fluids.simulators._base_simulator import BaseSimulator
 from inductiva.types import Path
+from inductiva.fluids.simulators._simulator import Simulator
 
 
-class XBeach(BaseSimulator):
+class XBeach(Simulator):
     """Class to invoke a generic XBeach simulation on the API."""
 
-    def simulate(self, n_cores=1, output_dir=None) -> Path:
+    @property
+    def api_method_name(self) -> str:
+        return "sw.xbeach.run_simulation"
+
+    def simulate(
+        self,
+        output_dir: Optional[Path] = None,
+        n_cores: int = 1,
+    ) -> pathlib.Path:
         """Run the simulation.
+
         Args:
-            output_dir: Directory where the generated files will be stored.
+            device: Device in which to run the simulation.
         """
-        return inductiva.sw.xbeach.run_simulation(self.sim_dir,
-                                                  self.input_filename,
-                                                  n_cores=n_cores,
-                                                  output_dir=output_dir)
+        return super().simulate(output_dir=output_dir, n_cores=n_cores)

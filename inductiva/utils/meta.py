@@ -46,7 +46,7 @@ def get_method_name(function_ptr) -> str:
     """Constructs the name of a method supported by the Web API.
 
     Example: If `function_ptr` is the function `sum` placed in the
-    `inductiva.math` module, it returns the string `math.sum`.
+    `inductiva.core.math` module, it returns the string `math.sum`.
 
     Args:
         function_ptr: Function to analyse.
@@ -55,7 +55,7 @@ def get_method_name(function_ptr) -> str:
         Returns name of the method.
     """
     module_name = function_ptr.__module__
-    module_name_segments_execept_toplevel = module_name.split(".")[1:]
-    module_name = ".".join(module_name_segments_execept_toplevel)
+    module_name_useful_segments = module_name.split(".")[2:]
+    module_name = ".".join(module_name_useful_segments)
 
     return f"{module_name}.{function_ptr.__name__}"
