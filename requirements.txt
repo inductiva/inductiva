@@ -10,3 +10,4 @@ gmsh
 meshio
 vtk
 xarray
+ipython
