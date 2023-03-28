@@ -45,49 +45,49 @@ class DamBreak(FluidBlock):
                             dimensions=dimensions,
                             position=position)
 
-    def simulate(self,
-                 engine: Literal["SPlisHSPlasH",
-                                 "DualSPHysics"] = "SPlisHSPlasH",
-                 resolution: Literal["high", "medium", "low"] = "medium",
-                 simulation_time: float = 1.,
-                 device: Literal["cpu", "gpu"] = "cpu",
-                 output_dir: Optional[Path] = None):
-        """Runs SPH simulation of Dam Break scenario.
+    # def simulate(self,
+    #              engine: Literal["SPlisHSPlasH",
+    #                              "DualSPHysics"] = "SPlisHSPlasH",
+    #              resolution: Literal["high", "medium", "low"] = "medium",
+    #              simulation_time: float = 1.,
+    #              device: Literal["cpu", "gpu"] = "cpu",
+    #              output_dir: Optional[Path] = None):
+    #     """Runs SPH simulation of Dam Break scenario.
 
-        Use the FluidBlock class to run a simulation with less freedom of
-        choice of the parameters. Namely, the Dam Break scenario only allows
-        to change the following arguments.
+    #     Use the FluidBlock class to run a simulation with less freedom of
+    #     choice of the parameters. Namely, the Dam Break scenario only allows
+    #     to change the following arguments.
 
-        Args:
-            device: Sets the device for a simulation to be run.
-            engine: The software platform to be used for the simulation.
-              Available options are (the default is DualSPHysics):
-              - SPlisHSPlasH
-              - DualSPHysics
-            resolution: Sets the fluid resolution to simulate.
-              Available options are (the default is "medium"):
-                - "high"
-                - "medium"
-                - "low"
-            simulation_time: Simulation time in seconds.
-            output_dir: Directory in which the output files will be saved. If
-              not specified, the default directory used for API tasks
-              (based on an internal ID of the task) will be used.
-        """
+    #     Args:
+    #         device: Sets the device for a simulation to be run.
+    #         engine: The software platform to be used for the simulation.
+    #           Available options are (the default is DualSPHysics):
+    #           - SPlisHSPlasH
+    #           - DualSPHysics
+    #         resolution: Sets the fluid resolution to simulate.
+    #           Available options are (the default is "medium"):
+    #             - "high"
+    #             - "medium"
+    #             - "low"
+    #         simulation_time: Simulation time in seconds.
+    #         output_dir: Directory in which the output files will be saved. If
+    #           not specified, the default directory used for API tasks
+    #           (based on an internal ID of the task) will be used.
+    #     """
 
-        particle_radius = ParticleRadius[resolution.upper()].value
+    #     particle_radius = ParticleRadius[resolution.upper()].value
 
-        if engine.lower() == "splishsplash":
-            engine_params = SPlisHSPlasHParameters()
-        else:
-            engine_params = DualSPHysicsParameters()
+    #     if engine.lower() == "splishsplash":
+    #         engine_params = SPlisHSPlasHParameters()
+    #     else:
+    #         engine_params = DualSPHysicsParameters()
 
-        sim_output_path = FluidBlock.simulate(self,
-                                              device=device,
-                                              engine=engine,
-                                              simulation_time=simulation_time,
-                                              particle_radius=particle_radius,
-                                              output_dir=output_dir,
-                                              engine_parameters=engine_params)
+    #     sim_output_path = FluidBlock.simulate(self,
+    #                                           device=device,
+    #                                           engine=engine,
+    #                                           simulation_time=simulation_time,
+    #                                           particle_radius=particle_radius,
+    #                                           output_dir=output_dir,
+    #                                           engine_parameters=engine_params)
 
-        return SimulationOutput(sim_output_path)
+    #     return SimulationOutput(sim_output_path)
