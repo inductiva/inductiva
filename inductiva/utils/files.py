@@ -16,7 +16,7 @@ def get_timestamped_path(path: Path, sep: str = "-"):
         A path that does not exist by appending the timestamp.
     """
     path = pathlib.Path(path)
-    timestamp = time.strftime("%Y-%m-%dT%H.%M.%S")
+    timestamp = time.strftime("%Y-%m-%dT%Hh%Mm%Ss")
 
     name = f"{path.stem}{sep}{timestamp}"
 
