@@ -17,7 +17,8 @@ from inductiva.types import Path
 from inductiva.fluids._output_post_processing import SimulationOutput
 
 
-class ScenarioSimulatorMixin(abc.ABC):
+# TODO: Move this class to `inductiva/scenarios._scenario.py`?
+class Scenario(abc.ABC):
     """Base class for scenario simulator mixins."""
 
     def __init__(self):
@@ -43,7 +44,7 @@ class ScenarioSimulatorMixin(abc.ABC):
         return SimulationOutput(output_path)
 
 
-class SPlisHSPlasHMixin(ScenarioSimulatorMixin):
+class SPlisHSPlasHMixin:
     """SPlisHSPlasH mixin.
     
     Defines the methods required by scenarios to be simulated with SPlisHSPlasH.
@@ -92,7 +93,7 @@ class SPlisHSPlasHMixin(ScenarioSimulatorMixin):
         pass
 
 
-class DualSPHysicsMixin(ScenarioSimulatorMixin):
+class DualSPHysicsMixin:
     """DualSPHysics mixin.
     
     Defines the methods required by scenarios to be simulated with DualSPHysics.
