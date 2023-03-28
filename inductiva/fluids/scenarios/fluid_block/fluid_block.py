@@ -4,32 +4,29 @@ import os
 import math
 from typing import List, Literal, Optional, Union
 import shutil
-
-import xml.etree.ElementTree as ET
+from pathlib import PurePosixPath
 
 from absl import logging
 
-from inductiva_sph.splishsplash.io_utils import convert_vtk_data_dir_to_netcdf
-
-import inductiva
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
-from inductiva.fluids._output_post_processing import SimulationOutput
+from inductiva.fluids.simulators import SPlisHSPlasH
+from inductiva.fluids.simulators import DualSPHysics
+from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.types import Path
-from inductiva.utils.templates import replace_params_in_template_file
+from inductiva.utils.templates import replace_params_in_template
 
 # Global variables to define a scenario
 TANK_DIMENSIONS = [1, 1, 1]
 TIME_STEP = 0.001
 
-SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash"
+SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_INPUT_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
 
-XML_INPUT_FILENAME = "InputCase.xml"
-INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), "xml_files",
-                              XML_INPUT_FILENAME)
+DUALSPHYSICS_TEMPLATE_FILENAME = "dam_break_template.dualsphysics.xml.jinja"
+DUALSPHYSICS_INPUT_FILENAME = "dam_break.xml"
 
 
 class FluidBlock:
@@ -81,7 +78,7 @@ class FluidBlock:
                  output_dir: Optional[Path] = None,
                  engine_parameters: Union[
                      DualSPHysicsParameters,
-                     SPlisHSPlasHParameters] = SPlisHSPlasHParameters):
+                     SPlisHSPlasHParameters] = SPlisHSPlasHParameters()):
         """Runs SPH simulation of the fluid block scenario.
 
         Args:
@@ -104,6 +101,7 @@ class FluidBlock:
         self.device = device
         self.output_dir = output_dir
         self.engine_parameters = engine_parameters
+        self.fluid_block_dir = os.path.dirname(__file__)
 
         # Create a temporary directory to store simulation input files
         self.input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
@@ -122,47 +120,38 @@ class FluidBlock:
         # Delete temporary input directory
         self.input_temp_dir.cleanup()
 
-        return SimulationOutput(sim_output_path)
+        return sim_output_path
 
     def _splishsplash_simulation(self):
         """Runs SPlisHSPlasH simulation via API."""
 
         input_dir = self.input_temp_dir.name
 
-        fluid_block_dir = os.path.dirname(__file__)
-        unit_box_file_path = os.path.join(fluid_block_dir,
+        unit_box_file_path = os.path.join(self.fluid_block_dir,
                                           UNIT_BOX_MESH_FILENAME)
         shutil.copy(unit_box_file_path, input_dir)
 
         fluid_margin = 2 * self.particle_radius
 
-        params = {
-            "__SIMULATION_TIME__": self.simulation_time,
-            "__TIME_STEP__": TIME_STEP,
-            "__PARTICLE_RADIUS__": self.particle_radius,
-            "__DATA_EXPORT_FPS__": 1 / self.engine_parameters.output_time_step,
-            "__TANK_FILENAME__": UNIT_BOX_MESH_FILENAME,
-            "__TANK_DIMENSIONS_X__": TANK_DIMENSIONS[0],
-            "__TANK_DIMENSIONS_Y__": TANK_DIMENSIONS[1],
-            "__TANK_DIMENSIONS_Z__": TANK_DIMENSIONS[2],
-            "__FLUID_FILENAME__": UNIT_BOX_MESH_FILENAME,
-            "__FLUID_DENSITY__": self.fluid.density,
-            "__FLUID_VISCOSITY__": self.fluid.kinematic_viscosity,
-            "__FLUID_POSITION_X__": fluid_margin,
-            "__FLUID_POSITION_Y__": fluid_margin,
-            "__FLUID_POSITION_Z__": fluid_margin,
-            "__FLUID_DIMENSIONS_X__": self.dimensions[0] - 2 * fluid_margin,
-            "__FLUID_DIMENSIONS_Y__": self.dimensions[1] - 2 * fluid_margin,
-            "__FLUID_DIMENSIONS_Z__": self.dimensions[2] - 2 * fluid_margin,
-            "__FLUID_VELOCITY_X__": self.initial_velocity[0],
-            "__FLUID_VELOCITY_Y__": self.initial_velocity[1],
-            "__FLUID_VELOCITY_Z__": self.initial_velocity[2],
-        }
-
-        replace_params_in_template_file(
-            template_file_path=os.path.join(fluid_block_dir,
-                                            SPLISHSPLASH_TEMPLATE_FILENAME),
-            params=params,
+        replace_params_in_template(
+            templates_dir=self.fluid_block_dir,
+            template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
+            params={
+                "simulation_time": self.simulation_time,
+                "time_step": TIME_STEP,
+                "particle_radius": self.particle_radius,
+                "data_export_rate": 1 / self.engine_parameters.output_time_step,
+                "tank_filename": UNIT_BOX_MESH_FILENAME,
+                "tank_dimensions": TANK_DIMENSIONS,
+                "fluid_filename": UNIT_BOX_MESH_FILENAME,
+                "fluid": self.fluid,
+                "fluid_position": [fluid_margin] * 3,
+                "fluid_dimensions": [
+                    dimension - 2 * fluid_margin
+                    for dimension in self.dimensions
+                ],
+                "fluid_velocity": self.initial_velocity,
+            },
             output_file_path=os.path.join(input_dir,
                                           SPLISHSPLASH_INPUT_FILENAME),
         )
@@ -176,11 +165,10 @@ class FluidBlock:
             math.ceil(self.simulation_time /
                       self.engine_parameters.output_time_step))
 
-        sim_output_path = inductiva.sph.splishsplash.run_simulation(
-            sim_dir=input_dir,
-            input_filename=SPLISHSPLASH_INPUT_FILENAME,
-            device=self.device,
-            output_dir=self.output_dir)
+        sim = SPlisHSPlasH(sim_dir=input_dir,
+                           sim_config_filename=SPLISHSPLASH_INPUT_FILENAME)
+        sim_output_path = sim.simulate(device=self.device,
+                                       output_dir=self.output_dir)
 
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(sim_output_path, "vtk"),
@@ -192,40 +180,26 @@ class FluidBlock:
     def _dualsphysics_simulation(self):
         """Runs simulation on DualSPHysics via API."""
 
-        # Parse XML file of a dam break scenario
-        input_file = ET.parse(INPUT_XML_PATH)
-        root = input_file.getroot()
+        replace_params_in_template(
+            templates_dir=self.fluid_block_dir,
+            template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
+            params={
+                "simulation_time": self.simulation_time,
+                "particle_radius": 2 * self.particle_radius,
+                "output_time_step": self.engine_parameters.output_time_step,
+                "tank_dimensions": TANK_DIMENSIONS,
+                "fluid_dimensions": self.dimensions,
+                "fluid_position": self.position,
+                "fluid": self.fluid,
+            },
+            output_file_path=os.path.join(self.input_temp_dir.name,
+                                          DUALSPHYSICS_INPUT_FILENAME),
+        )
 
-        # Set simulation parameters according to user input
-        root.find("./execution/parameters/parameter[@key='TimeMax']").set(
-            "value", str(self.simulation_time))
-        root.find(".//rhop0").set("value", str(self.fluid.density))
-        root.find("./execution/parameters/parameter[@key='Visco']").set(
-            "value", str(self.fluid.kinematic_viscosity))
-        root.find("./execution/parameters/parameter[@key='TimeOut']").set(
-            "value", str(self.engine_parameters.output_time_step))
-
-        self.update_axis_values_in_xml(
-            root=root,
-            parameter=".//drawbox[boxfill='solid']/size",
-            value=self.dimensions)
-        self.update_axis_values_in_xml(
-            root=root,
-            parameter=".//drawbox[boxfill='solid']/point",
-            value=self.position)
-
-        particle_size = root.find(".//definition")
-        particle_size.set("dp", str(self.particle_radius * 2))
-
-        # Create input file
-        input_file.write(
-            os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
-
-        return inductiva.sph.dualsphysics.run_simulation(
+        sim = DualSPHysics(
             sim_dir=self.input_temp_dir.name,
-            input_filename=XML_INPUT_FILENAME[:-4],
-            device=self.device,
-            output_dir=self.output_dir)
+            sim_config_filename=PurePosixPath(DUALSPHYSICS_INPUT_FILENAME).stem)
+        return sim.simulate(device=self.device, output_dir=self.output_dir)
 
     def estimate_num_particles(self):
         """Estimate of the number of SPH particles contained in fluid blocks."""
@@ -240,11 +214,3 @@ class FluidBlock:
 
         # Add number of particles to the total sum
         return n_particles_x * n_particles_y * n_particles_z
-
-    def update_axis_values_in_xml(self, root: ET.Element, parameter: str,
-                                  value: list):
-        """Sets X, Y, Z values of a given parameter in an ElementTree."""
-        param = root.find(parameter)
-        param.set("x", str(value[0]))
-        param.set("y", str(value[1]))
-        param.set("z", str(value[2]))

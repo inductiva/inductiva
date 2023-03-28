@@ -1,14 +1,8 @@
 """Client for Inductiva's web API."""
 import os
 
-from . import math
 from . import fluids
-from . import sph
-from . import sw
-from . import utils
-from . import cupy
-from . import openfoam
-from . import test
+from . import core
 
 from absl import logging
 

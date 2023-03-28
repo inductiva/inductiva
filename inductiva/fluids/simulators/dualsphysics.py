@@ -1,36 +1,39 @@
 """DualSPHysics module of the API."""
-import os
 import pathlib
+from typing import Literal, Optional
+from dataclasses import dataclass
 
-import inductiva
 from inductiva.types import Path
+from inductiva.fluids.simulators._simulator import Simulator
 
 
-class DualSPHysics:
-    """Class to invoke a generic DualSPHysics simulation on the API.
+class DualSPHysics(Simulator):
+    """Class to invoke a generic DualSPHysics simulation on the API."""
 
-    Attributes:
-        sim_dir: Path to the directory with all the simulation input files.
-        input_filename: Name of the DualSPHysics input file. The file should
-            be present in `sim_dir`, and the name is relative to that
-            directory. By default it is `DualSPHysics_input.xml`.
-    """
+    @property
+    def api_method_name(self) -> str:
+        return "sph.dualsphysics.run_simulation"
 
-    def __init__(self, sim_dir: Path, input_filename: str, device: str):
-        self.input_filename = input_filename
-        self.sim_dir = pathlib.Path(sim_dir)
-        self.device = device
-
-        if not os.path.isdir(sim_dir):
-            raise ValueError("The provided path is not a directory.")
-
-    def simulate(self, output_dir=None) -> Path:
+    def simulate(
+        self,
+        output_dir: Optional[Path] = None,
+        device: Literal["gpu", "cpu"] = "cpu",
+    ) -> pathlib.Path:
         """Run the simulation.
 
         Args:
-            output_dir: Directory where the generated files will be stored.
-        """
-        return inductiva.sph.dualsphysics.run_simulation(self.sim_dir,
-                                                         self.input_filename,
-                                                         self.device,
-                                                         output_dir=output_dir)
+            device: Device in which to run the simulation.
+            """
+        return super().simulate(output_dir=output_dir, device=device)
+
+
+@dataclass
+class DualSPHysicsParameters:
+    """Set of parameters for DualSPHysics.
+
+    Args:
+        cfl_number: Coefficient to multiply dt.
+        time_out: Time step to export the data.
+    """
+    cflnumber: float = 0.2
+    output_time_step: float = 0.01
