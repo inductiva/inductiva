@@ -2,8 +2,10 @@
 import time
 import pathlib
 
+from inductiva.types import Path
 
-def get_timestamped_path(path):
+
+def get_timestamped_path(path: Path):
     """Return a path that does not exist by appending a timestamp.
 
     Args:

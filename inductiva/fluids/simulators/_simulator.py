@@ -5,6 +5,7 @@ from typing import Optional
 
 from inductiva.api.methods import invoke_api
 from inductiva import types
+from inductiva.utils.files import get_timestamped_path
 
 
 class Simulator(ABC):
@@ -52,6 +53,11 @@ class Simulator(ABC):
         }
 
         type_annotations = {"sim_dir": types.Path}
+
+        if output_dir is None:
+            sim_dir_name = self.sim_dir.name
+            output_dir = self.sim_dir.with_name(f"{sim_dir_name}-output")
+            output_dir = get_timestamped_path(output_dir)
 
         return invoke_api(self.api_method_name,
                           params,

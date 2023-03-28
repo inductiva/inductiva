@@ -16,9 +16,12 @@ def test_get_timestamped_path_with_ext(tmp_path: pathlib.Path):
 
 
 def test_get_timestamp_path(tmp_path: pathlib.Path):
+    N = 10
+
     path = tmp_path / "output"
-    for _ in range(10):
+
+    for _ in range(N):
         path = get_timestamped_path(path)
         path.mkdir()
 
-    assert len(glob.glob(str(path.parent / "output_*"))) == 10
+    assert len(glob.glob(str(path.parent / "output_*"))) == N
