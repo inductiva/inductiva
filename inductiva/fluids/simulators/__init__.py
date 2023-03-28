@@ -9,3 +9,5 @@ from .dualsphysics import (
 )
 from .xbeach import XBeach
 from .swash import SWASH
+
+from .openfoam import OpenFOAM
