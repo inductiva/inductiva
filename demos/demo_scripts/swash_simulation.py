@@ -13,7 +13,7 @@ flags.DEFINE_string("sim_dir",
                     None,
                     "Directory with the simulation inputs.",
                     required=True)
-flags.DEFINE_string("input_filename",
+flags.DEFINE_string("sim_config_filename",
                     None,
                     "Name of the input .sws file.",
                     required=True)
@@ -29,7 +29,7 @@ def main(_):
 
     swash_sim = inductiva.fluids.SWASH(
         sim_dir=FLAGS.sim_dir,
-        input_filename=FLAGS.input_filename,
+        sim_config_filename=FLAGS.sim_config_filename,
     )
 
     output_path = swash_sim.simulate(

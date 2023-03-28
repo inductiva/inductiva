@@ -1,19 +1,20 @@
 """SWASH module of the API."""
-import inductiva
-from inductiva.fluids.simulators._base_simulator import BaseSimulator
+from typing import Optional
+from inductiva.fluids.simulators._simulator import Simulator
 from inductiva.types import Path
 
 
-class SWASH(BaseSimulator):
+class SWASH(Simulator):
     """Class to invoke a generic SWASH simulation on the API."""
 
-    def simulate(self, n_cores=1, output_dir=None) -> Path:
+    @property
+    def api_method_name(self) -> str:
+        return "sw.swash.run_simulation"
+
+    def simulate(self, output_dir: Optional[Path] = None, n_cores=1) -> Path:
         """Run the simulation.
 
         Args:
-            output_dir: Directory where the generated files will be stored.
+            n_cores: Number of MPI cores to use for the simulation.
         """
-        return inductiva.sw.swash.run_simulation(self.sim_dir,
-                                                 self.input_filename,
-                                                 n_cores=n_cores,
-                                                 output_dir=output_dir)
+        return super().simulate(n_cores=n_cores, output_dir=output_dir)

@@ -8,13 +8,13 @@ from typing import Tuple
 
 import numpy as np
 import scipy
-from api import invoke_api
+from inductiva.api import invoke_api_from_fn_ptr
 # pylint: disable=unused-argument
 
 
 def eigs(matrix: scipy.sparse,
          num_eigenpairs: int) -> Tuple[np.ndarray, np.ndarray]:
-    return invoke_api(locals(), eigs)
+    return invoke_api_from_fn_ptr(locals(), eigs)
 
 
 # pylint: enable=unused-argument
