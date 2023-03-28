@@ -1,16 +1,16 @@
 """Base classes for physical scenarios."""
 
 import abc
-import tempfile
 import os
+import tempfile
 
 from typing import Optional, Union
 
+from inductiva.fluids.simulators import SPlisHSPlasH
+from inductiva.fluids.simulators import DualSPHysics
 from inductiva.fluids.simulators import SPlisHSPlasHParameters
 from inductiva.fluids.simulators import DualSPHysicsParameters
 from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
-from inductiva.sph import splishsplash
-from inductiva.sph import dualsphysics
 from inductiva.types import Path
 
 # TODO: Move this class/submodule elsewhere, to simplify the import.
@@ -28,14 +28,17 @@ class Scenario(abc.ABC):
         self,
         simulator_params: Union[
             DualSPHysicsParameters,
-            SPlisHSPlasHParameters] = SPlisHSPlasHParameters,
+            SPlisHSPlasHParameters] = SPlisHSPlasHParameters(),
         output_dir: Optional[Path] = None,
     ):
         """Simulates the scenario."""
 
         with tempfile.TemporaryDirectory() as input_temp_dir:
-            output_path = self._simulate(simulator_params, input_temp_dir,
-                                         output_dir)
+            output_path = self._simulate(
+                simulator_params,
+                input_temp_dir,
+                output_dir,
+            )
 
         return SimulationOutput(output_path)
 
@@ -61,17 +64,10 @@ class SPlisHSPlasHScenario(Scenario, abc.ABC):
         self._replace_params_in_template_splishsplash(input_dir,
                                                       simulator_params)
 
-        output_path = splishsplash.run_simulation(
-            sim_dir=input_dir,
-            input_filename="splishsplash_config.json",
-            # device=self.device,
-            output_dir=output_dir,
-        )
+        simulator = SPlisHSPlasH(sim_dir=input_dir,
+                                 sim_config_filename="splishsplash_config.json")
 
-        # simulator = SPlisHSPlasH(sim_dir=input_dir,
-        #                          input_filename="splishsplash_config.json")
-
-        # output_path = simulator.simulate(output_dir=output_dir)
+        output_path = simulator.simulate(output_dir=output_dir)
 
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(output_path, "vtk"),
@@ -112,17 +108,10 @@ class DualSPHysicsScenario(Scenario, abc.ABC):
         self._replace_params_in_template_dualsphysics(input_dir,
                                                       simulator_params)
 
-        output_path = dualsphysics.run_simulation(
-            sim_dir=input_dir,
-            input_filename="dualsphysics_config.xml",
-            device="cpu",
-            output_dir=output_dir,
-        )
+        simulator = DualSPHysics(sim_dir=input_dir,
+                                 sim_config_filename="dualsphysics_config.xml")
 
-        # simulator = SPlisHSPlasH(sim_dir=input_dir,
-        #                          input_filename="splishsplash_config.json")
-
-        # output_path = simulator.simulate(output_dir=output_dir)
+        output_path = simulator.simulate(output_dir=output_dir)
 
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(output_path, "vtk"),
