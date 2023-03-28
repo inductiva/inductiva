@@ -1,8 +1,16 @@
+urllib3 >= 1.15
+certifi
+python-dateutil
+frozendict
 absl-py
 numpy
 scipy
-git+https://github.com/inductiva/inductiva-web-api-client.git
-git+https://github.com/inductiva/inductiva-sph.git
 git+https://github.com/inductiva/inductiva-data.git
 git+https://github.com/inductiva/inductiva-utils.git
 jinja2
+tqdm
+gmsh
+meshio
+vtk
+xarray
+ipython

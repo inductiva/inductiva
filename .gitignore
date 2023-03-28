@@ -607,3 +607,6 @@ tags
 
 # Misc
 output/
+
+# Allow client submodule tags to be committed
+!inductiva/client/**/tags

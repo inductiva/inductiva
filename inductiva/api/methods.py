@@ -4,15 +4,16 @@ The relevant function for usage outside of this file is invoke_api().
 Check the demos directory for examples on how it is used.
 """
 import os
+import pathlib
 import signal
 import time
 from contextlib import contextmanager
 
-from typing import Optional
+from typing import Any, Dict, Optional, Type
 from absl import logging
-from inductiva_web_api_client import ApiClient, ApiException, Configuration
-from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
-from inductiva_web_api_client.models import TaskRequest, TaskStatus, BodyUploadTaskInput
+from inductiva.client import ApiClient, ApiException, Configuration
+from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.client.models import TaskRequest, TaskStatus, BodyUploadTaskInput
 from inductiva.exceptions import RemoteExecutionError
 from inductiva.types import Path
 
@@ -22,31 +23,18 @@ from inductiva.utils.data import (extract_output, get_validate_request_params,
 from inductiva.utils.meta import get_method_name, get_type_annotations
 
 
-def submit_request(api_instance: TasksApi, original_params,
-                   function_ptr) -> TaskStatus:
+def submit_request(api_instance: TasksApi, request: TaskRequest) -> TaskStatus:
     """Submits a task request to the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
-        original_params: Params of the request passed by the user.
-        function_ptr: Pointer to the function that defines the requested method.
-
     Return:
         Returns the body of the HTTP response.
         Contains two fields, "id" and "status".
     """
-    request_params = get_validate_request_params(
-        original_params=original_params,
-        type_annotations=get_type_annotations(function_ptr),
-    )
-
-    task_request = TaskRequest(
-        method=get_method_name(function_ptr),
-        params=request_params,
-    )
 
     try:
-        api_response = api_instance.submit_task(body=task_request)
+        api_response = api_instance.submit_task(body=request)
     except ApiException as e:
         logging.exception("Exception when calling TasksApi->submit_task: %s", e)
         raise e
@@ -59,7 +47,6 @@ def submit_request(api_instance: TasksApi, original_params,
 def upload_input(api_instance: TasksApi, task_id, original_params,
                  type_annotations):
     """Uploads the inputs of a given task to the API.
-
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
@@ -245,7 +232,24 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
+def invoke_api_from_fn_ptr(params,
+                           function_ptr,
+                           output_dir: Optional[Path] = None):
+    """Perform a task remotely defined by a function pointer."""
+    type_annotations = get_type_annotations(function_ptr)
+    method_name = get_method_name(function_ptr)
+    return invoke_api(method_name,
+                      params,
+                      output_dir=output_dir,
+                      type_annotations=type_annotations,
+                      return_type=type_annotations["return"])
+
+
+def invoke_api(method_name: str,
+               params,
+               type_annotations: Dict[Any, Type],
+               output_dir: Optional[Path] = None,
+               return_type: Type = pathlib.Path):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -267,25 +271,32 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
             type annotations of `function_ptr`.
 
     Args:
-        params: Input params passed by the user.
-        function_ptr: Pointer to the function that defines the method
-            to be requested to the API.
+        request: Request sent to the API for validation.
+        input_dir: Directory containing the input files to be uploaded.
+        output_dir: Directory where to place the output files.
+        return_type: Type of the return value of the task, for unpacking.
 
     Return:
         Returns the output of the task.
     """
-
-    type_annotations = get_type_annotations(function_ptr)
-
     api_config = Configuration(host=inductiva.api_url)
+
+    request_params = get_validate_request_params(
+        original_params=params,
+        type_annotations=type_annotations,
+    )
+
+    task_request = TaskRequest(
+        method=method_name,
+        params=request_params,
+    )
 
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
 
         task = submit_request(
             api_instance=api_instance,
-            original_params=params,
-            function_ptr=function_ptr,
+            request=task_request,
         )
 
         task_id = task["id"]
@@ -296,8 +307,8 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
             if task["status"] == "pending-input":
                 upload_input(
                     api_instance=api_instance,
-                    task_id=task_id,
                     original_params=params,
+                    task_id=task_id,
                     type_annotations=type_annotations,
                 )
 
@@ -327,4 +338,4 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
         raise RemoteExecutionError(f"""Remote execution failed.
     Find more details in: \"{os.path.abspath(output_dir)}\".""")
 
-    return unpack_output(result_list, output_dir, type_annotations["return"])
+    return unpack_output(result_list, output_dir, return_type)
