@@ -20,7 +20,7 @@ def get_timestamped_path(path: Path, sep: str = "-"):
 
     name = f"{path.stem}{sep}{timestamp}"
 
-    return path.with_stem(name)
+    return path.with_name(name + path.suffix)
 
 
 def resolve_path(path: Path):
