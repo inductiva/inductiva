@@ -14,8 +14,8 @@ class OpenFOAM(Simulator):
         return "fvm.opemfoam.run_simulation"
 
     def simulate(self,
-                 openfoam_solver: str,
                  output_dir: Optional[Path] = None,
+                 openfoam_solver: str = "isoFoam",
                  n_cores=1) -> pathlib.Path:
         """Run the simulation.
         Args:
