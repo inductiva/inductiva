@@ -13,7 +13,7 @@ from typing import Any, Dict, Optional, Type
 from absl import logging
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
-from inductiva.client.models import TaskRequest, TaskStatus
+from inductiva.client.models import TaskRequest, TaskStatus, BodyUploadTaskInput
 from inductiva.exceptions import RemoteExecutionError
 from inductiva.types import Path
 
@@ -34,7 +34,7 @@ def submit_request(api_instance: TasksApi, request: TaskRequest) -> TaskStatus:
     """
 
     try:
-        api_response = api_instance.submit_task_task_submit_post(body=request)
+        api_response = api_instance.submit_task(body=request)
     except ApiException as e:
         logging.exception("Exception when calling TasksApi->submit_task: %s", e)
         raise e
@@ -44,7 +44,8 @@ def submit_request(api_instance: TasksApi, request: TaskRequest) -> TaskStatus:
     return api_response.body
 
 
-def upload_input(api_instance, task_id, original_params, type_annotations):
+def upload_input(api_instance: TasksApi, task_id, original_params,
+                 type_annotations):
     """Uploads the inputs of a given task to the API.
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
@@ -61,9 +62,9 @@ def upload_input(api_instance, task_id, original_params, type_annotations):
     logging.debug("Uploading input zip ...")
     try:
         with open(input_zip_path, "rb") as zip_fp:
-            _ = api_instance.upload_task_input_task_task_id_input_post(
+            _ = api_instance.upload_task_input(
                 path_params={"task_id": task_id},
-                body={"file": zip_fp},
+                body=BodyUploadTaskInput(file=zip_fp),
             )
     except ApiException as e:
         logging.exception(
@@ -73,7 +74,7 @@ def upload_input(api_instance, task_id, original_params, type_annotations):
     os.remove(input_zip_path)
 
 
-def download_output(api_instance, task_id):
+def download_output(api_instance: TasksApi, task_id):
     """Downloads the output of a given task from the API.
 
     Args:
@@ -84,7 +85,7 @@ def download_output(api_instance, task_id):
         Returns the path to the downloaded ZIP file.
     """
     try:
-        api_response = api_instance.get_task_output_task_task_id_output_get(
+        api_response = api_instance.download_task_output(
             path_params={"task_id": task_id},
             stream=True,
         )
@@ -96,7 +97,7 @@ def download_output(api_instance, task_id):
     return api_response.body.name
 
 
-def block_until_finish(api_instance, task_id: str) -> TaskRequest:
+def block_until_finish(api_instance: TasksApi, task_id: str) -> TaskRequest:
     """Block until a task executing remotely finishes execution.
 
     Args:
@@ -111,7 +112,7 @@ def block_until_finish(api_instance, task_id: str) -> TaskRequest:
     return block_until_status_is(api_instance, task_id, {"success", "failed"})
 
 
-def kill_task(api_instance, task_id: str):
+def kill_task(api_instance: TasksApi, task_id: str):
     """Kill a task that is executing remotely.
 
     The function sends a Kill request to the API and then polls until the
@@ -129,8 +130,7 @@ def kill_task(api_instance, task_id: str):
         "id" and "status".
     """
     logging.debug("Sending kill task request ...")
-    _ = api_instance.kill_task_task_task_id_kill_post(
-        path_params={"task_id": task_id},)
+    _ = api_instance.kill_task(path_params={"task_id": task_id},)
 
     logging.debug("Blocking until task is killed ...")
     out = block_until_status_is(api_instance, task_id, {"killed"})
@@ -138,7 +138,7 @@ def kill_task(api_instance, task_id: str):
     return out
 
 
-def block_until_status_is(api_instance,
+def block_until_status_is(api_instance: TasksApi,
                           task_id,
                           desired_status,
                           sleep_secs=0.5):
@@ -160,9 +160,9 @@ def block_until_status_is(api_instance,
     while True:
         try:
             api_response = \
-                api_instance.get_task_status_task_task_id_status_get(
+                api_instance.get_task_status(
                     path_params={"task_id": task_id},
-                    )
+                )
 
             status = api_response.body["status"]
 
@@ -200,7 +200,7 @@ def block_until_status_is(api_instance,
 
 
 @contextmanager
-def blocking_task_context(api_instance, task_id):
+def blocking_task_context(api_instance: TasksApi, task_id):
     """Context to handle execution of a blocking task.
 
     The context handles exceptions and the SIGINT signal, issuing a request
