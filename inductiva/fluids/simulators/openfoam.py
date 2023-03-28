@@ -18,6 +18,10 @@ class OpenFOAM(Simulator):
         """Run the simulation.
         Args:
             n_cores: Number of MPI cores to use for the simulation.
+            openfoam_solver: specific solver to simulate with OpenFOAM. 
+            OpenFOAM contains lots of solvers inside of it, which are used
+            to call the run simulation through terminal, e.g.,
+            [isoFoam, sonicFoam,...] 
         """
         return super().simulate(openfoam_solver=openfoam_solver,
                                 n_cores=n_cores,
