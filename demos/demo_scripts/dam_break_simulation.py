@@ -8,6 +8,8 @@ from absl import app
 import inductiva
 import inductiva_utils
 from inductiva.fluids.fluid_types import WATER, get_fluid_color
+from inductiva.fluids.simulators import SPlisHSPlasHParameters
+from inductiva.fluids.simulators import DualSPHysicsParameters
 
 FLAGS = flags.FLAGS
 
@@ -40,11 +42,13 @@ def main(_):
             FLAGS.fluid_dimensions),
         position=inductiva_utils.flags.cast_list_to_float(FLAGS.fluid_position))
 
-    simulation_output = scenario.simulate(output_dir=FLAGS.output_dir,
-                                          resolution=FLAGS.resolution,
-                                          engine=FLAGS.engine,
-                                          simulation_time=FLAGS.simulation_time,
-                                          device=FLAGS.device)
+    # TODO: Add back the `engine` and `simulation_time` flags once the scenario
+    # classes support them.
+    simulation_output = scenario.simulate(
+        simulator_params=DualSPHysicsParameters(),
+        resolution=FLAGS.resolution,
+        output_dir=FLAGS.output_dir,
+    )
 
     # Note: video rendering only works with SPlisHSPlasH for now
     simulation_output.render(color=get_fluid_color(WATER), alpha=0.8)
