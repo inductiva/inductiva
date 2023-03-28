@@ -1,0 +1,61 @@
+{
+    "Configuration": {
+        "stopAt": {{ simulation_time | float }},
+        "timeStepSize": {{ time_step | float }},
+        "particleRadius": {{ particle_radius | float }},
+        "simulationMethod": 4,
+        "boundaryHandlingMethod": 0,
+        "kernel": 1,
+        "cflMethod": 1,
+        "cflFactor": 0.5,
+        "cflMinTimeStepSize": 0.0001,
+        "cflMaxTimeStepSize": 0.005,
+        "gravitation": [0, 0, -9.81],
+        "gradKernel": 1,
+        "enableVTKExport": true,
+        "dataExportFPS": {{ data_export_rate | float }},
+        "particleAttributes": "velocity;density",
+        "enableZSort": {{ z_sort | tojson }}
+    },
+    "RigidBodies": [
+        {
+            "geometryFile": {{ tank_filename | tojson }},
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1],
+            "isDynamic": false
+        }
+    ],
+    "Materials": [
+        {
+            "id": "Fluid",
+            "density0": {{ fluid.density | float }},
+            "viscosity": {{ fluid.kinematic_viscosity | float }},
+            "viscosityMethod": 1,
+            "emitterReuseParticles": true,
+            "emitterBoxMin": {{ bounding_box_min | list }},
+            "emitterBoxMax": {{ bounding_box_max | list }}
+        }
+    ],
+    "FluidModels": [
+        {
+            "id": "Fluid",
+            "particleFile": {{ fluid_filename | tojson }},
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1],
+            "initialVelocity": [0, 0, 0]
+        }
+    ],
+    "Emitters": [
+        {
+            "id": "Fluid",
+            "width": {{ inlet_width | int }},
+            "height": 1,
+            "translation": {{ inlet_position | list }},
+            "rotationAxis": [0.7071067812, 0, -0.7071067812],
+            "rotationAngle": 3.141592653589793,
+            "velocity": {{ inlet_fluid_velocity | float }},
+            "emitStartTime": 0.0,
+            "type": 1
+        }
+    ]
+}

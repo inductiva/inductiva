@@ -13,9 +13,14 @@ REQUIRES = [
     "numpy",
     "scipy",
     "inductiva_web_api_client @ git+https://github.com/inductiva/inductiva-web-api-client.git",
-    "inductiva_sph @ git+https://github.com/inductiva/inductiva-sph#673f06311dd78846c7c2ed3b7344e292f85868eb",
     "inductiva_data @ git+https://github.com/inductiva/inductiva-data.git",
     "inductiva_utils @ git+https://github.com/inductiva/inductiva-utils.git",
+    "jinja2",
+    "tqdm",
+    "gmsh",
+    "meshio",
+    "vtk",
+    "xarray",
 ]
 
 setup(

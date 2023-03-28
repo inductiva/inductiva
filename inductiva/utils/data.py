@@ -21,6 +21,7 @@ from inductiva.types import Path
 
 INPUT_FILENAME = "input.json"
 OUTPUT_FILENAME = "output.json"
+ARTIFACTS_DIRNAME = "artifacts"
 
 
 def get_validate_request_params(original_params: dict,
@@ -45,8 +46,7 @@ def get_validate_request_params(original_params: dict,
     params = {}
 
     for variable in original_params:
-        param_type = type_annotations[variable]
-
+        param_type = type_annotations.get(variable, None)
         if param_type in (np.ndarray, scipy.sparse):
             params[variable] = {
                 "shape": original_params[variable].shape,
@@ -102,7 +102,7 @@ def pack_param(name: str, value, param_type, dst_dir):
     return value
 
 
-def pack_input(params, type_annotations, zip_name: str) -> str:
+def pack_input(params, type_annotations, zip_name) -> str:
     """Pack all inputs into a zip file.
 
     Pack all input params and compress all files into a zip file.
@@ -114,21 +114,22 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
         params: Dict with the params that are passed into
             the request by the user.
         type_annotations: Dict with the type annotation of each param.
-        zip_name: Name to use for the zip file (excluding the file extension).
+            If a type annotation doesn't exist for a param, it is
+            assumed that it is JSON encodable.
+        zip_name: Name of the zip file to be created.
 
     Return:
         Returns a path to zip file with the compressed input. The zip will be
         located in the temporary directory of the OS (`/tmp` in linux).
     """
     with tempfile.TemporaryDirectory() as tmpdir_path:
-        logging.debug("PACKING INPUT")
         input_params = {}
 
         for variable in params:
             input_params[variable] = pack_param(
                 name=variable,
                 value=params[variable],
-                param_type=type_annotations[variable],
+                param_type=type_annotations.get(variable, None),
                 dst_dir=tmpdir_path,
             )
 
@@ -146,7 +147,7 @@ def pack_input(params, type_annotations, zip_name: str) -> str:
     return zip_path
 
 
-def unpack_value(value: str, var_type, output_dir: str):
+def unpack_value(value: str, var_type, output_dir: Path):
     """Unpack a single output value return by the Web API.
 
     Unpack a single output value, returning it as the correct type
@@ -170,11 +171,11 @@ def unpack_value(value: str, var_type, output_dir: str):
     return type(value)
 
 
-def unpack_output(zip_path: str, output_dir: str, return_type):
-    """Unpack zip with the outputs of a task executed remotely in the API.
+def unpack_output(result_list, output_dir: Path, return_type):
+    """Transform outputs of a task executed in the API to the right objects.
 
     Args:
-        zip_path: Path to the zip file with the compressed outputs.
+        result_list: List
         output_dir: Directory in which to store the extracted outputs.
         return_type: Type annotation of the method return type. If `return_type`
             is a tuple, the return is also a tuple with the all output values
@@ -186,20 +187,8 @@ def unpack_output(zip_path: str, output_dir: str, return_type):
     if return_type is None:
         return
 
-    with zipfile.ZipFile(zip_path, "r") as zip_fp:
-        output_json = zip_fp.read(OUTPUT_FILENAME)
-        result_list = json.loads(output_json)
-
-        # Special case for if the output is a single directory, in which case
-        # write it directly to the specified output_dir.
-        if return_type == pathlib.Path:
-            dir_name = result_list[0]
-            extract_subdir_files(zip_fp, dir_name, output_dir)
-
-            return pathlib.Path(output_dir)
-
-        # Handle general case
-        zip_fp.extractall(output_dir)
+    if return_type == pathlib.Path:
+        return pathlib.Path(output_dir)
 
     if is_tuple(return_type):
         all_types = return_type.__args__
@@ -211,7 +200,17 @@ def unpack_output(zip_path: str, output_dir: str, return_type):
     return unpack_value(result_list[0], return_type, output_dir)
 
 
-def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name, output_dir):
+def extract_output(zip_path, output_dir):
+    with zipfile.ZipFile(zip_path, "r") as zip_fp:
+        output_json = zip_fp.read(OUTPUT_FILENAME)
+        result_list = json.loads(output_json)
+
+        extract_subdir_files(zip_fp, ARTIFACTS_DIRNAME, output_dir)
+    return result_list
+
+
+def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name: str,
+                         output_dir: Path):
     """Util function to extract the contents of a directory in a ZIP archive.
 
     For instance, if a ZIP archive contains a directory called `dir_name`,
@@ -236,3 +235,13 @@ def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name, output_dir):
 
         with open(target_path, "wb") as f:
             shutil.copyfileobj(src_file, f)
+
+
+def zip_dir(dir_path, zip_name):
+    """Compress a directory into a zip file."""
+    zip_path = shutil.make_archive(
+        os.path.join(tempfile.gettempdir(), zip_name), "zip", dir_path)
+
+    logging.debug("Compressed inputs to %s", zip_path)
+
+    return zip_path

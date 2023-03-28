@@ -4,49 +4,37 @@ The relevant function for usage outside of this file is invoke_api().
 Check the demos directory for examples on how it is used.
 """
 import os
+import pathlib
 import signal
 import time
 from contextlib import contextmanager
 
-from typing import Optional
+from typing import Any, Dict, Optional, Type
 from absl import logging
-from inductiva_web_api_client import ApiClient, ApiException, Configuration
-from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
-from inductiva_web_api_client.models import TaskRequest, TaskStatus
+from inductiva.client import ApiClient, ApiException, Configuration
+from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.client.models import TaskRequest, TaskStatus, BodyUploadTaskInput
+from inductiva.exceptions import RemoteExecutionError
 from inductiva.types import Path
 
 import inductiva
-from inductiva.utils.data import (get_validate_request_params, pack_input,
-                                  unpack_output)
+from inductiva.utils.data import (extract_output, get_validate_request_params,
+                                  pack_input, unpack_output)
 from inductiva.utils.meta import get_method_name, get_type_annotations
 
 
-def submit_request(api_instance: TasksApi, original_params,
-                   function_ptr) -> TaskStatus:
+def submit_request(api_instance: TasksApi, request: TaskRequest) -> TaskStatus:
     """Submits a task request to the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
-        original_params: Params of the request passed by the user.
-        function_ptr: Pointer to the function that defines the requested method.
-
     Return:
         Returns the body of the HTTP response.
         Contains two fields, "id" and "status".
     """
-    request_params = get_validate_request_params(
-        original_params=original_params,
-        type_annotations=get_type_annotations(function_ptr),
-    )
-
-    task_request = TaskRequest(
-        method=get_method_name(function_ptr),
-        params=request_params,
-    )
 
     try:
-        api_response = api_instance.submit_task_task_submit_post(
-            body=task_request)
+        api_response = api_instance.submit_task(body=request)
     except ApiException as e:
         logging.exception("Exception when calling TasksApi->submit_task: %s", e)
         raise e
@@ -56,9 +44,9 @@ def submit_request(api_instance: TasksApi, original_params,
     return api_response.body
 
 
-def upload_input(api_instance, task_id, original_params, type_annotations):
+def upload_input(api_instance: TasksApi, task_id, original_params,
+                 type_annotations):
     """Uploads the inputs of a given task to the API.
-
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
@@ -74,9 +62,9 @@ def upload_input(api_instance, task_id, original_params, type_annotations):
     logging.debug("Uploading input zip ...")
     try:
         with open(input_zip_path, "rb") as zip_fp:
-            _ = api_instance.upload_task_input_task_task_id_input_post(
+            _ = api_instance.upload_task_input(
                 path_params={"task_id": task_id},
-                body={"file": zip_fp},
+                body=BodyUploadTaskInput(file=zip_fp),
             )
     except ApiException as e:
         logging.exception(
@@ -86,7 +74,7 @@ def upload_input(api_instance, task_id, original_params, type_annotations):
     os.remove(input_zip_path)
 
 
-def download_output(api_instance, task_id):
+def download_output(api_instance: TasksApi, task_id):
     """Downloads the output of a given task from the API.
 
     Args:
@@ -97,7 +85,7 @@ def download_output(api_instance, task_id):
         Returns the path to the downloaded ZIP file.
     """
     try:
-        api_response = api_instance.get_task_output_task_task_id_output_get(
+        api_response = api_instance.download_task_output(
             path_params={"task_id": task_id},
             stream=True,
         )
@@ -109,7 +97,7 @@ def download_output(api_instance, task_id):
     return api_response.body.name
 
 
-def block_until_finish(api_instance, task_id: str) -> TaskRequest:
+def block_until_finish(api_instance: TasksApi, task_id: str) -> TaskRequest:
     """Block until a task executing remotely finishes execution.
 
     Args:
@@ -121,10 +109,10 @@ def block_until_finish(api_instance, task_id: str) -> TaskRequest:
         "id" and "status".
     """
     logging.debug("Blocking until task is finished ...")
-    return block_until_status_is(api_instance, task_id, "success")
+    return block_until_status_is(api_instance, task_id, {"success", "failed"})
 
 
-def kill_task(api_instance, task_id: str):
+def kill_task(api_instance: TasksApi, task_id: str):
     """Kill a task that is executing remotely.
 
     The function sends a Kill request to the API and then polls until the
@@ -142,16 +130,15 @@ def kill_task(api_instance, task_id: str):
         "id" and "status".
     """
     logging.debug("Sending kill task request ...")
-    _ = api_instance.kill_task_task_task_id_kill_post(
-        path_params={"task_id": task_id},)
+    _ = api_instance.kill_task(path_params={"task_id": task_id},)
 
     logging.debug("Blocking until task is killed ...")
-    out = block_until_status_is(api_instance, task_id, "killed")
+    out = block_until_status_is(api_instance, task_id, {"killed"})
     logging.info("Task terminated.")
     return out
 
 
-def block_until_status_is(api_instance,
+def block_until_status_is(api_instance: TasksApi,
                           task_id,
                           desired_status,
                           sleep_secs=0.5):
@@ -173,9 +160,9 @@ def block_until_status_is(api_instance,
     while True:
         try:
             api_response = \
-                api_instance.get_task_status_task_task_id_status_get(
+                api_instance.get_task_status(
                     path_params={"task_id": task_id},
-                    )
+                )
 
             status = api_response.body["status"]
 
@@ -204,16 +191,16 @@ def block_until_status_is(api_instance,
         prev_status = status
 
         # If status reaches the desired status, then stop polling
-        if status == desired_status:
+        if status in desired_status:
             break
 
         time.sleep(sleep_secs)
 
-    return api_response.body
+    return api_response.body["status"]
 
 
 @contextmanager
-def blocking_task_context(api_instance, task_id):
+def blocking_task_context(api_instance: TasksApi, task_id):
     """Context to handle execution of a blocking task.
 
     The context handles exceptions and the SIGINT signal, issuing a request
@@ -245,7 +232,24 @@ def blocking_task_context(api_instance, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
+def invoke_api_from_fn_ptr(params,
+                           function_ptr,
+                           output_dir: Optional[Path] = None):
+    """Perform a task remotely defined by a function pointer."""
+    type_annotations = get_type_annotations(function_ptr)
+    method_name = get_method_name(function_ptr)
+    return invoke_api(method_name,
+                      params,
+                      output_dir=output_dir,
+                      type_annotations=type_annotations,
+                      return_type=type_annotations["return"])
+
+
+def invoke_api(method_name: str,
+               params,
+               type_annotations: Dict[Any, Type],
+               output_dir: Optional[Path] = None,
+               return_type: Type = pathlib.Path):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -267,16 +271,14 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
             type annotations of `function_ptr`.
 
     Args:
-        params: Input params passed by the user.
-        function_ptr: Pointer to the function that defines the method
-            to be requested to the API.
+        request: Request sent to the API for validation.
+        input_dir: Directory containing the input files to be uploaded.
+        output_dir: Directory where to place the output files.
+        return_type: Type of the return value of the task, for unpacking.
 
     Return:
         Returns the output of the task.
     """
-
-    type_annotations = get_type_annotations(function_ptr)
-
     if inductiva.api_key is None:
         raise ValueError(
             "No API Key specified. "
@@ -286,13 +288,22 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
     api_config = Configuration(host=inductiva.api_url)
     api_config.api_key["APIKeyHeader"] = inductiva.api_key
 
+    request_params = get_validate_request_params(
+        original_params=params,
+        type_annotations=type_annotations,
+    )
+    
+    task_request = TaskRequest(
+        method=method_name,
+        params=request_params,
+    )
+
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
 
         task = submit_request(
             api_instance=api_instance,
-            original_params=params,
-            function_ptr=function_ptr,
+            request=task_request,
         )
 
         task_id = task["id"]
@@ -303,19 +314,22 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
             if task["status"] == "pending-input":
                 upload_input(
                     api_instance=api_instance,
-                    task_id=task_id,
                     original_params=params,
+                    task_id=task_id,
                     type_annotations=type_annotations,
                 )
 
             logging.info("Request submitted.")
 
-            _ = block_until_finish(
+            status = block_until_finish(
                 api_instance=api_instance,
                 task_id=task_id,
             )
 
-            logging.info("Task finished executing.")
+            if status == "success":
+                logging.info("Task executed successfuly.")
+            else:
+                logging.info("Task failed.")
 
         output_zip_path = download_output(
             api_instance=api_instance,
@@ -325,8 +339,10 @@ def invoke_api(params, function_ptr, output_dir: Optional[Path] = None):
     if output_dir is None:
         output_dir = os.path.join(inductiva.output_dir, task_id)
 
-    return unpack_output(
-        zip_path=output_zip_path,
-        output_dir=output_dir,
-        return_type=type_annotations["return"],
-    )
+    result_list = extract_output(output_zip_path, output_dir)
+
+    if status == "failed":
+        raise RemoteExecutionError(f"""Remote execution failed.
+    Find more details in: \"{os.path.abspath(output_dir)}\".""")
+
+    return unpack_output(result_list, output_dir, return_type)
