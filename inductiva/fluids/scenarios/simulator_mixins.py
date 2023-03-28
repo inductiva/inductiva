@@ -93,7 +93,10 @@ class SPlisHSPlasHMixin(ScenarioSimulatorMixin):
 
 
 class DualSPHysicsMixin(ScenarioSimulatorMixin):
-    """DualSPHysics mixin."""
+    """DualSPHysics mixin.
+    
+    Defines the methods required by scenarios to be simulated with DualSPHysics.
+    """
 
     def __init__(self):
         """Initializes a `DualSPHysicsMixin` object."""
