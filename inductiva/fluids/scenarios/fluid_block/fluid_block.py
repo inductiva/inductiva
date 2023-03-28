@@ -4,8 +4,7 @@ import os
 import math
 from typing import List, Literal, Optional, Union
 import shutil
-
-import xml.etree.ElementTree as ET
+from pathlib import PurePosixPath
 
 from absl import logging
 
@@ -26,9 +25,8 @@ SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_INPUT_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
 
-XML_INPUT_FILENAME = "InputCase.xml"
-INPUT_XML_PATH = os.path.join(os.path.dirname(__file__), "xml_files",
-                              XML_INPUT_FILENAME)
+DUALSPHYSICS_TEMPLATE_FILENAME = "dam_break_template.dualsphysics.xml.jinja"
+DUALSPHYSICS_INPUT_FILENAME = "dam_break.xml"
 
 
 class FluidBlock:
@@ -103,6 +101,7 @@ class FluidBlock:
         self.device = device
         self.output_dir = output_dir
         self.engine_parameters = engine_parameters
+        self.fluid_block_dir = os.path.dirname(__file__)
 
         # Create a temporary directory to store simulation input files
         self.input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
@@ -128,15 +127,14 @@ class FluidBlock:
 
         input_dir = self.input_temp_dir.name
 
-        fluid_block_dir = os.path.dirname(__file__)
-        unit_box_file_path = os.path.join(fluid_block_dir,
+        unit_box_file_path = os.path.join(self.fluid_block_dir,
                                           UNIT_BOX_MESH_FILENAME)
         shutil.copy(unit_box_file_path, input_dir)
 
         fluid_margin = 2 * self.particle_radius
 
         replace_params_in_template(
-            templates_dir=fluid_block_dir,
+            templates_dir=self.fluid_block_dir,
             template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
             params={
                 "simulation_time": self.simulation_time,
@@ -182,37 +180,25 @@ class FluidBlock:
     def _dualsphysics_simulation(self):
         """Runs simulation on DualSPHysics via API."""
 
-        # Parse XML file of a dam break scenario
-        input_file = ET.parse(INPUT_XML_PATH)
-        root = input_file.getroot()
+        replace_params_in_template(
+            templates_dir=self.fluid_block_dir,
+            template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
+            params={
+                "simulation_time": self.simulation_time,
+                "particle_radius": 2 * self.particle_radius,
+                "output_time_step": self.engine_parameters.output_time_step,
+                "tank_dimensions": TANK_DIMENSIONS,
+                "fluid_dimensions": self.dimensions,
+                "fluid_position": self.position,
+                "fluid": self.fluid,
+            },
+            output_file_path=os.path.join(self.input_temp_dir.name,
+                                          DUALSPHYSICS_INPUT_FILENAME),
+        )
 
-        # Set simulation parameters according to user input
-        root.find("./execution/parameters/parameter[@key='TimeMax']").set(
-            "value", str(self.simulation_time))
-        root.find(".//rhop0").set("value", str(self.fluid.density))
-        root.find("./execution/parameters/parameter[@key='Visco']").set(
-            "value", str(self.fluid.kinematic_viscosity))
-        root.find("./execution/parameters/parameter[@key='TimeOut']").set(
-            "value", str(self.engine_parameters.output_time_step))
-
-        self.update_axis_values_in_xml(
-            root=root,
-            parameter=".//drawbox[boxfill='solid']/size",
-            value=self.dimensions)
-        self.update_axis_values_in_xml(
-            root=root,
-            parameter=".//drawbox[boxfill='solid']/point",
-            value=self.position)
-
-        particle_size = root.find(".//definition")
-        particle_size.set("dp", str(self.particle_radius * 2))
-
-        # Create input file
-        input_file.write(
-            os.path.join(self.input_temp_dir.name, XML_INPUT_FILENAME))
-
-        sim = DualSPHysics(sim_dir=self.input_temp_dir.name,
-                           sim_config_filename=XML_INPUT_FILENAME[:-4])
+        sim = DualSPHysics(
+            sim_dir=self.input_temp_dir.name,
+            sim_config_filename=PurePosixPath(DUALSPHYSICS_INPUT_FILENAME).stem)
         return sim.simulate(device=self.device, output_dir=self.output_dir)
 
     def estimate_num_particles(self):
@@ -228,11 +214,3 @@ class FluidBlock:
 
         # Add number of particles to the total sum
         return n_particles_x * n_particles_y * n_particles_z
-
-    def update_axis_values_in_xml(self, root: ET.Element, parameter: str,
-                                  value: list):
-        """Sets X, Y, Z values of a given parameter in an ElementTree."""
-        param = root.find(parameter)
-        param.set("x", str(value[0]))
-        param.set("y", str(value[1]))
-        param.set("z", str(value[2]))
