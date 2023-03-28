@@ -13,8 +13,10 @@ class OpenFOAM(Simulator):
     def api_method_name(self) -> str:
         return "fvm.opemfoam.run_simulation"
 
-    def simulate(self, openfoam_solver: str,
-                 output_dir: Optional[Path] = None, n_cores=1) -> pathlib.Path:
+    def simulate(self,
+                 openfoam_solver: str,
+                 output_dir: Optional[Path] = None,
+                 n_cores=1) -> pathlib.Path:
         """Run the simulation.
         Args:
             n_cores: Number of MPI cores to use for the simulation.
@@ -23,6 +25,6 @@ class OpenFOAM(Simulator):
             to call the run simulation through terminal, e.g.,
             [isoFoam, sonicFoam,...] 
         """
-        return super().simulate(openfoam_solver=openfoam_solver,
-                                n_cores=n_cores,
-                                output_dir=output_dir)
+        return super().simulate(output_dir=output_dir,
+                                openfoam_solver=openfoam_solver,
+                                n_cores=n_cores)
