@@ -11,9 +11,9 @@ from contextlib import contextmanager
 
 from typing import Any, Dict, Optional, Type
 from absl import logging
-from inductiva_web_api_client import ApiClient, ApiException, Configuration
-from inductiva_web_api_client.apis.tags.tasks_api import TasksApi
-from inductiva_web_api_client.models import TaskRequest, TaskStatus
+from inductiva.client import ApiClient, ApiException, Configuration
+from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.client.models import TaskRequest, TaskStatus
 from inductiva.exceptions import RemoteExecutionError
 from inductiva.types import Path
 
