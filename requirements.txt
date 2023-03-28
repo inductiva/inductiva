@@ -1,6 +1,7 @@
 urllib3 >= 1.15
 certifi
 python-dateutil
+frozendict
 absl-py
 numpy
 scipy
