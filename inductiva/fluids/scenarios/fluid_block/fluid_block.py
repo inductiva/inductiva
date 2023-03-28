@@ -8,8 +8,8 @@ from typing import List, Optional
 from absl import logging
 
 from inductiva.fluids.fluid_types import FluidType
-from inductiva.fluids.scenarios import SPlisHSPlasHScenario
-from inductiva.fluids.scenarios import DualSPHysicsScenario
+from inductiva.fluids.scenarios.simulator_mixins import SPlisHSPlasHMixin
+from inductiva.fluids.scenarios.simulator_mixins import DualSPHysicsMixin
 from inductiva.utils.templates import replace_params_in_template
 
 # Global variables to define a scenario
@@ -26,7 +26,7 @@ DUALSPHYSICS_TEMPLATE_FILENAME = "dam_break_template.dualsphysics.xml.jinja"
 DUALSPHYSICS_INPUT_FILENAME = "dualsphysics_config.xml"
 
 
-class FluidBlock(SPlisHSPlasHScenario, DualSPHysicsScenario):
+class FluidBlock(SPlisHSPlasHMixin, DualSPHysicsMixin):
     """Physical scenario of a general fluid block simulation."""
 
     def __init__(self,

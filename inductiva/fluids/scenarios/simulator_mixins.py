@@ -1,4 +1,4 @@
-"""Base classes for physical scenarios."""
+"""Classes for scenario simulator mixins."""
 
 import abc
 import os
@@ -17,11 +17,11 @@ from inductiva.types import Path
 from inductiva.fluids._output_post_processing import SimulationOutput
 
 
-class Scenario(abc.ABC):
-    """Base class for physical scenarios."""
+class ScenarioSimulatorMixin(abc.ABC):
+    """Base class for scenario simulator mixins."""
 
     def __init__(self):
-        """Initializes a `Scenario` object."""
+        """Initializes a `ScenarioSimulatorMixin` object."""
         pass
 
     def simulate(
@@ -43,11 +43,14 @@ class Scenario(abc.ABC):
         return SimulationOutput(output_path)
 
 
-class SPlisHSPlasHScenario(Scenario, abc.ABC):
-    """Base class for physical scenarios."""
+class SPlisHSPlasHMixin(ScenarioSimulatorMixin):
+    """SPlisHSPlasH mixin.
+    
+    Defines the methods required by scenarios to be simulated with SPlisHSPlasH.
+    """
 
     def __init__(self):
-        """Initializes a `Scenario` object."""
+        """Initializes a `SPlisHSPlasHMixin` object."""
         pass
 
     def _simulate(self, simulator_params, input_dir, output_dir=None):
@@ -69,6 +72,8 @@ class SPlisHSPlasHScenario(Scenario, abc.ABC):
 
         output_path = simulator.simulate(output_dir=output_dir)
 
+        # TODO: Replace this by a post-processing function, e.g.
+        # `on_simulate_end()`?
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(output_path, "vtk"),
             output_time_step=simulator_params.output_time_step,
@@ -83,15 +88,15 @@ class SPlisHSPlasHScenario(Scenario, abc.ABC):
     @abc.abstractmethod
     def _replace_params_in_template_splishsplash(self, input_dir,
                                                  simulator_params):
-        """Creates auxiliary files for SPlisHSPlasH simulation."""
+        """Replaces parameters in a SPlisHSPlasH configuration template."""
         pass
 
 
-class DualSPHysicsScenario(Scenario, abc.ABC):
-    """Base class for physical scenarios."""
+class DualSPHysicsMixin(ScenarioSimulatorMixin):
+    """DualSPHysics mixin."""
 
     def __init__(self):
-        """Initializes a `Scenario` object."""
+        """Initializes a `DualSPHysicsMixin` object."""
         pass
 
     def _simulate(self, simulator_params, input_dir, output_dir=None):
@@ -113,19 +118,16 @@ class DualSPHysicsScenario(Scenario, abc.ABC):
 
         output_path = simulator.simulate(output_dir=output_dir)
 
-        convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(output_path, "vtk"),
-            output_time_step=simulator_params.output_time_step,
-            netcdf_data_dir=os.path.join(output_path, "netcdf"))
+        # TODO: Add default post-processing? Convert to NetCDF?
 
         return output_path
 
     def _create_aux_files_dualsphysics(self, input_dir):
-        """Creates auxiliary files for SPlisHSPlasH simulation."""
+        """Creates auxiliary files for DualSPHysics simulation."""
         pass
 
     @abc.abstractmethod
     def _replace_params_in_template_dualsphysics(self, input_dir,
                                                  simulator_params):
-        """Creates auxiliary files for SPlisHSPlasH simulation."""
+        """Replaces parameters in a DualSPHysics configuration template."""
         pass
