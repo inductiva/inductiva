@@ -292,7 +292,7 @@ def invoke_api(method_name: str,
         original_params=params,
         type_annotations=type_annotations,
     )
-    
+
     task_request = TaskRequest(
         method=method_name,
         params=request_params,
