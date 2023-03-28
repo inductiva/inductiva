@@ -16,6 +16,8 @@ from inductiva.utils.templates import replace_params_in_template
 # Global variables to define a scenario
 TANK_DIMENSIONS = [1, 1, 1]
 TIME_STEP = 0.001
+
+# TODO: Add these as parameters of `simulate`? Or as simulation parameters?
 PARTICLE_RADIUS = 0.02
 SIMULATION_TIME = 1
 
