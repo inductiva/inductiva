@@ -25,4 +25,3 @@ class DualSPHysics(Simulator):
             device: Device in which to run the simulation.
         """
         return super().run(sim_dir, output_dir, device=device)
-

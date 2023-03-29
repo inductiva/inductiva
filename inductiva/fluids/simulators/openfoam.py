@@ -6,7 +6,6 @@ from inductiva import types
 from inductiva.simulation import Simulator
 
 
-
 class OpenFOAM(Simulator):
     """Class to invoke a generic DualSPHysics simulation on the API."""
 
@@ -30,4 +29,9 @@ class OpenFOAM(Simulator):
                 to call the run simulation through terminal, e.g.,
                 [isoFoam, sonicFoam, ...]. The default solver is isoFoam.
         """
-        return super().run(sim_dir, output_dir, openfoam_solver=openfoam_solver, n_cores=n_cores)
+        return super().run(
+            sim_dir,
+            output_dir,
+            openfoam_solver=openfoam_solver,
+            n_cores=n_cores,
+        )
