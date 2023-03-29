@@ -342,11 +342,11 @@ def invoke_api(method_name: str,
 
 
 def run_simulation(
-        api_method_name: str,
-        sim_dir: pathlib.Path,
-        output_dir: pathlib.Path,
-        params: Dict[str, Any],
-    ) -> pathlib.Path:
+    api_method_name: str,
+    sim_dir: pathlib.Path,
+    output_dir: pathlib.Path,
+    params: Dict[str, Any],
+) -> pathlib.Path:
 
     params = {
         "sim_dir": sim_dir,
@@ -365,7 +365,6 @@ def run_simulation(
     )
 
     if not isinstance(result, pathlib.Path):
-        raise RuntimeError(
-            f"Expected result to be a Path, got {type(result)}")
+        raise RuntimeError(f"Expected result to be a Path, got {type(result)}")
 
     return result

@@ -1,7 +1,7 @@
 """Base class for low-level simulators."""
 from abc import ABC, abstractmethod
 import pathlib
-from typing import Any, Dict, Optional, Literal
+from typing import Optional
 
 from inductiva import api
 from inductiva import types
@@ -10,16 +10,18 @@ from inductiva.utils import files
 
 class Simulator(ABC):
     """Base simulator class."""
+
     @property
     @abstractmethod
     def api_method_name(self) -> str:
         pass
 
-    def run(self,
-            sim_dir: types.Path,
-            output_dir: Optional[types.Path] = None,
-            **kwargs,
-        ) -> pathlib.Path:
+    def run(
+        self,
+        sim_dir: types.Path,
+        output_dir: Optional[types.Path] = None,
+        **kwargs,
+    ) -> pathlib.Path:
         """Run the simulation."""
         sim_dir = pathlib.Path(sim_dir)
         if not sim_dir.is_dir():
@@ -38,4 +40,3 @@ class Simulator(ABC):
             output_dir,
             params=kwargs,
         )
-
