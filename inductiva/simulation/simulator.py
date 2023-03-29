@@ -9,10 +9,7 @@ from inductiva.utils import files
 
 
 class Simulator(ABC):
-    """Base simulator class..
-
-    Attributes:
-    """
+    """Base simulator class."""
     @property
     @abstractmethod
     def api_method_name(self) -> str:

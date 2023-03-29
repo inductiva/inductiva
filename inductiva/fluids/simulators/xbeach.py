@@ -2,8 +2,8 @@
 import pathlib
 from typing import Optional
 
-from inductiva.types import Path
-from inductiva.fluids.simulators._simulator import Simulator
+from inductiva import types
+from inductiva.simulation import Simulator
 
 
 class XBeach(Simulator):
@@ -13,14 +13,15 @@ class XBeach(Simulator):
     def api_method_name(self) -> str:
         return "sw.xbeach.run_simulation"
 
-    def simulate(
+    def run(
         self,
-        output_dir: Optional[Path] = None,
+        sim_dir: types.Path,
+        output_dir: Optional[types.Path] = None,
         n_cores: int = 1,
     ) -> pathlib.Path:
         """Run the simulation.
 
         Args:
-            device: Device in which to run the simulation.
+            n_cores: Number of MPI cores to use for the simulation.
         """
-        return super().simulate(output_dir=output_dir, n_cores=n_cores)
+        return super().run(sim_dir, output_dir=output_dir, n_cores=n_cores)
