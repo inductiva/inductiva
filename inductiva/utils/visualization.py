@@ -24,11 +24,11 @@ def create_movie_from_frames(frames_dir: str,
                              movie_path: str,
                              fps: int = 10) -> None:
     """Creates movie from a series of png image files.
-    
-    The order of the png image file names determines the order with which they 
+
+    The order of the png image file names determines the order with which they
     are rendered in the movie. For example, image 'frame-001.png' will appear
     before 'frame-002.png'.
-    
+
     Args:
         frames_dir: Directory where the png files are stored.
         movie_path: Path to the movie to be created.

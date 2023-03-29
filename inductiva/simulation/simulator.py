@@ -19,6 +19,8 @@ class Simulator(ABC):
     def run(
         self,
         sim_dir: types.Path,
+        *_args,  # unused in this method, but defined to allow for more
+        # non-default arguments in method override in subclasses.
         output_dir: Optional[types.Path] = None,
         **kwargs,
     ) -> pathlib.Path:
