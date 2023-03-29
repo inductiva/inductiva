@@ -2,7 +2,7 @@
 import tempfile
 import os
 import math
-from typing import List, Literal, Optional, Union
+from typing import List, Literal, Optional
 import shutil
 from pathlib import PurePosixPath
 
@@ -194,12 +194,12 @@ class FluidBlock:
         )
 
         simulator = DualSPHysics()
-        sim = simulator.run(
+        return simulator.run(
             sim_dir=self.input_temp_dir.name,
             sim_config_filename=PurePosixPath(DUALSPHYSICS_INPUT_FILENAME).stem,
             device=self.device,
-              output_dir=self.output_dir,
-            )
+            output_dir=self.output_dir,
+        )
 
     def estimate_num_particles(self):
         """Estimate of the number of SPH particles contained in fluid blocks."""

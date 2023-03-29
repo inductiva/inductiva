@@ -44,11 +44,11 @@ class DamBreak(FluidBlock):
                             position=position)
 
     def simulate(self,
+                 device: Literal["cpu", "gpu"] = "cpu",
                  engine: Literal["SPlisHSPlasH",
                                  "DualSPHysics"] = "SPlisHSPlasH",
                  resolution: Literal["high", "medium", "low"] = "medium",
                  simulation_time: float = 1.,
-                 device: Literal["cpu", "gpu"] = "cpu",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of Dam Break scenario.
 
