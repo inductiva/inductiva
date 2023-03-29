@@ -8,6 +8,9 @@ from pathlib import PurePosixPath
 
 from absl import logging
 
+from inductiva.fluids.scenarios.scenario import Scenario
+from inductiva.simulation import Simulator
+
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.simulators import DualSPHysics
@@ -30,8 +33,13 @@ DUALSPHYSICS_TEMPLATE_FILENAME = "dam_break_template.dualsphysics.xml.jinja"
 DUALSPHYSICS_INPUT_FILENAME = "dam_break.xml"
 
 
-class FluidBlock:
+class FluidBlock(Scenario):
     """Physical scenario of a general fluid block simulation."""
+
+    _gen_config = {
+        SPlisHSPlasH: _gen_splishsplash_config,
+        DualSPHysics: _gen_dualsphysics_config,
+    }
 
     def __init__(self,
                  density: float,
@@ -72,11 +80,11 @@ class FluidBlock:
 
     def simulate(
         self,
-        device: Literal["cpu", "gpu"] = "cpu",
-        engine: Literal["DualSPHysics", "SPlisHSPlasH"] = "SPlisHSPlasH",
-        simulation_time: float = 1.,
-        particle_radius: float = 0.015,
+        simulator: Simulator,
+        # simulation_time: float = 1.,
+        # particle_radius: float = 0.015,
         output_dir: Optional[Path] = None,
+        device: Literal["cpu", "gpu"] = "cpu",
     ):
         """Runs SPH simulation of the fluid block scenario.
 
@@ -95,33 +103,18 @@ class FluidBlock:
                 (based on an internal ID of the task) will be used.
             engine_parameters: Simulator specific parameters.
         """
-        self.particle_radius = particle_radius
-        self.simulation_time = simulation_time
-        self.device: Literal["cpu", "gpu"] = device
-        self.output_dir = output_dir
-        self.fluid_block_dir = os.path.dirname(__file__)
 
         # Create a temporary directory to store simulation input files
-        self.input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
+        with tempfile.TemporaryDirectory() as input_dir:
+            self._gen_config[type(simulator)](simulator, input_dir)
+            output_path = super().simulate(simulator,
+                                           input_dir,
+                                           output_dir=output_dir,
+                                           device=device)
 
-        if engine.lower() == "splishsplash":
-            sim_output_path = self._splishsplash_simulation()
-        elif engine.lower() == "dualsphysics":
-            sim_output_path = self._dualsphysics_simulation()
-        else:
-            raise ValueError("Entered `engine` does not exist or it \
-                             does not match with `engine_parameters` class")
+        return output_path
 
-        # Delete temporary input directory
-        self.input_temp_dir.cleanup()
-
-        return sim_output_path
-
-    def _splishsplash_simulation(self):
-        """Runs SPlisHSPlasH simulation via API."""
-
-        input_dir = self.input_temp_dir.name
-
+    def _gen_splishsplash_config(self, input_dir):
         unit_box_file_path = os.path.join(self.fluid_block_dir,
                                           UNIT_BOX_MESH_FILENAME)
         shutil.copy(unit_box_file_path, input_dir)
@@ -129,7 +122,7 @@ class FluidBlock:
         fluid_margin = 2 * self.particle_radius
 
         replace_params_in_template(
-            templates_dir=self.fluid_block_dir,
+            templates_dir=os.path.dirname(__file__),
             template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
             params={
                 "simulation_time": self.simulation_time,
@@ -151,54 +144,27 @@ class FluidBlock:
                                           SPLISHSPLASH_INPUT_FILENAME),
         )
 
-        logging.info("Estimated number of particles %d",
-                     self.estimate_num_particles())
-        logging.info("Estimated number of time steps %s",
-                     math.ceil(self.simulation_time / TIME_STEP))
-        logging.info(
-            "Number of output time steps %s",
-            math.ceil(self.simulation_time / SPLISHSPLASH_OUTPUT_TIM_STEP))
+    # convert_vtk_data_dir_to_netcdf(
+    #     data_dir=os.path.join(sim_output_path, "vtk"),
+    #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
+    #     netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
 
-        simulator = SPlisHSPlasH()
-        sim_output_path = simulator.run(
-            sim_dir=input_dir,
-            device=self.device,
-            output_dir=self.output_dir,
-            sim_config_filename=SPLISHSPLASH_INPUT_FILENAME,
-        )
-
-        convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(sim_output_path, "vtk"),
-            output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
-            netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
-
-        return sim_output_path
-
-    def _dualsphysics_simulation(self):
-        """Runs simulation on DualSPHysics via API."""
+    def _gen_dualsphysics_config(self, input_dir):
 
         replace_params_in_template(
-            templates_dir=self.fluid_block_dir,
+            templates_dir=os.path.dirname(__file__),
             template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
             params={
                 "simulation_time": self.simulation_time,
-                "particle_radius": 2 * self.particle_radius,
+                "particle_distance": 2 * self.particle_radius,
                 "output_time_step": DUALSPH_OUTPUT_TIME_STEP,
                 "tank_dimensions": TANK_DIMENSIONS,
                 "fluid_dimensions": self.dimensions,
                 "fluid_position": self.position,
                 "fluid": self.fluid,
             },
-            output_file_path=os.path.join(self.input_temp_dir.name,
+            output_file_path=os.path.join(input_dir,
                                           DUALSPHYSICS_INPUT_FILENAME),
-        )
-
-        simulator = DualSPHysics()
-        return simulator.run(
-            sim_dir=self.input_temp_dir.name,
-            sim_config_filename=PurePosixPath(DUALSPHYSICS_INPUT_FILENAME).stem,
-            device=self.device,
-            output_dir=self.output_dir,
         )
 
     def estimate_num_particles(self):
