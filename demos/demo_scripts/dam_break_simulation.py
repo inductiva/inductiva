@@ -6,8 +6,8 @@ from absl import flags
 from absl import app
 
 import inductiva
-import inductiva_utils
 from inductiva.fluids.fluid_types import WATER, get_fluid_color
+from inductiva.utils.flags import cast_list_to_float
 
 FLAGS = flags.FLAGS
 
@@ -36,9 +36,8 @@ def main(_):
 
     scenario = inductiva.fluids.DamBreak(
         fluid=WATER,
-        dimensions=inductiva_utils.flags.cast_list_to_float(
-            FLAGS.fluid_dimensions),
-        position=inductiva_utils.flags.cast_list_to_float(FLAGS.fluid_position))
+        dimensions=cast_list_to_float(FLAGS.fluid_dimensions),
+        position=cast_list_to_float(FLAGS.fluid_position))
 
     simulation_output = scenario.simulate(output_dir=FLAGS.output_dir,
                                           resolution=FLAGS.resolution,

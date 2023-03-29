@@ -5,13 +5,16 @@ from typing import Optional
 
 from inductiva.api.methods import invoke_api
 from inductiva import types
+from inductiva.utils.files import get_timestamped_path, resolve_path
 
 
 class Simulator(ABC):
     """Base class for the low-level simulator classes.
 
     Attributes:
-        sim_dir: Path to the directory with all the simulation input files.
+        sim_dir: Path to the directory with all the simulation input files. If
+            the path is relative, it is considered as being relative to the
+            `inductiva.working_dir` directory.
         main_config_filename: Name of the main simulation config file. The file
             should be present in `sim_dir`, and the name is relative to that
             directory.
@@ -24,7 +27,7 @@ class Simulator(ABC):
         sim_dir: types.Path,
         sim_config_filename: str,
     ):
-        self.sim_dir = pathlib.Path(sim_dir)
+        self.sim_dir = resolve_path(sim_dir)
         self.sim_config_filename = sim_config_filename
 
         if not self.sim_dir.is_dir():
@@ -45,6 +48,13 @@ class Simulator(ABC):
     def simulate(self,
                  output_dir: Optional[types.Path] = None,
                  **kwargs) -> pathlib.Path:
+        if output_dir is None:
+            sim_dir_name = self.sim_dir.name
+            output_dir = self.sim_dir.with_name(f"{sim_dir_name}-output")
+            output_dir = get_timestamped_path(output_dir)
+        else:
+            output_dir = resolve_path(output_dir)
+
         params = {
             "sim_dir": self.sim_dir,
             "input_filename": self.sim_config_filename,

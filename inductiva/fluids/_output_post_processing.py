@@ -6,7 +6,7 @@ from IPython.display import HTML
 
 import xarray as xr
 
-from inductiva_data import visualization
+from inductiva.utils import visualization
 from inductiva.types import Path
 
 

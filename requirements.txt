@@ -5,12 +5,13 @@ frozendict
 absl-py
 numpy
 scipy
-git+https://github.com/inductiva/inductiva-data.git
-git+https://github.com/inductiva/inductiva-utils.git
 jinja2
 tqdm
 gmsh
 meshio
 vtk
 xarray
+matplotlib
+imageio
+imageio-ffmpeg
 ipython
