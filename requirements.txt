@@ -5,7 +5,6 @@ frozendict
 absl-py
 numpy
 scipy
-git+https://github.com/inductiva/inductiva-utils.git
 jinja2
 tqdm
 gmsh
