@@ -39,7 +39,7 @@ class DamBreak(FluidBlock):
             pisition: A list containing fluid column position in a tank,
               in meters.
             """
-        
+
         if dimensions is None:
             dimensions = [0.3, 1, 1]
 
