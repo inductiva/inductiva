@@ -51,7 +51,7 @@ def get_validate_request_params(original_params: dict,
             params[variable] = {
                 "shape": original_params[variable].shape,
             }
-        elif param_type == Path:
+        elif param_type == pathlib.Path:
             # TODO: what kind of information do we want to send for validation
             # of a SplishSplash simulation?
             params[variable] = str(original_params[variable])
@@ -90,7 +90,7 @@ def pack_param(name: str, value, param_type, dst_dir):
         logging.debug("Stored %s to %s", name, param_fullpath)
         return param_filename
 
-    if param_type == Path:
+    if param_type == pathlib.Path:
         dst_dir_name = name
         dst_fullpath = os.path.join(dst_dir, dst_dir_name)
 

@@ -31,12 +31,11 @@ def main(_):
     inductiva.api_url = FLAGS.api_url
     inductiva.working_dir = FLAGS.working_dir
 
-    swash_sim = inductiva.fluids.SWASH(
-        sim_dir=FLAGS.sim_dir,
-        sim_config_filename=FLAGS.sim_config_filename,
-    )
+    swash_sim = inductiva.fluids.SWASH()
 
-    output_path = swash_sim.simulate(
+    output_path = swash_sim.run(
+        input_dir=FLAGS.sim_dir,
+        sim_config_filename=FLAGS.sim_config_filename,
         output_dir=FLAGS.output_dir,
         n_cores=FLAGS.n_cores,
     )

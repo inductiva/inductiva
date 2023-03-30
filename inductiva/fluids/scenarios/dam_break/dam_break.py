@@ -7,8 +7,6 @@ from inductiva.fluids.scenarios.fluid_block import FluidBlock
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.types import Path
-from inductiva.fluids.simulators import (SPlisHSPlasHParameters,
-                                         DualSPHysicsParameters)
 
 from inductiva.fluids._output_post_processing import SimulationOutput
 
@@ -49,12 +47,13 @@ class DamBreak(FluidBlock):
                             dimensions=dimensions,
                             position=position)
 
+    #pylint: disable=arguments-renamed
     def simulate(self,
+                 device: Literal["cpu", "gpu"] = "cpu",
                  engine: Literal["SPlisHSPlasH",
                                  "DualSPHysics"] = "SPlisHSPlasH",
-                 resolution: Literal["high", "medium", "low"] = "medium",
                  simulation_time: float = 1.,
-                 device: Literal["cpu", "gpu"] = "cpu",
+                 resolution: Literal["high", "medium", "low"] = "medium",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of Dam Break scenario.
 
@@ -81,17 +80,11 @@ class DamBreak(FluidBlock):
 
         particle_radius = ParticleRadius[resolution.upper()].value
 
-        if engine.lower() == "splishsplash":
-            engine_params = SPlisHSPlasHParameters()
-        else:
-            engine_params = DualSPHysicsParameters()
-
         sim_output_path = FluidBlock.simulate(self,
                                               device=device,
                                               engine=engine,
                                               simulation_time=simulation_time,
                                               particle_radius=particle_radius,
-                                              output_dir=output_dir,
-                                              engine_parameters=engine_params)
+                                              output_dir=output_dir)
 
         return SimulationOutput(sim_output_path)
