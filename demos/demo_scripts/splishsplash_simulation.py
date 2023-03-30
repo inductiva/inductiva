@@ -28,12 +28,11 @@ def main(_):
 
     inductiva.api_url = FLAGS.api_url
 
-    sph_sim = inductiva.fluids.simulators.SPlisHSPlasH(
-        sim_dir=FLAGS.sim_dir,
-        sim_config_filename=FLAGS.sim_config_filename,
-    )
+    sph_sim = inductiva.fluids.simulators.SPlisHSPlasH()
 
-    output_path = sph_sim.simulate(output_dir=FLAGS.output_dir)
+    output_path = sph_sim.run(input_dir=FLAGS.sim_dir,
+                              sim_config_filename=FLAGS.sim_config_filename,
+                              output_dir=FLAGS.output_dir)
 
     logging.info("Outputs stored in %s", output_path)
 

@@ -15,7 +15,7 @@ class OpenFOAM(Simulator):
 
     def run(
         self,
-        sim_dir: types.Path,
+        input_dir: types.Path,
         output_dir: Optional[types.Path] = None,
         openfoam_solver: str = "isoFoam",
         n_cores=1,
@@ -30,7 +30,7 @@ class OpenFOAM(Simulator):
                 [isoFoam, sonicFoam, ...]. The default solver is isoFoam.
         """
         return super().run(
-            sim_dir,
+            input_dir,
             output_dir,
             openfoam_solver=openfoam_solver,
             n_cores=n_cores,

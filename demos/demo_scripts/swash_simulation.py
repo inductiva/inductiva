@@ -34,7 +34,7 @@ def main(_):
     swash_sim = inductiva.fluids.SWASH()
 
     output_path = swash_sim.run(
-        sim_dir=FLAGS.sim_dir,
+        input_dir=FLAGS.sim_dir,
         sim_config_filename=FLAGS.sim_config_filename,
         output_dir=FLAGS.output_dir,
         n_cores=FLAGS.n_cores,

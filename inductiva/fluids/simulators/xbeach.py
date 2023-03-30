@@ -15,7 +15,7 @@ class XBeach(Simulator):
 
     def run(
         self,
-        sim_dir: types.Path,
+        input_dir: types.Path,
         output_dir: Optional[types.Path] = None,
         n_cores: int = 1,
     ) -> pathlib.Path:
@@ -24,4 +24,4 @@ class XBeach(Simulator):
         Args:
             n_cores: Number of MPI cores to use for the simulation.
         """
-        return super().run(sim_dir, output_dir=output_dir, n_cores=n_cores)
+        return super().run(input_dir, output_dir=output_dir, n_cores=n_cores)

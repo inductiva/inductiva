@@ -33,7 +33,7 @@ def main(_):
     sph_sim = inductiva.fluids.simulators.DualSPHysics()
 
     output_path = sph_sim.run(
-        sim_dir=FLAGS.sim_dir,
+        input_dir=FLAGS.sim_dir,
         sim_config_filename=FLAGS.sim_config_filename,
         output_dir=FLAGS.output_dir,
         device=FLAGS.device,
