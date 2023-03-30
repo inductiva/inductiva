@@ -39,6 +39,10 @@ class DamBreak(FluidBlock):
             pisition: A list containing fluid column position in a tank,
               in meters.
             """
+
+        if dimensions is None:
+            dimensions = [0.3, 1, 1]
+
         FluidBlock.__init__(self,
                             density=fluid.density,
                             kinematic_viscosity=fluid.kinematic_viscosity,
