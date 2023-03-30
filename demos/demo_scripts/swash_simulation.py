@@ -19,6 +19,9 @@ flags.DEFINE_string("sim_config_filename",
                     required=True)
 flags.DEFINE_string("output_dir", None,
                     "Directory where the outputs will be stored.")
+
+flags.DEFINE_string("working_dir", None,
+                    "Directory to which paths are relative to.")
 flags.DEFINE_integer("n_cores", 1, "Number of cores to use.")
 
 
@@ -26,6 +29,7 @@ def main(_):
     """Run a SWASH simulation using user-provided input files."""
 
     inductiva.api_url = FLAGS.api_url
+    inductiva.working_dir = FLAGS.working_dir
 
     swash_sim = inductiva.fluids.SWASH(
         sim_dir=FLAGS.sim_dir,

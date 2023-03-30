@@ -12,15 +12,19 @@ REQUIRES = [
     "absl-py",
     "numpy",
     "scipy",
-    "inductiva_web_api_client @ git+https://github.com/inductiva/inductiva-web-api-client.git",
-    "inductiva_data @ git+https://github.com/inductiva/inductiva-data.git",
-    "inductiva_utils @ git+https://github.com/inductiva/inductiva-utils.git",
     "jinja2",
     "tqdm",
     "gmsh",
     "meshio",
     "vtk",
     "xarray",
+    "certifi",
+    "python-dateutil",
+    "frozendict",
+    "urllib3 >= 1.15",
+    "matplotlib",
+    "imageio",
+    "imageio-ffmpeg",
 ]
 
 setup(
