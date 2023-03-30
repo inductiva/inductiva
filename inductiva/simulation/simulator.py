@@ -18,27 +18,27 @@ class Simulator(ABC):
 
     def run(
         self,
-        sim_dir: types.Path,
+        input_dir: types.Path,
         *_args,  # unused in this method, but defined to allow for more
         # non-default arguments in method override in subclasses.
         output_dir: Optional[types.Path] = None,
         **kwargs,
     ) -> pathlib.Path:
         """Run the simulation."""
-        sim_dir = pathlib.Path(sim_dir)
-        if not sim_dir.is_dir():
+        input_dir = pathlib.Path(input_dir)
+        if not input_dir.is_dir():
             raise ValueError(
-                f"The provided path ({sim_dir}) is not a directory.")
+                f"The provided path ({input_dir}) is not a directory.")
 
         if output_dir is None:
-            output_dir = sim_dir.with_name(f"{sim_dir.name}-output")
+            output_dir = input_dir.with_name(f"{input_dir.name}-output")
             output_dir = files.get_timestamped_path(output_dir)
         else:
             output_dir = files.resolve_path(output_dir)
 
         return api.run_simulation(
             self.api_method_name,
-            sim_dir,
+            input_dir,
             output_dir,
             params=kwargs,
         )

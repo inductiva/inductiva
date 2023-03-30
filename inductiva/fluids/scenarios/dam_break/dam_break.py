@@ -43,12 +43,13 @@ class DamBreak(FluidBlock):
                             dimensions=dimensions,
                             position=position)
 
+    #pylint: disable=arguments-renamed
     def simulate(self,
                  device: Literal["cpu", "gpu"] = "cpu",
                  engine: Literal["SPlisHSPlasH",
                                  "DualSPHysics"] = "SPlisHSPlasH",
-                 resolution: Literal["high", "medium", "low"] = "medium",
                  simulation_time: float = 1.,
+                 resolution: Literal["high", "medium", "low"] = "medium",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of Dam Break scenario.
 

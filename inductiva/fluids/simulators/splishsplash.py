@@ -15,7 +15,7 @@ class SPlisHSPlasH(Simulator):
 
     def run(
         self,
-        sim_dir: types.Path,
+        input_dir: types.Path,
         sim_config_filename: str,
         output_dir: Optional[types.Path] = None,
         device: Literal["gpu", "cpu"] = "cpu",
@@ -25,7 +25,7 @@ class SPlisHSPlasH(Simulator):
         Args:
             device: Device in which to run the simulation.
         """
-        return super().run(sim_dir,
+        return super().run(input_dir,
                            output_dir=output_dir,
                            device=device,
                            input_filename=sim_config_filename)

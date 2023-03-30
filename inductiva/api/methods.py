@@ -343,13 +343,13 @@ def invoke_api(method_name: str,
 
 def run_simulation(
     api_method_name: str,
-    sim_dir: pathlib.Path,
+    input_dir: pathlib.Path,
     output_dir: pathlib.Path,
     params: Dict[str, Any],
 ) -> pathlib.Path:
 
     params = {
-        "sim_dir": sim_dir,
+        "sim_dir": input_dir,
         **params,
     }
     type_annotations = {

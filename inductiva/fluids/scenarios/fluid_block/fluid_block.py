@@ -161,7 +161,7 @@ class FluidBlock:
 
         simulator = SPlisHSPlasH()
         sim_output_path = simulator.run(
-            sim_dir=input_dir,
+            input_dir=input_dir,
             device=self.device,
             output_dir=self.output_dir,
             sim_config_filename=SPLISHSPLASH_INPUT_FILENAME,
@@ -195,7 +195,7 @@ class FluidBlock:
 
         simulator = DualSPHysics()
         return simulator.run(
-            sim_dir=self.input_temp_dir.name,
+            input_dir=self.input_temp_dir.name,
             sim_config_filename=PurePosixPath(DUALSPHYSICS_INPUT_FILENAME).stem,
             device=self.device,
             output_dir=self.output_dir,
