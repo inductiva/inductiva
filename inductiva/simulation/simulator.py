@@ -25,10 +25,10 @@ class Simulator(ABC):
         **kwargs,
     ) -> pathlib.Path:
         """Run the simulation."""
-        input_dir = pathlib.Path(input_dir)
+        input_dir = files.resolve_path(input_dir)
         if not input_dir.is_dir():
             raise ValueError(
-                f"The provided path ({input_dir}) is not a directory.")
+                f"The provided path (\"{input_dir}\") is not a directory.")
 
         if output_dir is None:
             output_dir = input_dir.with_name(f"{input_dir.name}-output")
