@@ -185,7 +185,7 @@ class FluidBlock:
             template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
             params={
                 "simulation_time": self.simulation_time,
-                "particle_radius": 2 * self.particle_radius,
+                "particle_distance": 2 * self.particle_radius,
                 "output_time_step": self.engine_parameters.output_time_step,
                 "tank_dimensions": TANK_DIMENSIONS,
                 "fluid_dimensions": self.dimensions,
