@@ -2,15 +2,13 @@
 import tempfile
 import os
 import math
-from typing import List, Literal, Optional, Union
+from typing import List, Literal, Optional
 import shutil
 from pathlib import PurePosixPath
 
 from absl import logging
 
 from inductiva.fluids.fluid_types import FluidType
-from inductiva.fluids.simulators import SPlisHSPlasHParameters
-from inductiva.fluids.simulators import DualSPHysicsParameters
 from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.simulators import DualSPHysics
 from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
@@ -24,6 +22,9 @@ TIME_STEP = 0.001
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_INPUT_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
+
+SPLISHSPLASH_OUTPUT_TIM_STEP = 1. / 60.
+DUALSPH_OUTPUT_TIME_STEP = 0.01
 
 DUALSPHYSICS_TEMPLATE_FILENAME = "dam_break_template.dualsphysics.xml.jinja"
 DUALSPHYSICS_INPUT_FILENAME = "dam_break.xml"
@@ -69,16 +70,14 @@ class FluidBlock:
         else:
             self.initial_velocity = inital_velocity
 
-    def simulate(self,
-                 device: Literal["cpu", "gpu"] = "cpu",
-                 engine: Literal["DualSPHysics",
-                                 "SPlisHSPlasH"] = "SPlisHSPlasH",
-                 simulation_time: float = 1.,
-                 particle_radius: float = 0.015,
-                 output_dir: Optional[Path] = None,
-                 engine_parameters: Union[
-                     DualSPHysicsParameters,
-                     SPlisHSPlasHParameters] = SPlisHSPlasHParameters()):
+    def simulate(
+        self,
+        device: Literal["cpu", "gpu"] = "cpu",
+        engine: Literal["DualSPHysics", "SPlisHSPlasH"] = "SPlisHSPlasH",
+        simulation_time: float = 1.,
+        particle_radius: float = 0.015,
+        output_dir: Optional[Path] = None,
+    ):
         """Runs SPH simulation of the fluid block scenario.
 
         Args:
@@ -98,20 +97,16 @@ class FluidBlock:
         """
         self.particle_radius = particle_radius
         self.simulation_time = simulation_time
-        self.device = device
+        self.device: Literal["cpu", "gpu"] = device
         self.output_dir = output_dir
-        self.engine_parameters = engine_parameters
         self.fluid_block_dir = os.path.dirname(__file__)
 
         # Create a temporary directory to store simulation input files
         self.input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
 
-
-        if engine.lower() == "splishsplash" and \
-            isinstance(engine_parameters, SPlisHSPlasHParameters):
+        if engine.lower() == "splishsplash":
             sim_output_path = self._splishsplash_simulation()
-        elif engine.lower() == "dualsphysics" and \
-            isinstance(engine_parameters, DualSPHysicsParameters):
+        elif engine.lower() == "dualsphysics":
             sim_output_path = self._dualsphysics_simulation()
         else:
             raise ValueError("Entered `engine` does not exist or it \
@@ -140,7 +135,7 @@ class FluidBlock:
                 "simulation_time": self.simulation_time,
                 "time_step": TIME_STEP,
                 "particle_radius": self.particle_radius,
-                "data_export_rate": 1 / self.engine_parameters.output_time_step,
+                "data_export_rate": 1 / SPLISHSPLASH_OUTPUT_TIM_STEP,
                 "tank_filename": UNIT_BOX_MESH_FILENAME,
                 "tank_dimensions": TANK_DIMENSIONS,
                 "fluid_filename": UNIT_BOX_MESH_FILENAME,
@@ -162,17 +157,19 @@ class FluidBlock:
                      math.ceil(self.simulation_time / TIME_STEP))
         logging.info(
             "Number of output time steps %s",
-            math.ceil(self.simulation_time /
-                      self.engine_parameters.output_time_step))
+            math.ceil(self.simulation_time / SPLISHSPLASH_OUTPUT_TIM_STEP))
 
-        sim = SPlisHSPlasH(sim_dir=input_dir,
-                           sim_config_filename=SPLISHSPLASH_INPUT_FILENAME)
-        sim_output_path = sim.simulate(device=self.device,
-                                       output_dir=self.output_dir)
+        simulator = SPlisHSPlasH()
+        sim_output_path = simulator.run(
+            input_dir=input_dir,
+            device=self.device,
+            output_dir=self.output_dir,
+            sim_config_filename=SPLISHSPLASH_INPUT_FILENAME,
+        )
 
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(sim_output_path, "vtk"),
-            output_time_step=self.engine_parameters.output_time_step,
+            output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
             netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
 
         return sim_output_path
@@ -186,7 +183,7 @@ class FluidBlock:
             params={
                 "simulation_time": self.simulation_time,
                 "particle_distance": 2 * self.particle_radius,
-                "output_time_step": self.engine_parameters.output_time_step,
+                "output_time_step": DUALSPH_OUTPUT_TIME_STEP,
                 "tank_dimensions": TANK_DIMENSIONS,
                 "fluid_dimensions": self.dimensions,
                 "fluid_position": self.position,
@@ -196,10 +193,13 @@ class FluidBlock:
                                           DUALSPHYSICS_INPUT_FILENAME),
         )
 
-        sim = DualSPHysics(
-            sim_dir=self.input_temp_dir.name,
-            sim_config_filename=PurePosixPath(DUALSPHYSICS_INPUT_FILENAME).stem)
-        return sim.simulate(device=self.device, output_dir=self.output_dir)
+        simulator = DualSPHysics()
+        return simulator.run(
+            input_dir=self.input_temp_dir.name,
+            sim_config_filename=PurePosixPath(DUALSPHYSICS_INPUT_FILENAME).stem,
+            device=self.device,
+            output_dir=self.output_dir,
+        )
 
     def estimate_num_particles(self):
         """Estimate of the number of SPH particles contained in fluid blocks."""

@@ -3,7 +3,7 @@
 from dataclasses import dataclass, field
 import os
 import tempfile
-from typing import List, Literal, Optional, Union
+from typing import List, Literal, Optional
 
 from inductiva.types import Path
 from inductiva.fluids.shapes import BaseShape
@@ -14,8 +14,6 @@ from inductiva.fluids.shapes import Cylinder
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.fluids.simulators import SPlisHSPlasH
-from inductiva.fluids.simulators import SPlisHSPlasHParameters
-from inductiva.fluids.simulators import DualSPHysicsParameters
 from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.utils.templates import replace_params_in_template
 
@@ -139,8 +137,6 @@ class FluidTank:
         self,
         device: Literal["cpu", "gpu"] = "cpu",
         engine: Literal["SPlisHSPlasH"] = "SPlisHSPlasH",
-        engine_params: Union[DualSPHysicsParameters,
-                             SPlisHSPlasHParameters] = SPlisHSPlasHParameters(),
         output_dir: Optional[Path] = None,
     ):
         """Simulates the fluid tank.
@@ -160,9 +156,7 @@ class FluidTank:
 
         if engine.lower() == "splishsplash":
             sim_output_path = self._simulate_with_splishsplash(
-                device=device,
-                engine_params=engine_params,
-                output_dir=output_dir)
+                device=device, output_dir=output_dir)
         elif engine.lower() == "dualsphysics":
             raise NotImplementedError(
                 "The engine 'DualSPHysics' is not supported yet "
@@ -175,21 +169,21 @@ class FluidTank:
 
         return SimulationOutput(sim_output_path)
 
-    def _simulate_with_splishsplash(self, device, engine_params, output_dir):
+    def _simulate_with_splishsplash(self, device, output_dir):
         """Simulates the fluid tank with SPlisHSPlasH."""
-
-        if not isinstance(engine_params, SPlisHSPlasHParameters):
-            raise ValueError(f"Invalid engine parameters `{engine_params}`.")
 
         input_dir = self.input_temp_dir.name
 
         self._create_splishsplash_aux_files(input_dir)
         self._replace_params_in_splishsplash_template(input_dir)
 
-        simulator = SPlisHSPlasH(
-            sim_dir=input_dir, sim_config_filename=SPLISHSPLASH_INPUT_FILENAME)
+        simulator = SPlisHSPlasH()
 
-        output_path = simulator.simulate(device=device, output_dir=output_dir)
+        output_path = simulator.run(
+            input_dir=input_dir,
+            sim_config_filename=SPLISHSPLASH_INPUT_FILENAME,
+            device=device,
+            output_dir=output_dir)
 
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(output_path, "vtk"),
