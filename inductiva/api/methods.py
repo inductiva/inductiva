@@ -9,8 +9,7 @@ import os
 import pathlib
 import signal
 import time
-from websockets.exceptions import ConnectionClosedOK
-from contextlib import asynccontextmanager
+from contextlib import contextmanager
 from typing import Any, Dict, Optional, Type
 from urllib.parse import urlparse
 
@@ -103,7 +102,7 @@ def download_output(api_instance: TasksApi, task_id):
     return api_response.body.name
 
 
-async def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
+def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
     """Block until a task executing remotely finishes execution.
 
     Args:
@@ -115,11 +114,10 @@ async def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
         "id" and "status".
     """
     logging.debug("Blocking until task is finished ...")
-    return await block_until_status_is(api_instance, task_id,
-                                       {"success", "failed"})
+    return block_until_status_is(api_instance, task_id, {"success", "failed"})
 
 
-async def kill_task(api_instance: TasksApi, task_id: str):
+def kill_task(api_instance: TasksApi, task_id: str):
     """Kill a task that is executing remotely.
 
     The function sends a Kill request to the API and then polls until the
@@ -140,15 +138,15 @@ async def kill_task(api_instance: TasksApi, task_id: str):
     _ = api_instance.kill_task(path_params={"task_id": task_id},)
 
     logging.debug("Blocking until task is killed ...")
-    out = await block_until_status_is(api_instance, task_id, {"killed"})
+    out = block_until_status_is(api_instance, task_id, {"killed"})
     logging.info("Task terminated.")
     return out
 
 
-async def block_until_status_is(api_instance: TasksApi,
-                                task_id,
-                                desired_status,
-                                sleep_secs=0.5):
+def block_until_status_is(api_instance: TasksApi,
+                          task_id,
+                          desired_status,
+                          sleep_secs=0.5):
     """Block until the status of a task becomes the desired status.
 
     Args:
@@ -197,13 +195,13 @@ async def block_until_status_is(api_instance: TasksApi,
         if status in desired_status:
             break
 
-        await asyncio.sleep(sleep_secs)
+        time.sleep(sleep_secs)
 
     return api_response.body["status"]
 
 
-@asynccontextmanager
-async def blocking_task_context(api_instance: TasksApi, task_id):
+@contextmanager
+def blocking_task_context(api_instance: TasksApi, task_id):
     """Context to handle execution of a blocking task.
 
     The context handles exceptions and the SIGINT signal, issuing a request
@@ -226,37 +224,42 @@ async def blocking_task_context(api_instance: TasksApi, task_id):
         print(type(err))
         print(err)
         logging.info("Caught exception: terminating blocking task...")
-        await kill_task(api_instance, task_id)
+        kill_task(api_instance, task_id)
         raise err
     except KeyboardInterrupt as err:
         logging.info("Caught SIGINT: terminating blocking task...")
-        await kill_task(api_instance, task_id)
+        kill_task(api_instance, task_id)
         raise err
     finally:
         # Reset original SIGINT handler
         signal.signal(signal.SIGINT, original_sig)
 
 
-def invoke_api_from_fn_ptr(params,
-                           function_ptr,
-                           output_dir: Optional[Path] = None):
+def invoke_api_from_fn_ptr(
+    params,
+    function_ptr,
+    output_dir: Optional[Path] = None,
+    track_logs: bool = False,
+):
     """Perform a task remotely defined by a function pointer."""
     type_annotations = get_type_annotations(function_ptr)
     method_name = get_method_name(function_ptr)
-    return asyncio.run(
-        invoke_api(method_name,
-                   params,
-                   output_dir=output_dir,
-                   type_annotations=type_annotations,
-                   return_type=type_annotations["return"]))
+    return invoke_api(
+        method_name,
+        params,
+        output_dir=output_dir,
+        type_annotations=type_annotations,
+        return_type=type_annotations["return"],
+        log_remote_execution=track_logs,
+    )
 
 
-async def invoke_api(method_name: str,
-                     params,
-                     type_annotations: Dict[Any, Type],
-                     output_dir: Optional[Path] = None,
-                     return_type: Type = pathlib.Path,
-                     log_remote_execution: bool = False):
+def invoke_api(method_name: str,
+               params,
+               type_annotations: Dict[Any, Type],
+               output_dir: Optional[Path] = None,
+               return_type: Type = pathlib.Path,
+               log_remote_execution: bool = False):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -317,7 +320,7 @@ async def invoke_api(method_name: str,
 
         # While the task is executing, use a context manager that kills the
         # task if some exception or SIGINT is caught.
-        async with blocking_task_context(api_instance, task_id):
+        with blocking_task_context(api_instance, task_id):
             if task["status"] == "pending-input":
                 upload_input(
                     api_instance=api_instance,
@@ -328,7 +331,7 @@ async def invoke_api(method_name: str,
 
             logging.info("Request submitted.")
 
-            await block_until_status_is(
+            block_until_status_is(
                 api_instance=api_instance,
                 task_id=task_id,
                 desired_status={"started"},
@@ -337,9 +340,9 @@ async def invoke_api(method_name: str,
             logging.info("The requested task is being executed remotely...")
 
             if log_remote_execution:
-                status = await follow_task(task_id)
+                status = asyncio.run(follow_task(task_id))
             else:
-                status = await block_until_finish(
+                status = block_until_finish(
                     api_instance=api_instance,
                     task_id=task_id,
                 )
@@ -382,15 +385,14 @@ def run_simulation(
         "sim_dir": pathlib.Path,
     }
 
-    result = asyncio.run(
-        invoke_api(
-            api_method_name,
-            params,
-            type_annotations,
-            output_dir=output_dir,
-            return_type=pathlib.Path,
-            log_remote_execution=log_remote_execution,
-        ))
+    result = invoke_api(
+        api_method_name,
+        params,
+        type_annotations,
+        output_dir=output_dir,
+        return_type=pathlib.Path,
+        log_remote_execution=log_remote_execution,
+    )
 
     if not isinstance(result, pathlib.Path):
         raise RuntimeError(f"Expected result to be a Path, got {type(result)}")
