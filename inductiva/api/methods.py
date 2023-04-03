@@ -4,6 +4,7 @@ The relevant function for usage outside of this file is invoke_api().
 Check the demos directory for examples on how it is used.
 """
 import asyncio
+import json
 import os
 import pathlib
 import signal
@@ -222,6 +223,8 @@ async def blocking_task_context(api_instance: TasksApi, task_id):
     try:
         yield None
     except Exception as err:
+        print(type(err))
+        print(err)
         logging.info("Caught exception: terminating blocking task...")
         await kill_task(api_instance, task_id)
         raise err
@@ -252,7 +255,8 @@ async def invoke_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
                      output_dir: Optional[Path] = None,
-                     return_type: Type = pathlib.Path):
+                     return_type: Type = pathlib.Path,
+                     track: bool = False):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -332,19 +336,13 @@ async def invoke_api(method_name: str,
             logging.info("An executer has picked up the request.")
             logging.info("The requested task is being executed remotely...")
 
-            parsed_url = urlparse(inductiva.api_url)
-            url = f"ws://{parsed_url.hostname}:{parsed_url.port}/task/{task_id}/logs/tail"
-
-            async with websockets.connect(url) as ws:
-                follow_logs_task = asyncio.create_task(follow_logs(ws))
-
+            if track:
+                status = await follow_task(task_id)
+            else:
                 status = await block_until_finish(
                     api_instance=api_instance,
                     task_id=task_id,
                 )
-
-                await ws.close()
-                await follow_logs_task
 
             if status == "success":
                 logging.info("Task executed successfuly.")
@@ -373,6 +371,7 @@ def run_simulation(
     input_dir: pathlib.Path,
     output_dir: pathlib.Path,
     params: Dict[str, Any],
+    track: bool = False,
 ) -> pathlib.Path:
 
     params = {
@@ -390,6 +389,7 @@ def run_simulation(
             type_annotations,
             output_dir=output_dir,
             return_type=pathlib.Path,
+            track=track,
         ))
 
     if not isinstance(result, pathlib.Path):
@@ -398,10 +398,20 @@ def run_simulation(
     return result
 
 
-async def follow_logs(ws):
-    try:
+async def follow_task(task_id: str) -> str:
+    parsed_url = urlparse(inductiva.api_url)
+    url = f"ws://{parsed_url.hostname}:{parsed_url.port}/task/{task_id}/logs/tail"
+
+    async with websockets.connect(url) as ws:
         while True:
             message = await ws.recv()
-            print(message, end="")
-    except ConnectionClosedOK:
-        return
+            parsed_message = json.loads(message)
+
+            if parsed_message["type"] == "update":
+                status = parsed_message["content"]
+                logging.debug("Task status update: %s", status)
+
+                return status
+            else:
+                new_line = parsed_message["content"]
+                print(new_line, end="")
