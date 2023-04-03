@@ -18,6 +18,7 @@ class SWASH(Simulator):
         sim_config_filename: str,
         output_dir: Optional[types.Path] = None,
         n_cores=1,
+        track_logs: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
 
@@ -25,6 +26,7 @@ class SWASH(Simulator):
             n_cores: Number of MPI cores to use for the simulation.
         """
         return super().run(input_dir,
+                           track_logs=track_logs,
                            input_filename=sim_config_filename,
                            n_cores=n_cores,
                            output_dir=output_dir)

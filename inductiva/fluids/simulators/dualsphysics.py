@@ -19,6 +19,7 @@ class DualSPHysics(Simulator):
         sim_config_filename: str,
         output_dir: Optional[types.Path] = None,
         device: Literal["gpu", "cpu"] = "cpu",
+        track_logs: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
 
@@ -26,6 +27,7 @@ class DualSPHysics(Simulator):
             device: Device in which to run the simulation.
         """
         return super().run(input_dir,
-                           output_dir,
+                           output_dir=output_dir,
+                           track_logs=track_logs,
                            device=device,
                            input_filename=sim_config_filename)

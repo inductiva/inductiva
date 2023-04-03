@@ -18,10 +18,14 @@ class XBeach(Simulator):
         input_dir: types.Path,
         output_dir: Optional[types.Path] = None,
         n_cores: int = 1,
+        track_logs: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
 
         Args:
             n_cores: Number of MPI cores to use for the simulation.
         """
-        return super().run(input_dir, output_dir=output_dir, n_cores=n_cores)
+        return super().run(input_dir,
+                           output_dir=output_dir,
+                           n_cores=n_cores,
+                           track_logs=track_logs)

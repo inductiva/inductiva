@@ -22,6 +22,7 @@ class Simulator(ABC):
         *_args,  # unused in this method, but defined to allow for more
         # non-default arguments in method override in subclasses.
         output_dir: Optional[types.Path] = None,
+        track_logs: bool = False,
         **kwargs,
     ) -> pathlib.Path:
         """Run the simulation."""
@@ -41,4 +42,5 @@ class Simulator(ABC):
             input_dir,
             output_dir,
             params=kwargs,
+            log_remote_execution=track_logs,
         )
