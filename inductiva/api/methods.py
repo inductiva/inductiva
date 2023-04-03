@@ -279,7 +279,14 @@ def invoke_api(method_name: str,
     Return:
         Returns the output of the task.
     """
+    if inductiva.api_key is None:
+        raise ValueError(
+            "No API Key specified. "
+            "Set it in the code with \"inductiva.api_key = <YOUR_SECRET_KEY>\""
+            " or set the INDUCTIVA_API_KEY environment variable.")
+
     api_config = Configuration(host=inductiva.api_url)
+    api_config.api_key["APIKeyHeader"] = inductiva.api_key
 
     request_params = get_validate_request_params(
         original_params=params,
@@ -343,13 +350,13 @@ def invoke_api(method_name: str,
 
 def run_simulation(
     api_method_name: str,
-    sim_dir: pathlib.Path,
+    input_dir: pathlib.Path,
     output_dir: pathlib.Path,
     params: Dict[str, Any],
 ) -> pathlib.Path:
 
     params = {
-        "sim_dir": sim_dir,
+        "sim_dir": input_dir,
         **params,
     }
     type_annotations = {

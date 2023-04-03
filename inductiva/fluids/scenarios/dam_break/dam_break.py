@@ -37,18 +37,23 @@ class DamBreak(FluidBlock):
             pisition: A list containing fluid column position in a tank,
               in meters.
             """
+
+        if dimensions is None:
+            dimensions = [0.3, 1, 1]
+
         FluidBlock.__init__(self,
                             density=fluid.density,
                             kinematic_viscosity=fluid.kinematic_viscosity,
                             dimensions=dimensions,
                             position=position)
 
+    #pylint: disable=arguments-renamed
     def simulate(self,
                  device: Literal["cpu", "gpu"] = "cpu",
                  engine: Literal["SPlisHSPlasH",
                                  "DualSPHysics"] = "SPlisHSPlasH",
-                 resolution: Literal["high", "medium", "low"] = "medium",
                  simulation_time: float = 1.,
+                 resolution: Literal["high", "medium", "low"] = "medium",
                  output_dir: Optional[Path] = None):
         """Runs SPH simulation of Dam Break scenario.
 
