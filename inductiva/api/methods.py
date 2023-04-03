@@ -256,7 +256,7 @@ async def invoke_api(method_name: str,
                      type_annotations: Dict[Any, Type],
                      output_dir: Optional[Path] = None,
                      return_type: Type = pathlib.Path,
-                     track: bool = False):
+                     log_remote_execution: bool = False):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -336,7 +336,7 @@ async def invoke_api(method_name: str,
             logging.info("An executer has picked up the request.")
             logging.info("The requested task is being executed remotely...")
 
-            if track:
+            if log_remote_execution:
                 status = await follow_task(task_id)
             else:
                 status = await block_until_finish(
@@ -371,7 +371,7 @@ def run_simulation(
     input_dir: pathlib.Path,
     output_dir: pathlib.Path,
     params: Dict[str, Any],
-    track: bool = False,
+    log_remote_execution: bool = False,
 ) -> pathlib.Path:
 
     params = {
@@ -389,7 +389,7 @@ def run_simulation(
             type_annotations,
             output_dir=output_dir,
             return_type=pathlib.Path,
-            track=track,
+            log_remote_execution=log_remote_execution,
         ))
 
     if not isinstance(result, pathlib.Path):
