@@ -35,7 +35,7 @@ class Scenario(ABC):
             gen_aux_fn(self, input_dir)
             gen_config_fn(self, input_dir)
 
-            output_path = output_path = simulator.run(
+            output_path = simulator.run(
                 input_dir,
                 sim_config_filename,
                 output_dir=output_dir,
