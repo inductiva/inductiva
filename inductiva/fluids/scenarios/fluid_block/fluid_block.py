@@ -3,13 +3,12 @@ import os
 from typing import List, Literal, Optional
 import shutil
 
+from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
-
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.simulators import DualSPHysics
-from inductiva.types import Path
 from inductiva.utils.templates import replace_params_in_template
 
 TANK_DIMENSIONS = [1, 1, 1]
