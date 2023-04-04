@@ -6,7 +6,7 @@
         "simulationMethod": 4,
         "boundaryHandlingMethod": 0,
         "kernel": 1,
-        "cflMethod": {{ 0 if adaptive_time_step else 1 }},
+        "cflMethod": {{ adaptive_time_step | int }},
         "cflFactor": 0.5,
         "cflMinTimeStepSize": 0.0001,
         "cflMaxTimeStepSize": 0.005,
