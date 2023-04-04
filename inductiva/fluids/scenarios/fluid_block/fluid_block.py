@@ -70,7 +70,7 @@ class FluidBlock(Scenario):
         device: Literal["cpu", "gpu"] = "cpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
-        adaptive_time_step: bool = False,
+        adaptive_time_step: bool = True,
         particle_sorting: bool = True,
     ):
         """Simulates the scenario.
