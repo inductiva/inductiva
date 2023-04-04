@@ -3,7 +3,7 @@ import os
 from typing import List, Literal, Optional
 import shutil
 
-from inductiva.fluids.scenarios.scenario import Scenario
+from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 
 from inductiva.fluids.fluid_types import FluidType
@@ -12,15 +12,13 @@ from inductiva.fluids.simulators import DualSPHysics
 from inductiva.types import Path
 from inductiva.utils.templates import replace_params_in_template
 
-# Global variables to define a scenario
 TANK_DIMENSIONS = [1, 1, 1]
 TIME_STEP = 0.001
+OUTPUT_TIME_STEP = 0.02
 
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
-
-OUTPUT_TIME_STEP = 0.02
 
 DUALSPHYSICS_TEMPLATE_FILENAME = "dam_break_template.dualsphysics.xml.jinja"
 DUALSPHYSICS_CONFIG_FILENAME = "dam_break.xml"
@@ -104,13 +102,13 @@ class FluidBlock(Scenario):
 
 
 @FluidBlock.get_config_filename.register
-def _(cls, _: SPlisHSPlasH):
+def _(cls, simulator: SPlisHSPlasH):  # pylint: disable=unused-argument
     """Returns the configuration filename for SPlisHSPlasH."""
     return SPLISHSPLASH_CONFIG_FILENAME
 
 
 @FluidBlock.gen_aux_files.register
-def _(self, _: SPlisHSPlasH, input_dir):
+def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argument
     """Generates auxiliary files for SPlisHSPlasH."""
     unit_box_file_path = os.path.join(os.path.dirname(__file__),
                                       UNIT_BOX_MESH_FILENAME)
@@ -118,7 +116,7 @@ def _(self, _: SPlisHSPlasH, input_dir):
 
 
 @FluidBlock.gen_config.register
-def _(self, _: SPlisHSPlasH, input_dir: str):
+def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-argument
     """Generates the configuration file for SPlisHSPlasH."""
 
     fluid_margin = 2 * self.particle_radius
@@ -146,13 +144,13 @@ def _(self, _: SPlisHSPlasH, input_dir: str):
 
 
 @FluidBlock.get_config_filename.register
-def _(cls, _: DualSPHysics):
+def _(cls, simulator: DualSPHysics):  # pylint: disable=unused-argument
     """Returns the configuration filename for DualSPHysics."""
     return DUALSPHYSICS_CONFIG_FILENAME
 
 
 @FluidBlock.gen_config.register
-def _(self, _: DualSPHysics, input_dir: str):
+def _(self, simulator: DualSPHysics, input_dir: str):  # pylint: disable=unused-argument
     """Generates the configuration file for DualSPHysics."""
 
     replace_params_in_template(
