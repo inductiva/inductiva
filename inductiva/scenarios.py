@@ -25,9 +25,16 @@ class Scenario(ABC):
             self.gen_aux_files(simulator, input_dir)
             self.gen_config(simulator, input_dir)
 
+
+            args = ()
+            
+            config_filename = self.get_config_filename(simulator)
+            if config_filename:
+                args += (config_filename,)
+
             output_path = simulator.run(
                 input_dir,
-                self.get_config_filename(simulator),
+                *args,
                 output_dir=output_dir,
                 **kwargs,
             )
@@ -37,7 +44,7 @@ class Scenario(ABC):
     @singledispatchmethod
     @classmethod
     def get_config_filename(cls, simulator: Simulator):
-        pass
+        return ""
 
     @singledispatchmethod
     def gen_aux_files(self, simulator: Simulator, input_dir: str):
