@@ -153,8 +153,6 @@ def block_until_status_is(api_instance: TasksApi,
     Returns:
         Returns info related to the task, containing two fields,
     """
-    prev_queue_info = None
-
     prev_status = None
 
     while True:
@@ -170,21 +168,12 @@ def block_until_status_is(api_instance: TasksApi,
         except ApiException as e:
             raise e
 
+        if status == prev_status:
+            continue
+
         if status == "submitted":
-            queue_info = api_response.body["queue"]
-
-            if status != prev_status:
-                logging.info("Waiting for resources...")
-
-            if queue_info != prev_queue_info:
-                logging.info("\t> %d/%d executers busy.",
-                             queue_info["running_tasks"],
-                             queue_info["num_executers"])
-                logging.info("\t> %d requests ahead in the queue.",
-                             queue_info["tasks_ahead"])
-
-                prev_queue_info = queue_info
-        elif status == "started" and status != prev_status:
+            logging.info("Waiting for resources...")
+        elif status == "started":
             logging.info("An executer has picked up the request.")
             logging.info("The requested task is being executed remotely...")
 
@@ -331,15 +320,19 @@ def invoke_api(method_name: str,
             else:
                 logging.info("Task failed.")
 
+        logging.info("Downloading output...")
         output_zip_path = download_output(
             api_instance=api_instance,
             task_id=task_id,
         )
+        logging.info("Output downloaded.")
 
     if output_dir is None:
         output_dir = os.path.join(inductiva.output_dir, task_id)
 
+    logging.info("Extracting output ZIP file to \"%s\"...", output_dir)
     result_list = extract_output(output_zip_path, output_dir)
+    logging.info("Output extracted.")
 
     if status == "failed":
         raise RemoteExecutionError(f"""Remote execution failed.
