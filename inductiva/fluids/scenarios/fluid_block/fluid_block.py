@@ -70,6 +70,8 @@ class FluidBlock(Scenario):
         device: Literal["cpu", "gpu"] = "cpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
+        adaptive_time_step: bool = False,
+        particle_sorting: bool = True,
     ):
         """Simulates the scenario.
         
@@ -79,11 +81,15 @@ class FluidBlock(Scenario):
             device: Device in which to run the simulation.
             particle_radius: Radius of the fluid particles, in meters.
             simulation_time: Simulation time, in seconds.
+            adaptive_time_step: Whether to use adaptive time step.
+            particle_sorting: Whether to use particle sorting.
         """
 
         # TODO: Avoid storing these as class attributes.
         self.particle_radius = particle_radius
         self.simulation_time = simulation_time
+        self.adaptive_time_step = adaptive_time_step
+        self.particle_sorting = particle_sorting
 
         output_path = super().simulate(
             simulator,
@@ -137,6 +143,8 @@ def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-
                 dimension - 2 * fluid_margin for dimension in self.dimensions
             ],
             "fluid_velocity": self.initial_velocity,
+            "particle_sorting": self.particle_sorting,
+            "adaptive_time_step": self.adaptive_time_step,
         },
         output_file_path=os.path.join(input_dir, SPLISHSPLASH_CONFIG_FILENAME),
     )
