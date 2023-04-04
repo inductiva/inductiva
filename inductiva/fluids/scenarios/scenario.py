@@ -1,7 +1,7 @@
 """Base class for scenarios."""
 
 from abc import ABC
-from functools import singledispatch, singledispatchmethod
+from functools import singledispatchmethod
 import tempfile
 from typing import Optional
 
