@@ -1,35 +1,29 @@
 """Describes the physical scenarios and runs its simulation via API."""
-import tempfile
 import os
-import math
 from typing import List, Literal, Optional
 import shutil
 
-from absl import logging
-
+from inductiva.types import Path
+from inductiva.scenarios import Scenario
+from inductiva.simulation import Simulator
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.simulators import DualSPHysics
-from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
-from inductiva.types import Path
 from inductiva.utils.templates import replace_params_in_template
 
-# Global variables to define a scenario
 TANK_DIMENSIONS = [1, 1, 1]
 TIME_STEP = 0.001
+OUTPUT_TIME_STEP = 0.02
 
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
-SPLISHSPLASH_INPUT_FILENAME = "fluid_block.json"
+SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
 
-SPLISHSPLASH_OUTPUT_TIM_STEP = 1. / 60.
-DUALSPH_OUTPUT_TIME_STEP = 0.01
-
 DUALSPHYSICS_TEMPLATE_FILENAME = "dam_break_template.dualsphysics.xml.jinja"
-DUALSPHYSICS_INPUT_FILENAME = "dam_break.xml"
+DUALSPHYSICS_CONFIG_FILENAME = "dam_break.xml"
 
 
-class FluidBlock:
+class FluidBlock(Scenario):
     """Physical scenario of a general fluid block simulation."""
 
     def __init__(self,
@@ -60,156 +54,115 @@ class FluidBlock:
         self.dimensions = dimensions
 
         if position is None:
-            self.position = [0.0, 0.0, 0.0]
+            self.position = [0, 0, 0]
         else:
             self.position = position
 
         if inital_velocity is None:
-            self.initial_velocity = [0.0, 0.0, 0.0]
+            self.initial_velocity = [0, 0, 0]
         else:
             self.initial_velocity = inital_velocity
 
     def simulate(
         self,
-        device: Literal["cpu", "gpu"] = "cpu",
-        engine: Literal["DualSPHysics", "SPlisHSPlasH"] = "SPlisHSPlasH",
-        simulation_time: float = 1.,
-        particle_radius: float = 0.015,
+        simulator: Simulator,
         output_dir: Optional[Path] = None,
+        device: Literal["cpu", "gpu"] = "cpu",
+        particle_radius: float = 0.02,
+        simulation_time: float = 1,
     ):
-        """Runs SPH simulation of the fluid block scenario.
-
+        """Simulates the scenario.
+        
         Args:
-            device: Sets the device for a simulation to be run.
-            engine: The software platform to be used for the simulation.
-            Available options are (the default is DualSPHysics):
-            - SPlisHSPlasH
-            - DualSPHysics
-            particle_radius: Radius of the discretization particles, in meters.
-            Used to control particle spacing. Smaller particle radius means a
-            finer discretization, hence more particles.
-            time_max: Maximum time of simulation, in seconds.
-            output_dir: Directory in which the output files will be saved. If
-                not specified, the default directory used for API tasks
-                (based on an internal ID of the task) will be used.
-            engine_parameters: Simulator specific parameters.
+            simulator: Simulator to use.
+            output_dir: Directory to store the simulation output.
+            device: Device in which to run the simulation.
+            particle_radius: Radius of the fluid particles, in meters.
+            simulation_time: Simulation time, in seconds.
         """
+
+        # TODO: Avoid storing these as class attributes.
         self.particle_radius = particle_radius
         self.simulation_time = simulation_time
-        self.device: Literal["cpu", "gpu"] = device
-        self.output_dir = output_dir
-        self.fluid_block_dir = os.path.dirname(__file__)
 
-        # Create a temporary directory to store simulation input files
-        self.input_temp_dir = tempfile.TemporaryDirectory()  #pylint: disable=consider-using-with
-
-        if engine.lower() == "splishsplash":
-            sim_output_path = self._splishsplash_simulation()
-        elif engine.lower() == "dualsphysics":
-            sim_output_path = self._dualsphysics_simulation()
-        else:
-            raise ValueError("Entered `engine` does not exist or it \
-                             does not match with `engine_parameters` class")
-
-        # Delete temporary input directory
-        self.input_temp_dir.cleanup()
-
-        return sim_output_path
-
-    def _splishsplash_simulation(self):
-        """Runs SPlisHSPlasH simulation via API."""
-
-        input_dir = self.input_temp_dir.name
-
-        unit_box_file_path = os.path.join(self.fluid_block_dir,
-                                          UNIT_BOX_MESH_FILENAME)
-        shutil.copy(unit_box_file_path, input_dir)
-
-        fluid_margin = 2 * self.particle_radius
-
-        replace_params_in_template(
-            templates_dir=self.fluid_block_dir,
-            template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
-            params={
-                "simulation_time": self.simulation_time,
-                "time_step": TIME_STEP,
-                "particle_radius": self.particle_radius,
-                "data_export_rate": 1 / SPLISHSPLASH_OUTPUT_TIM_STEP,
-                "tank_filename": UNIT_BOX_MESH_FILENAME,
-                "tank_dimensions": TANK_DIMENSIONS,
-                "fluid_filename": UNIT_BOX_MESH_FILENAME,
-                "fluid": self.fluid,
-                "fluid_position": [fluid_margin] * 3,
-                "fluid_dimensions": [
-                    dimension - 2 * fluid_margin
-                    for dimension in self.dimensions
-                ],
-                "fluid_velocity": self.initial_velocity,
-            },
-            output_file_path=os.path.join(input_dir,
-                                          SPLISHSPLASH_INPUT_FILENAME),
+        output_path = super().simulate(
+            simulator,
+            output_dir=output_dir,
+            device=device,
         )
 
-        logging.info("Estimated number of particles %d",
-                     self.estimate_num_particles())
-        logging.info("Estimated number of time steps %s",
-                     math.ceil(self.simulation_time / TIME_STEP))
-        logging.info(
-            "Number of output time steps %s",
-            math.ceil(self.simulation_time / SPLISHSPLASH_OUTPUT_TIM_STEP))
+        # TODO: Add any kind of post-processing here, e.g. convert files?
+        # convert_vtk_data_dir_to_netcdf(
+        #     data_dir=os.path.join(output_path, "vtk"),
+        #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
+        #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
 
-        simulator = SPlisHSPlasH()
-        sim_output_path = simulator.run(
-            input_dir=input_dir,
-            device=self.device,
-            output_dir=self.output_dir,
-            sim_config_filename=SPLISHSPLASH_INPUT_FILENAME,
-        )
+        return output_path
 
-        convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(sim_output_path, "vtk"),
-            output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
-            netcdf_data_dir=os.path.join(sim_output_path, "netcdf"))
 
-        return sim_output_path
+@FluidBlock.get_config_filename.register
+def _(cls, simulator: SPlisHSPlasH):  # pylint: disable=unused-argument
+    """Returns the configuration filename for SPlisHSPlasH."""
+    return SPLISHSPLASH_CONFIG_FILENAME
 
-    def _dualsphysics_simulation(self):
-        """Runs simulation on DualSPHysics via API."""
 
-        replace_params_in_template(
-            templates_dir=self.fluid_block_dir,
-            template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
-            params={
-                "simulation_time": self.simulation_time,
-                "particle_distance": 2 * self.particle_radius,
-                "output_time_step": DUALSPH_OUTPUT_TIME_STEP,
-                "tank_dimensions": TANK_DIMENSIONS,
-                "fluid_dimensions": self.dimensions,
-                "fluid_position": self.position,
-                "fluid": self.fluid,
-            },
-            output_file_path=os.path.join(self.input_temp_dir.name,
-                                          DUALSPHYSICS_INPUT_FILENAME),
-        )
+@FluidBlock.gen_aux_files.register
+def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argument
+    """Generates auxiliary files for SPlisHSPlasH."""
+    unit_box_file_path = os.path.join(os.path.dirname(__file__),
+                                      UNIT_BOX_MESH_FILENAME)
+    shutil.copy(unit_box_file_path, input_dir)
 
-        simulator = DualSPHysics()
-        return simulator.run(
-            input_dir=self.input_temp_dir.name,
-            sim_config_filename=DUALSPHYSICS_INPUT_FILENAME,
-            device=self.device,
-            output_dir=self.output_dir,
-        )
 
-    def estimate_num_particles(self):
-        """Estimate of the number of SPH particles contained in fluid blocks."""
+@FluidBlock.gen_config.register
+def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-argument
+    """Generates the configuration file for SPlisHSPlasH."""
 
-        # Calculate number of particles for a fluid block
-        n_particles_x = round(self.dimensions[0] /
-                              (2 * self.particle_radius)) - 1
-        n_particles_y = round(self.dimensions[1] /
-                              (2 * self.particle_radius)) - 1
-        n_particles_z = round(self.dimensions[2] /
-                              (2 * self.particle_radius)) - 1
+    fluid_margin = 2 * self.particle_radius
 
-        # Add number of particles to the total sum
-        return n_particles_x * n_particles_y * n_particles_z
+    replace_params_in_template(
+        templates_dir=os.path.dirname(__file__),
+        template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
+        params={
+            "simulation_time": self.simulation_time,
+            "time_step": TIME_STEP,
+            "particle_radius": self.particle_radius,
+            "data_export_rate": 1 / OUTPUT_TIME_STEP,
+            "tank_filename": UNIT_BOX_MESH_FILENAME,
+            "tank_dimensions": TANK_DIMENSIONS,
+            "fluid_filename": UNIT_BOX_MESH_FILENAME,
+            "fluid": self.fluid,
+            "fluid_position": [fluid_margin] * 3,
+            "fluid_dimensions": [
+                dimension - 2 * fluid_margin for dimension in self.dimensions
+            ],
+            "fluid_velocity": self.initial_velocity,
+        },
+        output_file_path=os.path.join(input_dir, SPLISHSPLASH_CONFIG_FILENAME),
+    )
+
+
+@FluidBlock.get_config_filename.register
+def _(cls, simulator: DualSPHysics):  # pylint: disable=unused-argument
+    """Returns the configuration filename for DualSPHysics."""
+    return DUALSPHYSICS_CONFIG_FILENAME
+
+
+@FluidBlock.gen_config.register
+def _(self, simulator: DualSPHysics, input_dir: str):  # pylint: disable=unused-argument
+    """Generates the configuration file for DualSPHysics."""
+
+    replace_params_in_template(
+        templates_dir=os.path.dirname(__file__),
+        template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
+        params={
+            "simulation_time": self.simulation_time,
+            "particle_distance": 2 * self.particle_radius,
+            "output_time_step": OUTPUT_TIME_STEP,
+            "tank_dimensions": TANK_DIMENSIONS,
+            "fluid_dimensions": self.dimensions,
+            "fluid_position": self.position,
+            "fluid": self.fluid,
+        },
+        output_file_path=os.path.join(input_dir, DUALSPHYSICS_CONFIG_FILENAME),
+    )
