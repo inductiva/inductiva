@@ -153,8 +153,6 @@ def block_until_status_is(api_instance: TasksApi,
     Returns:
         Returns info related to the task, containing two fields,
     """
-    prev_queue_info = None
-
     prev_status = None
 
     while True:
