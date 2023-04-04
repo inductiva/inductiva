@@ -1,6 +1,7 @@
 """Base class for scenarios."""
 
 from abc import ABC
+from functools import singledispatch, singledispatchmethod
 import tempfile
 from typing import Optional
 
@@ -19,27 +20,29 @@ class Scenario(ABC):
     ):
         """Simulates the scenario."""
 
-        simulator_type = type(simulator)
-
-        try:
-            sim_config_filename = self._config_filename[simulator_type]
-            gen_aux_fn = self._gen_aux[simulator_type]
-            gen_config_fn = self._gen_config[simulator_type]
-        except KeyError:
-            raise NotImplementedError(
-                f"Scenario `{type(self).__name__}` does not support "
-                f"simulator `{simulator_type.__name__}`.") from None
-
         with tempfile.TemporaryDirectory() as input_dir:
 
-            gen_aux_fn(self, input_dir)
-            gen_config_fn(self, input_dir)
+            self.gen_aux_files(simulator, input_dir)
+            self.gen_config(simulator, input_dir)
 
             output_path = simulator.run(
                 input_dir,
-                sim_config_filename,
+                self.get_config_filename(simulator),
                 output_dir=output_dir,
                 **kwargs,
             )
 
         return output_path
+
+    @singledispatchmethod
+    @classmethod
+    def get_config_filename(cls, simulator: Simulator):
+        pass
+
+    @singledispatchmethod
+    def gen_aux_files(self, simulator: Simulator, input_dir: str):
+        pass
+
+    @singledispatchmethod
+    def gen_config(self, simulator: Simulator, input_dir: str):
+        pass

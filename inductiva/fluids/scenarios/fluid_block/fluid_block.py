@@ -102,78 +102,70 @@ class FluidBlock(Scenario):
 
         return output_path
 
-    def _gen_aux_splishsplash(self, input_dir):
-        """Generates auxiliary files for SPlisHSPlasH."""
-        unit_box_file_path = os.path.join(os.path.dirname(__file__),
-                                          UNIT_BOX_MESH_FILENAME)
-        shutil.copy(unit_box_file_path, input_dir)
 
-    def _gen_config_splishsplash(self, input_dir):
-        """Generates the configuration file for SPlisHSPlasH."""
+@FluidBlock.get_config_filename.register
+def _(cls, _: SPlisHSPlasH):
+    """Returns the configuration filename for SPlisHSPlasH."""
+    return SPLISHSPLASH_CONFIG_FILENAME
 
-        fluid_margin = 2 * self.particle_radius
 
-        replace_params_in_template(
-            templates_dir=os.path.dirname(__file__),
-            template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
-            params={
-                "simulation_time": self.simulation_time,
-                "time_step": TIME_STEP,
-                "particle_radius": self.particle_radius,
-                "data_export_rate": 1 / OUTPUT_TIME_STEP,
-                "tank_filename": UNIT_BOX_MESH_FILENAME,
-                "tank_dimensions": TANK_DIMENSIONS,
-                "fluid_filename": UNIT_BOX_MESH_FILENAME,
-                "fluid": self.fluid,
-                "fluid_position": [fluid_margin] * 3,
-                "fluid_dimensions": [
-                    dimension - 2 * fluid_margin
-                    for dimension in self.dimensions
-                ],
-                "fluid_velocity": self.initial_velocity,
-            },
-            output_file_path=os.path.join(input_dir,
-                                          SPLISHSPLASH_CONFIG_FILENAME),
-        )
+@FluidBlock.gen_aux_files.register
+def _(self, _: SPlisHSPlasH, input_dir):
+    """Generates auxiliary files for SPlisHSPlasH."""
+    unit_box_file_path = os.path.join(os.path.dirname(__file__),
+                                      UNIT_BOX_MESH_FILENAME)
+    shutil.copy(unit_box_file_path, input_dir)
 
-    def _gen_aux_dualsphysics(self, _):
-        """Generates auxiliary files for DualSPHysics.
-        
-        Does nothing, as DualSPHysics does not require any auxiliary files for
-        this scenario.
-        """
-        pass
 
-    def _gen_config_dualsphysics(self, input_dir):
-        """Generates the configuration file for DualSPHysics."""
+@FluidBlock.gen_config.register
+def _(self, _: SPlisHSPlasH, input_dir: str):
+    """Generates the configuration file for SPlisHSPlasH."""
 
-        replace_params_in_template(
-            templates_dir=os.path.dirname(__file__),
-            template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
-            params={
-                "simulation_time": self.simulation_time,
-                "particle_distance": 2 * self.particle_radius,
-                "output_time_step": OUTPUT_TIME_STEP,
-                "tank_dimensions": TANK_DIMENSIONS,
-                "fluid_dimensions": self.dimensions,
-                "fluid_position": self.position,
-                "fluid": self.fluid,
-            },
-            output_file_path=os.path.join(input_dir,
-                                          DUALSPHYSICS_CONFIG_FILENAME),
-        )
+    fluid_margin = 2 * self.particle_radius
 
-    _gen_config = {
-        SPlisHSPlasH: _gen_config_splishsplash,
-        DualSPHysics: _gen_config_dualsphysics,
-    }
+    replace_params_in_template(
+        templates_dir=os.path.dirname(__file__),
+        template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
+        params={
+            "simulation_time": self.simulation_time,
+            "time_step": TIME_STEP,
+            "particle_radius": self.particle_radius,
+            "data_export_rate": 1 / OUTPUT_TIME_STEP,
+            "tank_filename": UNIT_BOX_MESH_FILENAME,
+            "tank_dimensions": TANK_DIMENSIONS,
+            "fluid_filename": UNIT_BOX_MESH_FILENAME,
+            "fluid": self.fluid,
+            "fluid_position": [fluid_margin] * 3,
+            "fluid_dimensions": [
+                dimension - 2 * fluid_margin for dimension in self.dimensions
+            ],
+            "fluid_velocity": self.initial_velocity,
+        },
+        output_file_path=os.path.join(input_dir, SPLISHSPLASH_CONFIG_FILENAME),
+    )
 
-    _config_filename = {
-        SPlisHSPlasH: SPLISHSPLASH_CONFIG_FILENAME,
-        DualSPHysics: DUALSPHYSICS_CONFIG_FILENAME
-    }
 
-    _gen_aux = {
-        SPlisHSPlasH: _gen_aux_splishsplash,
-        DualSPHysics: _gen_aux_dualsphysics,
-    }
+@FluidBlock.get_config_filename.register
+def _(cls, _: DualSPHysics):
+    """Returns the configuration filename for DualSPHysics."""
+    return DUALSPHYSICS_CONFIG_FILENAME
+
+
+@FluidBlock.gen_config.register
+def _(self, _: DualSPHysics, input_dir: str):
+    """Generates the configuration file for DualSPHysics."""
+
+    replace_params_in_template(
+        templates_dir=os.path.dirname(__file__),
+        template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
+        params={
+            "simulation_time": self.simulation_time,
+            "particle_distance": 2 * self.particle_radius,
+            "output_time_step": OUTPUT_TIME_STEP,
+            "tank_dimensions": TANK_DIMENSIONS,
+            "fluid_dimensions": self.dimensions,
+            "fluid_position": self.position,
+            "fluid": self.fluid,
+        },
+        output_file_path=os.path.join(input_dir, DUALSPHYSICS_CONFIG_FILENAME),
+    )
