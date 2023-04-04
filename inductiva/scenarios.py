@@ -41,7 +41,7 @@ class Scenario(ABC):
 
     @singledispatchmethod
     @classmethod
-    def get_config_filename(cls, simulator: Simulator): # pylint: disable=unused-argument
+    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
         return ""
 
     @singledispatchmethod
