@@ -13,8 +13,8 @@ from inductiva.fluids.fluid_types import WATER
 from inductiva.utils.flags import cast_list_to_float
 
 SIMULATORS = {
-    "SPlisHSPlasH": SPlisHSPlasH,
-    "DualSPHysics": DualSPHysics,
+    "splishsplash": SPlisHSPlasH,
+    "dualsphysics": DualSPHysics,
 }
 
 FLAGS = flags.FLAGS
@@ -27,7 +27,7 @@ flags.DEFINE_list("fluid_position", [0.0, 0.0, 0.0],
                   "Position of the fluid column in the tank.")
 flags.DEFINE_enum("resolution", "low", ["high", "medium", "low"],
                   "Sets the fluid resolution to simulate.")
-flags.DEFINE_enum("simulator", "SPlisHSPlasH", SIMULATORS.keys(),
+flags.DEFINE_enum("simulator", "splishsplash", SIMULATORS.keys(),
                   "Fluid simulator to use.")
 flags.DEFINE_string("output_dir", None,
                     "Destination directory for output files.")
