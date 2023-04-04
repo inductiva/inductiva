@@ -25,9 +25,7 @@ class Scenario(ABC):
             self.gen_aux_files(simulator, input_dir)
             self.gen_config(simulator, input_dir)
 
-
             args = ()
-            
             config_filename = self.get_config_filename(simulator)
             if config_filename:
                 args += (config_filename,)
@@ -43,7 +41,7 @@ class Scenario(ABC):
 
     @singledispatchmethod
     @classmethod
-    def get_config_filename(cls, simulator: Simulator):
+    def get_config_filename(cls, simulator: Simulator): # pylint: disable=unused-argument
         return ""
 
     @singledispatchmethod
