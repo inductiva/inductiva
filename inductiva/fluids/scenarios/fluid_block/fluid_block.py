@@ -19,7 +19,7 @@ SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
 
-DUALSPHYSICS_TEMPLATE_FILENAME = "dam_break_template.dualsphysics.xml.jinja"
+DUALSPHYSICS_TEMPLATE_FILENAME = "fluid_block_template.dualsphysics.xml.jinja"
 DUALSPHYSICS_CONFIG_FILENAME = "dam_break.xml"
 
 
