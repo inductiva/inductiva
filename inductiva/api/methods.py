@@ -402,7 +402,8 @@ def run_simulation(
 
 async def follow_task(task_id: str) -> str:
     parsed_url = urlparse(inductiva.api_url)
-    url = f"ws://{parsed_url.hostname}:{parsed_url.port}/task/{task_id}/logs/tail"
+    url = f"ws://{parsed_url.hostname}:{parsed_url.port}/ \
+        task/{task_id}/logs/tail"
 
     async with websockets.connect(url) as ws:
         while True:
