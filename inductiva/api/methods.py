@@ -177,7 +177,7 @@ def block_until_status_is(api_instance: TasksApi,
 
         if status == "submitted":
             logging.info("Waiting for resources...")
-        
+
         prev_status = status
 
         # If status reaches the desired status, then stop polling
