@@ -37,7 +37,7 @@ class ParticleRadius(Enum):
 
 @dataclass
 class TimeStep(Enum):
-    """Sets particle radius according to resolution."""
+    """Sets time step according to resolution."""
     HIGH = 0.0025
     MEDIUM = 0.005
     LOW = 0.01
