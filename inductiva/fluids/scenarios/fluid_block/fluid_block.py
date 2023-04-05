@@ -165,12 +165,14 @@ def _(self, simulator: DualSPHysics, input_dir: str):  # pylint: disable=unused-
         template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
         params={
             "simulation_time": self.simulation_time,
+            "time_step": TIME_STEP,
             "particle_distance": 2 * self.particle_radius,
             "output_time_step": OUTPUT_TIME_STEP,
             "tank_dimensions": TANK_DIMENSIONS,
             "fluid_dimensions": self.dimensions,
             "fluid_position": self.position,
             "fluid": self.fluid,
+            "adaptive_time_step": self.adaptive_time_step,
         },
         output_file_path=os.path.join(input_dir, DUALSPHYSICS_CONFIG_FILENAME),
     )
