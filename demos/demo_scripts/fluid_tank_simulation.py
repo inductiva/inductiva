@@ -7,6 +7,7 @@ from absl import app
 
 import inductiva
 from inductiva.fluids.scenarios.fluid_tank import FluidTank
+from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.shapes import Cylinder
 
 FLAGS = flags.FLAGS
@@ -20,7 +21,7 @@ flags.DEFINE_float("fluid_level", 0.5,
 
 flags.DEFINE_string("output_dir", "output",
                     "Destination directory for output files.")
-flags.DEFINE_enum("device", "CPU", ["CPU", "GPU"],
+flags.DEFINE_enum("device", "cpu", ["cpu", "gpu"],
                   "Device in which device the simulation will run.")
 
 
@@ -36,7 +37,7 @@ def main(_):
         fluid_level=FLAGS.fluid_level,
     )
 
-    scenario.simulate(device=FLAGS.device)
+    scenario.simulate(simulator=SPlisHSPlasH(), device=FLAGS.device)
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 

@@ -3,12 +3,11 @@ from typing import List, Literal, Optional
 from enum import Enum
 from dataclasses import dataclass
 
+from inductiva.simulation import Simulator
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.types import Path
-
-from inductiva.fluids._output_post_processing import SimulationOutput
 
 
 @dataclass
@@ -41,50 +40,36 @@ class DamBreak(FluidBlock):
         if dimensions is None:
             dimensions = [0.3, 1, 1]
 
-        FluidBlock.__init__(self,
-                            density=fluid.density,
-                            kinematic_viscosity=fluid.kinematic_viscosity,
-                            dimensions=dimensions,
-                            position=position)
+        super().__init__(density=fluid.density,
+                         kinematic_viscosity=fluid.kinematic_viscosity,
+                         dimensions=dimensions,
+                         position=position)
 
-    #pylint: disable=arguments-renamed
-    def simulate(self,
-                 device: Literal["cpu", "gpu"] = "cpu",
-                 engine: Literal["SPlisHSPlasH",
-                                 "DualSPHysics"] = "SPlisHSPlasH",
-                 simulation_time: float = 1.,
-                 resolution: Literal["high", "medium", "low"] = "medium",
-                 output_dir: Optional[Path] = None):
-        """Runs SPH simulation of Dam Break scenario.
-
-        Use the FluidBlock class to run a simulation with less freedom of
-        choice of the parameters. Namely, the Dam Break scenario only allows
-        to change the following arguments.
-
+    # pylint: disable=arguments-renamed
+    def simulate(
+        self,
+        simulator: Simulator,
+        output_dir: Optional[Path] = None,
+        device: Literal["cpu", "gpu"] = "cpu",
+        resolution: Literal["high", "medium", "low"] = "medium",
+        simulation_time: float = 1,
+    ):
+        """Simulates the scenario.
+        
         Args:
-            device: Sets the device for a simulation to be run.
-            engine: The software platform to be used for the simulation.
-              Available options are (the default is DualSPHysics):
-              - SPlisHSPlasH
-              - DualSPHysics
-            resolution: Sets the fluid resolution to simulate.
-              Available options are (the default is "medium"):
-                - "high"
-                - "medium"
-                - "low"
-            simulation_time: Simulation time in seconds.
-            output_dir: Directory in which the output files will be saved. If
-              not specified, the default directory used for API tasks
-              (based on an internal ID of the task) will be used.
+            simulator: Simulator to use.
+            output_dir: Directory to store the simulation output.
+            device: Device in which to run the simulation.
+            resolution: Resolution of the simulation.
+            simulation_time: Simulation time, in seconds.
         """
 
         particle_radius = ParticleRadius[resolution.upper()].value
 
-        sim_output_path = FluidBlock.simulate(self,
-                                              device=device,
-                                              engine=engine,
-                                              simulation_time=simulation_time,
-                                              particle_radius=particle_radius,
-                                              output_dir=output_dir)
-
-        return SimulationOutput(sim_output_path)
+        return super().simulate(
+            simulator,
+            output_dir=output_dir,
+            device=device,
+            particle_radius=particle_radius,
+            simulation_time=simulation_time,
+        )

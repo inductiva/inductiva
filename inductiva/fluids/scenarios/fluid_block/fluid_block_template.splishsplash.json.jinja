@@ -6,7 +6,7 @@
         "simulationMethod": 4,
         "boundaryHandlingMethod": 0,
         "kernel": 1,
-        "cflMethod": 1,
+        "cflMethod": {{ adaptive_time_step | int }},
         "cflFactor": 0.5,
         "cflMinTimeStepSize": 0.0001,
         "cflMaxTimeStepSize": 0.005,
@@ -14,7 +14,8 @@
         "gradKernel": 1,
         "enableVTKExport": true,
         "dataExportFPS": {{ data_export_rate }},
-        "particleAttributes": "velocity;density"
+        "particleAttributes": "velocity;density",
+        "enableZSort": {{ particle_sorting | tojson }}
     },
     "RigidBodies": [
         {
