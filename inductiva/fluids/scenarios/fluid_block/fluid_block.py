@@ -4,7 +4,6 @@ import os
 import math
 from typing import List, Literal, Optional
 import shutil
-from pathlib import PurePosixPath
 
 from absl import logging
 
@@ -182,7 +181,7 @@ class FluidBlock:
             template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
             params={
                 "simulation_time": self.simulation_time,
-                "particle_radius": 2 * self.particle_radius,
+                "particle_distance": 2 * self.particle_radius,
                 "output_time_step": DUALSPH_OUTPUT_TIME_STEP,
                 "tank_dimensions": TANK_DIMENSIONS,
                 "fluid_dimensions": self.dimensions,
@@ -196,7 +195,7 @@ class FluidBlock:
         simulator = DualSPHysics()
         return simulator.run(
             input_dir=self.input_temp_dir.name,
-            sim_config_filename=PurePosixPath(DUALSPHYSICS_INPUT_FILENAME).stem,
+            sim_config_filename=DUALSPHYSICS_INPUT_FILENAME,
             device=self.device,
             output_dir=self.output_dir,
         )
