@@ -31,7 +31,7 @@ class OpenFOAM(Simulator):
         """
         return super().run(
             input_dir,
-            output_dir,
+            output_dir=output_dir,
             openfoam_solver=openfoam_solver,
             n_cores=n_cores,
         )
