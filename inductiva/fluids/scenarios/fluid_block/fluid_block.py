@@ -19,7 +19,7 @@ SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
 
-DUALSPHYSICS_TEMPLATE_FILENAME = "dam_break_template.dualsphysics.xml.jinja"
+DUALSPHYSICS_TEMPLATE_FILENAME = "fluid_block_template.dualsphysics.xml.jinja"
 DUALSPHYSICS_CONFIG_FILENAME = "dam_break.xml"
 
 
@@ -70,6 +70,8 @@ class FluidBlock(Scenario):
         device: Literal["cpu", "gpu"] = "cpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
+        adaptive_time_step: bool = True,
+        particle_sorting: bool = True,
     ):
         """Simulates the scenario.
         
@@ -79,11 +81,15 @@ class FluidBlock(Scenario):
             device: Device in which to run the simulation.
             particle_radius: Radius of the fluid particles, in meters.
             simulation_time: Simulation time, in seconds.
+            adaptive_time_step: Whether to use adaptive time step.
+            particle_sorting: Whether to use particle sorting.
         """
 
         # TODO: Avoid storing these as class attributes.
         self.particle_radius = particle_radius
         self.simulation_time = simulation_time
+        self.adaptive_time_step = adaptive_time_step
+        self.particle_sorting = particle_sorting
 
         output_path = super().simulate(
             simulator,
@@ -137,6 +143,8 @@ def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-
                 dimension - 2 * fluid_margin for dimension in self.dimensions
             ],
             "fluid_velocity": self.initial_velocity,
+            "particle_sorting": self.particle_sorting,
+            "adaptive_time_step": self.adaptive_time_step,
         },
         output_file_path=os.path.join(input_dir, SPLISHSPLASH_CONFIG_FILENAME),
     )
@@ -157,12 +165,14 @@ def _(self, simulator: DualSPHysics, input_dir: str):  # pylint: disable=unused-
         template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
         params={
             "simulation_time": self.simulation_time,
+            "time_step": TIME_STEP,
             "particle_distance": 2 * self.particle_radius,
             "output_time_step": OUTPUT_TIME_STEP,
             "tank_dimensions": TANK_DIMENSIONS,
             "fluid_dimensions": self.dimensions,
             "fluid_position": self.position,
             "fluid": self.fluid,
+            "adaptive_time_step": self.adaptive_time_step,
         },
         output_file_path=os.path.join(input_dir, DUALSPHYSICS_CONFIG_FILENAME),
     )
