@@ -1,10 +1,11 @@
 """GROMACS module of the API"""
 
 import pathlib
-from typing import Literal, Optional
+from typing import Optional
 
 from inductiva import types
 from inductiva.simulation import Simulator
+
 
 class GROMACS(Simulator):
     """Class to invoke a generic GROMACS simulation on the API."""
@@ -20,7 +21,7 @@ class GROMACS(Simulator):
         protein_filename: str,
         topology_filename: str,
         output_dir: Optional[types.Path] = None,
-        ) -> pathlib.Path:
+    ) -> pathlib.Path:
         """Run the energy minimization of a protein.
 
         Args:
@@ -33,7 +34,7 @@ class GROMACS(Simulator):
                 .top file.
         """
         return super().run(input_dir,
-                            output_dir=output_dir,
-                            input_filename=sim_config_filename,
-                            protein_filename=protein_filename,
-                            topology_filename=topology_filename)
+                           output_dir=output_dir,
+                           input_filename=sim_config_filename,
+                           protein_filename=protein_filename,
+                           topology_filename=topology_filename)
