@@ -15,3 +15,4 @@ matplotlib
 imageio
 imageio-ffmpeg
 ipython
+websockets
