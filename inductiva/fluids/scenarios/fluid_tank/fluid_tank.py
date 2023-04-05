@@ -1,6 +1,7 @@
 """Classes describing fluid tank scenarios."""
 
 from dataclasses import dataclass, field
+from enum import Enum
 import os
 from typing import List, Literal, Optional
 
@@ -25,11 +26,21 @@ SPLISHSPLASH_CONFIG_FILENAME = "fluid_tank.json"
 TANK_MESH_FILENAME = "tank.obj"
 FLUID_MESH_FILENAME = "fluid.obj"
 
-SIMULATION_TIME = 5
-OUTPUT_TIME_STEP = 0.1
-TIME_STEP = 0.005
-PARTICLE_RADIUS = 0.02
-Z_SORT = False
+
+@dataclass
+class ParticleRadius(Enum):
+    """Sets particle radius according to resolution."""
+    HIGH = 0.005
+    MEDIUM = 0.01
+    LOW = 0.02
+
+
+@dataclass
+class TimeStep(Enum):
+    """Sets particle radius according to resolution."""
+    HIGH = 0.0025
+    MEDIUM = 0.005
+    LOW = 0.01
 
 
 # Tank inlets.
@@ -137,6 +148,10 @@ class FluidTank(Scenario):
         simulator: Simulator,
         output_dir: Optional[Path] = None,
         device: Literal["cpu", "gpu"] = "cpu",
+        simulation_time: float = 5,
+        resolution: Literal["low", "medium", "high"] = "low",
+        output_time_step: float = 0.1,
+        particle_sorting: bool = False,
     ):
         """Simulates the scenario.
         
@@ -144,7 +159,18 @@ class FluidTank(Scenario):
             simulator: Simulator to use.
             output_dir: Directory to store the simulation output.
             device: Device in which to run the simulation.
+            simulation_time: Simulation time, in seconds.
+            output_time_step: Time step between output files, in seconds.
+            resolution: Resolution of the simulation. Controls the particle
+                radius and time step.
+            particle_sorting: Whether to use particle sorting.
         """
+
+        self.simulation_time = simulation_time
+        self.particle_radius = ParticleRadius[resolution.upper()].value
+        self.time_step = TimeStep[resolution.upper()].value
+        self.output_time_step = output_time_step
+        self.particle_sorting = particle_sorting
 
         output_path = super().simulate(
             simulator,
@@ -155,7 +181,7 @@ class FluidTank(Scenario):
         # TODO: Add any kind of post-processing here, e.g. convert files?
         convert_vtk_data_dir_to_netcdf(
             data_dir=os.path.join(output_path, "vtk"),
-            output_time_step=OUTPUT_TIME_STEP,
+            output_time_step=self.output_time_step,
             netcdf_data_dir=os.path.join(output_path, "netcdf"))
 
         return output_path
@@ -196,7 +222,7 @@ def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argum
     mesh_file_utils.create_tank_fluid_mesh_file(
         shape=self.shape,
         fluid_level=self.fluid_level,
-        margin=2 * PARTICLE_RADIUS,
+        margin=2 * self.particle_radius,
         path=os.path.join(input_dir, FLUID_MESH_FILENAME),
     )
 
@@ -216,16 +242,16 @@ def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-
         templates_dir=os.path.dirname(__file__),
         template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
         params={
-            "simulation_time": SIMULATION_TIME,
-            "time_step": TIME_STEP,
-            "particle_radius": PARTICLE_RADIUS,
-            "data_export_rate": 1 / OUTPUT_TIME_STEP,
-            "z_sort": Z_SORT,
+            "simulation_time": self.simulation_time,
+            "time_step": self.time_step,
+            "particle_radius": self.particle_radius,
+            "data_export_rate": 1 / self.output_time_step,
+            "z_sort": self.particle_sorting,
             "tank_filename": TANK_MESH_FILENAME,
             "fluid_filename": FLUID_MESH_FILENAME,
             "fluid": self.fluid,
             "inlet_position": inlet_position,
-            "inlet_width": int(self.inlet.radius / PARTICLE_RADIUS),
+            "inlet_width": int(self.inlet.radius / self.particle_radius),
             "inlet_fluid_velocity": self.inlet.fluid_velocity,
             "bounding_box_min": bounding_box_min,
             "bounding_box_max": bounding_box_max,
