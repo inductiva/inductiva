@@ -3,6 +3,7 @@ import os
 
 from . import fluids
 from . import core
+from . import molecules
 
 from absl import logging
 
