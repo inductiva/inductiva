@@ -7,6 +7,8 @@ from typing import Optional
 
 from inductiva.types import Path
 from inductiva.simulation import Simulator
+from inductiva.utils import files
+from inductiva.utils.misc import split_camel_case
 
 
 class Scenario(ABC):
@@ -19,6 +21,13 @@ class Scenario(ABC):
         **kwargs,
     ):
         """Simulates the scenario."""
+        if output_dir is None:
+            scenario_name_splitted = split_camel_case(self.__class__.__name__)
+            output_dir_prefix = "-".join(scenario_name_splitted).lower()
+            output_dir = files.get_timestamped_path(
+                f"{output_dir_prefix}-output")
+
+        output_dir = files.resolve_path(output_dir, is_output_path=True)
 
         with tempfile.TemporaryDirectory() as input_dir:
 

@@ -23,7 +23,7 @@ def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     return path.with_name(name + path.suffix)
 
 
-def resolve_path(path: types.Path) -> pathlib.Path:
+def resolve_path(path: types.Path, is_output_path=False) -> pathlib.Path:
     """Resolve a path relative to the Inductiva package working directory.
 
     Args:
@@ -31,7 +31,16 @@ def resolve_path(path: types.Path) -> pathlib.Path:
             as being relative to the `inductiva.working_dir` directory. Else,
             the absolute path is returned. If `inductiva.working_dir` is None,
             then the current working directory is used.
+        is_output_path: If True, the path is relative and
+            `inductiva.working_dir` is not set, the path is considered as
+            being relative to `inductiva.output_dir`.
     """
-    working_dir = pathlib.Path.cwd() if inductiva.working_dir is None \
-        else inductiva.working_dir
-    return pathlib.Path(working_dir, path)
+    root = pathlib.Path.cwd()
+
+    if inductiva.working_dir is not None:
+        root = pathlib.Path(inductiva.working_dir)
+    else:
+        if is_output_path:
+            root = pathlib.Path(inductiva.output_dir)
+
+    return pathlib.Path(root, path)
