@@ -9,6 +9,8 @@ from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.types import Path
 
+from inductiva.fluids.scenarios._post_processing import SimulationOutput
+
 
 @dataclass
 class ParticleRadius(Enum):
@@ -48,7 +50,6 @@ class DamBreak(FluidBlock):
     # pylint: disable=arguments-renamed
     def simulate(
         self,
-        simulator: Simulator,
         output_dir: Optional[Path] = None,
         device: Literal["cpu", "gpu"] = "cpu",
         resolution: Literal["high", "medium", "low"] = "medium",
@@ -66,10 +67,9 @@ class DamBreak(FluidBlock):
 
         particle_radius = ParticleRadius[resolution.upper()].value
 
-        return super().simulate(
-            simulator,
-            output_dir=output_dir,
-            device=device,
-            particle_radius=particle_radius,
-            simulation_time=simulation_time,
-        )
+        sim_output_path = super().simulate(output_dir=output_dir,
+                                           device=device,
+                                           particle_radius=particle_radius,
+                                           simulation_time=simulation_time)
+
+        return SimulationOutput(sim_output_path)

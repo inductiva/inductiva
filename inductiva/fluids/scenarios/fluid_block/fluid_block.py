@@ -13,7 +13,7 @@ from inductiva.utils.templates import replace_params_in_template
 
 TANK_DIMENSIONS = [1, 1, 1]
 TIME_STEP = 0.001
-OUTPUT_TIME_STEP = 0.02
+OUTPUT_TIME_STEP = 1./60.
 
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
@@ -65,7 +65,7 @@ class FluidBlock(Scenario):
 
     def simulate(
         self,
-        simulator: Simulator,
+        simulator: Simulator = SPlisHSPlasH(),
         output_dir: Optional[Path] = None,
         device: Literal["cpu", "gpu"] = "cpu",
         particle_radius: float = 0.02,
