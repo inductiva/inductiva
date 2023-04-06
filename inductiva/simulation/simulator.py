@@ -19,13 +19,26 @@ class Simulator(ABC):
     def run(
         self,
         input_dir: types.Path,
-        *_args,  # unused in this method, but defined to allow for more
-        # non-default arguments in method override in subclasses.
+        *_args,
         output_dir: Optional[types.Path] = None,
         track_logs: bool = False,
         **kwargs,
     ) -> pathlib.Path:
-        """Run the simulation."""
+        """Run the simulation.
+
+        Args:
+            input_dir: Path to the directory containing the input files.
+            _args: Unused in this method, but defined to allow for more
+                non-default arguments in method override in subclasses.
+            output_dir: Path to the directory where the output files will be
+                stored. If not provided, a timestamped directory will be
+                created with the same name as the input directory appended
+                with "-output".
+            track_logs: If True, the logs of the remote execution will be
+                streamed to the console.
+            **kwargs: Additional keyword arguments to be passed to the
+                simulation API method.
+        """
         input_dir = files.resolve_path(input_dir)
         if not input_dir.is_dir():
             raise ValueError(

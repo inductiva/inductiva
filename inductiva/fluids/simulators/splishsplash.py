@@ -24,7 +24,9 @@ class SPlisHSPlasH(Simulator):
         """Run the simulation.
 
         Args:
+            sim_config_filename: Name of the simulation configuration file.
             device: Device in which to run the simulation.
+            other arguments: See the documentation of the base class.
         """
         return super().run(
             input_dir,

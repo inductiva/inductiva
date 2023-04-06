@@ -210,8 +210,6 @@ def blocking_task_context(api_instance: TasksApi, task_id):
     try:
         yield None
     except Exception as err:
-        print(type(err))
-        print(err)
         logging.info("Caught exception: terminating blocking task...")
         kill_task(api_instance, task_id)
         raise err

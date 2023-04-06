@@ -24,6 +24,8 @@ class SWASH(Simulator):
 
         Args:
             n_cores: Number of MPI cores to use for the simulation.
+            sim_config_filename: Name of the simulation configuration file.
+            other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
                            track_logs=track_logs,

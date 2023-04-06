@@ -25,6 +25,8 @@ class DualSPHysics(Simulator):
 
         Args:
             device: Device in which to run the simulation.
+            sim_config_filename: Name of the simulation configuration file.
+            other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
                            output_dir=output_dir,

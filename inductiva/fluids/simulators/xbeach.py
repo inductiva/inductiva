@@ -24,6 +24,7 @@ class XBeach(Simulator):
 
         Args:
             n_cores: Number of MPI cores to use for the simulation.
+            other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
                            output_dir=output_dir,

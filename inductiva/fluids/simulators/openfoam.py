@@ -29,6 +29,7 @@ class OpenFOAM(Simulator):
                 OpenFOAM contains lots of solvers inside of it, which are used
                 to call the run simulation through terminal, e.g.,
                 [isoFoam, sonicFoam, ...]. The default solver is isoFoam.
+            other arguments: See the documentation of the base class.
         """
         return super().run(
             input_dir,
