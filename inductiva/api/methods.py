@@ -3,21 +3,26 @@
 The relevant function for usage outside of this file is invoke_api().
 Check the demos directory for examples on how it is used.
 """
+import asyncio
+import json
 import os
 import pathlib
 import signal
 import time
 from contextlib import contextmanager
-
 from typing import Any, Dict, Optional, Type
+from urllib.parse import urlparse
+
+import websockets
 from absl import logging
-from inductiva.client import ApiClient, ApiException, Configuration
-from inductiva.client.apis.tags.tasks_api import TasksApi
-from inductiva.client.models import TaskRequest, TaskStatus, BodyUploadTaskInput
-from inductiva.exceptions import RemoteExecutionError
-from inductiva.types import Path
 
 import inductiva
+from inductiva.client import ApiClient, ApiException, Configuration
+from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
+                                     TaskStatus)
+from inductiva.exceptions import RemoteExecutionError
+from inductiva.types import Path
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input, unpack_output)
 from inductiva.utils.meta import get_method_name, get_type_annotations
@@ -97,7 +102,7 @@ def download_output(api_instance: TasksApi, task_id):
     return api_response.body.name
 
 
-def block_until_finish(api_instance: TasksApi, task_id: str) -> TaskRequest:
+def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
     """Block until a task executing remotely finishes execution.
 
     Args:
@@ -163,8 +168,7 @@ def block_until_status_is(api_instance: TasksApi,
                 )
 
             status = api_response.body["status"]
-
-            logging.debug("Request status: %s", status)
+            logging.debug("Task status is %s", status)
         except ApiException as e:
             raise e
 
@@ -173,9 +177,6 @@ def block_until_status_is(api_instance: TasksApi,
 
         if status == "submitted":
             logging.info("Waiting for resources...")
-        elif status == "started":
-            logging.info("An executer has picked up the request.")
-            logging.info("The requested task is being executed remotely...")
 
         prev_status = status
 
@@ -221,24 +222,31 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def invoke_api_from_fn_ptr(params,
-                           function_ptr,
-                           output_dir: Optional[Path] = None):
+def invoke_api_from_fn_ptr(
+    params,
+    function_ptr,
+    output_dir: Optional[Path] = None,
+    track_logs: bool = False,
+):
     """Perform a task remotely defined by a function pointer."""
     type_annotations = get_type_annotations(function_ptr)
     method_name = get_method_name(function_ptr)
-    return invoke_api(method_name,
-                      params,
-                      output_dir=output_dir,
-                      type_annotations=type_annotations,
-                      return_type=type_annotations["return"])
+    return invoke_api(
+        method_name,
+        params,
+        output_dir=output_dir,
+        type_annotations=type_annotations,
+        return_type=type_annotations["return"],
+        log_remote_execution=track_logs,
+    )
 
 
 def invoke_api(method_name: str,
                params,
                type_annotations: Dict[Any, Type],
                output_dir: Optional[Path] = None,
-               return_type: Type = pathlib.Path):
+               return_type: Type = pathlib.Path,
+               log_remote_execution: bool = False):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -310,10 +318,21 @@ def invoke_api(method_name: str,
 
             logging.info("Request submitted.")
 
-            status = block_until_finish(
+            block_until_status_is(
                 api_instance=api_instance,
                 task_id=task_id,
+                desired_status={"started"},
             )
+            logging.info("An executer has picked up the request.")
+            logging.info("The requested task is being executed remotely...")
+
+            if log_remote_execution:
+                status = asyncio.run(follow_task(task_id))
+            else:
+                status = block_until_finish(
+                    api_instance=api_instance,
+                    task_id=task_id,
+                )
 
             if status == "success":
                 logging.info("Task executed successfuly.")
@@ -346,6 +365,7 @@ def run_simulation(
     input_dir: pathlib.Path,
     output_dir: pathlib.Path,
     params: Dict[str, Any],
+    log_remote_execution: bool = False,
 ) -> pathlib.Path:
 
     params = {
@@ -362,9 +382,30 @@ def run_simulation(
         type_annotations,
         output_dir=output_dir,
         return_type=pathlib.Path,
+        log_remote_execution=log_remote_execution,
     )
 
     if not isinstance(result, pathlib.Path):
         raise RuntimeError(f"Expected result to be a Path, got {type(result)}")
 
     return result
+
+
+async def follow_task(task_id: str) -> str:
+    parsed_url = urlparse(inductiva.api_url)
+    url = f"ws://{parsed_url.hostname}:{parsed_url.port}/ \
+        task/{task_id}/logs/tail"
+
+    async with websockets.connect(url) as ws:
+        while True:
+            message = await ws.recv()
+            parsed_message = json.loads(message)
+
+            if parsed_message["type"] == "update":
+                status = parsed_message["content"]
+                logging.debug("Task status update: %s", status)
+
+                return status
+            else:
+                new_line = parsed_message["content"]
+                print(new_line, end="")

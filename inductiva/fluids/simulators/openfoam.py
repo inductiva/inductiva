@@ -19,6 +19,7 @@ class OpenFOAM(Simulator):
         output_dir: Optional[types.Path] = None,
         openfoam_solver: str = "isoFoam",
         n_cores=1,
+        track_logs: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
 
@@ -28,10 +29,12 @@ class OpenFOAM(Simulator):
                 OpenFOAM contains lots of solvers inside of it, which are used
                 to call the run simulation through terminal, e.g.,
                 [isoFoam, sonicFoam, ...]. The default solver is isoFoam.
+            other arguments: See the documentation of the base class.
         """
         return super().run(
             input_dir,
             output_dir=output_dir,
+            track_logs=track_logs,
             openfoam_solver=openfoam_solver,
             n_cores=n_cores,
         )
