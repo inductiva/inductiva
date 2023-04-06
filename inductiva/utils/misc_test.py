@@ -1,3 +1,4 @@
+# pylint: disable=missing-docstring
 from .misc import split_camel_case
 
 
