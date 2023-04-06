@@ -24,8 +24,7 @@ class Scenario(ABC):
         if output_dir is None:
             scenario_name_splitted = split_camel_case(self.__class__.__name__)
             output_dir_prefix = "-".join(scenario_name_splitted).lower()
-            output_dir = get_timestamped_path(
-                f"{output_dir_prefix}-output")
+            output_dir = get_timestamped_path(f"{output_dir_prefix}-output")
 
         output_dir = resolve_path(output_dir, is_output_path=True)
 
