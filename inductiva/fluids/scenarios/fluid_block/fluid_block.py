@@ -10,6 +10,7 @@ from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.simulators import DualSPHysics
 from inductiva.utils.templates import replace_params_in_template
+from inductiva.fluids.scenarios._post_processing import SimulationOutput
 
 TANK_DIMENSIONS = [1, 1, 1]
 TIME_STEP = 0.001
@@ -103,7 +104,7 @@ class FluidBlock(Scenario):
         #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
         #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
 
-        return output_path
+        return SimulationOutput(output_path)
 
 
 @FluidBlock.get_config_filename.register
@@ -138,7 +139,7 @@ def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-
             "tank_dimensions": TANK_DIMENSIONS,
             "fluid_filename": UNIT_BOX_MESH_FILENAME,
             "fluid": self.fluid,
-            "fluid_position": [fluid_margin] * 3,
+            "fluid_position": self.position,
             "fluid_dimensions": [
                 dimension - 2 * fluid_margin for dimension in self.dimensions
             ],

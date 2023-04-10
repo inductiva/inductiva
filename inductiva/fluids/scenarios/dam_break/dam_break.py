@@ -72,4 +72,4 @@ class DamBreak(FluidBlock):
                                            particle_radius=particle_radius,
                                            simulation_time=simulation_time)
 
-        return SimulationOutput(sim_output_path)
+        return SimulationOutput(sim_output_path.sim_output_dir)

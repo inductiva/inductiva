@@ -42,10 +42,10 @@ class SimulationOutput:
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
 
         render_vtk(self.sim_output_dir,
-                                 movie_path,
-                                 objects=domain,
-                                 color=color,
-                                 fps=movie_fps)
+                   movie_path,
+                   camera=[(2.,2.,1.5), (0.,0.,0.), (1., 1., 3.)],
+                   fps=movie_fps,
+                   color=color)
 
         with open(movie_path, "rb") as file_path:
             mp4 = file_path.read()
