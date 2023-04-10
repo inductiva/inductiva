@@ -26,7 +26,7 @@ class Scenario(ABC):
             output_dir_prefix = "-".join(scenario_name_splitted).lower()
             output_dir = get_timestamped_path(f"{output_dir_prefix}-output")
 
-        output_dir = resolve_path(output_dir, is_output_path=True)
+        output_dir = resolve_path(output_dir)
 
         with tempfile.TemporaryDirectory() as input_dir:
 
