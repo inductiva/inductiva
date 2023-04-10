@@ -11,7 +11,7 @@ class OpenFOAM(Simulator):
 
     @property
     def api_method_name(self) -> str:
-        return "fvm.opemfoam.run_simulation"
+        return "fvm.openfoam.run_simulation"
 
     def run(
         self,
