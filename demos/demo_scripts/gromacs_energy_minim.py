@@ -36,6 +36,7 @@ flags.DEFINE_string("output_dir",
                     "Directory where the outputs will be stored.",
                     required=True)
 
+
 def main(_):
     """Run a Gromacs energy minimization using user-provided input files."""
 
@@ -52,6 +53,6 @@ def main(_):
 
     logging.info("Outputs stored in %s", output_path)
 
+
 if __name__ == "__main__":
     app.run(main)
-

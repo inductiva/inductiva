@@ -1,2 +1,2 @@
-from .simulators import (
-    GROMACS)
+#pylint: disable=missing-module-docstring
+from .simulators import GROMACS

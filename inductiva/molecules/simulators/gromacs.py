@@ -8,7 +8,7 @@ from inductiva.simulation import Simulator
 
 
 class GROMACS(Simulator):
-    """Class to invoke a generic GROMACS simulation on the API."""
+    """Class to invoke a GROMACS energy minimization on the API."""
 
     @property
     def api_method_name(self) -> str:
@@ -26,8 +26,8 @@ class GROMACS(Simulator):
 
         Args:
             input_dir: Path to the directory containing the input files.
-            sim_config_filename: Name of the file containing the energy
-                minimization parameters.
+            sim_config_filename: Name of the .mdp file containing the
+                energy minimization parameters.
             protein_filename: Name of the file containing the protein
                 .gro file.
             topology_filename: Name of the file containing the topology
