@@ -16,6 +16,7 @@ class XBeach(Simulator):
     def run(
         self,
         input_dir: types.Path,
+        sim_config_filename: Optional[str] = "params.txt",
         output_dir: Optional[types.Path] = None,
         n_cores: int = 1,
         track_logs: bool = False,
@@ -26,7 +27,10 @@ class XBeach(Simulator):
             n_cores: Number of MPI cores to use for the simulation.
             other arguments: See the documentation of the base class.
         """
-        return super().run(input_dir,
-                           output_dir=output_dir,
-                           n_cores=n_cores,
-                           track_logs=track_logs)
+        return super().run(
+            input_dir,
+            input_filename=sim_config_filename,
+            n_cores=n_cores,
+            track_logs=track_logs,
+            output_dir=output_dir,
+        )
