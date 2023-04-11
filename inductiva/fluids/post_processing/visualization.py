@@ -10,50 +10,55 @@ import pyvista as pv
 from inductiva.utils.visualization import create_movie_from_frames
 from inductiva.fluids.post_processing import process_vtk
 
-def render_vtk(sim_output_dir: str,
+def render_vtk(vtk_output_dir: str,
                movie_path: str,
                scalars: str = None,
                scalar_bounds: Optional[List[float]] = None,
-               objects = None,
-               camera = None,
-               color: str = "#00CCFF",
+               camera=None,
+               color: str = "blue",
                cmap: str = None,
                fps: int = 10) -> None:
     """Creates movie from a series of vtk files.
 
     The order of the vtk file name determines the order with which they
-    are render in the movie. For example, vtk file 'particle_001.vtk' will
+    are rendered in the movie. For example, vtk file 'particle_001.vtk' will
     appear before 'particle_002.vtk'.
 
     Args:
-        sim_output_dir: Directory containing a 'vtk' folder.
+        vtk_output_dir: Directory containing the vtk files.
         movie_path: Path to save the movie.
-        scalar: scalar value of the vtk files to be plotted.
-        scalar_bounds: bounds of the scalar field to be plotted.
+        scalar: Scalars used to “color” the mesh. Accepts a string name
+            of an array that is present on the mesh or an array equal to
+            the number of cells or the number of points in the mesh.
+            Array should be sized as a single vector.
+        scalar_bounds: Color bar range for scalars. Defaults to minimum
+            and maximum of scalars array. Example: [-1, 2].
         objects: Object of pyvista.PolyData type describing the domain or
             an object inside.
         camera: Camera description must be one of the following:
           - List of three tuples describing the position, focal-point
           and view-up: [(2.0, 5.0, 13.0), (0.0, 0.0, 0.0), (-0.7, -0.5, 0.3)]
           - List with a view-vector: [-1.0, 2.0, -5.0]
-          - A string with the plane orthogonal to the view direction: 'xy'
-        color: The color of the points in the simulation to plot trajectories.
-          The default color is light blue.
-        cmap: colormap for plotting the property.
-        fps: Number of frames per second to use in the movie. This cuts some
-            frames of data for speed and lower quality purposes.
+          - A string with the plane orthogonal to the view direction: 'xy'.
+          https://docs.pyvista.org/api/plotting/_autosummary/pyvista.CameraPosition.html
+        color: Color of the points used to represent particles. Default: "blue".
+        cmap: string with the name of the matplotlib colormap to use
+            when mapping the scalars. See available Matplotlib colormaps.
+        fps: Number of frames per second to use in the movie. Renders only a
+            subset of the vtk files to create the movie. This is done for
+            speed purposes.
+            Default: 10.
     """
-    vtk_dir = os.path.join(sim_output_dir, "vtk")
 
-    vtk_files = process_vtk.get_sorted_vtk_files(vtk_dir)
+    vtk_files = process_vtk.get_sorted_vtk_files(vtk_output_dir)
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         logging.info("Creating movie frames...")
         for index, frame_file in enumerate(vtk_files):
-            if index % int(round(60/fps)) == 0:
-                frame_path = os.path.join(sim_output_dir, frame_file)
+            if index % int(round(60 / fps)) == 0:
+                frame_path = os.path.join(vtk_output_dir, frame_file)
                 image_frame_path = os.path.join(
-                    tmp_dir, "Frame_"+str(index).zfill(5)+".png")
+                    tmp_dir, "Frame_" + str(index).zfill(5) + ".png")
 
                 render_vtk_frame(frame_path,
                                  image_frame_path=image_frame_path,
@@ -73,7 +78,7 @@ def render_vtk_frame(frame_path: str,
                      image_frame_path: str,
                      scalars: str = None,
                      scalar_bounds: Optional[List[float]] = None,
-                     camera = None,
+                     camera=None,
                      color: str = None,
                      cmap: str = None):
     """Render a .png image from a vtk file."""
@@ -85,5 +90,6 @@ def render_vtk_frame(frame_path: str,
                cpos=camera,
                scalars=scalars,
                clim=scalar_bounds,
+               render_points_as_spheres=True,
                color=color,
                cmap=cmap)

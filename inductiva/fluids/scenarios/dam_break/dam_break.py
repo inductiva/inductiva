@@ -9,7 +9,7 @@ from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.types import Path
 
-from inductiva.fluids.scenarios._post_processing import SimulationOutput
+from inductiva.fluids.scenarios._post_processing import SPHSimulationOutput
 
 
 @dataclass
@@ -72,4 +72,4 @@ class DamBreak(FluidBlock):
                                            particle_radius=particle_radius,
                                            simulation_time=simulation_time)
 
-        return SimulationOutput(sim_output_path.sim_output_dir)
+        return SPHSimulationOutput(sim_output_path.sim_output_dir)

@@ -1,17 +1,14 @@
 """Post process SPH simulation outputs."""
 import os
-from typing import List, Optional
 
 from base64 import b64encode
 from IPython.display import HTML
-
-import pyvista as pv
 
 from inductiva.fluids.post_processing import render_vtk
 from inductiva.types import Path
 
 
-class SimulationOutput:
+class SPHSimulationOutput:
     """Post process SPH simulation outputs."""
 
     def __init__(self, sim_output_path: Path):
@@ -23,14 +20,14 @@ class SimulationOutput:
         self.sim_output_dir = sim_output_path
 
     def render(self,
-               movie_fps: int = 10,
-               box_domain: Optional[List[float]] = [0., 1., 0., 1., 0., 1.],
-               color: str = "#00CCFF"):
+               fps: int = 10,
+               color: str = "blue"):
         """Render the simulation as a movie.
 
         Args:
-        movie_fps: The frames per second (fps) to be used in the movie.
-          Default is 10 fps.
+        fps: Number of frames per second to use in the movie. Renders a
+            subset of the vtk files to create the movie.
+            Default: 10.
         box_domain: Description of domain boundaries. As of now, it is fixed
             for a box defined by [x_min, x_max, y_min, y_max, z_min, z_max],
             but we can iterate to include objects ending in .obj, .stl or .vtk.
@@ -38,13 +35,14 @@ class SimulationOutput:
           If None, the default color is used.
         """
 
-        domain = pv.Box(bounds=box_domain)
+        vtk_dir = os.path.join(self.sim_output_dir, "vtk")
+
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
 
         render_vtk(self.sim_output_dir,
                    movie_path,
-                   camera=[(2.,2.,1.5), (0.,0.,0.), (1., 1., 3.)],
-                   fps=movie_fps,
+                   camera=[(2., 2., 1.5), (0., 0., 0.), (1., 1., 3.)],
+                   fps=fps,
                    color=color)
 
         with open(movie_path, "rb") as file_path:
