@@ -1,5 +1,67 @@
 ![Python package](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml/badge.svg)
 
-# Inductiva
+![linkedin_header](https://user-images.githubusercontent.com/104431973/231184851-0ce34289-593e-4832-aaa2-9aae652113f5.jpg)
 
-This repository holds a user-friendly client to Inductiva's scientific computing API.
+## Large scale simulations made simple
+
+Inductiva API provides dozens of open-source physical simulation packages from your laptop. Users can start simulating right away, with no hardware setup issues and no software configuration headaches. Additionally, we provide a transparent way to scale your simulations to the next-level with one-line of code.
+
+One can start running simulations in two ways:
+- **High-level Simulation:** We provide pre-built scenarios that define a physical model (e.g., fluid dynamics DamBreak). Users are allowed to define some parameters of the scenarios, choose the method of simulation and a few respective parameters and accelerate their simulations with the best hardware available for them. 
+
+Example of how to run the DamBreak scenario:
+```python
+from inductiva import fluids
+
+scenario = fluids.scenarios.DamBreak(position=(0., 0., 0.), dimensions=(1.,0.3,0.3))
+
+output = scenario.simulate()
+video = output.render()
+```
+
+- **Low-level Simulation:** Users familiar with the simulators can submit their previously prepared simulation configuration files. In this way, users can immediatelly take advantage of accelerated hardware to speed up their simulations, without having to change any of their existing simulation scripts. Moreover, most users want to execute more than just one simulation and via API one can do it in a couple of lines of code. 
+
+Example of how to run the low-level simulation:
+```python
+from inductiva import fluids
+
+simulator = fluids.simulators.DualSPHysics()
+
+output_dir = simulator.run(input_dir="FlowCylinder",
+                           sim_config_filename="CaseFlowCylinder_Re200_Def.xml",
+                           output_dir="Flow",
+                           device="gpu")
+```
+
+Find more examples of simulations at the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos/examples).
+
+Our goal is to provide researchers and engineers with an easy and fast way to scale their simulations and explore various designs. 
+
+
+## Simulators
+
+The simulators we provide are all open-source and have their own dedicated documentation.
+
+Currently, we have available the following simulators:
+- [SPlisHSPlasH](https://github.com/InteractiveComputerGraphics/SPlisHSPlasH)
+- [DualSPHysics](https://github.com/DualSPHysics/DualSPHysics)
+- [OpenFOAM](https://www.openfoam.com/)
+- [Swash](https://swash.sourceforge.io/)
+- [xBeach](https://oss.deltares.nl/web/xbeach/)
+
+If you would like for other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
+
+## Installation
+
+It is super simple to start using the API if you are already familiar with Python package management.
+One just needs to do
+```
+pip install inductiva
+```
+
+and your are good to go! After this, you can already start exploring our tutorial notebooks! 
+
+In a local computer you just need to do this once. In Colab, you may need to re-install this
+between notebooks.
+
+You are ready to start [exploring](https://github.com/inductiva/inductiva/tree/main/demos/examples).
