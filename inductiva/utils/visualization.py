@@ -55,6 +55,7 @@ def create_movie_from_frames(frames_dir: str,
 
 def create_movie_from_vtk(vtk_output_dir: str,
                           movie_path: str,
+                          virtual_display: bool = False,
                           scalars: str = None,
                           scalar_bounds: Optional[List[float]] = None,
                           camera=None,
@@ -92,7 +93,8 @@ def create_movie_from_vtk(vtk_output_dir: str,
             speed purposes.
             Default: 10.
     """
-
+    if virtual_display:
+        pv.start_xvfb()
     vtk_files = get_sorted_files(vtk_output_dir, ".vtk")
 
     with tempfile.TemporaryDirectory() as tmp_dir:
