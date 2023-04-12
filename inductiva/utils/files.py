@@ -29,14 +29,14 @@ def resolve_path(path: types.Path) -> pathlib.Path:
     """Resolve a path relative to the Inductiva package working directory.
 
     Args:
-        path: Path to a file or directory. If it is relative, it is considered
-            as being relative to the `inductiva.working_dir` directory. Else,
-            the absolute path is returned. If `inductiva.working_dir` is None,
-            then the current working directory is used.
+        path: Path to a file or directory.
     """
-    working_dir = pathlib.Path.cwd() if inductiva.working_dir is None \
-        else inductiva.working_dir
-    return pathlib.Path(working_dir, path)
+    root = pathlib.Path.cwd()
+
+    if inductiva.working_dir:
+        root = pathlib.Path(inductiva.working_dir)
+
+    return pathlib.Path(root, path)
 
 
 def get_sorted_files(data_dir: str, file_format: str = "name",

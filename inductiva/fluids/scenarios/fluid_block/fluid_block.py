@@ -13,8 +13,7 @@ from inductiva.utils.templates import replace_params_in_template
 from inductiva.fluids.scenarios._post_processing import SPHSimulationOutput
 
 TANK_DIMENSIONS = [1, 1, 1]
-TIME_STEP = 0.001
-OUTPUT_TIME_STEP = 1. / 60.
+
 
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
@@ -73,6 +72,8 @@ class FluidBlock(Scenario):
         simulation_time: float = 1,
         adaptive_time_step: bool = True,
         particle_sorting: bool = True,
+        time_step: float = 0.001,
+        output_time_step: float = 0.02,
     ):
         """Simulates the scenario.
         
@@ -84,6 +85,8 @@ class FluidBlock(Scenario):
             simulation_time: Simulation time, in seconds.
             adaptive_time_step: Whether to use adaptive time step.
             particle_sorting: Whether to use particle sorting.
+            time_step: Time step, in seconds.
+            output_time_step: Time step between outputs, in seconds.
         """
 
         # TODO: Avoid storing these as class attributes.
@@ -91,6 +94,8 @@ class FluidBlock(Scenario):
         self.simulation_time = simulation_time
         self.adaptive_time_step = adaptive_time_step
         self.particle_sorting = particle_sorting
+        self.time_step = time_step
+        self.output_time_step = output_time_step
 
         output_path = super().simulate(
             simulator,
@@ -132,9 +137,9 @@ def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-
         template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
         params={
             "simulation_time": self.simulation_time,
-            "time_step": TIME_STEP,
+            "time_step": self.time_step,
             "particle_radius": self.particle_radius,
-            "data_export_rate": 1 / OUTPUT_TIME_STEP,
+            "data_export_rate": 1 / self.output_time_step,
             "tank_filename": UNIT_BOX_MESH_FILENAME,
             "tank_dimensions": TANK_DIMENSIONS,
             "fluid_filename": UNIT_BOX_MESH_FILENAME,
@@ -168,9 +173,9 @@ def _(self, simulator: DualSPHysics, input_dir: str):  # pylint: disable=unused-
         template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
         params={
             "simulation_time": self.simulation_time,
-            "time_step": TIME_STEP,
+            "time_step": self.time_step,
             "particle_distance": 2 * self.particle_radius,
-            "output_time_step": OUTPUT_TIME_STEP,
+            "output_time_step": self.output_time_step,
             "tank_dimensions": TANK_DIMENSIONS,
             "fluid_dimensions": self.dimensions,
             "fluid_position": self.position,

@@ -19,13 +19,19 @@ class SPlisHSPlasH(Simulator):
         sim_config_filename: str,
         output_dir: Optional[types.Path] = None,
         device: Literal["gpu", "cpu"] = "cpu",
+        track_logs: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
 
         Args:
+            sim_config_filename: Name of the simulation configuration file.
             device: Device in which to run the simulation.
+            other arguments: See the documentation of the base class.
         """
-        return super().run(input_dir,
-                           output_dir=output_dir,
-                           device=device,
-                           input_filename=sim_config_filename)
+        return super().run(
+            input_dir,
+            output_dir=output_dir,
+            track_logs=track_logs,
+            device=device,
+            input_filename=sim_config_filename,
+        )
