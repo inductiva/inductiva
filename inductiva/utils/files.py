@@ -60,7 +60,7 @@ def get_sorted_files(data_dir: str, file_format: str = "name",
     # Get a list of the files in the data directory.
     files = os.scandir(data_dir)
 
-    # The files must have .vtk extension.
+    # The files have file_format extension.
     files = [
         file for file in files
         if pathlib.Path(file.path).suffix == file_format

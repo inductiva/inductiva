@@ -57,7 +57,7 @@ def create_movie_from_vtk(vtk_output_dir: str,
                           movie_path: str,
                           virtual_display: bool = False,
                           scalars: str = None,
-                          scalar_bounds: Optional[List[float]] = None,
+                          scalar_limits: Optional[List[float]] = None,
                           camera=None,
                           color: str = "blue",
                           cmap: str = None,
@@ -97,6 +97,9 @@ def create_movie_from_vtk(vtk_output_dir: str,
     """
     if virtual_display:
         pv.start_xvfb()
+
+    pv.global_theme.background = 'white'
+    
     vtk_files = get_sorted_files(vtk_output_dir, ".vtk")
 
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -111,7 +114,7 @@ def create_movie_from_vtk(vtk_output_dir: str,
                                       image_frame_path=image_frame_path,
                                       camera=camera,
                                       scalars=scalars,
-                                      scalar_bounds=scalar_bounds,
+                                      scalar_limits=scalar_limits,
                                       color=color,
                                       cmap=cmap)
 
@@ -124,7 +127,7 @@ def create_movie_from_vtk(vtk_output_dir: str,
 def create_frame_from_vtk(frame_path: str,
                           image_frame_path: str,
                           scalars: str = None,
-                          scalar_bounds: Optional[List[float]] = None,
+                          scalar_limits: Optional[List[float]] = None,
                           camera=None,
                           color: str = None,
                           cmap: str = None):
@@ -136,10 +139,11 @@ def create_frame_from_vtk(frame_path: str,
                screenshot=image_frame_path,
                cpos=camera,
                scalars=scalars,
-               clim=scalar_bounds,
+               clim=scalar_limits,
                render_points_as_spheres=True,
                color=color,
                cmap=cmap)
+
 
 
 def create_2d_scatter_plot(
