@@ -17,7 +17,7 @@ class OpenFOAM(Simulator):
         self,
         input_dir: types.Path,
         output_dir: Optional[types.Path] = None,
-        openfoam_solver: str = "isoFoam",
+        openfoam_solver: str = "interFoam",
         n_cores=1,
         track_logs: bool = False,
     ) -> pathlib.Path:
