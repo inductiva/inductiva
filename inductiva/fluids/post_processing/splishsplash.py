@@ -11,28 +11,7 @@ import vtk
 from vtk.util.numpy_support import vtk_to_numpy as _vtk_data_to_numpy
 import xarray as xr
 
-
-def get_sorted_vtk_files(data_dir: str):
-    """Returns a list of sorted vtk files in a directory."""
-
-    if not os.path.exists(data_dir):
-        raise IOError(f"Directory '{data_dir}' does not exist.")
-
-    # Get a list of the files in the data directory.
-    files = os.scandir(data_dir)
-
-    # The files must have .vtk extension.
-    files = [file for file in files if pathlib.Path(file.path).suffix == ".vtk"]
-
-    # Sort the files to be read according to [file_key].
-    def get_alphanum_key(file):
-        file_name = pathlib.Path(file.path).stem
-        file_name_splits = file_name.split("_")
-        file_key = file_name_splits[-1]
-        return int(file_key)
-
-    files = sorted(files, key=get_alphanum_key)
-    return files
+from inductiva.utils.files import get_sorted_files
 
 
 def convert_vtk_data_dir_to_netcdf(
@@ -48,7 +27,7 @@ def convert_vtk_data_dir_to_netcdf(
         netcdf_data_dir: Directory to store files in netcdf format.
     """
 
-    files = get_sorted_vtk_files(data_dir)
+    files = get_sorted_files(data_dir, ".vtk")
 
     if not os.path.exists(netcdf_data_dir):
         os.makedirs(netcdf_data_dir)

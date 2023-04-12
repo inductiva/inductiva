@@ -11,7 +11,7 @@ from .fluid_types import (
 from .scenarios import DamBreak
 from .scenarios import FluidBlock
 from . import scenarios
-from ._output_post_processing import SimulationOutput
+from .scenarios._post_processing import SPHSimulationOutput
 from .simulators import (
     SWASH,
     XBeach,

@@ -1,4 +1,5 @@
 """Utilities for working with the file system."""
+import os
 import time
 import pathlib
 import inductiva
@@ -35,3 +36,42 @@ def resolve_path(path: types.Path) -> pathlib.Path:
         root = pathlib.Path(inductiva.working_dir)
 
     return pathlib.Path(root, path)
+
+
+def get_sorted_files(data_dir: str,
+                     file_format: str = "name",
+                     split_token: str = "_"):
+    """Returns list of files sorted according to [file_key].
+    
+    Order a set of .format files of the form
+    ['name_1.format', 'name_2.format',...,'name_10.format',
+    ...,'name_n.format'].
+    
+    The default sorting methods for list, list.sort()
+    or sorted(list), order 'name_10.format' before 'name_2.format',
+    which is not representative of the time series.
+
+    In this function we sort according to the number..
+    """
+
+    if not os.path.exists(data_dir):
+        raise IOError(f"Directory '{data_dir}' does not exist.")
+
+    # Get a list of the files in the data directory.
+    files = os.scandir(data_dir)
+
+    # The files have file_format extension.
+    files = [
+        file for file in files if pathlib.Path(file.path).suffix == file_format
+    ]
+
+    # Sort the files to be read according to [file_key].
+    def get_alphanum_key(file):
+        file_name = pathlib.Path(file.path).stem
+        file_name_splits = file_name.split(split_token)
+        file_key = file_name_splits[-1]
+        return int(file_key)
+
+    files = sorted(files, key=get_alphanum_key)
+
+    return files
