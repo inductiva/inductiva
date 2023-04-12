@@ -98,8 +98,8 @@ def create_movie_from_vtk(vtk_output_dir: str,
     if virtual_display:
         pv.start_xvfb()
 
-    pv.global_theme.background = 'white'
-    
+    pv.global_theme.background = "white"
+
     vtk_files = get_sorted_files(vtk_output_dir, ".vtk")
 
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -143,7 +143,6 @@ def create_frame_from_vtk(frame_path: str,
                render_points_as_spheres=True,
                color=color,
                cmap=cmap)
-
 
 
 def create_2d_scatter_plot(
