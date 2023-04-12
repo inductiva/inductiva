@@ -11,7 +11,7 @@ import vtk
 from vtk.util.numpy_support import vtk_to_numpy as _vtk_data_to_numpy
 import xarray as xr
 
-from inductiva.fluids.post_processing import process_vtk
+from inductiva.utils.files import get_sorted_files
 
 
 def convert_vtk_data_dir_to_netcdf(
@@ -27,7 +27,7 @@ def convert_vtk_data_dir_to_netcdf(
         netcdf_data_dir: Directory to store files in netcdf format.
     """
 
-    files = process_vtk.get_sorted_vtk_files(data_dir)
+    files = get_sorted_files(data_dir, ".vtk")
 
     if not os.path.exists(netcdf_data_dir):
         os.makedirs(netcdf_data_dir)
