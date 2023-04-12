@@ -39,7 +39,8 @@ def resolve_path(path: types.Path) -> pathlib.Path:
     return pathlib.Path(working_dir, path)
 
 
-def get_sorted_files(data_dir: str, file_format: str = "name"):
+def get_sorted_files(data_dir: str, file_format: str = "name",
+                     split_token: str = "_"):
     """Returns list of files sorted according to [file_key].
     
     Order a set of .format files of the form
@@ -68,7 +69,7 @@ def get_sorted_files(data_dir: str, file_format: str = "name"):
     # Sort the files to be read according to [file_key].
     def get_alphanum_key(file):
         file_name = pathlib.Path(file.path).stem
-        file_name_splits = file_name.split("_")
+        file_name_splits = file_name.split(split_token)
         file_key = file_name_splits[-1]
         return int(file_key)
 
