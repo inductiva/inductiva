@@ -71,6 +71,8 @@ def create_movie_from_vtk(vtk_output_dir: str,
     Args:
         vtk_output_dir: Directory containing the vtk files.
         movie_path: Path to save the movie.
+        virtual_display: Whether to use a virtual display to render
+            the movie.
         scalar: Scalars used to “color” the mesh. Accepts a string name
             of an array that is present on the mesh or an array equal to
             the number of cells or the number of points in the mesh.
