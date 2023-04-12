@@ -7,7 +7,6 @@ import inductiva
 from inductiva import types
 
 
-
 def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     """Return a path that does not exist by appending a timestamp.
 
@@ -39,7 +38,8 @@ def resolve_path(path: types.Path) -> pathlib.Path:
     return pathlib.Path(root, path)
 
 
-def get_sorted_files(data_dir: str, file_format: str = "name",
+def get_sorted_files(data_dir: str,
+                     file_format: str = "name",
                      split_token: str = "_"):
     """Returns list of files sorted according to [file_key].
     
@@ -62,8 +62,7 @@ def get_sorted_files(data_dir: str, file_format: str = "name",
 
     # The files have file_format extension.
     files = [
-        file for file in files
-        if pathlib.Path(file.path).suffix == file_format
+        file for file in files if pathlib.Path(file.path).suffix == file_format
     ]
 
     # Sort the files to be read according to [file_key].

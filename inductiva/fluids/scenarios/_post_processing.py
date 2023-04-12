@@ -36,8 +36,7 @@ class SPHSimulationOutput:
 
         create_movie_from_vtk(vtk_dir,
                               movie_path,
-                              camera=[(3., 3., 2.), (0., 0., 0.),
-                                      (1., 1., 2.)],
+                              camera=[(3., 3., 2.), (0., 0., 0.), (1., 1., 2.)],
                               fps=fps,
                               color=color)
 

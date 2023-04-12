@@ -14,7 +14,6 @@ from inductiva.fluids.scenarios._post_processing import SPHSimulationOutput
 
 TANK_DIMENSIONS = [1, 1, 1]
 
-
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
