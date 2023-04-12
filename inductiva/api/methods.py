@@ -120,27 +120,15 @@ def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
 def kill_task(api_instance: TasksApi, task_id: str):
     """Kill a task that is executing remotely.
 
-    The function sends a Kill request to the API and then polls until the
-    status of the task is killed.
-    TODO: should polling be done here? Or should the API endpoint make sure
-    that the task is killed instead of the client having to wait for
-    confirmation?
+    The function sends a kill request to the API.
 
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task to kill.
-
-    Returns:
-        Returns info related to the task, containing two fields,
-        "id" and "status".
-    """
+   """
     logging.debug("Sending kill task request ...")
-    _ = api_instance.kill_task(path_params={"task_id": task_id},)
-
-    logging.debug("Blocking until task is killed ...")
-    out = block_until_status_is(api_instance, task_id, {"killed"})
+    api_instance.kill_task(path_params={"task_id": task_id},)
     logging.info("Task terminated.")
-    return out
 
 
 def block_until_status_is(api_instance: TasksApi,
@@ -172,13 +160,11 @@ def block_until_status_is(api_instance: TasksApi,
         except ApiException as e:
             raise e
 
-        if status == prev_status:
-            continue
+        if status != prev_status:
+            if status == "submitted":
+                logging.info("Waiting for resources...")
 
-        if status == "submitted":
-            logging.info("Waiting for resources...")
-
-        prev_status = status
+            prev_status = status
 
         # If status reaches the desired status, then stop polling
         if status in desired_status:
@@ -393,9 +379,11 @@ def run_simulation(
 
 async def follow_task(task_id: str) -> str:
     parsed_url = urlparse(inductiva.api_url)
-    url = f"ws://{parsed_url.hostname}:{parsed_url.port}/ \
-        task/{task_id}/logs/tail"
+    url = \
+        f"ws://{parsed_url.hostname}:{parsed_url.port}/" \
+        f"task/{task_id}/logs/tail"
 
+    logging.debug("Following task logs at %s", url)
     async with websockets.connect(url) as ws:
         while True:
             message = await ws.recv()
