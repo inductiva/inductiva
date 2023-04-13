@@ -106,7 +106,7 @@ def create_movie_from_vtk(vtk_output_dir: str,
         logging.info("Creating movie frames...")
         for index, frame_file in enumerate(vtk_files):
             if index % int(round(60 / fps)) == 0:
-                frame_path = pathlib.Path(frame_file)
+                frame_path = os.path.join(vtk_output_dir, frame_file)
                 image_frame_path = os.path.join(
                     tmp_dir, "frame_" + str(index).zfill(5) + ".png")
 
