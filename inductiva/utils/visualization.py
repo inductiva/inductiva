@@ -2,7 +2,6 @@
 
 import os
 import tempfile
-import pathlib
 from typing import Dict, List, Optional
 
 from absl import logging
