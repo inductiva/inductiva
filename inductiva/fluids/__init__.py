@@ -1,5 +1,6 @@
 #pylint: disable=missing-module-docstring
 from .fluid_types import (
+    FluidType,
     WATER,
     OLIVE_OIL,
     LIQUID_PROPANE,
