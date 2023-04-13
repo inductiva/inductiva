@@ -4,6 +4,7 @@ from enum import Enum
 from dataclasses import dataclass
 
 from inductiva.simulation import Simulator
+from inductiva.fluids.simulators import DualSPHysics
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
@@ -50,8 +51,9 @@ class DamBreak(FluidBlock):
     # pylint: disable=arguments-renamed
     def simulate(
         self,
+        simulator: Simulator = DualSPHysics(),
         output_dir: Optional[Path] = None,
-        device: Literal["cpu", "gpu"] = "cpu",
+        device: Literal["cpu", "gpu"] = "gpu",
         resolution: Literal["high", "medium", "low"] = "medium",
         simulation_time: float = 1,
     ):
@@ -67,7 +69,8 @@ class DamBreak(FluidBlock):
 
         particle_radius = ParticleRadius[resolution.upper()].value
 
-        sim_output_path = super().simulate(output_dir=output_dir,
+        sim_output_path = super().simulate(simulator=simulator,
+                                           output_dir=output_dir,
                                            device=device,
                                            particle_radius=particle_radius,
                                            simulation_time=simulation_time)

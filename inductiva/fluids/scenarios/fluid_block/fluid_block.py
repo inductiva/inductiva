@@ -64,15 +64,15 @@ class FluidBlock(Scenario):
 
     def simulate(
         self,
-        simulator: Simulator,
+        simulator: Simulator = DualSPHysics(),
         output_dir: Optional[Path] = None,
-        device: Literal["cpu", "gpu"] = "cpu",
+        device: Literal["cpu", "gpu"] = "gpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
         adaptive_time_step: bool = True,
         particle_sorting: bool = True,
         time_step: float = 0.001,
-        output_time_step: float = 0.02,
+        output_time_step: float = 1 / 60,
     ):
         """Simulates the scenario.
         
