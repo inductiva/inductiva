@@ -64,7 +64,7 @@ class FluidBlock(Scenario):
 
     def simulate(
         self,
-        simulator: Simulator,
+        simulator: Simulator = SPlisHSPlasH(),
         output_dir: Optional[Path] = None,
         device: Literal["cpu", "gpu"] = "cpu",
         particle_radius: float = 0.02,
@@ -72,7 +72,7 @@ class FluidBlock(Scenario):
         adaptive_time_step: bool = True,
         particle_sorting: bool = True,
         time_step: float = 0.001,
-        output_time_step: float = 0.02,
+        output_time_step: float = 1 / 60,
     ):
         """Simulates the scenario.
         
