@@ -64,9 +64,9 @@ class FluidBlock(Scenario):
 
     def simulate(
         self,
-        simulator: Simulator = SPlisHSPlasH(),
+        simulator: Simulator = DualSPHysics(),
         output_dir: Optional[Path] = None,
-        device: Literal["cpu", "gpu"] = "cpu",
+        device: Literal["cpu", "gpu"] = "gpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
         adaptive_time_step: bool = True,
