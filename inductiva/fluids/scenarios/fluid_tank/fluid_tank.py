@@ -155,7 +155,7 @@ class FluidTank(Scenario):
         particle_sorting: bool = False,
     ):
         """Simulates the scenario.
-        
+
         Args:
             simulator: Simulator to use.
             output_dir: Directory to store the simulation output.

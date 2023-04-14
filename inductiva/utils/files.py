@@ -42,11 +42,11 @@ def get_sorted_files(data_dir: str,
                      file_format: str = "name",
                      split_token: str = "_"):
     """Returns list of files sorted according to [file_key].
-    
+
     Order a set of .format files of the form
     ['name_1.format', 'name_2.format',...,'name_10.format',
     ...,'name_n.format'].
-    
+
     The default sorting methods for list, list.sort()
     or sorted(list), order 'name_10.format' before 'name_2.format',
     which is not representative of the time series.

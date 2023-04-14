@@ -77,7 +77,7 @@ class FluidBlock(Scenario):
         output_time_step: float = 1 / 60,
     ):
         """Simulates the scenario.
-        
+
         Args:
             simulator: Simulator to use.
             output_dir: Directory to store the simulation output.

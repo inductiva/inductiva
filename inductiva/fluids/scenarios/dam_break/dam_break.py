@@ -58,7 +58,7 @@ class DamBreak(FluidBlock):
         simulation_time: float = 1,
     ):
         """Simulates the scenario.
-        
+
         Args:
             simulator: Simulator to use.
             output_dir: Directory to store the simulation output.
