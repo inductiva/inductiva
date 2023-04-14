@@ -34,7 +34,7 @@ output_dir = simulator.run(input_dir="FlowCylinder",
                            device="gpu")
 ```
 
-Find more examples of simulations at the [tutorials section](demos/).
+Find more examples of simulations at the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
 
 Our goal is to provide researchers and engineers with an easy and fast way to scale their simulations and explore various designs. 
 
@@ -61,7 +61,7 @@ One just needs to do
 pip install inductiva
 ```
 
-and your are good to go! You are ready to start [exploring our tutorial notebooks](demos).
+and your are good to go! You are ready to start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
 
 Notice that, in a local computer you just need to do this once. When opening the tutorials in Google Colab, you may need to re-install this
 between notebooks.
