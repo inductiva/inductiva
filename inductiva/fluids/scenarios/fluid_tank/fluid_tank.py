@@ -207,15 +207,20 @@ class FluidTank(Scenario):
     @singledispatchmethod
     @classmethod
     def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
-        return ""
+        raise ValueError(
+            f"Simulator not supported for `{cls.__name__}` scenario.")
 
     @singledispatchmethod
     def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        pass
+        raise ValueError(
+            f"Simulator not supported for `{self.__class__.__name__}` scenario."
+        )
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator, input_dir: str):
-        pass
+        raise ValueError(
+            f"Simulator not supported for `{self.__class__.__name__}` scenario."
+        )
 
 
 @FluidTank.get_config_filename.register
