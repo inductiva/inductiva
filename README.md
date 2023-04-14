@@ -49,6 +49,7 @@ Currently, we have available the following simulators:
 - [OpenFOAM](https://www.openfoam.com/)
 - [SWASH](https://swash.sourceforge.io/)
 - [xBeach](https://oss.deltares.nl/web/xbeach/)
+- [GROMACS](https://www.gromacs.org/)
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
