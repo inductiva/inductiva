@@ -19,7 +19,10 @@ class SPHSimulationOutput:
             """
         self.sim_output_dir = sim_output_path
 
-    def render(self, fps: int = 10, color: str = "blue"):
+    def render(self,
+               virtual_display: bool = True,
+               fps: int = 10,
+               color: str = "blue"):
         """Render the simulation as a movie.
 
         Args:
@@ -35,6 +38,7 @@ class SPHSimulationOutput:
         movie_path = os.path.join(self.sim_output_dir, "movie.mp4")
 
         create_movie_from_vtk(vtk_dir,
+                              virtual_display=virtual_display,
                               movie_path,
                               camera=[(3., 3., 2.), (0., 0., 0.), (1., 1., 2.)],
                               fps=fps,

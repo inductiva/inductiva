@@ -54,7 +54,7 @@ def create_movie_from_frames(frames_dir: str,
 
 def create_movie_from_vtk(vtk_output_dir: str,
                           movie_path: str,
-                          virtual_display: bool = False,
+                          virtual_display: bool = True,
                           scalars: str = None,
                           scalar_limits: Optional[List[float]] = None,
                           camera=None,
