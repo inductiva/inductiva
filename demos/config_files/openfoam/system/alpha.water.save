@@ -9,14 +9,45 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    object      decomposeParDict;
+    class       volScalarField;
+    object      alpha.water;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-numberOfSubdomains 4;
+dimensions      [0 0 0 0 0 0 0];
 
-method          scotch;
+internalField   uniform 0;
+
+boundaryField
+{
+    leftWall
+    {
+        type            zeroGradient;
+    }
+
+    rightWall
+    {
+        type            zeroGradient;
+    }
+
+    lowerWall
+    {
+        type            zeroGradient;
+    }
+
+    atmosphere
+    {
+        type            inletOutlet;
+        inletValue      uniform 0;
+        value           uniform 0;
+    }
+
+    defaultFaces
+    {
+        type            empty;
+    }
+}
 
 
 // ************************************************************************* //
+
