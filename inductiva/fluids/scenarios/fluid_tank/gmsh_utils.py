@@ -10,7 +10,7 @@ import os
 import gmsh
 import meshio
 
-TMP_MSH_FILE_PATH = 'gmsh_generated.msh'
+TMP_MSH_FILE_PATH = "gmsh_generated.msh"
 MESH_SIZE = 0.05
 GMSH_LOG_LEVEL = 2
 
@@ -38,10 +38,10 @@ class gmshAPIWrapper(contextlib.AbstractContextManager):  # pylint: disable=inva
         gmsh.initialize()
 
         # Set the log level.
-        gmsh.option.setNumber('General.Verbosity', self.log_level)
+        gmsh.option.setNumber("General.Verbosity", self.log_level)
 
         # Set the mesh size.
-        gmsh.option.setNumber('Mesh.MeshSizeMax', self.mesh_size)
+        gmsh.option.setNumber("Mesh.MeshSizeMax", self.mesh_size)
 
     def __exit__(self, *_):
         """Common operations applied after use case-specific primitives."""
@@ -285,7 +285,7 @@ def convert_msh_to_obj_file(obj_file_path: str,
     mesh = meshio.read(msh_file_path, file_format="gmsh")
 
     # Filter cell blocks to keep only those representing surfaces.
-    cells = [block for block in mesh.cells if block.type == 'triangle']
+    cells = [block for block in mesh.cells if block.type == "triangle"]
 
     # Write mesh to obj file.
     meshio.write_points_cells(obj_file_path, mesh.points, cells)
