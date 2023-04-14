@@ -1,4 +1,5 @@
-![Python package](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml)
+
+[![Python package](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml/badge.svg)](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml)
 
 ![linkedin_header](https://user-images.githubusercontent.com/104431973/231184851-0ce34289-593e-4832-aaa2-9aae652113f5.jpg)
 
