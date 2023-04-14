@@ -146,7 +146,7 @@ class FluidTank(Scenario):
 
     def simulate(
         self,
-        simulator: Simulator,
+        simulator: Simulator = SPlisHSPlasH(),
         output_dir: Optional[Path] = None,
         device: Literal["cpu", "gpu"] = "cpu",
         simulation_time: float = 5,
