@@ -1,4 +1,6 @@
 """Describes the physical scenarios and runs its simulation via API."""
+
+from functools import singledispatchmethod
 import os
 from typing import List, Literal, Optional
 import shutil
@@ -110,6 +112,24 @@ class FluidBlock(Scenario):
 
         return SPHSimulationOutput(output_path)
 
+    @singledispatchmethod
+    @classmethod
+    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
+        raise ValueError(
+            f"Simulator not supported for `{cls.__name__}` scenario.")
+
+    @singledispatchmethod
+    def gen_aux_files(self, simulator: Simulator, input_dir: str):
+        raise ValueError(
+            f"Simulator not supported for `{self.__class__.__name__}` scenario."
+        )
+
+    @singledispatchmethod
+    def gen_config(self, simulator: Simulator, input_dir: str):
+        raise ValueError(
+            f"Simulator not supported for `{self.__class__.__name__}` scenario."
+        )
+
 
 @FluidBlock.get_config_filename.register
 def _(cls, simulator: SPlisHSPlasH):  # pylint: disable=unused-argument
@@ -161,6 +181,11 @@ def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-
 def _(cls, simulator: DualSPHysics):  # pylint: disable=unused-argument
     """Returns the configuration filename for DualSPHysics."""
     return DUALSPHYSICS_CONFIG_FILENAME
+
+
+@FluidBlock.gen_aux_files.register
+def _(self, simulator: DualSPHysics, input_dir):  # pylint: disable=unused-argument
+    pass
 
 
 @FluidBlock.gen_config.register

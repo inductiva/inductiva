@@ -1,7 +1,6 @@
 """Base class for scenarios."""
 
 from abc import ABC
-from functools import singledispatchmethod
 import tempfile
 from typing import Optional
 
@@ -46,16 +45,3 @@ class Scenario(ABC):
             )
 
         return output_path
-
-    @singledispatchmethod
-    @classmethod
-    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
-        return ""
-
-    @singledispatchmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        pass
-
-    @singledispatchmethod
-    def gen_config(self, simulator: Simulator, input_dir: str):
-        pass

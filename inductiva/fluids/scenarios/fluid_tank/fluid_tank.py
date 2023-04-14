@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
+from functools import singledispatchmethod
 import os
 from typing import List, Literal, Optional
 
@@ -202,6 +203,24 @@ class FluidTank(Scenario):
             bounding_box_min[2] = outlet_bounding_box_min[2]
 
         return bounding_box_min, bounding_box_max
+
+    @singledispatchmethod
+    @classmethod
+    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
+        raise ValueError(
+            f"Simulator not supported for `{cls.__name__}` scenario.")
+
+    @singledispatchmethod
+    def gen_aux_files(self, simulator: Simulator, input_dir: str):
+        raise ValueError(
+            f"Simulator not supported for `{self.__class__.__name__}` scenario."
+        )
+
+    @singledispatchmethod
+    def gen_config(self, simulator: Simulator, input_dir: str):
+        raise ValueError(
+            f"Simulator not supported for `{self.__class__.__name__}` scenario."
+        )
 
 
 @FluidTank.get_config_filename.register
