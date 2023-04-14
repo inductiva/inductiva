@@ -12,7 +12,7 @@ import meshio
 
 TMP_MSH_FILE_PATH = 'gmsh_generated.msh'
 MESH_SIZE = 0.05
-GMSH_LOG_LEVEL = 0
+GMSH_LOG_LEVEL = 2
 
 
 class gmshAPIWrapper(contextlib.AbstractContextManager):  # pylint: disable=invalid-name
