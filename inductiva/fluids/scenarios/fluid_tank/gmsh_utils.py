@@ -282,7 +282,7 @@ def convert_msh_to_obj_file(obj_file_path: str,
     """Converts msh to obj files using meshio."""
 
     # Read mesh using meshio.
-    mesh = meshio.read(msh_file_path)
+    mesh = meshio.read(msh_file_path, file_format="gmsh")
 
     # Filter cell blocks to keep only those representing surfaces.
     cells = [block for block in mesh.cells if block.type == 'triangle']
