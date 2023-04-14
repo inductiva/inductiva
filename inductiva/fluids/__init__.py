@@ -11,7 +11,13 @@ from .fluid_types import (
 )
 from .scenarios import DamBreak
 from .scenarios import FluidBlock
-from .scenarios import FluidTank
+from .scenarios import (
+    FluidTank,
+    CubicTankOutlet,
+    CylindricalTankOutlet,
+    RectangularTankInlet,
+    CircularTankInlet,
+)
 from . import scenarios
 from .scenarios._post_processing import SPHSimulationOutput
 from .simulators import (
