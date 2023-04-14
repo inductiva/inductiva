@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
+from functools import singledispatchmethod
 import os
 from typing import List, Literal, Optional
 
@@ -202,6 +203,19 @@ class FluidTank(Scenario):
             bounding_box_min[2] = outlet_bounding_box_min[2]
 
         return bounding_box_min, bounding_box_max
+
+    @singledispatchmethod
+    @classmethod
+    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
+        return ""
+
+    @singledispatchmethod
+    def gen_aux_files(self, simulator: Simulator, input_dir: str):
+        pass
+
+    @singledispatchmethod
+    def gen_config(self, simulator: Simulator, input_dir: str):
+        pass
 
 
 @FluidTank.get_config_filename.register

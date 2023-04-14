@@ -1,4 +1,6 @@
 """Describes the physical scenarios and runs its simulation via API."""
+
+from functools import singledispatchmethod
 import os
 from typing import List, Literal, Optional
 import shutil
@@ -109,6 +111,19 @@ class FluidBlock(Scenario):
         #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
 
         return SPHSimulationOutput(output_path)
+
+    @singledispatchmethod
+    @classmethod
+    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
+        return ""
+
+    @singledispatchmethod
+    def gen_aux_files(self, simulator: Simulator, input_dir: str):
+        pass
+
+    @singledispatchmethod
+    def gen_config(self, simulator: Simulator, input_dir: str):
+        pass
 
 
 @FluidBlock.get_config_filename.register
