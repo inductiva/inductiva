@@ -60,7 +60,7 @@ One just needs to do
 pip install inductiva
 ```
 
-and your are good to go! You are ready to start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos/examples).
+and your are good to go! You are ready to start [exploring our tutorial notebooks](demos).
 
 Notice that, in a local computer you just need to do this once. When opening the tutorials in Google Colab, you may need to re-install this
 between notebooks.
