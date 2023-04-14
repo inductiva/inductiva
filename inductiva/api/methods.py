@@ -52,6 +52,7 @@ def submit_request(api_instance: TasksApi, request: TaskRequest) -> TaskStatus:
 def upload_input(api_instance: TasksApi, task_id, original_params,
                  type_annotations):
     """Uploads the inputs of a given task to the API.
+
     Args:
         api_instance: Instance of TasksApi used to send necessary requests.
         task_id: ID of the task.
@@ -64,7 +65,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         zip_name=task_id,
     )
 
-    logging.debug("Uploading input zip ...")
+    logging.info("Uploading input files...")
     try:
         with open(input_zip_path, "rb") as zip_fp:
             _ = api_instance.upload_task_input(
@@ -295,6 +296,7 @@ def invoke_api(method_name: str,
         # task if some exception or SIGINT is caught.
         with blocking_task_context(api_instance, task_id):
             if task["status"] == "pending-input":
+
                 upload_input(
                     api_instance=api_instance,
                     original_params=params,
