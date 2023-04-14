@@ -183,6 +183,11 @@ def _(cls, simulator: DualSPHysics):  # pylint: disable=unused-argument
     return DUALSPHYSICS_CONFIG_FILENAME
 
 
+@FluidBlock.gen_aux_files.register
+def _(self, simulator: DualSPHysics, input_dir):  # pylint: disable=unused-argument
+    pass
+
+
 @FluidBlock.gen_config.register
 def _(self, simulator: DualSPHysics, input_dir: str):  # pylint: disable=unused-argument
     """Generates the configuration file for DualSPHysics."""
