@@ -21,6 +21,7 @@ class GROMACS(Simulator):
         protein_filename: str,
         topology_filename: str,
         output_dir: Optional[types.Path] = None,
+        track_logs: bool = True,
     ) -> pathlib.Path:
         """Run the energy minimization of a protein.
 
@@ -35,6 +36,7 @@ class GROMACS(Simulator):
         """
         return super().run(input_dir,
                            output_dir=output_dir,
+                           track_logs=track_logs,
                            input_filename=sim_config_filename,
                            protein_filename=protein_filename,
                            topology_filename=topology_filename)
