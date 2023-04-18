@@ -30,6 +30,7 @@ def explore_design_space(simulator: Simulator,
         extra_sim_kwargs: Extra keyword arguments to pass to the simulator.
     """
     input_dir = files.resolve_path(input_dir)
+    file_format = os.path.splitext(template_filename)[1]
 
     if output_dir is None:
         output_dir = input_dir.with_name(f"{input_dir.name}-output")
@@ -41,7 +42,7 @@ def explore_design_space(simulator: Simulator,
     for value in values:
         logging.info("Running simulation for %s=%s.", tag, value)
 
-        input_filename = f"input_file_{value}.sws"
+        input_filename = f"input_file_{value}{file_format}"
         input_file = os.path.join(input_dir, input_filename)
 
         templates.replace_params_in_template(
