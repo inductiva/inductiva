@@ -1,6 +1,5 @@
 """Functions to explore design space of simulations."""
 import os
-import pathlib
 from typing import Any, List, Optional
 from absl import logging
 
@@ -29,8 +28,13 @@ def explore_design_space(simulator: Simulator,
         output_dir: Directory where the output files will be stored.
         extra_sim_kwargs: Extra keyword arguments to pass to the simulator.
     """
-    input_dir = pathlib.Path(input_dir)
+    input_dir = files.resolve_path(input_dir)
     file_format = os.path.splitext(template_filename)[1]
+
+    if output_dir is None:
+        output_dir = input_dir.with_name(f"{input_dir.name}-output")
+    else:
+        output_dir = files.resolve_path(output_dir)
 
     logging.info("Exploring design space for attribute \"%s\".", tag)
 
@@ -46,11 +50,6 @@ def explore_design_space(simulator: Simulator,
             {tag: value},
             input_file,
         )
-
-        if output_dir is None:
-            output_dir = input_dir.with_name(f"{input_dir.name}-output")
-        else:
-            output_dir = files.resolve_path(output_dir)
 
         simulator.run(
             input_dir=input_dir,
