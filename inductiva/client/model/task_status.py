@@ -68,11 +68,24 @@ Attributes:
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
-                                         datetime, uuid.UUID, int, float,
-                                         decimal.Decimal, bool, None, list,
-                                         tuple, bytes, io.FileIO,
-                                         io.BufferedReader,],
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -119,10 +132,11 @@ Attributes:
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self,
-                    name: typing.Union[typing_extensions.Literal["id", "status",
-                                                                 "queue",],
-                                       str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "id",
+        "status",
+        "queue",
+    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -150,18 +164,27 @@ Attributes:
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self,
-                      name: typing.Union[typing_extensions.Literal["id",
-                                                                   "status",
-                                                                   "queue",],
-                                         str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "id",
+        "status",
+        "queue",
+    ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict,],
-        id: typing.Union[MetaOapg.properties.id, str,],
-        status: typing.Union[MetaOapg.properties.status, str,],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+        ],
+        id: typing.Union[
+            MetaOapg.properties.id,
+            str,
+        ],
+        status: typing.Union[
+            MetaOapg.properties.status,
+            str,
+        ],
         queue: typing.Union[MetaOapg.properties.queue, dict,
                             frozendict.frozendict, str, date, datetime,
                             uuid.UUID, int, float, decimal.Decimal, bool, None,
