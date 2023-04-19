@@ -1,6 +1,5 @@
 """Functions to explore design space of simulations."""
 import os
-import pathlib
 from typing import Any, List, Optional
 from absl import logging
 
