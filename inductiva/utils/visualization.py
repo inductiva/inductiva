@@ -98,7 +98,8 @@ def create_movie_from_vtk(vtk_output_dir: str,
         pv.start_xvfb()
 
     pv.global_theme.background = "white"
-
+    
+    vtk_output_dir = files.resolve_path(vtk_ouput_dir)
     vtk_files = get_sorted_files(vtk_output_dir, ".vtk")
 
     with tempfile.TemporaryDirectory() as tmp_dir:
