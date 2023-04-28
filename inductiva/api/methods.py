@@ -419,6 +419,7 @@ def invoke_async_api(
         )
 
         task_id = task["id"]
+        logging.info("This simulation has the task_id: %s", task_id)
 
         if task["status"] == "pending-input":
 
@@ -435,9 +436,8 @@ def invoke_async_api(
                 task_id=task_id,
                 desired_status={"started"},
             )
-            logging.info("An executer has picked up the request.")
-            logging.info("The requested task is being executed remotely "
-                         "with task_id: %s...", task_id)
+            logging.info("An executer has picked up the request")
+            logging.info("The requested task is being executed remotely")
 
     return task_id
 
