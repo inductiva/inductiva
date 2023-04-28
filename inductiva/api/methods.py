@@ -132,13 +132,11 @@ def kill_task(api_instance: TasksApi, task_id: str):
     logging.info("Task terminated.")
 
 
-def check_status(api_instance: TasksApi,
-                 task_id: str):
+def check_status(api_instance: TasksApi, task_id: str):
     """Check the status of a task."""
 
     api_response = api_instance.get_task_status(
-                    path_params={"task_id": task_id},
-                )
+        path_params={"task_id": task_id},)
 
     status = api_response.body["status"]
     logging.info("Task status: %s", status)
@@ -362,10 +360,8 @@ def invoke_api(method_name: str,
     return unpack_output(result_list, output_dir, return_type)
 
 
-def invoke_async_api(
-    method_name: str,
-    params,
-    type_annotations: Dict[Any, Type]):
+def invoke_async_api(method_name: str, params, type_annotations: Dict[Any,
+                                                                      Type]):
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -496,7 +492,8 @@ def run_async_simulation(
     )
 
     if not isinstance(result, str):
-        raise RuntimeError(f"Expected result to be a string with task_id, got {type(result)}")
+        raise RuntimeError(
+            f"Expected result to be a string with task_id, got {type(result)}")
 
     return result
 

@@ -10,8 +10,7 @@ from inductiva import api
 from inductiva.types import Path
 from inductiva.client import ApiClient, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
-from inductiva.utils.data import (extract_output, get_validate_request_params,
-                                  pack_input, unpack_output)
+from inductiva.utils.data import (extract_output, unpack_output)
 
 
 def check_status(task_id: str):
@@ -30,9 +29,8 @@ def check_status(task_id: str):
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
 
-        status = api.methods.check_status(
-            api_instance=api_instance,
-            task_id=task_id)
+        status = api.methods.check_status(api_instance=api_instance,
+                                          task_id=task_id)
 
     return status
 
@@ -55,9 +53,7 @@ def fetch_task(task_id: str,
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
 
-        status = api.check_status(
-            api_instance=api_instance,
-            task_id=task_id)
+        status = api.check_status(api_instance=api_instance, task_id=task_id)
 
         if status == "started":
             logging.info("The task is still being executed.")
