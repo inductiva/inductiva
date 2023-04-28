@@ -35,3 +35,15 @@ class SPlisHSPlasH(Simulator):
             device=device,
             input_filename=sim_config_filename,
         )
+
+    def run_async(
+        self,
+        input_dir: types.Path,
+        sim_config_filename: str,
+        device: Literal["gpu", "cpu"] = "cpu",
+    ) -> str:
+
+        return super().run_async(
+            input_dir,
+            device=device,
+            input_filename=sim_config_filename)

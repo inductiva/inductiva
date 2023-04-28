@@ -132,6 +132,20 @@ def kill_task(api_instance: TasksApi, task_id: str):
     logging.info("Task terminated.")
 
 
+def check_status(api_instance: TasksApi,
+                 task_id: str):
+    """Check the status of a task."""
+
+    api_response = api_instance.get_task_status(
+                    path_params={"task_id": task_id},
+                )
+
+    status = api_response.body["status"]
+    logging.info("Task status: %s", status)
+
+    return status
+
+
 def block_until_status_is(api_instance: TasksApi,
                           task_id,
                           desired_status,
@@ -348,6 +362,86 @@ def invoke_api(method_name: str,
     return unpack_output(result_list, output_dir, return_type)
 
 
+def invoke_async_api(
+    method_name: str,
+    params,
+    type_annotations: Dict[Any, Type]):
+    """Perform a task asyc and remotely via Inductiva's Web API.
+
+    Submits a simulation async to the API and returns the task id.
+    The flow is similar to invoke_api, but it does not block until the task
+    is finished. 
+    The flow is summarized as follows:
+        1. Transform request params into the params used to
+        validate permission to execute the request.
+        2. Submit task via the "POST task/submit" endpoint.
+            Note: HTTP status code 400 informs the requested method is invalid,
+                and HTTP status code 403 informs that the user is not authorized
+                to post such request.
+        3. If the status returned by the previous HTTP request is
+            "pending-input", ZIP inputs and send them via
+            "POST task/{task_id}/input".
+        4. Return task_id and leaves the simulation running on the server.
+
+    Args:
+        request: Request sent to the API for validation.
+        input_dir: Directory containing the input files to be uploaded.
+
+    Return:
+        Returns the task id.
+    """
+
+    if inductiva.api_key is None:
+        raise ValueError(
+            "No API Key specified. "
+            "Set it in the code with \"inductiva.api_key = <YOUR_SECRET_KEY>\""
+            " or set the INDUCTIVA_API_KEY environment variable.")
+
+    api_config = Configuration(host=inductiva.api_url)
+    api_config.api_key["APIKeyHeader"] = inductiva.api_key
+
+    request_params = get_validate_request_params(
+        original_params=params,
+        type_annotations=type_annotations,
+    )
+
+    task_request = TaskRequest(
+        method=method_name,
+        params=request_params,
+    )
+
+    with ApiClient(api_config) as client:
+        api_instance = TasksApi(client)
+
+        task = submit_request(
+            api_instance=api_instance,
+            request=task_request,
+        )
+
+        task_id = task["id"]
+
+        if task["status"] == "pending-input":
+
+            upload_input(
+                api_instance=api_instance,
+                original_params=params,
+                task_id=task_id,
+                type_annotations=type_annotations,
+            )
+
+            logging.info("Request submitted.")
+            block_until_status_is(
+                api_instance=api_instance,
+                task_id=task_id,
+                desired_status={"started"},
+            )
+            logging.info("An executer has picked up the request.")
+            logging.info("The requested task is being executed remotely "
+                         "with task_id: %s...", task_id)
+
+    return task_id
+
+
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
@@ -355,6 +449,7 @@ def run_simulation(
     params: Dict[str, Any],
     log_remote_execution: bool = False,
 ) -> pathlib.Path:
+    """Run a simulation synchronously via Inductiva Web API."""
 
     params = {
         "sim_dir": input_dir,
@@ -375,6 +470,33 @@ def run_simulation(
 
     if not isinstance(result, pathlib.Path):
         raise RuntimeError(f"Expected result to be a Path, got {type(result)}")
+
+    return result
+
+
+def run_async_simulation(
+    api_method_name: str,
+    input_dir: pathlib.Path,
+    params: Dict[str, Any],
+) -> str:
+    """Run a simulation synchronously via Inductiva Web API."""
+
+    params = {
+        "sim_dir": input_dir,
+        **params,
+    }
+    type_annotations = {
+        "sim_dir": pathlib.Path,
+    }
+
+    result = invoke_async_api(
+        api_method_name,
+        params,
+        type_annotations,
+    )
+
+    if not isinstance(result, str):
+        raise RuntimeError(f"Expected result to be a string with task_id, got {type(result)}")
 
     return result
 

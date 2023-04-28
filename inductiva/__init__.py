@@ -4,6 +4,7 @@ import os
 from . import fluids
 from . import core
 from . import molecules
+from . import jobs
 
 from absl import logging
 
