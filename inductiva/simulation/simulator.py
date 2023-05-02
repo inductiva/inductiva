@@ -57,3 +57,29 @@ class Simulator(ABC):
             params=kwargs,
             log_remote_execution=track_logs,
         )
+
+    def run_async(
+        self,
+        input_dir: types.Path,
+        *_args,
+        **kwargs,
+    ) -> str:
+        """Run the simulation asynchronously.
+
+        Args:
+            input_dir: Path to the directory containing the input files.
+            _args: Unused in this method, but defined to allow for more
+                non-default arguments in method override in subclasses.
+            **kwargs: Additional keyword arguments to be passed to the
+                simulation API method.
+        """
+        input_dir = files.resolve_path(input_dir)
+        if not input_dir.is_dir():
+            raise ValueError(
+                f"The provided path (\"{input_dir}\") is not a directory.")
+
+        return api.run_async_simulation(
+            self.api_method_name,
+            input_dir,
+            params=kwargs,
+        )
