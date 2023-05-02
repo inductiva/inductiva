@@ -260,8 +260,7 @@ def invoke_api_from_fn_ptr(
     )
 
 
-def submit_task(api_instance, task_request, params,
-                              type_annotations):
+def submit_task(api_instance, task_request, params, type_annotations):
     """Submit a task and send input files to the API."""
 
     task = submit_request(
@@ -337,9 +336,7 @@ def invoke_api(method_name: str,
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
 
-        task_id = submit_task(api_instance,
-                              task_request,
-                              params,
+        task_id = submit_task(api_instance, task_request, params,
                               type_annotations)
 
         block_until_status_is(
