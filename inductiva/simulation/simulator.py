@@ -64,7 +64,7 @@ class Simulator(ABC):
         *_args,
         **kwargs,
     ) -> str:
-        """Run the simulation.
+        """Run the simulation asynchronously.
 
         Args:
             input_dir: Path to the directory containing the input files.
