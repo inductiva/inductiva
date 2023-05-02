@@ -28,7 +28,7 @@ from inductiva.utils.data import (extract_output, get_validate_request_params,
 from inductiva.utils.meta import get_method_name, get_type_annotations
 
 
-def validate_api_config(api_key: str) -> Configuration:
+def validate_api_key(api_key: str) -> Configuration:
     """Validates the API key and returns API configuration"""
     if inductiva.api_key is None:
         raise ValueError(
@@ -260,8 +260,9 @@ def invoke_api_from_fn_ptr(
     )
 
 
-def submit_simulation_request(api_instance, task_request, params,
+def submit_task(api_instance, task_request, params,
                               type_annotations):
+    """Submit a task and send input files to the API."""
 
     task = submit_request(
         api_instance=api_instance,
@@ -321,7 +322,7 @@ def invoke_api(method_name: str,
     Return:
         Returns the output of the task.
     """
-    api_config = validate_api_config(inductiva.api_key)
+    api_config = validate_api_key(inductiva.api_key)
 
     request_params = get_validate_request_params(
         original_params=params,
@@ -336,8 +337,10 @@ def invoke_api(method_name: str,
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
 
-        task_id = submit_simulation_request(api_instance, task_request, params,
-                                            type_annotations)
+        task_id = submit_task(api_instance,
+                              task_request,
+                              params,
+                              type_annotations)
 
         block_until_status_is(
             api_instance=api_instance,
@@ -389,7 +392,8 @@ def invoke_async_api(method_name: str, params, type_annotations: Dict[Any,
         3. If the status returned by the previous HTTP request is
             "pending-input", ZIP inputs and send them via
             "POST task/{task_id}/input".
-        4. Return task_id and leaves the simulation running on the server.
+        4. Return task_id and leaves the simulation on the queue until resources
+            become available.
 
     Args:
         request: Request sent to the API for validation.
@@ -399,7 +403,7 @@ def invoke_async_api(method_name: str, params, type_annotations: Dict[Any,
         Returns the task id.
     """
 
-    api_config = validate_api_config(inductiva.api_key)
+    api_config = validate_api_key(inductiva.api_key)
 
     request_params = get_validate_request_params(
         original_params=params,
@@ -414,10 +418,10 @@ def invoke_async_api(method_name: str, params, type_annotations: Dict[Any,
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
 
-        task_id = submit_simulation_request(api_instance=api_instance,
-                                            task_request=task_request,
-                                            params=params,
-                                            type_annotations=type_annotations)
+        task_id = submit_task(api_instance=api_instance,
+                              task_request=task_request,
+                              params=params,
+                              type_annotations=type_annotations)
 
     return task_id
 

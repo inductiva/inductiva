@@ -15,7 +15,7 @@ from inductiva.utils.data import (unpack_output)
 def get_task_status(task_id: str):
     """Get the status of a simulation."""
 
-    api_config = api.validate_api_config(inductiva.api_key)
+    api_config = api.validate_api_key(inductiva.api_key)
 
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
@@ -27,10 +27,10 @@ def get_task_status(task_id: str):
 
 def fetch_task_output(task_id: str,
                       output_dir: Optional[Path] = None,
-                      return_type: Type = pathlib.Path) -> pathlib.Path:
+                      return_type: Type = pathlib.Path) -> Type:
     """Fetch the results of a simulation."""
     logging.info("Fetching the simulation output for task %s", task_id)
-    api_config = api.validate_api_config(inductiva.api_key)
+    api_config = api.validate_api_key(inductiva.api_key)
 
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
@@ -40,8 +40,10 @@ def fetch_task_output(task_id: str,
         logging.info(status)
         if status == "started":
             logging.info("The task is still being executed.")
+            return_type = None
         elif status == "submitted":
             logging.info("The task is waiting for resources...")
+            return_type = None
         else:
             result_list = api.download_output(api_instance, task_id, output_dir)
 
