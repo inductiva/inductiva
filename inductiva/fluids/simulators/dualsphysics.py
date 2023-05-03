@@ -33,3 +33,21 @@ class DualSPHysics(Simulator):
                            track_logs=track_logs,
                            device=device,
                            input_filename=sim_config_filename)
+
+    def run_async(
+        self,
+        input_dir: types.Path,
+        sim_config_filename: str,
+        device: Literal["gpu", "cpu"] = "cpu",
+    ) -> str:
+        """Run the simulation asynchronously.
+        
+        Args:
+            sim_config_filename: Name of the simulation configuration file.
+            device: Device in which to run the simulation.
+            other arguments: See the documentation of the base class.
+            """
+
+        return super().run_async(input_dir,
+                                 device=device,
+                                 input_filename=sim_config_filename)
