@@ -28,7 +28,7 @@ class OpenFOAM(Simulator):
             openfoam_solver: specific solver to simulate with OpenFOAM.
                 OpenFOAM contains lots of solvers inside of it, which are used
                 to call the run simulation through terminal, e.g.,
-                [isoFoam, sonicFoam, ...]. The default solver is isoFoam.
+                [isoFoam, sonicFoam, ...]. The default solver is interFoam.
             other arguments: See the documentation of the base class.
         """
         return super().run(
@@ -48,8 +48,11 @@ class OpenFOAM(Simulator):
         """Run the simulation asynchronously.
         
         Args:
-            sim_config_filename: Name of the simulation configuration file.
-            device: Device in which to run the simulation.
+            n_cores: Number of MPI cores to use for the simulation.
+            openfoam_solver: specific solver to simulate with OpenFOAM.
+                OpenFOAM contains lots of solvers inside of it, which are used
+                to call the run simulation through terminal, e.g.,
+                [isoFoam, sonicFoam, ...]. The default solver is interFoam.
             other arguments: See the documentation of the base class.
             """
 

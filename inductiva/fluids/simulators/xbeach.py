@@ -24,6 +24,7 @@ class XBeach(Simulator):
         """Run the simulation.
 
         Args:
+            sim_config_filename: Name of the simulation configuration file.
             n_cores: Number of MPI cores to use for the simulation.
             other arguments: See the documentation of the base class.
         """
@@ -35,19 +36,17 @@ class XBeach(Simulator):
             output_dir=output_dir,
         )
 
-
     def run_async(
         self,
         input_dir: types.Path,
-        sim_config_filename: str,
+        sim_config_filename: Optional[str] = "params.txt",
         n_cores: int = 1,
     ) -> str:
         """Run the simulation asynchronously.
         
         Args:
             sim_config_filename: Name of the simulation configuration file.
-            device: Device in which to run the simulation.
-            other arguments: See the documentation of the base class.
+            n_cores: Number of MPI cores to use for the simulation.
             """
 
         return super().run_async(input_dir,

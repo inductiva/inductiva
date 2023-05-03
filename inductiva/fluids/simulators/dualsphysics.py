@@ -34,7 +34,6 @@ class DualSPHysics(Simulator):
                            device=device,
                            input_filename=sim_config_filename)
 
-
     def run_async(
         self,
         input_dir: types.Path,
