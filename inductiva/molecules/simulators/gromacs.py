@@ -40,3 +40,24 @@ class GROMACS(Simulator):
                            input_filename=sim_config_filename,
                            protein_filename=protein_filename,
                            topology_filename=topology_filename)
+
+
+    def run_async(
+        self,
+        input_dir: types.Path,
+        sim_config_filename: str,
+        protein_filename: str,
+        topology_filename: str,
+    ) -> str:
+        """Run the simulation asynchronously.
+        
+        Args:
+            sim_config_filename: Name of the simulation configuration file.
+            device: Device in which to run the simulation.
+            other arguments: See the documentation of the base class.
+            """
+
+        return super().run_async(input_dir,
+                                 input_filename=sim_config_filename,
+                                 protein_filename=protein_filename,
+                                 topology_filename=topology_filename)

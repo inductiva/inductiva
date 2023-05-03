@@ -17,7 +17,7 @@ class SWASH(Simulator):
         input_dir: types.Path,
         sim_config_filename: str,
         output_dir: Optional[types.Path] = None,
-        n_cores=1,
+        n_cores: int = 1,
         track_logs: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
@@ -32,3 +32,22 @@ class SWASH(Simulator):
                            input_filename=sim_config_filename,
                            n_cores=n_cores,
                            output_dir=output_dir)
+
+
+    def run_async(
+        self,
+        input_dir: types.Path,
+        sim_config_filename: str,
+        n_cores: int = 1,
+    ) -> str:
+        """Run the simulation asynchronously.
+        
+        Args:
+            sim_config_filename: Name of the simulation configuration file.
+            device: Device in which to run the simulation.
+            other arguments: See the documentation of the base class.
+            """
+
+        return super().run_async(input_dir,
+                                 n_cores=n_cores,
+                                 input_filename=sim_config_filename)

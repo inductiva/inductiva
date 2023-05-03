@@ -34,3 +34,22 @@ class XBeach(Simulator):
             track_logs=track_logs,
             output_dir=output_dir,
         )
+
+
+    def run_async(
+        self,
+        input_dir: types.Path,
+        sim_config_filename: str,
+        n_cores: int = 1,
+    ) -> str:
+        """Run the simulation asynchronously.
+        
+        Args:
+            sim_config_filename: Name of the simulation configuration file.
+            device: Device in which to run the simulation.
+            other arguments: See the documentation of the base class.
+            """
+
+        return super().run_async(input_dir,
+                                 input_filename=sim_config_filename,
+                                 n_cores=n_cores)

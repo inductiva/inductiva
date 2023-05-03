@@ -18,7 +18,7 @@ class OpenFOAM(Simulator):
         input_dir: types.Path,
         output_dir: Optional[types.Path] = None,
         openfoam_solver: str = "interFoam",
-        n_cores=1,
+        n_cores: int = 1,
         track_logs: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
@@ -38,3 +38,21 @@ class OpenFOAM(Simulator):
             openfoam_solver=openfoam_solver,
             n_cores=n_cores,
         )
+
+    def run_async(
+        self,
+        input_dir: types.Path,
+        openfoam_solver: str = "interFoam",
+        n_cores: int = 1,
+    ) -> str:
+        """Run the simulation asynchronously.
+        
+        Args:
+            sim_config_filename: Name of the simulation configuration file.
+            device: Device in which to run the simulation.
+            other arguments: See the documentation of the base class.
+            """
+
+        return super().run_async(input_dir,
+                                 openfoam_solver=openfoam_solver,
+                                 n_cores=n_cores)
