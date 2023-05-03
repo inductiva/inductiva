@@ -21,6 +21,7 @@ def get_task_status(task_id: str):
         api_instance = TasksApi(client)
 
         status = api.get_task_status(api_instance, task_id)
+    logging.info("Task status: %s", status)
 
     return status
 

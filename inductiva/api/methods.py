@@ -164,7 +164,6 @@ def get_task_status(api_instance: TasksApi, task_id: str) -> TaskStatus:
         path_params={"task_id": task_id})
 
     status = api_response.body["status"]
-    logging.info("Task status: %s", status)
 
     return status
 
