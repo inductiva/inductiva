@@ -8,3 +8,4 @@ from .fluid_tank import (
     RectangularTankInlet,
     CircularTankInlet,
 )
+from .wind_tunnel import WindTunnel
