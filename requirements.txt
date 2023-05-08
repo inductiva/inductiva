@@ -12,6 +12,7 @@ meshio
 vtk
 xarray
 matplotlib
+imageio
 pyvista
 imageio-ffmpeg
 ipython
