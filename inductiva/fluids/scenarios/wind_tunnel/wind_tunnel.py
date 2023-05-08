@@ -5,6 +5,8 @@ import os
 import shutil
 from typing import Optional, List
 
+from absl import logging
+
 from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
@@ -34,7 +36,10 @@ class WindTunnel(Scenario):
 
         self.object_path = object_path
         self.flow_velocity = flow_velocity
-        self.domain = domain
+
+        if domain is None:
+            logging.info("Using a default domain: [[-5, 15], [-4, 4], [0, 8]].")
+            self.domain = [[-5, 15], [-4, 4], [0, 8]]
 
     def simulate(self,
                  simulator: Simulator = OpenFOAM(),
