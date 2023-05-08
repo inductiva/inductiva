@@ -80,8 +80,8 @@ def get_sorted_files(data_dir: str,
 def remove_files_with_tag(main_dir: str, remove_tag: str) -> None:
     """Remove files in a directory that contain a specific name tag.
     
-    We iterate over all folders inside the main folder to remove all files
-    that contain the remove_tag in their name.
+    Iterates over all folders in the main folder and remove all files
+    that contain remove_tag as a substring in the filename.
 
     Args:
         main_dir: Path to a directory.
