@@ -1,4 +1,4 @@
-"""Wind tunnel scenario to run an object over a air flow."""
+"""Wind tunnel scenario to run an object over an air flow."""
 
 from functools import singledispatchmethod
 import os
