@@ -22,6 +22,15 @@ class WindTunnel(Scenario):
                  object_path: str,
                  flow_velocity: float = 50,
                  domain: Optional[List[float]] = [[-5, 15], [-4, 4], [0, 8]]):
+        """Initializes a `WindTunnel` object.
+        
+        Args:
+            object_path: Path to the object that is inserted in the wind tunnel.
+            flow_velocity: Velocity of the air flow in m/s.
+            domain: List containing the vertices describing the domain
+                of the wind tunnel in the [x, y, z] axes, in meters. This is a
+                natural description with the default OpenFOAM simulator.
+        """
 
         self.object_path = object_path
         self.flow_velocity = flow_velocity
@@ -33,7 +42,16 @@ class WindTunnel(Scenario):
                  simulation_time: float = 100,
                  write_interval: float = 50,
                  n_cores: int = 1):
-        """Simulates the wind tunnel scenario."""
+        """Simulates the wind tunnel scenario.
+        
+        Args:
+            simulator: Simulator to use for the simulation.
+            output_dir: Path to the directory where the simulation output
+                is downloaded.
+            simulation_time: Simulation time, in seconds.
+            write_interval: Interval between simulation outputs, in seconds.
+            n_cores: Number of cores to use for the simulation.
+            """
 
         self.simulation_time = simulation_time
         self.write_interval = write_interval
