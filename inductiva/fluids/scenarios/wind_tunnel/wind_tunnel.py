@@ -97,16 +97,9 @@ def _(self, simulator: OpenFOAM):  # pylint: disable=unused-argument
 
 @WindTunnel.gen_aux_files.register
 def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
-    pass
-
-
-@WindTunnel.gen_config.register
-def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argument
-    """Generates the configuration files for OpenFOAM."""
-
     # The WindTunnel with OpenFOAM requires changing multiple files
     template_dir = os.path.join(os.path.dirname(__file__),
-                                "wind_tunnel_input_template/")
+                                OPENFOAM_TEMPLATE_INPUT_DIR)
 
     # Copy all files from the template dir to the input directory
     for directory in os.listdir(template_dir):
@@ -115,6 +108,15 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
 
     # Remove all files that have .jinja in input_dir
     remove_files_with_tag(input_dir, ".jinja")
+
+
+@WindTunnel.gen_config.register
+def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argument
+    """Generates the configuration files for OpenFOAM."""
+
+    # The WindTunnel with OpenFOAM requires changing multiple files
+    template_dir = os.path.join(os.path.dirname(__file__),
+                                OPENFOAM_TEMPLATE_INPUT_DIR)
 
     # Add object path to its respective place
     shutil.copy(self.object_path,
