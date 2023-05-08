@@ -31,7 +31,7 @@ geometry
     object
     {
         type triSurfaceMesh;
-        file "{{ input_object }}";
+        file "object.obj";
     }
 
     refinementBox

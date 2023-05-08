@@ -9,7 +9,8 @@ from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import OpenFOAM
-from inductiva.utils.templates import replace_params_in_template
+from inductiva.utils.templates import batch_replace_params_in_template
+from inductiva.utils.files import remove_files_with_tag
 
 OPENFOAM_TEMPLATE_INPUT_DIR = "wind_tunnel_input_template"
 
@@ -17,11 +18,9 @@ OPENFOAM_TEMPLATE_INPUT_DIR = "wind_tunnel_input_template"
 class WindTunnel(Scenario):
     """Physical scenario of a general wind tunnel simulation."""
 
-    def __init__(self,
-                 input_object: str,
-                 flow_velocity: float = 50):
+    def __init__(self, object_path: str, flow_velocity: float = 50):
 
-        self.input_object = input_object
+        self.object_path = object_path
         self.flow_velocity = flow_velocity
 
     def simulate(self,
@@ -40,6 +39,7 @@ class WindTunnel(Scenario):
             simulator,
             output_dir=output_dir,
             n_cores=n_cores,
+            openfoam_solver="simpleFoam",
         )
 
         return output_path
@@ -74,54 +74,40 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
 
 
 @WindTunnel.gen_config.register
-def _(self, simulator: OpenFOAM, input_dir: str): # pylint: disable=unused-argument
+def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argument
     """Generates the configuration files for OpenFOAM."""
 
-    template_dir = os.path.join(os.path.dirname(__file__), "wind_tunnel_input_template/")
+    # The WindTunnel with OpenFOAM requires changing multiple files
+    template_dir = os.path.join(os.path.dirname(__file__),
+                                "wind_tunnel_input_template/")
 
+    # Copy all files from the template dir to the input directory
     for directory in os.listdir(template_dir):
-        shutil.copytree(os.path.join(template_dir,directory),
-                    os.path.join(input_dir, directory))
+        shutil.copytree(os.path.join(template_dir, directory),
+                        os.path.join(input_dir, directory))
 
-    
-    replace_params_in_template(
+    # Remove all files that have .jinja in input_dir
+    remove_files_with_tag(input_dir, ".jinja")
+
+    # Add object path to its respective place
+    shutil.copy(self.object_path,
+                os.path.join(input_dir, "constant/triSurface", "object.obj"))
+
+    batch_replace_params_in_template(
         templates_dir=template_dir,
-        template_filename="0/include/initialConditions_template.openfoam.jinja",
+        template_filename_paths=[
+            "0/include/initialConditions_template.openfoam.jinja",
+            "system/controlDict_template.openfoam.jinja",
+            "system/decomposeParDict_template.openfoam.jinja"
+        ],
         params={
             "flow_velocity": self.flow_velocity,
-        },
-        output_file_path=os.path.join(input_dir, "0/include/", "initialConditions"))
-
-    replace_params_in_template(
-        templates_dir=template_dir,
-        template_filename="system/controlDict",
-        params={
             "simulation_time": self.simulation_time,
             "write_interval": self.write_interval,
+            "n_cores": self.n_cores
         },
-        output_file_path=os.path.join(input_dir, "system/controlDict"))
-
-    replace_params_in_template(
-        templates_dir=template_dir,
-        template_filename="system/decomposeParDict",
-        params={
-            "n_cores": self.n_cores,
-        },
-        output_file_path=os.path.join(input_dir, "system/decomposeParDict"))
-
-    replace_params_in_template(
-        templates_dir=template_dir,
-        template_filename="system/surfaceFeaturesDict",
-        params={
-            "input_object": self.input_object,
-        },
-        output_file_path=os.path.join(input_dir, "system/surfaceFeaturesDict"))
-
-    replace_params_in_template(
-        templates_dir=template_dir,
-        template_filename="system/snappyHexMeshDict",
-        params={
-            "input_object": self.input_object,
-        },
-        output_file_path=os.path.join(input_dir, "system/snappyHexMeshDict"))
-    
+        output_filename_paths=[
+            os.path.join(input_dir, "0/include/initialConditions"),
+            os.path.join(input_dir, "system/controlDict"),
+            os.path.join(input_dir, "system/decomposeParDict")
+        ])

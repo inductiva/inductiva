@@ -1,6 +1,7 @@
 #pylint: disable=missing-module-docstring
 from .dam_break import DamBreak
 from .fluid_block import FluidBlock
+from .wind_tunnel import WindTunnel
 from .fluid_tank import (
     FluidTank,
     CubicTankOutlet,
@@ -8,4 +9,3 @@ from .fluid_tank import (
     RectangularTankInlet,
     CircularTankInlet,
 )
-from .wind_tunnel import WindTunnel
