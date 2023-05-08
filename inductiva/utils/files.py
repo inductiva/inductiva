@@ -90,6 +90,6 @@ def remove_files_with_tag(main_dir: str, remove_tag: str) -> None:
     for item in os.listdir(main_dir):
         item_path = os.path.join(main_dir, item)
         if os.path.isdir(item_path):
-            remove_tagged_files(item_path, remove_tag)
+            remove_files_with_tag(item_path, remove_tag)
         elif remove_tag in item:
             os.remove(item_path)
