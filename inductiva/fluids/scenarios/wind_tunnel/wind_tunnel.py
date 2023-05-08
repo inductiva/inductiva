@@ -21,7 +21,7 @@ class WindTunnel(Scenario):
     def __init__(self,
                  object_path: str,
                  flow_velocity: float = 50,
-                 domain: Optional[List[float]] = [[-5, 15], [-4, 4], [0, 8]]):
+                 domain: Optional[List[float]] = None):
         """Initializes a `WindTunnel` object.
         
         Args:
