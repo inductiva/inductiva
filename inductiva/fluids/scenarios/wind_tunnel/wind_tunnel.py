@@ -14,7 +14,7 @@ from inductiva.fluids.simulators import OpenFOAM
 from inductiva.utils.templates import batch_replace_params_in_template
 from inductiva.utils.files import remove_files_with_tag
 
-OPENFOAM_TEMPLATE_INPUT_DIR = "wind_tunnel_input_template"
+OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam_template"
 
 
 class WindTunnel(Scenario):
