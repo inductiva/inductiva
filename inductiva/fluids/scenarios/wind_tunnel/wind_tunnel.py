@@ -3,7 +3,7 @@
 from functools import singledispatchmethod
 import os
 import shutil
-from typing import Optional
+from typing import Optional, List
 
 from inductiva.types import Path
 from inductiva.scenarios import Scenario
@@ -18,10 +18,14 @@ OPENFOAM_TEMPLATE_INPUT_DIR = "wind_tunnel_input_template"
 class WindTunnel(Scenario):
     """Physical scenario of a general wind tunnel simulation."""
 
-    def __init__(self, object_path: str, flow_velocity: float = 50):
+    def __init__(self,
+                 object_path: str,
+                 flow_velocity: float = 50,
+                 domain: Optional[List[float]] = [[-5, 15], [-4, 4], [0, 8]]):
 
         self.object_path = object_path
         self.flow_velocity = flow_velocity
+        self.domain = domain
 
     def simulate(self,
                  simulator: Simulator = OpenFOAM(),
@@ -98,16 +102,19 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
         template_filename_paths=[
             "0/include/initialConditions_template.openfoam.jinja",
             "system/controlDict_template.openfoam.jinja",
+            "system/blockMeshDict_template.openfoam.jinja",
             "system/decomposeParDict_template.openfoam.jinja"
         ],
         params={
             "flow_velocity": self.flow_velocity,
             "simulation_time": self.simulation_time,
             "write_interval": self.write_interval,
-            "n_cores": self.n_cores
+            "n_cores": self.n_cores,
+            "domain": self.domain,
         },
         output_filename_paths=[
             os.path.join(input_dir, "0/include/initialConditions"),
             os.path.join(input_dir, "system/controlDict"),
+            os.path.join(input_dir, "system/blockMeshDict"),
             os.path.join(input_dir, "system/decomposeParDict")
         ])
