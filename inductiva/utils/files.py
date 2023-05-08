@@ -75,3 +75,21 @@ def get_sorted_files(data_dir: str,
     files = sorted(files, key=get_alphanum_key)
 
     return files
+
+
+def remove_files_with_tag(main_dir: str, remove_tag: str) -> None:
+    """Remove files in a directory that contain a specific name tag.
+    
+    We iterate over all folders inside the main folder to remove all files
+    that contain the remove_tag in their name.
+
+    Args:
+        main_dir: Path to a directory.
+        remove_tag: tag that identifies all files to be removed."""
+
+    for item in os.listdir(main_dir):
+        item_path = os.path.join(main_dir, item)
+        if os.path.isdir(item_path):
+            remove_tagged_files(item_path, remove_tag)
+        elif remove_tag in item:
+            os.remove(item_path)
