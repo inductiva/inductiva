@@ -132,7 +132,8 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
     batch_replace_params_in_template(
         templates_dir=template_dir,
         template_filename_paths=[
-            os.path.join("0", "include", "initialConditions_template.openfoam.jinja"),
+            os.path.join("0", "include",
+                         "initialConditions_template.openfoam.jinja"),
             os.path.join("system", "controlDict_template.openfoam.jinja"),
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
             os.path.join("system", "decomposeParDict_template.openfoam.jinja")
