@@ -18,20 +18,25 @@ OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam_template"
 
 
 class WindTunnel(Scenario):
-    """Physical scenario of a general wind tunnel simulation."""
+    """Physical scenario of a configurable wind tunnel simulation.
+    
+    In this scenario, an object is inserted in a wind tunnel described by the
+    user. The object is then subject to an air flow determined for which the
+    direction and magnitude is defined by the user.
+    """
 
     def __init__(self,
                  object_path: str,
-                 flow_velocity: float = 50,
+                 flow_velocity: List[float],
                  domain: Optional[List[float]] = None):
         """Initializes a `WindTunnel` object.
         
         Args:
             object_path: Path to the object that is inserted in the wind tunnel.
             flow_velocity: Velocity of the air flow in m/s.
-            domain: List containing the vertices describing the domain
-                of the wind tunnel in the [x, y, z] axes, in meters. This is a
-                natural description with the default OpenFOAM simulator.
+            domain: List containing the lower and upper boundary of the wind
+                tunnel in each (x, y, z) direction. It is the natural
+                description with the default OpenFOAM simulator.
         """
 
         self.object_path = object_path
@@ -40,12 +45,14 @@ class WindTunnel(Scenario):
         if domain is None:
             logging.info("Using a default domain: [[-5, 15], [-4, 4], [0, 8]].")
             self.domain = [[-5, 15], [-4, 4], [0, 8]]
+        else:
+            self.domain = domain
 
     def simulate(self,
                  simulator: Simulator = OpenFOAM(),
                  output_dir: Optional[Path] = None,
                  simulation_time: float = 100,
-                 write_interval: float = 50,
+                 output_time_step: float = 50,
                  n_cores: int = 1):
         """Simulates the wind tunnel scenario.
         
@@ -59,7 +66,7 @@ class WindTunnel(Scenario):
             """
 
         self.simulation_time = simulation_time
-        self.write_interval = write_interval
+        self.output_time_step = output_time_step
         self.n_cores = n_cores
 
         output_path = super().simulate(
@@ -125,10 +132,11 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
     batch_replace_params_in_template(
         templates_dir=template_dir,
         template_filename_paths=[
-            "0/include/initialConditions_template.openfoam.jinja",
-            "system/controlDict_template.openfoam.jinja",
-            "system/blockMeshDict_template.openfoam.jinja",
-            "system/decomposeParDict_template.openfoam.jinja"
+            os.path.join("0", "include",
+                         "initialConditions_template.openfoam.jinja"),
+            os.path.join("system", "controlDict_template.openfoam.jinja"),
+            os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
+            os.path.join("system", "decomposeParDict_template.openfoam.jinja")
         ],
         params={
             "flow_velocity": self.flow_velocity,
@@ -138,8 +146,8 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
             "domain": self.domain,
         },
         output_filename_paths=[
-            os.path.join(input_dir, "0/include/initialConditions"),
-            os.path.join(input_dir, "system/controlDict"),
-            os.path.join(input_dir, "system/blockMeshDict"),
-            os.path.join(input_dir, "system/decomposeParDict")
+            os.path.join(input_dir, "0", "include", "initialConditions"),
+            os.path.join(input_dir, "system", "controlDict"),
+            os.path.join(input_dir, "system", "blockMeshDict"),
+            os.path.join(input_dir, "system", "decomposeParDict")
         ])
