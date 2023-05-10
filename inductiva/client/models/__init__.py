@@ -13,8 +13,9 @@
 
 from inductiva.client.model.body_upload_task_input import BodyUploadTaskInput
 from inductiva.client.model.http_validation_error import HTTPValidationError
-from inductiva.client.model.new_user import NewUser
 from inductiva.client.model.queue_status import QueueStatus
 from inductiva.client.model.task_request import TaskRequest
 from inductiva.client.model.task_status import TaskStatus
+from inductiva.client.model.user import User
+from inductiva.client.model.user_create import UserCreate
 from inductiva.client.model.validation_error import ValidationError
