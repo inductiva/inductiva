@@ -1,4 +1,10 @@
-"""Post process OpenFOAM simulation outputs."""
+"""Post process OpenFOAM simulation outputs.
+
+Visualization Features:
+- Scalar fields over object.
+- Streamlines with scalar field coloring
+- Cutting plane with scalar field coloring.
+"""
 import os
 import pyvista as pv
 
@@ -58,6 +64,8 @@ class OpenFOAMSimulationOutput:
                            time_step: int,
                            scalars: str = "p"):
         """Render streamlines flowing by object with scalar color map.
+
+        The streamlines are immediately obtained as outputs of 
         
         Args:
             time_step: The time frame for which we want to plot
