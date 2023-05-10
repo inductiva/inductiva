@@ -12,6 +12,7 @@ from inductiva.types import Path
 
 
 class OpenFOAMSimulationOutput:
+    """Post process WindTunnel simulation outputs."""
 
     def __init__(self, sim_output_path: Path):
         """Initializes a `OpenFOAMSimulationOutput` object.
