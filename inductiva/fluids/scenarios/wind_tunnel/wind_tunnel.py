@@ -12,10 +12,12 @@ from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import OpenFOAM
 from inductiva.utils.templates import batch_replace_params_in_template
-from inductiva.utils.files import remove_files_with_tag
+from inductiva.utils.files import (
+    find_path_to_package,
+    remove_files_with_tag)
 
-SCENARIO_TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "..",
-                                     "templates", "wind_tunnel")
+SCENARIO_TEMPLATE_DIR = os.path.join(find_path_to_package("templates"),
+                                     "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 
 
