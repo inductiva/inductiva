@@ -13,8 +13,7 @@ def find_path_to_package(package_dir: str):
     Args:
         package_dir: Name of package directory.
     """
-    return os.path.join(os.path.dirname(__file__),
-                                 "..", package_dir)
+    return os.path.join(os.path.dirname(__file__), "..", package_dir)
 
 
 def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
