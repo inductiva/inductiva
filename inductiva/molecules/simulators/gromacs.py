@@ -32,17 +32,17 @@ class GROMACS(Simulator):
             gromacs_flags: Flags to pass to the gromacs CLI.
         """
         return super().run(input_directory,
-                           output_dir = output_directory,
-                           track_logs = track_logs,
-                           method = method_name,
-                           user_flags=gromacs_flags
-                           )
+                           output_dir=output_directory,
+                           track_logs=track_logs,
+                           method=method_name,
+                           user_flags=gromacs_flags)
 
-    def run_async(self,
-                    input_dir: types.Path,
-                    method_name: str,
-                    **gromacs_flags: Optional[types.Args],
-                    ) -> str:
+    def run_async(
+        self,
+        input_dir: types.Path,
+        method_name: str,
+        **gromacs_flags: Optional[types.Args],
+    ) -> str:
         """Run a specified gromacs method asynchronously.
 
         Args:
