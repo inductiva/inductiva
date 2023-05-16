@@ -16,25 +16,22 @@ class GROMACS(Simulator):
 
     def run(
         self,
-        input_dir: types.Path,
-        sim_config_filename: str,
-        protein_filename: str,
-        topology_filename: str,
-        output_dir: Optional[types.Path] = None,
+        input_directory: types.Path,
+        method_name: str,
+        output_directory: Optional[types.Path] = None,
+        **gromacs_flags: Optional[types.Args],
     ) -> pathlib.Path:
-        """Run the energy minimization of a protein.
+        """Run a specefied gromacs method.
 
         Args:
             input_dir: Path to the directory containing the input files.
-            sim_config_filename: Name of the .mdp file containing the
-                energy minimization parameters.
-            protein_filename: Name of the file containing the protein
-                .gro file.
-            topology_filename: Name of the file containing the topology
-                .top file.
+            method_name: Method to run.
+            output_dir: Path to the directory where the output files will be
+                stored.
+            gromacs_flags: Flags to pass to the gromacs CLI.
         """
-        return super().run(input_dir,
-                           output_dir=output_dir,
-                           input_filename=sim_config_filename,
-                           protein_filename=protein_filename,
-                           topology_filename=topology_filename)
+        return super().run(input_directory,
+                           output_dir = output_directory,
+                           method = method_name,
+                           user_flags=gromacs_flags
+                           )
