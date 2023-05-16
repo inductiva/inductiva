@@ -1,2 +1,3 @@
+global-include fluids/scenarios/templates/**
 global-include *.jinja
 global-include *.obj

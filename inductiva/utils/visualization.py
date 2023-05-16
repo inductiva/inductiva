@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import xarray as xr
 
-from inductiva.utils.files import get_sorted_files
+from inductiva.utils import files
 
 MPL_CONFIG_PARAMS = {
     "font.size": 14,
@@ -54,7 +54,7 @@ def create_movie_from_frames(frames_dir: str,
 
 def create_movie_from_vtk(vtk_output_dir: str,
                           movie_path: str,
-                          virtual_display: bool = False,
+                          virtual_display: bool = True,
                           scalars: str = None,
                           scalar_limits: Optional[List[float]] = None,
                           camera=None,
@@ -98,8 +98,8 @@ def create_movie_from_vtk(vtk_output_dir: str,
         pv.start_xvfb()
 
     pv.global_theme.background = "white"
-
-    vtk_files = get_sorted_files(vtk_output_dir, ".vtk")
+    vtk_output_dir = files.resolve_path(vtk_output_dir)
+    vtk_files = files.get_sorted_files(vtk_output_dir, ".vtk")
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         logging.info("Creating movie frames...")

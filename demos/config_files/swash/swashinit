@@ -1,0 +1,32 @@
+    5                                   version of initialisation file
+Delft University of Technology          name of institute
+    3                                   command file ref. number
+INPUT                                   command file name
+    4                                   print file ref. number
+PRINT                                   print file name
+    4                                   test file ref. number
+                                        test file name
+    6                                   screen ref. number
+   99                                   highest file ref. number
+$                                       comment identifier
+	                                       TAB character
+\                                       dir sep char in input file
+/                                       dir sep char replacing previous one
+    7                                   default time coding option
+    1                                   grid partitioning option
+  100                                   speed of processor   1
+  100                                   speed of processor   2
+  100                                   speed of processor   3
+  100                                   speed of processor   4
+  100                                   speed of processor   5
+  100                                   speed of processor   6
+  100                                   speed of processor   7
+  100                                   speed of processor   8
+  100                                   speed of processor   9
+  100                                   speed of processor  10
+  100                                   speed of processor  11
+  100                                   speed of processor  12
+  100                                   speed of processor  13
+  100                                   speed of processor  14
+  100                                   speed of processor  15
+  100                                   speed of processor  16

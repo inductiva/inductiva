@@ -1,5 +1,6 @@
 #pylint: disable=missing-module-docstring
 from .fluid_types import (
+    FluidType,
     WATER,
     OLIVE_OIL,
     LIQUID_PROPANE,
@@ -10,6 +11,14 @@ from .fluid_types import (
 )
 from .scenarios import DamBreak
 from .scenarios import FluidBlock
+from .scenarios import WindTunnel
+from .scenarios import (
+    FluidTank,
+    CubicTankOutlet,
+    CylindricalTankOutlet,
+    RectangularTankInlet,
+    CircularTankInlet,
+)
 from . import scenarios
 from .scenarios._post_processing import SPHSimulationOutput
 from .simulators import (

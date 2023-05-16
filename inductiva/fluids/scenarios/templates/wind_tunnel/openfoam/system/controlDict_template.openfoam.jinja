@@ -1,0 +1,55 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     simpleFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         {{ simulation_time }};
+
+deltaT          1;
+
+writeControl    timeStep;
+
+writeInterval   {{ output_time_step }};
+
+purgeWrite      0;
+
+writeFormat     binary;
+
+writePrecision  5;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   5;
+
+runTimeModifiable true;
+
+functions
+{
+    #include "streamLines"
+    #include "cuttingPlane"
+    #include "forceCoeffs"
+}
+
+
+// ************************************************************************* //

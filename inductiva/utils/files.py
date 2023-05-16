@@ -42,11 +42,11 @@ def get_sorted_files(data_dir: str,
                      file_format: str = "name",
                      split_token: str = "_"):
     """Returns list of files sorted according to [file_key].
-    
+
     Order a set of .format files of the form
     ['name_1.format', 'name_2.format',...,'name_10.format',
     ...,'name_n.format'].
-    
+
     The default sorting methods for list, list.sort()
     or sorted(list), order 'name_10.format' before 'name_2.format',
     which is not representative of the time series.
@@ -75,3 +75,21 @@ def get_sorted_files(data_dir: str,
     files = sorted(files, key=get_alphanum_key)
 
     return files
+
+
+def remove_files_with_tag(main_dir: str, remove_tag: str) -> None:
+    """Remove files in a directory that contain a specific name tag.
+    
+    Iterates over all folders in the main folder and remove all files
+    that contain remove_tag as a substring in the filename.
+
+    Args:
+        main_dir: Path to a directory.
+        remove_tag: tag that identifies all files to be removed."""
+
+    for item in os.listdir(main_dir):
+        item_path = os.path.join(main_dir, item)
+        if os.path.isdir(item_path):
+            remove_files_with_tag(item_path, remove_tag)
+        elif remove_tag in item:
+            os.remove(item_path)

@@ -52,8 +52,10 @@ class BodyUploadTaskInput(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["file",],
-                                             str]):
+    def __getitem__(self,
+                    name: typing.Union[typing_extensions.Literal[
+                        "file",
+                    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -70,15 +72,23 @@ class BodyUploadTaskInput(schemas.DictSchema):
         ...
 
     def get_item_oapg(self,
-                      name: typing.Union[typing_extensions.Literal["file",],
-                                         str]):
+                      name: typing.Union[typing_extensions.Literal[
+                          "file",
+                      ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict,],
-        file: typing.Union[MetaOapg.properties.file, bytes, io.FileIO,
-                           io.BufferedReader,],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+        ],
+        file: typing.Union[
+            MetaOapg.properties.file,
+            bytes,
+            io.FileIO,
+            io.BufferedReader,
+        ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
