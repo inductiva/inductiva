@@ -8,7 +8,7 @@ from inductiva.simulation import Simulator
 
 
 class GROMACS(Simulator):
-    """Class to invoke a GROMACS energy minimization on the API."""
+    """Class to invoke any GROMACS command on the API."""
 
     @property
     def api_method_name(self) -> str:
@@ -17,49 +17,39 @@ class GROMACS(Simulator):
     def run(
         self,
         input_dir: types.Path,
-        sim_config_filename: str,
-        protein_filename: str,
-        topology_filename: str,
-        output_dir: Optional[types.Path] = None,
+        method_name: str,
         track_logs: bool = False,
+        output_directory: Optional[types.Path] = None,
+        **gromacs_flags: Optional[str],
     ) -> pathlib.Path:
-        """Run the energy minimization of a protein.
+        """Run a specified gromacs method.
 
         Args:
             input_dir: Path to the directory containing the input files.
-            sim_config_filename: Name of the .mdp file containing the
-                energy minimization parameters.
-            protein_filename: Name of the file containing the protein
-                .gro file.
-            topology_filename: Name of the file containing the topology
-                .top file.
+            method_name: Method to run.
+            output_dir: Path to the directory where the output files will be
+                stored.
+            gromacs_flags: Flags to pass to the gromacs CLI.
         """
         return super().run(input_dir,
-                           output_dir=output_dir,
+                           output_dir=output_directory,
                            track_logs=track_logs,
-                           input_filename=sim_config_filename,
-                           protein_filename=protein_filename,
-                           topology_filename=topology_filename)
+                           method=method_name,
+                           user_flags=gromacs_flags)
 
     def run_async(
         self,
         input_dir: types.Path,
-        sim_config_filename: str,
-        protein_filename: str,
-        topology_filename: str,
+        method_name: str,
+        **gromacs_flags: Optional[str],
     ) -> str:
-        """Run the simulation asynchronously.
-        
-        Args:
-            sim_config_filename: Name of the .mdp file containing the
-                energy minimization parameters.
-            protein_filename: Name of the file containing the protein
-                .gro file.
-            topology_filename: Name of the file containing the topology
-                .top file.
-            """
+        """Run a specified gromacs method asynchronously.
 
+        Args:
+            input_dir: Path to the directory containing the input files.
+            method_name: Method to run.
+            gromacs_flags: Flags to pass to the gromacs CLI.
+        """
         return super().run_async(input_dir,
-                                 input_filename=sim_config_filename,
-                                 protein_filename=protein_filename,
-                                 topology_filename=topology_filename)
+                                 method=method_name,
+                                 user_flags=gromacs_flags)
