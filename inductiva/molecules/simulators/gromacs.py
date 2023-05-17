@@ -8,7 +8,7 @@ from inductiva.simulation import Simulator
 
 
 class GROMACS(Simulator):
-    """Class to invoke a GROMACS energy minimization on the API."""
+    """Class to invoke any GROMACS command on the API."""
 
     @property
     def api_method_name(self) -> str:
@@ -16,7 +16,7 @@ class GROMACS(Simulator):
 
     def run(
         self,
-        input_directory: types.Path,
+        input_dir: types.Path,
         method_name: str,
         track_logs: bool = False,
         output_directory: Optional[types.Path] = None,
@@ -31,7 +31,7 @@ class GROMACS(Simulator):
                 stored.
             gromacs_flags: Flags to pass to the gromacs CLI.
         """
-        return super().run(input_directory,
+        return super().run(input_dir,
                            output_dir=output_directory,
                            track_logs=track_logs,
                            method=method_name,
