@@ -20,7 +20,7 @@ class GROMACS(Simulator):
         method_name: str,
         track_logs: bool = False,
         output_directory: Optional[types.Path] = None,
-        **gromacs_flags: Optional[types.Args],
+        **gromacs_flags: Optional[str],
     ) -> pathlib.Path:
         """Run a specified gromacs method.
 
@@ -41,7 +41,7 @@ class GROMACS(Simulator):
         self,
         input_dir: types.Path,
         method_name: str,
-        **gromacs_flags: Optional[types.Args],
+        **gromacs_flags: Optional[str],
     ) -> str:
         """Run a specified gromacs method asynchronously.
 
