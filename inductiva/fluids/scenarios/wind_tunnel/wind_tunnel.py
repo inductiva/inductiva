@@ -11,10 +11,12 @@ from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import OpenFOAM
-from inductiva.utils.templates import batch_replace_params_in_template
+from inductiva.utils.templates import (TEMPLATES_PATH,
+                                       batch_replace_params_in_template)
 from inductiva.utils.files import remove_files_with_tag
 
-OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam_template"
+SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
+OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 
 
 class WindTunnel(Scenario):
@@ -105,7 +107,7 @@ def _(self, simulator: OpenFOAM):  # pylint: disable=unused-argument
 @WindTunnel.gen_aux_files.register
 def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
     # The WindTunnel with OpenFOAM requires changing multiple files
-    template_dir = os.path.join(os.path.dirname(__file__),
+    template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                 OPENFOAM_TEMPLATE_INPUT_DIR)
 
     # Copy all files from the template dir to the input directory
@@ -122,12 +124,14 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
     """Generates the configuration files for OpenFOAM."""
 
     # The WindTunnel with OpenFOAM requires changing multiple files
-    template_dir = os.path.join(os.path.dirname(__file__),
+    template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                 OPENFOAM_TEMPLATE_INPUT_DIR)
 
     # Add object path to its respective place
+    object_input_dir_path = os.path.join(input_dir, "constant", "triSurface")
+    os.mkdir(object_input_dir_path)
     shutil.copy(self.object_path,
-                os.path.join(input_dir, "constant/triSurface", "object.obj"))
+                os.path.join(object_input_dir_path, "object.obj"))
 
     batch_replace_params_in_template(
         templates_dir=template_dir,
@@ -141,7 +145,7 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
         params={
             "flow_velocity": self.flow_velocity,
             "simulation_time": self.simulation_time,
-            "write_interval": self.write_interval,
+            "output_time_step": self.output_time_step,
             "n_cores": self.n_cores,
             "domain": self.domain,
         },
