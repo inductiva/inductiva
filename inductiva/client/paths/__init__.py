@@ -11,5 +11,5 @@ class PathValues(str, enum.Enum):
     TASK_TASK_ID_STATUS = "/task/{task_id}/status"
     TASK_TASK_ID_OUTPUT = "/task/{task_id}/output"
     TASK_TASK_ID_KILL = "/task/{task_id}/kill"
-    ADMIN_USER = "/admin/user"
-    ADMIN_USER_USERNAME_TASKS = "/admin/user/{username}/tasks"
+    ADMIN_USERS = "/admin/users"
+    ADMIN_USERS_USERNAME_TASKS = "/admin/users/{username}/tasks"
