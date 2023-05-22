@@ -42,7 +42,8 @@ class WindTunnelSimulationOutput:
     @singledispatchmethod
     def get_pressure_field(self, simulator: Simulator, time_step: int):
         return ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario.")
+            f"Simulator not supported for `{self.__class__.__name__}` scenario."
+        )
 
 
 @WindTunnelSimulationOutput.get_object_data.register
