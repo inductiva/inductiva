@@ -424,3 +424,24 @@ def create_color_plot_movie(
         create_movie_from_frames(frames_dir=tmp_dir,
                                  movie_path=movie_path,
                                  fps=movie_fps)
+
+
+class Object():
+    """Object class containing data and render properties.
+    
+    This class allows the manipulation of data over objects
+    and the rendering of this data. It serves a niche, but the goal
+    is to integrate this in a more general object file.
+    """
+
+    def __init__(self, object_data, scalar):
+        """Initialize a `Scalar` type object."""
+        self.object_data = object_data
+        self.scalar_field = object_data[scalar]
+        self.scalar = scalar
+
+    def render(self):
+        """Render scalar data over the object."""
+        plotter = pv.Plotter()
+        plotter.add_mesh(self.object_data, scalars=self.scalar)
+        plotter.show()
