@@ -1,3 +1,13 @@
+"""Visualization processing of WindTunnel scenario.
+
+This class implements various visualization capabilities for
+the WindTunnel scenario. Namely:
+    - Pressure over object; 
+    - Cutting plane;
+    - StreamLines.
+
+Currently, we only support the OpenFOAM simulator.
+"""
 from functools import singledispatchmethod
 
 import os
