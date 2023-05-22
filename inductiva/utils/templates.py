@@ -4,6 +4,10 @@ from typing import Dict, List
 
 from jinja2 import Environment, FileSystemLoader
 
+from inductiva.utils.files import find_path_to_package
+
+TEMPLATES_PATH = find_path_to_package("templates")
+
 
 def replace_params_in_template(
     templates_dir: str,
