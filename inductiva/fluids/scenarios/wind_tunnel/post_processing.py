@@ -40,28 +40,33 @@ class WindTunnelSimulationOutput:
         """
 
         self.sim_output_dir = sim_output_path
+        self.object_path = self.get_object
         self.object_data = self.get_object_data(simulator, time_step)
-        self.pressure_field = self.get_pressure_field(simulator, time_step)
+        self.pressure_field = self.get_pressure_field(simulator)
 
     @singledispatchmethod
-    def get_object_data(self, simulator: Simulator, time_step: int):
+    def get_object_data(self, simulator: Simulator, time_step: int): # pylint: disable=unused-argument
         return ValueError(
             f"Simulator not supported for `{self.__class__.__name__}` scenario."
         )
 
     @singledispatchmethod
-    def get_pressure_field(self, simulator: Simulator, time_step: int):
+    def get_pressure_field(self, simulator: Simulator): # pylint: disable=unused-argument
         return ValueError(
             f"Simulator not supported for `{self.__class__.__name__}` scenario."
         )
 
 
 @WindTunnelSimulationOutput.get_object_data.register
-def _(self, simulator: OpenFOAM, time_step: int):
+def _(self, simulator: OpenFOAM, time_step: int): # pylint: disable=unused-argument
     """Get data over object for OpenFOAM."""
 
     reading_file = os.path.join(self.sim_output_dir, "foam.foam")
-    open(reading_file, "w", encoding="utf-8").close()
+
+    # Create reading file
+    with open(reading_file, "w", encoding="utf-8") as f:
+        f.close()
+
     # Initialize reader and define reading time-step
     reader = pv.POpenFOAMReader(reading_file)
     reader.set_active_time_value(time_step)
@@ -72,8 +77,8 @@ def _(self, simulator: OpenFOAM, time_step: int):
     return object_data
 
 
-@WindTunnelSimulationOutput.get_pressure_field.register
-def _(self, simulator: OpenFOAM, time_step: int):
+@WindTunnelSimulationOutput.get_pressure_field.register 
+def _(self, simulator: OpenFOAM): # pylint: disable=unused-argument
     """Returns pressure field over mesh points at a certain time_step."""
 
     pressure_field = Object(self.object_data, "p")
