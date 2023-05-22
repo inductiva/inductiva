@@ -64,8 +64,8 @@ def _(self, simulator: OpenFOAM, time_step: int): # pylint: disable=unused-argum
     reading_file = os.path.join(self.sim_output_dir, "foam.foam")
 
     # Create reading file
-    with open(reading_file, "w", encoding="utf-8") as f:
-        f.close()
+    with open(reading_file, "w", encoding="utf-8") as file:
+        file.close()
 
     # Initialize reader and define reading time-step
     reader = pv.POpenFOAMReader(reading_file)
@@ -77,7 +77,7 @@ def _(self, simulator: OpenFOAM, time_step: int): # pylint: disable=unused-argum
     return object_data
 
 
-@WindTunnelSimulationOutput.get_pressure_field.register 
+@WindTunnelSimulationOutput.get_pressure_field.register
 def _(self, simulator: OpenFOAM): # pylint: disable=unused-argument
     """Returns pressure field over mesh points at a certain time_step."""
 
