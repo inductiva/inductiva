@@ -8,25 +8,24 @@ the WindTunnel scenario. Namely:
 
 Currently, we only support the OpenFOAM simulator.
 """
-from functools import singledispatchmethod
-
 import os
 import pyvista as pv
 
-from inductiva.simulation import Simulator
-from inductiva.fluids.simulators import OpenFOAM
 from inductiva.types import Path
-from inductiva.utils.visualization import Object
+from inductiva.utils.visualization import MeshData
 
 
 class WindTunnelSimulationOutput:
-    """Post process WindTunnel simulation outputs."""
+    """Post process WindTunnel simulation outputs.
+    
+    Current Support:
+        OpenFOAM
+    """
 
     def __init__(self,
                  sim_output_path: Path,
-                 time_step: int,
-                 simulator: Simulator = OpenFOAM()):
-        """Initializes an `OpenFOAMSimulationOutput` object.
+                 time_step: int):
+        """Initializes an `WindTunnelSimulationOutput` object.
 
         Args:
             simulator: Simulator object.
@@ -40,47 +39,99 @@ class WindTunnelSimulationOutput:
         """
 
         self.sim_output_dir = sim_output_path
-        self.object_path = self.get_object
-        self.object_data = self.get_object_data(simulator, time_step)
-        self.pressure_field = self.get_pressure_field(simulator)
+        self.object_data = self.get_object_data(time_step)
 
-    @singledispatchmethod
-    def get_object_data(self, simulator: Simulator, time_step: int): # pylint: disable=unused-argument
-        return ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def get_object_data(self, time_step: int): # pylint: disable=unused-argument
+        """Get aerodynamics data over an object set inside the WindTunnel
+        
+        Current Support - OpenFOAM
 
-    @singledispatchmethod
-    def get_pressure_field(self, simulator: Simulator): # pylint: disable=unused-argument
-        return ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+        Args:
+            time_step: Time step for which we want to visualize
+                aerodynamics data.
+        """
+
+        reading_file = os.path.join(self.sim_output_dir, "foam.foam")
+
+        # Create reading file
+        with open(reading_file, "w", encoding="utf-8") as file:
+            file.close()
+
+        # Initialize reader and define reading time-step
+        reader = pv.POpenFOAMReader(reading_file)
+        reader.set_active_time_value(time_step)
+
+        mesh = reader.read()
+        object_data = mesh["boundary"]["object"]
+
+        return object_data
+
+    def get_pressure_field(self): # pylint: disable=unused-argument
+        """Get pressure field over mesh points for a certain time_step.
+        
+        Returns:
+            A MeshData object that allow to manipulate data over a mesh
+            and to render it.
+        """
+        pressure_field = MeshData(self.object_data, "p")
+
+        return pressure_field
+
+    def get_streamlines(self,
+                        time_step: int,
+                        physical_property: str = "pressure"):
+        """Get streamlines over the object we insert in the WindTunnel."""
+
+        streamlines_path = os.path.join(
+            self.sim_output_dir, "postProcessing",
+            "sets", "streamLines",
+            str(time_step))
+
+        if physical_property.lower() == "pressure":
+            streamlines_mesh = pv.read(
+            os.path.join(streamlines_path, "track0_p.vtk"))
+        elif physical_property.lower() == "velocity":
+            streamlines_mesh = pv.read(
+            os.path.join(streamlines_path, "track0_U.vtk"))
+        else:
+            raise ValueError(f"Physical property `{physical_property}` not available "
+                             "or supported")
+
+        return streamlines_mesh
+
+    def get_flow_plane(self,
+                        time_step: int,
+                        physical_property: str = "pressure"):
+        """Get flow properties in a plane of the domain in WindTunnel."""
+        cutting_plane_path = os.path.join(
+            self.sim_output_dir, "postProcessing",
+            "cuttingPlane", str(time_step))
+
+        if physical_property.lower() == "pressure":
+            cutting_plane_mesh = pv.read(os.path.join(
+                cutting_plane_path, "p_yNormal.vtk"))
+        elif physical_property.lower() == "velocity":
+            cutting_plane_mesh = pv.read(os.path.join(
+                cutting_plane_path, "U_yNormal.vtk"))
+        else:
+            raise ValueError(f"Physical property `{physical_property}` not available "
+                             "or supported")
+
+        return cutting_plane_mesh
 
 
-@WindTunnelSimulationOutput.get_object_data.register
-def _(self, simulator: OpenFOAM, time_step: int): # pylint: disable=unused-argument
-    """Get data over object for OpenFOAM."""
+    def render_flow(self, flow_property_mesh,
+                    physical_property: str = "pressure"):
+        """Render flow property over the object we insert in the WindTunnel."""
 
-    reading_file = os.path.join(self.sim_output_dir, "foam.foam")
-
-    # Create reading file
-    with open(reading_file, "w", encoding="utf-8") as file:
-        file.close()
-
-    # Initialize reader and define reading time-step
-    reader = pv.POpenFOAMReader(reading_file)
-    reader.set_active_time_value(time_step)
-
-    mesh = reader.read()
-    object_data = mesh["boundary"]["object"]
-
-    return object_data
-
-
-@WindTunnelSimulationOutput.get_pressure_field.register
-def _(self, simulator: OpenFOAM): # pylint: disable=unused-argument
-    """Returns pressure field over mesh points at a certain time_step."""
-
-    pressure_field = Object(self.object_data, "p")
-
-    return pressure_field
+        plotter = pv.Plotter()
+        plotter.add_mesh(self.object_data)
+        if physical_property.lower() == "pressure":
+            plotter.add_mesh(flow_property_mesh, scalars="p")
+        elif physical_property.lower() == "velocity":
+            plotter.add_mesh(flow_property_mesh, scalars="U")
+        else:
+            raise ValueError(f"Physical property `{physical_property}` not available "
+                             "or supported")
+        plotter.show()
+        plotter.close()
