@@ -463,8 +463,7 @@ class MeshData:
         Attributes:
             mesh: mesh over the object obtained from 
         """
-        self.mesh = pv.PolyData(mesh_data.points,
-                                faces = mesh_data.faces)
+        self.mesh = pv.PolyData(mesh_data.points, faces=mesh_data.faces)
         self.scalar_name = scalar_name
         self.mesh.point_data[scalar_name] = mesh_data.point_data[scalar_name]
         self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
