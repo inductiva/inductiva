@@ -67,7 +67,8 @@ class WindTunnelSimulationOutput:
             and to render it.
         """
 
-        property_notation = OpenFOAMPhysicalProperty[physical_property.upper()].value
+        property_notation = OpenFOAMPhysicalProperty[
+            physical_property.upper()].value
         physical_field = MeshData(self.object_data, property_notation)
 
         return physical_field
@@ -81,7 +82,8 @@ class WindTunnelSimulationOutput:
                                         "sets", "streamLines",
                                         str(self.time_step))
 
-        property_notation =  OpenFOAMPhysicalProperty[physical_property.upper()].value
+        property_notation = OpenFOAMPhysicalProperty[
+            physical_property.upper()].value
         streamlines_file = "track0" + property_notation + ".vtk"
 
         streamlines_mesh = pv.read(
@@ -94,11 +96,13 @@ class WindTunnelSimulationOutput:
                                                   "velocity"] = "pressure"):
         """Get flow properties in a plane of the domain in WindTunnel."""
 
-        cutting_plane_path = os.path.join(self.sim_output_path, "postProcessing",
-                                          "cuttingPlane", str(self.time_step))
+        cutting_plane_path = os.path.join(self.sim_output_path,
+                                          "postProcessing", "cuttingPlane",
+                                          str(self.time_step))
 
         # Obtain notation for the physical property for the simulator.
-        property_notation = OpenFOAMPhysicalProperty[physical_property.upper()].value
+        property_notation = OpenFOAMPhysicalProperty[
+            physical_property.upper()].value
         cutting_plane_file = property_notation + "_yNormal.vtk"
 
         cutting_plane_mesh = pv.read(
@@ -114,7 +118,8 @@ class WindTunnelSimulationOutput:
         """Render flow property over the object in the WindTunnel."""
 
         # Obtain notation for the physical property for the simulator.
-        property_notation = OpenFOAMPhysicalProperty[physical_property.upper()].value
+        property_notation = OpenFOAMPhysicalProperty[
+            physical_property.upper()].value
 
         plotter = pv.Plotter()
         plotter.add_mesh(self.object_data)
