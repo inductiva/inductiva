@@ -15,6 +15,7 @@ from tqdm import tqdm
 import xarray as xr
 
 from inductiva.utils import files
+from inductiva.types import Path
 
 MPL_CONFIG_PARAMS = {
     "font.size": 14,
@@ -457,8 +458,8 @@ class MeshData:
             mesh_data: pyvista mesh (PolyData or Unstructured) which
                 contains all of the simulated outputs over the mesh.
             scalar_name: string that defines the scalar we want to
-                manipulate and render. This names depend on the mesh_data
-                and on the specific simulator used.
+                manipulate and render. This names depends on the mesh_data
+                array names and on the specific simulator used.
 
         Attributes:
             mesh: mesh over the object obtained from 
@@ -468,10 +469,10 @@ class MeshData:
         self.mesh.point_data[scalar_name] = mesh_data.point_data[scalar_name]
         self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
 
-    def render(self):
+    def render(self, save_path: Path = None):
         """Render scalar field data over the mesh."""
 
         plotter = pv.Plotter()
         plotter.add_mesh(self.mesh, scalars=self.scalar_name)
-        plotter.show()
+        plotter.show(screenshot= save_path)
         plotter.close()

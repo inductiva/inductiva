@@ -9,6 +9,10 @@ the WindTunnel scenario. Namely:
 Currently, we only support the OpenFOAM simulator.
 """
 import os
+from dataclasses import dataclass
+from enum import Enum
+from typing import Literal
+
 import pyvista as pv
 
 from inductiva.types import Path
@@ -23,14 +27,14 @@ class WindTunnelSimulationOutput:
     """
 
     def __init__(self, sim_output_path: Path, time_step: int):
-        """Initializes an `WindTunnelSimulationOutput` object.
+        """Initializes a `WindTunnelSimulationOutput` object.
 
         Args:
             sim_output_path: Path to simulation output files.
             time_step: Time step where we read the data.
         """
 
-        self.sim_output_dir = sim_output_path
+        self.sim_output_path = sim_output_path
         self.time_step = time_step
         self.object_data = self.get_object_data()
 
@@ -40,7 +44,7 @@ class WindTunnelSimulationOutput:
         Current Support - OpenFOAM
         """
 
-        reading_file = os.path.join(self.sim_output_dir, "foam.foam")
+        reading_file = os.path.join(self.sim_output_path, "foam.foam")
 
         # Create reading file
         with open(reading_file, "w", encoding="utf-8") as file:
@@ -63,19 +67,21 @@ class WindTunnelSimulationOutput:
             and to render it.
         """
 
-        property_notation = _get_physical_property_notation(physical_property)
+        property_notation = OpenFOAMPhysicalProperty[physical_property.upper()].value
         physical_field = MeshData(self.object_data, property_notation)
 
         return physical_field
 
-    def get_streamlines(self, physical_property: str = "pressure"):
+    def get_streamlines(self,
+                        physical_property: Literal["pressure",
+                                                   "velocity"] = "pressure"):
         """Get streamlines over the object in the WindTunnel."""
 
-        streamlines_path = os.path.join(self.sim_output_dir, "postProcessing",
+        streamlines_path = os.path.join(self.sim_output_path, "postProcessing",
                                         "sets", "streamLines",
                                         str(self.time_step))
 
-        property_notation = _get_physical_property_notation(physical_property)
+        property_notation =  OpenFOAMPhysicalProperty[physical_property.upper()].value
         streamlines_file = "track0" + property_notation + ".vtk"
 
         streamlines_mesh = pv.read(
@@ -83,14 +89,16 @@ class WindTunnelSimulationOutput:
 
         return streamlines_mesh
 
-    def get_flow_plane(self, physical_property: str = "pressure"):
+    def get_flow_plane(self,
+                       physical_property: Literal["pressure",
+                                                  "velocity"] = "pressure"):
         """Get flow properties in a plane of the domain in WindTunnel."""
 
-        cutting_plane_path = os.path.join(self.sim_output_dir, "postProcessing",
+        cutting_plane_path = os.path.join(self.sim_output_path, "postProcessing",
                                           "cuttingPlane", str(self.time_step))
 
         # Obtain notation for the physical property for the simulator.
-        property_notation = _get_physical_property_notation(physical_property)
+        property_notation = OpenFOAMPhysicalProperty[physical_property.upper()].value
         cutting_plane_file = property_notation + "_yNormal.vtk"
 
         cutting_plane_mesh = pv.read(
@@ -100,29 +108,23 @@ class WindTunnelSimulationOutput:
 
     def render_flow(self,
                     flow_property_mesh,
-                    physical_property: str = "pressure"):
+                    physical_property: Literal["pressure",
+                                               "velocity"] = "pressure",
+                    save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
 
         # Obtain notation for the physical property for the simulator.
-        property_notation = _get_physical_property_notation(physical_property)
+        property_notation = OpenFOAMPhysicalProperty[physical_property.upper()].value
 
         plotter = pv.Plotter()
         plotter.add_mesh(self.object_data)
         plotter.add_mesh(flow_property_mesh, scalars=property_notation)
-        plotter.show()
+        plotter.show(screenshot=save_path)
         plotter.close()
 
 
-def _get_physical_property_notation(physical_property: str):
-    "Get OpenFOAM names for physical properties."
-
-    if physical_property.lower() == "pressure":
-        openfoam_property = "p"
-    elif physical_property.lower() == "velocity":
-        openfoam_property = "U"
-    else:
-        raise ValueError(
-            f"Physical property `{physical_property}` not available "
-            "or supported")
-
-    return openfoam_property
+@dataclass
+class OpenFOAMPhysicalProperty(Enum):
+    """Defines the notation used for physical properties in OpenFOAM."""
+    PRESSURE = "p"
+    VELOCITY = "U"
