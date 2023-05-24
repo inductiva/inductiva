@@ -474,5 +474,5 @@ class MeshData:
 
         plotter = pv.Plotter()
         plotter.add_mesh(self.mesh, scalars=self.scalar_name)
-        plotter.show(screenshot= save_path)
+        plotter.show(screenshot=save_path)
         plotter.close()
