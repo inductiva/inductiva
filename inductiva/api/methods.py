@@ -28,7 +28,7 @@ from inductiva.utils.data import (extract_output, get_validate_request_params,
 from inductiva.utils.meta import get_method_name, get_type_annotations
 
 
-def validate_api_key(api_key: str) -> Configuration:
+def validate_api_key(api_key: Optional[str]) -> Configuration:
     """Validates the API key and returns API configuration"""
     if inductiva.api_key is None:
         raise ValueError(
@@ -377,7 +377,7 @@ def invoke_async_api(method_name: str, params, type_annotations: Dict[Any,
 
     Submits a simulation async to the API and returns the task id.
     The flow is similar to invoke_api, but it does not block until the task
-    is finished. 
+    is finished.
     The flow is summarized as follows:
         1. Transform request params into the params used to
         validate permission to execute the request.

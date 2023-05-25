@@ -17,3 +17,4 @@ pyvista
 imageio-ffmpeg
 ipython
 websockets
+typing-extensions
