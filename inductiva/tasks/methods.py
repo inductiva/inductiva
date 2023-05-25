@@ -52,7 +52,8 @@ def fetch_task_output(task_id: str,
             return unpack_output(result_list, output_dir, return_type)
 
 
-def get_task(task_id) -> Dict:
+def get_task_info(task_id) -> Dict:
+    """Get info about a task by its ID."""
     api_config = api.validate_api_key(inductiva.api_key)
 
     with ApiClient(api_config) as client:
@@ -69,7 +70,13 @@ def get_task(task_id) -> Dict:
             raise e
 
 
-def get_tasks(status: Optional[str] = None, page=1, per_page=10) -> List[Dict]:
+def get_tasks_info(status: Optional[str] = None,
+                   page=1,
+                   per_page=10) -> List[Dict]:
+    """Get information about a user's tasks on the API.
+
+    Tags can be filtered by a status. Results are paginated indexed from 1.
+    """
     api_config = api.validate_api_key(inductiva.api_key)
 
     with ApiClient(api_config) as client:

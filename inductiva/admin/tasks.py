@@ -1,4 +1,4 @@
-"""Admin functions to manage tasks."""
+"""Admin functions to query tasks."""
 from typing import Dict, List, Optional
 
 import inductiva
@@ -8,11 +8,17 @@ from inductiva.client.apis.tags.admin_api import AdminApi
 from inductiva.client.model.task_status_code import TaskStatusCode
 
 
-def get_tasks(statuses: Optional[List[str]] = None,
-              usernames: Optional[List[str]] = None,
-              methods: Optional[List[str]] = None,
-              page=1,
-              per_page=10) -> List[Dict]:
+def get_tasks_info(statuses: Optional[List[str]] = None,
+                   usernames: Optional[List[str]] = None,
+                   methods: Optional[List[str]] = None,
+                   page=1,
+                   per_page=10) -> List[Dict]:
+    """Get information about tasks all tasks on the API.
+
+    Tasks can be filtered by status, username, and method_name,
+    by providing a list of each as function arguments. Results are
+    paginated indexed from 1.
+    """
     api_config = api.validate_api_key(inductiva.api_key)
 
     with ApiClient(api_config) as client:
