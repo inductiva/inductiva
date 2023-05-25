@@ -1,2 +1,2 @@
 #pylint: disable=missing-module-docstring
-from .methods import fetch_task_output, get_task_status
+from .methods import fetch_task_output, get_task_status, get_task, get_tasks
