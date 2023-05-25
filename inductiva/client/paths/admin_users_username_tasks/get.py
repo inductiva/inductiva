@@ -24,60 +24,10 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.task_status_code import TaskStatusCode
-from inductiva.client.model.task import Task
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
 
-# Query params
-PageSchema = schemas.IntSchema
-PerPageSchema = schemas.IntSchema
-StatusSchema = TaskStatusCode
-RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams', {})
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {
-        'page': typing.Union[
-            PageSchema,
-            decimal.Decimal,
-            int,
-        ],
-        'per_page': typing.Union[
-            PerPageSchema,
-            decimal.Decimal,
-            int,
-        ],
-        'status': typing.Union[
-            StatusSchema,
-        ],
-    },
-    total=False)
-
-
-class RequestQueryParams(RequestRequiredQueryParams,
-                         RequestOptionalQueryParams):
-    pass
-
-
-request_query_page = api_client.QueryParameter(
-    name="page",
-    style=api_client.ParameterStyle.FORM,
-    schema=PageSchema,
-    explode=True,
-)
-request_query_per_page = api_client.QueryParameter(
-    name="per_page",
-    style=api_client.ParameterStyle.FORM,
-    schema=PerPageSchema,
-    explode=True,
-)
-request_query_status = api_client.QueryParameter(
-    name="status",
-    style=api_client.ParameterStyle.FORM,
-    schema=StatusSchema,
-    explode=True,
-)
 # Path params
 UsernameSchema = schemas.StrSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
@@ -104,29 +54,7 @@ request_path_username = api_client.PathParameter(
 _auth = [
     'APIKeyHeader',
 ]
-
-
-class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
-
-    class MetaOapg:
-
-        @staticmethod
-        def items() -> typing.Type['Task']:
-            return Task
-
-    def __new__(
-        cls,
-        _arg: typing.Union[typing.Tuple['Task'], typing.List['Task']],
-        _configuration: typing.Optional[schemas.Configuration] = None,
-    ) -> 'SchemaFor200ResponseBodyApplicationJson':
-        return super().__new__(
-            cls,
-            _arg,
-            _configuration=_configuration,
-        )
-
-    def __getitem__(self, i: int) -> 'Task':
-        return super().__getitem__(i)
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass
@@ -176,9 +104,8 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _get_tasks_by_username_oapg(
+    def _get_user_tasks_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -190,10 +117,9 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_tasks_by_username_oapg(
+    def _get_user_tasks_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -202,9 +128,8 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_tasks_by_username_oapg(
+    def _get_user_tasks_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -216,9 +141,8 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _get_tasks_by_username_oapg(
+    def _get_user_tasks_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -226,12 +150,11 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Get Tasks By Username
+        Get User Tasks
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
-        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         self._verify_typed_dict_inputs_oapg(RequestPathParams, path_params)
         used_path = path.value
 
@@ -245,23 +168,6 @@ class BaseApi(api_client.Api):
 
         for k, v in _path_params.items():
             used_path = used_path.replace('{%s}' % k, v)
-
-        prefix_separator_iterator = None
-        for parameter in (
-                request_query_page,
-                request_query_per_page,
-                request_query_status,
-        ):
-            parameter_data = query_params.get(parameter.name, schemas.unset)
-            if parameter_data is schemas.unset:
-                continue
-            if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
-                )
-            serialized_data = parameter.serialize(parameter_data,
-                                                  prefix_separator_iterator)
-            for serialized_value in serialized_data.values():
-                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -299,13 +205,12 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetTasksByUsername(BaseApi):
+class GetUserTasks(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_tasks_by_username(
+    def get_user_tasks(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -317,10 +222,9 @@ class GetTasksByUsername(BaseApi):
         ...
 
     @typing.overload
-    def get_tasks_by_username(
+    def get_user_tasks(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -329,9 +233,8 @@ class GetTasksByUsername(BaseApi):
         ...
 
     @typing.overload
-    def get_tasks_by_username(
+    def get_user_tasks(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -343,17 +246,15 @@ class GetTasksByUsername(BaseApi):
     ]:
         ...
 
-    def get_tasks_by_username(
+    def get_user_tasks(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_tasks_by_username_oapg(
-            query_params=query_params,
+        return self._get_user_tasks_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
@@ -367,7 +268,6 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -382,7 +282,6 @@ class ApiForget(BaseApi):
     def get(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -393,7 +292,6 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -407,15 +305,13 @@ class ApiForget(BaseApi):
 
     def get(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_tasks_by_username_oapg(
-            query_params=query_params,
+        return self._get_user_tasks_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,

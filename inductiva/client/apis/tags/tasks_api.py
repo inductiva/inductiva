@@ -9,9 +9,7 @@
 """
 
 from inductiva.client.paths.task_task_id_output.get import DownloadTaskOutput
-from inductiva.client.paths.task_task_id.get import GetTask
 from inductiva.client.paths.task_task_id_status.get import GetTaskStatus
-from inductiva.client.paths.task.get import GetUserTasks
 from inductiva.client.paths.task_task_id_kill.post import KillTask
 from inductiva.client.paths.task_submit.post import SubmitTask
 from inductiva.client.paths.task_task_id_input.post import UploadTaskInput
@@ -19,9 +17,7 @@ from inductiva.client.paths.task_task_id_input.post import UploadTaskInput
 
 class TasksApi(
         DownloadTaskOutput,
-        GetTask,
         GetTaskStatus,
-        GetUserTasks,
         KillTask,
         SubmitTask,
         UploadTaskInput,
