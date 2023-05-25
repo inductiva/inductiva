@@ -64,6 +64,7 @@ def get_task_info(task_id) -> Dict:
             api_response = api_instance.get_task(
                 path_params={"task_id": task_id})
 
+            # Convert DynamicSchema to dict
             return {**api_response.body}
 
         except ApiException as e:
