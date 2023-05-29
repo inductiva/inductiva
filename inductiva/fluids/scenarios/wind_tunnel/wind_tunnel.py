@@ -48,8 +48,8 @@ class WindTunnel(Scenario):
             self.domain = domain
 
     def simulate(self,
-                 object_path: Path,
                  simulator: Simulator = OpenFOAM(),
+                 object_path: Optional[Path] = None,
                  output_dir: Optional[Path] = None,
                  simulation_time: float = 100,
                  output_time_step: float = 50,
@@ -66,7 +66,11 @@ class WindTunnel(Scenario):
             n_cores: Number of cores to use for the simulation.
             """
 
-        self.object_path = object_path
+        if object_path:
+            self.object_path = object_path
+        else:
+            logging.info("WindTunnel is empty. Object path not specified.")
+
         self.simulation_time = simulation_time
         self.output_time_step = output_time_step
         self.n_cores = n_cores
@@ -81,8 +85,8 @@ class WindTunnel(Scenario):
         return output_path
 
     def simulate_async(self,
-                       object_path: Path,
                        simulator: Simulator = OpenFOAM(),
+                       object_path: Optional[Path] = None,
                        simulation_time: float = 100,
                        output_time_step: float = 50,
                        n_cores: int = 1):
@@ -97,7 +101,12 @@ class WindTunnel(Scenario):
             write_interval: Interval between simulation outputs, in seconds.
             n_cores: Number of cores to use for the simulation.
             """
-        self.object_path = object_path
+
+        if object_path:
+            self.object_path = object_path
+        else:
+            logging.info("WindTunnel is empty. Object path not specified.")
+
         self.simulation_time = simulation_time
         self.output_time_step = output_time_step
         self.n_cores = n_cores
