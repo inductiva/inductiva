@@ -45,3 +45,28 @@ class Scenario(ABC):
             )
 
         return output_path
+
+    def simulate_async(
+        self,
+        simulator: Simulator,
+        **kwargs,
+    ):
+        """Simulates the scenario asychronously."""
+
+        with tempfile.TemporaryDirectory() as input_dir:
+
+            self.gen_aux_files(simulator, input_dir)
+            self.gen_config(simulator, input_dir)
+
+            args = ()
+            config_filename = self.get_config_filename(simulator)
+            if config_filename:
+                args += (config_filename,)
+
+            task_id = simulator.run_async(
+                input_dir,
+                *args,
+                **kwargs,
+            )
+
+        return task_id

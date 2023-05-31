@@ -28,20 +28,17 @@ class WindTunnel(Scenario):
     """
 
     def __init__(self,
-                 object_path: str,
                  flow_velocity: List[float],
                  domain: Optional[List[float]] = None):
-        """Initializes a `WindTunnel` object.
+        """Initializes the `WindTunnel` conditions.
         
         Args:
-            object_path: Path to the object that is inserted in the wind tunnel.
             flow_velocity: Velocity of the air flow in m/s.
             domain: List containing the lower and upper boundary of the wind
                 tunnel in each (x, y, z) direction. It is the natural
                 description with the default OpenFOAM simulator.
         """
 
-        self.object_path = object_path
         self.flow_velocity = flow_velocity
 
         if domain is None:
@@ -53,12 +50,14 @@ class WindTunnel(Scenario):
     def simulate(self,
                  simulator: Simulator = OpenFOAM(),
                  output_dir: Optional[Path] = None,
+                 object_path: Optional[Path] = None,
                  simulation_time: float = 100,
                  output_time_step: float = 50,
                  n_cores: int = 1):
-        """Simulates the wind tunnel scenario.
+        """Simulates the wind tunnel scenario synchronously.
         
         Args:
+            object_path: Path to object inserted in the wind tunnel.
             simulator: Simulator to use for the simulation.
             output_dir: Path to the directory where the simulation output
                 is downloaded.
@@ -66,6 +65,11 @@ class WindTunnel(Scenario):
             write_interval: Interval between simulation outputs, in seconds.
             n_cores: Number of cores to use for the simulation.
             """
+
+        if object_path:
+            self.object_path = object_path
+        else:
+            logging.info("WindTunnel is empty. Object path not specified.")
 
         self.simulation_time = simulation_time
         self.output_time_step = output_time_step
@@ -79,6 +83,41 @@ class WindTunnel(Scenario):
         )
 
         return output_path
+
+    def simulate_async(self,
+                       simulator: Simulator = OpenFOAM(),
+                       object_path: Optional[Path] = None,
+                       simulation_time: float = 100,
+                       output_time_step: float = 50,
+                       n_cores: int = 1):
+        """Simulates the wind tunnel scenario asynchronously.
+        
+        Args:
+            object_path: Path to object inserted in the wind tunnel.
+            simulator: Simulator to use for the simulation.
+            output_dir: Path to the directory where the simulation output
+                is downloaded.
+            simulation_time: Simulation time, in seconds.
+            write_interval: Interval between simulation outputs, in seconds.
+            n_cores: Number of cores to use for the simulation.
+            """
+
+        if object_path:
+            self.object_path = object_path
+        else:
+            logging.info("WindTunnel is empty. Object path not specified.")
+
+        self.simulation_time = simulation_time
+        self.output_time_step = output_time_step
+        self.n_cores = n_cores
+
+        task_id = super().simulate_async(
+            simulator,
+            n_cores=n_cores,
+            openfoam_solver="simpleFoam",
+        )
+
+        return task_id
 
     @singledispatchmethod
     @classmethod
