@@ -49,8 +49,8 @@ class WindTunnel(Scenario):
 
     def simulate(self,
                  simulator: Simulator = OpenFOAM(),
-                 object_path: Optional[Path] = None,
                  output_dir: Optional[Path] = None,
+                 object_path: Optional[Path] = None,
                  simulation_time: float = 100,
                  output_time_step: float = 50,
                  n_cores: int = 1):
