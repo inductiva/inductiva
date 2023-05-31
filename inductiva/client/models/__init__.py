@@ -12,7 +12,11 @@
 # sys.setrecursionlimit(n)
 
 from inductiva.client.model.body_upload_task_input import BodyUploadTaskInput
+from inductiva.client.model.g_cloud_executer import GCloudExecuter
+from inductiva.client.model.g_cloud_executer_create import GCloudExecuterCreate
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.on_premise_executer import OnPremiseExecuter
+from inductiva.client.model.on_premise_executer_create import OnPremiseExecuterCreate
 from inductiva.client.model.task import Task
 from inductiva.client.model.task_request import TaskRequest
 from inductiva.client.model.task_status import TaskStatus
