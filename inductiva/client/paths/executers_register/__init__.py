@@ -1,11 +1,7 @@
 # do not import all endpoints into this module because that uses a lot of memory and stack frames
 # if you need the ability to import all endpoints from this module, import them with
-# from inductiva.client.apis.tag_to_api import tag_to_api
+# from inductiva.client.paths.executers_register import Api
 
-import enum
+from inductiva.client.paths import PathValues
 
-
-class TagValues(str, enum.Enum):
-    ADMIN = "admin"
-    EXECUTERS = "executers"
-    TASKS = "tasks"
+path = PathValues.EXECUTERS_REGISTER

@@ -12,6 +12,7 @@ from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_username import AdminUsersUsername
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
 from inductiva.client.apis.paths.admin_tasks import AdminTasks
+from inductiva.client.apis.paths.executers_register import ExecutersRegister
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -26,6 +27,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
         PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
         PathValues.ADMIN_TASKS: AdminTasks,
+        PathValues.EXECUTERS_REGISTER: ExecutersRegister,
     })
 
 path_to_api = PathToApi({
@@ -40,4 +42,5 @@ path_to_api = PathToApi({
     PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
     PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
     PathValues.ADMIN_TASKS: AdminTasks,
+    PathValues.EXECUTERS_REGISTER: ExecutersRegister,
 })

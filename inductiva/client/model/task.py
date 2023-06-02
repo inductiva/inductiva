@@ -40,7 +40,11 @@ class Task(schemas.DictSchema):
 
         class properties:
             task_id = schemas.StrSchema
-            status = schemas.StrSchema
+
+            @staticmethod
+            def status() -> typing.Type['TaskStatusCode']:
+                return TaskStatusCode
+
             method_name = schemas.StrSchema
 
             class executer(
@@ -353,7 +357,7 @@ class Task(schemas.DictSchema):
 
     method_name: MetaOapg.properties.method_name
     task_id: MetaOapg.properties.task_id
-    status: MetaOapg.properties.status
+    status: 'TaskStatusCode'
 
     @typing.overload
     def __getitem__(
@@ -363,8 +367,8 @@ class Task(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["status"]
-    ) -> MetaOapg.properties.status:
+            self,
+            name: typing_extensions.Literal["status"]) -> 'TaskStatusCode':
         ...
 
     @typing.overload
@@ -428,8 +432,8 @@ class Task(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["status"]
-    ) -> MetaOapg.properties.status:
+            self,
+            name: typing_extensions.Literal["status"]) -> 'TaskStatusCode':
         ...
 
     @typing.overload
@@ -500,10 +504,7 @@ class Task(schemas.DictSchema):
             MetaOapg.properties.task_id,
             str,
         ],
-        status: typing.Union[
-            MetaOapg.properties.status,
-            str,
-        ],
+        status: 'TaskStatusCode',
         executer: typing.Union[MetaOapg.properties.executer, dict,
                                frozendict.frozendict, str, date, datetime,
                                uuid.UUID, int, float, decimal.Decimal, bool,
@@ -555,3 +556,6 @@ class Task(schemas.DictSchema):
             _configuration=_configuration,
             **kwargs,
         )
+
+
+from inductiva.client.model.task_status_code import TaskStatusCode

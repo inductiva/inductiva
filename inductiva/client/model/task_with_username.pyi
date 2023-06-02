@@ -45,7 +45,10 @@ class TaskWithUsername(
         
         class properties:
             task_id = schemas.StrSchema
-            status = schemas.StrSchema
+        
+            @staticmethod
+            def status() -> typing.Type['TaskStatusCode']:
+                return TaskStatusCode
             method_name = schemas.StrSchema
             username = schemas.StrSchema
             
@@ -265,14 +268,14 @@ class TaskWithUsername(
     
     method_name: MetaOapg.properties.method_name
     task_id: MetaOapg.properties.task_id
-    status: MetaOapg.properties.status
+    status: 'TaskStatusCode'
     username: MetaOapg.properties.username
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["task_id"]) -> MetaOapg.properties.task_id: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["status"]) -> MetaOapg.properties.status: ...
+    def __getitem__(self, name: typing_extensions.Literal["status"]) -> 'TaskStatusCode': ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["method_name"]) -> MetaOapg.properties.method_name: ...
@@ -307,7 +310,7 @@ class TaskWithUsername(
     def get_item_oapg(self, name: typing_extensions.Literal["task_id"]) -> MetaOapg.properties.task_id: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["status"]) -> MetaOapg.properties.status: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["status"]) -> 'TaskStatusCode': ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["method_name"]) -> MetaOapg.properties.method_name: ...
@@ -342,7 +345,7 @@ class TaskWithUsername(
         *_args: typing.Union[dict, frozendict.frozendict, ],
         method_name: typing.Union[MetaOapg.properties.method_name, str, ],
         task_id: typing.Union[MetaOapg.properties.task_id, str, ],
-        status: typing.Union[MetaOapg.properties.status, str, ],
+        status: 'TaskStatusCode',
         username: typing.Union[MetaOapg.properties.username, str, ],
         executer: typing.Union[MetaOapg.properties.executer, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         create_time: typing.Union[MetaOapg.properties.create_time, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -367,3 +370,5 @@ class TaskWithUsername(
             _configuration=_configuration,
             **kwargs,
         )
+
+from inductiva.client.model.task_status_code import TaskStatusCode
