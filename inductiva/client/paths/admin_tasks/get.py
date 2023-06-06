@@ -24,9 +24,9 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.task_with_username import TaskWithUsername
 from inductiva.client.model.task_status_code import TaskStatusCode
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.task_with_user_info import TaskWithUserInfo
 
 from . import path
 
@@ -189,13 +189,13 @@ class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
     class MetaOapg:
 
         @staticmethod
-        def items() -> typing.Type['TaskWithUsername']:
-            return TaskWithUsername
+        def items() -> typing.Type['TaskWithUserInfo']:
+            return TaskWithUserInfo
 
     def __new__(
         cls,
-        _arg: typing.Union[typing.Tuple['TaskWithUsername'],
-                           typing.List['TaskWithUsername']],
+        _arg: typing.Union[typing.Tuple['TaskWithUserInfo'],
+                           typing.List['TaskWithUserInfo']],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'SchemaFor200ResponseBodyApplicationJson':
         return super().__new__(
@@ -204,7 +204,7 @@ class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
             _configuration=_configuration,
         )
 
-    def __getitem__(self, i: int) -> 'TaskWithUsername':
+    def __getitem__(self, i: int) -> 'TaskWithUserInfo':
         return super().__getitem__(i)
 
 
