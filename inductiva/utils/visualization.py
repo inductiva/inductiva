@@ -469,10 +469,11 @@ class MeshData:
         self.mesh.point_data[scalar_name] = mesh_data.point_data[scalar_name]
         self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
 
-    def render(self, save_path: Path = None):
+    def render(self, save_path: Path = None, background_color: str = "black"):
         """Render scalar field data over the mesh."""
 
         plotter = pv.Plotter()
+        plotter.background_color = background_color
         plotter.add_mesh(self.mesh, scalars=self.scalar_name)
         plotter.show(screenshot=save_path)
         plotter.close()

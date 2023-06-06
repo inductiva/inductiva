@@ -47,8 +47,7 @@ class WindTunnelSimulationOutput:
         reading_file = os.path.join(self.sim_output_path, "foam.foam")
 
         # Create reading file
-        with open(reading_file, "w", encoding="utf-8") as file:
-            file.close()
+        open(reading_file, "w", encoding="utf-8").close()
 
         # Initialize reader and define reading time-step
         reader = pv.POpenFOAMReader(reading_file)
@@ -84,7 +83,7 @@ class WindTunnelSimulationOutput:
 
         property_notation = OpenFOAMPhysicalProperty[
             physical_property.upper()].value
-        streamlines_file = "track0" + property_notation + ".vtk"
+        streamlines_file = "track0_" + property_notation + ".vtk"
 
         streamlines_mesh = pv.read(
             os.path.join(streamlines_path, streamlines_file))

@@ -17,7 +17,8 @@ FoamFile
 surfaces ("object.obj");
 
 // Identify a feature when angle between faces < includedAngle
-includedAngle       150;
+includedAngle       50;
+geometricTestOnly yes;
 
 subsetFeatures
 {

@@ -3,7 +3,9 @@
 from functools import singledispatchmethod
 import os
 import shutil
-from typing import Optional, List
+from typing import Optional, List, Literal
+from enum import Enum
+from dataclasses import dataclass
 
 from absl import logging
 
@@ -19,6 +21,14 @@ SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 
 
+@dataclass
+class MeshResolution(Enum):
+    """Sets particle radius according to resolution."""
+    HIGH = [5, 6]
+    MEDIUM = [4, 5]
+    LOW = [3, 4]
+
+
 class WindTunnel(Scenario):
     """Physical scenario of a configurable wind tunnel simulation.
     
@@ -29,12 +39,12 @@ class WindTunnel(Scenario):
 
     def __init__(self,
                  flow_velocity: List[float],
-                 domain: Optional[List[float]] = None):
+                 domain: Optional[dict] = None):
         """Initializes the `WindTunnel` conditions.
         
         Args:
-            flow_velocity: Velocity of the air flow in m/s.
-            domain: List containing the lower and upper boundary of the wind
+            flow_velocity (dict): Velocity of the air flow in m/s.
+            domain (dict): List containing the lower and upper boundary of the wind
                 tunnel in each (x, y, z) direction. It is the natural
                 description with the default OpenFOAM simulator.
         """
@@ -43,7 +53,7 @@ class WindTunnel(Scenario):
 
         if domain is None:
             logging.info("Using a default domain: [[-5, 15], [-4, 4], [0, 8]].")
-            self.domain = [[-5, 15], [-4, 4], [0, 8]]
+            self.domain = {"x": [-5, 15], "y": [-4, 4], "z": [0, 8]}
         else:
             self.domain = domain
 
@@ -53,6 +63,7 @@ class WindTunnel(Scenario):
                  object_path: Optional[Path] = None,
                  simulation_time: float = 100,
                  output_time_step: float = 50,
+                 resolution: Literal["high", "medium", "low"] = "medium",
                  n_cores: int = 1):
         """Simulates the wind tunnel scenario synchronously.
         
@@ -74,6 +85,7 @@ class WindTunnel(Scenario):
         self.simulation_time = simulation_time
         self.output_time_step = output_time_step
         self.n_cores = n_cores
+        self.resolution = MeshResolution[resolution.upper()].value
 
         output_path = super().simulate(
             simulator,
@@ -89,6 +101,7 @@ class WindTunnel(Scenario):
                        object_path: Optional[Path] = None,
                        simulation_time: float = 100,
                        output_time_step: float = 50,
+                       resolution: Literal["high", "medium", "low"] = "medium",
                        n_cores: int = 1):
         """Simulates the wind tunnel scenario asynchronously.
         
@@ -107,6 +120,7 @@ class WindTunnel(Scenario):
         else:
             logging.info("WindTunnel is empty. Object path not specified.")
 
+        self.resolution = MeshResolution[resolution.upper()].value
         self.simulation_time = simulation_time
         self.output_time_step = output_time_step
         self.n_cores = n_cores
@@ -179,7 +193,8 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
                          "initialConditions_template.openfoam.jinja"),
             os.path.join("system", "controlDict_template.openfoam.jinja"),
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
-            os.path.join("system", "decomposeParDict_template.openfoam.jinja")
+            os.path.join("system", "decomposeParDict_template.openfoam.jinja"),
+            os.path.join("system", "snappyHexMeshDict_template.openfoam.jinja")
         ],
         params={
             "flow_velocity": self.flow_velocity,
@@ -187,10 +202,12 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
             "output_time_step": self.output_time_step,
             "n_cores": self.n_cores,
             "domain": self.domain,
+            "resolution": self.resolution,
         },
         output_filename_paths=[
             os.path.join(input_dir, "0", "include", "initialConditions"),
             os.path.join(input_dir, "system", "controlDict"),
             os.path.join(input_dir, "system", "blockMeshDict"),
-            os.path.join(input_dir, "system", "decomposeParDict")
+            os.path.join(input_dir, "system", "decomposeParDict"),
+            os.path.join(input_dir, "system", "snappyHexMeshDict")
         ])
