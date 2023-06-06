@@ -11,7 +11,7 @@ Currently, we only support the OpenFOAM simulator.
 import os
 from dataclasses import dataclass
 from enum import Enum
-from typing import Literal
+from typing import Literal, Optional
 
 import pyvista as pv
 
@@ -26,7 +26,7 @@ class WindTunnelSimulationOutput:
         OpenFOAM
     """
 
-    def __init__(self, sim_output_path: Path, time_step: int):
+    def __init__(self, sim_output_path: Path, time_step: int = 100):
         """Initializes a `WindTunnelSimulationOutput` object.
 
         Args:
@@ -66,7 +66,6 @@ class WindTunnelSimulationOutput:
             A MeshData object that allow to manipulate the data over a mesh
             and to render it.
         """
-
         property_notation = OpenFOAMPhysicalProperty[
             physical_property.upper()].value
         physical_field = MeshData(self.object_data, property_notation)
@@ -114,6 +113,8 @@ class WindTunnelSimulationOutput:
                     flow_property_mesh,
                     physical_property: Literal["pressure",
                                                "velocity"] = "pressure",
+                    background_color: str = "black",
+                    flow_cmap: str = "viridis",
                     save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
 
@@ -122,8 +123,12 @@ class WindTunnelSimulationOutput:
             physical_property.upper()].value
 
         plotter = pv.Plotter()
-        plotter.add_mesh(self.object_data)
-        plotter.add_mesh(flow_property_mesh, scalars=property_notation)
+        plotter.background_color = background_color
+        plotter.add_mesh(self.object_data, color="white")
+        plotter.add_mesh(flow_property_mesh,
+                         scalars=property_notation,
+                         cmap=flow_cmap)
+        plotter.view_xz()
         plotter.show(screenshot=save_path)
         plotter.close()
 

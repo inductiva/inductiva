@@ -38,7 +38,7 @@ class WindTunnel(Scenario):
     """
 
     def __init__(self,
-                 flow_velocity: List[float],
+                 flow_velocity: List[float] = None,
                  domain: Optional[dict] = None):
         """Initializes the `WindTunnel` conditions.
         
@@ -48,8 +48,11 @@ class WindTunnel(Scenario):
                 the wind tunnel in each (x, y, z) direction. It is the
                 natural description with the default OpenFOAM simulator.
         """
-
-        self.flow_velocity = flow_velocity
+        if flow_velocity is None:
+            logging.info("Using a default flow velocity: [30, 0, 0].")
+            self.flow_velocity = [30, 0, 0]
+        else:
+            self.flow_velocity = flow_velocity
 
         if domain is None:
             logging.info("Using a default domain: [[-5, 15], [-4, 4], [0, 8]].")
