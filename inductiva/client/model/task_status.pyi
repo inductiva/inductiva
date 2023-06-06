@@ -30,12 +30,6 @@ class TaskStatus(
     Ref: https://openapi-generator.tech
 
     Do not edit the class manually.
-
-    Dataclass that represents the status of a task.
-
-Attributes:
-    id: Unique ID of the task.
-    status: String representing the status of the task.
     """
 
 
@@ -47,20 +41,23 @@ Attributes:
         
         class properties:
             id = schemas.StrSchema
-            status = schemas.StrSchema
+        
+            @staticmethod
+            def status() -> typing.Type['TaskStatusCode']:
+                return TaskStatusCode
             __annotations__ = {
                 "id": id,
                 "status": status,
             }
     
     id: MetaOapg.properties.id
-    status: MetaOapg.properties.status
+    status: 'TaskStatusCode'
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["status"]) -> MetaOapg.properties.status: ...
+    def __getitem__(self, name: typing_extensions.Literal["status"]) -> 'TaskStatusCode': ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
@@ -74,7 +71,7 @@ Attributes:
     def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["status"]) -> MetaOapg.properties.status: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["status"]) -> 'TaskStatusCode': ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
@@ -87,7 +84,7 @@ Attributes:
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         id: typing.Union[MetaOapg.properties.id, str, ],
-        status: typing.Union[MetaOapg.properties.status, str, ],
+        status: 'TaskStatusCode',
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'TaskStatus':
@@ -99,3 +96,5 @@ Attributes:
             _configuration=_configuration,
             **kwargs,
         )
+
+from inductiva.client.model.task_status_code import TaskStatusCode

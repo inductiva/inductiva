@@ -27,12 +27,6 @@ class TaskRequest(schemas.DictSchema):
     Ref: https://openapi-generator.tech
 
     Do not edit the class manually.
-
-    Dataclass that represents a task request.
-
-Attributes:
-    method: Name of the requested method, e.g. "math.matmul".
-    params: Dictionary containing the parameters request.
     """
 
     class MetaOapg:

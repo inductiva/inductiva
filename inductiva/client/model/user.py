@@ -27,18 +27,6 @@ class User(schemas.DictSchema):
     Ref: https://openapi-generator.tech
 
     Do not edit the class manually.
-
-    Class to be used in place of Pydantic's BaseModel.
-
-Currently, FastAPI and Pydantic don't generate an OpenAPI specification
-that correctly handles optional fields, i.e., fields that can be None.
-This results in the client generator not being able to generate a client
-that works correctly.
-Since some of our return types have optional attributes, e.g. TaskStatus,
-this class adds a generic workaround. The workaround was taken from
-https://github.com/pydantic/pydantic/issues/1270.
-There you can also find more information about this issue, which (as per
-information on the issue), will only be adressed in Pydantic's version 2.
     """
 
     class MetaOapg:

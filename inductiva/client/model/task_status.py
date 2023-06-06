@@ -27,12 +27,6 @@ class TaskStatus(schemas.DictSchema):
     Ref: https://openapi-generator.tech
 
     Do not edit the class manually.
-
-    Dataclass that represents the status of a task.
-
-Attributes:
-    id: Unique ID of the task.
-    status: String representing the status of the task.
     """
 
     class MetaOapg:
@@ -43,14 +37,18 @@ Attributes:
 
         class properties:
             id = schemas.StrSchema
-            status = schemas.StrSchema
+
+            @staticmethod
+            def status() -> typing.Type['TaskStatusCode']:
+                return TaskStatusCode
+
             __annotations__ = {
                 "id": id,
                 "status": status,
             }
 
     id: MetaOapg.properties.id
-    status: MetaOapg.properties.status
+    status: 'TaskStatusCode'
 
     @typing.overload
     def __getitem__(
@@ -60,8 +58,8 @@ Attributes:
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["status"]
-    ) -> MetaOapg.properties.status:
+            self,
+            name: typing_extensions.Literal["status"]) -> 'TaskStatusCode':
         ...
 
     @typing.overload
@@ -84,8 +82,8 @@ Attributes:
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["status"]
-    ) -> MetaOapg.properties.status:
+            self,
+            name: typing_extensions.Literal["status"]) -> 'TaskStatusCode':
         ...
 
     @typing.overload
@@ -111,10 +109,7 @@ Attributes:
             MetaOapg.properties.id,
             str,
         ],
-        status: typing.Union[
-            MetaOapg.properties.status,
-            str,
-        ],
+        status: 'TaskStatusCode',
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -129,3 +124,6 @@ Attributes:
             _configuration=_configuration,
             **kwargs,
         )
+
+
+from inductiva.client.model.task_status_code import TaskStatusCode
