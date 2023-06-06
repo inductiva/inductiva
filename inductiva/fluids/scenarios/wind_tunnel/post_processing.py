@@ -11,7 +11,7 @@ Currently, we only support the OpenFOAM simulator.
 import os
 from dataclasses import dataclass
 from enum import Enum
-from typing import Literal, Optional
+from typing import Literal
 
 import pyvista as pv
 
