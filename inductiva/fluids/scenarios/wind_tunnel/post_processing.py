@@ -47,7 +47,8 @@ class WindTunnelSimulationOutput:
         reading_file = os.path.join(self.sim_output_path, "foam.foam")
 
         # Create reading file
-        open(reading_file, "w", encoding="utf-8").close()
+        with open(reading_file, "w", encoding="utf-8") as file:
+            file.close()
 
         # Initialize reader and define reading time-step
         reader = pv.POpenFOAMReader(reading_file)
