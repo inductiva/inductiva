@@ -44,9 +44,9 @@ class WindTunnel(Scenario):
         
         Args:
             flow_velocity (dict): Velocity of the air flow in m/s.
-            domain (dict): List containing the lower and upper boundary of the
-                wind tunnel in each (x, y, z) direction. It is the natural
-                description with the default OpenFOAM simulator.
+            domain (dict): List containing the lower and upper boundary of
+                the wind tunnel in each (x, y, z) direction. It is the
+                natural description with the default OpenFOAM simulator.
         """
 
         self.flow_velocity = flow_velocity
