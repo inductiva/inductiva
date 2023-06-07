@@ -48,7 +48,7 @@ class WindTunnel(Scenario):
             self.domain = domain
 
     def simulate(self,
-                 simulator: Simulator = OpenFOAM(),
+                 simulator: Simulator = OpenFOAM("windtunnel.openfoam.run_simulation"),
                  output_dir: Optional[Path] = None,
                  object_path: Optional[Path] = None,
                  simulation_time: float = 100,
@@ -79,13 +79,13 @@ class WindTunnel(Scenario):
             simulator,
             output_dir=output_dir,
             n_cores=n_cores,
-            openfoam_solver="simpleFoam",
+            method_name="simpleFoam",
         )
 
         return output_path
 
     def simulate_async(self,
-                       simulator: Simulator = OpenFOAM(),
+                       simulator: Simulator = OpenFOAM("windtunnel.openfoam.run_simulation"),
                        object_path: Optional[Path] = None,
                        simulation_time: float = 100,
                        output_time_step: float = 50,
@@ -114,7 +114,7 @@ class WindTunnel(Scenario):
         task_id = super().simulate_async(
             simulator,
             n_cores=n_cores,
-            openfoam_solver="simpleFoam",
+            method_name="simpleFoam",
         )
 
         return task_id
