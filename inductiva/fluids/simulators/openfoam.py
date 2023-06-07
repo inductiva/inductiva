@@ -9,15 +9,18 @@ from inductiva.simulation import Simulator
 class OpenFOAM(Simulator):
     """Class to invoke a generic DualSPHysics simulation on the API."""
 
+    def __init__(self, api_method: str = "fvm.openfoam.run_simulation"):
+        self.api_method = api_method
+
     @property
     def api_method_name(self) -> str:
-        return "fvm.openfoam.run_simulation"
+        return self.api_method
 
     def run(
         self,
         input_dir: types.Path,
+        method_name: str,
         output_dir: Optional[types.Path] = None,
-        openfoam_solver: str = "interFoam",
         n_cores: int = 1,
         track_logs: bool = False,
     ) -> pathlib.Path:
@@ -25,37 +28,33 @@ class OpenFOAM(Simulator):
 
         Args:
             n_cores: Number of MPI cores to use for the simulation.
-            openfoam_solver: specific solver to simulate with OpenFOAM.
-                OpenFOAM contains lots of solvers inside of it, which are used
-                to call the run simulation through terminal, e.g.,
-                [isoFoam, sonicFoam, ...]. The default solver is interFoam.
+            method_name: OpenFOAM method used to prepare, run or post process
+                a simulation.
             other arguments: See the documentation of the base class.
         """
         return super().run(
             input_dir,
             output_dir=output_dir,
             track_logs=track_logs,
-            openfoam_solver=openfoam_solver,
+            method_name=method_name,
             n_cores=n_cores,
         )
 
     def run_async(
         self,
         input_dir: types.Path,
-        openfoam_solver: str = "interFoam",
+        method_name: str,
         n_cores: int = 1,
     ) -> str:
         """Run the simulation asynchronously.
         
         Args:
             n_cores: Number of MPI cores to use for the simulation.
-            openfoam_solver: specific solver to simulate with OpenFOAM.
-                OpenFOAM contains lots of solvers inside of it, which are used
-                to call the run simulation through terminal, e.g.,
-                [isoFoam, sonicFoam, ...]. The default solver is interFoam.
+            method_name: OpenFOAM method used to prepare, run or post process
+                a simulation.
             other arguments: See the documentation of the base class.
             """
 
         return super().run_async(input_dir,
-                                 openfoam_solver=openfoam_solver,
+                                 method_name=method_name,
                                  n_cores=n_cores)
