@@ -24,15 +24,15 @@ class OpenFOAM(Simulator):
         output_dir: Optional[types.Path] = None,
         n_cores: int = 1,
         track_logs: bool = False,
+        **openfoam_flags: Optional[str],
     ) -> pathlib.Path:
         """Run the simulation.
 
         Args:
             n_cores: Number of MPI cores to use for the simulation.
-            openfoam_solver: specific solver to simulate with OpenFOAM.
-                OpenFOAM contains lots of solvers inside of it, which are used
-                to call the run simulation through terminal, e.g.,
-                [isoFoam, sonicFoam, ...]. The default solver is interFoam.
+            method_name: OpenFOAM method to run. This involves commands
+                from pre-processing, to solvers and post-processing.
+            openfoam_flags: Flags to pass to the openfoam method_name.
             other arguments: See the documentation of the base class.
         """
         return super().run(
@@ -41,6 +41,7 @@ class OpenFOAM(Simulator):
             track_logs=track_logs,
             method_name=method_name,
             n_cores=n_cores,
+            user_flags=openfoam_flags
         )
 
     def run_async(
@@ -48,18 +49,19 @@ class OpenFOAM(Simulator):
         input_dir: types.Path,
         method_name: str,
         n_cores: int = 1,
+        **openfoam_flags: Optional[str],
     ) -> str:
         """Run the simulation asynchronously.
         
         Args:
             n_cores: Number of MPI cores to use for the simulation.
-            openfoam_solver: specific solver to simulate with OpenFOAM.
-                OpenFOAM contains lots of solvers inside of it, which are used
-                to call the run simulation through terminal, e.g.,
-                [isoFoam, sonicFoam, ...]. The default solver is interFoam.
+            method_name: OpenFOAM method to run. This involves commands
+                from pre-processing, to solvers and post-processing.
+            openfoam_flags: Flags to pass to the openfoam method_name.
             other arguments: See the documentation of the base class.
             """
 
         return super().run_async(input_dir,
                                  method_name=method_name,
-                                 n_cores=n_cores)
+                                 n_cores=n_cores,
+                                 user_flags=openfoam_flags)
