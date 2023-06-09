@@ -115,6 +115,7 @@ class WindTunnelSimulationOutput:
                                                "velocity"] = "pressure",
                     background_color: str = "black",
                     flow_cmap: str = "viridis",
+                    object_color: str = "white",
                     save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
 
@@ -124,7 +125,7 @@ class WindTunnelSimulationOutput:
 
         plotter = pv.Plotter()
         plotter.background_color = background_color
-        plotter.add_mesh(self.object_data, color="white")
+        plotter.add_mesh(self.object_data, color=object_color)
         plotter.add_mesh(flow_property_mesh,
                          scalars=property_notation,
                          cmap=flow_cmap)

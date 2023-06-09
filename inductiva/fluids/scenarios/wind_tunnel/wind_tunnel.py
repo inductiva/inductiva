@@ -51,12 +51,19 @@ class WindTunnel(Scenario):
         if flow_velocity is None:
             logging.info("Using a default flow velocity: [30, 0, 0].")
             self.flow_velocity = [30, 0, 0]
+        elif len(flow_velocity) != 3:
+            raise ValueError("`flow_velocity` must have 3 values.")
         else:
             self.flow_velocity = flow_velocity
 
         if domain is None:
-            logging.info("Using a default domain: [[-5, 15], [-4, 4], [0, 8]].")
+            logging.info("Using a default domain: `{\"x\":"
+                "[-5, 15], \"y\": [-4, 4], \"z\": [0, 8]}`.")
             self.domain = {"x": [-5, 15], "y": [-4, 4], "z": [0, 8]}
+        elif isinstance(domain, dict):
+            raise ValueError(
+                "`domain` must be a dictionary of the type `{\"x\":"
+                "[-5, 15], \"y\": [-4, 4], \"z\": [0, 8]}`.")
         else:
             self.domain = domain
 
