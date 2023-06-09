@@ -35,14 +35,12 @@ class OpenFOAM(Simulator):
             openfoam_flags: Flags to pass to the openfoam method_name.
             other arguments: See the documentation of the base class.
         """
-        return super().run(
-            input_dir,
-            output_dir=output_dir,
-            track_logs=track_logs,
-            method_name=method_name,
-            n_cores=n_cores,
-            user_flags=openfoam_flags
-        )
+        return super().run(input_dir,
+                           output_dir=output_dir,
+                           track_logs=track_logs,
+                           method_name=method_name,
+                           n_cores=n_cores,
+                           user_flags=openfoam_flags)
 
     def run_async(
         self,
