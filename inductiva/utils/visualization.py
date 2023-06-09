@@ -469,10 +469,14 @@ class MeshData:
         self.mesh.point_data[scalar_name] = mesh_data.point_data[scalar_name]
         self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
 
-    def render(self, save_path: Path = None):
+    def render(self,
+               background_color: str = "black",
+               scalars_cmap: str = "viridis",
+               save_path: Path = None):
         """Render scalar field data over the mesh."""
 
         plotter = pv.Plotter()
-        plotter.add_mesh(self.mesh, scalars=self.scalar_name)
+        pv.global_theme.background = background_color
+        plotter.add_mesh(self.mesh, scalars=self.scalar_name, cmap=scalars_cmap)
         plotter.show(screenshot=save_path)
         plotter.close()

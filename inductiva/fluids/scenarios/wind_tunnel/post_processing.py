@@ -26,7 +26,7 @@ class WindTunnelSimulationOutput:
         OpenFOAM
     """
 
-    def __init__(self, sim_output_path: Path, time_step: int):
+    def __init__(self, sim_output_path: Path, time_step: int = 100):
         """Initializes a `WindTunnelSimulationOutput` object.
 
         Args:
@@ -66,7 +66,6 @@ class WindTunnelSimulationOutput:
             A MeshData object that allow to manipulate the data over a mesh
             and to render it.
         """
-
         property_notation = OpenFOAMPhysicalProperty[
             physical_property.upper()].value
         physical_field = MeshData(self.object_data, property_notation)
@@ -84,7 +83,7 @@ class WindTunnelSimulationOutput:
 
         property_notation = OpenFOAMPhysicalProperty[
             physical_property.upper()].value
-        streamlines_file = "track0" + property_notation + ".vtk"
+        streamlines_file = "track0_" + property_notation + ".vtk"
 
         streamlines_mesh = pv.read(
             os.path.join(streamlines_path, streamlines_file))
@@ -114,6 +113,9 @@ class WindTunnelSimulationOutput:
                     flow_property_mesh,
                     physical_property: Literal["pressure",
                                                "velocity"] = "pressure",
+                    background_color: str = "black",
+                    flow_cmap: str = "viridis",
+                    object_color: str = "white",
                     save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
 
@@ -122,8 +124,12 @@ class WindTunnelSimulationOutput:
             physical_property.upper()].value
 
         plotter = pv.Plotter()
-        plotter.add_mesh(self.object_data)
-        plotter.add_mesh(flow_property_mesh, scalars=property_notation)
+        plotter.background_color = background_color
+        plotter.add_mesh(self.object_data, color=object_color)
+        plotter.add_mesh(flow_property_mesh,
+                         scalars=property_notation,
+                         cmap=flow_cmap)
+        plotter.view_xz()
         plotter.show(screenshot=save_path)
         plotter.close()
 
