@@ -1,0 +1,24 @@
+; Run parameters
+integrator              = {{ integrator }}   ; integrator
+nsteps                  = {{ nsteps }}       ; number of steps in simulation
+dt                      = 0.002              ; 2 fs
+
+; Output control
+nstxout                 = 500                ; save coordinates every 500 iter
+nstvout                 = 500                ; save velocities every 1.0 ps
+nstenergy               = 500                ; save energies every 1.0 ps
+nstlog                  = 500                ; update log file every 1.0 ps
+
+; Temperature coupling is on
+tc-grps                 = system             ; single coupling group
+ref_t                   = {{ ref_temp }}     ; reference temperature, in K
+tau_t                   = 0.5                ; relaxation time constant for temperature coupling
+
+; Bond constraints
+constraints             = h-bonds            ; apply constraints to hydrogen bonds
+
+; Parameters describing how to find the neighbors of each atom and how to calculate the interactions
+nstlist		            = 2	                 ; Frequency to update the neighbor list and long range forces
+coulombtype	            = PME		         ; Treatment of long range electrostatic interactions
+pbc		                = xyz 		         ; Periodic Boundary Conditions (yes/no)
+ns_type		            = grid		         ; Method to determine neighbor list (simple, grid)
