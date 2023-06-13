@@ -13,22 +13,17 @@ from inductiva.utils.files import remove_files_with_tag
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 
-
 class ProteinSolvation():
     """Solvated protein scenario."""
 
     def __init__(self):
-        """Scenario constructor for protein solvation. 
-        Parameters of this scenario are controlled by the mdp files, 
-        which structure is known by the GROMACS simulator.
+        """Scenario constructor for protein solvation based on the 
+        GROMACS simulator.
         The three main steps of this scenario are solvation, 
-        energy minimization and simulation.
-        Args:
-            working_dir: The working directory where the simulation 
-            will be executed.
-            ionization_mdp: The mdp file for the ionization step.
-            minim_mdp: The mdp file for the energy minimization step.
-            simulation_mdp: The mdp file for the simulation step.
+        energy minimization and simulation. The user can control 
+        the number of steps used to perform the energy minimization step and 
+        the duration, temperature and integrator used to perform 
+        the simulation.
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
@@ -50,6 +45,7 @@ class ProteinSolvation():
             simulation_time: The simulation time in ns.
             temperature: The temperature in K.
             integrator: The integrator to use for the simulation.
+            nsteps_minim: The number of steps to use for the energy minization.
         """
         self.nsteps = int(simulation_time * 1e6 / 2)
         self.temperature = temperature
@@ -83,7 +79,7 @@ class ProteinSolvation():
         self.simulator.run(input_dir=self.working_dir,
                            output_directory=self.working_dir,
                            method_name="grompp",
-                           f="ionization.mdp",
+                           f="ions.mdp",
                            c="protein_solv.gro",
                            p="topol.top",
                            o="ions.tpr")
@@ -150,7 +146,7 @@ class ProteinSolvation():
         return working_dir
 
     def gen_config(self):
-        """Generate the mdp files for the simulation."""
+        """Generate the mdp configuration files for the simulation."""
         batch_replace_params_in_template(
             templates_dir=self.template_dir,
             template_filename_paths=[
