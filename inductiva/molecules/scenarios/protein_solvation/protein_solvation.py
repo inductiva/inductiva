@@ -13,6 +13,7 @@ from inductiva.utils.files import remove_files_with_tag
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 
+
 class ProteinSolvation():
     """Solvated protein scenario."""
 
