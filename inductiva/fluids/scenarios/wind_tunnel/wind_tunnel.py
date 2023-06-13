@@ -3,7 +3,9 @@
 from functools import singledispatchmethod
 import os
 import shutil
-from typing import Optional, List
+from typing import Optional, List, Literal
+from enum import Enum
+from dataclasses import dataclass
 
 from absl import logging
 
@@ -19,6 +21,14 @@ SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 
 
+@dataclass
+class MeshResolution(Enum):
+    """Sets particle radius according to resolution."""
+    HIGH = [5, 6]
+    MEDIUM = [4, 5]
+    LOW = [3, 4]
+
+
 class WindTunnel(Scenario):
     """Physical scenario of a configurable wind tunnel simulation.
     
@@ -28,37 +38,48 @@ class WindTunnel(Scenario):
     """
 
     def __init__(self,
-                 object_path: str,
-                 flow_velocity: List[float],
-                 domain: Optional[List[float]] = None):
-        """Initializes a `WindTunnel` object.
+                 flow_velocity: List[float] = None,
+                 domain: Optional[dict] = None):
+        """Initializes the `WindTunnel` conditions.
         
         Args:
-            object_path: Path to the object that is inserted in the wind tunnel.
-            flow_velocity: Velocity of the air flow in m/s.
-            domain: List containing the lower and upper boundary of the wind
-                tunnel in each (x, y, z) direction. It is the natural
-                description with the default OpenFOAM simulator.
+            flow_velocity (dict): Velocity of the air flow in m/s.
+            domain (dict): List containing the lower and upper boundary of
+                the wind tunnel in each (x, y, z) direction. It is the
+                natural description with the default OpenFOAM simulator.
         """
-
-        self.object_path = object_path
-        self.flow_velocity = flow_velocity
+        if flow_velocity is None:
+            logging.info("Using a default flow velocity: [30, 0, 0].")
+            self.flow_velocity = [30, 0, 0]
+        elif len(flow_velocity) != 3:
+            raise ValueError("`flow_velocity` must have 3 values.")
+        else:
+            self.flow_velocity = flow_velocity
 
         if domain is None:
-            logging.info("Using a default domain: [[-5, 15], [-4, 4], [0, 8]].")
-            self.domain = [[-5, 15], [-4, 4], [0, 8]]
+            logging.info("Using a default domain: `{\"x\":"
+                         "[-5, 15], \"y\": [-4, 4], \"z\": [0, 8]}`.")
+            self.domain = {"x": [-5, 15], "y": [-4, 4], "z": [0, 8]}
+        elif isinstance(domain, dict):
+            raise ValueError(
+                "`domain` must be a dictionary of the type `{\"x\":"
+                "[-5, 15], \"y\": [-4, 4], \"z\": [0, 8]}`.")
         else:
             self.domain = domain
 
     def simulate(self,
-                 simulator: Simulator = OpenFOAM(),
+                 simulator: Simulator = OpenFOAM(
+                     "windtunnel.openfoam.run_simulation"),
                  output_dir: Optional[Path] = None,
+                 object_path: Optional[Path] = None,
                  simulation_time: float = 100,
                  output_time_step: float = 50,
+                 resolution: Literal["high", "medium", "low"] = "medium",
                  n_cores: int = 1):
-        """Simulates the wind tunnel scenario.
+        """Simulates the wind tunnel scenario synchronously.
         
         Args:
+            object_path: Path to object inserted in the wind tunnel.
             simulator: Simulator to use for the simulation.
             output_dir: Path to the directory where the simulation output
                 is downloaded.
@@ -67,18 +88,62 @@ class WindTunnel(Scenario):
             n_cores: Number of cores to use for the simulation.
             """
 
+        if object_path:
+            self.object_path = object_path
+        else:
+            logging.info("WindTunnel is empty. Object path not specified.")
+
         self.simulation_time = simulation_time
         self.output_time_step = output_time_step
         self.n_cores = n_cores
+        self.resolution = MeshResolution[resolution.upper()].value
 
         output_path = super().simulate(
             simulator,
             output_dir=output_dir,
             n_cores=n_cores,
-            openfoam_solver="simpleFoam",
+            method_name="simpleFoam",
         )
 
         return output_path
+
+    def simulate_async(self,
+                       simulator: Simulator = OpenFOAM(
+                           "windtunnel.openfoam.run_simulation"),
+                       object_path: Optional[Path] = None,
+                       simulation_time: float = 100,
+                       output_time_step: float = 50,
+                       resolution: Literal["high", "medium", "low"] = "medium",
+                       n_cores: int = 1):
+        """Simulates the wind tunnel scenario asynchronously.
+        
+        Args:
+            object_path: Path to object inserted in the wind tunnel.
+            simulator: Simulator to use for the simulation.
+            output_dir: Path to the directory where the simulation output
+                is downloaded.
+            simulation_time: Simulation time, in seconds.
+            write_interval: Interval between simulation outputs, in seconds.
+            n_cores: Number of cores to use for the simulation.
+            """
+
+        if object_path:
+            self.object_path = object_path
+        else:
+            logging.info("WindTunnel is empty. Object path not specified.")
+
+        self.resolution = MeshResolution[resolution.upper()].value
+        self.simulation_time = simulation_time
+        self.output_time_step = output_time_step
+        self.n_cores = n_cores
+
+        task_id = super().simulate_async(
+            simulator,
+            n_cores=n_cores,
+            method_name="simpleFoam",
+        )
+
+        return task_id
 
     @singledispatchmethod
     @classmethod
@@ -140,7 +205,8 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
                          "initialConditions_template.openfoam.jinja"),
             os.path.join("system", "controlDict_template.openfoam.jinja"),
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
-            os.path.join("system", "decomposeParDict_template.openfoam.jinja")
+            os.path.join("system", "decomposeParDict_template.openfoam.jinja"),
+            os.path.join("system", "snappyHexMeshDict_template.openfoam.jinja")
         ],
         params={
             "flow_velocity": self.flow_velocity,
@@ -148,10 +214,12 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
             "output_time_step": self.output_time_step,
             "n_cores": self.n_cores,
             "domain": self.domain,
+            "resolution": self.resolution,
         },
         output_filename_paths=[
             os.path.join(input_dir, "0", "include", "initialConditions"),
             os.path.join(input_dir, "system", "controlDict"),
             os.path.join(input_dir, "system", "blockMeshDict"),
-            os.path.join(input_dir, "system", "decomposeParDict")
+            os.path.join(input_dir, "system", "decomposeParDict"),
+            os.path.join(input_dir, "system", "snappyHexMeshDict")
         ])

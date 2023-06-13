@@ -23,7 +23,7 @@ streamLines
     direction       forward;
 
     // Names of fields to sample. Should contain above velocity field!
-    fields (p U k);
+    fields (p U);
 
     // Steps particles can travel before being removed
     lifeTime        10000;

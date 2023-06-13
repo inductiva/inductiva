@@ -6,10 +6,15 @@ import enum
 
 
 class PathValues(str, enum.Enum):
-    TASK_SUBMIT = "/task/submit"
-    TASK_TASK_ID_INPUT = "/task/{task_id}/input"
-    TASK_TASK_ID_STATUS = "/task/{task_id}/status"
-    TASK_TASK_ID_OUTPUT = "/task/{task_id}/output"
-    TASK_TASK_ID_KILL = "/task/{task_id}/kill"
-    ADMIN_USER = "/admin/user"
-    ADMIN_USER_USERNAME_TASKS = "/admin/user/{username}/tasks"
+    TASKS_SUBMIT = "/tasks/submit"
+    TASKS_TASK_ID_INPUT = "/tasks/{task_id}/input"
+    TASKS_TASK_ID = "/tasks/{task_id}"
+    TASKS = "/tasks"
+    TASKS_TASK_ID_STATUS = "/tasks/{task_id}/status"
+    TASKS_TASK_ID_OUTPUT = "/tasks/{task_id}/output"
+    TASKS_TASK_ID_KILL = "/tasks/{task_id}/kill"
+    ADMIN_USERS = "/admin/users"
+    ADMIN_USERS_USERNAME = "/admin/users/{username}"
+    ADMIN_USERS_USERNAME_TASKS = "/admin/users/{username}/tasks"
+    ADMIN_TASKS = "/admin/tasks"
+    EXECUTERS_REGISTER = "/executers/register"

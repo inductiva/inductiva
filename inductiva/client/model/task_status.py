@@ -27,12 +27,6 @@ class TaskStatus(schemas.DictSchema):
     Ref: https://openapi-generator.tech
 
     Do not edit the class manually.
-
-    Dataclass that represents the status of a task.
-
-Attributes:
-    id: Unique ID of the task.
-    status: String representing the status of the task.
     """
 
     class MetaOapg:
@@ -43,72 +37,18 @@ Attributes:
 
         class properties:
             id = schemas.StrSchema
-            status = schemas.StrSchema
 
-            class queue(
-                    schemas.ComposedSchema,):
-
-                class MetaOapg:
-                    any_of_1 = schemas.NoneSchema
-
-                    @classmethod
-                    @functools.lru_cache()
-                    def any_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            QueueStatus,
-                            cls.any_of_1,
-                        ]
-
-                def __new__(
-                    cls,
-                    *_args: typing.Union[
-                        dict,
-                        frozendict.frozendict,
-                        str,
-                        date,
-                        datetime,
-                        uuid.UUID,
-                        int,
-                        float,
-                        decimal.Decimal,
-                        bool,
-                        None,
-                        list,
-                        tuple,
-                        bytes,
-                        io.FileIO,
-                        io.BufferedReader,
-                    ],
-                    _configuration: typing.Optional[
-                        schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
-                                           frozendict.frozendict, str, date,
-                                           datetime, uuid.UUID, int, float,
-                                           decimal.Decimal, None, list, tuple,
-                                           bytes],
-                ) -> 'queue':
-                    return super().__new__(
-                        cls,
-                        *_args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
+            @staticmethod
+            def status() -> typing.Type['TaskStatusCode']:
+                return TaskStatusCode
 
             __annotations__ = {
                 "id": id,
                 "status": status,
-                "queue": queue,
             }
 
     id: MetaOapg.properties.id
-    status: MetaOapg.properties.status
+    status: 'TaskStatusCode'
 
     @typing.overload
     def __getitem__(
@@ -118,25 +58,19 @@ Attributes:
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["status"]
-    ) -> MetaOapg.properties.status:
-        ...
-
-    @typing.overload
-    def __getitem__(
-            self, name: typing_extensions.Literal["queue"]
-    ) -> MetaOapg.properties.queue:
+            self,
+            name: typing_extensions.Literal["status"]) -> 'TaskStatusCode':
         ...
 
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "id",
-        "status",
-        "queue",
-    ], str]):
+    def __getitem__(self,
+                    name: typing.Union[typing_extensions.Literal[
+                        "id",
+                        "status",
+                    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -148,14 +82,8 @@ Attributes:
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["status"]
-    ) -> MetaOapg.properties.status:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["queue"]
-    ) -> typing.Union[MetaOapg.properties.queue, schemas.Unset]:
+            self,
+            name: typing_extensions.Literal["status"]) -> 'TaskStatusCode':
         ...
 
     @typing.overload
@@ -164,11 +92,11 @@ Attributes:
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "id",
-        "status",
-        "queue",
-    ], str]):
+    def get_item_oapg(self,
+                      name: typing.Union[typing_extensions.Literal[
+                          "id",
+                          "status",
+                      ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -181,15 +109,7 @@ Attributes:
             MetaOapg.properties.id,
             str,
         ],
-        status: typing.Union[
-            MetaOapg.properties.status,
-            str,
-        ],
-        queue: typing.Union[MetaOapg.properties.queue, dict,
-                            frozendict.frozendict, str, date, datetime,
-                            uuid.UUID, int, float, decimal.Decimal, bool, None,
-                            list, tuple, bytes, io.FileIO, io.BufferedReader,
-                            schemas.Unset] = schemas.unset,
+        status: 'TaskStatusCode',
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -201,10 +121,9 @@ Attributes:
             *_args,
             id=id,
             status=status,
-            queue=queue,
             _configuration=_configuration,
             **kwargs,
         )
 
 
-from inductiva.client.model.queue_status import QueueStatus
+from inductiva.client.model.task_status_code import TaskStatusCode

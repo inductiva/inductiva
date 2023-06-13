@@ -5,6 +5,7 @@ from . import fluids
 from . import core
 from . import molecules
 from . import tasks
+from . import admin
 
 from absl import logging
 

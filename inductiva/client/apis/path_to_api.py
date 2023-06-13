@@ -1,31 +1,46 @@
 import typing_extensions
 
 from inductiva.client.paths import PathValues
-from inductiva.client.apis.paths.task_submit import TaskSubmit
-from inductiva.client.apis.paths.task_task_id_input import TaskTaskIdInput
-from inductiva.client.apis.paths.task_task_id_status import TaskTaskIdStatus
-from inductiva.client.apis.paths.task_task_id_output import TaskTaskIdOutput
-from inductiva.client.apis.paths.task_task_id_kill import TaskTaskIdKill
-from inductiva.client.apis.paths.admin_user import AdminUser
-from inductiva.client.apis.paths.admin_user_username_tasks import AdminUserUsernameTasks
+from inductiva.client.apis.paths.tasks_submit import TasksSubmit
+from inductiva.client.apis.paths.tasks_task_id_input import TasksTaskIdInput
+from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
+from inductiva.client.apis.paths.tasks import Tasks
+from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
+from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
+from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
+from inductiva.client.apis.paths.admin_users import AdminUsers
+from inductiva.client.apis.paths.admin_users_username import AdminUsersUsername
+from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
+from inductiva.client.apis.paths.admin_tasks import AdminTasks
+from inductiva.client.apis.paths.executers_register import ExecutersRegister
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
-        PathValues.TASK_SUBMIT: TaskSubmit,
-        PathValues.TASK_TASK_ID_INPUT: TaskTaskIdInput,
-        PathValues.TASK_TASK_ID_STATUS: TaskTaskIdStatus,
-        PathValues.TASK_TASK_ID_OUTPUT: TaskTaskIdOutput,
-        PathValues.TASK_TASK_ID_KILL: TaskTaskIdKill,
-        PathValues.ADMIN_USER: AdminUser,
-        PathValues.ADMIN_USER_USERNAME_TASKS: AdminUserUsernameTasks,
+        PathValues.TASKS_SUBMIT: TasksSubmit,
+        PathValues.TASKS_TASK_ID_INPUT: TasksTaskIdInput,
+        PathValues.TASKS_TASK_ID: TasksTaskId,
+        PathValues.TASKS: Tasks,
+        PathValues.TASKS_TASK_ID_STATUS: TasksTaskIdStatus,
+        PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
+        PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
+        PathValues.ADMIN_USERS: AdminUsers,
+        PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
+        PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
+        PathValues.ADMIN_TASKS: AdminTasks,
+        PathValues.EXECUTERS_REGISTER: ExecutersRegister,
     })
 
 path_to_api = PathToApi({
-    PathValues.TASK_SUBMIT: TaskSubmit,
-    PathValues.TASK_TASK_ID_INPUT: TaskTaskIdInput,
-    PathValues.TASK_TASK_ID_STATUS: TaskTaskIdStatus,
-    PathValues.TASK_TASK_ID_OUTPUT: TaskTaskIdOutput,
-    PathValues.TASK_TASK_ID_KILL: TaskTaskIdKill,
-    PathValues.ADMIN_USER: AdminUser,
-    PathValues.ADMIN_USER_USERNAME_TASKS: AdminUserUsernameTasks,
+    PathValues.TASKS_SUBMIT: TasksSubmit,
+    PathValues.TASKS_TASK_ID_INPUT: TasksTaskIdInput,
+    PathValues.TASKS_TASK_ID: TasksTaskId,
+    PathValues.TASKS: Tasks,
+    PathValues.TASKS_TASK_ID_STATUS: TasksTaskIdStatus,
+    PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
+    PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
+    PathValues.ADMIN_USERS: AdminUsers,
+    PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
+    PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
+    PathValues.ADMIN_TASKS: AdminTasks,
+    PathValues.EXECUTERS_REGISTER: ExecutersRegister,
 })

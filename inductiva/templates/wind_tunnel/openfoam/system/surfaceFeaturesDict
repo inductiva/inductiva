@@ -18,6 +18,7 @@ surfaces ("object.obj");
 
 // Identify a feature when angle between faces < includedAngle
 includedAngle       150;
+geometricTestOnly no;
 
 subsetFeatures
 {
