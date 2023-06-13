@@ -48,7 +48,9 @@ class ProteinSolvation():
             integrator: The integrator to use for the simulation.
             nsteps_minim: The number of steps to use for the energy minization.
         """
-        self.nsteps = int(simulation_time * 1e6 / 2)
+        self.nsteps = int(
+            simulation_time * 1e6 / 2
+        )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.temperature = temperature
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
