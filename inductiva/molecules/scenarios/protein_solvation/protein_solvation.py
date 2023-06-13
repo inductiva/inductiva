@@ -57,7 +57,7 @@ class ProteinSolvation():
 
         self.working_dir = self.setup_working_dir(working_dir, protein_pdb)
         self.gen_config()
-
+        # Solvation
         self.simulator.run(input_dir=self.working_dir,
                            output_directory=self.working_dir,
                            method_name="pdb2gmx",
@@ -95,6 +95,7 @@ class ProteinSolvation():
                            pname="NA",
                            nname="CL",
                            neutral="yes")
+        # Energy minimization
         self.simulator.run(input_dir=self.working_dir,
                            output_directory=self.working_dir,
                            method_name="grompp",
@@ -107,6 +108,7 @@ class ProteinSolvation():
                            method_name="mdrun",
                            deffnm="em",
                            v="yes")
+        # Simulation
         self.simulator.run(input_dir=self.working_dir,
                            output_directory=self.working_dir,
                            method_name="grompp",
