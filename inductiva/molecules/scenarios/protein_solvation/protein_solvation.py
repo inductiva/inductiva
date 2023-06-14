@@ -4,6 +4,7 @@ import os
 import shutil
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
+from inductiva.simulation import Simulator
 from inductiva.utils.files import resolve_path, get_timestamped_path
 from inductiva.utils.misc import split_camel_case
 from inductiva.utils.templates import (TEMPLATES_PATH,
@@ -17,51 +18,54 @@ GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 class ProteinSolvation():
     """Solvated protein scenario."""
 
-    def __init__(self):
-        """Scenario constructor for protein solvation based on the 
-        GROMACS simulator.
-        The three main steps of this scenario are solvation, 
-        energy minimization and simulation. The user can control 
-        the number of steps used to perform the energy minimization step and 
-        the duration, temperature and integrator used to perform 
-        the simulation.
+    def __init__(
+        self,
+        protein_pdb: str,
+        temperature: float = 300,
+    ):
+        """
+        Scenario constructor for protein solvation based on the GROMACS simulator.
+        The three main steps of this scenario are solvation, energy minimization 
+        and simulation. The user can control the number of steps used to perform
+        the energy minimization step and the duration, temperature and integrator
+        used to perform the simulation.
+        Args:
+            protein_pdb: The path to the protein pdb file.
+            temperature: The temperature to use for the simulation.
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
+        self.protein_pdb = protein_pdb
+        self.temperature = temperature
         self.simulator = GROMACS()
 
     def simulate(
             self,
-            protein_pdb: str,
             working_dir: Optional[Path] = None,
             simulation_time: float = 10,  # ns
-            temperature: float = 300,
             integrator: str = "md",
             nsteps_minim: int = 5000):
         """Simulate the solvation of a protein.
         Args:
-            protein_pdb: The protein pdb file.
             working_dir: The working directory where the simulation 
             will be executed.
-            simulation_time: The simulation time in ns.
-            temperature: The temperature in K.
-            integrator: The integrator to use for the simulation.
-            nsteps_minim: The number of steps to use for the energy minization.
+            simulation_time: The simulation time in ns. Default is 10 ns.
+            integrator: The integrator to use for the simulation. Default is md.
+            nsteps_minim: The number of steps to use for the energy minization. 
+            Default is 5000.
         """
         self.nsteps = int(
             simulation_time * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
-        self.temperature = temperature
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-
-        self.working_dir = self.setup_working_dir(working_dir, protein_pdb)
+        self.working_dir = self.setup_working_dir(working_dir, self.protein_pdb)
         self.gen_config()
         # Solvation
         self.simulator.run(input_dir=self.working_dir,
                            output_directory=self.working_dir,
                            method_name="pdb2gmx",
-                           f=protein_pdb,
+                           f=self.protein_pdb,
                            o="protein.gro",
                            water="tip3p",
                            user_input="6")
@@ -132,18 +136,18 @@ class ProteinSolvation():
             scenario_name_splitted = split_camel_case(self.__class__.__name__)
             working_dir_prefix = "-".join(scenario_name_splitted).lower()
             working_dir = get_timestamped_path(f"{working_dir_prefix}-output")
+
         working_dir = resolve_path(working_dir)
         if not os.path.exists(working_dir):
             os.makedirs(working_dir)
 
+        # Copy template files to working_dir
+        shutil.copytree(os.path.join(self.template_dir),
+                        os.path.join(working_dir))
+
         # Copy protein pdb to working_dir
         shutil.copy(protein_pdb,
                     os.path.join(working_dir, os.path.basename(protein_pdb)))
-
-        # Copy template files to working_dir
-        for file in os.listdir(self.template_dir):
-            shutil.copy(os.path.join(self.template_dir, file),
-                        os.path.join(working_dir, file))
 
         # Remove all files that have .jinja in the working_dir
         remove_files_with_tag(working_dir, ".jinja")
