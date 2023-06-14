@@ -39,6 +39,7 @@ class ProteinSolvation():
                                          GROMACS_TEMPLATE_INPUT_DIR)
         self.protein_pdb = protein_pdb
         self.temperature = temperature
+
     def simulate(
             self,
             simulator: Simulator = GROMACS(),
@@ -104,6 +105,7 @@ class ProteinSolvation():
 
 @ProteinSolvation.run_simulation.register
 def _(self, simulator: GROMACS):
+    """Run the simulation using GROMACS."""
     #Solvation
     simulator.run(input_dir=self.working_dir,
                   output_directory=self.working_dir,
