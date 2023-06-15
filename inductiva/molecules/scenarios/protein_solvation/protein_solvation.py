@@ -147,7 +147,10 @@ def _(self, simulator: GROMACS):
                        c="protein_solv_ions.gro",
                        p="topol.top",
                        o="em.tpr"))
-    pipeline.append(GROMACSCommand(method_name="mdrun", deffnm="em", v="yes"))
+    pipeline.append(
+        GROMACSCommand(method_name="mdrun", 
+                                   deffnm="em", 
+                                   v="yes"))
     pipeline.append(
         GROMACSCommand(method_name="grompp",
                        f="simulation.mdp",
@@ -158,7 +161,6 @@ def _(self, simulator: GROMACS):
     # Simulation
     pipeline.append(
         GROMACSCommand(method_name="mdrun",
-                       method_name="mdrun",
                        deffnm="solvated_protein",
                        v="yes"))
     simulator.run_pipeline(working_dir=self.working_dir, pipeline=pipeline)
