@@ -43,7 +43,7 @@ class ProteinSolvation(Scenario):
     def simulate(
             self,
             simulator: Simulator = GROMACS(),
-            working_dir: Optional[Path] = None,
+            output_dir: Optional[Path] = None,
             simulation_time: float = 10,  # ns
             integrator: str = "md",
             nsteps_minim: int = 5000):
@@ -61,8 +61,9 @@ class ProteinSolvation(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
+
         pipeline = self.setup_pipeline(simulator)
-        return super().simulate_pipeline(simulator, pipeline, working_dir)
+        return super().simulate_pipeline(simulator, pipeline, output_dir)
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):
