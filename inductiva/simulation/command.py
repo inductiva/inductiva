@@ -1,9 +1,8 @@
 """Classe for construction of simulator commands."""
-from abc import ABC
 
 
-class Command(ABC):
-    """Abstract class for construction of simulator commands."""
+class Command():
+    """Base class for construction of simulator commands."""
 
     def __init__(self, **kwargs):
         """Command constructor.
