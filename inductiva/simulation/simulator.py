@@ -90,7 +90,8 @@ class Simulator(ABC):
                      track_logs: bool = False):
         """Run a pipeline of commands.
         Args:
-            working_dir: Path to the directory where the pipeline will be executed.
+            working_dir: Path to the directory where the pipeline will be 
+            executed.
             pipeline: List of commands to be executed in the simulation API.
         """
         working_dir = files.resolve_path(working_dir)
