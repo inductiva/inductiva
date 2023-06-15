@@ -63,11 +63,10 @@ class GROMACSCommand(Command):
 
         Args:
             method_name: The name of the method to be executed in GROMAS.
-            **gromacs_flags: Additional keyword arguments to be passed to the simulation API method.
+            **gromacs_flags: Additional keyword arguments to be passed 
+            to the simulation API method.
         """
-        self.method_name = method_name
-        self.gromacs_flags = gromacs_flags
+        super().__init__(method_name=method_name, **gromacs_flags)
 
-    def get_args(self):
-        """Return the command as a dictionary."""
-        return {"method": self.method_name, **self.gromacs_flags}
+
+

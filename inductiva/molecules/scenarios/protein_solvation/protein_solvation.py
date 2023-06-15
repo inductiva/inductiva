@@ -110,58 +110,61 @@ def _(self, simulator: GROMACS):
     pipeline = []
     pipeline.append(
         GROMACSCommand(method_name="pdb2gmx",
-                f=self.protein_pdb,
-                o="protein.gro",
-                water="tip3p",
-                user_input="6"))
+                       f=self.protein_pdb,
+                       o="protein.gro",
+                       water="tip3p",
+                       user_input="6"))
     pipeline.append(
         GROMACSCommand(method_name="editconf",
-                f="protein.gro",
-                o="protein_box.gro",
-                c="yes",
-                d="1.0",
-                bt="cubic"))
+                       f="protein.gro",
+                       o="protein_box.gro",
+                       c="yes",
+                       d="1.0",
+                       bt="cubic"))
     pipeline.append(
         GROMACSCommand(method_name="genbox",
-                cp="protein_box.gro",
-                o="protein_solv.gro",
-                p="topol.top"))
+                       cp="protein_box.gro",
+                       o="protein_solv.gro",
+                       p="topol.top"))
     pipeline.append(
         GROMACSCommand(method_name="grompp",
-                f="ions.mdp",
-                c="protein_solv.gro",
-                p="topol.top",
-                o="ions.tpr"))
+                       f="ions.mdp",
+                       c="protein_solv.gro",
+                       p="topol.top",
+                       o="ions.tpr"))
     pipeline.append(
         GROMACSCommand(method_name="genion",
-                s="ions.tpr",
-                o="protein_solv_ions.gro",
-                p="topol.top",
-                pname="NA",
-                nname="CL",
-                neutral="yes"))
+                       s="ions.tpr",
+                       o="protein_solv_ions.gro",
+                       p="topol.top",
+                       pname="NA",
+                       nname="CL",
+                       neutral="yes"))
     # Energy minimization
     pipeline.append(
         GROMACSCommand(method_name="grompp",
-                f="energy_minimization.mdp",
-                c="protein_solv_ions.gro",
-                p="topol.top",
-                o="em.tpr"))
+                       f="energy_minimization.mdp",
+                       c="protein_solv_ions.gro",
+                       p="topol.top",
+                       o="em.tpr"))
     pipeline.append(
-        GROMACSCommand(method_name="mdrun", method_name="mdrun", deffnm="em", v="yes"))
+        GROMACSCommand(method_name="mdrun",
+                       method_name="mdrun",
+                       deffnm="em",
+                       v="yes"))
     pipeline.append(
         GROMACSCommand(method_name="grompp",
-                f="simulation.mdp",
-                c="em.gro",
-                r="em.gro",
-                p="topol.top",
-                o="solvated_protein.tpr"))
+                       f="simulation.mdp",
+                       c="em.gro",
+                       r="em.gro",
+                       p="topol.top",
+                       o="solvated_protein.tpr"))
     # Simulation
     pipeline.append(
         GROMACSCommand(method_name="mdrun",
-                method_name="mdrun",
-                deffnm="solvated_protein",
-                v="yes"))
+                       method_name="mdrun",
+                       deffnm="solvated_protein",
+                       v="yes"))
     simulator.run_pipeline(working_dir=self.working_dir, pipeline=pipeline)
 
 
