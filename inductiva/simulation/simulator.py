@@ -5,7 +5,7 @@ from typing import Optional, List
 from inductiva import api
 from inductiva import types
 from inductiva.utils import files
-from inductiva.simulation import Command
+from .command import Command
 
 
 class Simulator(ABC):
