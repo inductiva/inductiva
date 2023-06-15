@@ -66,7 +66,8 @@ class GROMACSCommand(Command):
             **gromacs_flags: Additional keyword arguments to be passed 
             to the simulation API method.
         """
-        super().__init__(method_name=method_name, **gromacs_flags)
+        all_args = {"method_name": method_name, **gromacs_flags}
+        super().__init__(**all_args)
 
 
 
