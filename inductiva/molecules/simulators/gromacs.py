@@ -68,6 +68,3 @@ class GROMACSCommand(Command):
         """
         all_args = {"method_name": method_name, **gromacs_flags}
         super().__init__(**all_args)
-
-
-
