@@ -3,20 +3,20 @@ from functools import singledispatchmethod
 from typing import Optional
 import os
 import shutil
+
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS, GROMACSCommand
 from inductiva.simulation import Simulator
-from inductiva.utils.files import resolve_path, get_timestamped_path
-from inductiva.utils.misc import split_camel_case
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template)
+from inductiva.scenarios import Scenario
 from inductiva.utils.files import remove_files_with_tag
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 
 
-class ProteinSolvation():
+class ProteinSolvation(Scenario):
     """Solvated protein scenario."""
 
     def __init__(
@@ -61,34 +61,8 @@ class ProteinSolvation():
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        self.working_dir = self.setup_working_dir(working_dir, self.protein_pdb)
-        self.gen_config(simulator)
-        self.run_simulation(simulator)
-
-    def setup_working_dir(self, working_dir, protein_pdb):
-        """Setup the working directory for the simulation. 
-        For this scenario, the input and output directories are the same."""
-
-        # Create working_dir if it does not exist
-        if working_dir is None:
-            scenario_name_splitted = split_camel_case(self.__class__.__name__)
-            working_dir_prefix = "-".join(scenario_name_splitted).lower()
-            working_dir = get_timestamped_path(f"{working_dir_prefix}-output")
-
-        working_dir = resolve_path(working_dir)
-        if not os.path.exists(working_dir):
-            os.makedirs(working_dir)
-
-        # Copy protein pdb to working_dir
-        shutil.copy(protein_pdb,
-                    os.path.join(working_dir, os.path.basename(protein_pdb)))
-        # Copy template files to working_dir
-        shutil.copytree(os.path.join(self.template_dir),
-                        os.path.join(working_dir),
-                        dirs_exist_ok=True)
-        # Remove all files that have .jinja in the working_dir
-        remove_files_with_tag(working_dir, ".jinja")
-        return working_dir
+        pipeline = self.setup_pipeline(simulator)
+        return super().simulate_pipeline(simulator, pipeline, working_dir)
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):
@@ -97,14 +71,36 @@ class ProteinSolvation():
         )
 
     @singledispatchmethod
-    def run_simulation(self, simulator: Simulator):
+    def setup_pipeline(self, simulator: Simulator):
+        raise ValueError(
+            f"Simulator not supported for `{self.__class__.__name__}` scenario."
+        )
+
+    @singledispatchmethod
+    def gen_aux_files(self, simulator: Simulator, input_dir: str):
         raise ValueError(
             f"Simulator not supported for `{self.__class__.__name__}` scenario."
         )
 
 
-@ProteinSolvation.run_simulation.register
-def _(self, simulator: GROMACS):
+@ProteinSolvation.gen_aux_files.register
+def _(self, simulator: GROMACS, working_dir, protein_pdb):  # pylint: disable=unused-argument
+    """Setup the working directory for the simulation. 
+    For this scenario, the input and output directories are the same."""
+    # Copy protein pdb to working_dir
+    shutil.copy(protein_pdb,
+                os.path.join(working_dir, os.path.basename(protein_pdb)))
+    # Copy template files to working_dir
+    shutil.copytree(os.path.join(self.template_dir),
+                    os.path.join(working_dir),
+                    dirs_exist_ok=True)
+    # Remove all files that have .jinja in the working_dir
+    remove_files_with_tag(working_dir, ".jinja")
+    return working_dir
+
+
+@ProteinSolvation.setup_pipeline.register
+def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
     """Run the simulation using GROMACS."""
     #Solvation
     pipeline = []
@@ -158,7 +154,7 @@ def _(self, simulator: GROMACS):
     # Simulation
     pipeline.append(
         GROMACSCommand(method_name="mdrun", deffnm="solvated_protein", v="yes"))
-    simulator.run_pipeline(working_dir=self.working_dir, pipeline=pipeline)
+    return pipeline
 
 
 @ProteinSolvation.gen_config.register

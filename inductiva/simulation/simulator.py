@@ -88,7 +88,7 @@ class Simulator(ABC):
                      working_dir: types.Path,
                      *_args,
                      pipeline: List[Command],
-                     track_logs: bool = False):
+                     track_logs: bool = False) -> pathlib.Path:
         """Run a pipeline of commands.
         Args:
             working_dir: Path to the directory where the pipeline will be 
