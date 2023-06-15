@@ -86,6 +86,7 @@ class Simulator(ABC):
 
     def run_pipeline(self,
                      working_dir: types.Path,
+                     *_args,
                      pipeline: List[Command],
                      track_logs: bool = False):
         """Run a pipeline of commands.
