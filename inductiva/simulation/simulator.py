@@ -1,8 +1,7 @@
 """Base class for low-level simulators."""
 from abc import ABC, abstractmethod
 import pathlib
-from typing import Optional
-
+from typing import Optional, List
 from inductiva import api
 from inductiva import types
 from inductiva.utils import files
@@ -83,3 +82,22 @@ class Simulator(ABC):
             input_dir,
             params=kwargs,
         )
+
+    def run_pipeline(self,
+                     working_dir: types.Path,
+                     pipeline: List[Command],
+                     track_logs: bool = False):
+        """Run a pipeline of commands.
+        Args:
+            working_dir: Path to the directory where the pipeline will be executed.
+            pipeline: List of commands to be executed in the simulation API.
+        """
+        working_dir = files.resolve_path(working_dir)
+        if not working_dir.is_dir():
+            raise ValueError(
+                f"The provided path (\"{working_dir}\") is not a directory.")
+        return api.run_pipeline(self.api_method_name,
+                                input_dir=working_dir,
+                                output_dir=working_dir,
+                                params=pipeline,
+                                log_remote_execution=track_logs)
