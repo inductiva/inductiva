@@ -5,6 +5,7 @@ from typing import Optional, List
 from inductiva import api
 from inductiva import types
 from inductiva.utils import files
+from inductiva.simulation import Command
 
 
 class Simulator(ABC):
@@ -53,7 +54,7 @@ class Simulator(ABC):
             self.api_method_name,
             input_dir,
             output_dir,
-            params=kwargs,
+            params=[kwargs],
             log_remote_execution=track_logs,
         )
 
@@ -80,7 +81,7 @@ class Simulator(ABC):
         return api.run_async_simulation(
             self.api_method_name,
             input_dir,
-            params=kwargs,
+            params=[kwargs],
         )
 
     def run_pipeline(self,
@@ -96,8 +97,9 @@ class Simulator(ABC):
         if not working_dir.is_dir():
             raise ValueError(
                 f"The provided path (\"{working_dir}\") is not a directory.")
-        return api.run_pipeline(self.api_method_name,
-                                input_dir=working_dir,
-                                output_dir=working_dir,
-                                params=pipeline,
-                                log_remote_execution=track_logs)
+        params = [command.get_args() for command in pipeline]
+        return api.run(self.api_method_name,
+                       input_dir=working_dir,
+                       output_dir=working_dir,
+                       params=params,
+                       log_remote_execution=track_logs)
