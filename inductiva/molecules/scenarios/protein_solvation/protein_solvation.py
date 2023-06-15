@@ -4,7 +4,7 @@ from typing import Optional
 import os
 import shutil
 from inductiva.types import Path
-from inductiva.molecules.simulators import GROMACS
+from inductiva.molecules.simulators import GROMACS, GROMACSCommand
 from inductiva.simulation import Simulator
 from inductiva.utils.files import resolve_path, get_timestamped_path
 from inductiva.utils.misc import split_camel_case
@@ -107,70 +107,62 @@ class ProteinSolvation():
 def _(self, simulator: GROMACS):
     """Run the simulation using GROMACS."""
     #Solvation
-    simulator.run(input_dir=self.working_dir,
-                  output_directory=self.working_dir,
-                  method_name="pdb2gmx",
-                  f=self.protein_pdb,
-                  o="protein.gro",
-                  water="tip3p",
-                  user_input="6")
-    simulator.run(input_dir=self.working_dir,
-                  output_directory=self.working_dir,
-                  method_name="editconf",
-                  f="protein.gro",
-                  o="protein_box.gro",
-                  c="yes",
-                  d="1.0",
-                  bt="cubic")
-    simulator.run(input_dir=self.working_dir,
-                  output_directory=self.working_dir,
-                  method_name="solvate",
-                  cp="protein_box.gro",
-                  o="protein_solv.gro",
-                  p="topol.top")
-    simulator.run(input_dir=self.working_dir,
-                  output_directory=self.working_dir,
-                  method_name="grompp",
-                  f="ions.mdp",
-                  c="protein_solv.gro",
-                  p="topol.top",
-                  o="ions.tpr")
-    simulator.run(input_dir=self.working_dir,
-                  output_directory=self.working_dir,
-                  method_name="genion",
-                  s="ions.tpr",
-                  o="protein_solv_ions.gro",
-                  p="topol.top",
-                  pname="NA",
-                  nname="CL",
-                  neutral="yes")
+    pipeline = []
+    pipeline.append(
+        GROMACSCommand(method_name="pdb2gmx",
+                f=self.protein_pdb,
+                o="protein.gro",
+                water="tip3p",
+                user_input="6"))
+    pipeline.append(
+        GROMACSCommand(method_name="editconf",
+                f="protein.gro",
+                o="protein_box.gro",
+                c="yes",
+                d="1.0",
+                bt="cubic"))
+    pipeline.append(
+        GROMACSCommand(method_name="genbox",
+                cp="protein_box.gro",
+                o="protein_solv.gro",
+                p="topol.top"))
+    pipeline.append(
+        GROMACSCommand(method_name="grompp",
+                f="ions.mdp",
+                c="protein_solv.gro",
+                p="topol.top",
+                o="ions.tpr"))
+    pipeline.append(
+        GROMACSCommand(method_name="genion",
+                s="ions.tpr",
+                o="protein_solv_ions.gro",
+                p="topol.top",
+                pname="NA",
+                nname="CL",
+                neutral="yes"))
     # Energy minimization
-    simulator.run(input_dir=self.working_dir,
-                  output_directory=self.working_dir,
-                  method_name="grompp",
-                  f="energy_minimization.mdp",
-                  c="protein_solv_ions.gro",
-                  p="topol.top",
-                  o="em.tpr")
-    simulator.run(input_dir=self.working_dir,
-                  output_directory=self.working_dir,
-                  method_name="mdrun",
-                  deffnm="em",
-                  v="yes")
+    pipeline.append(
+        GROMACSCommand(method_name="grompp",
+                f="energy_minimization.mdp",
+                c="protein_solv_ions.gro",
+                p="topol.top",
+                o="em.tpr"))
+    pipeline.append(
+        GROMACSCommand(method_name="mdrun", method_name="mdrun", deffnm="em", v="yes"))
+    pipeline.append(
+        GROMACSCommand(method_name="grompp",
+                f="simulation.mdp",
+                c="em.gro",
+                r="em.gro",
+                p="topol.top",
+                o="solvated_protein.tpr"))
     # Simulation
-    simulator.run(input_dir=self.working_dir,
-                  output_directory=self.working_dir,
-                  method_name="grompp",
-                  f="simulation.mdp",
-                  c="em.gro",
-                  r="em.gro",
-                  p="topol.top",
-                  o="solvated_protein.tpr")
-    simulator.run(input_dir=self.working_dir,
-                  output_directory=self.working_dir,
-                  method_name="mdrun",
-                  deffnm="solvated_protein",
-                  v="yes")
+    pipeline.append(
+        GROMACSCommand(method_name="mdrun",
+                method_name="mdrun",
+                deffnm="solvated_protein",
+                v="yes"))
+    simulator.run_pipeline(working_dir=self.working_dir, pipeline=pipeline)
 
 
 @ProteinSolvation.gen_config.register
