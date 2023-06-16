@@ -2,10 +2,9 @@
 
 from abc import ABC
 import tempfile
-from typing import Optional, List
-
+from typing import Optional
 from inductiva.types import Path
-from inductiva.simulation import Simulator, Command
+from inductiva.simulation import Simulator
 from inductiva.utils.files import resolve_path, get_timestamped_path
 from inductiva.utils.misc import split_camel_case
 
@@ -34,7 +33,8 @@ class Scenario(ABC):
         return args
 
     def gen_pipeline(self, simulator: Simulator):  # pylint: disable=unused-argument
-        """Generate the pipeline for the scenario. To be implemented in subclasses."""
+        """Generate the pipeline for the scenario. To be implemented
+        in subclasses."""
         return None
 
     def simulate(

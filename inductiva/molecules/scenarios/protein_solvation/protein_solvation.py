@@ -71,9 +71,7 @@ class ProteinSolvation(Scenario):
 
     @singledispatchmethod
     def gen_pipeline(self, simulator: Simulator):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+        pass
 
     @singledispatchmethod
     def gen_aux_files(self, simulator: Simulator, input_dir: str):
