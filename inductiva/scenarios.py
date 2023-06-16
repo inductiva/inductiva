@@ -13,7 +13,7 @@ from inductiva.utils.misc import split_camel_case
 class Scenario(ABC):
     """Base class for scenarios."""
 
-    def setup_output_dir(self, output_dir: str):
+    def _setup_output_dir(self, output_dir: str):
         """Setup the scenario output directory."""
         if output_dir is None:
             scenario_name_splitted = split_camel_case(self.__class__.__name__)
@@ -22,7 +22,7 @@ class Scenario(ABC):
         output_dir = resolve_path(output_dir)
         return output_dir
 
-    def setup_config(self, simulator: Simulator, input_dir: Path):
+    def _setup_config(self, simulator: Simulator, input_dir: Path):
         """Setup the scenario configuration files and arguments."""
         self.gen_aux_files(simulator, input_dir)
         self.gen_config(simulator, input_dir)
@@ -40,9 +40,9 @@ class Scenario(ABC):
         **kwargs,
     ):
         """Simulates the scenario for a single simulator call."""
-        output_dir = self.setup_output_dir(output_dir)
+        output_dir = self._setup_output_dir(output_dir)
         with tempfile.TemporaryDirectory() as input_dir:
-            args = self.setup_config(simulator, input_dir)
+            args = self._setup_config(simulator, input_dir)
             output_path = simulator.run(
                 input_dir,
                 *args,
@@ -58,9 +58,9 @@ class Scenario(ABC):
         working_dir: Optional[Path] = None,
     ):
         """Simulates the scenario using a commands pipeline."""
-        working_dir = self.setup_output_dir(working_dir)
+        working_dir = self._setup_output_dir(working_dir)
         with tempfile.TemporaryDirectory() as input_dir:
-            args = self.setup_config(simulator, input_dir)
+            args = self._setup_config(simulator, input_dir)
             output_path = simulator.run_pipeline(working_dir,
                                                  *args,
                                                  pipeline=pipeline)
