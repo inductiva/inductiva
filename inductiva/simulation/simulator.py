@@ -16,6 +16,21 @@ class Simulator(ABC):
     def api_method_name(self) -> str:
         pass
 
+    def _setup_dirs(self, input_dir: types.Path, output_dir: types.Path):
+        """Setup the scenario output directory."""
+        input_dir = files.resolve_path(input_dir)
+        if not input_dir.is_dir():
+            raise ValueError(
+                f"The provided path (\"{input_dir}\") is not a directory.")
+
+        if output_dir is None:
+            output_dir = input_dir.with_name(f"{input_dir.name}-output")
+            output_dir = files.get_timestamped_path(output_dir)
+        else:
+            output_dir = files.resolve_path(output_dir)
+
+        return input_dir, output_dir
+
     def run(
         self,
         input_dir: types.Path,
@@ -39,16 +54,7 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
-        input_dir = files.resolve_path(input_dir)
-        if not input_dir.is_dir():
-            raise ValueError(
-                f"The provided path (\"{input_dir}\") is not a directory.")
-
-        if output_dir is None:
-            output_dir = input_dir.with_name(f"{input_dir.name}-output")
-            output_dir = files.get_timestamped_path(output_dir)
-        else:
-            output_dir = files.resolve_path(output_dir)
+        input_dir, output_dir = self._setup_dirs(input_dir, output_dir)
 
         return api.run_simulation(
             self.api_method_name,
@@ -85,8 +91,9 @@ class Simulator(ABC):
         )
 
     def run_pipeline(self,
-                     working_dir: types.Path,
+                     input_dir: types.Path,
                      *_args,
+                     output_dir: Optional[types.Path] = None,
                      pipeline: List[Command],
                      track_logs: bool = False) -> pathlib.Path:
         """Run a pipeline of commands.
@@ -95,13 +102,13 @@ class Simulator(ABC):
             executed.
             pipeline: List of commands to be executed in the simulation API.
         """
-        working_dir = files.resolve_path(working_dir)
-        if not working_dir.is_dir():
-            raise ValueError(
-                f"The provided path (\"{working_dir}\") is not a directory.")
+        input_dir, output_dir = self._setup_dirs(input_dir, output_dir)
+
         params = [command.get_args() for command in pipeline]
-        return api.run(self.api_method_name,
-                       input_dir=working_dir,
-                       output_dir=working_dir,
-                       params=params,
-                       log_remote_execution=track_logs)
+        return api.run_simulation(
+            self.api_method_name,
+            input_dir,
+            output_dir,
+            params=params,
+            log_remote_execution=track_logs,
+        )

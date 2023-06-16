@@ -61,9 +61,7 @@ class ProteinSolvation(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-
-        pipeline = self.setup_pipeline(simulator)
-        return super().simulate_pipeline(simulator, pipeline, output_dir)
+        return super().simulate(simulator, output_dir)
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):
@@ -72,7 +70,7 @@ class ProteinSolvation(Scenario):
         )
 
     @singledispatchmethod
-    def setup_pipeline(self, simulator: Simulator):
+    def gen_pipeline(self, simulator: Simulator):
         raise ValueError(
             f"Simulator not supported for `{self.__class__.__name__}` scenario."
         )
@@ -100,7 +98,7 @@ def _(self, simulator: GROMACS, working_dir, protein_pdb):  # pylint: disable=un
     return working_dir
 
 
-@ProteinSolvation.setup_pipeline.register
+@ProteinSolvation.gen_pipeline.register
 def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
     """Run the simulation using GROMACS."""
     #Solvation

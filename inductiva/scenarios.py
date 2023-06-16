@@ -33,6 +33,10 @@ class Scenario(ABC):
             args += (config_filename,)
         return args
 
+    def gen_pipeline(self, simulator: Simulator):  # pylint: disable=unused-argument
+        """Generate the pipeline for the scenario. To be implemented in subclasses."""
+        return None
+
     def simulate(
         self,
         simulator: Simulator,
@@ -41,29 +45,22 @@ class Scenario(ABC):
     ):
         """Simulates the scenario for a single simulator call."""
         output_dir = self._setup_output_dir(output_dir)
-        with tempfile.TemporaryDirectory() as input_dir:
-            args = self._setup_config(simulator, input_dir)
-            output_path = simulator.run(
-                input_dir,
-                *args,
-                output_dir=output_dir,
-                **kwargs,
-            )
-        return output_path
 
-    def simulate_pipeline(
-        self,
-        simulator: Simulator,
-        pipeline: List[Command],
-        working_dir: Optional[Path] = None,
-    ):
-        """Simulates the scenario using a commands pipeline."""
-        working_dir = self._setup_output_dir(working_dir)
         with tempfile.TemporaryDirectory() as input_dir:
-            args = self._setup_config(simulator, input_dir)
-            output_path = simulator.run_pipeline(working_dir,
-                                                 *args,
-                                                 pipeline=pipeline)
+            args, pipeline = self._setup_config(simulator, input_dir)
+            pipeline = self.gen_pipeline(simulator)
+            if pipeline is None:
+                output_path = simulator.run(
+                    input_dir,
+                    *args,
+                    output_dir=output_dir,
+                    **kwargs,
+                )
+            else:
+                output_path = simulator.run_pipeline(input_dir,
+                                                     *args,
+                                                     output_dir=output_dir,
+                                                     pipeline=pipeline)
         return output_path
 
     def simulate_async(
@@ -74,7 +71,7 @@ class Scenario(ABC):
         """Simulates the scenario asychronously."""
 
         with tempfile.TemporaryDirectory() as input_dir:
-            args = self.setup_config(simulator, input_dir)
+            args = self._setup_config(simulator, input_dir)
             task_id = simulator.run_async(
                 input_dir,
                 *args,
