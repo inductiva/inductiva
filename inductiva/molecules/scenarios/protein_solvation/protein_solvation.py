@@ -83,19 +83,18 @@ class ProteinSolvation(Scenario):
 
 
 @ProteinSolvation.gen_aux_files.register
-def _(self, simulator: GROMACS, working_dir, protein_pdb):  # pylint: disable=unused-argument
+def _(self, simulator: GROMACS, input_dir, protein_pdb):  # pylint: disable=unused-argument
     """Setup the working directory for the simulation. 
     For this scenario, the input and output directories are the same."""
     # Copy protein pdb to working_dir
     shutil.copy(protein_pdb,
-                os.path.join(working_dir, os.path.basename(protein_pdb)))
+                os.path.join(input_dir, os.path.basename(protein_pdb)))
     # Copy template files to working_dir
     shutil.copytree(os.path.join(self.template_dir),
-                    os.path.join(working_dir),
+                    os.path.join(input_dir),
                     dirs_exist_ok=True)
     # Remove all files that have .jinja in the working_dir
-    remove_files_with_tag(working_dir, ".jinja")
-    return working_dir
+    remove_files_with_tag(input_dir, ".jinja")
 
 
 @ProteinSolvation.gen_pipeline.register
