@@ -1,6 +1,6 @@
 """Protein solvation scenario."""
 from functools import singledispatchmethod
-from typing import Optional
+from typing import Optional, Literal
 import os
 import shutil
 
@@ -45,16 +45,17 @@ class ProteinSolvation(Scenario):
             simulator: Simulator = GROMACS(),
             output_dir: Optional[Path] = None,
             simulation_time: float = 10,  # ns
-            integrator: str = "md",
+            integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
         """Simulate the solvation of a protein.
         Args:
             output_dir: The  output directory for the simulation.
-            simulation_time: The simulation time in ns. Default is 10 ns.
-            integrator: The integrator to use for the simulation. Default is md.
-            Other options for integrator include sd, steep, cg, l-bfgs. 
+            simulation_time: The simulation time in ns. 
+            integrator: The integrator to use for the simulation. 
+            For more information about the integrator used in the simulation, 
+            consult the GROMACS official documentation at 
+            https://manual.gromacs.org/current/user-guide/mdp-options.html. 
             nsteps_minim: The number of steps to use for the energy minization. 
-            Default is 5000.
         """
         self.nsteps = int(
             simulation_time * 1e6 / 2

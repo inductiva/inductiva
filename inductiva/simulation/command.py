@@ -2,18 +2,20 @@
 
 
 class Command():
-    """Base class for construction of simulator commands."""
+    """Class for construction of simulator commands."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, name:str, **kwargs):
         """Command constructor.
         Args:
-            method_name: The name of the method to be executed in 
+            name: The name of the specific method to be executed in 
             the simulation API.
             **kwargs: Additional keyword arguments to be passed to
             the simulation API method."""
-
-        self.kwargs = kwargs
+        self.name = name
+        self.flags = kwargs
 
     def get_args(self):
-        """Return the command as a dictionary."""
-        return self.kwargs
+        """Return the flags used in the command as a dictionary."""
+        all_args = {"name": self.name, **self.flags}
+
+        return all_args
