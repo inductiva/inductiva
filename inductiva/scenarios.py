@@ -52,7 +52,6 @@ class Scenario(ABC):
     def simulate(
         self,
         simulator: Simulator,
-        pipeline: Optional[list] = [],
         output_dir: Optional[Path] = None,
         **kwargs,
     ):

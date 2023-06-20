@@ -1,4 +1,4 @@
-"""Classe for construction of simulator commands."""
+"""Class for construction of simulator commands."""
 
 
 class Command():
