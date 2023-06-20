@@ -16,10 +16,10 @@ class Simulator(ABC):
     def api_method_name(self) -> str:
         pass
 
-    def _setup_dirs(self, input_dir: types.Path,
+    def _setup_io_dirs(self, input_dir: types.Path,
                     output_dir: types.Path) -> pathlib.Path:
         """Setup the scenario input and output directories."""
-        input_dir = self._setup_input_dir(input_dir)
+        input_dir = files.resolve_path(input_dir)
         if not input_dir.is_dir():
             raise ValueError(
                 f"The provided path (\"{input_dir}\") is not a directory.")
@@ -57,7 +57,7 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
-        input_dir, output_dir = self._setup_dirs(input_dir, output_dir)
+        input_dir, output_dir = self._setup_io_dirs(input_dir, output_dir)
         if pipeline is None:
             params = [kwargs]
         else:
@@ -88,7 +88,7 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
-        input_dir, _ = self._setup_dirs(input_dir, None)
+        input_dir, _ = self._setup_io_dirs(input_dir, None)
         if pipeline is None:
             params = [kwargs]
         else:
