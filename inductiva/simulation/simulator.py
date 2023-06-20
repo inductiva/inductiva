@@ -16,9 +16,10 @@ class Simulator(ABC):
     def api_method_name(self) -> str:
         pass
 
-    def _setup_dirs(self, input_dir: types.Path, output_dir: types.Path):
-        """Setup the scenario output directory."""
-        input_dir = files.resolve_path(input_dir)
+    def _setup_dirs(self, input_dir: types.Path,
+                    output_dir: types.Path) -> pathlib.Path:
+        """Setup the scenario input and output directories."""
+        input_dir = self._setup_input_dir(input_dir)
         if not input_dir.is_dir():
             raise ValueError(
                 f"The provided path (\"{input_dir}\") is not a directory.")
@@ -35,6 +36,7 @@ class Simulator(ABC):
         self,
         input_dir: types.Path,
         *_args,
+        pipeline: List[Command] = [],
         output_dir: Optional[types.Path] = None,
         track_logs: bool = False,
         **kwargs,
@@ -45,6 +47,7 @@ class Simulator(ABC):
             input_dir: Path to the directory containing the input files.
             _args: Unused in this method, but defined to allow for more
                 non-default arguments in method override in subclasses.
+            pipeline: List of commands to be executed in the simulation.
             output_dir: Path to the directory where the output files will be
                 stored. If not provided, a timestamped directory will be
                 created with the same name as the input directory appended
@@ -55,12 +58,16 @@ class Simulator(ABC):
                 simulation API method.
         """
         input_dir, output_dir = self._setup_dirs(input_dir, output_dir)
+        if pipeline == []:
+            params = [kwargs]
+        else:
+            params = [command.get_args() for command in pipeline]
 
         return api.run_simulation(
             self.api_method_name,
             input_dir,
             output_dir,
-            params=[kwargs],
+            params=params,
             log_remote_execution=track_logs,
         )
 
@@ -68,6 +75,7 @@ class Simulator(ABC):
         self,
         input_dir: types.Path,
         *_args,
+        pipeline: List[Command] = [],
         **kwargs,
     ) -> str:
         """Run the simulation asynchronously.
@@ -76,39 +84,18 @@ class Simulator(ABC):
             input_dir: Path to the directory containing the input files.
             _args: Unused in this method, but defined to allow for more
                 non-default arguments in method override in subclasses.
+            pipeline: List of commands to be executed in the simulation.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
-        input_dir = files.resolve_path(input_dir)
-        if not input_dir.is_dir():
-            raise ValueError(
-                f"The provided path (\"{input_dir}\") is not a directory.")
+        input_dir, _ = self._setup_dirs(input_dir, None)
+        if pipeline == []:
+            params = [kwargs]
+        else:
+            params = [command.get_args() for command in pipeline]
 
         return api.run_async_simulation(
             self.api_method_name,
             input_dir,
-            params=[kwargs],
-        )
-
-    def run_pipeline(self,
-                     input_dir: types.Path,
-                     *_args,
-                     output_dir: Optional[types.Path] = None,
-                     pipeline: List[Command],
-                     track_logs: bool = False) -> pathlib.Path:
-        """Run a pipeline of commands.
-        Args:
-            working_dir: Path to the directory where the pipeline will be 
-            executed.
-            pipeline: List of commands to be executed in the simulation API.
-        """
-        input_dir, output_dir = self._setup_dirs(input_dir, output_dir)
-
-        params = [command.get_args() for command in pipeline]
-        return api.run_simulation(
-            self.api_method_name,
-            input_dir,
-            output_dir,
             params=params,
-            log_remote_execution=track_logs,
         )

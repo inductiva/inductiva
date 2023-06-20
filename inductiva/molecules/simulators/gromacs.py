@@ -17,8 +17,9 @@ class GROMACS(Simulator):
     def run(
         self,
         input_dir: types.Path,
-        method_name: str,
         track_logs: bool = False,
+        method_name: Optional[str] = None,
+        pipeline: Optional[list] = [],
         output_directory: Optional[types.Path] = None,
         **gromacs_flags: Optional[str],
     ) -> pathlib.Path:
@@ -34,13 +35,15 @@ class GROMACS(Simulator):
         return super().run(input_dir,
                            output_dir=output_directory,
                            track_logs=track_logs,
+                           pipeline=pipeline,
                            method=method_name,
                            user_flags=gromacs_flags)
 
     def run_async(
         self,
         input_dir: types.Path,
-        method_name: str,
+        pipeline: Optional[list] = [],
+        method_name: Optional[str] = None,
         **gromacs_flags: Optional[str],
     ) -> str:
         """Run a specified gromacs method asynchronously.
@@ -51,6 +54,7 @@ class GROMACS(Simulator):
             gromacs_flags: Flags to pass to the gromacs CLI.
         """
         return super().run_async(input_dir,
+                                 pipeline=pipeline,
                                  method=method_name,
                                  user_flags=gromacs_flags)
 

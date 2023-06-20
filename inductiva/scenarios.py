@@ -1,6 +1,6 @@
 """Base class for scenarios."""
 
-from abc import ABC
+from abc import ABC, abstractmethod
 import tempfile
 from typing import Optional
 from inductiva.types import Path
@@ -32,14 +32,27 @@ class Scenario(ABC):
             args += (config_filename,)
         return args
 
+    @abstractmethod
+    def gen_aux_files(self, simulator: Simulator, input_dir: Path):
+        """Generate the auxiliary files for the scenario. To be implemented
+        in subclasses."""
+        pass
+
+    @abstractmethod
+    def gen_config(self, simulator: Simulator, input_dir: Path):
+        """Generate the configuration files for the scenario. To be implemented
+        in subclasses."""
+        pass
+
     def gen_pipeline(self, simulator: Simulator):  # pylint: disable=unused-argument
         """Generate the pipeline for the scenario. To be implemented
         in subclasses."""
-        return None
+        return []
 
     def simulate(
         self,
         simulator: Simulator,
+        pipeline: Optional[list] = [],
         output_dir: Optional[Path] = None,
         **kwargs,
     ):
@@ -47,21 +60,16 @@ class Scenario(ABC):
         output_dir = self._setup_output_dir(output_dir)
 
         with tempfile.TemporaryDirectory() as input_dir:
-            args, pipeline = self._setup_config(simulator, input_dir)
+            args = self._setup_config(simulator, input_dir)
             pipeline = self.gen_pipeline(simulator)
-            if pipeline is None:
-                output_path = simulator.run(
-                    input_dir,
-                    *args,
-                    output_dir=output_dir,
-                    **kwargs,
-                )
-            else:
-                output_path = simulator.run_pipeline(input_dir,
-                                                     *args,
-                                                     output_dir=output_dir,
-                                                     pipeline=pipeline)
-        return output_path
+
+            return simulator.run(
+                input_dir,
+                *args,
+                pipeline=pipeline,
+                output_dir=output_dir,
+                **kwargs,
+            )
 
     def simulate_async(
         self,
@@ -72,9 +80,12 @@ class Scenario(ABC):
 
         with tempfile.TemporaryDirectory() as input_dir:
             args = self._setup_config(simulator, input_dir)
+            pipeline = self.gen_pipeline(simulator)
+
             task_id = simulator.run_async(
                 input_dir,
                 *args,
+                pipeline=pipeline,
                 **kwargs,
             )
         return task_id

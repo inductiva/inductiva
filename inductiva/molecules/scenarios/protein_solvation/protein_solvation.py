@@ -49,10 +49,10 @@ class ProteinSolvation(Scenario):
             nsteps_minim: int = 5000):
         """Simulate the solvation of a protein.
         Args:
-            working_dir: The working directory where the simulation 
-            will be executed.
+            output_dir: The  output directory for the simulation.
             simulation_time: The simulation time in ns. Default is 10 ns.
             integrator: The integrator to use for the simulation. Default is md.
+            Other options for integrator include sd, steep, cg, l-bfgs. 
             nsteps_minim: The number of steps to use for the energy minization. 
             Default is 5000.
         """
