@@ -4,7 +4,7 @@
 class Command():
     """Class for construction of simulator commands."""
 
-    def __init__(self, name:str, **kwargs):
+    def __init__(self, name: str, **kwargs):
         """Command constructor.
         Args:
             name: The name of the specific method to be executed in 

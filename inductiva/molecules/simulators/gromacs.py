@@ -4,7 +4,7 @@ import pathlib
 from typing import Optional
 
 from inductiva import types
-from inductiva.simulation import Simulator, Command
+from inductiva.simulation import Simulator
 
 
 class GROMACS(Simulator):
@@ -57,18 +57,3 @@ class GROMACS(Simulator):
                                  pipeline=pipeline,
                                  method=method_name,
                                  user_flags=gromacs_flags)
-
-
-class GROMACSCommand(Command):
-    """Class for construction of GROMACS commands."""
-
-    def __init__(self, method_name: str, **gromacs_flags: Optional[str]):
-        """Command constructor.
-
-        Args:
-            method_name: The name of the method to be executed in GROMAS.
-            **gromacs_flags: Additional keyword arguments to be passed 
-            to the simulation API method.
-        """
-        all_args = {"method_name": method_name, **gromacs_flags}
-        super().__init__(**all_args)
