@@ -19,7 +19,7 @@ class GROMACS(Simulator):
         input_dir: types.Path,
         track_logs: bool = False,
         method_name: Optional[str] = None,
-        pipeline: Optional[list] = [],
+        pipeline: Optional[list] = None,
         output_directory: Optional[types.Path] = None,
         **gromacs_flags: Optional[str],
     ) -> pathlib.Path:
@@ -42,7 +42,7 @@ class GROMACS(Simulator):
     def run_async(
         self,
         input_dir: types.Path,
-        pipeline: Optional[list] = [],
+        pipeline: Optional[list] = None,
         method_name: Optional[str] = None,
         **gromacs_flags: Optional[str],
     ) -> str:

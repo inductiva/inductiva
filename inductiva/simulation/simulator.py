@@ -36,7 +36,7 @@ class Simulator(ABC):
         self,
         input_dir: types.Path,
         *_args,
-        pipeline: List[Command] = [],
+        pipeline: List[Command] = None,
         output_dir: Optional[types.Path] = None,
         track_logs: bool = False,
         **kwargs,
@@ -58,7 +58,7 @@ class Simulator(ABC):
                 simulation API method.
         """
         input_dir, output_dir = self._setup_dirs(input_dir, output_dir)
-        if pipeline == []:
+        if pipeline is None:
             params = [kwargs]
         else:
             params = [command.get_args() for command in pipeline]
@@ -75,7 +75,7 @@ class Simulator(ABC):
         self,
         input_dir: types.Path,
         *_args,
-        pipeline: List[Command] = [],
+        pipeline: List[Command] = None,
         **kwargs,
     ) -> str:
         """Run the simulation asynchronously.
@@ -89,7 +89,7 @@ class Simulator(ABC):
                 simulation API method.
         """
         input_dir, _ = self._setup_dirs(input_dir, None)
-        if pipeline == []:
+        if pipeline is None:
             params = [kwargs]
         else:
             params = [command.get_args() for command in pipeline]
