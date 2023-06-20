@@ -1,2 +1,2 @@
 #pylint: disable=missing-module-docstring
-from .gromacs import GROMACS, GROMACSCommand
+from .gromacs import GROMACS
