@@ -49,7 +49,8 @@ class ProteinSolvation(Scenario):
             nsteps_minim: int = 5000):
         """Simulate the solvation of a protein.
         Args:
-            output_dir: The  output directory for the simulation.
+            output_dir: The  output directory to save the results of the
+            simulation. 
             simulation_time: The simulation time in ns. 
             integrator: The integrator to use for the simulation. 
             For more information about the integrator used in the simulation, 
@@ -79,8 +80,7 @@ class ProteinSolvation(Scenario):
 
 @ProteinSolvation.gen_aux_files.register
 def _(self, simulator: GROMACS, input_dir, protein_pdb):  # pylint: disable=unused-argument
-    """Setup the working directory for the simulation. 
-    For this scenario, the input and output directories are the same."""
+    """Setup the working directory for the simulation."""
     # Copy protein pdb to working_dir
     shutil.copy(protein_pdb, os.path.join(input_dir, "protein.pdb"))
     # Copy template files to working_dir
