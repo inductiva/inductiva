@@ -17,7 +17,7 @@ class Simulator(ABC):
 
     def _setup_io_dirs(self, input_dir: types.Path,
                        output_dir: types.Path) -> pathlib.Path:
-        """Setup the scenario input and output directories."""
+        """Setup the simulator input and output directories."""
         input_dir = files.resolve_path(input_dir)
         if not input_dir.is_dir():
             raise ValueError(
