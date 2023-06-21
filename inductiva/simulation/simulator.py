@@ -2,7 +2,6 @@
 from abc import ABC, abstractmethod
 import pathlib
 from typing import Optional
-
 from inductiva import api
 from inductiva import types
 from inductiva.utils import files
@@ -15,6 +14,22 @@ class Simulator(ABC):
     @abstractmethod
     def api_method_name(self) -> str:
         pass
+
+    def _setup_io_dirs(self, input_dir: types.Path,
+                       output_dir: types.Path) -> pathlib.Path:
+        """Setup the scenario input and output directories."""
+        input_dir = files.resolve_path(input_dir)
+        if not input_dir.is_dir():
+            raise ValueError(
+                f"The provided path (\"{input_dir}\") is not a directory.")
+
+        if output_dir is None:
+            output_dir = input_dir.with_name(f"{input_dir.name}-output")
+            output_dir = files.get_timestamped_path(output_dir)
+        else:
+            output_dir = files.resolve_path(output_dir)
+
+        return input_dir, output_dir
 
     def run(
         self,
@@ -39,16 +54,7 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
-        input_dir = files.resolve_path(input_dir)
-        if not input_dir.is_dir():
-            raise ValueError(
-                f"The provided path (\"{input_dir}\") is not a directory.")
-
-        if output_dir is None:
-            output_dir = input_dir.with_name(f"{input_dir.name}-output")
-            output_dir = files.get_timestamped_path(output_dir)
-        else:
-            output_dir = files.resolve_path(output_dir)
+        input_dir, output_dir = self._setup_io_dirs(input_dir, output_dir)
 
         return api.run_simulation(
             self.api_method_name,
@@ -73,10 +79,7 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
-        input_dir = files.resolve_path(input_dir)
-        if not input_dir.is_dir():
-            raise ValueError(
-                f"The provided path (\"{input_dir}\") is not a directory.")
+        input_dir, _ = self._setup_io_dirs(input_dir, None)
 
         return api.run_async_simulation(
             self.api_method_name,
