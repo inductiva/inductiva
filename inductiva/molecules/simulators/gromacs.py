@@ -17,7 +17,7 @@ class GROMACS(Simulator):
     def run(
         self,
         input_dir: types.Path,
-        method_name: str,
+        method_name: str = None,
         track_logs: bool = False,
         output_directory: Optional[types.Path] = None,
         **gromacs_flags: Optional[str],
@@ -40,7 +40,7 @@ class GROMACS(Simulator):
     def run_async(
         self,
         input_dir: types.Path,
-        method_name: str,
+        method_name: str = None,
         **gromacs_flags: Optional[str],
     ) -> str:
         """Run a specified gromacs method asynchronously.

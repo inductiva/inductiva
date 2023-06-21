@@ -6,7 +6,7 @@ import shutil
 
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
-from inductiva.simulation import Simulator, Command
+from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template)
 from inductiva.scenarios import Scenario
@@ -62,7 +62,7 @@ class ProteinSolvation(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        return super().simulate(simulator, output_dir, commands=True)
+        return super().simulate(simulator, output_dir)
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):
