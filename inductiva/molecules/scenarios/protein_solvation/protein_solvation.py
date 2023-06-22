@@ -1,6 +1,7 @@
 """Protein solvation scenario."""
 from functools import singledispatchmethod
 from typing import Optional, Literal
+import json
 import os
 import shutil
 
@@ -48,22 +49,39 @@ class ProteinSolvation(Scenario):
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
         """Simulate the solvation of a protein.
+
         Args:
-            output_dir: The  output directory to save the results of the
-            simulation. 
-            simulation_time: The simulation time in ns. 
-            integrator: The integrator to use for the simulation. 
-            For more information about the integrator used in the simulation, 
-            consult the GROMACS official documentation at 
-            https://manual.gromacs.org/current/user-guide/mdp-options.html. 
-            nsteps_minim: The number of steps to use for the energy minization. 
+            output_dir: The output directory to save the simulation results.
+            simulation_time: The simulation time in ns.
+            integrator: The integrator to use for the simulation. Options:
+                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for integrating
+                Newton's equations of motion.
+                - "sd" (Steepest Descent): Stochastic dynamics integrator with leap-frog
+                scheme. Useful for energy minimization and system relaxation before dynamics
+                simulations.
+                - "bd" (Brownian Dynamics): Euler integrator for Brownian or position Langevin
+                dynamics. Incorporates random forces from solvent particles. Suitable for
+                simulating systems in a solvent environment.
+
+            For more details on the integrators, refer to the GROMACS documentation at
+            https://manual.gromacs.org/current/user-guide/mdp-options.html.
+
+            nsteps_minim: Number of steps for energy minimization.
         """
         self.nsteps = int(
             simulation_time * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        return super().simulate(simulator, output_dir)
+        commands = self.read_commands_from_file()
+        return super().simulate(simulator, output_dir, commands=commands)
+
+    def read_commands_from_file(self):
+        "Read commands from commands.json file"
+        commands_path = os.path.join(self.template_dir, "commands.json")
+        with open(commands_path, "r", encoding="utf-8") as f:
+            commands = json.load(f)
+        return commands
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):
@@ -78,7 +96,6 @@ class ProteinSolvation(Scenario):
         )
 
     @singledispatchmethod
-    @classmethod
     def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
         raise ValueError(
             f"Simulator not supported for `{cls.__name__}` scenario.")

@@ -43,7 +43,7 @@ class Scenario(ABC):
         pass
 
     @abstractmethod
-    def gen_config_filename(self, simulator: Simulator):
+    def get_config_filename(self, simulator: Simulator):
         """To be implemented in subclasses."""
         pass
 
