@@ -34,14 +34,17 @@ class Scenario(ABC):
 
     @abstractmethod
     def gen_aux_files(self, simulator: Simulator, input_dir: Path):
-        """Generate the auxiliary files for the scenario. To be implemented
-        in subclasses."""
+        """To be implemented in subclasses."""
         pass
 
     @abstractmethod
     def gen_config(self, simulator: Simulator, input_dir: Path):
-        """Generate the configuration files for the scenario. To be implemented
-        in subclasses."""
+        """To be implemented in subclasses."""
+        pass
+
+    @abstractmethod
+    def gen_config_filename(self, simulator: Simulator):
+        """To be implemented in subclasses."""
         pass
 
     def simulate(
