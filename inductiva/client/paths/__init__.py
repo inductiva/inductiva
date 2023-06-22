@@ -18,3 +18,4 @@ class PathValues(str, enum.Enum):
     ADMIN_USERS_USERNAME_TASKS = "/admin/users/{username}/tasks"
     ADMIN_TASKS = "/admin/tasks"
     EXECUTERS_REGISTER = "/executers/register"
+    EXECUTERS_POOLS = "/executers/pools"
