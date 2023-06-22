@@ -37,8 +37,8 @@ class GCloudExecuter(schemas.DictSchema):
             "memory",
             "cpu_count_logical",
             "cpu_count_physical",
-            "type",
             "uuid",
+            "host_type",
             "vm_name",
         }
 
@@ -48,7 +48,7 @@ class GCloudExecuter(schemas.DictSchema):
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
 
-            class type(schemas.EnumBase, schemas.StrSchema):
+            class host_type(schemas.EnumBase, schemas.StrSchema):
 
                 class MetaOapg:
                     enum_value_to_name = {
@@ -66,7 +66,7 @@ class GCloudExecuter(schemas.DictSchema):
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
-                "type": type,
+                "host_type": host_type,
                 "vm_type": vm_type,
                 "vm_name": vm_name,
             }
@@ -75,8 +75,8 @@ class GCloudExecuter(schemas.DictSchema):
     memory: MetaOapg.properties.memory
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
-    type: MetaOapg.properties.type
     uuid: MetaOapg.properties.uuid
+    host_type: MetaOapg.properties.host_type
     vm_name: MetaOapg.properties.vm_name
 
     @typing.overload
@@ -105,8 +105,8 @@ class GCloudExecuter(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-            self, name: typing_extensions.Literal["type"]
-    ) -> MetaOapg.properties.type:
+        self, name: typing_extensions.Literal["host_type"]
+    ) -> MetaOapg.properties.host_type:
         ...
 
     @typing.overload
@@ -130,7 +130,7 @@ class GCloudExecuter(schemas.DictSchema):
         "cpu_count_logical",
         "cpu_count_physical",
         "memory",
-        "type",
+        "host_type",
         "vm_type",
         "vm_name",
     ], str]):
@@ -163,8 +163,8 @@ class GCloudExecuter(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-            self, name: typing_extensions.Literal["type"]
-    ) -> MetaOapg.properties.type:
+        self, name: typing_extensions.Literal["host_type"]
+    ) -> MetaOapg.properties.host_type:
         ...
 
     @typing.overload
@@ -190,7 +190,7 @@ class GCloudExecuter(schemas.DictSchema):
         "cpu_count_logical",
         "cpu_count_physical",
         "memory",
-        "type",
+        "host_type",
         "vm_type",
         "vm_name",
     ], str]):
@@ -221,12 +221,12 @@ class GCloudExecuter(schemas.DictSchema):
             decimal.Decimal,
             int,
         ],
-        type: typing.Union[
-            MetaOapg.properties.type,
-            str,
-        ],
         uuid: typing.Union[
             MetaOapg.properties.uuid,
+            str,
+        ],
+        host_type: typing.Union[
+            MetaOapg.properties.host_type,
             str,
         ],
         vm_name: typing.Union[
@@ -246,8 +246,8 @@ class GCloudExecuter(schemas.DictSchema):
             memory=memory,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
-            type=type,
             uuid=uuid,
+            host_type=host_type,
             vm_name=vm_name,
             _configuration=_configuration,
             **kwargs,

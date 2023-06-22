@@ -8,4 +8,5 @@ import enum
 class TagValues(str, enum.Enum):
     ADMIN = "admin"
     EXECUTERS = "executers"
+    INSTANCE = "instance"
     TASKS = "tasks"

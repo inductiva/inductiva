@@ -36,8 +36,8 @@ class InductivaExecuter(schemas.DictSchema):
             "memory",
             "cpu_count_logical",
             "cpu_count_physical",
-            "type",
             "uuid",
+            "host_type",
         }
 
         class properties:
@@ -46,7 +46,7 @@ class InductivaExecuter(schemas.DictSchema):
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
 
-            class type(schemas.EnumBase, schemas.StrSchema):
+            class host_type(schemas.EnumBase, schemas.StrSchema):
 
                 class MetaOapg:
                     enum_value_to_name = {
@@ -62,14 +62,14 @@ class InductivaExecuter(schemas.DictSchema):
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
-                "type": type,
+                "host_type": host_type,
             }
 
     memory: MetaOapg.properties.memory
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
-    type: MetaOapg.properties.type
     uuid: MetaOapg.properties.uuid
+    host_type: MetaOapg.properties.host_type
 
     @typing.overload
     def __getitem__(
@@ -97,8 +97,8 @@ class InductivaExecuter(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-            self, name: typing_extensions.Literal["type"]
-    ) -> MetaOapg.properties.type:
+        self, name: typing_extensions.Literal["host_type"]
+    ) -> MetaOapg.properties.host_type:
         ...
 
     @typing.overload
@@ -110,7 +110,7 @@ class InductivaExecuter(schemas.DictSchema):
         "cpu_count_logical",
         "cpu_count_physical",
         "memory",
-        "type",
+        "host_type",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -141,8 +141,8 @@ class InductivaExecuter(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-            self, name: typing_extensions.Literal["type"]
-    ) -> MetaOapg.properties.type:
+        self, name: typing_extensions.Literal["host_type"]
+    ) -> MetaOapg.properties.host_type:
         ...
 
     @typing.overload
@@ -156,7 +156,7 @@ class InductivaExecuter(schemas.DictSchema):
         "cpu_count_logical",
         "cpu_count_physical",
         "memory",
-        "type",
+        "host_type",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -181,12 +181,12 @@ class InductivaExecuter(schemas.DictSchema):
             decimal.Decimal,
             int,
         ],
-        type: typing.Union[
-            MetaOapg.properties.type,
-            str,
-        ],
         uuid: typing.Union[
             MetaOapg.properties.uuid,
+            str,
+        ],
+        host_type: typing.Union[
+            MetaOapg.properties.host_type,
             str,
         ],
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -201,8 +201,8 @@ class InductivaExecuter(schemas.DictSchema):
             memory=memory,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
-            type=type,
             uuid=uuid,
+            host_type=host_type,
             _configuration=_configuration,
             **kwargs,
         )

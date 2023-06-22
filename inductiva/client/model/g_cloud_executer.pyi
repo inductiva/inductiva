@@ -41,8 +41,8 @@ class GCloudExecuter(
             "memory",
             "cpu_count_logical",
             "cpu_count_physical",
-            "type",
             "uuid",
+            "host_type",
             "vm_name",
         }
         
@@ -53,7 +53,7 @@ class GCloudExecuter(
             memory = schemas.IntSchema
             
             
-            class type(
+            class host_type(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
@@ -68,7 +68,7 @@ class GCloudExecuter(
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
-                "type": type,
+                "host_type": host_type,
                 "vm_type": vm_type,
                 "vm_name": vm_name,
             }
@@ -77,8 +77,8 @@ class GCloudExecuter(
     memory: MetaOapg.properties.memory
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
-    type: MetaOapg.properties.type
     uuid: MetaOapg.properties.uuid
+    host_type: MetaOapg.properties.host_type
     vm_name: MetaOapg.properties.vm_name
     
     @typing.overload
@@ -94,7 +94,7 @@ class GCloudExecuter(
     def __getitem__(self, name: typing_extensions.Literal["memory"]) -> MetaOapg.properties.memory: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
+    def __getitem__(self, name: typing_extensions.Literal["host_type"]) -> MetaOapg.properties.host_type: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["vm_type"]) -> MetaOapg.properties.vm_type: ...
@@ -105,7 +105,7 @@ class GCloudExecuter(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "type", "vm_type", "vm_name", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "host_type", "vm_type", "vm_name", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -123,7 +123,7 @@ class GCloudExecuter(
     def get_item_oapg(self, name: typing_extensions.Literal["memory"]) -> MetaOapg.properties.memory: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["host_type"]) -> MetaOapg.properties.host_type: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["vm_type"]) -> MetaOapg.properties.vm_type: ...
@@ -134,7 +134,7 @@ class GCloudExecuter(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "type", "vm_type", "vm_name", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "host_type", "vm_type", "vm_name", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -145,8 +145,8 @@ class GCloudExecuter(
         memory: typing.Union[MetaOapg.properties.memory, decimal.Decimal, int, ],
         cpu_count_logical: typing.Union[MetaOapg.properties.cpu_count_logical, decimal.Decimal, int, ],
         cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical, decimal.Decimal, int, ],
-        type: typing.Union[MetaOapg.properties.type, str, ],
         uuid: typing.Union[MetaOapg.properties.uuid, str, ],
+        host_type: typing.Union[MetaOapg.properties.host_type, str, ],
         vm_name: typing.Union[MetaOapg.properties.vm_name, str, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -158,8 +158,8 @@ class GCloudExecuter(
             memory=memory,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
-            type=type,
             uuid=uuid,
+            host_type=host_type,
             vm_name=vm_name,
             _configuration=_configuration,
             **kwargs,
