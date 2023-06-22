@@ -37,7 +37,7 @@ class Executer(
         @staticmethod
         def discriminator():
             return {
-                'type': {
+                'host_type': {
                     'GCloudExecuter': GCloudExecuter,
                     'InductivaExecuter': InductivaExecuter,
                     'gcloud': GCloudExecuter,
