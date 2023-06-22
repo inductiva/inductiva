@@ -79,10 +79,10 @@ class ProteinSolvation(Scenario):
 
 
 @ProteinSolvation.gen_aux_files.register
-def _(self, simulator: GROMACS, input_dir, protein_pdb):  # pylint: disable=unused-argument
+def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Setup the working directory for the simulation."""
     # Copy protein pdb to working_dir
-    shutil.copy(protein_pdb, os.path.join(input_dir, "protein.pdb"))
+    shutil.copy(self.protein_pdb, os.path.join(input_dir, "protein.pdb"))
     # Copy template files to working_dir
     shutil.copytree(os.path.join(self.template_dir),
                     os.path.join(input_dir),
@@ -92,7 +92,7 @@ def _(self, simulator: GROMACS, input_dir, protein_pdb):  # pylint: disable=unus
 
 
 @ProteinSolvation.gen_config.register
-def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
+def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Generate the mdp configuration files for the simulation."""
     batch_replace_params_in_template(
         templates_dir=self.template_dir,
@@ -107,6 +107,6 @@ def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
             "nsteps_minim": self.nsteps_minim,
         },
         output_filename_paths=[
-            os.path.join(self.working_dir, "simulation.mdp"),
-            os.path.join(self.working_dir, "energy_minimization.mdp"),
+            os.path.join(input_dir, "simulation.mdp"),
+            os.path.join(input_dir, "energy_minimization.mdp"),
         ])
