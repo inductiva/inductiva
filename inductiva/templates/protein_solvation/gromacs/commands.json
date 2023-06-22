@@ -1,9 +1,9 @@
-[{"command_name": "pdb2gmx", "f": "protein.pdb", "o": "protein.gro", "water": "tip3p", "user_input": "6"},
-{"command_name": "editconf", "f": "protein.gro", "o": "protein_box.gro", "c": "yes", "d": "1.0", "bt": "cubic"},
-{"command_name": "solvate", "cp": "protein_box.gro", "o": "protein_solv.gro", "p": "topol.top"}, 
-{"command_name": "grompp", "f": "ions.mdp", "c": "protein_solv.gro", "p": "topol.top", "o": "ions.tpr"}, 
-{"command_name": "genion", "s": "ions.tpr", "o": "protein_solv_ions.gro", "p": "topol.top", "pname": "NA", "nname": "CL", "neutral": "yes"}, 
-{"command_name": "grompp", "f": "energy_minimization.mdp", "c": "protein_solv_ions.gro", "p": "topol.top", "o": "em.tpr"}, 
-{"command_name": "mdrun", "deffnm": "em", "v": "yes"}, 
-{"command_name": "grompp", "f": "simulation.mdp", "c": "em.gro", "r": "em.gro", "p": "topol.top", "o": "solvated_protein.tpr"}, 
-{"command_name": "mdrun", "deffnm": "solvated_protein", "v": "yes"}]
+[{"method_name": "pdb2gmx", "f": "protein.pdb", "o": "protein.gro", "water": "tip3p", "user_input": "6"},
+{"method_name": "editconf", "f": "protein.gro", "o": "protein_box.gro", "c": "yes", "d": "1.0", "bt": "cubic"},
+{"method_name": "solvate", "cp": "protein_box.gro", "o": "protein_solv.gro", "p": "topol.top"}, 
+{"method_name": "grompp", "f": "ions.mdp", "c": "protein_solv.gro", "p": "topol.top", "o": "ions.tpr"}, 
+{"method_name": "genion", "s": "ions.tpr", "o": "protein_solv_ions.gro", "p": "topol.top", "pname": "NA", "nname": "CL", "neutral": "yes"}, 
+{"method_name": "grompp", "f": "energy_minimization.mdp", "c": "protein_solv_ions.gro", "p": "topol.top", "o": "em.tpr"}, 
+{"method_name": "mdrun", "deffnm": "em", "v": "yes"}, 
+{"method_name": "grompp", "f": "simulation.mdp", "c": "em.gro", "r": "em.gro", "p": "topol.top", "o": "solvated_protein.tpr"}, 
+{"method_name": "mdrun", "deffnm": "solvated_protein", "v": "yes"}]

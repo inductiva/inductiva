@@ -92,13 +92,11 @@ def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
 @ProteinSolvation.gen_aux_files.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Setup the working directory for the simulation."""
-    # Copy protein pdb to working_dir
+    # rename the pdb file to comply with the naming in the commands list
     shutil.copy(self.protein_pdb, os.path.join(input_dir, "protein.pdb"))
-    # Copy template files to working_dir
     shutil.copytree(os.path.join(self.template_dir),
                     os.path.join(input_dir),
                     dirs_exist_ok=True)
-    # Remove all files that have .jinja in the working_dir
     remove_files_with_tag(input_dir, ".jinja")
 
 
