@@ -19,7 +19,7 @@ class GROMACS(Simulator):
         input_dir: types.Path,
         method_name: str = None,
         track_logs: bool = False,
-        output_directory: Optional[types.Path] = None,
+        output_dir: Optional[types.Path] = None,
         **gromacs_flags: Optional[str],
     ) -> pathlib.Path:
         """Run a specified gromacs method.
@@ -32,7 +32,7 @@ class GROMACS(Simulator):
             gromacs_flags: Flags to pass to the gromacs CLI.
         """
         return super().run(input_dir,
-                           output_dir=output_directory,
+                           output_dir=output_dir,
                            track_logs=track_logs,
                            method=method_name,
                            user_flags=gromacs_flags)

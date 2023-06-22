@@ -77,6 +77,17 @@ class ProteinSolvation(Scenario):
             f"Simulator not supported for `{self.__class__.__name__}` scenario."
         )
 
+    @singledispatchmethod
+    @classmethod
+    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
+        raise ValueError(
+            f"Simulator not supported for `{cls.__name__}` scenario.")
+
+
+@ProteinSolvation.get_config_filename.register
+def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
+    pass
+
 
 @ProteinSolvation.gen_aux_files.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument

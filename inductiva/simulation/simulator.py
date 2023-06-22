@@ -15,8 +15,7 @@ class Simulator(ABC):
     def api_method_name(self) -> str:
         pass
 
-    def _setup_io_dirs(self, input_dir: types.Path,
-                       output_dir: types.Path) -> pathlib.Path:
+    def _setup_io_dirs(self, input_dir: types.Path, output_dir: types.Path):
         """Setup the simulator input and output directories."""
         input_dir = files.resolve_path(input_dir)
         if not input_dir.is_dir():
@@ -26,8 +25,7 @@ class Simulator(ABC):
         if output_dir is None:
             output_dir = input_dir.with_name(f"{input_dir.name}-output")
             output_dir = files.get_timestamped_path(output_dir)
-        else:
-            output_dir = files.resolve_path(output_dir)
+        output_dir = files.resolve_path(output_dir)
 
         return input_dir, output_dir
 
@@ -38,7 +36,7 @@ class Simulator(ABC):
         output_dir: Optional[types.Path] = None,
         track_logs: bool = False,
         **kwargs,
-    ) -> pathlib.Path:
+    ):
         """Run the simulation.
 
         Args:
@@ -54,6 +52,7 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
+
         input_dir, output_dir = self._setup_io_dirs(input_dir, output_dir)
 
         return api.run_simulation(

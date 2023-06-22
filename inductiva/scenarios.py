@@ -18,7 +18,7 @@ class Scenario(ABC):
             scenario_name_splitted = split_camel_case(self.__class__.__name__)
             output_dir_prefix = "-".join(scenario_name_splitted).lower()
             output_dir = get_timestamped_path(f"{output_dir_prefix}-output")
-        output_dir = resolve_path(output_dir)
+            output_dir = resolve_path(output_dir)
         return output_dir
 
     def _setup_config(self, simulator: Simulator, input_dir: Path):
@@ -52,7 +52,6 @@ class Scenario(ABC):
     ):
         """Simulates the scenario for a single simulator call."""
         output_dir = self._setup_output_dir(output_dir)
-
         with tempfile.TemporaryDirectory() as input_dir:
             args = self._setup_config(simulator, input_dir)
             return simulator.run(
