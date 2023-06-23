@@ -47,12 +47,54 @@ class InstanceCreate(
             image_name = schemas.StrSchema
             spot = schemas.BoolSchema
             zone = schemas.StrSchema
+            
+            
+            class resource_pool_id(
+                schemas.UUIDBase,
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    format = 'uuid'
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'resource_pool_id':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             __annotations__ = {
                 "name": name,
                 "machine_type": machine_type,
                 "image_name": image_name,
                 "spot": spot,
                 "zone": zone,
+                "resource_pool_id": resource_pool_id,
             }
     
     machine_type: MetaOapg.properties.machine_type
@@ -76,9 +118,12 @@ class InstanceCreate(
     def __getitem__(self, name: typing_extensions.Literal["zone"]) -> MetaOapg.properties.zone: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["resource_pool_id"]) -> MetaOapg.properties.resource_pool_id: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "zone", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "zone", "resource_pool_id", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -99,9 +144,12 @@ class InstanceCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["zone"]) -> typing.Union[MetaOapg.properties.zone, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["resource_pool_id"]) -> typing.Union[MetaOapg.properties.resource_pool_id, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "zone", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "zone", "resource_pool_id", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -113,6 +161,7 @@ class InstanceCreate(
         spot: typing.Union[MetaOapg.properties.spot, bool, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         zone: typing.Union[MetaOapg.properties.zone, str, schemas.Unset] = schemas.unset,
+        resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'InstanceCreate':
@@ -124,6 +173,7 @@ class InstanceCreate(
             spot=spot,
             name=name,
             zone=zone,
+            resource_pool_id=resource_pool_id,
             _configuration=_configuration,
             **kwargs,
         )
