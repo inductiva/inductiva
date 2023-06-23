@@ -1,9 +1,9 @@
-[{"command_name": "pdb2gmx", "user_flags": {"f": "protein.pdb", "o": "protein.gro", "water": "tip3p", "user_input": "6"}},
-{"command_name": "editconf", "user_flags":{"f": "protein.gro", "o": "protein_box.gro", "c": "yes", "d": "1.0", "bt": "cubic"}},
+[{"command_name": "pdb2gmx","user_flags": {"f": "protein.pdb", "o": "protein.gro", "water": "tip3p", "user_input": "6"}},
+{"command_name": "editconf","user_flags":{"f": "protein.gro", "o": "protein_box.gro", "c": "yes", "d": "1.0", "bt": "cubic"}},
 {"command_name": "solvate","user_flags":{"cp": "protein_box.gro", "o": "protein_solv.gro", "p": "topol.top"}}, 
-{"command_name": "grompp", "user_flags":{"f": "ions.mdp", "c": "protein_solv.gro", "p": "topol.top", "o": "ions.tpr"}}, 
-{"command_name": "genion", "user_flags":{"s": "ions.tpr", "o": "protein_solv_ions.gro", "p": "topol.top", "pname": "NA", "nname": "CL", "neutral": "yes"}}, 
+{"command_name": "grompp","user_flags":{"f": "ions.mdp", "c": "protein_solv.gro", "p": "topol.top", "o": "ions.tpr"}}, 
+{"command_name": "genion","user_flags":{"s": "ions.tpr", "o": "protein_solv_ions.gro", "p": "topol.top", "pname": "NA", "nname": "CL", "neutral": "yes"}}, 
 {"command_name": "grompp","user_flags":{ "f": "energy_minimization.mdp", "c": "protein_solv_ions.gro", "p": "topol.top", "o": "em.tpr"}}, 
-{"command_name": "mdrun", "user_flags":{"deffnm": "em", "v": "yes"}}, 
+{"command_name": "mdrun","user_flags":{"deffnm": "em", "v": "yes"}}, 
 {"command_name": "grompp","user_flags":{ "f": "simulation.mdp", "c": "em.gro", "r": "em.gro", "p": "topol.top", "o": "solvated_protein.tpr"}}, 
-{"command_name": "mdrun", "user_flags":{"deffnm": "solvated_protein", "v": "yes"}}]
+{"command_name": "mdrun","user_flags":{"deffnm": "solvated_protein", "v": "yes"}}]
