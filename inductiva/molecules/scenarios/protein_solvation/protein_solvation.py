@@ -76,7 +76,7 @@ class ProteinSolvation(Scenario):
         return super().simulate(simulator, output_dir, commands=commands)
 
     def read_commands_from_file(self):
-        "Read commands from commands.json file"
+        "Read list of commands from commands.json file"
         commands_path = os.path.join(self.template_dir, "commands.json")
         with open(commands_path, "r", encoding="utf-8") as f:
             commands = json.load(f)
