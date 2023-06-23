@@ -61,7 +61,8 @@ class ProteinSolvation(Scenario):
                 - "bd" (Brownian Dynamics): Euler integrator for Brownian or 
                 position Langevin dynamics. 
                 
-            For more details on the integrators, refer to the GROMACS documentation at
+            For more details on the integrators, refer to the GROMACS 
+            documentation at 
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
             nsteps_minim: Number of steps for energy minimization.
@@ -96,7 +97,8 @@ class ProteinSolvation(Scenario):
     @singledispatchmethod
     def get_config_filename(self, simulator: Simulator):  # pylint: disable=unused-argument
         raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario.")
+            f"Simulator not supported for `{self.__class__.__name__}` scenario."
+        )
 
 
 @ProteinSolvation.get_config_filename.register
