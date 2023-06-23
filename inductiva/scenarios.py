@@ -52,7 +52,7 @@ class Scenario(ABC):
         simulator: Simulator,
         output_dir: Optional[Path] = None,
         **kwargs,
-    ):
+    ) -> Path:
         """Simulates the scenario for a single simulator call."""
         output_dir = self._setup_output_dir(output_dir)
         with tempfile.TemporaryDirectory() as input_dir:
@@ -68,7 +68,7 @@ class Scenario(ABC):
         self,
         simulator: Simulator,
         **kwargs,
-    ):
+    ) -> str:
         """Simulates the scenario asychronously."""
 
         with tempfile.TemporaryDirectory() as input_dir:

@@ -37,7 +37,7 @@ class Simulator(ABC):
         output_dir: Optional[types.Path] = None,
         track_logs: bool = False,
         **kwargs,
-    ):
+    ) -> types.Path:
         """Run the simulation.
 
         Args:
