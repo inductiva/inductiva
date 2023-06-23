@@ -1,6 +1,5 @@
 """Base class for low-level simulators."""
 from abc import ABC, abstractmethod
-import pathlib
 from typing import Optional
 from inductiva import api
 from inductiva import types
