@@ -1,7 +1,7 @@
 """GROMACS module of the API"""
 
 import pathlib
-from typing import Optional
+from typing import Optional, List
 
 from inductiva import types
 from inductiva.simulation import Simulator
@@ -17,39 +17,34 @@ class GROMACS(Simulator):
     def run(
         self,
         input_dir: types.Path,
-        method_name: str,
+        commands: List[dict],
         track_logs: bool = False,
-        output_directory: Optional[types.Path] = None,
-        **gromacs_flags: Optional[str],
+        output_dir: Optional[types.Path] = None,
     ) -> pathlib.Path:
-        """Run a specified gromacs method.
+        """Run a list of GROMACS commands.
 
         Args:
             input_dir: Path to the directory containing the input files.
-            method_name: Method to run.
+            commands: List of commands to run using the GROMACS simulator.
+            track_logs: If True, the logs of the remote execution will be
+            logged. 
             output_dir: Path to the directory where the output files will be
-                stored.
-            gromacs_flags: Flags to pass to the gromacs CLI.
+            stored. If not provided, a timestamped directory will be created.
         """
         return super().run(input_dir,
-                           output_dir=output_directory,
+                           output_dir=output_dir,
                            track_logs=track_logs,
-                           method=method_name,
-                           user_flags=gromacs_flags)
+                           commands=commands)
 
     def run_async(
         self,
         input_dir: types.Path,
-        method_name: str,
-        **gromacs_flags: Optional[str],
+        commands: List[dict],
     ) -> str:
-        """Run a specified gromacs method asynchronously.
+        """Run a list of GROMACS commands asynchronously.
 
         Args:
             input_dir: Path to the directory containing the input files.
-            method_name: Method to run.
-            gromacs_flags: Flags to pass to the gromacs CLI.
+            commands: List of commands to run using the GROMACS simulator.
         """
-        return super().run_async(input_dir,
-                                 method=method_name,
-                                 user_flags=gromacs_flags)
+        return super().run_async(input_dir, commands=commands)
