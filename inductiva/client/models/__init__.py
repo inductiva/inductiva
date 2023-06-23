@@ -11,6 +11,7 @@
 # import sys
 # sys.setrecursionlimit(n)
 
+from inductiva.client.model.body_create_instance_group_gcp_instances_group_post import BodyCreateInstanceGroupGcpInstancesGroupPost
 from inductiva.client.model.body_upload_task_input import BodyUploadTaskInput
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.executer_create import ExecuterCreate
