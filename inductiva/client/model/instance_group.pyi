@@ -37,6 +37,7 @@ class InstanceGroup(
         required = {
             "machine_type",
             "image_name",
+            "metadata",
             "spot",
             "name",
             "num_instances",
@@ -47,6 +48,7 @@ class InstanceGroup(
             machine_type = schemas.StrSchema
             image_name = schemas.StrSchema
             spot = schemas.BoolSchema
+            metadata = schemas.DictSchema
             num_instances = schemas.IntSchema
             zone = schemas.StrSchema
             __annotations__ = {
@@ -54,12 +56,14 @@ class InstanceGroup(
                 "machine_type": machine_type,
                 "image_name": image_name,
                 "spot": spot,
+                "metadata": metadata,
                 "num_instances": num_instances,
                 "zone": zone,
             }
     
     machine_type: MetaOapg.properties.machine_type
     image_name: MetaOapg.properties.image_name
+    metadata: MetaOapg.properties.metadata
     spot: MetaOapg.properties.spot
     name: MetaOapg.properties.name
     num_instances: MetaOapg.properties.num_instances
@@ -77,6 +81,9 @@ class InstanceGroup(
     def __getitem__(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["metadata"]) -> MetaOapg.properties.metadata: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["num_instances"]) -> MetaOapg.properties.num_instances: ...
     
     @typing.overload
@@ -85,7 +92,7 @@ class InstanceGroup(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "num_instances", "zone", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "metadata", "num_instances", "zone", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -103,6 +110,9 @@ class InstanceGroup(
     def get_item_oapg(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["metadata"]) -> MetaOapg.properties.metadata: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["num_instances"]) -> MetaOapg.properties.num_instances: ...
     
     @typing.overload
@@ -111,7 +121,7 @@ class InstanceGroup(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "num_instances", "zone", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "metadata", "num_instances", "zone", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -120,6 +130,7 @@ class InstanceGroup(
         *_args: typing.Union[dict, frozendict.frozendict, ],
         machine_type: typing.Union[MetaOapg.properties.machine_type, str, ],
         image_name: typing.Union[MetaOapg.properties.image_name, str, ],
+        metadata: typing.Union[MetaOapg.properties.metadata, dict, frozendict.frozendict, ],
         spot: typing.Union[MetaOapg.properties.spot, bool, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         num_instances: typing.Union[MetaOapg.properties.num_instances, decimal.Decimal, int, ],
@@ -132,6 +143,7 @@ class InstanceGroup(
             *_args,
             machine_type=machine_type,
             image_name=image_name,
+            metadata=metadata,
             spot=spot,
             name=name,
             num_instances=num_instances,

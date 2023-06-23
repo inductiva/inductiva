@@ -33,6 +33,7 @@ class InstanceCreate(schemas.DictSchema):
         required = {
             "machine_type",
             "image_name",
+            "metadata",
             "spot",
             "name",
         }
@@ -42,17 +43,20 @@ class InstanceCreate(schemas.DictSchema):
             machine_type = schemas.StrSchema
             image_name = schemas.StrSchema
             spot = schemas.BoolSchema
+            metadata = schemas.DictSchema
             zone = schemas.StrSchema
             __annotations__ = {
                 "name": name,
                 "machine_type": machine_type,
                 "image_name": image_name,
                 "spot": spot,
+                "metadata": metadata,
                 "zone": zone,
             }
 
     machine_type: MetaOapg.properties.machine_type
     image_name: MetaOapg.properties.image_name
+    metadata: MetaOapg.properties.metadata
     spot: MetaOapg.properties.spot
     name: MetaOapg.properties.name
 
@@ -82,6 +86,12 @@ class InstanceCreate(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["metadata"]
+    ) -> MetaOapg.properties.metadata:
+        ...
+
+    @typing.overload
+    def __getitem__(
             self, name: typing_extensions.Literal["zone"]
     ) -> MetaOapg.properties.zone:
         ...
@@ -95,6 +105,7 @@ class InstanceCreate(schemas.DictSchema):
         "machine_type",
         "image_name",
         "spot",
+        "metadata",
         "zone",
     ], str]):
         # dict_instance[name] accessor
@@ -126,6 +137,12 @@ class InstanceCreate(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["metadata"]
+    ) -> MetaOapg.properties.metadata:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["zone"]
     ) -> typing.Union[MetaOapg.properties.zone, schemas.Unset]:
         ...
@@ -141,6 +158,7 @@ class InstanceCreate(schemas.DictSchema):
         "machine_type",
         "image_name",
         "spot",
+        "metadata",
         "zone",
     ], str]):
         return super().get_item_oapg(name)
@@ -158,6 +176,11 @@ class InstanceCreate(schemas.DictSchema):
         image_name: typing.Union[
             MetaOapg.properties.image_name,
             str,
+        ],
+        metadata: typing.Union[
+            MetaOapg.properties.metadata,
+            dict,
+            frozendict.frozendict,
         ],
         spot: typing.Union[
             MetaOapg.properties.spot,
@@ -180,6 +203,7 @@ class InstanceCreate(schemas.DictSchema):
             *_args,
             machine_type=machine_type,
             image_name=image_name,
+            metadata=metadata,
             spot=spot,
             name=name,
             zone=zone,

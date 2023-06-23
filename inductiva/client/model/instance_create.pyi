@@ -37,6 +37,7 @@ class InstanceCreate(
         required = {
             "machine_type",
             "image_name",
+            "metadata",
             "spot",
             "name",
         }
@@ -46,17 +47,20 @@ class InstanceCreate(
             machine_type = schemas.StrSchema
             image_name = schemas.StrSchema
             spot = schemas.BoolSchema
+            metadata = schemas.DictSchema
             zone = schemas.StrSchema
             __annotations__ = {
                 "name": name,
                 "machine_type": machine_type,
                 "image_name": image_name,
                 "spot": spot,
+                "metadata": metadata,
                 "zone": zone,
             }
     
     machine_type: MetaOapg.properties.machine_type
     image_name: MetaOapg.properties.image_name
+    metadata: MetaOapg.properties.metadata
     spot: MetaOapg.properties.spot
     name: MetaOapg.properties.name
     
@@ -73,12 +77,15 @@ class InstanceCreate(
     def __getitem__(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["metadata"]) -> MetaOapg.properties.metadata: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["zone"]) -> MetaOapg.properties.zone: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "zone", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "metadata", "zone", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -96,12 +103,15 @@ class InstanceCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["metadata"]) -> MetaOapg.properties.metadata: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["zone"]) -> typing.Union[MetaOapg.properties.zone, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "zone", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "metadata", "zone", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -110,6 +120,7 @@ class InstanceCreate(
         *_args: typing.Union[dict, frozendict.frozendict, ],
         machine_type: typing.Union[MetaOapg.properties.machine_type, str, ],
         image_name: typing.Union[MetaOapg.properties.image_name, str, ],
+        metadata: typing.Union[MetaOapg.properties.metadata, dict, frozendict.frozendict, ],
         spot: typing.Union[MetaOapg.properties.spot, bool, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
         zone: typing.Union[MetaOapg.properties.zone, str, schemas.Unset] = schemas.unset,
@@ -121,6 +132,7 @@ class InstanceCreate(
             *_args,
             machine_type=machine_type,
             image_name=image_name,
+            metadata=metadata,
             spot=spot,
             name=name,
             zone=zone,
