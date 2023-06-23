@@ -24,6 +24,7 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.instance import Instance
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.instance_group import InstanceGroup
 
@@ -42,23 +43,23 @@ request_body_instance_group = api_client.RequestBody(
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor201ResponseBodyApplicationJson = Instance
 
 
 @dataclass
-class ApiResponseFor200(api_client.ApiResponse):
+class ApiResponseFor201(api_client.ApiResponse):
     response: urllib3.HTTPResponse
     body: typing.Union[
-        SchemaFor200ResponseBodyApplicationJson,
+        SchemaFor201ResponseBodyApplicationJson,
     ]
     headers: schemas.Unset = schemas.unset
 
 
-_response_for_200 = api_client.OpenApiResponse(
-    response_cls=ApiResponseFor200,
+_response_for_201 = api_client.OpenApiResponse(
+    response_cls=ApiResponseFor201,
     content={
         'application/json':
-            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
+            api_client.MediaType(schema=SchemaFor201ResponseBodyApplicationJson
                                 ),
     },
 )
@@ -83,7 +84,7 @@ _response_for_422 = api_client.OpenApiResponse(
     },
 )
 _status_code_to_response = {
-    '200': _response_for_200,
+    '201': _response_for_201,
     '422': _response_for_422,
 }
 _all_accept_content_types = ('application/json',)
@@ -103,7 +104,7 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
+            ApiResponseFor201,
     ]:
         ...
 
@@ -119,7 +120,7 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
+            ApiResponseFor201,
     ]:
         ...
 
@@ -149,7 +150,7 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
+            ApiResponseFor201,
             api_client.ApiResponseWithoutDeserialization,
     ]:
         ...
@@ -239,7 +240,7 @@ class CreateInstanceGroup(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
+            ApiResponseFor201,
     ]:
         ...
 
@@ -255,7 +256,7 @@ class CreateInstanceGroup(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
+            ApiResponseFor201,
     ]:
         ...
 
@@ -285,7 +286,7 @@ class CreateInstanceGroup(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
+            ApiResponseFor201,
             api_client.ApiResponseWithoutDeserialization,
     ]:
         ...
@@ -325,7 +326,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
+            ApiResponseFor201,
     ]:
         ...
 
@@ -341,7 +342,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
+            ApiResponseFor201,
     ]:
         ...
 
@@ -371,7 +372,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
+            ApiResponseFor201,
             api_client.ApiResponseWithoutDeserialization,
     ]:
         ...
