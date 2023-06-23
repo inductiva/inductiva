@@ -21,11 +21,11 @@ class GROMACS(Simulator):
         track_logs: bool = False,
         output_dir: Optional[types.Path] = None,
     ) -> pathlib.Path:
-        """Run a specified gromacs method.
+        """Run a list of GROMACS commands.
 
         Args:
             input_dir: Path to the directory containing the input files.
-            commands: List of commands to run using the GROMACS simulatort.
+            commands: List of commands to run using the GROMACS simulator.
             track_logs: If True, the logs of the remote execution will be
             logged. 
             output_dir: Path to the directory where the output files will be
@@ -39,16 +39,12 @@ class GROMACS(Simulator):
     def run_async(
         self,
         input_dir: types.Path,
-        method_name: str = None,
-        **gromacs_flags: Optional[str],
+        commands: List[dict],
     ) -> str:
-        """Run a specified gromacs method asynchronously.
+        """Run a list of GROMACS commands asynchronously.
 
         Args:
             input_dir: Path to the directory containing the input files.
-            method_name: Method to run.
-            gromacs_flags: Flags to pass to the gromacs CLI.
+            commands: List of commands to run using the GROMACS simulator.
         """
-        return super().run_async(input_dir,
-                                 method=method_name,
-                                 user_flags=gromacs_flags)
+        return super().run_async(input_dir, commands=commands)
