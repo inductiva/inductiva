@@ -54,15 +54,13 @@ class ProteinSolvation(Scenario):
             output_dir: The output directory to save the simulation results.
             simulation_time: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
-                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for integrating
-                Newton's equations of motion.
-                - "sd" (Steepest Descent): Stochastic dynamics integrator with leap-frog
-                scheme. Useful for energy minimization and system relaxation before dynamics
-                simulations.
-                - "bd" (Brownian Dynamics): Euler integrator for Brownian or position Langevin
-                dynamics. Incorporates random forces from solvent particles. Suitable for
-                simulating systems in a solvent environment.
-
+                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for 
+                integrating Newton's equations of motion.
+                - "sd" (Steepest Descent): Stochastic dynamics integrator with
+                leap-frog scheme.
+                - "bd" (Brownian Dynamics): Euler integrator for Brownian or 
+                position Langevin dynamics. 
+                
             For more details on the integrators, refer to the GROMACS documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
@@ -96,9 +94,9 @@ class ProteinSolvation(Scenario):
         )
 
     @singledispatchmethod
-    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
+    def get_config_filename(self, simulator: Simulator):  # pylint: disable=unused-argument
         raise ValueError(
-            f"Simulator not supported for `{cls.__name__}` scenario.")
+            f"Simulator not supported for `{self.__class__.__name__}` scenario.")
 
 
 @ProteinSolvation.get_config_filename.register
