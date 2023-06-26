@@ -30,11 +30,13 @@ class WaterBox(Scenario):
         The simulation consists of three main steps: energy minimization, water 
         molecule position decorrelation, and molecular dynamics simulation. 
         Currently, this scenario exclusively supports the GROMACS simulator.
-        By default, for a given box size the water molecules are always initially 
-        positioned in the same locations following a uniform distribution. 
+        By default, for a given box size the water molecules are always 
+        initially positioned in the same locations following a uniform
+        distribution. 
         To introduce randomness in the initial positions of the water molecules, 
         a decorrelation step is performed. This step involves running a short 
-        simulation so that their position changes according to a normal distribution.
+        simulation so that their position changes according to a normal 
+        distribution.
         Args:
             temperature: The temperature of the simulation in Kelvin.
             box_size: The size of the box in nm.
