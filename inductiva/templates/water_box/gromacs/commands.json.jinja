@@ -1,0 +1,12 @@
+[{"command_name":"solvate", "user_flags":{"method_name":"solvate","cs":"tip4p", "box":{{ box_size }},"o": "conf.gro","p": "topol.top"}}, 
+]
+gromacs.run(input_dir=working_dir, output_directory=working_dir, method_name="grompp", f="mdp/water_min.mdp",o = "min.tpr", pp="min.top", po="min.mdp", c = "conf.gro", p="topol.top") 
+gromacs.run(input_dir=working_dir, output_directory=working_dir, method_name="mdrun", s="min.tpr",o = "min.trr", x="min.xtc", c="min.gro", e="min.edr", g="min.log")
+#decorr
+gromacs.run(input_dir=working_dir, output_directory=working_dir, method_name="grompp", f="mdp/water_decorr.mdp", o="decorr.tpr", pp="decorr.top", po="decorr.mdp", c="min.gro")
+gromacs.run(input_dir=working_dir, output_directory=working_dir, method_name="mdrun", s="decorr.tpr", o="decorr.trr", x="decorr.xtc", c="decorr.gro",e="decorr.edr", g="decorr.log")
+# MD 
+tpr_name = f"eql_{output_extension}.tpr"
+gromacs.run(input_dir=working_dir, output_directory=working_dir, method_name="grompp", f="mdp/water_md_parameters.mdp", o=tpr_name, pp="eql.top", po="eql.mdp", c="decorr.gro")
+trr_name = f"eql_{output_extension}.trr"
+gromacs.run(input_dir=working_dir, output_directory=working_dir, method_name="mdrun", s=tpr_name, o=trr_name, x="eql.xtc", c="eql.gro",e="eql.edr", g="eql.log")
