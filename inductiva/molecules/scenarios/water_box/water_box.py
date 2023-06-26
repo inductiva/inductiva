@@ -1,4 +1,4 @@
-"""Protein solvation scenario."""
+"""Water box scenario."""
 from functools import singledispatchmethod
 from typing import Optional, Literal
 import json
@@ -9,7 +9,8 @@ from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template)
+                                       batch_replace_params_in_template,
+                                       replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils.files import remove_files_with_tag
 
@@ -17,26 +18,31 @@ SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 
 
-class ProteinSolvation(Scenario):
-    """Solvated protein scenario."""
+class WaterBox(Scenario):
+    """Water box scenario."""
 
     def __init__(
         self,
         temperature: float = 300,
+        box_size: float = 3.0,
     ):
-        """
-        Scenario constructor for basic box filled with water simulation 
-        based on the GROMACS simulator.
-        The three main steps of this scenario are solvation, energy minimization 
-        and simulation. The user can control the number of steps used to perform
-        the energy minimization step and the duration, temperature and 
-        integrator used to perform the simulation.
+        """The scenario involves simulating a box filled with water molecules.
+        The simulation consists of three main steps: energy minimization, water 
+        molecule position decorrelation, and molecular dynamics simulation. 
+        Currently, this scenario exclusively supports the GROMACS simulator.
+        By default, for a given box size the water molecules are always initially 
+        positioned in the same locations following a uniform distribution. 
+        To introduce randomness in the initial positions of the water molecules, 
+        a decorrelation step is performed. This step involves running a short 
+        simulation so that their position changes according to a normal distribution.
         Args:
-            temperature: The temperature to use for the simulation.
+            temperature: The temperature of the simulation in Kelvin.
+            box_size: The size of the box in nm.
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
         self.temperature = temperature
+        self.box_size = box_size
 
     def simulate(
             self,
@@ -45,7 +51,7 @@ class ProteinSolvation(Scenario):
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
-        """Simulate the solvation of a protein.
+        """Simulate the water box scenario.
 
         Args:
             output_dir: The output directory to save the simulation results.
@@ -69,6 +75,10 @@ class ProteinSolvation(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
+        replace_params_in_template(
+            self.template_dir, "commands.json.jinja",
+            {"box_size": self.box_size},
+            os.path.join(self.template_dir, "commands.json"))
         commands = self.read_commands_from_file()
         return super().simulate(simulator, output_dir, commands=commands)
 
@@ -98,23 +108,21 @@ class ProteinSolvation(Scenario):
         )
 
 
-@ProteinSolvation.get_config_filename.register
+@WaterBox.get_config_filename.register
 def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
     pass
 
 
-@ProteinSolvation.gen_aux_files.register
+@WaterBox.gen_aux_files.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Setup the working directory for the simulation."""
-    # rename the pdb file to comply with the naming in the commands list
-    shutil.copy(self.protein_pdb, os.path.join(input_dir, "protein.pdb"))
     shutil.copytree(os.path.join(self.template_dir),
                     os.path.join(input_dir),
                     dirs_exist_ok=True)
     remove_files_with_tag(input_dir, ".jinja")
 
 
-@ProteinSolvation.gen_config.register
+@WaterBox.gen_config.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Generate the mdp configuration files for the simulation."""
     batch_replace_params_in_template(
