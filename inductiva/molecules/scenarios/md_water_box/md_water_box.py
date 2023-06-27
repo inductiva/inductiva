@@ -23,19 +23,14 @@ class MDWaterBox(Scenario):
     def __init__(
         self,
         temperature: float = 300,
-        box_size: float = 3.0,
+        box_size: float = 2.3,
     ):
-        """The scenario involves simulating a box filled with water molecules.
-        The simulation consists of three main steps: energy minimization, water 
-        molecule position decorrelation, and molecular dynamics simulation. 
-        Currently, this scenario exclusively supports the GROMACS simulator.
-        By default, for a given box size the water molecules are always 
-        initially positioned in the same locations following a uniform
-        distribution. 
-        To introduce randomness in the initial positions of the water molecules, 
-        a decorrelation step is performed. This step involves running a short 
-        simulation so that their position changes according to a normal 
-        distribution.
+        """The scenario involves simulating a box with water molecules.
+        The simulation consists of two main steps: energy minimization 
+        and molecular dynamics simulation. 
+        By default, the initial positions of the water molecules are 
+        arranged uniformally, so to randomize them we perform a 
+        decorrelation step.
         Args:
             temperature: The temperature of the simulation in Kelvin.
             box_size: The size of the box in nm.
