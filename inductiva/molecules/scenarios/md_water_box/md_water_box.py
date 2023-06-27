@@ -33,7 +33,8 @@ class MDWaterBox(Scenario):
         decorrelation step.
         Args:
             temperature: The temperature of the simulation in Kelvin.
-            box_size: The size of the box in nm.
+            box_size: The size of the box in nm. The minimum box size 
+            is 2.3 nm.
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
@@ -71,11 +72,10 @@ class MDWaterBox(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        replace_params_in_template(
-            self.template_dir, "commands.json.jinja",
-            {"box_size": self.box_size},
-            os.path.join(self.template_dir, "commands.json"))
-        commands = self.read_commands_from_file(self.template_dir)
+        commands_path = os.path.join(self.template_dir, "commands.json")
+        replace_params_in_template(self.template_dir, "commands.json.jinja",
+                                   {"box_size": self.box_size}, commands_path)
+        commands = self.read_commands_from_file(commands_path)
         return super().simulate(simulator, output_dir, commands=commands)
 
     @singledispatchmethod

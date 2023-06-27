@@ -49,9 +49,8 @@ class Scenario(ABC):
         """To be implemented in subclasses."""
         pass
 
-    def read_commands_from_file(self, template_dir):
+    def read_commands_from_file(self, commands_path: str):
         "Read list of commands from commands.json file"
-        commands_path = os.path.join(template_dir, "commands.json")
         with open(commands_path, "r", encoding="utf-8") as f:
             commands = json.load(f)
         return commands

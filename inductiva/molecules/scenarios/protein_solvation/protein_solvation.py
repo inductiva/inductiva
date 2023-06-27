@@ -71,7 +71,8 @@ class ProteinSolvation(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        commands = self.read_commands_from_file(self.template_dir)
+        commands = self.read_commands_from_file(
+            os.path.join(self.template_dir, "commands.json"))
         return super().simulate(simulator, output_dir, commands=commands)
 
     @singledispatchmethod
