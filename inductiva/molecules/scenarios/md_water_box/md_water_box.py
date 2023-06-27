@@ -39,9 +39,7 @@ class MDWaterBox(Scenario):
                                          GROMACS_TEMPLATE_INPUT_DIR)
         self.temperature = temperature
         if box_size < 2.3:
-            raise ValueError(
-                "The box size must be greater than 2.3 nm."
-            )
+            raise ValueError("The box size must be greater than 2.3 nm.")
         self.box_size = box_size
 
     def simulate(
