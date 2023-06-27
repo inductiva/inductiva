@@ -1,0 +1,29 @@
+title                   = Decorrelation       
+
+; Run parameters
+integrator              = md                  ; Nose-Hoover integrator
+nsteps                  = 500                 ; 
+dt                      = 0.002               ; 2 fs
+
+; Output control
+nstxout                 = 50                  ; save coordinates every 50 iter
+nstvout                 = 50                  ; save velocities every 1.0 ps
+nstenergy               = 50                  ; save energies every 1.0 ps
+nstlog                  = 50                  ; update log file every 1.0 ps
+
+; Temperature coupling is on
+tcoupl                  = Nose-Hoover         ; Nose-Hoover thermostat
+tc-grps                 = system              ; single coupling group
+tau_t                   = 1                   ; time constant, in ps
+ref_t                   = 300                 ; reference temperature, in K
+
+; Pressure coupling is off
+pcoupl                  = no                  ; no pressure coupling in NVT
+
+; Periodic boundary conditions
+pbc                     = xyz                 ; 3-D PBC
+
+; Velocity generation
+gen_vel                 = yes                 ; assign velocities from Maxwell distribution
+gen_temp                = 300                 ; temperature for Maxwell distribution
+gen_seed                = -1                  ; generate a random seed

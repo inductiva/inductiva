@@ -1,4 +1,4 @@
-"""Protein solvation scenario."""
+"""Molecular Dynamics simulation for water box scenario."""
 from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
@@ -8,37 +8,39 @@ from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template)
+                                       batch_replace_params_in_template,
+                                       replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils.files import remove_files_with_tag
 
-SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
+SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "md_water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 
 
-class ProteinSolvation(Scenario):
-    """Solvated protein scenario."""
+class MDWaterBox(Scenario):
+    """Molecular dynamics water box scenario."""
 
     def __init__(
         self,
-        protein_pdb: str,
         temperature: float = 300,
+        box_size: float = 2.3,
     ):
-        """
-        Scenario constructor for protein solvation based on the GROMACS 
-        simulator.
-        The three main steps of this scenario are solvation, energy minimization 
-        and simulation. The user can control the number of steps used to perform
-        the energy minimization step and the duration, temperature and 
-        integrator used to perform the simulation.
+        """The scenario involves simulating a box with water molecules.
+        The simulation consists of two main steps: energy minimization 
+        and molecular dynamics simulation. 
+        By default, the initial positions of the water molecules are 
+        arranged uniformally, so to randomize them we perform a 
+        decorrelation step.
         Args:
-            protein_pdb: The path to the protein pdb file.
-            temperature: The temperature to use for the simulation.
+            temperature: The temperature of the simulation in Kelvin.
+            box_size: The size of the box in nm. 
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
-        self.protein_pdb = protein_pdb
         self.temperature = temperature
+        if box_size < 2.3:
+            raise ValueError("The box size must be greater than 2.3 nm.")
+        self.box_size = box_size
 
     def simulate(
             self,
@@ -47,7 +49,7 @@ class ProteinSolvation(Scenario):
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
-        """Simulate the solvation of a protein.
+        """Simulate the water box scenario using molecular dynamics.
 
         Args:
             output_dir: The output directory to save the simulation results.
@@ -71,8 +73,10 @@ class ProteinSolvation(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        commands = self.read_commands_from_file(
-            os.path.join(self.template_dir, "commands.json"))
+        commands_path = os.path.join(self.template_dir, "commands.json")
+        replace_params_in_template(self.template_dir, "commands.json.jinja",
+                                   {"box_size": self.box_size}, commands_path)
+        commands = self.read_commands_from_file(commands_path)
         return super().simulate(simulator, output_dir, commands=commands)
 
     @singledispatchmethod
@@ -94,23 +98,21 @@ class ProteinSolvation(Scenario):
         )
 
 
-@ProteinSolvation.get_config_filename.register
+@MDWaterBox.get_config_filename.register
 def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
     pass
 
 
-@ProteinSolvation.gen_aux_files.register
+@MDWaterBox.gen_aux_files.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Setup the working directory for the simulation."""
-    # rename the pdb file to comply with the naming in the commands list
-    shutil.copy(self.protein_pdb, os.path.join(input_dir, "protein.pdb"))
     shutil.copytree(os.path.join(self.template_dir),
                     os.path.join(input_dir),
                     dirs_exist_ok=True)
     remove_files_with_tag(input_dir, ".jinja")
 
 
-@ProteinSolvation.gen_config.register
+@MDWaterBox.gen_config.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Generate the mdp configuration files for the simulation."""
     batch_replace_params_in_template(
