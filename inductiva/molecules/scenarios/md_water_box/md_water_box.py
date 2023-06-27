@@ -33,12 +33,15 @@ class MDWaterBox(Scenario):
         decorrelation step.
         Args:
             temperature: The temperature of the simulation in Kelvin.
-            box_size: The size of the box in nm. The minimum box size 
-            is 2.3 nm.
+            box_size: The size of the box in nm. 
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
         self.temperature = temperature
+        if box_size < 2.3:
+            raise ValueError(
+                "The box size must be greater than 2.3 nm."
+            )
         self.box_size = box_size
 
     def simulate(
