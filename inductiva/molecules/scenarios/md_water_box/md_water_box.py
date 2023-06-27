@@ -1,7 +1,6 @@
 """Molecular Dynamics simulation for water box scenario."""
 from functools import singledispatchmethod
 from typing import Optional, Literal
-import json
 import os
 import shutil
 
