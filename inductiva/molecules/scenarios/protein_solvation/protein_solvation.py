@@ -72,15 +72,8 @@ class ProteinSolvation(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        commands = self.read_commands_from_file()
+        commands = self.read_commands_from_file(self.template_dir)
         return super().simulate(simulator, output_dir, commands=commands)
-
-    def read_commands_from_file(self):
-        "Read list of commands from commands.json file"
-        commands_path = os.path.join(self.template_dir, "commands.json")
-        with open(commands_path, "r", encoding="utf-8") as f:
-            commands = json.load(f)
-        return commands
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):

@@ -1,4 +1,4 @@
-"""Water box scenario."""
+"""Molecular Dynamics simulation for water box scenario."""
 from functools import singledispatchmethod
 from typing import Optional, Literal
 import json
@@ -14,12 +14,12 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
 from inductiva.scenarios import Scenario
 from inductiva.utils.files import remove_files_with_tag
 
-SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "water_box")
+SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "md_water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 
 
-class WaterBox(Scenario):
-    """Water box scenario."""
+class MDWaterBox(Scenario):
+    """Molecular dynamics water box scenario."""
 
     def __init__(
         self,
@@ -53,7 +53,7 @@ class WaterBox(Scenario):
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
-        """Simulate the water box scenario.
+        """Simulate the water box scenario using molecular dynamics.
 
         Args:
             output_dir: The output directory to save the simulation results.
@@ -81,15 +81,8 @@ class WaterBox(Scenario):
             self.template_dir, "commands.json.jinja",
             {"box_size": self.box_size},
             os.path.join(self.template_dir, "commands.json"))
-        commands = self.read_commands_from_file()
+        commands = self.read_commands_from_file(self.template_dir)
         return super().simulate(simulator, output_dir, commands=commands)
-
-    def read_commands_from_file(self):
-        "Read list of commands from commands.json file"
-        commands_path = os.path.join(self.template_dir, "commands.json")
-        with open(commands_path, "r", encoding="utf-8") as f:
-            commands = json.load(f)
-        return commands
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):
@@ -110,12 +103,12 @@ class WaterBox(Scenario):
         )
 
 
-@WaterBox.get_config_filename.register
+@MDWaterBox.get_config_filename.register
 def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
     pass
 
 
-@WaterBox.gen_aux_files.register
+@MDWaterBox.gen_aux_files.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Setup the working directory for the simulation."""
     shutil.copytree(os.path.join(self.template_dir),
@@ -124,7 +117,7 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     remove_files_with_tag(input_dir, ".jinja")
 
 
-@WaterBox.gen_config.register
+@MDWaterBox.gen_config.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Generate the mdp configuration files for the simulation."""
     batch_replace_params_in_template(

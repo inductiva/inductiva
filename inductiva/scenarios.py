@@ -7,6 +7,8 @@ from inductiva.types import Path
 from inductiva.simulation import Simulator
 from inductiva.utils.files import resolve_path, get_timestamped_path
 from inductiva.utils.misc import split_camel_case
+import os
+import json
 
 
 class Scenario(ABC):
@@ -46,6 +48,13 @@ class Scenario(ABC):
     def get_config_filename(self, simulator: Simulator):
         """To be implemented in subclasses."""
         pass
+
+    def read_commands_from_file(self, template_dir):
+        "Read list of commands from commands.json file"
+        commands_path = os.path.join(template_dir, "commands.json")
+        with open(commands_path, "r", encoding="utf-8") as f:
+            commands = json.load(f)
+        return commands
 
     def simulate(
         self,
