@@ -1,4 +1,4 @@
-"Sample usage of Gromacs energy minimization via the API."""
+"""Sample usage of Gromacs energy minimization via the API."""
 
 from absl import logging
 from absl import flags
