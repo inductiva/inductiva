@@ -85,7 +85,8 @@ class MDWaterBox(Scenario):
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
-        """Simulate the water box scenario using molecular dynamics asyncronously.
+        """Simulate the water box scenario using molecular dynamics 
+        asyncronously.
 
         Args:
             simulation_time: The simulation time in ns.
