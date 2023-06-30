@@ -3,6 +3,7 @@ from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
+from uuid import UUID
 
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
@@ -25,11 +26,11 @@ class ProteinSolvation(Scenario):
         temperature: float = 300,
     ):
         """
-        Scenario constructor for protein solvation based on the GROMACS 
+        Scenario constructor for protein solvation based on the GROMACS
         simulator.
-        The three main steps of this scenario are solvation, energy minimization 
+        The three main steps of this scenario are solvation, energy minimization
         and simulation. The user can control the number of steps used to perform
-        the energy minimization step and the duration, temperature and 
+        the energy minimization step and the duration, temperature and
         integrator used to perform the simulation.
         Args:
             protein_pdb: The path to the protein pdb file.
@@ -44,6 +45,7 @@ class ProteinSolvation(Scenario):
             self,
             simulator: Simulator = GROMACS(),
             output_dir: Optional[Path] = None,
+            resource_pool_id: Optional[UUID] = None,
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
@@ -53,15 +55,15 @@ class ProteinSolvation(Scenario):
             output_dir: The output directory to save the simulation results.
             simulation_time: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
-                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for 
+                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
                 - "sd" (Steepest Descent): Stochastic dynamics integrator with
                 leap-frog scheme.
-                - "bd" (Brownian Dynamics): Euler integrator for Brownian or 
-                position Langevin dynamics. 
-                
-            For more details on the integrators, refer to the GROMACS 
-            documentation at 
+                - "bd" (Brownian Dynamics): Euler integrator for Brownian or
+                position Langevin dynamics.
+
+            For more details on the integrators, refer to the GROMACS
+            documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
             nsteps_minim: Number of steps for energy minimization.
@@ -73,11 +75,15 @@ class ProteinSolvation(Scenario):
         self.nsteps_minim = nsteps_minim
         commands = self.read_commands_from_file(
             os.path.join(self.template_dir, "commands.json"))
-        return super().simulate(simulator, output_dir, commands=commands)
+        return super().simulate(simulator,
+                                output_dir,
+                                resource_pool_id=resource_pool_id,
+                                commands=commands)
 
     def simulate_async(
             self,
             simulator: Simulator = GROMACS(),
+            resource_pool_id: Optional[UUID] = None,
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
@@ -86,15 +92,15 @@ class ProteinSolvation(Scenario):
         Args:
             simulation_time: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
-                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for 
+                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
                 - "sd" (Steepest Descent): Stochastic dynamics integrator with
                 leap-frog scheme.
-                - "bd" (Brownian Dynamics): Euler integrator for Brownian or 
-                position Langevin dynamics. 
-                
-            For more details on the integrators, refer to the GROMACS 
-            documentation at 
+                - "bd" (Brownian Dynamics): Euler integrator for Brownian or
+                position Langevin dynamics.
+
+            For more details on the integrators, refer to the GROMACS
+            documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
             nsteps_minim: Number of steps for energy minimization.
@@ -106,7 +112,9 @@ class ProteinSolvation(Scenario):
         self.nsteps_minim = nsteps_minim
         commands = self.read_commands_from_file(
             os.path.join(self.template_dir, "commands.json"))
-        return super().simulate_async(simulator, commands=commands)
+        return super().simulate_async(simulator,
+                                      resource_pool_id=resource_pool_id,
+                                      commands=commands)
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):

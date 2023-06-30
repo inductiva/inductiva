@@ -3,17 +3,14 @@
 The relevant function for usage outside of this file is invoke_api().
 Check the demos directory for examples on how it is used.
 """
-import asyncio
-import json
 import os
 import pathlib
 import signal
 import time
 from contextlib import contextmanager
 from typing import Any, Dict, Optional, Type
-from urllib.parse import urlparse
+from uuid import UUID
 
-import websockets
 from absl import logging
 
 import inductiva
@@ -244,7 +241,7 @@ def invoke_api_from_fn_ptr(
     params,
     function_ptr,
     output_dir: Optional[Path] = None,
-    track_logs: bool = False,
+    resource_pool_id: Optional[UUID] = None,
 ):
     """Perform a task remotely defined by a function pointer."""
     type_annotations = get_type_annotations(function_ptr)
@@ -255,7 +252,7 @@ def invoke_api_from_fn_ptr(
         output_dir=output_dir,
         type_annotations=type_annotations,
         return_type=type_annotations["return"],
-        log_remote_execution=track_logs,
+        resource_pool_id=resource_pool_id,
     )
 
 
@@ -290,7 +287,7 @@ def invoke_api(method_name: str,
                type_annotations: Dict[Any, Type],
                output_dir: Optional[Path] = None,
                return_type: Type = pathlib.Path,
-               log_remote_execution: bool = False):
+               resource_pool_id: Optional[UUID] = None):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -330,6 +327,7 @@ def invoke_api(method_name: str,
     task_request = TaskRequest(
         method=method_name,
         params=request_params,
+        resource_pool=resource_pool_id,
     )
 
     with ApiClient(api_config) as client:
@@ -349,13 +347,10 @@ def invoke_api(method_name: str,
         # While the task is executing, use a context manager that kills the
         # task if some exception or SIGINT is caught.
         with blocking_task_context(api_instance, task_id):
-            if log_remote_execution:
-                status = asyncio.run(follow_task(task_id))
-            else:
-                status = block_until_finish(
-                    api_instance=api_instance,
-                    task_id=task_id,
-                )
+            status = block_until_finish(
+                api_instance=api_instance,
+                task_id=task_id,
+            )
 
             if status == "success":
                 logging.info("Task executed successfuly.")
@@ -371,8 +366,10 @@ def invoke_api(method_name: str,
     return unpack_output(result_list, output_dir, return_type)
 
 
-def invoke_async_api(method_name: str, params, type_annotations: Dict[Any,
-                                                                      Type]):
+def invoke_async_api(method_name: str,
+                     params,
+                     type_annotations: Dict[Any, Type],
+                     resource_pool_id: Optional[UUID] = None):
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -409,6 +406,7 @@ def invoke_async_api(method_name: str, params, type_annotations: Dict[Any,
     task_request = TaskRequest(
         method=method_name,
         params=request_params,
+        resource_pool=resource_pool_id,
     )
 
     with ApiClient(api_config) as client:
@@ -427,7 +425,7 @@ def run_simulation(
     input_dir: pathlib.Path,
     output_dir: pathlib.Path,
     params: Dict[str, Any],
-    log_remote_execution: bool = False,
+    resource_pool_id: Optional[UUID] = None,
 ) -> pathlib.Path:
     """Run a simulation synchronously via Inductiva Web API."""
 
@@ -445,7 +443,7 @@ def run_simulation(
         type_annotations,
         output_dir=output_dir,
         return_type=pathlib.Path,
-        log_remote_execution=log_remote_execution,
+        resource_pool_id=resource_pool_id,
     )
 
     if not isinstance(result, pathlib.Path):
@@ -458,6 +456,7 @@ def run_async_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
     params: Dict[str, Any],
+    resource_pool_id: Optional[UUID] = None,
 ) -> str:
     """Run a simulation asynchronously via Inductiva Web API."""
 
@@ -469,36 +468,13 @@ def run_async_simulation(
         "sim_dir": pathlib.Path,
     }
 
-    result = invoke_async_api(
-        api_method_name,
-        params,
-        type_annotations,
-    )
+    result = invoke_async_api(api_method_name,
+                              params,
+                              type_annotations,
+                              resource_pool_id=resource_pool_id)
 
     if not isinstance(result, str):
         raise RuntimeError(
             f"Expected result to be a string with task_id, got {type(result)}")
 
     return result
-
-
-async def follow_task(task_id: str) -> str:
-    parsed_url = urlparse(inductiva.api_url)
-    url = \
-        f"ws://{parsed_url.hostname}:{parsed_url.port}/" \
-        f"task/{task_id}/logs/tail"
-
-    logging.debug("Following task logs at %s", url)
-    async with websockets.connect(url) as ws:
-        while True:
-            message = await ws.recv()
-            parsed_message = json.loads(message)
-
-            if parsed_message["type"] == "update":
-                status = parsed_message["content"]
-                logging.debug("Task status update: %s", status)
-
-                return status
-            else:
-                new_line = parsed_message["content"]
-                print(new_line, end="")
