@@ -3,6 +3,7 @@ from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
+import numpy as np
 
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
@@ -39,6 +40,7 @@ class ProteinSolvation(Scenario):
                                          GROMACS_TEMPLATE_INPUT_DIR)
         self.protein_pdb = protein_pdb
         self.temperature = temperature
+        self.charged = self.compute_charge()
 
     def simulate(
             self,
@@ -104,9 +106,30 @@ class ProteinSolvation(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
+
+        self.command_file = "commands_charged.json" if self.charged else "commands_neutral.json"
         commands = self.read_commands_from_file(
             os.path.join(self.template_dir, "commands.json"))
         return super().simulate_async(simulator, commands=commands)
+
+    def compute_charge(self,
+                       simulator: Simulator = GROMACS()):
+        """Check if the protein is charged."""
+
+        output_dir = os.path.dirname(self.protein_pdb)
+
+        simulator.run(output_dir, commands= [{"cmd": "gmx pdb2gmx -f \
+                         protein.pdb -o protein.gro \
+                         -water tip3p -ff amber99sb-ildn", "prompts": []}],
+                         output_dir=output_dir)
+        
+        topology_file = os.path.join(output_dir, "topol.top")
+        with open(topology_file, "r") as file:
+            charge = np.sum([float(line.split()[-1]) for line in file 
+                             if line.startswith("; residue")])
+            
+        is_charged = (abs(charge) > 1e-6)
+        return is_charged
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):
