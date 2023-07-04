@@ -26,11 +26,11 @@ class ProteinSolvation(Scenario):
         temperature: float = 300,
     ):
         """
-        Scenario constructor for protein solvation based on the GROMACS 
+        Scenario constructor for protein solvation based on the GROMACS
         simulator.
-        The three main steps of this scenario are solvation, energy minimization 
+        The three main steps of this scenario are solvation, energy minimization
         and simulation. The user can control the number of steps used to perform
-        the energy minimization step and the duration, temperature and 
+        the energy minimization step and the duration, temperature and
         integrator used to perform the simulation.
         Args:
             protein_pdb: The path to the protein pdb file.
@@ -55,15 +55,15 @@ class ProteinSolvation(Scenario):
             output_dir: The output directory to save the simulation results.
             simulation_time: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
-                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for 
+                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
                 - "sd" (Steepest Descent): Stochastic dynamics integrator with
                 leap-frog scheme.
-                - "bd" (Brownian Dynamics): Euler integrator for Brownian or 
-                position Langevin dynamics. 
-                
-            For more details on the integrators, refer to the GROMACS 
-            documentation at 
+                - "bd" (Brownian Dynamics): Euler integrator for Brownian or
+                position Langevin dynamics.
+
+            For more details on the integrators, refer to the GROMACS
+            documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
             nsteps_minim: Number of steps for energy minimization.
@@ -88,15 +88,15 @@ class ProteinSolvation(Scenario):
         Args:
             simulation_time: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
-                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for 
+                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
                 - "sd" (Steepest Descent): Stochastic dynamics integrator with
                 leap-frog scheme.
-                - "bd" (Brownian Dynamics): Euler integrator for Brownian or 
-                position Langevin dynamics. 
-                
-            For more details on the integrators, refer to the GROMACS 
-            documentation at 
+                - "bd" (Brownian Dynamics): Euler integrator for Brownian or
+                position Langevin dynamics.
+
+            For more details on the integrators, refer to the GROMACS
+            documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
             nsteps_minim: Number of steps for energy minimization.
@@ -107,27 +107,35 @@ class ProteinSolvation(Scenario):
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
 
-        self.command_file = "commands_charged.json" if self.charged else "commands_neutral.json"
+        self.command_file = "commands_charged.json" if self.charged\
+                                else "commands_neutral.json"
         commands = self.read_commands_from_file(
             os.path.join(self.template_dir, "commands.json"))
         return super().simulate_async(simulator, commands=commands)
 
-    def compute_charge(self,
-                       simulator: Simulator = GROMACS()):
+    def compute_charge(self, simulator: Simulator = GROMACS()):
         """Check if the protein is charged."""
 
         output_dir = os.path.dirname(self.protein_pdb)
 
-        simulator.run(output_dir, commands= [{"cmd": "gmx pdb2gmx -f \
+        simulator.run(output_dir,
+                      commands=[{
+                          "cmd":
+                              "gmx pdb2gmx -f \
                          protein.pdb -o protein.gro \
-                         -water tip3p -ff amber99sb-ildn", "prompts": []}],
-                         output_dir=output_dir)
-        
+                         -water tip3p -ff amber99sb-ildn",
+                          "prompts": []
+                      }],
+                      output_dir=output_dir)
+
         topology_file = os.path.join(output_dir, "topol.top")
-        with open(topology_file, "r") as file:
-            charge = np.sum([float(line.split()[-1]) for line in file 
-                             if line.startswith("; residue")])
-            
+        with open(topology_file, "r", encoding = "UFT-8") as file:
+            charge = np.sum([
+                float(line.split()[-1])
+                for line in file
+                if line.startswith("; residue")
+            ])
+
         is_charged = (abs(charge) > 1e-6)
         return is_charged
 
