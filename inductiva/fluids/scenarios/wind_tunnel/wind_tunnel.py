@@ -6,6 +6,7 @@ import shutil
 from typing import Optional, List, Literal
 from enum import Enum
 from dataclasses import dataclass
+from uuid import UUID
 
 from absl import logging
 
@@ -31,7 +32,7 @@ class MeshResolution(Enum):
 
 class WindTunnel(Scenario):
     """Physical scenario of a configurable wind tunnel simulation.
-    
+
     In this scenario, an object is inserted in a wind tunnel described by the
     user. The object is then subject to an air flow determined for which the
     direction and magnitude is defined by the user.
@@ -41,7 +42,7 @@ class WindTunnel(Scenario):
                  flow_velocity: List[float] = None,
                  domain: Optional[dict] = None):
         """Initializes the `WindTunnel` conditions.
-        
+
         Args:
             flow_velocity (dict): Velocity of the air flow in m/s.
             domain (dict): List containing the lower and upper boundary of
@@ -71,13 +72,14 @@ class WindTunnel(Scenario):
                  simulator: Simulator = OpenFOAM(
                      "windtunnel.openfoam.run_simulation"),
                  output_dir: Optional[Path] = None,
+                 resource_pool_id: Optional[UUID] = None,
                  object_path: Optional[Path] = None,
                  simulation_time: float = 100,
                  output_time_step: float = 50,
                  resolution: Literal["high", "medium", "low"] = "medium",
                  n_cores: int = 1):
         """Simulates the wind tunnel scenario synchronously.
-        
+
         Args:
             object_path: Path to object inserted in the wind tunnel.
             simulator: Simulator to use for the simulation.
@@ -101,6 +103,7 @@ class WindTunnel(Scenario):
         output_path = super().simulate(
             simulator,
             output_dir=output_dir,
+            resource_pool_id=resource_pool_id,
             n_cores=n_cores,
             method_name="simpleFoam",
         )
@@ -110,13 +113,14 @@ class WindTunnel(Scenario):
     def simulate_async(self,
                        simulator: Simulator = OpenFOAM(
                            "windtunnel.openfoam.run_simulation"),
+                       resource_pool_id: Optional[UUID] = None,
                        object_path: Optional[Path] = None,
                        simulation_time: float = 100,
                        output_time_step: float = 50,
                        resolution: Literal["high", "medium", "low"] = "medium",
                        n_cores: int = 1):
         """Simulates the wind tunnel scenario asynchronously.
-        
+
         Args:
             object_path: Path to object inserted in the wind tunnel.
             simulator: Simulator to use for the simulation.
@@ -139,6 +143,7 @@ class WindTunnel(Scenario):
 
         task_id = super().simulate_async(
             simulator,
+            resource_pool_id=resource_pool_id,
             n_cores=n_cores,
             method_name="simpleFoam",
         )
