@@ -24,6 +24,7 @@ class ProteinSolvation(Scenario):
         self,
         protein_pdb: str,
         temperature: float = 300,
+        charged: bool = None
     ):
         """
         Scenario constructor for protein solvation based on the GROMACS
@@ -40,7 +41,10 @@ class ProteinSolvation(Scenario):
                                          GROMACS_TEMPLATE_INPUT_DIR)
         self.protein_pdb = protein_pdb
         self.temperature = temperature
-        self.charged = self.compute_charge()
+        if charged is None:
+            self.charged = self.compute_charge()
+        else:
+            self.charged = charged
 
     def simulate(
             self,
