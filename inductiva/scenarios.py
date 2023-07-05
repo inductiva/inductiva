@@ -3,6 +3,7 @@
 from abc import ABC, abstractmethod
 import tempfile
 from typing import Optional
+from uuid import UUID
 from inductiva.types import Path
 from inductiva.simulation import Simulator
 from inductiva.utils.files import resolve_path, get_timestamped_path
@@ -58,6 +59,7 @@ class Scenario(ABC):
         self,
         simulator: Simulator,
         output_dir: Optional[Path] = None,
+        resource_pool_id: Optional[UUID] = None,
         **kwargs,
     ) -> Path:
         """Simulates the scenario for a single simulator call."""
@@ -68,12 +70,14 @@ class Scenario(ABC):
                 input_dir,
                 *args,
                 output_dir=output_dir,
+                resource_pool_id=resource_pool_id,
                 **kwargs,
             )
 
     def simulate_async(
         self,
         simulator: Simulator,
+        resource_pool_id: Optional[UUID] = None,
         **kwargs,
     ) -> str:
         """Simulates the scenario asychronously."""
@@ -83,6 +87,7 @@ class Scenario(ABC):
             task_id = simulator.run_async(
                 input_dir,
                 *args,
+                resource_pool_id=resource_pool_id,
                 **kwargs,
             )
         return task_id

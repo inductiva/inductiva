@@ -1,6 +1,7 @@
 """DualSPHysics module of the API."""
 import pathlib
 from typing import Literal, Optional
+from uuid import UUID
 
 from inductiva import types
 from inductiva.simulation import Simulator
@@ -19,7 +20,7 @@ class DualSPHysics(Simulator):
         sim_config_filename: str,
         output_dir: Optional[types.Path] = None,
         device: Literal["gpu", "cpu"] = "cpu",
-        track_logs: bool = False,
+        resource_pool_id: Optional[UUID] = None,
     ) -> pathlib.Path:
         """Run the simulation.
 
@@ -30,7 +31,7 @@ class DualSPHysics(Simulator):
         """
         return super().run(input_dir,
                            output_dir=output_dir,
-                           track_logs=track_logs,
+                           resource_pool_id=resource_pool_id,
                            device=device,
                            input_filename=sim_config_filename)
 
@@ -39,9 +40,10 @@ class DualSPHysics(Simulator):
         input_dir: types.Path,
         sim_config_filename: str,
         device: Literal["gpu", "cpu"] = "cpu",
+        resource_pool_id: Optional[UUID] = None,
     ) -> str:
         """Run the simulation asynchronously.
-        
+
         Args:
             sim_config_filename: Name of the simulation configuration file.
             device: Device in which to run the simulation.
@@ -49,5 +51,6 @@ class DualSPHysics(Simulator):
             """
 
         return super().run_async(input_dir,
+                                 resource_pool_id=resource_pool_id,
                                  device=device,
                                  input_filename=sim_config_filename)

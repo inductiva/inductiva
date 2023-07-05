@@ -1,6 +1,7 @@
 """Base class for low-level simulators."""
 from abc import ABC, abstractmethod
 from typing import Optional
+from uuid import UUID
 from inductiva import api
 from inductiva import types
 from inductiva.utils import files
@@ -35,7 +36,7 @@ class Simulator(ABC):
         input_dir: types.Path,
         *_args,
         output_dir: Optional[types.Path] = None,
-        track_logs: bool = False,
+        resource_pool_id: Optional[UUID] = None,
         **kwargs,
     ) -> types.Path:
         """Run the simulation.
@@ -48,8 +49,6 @@ class Simulator(ABC):
                 stored. If not provided, a timestamped directory will be
                 created with the same name as the input directory appended
                 with "-output".
-            track_logs: If True, the logs of the remote execution will be
-                streamed to the console.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
@@ -61,13 +60,14 @@ class Simulator(ABC):
             input_dir,
             output_dir,
             params=kwargs,
-            log_remote_execution=track_logs,
+            resource_pool_id=resource_pool_id,
         )
 
     def run_async(
         self,
         input_dir: types.Path,
         *_args,
+        resource_pool_id: Optional[UUID] = None,
         **kwargs,
     ) -> str:
         """Run the simulation asynchronously.
@@ -85,4 +85,5 @@ class Simulator(ABC):
             self.api_method_name,
             input_dir,
             params=kwargs,
+            resource_pool_id=resource_pool_id,
         )
