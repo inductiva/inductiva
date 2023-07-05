@@ -174,7 +174,7 @@ class ProteinSolvation(Scenario):
                 if line.startswith("; residue")
             ])
 
-        is_charged = (abs(charge) > 1e-6)
+        is_charged = abs(charge) > 1e-6
         return is_charged
 
     @singledispatchmethod
