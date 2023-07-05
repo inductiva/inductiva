@@ -1,5 +1,5 @@
 [
-    {% if not charged %} {"cmd": "gmx pdb2gmx -f protein.pdb -o protein.gro -water tip3p -ff amber99sb-ildn", "prompts":[]}, {% endif %}
+    {"cmd": "gmx pdb2gmx -f protein.pdb -o protein.gro -water tip3p -ff amber99sb-ildn", "prompts":[]},
     {"cmd": "gmx editconf -f protein.gro -o protein_box.gro -c yes -d 1.0 -bt cubic", "prompts":[]},
     {"cmd": "gmx solvate -cp protein_box.gro -o protein_solv.gro -p topol.top", "prompts":[]},
     {"cmd": "gmx grompp -f ions.mdp -c protein_solv.gro -p topol.top -o ions.tpr {% if charged %} -maxwarn 1 {% endif %}", "prompts":[]},
