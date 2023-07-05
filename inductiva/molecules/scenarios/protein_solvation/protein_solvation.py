@@ -13,7 +13,8 @@ from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template)
+                                       batch_replace_params_in_template,
+                                       replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils.files import remove_files_with_tag
 
@@ -80,13 +81,12 @@ class ProteinSolvation(Scenario):
             self.charged = self.compute_charge()
 
         #Edit commands.json according to the charge of the protein
-        commands = self.read_commands_from_file(
-            os.path.join(self.template_dir, "commands.json"))
+        commands_path = os.path.join(self.template_dir, "commands.json")
 
-        if self.charged:
-            commands[3]["cmd"] = commands[3]["cmd"] + " -maxwarn 1"
-            commands[4]["prompts"].append("SOL")
+        replace_params_in_template(self.template_dir, "commands.json.jinja",
+                            {"charged": self.charged}, commands_path)
 
+        commands = self.read_commands_from_file(commands_path)
         self.nsteps = int(
             simulation_time * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
@@ -127,16 +127,13 @@ class ProteinSolvation(Scenario):
         if self.charged is None:
             self.charged = self.compute_charge()
 
-        commands = self.read_commands_from_file(
-            os.path.join(self.template_dir, "commands.json"))
+        #Edit commands.json according to the charge of the protein
+        commands_path = os.path.join(self.template_dir, "commands.json")
 
-        #Edit commands according to the charge of the protein
-        if self.charged:
-            commands[3]["cmd"] = commands[3]["cmd"] + " -maxwarn 1"
-            commands[4]["prompts"].append("SOL")
-            #Removes first command if the protein is charged since it
-            #already ran in self.compute_charge()
-            commands = commands[1:]
+        replace_params_in_template(self.template_dir, "commands.json.jinja",
+                            {"charged": self.charged}, commands_path)
+
+        commands = self.read_commands_from_file(commands_path)
 
         self.nsteps = int(
             simulation_time * 1e6 / 2
