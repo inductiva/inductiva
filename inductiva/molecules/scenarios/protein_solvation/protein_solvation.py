@@ -1,15 +1,19 @@
 """Protein solvation scenario."""
+
 from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
+from absl import logging
+import numpy as np
 from uuid import UUID
 
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template)
+                                       batch_replace_params_in_template,
+                                       replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils.files import remove_files_with_tag
 
@@ -20,11 +24,10 @@ GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 class ProteinSolvation(Scenario):
     """Solvated protein scenario."""
 
-    def __init__(
-        self,
-        protein_pdb: str,
-        temperature: float = 300,
-    ):
+    def __init__(self,
+                 protein_pdb: str,
+                 temperature: float = 300,
+                 charged: bool = None):
         """
         Scenario constructor for protein solvation based on the GROMACS
         simulator.
@@ -35,11 +38,14 @@ class ProteinSolvation(Scenario):
         Args:
             protein_pdb: The path to the protein pdb file.
             temperature: The temperature to use for the simulation.
+            charged: Whether the protein is charged or not. If None, the charge
+            is computed automatically.
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
         self.protein_pdb = protein_pdb
         self.temperature = temperature
+        self.charged = charged
 
     def simulate(
             self,
@@ -68,13 +74,23 @@ class ProteinSolvation(Scenario):
 
             nsteps_minim: Number of steps for energy minimization.
         """
+
+        #Compute charge if it is not provided
+        if self.charged is None:
+            self.charged = self.compute_charge()
+
+        #Edit commands.json according to the charge of the protein
+        commands_path = os.path.join(self.template_dir, "commands.json")
+
+        replace_params_in_template(self.template_dir, "commands.json.jinja",
+                                   {"charged": self.charged}, commands_path)
+
+        commands = self.read_commands_from_file(commands_path)
         self.nsteps = int(
             simulation_time * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        commands = self.read_commands_from_file(
-            os.path.join(self.template_dir, "commands.json"))
         return super().simulate(simulator,
                                 output_dir,
                                 resource_pool_id=resource_pool_id,
@@ -105,16 +121,57 @@ class ProteinSolvation(Scenario):
 
             nsteps_minim: Number of steps for energy minimization.
         """
+
+        #Compute charge if it is not provided
+        if self.charged is None:
+            self.charged = self.compute_charge()
+
+        #Edit commands.json according to the charge of the protein
+        commands_path = os.path.join(self.template_dir, "commands.json")
+
+        replace_params_in_template(self.template_dir, "commands.json.jinja",
+                                   {"charged": self.charged}, commands_path)
+
+        commands = self.read_commands_from_file(commands_path)
+
         self.nsteps = int(
             simulation_time * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        commands = self.read_commands_from_file(
-            os.path.join(self.template_dir, "commands.json"))
+
         return super().simulate_async(simulator,
                                       resource_pool_id=resource_pool_id,
                                       commands=commands)
+
+    def compute_charge(self, simulator: Simulator = GROMACS()):
+        """Check if the protein is charged."""
+
+        logging.info("Computing the charge of the protein")
+
+        protein_directory = os.path.dirname(self.protein_pdb)
+        commands = self.read_commands_from_file(
+            os.path.join(self.template_dir, "charge_computation.json"))
+
+        simulator.run(protein_directory,
+                      commands=commands,
+                      output_dir=protein_directory)
+
+        topology_file = os.path.join(protein_directory, "topol.top")
+
+        #Information about the charge of each residue is stored in the topology
+        #file in the lines starting with "; residue". Summing the charges of
+        #all residues gives the total charge of the protein.
+
+        with open(topology_file, "r", encoding="UFT-8") as file:
+            charge = np.sum([
+                float(line.split()[-1])
+                for line in file
+                if line.startswith("; residue")
+            ])
+
+        is_charged = abs(charge) > 1e-6
+        return is_charged
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):
