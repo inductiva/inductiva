@@ -1,11 +1,10 @@
 """Protein solvation scenario."""
 
-from absl import logging
-
 from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
+from absl import logging
 import numpy as np
 from uuid import UUID
 
