@@ -7,6 +7,7 @@ from typing import Optional, Literal
 import os
 import shutil
 import numpy as np
+from uuid import UUID
 
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
@@ -79,11 +80,12 @@ class ProteinSolvation(Scenario):
             self.charged = self.compute_charge()
 
         #Edit commands.json according to the charge of the protein
-        commands_path = os.path.join(self.template_dir, "commands.json")
-        replace_params_in_template(self.template_dir, "commands.json.jinja", {
-            "warnings": "-maxwarn 1",
-            "solvents": "SOL"
-        }, commands_path)
+        commands = self.read_commands_from_file(
+            os.path.join(self.template_dir, "commands.json"))
+
+        if self.charged:
+            commands[3]["cmd"] = commands[3]["cmd"] + " -maxwarn 1"
+            commands[4]["prompts"].append("SOL")
 
         self.nsteps = int(
             simulation_time * 1e6 / 2
@@ -91,8 +93,10 @@ class ProteinSolvation(Scenario):
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
 
-        commands = self.read_commands_from_file(commands_path)
-        return super().simulate(simulator, output_dir, commands=commands)
+        return super().simulate(simulator,
+                                output_dir,
+                                resource_pool_id=resource_pool_id,
+                                commands=commands)
 
     def simulate_async(
             self,
@@ -123,12 +127,16 @@ class ProteinSolvation(Scenario):
         if self.charged is None:
             self.charged = self.compute_charge()
 
-        #Edit commands.json according to the charge of the protein
-        commands_path = os.path.join(self.template_dir, "commands.json")
-        replace_params_in_template(self.template_dir, "commands.json.jinja", {
-            "warnings": "-maxwarn 1",
-            "solvents": "SOL"
-        }, commands_path)
+        commands = self.read_commands_from_file(
+            os.path.join(self.template_dir, "commands.json"))
+
+        #Edit commands according to the charge of the protein
+        if self.charged:
+            commands[3]["cmd"] = commands[3]["cmd"] + " -maxwarn 1"
+            commands[4]["prompts"].append("SOL")
+            #Removes first command if the protein is charged since it
+            #already ran in self.compute_charge()
+            commands = commands[1:]
 
         self.nsteps = int(
             simulation_time * 1e6 / 2
@@ -136,21 +144,24 @@ class ProteinSolvation(Scenario):
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
 
-        commands = self.read_commands_from_file(commands_path)
-        return super().simulate_async(simulator, commands=commands)
+        return super().simulate_async(simulator,
+                                      resource_pool_id=resource_pool_id,
+                                      commands=commands)
 
     def compute_charge(self, simulator: Simulator = GROMACS()):
         """Check if the protein is charged."""
 
         logging.info("Computing the charge of the protein")
 
-        output_dir = os.path.dirname(self.protein_pdb)
+        protein_directory = os.path.dirname(self.protein_pdb)
         commands = self.read_commands_from_file(
             os.path.join(self.template_dir, "charge_computation.json"))
 
-        simulator.run(output_dir, commands=commands, output_dir=output_dir)
+        simulator.run(protein_directory,
+                      commands=commands,
+                      output_dir=protein_directory)
 
-        topology_file = os.path.join(output_dir, "topol.top")
+        topology_file = os.path.join(protein_directory, "topol.top")
 
         #Information about the charge of each residue is stored in the topology
         #file in the lines starting with "; residue". Summing the charges of
