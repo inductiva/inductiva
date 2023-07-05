@@ -83,7 +83,7 @@ class ProteinSolvation(Scenario):
         commands_path = os.path.join(self.template_dir, "commands.json")
 
         replace_params_in_template(self.template_dir, "commands.json.jinja",
-                            {"charged": self.charged}, commands_path)
+                                   {"charged": self.charged}, commands_path)
 
         commands = self.read_commands_from_file(commands_path)
         self.nsteps = int(
@@ -130,7 +130,7 @@ class ProteinSolvation(Scenario):
         commands_path = os.path.join(self.template_dir, "commands.json")
 
         replace_params_in_template(self.template_dir, "commands.json.jinja",
-                            {"charged": self.charged}, commands_path)
+                                   {"charged": self.charged}, commands_path)
 
         commands = self.read_commands_from_file(commands_path)
 
