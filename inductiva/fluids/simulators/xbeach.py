@@ -1,6 +1,7 @@
 """DualSPHysics module of the API."""
 import pathlib
 from typing import Optional
+from uuid import UUID
 
 from inductiva import types
 from inductiva.simulation import Simulator
@@ -18,8 +19,8 @@ class XBeach(Simulator):
         input_dir: types.Path,
         sim_config_filename: Optional[str] = "params.txt",
         output_dir: Optional[types.Path] = None,
+        resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
-        track_logs: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
 
@@ -32,23 +33,25 @@ class XBeach(Simulator):
             input_dir,
             input_filename=sim_config_filename,
             n_cores=n_cores,
-            track_logs=track_logs,
             output_dir=output_dir,
+            resource_pool_id=resource_pool_id,
         )
 
     def run_async(
         self,
         input_dir: types.Path,
+        resource_pool_id: Optional[UUID] = None,
         sim_config_filename: Optional[str] = "params.txt",
         n_cores: int = 1,
     ) -> str:
         """Run the simulation asynchronously.
-        
+
         Args:
             sim_config_filename: Name of the simulation configuration file.
             n_cores: Number of MPI cores to use for the simulation.
             """
 
         return super().run_async(input_dir,
+                                 resource_pool_id=resource_pool_id,
                                  input_filename=sim_config_filename,
                                  n_cores=n_cores)

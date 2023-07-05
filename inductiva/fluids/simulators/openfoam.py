@@ -1,6 +1,7 @@
 """OpenFOAM module of the API for fluid dynamics."""
 import pathlib
 from typing import Optional, List
+from uuid import UUID
 
 from inductiva import types
 from inductiva.simulation import Simulator
@@ -22,8 +23,8 @@ class OpenFOAM(Simulator):
         input_dir: types.Path,
         commands: List[dict],
         output_dir: Optional[types.Path] = None,
+        resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
-        track_logs: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
 
@@ -35,8 +36,8 @@ class OpenFOAM(Simulator):
         return super().run(
             input_dir,
             output_dir=output_dir,
+            resource_pool_id=resource_pool_id,
             n_cores=n_cores,
-            track_logs=track_logs,
             commands=commands,
         )
 
@@ -44,11 +45,12 @@ class OpenFOAM(Simulator):
         self,
         input_dir: types.Path,
         method_name: str,
+        resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
         **openfoam_flags: Optional[str],
     ) -> str:
         """Run the simulation asynchronously.
-        
+
         Args:
             n_cores: Number of MPI cores to use for the simulation.
             method_name: OpenFOAM method to run. This involves commands
@@ -58,6 +60,7 @@ class OpenFOAM(Simulator):
             """
 
         return super().run_async(input_dir,
+                                 resource_pool_id=resource_pool_id,
                                  method_name=method_name,
                                  n_cores=n_cores,
                                  user_flags=openfoam_flags)

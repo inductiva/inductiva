@@ -4,6 +4,7 @@ from functools import singledispatchmethod
 import os
 from typing import List, Literal, Optional
 import shutil
+from uuid import UUID
 
 from inductiva.types import Path
 from inductiva.scenarios import Scenario
@@ -68,6 +69,7 @@ class FluidBlock(Scenario):
         self,
         simulator: Simulator = DualSPHysics(),
         output_dir: Optional[Path] = None,
+        resource_pool_id: Optional[UUID] = None,
         device: Literal["cpu", "gpu"] = "gpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
@@ -101,6 +103,7 @@ class FluidBlock(Scenario):
         output_path = super().simulate(
             simulator,
             output_dir=output_dir,
+            resource_pool_id=resource_pool_id,
             device=device,
         )
 

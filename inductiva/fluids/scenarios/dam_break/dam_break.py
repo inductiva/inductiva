@@ -2,6 +2,7 @@
 from typing import List, Literal, Optional
 from enum import Enum
 from dataclasses import dataclass
+from uuid import UUID
 
 from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import DualSPHysics
@@ -53,6 +54,7 @@ class DamBreak(FluidBlock):
         self,
         simulator: Simulator = DualSPHysics(),
         output_dir: Optional[Path] = None,
+        resource_pool_id: Optional[UUID] = None,
         device: Literal["cpu", "gpu"] = "gpu",
         resolution: Literal["high", "medium", "low"] = "medium",
         simulation_time: float = 1,
@@ -71,6 +73,7 @@ class DamBreak(FluidBlock):
 
         sim_output_path = super().simulate(simulator=simulator,
                                            output_dir=output_dir,
+                                           resource_pool_id=resource_pool_id,
                                            device=device,
                                            particle_radius=particle_radius,
                                            simulation_time=simulation_time)

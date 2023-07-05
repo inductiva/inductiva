@@ -3,6 +3,7 @@ from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
+from uuid import UUID
 
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
@@ -26,14 +27,14 @@ class MDWaterBox(Scenario):
         box_size: float = 2.3,
     ):
         """The scenario involves simulating a box with water molecules.
-        The simulation consists of two main steps: energy minimization 
-        and molecular dynamics simulation. 
-        By default, the initial positions of the water molecules are 
-        arranged uniformally, so to randomize them we perform a 
+        The simulation consists of two main steps: energy minimization
+        and molecular dynamics simulation.
+        By default, the initial positions of the water molecules are
+        arranged uniformally, so to randomize them we perform a
         decorrelation step.
         Args:
             temperature: The temperature of the simulation in Kelvin.
-            box_size: The size of the box in nm. 
+            box_size: The size of the box in nm.
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
@@ -46,6 +47,7 @@ class MDWaterBox(Scenario):
             self,
             simulator: Simulator = GROMACS(),
             output_dir: Optional[Path] = None,
+            resource_pool_id: Optional[UUID] = None,
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
@@ -55,15 +57,15 @@ class MDWaterBox(Scenario):
             output_dir: The output directory to save the simulation results.
             simulation_time: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
-                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for 
+                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
                 - "sd" (Steepest Descent): Stochastic dynamics integrator with
                 leap-frog scheme.
-                - "bd" (Brownian Dynamics): Euler integrator for Brownian or 
-                position Langevin dynamics. 
-                
-            For more details on the integrators, refer to the GROMACS 
-            documentation at 
+                - "bd" (Brownian Dynamics): Euler integrator for Brownian or
+                position Langevin dynamics.
+
+            For more details on the integrators, refer to the GROMACS
+            documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
             nsteps_minim: Number of steps for energy minimization.
@@ -77,29 +79,33 @@ class MDWaterBox(Scenario):
         replace_params_in_template(self.template_dir, "commands.json.jinja",
                                    {"box_size": self.box_size}, commands_path)
         commands = self.read_commands_from_file(commands_path)
-        return super().simulate(simulator, output_dir, commands=commands)
+        return super().simulate(simulator,
+                                output_dir,
+                                resource_pool_id=resource_pool_id,
+                                commands=commands)
 
     def simulate_async(
             self,
             simulator: Simulator = GROMACS(),
+            resource_pool_id: Optional[UUID] = None,
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
-        """Simulate the water box scenario using molecular dynamics 
+        """Simulate the water box scenario using molecular dynamics
         asyncronously.
 
         Args:
             simulation_time: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
-                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for 
+                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
                 - "sd" (Steepest Descent): Stochastic dynamics integrator with
                 leap-frog scheme.
-                - "bd" (Brownian Dynamics): Euler integrator for Brownian or 
-                position Langevin dynamics. 
-                
-            For more details on the integrators, refer to the GROMACS 
-            documentation at 
+                - "bd" (Brownian Dynamics): Euler integrator for Brownian or
+                position Langevin dynamics.
+
+            For more details on the integrators, refer to the GROMACS
+            documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
             nsteps_minim: Number of steps for energy minimization.
@@ -113,7 +119,9 @@ class MDWaterBox(Scenario):
         replace_params_in_template(self.template_dir, "commands.json.jinja",
                                    {"box_size": self.box_size}, commands_path)
         commands = self.read_commands_from_file(commands_path)
-        return super().simulate_async(simulator, commands=commands)
+        return super().simulate_async(simulator,
+                                      resource_pool_id=resource_pool_id,
+                                      commands=commands)
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):

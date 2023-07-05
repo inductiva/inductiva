@@ -52,6 +52,7 @@ class ProteinSolvation(Scenario):
             self,
             simulator: Simulator = GROMACS(),
             output_dir: Optional[Path] = None,
+            resource_pool_id: Optional[UUID] = None,
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):
@@ -92,7 +93,6 @@ class ProteinSolvation(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-
         return super().simulate(simulator,
                                 output_dir,
                                 resource_pool_id=resource_pool_id,
@@ -101,6 +101,7 @@ class ProteinSolvation(Scenario):
     def simulate_async(
             self,
             simulator: Simulator = GROMACS(),
+            resource_pool_id: Optional[UUID] = None,
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000):

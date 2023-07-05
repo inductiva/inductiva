@@ -5,6 +5,7 @@ from enum import Enum
 from functools import singledispatchmethod
 import os
 from typing import List, Literal, Optional
+from uuid import UUID
 
 from inductiva.types import Path
 from inductiva.scenarios import Scenario
@@ -148,6 +149,7 @@ class FluidTank(Scenario):
         self,
         simulator: Simulator = SPlisHSPlasH(),
         output_dir: Optional[Path] = None,
+        resource_pool_id: Optional[UUID] = None,
         device: Literal["cpu", "gpu"] = "cpu",
         simulation_time: float = 5,
         resolution: Literal["low", "medium", "high"] = "low",
@@ -176,6 +178,7 @@ class FluidTank(Scenario):
         output_path = super().simulate(
             simulator,
             output_dir=output_dir,
+            resource_pool_id=resource_pool_id,
             device=device,
         )
 
