@@ -77,13 +77,16 @@ class ProteinSolvation(Scenario):
 
         #Compute charge if it is not provided
         if self.charged is None:
-            self.charged = self.compute_charge(resource_pool_id = resource_pool_id)
+            self.charged = self.compute_charge(
+                resource_pool_id=resource_pool_id)
 
         #Edit commands.json according to the charge of the protein
         commands_path = os.path.join(self.template_dir, "commands.json")
 
-        replace_params_in_template(self.template_dir, "commands.json.jinja",
-                                   {"pdb_file": self.protein_pdb, "charged": self.charged}, commands_path)
+        replace_params_in_template(self.template_dir, "commands.json.jinja", {
+            "pdb_file": self.protein_pdb,
+            "charged": self.charged
+        }, commands_path)
 
         commands = self.read_commands_from_file(commands_path)
         self.nsteps = int(
@@ -124,13 +127,16 @@ class ProteinSolvation(Scenario):
 
         #Compute charge if it is not provided
         if self.charged is None:
-            self.charged = self.compute_charge(resource_pool_id=resource_pool_id)
+            self.charged = self.compute_charge(
+                resource_pool_id=resource_pool_id)
 
         #Edit commands.json according to the charge of the protein
         commands_path = os.path.join(self.template_dir, "commands.json")
 
-        replace_params_in_template(self.template_dir, "commands.json.jinja",
-                                   {"pdb_file": self.protein_pdb, "charged": self.charged}, commands_path)
+        replace_params_in_template(self.template_dir, "commands.json.jinja", {
+            "pdb_file": self.protein_pdb,
+            "charged": self.charged
+        }, commands_path)
 
         commands = self.read_commands_from_file(commands_path)
 
@@ -144,7 +150,8 @@ class ProteinSolvation(Scenario):
                                       resource_pool_id=resource_pool_id,
                                       commands=commands)
 
-    def compute_charge(self, simulator: Simulator = GROMACS(),
+    def compute_charge(self,
+                       simulator: Simulator = GROMACS(),
                        resource_pool_id: Optional[UUID] = None):
         """Check if the protein is charged."""
 
@@ -152,13 +159,15 @@ class ProteinSolvation(Scenario):
 
         protein_directory = os.path.dirname(self.protein_pdb)
 
-        commands_path = os.path.join(self.template_dir, "charge_computation.json")
+        commands_path = os.path.join(self.template_dir,
+                                     "charge_computation.json")
         protein_pdb = os.path.basename(self.protein_pdb)
-        replace_params_in_template(self.template_dir, "charge_computation.json.jinja",
+        replace_params_in_template(self.template_dir,
+                                   "charge_computation.json.jinja",
                                    {"pdb_file": protein_pdb}, commands_path)
 
         commands = self.read_commands_from_file(commands_path)
-        
+
         simulator.run(protein_directory,
                       commands=commands,
                       output_dir=protein_directory,
