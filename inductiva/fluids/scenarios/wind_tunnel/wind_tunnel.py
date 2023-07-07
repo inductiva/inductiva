@@ -61,7 +61,7 @@ class WindTunnel(Scenario):
             logging.info("Using a default domain: `{\"x\":"
                          "[-5, 15], \"y\": [-4, 4], \"z\": [0, 8]}`.")
             self.domain = {"x": [-5, 15], "y": [-4, 4], "z": [0, 8]}
-        elif isinstance(domain, dict):
+        elif not isinstance(domain, dict):
             raise ValueError(
                 "`domain` must be a dictionary of the type `{\"x\":"
                 "[-5, 15], \"y\": [-4, 4], \"z\": [0, 8]}`.")
