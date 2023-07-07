@@ -18,3 +18,5 @@ imageio-ffmpeg
 ipython
 websockets
 typing-extensions
+MDAnalysis
+nglview
