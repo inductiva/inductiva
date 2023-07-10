@@ -1,0 +1,8 @@
+[
+    {"cmd": "blockMesh", "prompts": []},
+    {"cmd": "ideasUnvToFoam fluidHeaterFins.unv", "prompts": []},
+    {"cmd": "transformPoints -scale '(1e-3 1e-3 1e-3)'", "prompts": []},
+    {"cmd": "splitMeshRegions -cellZones -overwrite", "prompts": []},
+    {"cmd": "chtMultiRegionFoam", "prompts": []}
+]
+

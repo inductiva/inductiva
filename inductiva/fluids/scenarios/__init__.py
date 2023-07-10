@@ -10,3 +10,4 @@ from .fluid_tank import (
     RectangularTankInlet,
     CircularTankInlet,
 )
+from .heat_sink import HeatSink
