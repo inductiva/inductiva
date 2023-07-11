@@ -14,6 +14,8 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "heat_sink")
 OPENFOAM_TEMPLATE_SUBDIR = "openfoam"
 FILES_SUBDIR = "files"
+OPENFOAM_TEMPLATE_PARAMS_FILE_NAME = "parameters.jinja"
+OPENFOAM_PARAMS_FILE_NAME = "parameters"
 COMMANDS_FILE_NAME = "commands.json"
 
 
@@ -119,6 +121,22 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
                     input_dir,
                     dirs_exist_ok=True,
                     symlinks=True)
+
+    params_file_path = os.path.join(input_dir, OPENFOAM_PARAMS_FILE_NAME)
+
+    replace_params_in_template(
+        templates_dir=input_dir,
+        template_filename=OPENFOAM_TEMPLATE_PARAMS_FILE_NAME,
+        params={
+            "temperature": self.temperature,
+            "heater_power": self.heater_power
+        },
+        output_file_path=params_file_path,
+    )
+
+    # TODO (fabiocruz): add option to remove template file in
+    # replace_params_in_template.
+    os.remove(os.path.join(input_dir, OPENFOAM_TEMPLATE_PARAMS_FILE_NAME))
 
 
 @HeatSink.gen_config.register
