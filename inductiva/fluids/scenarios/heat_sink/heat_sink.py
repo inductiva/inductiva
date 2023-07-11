@@ -126,7 +126,10 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                       OPENFOAM_TEMPLATE_SUBDIR, FILES_SUBDIR)
 
-    shutil.copytree(template_files_dir, input_dir, dirs_exist_ok=True)
+    shutil.copytree(template_files_dir,
+                    input_dir,
+                    dirs_exist_ok=True,
+                    symlinks=True)
 
 
 @HeatSink.gen_config.register
