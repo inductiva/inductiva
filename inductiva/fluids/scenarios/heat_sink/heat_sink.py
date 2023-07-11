@@ -33,16 +33,19 @@ class HeatSink(Scenario):
 
     def __init__(
         self,
-        temperature=290,
+        air_velocity=10,
+        air_temperature=290,
         heater_power=200,
     ):
         """Initializes the heat sink scenario.
         Args:
-            temperature: The temperature of the air flow, in Kelvin. Also sets
-              the initial temperature of the heater and the heat sink.
+            air_velocity: The velocity of the air flow, in m/s.
+            air_temperature: The temperature of the air flow, in Kelvin. Also
+              sets the initial temperature of the heater and the heat sink.
             heater_power: The power of the heater, in Watts.
         """
-        self.temperature = temperature
+        self.air_velocity = air_velocity
+        self.air_temperature = air_temperature
         self.heater_power = heater_power
 
     def simulate(
@@ -128,7 +131,8 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
         templates_dir=input_dir,
         template_filename=OPENFOAM_TEMPLATE_PARAMS_FILE_NAME,
         params={
-            "temperature": self.temperature,
+            "air_velocity": self.air_velocity,
+            "air_temperature": self.air_temperature,
             "heater_power": self.heater_power
         },
         output_file_path=params_file_path,

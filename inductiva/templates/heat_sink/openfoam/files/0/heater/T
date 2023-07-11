@@ -19,7 +19,7 @@ FoamFile
 
 dimensions      [ 0 0 0 1 0 0 0 ];
 
-internalField   uniform $Tinitial;
+internalField   uniform $airTemperature;
 
 boundaryField
 {

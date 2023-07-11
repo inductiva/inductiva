@@ -15,9 +15,11 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+#include "$FOAM_CASE/parameters"
+
 dimensions      [ 0 1 -1 0 0 0 0 ];
 
-internalField   uniform (0 0 5.6);
+internalField   $airVelocity;
 
 boundaryField
 {
@@ -25,7 +27,7 @@ boundaryField
     inlet_fluid
     {
         type            fixedValue;
-        value           uniform (0 0 5.6);
+        value           uniform (0, 0, $internalField);
     }
     walls_fluid
     {
@@ -35,7 +37,7 @@ boundaryField
     outlet_fluid
     {
         type            pressureInletOutletVelocity;
-        value           $internalField;
+        value           (0, 0, $internalField);
     }
     fluid_to_fins
     {
