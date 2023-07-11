@@ -3,6 +3,7 @@ from functools import singledispatchmethod
 import os
 import shutil
 from typing import Optional
+from uuid import UUID
 
 from inductiva.types import Path
 from inductiva.fluids.simulators import OpenFOAM
@@ -52,6 +53,7 @@ class HeatSink(Scenario):
         self,
         simulator: Simulator = OpenFOAM(),
         output_dir: Optional[Path] = None,
+        resource_pool_id: Optional[UUID] = None,
         simulation_time=300,
         output_time_step=10,
     ):
@@ -69,11 +71,15 @@ class HeatSink(Scenario):
 
         commands = self.get_commands()
 
-        return super().simulate(simulator, output_dir, commands=commands)
+        return super().simulate(simulator,
+                                output_dir,
+                                resource_pool_id=resource_pool_id,
+                                commands=commands)
 
     def simulate_async(
         self,
         simulator: Simulator = OpenFOAM(),
+        resource_pool_id: Optional[UUID] = None,
         simulation_time=300,
         output_time_step=10,
     ):
@@ -91,7 +97,9 @@ class HeatSink(Scenario):
 
         commands = self.get_commands()
 
-        return super().simulate_async(simulator, commands=commands)
+        return super().simulate_async(simulator,
+                                      resource_pool_id=resource_pool_id,
+                                      commands=commands)
 
     def get_commands(self):
         """Returns the commands for the simulation.
