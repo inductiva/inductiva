@@ -15,6 +15,8 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+#include "$FOAM_CASE/parameters"
+
 application     chtMultiRegionFoam;
 
 startFrom       startTime;
@@ -23,7 +25,7 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         3000;
+endTime         $simulationTime;
 
 deltaT          1;
 

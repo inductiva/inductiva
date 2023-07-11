@@ -49,16 +49,20 @@ class HeatSink(Scenario):
         self.heater_power = heater_power
 
     def simulate(
-            self,
-            simulator: Simulator = OpenFOAM(),
-            output_dir: Optional[Path] = None,
+        self,
+        simulator: Simulator = OpenFOAM(),
+        output_dir: Optional[Path] = None,
+        simulation_time=300,
     ):
         """Simulates the scenario.
 
         Args:
             simulator: The simulator to use for the simulation.
             output_dir: The output directory to save the simulation results.
+            simulation_time: The simulation time, in seconds.
         """
+        self.simulation_time = simulation_time
+
         commands = self.get_commands()
 
         return super().simulate(simulator, output_dir, commands=commands)
@@ -66,13 +70,16 @@ class HeatSink(Scenario):
     def simulate_async(
             self,
             simulator: Simulator = OpenFOAM(),
+            simulation_time=300,
     ):
         """Simulates the scenario asynchronously.
 
         Args:
             simulator: The simulator to use for the simulation.
             output_dir: The output directory to save the simulation results.
+            simulation_time: The simulation time, in seconds.
         """
+        self.simulation_time = simulation_time
 
         commands = self.get_commands()
 
@@ -131,6 +138,7 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
         templates_dir=input_dir,
         template_filename=OPENFOAM_TEMPLATE_PARAMS_FILE_NAME,
         params={
+            "simulation_time": self.simulation_time,
             "air_velocity": self.air_velocity,
             "air_temperature": self.air_temperature,
             "heater_power": self.heater_power
