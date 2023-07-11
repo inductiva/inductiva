@@ -53,6 +53,7 @@ class HeatSink(Scenario):
         simulator: Simulator = OpenFOAM(),
         output_dir: Optional[Path] = None,
         simulation_time=300,
+        output_time_step=10,
     ):
         """Simulates the scenario.
 
@@ -60,17 +61,21 @@ class HeatSink(Scenario):
             simulator: The simulator to use for the simulation.
             output_dir: The output directory to save the simulation results.
             simulation_time: The simulation time, in seconds.
+            output_time_step: The time step to save the simulation results, in
+              seconds.
         """
         self.simulation_time = simulation_time
+        self.output_time_step = output_time_step
 
         commands = self.get_commands()
 
         return super().simulate(simulator, output_dir, commands=commands)
 
     def simulate_async(
-            self,
-            simulator: Simulator = OpenFOAM(),
-            simulation_time=300,
+        self,
+        simulator: Simulator = OpenFOAM(),
+        simulation_time=300,
+        output_time_step=10,
     ):
         """Simulates the scenario asynchronously.
 
@@ -78,8 +83,11 @@ class HeatSink(Scenario):
             simulator: The simulator to use for the simulation.
             output_dir: The output directory to save the simulation results.
             simulation_time: The simulation time, in seconds.
+            output_time_step: The time step to save the simulation results, in
+              seconds.
         """
         self.simulation_time = simulation_time
+        self.output_time_step = output_time_step
 
         commands = self.get_commands()
 
@@ -139,6 +147,7 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
         template_filename=OPENFOAM_TEMPLATE_PARAMS_FILE_NAME,
         params={
             "simulation_time": self.simulation_time,
+            "output_time_step": self.output_time_step,
             "air_velocity": self.air_velocity,
             "air_temperature": self.air_temperature,
             "heater_power": self.heater_power

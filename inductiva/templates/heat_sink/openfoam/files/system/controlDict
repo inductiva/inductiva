@@ -31,7 +31,7 @@ deltaT          1;
 
 writeControl    adjustableRunTime;
 
-writeInterval   10;
+writeInterval   $outputTimeStep;
 
 purgeWrite      0;
 
