@@ -27,7 +27,7 @@ boundaryField
     inlet_fluid
     {
         type            fixedValue;
-        value           uniform (0, 0, $internalField);
+        value           uniform (0 0 $internalField);
     }
     walls_fluid
     {
@@ -37,7 +37,7 @@ boundaryField
     outlet_fluid
     {
         type            pressureInletOutletVelocity;
-        value           (0, 0, $internalField);
+        value           uniform (0 0 $internalField);
     }
     fluid_to_fins
     {
