@@ -46,11 +46,12 @@ class GROMACSSimulationOutput:
         if pdb_file is None:
             for filename in os.listdir(self.sim_output_dir):
                 if filename.endswith(".pdb"):
-                    pdb_file = os.path.join(self.sim_output_dir, filename)
+                    pdb_file = filename
 
         if pdb_file is None:
             raise ValueError("No PDB file found in the output directory.")
 
+        protein_file = os.path.join(self.sim_output_dir, pdb_file)
         trajectory = os.path.join(self.sim_output_dir, trajectory_name)
         system = mda.Universe(pdb_file, trajectory)
 
