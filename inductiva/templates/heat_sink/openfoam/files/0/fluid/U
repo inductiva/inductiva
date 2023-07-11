@@ -19,7 +19,7 @@ FoamFile
 
 dimensions      [ 0 1 -1 0 0 0 0 ];
 
-internalField   $airVelocity;
+internalField   uniform (0 0 $airVelocity);
 
 boundaryField
 {
@@ -27,7 +27,7 @@ boundaryField
     inlet_fluid
     {
         type            fixedValue;
-        value           uniform (0 0 $internalField);
+        value           $internalField;
     }
     walls_fluid
     {
@@ -37,7 +37,7 @@ boundaryField
     outlet_fluid
     {
         type            pressureInletOutletVelocity;
-        value           uniform (0 0 $internalField);
+        value           $internalField;
     }
     fluid_to_fins
     {
