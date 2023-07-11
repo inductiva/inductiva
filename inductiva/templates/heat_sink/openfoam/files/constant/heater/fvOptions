@@ -15,7 +15,7 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "$FOAM_CASE/constant/initialConditions"
+#include "$FOAM_CASE/parameters"
 
 internalField   $heaterPower; // Set power (W)
 
