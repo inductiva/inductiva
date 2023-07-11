@@ -1,1 +1,0 @@
-[{"cmd" : "gmx trjconv -f solvated_protein.trr -s solvated_protein.tpr -o trajectory.xtc", "prompts":[ "Protein-H" ]}]

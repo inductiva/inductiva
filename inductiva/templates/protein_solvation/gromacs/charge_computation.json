@@ -1,0 +1,5 @@
+[{
+    "cmd":
+        "gmx pdb2gmx -f 1AKI_clean.pdb -o protein.gro -water tip3p -ff amber99sb-ildn",
+    "prompts": []
+}]
