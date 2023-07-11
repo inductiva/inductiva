@@ -2,7 +2,6 @@
 from functools import singledispatchmethod
 import os
 import shutil
-import tempfile
 from typing import Optional
 
 from inductiva.types import Path
@@ -15,7 +14,7 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "heat_sink")
 OPENFOAM_TEMPLATE_SUBDIR = "openfoam"
 FILES_SUBDIR = "files"
-COMMANDS_TEMPLATE_FILE = "commands.json.jinja"
+COMMANDS_FILE_NAME = "commands.json"
 
 
 class HeatSink(Scenario):
@@ -77,21 +76,11 @@ class HeatSink(Scenario):
     def get_commands(self):
         """Returns the commands for the simulation.
         """
+        commands_file_path = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                          OPENFOAM_TEMPLATE_SUBDIR,
+                                          COMMANDS_FILE_NAME)
 
-        openfoam_template_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                              OPENFOAM_TEMPLATE_SUBDIR)
-
-        # Replace parameters in the template file, writing the result to a
-        # temporary file.
-        with tempfile.NamedTemporaryFile(mode="w") as commands_file:
-            replace_params_in_template(openfoam_template_path,
-                                       COMMANDS_TEMPLATE_FILE, {
-                                           "temperature": self.temperature,
-                                           "heater_power": self.heater_power,
-                                       }, commands_file.name)
-
-            # Read the commands from the temporary file.
-            commands = self.read_commands_from_file(commands_file.name)
+        commands = self.read_commands_from_file(commands_file_path)
 
         return commands
 
