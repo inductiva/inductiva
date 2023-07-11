@@ -10,39 +10,31 @@ FoamFile
     version     2.0;
     format      ascii;
     class       volScalarField;
-    location    "0/fluid";
+    location    "0/heater";
     object      T;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
+#include "$FOAM_CASE/constant/initialConditions"
+
 dimensions      [ 0 0 0 1 0 0 0 ];
 
-internalField   uniform 296.9;
+internalField   uniform $Tinitial;
 
 boundaryField
 {
 
-    inlet_fluid
-    {
-        type            fixedValue;
-        value           $internalField;
-    }
-    walls_fluid
+
+    walls_heater
     {
         type            zeroGradient;
     }
-    outlet_fluid
-    {
-        type            inletOutlet;
-        value           $internalField;
-        inletValue      $internalField;
-    }
-    fluid_to_fins
+    heater_to_fins
     {
         type            compressible::turbulentTemperatureCoupledBaffleMixed;
         value           $internalField;
         Tnbr            T;
-        kappaMethod     fluidThermo;
+        kappaMethod     solidThermo;
     }
 }
 

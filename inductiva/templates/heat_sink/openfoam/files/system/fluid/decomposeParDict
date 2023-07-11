@@ -10,32 +10,36 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    location    "constant/heater";
-    object      fvOptions;
+    note        "mesh decomposition control dictionary";
+    location    "system";
+    object      decomposeParDict;
 }
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-options
+numberOfSubdomains 6;
+
+method          scotch;
+
+simpleCoeffs
 {
-    energySource
-    {
-        type            semiImplicitSource;
-        active          yes;
-        selectionMode   all;
-
-        volumeMode      absolute;
-
-        power           50;          // Set power (W)
-
-        sources
-        {
-            e
-            {
-                explicit    $power;
-                implicit    0;
-            }
-        }
-    }
+    n               (3 1 2);
+    delta           0.001;
 }
 
+hierarchicalCoeffs
+{
+    n               (1 1 1);
+    delta           0.001;
+    order           xyz;
+}
+
+manualCoeffs
+{
+    dataFile        "";
+}
+
+distributed     no;
+
+roots           ( );
 // ************************************************************************* //
