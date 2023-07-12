@@ -85,11 +85,12 @@ class ProteinSolvation(Scenario):
         #Edit commands.json according to the charge of the protein
         commands_path = os.path.join(self.template_dir, "commands.json")
 
-        replace_params_in_template(self.template_dir, "commands.json.jinja", {
-            "pdb_file": self.protein_pdb,
-            "charged": self.charged,
-            "selected_part": visualized_section
-        }, commands_path)
+        replace_params_in_template(
+            self.template_dir, "commands.json.jinja", {
+                "pdb_file": self.protein_pdb,
+                "charged": self.charged,
+                "selected_part": visualized_section
+            }, commands_path)
 
         commands = self.read_commands_from_file(commands_path)
         self.nsteps = int(
@@ -137,11 +138,12 @@ class ProteinSolvation(Scenario):
         #Edit commands.json according to the charge of the protein
         commands_path = os.path.join(self.template_dir, "commands.json")
 
-        replace_params_in_template(self.template_dir, "commands.json.jinja", {
-            "pdb_file": self.protein_pdb,
-            "charged": self.charged,
-            "selected_part": visualized_section
-        }, commands_path)
+        replace_params_in_template(
+            self.template_dir, "commands.json.jinja", {
+                "pdb_file": self.protein_pdb,
+                "charged": self.charged,
+                "selected_part": visualized_section
+            }, commands_path)
 
         commands = self.read_commands_from_file(commands_path)
 
@@ -152,8 +154,8 @@ class ProteinSolvation(Scenario):
         self.nsteps_minim = nsteps_minim
 
         self.task_id = super().simulate_async(simulator,
-                                      resource_pool_id=resource_pool_id,
-                                      commands=commands)
+                                              resource_pool_id=resource_pool_id,
+                                              commands=commands)
 
     def compute_charge(self,
                        simulator: Simulator = GROMACS(),
@@ -197,7 +199,8 @@ class ProteinSolvation(Scenario):
         is_charged = abs(charge) > 1e-6
         return is_charged
 
-    def download_outputs(self, output_dir: str = None, resource_pool_id: Optional[UUID] = None):
+    def download_outputs(self,
+                         output_dir: str = None):
         """Download the outputs of the simulation to output_dir."""
 
         if not get_task_info(self.task_id)["status"]:
