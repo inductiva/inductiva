@@ -39,6 +39,7 @@ class InstanceGroup(
             "image_name",
             "spot",
             "name",
+            "disk_size_gb",
             "num_instances",
         }
         
@@ -47,6 +48,7 @@ class InstanceGroup(
             machine_type = schemas.StrSchema
             image_name = schemas.StrSchema
             spot = schemas.BoolSchema
+            disk_size_gb = schemas.IntSchema
             num_instances = schemas.IntSchema
             zone = schemas.StrSchema
             
@@ -95,6 +97,7 @@ class InstanceGroup(
                 "machine_type": machine_type,
                 "image_name": image_name,
                 "spot": spot,
+                "disk_size_gb": disk_size_gb,
                 "num_instances": num_instances,
                 "zone": zone,
                 "resource_pool_id": resource_pool_id,
@@ -104,6 +107,7 @@ class InstanceGroup(
     image_name: MetaOapg.properties.image_name
     spot: MetaOapg.properties.spot
     name: MetaOapg.properties.name
+    disk_size_gb: MetaOapg.properties.disk_size_gb
     num_instances: MetaOapg.properties.num_instances
     
     @typing.overload
@@ -119,6 +123,9 @@ class InstanceGroup(
     def __getitem__(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["disk_size_gb"]) -> MetaOapg.properties.disk_size_gb: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["num_instances"]) -> MetaOapg.properties.num_instances: ...
     
     @typing.overload
@@ -130,7 +137,7 @@ class InstanceGroup(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "num_instances", "zone", "resource_pool_id", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "disk_size_gb", "num_instances", "zone", "resource_pool_id", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -148,6 +155,9 @@ class InstanceGroup(
     def get_item_oapg(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["disk_size_gb"]) -> MetaOapg.properties.disk_size_gb: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["num_instances"]) -> MetaOapg.properties.num_instances: ...
     
     @typing.overload
@@ -159,7 +169,7 @@ class InstanceGroup(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "num_instances", "zone", "resource_pool_id", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "disk_size_gb", "num_instances", "zone", "resource_pool_id", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -170,6 +180,7 @@ class InstanceGroup(
         image_name: typing.Union[MetaOapg.properties.image_name, str, ],
         spot: typing.Union[MetaOapg.properties.spot, bool, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
+        disk_size_gb: typing.Union[MetaOapg.properties.disk_size_gb, decimal.Decimal, int, ],
         num_instances: typing.Union[MetaOapg.properties.num_instances, decimal.Decimal, int, ],
         zone: typing.Union[MetaOapg.properties.zone, str, schemas.Unset] = schemas.unset,
         resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -183,6 +194,7 @@ class InstanceGroup(
             image_name=image_name,
             spot=spot,
             name=name,
+            disk_size_gb=disk_size_gb,
             num_instances=num_instances,
             zone=zone,
             resource_pool_id=resource_pool_id,
