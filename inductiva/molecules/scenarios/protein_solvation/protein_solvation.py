@@ -16,7 +16,6 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils.files import remove_files_with_tag
-from inductiva.tasks import fetch_task_output, get_task_info
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
@@ -166,7 +165,7 @@ class ProteinSolvation(Scenario):
         self.task_id = super().simulate_async(simulator,
                                               resource_pool_id=resource_pool_id,
                                               commands=commands)
-        
+
         return self.task_id
 
     def compute_charge(self,

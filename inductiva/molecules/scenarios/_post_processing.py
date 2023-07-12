@@ -26,7 +26,9 @@ class GROMACSSimulationOutput:
 
         self.sim_output_dir = sim_output_path
 
-    def render(self, pdb_file_name: str =None, trajectory_file_name: str = "trajectory.xtc"):
+    def render(self,
+               pdb_file_name: str = None,
+               trajectory_file_name: str = "trajectory.xtc"):
         """Visualize the simulation outputs in a notebook using NGLView.
 
         Args:
