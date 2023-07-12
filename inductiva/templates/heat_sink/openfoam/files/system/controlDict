@@ -1,0 +1,89 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#include "$FOAM_CASE/parameters"
+
+application     chtMultiRegionFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         $simulationTime;
+
+deltaT          1;
+
+writeControl    adjustableRunTime;
+
+writeInterval   $outputTimeStep;
+
+purgeWrite      0;
+
+writeFormat     binary;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+//maxCo           1.0;
+
+//maxDi           10.0;
+
+//adjustTimeStep  yes;
+
+functions
+{
+
+    #includeFunc cellMaxHeaterT
+    #includeFunc cellMaxFinT
+    // #includeFunc volAvgFinTemperature
+    // #includeFunc volAvgHeaterTemperature
+ 
+    // averageTempHeaterFinInterface
+    // {
+    //     type            surfaceFieldValue;
+    //     surfaceFormat   off;
+    //     libs            ("libfieldFunctionObjects.so");
+    //     enabled         true;
+    //     writeControl    timeStep;
+    //     writeInterval   1;
+    //     log             true;
+    //     writeFields     false;
+    //     region          heater;
+    //     regionType      patch;
+    //     name            heater_to_fins;
+    //     operation       areaAverage;
+    //     mode            magnitude;
+    //     fields
+    //     (
+    //         T
+    //     );
+    // }
+
+
+}
+
+
+// ************************************************************************* //

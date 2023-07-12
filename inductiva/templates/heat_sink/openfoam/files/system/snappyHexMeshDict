@@ -1,0 +1,126 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  7
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#includeEtc "caseDicts/mesh/generation/snappyHexMeshDict.cfg"
+
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    fluid
+    {
+        type triSurfaceMesh;
+        file "fluidHeaterFins.stl";
+
+        regions
+        {
+            inlet_fluid     { name inlet_fluid;     }
+            outlet_fluid    { name outlet_fluid;    }
+            walls_fluid     { name walls_fluid;     }
+            base_fins       { name base_fins;     }
+            walls_heater    { name walls_heater;     }
+        }
+    }
+
+
+    interface_heaterToFins
+    {
+        type triSurfaceMesh;
+        file "interface_heater.stl";
+    }
+
+    interface_fluidToFins
+    {
+        type triSurfaceMesh;
+        file "interface_fluid.stl";
+    }
+    
+    box1    // User defined region name 
+    { 
+        type    searchableBox;       // region defined by bounding box 
+        min     (-30 -20 -40); 
+        max     (30 40 40); 
+    } 
+
+
+};
+
+castellatedMeshControls
+{
+    refinementSurfaces
+    {
+        fluid
+        {
+            level (0 0);
+            regions
+            {
+                inlet_fluid     { level (0 0); patchInfo { type patch; } }
+                outlet_fluid    { level (0 0); patchInfo { type patch; } }
+                walls_fluid     { level (0 0); patchInfo { type wall; } }
+                walls_heater    { level (2 2); patchInfo { type wall;  } }
+                base_fins       { level (2 2); patchInfo { type wall;  } }
+            }
+        }
+
+        interface_fluidToFins
+        {
+            level (2 3);
+            faceZone interface_fluidToFins;
+            cellZone fins;
+            cellZoneInside insidePoint;
+            insidePoint (0.01 0.001 0.001);
+        }
+
+        interface_heaterToFins
+        {
+            level (2 3);
+            faceZone interface_heaterToFins;
+            cellZone heater;
+            cellZoneInside insidePoint;
+            insidePoint (0.01 -10 0.01);
+        }
+        
+
+    }
+
+    nCellsBetweenLevels 1;
+
+    refinementRegions
+    {
+        box1
+        {
+            mode inside;
+            levels ((1.0 2));  // refinement level 2 (1.0 entry ignored)
+        }
+    }
+
+    locationInMesh (1.0 10 1.0);
+}
+
+addLayersControls
+{
+    relativeSizes       true;
+    minThickness        1;
+    finalLayerThickness 1;
+    expansionRatio      1;
+    layers
+    {}
+}
+
+// ************************************************************************* //
