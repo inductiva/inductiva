@@ -75,6 +75,11 @@ class ProteinSolvation(Scenario):
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
             nsteps_minim: Number of steps for energy minimization.
+            visualized_section: The section of the protein to visualize in the
+            simulation.
+                Options:
+                - "Protein-H": The protein with hydrogens. This is the default.
+                - "System": The whole system (Protein + Water).
         """
 
         #Compute charge if it is not provided
@@ -89,7 +94,7 @@ class ProteinSolvation(Scenario):
             self.template_dir, "commands.json.jinja", {
                 "pdb_file": self.protein_pdb,
                 "charged": self.charged,
-                "selected_part": visualized_section
+                "visualized_section": visualized_section
             }, commands_path)
 
         commands = self.read_commands_from_file(commands_path)
@@ -128,6 +133,11 @@ class ProteinSolvation(Scenario):
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
             nsteps_minim: Number of steps for energy minimization.
+            visualized_section: The section of the protein to visualize in the
+            simulation.
+                Options:
+                - "Protein-H": The protein with hydrogens. This is the default.
+                - "System": The whole system (Protein + Water).
         """
 
         #Compute charge if it is not provided
@@ -142,7 +152,7 @@ class ProteinSolvation(Scenario):
             self.template_dir, "commands.json.jinja", {
                 "pdb_file": self.protein_pdb,
                 "charged": self.charged,
-                "selected_part": visualized_section
+                "visualized_section": visualized_section
             }, commands_path)
 
         commands = self.read_commands_from_file(commands_path)
@@ -156,6 +166,8 @@ class ProteinSolvation(Scenario):
         self.task_id = super().simulate_async(simulator,
                                               resource_pool_id=resource_pool_id,
                                               commands=commands)
+        
+        return self.task_id
 
     def compute_charge(self,
                        simulator: Simulator = GROMACS(),
@@ -198,15 +210,6 @@ class ProteinSolvation(Scenario):
 
         is_charged = abs(charge) > 1e-6
         return is_charged
-
-    def download_outputs(self,
-                         output_dir: str = None):
-        """Download the outputs of the simulation to output_dir."""
-
-        if not get_task_info(self.task_id)["status"]:
-            raise ValueError("Simulation not finished.")
-
-        fetch_task_output(self.task_id, output_dir=output_dir, return_type=None)
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):

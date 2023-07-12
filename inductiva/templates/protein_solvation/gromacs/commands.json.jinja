@@ -8,5 +8,5 @@
     {"cmd": "gmx mdrun -deffnm em -v yes", "prompts":[]},
     {"cmd": "gmx grompp -f simulation.mdp -c em.gro -r em.gro -p topol.top -o solvated_protein.tpr", "prompts":[]},
     {"cmd": "gmx mdrun -deffnm solvated_protein -v yes", "prompts":[]},
-    {"cmd": "gmx trjconv -f solvated_protein.trr -s solvated_protein.tpr -o trajectory.xtc", "prompts":[ "{{selected_part}}"] }
+    {"cmd": "gmx trjconv -f solvated_protein.trr -s solvated_protein.tpr -o trajectory.xtc", "prompts":[ "{{visualized_section}}"] }
 ]

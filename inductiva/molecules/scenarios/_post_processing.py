@@ -1,4 +1,5 @@
 """Post process Gromacs simulation outputs."""
+import glob
 import os
 import MDAnalysis as mda
 import nglview as nv
@@ -11,7 +12,7 @@ GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 
 
 class GROMACSSimulationOutput:
-    """Post process GROMACS simulation outputs."""
+    """Post process a GROMACS simulation outputs."""
 
     def __init__(self, sim_output_path: Path = None):
         """Initializes a `SimulationOutput` object.
@@ -25,23 +26,24 @@ class GROMACSSimulationOutput:
 
         self.sim_output_dir = sim_output_path
 
-    def render(self, pdb_file=None, trajectory_name: str = "trajectory.xtc"):
+    def render(self, pdb_file_name: str =None, trajectory_file_name: str = "trajectory.xtc"):
         """Visualize the simulation outputs in a notebook using NGLView.
 
         Args:
             pdb_file: Path to the PDB file to be visualized.
             trajectory_name: Name of the trajectory file to be visualized."""
 
-        if pdb_file is None:
-            for filename in os.listdir(self.sim_output_dir):
-                if filename.endswith(".pdb"):
-                    pdb_file = filename
+        pdb_pattern = os.path.join(self.sim_output_dir, "*.pdb")
+        pdb_file_name = glob.glob(pdb_pattern)
 
-        if pdb_file is None:
+        if pdb_file_name is None:
             raise ValueError("No PDB file found in the output directory.")
 
-        protein_file = os.path.join(self.sim_output_dir, pdb_file)
-        trajectory = os.path.join(self.sim_output_dir, trajectory_name)
+        if len(pdb_file_name) != 1:
+            raise ValueError("Please specify the .pdb file to be visualized.")
+
+        protein_file = os.path.join(self.sim_output_dir, pdb_file_name[0])
+        trajectory = os.path.join(self.sim_output_dir, trajectory_file_name)
         system = mda.Universe(protein_file, trajectory)
 
         view = nv.show_mdanalysis(system)
