@@ -35,6 +35,7 @@ class InstanceCreate(schemas.DictSchema):
             "image_name",
             "spot",
             "name",
+            "disk_size_gb",
         }
 
         class properties:
@@ -42,6 +43,7 @@ class InstanceCreate(schemas.DictSchema):
             machine_type = schemas.StrSchema
             image_name = schemas.StrSchema
             spot = schemas.BoolSchema
+            disk_size_gb = schemas.IntSchema
             zone = schemas.StrSchema
 
             class resource_pool_id(
@@ -109,6 +111,7 @@ class InstanceCreate(schemas.DictSchema):
                 "machine_type": machine_type,
                 "image_name": image_name,
                 "spot": spot,
+                "disk_size_gb": disk_size_gb,
                 "zone": zone,
                 "resource_pool_id": resource_pool_id,
             }
@@ -117,6 +120,7 @@ class InstanceCreate(schemas.DictSchema):
     image_name: MetaOapg.properties.image_name
     spot: MetaOapg.properties.spot
     name: MetaOapg.properties.name
+    disk_size_gb: MetaOapg.properties.disk_size_gb
 
     @typing.overload
     def __getitem__(
@@ -144,6 +148,12 @@ class InstanceCreate(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["disk_size_gb"]
+    ) -> MetaOapg.properties.disk_size_gb:
+        ...
+
+    @typing.overload
+    def __getitem__(
             self, name: typing_extensions.Literal["zone"]
     ) -> MetaOapg.properties.zone:
         ...
@@ -163,6 +173,7 @@ class InstanceCreate(schemas.DictSchema):
         "machine_type",
         "image_name",
         "spot",
+        "disk_size_gb",
         "zone",
         "resource_pool_id",
     ], str]):
@@ -195,6 +206,12 @@ class InstanceCreate(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["disk_size_gb"]
+    ) -> MetaOapg.properties.disk_size_gb:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["zone"]
     ) -> typing.Union[MetaOapg.properties.zone, schemas.Unset]:
         ...
@@ -216,6 +233,7 @@ class InstanceCreate(schemas.DictSchema):
         "machine_type",
         "image_name",
         "spot",
+        "disk_size_gb",
         "zone",
         "resource_pool_id",
     ], str]):
@@ -243,6 +261,11 @@ class InstanceCreate(schemas.DictSchema):
             MetaOapg.properties.name,
             str,
         ],
+        disk_size_gb: typing.Union[
+            MetaOapg.properties.disk_size_gb,
+            decimal.Decimal,
+            int,
+        ],
         zone: typing.Union[MetaOapg.properties.zone, str,
                            schemas.Unset] = schemas.unset,
         resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id,
@@ -264,6 +287,7 @@ class InstanceCreate(schemas.DictSchema):
             image_name=image_name,
             spot=spot,
             name=name,
+            disk_size_gb=disk_size_gb,
             zone=zone,
             resource_pool_id=resource_pool_id,
             _configuration=_configuration,

@@ -39,6 +39,7 @@ class InstanceCreate(
             "image_name",
             "spot",
             "name",
+            "disk_size_gb",
         }
         
         class properties:
@@ -46,6 +47,7 @@ class InstanceCreate(
             machine_type = schemas.StrSchema
             image_name = schemas.StrSchema
             spot = schemas.BoolSchema
+            disk_size_gb = schemas.IntSchema
             zone = schemas.StrSchema
             
             
@@ -93,6 +95,7 @@ class InstanceCreate(
                 "machine_type": machine_type,
                 "image_name": image_name,
                 "spot": spot,
+                "disk_size_gb": disk_size_gb,
                 "zone": zone,
                 "resource_pool_id": resource_pool_id,
             }
@@ -101,6 +104,7 @@ class InstanceCreate(
     image_name: MetaOapg.properties.image_name
     spot: MetaOapg.properties.spot
     name: MetaOapg.properties.name
+    disk_size_gb: MetaOapg.properties.disk_size_gb
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
@@ -115,6 +119,9 @@ class InstanceCreate(
     def __getitem__(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["disk_size_gb"]) -> MetaOapg.properties.disk_size_gb: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["zone"]) -> MetaOapg.properties.zone: ...
     
     @typing.overload
@@ -123,7 +130,7 @@ class InstanceCreate(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "zone", "resource_pool_id", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "disk_size_gb", "zone", "resource_pool_id", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -141,6 +148,9 @@ class InstanceCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["disk_size_gb"]) -> MetaOapg.properties.disk_size_gb: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["zone"]) -> typing.Union[MetaOapg.properties.zone, schemas.Unset]: ...
     
     @typing.overload
@@ -149,7 +159,7 @@ class InstanceCreate(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "zone", "resource_pool_id", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "image_name", "spot", "disk_size_gb", "zone", "resource_pool_id", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -160,6 +170,7 @@ class InstanceCreate(
         image_name: typing.Union[MetaOapg.properties.image_name, str, ],
         spot: typing.Union[MetaOapg.properties.spot, bool, ],
         name: typing.Union[MetaOapg.properties.name, str, ],
+        disk_size_gb: typing.Union[MetaOapg.properties.disk_size_gb, decimal.Decimal, int, ],
         zone: typing.Union[MetaOapg.properties.zone, str, schemas.Unset] = schemas.unset,
         resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -172,6 +183,7 @@ class InstanceCreate(
             image_name=image_name,
             spot=spot,
             name=name,
+            disk_size_gb=disk_size_gb,
             zone=zone,
             resource_pool_id=resource_pool_id,
             _configuration=_configuration,

@@ -35,6 +35,7 @@ class InstanceGroup(schemas.DictSchema):
             "image_name",
             "spot",
             "name",
+            "disk_size_gb",
             "num_instances",
         }
 
@@ -43,6 +44,7 @@ class InstanceGroup(schemas.DictSchema):
             machine_type = schemas.StrSchema
             image_name = schemas.StrSchema
             spot = schemas.BoolSchema
+            disk_size_gb = schemas.IntSchema
             num_instances = schemas.IntSchema
             zone = schemas.StrSchema
 
@@ -111,6 +113,7 @@ class InstanceGroup(schemas.DictSchema):
                 "machine_type": machine_type,
                 "image_name": image_name,
                 "spot": spot,
+                "disk_size_gb": disk_size_gb,
                 "num_instances": num_instances,
                 "zone": zone,
                 "resource_pool_id": resource_pool_id,
@@ -120,6 +123,7 @@ class InstanceGroup(schemas.DictSchema):
     image_name: MetaOapg.properties.image_name
     spot: MetaOapg.properties.spot
     name: MetaOapg.properties.name
+    disk_size_gb: MetaOapg.properties.disk_size_gb
     num_instances: MetaOapg.properties.num_instances
 
     @typing.overload
@@ -144,6 +148,12 @@ class InstanceGroup(schemas.DictSchema):
     def __getitem__(
             self, name: typing_extensions.Literal["spot"]
     ) -> MetaOapg.properties.spot:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["disk_size_gb"]
+    ) -> MetaOapg.properties.disk_size_gb:
         ...
 
     @typing.overload
@@ -173,6 +183,7 @@ class InstanceGroup(schemas.DictSchema):
         "machine_type",
         "image_name",
         "spot",
+        "disk_size_gb",
         "num_instances",
         "zone",
         "resource_pool_id",
@@ -206,6 +217,12 @@ class InstanceGroup(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["disk_size_gb"]
+    ) -> MetaOapg.properties.disk_size_gb:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["num_instances"]
     ) -> MetaOapg.properties.num_instances:
         ...
@@ -233,6 +250,7 @@ class InstanceGroup(schemas.DictSchema):
         "machine_type",
         "image_name",
         "spot",
+        "disk_size_gb",
         "num_instances",
         "zone",
         "resource_pool_id",
@@ -261,6 +279,11 @@ class InstanceGroup(schemas.DictSchema):
             MetaOapg.properties.name,
             str,
         ],
+        disk_size_gb: typing.Union[
+            MetaOapg.properties.disk_size_gb,
+            decimal.Decimal,
+            int,
+        ],
         num_instances: typing.Union[
             MetaOapg.properties.num_instances,
             decimal.Decimal,
@@ -287,6 +310,7 @@ class InstanceGroup(schemas.DictSchema):
             image_name=image_name,
             spot=spot,
             name=name,
+            disk_size_gb=disk_size_gb,
             num_instances=num_instances,
             zone=zone,
             resource_pool_id=resource_pool_id,
