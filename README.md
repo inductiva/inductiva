@@ -66,4 +66,9 @@ and your are good to go! You are ready to start [exploring our tutorial notebook
 Notice that, in a local computer you just need to do this once. When opening the tutorials in Google Colab, you may need to re-install this
 between notebooks.
 
+## API access tokens
+
+Please request your demo API token via the following Google Form (we will reply to you by email):
+
+[Request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform)
 
