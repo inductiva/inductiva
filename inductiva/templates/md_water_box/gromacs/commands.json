@@ -1,0 +1,9 @@
+[
+    {"cmd": "gmx solvate -cs tip4p -box 2.3 -o conf.gro -p topol.top", "prompts": []},
+    {"cmd": "gmx grompp -f energy_minimization.mdp -o min.tpr -pp min.top -po min.mdp -c conf.gro -p topol.top", "prompts": []},
+    {"cmd": "gmx mdrun -s min.tpr -o min.trr -x min.xtc -c min.gro -e min.edr -g min.log", "prompts": []},
+    {"cmd": "gmx grompp -f positions_decorrelation.mdp -o decorr.tpr -pp decorr.top -po decorr.mdp -c min.gro", "prompts": []},
+    {"cmd": "gmx mdrun -s decorr.tpr -o decorr.trr -x decorr.xtc -c decorr.gro -e decorr.edr -g decorr.log", "prompts": []},
+    {"cmd": "gmx grompp -f simulation.mdp -o eql.tpr -pp eql.top -po eql.mdp -c decorr.gro", "prompts": []},
+    {"cmd": "gmx mdrun -s eql.tpr -o eql.trr -x eql.xtc -c eql.gro -e eql.edr -g eql.log", "prompts": []}
+]
