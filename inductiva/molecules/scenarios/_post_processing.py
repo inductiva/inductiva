@@ -29,9 +29,7 @@ class GROMACSSimulationOutput:
 
     def render(self,
                pdb_file_name: str = None,
-               representation = "licorice",
-               trajectory_file_name: str = "trajectory.xtc", 
-               save = True):
+               trajectory_file_name: str = "trajectory.xtc"):
         """Visualize the simulation outputs in a notebook using NGLView.
 
         Args:
@@ -47,7 +45,8 @@ class GROMACSSimulationOutput:
                 raise ValueError("No PDB file found in the output directory.")
 
             if len(pdb_file_name) != 1:
-                raise ValueError("Please specify the .pdb file to be visualized.")
+                raise ValueError(
+                    "Please specify the .pdb file to be visualized.")
 
         protein_file = os.path.join(self.sim_output_dir, pdb_file_name)
         trajectory = os.path.join(self.sim_output_dir, trajectory_file_name)
@@ -61,7 +60,5 @@ class GROMACSSimulationOutput:
         view.parameters = {
             "backgroundColor": "white"
         }  # Set the background color
-
-
 
         return view
