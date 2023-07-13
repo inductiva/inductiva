@@ -6,6 +6,7 @@ import nglview as nv
 
 from inductiva.types import Path
 from inductiva.utils.templates import (TEMPLATES_PATH)
+from nglview.contrib.movie import MovieMaker
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_visualization")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
@@ -28,32 +29,39 @@ class GROMACSSimulationOutput:
 
     def render(self,
                pdb_file_name: str = None,
-               trajectory_file_name: str = "trajectory.xtc"):
+               representation = "licorice",
+               trajectory_file_name: str = "trajectory.xtc", 
+               save = True):
         """Visualize the simulation outputs in a notebook using NGLView.
 
         Args:
             pdb_file: Path to the PDB file to be visualized.
-            trajectory_name: Name of the trajectory file to be visualized."""
-
-        pdb_pattern = os.path.join(self.sim_output_dir, "*.pdb")
-        pdb_file_name = glob.glob(pdb_pattern)
+            trajectory_name: Name of the trajectory file to be visualized.
+            save: If True, save the visualization as a .mp4 file."""
 
         if pdb_file_name is None:
-            raise ValueError("No PDB file found in the output directory.")
+            pdb_pattern = os.path.join(self.sim_output_dir, "*.pdb")
+            pdb_file_name = glob.glob(pdb_pattern)
 
-        if len(pdb_file_name) != 1:
-            raise ValueError("Please specify the .pdb file to be visualized.")
+            if pdb_file_name is None:
+                raise ValueError("No PDB file found in the output directory.")
 
-        protein_file = os.path.join(self.sim_output_dir, pdb_file_name[0])
+            if len(pdb_file_name) != 1:
+                raise ValueError("Please specify the .pdb file to be visualized.")
+
+        protein_file = os.path.join(self.sim_output_dir, pdb_file_name)
         trajectory = os.path.join(self.sim_output_dir, trajectory_file_name)
         system = mda.Universe(protein_file, trajectory)
 
         view = nv.show_mdanalysis(system)
-        view.add_ball_and_stick(
-            "all")  # Render the molecules as ball-and-stick models
+        view.clear()
+        view.add_representation(
+            "ball+stick")  # Render the molecules as ball-and-stick models
         view.center()  # Center the view
         view.parameters = {
             "backgroundColor": "white"
         }  # Set the background color
+
+
 
         return view
