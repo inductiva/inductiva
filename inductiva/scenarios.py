@@ -8,7 +8,7 @@ from inductiva.types import Path
 from inductiva.simulation import Simulator
 from inductiva.utils.files import resolve_path, get_timestamped_path
 from inductiva.utils.misc import split_camel_case
-from inductiva.utils.task import get_task_info, fetch_task_output
+from inductiva.tasks.methods import get_task_info, fetch_task_output
 import json
 
 
@@ -35,8 +35,7 @@ class Scenario(ABC):
             args += (config_filename,)
         return args
 
-    def download_outputs(self,
-                         output_dir: str = None):
+    def download_outputs(self, output_dir: str = None):
         """Download the outputs of an async simulation to output_dir."""
 
         if not get_task_info(self.task_id)["status"]:
