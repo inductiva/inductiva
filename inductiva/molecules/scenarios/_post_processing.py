@@ -6,7 +6,6 @@ import nglview as nv
 
 from inductiva.types import Path
 from inductiva.utils.templates import (TEMPLATES_PATH)
-from nglview.contrib.movie import MovieMaker
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_visualization")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
@@ -34,8 +33,7 @@ class GROMACSSimulationOutput:
 
         Args:
             pdb_file: Path to the PDB file to be visualized.
-            trajectory_name: Name of the trajectory file to be visualized.
-            save: If True, save the visualization as a .mp4 file."""
+            trajectory_name: Name of the trajectory file to be visualized."""
 
         if pdb_file_name is None:
             pdb_pattern = os.path.join(self.sim_output_dir, "*.pdb")
@@ -53,9 +51,8 @@ class GROMACSSimulationOutput:
         system = mda.Universe(protein_file, trajectory)
 
         view = nv.show_mdanalysis(system)
-        view.clear()
-        view.add_representation(
-            "ball+stick")  # Render the molecules as ball-and-stick models
+        view.add_ball_and_stick(
+            "all")  # Render the molecules as ball-and-stick models
         view.center()  # Center the view
         view.parameters = {
             "backgroundColor": "white"
