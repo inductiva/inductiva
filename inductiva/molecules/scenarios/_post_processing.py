@@ -35,16 +35,18 @@ class GROMACSSimulationOutput:
             pdb_file: Path to the PDB file to be visualized.
             trajectory_name: Name of the trajectory file to be visualized."""
 
-        pdb_pattern = os.path.join(self.sim_output_dir, "*.pdb")
-        pdb_file_name = glob.glob(pdb_pattern)
-
         if pdb_file_name is None:
-            raise ValueError("No PDB file found in the output directory.")
+            pdb_pattern = os.path.join(self.sim_output_dir, "*.pdb")
+            pdb_file_name = glob.glob(pdb_pattern)
 
-        if len(pdb_file_name) != 1:
-            raise ValueError("Please specify the .pdb file to be visualized.")
+            if pdb_file_name is None:
+                raise ValueError("No PDB file found in the output directory.")
 
-        protein_file = os.path.join(self.sim_output_dir, pdb_file_name[0])
+            if len(pdb_file_name) != 1:
+                raise ValueError(
+                    "Please specify the .pdb file to be visualized.")
+
+        protein_file = os.path.join(self.sim_output_dir, pdb_file_name)
         trajectory = os.path.join(self.sim_output_dir, trajectory_file_name)
         system = mda.Universe(protein_file, trajectory)
 
