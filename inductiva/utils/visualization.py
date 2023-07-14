@@ -472,8 +472,12 @@ class MeshData:
     def render(self,
                background_color: str = "black",
                scalars_cmap: str = "viridis",
+               virtual_display: bool = True,
                save_path: Path = None):
         """Render scalar field data over the mesh."""
+
+        if virtual_display:
+            pv.start_xvfb()
 
         plotter = pv.Plotter()
         pv.global_theme.background = background_color
