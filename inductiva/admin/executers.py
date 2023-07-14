@@ -32,6 +32,7 @@ def launch_executer(
     executer_type: str,
     spot: bool = True,
     resource_pool_id: Optional[UUID] = None,
+    disk_size_gb: int = 10,
 ) -> None:
 
     api_config = api.validate_api_key(inductiva.api_key)
@@ -45,6 +46,7 @@ def launch_executer(
             image_name=executer_type,
             spot=spot,
             resource_pool_id=resource_pool_id,
+            disk_size_gb=disk_size_gb,
         )
 
         try:
@@ -71,6 +73,7 @@ def launch_executer_group(
     executer_type: str,
     spot: bool = True,
     resource_pool_id: Optional[UUID] = None,
+    disk_size_gb: int = 10,
 ) -> None:
 
     api_config = api.validate_api_key(inductiva.api_key)
@@ -85,6 +88,7 @@ def launch_executer_group(
             spot=spot,
             resource_pool_id=resource_pool_id,
             num_instances=num_executers,
+            disk_size_gb=disk_size_gb,
         )
 
         try:
