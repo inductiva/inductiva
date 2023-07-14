@@ -113,11 +113,15 @@ class WindTunnelSimulationOutput:
                     flow_property_mesh,
                     physical_property: Literal["pressure",
                                                "velocity"] = "pressure",
+                    virtual_display: bool = True,
                     background_color: str = "black",
                     flow_cmap: str = "viridis",
                     object_color: str = "white",
                     save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
+
+        if virtual_display:
+            pv.start_xvfb()
 
         # Obtain notation for the physical property for the simulator.
         property_notation = OpenFOAMPhysicalProperty[
