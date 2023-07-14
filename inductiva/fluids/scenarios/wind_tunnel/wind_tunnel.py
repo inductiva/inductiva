@@ -159,7 +159,7 @@ class WindTunnel(Scenario):
         """Returns the commands for the simulation.
         """
         templates_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                          OPENFOAM_TEMPLATE_INPUT_DIR)
+                                      OPENFOAM_TEMPLATE_INPUT_DIR)
         commands_file_path = os.path.join(templates_path, "commands.json")
 
         replace_params_in_template(templates_path, "commands.json.jinja",
@@ -198,8 +198,7 @@ def _(self, simulator: OpenFOAM):  # pylint: disable=unused-argument
 def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
     # The WindTunnel with OpenFOAM requires changing multiple files
     template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                OPENFOAM_TEMPLATE_INPUT_DIR,
-                                FILES_SUBDIR)
+                                OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
 
     # Copy all files from the template dir to the input directory
     shutil.copytree(template_dir, input_dir, dirs_exist_ok=True, symlinks=True)
@@ -214,8 +213,7 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
 
     # The WindTunnel with OpenFOAM requires changing multiple files
     template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                OPENFOAM_TEMPLATE_INPUT_DIR,
-                                FILES_SUBDIR)
+                                OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
 
     # Add object path to its respective place
     object_input_dir_path = os.path.join(input_dir, "constant", "triSurface")
