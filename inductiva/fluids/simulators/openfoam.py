@@ -44,10 +44,9 @@ class OpenFOAM(Simulator):
     def run_async(
         self,
         input_dir: types.Path,
-        method_name: str,
+        commands: List[dict],
         resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
-        **openfoam_flags: Optional[str],
     ) -> str:
         """Run the simulation asynchronously.
 
@@ -61,6 +60,5 @@ class OpenFOAM(Simulator):
 
         return super().run_async(input_dir,
                                  resource_pool_id=resource_pool_id,
-                                 method_name=method_name,
-                                 n_cores=n_cores,
-                                 user_flags=openfoam_flags)
+                                 commands=commands,
+                                 n_cores=n_cores)

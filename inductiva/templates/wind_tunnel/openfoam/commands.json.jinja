@@ -1,0 +1,15 @@
+[
+    {"cmd": "surfaceFeatures", "prompts": []},
+    {"cmd": "blockMesh", "prompts":[]},
+    {% if n_cores > 1 %} {"cmd": "decomposePar -copyZero", "prompts":[]},
+    {"cmd": "mpirun --allow-run-as-root -np {{ n_cores }} snappyHexMesh -overwrite -parallel", "prompts":[]},
+    {% else %} {"cmd": "snappyHexMesh -overwrite", "prompts":[]},
+    {% endif %}
+    {"cmd": "reconstructParMesh -constant", "prompts":[]},
+    {"cmd": "potentialFoam", "prompts":[]},
+    {% if n_cores > 1 %} 
+    {"cmd": "mpirun --allow-run-as-root -np {{ n_cores }} simpleFoam -parallel", "prompts":[]},
+    {"cmd": "reconstructPar", "prompts":[]}
+    {% else %} {"cmd": "simpleFoam", "prompts":[]}
+    {% endif %}
+]
