@@ -3,6 +3,8 @@
 import os
 import tempfile
 from typing import Dict, List, Optional
+from base64 import b64encode
+from IPython.display import HTML
 
 from absl import logging
 
@@ -487,3 +489,11 @@ class MeshData:
         plotter.add_mesh(self.mesh, scalars=self.scalar_name, cmap=scalars_cmap)
         plotter.show(screenshot=save_path)
         plotter.close()
+
+        with open(save_path, "rb") as file_path:
+            png = file_path.read()
+        png_url = "data:image/png;base64," + b64encode(png).decode()
+
+        return HTML(f"""
+                <img src="{png_url}" type="image/png" width="600">
+        """)
