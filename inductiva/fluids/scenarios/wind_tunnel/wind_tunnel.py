@@ -15,11 +15,15 @@ from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import OpenFOAM
 from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template)
+                                       batch_replace_params_in_template,
+                                       replace_params_in_template)
 from inductiva.utils.files import remove_files_with_tag
+from inductiva.fluids.scenarios.wind_tunnel.post_processing import WindTunnelSimulationOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
+FILES_SUBDIR = "files"
+COMMANDS_TEMPLATE_NAME = "commands.json.jinja"
 
 
 @dataclass
@@ -69,8 +73,7 @@ class WindTunnel(Scenario):
             self.domain = domain
 
     def simulate(self,
-                 simulator: Simulator = OpenFOAM(
-                     "windtunnel.openfoam.run_simulation"),
+                 simulator: Simulator = OpenFOAM(),
                  output_dir: Optional[Path] = None,
                  resource_pool_id: Optional[UUID] = None,
                  object_path: Optional[Path] = None,
@@ -100,19 +103,20 @@ class WindTunnel(Scenario):
         self.n_cores = n_cores
         self.resolution = MeshResolution[resolution.upper()].value
 
+        commands = self.get_commands()
+
         output_path = super().simulate(
             simulator,
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             n_cores=n_cores,
-            method_name="simpleFoam",
+            commands=commands,
         )
 
-        return output_path
+        return WindTunnelSimulationOutput(output_path, simulation_time)
 
     def simulate_async(self,
-                       simulator: Simulator = OpenFOAM(
-                           "windtunnel.openfoam.run_simulation"),
+                       simulator: Simulator = OpenFOAM(),
                        resource_pool_id: Optional[UUID] = None,
                        object_path: Optional[Path] = None,
                        simulation_time: float = 100,
@@ -141,14 +145,31 @@ class WindTunnel(Scenario):
         self.output_time_step = output_time_step
         self.n_cores = n_cores
 
+        commands = self.get_commands()
+
         task_id = super().simulate_async(
             simulator,
             resource_pool_id=resource_pool_id,
             n_cores=n_cores,
-            method_name="simpleFoam",
+            commands=commands,
         )
 
         return task_id
+
+    def get_commands(self):
+        """Returns the commands for the simulation.
+        """
+        templates_path = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      OPENFOAM_TEMPLATE_INPUT_DIR)
+        commands_file_path = os.path.join(templates_path, "commands.json")
+
+        replace_params_in_template(templates_path, "commands.json.jinja",
+                                   {"n_cores": self.n_cores},
+                                   commands_file_path)
+
+        commands = self.read_commands_from_file(commands_file_path)
+
+        return commands
 
     @singledispatchmethod
     @classmethod
@@ -178,12 +199,10 @@ def _(self, simulator: OpenFOAM):  # pylint: disable=unused-argument
 def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
     # The WindTunnel with OpenFOAM requires changing multiple files
     template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                OPENFOAM_TEMPLATE_INPUT_DIR)
+                                OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
 
     # Copy all files from the template dir to the input directory
-    for directory in os.listdir(template_dir):
-        shutil.copytree(os.path.join(template_dir, directory),
-                        os.path.join(input_dir, directory))
+    shutil.copytree(template_dir, input_dir, dirs_exist_ok=True, symlinks=True)
 
     # Remove all files that have .jinja in input_dir
     remove_files_with_tag(input_dir, ".jinja")
@@ -195,7 +214,7 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
 
     # The WindTunnel with OpenFOAM requires changing multiple files
     template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                OPENFOAM_TEMPLATE_INPUT_DIR)
+                                OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
 
     # Add object path to its respective place
     object_input_dir_path = os.path.join(input_dir, "constant", "triSurface")
