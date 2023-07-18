@@ -147,7 +147,7 @@ class WindTunnelSimulationOutput:
         png_url = "data:image/png;base64," + b64encode(png).decode()
 
         return HTML(f"""
-                <img src="{png_url}" type="image/png">
+                <img src="{png_url}" type="image/png" width="600">
         """)
 
 
