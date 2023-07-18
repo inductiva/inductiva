@@ -113,7 +113,7 @@ class WindTunnel(Scenario):
             commands=commands,
         )
 
-        return WindTunnelSimulationOutput(output_path)
+        return WindTunnelSimulationOutput(output_path, simulation_time)
 
     def simulate_async(self,
                        simulator: Simulator = OpenFOAM(),
