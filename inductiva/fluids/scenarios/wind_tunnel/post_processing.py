@@ -12,6 +12,8 @@ import os
 from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
+from base64 import b64encode
+from IPython.display import HTML
 
 import pyvista as pv
 
@@ -120,14 +122,17 @@ class WindTunnelSimulationOutput:
                     save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
 
+        off_screen = False
+
         if virtual_display:
+            off_screen = True
             pv.start_xvfb()
 
         # Obtain notation for the physical property for the simulator.
         property_notation = OpenFOAMPhysicalProperty[
             physical_property.upper()].value
 
-        plotter = pv.Plotter()
+        plotter = pv.Plotter(off_screen=off_screen)
         plotter.background_color = background_color
         plotter.add_mesh(self.object_data, color=object_color)
         plotter.add_mesh(flow_property_mesh,
@@ -137,6 +142,13 @@ class WindTunnelSimulationOutput:
         plotter.show(screenshot=save_path)
         plotter.close()
 
+        with open(save_path, "rb") as file_path:
+            png = file_path.read()
+        png_url = "data:image/png;base64," + b64encode(png).decode()
+
+        return HTML(f"""
+                <img src="{png_url}" type="image/png">
+        """)
 
 @dataclass
 class OpenFOAMPhysicalProperty(Enum):
