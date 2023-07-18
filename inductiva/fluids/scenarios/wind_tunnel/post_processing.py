@@ -150,6 +150,7 @@ class WindTunnelSimulationOutput:
                 <img src="{png_url}" type="image/png">
         """)
 
+
 @dataclass
 class OpenFOAMPhysicalProperty(Enum):
     """Defines the notation used for physical properties in OpenFOAM."""
