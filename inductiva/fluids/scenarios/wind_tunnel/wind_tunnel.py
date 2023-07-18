@@ -18,6 +18,7 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template,
                                        replace_params_in_template)
 from inductiva.utils.files import remove_files_with_tag
+from inductiva.fluids import WindTunnelSimulationOutput 
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
@@ -112,7 +113,7 @@ class WindTunnel(Scenario):
             commands=commands,
         )
 
-        return output_path
+        return WindTunnelSimulationOutput(output_path)
 
     def simulate_async(self,
                        simulator: Simulator = OpenFOAM(),
