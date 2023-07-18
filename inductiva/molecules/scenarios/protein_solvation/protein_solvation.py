@@ -16,6 +16,7 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils.files import remove_files_with_tag
+from inductiva.utils import files
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
@@ -43,7 +44,7 @@ class ProteinSolvation(Scenario):
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
-        self.protein_pdb = protein_pdb
+        self.protein_pdb = files.resolve_path(protein_pdb)
         self.temperature = temperature
         self.charged = charged
 
