@@ -476,10 +476,13 @@ class MeshData:
                save_path: Path = None):
         """Render scalar field data over the mesh."""
 
+        off_screen = False
+
         if virtual_display:
+            off_screen = True
             pv.start_xvfb()
 
-        plotter = pv.Plotter()
+        plotter = pv.Plotter(off_screen=off_screen)
         pv.global_theme.background = background_color
         plotter.add_mesh(self.mesh, scalars=self.scalar_name, cmap=scalars_cmap)
         plotter.show(screenshot=save_path)
