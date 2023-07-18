@@ -4,8 +4,6 @@ from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
-from absl import logging
-import numpy as np
 from uuid import UUID
 
 from inductiva.types import Path
@@ -24,9 +22,7 @@ GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 class ProteinSolvation(Scenario):
     """Solvated protein scenario."""
 
-    def __init__(self,
-                 protein_pdb: str,
-                 temperature: float = 300):
+    def __init__(self, protein_pdb: str, temperature: float = 300):
         """
         Scenario constructor for protein solvation based on the GROMACS
         simulator.
@@ -82,10 +78,9 @@ class ProteinSolvation(Scenario):
         #Edit commands.json according to the charge of the protein
         commands_path = os.path.join(self.template_dir, "commands.json")
 
-        replace_params_in_template(
-            self.template_dir, "commands.json.jinja", {
-                "visualized_section": visualized_section
-            }, commands_path)
+        replace_params_in_template(self.template_dir, "commands.json.jinja",
+                                   {"visualized_section": visualized_section},
+                                   commands_path)
 
         commands = self.read_commands_from_file(commands_path)
         self.nsteps = int(
@@ -133,10 +128,9 @@ class ProteinSolvation(Scenario):
         #Edit commands.json according to the charge of the protein
         commands_path = os.path.join(self.template_dir, "commands.json")
 
-        replace_params_in_template(
-            self.template_dir, "commands.json.jinja", {
-                "visualized_section": visualized_section
-            }, commands_path)
+        replace_params_in_template(self.template_dir, "commands.json.jinja",
+                                   {"visualized_section": visualized_section},
+                                   commands_path)
 
         commands = self.read_commands_from_file(commands_path)
 
