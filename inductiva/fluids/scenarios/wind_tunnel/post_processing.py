@@ -19,6 +19,7 @@ from inductiva.types import Path
 from inductiva.utils.visualization import MeshData
 from inductiva.utils import files
 
+
 class WindTunnelSimulationOutput:
     """Post-Process WindTunnel simulation outputs.
 
