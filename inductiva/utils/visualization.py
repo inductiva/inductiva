@@ -442,10 +442,10 @@ class MeshData:
     Imagine we run a WindTunnel simulation with an object inside
     for which a mesh was generated. A possible output of the simulation is
     a mesh of the object with scalar fields over the points defining a certain
-    physical property, e.g., pressure. 
+    physical property, e.g., pressure.
 
     Assume this output mesh is `object_mesh`. To process the pressure field over
-    the data, we can do `pressure_field = MeshData(object_mesh, "p")` 
+    the data, we can do `pressure_field = MeshData(object_mesh, "p")`
 
     `pressure_field.mesh` contains a mesh structure with the pressure field over
     the mesh.
@@ -455,7 +455,7 @@ class MeshData:
 
     def __init__(self, mesh_data, scalar_name: str = None):
         """Initialize a `MeshData` type object.
-        
+
         Args:
             mesh_data: pyvista mesh (PolyData or Unstructured) which
                 contains all of the simulated outputs over the mesh.
@@ -464,7 +464,7 @@ class MeshData:
                 array names and on the specific simulator used.
 
         Attributes:
-            mesh: mesh over the object obtained from 
+            mesh: mesh over the object obtained from
         """
         self.mesh = pv.PolyData(mesh_data.points, faces=mesh_data.faces)
         self.scalar_name = scalar_name
@@ -477,6 +477,8 @@ class MeshData:
                virtual_display: bool = True,
                save_path: Path = None):
         """Render scalar field data over the mesh."""
+        if save_path is not None:
+            save_path = files.resolve_path(save_path)
 
         off_screen = False
 

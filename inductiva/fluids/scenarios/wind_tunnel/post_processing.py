@@ -2,7 +2,7 @@
 
 This class implements various visualization capabilities for
 the WindTunnel scenario. Namely:
-    - Pressure over object; 
+    - Pressure over object;
     - Cutting plane;
     - StreamLines.
 
@@ -19,11 +19,12 @@ import pyvista as pv
 
 from inductiva.types import Path
 from inductiva.utils.visualization import MeshData
+from inductiva.utils import files
 
 
 class WindTunnelSimulationOutput:
     """Post-Process WindTunnel simulation outputs.
-    
+
     Current Support:
         OpenFOAM
     """
@@ -42,7 +43,7 @@ class WindTunnelSimulationOutput:
 
     def get_object_data(self):  # pylint: disable=unused-argument
         """Get aerodynamics data over an object inside the WindTunnel.
-        
+
         Current Support - OpenFOAM
         """
 
@@ -63,7 +64,7 @@ class WindTunnelSimulationOutput:
 
     def get_physical_field(self, physical_property: str = "pressure"):
         """Get a physical scalar field over mesh points for a certain time_step.
-        
+
         Returns:
             A MeshData object that allow to manipulate the data over a mesh
             and to render it.
@@ -121,6 +122,8 @@ class WindTunnelSimulationOutput:
                     object_color: str = "white",
                     save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
+        if save_path is not None:
+            save_path = files.resolve_path(save_path)
 
         off_screen = False
 
