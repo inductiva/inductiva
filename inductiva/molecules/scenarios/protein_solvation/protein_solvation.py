@@ -20,21 +20,24 @@ GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 
 
 class ProteinSolvation(Scenario):
-    """Solvated protein scenario."""
+    """Solvated protein scenario.
+    
+    This scenario implements the simulation of a protein trajectory in a
+    water solution.
+    The three main steps of this scenario are solvation, energy minimization
+    and simulation. The user can control the number of steps used to perform
+    the energy minimization step and the duration, temperature and
+    integrator used to perform the simulation. The system is neutralized by
+    adding counter ions to the protein charge."""
 
     def __init__(self, protein_pdb: str, temperature: float = 300):
         """
         Scenario constructor for protein solvation based on the GROMACS
         simulator.
-        The three main steps of this scenario are solvation, energy minimization
-        and simulation. The user can control the number of steps used to perform
-        the energy minimization step and the duration, temperature and
-        integrator used to perform the simulation.
+
         Args:
             protein_pdb: The path to the protein pdb file.
-            temperature: The temperature to use for the simulation.
-            charged: Whether the protein is charged or not. If None, the charge
-            is computed automatically.
+            temperature: The temperature to use for the simulation (Kelvin).
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
@@ -52,9 +55,12 @@ class ProteinSolvation(Scenario):
             visualized_section: str = "Protein-H"):
         """Simulate the solvation of a protein.
 
+        Available simulators:
+            - GROMACS
+
         Args:
             output_dir: The output directory to save the simulation results.
-            simulation_time: The simulation time in ns.
+            simulation_time: The simulation time (ns).
             integrator: The integrator to use for the simulation. Options:
                 - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
@@ -102,6 +108,9 @@ class ProteinSolvation(Scenario):
             nsteps_minim: int = 5000,
             visualized_section: str = "Protein-H"):
         """Simulate the solvation of a protein scenario asyncronously.
+
+        Available simulators:
+            - GROMACS
 
         Args:
             simulation_time: The simulation time in ns.

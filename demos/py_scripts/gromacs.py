@@ -8,28 +8,14 @@ import inductiva
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string("api_url", "http://localhost:6969",
-                    "Base URL of the Inductiva API.")
-
-flags.DEFINE_string("sim_dir",
+flags.DEFINE_string("input_dir",
                     None,
-                    "Directory with the simulation inputs.",
+                    "Directory containing the input files.",
                     required=True)
 
-flags.DEFINE_string("sim_config_filename",
-                    None,
-                    "Name of the input file.",
-                    required=True)
-
-flags.DEFINE_string("protein_filename",
-                    None,
-                    "Name of the protein file.",
-                    required=True)
-
-flags.DEFINE_string("topology_filename",
-                    None,
-                    "Name of the topology file.",
-                    required=True)
+flags.DEFINE_string("protein_pdb",
+                    "protein.pdb",
+                    "Path to the protein PDB file.")
 
 flags.DEFINE_string("output_dir",
                     None,
@@ -38,20 +24,23 @@ flags.DEFINE_string("output_dir",
 
 
 def main(_):
-    """Run a Gromacs energy minimization using user-provided input files."""
+    """Run a Gromacs command."""
 
-    inductiva.api_key = "user-key"
-    inductiva.api_url = FLAGS.api_url
+    inductiva.api_key = "6e2a3936beba573da6c4f81b23b2650395c6911633397ee9dec8307b51c5f451"
 
-    gromacs_sim = inductiva.md.simulators.GROMACS()
+    gromacs = inductiva.molecules.simulators.GROMACS()
 
-    output_path = gromacs_sim.run(input_dir=FLAGS.sim_dir,
-                                  sim_config_filename=FLAGS.sim_config_filename,
-                                  protein_filename=FLAGS.protein_filename,
-                                  topology_filename=FLAGS.topology_filename,
-                                  output_dir=FLAGS.output_dir)
+    example_command = {
+        "cmd":
+            f"gmx pdb2gmx -f {FLAGS.protein_pdb} -o protein.gro -water tip3p -ff amber99sb-ildn",
+        "promps": []
+    }
 
-    logging.info("Outputs stored in %s", output_path)
+    gromacs.run(input_dir=FLAGS.input_dir,
+                commands=example_command,
+                output_dir=FLAGS.output_dir)
+
+    logging.info("Outputs stored in %s", FLAGS.output_dir)
 
 
 if __name__ == "__main__":
