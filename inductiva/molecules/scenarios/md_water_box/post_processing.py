@@ -1,3 +1,4 @@
+"Postprocessing steps for the MDWaterBox scenario."
 import os
 import MDAnalysis as mda
 import nglview as nv
