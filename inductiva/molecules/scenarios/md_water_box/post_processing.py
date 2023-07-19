@@ -41,27 +41,3 @@ class MDWaterBoxSimulationOutput:
     def render_movie(self, view,save_path: Path = None, fps=8, start=0,stop=-1): 
         movie = MovieMaker(view, output=save_path, fps=fps, start=start, stop=stop)
         movie.make()
-
-    # def to_movie(self, view): 
-    #     thread = threading.Thread(
-    #         target=self.render_movie(view=view, output_path="movie.mp4"),
-    #     )
-    #     thread.daemon = True
-    #     thread.start()
-    
-    # def render_movie(self,view, output_path, fps=8):
-    #     #with tempfile.TemporaryDirectory() as tmpdir:
-    #     imagefiles = []
-    #     for frame in range(0, 1000):
-    #         print(frame)
-    #         view.frame = frame
-    #         view.render_image()
-    #         image = view._display_image()
-    #         image_bytes = image.data
-    #         image = Image.open(io.BytesIO(image_bytes))
-    #         filename = os.path.join("water_small", f'figure_{frame}.png').format(frame)
-    #         image.save(filename, "PNG")
-    #         sleep(0.1)
-    #         imagefiles.append(filename)
-    #     clip = ImageSequenceClip(imagefiles, fps=fps)
-    #     clip.write_videofile(output_path)
