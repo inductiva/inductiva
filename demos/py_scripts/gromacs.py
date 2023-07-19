@@ -13,9 +13,7 @@ flags.DEFINE_string("input_dir",
                     "Directory containing the input files.",
                     required=True)
 
-flags.DEFINE_string("protein_pdb",
-                    "1aki.pdb",
-                    "Path to the protein PDB file.")
+flags.DEFINE_string("protein_pdb", "1aki.pdb", "Path to the protein PDB file.")
 
 flags.DEFINE_string("output_dir",
                     "../config_files/gromacs",
@@ -32,7 +30,8 @@ def main(_):
 
     example_command = {
         "cmd":
-            f"gmx pdb2gmx -f {FLAGS.protein_pdb} -o protein.gro -water tip3p -ff amber99sb-ildn",
+            f"gmx pdb2gmx -f {FLAGS.protein_pdb} -o protein.gro\
+                -water tip3p -ff amber99sb-ildn",
         "promps": []
     }
 
