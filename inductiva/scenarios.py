@@ -35,14 +35,6 @@ class Scenario(ABC):
             args += (config_filename,)
         return args
 
-    def download_outputs(self, output_dir: str = None):
-        """Download the outputs of an async simulation to output_dir."""
-
-        if not get_task_info(self.task_id)["status"]:
-            raise ValueError("Simulation not finished.")
-
-        fetch_task_output(self.task_id, output_dir=output_dir, return_type=None)
-
     @abstractmethod
     def gen_aux_files(self, simulator: Simulator, input_dir: Path):
         """To be implemented in subclasses."""
