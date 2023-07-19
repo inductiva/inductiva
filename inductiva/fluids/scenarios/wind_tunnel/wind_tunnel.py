@@ -42,6 +42,8 @@ class WindTunnel(Scenario):
     direction and magnitude is defined by the user.
     """
 
+    valid_simulators = [OpenFOAM]
+
     def __init__(self,
                  flow_velocity: List[float] = None,
                  domain: Optional[dict] = None):
