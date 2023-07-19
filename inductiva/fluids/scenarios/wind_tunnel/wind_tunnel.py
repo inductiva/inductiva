@@ -18,7 +18,6 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template,
                                        replace_params_in_template)
 from inductiva.utils import files
-from inductiva.utils.files import remove_files_with_tag
 from inductiva.fluids.scenarios.wind_tunnel.post_processing import WindTunnelSimulationOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
@@ -174,58 +173,26 @@ class WindTunnel(Scenario):
         return commands
 
     @singledispatchmethod
-    @classmethod
-    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
-        raise ValueError(
-            f"Simulator not supported for `{cls.__name__}` scenario.")
-
-    @singledispatchmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
-
-    @singledispatchmethod
-    def gen_config(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def create_input_files(self, simulator: Simulator):
+        pass
 
 
-@WindTunnel.get_config_filename.register
-def _(self, simulator: OpenFOAM):  # pylint: disable=unused-argument
-    pass
-
-
-@WindTunnel.gen_aux_files.register
+@WindTunnel.create_input_files.register
 def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
+    """Creates OpenFOAM simulation input files."""
+
     # The WindTunnel with OpenFOAM requires changing multiple files
-    template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
 
     # Copy all files from the template dir to the input directory
-    shutil.copytree(template_dir, input_dir, dirs_exist_ok=True, symlinks=True)
-
-    # Remove all files that have .jinja in input_dir
-    remove_files_with_tag(input_dir, ".jinja")
-
-
-@WindTunnel.gen_config.register
-def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argument
-    """Generates the configuration files for OpenFOAM."""
-
-    # The WindTunnel with OpenFOAM requires changing multiple files
-    template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
-
-    # Add object path to its respective place
-    object_input_dir_path = os.path.join(input_dir, "constant", "triSurface")
-    os.mkdir(object_input_dir_path)
-    shutil.copy(self.object_path,
-                os.path.join(object_input_dir_path, "object.obj"))
+    shutil.copytree(template_files_dir,
+                    input_dir,
+                    dirs_exist_ok=True,
+                    symlinks=True)
 
     batch_replace_params_in_template(
-        templates_dir=template_dir,
+        templates_dir=template_files_dir,
         template_filenames=[
             os.path.join("0", "include",
                          "initialConditions_template.openfoam.jinja"),
@@ -248,4 +215,11 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
             os.path.join(input_dir, "system", "blockMeshDict"),
             os.path.join(input_dir, "system", "decomposeParDict"),
             os.path.join(input_dir, "system", "snappyHexMeshDict")
-        ])
+        ],
+        remove_templates=True,
+    )
+
+    # Add object path to its respective place
+    object_dir = os.path.join(input_dir, "constant", "triSurface")
+    os.mkdir(object_dir)
+    shutil.copy(self.object_path, os.path.join(object_dir, "object.obj"))
