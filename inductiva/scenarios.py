@@ -24,29 +24,8 @@ class Scenario(ABC):
         output_dir = resolve_path(output_dir)
         return output_dir
 
-    def _setup_config(self, simulator: Simulator, input_dir: Path):
-        """Setup the scenario configuration files and arguments."""
-        self.gen_aux_files(simulator, input_dir)
-        self.gen_config(simulator, input_dir)
-
-        args = ()
-        config_filename = self.get_config_filename(simulator)
-        if config_filename:
-            args += (config_filename,)
-        return args
-
     @abstractmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: Path):
-        """To be implemented in subclasses."""
-        pass
-
-    @abstractmethod
-    def gen_config(self, simulator: Simulator, input_dir: Path):
-        """To be implemented in subclasses."""
-        pass
-
-    @abstractmethod
-    def get_config_filename(self, simulator: Simulator):
+    def create_input_files(self, simulator: Simulator, input_dir: Path):
         """To be implemented in subclasses."""
         pass
 
@@ -63,13 +42,12 @@ class Scenario(ABC):
         resource_pool_id: Optional[UUID] = None,
         **kwargs,
     ) -> Path:
-        """Simulates the scenario for a single simulator call."""
+        """Simulates the scenario synchronously."""
         output_dir = self._setup_output_dir(output_dir)
         with tempfile.TemporaryDirectory() as input_dir:
-            args = self._setup_config(simulator, input_dir)
+            self.create_input_files(simulator, input_dir)
             return simulator.run(
                 input_dir,
-                *args,
                 output_dir=output_dir,
                 resource_pool_id=resource_pool_id,
                 **kwargs,
@@ -82,12 +60,9 @@ class Scenario(ABC):
         **kwargs,
     ) -> str:
         """Simulates the scenario asychronously."""
-
         with tempfile.TemporaryDirectory() as input_dir:
-            args = self._setup_config(simulator, input_dir)
             task_id = simulator.run_async(
                 input_dir,
-                *args,
                 resource_pool_id=resource_pool_id,
                 **kwargs,
             )
