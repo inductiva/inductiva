@@ -15,6 +15,7 @@ def replace_params_in_template(
     template_path: str,
     params: Dict,
     output_file_path: str,
+    remove_template: bool = False,
 ) -> None:
     """Replaces parameters in a template file."""
 
@@ -27,6 +28,9 @@ def replace_params_in_template(
     template = environment.get_template(template_filename)
     stream = template.stream(**params)
     stream.dump(output_file_path)
+
+    if remove_template:
+        os.remove(template_path)
 
 
 def batch_replace_params_in_template(
