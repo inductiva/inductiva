@@ -1,5 +1,6 @@
 """Utils related to template files."""
 
+import os
 from typing import Dict, List
 from pathlib import Path
 
@@ -51,5 +52,7 @@ def batch_replace_params_in_template(
     """
 
     for index, template_filename in enumerate(template_filename_paths):
-        replace_params_in_template(templates_dir, template_filename, params,
+        template_file_path = os.path.join(templates_dir, template_filename)
+
+        replace_params_in_template(template_file_path, params,
                                    output_filename_paths[index])
