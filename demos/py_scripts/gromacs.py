@@ -9,16 +9,16 @@ import inductiva
 FLAGS = flags.FLAGS
 
 flags.DEFINE_string("input_dir",
-                    None,
+                    "../config_files/gromacs",
                     "Directory containing the input files.",
                     required=True)
 
 flags.DEFINE_string("protein_pdb",
-                    "protein.pdb",
+                    "1aki.pdb",
                     "Path to the protein PDB file.")
 
 flags.DEFINE_string("output_dir",
-                    None,
+                    "../config_files/gromacs",
                     "Directory where the outputs will be stored.",
                     required=True)
 
@@ -26,7 +26,7 @@ flags.DEFINE_string("output_dir",
 def main(_):
     """Run a Gromacs command."""
 
-    inductiva.api_key = "6e2a3936beba573da6c4f81b23b2650395c6911633397ee9dec8307b51c5f451"
+    inductiva.api_key = "user-key"
 
     gromacs = inductiva.molecules.simulators.GROMACS()
 
