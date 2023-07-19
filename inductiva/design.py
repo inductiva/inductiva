@@ -42,11 +42,11 @@ def explore_design_space(simulator: Simulator,
         logging.info("Running simulation for %s=%s.", tag, value)
 
         input_filename = f"input_file_{value}{file_format}"
+        template_path = os.path.join(input_dir, template_filename)
         input_file = os.path.join(input_dir, input_filename)
 
         templates.replace_params_in_template(
-            str(input_dir),
-            template_filename,
+            template_path,
             {tag: value},
             input_file,
         )

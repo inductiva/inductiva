@@ -162,10 +162,11 @@ class WindTunnel(Scenario):
         """
         templates_path = os.path.join(SCENARIO_TEMPLATE_DIR,
                                       OPENFOAM_TEMPLATE_INPUT_DIR)
+
+        template_path = os.path.join(templates_path, COMMANDS_TEMPLATE_NAME)
         commands_file_path = os.path.join(templates_path, "commands.json")
 
-        replace_params_in_template(templates_path, "commands.json.jinja",
-                                   {"n_cores": self.n_cores},
+        replace_params_in_template(template_path, {"n_cores": self.n_cores},
                                    commands_file_path)
 
         commands = self.read_commands_from_file(commands_file_path)

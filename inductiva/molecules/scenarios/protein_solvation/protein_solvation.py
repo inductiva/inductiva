@@ -127,9 +127,9 @@ class ProteinSolvation(Scenario):
         """
 
         #Edit commands.json according to the charge of the protein
+        template_path = os.path.join(self.template_dir, "commands.json.jinja")
         commands_path = os.path.join(self.template_dir, "commands.json")
-
-        replace_params_in_template(self.template_dir, "commands.json.jinja",
+        replace_params_in_template(template_path,
                                    {"visualized_section": visualized_section},
                                    commands_path)
 
