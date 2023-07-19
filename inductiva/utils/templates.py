@@ -31,7 +31,7 @@ def replace_params_in_template(
 
 def batch_replace_params_in_template(
     templates_dir: str,
-    template_filename_paths: List[str],
+    template_filenames: List[str],
     params: Dict,
     output_filename_paths: List[str],
 ) -> None:
@@ -51,7 +51,7 @@ def batch_replace_params_in_template(
             the template files.
     """
 
-    for index, template_filename in enumerate(template_filename_paths):
+    for index, template_filename in enumerate(template_filenames):
         template_file_path = os.path.join(templates_dir, template_filename)
 
         replace_params_in_template(template_file_path, params,

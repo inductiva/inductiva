@@ -187,7 +187,7 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Generate the mdp configuration files for the simulation."""
     batch_replace_params_in_template(
         templates_dir=self.template_dir,
-        template_filename_paths=[
+        template_filenames=[
             "simulation.mdp.jinja",
             "energy_minimization.mdp.jinja",
         ],
