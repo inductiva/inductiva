@@ -32,6 +32,8 @@ class HeatSink(Scenario):
     in the simulation via an inlet, where the air is at a fixed temperature.
     """
 
+    valid_simulators = [OpenFOAM]
+
     def __init__(
         self,
         air_velocity=10,
@@ -102,7 +104,7 @@ class HeatSink(Scenario):
                                       commands=commands)
 
     def get_commands(self):
-        """Returns the commands for the simulation.
+        """Returns the OpenFOAM commands for the simulation.
         """
         commands_file_path = os.path.join(SCENARIO_TEMPLATE_DIR,
                                           OPENFOAM_TEMPLATE_SUBDIR,
@@ -113,32 +115,13 @@ class HeatSink(Scenario):
         return commands
 
     @singledispatchmethod
-    def gen_config(self, simulator: Simulator):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
-
-    @singledispatchmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
-
-    @singledispatchmethod
-    def get_config_filename(self, simulator: Simulator):  # pylint: disable=unused-argument
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def create_input_files(self, simulator: Simulator):
+        pass
 
 
-@HeatSink.get_config_filename.register
-def _(self, simulator: OpenFOAM):  # pylint: disable=unused-argument
-    pass
-
-
-@HeatSink.gen_aux_files.register
+@HeatSink.create_input_files.register
 def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
-    """Setup the working directory for the simulation."""
+    """Creates OpenFOAM simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                       OPENFOAM_TEMPLATE_SUBDIR, FILES_SUBDIR)
@@ -164,9 +147,3 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
         output_file_path=params_file_path,
         remove_template=True,
     )
-
-
-@HeatSink.gen_config.register
-def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
-    """Generate the mdp configuration files for the simulation."""
-    pass
