@@ -8,12 +8,12 @@ from inductiva.types import Path
 from inductiva.simulation import Simulator
 from inductiva.utils.files import resolve_path, get_timestamped_path
 from inductiva.utils.misc import split_camel_case
-from inductiva.tasks.methods import get_task_info, fetch_task_output
 import json
 
 
 class Scenario(ABC):
     """Base class for scenarios."""
+    valid_simulators = []
 
     def _setup_output_dir(self, output_dir: str):
         """Setup the scenario output directory."""
@@ -35,6 +35,14 @@ class Scenario(ABC):
             commands = json.load(f)
         return commands
 
+    def validate_simulator(self, simulator: Simulator):
+        """Checks if the scenario can be simulated with the given simulator."""
+        if type(simulator) not in self.valid_simulators:
+            raise ValueError(
+                f"Simulator not supported for `{self.__class__.__name__}` "
+                "scenario."
+            )
+
     def simulate(
         self,
         simulator: Simulator,
@@ -43,6 +51,7 @@ class Scenario(ABC):
         **kwargs,
     ) -> Path:
         """Simulates the scenario synchronously."""
+        self.validate_simulator(simulator)
         output_dir = self._setup_output_dir(output_dir)
         with tempfile.TemporaryDirectory() as input_dir:
             self.create_input_files(simulator, input_dir)
