@@ -4,6 +4,7 @@ import os
 import shutil
 from typing import Optional
 from uuid import UUID
+from inductiva.tasks.task import Task
 
 from inductiva.types import Path
 from inductiva.fluids.simulators import OpenFOAM
@@ -22,9 +23,9 @@ COMMANDS_FILE_NAME = "commands.json"
 
 class HeatSink(Scenario):
     """Heat sink scenario.
-    
+
     This is a simulation scenario for a heat sink. A heat source is placed
-    in a box where there is an air flow. A heat sink, placed on top of the 
+    in a box where there is an air flow. A heat sink, placed on top of the
     source, is used to dissipate the heat via convection with the air flow.
 
     The heat source is modeled as a heater with a given power. The heat sink
@@ -82,7 +83,7 @@ class HeatSink(Scenario):
         resource_pool_id: Optional[UUID] = None,
         simulation_time=300,
         output_time_step=10,
-    ):
+    ) -> Task:
         """Simulates the scenario asynchronously.
 
         Args:

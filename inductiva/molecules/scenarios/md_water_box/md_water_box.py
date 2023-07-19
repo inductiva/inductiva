@@ -4,6 +4,7 @@ from typing import Optional, Literal
 import os
 import shutil
 from uuid import UUID
+from inductiva.tasks.task import Task
 
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
@@ -90,7 +91,7 @@ class MDWaterBox(Scenario):
             resource_pool_id: Optional[UUID] = None,
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
-            nsteps_minim: int = 5000):
+            nsteps_minim: int = 5000) -> Task:
         """Simulate the water box scenario using molecular dynamics
         asyncronously.
 

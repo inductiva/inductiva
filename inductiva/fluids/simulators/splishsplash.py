@@ -5,6 +5,7 @@ from uuid import UUID
 
 from inductiva import types
 from inductiva.simulation import Simulator
+from inductiva.tasks.task import Task
 
 
 class SPlisHSPlasH(Simulator):
@@ -43,7 +44,7 @@ class SPlisHSPlasH(Simulator):
         sim_config_filename: str,
         resource_pool_id: Optional[UUID] = None,
         device: Literal["gpu", "cpu"] = "cpu",
-    ) -> str:
+    ) -> Task:
         """Run the simulation asynchronously.
 
         Args:

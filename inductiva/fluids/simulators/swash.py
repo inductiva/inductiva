@@ -4,6 +4,7 @@ from typing import Optional
 from uuid import UUID
 from inductiva.simulation import Simulator
 from inductiva import types
+from inductiva.tasks.task import Task
 
 
 class SWASH(Simulator):
@@ -40,7 +41,7 @@ class SWASH(Simulator):
         sim_config_filename: str,
         resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
-    ) -> str:
+    ) -> Task:
         """Run the simulation asynchronously.
 
         Args:

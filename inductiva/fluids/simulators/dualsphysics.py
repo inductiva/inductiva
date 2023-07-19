@@ -5,6 +5,7 @@ from uuid import UUID
 
 from inductiva import types
 from inductiva.simulation import Simulator
+from inductiva.tasks.task import Task
 
 
 class DualSPHysics(Simulator):
@@ -41,7 +42,7 @@ class DualSPHysics(Simulator):
         sim_config_filename: str,
         device: Literal["gpu", "cpu"] = "cpu",
         resource_pool_id: Optional[UUID] = None,
-    ) -> str:
+    ) -> Task:
         """Run the simulation asynchronously.
 
         Args:
