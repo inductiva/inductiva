@@ -2,7 +2,7 @@
 
 This class implements various visualization capabilities for
 the WindTunnel scenario. Namely:
-    - Pressure over object; 
+    - Pressure over object;
     - Cutting plane;
     - StreamLines.
 
@@ -12,16 +12,19 @@ import os
 from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
+from base64 import b64encode
+from IPython.display import HTML
 
 import pyvista as pv
 
 from inductiva.types import Path
 from inductiva.utils.visualization import MeshData
+from inductiva.utils import files
 
 
 class WindTunnelSimulationOutput:
     """Post-Process WindTunnel simulation outputs.
-    
+
     Current Support:
         OpenFOAM
     """
@@ -40,7 +43,7 @@ class WindTunnelSimulationOutput:
 
     def get_object_data(self):  # pylint: disable=unused-argument
         """Get aerodynamics data over an object inside the WindTunnel.
-        
+
         Current Support - OpenFOAM
         """
 
@@ -61,7 +64,7 @@ class WindTunnelSimulationOutput:
 
     def get_physical_field(self, physical_property: str = "pressure"):
         """Get a physical scalar field over mesh points for a certain time_step.
-        
+
         Returns:
             A MeshData object that allow to manipulate the data over a mesh
             and to render it.
@@ -119,15 +122,20 @@ class WindTunnelSimulationOutput:
                     object_color: str = "white",
                     save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
+        if save_path is not None:
+            save_path = files.resolve_path(save_path)
+
+        off_screen = False
 
         if virtual_display:
+            off_screen = True
             pv.start_xvfb()
 
         # Obtain notation for the physical property for the simulator.
         property_notation = OpenFOAMPhysicalProperty[
             physical_property.upper()].value
 
-        plotter = pv.Plotter()
+        plotter = pv.Plotter(off_screen=off_screen)
         plotter.background_color = background_color
         plotter.add_mesh(self.object_data, color=object_color)
         plotter.add_mesh(flow_property_mesh,
@@ -136,6 +144,14 @@ class WindTunnelSimulationOutput:
         plotter.view_xz()
         plotter.show(screenshot=save_path)
         plotter.close()
+
+        with open(save_path, "rb") as file_path:
+            png = file_path.read()
+        png_url = "data:image/png;base64," + b64encode(png).decode()
+
+        return HTML(f"""
+                <img src="{png_url}" type="image/png" width="600">
+        """)
 
 
 @dataclass

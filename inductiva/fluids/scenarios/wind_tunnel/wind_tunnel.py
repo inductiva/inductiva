@@ -17,6 +17,7 @@ from inductiva.fluids.simulators import OpenFOAM
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template,
                                        replace_params_in_template)
+from inductiva.utils import files
 from inductiva.utils.files import remove_files_with_tag
 from inductiva.fluids.scenarios.wind_tunnel.post_processing import WindTunnelSimulationOutput
 
@@ -94,7 +95,7 @@ class WindTunnel(Scenario):
             """
 
         if object_path:
-            self.object_path = object_path
+            self.object_path = files.resolve_path(object_path)
         else:
             logging.info("WindTunnel is empty. Object path not specified.")
 
@@ -136,7 +137,7 @@ class WindTunnel(Scenario):
             """
 
         if object_path:
-            self.object_path = object_path
+            self.object_path = files.resolve_path(object_path)
         else:
             logging.info("WindTunnel is empty. Object path not specified.")
 
