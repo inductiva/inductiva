@@ -163,11 +163,6 @@ class ProteinSolvation(Scenario):
         pass
 
 
-@ProteinSolvation.get_config_filename.register
-def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
-    pass
-
-
 @ProteinSolvation.create_input_files.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Creates GROMACS simulation input files."""
