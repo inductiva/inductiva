@@ -14,7 +14,6 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template,
                                        replace_params_in_template)
 from inductiva.scenarios import Scenario
-from inductiva.utils.files import remove_files_with_tag
 from inductiva.utils import files
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
@@ -79,6 +78,8 @@ class ProteinSolvation(Scenario):
                 - "Protein-H": The protein with hydrogens. This is the default.
                 - "System": The whole system (Protein + Water).
         """
+
+        self.visualized_section = visualized_section
 
         self.nsteps = int(
             simulation_time * 1e6 / 2
