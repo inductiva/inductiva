@@ -4,6 +4,7 @@ import os
 import shutil
 from typing import Optional
 from uuid import UUID
+from inductiva.tasks import Task
 
 from inductiva.types import Path
 from inductiva.fluids.simulators import OpenFOAM
@@ -84,7 +85,7 @@ class HeatSink(Scenario):
         resource_pool_id: Optional[UUID] = None,
         simulation_time=300,
         output_time_step=10,
-    ):
+    ) -> Task:
         """Simulates the scenario asynchronously.
 
         Args:

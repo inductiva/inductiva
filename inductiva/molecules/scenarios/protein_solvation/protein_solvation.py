@@ -134,11 +134,9 @@ class ProteinSolvation(Scenario):
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
 
-        self.task_id = super().simulate_async(simulator,
-                                              resource_pool_id=resource_pool_id,
-                                              commands=commands)
-
-        return self.task_id
+        return super().simulate_async(simulator,
+                                      resource_pool_id=resource_pool_id,
+                                      commands=commands)
 
     def get_commands(self):
         """Returns the commands for the simulation."""

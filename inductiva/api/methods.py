@@ -8,7 +8,7 @@ import pathlib
 import signal
 import time
 from contextlib import contextmanager
-from typing import Any, Dict, Optional, Type
+from typing import Any, Dict, List, Optional, Tuple, Type
 from uuid import UUID
 
 from absl import logging
@@ -19,10 +19,12 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
                                      TaskStatus)
 from inductiva.exceptions import RemoteExecutionError
+from inductiva.tasks import Task
 from inductiva.types import Path
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input, unpack_output)
 from inductiva.utils.meta import get_method_name, get_type_annotations
+from inductiva import utils
 
 
 def validate_api_key(api_key: Optional[str]) -> Configuration:
@@ -37,6 +39,13 @@ def validate_api_key(api_key: Optional[str]) -> Configuration:
     api_config.api_key["APIKeyHeader"] = api_key
 
     return api_config
+
+
+def get_client() -> ApiClient:
+    """Returns an ApiClient instance."""
+    api_config = validate_api_key(inductiva.api_key)
+
+    return ApiClient(api_config)
 
 
 def submit_request(api_instance: TasksApi, request: TaskRequest) -> TaskStatus:
@@ -70,13 +79,17 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         original_params: Params of the request passed by the user.
         type_annotations: Annotations of the params' types.
     """
+    logging.info("Creating input archive...")
     input_zip_path = pack_input(
         params=original_params,
         type_annotations=type_annotations,
         zip_name=task_id,
     )
+    file_size = os.path.getsize(input_zip_path)
+    logging.info("Input archive created.")
+    logging.info("Input archive size: %s", utils.format_bytes(file_size))
 
-    logging.info("Uploading input files...")
+    logging.info("Uploading input...")
     try:
         with open(input_zip_path, "rb") as zip_fp:
             _ = api_instance.upload_task_input(
@@ -88,12 +101,15 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
             "Exception when calling TasksApi->upload_task_inputs: %s", e)
         raise e
 
+    logging.info("Input archive uploaded.")
+
     os.remove(input_zip_path)
 
 
-def download_output(api_instance: TasksApi,
-                    task_id,
-                    output_dir: Optional[Path] = None):
+def download_output(
+        api_instance: TasksApi,
+        task_id,
+        output_dir: Optional[Path] = None) -> Tuple[List, pathlib.Path]:
     """Downloads the output of a given task from the API.
 
     Args:
@@ -122,7 +138,7 @@ def download_output(api_instance: TasksApi,
     result_list = extract_output(api_response.body.name, output_dir)
     logging.info("Output extracted.")
 
-    return result_list
+    return result_list, pathlib.Path(output_dir)
 
 
 def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
@@ -265,7 +281,7 @@ def submit_task(api_instance, task_request, params, type_annotations):
     )
 
     task_id = task["id"]
-    logging.info("This simulation has the task_id: %s", task_id)
+    logging.info("Task ID: %s", task_id)
 
     with blocking_task_context(api_instance, task_id):
         if task["status"] == "pending-input":
@@ -277,7 +293,7 @@ def submit_task(api_instance, task_request, params, type_annotations):
                 type_annotations=type_annotations,
             )
 
-            logging.info("Request submitted.")
+            logging.info("Task request submitted.")
 
     return task_id
 
@@ -369,7 +385,7 @@ def invoke_api(method_name: str,
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
-                     resource_pool_id: Optional[UUID] = None):
+                     resource_pool_id: Optional[UUID] = None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -428,28 +444,12 @@ def run_simulation(
     resource_pool_id: Optional[UUID] = None,
 ) -> pathlib.Path:
     """Run a simulation synchronously via Inductiva Web API."""
+    task = run_async_simulation(api_method_name, input_dir, params,
+                                resource_pool_id)
+    with task:
+        task.wait()
 
-    params = {
-        "sim_dir": input_dir,
-        **params,
-    }
-    type_annotations = {
-        "sim_dir": pathlib.Path,
-    }
-
-    result = invoke_api(
-        api_method_name,
-        params,
-        type_annotations,
-        output_dir=output_dir,
-        return_type=pathlib.Path,
-        resource_pool_id=resource_pool_id,
-    )
-
-    if not isinstance(result, pathlib.Path):
-        raise RuntimeError(f"Expected result to be a Path, got {type(result)}")
-
-    return result
+    return task.download_output(output_dir)
 
 
 def run_async_simulation(
@@ -457,7 +457,7 @@ def run_async_simulation(
     input_dir: pathlib.Path,
     params: Dict[str, Any],
     resource_pool_id: Optional[UUID] = None,
-) -> str:
+) -> Task:
     """Run a simulation asynchronously via Inductiva Web API."""
 
     params = {
@@ -468,13 +468,13 @@ def run_async_simulation(
         "sim_dir": pathlib.Path,
     }
 
-    result = invoke_async_api(api_method_name,
-                              params,
-                              type_annotations,
-                              resource_pool_id=resource_pool_id)
+    task_id = invoke_async_api(api_method_name,
+                               params,
+                               type_annotations,
+                               resource_pool_id=resource_pool_id)
 
-    if not isinstance(result, str):
+    if not isinstance(task_id, str):
         raise RuntimeError(
-            f"Expected result to be a string with task_id, got {type(result)}")
+            f"Expected result to be a string with task_id, got {type(task_id)}")
 
-    return result
+    return Task(task_id)
