@@ -15,6 +15,7 @@ from typing import Literal
 from base64 import b64encode
 from IPython.display import HTML
 
+import pandas as pd
 import pyvista as pv
 
 from inductiva.types import Path
@@ -111,6 +112,27 @@ class WindTunnelSimulationOutput:
             os.path.join(cutting_plane_path, cutting_plane_file))
 
         return cutting_plane_mesh
+
+    def get_force_coefficients(self):
+        """Get the force coefficients of the object in the WindTunnel."""
+
+        num_header_lines = 9
+        force_coefficients = pd.DataFrame(
+            columns=["time_step", "Cm", "Cd", "Cl", "Cl(f)", "Cl(r)"])
+
+        force_coefficients_path = os.path.join(self.sim_output_path,
+                                               "postProcessing", "forceCoeffs1",
+                                               "0", "forceCoeffs.dat")
+        force_coefficients_df = pd.read_csv(force_coefficients_path,
+                                            header=None)
+
+        # Skip the first lines of the header to read the force coefficients
+        # on the respective time_step.
+        force_coefficients.loc[0] = force_coefficients_df.loc[self.time_step +
+                                                              num_header_lines,
+                                                              0].split()
+
+        return force_coefficients
 
     def render_flow(self,
                     flow_property_mesh,
