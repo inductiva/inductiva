@@ -84,7 +84,7 @@ class MDWaterBox(Scenario):
                                        output_dir,
                                        resource_pool_id=resource_pool_id,
                                        commands=commands)
-        return MDWaterBoxSimulationOutput(output_path)
+        return MDWaterBoxOutput(output_path)
 
     def simulate_async(
             self,
