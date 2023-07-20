@@ -1,2 +1,2 @@
-from machines import Machines
-from resources import *
+from .machines import MachineGroup
+from .resources import *
