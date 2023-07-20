@@ -4,6 +4,7 @@ import os
 import shutil
 from typing import Optional
 from uuid import UUID
+from inductiva.tasks import Task
 
 from inductiva.types import Path
 from inductiva.fluids.simulators import OpenFOAM
@@ -22,9 +23,9 @@ COMMANDS_FILE_NAME = "commands.json"
 
 class HeatSink(Scenario):
     """Heat sink scenario.
-    
+
     This is a simulation scenario for a heat sink. A heat source is placed
-    in a box where there is an air flow. A heat sink, placed on top of the 
+    in a box where there is an air flow. A heat sink, placed on top of the
     source, is used to dissipate the heat via convection with the air flow.
 
     The heat source is modeled as a heater with a given power. The heat sink
@@ -82,7 +83,7 @@ class HeatSink(Scenario):
         resource_pool_id: Optional[UUID] = None,
         simulation_time=300,
         output_time_step=10,
-    ):
+    ) -> Task:
         """Simulates the scenario asynchronously.
 
         Args:
@@ -148,11 +149,12 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    params_file_path = os.path.join(input_dir, OPENFOAM_PARAMS_FILE_NAME)
+    template_file_path, params_file_path = (
+        os.path.join(input_dir, file_name) for file_name in
+        [OPENFOAM_TEMPLATE_PARAMS_FILE_NAME, OPENFOAM_PARAMS_FILE_NAME])
 
     replace_params_in_template(
-        templates_dir=input_dir,
-        template_filename=OPENFOAM_TEMPLATE_PARAMS_FILE_NAME,
+        template_path=template_file_path,
         params={
             "simulation_time": self.simulation_time,
             "output_time_step": self.output_time_step,
@@ -161,11 +163,8 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
             "heater_power": self.heater_power
         },
         output_file_path=params_file_path,
+        remove_template=True,
     )
-
-    # TODO (fabiocruz): add option to remove template file in
-    # replace_params_in_template.
-    os.remove(os.path.join(input_dir, OPENFOAM_TEMPLATE_PARAMS_FILE_NAME))
 
 
 @HeatSink.gen_config.register

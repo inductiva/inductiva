@@ -127,9 +127,9 @@ class ProteinSolvation(Scenario):
         """
 
         #Edit commands.json according to the charge of the protein
+        template_path = os.path.join(self.template_dir, "commands.json.jinja")
         commands_path = os.path.join(self.template_dir, "commands.json")
-
-        replace_params_in_template(self.template_dir, "commands.json.jinja",
+        replace_params_in_template(template_path,
                                    {"visualized_section": visualized_section},
                                    commands_path)
 
@@ -141,11 +141,9 @@ class ProteinSolvation(Scenario):
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
 
-        self.task_id = super().simulate_async(simulator,
-                                              resource_pool_id=resource_pool_id,
-                                              commands=commands)
-
-        return self.task_id
+        return super().simulate_async(simulator,
+                                      resource_pool_id=resource_pool_id,
+                                      commands=commands)
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):
@@ -187,7 +185,7 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Generate the mdp configuration files for the simulation."""
     batch_replace_params_in_template(
         templates_dir=self.template_dir,
-        template_filename_paths=[
+        template_filenames=[
             "simulation.mdp.jinja",
             "energy_minimization.mdp.jinja",
         ],

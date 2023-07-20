@@ -20,6 +20,7 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
 from inductiva.utils import files
 from inductiva.utils.files import remove_files_with_tag
 from inductiva.fluids.scenarios.wind_tunnel.post_processing import WindTunnelSimulationOutput
+from inductiva.tasks import Task
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
@@ -123,7 +124,7 @@ class WindTunnel(Scenario):
                        simulation_time: float = 100,
                        output_time_step: float = 50,
                        resolution: Literal["high", "medium", "low"] = "medium",
-                       n_cores: int = 1):
+                       n_cores: int = 1) -> Task:
         """Simulates the wind tunnel scenario asynchronously.
 
         Args:
@@ -148,24 +149,23 @@ class WindTunnel(Scenario):
 
         commands = self.get_commands()
 
-        task_id = super().simulate_async(
+        return super().simulate_async(
             simulator,
             resource_pool_id=resource_pool_id,
             n_cores=n_cores,
             commands=commands,
         )
 
-        return task_id
-
     def get_commands(self):
         """Returns the commands for the simulation.
         """
         templates_path = os.path.join(SCENARIO_TEMPLATE_DIR,
                                       OPENFOAM_TEMPLATE_INPUT_DIR)
+
+        template_path = os.path.join(templates_path, COMMANDS_TEMPLATE_NAME)
         commands_file_path = os.path.join(templates_path, "commands.json")
 
-        replace_params_in_template(templates_path, "commands.json.jinja",
-                                   {"n_cores": self.n_cores},
+        replace_params_in_template(template_path, {"n_cores": self.n_cores},
                                    commands_file_path)
 
         commands = self.read_commands_from_file(commands_file_path)
@@ -225,7 +225,7 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
 
     batch_replace_params_in_template(
         templates_dir=template_dir,
-        template_filename_paths=[
+        template_filenames=[
             os.path.join("0", "include",
                          "initialConditions_template.openfoam.jinja"),
             os.path.join("system", "controlDict_template.openfoam.jinja"),

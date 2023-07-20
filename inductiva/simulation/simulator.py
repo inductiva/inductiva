@@ -5,6 +5,7 @@ from uuid import UUID
 from inductiva import api
 from inductiva import types
 from inductiva.utils import files
+from inductiva.tasks import Task
 
 
 class Simulator(ABC):
@@ -69,7 +70,7 @@ class Simulator(ABC):
         *_args,
         resource_pool_id: Optional[UUID] = None,
         **kwargs,
-    ) -> str:
+    ) -> Task:
         """Run the simulation asynchronously.
 
         Args:
