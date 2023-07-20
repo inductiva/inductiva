@@ -166,13 +166,14 @@ class WindTunnel(Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         with tempfile.NamedTemporaryFile() as commands_file:
+            logging.info(commands_file.name)
             replace_params_in_template(
                 template_path=commands_template_path,
                 params={"n_cores": self.n_cores},
                 output_file_path=commands_file.name,
             )
 
-            commands = self.read_commands_from_file(commands_file)
+            commands = self.read_commands_from_file(commands_file.name)
 
         return commands
 

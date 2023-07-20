@@ -139,7 +139,7 @@ class MDWaterBox(Scenario):
                 output_file_path=commands_file.name,
             )
 
-            commands = self.read_commands_from_file(commands_file)
+            commands = self.read_commands_from_file(commands_file.name)
 
         return commands
 
