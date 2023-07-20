@@ -3,6 +3,7 @@ from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
+import tempfile
 from uuid import UUID
 
 from inductiva.types import Path
@@ -12,14 +13,16 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template,
                                        replace_params_in_template)
 from inductiva.scenarios import Scenario
-from inductiva.utils.files import remove_files_with_tag
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "md_water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
+COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
 
 class MDWaterBox(Scenario):
     """Molecular dynamics water box scenario."""
+
+    valid_simulators = [GROMACS]
 
     def __init__(
         self,
@@ -36,8 +39,7 @@ class MDWaterBox(Scenario):
             temperature: The temperature of the simulation in Kelvin.
             box_size: The size of the box in nm.
         """
-        self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                         GROMACS_TEMPLATE_INPUT_DIR)
+
         self.temperature = temperature
         if box_size < 2.3:
             raise ValueError("The box size must be greater than 2.3 nm.")
@@ -75,12 +77,8 @@ class MDWaterBox(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        commands_path = os.path.join(self.template_dir, "commands.json")
 
-        replace_params_in_template(
-            os.path.join(self.template_dir, "commands.json.jinja"),
-            {"box_size": self.box_size}, commands_path)
-        commands = self.read_commands_from_file(commands_path)
+        commands = self.get_commands()
         return super().simulate(simulator,
                                 output_dir,
                                 resource_pool_id=resource_pool_id,
@@ -117,53 +115,46 @@ class MDWaterBox(Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
-        commands_path = os.path.join(self.template_dir, "commands.json")
-        replace_params_in_template(
-            os.path.join(self.template_dir, "commands.json.jinja"),
-            {"box_size": self.box_size}, commands_path)
-        commands = self.read_commands_from_file(commands_path)
+
+        commands = self.get_commands()
         return super().simulate_async(simulator,
                                       resource_pool_id=resource_pool_id,
                                       commands=commands)
 
-    @singledispatchmethod
-    def gen_config(self, simulator: Simulator):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def get_commands(self):
+        """Returns the commands for the simulation."""
+
+        commands_template_path = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                              GROMACS_TEMPLATE_INPUT_DIR,
+                                              COMMANDS_TEMPLATE_FILE_NAME)
+
+        with tempfile.NamedTemporaryFile() as commands_file:
+            replace_params_in_template(
+                template_path=commands_template_path,
+                params={"box_size": self.box_size},
+                output_file_path=commands_file.name,
+            )
+
+            commands = self.read_commands_from_file(commands_file)
+
+        return commands
 
     @singledispatchmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
-
-    @singledispatchmethod
-    def get_config_filename(self, simulator: Simulator):  # pylint: disable=unused-argument
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def create_input_files(self, simulator: Simulator):
+        pass
 
 
-@MDWaterBox.get_config_filename.register
-def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
-    pass
-
-
-@MDWaterBox.gen_aux_files.register
+@MDWaterBox.create_input_files.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
-    """Setup the working directory for the simulation."""
-    shutil.copytree(os.path.join(self.template_dir),
-                    os.path.join(input_dir),
-                    dirs_exist_ok=True)
-    remove_files_with_tag(input_dir, ".jinja")
+    """Creates GROMACS simulation input files."""
 
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      GROMACS_TEMPLATE_INPUT_DIR)
 
-@MDWaterBox.gen_config.register
-def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
-    """Generate the mdp configuration files for the simulation."""
+    shutil.copytree(template_files_dir, input_dir, dirs_exist_ok=True)
+
     batch_replace_params_in_template(
-        templates_dir=self.template_dir,
+        templates_dir=input_dir,
         template_filenames=[
             "simulation.mdp.jinja",
             "energy_minimization.mdp.jinja",
@@ -177,4 +168,6 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
         output_filename_paths=[
             os.path.join(input_dir, "simulation.mdp"),
             os.path.join(input_dir, "energy_minimization.mdp"),
-        ])
+        ],
+        remove_templates=True,
+    )
