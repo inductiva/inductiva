@@ -39,9 +39,27 @@ class MeshResolution(Enum):
 class WindTunnel(Scenario):
     """Physical scenario of a configurable wind tunnel simulation.
 
-    In this scenario, an object is inserted in a wind tunnel described by the
-    user. The object is then subject to an air flow determined for which the
-    direction and magnitude is defined by the user.
+    A wind tunnel is a tool used in aerodynamic research to study the effects
+    of air moving past solid objects. Here, the tunnel consiste of a box
+    object in 3D space, where the air will flow with a certain velocity.
+
+    Object O==O is set inside the wind tunnel and air flows in a direction
+    established by the user (e.g. below from left to right):
+    |--------------------------------|
+    |->          ___                 |
+    |->        _/   \_               |
+    |->_______|_o___O_|______________|
+
+    This scenario solves steady-state continuity and momentum equations, thus
+    in practice is not solving time-dependent equations. However, it solves
+    these equations for several time steps, to propagate the system
+    dynamics until a steady-state is found.
+
+    Currently, the following variables are fixed:
+    - The fluid being inject is air.
+    - The flow is incompressible (this restricts the max air velocity)
+    - TO FIX: Air only flows in one direction (e.g. from left to right)
+    - Post-processing functionalities within the Simulator are fixed.
     """
 
     def __init__(self,
@@ -50,9 +68,9 @@ class WindTunnel(Scenario):
         """Initializes the `WindTunnel` conditions.
 
         Args:
-            flow_velocity (dict): Velocity of the air flow in m/s.
+            flow_velocity (dict): Velocity of the air flow (m/s).
             domain (dict): List containing the lower and upper boundary of
-                the wind tunnel in each (x, y, z) direction. It is the
+                the wind tunnel in each (x, y, z) direction (m). It is the
                 natural description with the default OpenFOAM simulator.
         """
         if flow_velocity is None:
@@ -86,13 +104,16 @@ class WindTunnel(Scenario):
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
+            simulator: Simulators available [OpenFOAM].
             object_path: Path to object inserted in the wind tunnel.
-            simulator: Simulator to use for the simulation.
             output_dir: Path to the directory where the simulation output
                 is downloaded.
             simulation_time: Simulation time, in seconds.
-            write_interval: Interval between simulation outputs, in seconds.
+            output_time_step: Interval between simulation outputs, in seconds.
             n_cores: Number of cores to use for the simulation.
+            resolution: Level of detail for the simulation. It can be
+                "high", "medium" or "low".
+            resource_pool_id: Id of the resource pool to use for the simulation.
             """
 
         if object_path:
@@ -128,13 +149,14 @@ class WindTunnel(Scenario):
         """Simulates the wind tunnel scenario asynchronously.
 
         Args:
+            simulator: Simulators available [OpenFOAM].
             object_path: Path to object inserted in the wind tunnel.
-            simulator: Simulator to use for the simulation.
-            output_dir: Path to the directory where the simulation output
-                is downloaded.
-            simulation_time: Simulation time, in seconds.
-            write_interval: Interval between simulation outputs, in seconds.
+            simulation_time: Simulation time, in seconds (s).
+            output_time_step: Interval between simulation outputs, in seconds (s).
             n_cores: Number of cores to use for the simulation.
+            resolution: Level of detail for the simulation. It can be
+                "high", "medium" or "low".
+            resource_pool_id: Id of the resource pool to use for the simulation.
             """
 
         if object_path:
