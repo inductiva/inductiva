@@ -3,12 +3,11 @@ import time
 import os
 import io
 import base64
+import shutil
 import threading
 from PIL import Image
 from moviepy.editor import ImageSequenceClip
-from tempfile import TemporaryDirectory
 from ipywidgets import Output, IntProgress
-import shutil
 
 
 class MovieMaker:
@@ -50,18 +49,18 @@ class MovieMaker:
 
         self._range = range(start, stop, step)
         self._event = threading.Event()
-        self.frames_dir= "frames"
-        os.makedirs("frames", exist_ok=True)
+        self.frames_dir = 'frames'
+        os.makedirs('frames', exist_ok=True)
 
     def sleep(self):
         time.sleep(self.timeout)
 
     def make(self):
         self.progress = IntProgress(description='Rendering...',
-                               max=len(self._range) - 1)
+                                    max=len(self._range) - 1)
         self._event = threading.Event()
 
-        def _make(event ):
+        def _make(event):
             image_files = []
             iw = None
             for i in self._range:
@@ -79,7 +78,7 @@ class MovieMaker:
                                                 f'figure_{i}.png').format(i)
                         image_files.append(filename)
                         image.save(filename, "PNG")
-                    except:
+                    except Exception:
                         print("Could not save frame", i)
                         continue
 
@@ -102,9 +101,8 @@ class MovieMaker:
                 time.sleep(1)
                 self.progress.close()
 
-        self.thread = threading.Thread(target=_make,
-                                        args=(self._event,))
+        self.thread = threading.Thread(target=_make, args=(self._event,))
         self.thread.daemon = True
         self.thread.start()
-
+        shutil.rmtree(self.frames_dir)
         return self.progress

@@ -28,7 +28,7 @@ class MDWaterBoxOutput:
         trajectory = os.path.join(self.sim_output_dir, "eql.xtc")
         universe = mda.Universe(topology, trajectory, all_coordinates=True)
         atoms = universe.atoms
-        transformation = mda.transformations.unwrap(atoms)
+        transformation = MDAnalysis.transformations.unwrap(atoms)
         universe.trajectory.add_transformations(transformation)
 
         view = nv.show_mdanalysis(universe)
