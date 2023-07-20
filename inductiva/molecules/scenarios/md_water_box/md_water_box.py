@@ -14,6 +14,7 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils.files import remove_files_with_tag
+from .post_processing import MDWaterBoxOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "md_water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
@@ -82,10 +83,11 @@ class MDWaterBox(Scenario):
             os.path.join(self.template_dir, "commands.json.jinja"),
             {"box_size": self.box_size}, commands_path)
         commands = self.read_commands_from_file(commands_path)
-        return super().simulate(simulator,
-                                output_dir,
-                                resource_pool_id=resource_pool_id,
-                                commands=commands)
+        output_path = super().simulate(simulator,
+                                       output_dir,
+                                       resource_pool_id=resource_pool_id,
+                                       commands=commands)
+        return MDWaterBoxOutput(output_path)
 
     def simulate_async(
             self,
@@ -123,9 +125,10 @@ class MDWaterBox(Scenario):
             os.path.join(self.template_dir, "commands.json.jinja"),
             {"box_size": self.box_size}, commands_path)
         commands = self.read_commands_from_file(commands_path)
-        return super().simulate_async(simulator,
-                                      resource_pool_id=resource_pool_id,
-                                      commands=commands)
+        task_id = super().simulate_async(simulator,
+                                         resource_pool_id=resource_pool_id,
+                                         commands=commands)
+        return task_id
 
     @singledispatchmethod
     def gen_config(self, simulator: Simulator):
