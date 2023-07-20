@@ -13,7 +13,7 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils.files import remove_files_with_tag
-from .post_processing import MDWaterBoxSimulationOutput
+from .post_processing import MDWaterBoxOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "md_water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
