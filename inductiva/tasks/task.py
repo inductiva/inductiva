@@ -1,17 +1,23 @@
-"""Interact with a running/completed task on the Inductiva API."""
+"""Manage running/completed tasks on the Inductiva API."""
 import pathlib
 import time
+from absl import logging
 from typing import Dict, Any
 from typing_extensions import TypedDict
 
 from inductiva.client.models import TaskStatusCode
 from inductiva import api
 from inductiva.client.apis.tags.tasks_api import TasksApi
-from absl import logging
 
 
 class Task:
     """Represents a running/completed task on the Inductiva API.
+
+    Example usage:
+        task = scenario.simulate_async(...)
+        final_status = task.wait()
+        info = task.get_info() # dictionary with info about the task
+        task.download_output() # download the output of the task
 
     Attributes:
         id: The task ID.

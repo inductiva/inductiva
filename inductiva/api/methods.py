@@ -281,7 +281,7 @@ def submit_task(api_instance, task_request, params, type_annotations):
     )
 
     task_id = task["id"]
-    logging.info("Simulation ID: %s", task_id)
+    logging.info("Task ID: %s", task_id)
 
     with blocking_task_context(api_instance, task_id):
         if task["status"] == "pending-input":
@@ -293,7 +293,7 @@ def submit_task(api_instance, task_request, params, type_annotations):
                 type_annotations=type_annotations,
             )
 
-            logging.info("Simulation successfully submitted.")
+            logging.info("Task request submitted.")
 
     return task_id
 
