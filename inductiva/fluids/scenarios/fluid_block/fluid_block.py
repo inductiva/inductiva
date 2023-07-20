@@ -155,8 +155,8 @@ def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-
     fluid_margin = 2 * self.particle_radius
 
     replace_params_in_template(
-        templates_dir=os.path.dirname(__file__),
-        template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
+        template_path=os.path.join(os.path.dirname(__file__),
+                                   SPLISHSPLASH_TEMPLATE_FILENAME),
         params={
             "simulation_time": self.simulation_time,
             "time_step": self.time_step,
@@ -196,8 +196,8 @@ def _(self, simulator: DualSPHysics, input_dir: str):  # pylint: disable=unused-
     """Generates the configuration file for DualSPHysics."""
 
     replace_params_in_template(
-        templates_dir=os.path.dirname(__file__),
-        template_filename=DUALSPHYSICS_TEMPLATE_FILENAME,
+        template_path=os.path.join(os.path.dirname(__file__),
+                                   DUALSPHYSICS_TEMPLATE_FILENAME),
         params={
             "simulation_time": self.simulation_time,
             "time_step": self.time_step,

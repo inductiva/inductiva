@@ -76,8 +76,10 @@ class MDWaterBox(Scenario):
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
         commands_path = os.path.join(self.template_dir, "commands.json")
-        replace_params_in_template(self.template_dir, "commands.json.jinja",
-                                   {"box_size": self.box_size}, commands_path)
+
+        replace_params_in_template(
+            os.path.join(self.template_dir, "commands.json.jinja"),
+            {"box_size": self.box_size}, commands_path)
         commands = self.read_commands_from_file(commands_path)
         return super().simulate(simulator,
                                 output_dir,
@@ -116,8 +118,9 @@ class MDWaterBox(Scenario):
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
         commands_path = os.path.join(self.template_dir, "commands.json")
-        replace_params_in_template(self.template_dir, "commands.json.jinja",
-                                   {"box_size": self.box_size}, commands_path)
+        replace_params_in_template(
+            os.path.join(self.template_dir, "commands.json.jinja"),
+            {"box_size": self.box_size}, commands_path)
         commands = self.read_commands_from_file(commands_path)
         return super().simulate_async(simulator,
                                       resource_pool_id=resource_pool_id,
@@ -161,7 +164,7 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
     """Generate the mdp configuration files for the simulation."""
     batch_replace_params_in_template(
         templates_dir=self.template_dir,
-        template_filename_paths=[
+        template_filenames=[
             "simulation.mdp.jinja",
             "energy_minimization.mdp.jinja",
         ],

@@ -148,11 +148,12 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    params_file_path = os.path.join(input_dir, OPENFOAM_PARAMS_FILE_NAME)
+    template_file_path, params_file_path = (
+        os.path.join(input_dir, file_name) for file_name in
+        [OPENFOAM_TEMPLATE_PARAMS_FILE_NAME, OPENFOAM_PARAMS_FILE_NAME])
 
     replace_params_in_template(
-        templates_dir=input_dir,
-        template_filename=OPENFOAM_TEMPLATE_PARAMS_FILE_NAME,
+        template_path=template_file_path,
         params={
             "simulation_time": self.simulation_time,
             "output_time_step": self.output_time_step,
@@ -161,11 +162,8 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
             "heater_power": self.heater_power
         },
         output_file_path=params_file_path,
+        remove_template=True,
     )
-
-    # TODO (fabiocruz): add option to remove template file in
-    # replace_params_in_template.
-    os.remove(os.path.join(input_dir, OPENFOAM_TEMPLATE_PARAMS_FILE_NAME))
 
 
 @HeatSink.gen_config.register

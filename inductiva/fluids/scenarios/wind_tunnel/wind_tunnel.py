@@ -162,10 +162,11 @@ class WindTunnel(Scenario):
         """
         templates_path = os.path.join(SCENARIO_TEMPLATE_DIR,
                                       OPENFOAM_TEMPLATE_INPUT_DIR)
+
+        template_path = os.path.join(templates_path, COMMANDS_TEMPLATE_NAME)
         commands_file_path = os.path.join(templates_path, "commands.json")
 
-        replace_params_in_template(templates_path, "commands.json.jinja",
-                                   {"n_cores": self.n_cores},
+        replace_params_in_template(template_path, {"n_cores": self.n_cores},
                                    commands_file_path)
 
         commands = self.read_commands_from_file(commands_file_path)
@@ -225,7 +226,7 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
 
     batch_replace_params_in_template(
         templates_dir=template_dir,
-        template_filename_paths=[
+        template_filenames=[
             os.path.join("0", "include",
                          "initialConditions_template.openfoam.jinja"),
             os.path.join("system", "controlDict_template.openfoam.jinja"),
