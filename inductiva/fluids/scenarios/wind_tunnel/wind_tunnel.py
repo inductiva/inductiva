@@ -1,11 +1,12 @@
 """Wind tunnel scenario to run an object over an air flow."""
 
+from dataclasses import dataclass
+from enum import Enum
 from functools import singledispatchmethod
 import os
 import shutil
+import tempfile
 from typing import Optional, List, Literal
-from enum import Enum
-from dataclasses import dataclass
 from uuid import UUID
 
 from absl import logging
@@ -23,7 +24,7 @@ from inductiva.fluids.scenarios.wind_tunnel.post_processing import WindTunnelSim
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
-COMMANDS_TEMPLATE_NAME = "commands.json.jinja"
+COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
 
 @dataclass
@@ -159,18 +160,20 @@ class WindTunnel(Scenario):
         return task_id
 
     def get_commands(self):
-        """Returns the commands for the simulation.
-        """
-        templates_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                      OPENFOAM_TEMPLATE_INPUT_DIR)
+        """Returns the commands for the simulation."""
 
-        template_path = os.path.join(templates_path, COMMANDS_TEMPLATE_NAME)
-        commands_file_path = os.path.join(templates_path, "commands.json")
+        commands_template_path = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                              OPENFOAM_TEMPLATE_INPUT_DIR,
+                                              COMMANDS_TEMPLATE_FILE_NAME)
 
-        replace_params_in_template(template_path, {"n_cores": self.n_cores},
-                                   commands_file_path)
+        with tempfile.NamedTemporaryFile() as commands_file:
+            replace_params_in_template(
+                template_path=commands_template_path,
+                params={"n_cores": self.n_cores},
+                output_file_path=commands_file.name,
+            )
 
-        commands = self.read_commands_from_file(commands_file_path)
+            commands = self.read_commands_from_file(commands_file)
 
         return commands
 
