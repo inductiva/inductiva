@@ -197,7 +197,7 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
                     symlinks=True)
 
     batch_replace_params_in_template(
-        templates_dir=template_files_dir,
+        templates_dir=input_dir,
         template_filenames=[
             os.path.join("0", "include",
                          "initialConditions_template.openfoam.jinja"),
