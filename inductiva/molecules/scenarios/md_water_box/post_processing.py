@@ -1,6 +1,7 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
 import MDAnalysis as mda
+import MDAnalysis.transformations
 import nglview as nv
 from pathlib import Path
 
@@ -21,7 +22,7 @@ class MDWaterBoxOutput:
         self.sim_output_dir = sim_output_path
 
     def render(self):
-        """Visualize the simulation outputs in a notebook using NGLView."""
+        """Visualize the simulation outputs in a notebook widget using NGLView."""
 
         topology = os.path.join(self.sim_output_dir, "eql.tpr")
         trajectory = os.path.join(self.sim_output_dir, "eql.xtc")

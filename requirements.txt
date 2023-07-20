@@ -20,3 +20,4 @@ websockets
 typing-extensions
 MDAnalysis
 nglview
+moviepy
