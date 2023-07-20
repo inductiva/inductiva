@@ -40,8 +40,7 @@ class Scenario(ABC):
         if type(simulator) not in self.valid_simulators:
             raise ValueError(
                 f"Simulator not supported for `{self.__class__.__name__}` "
-                "scenario."
-            )
+                "scenario.")
 
     def simulate(
         self,
