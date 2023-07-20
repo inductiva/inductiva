@@ -9,7 +9,7 @@ from inductiva import types
 
 def find_path_to_package(package_dir: str):
     """Find path to package directory in inductiva library in local computer.
-    
+
     Args:
         package_dir: Name of package directory.
     """

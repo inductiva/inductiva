@@ -22,9 +22,9 @@ COMMANDS_FILE_NAME = "commands.json"
 
 class HeatSink(Scenario):
     """Heat sink scenario.
-    
+
     This is a simulation scenario for a heat sink. A heat source is placed
-    in a box where there is an air flow. A heat sink, placed on top of the 
+    in a box where there is an air flow. A heat sink, placed on top of the
     source, is used to dissipate the heat via convection with the air flow.
 
     The heat source is modeled as a heater with a given power. The heat sink
