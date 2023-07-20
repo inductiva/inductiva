@@ -14,6 +14,7 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template,
                                        replace_params_in_template)
 from inductiva.scenarios import Scenario
+from .post_processing import MDWaterBoxOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "md_water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
@@ -80,10 +81,11 @@ class MDWaterBox(Scenario):
         self.nsteps_minim = nsteps_minim
 
         commands = self.get_commands()
-        return super().simulate(simulator,
-                                output_dir,
-                                resource_pool_id=resource_pool_id,
-                                commands=commands)
+        output_path = super().simulate(simulator,
+                                       output_dir,
+                                       resource_pool_id=resource_pool_id,
+                                       commands=commands)
+        return MDWaterBoxOutput(output_path)
 
     def simulate_async(
             self,
@@ -118,9 +120,10 @@ class MDWaterBox(Scenario):
         self.nsteps_minim = nsteps_minim
 
         commands = self.get_commands()
-        return super().simulate_async(simulator,
+        task = super().simulate_async(simulator,
                                       resource_pool_id=resource_pool_id,
                                       commands=commands)
+        return task
 
     def get_commands(self):
         """Returns the commands for the simulation."""
