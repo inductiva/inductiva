@@ -1,3 +1,4 @@
+# pylint: disable=protected-access
 """Post processing auxiliary functions."""
 import time
 import os
@@ -5,7 +6,7 @@ import io
 import base64
 import shutil
 import threading
-from PIL import Image
+import PIL
 from moviepy.editor import ImageSequenceClip
 from ipywidgets import Output, IntProgress
 
@@ -73,20 +74,20 @@ class MovieMaker:
                     im_bytes = base64.b64decode(self.view._image_data)
                     im_bytes = io.BytesIO(im_bytes)
                     try:
-                        image = Image.open(im_bytes)
+                        image = PIL.Image.open(im_bytes)
                         filename = os.path.join(self.frames_dir,
                                                 f'figure_{i}.png').format(i)
                         image_files.append(filename)
-                        image.save(filename, "PNG")
-                    except Exception:
-                        print("Could not save frame", i)
+                        image.save(filename, 'PNG')
+                    except PIL.UnidentifiedImageError:
+                        print(f'Error: Unidentified image at frame {i}')
                         continue
 
                     if iw:
                         iw.close()
 
             if not self._event.is_set():
-                self.progress.description = "Writing ..."
+                self.progress.description = 'Writing ...'
                 clip = ImageSequenceClip(image_files, fps=self.fps)
                 with Output():
                     if self.output_path.endswith('.gif'):
