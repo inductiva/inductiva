@@ -10,6 +10,7 @@ from inductiva.utils.files import resolve_path, get_timestamped_path
 from inductiva.utils.misc import split_camel_case
 from inductiva.tasks.methods import get_task_info, fetch_task_output
 import json
+from inductiva.tasks import Task
 
 
 class Scenario(ABC):
@@ -88,15 +89,16 @@ class Scenario(ABC):
         simulator: Simulator,
         resource_pool_id: Optional[UUID] = None,
         **kwargs,
-    ) -> str:
+    ) -> Task:
         """Simulates the scenario asychronously."""
 
         with tempfile.TemporaryDirectory() as input_dir:
             args = self._setup_config(simulator, input_dir)
-            task_id = simulator.run_async(
+            task = simulator.run_async(
                 input_dir,
                 *args,
                 resource_pool_id=resource_pool_id,
                 **kwargs,
             )
-        return task_id
+
+        return task

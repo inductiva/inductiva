@@ -5,6 +5,7 @@ from uuid import UUID
 
 from inductiva import types
 from inductiva.simulation import Simulator
+from inductiva.tasks import Task
 
 
 class OpenFOAM(Simulator):
@@ -47,7 +48,7 @@ class OpenFOAM(Simulator):
         commands: List[dict],
         resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
-    ) -> str:
+    ) -> Task:
         """Run the simulation asynchronously.
 
         Args:
