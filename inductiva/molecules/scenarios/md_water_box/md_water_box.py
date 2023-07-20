@@ -4,7 +4,7 @@ from typing import Optional, Literal
 import os
 import shutil
 from uuid import UUID
-from inductiva.tasks.task import Task
+from inductiva.tasks import Task
 
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS

@@ -10,7 +10,7 @@ from inductiva.utils.files import resolve_path, get_timestamped_path
 from inductiva.utils.misc import split_camel_case
 from inductiva.tasks.methods import get_task_info, fetch_task_output
 import json
-from inductiva.tasks.task import Task
+from inductiva.tasks import Task
 
 
 class Scenario(ABC):

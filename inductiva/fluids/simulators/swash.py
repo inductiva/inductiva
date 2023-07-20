@@ -4,7 +4,7 @@ from typing import Optional
 from uuid import UUID
 from inductiva.simulation import Simulator
 from inductiva import types
-from inductiva.tasks.task import Task
+from inductiva.tasks import Task
 
 
 class SWASH(Simulator):

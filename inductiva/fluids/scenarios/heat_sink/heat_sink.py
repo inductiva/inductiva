@@ -4,7 +4,7 @@ import os
 import shutil
 from typing import Optional
 from uuid import UUID
-from inductiva.tasks.task import Task
+from inductiva.tasks import Task
 
 from inductiva.types import Path
 from inductiva.fluids.simulators import OpenFOAM

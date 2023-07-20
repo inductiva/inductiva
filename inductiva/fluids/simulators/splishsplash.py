@@ -5,7 +5,7 @@ from uuid import UUID
 
 from inductiva import types
 from inductiva.simulation import Simulator
-from inductiva.tasks.task import Task
+from inductiva.tasks import Task
 
 
 class SPlisHSPlasH(Simulator):

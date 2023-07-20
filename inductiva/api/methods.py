@@ -19,7 +19,7 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
                                      TaskStatus)
 from inductiva.exceptions import RemoteExecutionError
-from inductiva.tasks.task import Task
+from inductiva.tasks import Task
 from inductiva.types import Path
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input, unpack_output)

@@ -72,6 +72,10 @@ class Task:
     def get_info(self) -> Dict[str, Any]:
         """Get a dictionary with information about the task.
 
+        Information includes e.g., "task_id", "status", timestamps
+        ("create_time", "input_submit_time, "start_time", "end_time"),
+        among others.
+
         This method issues a request to the API.
         """
         params = self._get_path_params()
