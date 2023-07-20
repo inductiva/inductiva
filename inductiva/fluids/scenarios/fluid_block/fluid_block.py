@@ -28,6 +28,8 @@ DUALSPHYSICS_CONFIG_FILENAME = "dam_break.xml"
 class FluidBlock(Scenario):
     """Physical scenario of a general fluid block simulation."""
 
+    valid_simulators = [SPlisHSPlasH, DualSPHysics]
+
     def __init__(self,
                  density: float,
                  kinematic_viscosity: float,
@@ -38,14 +40,11 @@ class FluidBlock(Scenario):
 
         Args:
             density: Density of the fluid in kg/m^3.
-            kinematic_viscosity: Kinematic viscosity of the fluid,
-                in m^2/s.
-            dimensions: A list containing fluid column dimensions,
-                in meters.
-            position: Position of the fluid column in the tank,
-                in meters.
-            initial_velocity: Initial velocity of the fluid block
-                in the [x, y, z] axes, in m/s.
+            kinematic_viscosity: Kinematic viscosity of the fluid, in m^2/s.
+            dimensions: A list containing fluid column dimensions, in meters.
+            position: Position of the fluid column in the tank, in meters.
+            initial_velocity: Initial velocity of the fluid block in the
+              [x, y, z] axes, in m/s.
         """
 
         self.fluid = FluidType(density=density,
@@ -116,22 +115,12 @@ class FluidBlock(Scenario):
         return SPHSimulationOutput(output_path)
 
     @singledispatchmethod
-    @classmethod
-    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
-        raise ValueError(
-            f"Simulator not supported for `{cls.__name__}` scenario.")
+    def get_config_filename(self, simulator: Simulator):
+        pass
 
     @singledispatchmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
-
-    @singledispatchmethod
-    def gen_config(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def create_input_files(self, simulator: Simulator):
+        pass
 
 
 @FluidBlock.get_config_filename.register
@@ -140,18 +129,16 @@ def _(cls, simulator: SPlisHSPlasH):  # pylint: disable=unused-argument
     return SPLISHSPLASH_CONFIG_FILENAME
 
 
-@FluidBlock.gen_aux_files.register
+@FluidBlock.create_input_files.register
 def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argument
-    """Generates auxiliary files for SPlisHSPlasH."""
+    """Creates SPlisHSPlasH simulation input files."""
+
+    # Copy the unit box mesh file to the input directory.
     unit_box_file_path = os.path.join(os.path.dirname(__file__),
                                       UNIT_BOX_MESH_FILENAME)
     shutil.copy(unit_box_file_path, input_dir)
 
-
-@FluidBlock.gen_config.register
-def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-argument
-    """Generates the configuration file for SPlisHSPlasH."""
-
+    # Generate the simulation configuration file.
     fluid_margin = 2 * self.particle_radius
 
     replace_params_in_template(
@@ -186,14 +173,9 @@ def _(cls, simulator: DualSPHysics):  # pylint: disable=unused-argument
     return DUALSPHYSICS_CONFIG_FILENAME
 
 
-@FluidBlock.gen_aux_files.register
+@FluidBlock.create_input_files.register
 def _(self, simulator: DualSPHysics, input_dir):  # pylint: disable=unused-argument
-    pass
-
-
-@FluidBlock.gen_config.register
-def _(self, simulator: DualSPHysics, input_dir: str):  # pylint: disable=unused-argument
-    """Generates the configuration file for DualSPHysics."""
+    """Creates DualSPHysics simulation input files."""
 
     replace_params_in_template(
         template_path=os.path.join(os.path.dirname(__file__),
