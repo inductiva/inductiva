@@ -3,12 +3,104 @@ import glob
 import os
 import MDAnalysis as mda
 import nglview as nv
-
+import threading
+import time
+from ipywidgets import Output, IntProgress
 from inductiva.types import Path
+import os
+import MDAnalysis as mda
+import nglview as nv
+from PIL import Image
+import io
+from moviepy.editor import ImageSequenceClip
+
 from inductiva.utils.templates import (TEMPLATES_PATH)
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_visualization")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
+
+
+class MovieMaker:
+    """ 
+
+    """
+
+    def __init__(
+        self,
+        view,
+        download_folder=None,
+        output='my_movie.mp4',
+        fps=8,
+        start=0,
+        stop=-1,
+        step=1,
+        timeout=0.1,
+    ):
+        if download_folder is None:
+            os.makedirs('movie', exist_ok=True)
+            download_folder = 'movie'
+        self.view = view
+        self.download_folder = download_folder
+        self.timeout = timeout
+        self.fps = fps
+
+        self.output = output
+        if stop < 0:
+            stop = self.view.max_frame + 1
+        self._time_range = range(start, stop, step)
+        self._iframe = iter(self._time_range)
+        self._progress = IntProgress(max=len(self._time_range) - 1)
+        self._woutput = Output()
+        self._event = threading.Event()
+        self._thread = None
+
+    def sleep(self):
+        time.sleep(self.timeout)
+
+    def make(self):
+        progress = IntProgress(description='Rendering...',
+                               max=len(self._time_range) - 1)
+        self._event = threading.Event()
+
+        def _make(event):
+            image_files = []
+            iw = None
+            for i in self._time_range:
+                progress.value = i
+                if not event.is_set():
+                    self.view.frame = i
+                    self.sleep()
+                    iw = self.view.render_image()
+                    image = self.view._display_image()
+                    self.sleep()
+                    image_bytes = image.data
+                    image = Image.open(io.BytesIO(image_bytes))
+                    filename = os.path.join(self.download_folder,
+                                            f'figure_{i}.png').format(i)
+                    image_files.append(filename)
+                    image.save(filename, "PNG")
+                    iw.close()
+
+            if not self._event.is_set():
+                progress.description = "Writing ..."
+                clip = ImageSequenceClip(image_files, fps=self.fps)
+                with Output():
+                    if self.output.endswith('.gif'):
+                        clip.write_gif(
+                            self.output,
+                            fps=self.fps,
+                            verbose=False,
+                        )
+                    else:
+                        clip.write_videofile(self.output, fps=self.fps)
+                progress.description = 'Done'
+                time.sleep(1)
+                progress.close()
+
+        self.thread = threading.Thread(target=_make, args=(self._event,))
+        self.thread.daemon = True
+        self.thread.start()
+        return progress
 
 
 class GROMACSSimulationOutput:
