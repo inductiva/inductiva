@@ -32,8 +32,8 @@ class MachineGroup():
             spot: Whether to use spot instances.
             disk_size_gb: The size of the disk in GB. (min. 30 GB)
             label: The label to assign to the machine group.
-            machine_group_id: The ID of the machine group to be created. A new
-              ID can be created by invoking the
+            machine_group_id: If None the Machine Group ID will be generated
+              automatically. A new ID can be created by invoking the
               inductiva.resources.create_resource_pool() method.
         """
         self.machine_type = machine_type
