@@ -118,33 +118,31 @@ class WindTunnelSimulationOutput:
         """Get the force coefficients of the object in the WindTunnel.
         
         The force coefficients are provided in a .dat file during the
-        simulation run-time. This file contains 9 lines that are provide
+        simulation run-time. This file contains 8 lines that are provide
         the general input information. In this function, we read the file,
-        ignore the first 9 lines and read the force coefficients for the 
+        ignore the first 8 lines and read the force coefficients for the 
         time_step chosen.
 
         Args:
             save_path: Path to save the force coefficients in a .csv file.
         """
 
-        num_header_lines = 9
+        num_header_lines = 8
         force_coefficients_path = os.path.join(self.sim_output_path,
                                                "postProcessing", "forceCoeffs1",
                                                "0", "forceCoeffs.dat")
-
-        force_coefficients_data = [
-            line.split() for line in open(force_coefficients_path).readlines()
-        ]
-
         force_coefficients = []
-        # Select the line [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove the
-        # first entry. This is the line 8 of the file.
-        force_coefficients.append(force_coefficients_data[num_header_lines -
-                                                          1][1])
 
-        # Add the force coefficients for the time_step chosen
-        force_coefficients.append(force_coefficients_data[num_header_lines +
-                                                          self.time_step])
+        with open(force_coefficients_path, "r",
+                  encoding="utf-8") as forces_file:
+            for index, line in enumerate(forces_file.readlines()):
+                # Pick the line 8 of the file:
+                # [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)]
+                if index == num_header_lines:
+                    force_coefficients.append(line.split()[1:])
+                # Add the force coefficients for the time_step chosen
+                elif index == num_header_lines + self.time_step + 1:
+                    force_coefficients.append(line.split())
 
         if save_path:
             with open(save_path, "w", encoding="utf-8") as csv_file:
