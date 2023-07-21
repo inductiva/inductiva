@@ -25,6 +25,9 @@ from inductiva.utils import files
 class WindTunnelSimulationOutput:
     """Post-Process WindTunnel simulation outputs.
 
+    This class contains several methods to post-process the output 
+    and visualize the results of a WindTunnel simulation.
+
     Current Support:
         OpenFOAM
     """
@@ -34,15 +37,17 @@ class WindTunnelSimulationOutput:
 
         Args:
             sim_output_path: Path to simulation output files.
-            time_step: Time step where we read the data.
+            time_step: Time step where we read the data (s).
+                This time step needs to be a multiple of the
+                output time step of the simulation.
         """
 
         self.sim_output_path = sim_output_path
         self.time_step = time_step
         self.object_data = self.get_object_data()
 
-    def get_object_data(self):  # pylint: disable=unused-argument
-        """Get aerodynamics data over an object inside the WindTunnel.
+    def get_object_data(self):
+        """Get aerodynamics measumerents at the object inside the WindTunnel.
 
         Current Support - OpenFOAM
         """
@@ -65,6 +70,8 @@ class WindTunnelSimulationOutput:
     def get_physical_field(self, physical_property: str = "pressure"):
         """Get a physical scalar field over mesh points for a certain time_step.
 
+        Args:
+            physical_property: Physical property to be read.
         Returns:
             A MeshData object that allow to manipulate the data over a mesh
             and to render it.
@@ -78,7 +85,13 @@ class WindTunnelSimulationOutput:
     def get_streamlines(self,
                         physical_property: Literal["pressure",
                                                    "velocity"] = "pressure"):
-        """Get streamlines over the object in the WindTunnel."""
+        """Get streamlines over the object in the WindTunnel.
+        
+        Args:
+            physical_property: Physical property to be read.
+        Returns:
+            A MeshData object with the streamlines that represent the flow.
+        """
 
         streamlines_path = os.path.join(self.sim_output_path, "postProcessing",
                                         "sets", "streamLines",
@@ -96,7 +109,12 @@ class WindTunnelSimulationOutput:
     def get_flow_plane(self,
                        physical_property: Literal["pressure",
                                                   "velocity"] = "pressure"):
-        """Get flow properties in a plane of the domain in WindTunnel."""
+        """Get flow properties in a plane of the domain in WindTunnel.
+        
+        Args:
+            physical_property: Physical property to be read.
+        Returns:
+            A MeshData object with aerodynamic measurements over a plane."""
 
         cutting_plane_path = os.path.join(self.sim_output_path,
                                           "postProcessing", "cuttingPlane",
@@ -121,7 +139,19 @@ class WindTunnelSimulationOutput:
                     flow_cmap: str = "viridis",
                     object_color: str = "white",
                     save_path: Path = None):
-        """Render flow property over the object in the WindTunnel."""
+        """Render flow property over the object in the WindTunnel.
+        
+        Args:
+            flow_property_mesh: MeshData object with the flow property.
+            physical_property: Physical property to be read.
+            virtual_display: Uses a virtual display to render the plot.
+                Essential, to render in a remote server.
+            background_color: Background color of the plot.
+            flow_cmap: Colormap for the flow property.
+            object_color: Color of the object.
+            save_path: Path to save the plot. If None, the
+                plot is not saved.
+        """
         if save_path is not None:
             save_path = files.resolve_path(save_path)
 
@@ -156,6 +186,6 @@ class WindTunnelSimulationOutput:
 
 @dataclass
 class OpenFOAMPhysicalProperty(Enum):
-    """Defines the notation used for physical properties in OpenFOAM."""
+    """Notation for physical properties in OpenFOAM."""
     PRESSURE = "p"
     VELOCITY = "U"
