@@ -38,13 +38,39 @@ class ExecuterCreate(schemas.DictSchema):
             "create_time",
             "cpu_count_logical",
             "cpu_count_physical",
-            "executer_type",
             "host_info",
+            "supported_executer_types",
         }
 
         class properties:
             create_time = schemas.DateTimeSchema
-            executer_type = schemas.StrSchema
+
+            class supported_executer_types(schemas.ListSchema):
+
+                class MetaOapg:
+                    items = schemas.StrSchema
+
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple[typing.Union[
+                        MetaOapg.items,
+                        str,
+                    ]], typing.List[typing.Union[
+                        MetaOapg.items,
+                        str,
+                    ]]],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                ) -> 'supported_executer_types':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+
             cpu_count_logical = schemas.IntSchema
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
@@ -108,7 +134,7 @@ class ExecuterCreate(schemas.DictSchema):
             resource_pool_id = schemas.StrSchema
             __annotations__ = {
                 "create_time": create_time,
-                "executer_type": executer_type,
+                "supported_executer_types": supported_executer_types,
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
@@ -122,8 +148,8 @@ class ExecuterCreate(schemas.DictSchema):
     create_time: MetaOapg.properties.create_time
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
-    executer_type: MetaOapg.properties.executer_type
     host_info: MetaOapg.properties.host_info
+    supported_executer_types: MetaOapg.properties.supported_executer_types
 
     @typing.overload
     def __getitem__(
@@ -133,8 +159,8 @@ class ExecuterCreate(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["executer_type"]
-    ) -> MetaOapg.properties.executer_type:
+        self, name: typing_extensions.Literal["supported_executer_types"]
+    ) -> MetaOapg.properties.supported_executer_types:
         ...
 
     @typing.overload
@@ -179,7 +205,7 @@ class ExecuterCreate(schemas.DictSchema):
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "create_time",
-        "executer_type",
+        "supported_executer_types",
         "cpu_count_logical",
         "cpu_count_physical",
         "memory",
@@ -198,8 +224,8 @@ class ExecuterCreate(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["executer_type"]
-    ) -> MetaOapg.properties.executer_type:
+        self, name: typing_extensions.Literal["supported_executer_types"]
+    ) -> MetaOapg.properties.supported_executer_types:
         ...
 
     @typing.overload
@@ -246,7 +272,7 @@ class ExecuterCreate(schemas.DictSchema):
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "create_time",
-        "executer_type",
+        "supported_executer_types",
         "cpu_count_logical",
         "cpu_count_physical",
         "memory",
@@ -286,10 +312,6 @@ class ExecuterCreate(schemas.DictSchema):
             decimal.Decimal,
             int,
         ],
-        executer_type: typing.Union[
-            MetaOapg.properties.executer_type,
-            str,
-        ],
         host_info: typing.Union[
             MetaOapg.properties.host_info,
             dict,
@@ -309,6 +331,11 @@ class ExecuterCreate(schemas.DictSchema):
             io.FileIO,
             io.BufferedReader,
         ],
+        supported_executer_types: typing.Union[
+            MetaOapg.properties.supported_executer_types,
+            list,
+            tuple,
+        ],
         resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id,
                                        str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -325,8 +352,8 @@ class ExecuterCreate(schemas.DictSchema):
             create_time=create_time,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
-            executer_type=executer_type,
             host_info=host_info,
+            supported_executer_types=supported_executer_types,
             resource_pool_id=resource_pool_id,
             _configuration=_configuration,
             **kwargs,

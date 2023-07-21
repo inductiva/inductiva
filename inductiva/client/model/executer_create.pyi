@@ -42,13 +42,35 @@ class ExecuterCreate(
             "create_time",
             "cpu_count_logical",
             "cpu_count_physical",
-            "executer_type",
             "host_info",
+            "supported_executer_types",
         }
         
         class properties:
             create_time = schemas.DateTimeSchema
-            executer_type = schemas.StrSchema
+            
+            
+            class supported_executer_types(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.StrSchema
+            
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'supported_executer_types':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
             cpu_count_logical = schemas.IntSchema
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
@@ -93,7 +115,7 @@ class ExecuterCreate(
             resource_pool_id = schemas.StrSchema
             __annotations__ = {
                 "create_time": create_time,
-                "executer_type": executer_type,
+                "supported_executer_types": supported_executer_types,
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
@@ -107,14 +129,14 @@ class ExecuterCreate(
     create_time: MetaOapg.properties.create_time
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
-    executer_type: MetaOapg.properties.executer_type
     host_info: MetaOapg.properties.host_info
+    supported_executer_types: MetaOapg.properties.supported_executer_types
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["create_time"]) -> MetaOapg.properties.create_time: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["executer_type"]) -> MetaOapg.properties.executer_type: ...
+    def __getitem__(self, name: typing_extensions.Literal["supported_executer_types"]) -> MetaOapg.properties.supported_executer_types: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["cpu_count_logical"]) -> MetaOapg.properties.cpu_count_logical: ...
@@ -137,7 +159,7 @@ class ExecuterCreate(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "executer_type", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "host_info", "resource_pool_id", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "host_info", "resource_pool_id", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -146,7 +168,7 @@ class ExecuterCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["create_time"]) -> MetaOapg.properties.create_time: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["executer_type"]) -> MetaOapg.properties.executer_type: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["supported_executer_types"]) -> MetaOapg.properties.supported_executer_types: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["cpu_count_logical"]) -> MetaOapg.properties.cpu_count_logical: ...
@@ -169,7 +191,7 @@ class ExecuterCreate(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "executer_type", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "host_info", "resource_pool_id", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "host_info", "resource_pool_id", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -181,8 +203,8 @@ class ExecuterCreate(
         create_time: typing.Union[MetaOapg.properties.create_time, str, datetime, ],
         cpu_count_logical: typing.Union[MetaOapg.properties.cpu_count_logical, decimal.Decimal, int, ],
         cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical, decimal.Decimal, int, ],
-        executer_type: typing.Union[MetaOapg.properties.executer_type, str, ],
         host_info: typing.Union[MetaOapg.properties.host_info, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        supported_executer_types: typing.Union[MetaOapg.properties.supported_executer_types, list, tuple, ],
         resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -195,8 +217,8 @@ class ExecuterCreate(
             create_time=create_time,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
-            executer_type=executer_type,
             host_info=host_info,
+            supported_executer_types=supported_executer_types,
             resource_pool_id=resource_pool_id,
             _configuration=_configuration,
             **kwargs,
