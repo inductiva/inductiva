@@ -12,10 +12,11 @@ import os
 from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
+import csv
+
 from base64 import b64encode
 from IPython.display import HTML
 
-import pandas as pd
 import pyvista as pv
 
 from inductiva.types import Path
@@ -113,24 +114,40 @@ class WindTunnelSimulationOutput:
 
         return cutting_plane_mesh
 
-    def get_force_coefficients(self):
-        """Get the force coefficients of the object in the WindTunnel."""
+    def get_force_coefficients(self, save_path: Path = None):
+        """Get the force coefficients of the object in the WindTunnel.
+        
+        The force coefficients are provided in a .dat file during the
+        simulation run-time. This file contains 9 lines that are provide
+        the general input information. In this function, we read the file,
+        ignore the first 9 lines and read the force coefficients for the 
+        time_step chosen.
+
+        Args:
+            save_path: Path to save the force coefficients in a .csv file.
+        """
 
         num_header_lines = 9
-        force_coefficients = pd.DataFrame(
-            columns=["time_step", "Cm", "Cd", "Cl", "Cl(f)", "Cl(r)"])
-
         force_coefficients_path = os.path.join(self.sim_output_path,
                                                "postProcessing", "forceCoeffs1",
                                                "0", "forceCoeffs.dat")
-        force_coefficients_df = pd.read_csv(force_coefficients_path,
-                                            header=None)
 
-        # Skip the first lines of the header to read the force coefficients
-        # on the respective time_step.
-        force_coefficients.loc[0] = force_coefficients_df.loc[self.time_step +
-                                                              num_header_lines,
-                                                              0].split()
+        force_coefficients_data = [
+            line.split() for line in open(force_coefficients_path).readlines()
+        ]
+
+        force_coefficients = []
+        # Add the header lines of each parameter
+        force_coefficients.append(force_coefficients_data[num_header_lines - 1])
+        
+        # Add the force coefficients for the time_step chosen
+        force_coefficients.append(force_coefficients_data[num_header_lines +
+                                                          self.time_step])
+
+        if save_path:
+            with open(save_path, "w", encoding="utf-8") as csv_file:
+                csv_writer = csv.writer(csv_file)
+                csv_writer.writerows(force_coefficients)
 
         return force_coefficients
 
