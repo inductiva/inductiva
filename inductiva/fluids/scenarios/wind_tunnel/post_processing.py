@@ -137,9 +137,11 @@ class WindTunnelSimulationOutput:
         ]
 
         force_coefficients = []
-        # Add the header lines of each parameter
-        force_coefficients.append(force_coefficients_data[num_header_lines - 1])
-        
+        # Select the line [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove the
+        # first entry. This is the line 8 of the file.
+        force_coefficients.append(force_coefficients_data[num_header_lines -
+                                                          1][1])
+
         # Add the force coefficients for the time_step chosen
         force_coefficients.append(force_coefficients_data[num_header_lines +
                                                           self.time_step])
