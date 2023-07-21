@@ -39,27 +39,31 @@ class MeshResolution(Enum):
 class WindTunnel(Scenario):
     """Physical scenario of a configurable wind tunnel simulation.
 
-    A wind tunnel is a tool used in aerodynamic research to study the effects
-    of air moving past solid objects. Here, the tunnel consiste of a box
-    object in 3D space, where the air will flow with a certain velocity.
-
-    Object O==O is set inside the wind tunnel and air flows in a direction
-    established by the user (e.g. below from left to right):
+    A wind tunnel is a tool used in aerodynamic research to study the
+    effects of air moving past solid objects. Here, the tunnel consists
+    of a box object in 3D space (x, y, z) space, where air flows in the
+    positive x-direction with a certain velocity.
+            
+    An arbitrary object is placed within the tunnel, sucht that air flows
+    around it, as illustrated in the schematic below:
     |--------------------------------|
-    |->          ___                 |
-    |->        _/   \_               |
+    |->          _____               |
+    |->        _/     |              |
     |->_______|_o___O_|______________|
 
-    This scenario solves steady-state continuity and momentum equations, thus
-    in practice is not solving time-dependent equations. However, it solves
-    these equations for several time steps, to propagate the system
-    dynamics until a steady-state is found.
+    This scenario solves steady-state continuity and momentum equations
+    (time-independent) with incompressible flow. 
+    The simulation solves the time-independent equations for several
+    time steps, based on the state of the previous one. The end goal is
+    to determine the steady-state of the system, i.e., where the flow
+    does not change in time anymore.
 
     Currently, the following variables are fixed:
     - The fluid being inject is air.
-    - The flow is incompressible (this restricts the max air velocity)
-    - TO FIX: Air only flows in one direction (e.g. from left to right)
-    - Post-processing functionalities within the Simulator are fixed.
+    - The flow is incompressible (this restricts the max air velocity).
+    - Air only flows in the positive x-direction.
+    - Some post-processing of the data occurs at run-time: streamlines,
+    pressure_field, cutting planes and force coefficients.
     """
 
     def __init__(self,
@@ -104,17 +108,18 @@ class WindTunnel(Scenario):
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
-            simulator: Simulators available [OpenFOAM].
+            simulator: Simulator used to simulate the scenario.
+                Valid simulators: OpenFOAM.
             object_path: Path to object inserted in the wind tunnel.
             output_dir: Path to the directory where the simulation output
                 is downloaded.
-            simulation_time: Simulation time, in seconds.
-            output_time_step: Interval between simulation outputs, in seconds.
+            simulation_time: Simulation time (s).
+            output_time_step: Interval between simulation outputs (s).
             n_cores: Number of cores to use for the simulation.
-            resolution: Level of detail for the simulation. It can be
-                "high", "medium" or "low".
+            resolution: Level of detail of the mesh used for the simulation.
+                Options: "high", "medium" or "low".
             resource_pool_id: Id of the resource pool to use for the simulation.
-            """
+        """
 
         if object_path:
             self.object_path = files.resolve_path(object_path)
@@ -149,10 +154,11 @@ class WindTunnel(Scenario):
         """Simulates the wind tunnel scenario asynchronously.
 
         Args:
-            simulator: Simulators available [OpenFOAM].
+            simulator: Simulator used to simulate the scenario.
+                Valid simulators: OpenFOAM.
             object_path: Path to object inserted in the wind tunnel.
-            simulation_time: Simulation time, in seconds (s).
-            output_time_step: Interval between simulation outputs, in seconds (s).
+            simulation_time: Simulation time (s).
+            output_time_step: Interval between simulation outputs (s).
             n_cores: Number of cores to use for the simulation.
             resolution: Level of detail for the simulation. It can be
                 "high", "medium" or "low".
