@@ -2,6 +2,7 @@
 
 import os
 import pathlib
+from typing import Sequence
 
 import pyvista as pv
 
@@ -22,11 +23,11 @@ class HeatSinkOutput:
         self.sim_output_path = sim_output_path
 
     def render(
-        self,
-        movie_path: Path = "movie.mp4",
-        fps: int = 10,
-        cmap: str = "viridis",
-        clim: list = [280, 300],
+            self,
+            movie_path: Path = "movie.mp4",
+            fps: int = 10,
+            cmap: str = "viridis",
+            clim: Sequence[float] = (280, 300),
     ):
         """Renders temporal evolution of the temperature.
         
