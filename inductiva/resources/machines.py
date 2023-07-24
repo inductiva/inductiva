@@ -22,7 +22,6 @@ class MachineGroup():
         spot: bool = False,
         disk_size_gb: int = 30,
         label: Optional[str] = None,
-        machine_group_id: Optional[uuid.UUID] = None,
     ) -> None:
         """Create a MachineGroup object.
 
@@ -41,8 +40,7 @@ class MachineGroup():
         self.spot = spot
         self.disk_size_gb = disk_size_gb
         self.label = label
-        self.machine_group_id = resources.create_machine_group_id() \
-            if machine_group_id is None else machine_group_id
+        self.machine_group_id = resources.create_machine_group_id()
         self.name = self._generate_instance_name()
 
         self.api_config = api.validate_api_key(inductiva.api_key)
@@ -92,14 +90,14 @@ class MachineGroup():
                     name=self.machine_type))
                 if self.spot:
                     logging.info(
-                        "Estimated spot cost: %s/hour per machine, resulting in \
-                        %s/hour for all machines.",
+                        "Estimated spot cost: %s/hour per machine, resulting \
+                        in %s/hour for all machines.",
                         instance_price.body["preemptible"],
                         instance_price.body["preemptible"] * self.num_machines)
                 else:
                     logging.info(
-                        "Estimated on-demand cost: %s/hour per machine, resulting \
-                        %s/hour for all machines.",
+                        "Estimated on-demand cost: %s/hour per machine, \
+                        resulting in %s/hour for all machines.",
                         instance_price.body["on_demand"],
                         instance_price.body["on_demand"] * self.num_machines)
             except ApiException as e:
