@@ -79,7 +79,7 @@ class HeatSinkOutput:
             zoom_factor = 1.2
             slice_normal = (-1, 0, 0)
         else:
-            raise ValueError(f"Invalid view.")
+            raise ValueError("Invalid view.")
 
         plotter.camera.zoom(zoom_factor)
 
