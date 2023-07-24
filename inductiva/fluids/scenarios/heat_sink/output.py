@@ -43,6 +43,7 @@ class HeatSinkOutput:
             fps: Number of frames per second to use in the movie.
             cmap: Colormap used to represent temperature.
             clim: Colorbar limits.
+            view: View to use in the movie.
         """
 
         movie_path = files.resolve_path(movie_path)
