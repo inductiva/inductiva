@@ -78,28 +78,25 @@ class MachineGroup():
                 raise e
 
     def estimate_cost(self):
-        """Returns an estimated cost per hour of a single machine."""
+        """Returns an estimated cost per hour of a machine group."""
         with ApiClient(self.api_config) as client:
             api_instance = InstanceApi(client)
 
             try:
                 instance_price = api_instance.get_instance_price(body=Instance(
                     name=self.machine_type))
-                if self.spot:
-                    logging.info(
-                        "Estimated spot cost: %s/hour per machine, resulting \
-                        in %s/hour for all machines.",
-                        instance_price.body["preemptible"],
-                        instance_price.body["preemptible"] * self.num_machines)
-                else:
-                    logging.info(
-                        "Estimated on-demand cost: %s/hour per machine, \
-                        resulting in %s/hour for all machines.",
-                        instance_price.body["on_demand"],
-                        instance_price.body["on_demand"] * self.num_machines)
+                logging.info(
+                    "Estimated cost of a machine group is %s$ per hour.",
+                    self._get_cost(instance_price))
             except ApiException as e:
                 raise e
-        return instance_price.body
+        return self._get_cost(instance_price)
+
+    def _get_cost(self, instance_price):
+        if self.spot:
+            return instance_price.body["on_demand"] * self.num_machines
+        else:
+            return instance_price.body["preemptible"] * self.num_machines
 
     def _generate_instance_name(self):
         unique_id = uuid.uuid4().hex[:8]
