@@ -2,7 +2,7 @@
 
 import os
 import pathlib
-from typing import Sequence
+from typing import Literal, Sequence
 
 import pyvista as pv
 
@@ -23,11 +23,13 @@ class HeatSinkOutput:
         self.sim_output_path = sim_output_path
 
     def render(
-            self,
-            movie_path: Path = "movie.mp4",
-            fps: int = 10,
-            cmap: str = "viridis",
-            clim: Sequence[float] = (280, 300),
+        self,
+        movie_path: Path = "movie.mp4",
+        fps: int = 10,
+        cmap: str = "viridis",
+        clim: Sequence[float] = (280, 300),
+        view: Literal["isometric", "front", "rear", "top",
+                      "side"] = "isometric",
     ):
         """Renders temporal evolution of the temperature.
         
@@ -56,8 +58,30 @@ class HeatSinkOutput:
         plotter = pv.Plotter(off_screen=True)
 
         # Set camera position for a nice view.
-        plotter.view_vector([-0.67, 0.49, -0.58], viewup=[0.31, 0.90, 0.29])
-        plotter.camera.zoom(1.4)
+        if view == "isometric":
+            plotter.view_vector([-0.67, 0.49, -0.58], viewup=[0.31, 0.90, 0.29])
+            zoom_factor = 1.4
+            slice_normal = (-1, 0, 0)
+        elif view == "front":
+            plotter.view_xy(negative=True)
+            zoom_factor = 1.6
+            slice_normal = (0, 0, -1)
+        elif view == "rear":
+            plotter.view_xy()
+            zoom_factor = 1.6
+            slice_normal = (0, 0, 1)
+        elif view == "top":
+            plotter.view_zx()
+            zoom_factor = 1.2
+            slice_normal = (0, -1, 0)
+        elif view == "side":
+            plotter.view_zy()
+            zoom_factor = 1.2
+            slice_normal = (-1, 0, 0)
+        else:
+            raise ValueError(f"Invalid view.")
+
+        plotter.camera.zoom(zoom_factor)
 
         plotter.open_movie(movie_path, framerate=fps)
 
@@ -69,7 +93,8 @@ class HeatSinkOutput:
             fins_data = mesh["fins"]["boundary"]
             fluid_data = mesh["fluid"]["internalMesh"]
 
-            fluid_data_slice = fluid_data.slice(normal=(-1, 0, 0))
+            fluid_data_slice = fluid_data.slice(normal=slice_normal,
+                                                origin=(0, 0.02, 0))
 
             plotter.add_mesh(fins_data,
                              scalars="T",
@@ -96,7 +121,7 @@ class HeatSinkOutput:
 
             # Add time label.
             plotter.add_title(f"Time = {reader.active_time_value} [s]",
-                              font_size=12)
+                              font_size=10)
 
             plotter.show_axes()
 
