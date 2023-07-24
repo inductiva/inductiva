@@ -21,7 +21,7 @@ class MachineGroup():
         num_machines: int = 1,
         spot: bool = False,
         disk_size_gb: int = 30,
-        label: str = None,
+        label: Optional[str] = None,
         machine_group_id: Optional[uuid.UUID] = None,
     ) -> None:
         """Create a MachineGroup object.
@@ -30,21 +30,19 @@ class MachineGroup():
             machine_type: The type of GC machine to launch. Ex: "e2-medium".
             num_machines: The number of machines to launch.
             spot: Whether to use spot instances.
-            disk_size_gb: The size of the disk in GB. (min. 30 GB)
+            disk_size_gb: The size of the disk in GB, recommended min. is 30 GB.
             label: The label to assign to the machine group.
             machine_group_id: If None the Machine Group ID will be generated
               automatically. A new ID can be created by invoking the
-              inductiva.resources.create_resource_pool() method.
+              inductiva.resources.create_machine_group_id() method.
         """
         self.machine_type = machine_type
         self.num_machines = num_machines
         self.spot = spot
         self.disk_size_gb = disk_size_gb
         self.label = label
-        if machine_group_id is None:
-            self.machine_group_id = resources.create_machine_group_id()
-        else:
-            self.machine_group_id = machine_group_id
+        self.machine_group_id = resources.create_machine_group_id() \
+            if machine_group_id is None else machine_group_id
         self.name = self._generate_instance_name()
 
         self.api_config = api.validate_api_key(inductiva.api_key)
@@ -65,7 +63,7 @@ class MachineGroup():
                 logging.info("Creating a machine group. \
                              This may take a few minutes.")
                 api_instance.create_instance_group(body=body)
-                logging.info("Machine group is successfully created.")
+                logging.info("Machine group successfully created.")
             except ApiException as e:
                 raise e
 
@@ -79,7 +77,7 @@ class MachineGroup():
                              This may take a few minutes.")
                 api_instance.delete_instance_group(body=Instance(
                     name=self.name))
-                logging.info("Machine group is successfully terminated.")
+                logging.info("Machine group successfully terminated.")
 
             except ApiException as e:
                 raise e
@@ -92,16 +90,18 @@ class MachineGroup():
             try:
                 instance_price = api_instance.get_instance_price(body=Instance(
                     name=self.machine_type))
-                logging.info("Estimated on-demand cost: %f/hour, resulting in \
-                             %f/hour for all machines.",
-                             instance_price.body["on_demand"],
-                             instance_price.body["on_demand"] * \
-                                self.num_machines)
-                logging.info("Estimated spot cost: %f/hour, resulting in \
-                             %f/hour for all machines.",
-                             instance_price.body["preemptible"],
-                             instance_price.body["preemptible"] * \
-                                self.num_machines)
+                if self.spot:
+                    logging.info("Estimated spot cost: %s/hour, resulting in \
+                                 %s/hour for all machines.",
+                                 instance_price.body["preemptible"],
+                                 instance_price.body["preemptible"] * \
+                                     self.num_machines)
+                else:
+                    logging.info("Estimated on-demand cost: %s/hour, resulting \
+                                  %s/hour for all machines.",
+                                 instance_price.body["on_demand"],
+                                 instance_price.body["on_demand"] * \
+                                     self.num_machines)
             except ApiException as e:
                 raise e
         return instance_price.body
