@@ -41,7 +41,7 @@ def batch_replace_params_in_template(
     remove_templates: bool = False,
 ) -> None:
     """Replaces parameters in a set of template files.
-    
+
     For some simulators, more than one file needs to be changed.
     Moreover, some parameters are altered in different input files.
     To simplify, we can do a batch change for the same params dict.
