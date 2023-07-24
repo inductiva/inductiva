@@ -31,6 +31,30 @@ class HeatSink(Scenario):
     The heat source is modeled as a heater with a given power. The heat sink
     is a block of aluminum with thin fins on top. The air flow is introduced
     in the simulation via an inlet, where the air is at a fixed temperature.
+
+    The scenario is simulated in a 3D box with dimensions 8 x 16 x 52 cm in x, y
+    and z directions, respectively. The heat sink is a 4 x 3 x 6 cm block with 1
+    mm wide fins separated by 2 mm centered in (x, z) in the simulation box. The
+    heat source is a 1 x 1 x 1 cm cube that sits under the heat sink.
+    The air flow is injected in the simulation from the lower z boundary, and
+    flows in the positive z direction.
+
+    Schematic representation of the simulation scenario:
+    z points right, y points up, x points into the screen.
+ 
+    ________________________________
+    |                              |
+    |                              |
+    |                              |
+    |  air flow ->                 |
+    |           ________           |
+    |           |      |           |
+    |           | heat |           |
+    |           | sink |           |
+    |___________|______|___________|
+                  |__|
+              heat source
+
     """
 
     valid_simulators = [OpenFOAM]
