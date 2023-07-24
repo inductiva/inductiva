@@ -91,17 +91,17 @@ class MachineGroup():
                 instance_price = api_instance.get_instance_price(body=Instance(
                     name=self.machine_type))
                 if self.spot:
-                    logging.info("Estimated spot cost: %s/hour, resulting in \
-                                 %s/hour for all machines.",
-                                 instance_price.body["preemptible"],
-                                 instance_price.body["preemptible"] * \
-                                     self.num_machines)
+                    logging.info(
+                        "Estimated spot cost: %s/hour per machine, resulting in \
+                        %s/hour for all machines.",
+                        instance_price.body["preemptible"],
+                        instance_price.body["preemptible"] * self.num_machines)
                 else:
-                    logging.info("Estimated on-demand cost: %s/hour, resulting \
-                                  %s/hour for all machines.",
-                                 instance_price.body["on_demand"],
-                                 instance_price.body["on_demand"] * \
-                                     self.num_machines)
+                    logging.info(
+                        "Estimated on-demand cost: %s/hour per machine, resulting \
+                        %s/hour for all machines.",
+                        instance_price.body["on_demand"],
+                        instance_price.body["on_demand"] * self.num_machines)
             except ApiException as e:
                 raise e
         return instance_price.body
