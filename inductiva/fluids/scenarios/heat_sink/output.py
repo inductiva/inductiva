@@ -1,7 +1,7 @@
-"""TODO
-"""
+"""Post-processing and visualization utilities of the heat sink scenario."""
+
 import os
-from IPython.display import HTML
+import pathlib
 
 import pyvista as pv
 
@@ -10,18 +10,13 @@ from inductiva.utils import files
 
 
 class HeatSinkOutput:
-    """Post-Process WindTunnel simulation outputs.
-
-    Current Support:
-        OpenFOAM
-    """
+    """Heat sink simulation output."""
 
     def __init__(self, sim_output_path: Path):
-        """Initializes a `WindTunnelSimulationOutput` object.
+        """Initializes a `HeatSinkOutput` object.
 
         Args:
             sim_output_path: Path to simulation output files.
-            time_step: Time step where we read the data.
         """
 
         self.sim_output_path = sim_output_path
@@ -33,26 +28,40 @@ class HeatSinkOutput:
         cmap: str = "viridis",
         clim: list = [280, 300],
     ):
-        """Render flow property over the object in the WindTunnel."""
+        """Renders temporal evolution of the temperature.
+        
+        A movie is produced representing the temporal evolution of the
+        temperature in the heat sink and in the surrounding air flow.
+         
+        The movie is saved in the `movie_path` location.
+
+        Args:
+            movie_path: Path to the movie file.
+            fps: Number of frames per second to use in the movie.
+            cmap: Colormap used to represent temperature.
+            clim: Colorbar limits.
+        """
 
         movie_path = files.resolve_path(movie_path)
 
+        # The OpenFOAM data reader from PyVista requires that a file named
+        # "foam.foam" exists in the simulation output directory.
+        # Create this file if it does not exist.
         foam_file_path = os.path.join(self.sim_output_path, "foam.foam")
+        pathlib.Path(foam_file_path).touch(exist_ok=True)
 
-        # Create reading file
-        with open(foam_file_path, "w", encoding="utf-8"):
-            reader = pv.OpenFOAMReader(foam_file_path)
+        reader = pv.OpenFOAMReader(foam_file_path)
 
         plotter = pv.Plotter(off_screen=True)
 
-        # Set camera position to a nice view.
+        # Set camera position for a nice view.
         plotter.view_vector([-0.67, 0.49, -0.58], viewup=[0.31, 0.90, 0.29])
         plotter.camera.zoom(1.4)
 
         plotter.open_movie(movie_path, framerate=fps)
 
-        for i in range(1, reader.number_time_points):
-            reader.set_active_time_point(i)
+        for idx in range(1, reader.number_time_points):
+            reader.set_active_time_point(idx)
 
             mesh = reader.read()
 
@@ -73,6 +82,7 @@ class HeatSinkOutput:
                              clim=clim,
                              show_scalar_bar=False)
 
+            # Create custom color bar for temperature.
             plotter.add_scalar_bar(
                 "Temperature [K]",
                 position_x=0.45,
@@ -84,6 +94,7 @@ class HeatSinkOutput:
                 font_family="arial",
             )
 
+            # Add time label.
             plotter.add_title(f"Time = {reader.active_time_value} [s]",
                               font_size=12)
 
