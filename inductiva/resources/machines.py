@@ -20,7 +20,7 @@ class MachineGroup():
         machine_type: str,
         num_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 30,
+        disk_size_gb: int = 20,
         label: Optional[str] = None,
     ) -> None:
         """Create a MachineGroup object.
@@ -28,8 +28,8 @@ class MachineGroup():
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-medium".
             num_machines: The number of machines to launch.
-            spot: Whether to use spot instances.
-            disk_size_gb: The size of the disk in GB, recommended min. is 30 GB.
+            spot: Whether to use spot machines.
+            disk_size_gb: The size of the disk in GB, recommended min. is 20 GB.
             label: The label to assign to the machine group.
         """
         self.machine_type = machine_type
@@ -58,7 +58,20 @@ class MachineGroup():
                 logging.info("Creating a machine group. \
                              This may take a few minutes.")
                 api_instance.create_instance_group(body=body)
+                logging.info(
+                    "Machine group with the specified settings successfully \
+                        created.")
+                logging.info("Machine type: %s", self.machine_type)
+                logging.info("Number of machines: %s", self.num_machines)
+                logging.info("Spot: %s", self.spot)
+                logging.info("Disk size: %s GB", self.disk_size_gb)
+                logging.info("Machine group ID: %s", self.machine_group_id)
+                if self.label:
+                    logging.info("Label: %s", self.label)
                 logging.info("Machine group successfully created.")
+                logging.info("Estimated cost per hour: %s$",
+                             self.estimate_cost())
+
             except ApiException as e:
                 raise e
 
