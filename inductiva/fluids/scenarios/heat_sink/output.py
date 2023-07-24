@@ -89,7 +89,6 @@ class HeatSinkOutput:
                 width=0.5,
                 title_font_size=18,
                 label_font_size=18,
-                n_labels=5,
                 fmt="%.0f",
                 font_family="arial",
             )
