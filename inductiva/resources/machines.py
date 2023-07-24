@@ -72,7 +72,9 @@ class MachineGroup():
                              This may take a few minutes.")
                 api_instance.delete_instance_group(body=Instance(
                     name=self.name))
-                logging.info("Machine group successfully terminated.")
+                logging.info(
+                    "Machine group of %s machines successfully \
+                    terminated.", self.num_machines)
 
             except ApiException as e:
                 raise e
