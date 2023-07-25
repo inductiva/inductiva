@@ -25,7 +25,7 @@ class CoastalArea(Scenario):
 
     valid_simulators = [SWASH]
 
-    def __init__(self, wave_amplitude: float = 5, wave_period: float = 10):
+    def __init__(self, wave_amplitude: float = 2, wave_period: float = 10):
         """Initializes a `CoastalArea` object.
 
         Args:
@@ -102,7 +102,7 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
     replace_params_in_template(
         template_path=config_template_file_path,
         params={
-            "wave_amplitude": self.wave_amplitude,
+            "wave_amplitude": 2 * self.wave_amplitude,
             "wave_period": self.wave_period,
             "simulation_time_hms": _convert_time_to_hmsms(self.simulation_time),
             "time_step": self.time_step,
