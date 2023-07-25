@@ -53,6 +53,40 @@ Currently, we have available the following simulators:
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
+## Scenarios
+
+### MDWaterBox
+
+This scenario simulates a system that consists of a cubic box of water molecules, evolving according to the rules of Molecular Dynamics - the position of the water molecules is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
+
+Example of a simple scenario call:
+
+First we initialize the scenario:
+```
+from inductiva.molecules.scenarios.md_water_box import MDWaterBox
+
+cenario = MDWaterBox(temperature = 300, box_size = 2.3)
+```
+
+The user can specify the temperature and box size (length of one of the cube's edges) as it sees fit. The numbers above correspond to the default values.
+
+After the initialization, we can simulate the system using the simulation infrastructure of Inductiva's Cloud management.
+
+```
+task = cenario.simulate_async(simulator = GROMACS(),
+            simulation_time: 10,
+            integrator = "md",
+            nsteps_minim = 5000)
+```
+
+The simulate_async method initializes a simulation in the cloud, using any MD simulator available (right now only GROMACS can be used). This simulation represents a system evolving over X nanoseconds, where X is the value specified in simulation_time. The simulation can conform (specified in the integrator) either to: the [molecular dynamics paradigm](https://en.wikipedia.org/wiki/Molecular_dynamics) ("md"), to the [brownian motion](https://en.wikipedia.org/wiki/Brownian_motion) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system. Also, the number of minimization steps in the energy minimization step can be specified by the user. Once again, all the parameters in the code snippet above correspond to the default values.
+
+After having launched the simulation, we can check its status with ```task.status```. When the task.status is "success", we can download the simulation output files to an output directory using the task method:
+
+```
+task.download_output(output_dir)
+```
+
 ## Installation
 
 It is super simple to start using the API if you are already familiar with Python package management.
