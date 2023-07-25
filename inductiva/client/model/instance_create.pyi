@@ -49,7 +49,7 @@ class InstanceCreate(
             zone = schemas.StrSchema
             
             
-            class resource_pool_id(
+            class machine_group_id(
                 schemas.UUIDBase,
                 schemas.ComposedSchema,
             ):
@@ -81,7 +81,7 @@ class InstanceCreate(
                     *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'resource_pool_id':
+                ) -> 'machine_group_id':
                     return super().__new__(
                         cls,
                         *_args,
@@ -133,7 +133,7 @@ class InstanceCreate(
                 "spot": spot,
                 "disk_size_gb": disk_size_gb,
                 "zone": zone,
-                "resource_pool_id": resource_pool_id,
+                "machine_group_id": machine_group_id,
                 "image_name": image_name,
             }
     
@@ -158,7 +158,7 @@ class InstanceCreate(
     def __getitem__(self, name: typing_extensions.Literal["zone"]) -> MetaOapg.properties.zone: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["resource_pool_id"]) -> MetaOapg.properties.resource_pool_id: ...
+    def __getitem__(self, name: typing_extensions.Literal["machine_group_id"]) -> MetaOapg.properties.machine_group_id: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["image_name"]) -> MetaOapg.properties.image_name: ...
@@ -166,7 +166,7 @@ class InstanceCreate(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "spot", "disk_size_gb", "zone", "resource_pool_id", "image_name", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "spot", "disk_size_gb", "zone", "machine_group_id", "image_name", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -187,7 +187,7 @@ class InstanceCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["zone"]) -> typing.Union[MetaOapg.properties.zone, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["resource_pool_id"]) -> typing.Union[MetaOapg.properties.resource_pool_id, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["machine_group_id"]) -> typing.Union[MetaOapg.properties.machine_group_id, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["image_name"]) -> typing.Union[MetaOapg.properties.image_name, schemas.Unset]: ...
@@ -195,7 +195,7 @@ class InstanceCreate(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "spot", "disk_size_gb", "zone", "resource_pool_id", "image_name", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "machine_type", "spot", "disk_size_gb", "zone", "machine_group_id", "image_name", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -207,7 +207,7 @@ class InstanceCreate(
         name: typing.Union[MetaOapg.properties.name, str, ],
         disk_size_gb: typing.Union[MetaOapg.properties.disk_size_gb, decimal.Decimal, int, ],
         zone: typing.Union[MetaOapg.properties.zone, str, schemas.Unset] = schemas.unset,
-        resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        machine_group_id: typing.Union[MetaOapg.properties.machine_group_id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         image_name: typing.Union[MetaOapg.properties.image_name, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -220,7 +220,7 @@ class InstanceCreate(
             name=name,
             disk_size_gb=disk_size_gb,
             zone=zone,
-            resource_pool_id=resource_pool_id,
+            machine_group_id=machine_group_id,
             image_name=image_name,
             _configuration=_configuration,
             **kwargs,
