@@ -70,7 +70,7 @@ scenario = MDWaterBox(temperature = 300, box_size = 2.3)
 
 The user can specify the temperature (in Kelvin) and box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
 
-After the initialization, we can simulate the system:
+After the initialization, we are ready to simulate the system:
 
 ```
 task = scenario.simulate_async(simulator = GROMACS(),
@@ -82,17 +82,14 @@ task = scenario.simulate_async(simulator = GROMACS(),
 The simulate_async method initializes a simulation in the cloud. In this call, we set the parameters:
  - simulator = GROMACS(): sets the simulator to be used to GROMACS (at the moment the only one available);
  - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
- - integrator = "md": the simulation can conform either to: the [molecular dynamics paradigm](https://en.wikipedia.org/wiki/Molecular_dynamics) ("md"), to the [brownian motion](https://en.wikipedia.org/wiki/Brownian_motion) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system;
+ - integrator = "md": the simulation can conform either to: the [molecular dynamics paradigm](https://manual.gromacs.org/nightly/reference-manual/algorithms/molecular-dynamics.html) ("md"), to the [brownian motion](https://manual.gromacs.org/2021.2/reference-manual/algorithms/brownian-dynamics.html) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system;
  -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
-Once again, all the parameters in the code snippet above correspond to the default values.
 
 After having launched the simulation, we can check its status with ```task.status```. When the task.status is "success", we can download the simulation output files to an output directory using the task method:
 
 ```
 task.download_output(output_dir)
 ```
-
-#### Visualization
 
 ## Installation
 
