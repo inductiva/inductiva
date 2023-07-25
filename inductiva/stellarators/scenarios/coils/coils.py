@@ -37,14 +37,14 @@ class Coil:
     combination of Fourier series [Fx, Fy, Fz], each of which is an expansion 
     over trigonometric functions: 
         Fi = sum_j (sj * sin(j * theta) + cj * cos(j * theta)).
-    The curve provided must then me a numpy array with dimensions 6*order, 
-    where 'order' (the number of columns) is the maximum order of the series 
+    The curve provided must then be a numpy array with shape `(6, order)`, 
+    where `order` (the number of columns) is the maximum order of the series 
     (maximum value of j) and the number of rows is 6, one for each of the 
     sj and cj coefficients of each series Fi.
      
     Attributes: 
-        curve_coefficients (list): List of the Fourier coefficients defining
-        the coil.
+        curve_coefficients (np.ndarray): Array with Fourier coefficients 
+        defining the coil.
         current (float): Coil current.
     """
 
