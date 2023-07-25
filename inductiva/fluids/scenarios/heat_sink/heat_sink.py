@@ -40,22 +40,39 @@ class HeatSink(Scenario):
     sink. The air flow is injected in the simulation from the lower z boundary,
     and flows in the positive z direction.
 
-    Schematic representation of the simulation scenario:
-    z points right, y points up, x points into the screen.
- 
-    ________________________________
-    |                              |
-    |                              |
-    |                              |
-    |  air flow ->                 |
-    |           ________           |
-    |           |      |           |
-    |           | heat |           |
-    |           | sink |           |
-    |___________|______|___________|
-                  |__|
-              heat source
+    Schematic representations of the simulation scenario:
 
+    - as seen from the side (zy plane): z points right, y points up, x points
+      into the screen.
+      _________________________________
+      |                               |
+      |                               |
+      |                               |
+      |  air flow ->                  |
+      |           _________           |
+      |           |       | heat      |
+      |           |       | sink      |
+      |           |       |           |
+      |___________|_______|___________|
+                    |___|
+                 heat source
+
+    - as seen from the the inlet of the air flow (xy plane): x points right, y
+      points up, z points out of the screen.
+
+      _________________________________
+      |                               |
+      |                               |
+      |                               |
+      |                               |
+      |                               |
+      |      fins | | | | | heat      |
+      |           | | | | | sink      |
+      |           |_|_|_|_|           |
+      |           |       |           |
+      |___________|_______|___________|
+                    |___|
+                 heat source
     """
 
     valid_simulators = [OpenFOAM]
