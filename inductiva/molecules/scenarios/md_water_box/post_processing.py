@@ -1,7 +1,7 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
 import MDAnalysis as mda
-from  MDAnalysis import transformations
+from MDAnalysis import transformations
 import nglview as nv
 from pathlib import Path
 
