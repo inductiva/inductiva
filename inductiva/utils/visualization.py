@@ -1,4 +1,5 @@
 """Visualization utilities."""
+# pylint: disable=protected-access
 
 import os
 import tempfile
@@ -30,8 +31,9 @@ MPL_CONFIG_PARAMS = {
     "figure.dpi": 100,
 }
 
+
 def create_movie_from_view(view,
-                           output_path='movie.mp4',
+                           output_path="movie.mp4",
                            fps=8,
                            start=0,
                            stop=-1,
@@ -63,11 +65,11 @@ def create_movie_from_view(view,
                     image_data = view._image_data
                     sleep(timeout)
                     filename = os.path.join(
-                        tmp_dir, f'frame-{str(i).zfill(max_frame_digits)}.png')
+                        tmp_dir, f"frame-{str(i).zfill(max_frame_digits)}.png")
                     try:
                         decode_save_image(image_data, filename)
                     except PIL.UnidentifiedImageError:
-                        print(f'Error: Unidentified image at frame {i}')
+                        print(f"Error: Unidentified image at frame {i}")
                         continue
                     iw.close()
                     sleep(timeout)
@@ -86,7 +88,7 @@ def decode_save_image(image_data, filename):
     im_bytes = base64.b64decode(image_data)
     im_bytes = io.BytesIO(im_bytes)
     image = PIL.Image.open(im_bytes)
-    image.save(filename, 'PNG')
+    image.save(filename, "PNG")
 
 
 def create_movie_from_frames(frames_dir: str,
@@ -562,6 +564,3 @@ class MeshData:
         return HTML(f"""
                 <img src="{png_url}" type="image/png" width="600">
         """)
-
-
-# pylint: disable=protected-access
