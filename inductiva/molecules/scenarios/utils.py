@@ -21,6 +21,7 @@ class MovieMaker:
         self,
         view,
         output_path='movie.mp4',
+        frames_dir=None, 
         fps=8,
         start=0,
         stop=-1,
@@ -50,8 +51,10 @@ class MovieMaker:
 
         self._range = range(start, stop, step)
         self._event = threading.Event()
-        self.frames_dir = 'frames'
-        os.makedirs('frames', exist_ok=True)
+        self.frames_dir = frames_dir
+        if frames_dir is None:
+            self.frames_dir = 'frames'
+            os.makedirs('frames', exist_ok=True)
 
     def sleep(self):
         time.sleep(self.timeout)
@@ -105,5 +108,4 @@ class MovieMaker:
         self.thread = threading.Thread(target=_make, args=(self._event,))
         self.thread.daemon = True
         self.thread.start()
-        shutil.rmtree(self.frames_dir)
         return self.progress
