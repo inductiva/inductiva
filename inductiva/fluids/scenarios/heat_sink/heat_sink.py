@@ -42,6 +42,7 @@ class HeatSink(Scenario):
         heater_power=200,
     ):
         """Initializes the heat sink scenario.
+
         Args:
             air_velocity: The velocity of the air flow, in m/s.
             air_temperature: The temperature of the air flow, in Kelvin. Also
