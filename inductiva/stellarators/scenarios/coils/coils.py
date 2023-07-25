@@ -1,6 +1,8 @@
 """Class for the coils creation."""
+from inductiva.scenarios import Scenario
 
-class StellaratorCoils:
+
+class StellaratorCoils(Scenario):
     """Represents stellarator coils.
 
     The class can be initialized normally (directly from __init__) providing
@@ -27,20 +29,27 @@ class StellaratorCoils:
     def simulate(self):
         pass
 
+
 class Coil:
     """Represents one coil of a stellarator.
 
-    The curve provided must be a list of lists, [sin_x, cos_x, 
-    sin_y, cos_y, sin_z, cos_z] where each list has the Fourier 
-    coeffiecients wanted.
+    The curve is represented in 3D cartesian coordinates (x, y, z) as a 
+    combination of Fourier series [Fx, Fy, Fz], each of which is an expansion 
+    over trigonometric functions: 
+        Fi = sum_j (sj * sin(j * theta) + cj * cos(j * theta)).
+    The curve provided must then me a numpy array with dimensions 6*order, 
+    where 'order' (the number of columns) is the maximum order of the series 
+    (maximum value of j) and the number of rows is 6, one for each of the 
+    sj and cj coefficients of each series Fi.
      
     Attributes: 
-        curve (list): List of the Fourier coefficients defining the coil.
+        curve_coefficients (list): List of the Fourier coefficients defining
+        the coil.
         current (float): Coil current.
     """
 
-    def __init__(self, curve, current):
+    def __init__(self, curve_coefficients, current):
         """Initialize the Coil object."""
 
-        self.curve = curve
+        self.curve_coefficients = curve_coefficients
         self.current = current
