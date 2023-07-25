@@ -12,6 +12,8 @@ import os
 from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
+import csv
+
 import pathlib
 
 import pyvista as pv
@@ -157,16 +159,52 @@ class FlowSlice:
     def __init__(self, flow_slice):
         self.mesh = flow_slice
 
-    def render_frame(self,
-                     object_mesh: pv.PolyData = None,
-                     physical_property: Literal["pressure",
-                                                "velocity"] = "pressure",
-                     off_screen: bool = False,
-                     virtual_display: bool = False,
-                     background_color: str = "black",
-                     flow_cmap: str = "viridis",
-                     object_color: str = "white",
-                     save_path: Path = None):
+    def get_force_coefficients(self, save_path: Path = None):
+        """Get the force coefficients of the object in the WindTunnel.
+        
+        The force coefficients are provided in a .dat file during the
+        simulation run-time. This file contains 8 lines that are provide
+        the general input information. In this function, we read the file,
+        ignore the first 8 lines and read the force coefficients for the 
+        time_step chosen.
+
+        Args:
+            save_path: Path to save the force coefficients in a .csv file.
+        """
+
+        num_header_lines = 8
+        force_coefficients_path = os.path.join(self.sim_output_path,
+                                               "postProcessing", "forceCoeffs1",
+                                               "0", "forceCoeffs.dat")
+        force_coefficients = []
+
+        with open(force_coefficients_path, "r",
+                  encoding="utf-8") as forces_file:
+            for index, line in enumerate(forces_file.readlines()):
+                # Pick the line 8 of the file:
+                # [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove the # column
+                if index == num_header_lines:
+                    force_coefficients.append(line.split()[1:])
+                # Add the force coefficients for the time_step chosen
+                elif index == num_header_lines + self.time_step + 1:
+                    force_coefficients.append(line.split())
+
+        if save_path:
+            with open(save_path, "w", encoding="utf-8") as csv_file:
+                csv_writer = csv.writer(csv_file)
+                csv_writer.writerows(force_coefficients)
+
+        return force_coefficients
+
+    def render_flow(self,
+                    flow_property_mesh,
+                    physical_property: Literal["pressure",
+                                               "velocity"] = "pressure",
+                    virtual_display: bool = True,
+                    background_color: str = "black",
+                    flow_cmap: str = "viridis",
+                    object_color: str = "white",
+                    save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
 
         if save_path is not None:

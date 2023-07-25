@@ -53,6 +53,40 @@ Currently, we have available the following simulators:
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
+## Scenarios
+
+### MDWaterBox
+
+This scenario simulates a system that consists of a cubic box of water molecules, evolving according to the rules of Molecular Dynamics - the position of the water molecules is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields. This approach is inspired by [this article](https://arxiv.org/abs/2112.03383).
+
+#### Example
+
+First we initialize the scenario:
+```
+from inductiva.molecules.scenarios.md_water_box import MDWaterBox
+
+scenario = MDWaterBox(temperature = 300, box_size = 2.3)
+```
+
+The user can specify the temperature (in Kelvin) and box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
+
+After the initialization, we are ready to simulate the system:
+
+```
+output = scenario.simulate(output_dir = "output_dir",
+            simulation_time = 10,
+            integrator = "md",
+            nsteps_minim = 5000)
+```
+
+The simulate method initializes a simulation in the cloud. In this call, we set the parameters:
+ - output_dir = "output_dir": sets the path of the directory where the simulation output will be downloaded to;
+ - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
+ - integrator = "md": the simulation can conform either to: the [molecular dynamics paradigm](https://manual.gromacs.org/nightly/reference-manual/algorithms/molecular-dynamics.html) ("md"), to the [brownian motion](https://manual.gromacs.org/2021.2/reference-manual/algorithms/brownian-dynamics.html) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system;
+ -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
+
+When the simulation ends, the simulation output files can be found in the output_dir. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
+
 ## Installation
 
 It is super simple to start using the API if you are already familiar with Python package management.
