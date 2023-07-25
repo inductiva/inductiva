@@ -13,7 +13,6 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
 import csv
-
 import pathlib
 
 import pyvista as pv
@@ -144,21 +143,7 @@ class WindTunnelOutput:
             flow_slice.save(save_path)
 
         return FlowSlice(flow_slice)
-
-
-@dataclass
-class OpenFOAMPhysicalProperty(Enum):
-    """Defines the notation used for physical properties in OpenFOAM."""
-    PRESSURE = "p"
-    VELOCITY = "U"
-
-
-class FlowSlice:
-    """Render flow properties in a plane of the domain in WindTunnel."""
-
-    def __init__(self, flow_slice):
-        self.mesh = flow_slice
-
+    
     def get_force_coefficients(self, save_path: Path = None):
         """Get the force coefficients of the object in the WindTunnel.
         
@@ -196,15 +181,30 @@ class FlowSlice:
 
         return force_coefficients
 
-    def render_flow(self,
-                    flow_property_mesh,
-                    physical_property: Literal["pressure",
-                                               "velocity"] = "pressure",
-                    virtual_display: bool = True,
-                    background_color: str = "black",
-                    flow_cmap: str = "viridis",
-                    object_color: str = "white",
-                    save_path: Path = None):
+
+@dataclass
+class OpenFOAMPhysicalProperty(Enum):
+    """Defines the notation used for physical properties in OpenFOAM."""
+    PRESSURE = "p"
+    VELOCITY = "U"
+
+
+class FlowSlice:
+    """Render flow properties in a plane of the domain in WindTunnel."""
+
+    def __init__(self, flow_slice):
+        self.mesh = flow_slice
+
+    def render_frame(self,
+                     object_mesh: pv.PolyData = None,
+                     physical_property: Literal["pressure",
+                                                "velocity"] = "pressure",
+                     off_screen: bool = False,
+                     virtual_display: bool = False,
+                     background_color: str = "black",
+                     flow_cmap: str = "viridis",
+                     object_color: str = "white",
+                     save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
 
         if save_path is not None:
