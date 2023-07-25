@@ -119,7 +119,7 @@ class WindTunnelOutput:
 
     def get_flow_slice(self,
                        time_step: float = 50,
-                       plane: Literal["xy", "xz", "yz"] = "xy",
+                       plane: Literal["xy", "xz", "yz"] = "xz",
                        origin: tuple = (0, 0, 0),
                        save_path: Path = None):
         """Get flow properties in a plane of the domain in WindTunnel."""
@@ -188,7 +188,8 @@ class FlowSlice:
         property_notation = OpenFOAMPhysicalProperty[
             physical_property.upper()].value
 
-        plotter.add_mesh(object_mesh, color=object_color)
+        if object_mesh:
+            plotter.add_mesh(object_mesh, color=object_color)
         plotter.add_mesh(self.mesh, scalars=property_notation, cmap=flow_cmap)
         plotter.reset_camera(bounds=self.mesh.bounds)
         plotter.show(screenshot=save_path)
@@ -206,7 +207,7 @@ class Streamlines:
                      physical_property: Literal["pressure",
                                                 "velocity"] = "pressure",
                      off_screen: bool = False,
-                     virtual_display: bool = True,
+                     virtual_display: bool = False,
                      background_color: str = "black",
                      flow_cmap: str = "viridis",
                      view: Literal["isometric", "front", "rear", "top",
@@ -245,7 +246,8 @@ class Streamlines:
         plotter.add_mesh(self.mesh.tube(radius=0.01),
                          scalars=property_notation,
                          cmap=flow_cmap)
-        plotter.add_mesh(object_mesh, color=object_color)
+        if object_mesh:
+            plotter.add_mesh(object_mesh, color=object_color)
         # Slide along the vectord defined from camera position to focal point,
         # until all of the meshes are visible.
         plotter.reset_camera(bounds=self.mesh.bounds, render=False)
