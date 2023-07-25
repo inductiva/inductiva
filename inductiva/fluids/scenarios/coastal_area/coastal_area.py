@@ -99,12 +99,18 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
         input_dir, file_name
     ) for file_name in [SWASH_CONFIG_TEMPLATE_FILENAME, SWASH_CONFIG_FILENAME])
 
+    # SWASH requires the simulation time to be formatted as HHMMSS.sss.
+    simulation_time_hmsms = _convert_time_to_hmsms(self.simulation_time)
+
+    # SWASH uses as amplitude the peak-to-peak amplitude.
+    wave_amplitude = 2 * self.wave_amplitude
+
     replace_params_in_template(
         template_path=config_template_file_path,
         params={
-            "wave_amplitude": 2 * self.wave_amplitude,
+            "wave_amplitude": wave_amplitude,
             "wave_period": self.wave_period,
-            "simulation_time_hms": _convert_time_to_hmsms(self.simulation_time),
+            "simulation_time_hmsms": simulation_time_hmsms,
             "time_step": self.time_step,
             "output_time_step": self.output_time_step,
         },
