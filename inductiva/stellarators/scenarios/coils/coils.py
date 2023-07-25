@@ -33,6 +33,9 @@ class StellaratorCoils(Scenario):
                              major_radius, minor_radius):
         """Create simple circular and equally spaced curves.
 
+        The non-zero coefficients are c_0 and c_1 for both the Fx and Fy
+        Fourier Series and s_1 for Fz. This is what makes the coils circular. 
+
         Args:
             num_field_periods (int): Number of magnetic field periods.
             num_coils (int): The number of coils per field period.
@@ -45,20 +48,21 @@ class StellaratorCoils(Scenario):
             StellaratorCoils: The created StellaratorCoils instance.
         """
 
-        stellarator_symmetry = True
-        angle_factor = (1+int(stellarator_symmetry)) * \
-            num_field_periods*num_coils
+        # To spread the coils equally (in a torus) over an angle that
+        # is a fraction of 2*pi. 2*num_field_periods*num_coils will be
+        # the final number of coils.
+        angle_factor = 2 * num_field_periods * num_coils
 
         coils = []
         for i in range(num_coils):
-            angle = (i + 0.5) * (2 * np.pi) / (angle_factor)
+            toroidal_angle = (i + 0.5) * (2 * np.pi) / (angle_factor)
             curve_coefficients = np.zeros((6, 2))
 
-            # Set the coefficients
-            curve_coefficients[1, 0] = math.cos(angle) * major_radius
-            curve_coefficients[1, 1] = math.cos(angle) * minor_radius
-            curve_coefficients[3, 0] = math.sin(angle) * major_radius
-            curve_coefficients[3, 1] = math.sin(angle) * minor_radius
+            # Set the non-zero coefficients
+            curve_coefficients[1, 0] = math.cos(toroidal_angle) * major_radius
+            curve_coefficients[1, 1] = math.cos(toroidal_angle) * minor_radius
+            curve_coefficients[3, 0] = math.sin(toroidal_angle) * major_radius
+            curve_coefficients[3, 1] = math.sin(toroidal_angle) * minor_radius
             curve_coefficients[4, 1] = -minor_radius
 
             # Create the Coil object
