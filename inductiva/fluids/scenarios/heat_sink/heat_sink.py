@@ -4,7 +4,6 @@ import os
 import shutil
 from typing import Optional
 from uuid import UUID
-from inductiva.tasks import Task
 
 from inductiva.types import Path
 from inductiva.fluids.simulators import OpenFOAM
@@ -56,9 +55,10 @@ class HeatSink(Scenario):
         self,
         simulator: Simulator = OpenFOAM(),
         output_dir: Optional[Path] = None,
-        resource_pool_id: Optional[UUID] = None,
+        machine_group_id: Optional[UUID] = None,
         simulation_time=300,
         output_time_step=10,
+        run_async: bool = False,
     ):
         """Simulates the scenario.
 
@@ -68,41 +68,23 @@ class HeatSink(Scenario):
             simulation_time: The simulation time, in seconds.
             output_time_step: The time step to save the simulation results, in
               seconds.
+            run_async: Whether to run the simulation asynchronously.
         """
         self.simulation_time = simulation_time
         self.output_time_step = output_time_step
 
         commands = self.get_commands()
 
-        return super().simulate(simulator,
-                                output_dir,
-                                resource_pool_id=resource_pool_id,
-                                commands=commands)
-
-    def simulate_async(
-        self,
-        simulator: Simulator = OpenFOAM(),
-        resource_pool_id: Optional[UUID] = None,
-        simulation_time=300,
-        output_time_step=10,
-    ) -> Task:
-        """Simulates the scenario asynchronously.
-
-        Args:
-            simulator: The simulator to use for the simulation.
-            output_dir: The output directory to save the simulation results.
-            simulation_time: The simulation time, in seconds.
-            output_time_step: The time step to save the simulation results, in
-              seconds.
-        """
-        self.simulation_time = simulation_time
-        self.output_time_step = output_time_step
-
-        commands = self.get_commands()
-
-        return super().simulate_async(simulator,
-                                      resource_pool_id=resource_pool_id,
-                                      commands=commands)
+        if run_async:
+            return super().simulate_async(simulator,
+                                          output_dir,
+                                          machine_group_id=machine_group_id,
+                                          commands=commands)
+        else:
+            return super().simulate(simulator,
+                                    output_dir,
+                                    machine_group_id=machine_group_id,
+                                    commands=commands)
 
     def get_commands(self):
         """Returns the OpenFOAM commands for the simulation.
