@@ -59,33 +59,40 @@ If you would like other simulators to be added, contact us at [simulations@induc
 
 This scenario simulates a system that consists of a cubic box of water molecules, evolving according to the rules of Molecular Dynamics - the position of the water molecules is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
 
-Example of a simple scenario call:
+#### Example
 
 First we initialize the scenario:
 ```
 from inductiva.molecules.scenarios.md_water_box import MDWaterBox
 
-cenario = MDWaterBox(temperature = 300, box_size = 2.3)
+scenario = MDWaterBox(temperature = 300, box_size = 2.3)
 ```
 
-The user can specify the temperature and box size (length of one of the cube's edges) as it sees fit. The numbers above correspond to the default values.
+The user can specify the temperature (in Kelvin) and box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
 
-After the initialization, we can simulate the system using the simulation infrastructure of Inductiva's Cloud management.
+After the initialization, we can simulate the system:
 
 ```
-task = cenario.simulate_async(simulator = GROMACS(),
-            simulation_time: 10,
+task = scenario.simulate_async(simulator = GROMACS(),
+            simulation_time = 10,
             integrator = "md",
             nsteps_minim = 5000)
 ```
 
-The simulate_async method initializes a simulation in the cloud, using any MD simulator available (right now only GROMACS can be used). This simulation represents a system evolving over X nanoseconds, where X is the value specified in simulation_time. The simulation can conform (specified in the integrator) either to: the [molecular dynamics paradigm](https://en.wikipedia.org/wiki/Molecular_dynamics) ("md"), to the [brownian motion](https://en.wikipedia.org/wiki/Brownian_motion) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system. Also, the number of minimization steps in the energy minimization step can be specified by the user. Once again, all the parameters in the code snippet above correspond to the default values.
+The simulate_async method initializes a simulation in the cloud. In this call, we set the parameters:
+ - simulator = GROMACS(): sets the simulator to be used to GROMACS (at the moment the only one available);
+ - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
+ - integrator = "md": the simulation can conform either to: the [molecular dynamics paradigm](https://en.wikipedia.org/wiki/Molecular_dynamics) ("md"), to the [brownian motion](https://en.wikipedia.org/wiki/Brownian_motion) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system;
+ -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
+Once again, all the parameters in the code snippet above correspond to the default values.
 
 After having launched the simulation, we can check its status with ```task.status```. When the task.status is "success", we can download the simulation output files to an output directory using the task method:
 
 ```
 task.download_output(output_dir)
 ```
+
+#### Visualization
 
 ## Installation
 
