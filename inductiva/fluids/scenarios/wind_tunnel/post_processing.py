@@ -143,7 +143,7 @@ class WindTunnelOutput:
             flow_slice.save(save_path)
 
         return FlowSlice(flow_slice)
-    
+
     def get_force_coefficients(self, save_path: Path = None):
         """Get the force coefficients of the object in the WindTunnel.
         
