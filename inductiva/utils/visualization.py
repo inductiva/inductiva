@@ -33,12 +33,12 @@ MPL_CONFIG_PARAMS = {
 
 
 def create_movie_from_widget(view,
-                           output_path="movie.mp4",
-                           fps=8,
-                           start=0,
-                           stop=-1,
-                           step=1,
-                           timeout=0.2):
+                             output_path="movie.mp4",
+                             fps=8,
+                             start=0,
+                             stop=-1,
+                             step=1,
+                             timeout=0.2):
     """Create a movie from a ipywidget view.
     Args: 
         view: ipywidget visualization.
