@@ -474,7 +474,7 @@ class MeshData:
     def render(self,
                background_color: str = "black",
                scalars_cmap: str = "viridis",
-               virtual_display: bool = True,
+               virtual_display: bool = False,
                save_path: Path = None):
         """Render scalar field data over the mesh."""
         if save_path is not None:
