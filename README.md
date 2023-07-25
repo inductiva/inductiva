@@ -73,7 +73,8 @@ The user can specify the temperature (in Kelvin) and box size (length of one of 
 After the initialization, we are ready to simulate the system:
 
 ```
-task = scenario.simulate_async(simulator = GROMACS(),
+simulation = scenario.simulate(simulator = GROMACS(),
+            output_dir = "output_dir",
             simulation_time = 10,
             integrator = "md",
             nsteps_minim = 5000)
@@ -81,15 +82,12 @@ task = scenario.simulate_async(simulator = GROMACS(),
 
 The simulate_async method initializes a simulation in the cloud. In this call, we set the parameters:
  - simulator = GROMACS(): sets the simulator to be used to GROMACS (at the moment the only one available);
+ - output_dir = "output_dir": sets the path of the directory where the simulation output will be downloaded to;
  - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
  - integrator = "md": the simulation can conform either to: the [molecular dynamics paradigm](https://manual.gromacs.org/nightly/reference-manual/algorithms/molecular-dynamics.html) ("md"), to the [brownian motion](https://manual.gromacs.org/2021.2/reference-manual/algorithms/brownian-dynamics.html) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system;
  -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
 
-After having launched the simulation, we can check its status with ```task.status```. When the task.status is "success", we can download the simulation output files to an output directory using the task method:
-
-```
-task.download_output(output_dir)
-```
+When the simulation ends, the simulation output files can be found in the output_dir. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```simulation.render_interactive()``` yields a video that can be visualized in a standard jupyter notebook.
 
 ## Installation
 
