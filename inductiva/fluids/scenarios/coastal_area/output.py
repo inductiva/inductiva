@@ -72,8 +72,8 @@ def read_swash_grid_positions_file(file_path: str) -> Tuple[np.ndarray]:
     return x_array, y_array
 
 
-def read_swash_quantity_file(file_path: str, quantity: str):
-    """Reads a SWASH output file containing a quantity.
+def read_swash_grid_quantity_file(file_path: str, quantity: str):
+    """Reads a SWASH output file containing a quantity defined over a grid.
 
     SWASH outputs are stored in .mat files. Here, we first read the contents
     of one of these files as a dictionary, and then convert the dictionary
@@ -106,9 +106,9 @@ def read_swash_quantity_file(file_path: str, quantity: str):
 
             # Convert time to seconds
             time_s = float(time_ms[:2]) * 3600. + \
-                    float(time_ms[2:4]) * 60. + \
-                    float(time_ms[4:6]) + \
-                    float(time_ms[6:]) / 1000.
+                     float(time_ms[2:4]) * 60. + \
+                     float(time_ms[4:6]) + \
+                     float(time_ms[6:]) / 1000.
 
             # The values are transposed in the file, so we transpose them
             # again for consistency
@@ -120,16 +120,16 @@ def read_swash_quantity_file(file_path: str, quantity: str):
     return time_list, data_list
 
 
-def _render_quantity_data(x_array: np.ndarray,
-                          y_array: np.ndarray,
-                          time_list: Sequence[float],
-                          data_list: Sequence[np.ndarray],
-                          quantity: str,
-                          movie_path: str,
-                          fps: int = 10,
-                          cmap: Optional[str] = None,
-                          clim: Optional[Sequence[float]] = None):
-    """Renders temporal evolution of a quantity."""
+def _render_quantity_grid_data(x_array: np.ndarray,
+                               y_array: np.ndarray,
+                               time_list: Sequence[float],
+                               data_list: Sequence[np.ndarray],
+                               quantity: str,
+                               movie_path: str,
+                               fps: int = 10,
+                               cmap: Optional[str] = None,
+                               clim: Optional[Sequence[float]] = None):
+    """Renders temporal evolution of a quantity defined over a grid."""
 
     with tempfile.TemporaryDirectory() as tmp_dir:
 
@@ -226,12 +226,12 @@ class CoastalAreaOutput:
         x_array, y_array = read_swash_grid_positions_file(
             os.path.join(self.sim_output_path, GRID_POSITIONS_FILE_NAME))
 
-        time_list, data_list = read_swash_quantity_file(
+        time_list, data_list = read_swash_grid_quantity_file(
             file_path=os.path.join(self.sim_output_path, quantity + ".mat"),
             quantity=quantity,
         )
 
-        _render_quantity_data(
+        _render_quantity_grid_data(
             x_array=x_array,
             y_array=y_array,
             time_list=time_list,
