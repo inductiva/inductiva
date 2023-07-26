@@ -76,6 +76,7 @@ class FluidBlock(Scenario):
         particle_sorting: bool = True,
         time_step: float = 0.001,
         output_time_step: float = 1 / 60,
+        run_async: bool = False,
     ):
         """Simulates the scenario.
 
@@ -89,6 +90,7 @@ class FluidBlock(Scenario):
             particle_sorting: Whether to use particle sorting.
             time_step: Time step, in seconds.
             output_time_step: Time step between outputs, in seconds.
+            run_async: Whether to run the simulation asynchronously.
         """
 
         # TODO: Avoid storing these as class attributes.
@@ -103,6 +105,7 @@ class FluidBlock(Scenario):
             simulator,
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
+            run_async=run_async,
             device=device,
         )
 

@@ -1,6 +1,6 @@
 """DualSPHysics module of the API."""
 import pathlib
-from typing import Optional
+from typing import Optional, Union
 from uuid import UUID
 
 from inductiva import types
@@ -23,7 +23,7 @@ class XBeach(Simulator):
         resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
         run_async: bool = False,
-    ) -> pathlib.Path:
+    ) -> Union[pathlib.Path, Task]:
         """Run the simulation.
 
         Args:

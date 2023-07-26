@@ -78,6 +78,7 @@ class ProteinSolvation(Scenario):
                 Options:
                 - "Protein-H": The protein with hydrogens. This is the default.
                 - "System": The whole system (Protein + Water).
+            run_async: Whether to run the simulation asynchronously.
         """
 
         self.visualized_section = visualized_section

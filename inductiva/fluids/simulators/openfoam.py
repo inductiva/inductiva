@@ -1,6 +1,6 @@
 """OpenFOAM module of the API for fluid dynamics."""
 import pathlib
-from typing import Optional, List
+from typing import Optional, List, Union
 from uuid import UUID
 
 from inductiva import types
@@ -27,7 +27,7 @@ class OpenFOAM(Simulator):
         resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
         run_async: bool = False,
-    ) -> pathlib.Path:
+    ) -> Union[pathlib.Path, Task]:
         """Run the simulation.
 
         Args:

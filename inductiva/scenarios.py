@@ -6,7 +6,6 @@ from typing import Optional, Union
 from uuid import UUID
 from inductiva.types import Path
 from inductiva.simulation import Simulator
-from inductiva.utils.files import resolve_path, get_timestamped_path
 from inductiva.utils.misc import split_camel_case
 import json
 from inductiva.tasks import Task

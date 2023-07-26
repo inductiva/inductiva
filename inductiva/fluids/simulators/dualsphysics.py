@@ -1,6 +1,6 @@
 """DualSPHysics module of the API."""
 import pathlib
-from typing import Literal, Optional
+from typing import Literal, Optional, Union
 from uuid import UUID
 
 from inductiva import types
@@ -23,7 +23,7 @@ class DualSPHysics(Simulator):
         device: Literal["gpu", "cpu"] = "cpu",
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
-    ) -> pathlib.Path:
+    ) -> Union[pathlib.Path, Task]:
         """Run the simulation.
 
         Args:

@@ -6,7 +6,6 @@ from uuid import UUID
 
 from inductiva import types
 from inductiva.simulation import Simulator
-from inductiva.tasks import Task
 
 
 class GROMACS(Simulator):

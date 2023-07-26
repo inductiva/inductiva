@@ -58,6 +58,7 @@ class DamBreak(FluidBlock):
         device: Literal["cpu", "gpu"] = "gpu",
         resolution: Literal["high", "medium", "low"] = "medium",
         simulation_time: float = 1,
+        run_async: bool = False,
     ):
         """Simulates the scenario.
 
@@ -67,6 +68,7 @@ class DamBreak(FluidBlock):
             device: Device in which to run the simulation.
             resolution: Resolution of the simulation.
             simulation_time: Simulation time, in seconds.
+            run_async: Whether to run the simulation asynchronously.
         """
 
         particle_radius = ParticleRadius[resolution.upper()].value
@@ -76,6 +78,7 @@ class DamBreak(FluidBlock):
                                            resource_pool_id=resource_pool_id,
                                            device=device,
                                            particle_radius=particle_radius,
-                                           simulation_time=simulation_time)
+                                           simulation_time=simulation_time,
+                                           run_async=run_async)
 
         return SPHSimulationOutput(sim_output_path.sim_output_dir)

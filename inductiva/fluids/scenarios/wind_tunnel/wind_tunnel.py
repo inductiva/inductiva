@@ -138,13 +138,13 @@ class WindTunnel(Scenario):
         output = super().simulate(simulator,
                                   output_dir=output_dir,
                                   resource_pool_id=resource_pool_id,
+                                  run_async=run_async,
                                   n_cores=n_cores,
-                                  commands=commands,
-                                  run_async=run_async)
+                                  commands=commands)
         if run_async:
             return output
         else:
-            return WindTunnelOutput(output, simulation_time)
+            return WindTunnelOutput(output)
 
     def get_commands(self):
         """Returns the commands for the simulation."""

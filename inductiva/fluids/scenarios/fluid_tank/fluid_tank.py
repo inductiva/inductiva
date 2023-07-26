@@ -157,6 +157,7 @@ class FluidTank(Scenario):
         resolution: Literal["low", "medium", "high"] = "low",
         output_time_step: float = 0.1,
         particle_sorting: bool = False,
+        run_async: bool = False,
     ):
         """Simulates the scenario.
 
@@ -169,6 +170,7 @@ class FluidTank(Scenario):
             resolution: Resolution of the simulation. Controls the particle
                 radius and time step.
             particle_sorting: Whether to use particle sorting.
+            run_async: Whether to run the simulation asynchronously.
         """
 
         self.simulation_time = simulation_time
@@ -181,6 +183,7 @@ class FluidTank(Scenario):
             simulator,
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
+            run_async=run_async,
             device=device,
             input_filename=self.get_config_filename(simulator),
         )
