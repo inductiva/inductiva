@@ -38,5 +38,3 @@ class ProteinSolvationOutput:
             "backgroundColor": "white"
         }  # Set the background color
         return view
-
-

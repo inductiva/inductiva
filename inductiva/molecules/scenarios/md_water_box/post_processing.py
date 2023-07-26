@@ -38,5 +38,3 @@ class MDWaterBoxOutput:
             "backgroundColor": "white"
         }  # Set the background color
         return view
-
-
