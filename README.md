@@ -63,7 +63,7 @@ This scenario simulates a system that consists of a cubic box of water molecules
 
 First we initialize the scenario:
 ```
-from inductiva.molecules.scenarios.md_water_box import MDWaterBox
+from inductiva.molecules.scenarios import MDWaterBox
 
 scenario = MDWaterBox(temperature = 300, box_size = 2.3)
 ```
@@ -75,14 +75,12 @@ After the initialization, we are ready to simulate the system:
 ```
 output = scenario.simulate(output_dir = "output_dir",
             simulation_time = 10,
-            integrator = "md",
             nsteps_minim = 5000)
 ```
 
 The simulate method initializes a simulation in the cloud. In this call, we set the parameters:
  - output_dir = "output_dir": sets the path of the directory where the simulation output will be downloaded to;
  - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
- - integrator = "md": the simulation can conform either to: the [molecular dynamics paradigm](https://manual.gromacs.org/nightly/reference-manual/algorithms/molecular-dynamics.html) ("md"), to the [brownian motion](https://manual.gromacs.org/2021.2/reference-manual/algorithms/brownian-dynamics.html) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system;
  -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
 
 When the simulation ends, the simulation output files can be found in the output_dir. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
@@ -95,7 +93,7 @@ This scenario simulates the dynamics of a protein whose structure is described b
 
 First we initialize the scenario:
 ```
-from inductiva.molecules.scenarios.protein_solvation import ProteinSolvation
+from inductiva.molecules.scenarios import ProteinSolvation
 
 scenario = ProteinSolvation(pdb_file, temperature = 300)
 ```
@@ -107,14 +105,12 @@ After the initialization, we are ready to simulate the system:
 ```
 output = scenario.simulate(output_dir = "output_dir",
             simulation_time = 10,
-            integrator = "md",
             nsteps_minim = 5000)
 ```
 
 The simulate method initializes the simulation. In this call, we set the parameters:
  - output_dir = "output_dir": sets the path of the directory where the simulation output will be downloaded to;
  - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
- - integrator = "md": the simulation can conform either to: the [molecular dynamics paradigm](https://manual.gromacs.org/nightly/reference-manual/algorithms/molecular-dynamics.html) ("md"), to the [brownian motion](https://manual.gromacs.org/2021.2/reference-manual/algorithms/brownian-dynamics.html) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system;
  -nsteps_minin = 5000: number of steps for the energy minimization section. 
 
 When the simulation ends, the simulation output files can be found in the output_dir. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
