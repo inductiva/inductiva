@@ -73,17 +73,15 @@ The user can specify the temperature (in Kelvin) and box size (length of one of 
 After the initialization, we are ready to simulate the system:
 
 ```
-output = scenario.simulate(output_dir = "output_dir",
-            simulation_time = 10,
+output = scenario.simulate(simulation_time = 10,
             nsteps_minim = 5000)
 ```
 
 The simulate method initializes a simulation in the cloud. In this call, we set the parameters:
- - output_dir = "output_dir": sets the path of the directory where the simulation output will be downloaded to;
  - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
  -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
 
-When the simulation ends, the simulation output files can be found in the output_dir. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
+When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
 
 ### ProteinSolvation
 
@@ -103,17 +101,15 @@ The user must provide the path for the PDB file  ```pdb_file``` corresponding to
 After the initialization, we are ready to simulate the system:
 
 ```
-output = scenario.simulate(output_dir = "output_dir",
-            simulation_time = 10,
+output = scenario.simulate(simulation_time = 10,
             nsteps_minim = 5000)
 ```
 
 The simulate method initializes the simulation. In this call, we set the parameters:
- - output_dir = "output_dir": sets the path of the directory where the simulation output will be downloaded to;
  - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
  -nsteps_minin = 5000: number of steps for the energy minimization section. 
 
-When the simulation ends, the simulation output files can be found in the output_dir. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
+When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
 
 ## Installation
 
