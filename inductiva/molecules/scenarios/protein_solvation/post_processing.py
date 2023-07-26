@@ -1,10 +1,9 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
-import MDAnalysis as mda
-from MDAnalysis import transformations
 import nglview as nv
 from pathlib import Path
 from typing import Literal
+from inductiva.molecules.scenarios.md_analysis import unwrap_trajectory
 
 
 class ProteinSolvationOutput:
@@ -43,10 +42,7 @@ class ProteinSolvationOutput:
             trajectory = os.path.join(self.sim_output_dir,
                                       "solvated_protein.trr")
 
-        universe = mda.Universe(topology, trajectory, all_coordinates=True)
-        atoms = universe.atoms
-        transformation = transformations.unwrap(atoms)
-        universe.trajectory.add_transformations(transformation)
+        universe = unwrap_trajectory(topology, trajectory)
         view = nv.show_mdanalysis(universe)
         view.add_representation(representation, selection="not water")
         if add_backbone:
