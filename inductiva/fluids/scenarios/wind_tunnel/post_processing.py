@@ -64,7 +64,7 @@ class WindTunnelOutput:
         return domain_mesh, object_mesh
 
     def get_object_physical_field(self,
-                                  physical_property: str = "pressure",
+                                  physical_field: str = "pressure",
                                   simulation_time: float = 50,
                                   save_path: Path = None):
         """Get a physical scalar field over mesh points.
@@ -79,9 +79,9 @@ class WindTunnelOutput:
 
         _, object_mesh = self.get_mesh_at_time(simulation_time)
 
-        property_notation = OpenFOAMPhysicalProperty[
-            physical_property.upper()].value
-        physical_field = MeshData(object_mesh, property_notation)
+        field_notation = OpenFOAMPhysicalField[
+            physical_field.upper()].value
+        physical_field = MeshData(object_mesh, field_notation)
 
         if save_path is not None:
             save_path = files.resolve_path(save_path)
@@ -205,22 +205,22 @@ class WindTunnelOutput:
 
 
 @dataclass
-class OpenFOAMPhysicalProperty(Enum):
-    """Defines the notation used for physical properties in OpenFOAM."""
+class OpenFOAMPhysicalField(Enum):
+    """Defines the notation used for physical field in OpenFOAM."""
     PRESSURE = "p"
     VELOCITY = "U"
 
 
 class FlowSlice:
-    """Render flow properties in a plane of the domain in WindTunnel."""
+    """Render flow field in a plane of the domain in WindTunnel."""
 
     def __init__(self, flow_slice):
         self.mesh = flow_slice
 
     def render_frame(self,
                      object_mesh: pv.PolyData = None,
-                     physical_property: Literal["pressure",
-                                                "velocity"] = "pressure",
+                     physical_field: Literal["pressure",
+                                             "velocity"] = "pressure",
                      off_screen: bool = False,
                      virtual_display: bool = False,
                      background_color: str = "black",
@@ -244,13 +244,13 @@ class FlowSlice:
         plotter.camera.focal_point = center
         plotter.camera.zoom(1.2)
 
-        # Obtain notation for the physical property for the simulator.
-        property_notation = OpenFOAMPhysicalProperty[
-            physical_property.upper()].value
+        # Obtain notation for the physical field for the simulator.
+        field_notation = OpenFOAMPhysicalField[
+            physical_field.upper()].value
 
         if object_mesh:
             plotter.add_mesh(object_mesh, color=object_color)
-        plotter.add_mesh(self.mesh, scalars=property_notation, cmap=flow_cmap)
+        plotter.add_mesh(self.mesh, scalars=field_notation, cmap=flow_cmap)
         plotter.reset_camera(bounds=self.mesh.bounds)
         plotter.show(screenshot=save_path)
         plotter.close()
@@ -264,7 +264,7 @@ class Streamlines:
 
     def render_frame(self,
                      object_mesh: pv.PolyData = None,
-                     physical_property: Literal["pressure",
+                     physical_field: Literal["pressure",
                                                 "velocity"] = "pressure",
                      off_screen: bool = False,
                      virtual_display: bool = False,
@@ -299,12 +299,12 @@ class Streamlines:
         else:
             raise ValueError("Invalid view.")
 
-        # Obtain notation for the physical property for the simulator.
-        property_notation = OpenFOAMPhysicalProperty[
-            physical_property.upper()].value
+        # Obtain notation for the physical field for the simulator.
+        field_notation = OpenFOAMPhysicalField[
+            physical_field.upper()].value
 
         plotter.add_mesh(self.mesh.tube(radius=0.01),
-                         scalars=property_notation,
+                         scalars=field_notation,
                          cmap=flow_cmap)
         if object_mesh:
             plotter.add_mesh(object_mesh, color=object_color)
