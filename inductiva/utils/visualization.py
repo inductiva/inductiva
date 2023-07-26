@@ -7,7 +7,6 @@ from typing import Dict, List, Optional
 import base64
 import io
 from time import sleep
-from IPython.display import HTML
 from ipywidgets import Output
 
 from absl import logging
