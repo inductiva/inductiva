@@ -55,6 +55,49 @@ If you would like other simulators to be added, contact us at [simulations@induc
 
 ## Scenarios
 
+### Coastal area
+
+This scenario simulates the propagation of waves in a coastal area, by solving
+the [shallow water equations](https://en.wikipedia.org/wiki/Shallow_water_equations)
+in a given bathymetric profile (i.e., the depth of the sea bottom). For now,
+this profile is fixed to be that of Praia do Carneiro beach, in Porto, Portugal.
+Waves are injected at the boundary opposite to the beach, and propagate towards
+the shore, interacting with the different elements of the bathymetry.
+
+#### Example
+
+Initialize the scenario:
+
+```python
+from inductiva.fluids.scenarios import CoastalArea
+
+scenario = CoastalArea(wave_amplitude=2.5, wave_period=5.5, water_level=1.0)
+```
+
+The user can specify the wave amplitude (in meters) and period (in seconds), as
+well as the base water level (in meters).
+
+Run the simulation:
+
+```python
+output = scenario.simulate(simulation_time=120, time_step=0.1, output_time_step=1)
+```
+
+The user can specify the total simulation time, the adopted time step and the
+time step between outputs (all in seconds).
+
+Visualize the results:
+
+```python
+output.render(quantity="water_level")
+```
+
+This produces a movie of the temporal evolution of the water level in the
+coastal area.
+
+![Coastal area simulation. Water level render.](resources/media/coastal_area.gif)
+
+
 ### MDWaterBox
 
 This scenario simulates a system that consists of a cubic box of water molecules, evolving according to the rules of Molecular Dynamics - the position of the water molecules is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields. This approach is inspired by [this article](https://arxiv.org/abs/2112.03383).
