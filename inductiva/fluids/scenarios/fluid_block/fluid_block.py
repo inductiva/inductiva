@@ -26,7 +26,28 @@ DUALSPHYSICS_CONFIG_FILENAME = "dam_break.xml"
 
 
 class FluidBlock(Scenario):
-    """Physical scenario of a general fluid block simulation."""
+    """Fluid block scenario.
+    
+    This is a simulation scenario for a fluid block moving in a cubic tank under
+    the action of gravity. The tank is a cube of dimensions 1 x 1 x 1 m. The
+    fluid block is also cubic, but has configurable dimensions and initial
+    position and velocity. The fluid properties such as density and kinematic
+    viscosity are also configurable.
+
+    Schematic representation of the simulation scenario:
+    _________________________________
+    |                               |  tank
+    |         ___________           |
+    |         |         |           |
+    |         |  fluid  |  ->       |
+    |         |  block  |  initial  |
+    |         |_________|  velocity |
+    |                               |
+    |                               |
+    |_______________________________|
+
+    The scenario can be simulated with SPlisSPlasH and DualSPHysics.
+    """
 
     valid_simulators = [SPlisHSPlasH, DualSPHysics]
 
@@ -36,15 +57,16 @@ class FluidBlock(Scenario):
                  dimensions: List[float],
                  position: Optional[List[float]] = None,
                  inital_velocity: Optional[List[float]] = None):
-        """Initializes a `FluidBlock` object.
+        """Initializes the fluid block scenario.
 
         Args:
-            density: Density of the fluid in kg/m^3.
-            kinematic_viscosity: Kinematic viscosity of the fluid, in m^2/s.
-            dimensions: A list containing fluid column dimensions, in meters.
-            position: Position of the fluid column in the tank, in meters.
-            initial_velocity: Initial velocity of the fluid block in the
-              [x, y, z] axes, in m/s.
+            density: The density of the fluid in kg/m^3.
+            kinematic_viscosity: The kinematic viscosity of the fluid, in m^2/s.
+            dimensions: The fluid block dimensions (in x, y, z), in meters.
+            position: The position of the fluid block in the tank (in x, y, z),
+              in meters.
+            initial_velocity: The initial velocity of the fluid block (in x, y,
+              z), in m/s.
         """
 
         self.fluid = FluidType(density=density,
@@ -80,15 +102,19 @@ class FluidBlock(Scenario):
         """Simulates the scenario.
 
         Args:
-            simulator: Simulator to use.
-            output_dir: Directory to store the simulation output.
-            device: Device in which to run the simulation.
+            simulator: The simulator to use for the simulation. Supported
+              simulators are: SPlisHSPlasH, DualSPHysics.
+            output_dir: The output directory to save the simulation results.
+            device: Device in which to run the simulation. Available options are
+              "cpu" and "gpu".
             particle_radius: Radius of the fluid particles, in meters.
-            simulation_time: Simulation time, in seconds.
-            adaptive_time_step: Whether to use adaptive time step.
+              Determines the resolution of the simulation. Lower values result
+              in higher resolution and longer simulation times.
+            simulation_time: The simulation time, in seconds.
+            adaptive_time_step: Whether to use adaptive time stepping.
             particle_sorting: Whether to use particle sorting.
-            time_step: Time step, in seconds.
-            output_time_step: Time step between outputs, in seconds.
+            time_step: The time step, in seconds.
+            output_time_step: Time step for the output, in seconds.
         """
 
         # TODO: Avoid storing these as class attributes.
@@ -106,12 +132,8 @@ class FluidBlock(Scenario):
             device=device,
         )
 
-        # TODO: Add any kind of post-processing here, e.g. convert files?
-        # convert_vtk_data_dir_to_netcdf(
-        #     data_dir=os.path.join(output_path, "vtk"),
-        #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
-        #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
-
+        # TODO: What to return when the simulation is performed with
+        # DualSPHysics?
         return SPHSimulationOutput(output_path)
 
     @singledispatchmethod
