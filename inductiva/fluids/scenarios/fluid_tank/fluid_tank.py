@@ -182,7 +182,7 @@ class FluidTank(Scenario):
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             device=device,
-            input_filename=self.get_config_filename(simulator),
+            sim_config_filename=self.get_config_filename(simulator),
         )
 
         # TODO: Add any kind of post-processing here, e.g. convert files?
