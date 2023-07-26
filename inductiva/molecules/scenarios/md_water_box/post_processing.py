@@ -1,9 +1,8 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
-import MDAnalysis as mda
-from MDAnalysis import transformations
 import nglview as nv
 from pathlib import Path
+from ..utils import unwrap_trajectory
 
 
 class MDWaterBoxOutput:
@@ -21,20 +20,19 @@ class MDWaterBoxOutput:
 
         self.sim_output_dir = sim_output_path
 
-    def render_interactive(self):
+    def render_interactive(self, use_compressed_trajectory: bool = False):
         """Render the simulation outputs in an interactive visualization."""
 
         topology = os.path.join(self.sim_output_dir, "eql.tpr")
-        trajectory = os.path.join(self.sim_output_dir, "eql.xtc")
-        universe = mda.Universe(topology, trajectory, all_coordinates=True)
-        atoms = universe.atoms
-        transformation = transformations.unwrap(atoms)
-        universe.trajectory.add_transformations(transformation)
+        if use_compressed_trajectory:
+            trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")
+        else:
+            trajectory = os.path.join(self.sim_output_dir, "eql.trr")
 
+        universe = unwrap_trajectory(topology, trajectory)
         view = nv.show_mdanalysis(universe)
         view.add_ball_and_stick("all")
-        view.center()
-        view.parameters = {
-            "backgroundColor": "white"
-        }  # Set the background color
+        print("System Information:")
+        print(f"Number of atoms in the system: {len(universe.atoms)}")
+        print(f"Number of trajectory frames: {len(universe.trajectory)}")
         return view

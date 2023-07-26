@@ -4,21 +4,19 @@ from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
-import tempfile
 from uuid import UUID
 
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template,
-                                       replace_params_in_template)
+                                       batch_replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils import files
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
-COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
+COMMANDS_TEMPLATE_FILE_NAME = "commands.json"
 
 
 class ProteinSolvation(Scenario):
@@ -145,15 +143,7 @@ class ProteinSolvation(Scenario):
                                               GROMACS_TEMPLATE_INPUT_DIR,
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
-        with tempfile.NamedTemporaryFile() as commands_file:
-            replace_params_in_template(
-                template_path=commands_template_path,
-                params={"visualized_section": self.visualized_section},
-                output_file_path=commands_file.name,
-            )
-
-            commands = self.read_commands_from_file(commands_file.name)
-
+        commands = self.read_commands_from_file(commands_template_path)
         return commands
 
     @singledispatchmethod
