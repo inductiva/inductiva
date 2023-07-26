@@ -34,8 +34,8 @@ class StellaratorCoils(Scenario):
                              major_radius, minor_radius):
         """Create simple circular and equally spaced curves.
 
-        The non-zero coefficients are c_0 and c_1 for both the Fx and Fy
-        Fourier Series and s_1 for Fz. This is what makes the coils circular. 
+        The non-zero coefficients are c0 and c1 for both the Fx and Fy
+        Fourier Series and s1 for Fz. This is what makes the coils circular. 
 
         Args:
             num_field_periods (int): Number of magnetic field periods.
@@ -138,6 +138,50 @@ class StellaratorCoils(Scenario):
             coil = Coil(curve_coefficients, coil_currents[i])
 
             coils.append(coil)
+
+        return cls(coils, num_field_periods)
+
+    @classmethod
+    def from_curves_file(cls,
+                         num_field_periods,
+                         coil_currents,
+                         curves_file,
+                         delimiter=','):
+        """Create StellaratorCoils from Fourier coefficients loaded from a file.
+
+        This function loads a file containing Fourier coefficients for several 
+        coils. The file is expected to have `6*num_coils` many columns, and 
+        `order+1` many rows. The columns are in the following order,
+
+        sj_x_coil1,cj_x_coil1,sj_y_coil1,...,sj_x_coil2,cj_x_coil2,...
+
+        Args:
+            num_field_periods (int): Number of magnetic field periods.
+            coil_currents (list): List of coil currents.
+            curves_file (str): Name of the file containing Fourier coefficients.
+            delimiter (str): Delimiter used in the file. 
+
+        Returns:
+            StellaratorCoils: The created StellaratorCoils instance.
+        """
+
+        # Reads all the coefficients from the file to a numpy 2D array
+        # with `order+1` columns and `6*num_coils` rows.
+        curves_data = np.loadtxt(fname=curves_file,
+                                 delimiter=delimiter,
+                                 unpack=True)
+
+        # Gets the number of coils.
+        num_coils = int((curves_data.shape[0]) / 6)
+
+        # Gets the coefficients for each coil.
+        curves_coefficients = np.split(curves_data, num_coils, axis=0)
+
+        coils = [
+            Coil(curve_coefficients,
+                 coil_current) for curve_coefficients, coil_current in zip(
+                     curves_coefficients, coil_currents)
+        ]
 
         return cls(coils, num_field_periods)
 
