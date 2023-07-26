@@ -4,15 +4,13 @@ from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
-import tempfile
 from uuid import UUID
 
 from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template,
-                                       replace_params_in_template)
+                                       batch_replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils import files
 
