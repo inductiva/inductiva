@@ -3,7 +3,7 @@ import os
 import nglview as nv
 from pathlib import Path
 from typing import Literal
-from inductiva.molecules.scenarios.md_analysis import unwrap_trajectory
+from ..utils import unwrap_trajectory
 
 
 class ProteinSolvationOutput:

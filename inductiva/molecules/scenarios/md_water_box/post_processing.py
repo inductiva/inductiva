@@ -2,7 +2,7 @@
 import os
 import nglview as nv
 from pathlib import Path
-from inductiva.molecules.scenarios.md_analysis import unwrap_trajectory
+from ..utils import unwrap_trajectory
 
 
 class MDWaterBoxOutput:
