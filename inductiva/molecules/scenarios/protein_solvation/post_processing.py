@@ -5,6 +5,7 @@ from MDAnalysis import transformations
 import nglview as nv
 from pathlib import Path
 from typing import Literal
+from absl import logging
 
 
 class ProteinSolvationOutput:
@@ -26,11 +27,22 @@ class ProteinSolvationOutput:
                            representation: Literal["cartoon", "ball+stick",
                                                    "line", "point",
                                                    "ribbon"] = "ball+stick",
-                           add_backbone: bool = True):
-        """Render the simulation outputs in an interactive visualization."""
+                           add_backbone: bool = True,
+                           use_compressed_trajectory: bool = False):
+        """Render the simulation outputs in an interactive visualization.
+        Args: 
+            representation: The protein representation to use for the visualization.
+            add_backbone: Whether to add the protein backbone to the visualization.
+            use_compressed_trajectory: Whether to use the compressed trajectory. 
+            """
 
         topology = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
-        trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")
+        if use_compressed_trajectory:
+            trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")
+        else:
+            trajectory = os.path.join(self.sim_output_dir,
+                                      "solvated_protein.trr")
+
         universe = mda.Universe(topology, trajectory, all_coordinates=True)
         atoms = universe.atoms
         transformation = transformations.unwrap(atoms)
@@ -40,7 +52,14 @@ class ProteinSolvationOutput:
         if add_backbone:
             view.add_representation("cartoon", selection="protein")
         view.center()
-        view.parameters = {
-            "backgroundColor": "white"
-        }  # Set the background color
+        view.background = "white"
+        print("System Information:")
+        print(f"Number of atoms in the system: {len(universe.atoms)}")
+        print(
+            f"Number of amino acids: {universe.select_atoms('protein').n_residues}"
+        )
+        print(
+            f"Number of solvent molecules: {universe.select_atoms('not protein').n_residues}"
+        )
+        print(f"Number of trajectory frames: {len(universe.trajectory)}")
         return view
