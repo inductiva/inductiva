@@ -4,6 +4,7 @@ import MDAnalysis as mda
 from MDAnalysis import transformations
 import nglview as nv
 from pathlib import Path
+from typing import Literal
 
 
 class ProteinSolvationOutput:
@@ -21,7 +22,11 @@ class ProteinSolvationOutput:
 
         self.sim_output_dir = sim_output_path
 
-    def render_interactive(self):
+    def render_interactive(self,
+                           representation: Literal["cartoon", "ball+stick",
+                                                   "line", "point",
+                                                   "ribbon"] = "ball+stick",
+                           add_backbone: bool = True):
         """Render the simulation outputs in an interactive visualization."""
 
         topology = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
@@ -30,9 +35,10 @@ class ProteinSolvationOutput:
         atoms = universe.atoms
         transformation = transformations.unwrap(atoms)
         universe.trajectory.add_transformations(transformation)
-
         view = nv.show_mdanalysis(universe)
-        view.add_ball_and_stick("not water")
+        view.add_representation(representation, selection="not water")
+        if add_backbone:
+            view.add_representation("cartoon", selection="protein")
         view.center()
         view.parameters = {
             "backgroundColor": "white"
