@@ -55,6 +55,51 @@ If you would like other simulators to be added, contact us at [simulations@induc
 
 ## Scenarios
 
+### Heat sink
+
+This scenario simulates heat exchange between an air flow and a heat sink. The
+heat sink is a rectangular block of aluminum with thin fins aligned with the air
+flow. A small cubic copper heat source is placed under the sink.
+
+#### Example
+
+Initialize the scenario:
+
+```python
+from inductiva.fluids.scenarios import HeatSink
+
+scenario = HeatSink(air_velocity=10, air_temperature=290, heater_power=50)
+```
+
+The user can specify the velocity (in meters per second) and temperature (in
+Kelvin) of the air flow, as well as the power produced by the heat source (in
+Watts).
+
+Run the simulation:
+
+```python
+output = scenario.simulate(simulation_time=100, output_time_step=1)
+```
+
+The user can specify the total simulation time and the time step between outputs
+(all in seconds).
+
+Visualize the results:
+
+```python
+output.render()
+```
+
+This produces a movie of the temporal evolution of the temperature in the heat
+sink, as well as in a slice of the air flow.
+
+![Heat sink simulation. Default render.](resources/media/heat_sink_default.gif)
+
+The view of the render can be adjusted, by passing e.g. `view = "top"` to the
+`render()` method.
+
+![Heat sink simulation. Top render.](resources/media/heat_sink_top.gif)
+
 ### Coastal area
 
 This scenario simulates the propagation of waves in a coastal area, by solving
