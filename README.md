@@ -82,7 +82,7 @@ m^2/s), initial position (in m), dimensions (in m) and velocity (in m/s).
 Run the simulation:
 
 ```python
-output = scenario.simulate(simulator=fluids.simulators.SPlisHSPlasH(),
+output = scenario.simulate(simulator=fluids.SPlisHSPlasH(),
                            simulation_time=1,
                            time_step=0.001,
                            output_time_step=0.05)
