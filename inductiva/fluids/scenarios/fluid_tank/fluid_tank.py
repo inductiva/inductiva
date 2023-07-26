@@ -128,7 +128,7 @@ class FluidTank(Scenario):
         self,
         shape: BaseShape = Cylinder(radius=0.5, height=1),
         fluid: FluidType = WATER,
-        fluid_level: float = 0,
+        fluid_level: float = 0.5,
         inlet: Optional[BaseTankInlet] = CircularTankInlet(radius=0.1),
         outlet: Optional[BaseTankOutlet] = CylindricalTankOutlet(radius=0.1,
                                                                  height=0.1),
