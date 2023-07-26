@@ -65,7 +65,8 @@ class WindTunnelOutput:
 
     def get_physical_field(self,
                            physical_property: str = "pressure",
-                           time_step: float = 50):
+                           time_step: float = 50,
+                           save_path: Path = None):
         """Get a physical scalar field over mesh points for a certain time_step.
 
         Returns:
@@ -79,11 +80,15 @@ class WindTunnelOutput:
             physical_property.upper()].value
         physical_field = MeshData(object_mesh, property_notation)
 
+        if save_path is not None:
+            save_path = files.resolve_path(save_path)
+            physical_field.mesh.save(save_path)
+
         return physical_field
 
     def get_streamlines(self,
                         time_step: float = 50,
-                        max_time: float = 100,
+                        max_steps: float = 100,
                         n_points: int = 100,
                         initial_step_length: float = 1,
                         source_radius: float = 0.7,
@@ -95,7 +100,7 @@ class WindTunnelOutput:
 
         Args:
             time_step: Simulation time step to obtain the streamlines.
-            max_time: Maximum time for the streamlines.
+            max_steps: Number of steps to visualize the particles through the flow.
             n_points: Number of points to seed.
             initial_step_length: Initial step length for the streamlines.
             source_radius: Radius of the source of the streamlines.
@@ -106,7 +111,7 @@ class WindTunnelOutput:
         inlet_position = (mesh.bounds[0], 0, 1)
 
         streamlines_mesh = mesh.streamlines(
-            max_time=max_time,
+            max_time=max_steps,
             n_points=n_points,
             initial_step_length=initial_step_length,
             source_radius=source_radius,
@@ -144,7 +149,9 @@ class WindTunnelOutput:
 
         return FlowSlice(flow_slice)
 
-    def get_force_coefficients(self, save_path: Path = None):
+    def get_force_coefficients(self,
+                               time_step: float = 50,
+                               save_path: Path = None):
         """Get the force coefficients of the object in the WindTunnel.
         
         The force coefficients are provided in a .dat file during the
@@ -171,7 +178,7 @@ class WindTunnelOutput:
                 if index == num_header_lines:
                     force_coefficients.append(line.split()[1:])
                 # Add the force coefficients for the time_step chosen
-                elif index == num_header_lines + self.time_step + 1:
+                elif index == num_header_lines + time_step + 1:
                     force_coefficients.append(line.split())
 
         if save_path:
@@ -217,7 +224,7 @@ class FlowSlice:
         plotter.background_color = background_color
 
         center = self.mesh.center
-        normal = self.mesh.compute_normals()["Normals"].mean(axis=0)
+        normal = -self.mesh.compute_normals()["Normals"].mean(axis=0)
         plotter.camera.position = center + normal
         plotter.camera.focal_point = center
         plotter.camera.zoom(1.2)

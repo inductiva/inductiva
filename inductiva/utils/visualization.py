@@ -472,6 +472,7 @@ class MeshData:
         self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
 
     def render(self,
+               off_screen: bool = False,
                background_color: str = "black",
                scalars_cmap: str = "viridis",
                virtual_display: bool = False,
@@ -480,10 +481,7 @@ class MeshData:
         if save_path is not None:
             save_path = files.resolve_path(save_path)
 
-        off_screen = False
-
         if virtual_display:
-            off_screen = True
             pv.start_xvfb()
 
         plotter = pv.Plotter(off_screen=off_screen)
@@ -491,11 +489,3 @@ class MeshData:
         plotter.add_mesh(self.mesh, scalars=self.scalar_name, cmap=scalars_cmap)
         plotter.show(screenshot=save_path)
         plotter.close()
-
-        with open(save_path, "rb") as file_path:
-            png = file_path.read()
-        png_url = "data:image/png;base64," + b64encode(png).decode()
-
-        return HTML(f"""
-                <img src="{png_url}" type="image/png" width="600">
-        """)
