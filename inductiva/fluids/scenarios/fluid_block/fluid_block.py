@@ -130,6 +130,7 @@ class FluidBlock(Scenario):
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             device=device,
+            sim_config_filename=self.get_config_filename(simulator),
         )
 
         # TODO: What to return when the simulation is performed with
