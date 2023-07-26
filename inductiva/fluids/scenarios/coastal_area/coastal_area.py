@@ -14,6 +14,7 @@ from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import SWASH
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
+from inductiva.fluids.scenarios.coastal_area.output import CoastalAreaOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
@@ -93,12 +94,14 @@ class CoastalArea(Scenario):
         self.time_step = time_step
         self.output_time_step = output_time_step
 
-        return super().simulate(
+        output_path = super().simulate(
             simulator,
             sim_config_filename=SWASH_CONFIG_FILENAME,
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
         )
+
+        return CoastalAreaOutput(output_path)
 
     def simulate_async(
         self,
