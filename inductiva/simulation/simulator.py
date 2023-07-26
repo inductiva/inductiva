@@ -41,7 +41,7 @@ class Simulator(ABC):
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
         **kwargs,
-    ) -> Union[pathlib.Path,Task]:
+    ) -> Union[pathlib.Path, Task]:
         """Run the simulation.
 
         Args:
@@ -57,7 +57,7 @@ class Simulator(ABC):
         """
         input_dir = self._setup_input_dir(input_dir)
         output_dir = self._setup_output_dir(output_dir, input_dir)
-            
+
         return tasks.run_simulation(
             self.api_method_name,
             input_dir,

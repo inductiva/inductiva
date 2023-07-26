@@ -14,7 +14,7 @@ def run_simulation(
     resource_pool_id: Optional[UUID] = None,
     run_async: bool = False,
     **kwargs: Any,
-) -> Union[pathlib.Path,Task]:
+) -> Union[pathlib.Path, Task]:
     """Run a simulation via Inductiva Web API."""
 
     params = {
