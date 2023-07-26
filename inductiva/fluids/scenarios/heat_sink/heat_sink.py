@@ -55,7 +55,7 @@ class HeatSink(Scenario):
         self,
         simulator: Simulator = OpenFOAM(),
         output_dir: Optional[Path] = None,
-        machine_group_id: Optional[UUID] = None,
+        resource_pool_id: Optional[UUID] = None,
         simulation_time=300,
         output_time_step=10,
         run_async: bool = False,
@@ -64,10 +64,12 @@ class HeatSink(Scenario):
 
         Args:
             simulator: The simulator to use for the simulation.
-            output_dir: The output directory to save the simulation results.
+            output_dir: The output directory to save the simulation results when
+              running synchronously.
             simulation_time: The simulation time, in seconds.
             output_time_step: The time step to save the simulation results, in
               seconds.
+            resource_pool_id: The resource pool to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
         """
         self.simulation_time = simulation_time
@@ -75,16 +77,11 @@ class HeatSink(Scenario):
 
         commands = self.get_commands()
 
-        if run_async:
-            return super().simulate_async(simulator,
-                                          output_dir,
-                                          machine_group_id=machine_group_id,
-                                          commands=commands)
-        else:
-            return super().simulate(simulator,
-                                    output_dir,
-                                    machine_group_id=machine_group_id,
-                                    commands=commands)
+        return super().simulate(simulator,
+                                output_dir,
+                                resource_pool_id=resource_pool_id,
+                                commands=commands,
+                                run_async=run_async)
 
     def get_commands(self):
         """Returns the OpenFOAM commands for the simulation.

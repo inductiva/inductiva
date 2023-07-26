@@ -22,6 +22,7 @@ class XBeach(Simulator):
         output_dir: Optional[types.Path] = None,
         resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
+        run_async: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
 
@@ -36,23 +37,5 @@ class XBeach(Simulator):
             n_cores=n_cores,
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
+            run_async=run_async,
         )
-
-    def run_async(
-        self,
-        input_dir: types.Path,
-        resource_pool_id: Optional[UUID] = None,
-        sim_config_filename: Optional[str] = "params.txt",
-        n_cores: int = 1,
-    ) -> Task:
-        """Run the simulation asynchronously.
-
-        Args:
-            sim_config_filename: Name of the simulation configuration file.
-            n_cores: Number of MPI cores to use for the simulation.
-            """
-
-        return super().run_async(input_dir,
-                                 resource_pool_id=resource_pool_id,
-                                 input_filename=sim_config_filename,
-                                 n_cores=n_cores)

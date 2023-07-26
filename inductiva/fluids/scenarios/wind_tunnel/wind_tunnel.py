@@ -91,7 +91,7 @@ class WindTunnel(Scenario):
             object_path: Path to object inserted in the wind tunnel.
             simulator: Simulator to use for the simulation.
             output_dir: Path to the directory where the simulation output
-                is downloaded.
+                is downloaded when running synchronously.
             simulation_time: Simulation time, in seconds.
             write_interval: Interval between simulation outputs, in seconds.
             n_cores: Number of cores to use for the simulation.
@@ -109,18 +109,17 @@ class WindTunnel(Scenario):
         self.resolution = MeshResolution[resolution.upper()].value
 
         commands = self.get_commands()
+
+        output = super().simulate(simulator,
+                                  output_dir=output_dir,
+                                  resource_pool_id=resource_pool_id,
+                                  n_cores=n_cores,
+                                  commands=commands,
+                                  run_async=run_async)
         if run_async:
-            return super().simulate_async(simulator,
-                                          resource_pool_id=resource_pool_id,
-                                          n_cores=n_cores,
-                                          commands=commands)
+            return output
         else:
-            output_path = super().simulate(simulator,
-                                           output_dir=output_dir,
-                                           resource_pool_id=resource_pool_id,
-                                           n_cores=n_cores,
-                                           commands=commands)
-            return WindTunnelSimulationOutput(output_path, simulation_time)
+            return WindTunnelSimulationOutput(output, simulation_time)
 
     def get_commands(self):
         """Returns the commands for the simulation."""

@@ -26,6 +26,7 @@ class OpenFOAM(Simulator):
         output_dir: Optional[types.Path] = None,
         resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
+        run_async: bool = False,
     ) -> pathlib.Path:
         """Run the simulation.
 
@@ -34,32 +35,9 @@ class OpenFOAM(Simulator):
             n_cores: Number of MPI cores to use for the simulation.
             other arguments: See the documentation of the base class.
         """
-        return super().run(
-            input_dir,
-            output_dir=output_dir,
-            resource_pool_id=resource_pool_id,
-            n_cores=n_cores,
-            commands=commands,
-        )
-
-    def run_async(
-        self,
-        input_dir: types.Path,
-        commands: List[dict],
-        resource_pool_id: Optional[UUID] = None,
-        n_cores: int = 1,
-    ) -> Task:
-        """Run the simulation asynchronously.
-
-        Args:
-            n_cores: Number of MPI cores to use for the simulation.
-            method_name: OpenFOAM method to run. This involves commands
-                from pre-processing, to solvers and post-processing.
-            openfoam_flags: Flags to pass to the openfoam method_name.
-            other arguments: See the documentation of the base class.
-            """
-
-        return super().run_async(input_dir,
-                                 resource_pool_id=resource_pool_id,
-                                 commands=commands,
-                                 n_cores=n_cores)
+        return super().run(input_dir,
+                           output_dir=output_dir,
+                           resource_pool_id=resource_pool_id,
+                           n_cores=n_cores,
+                           commands=commands,
+                           run_async=run_async)
