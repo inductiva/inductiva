@@ -25,6 +25,9 @@ from inductiva.utils import files
 class WindTunnelOutput:
     """Post-Process WindTunnel simulation outputs.
 
+    This class contains several methods to post-process the output 
+    and visualize the results of a WindTunnel simulation.
+
     Current Support:
         OpenFOAM
     """
@@ -72,6 +75,8 @@ class WindTunnelOutput:
         Args:
             simulation_time: Time value to obtain simulation mesh.
 
+        Args:
+            physical_property: Physical property to be read.
         Returns:
             A MeshData object that allow to manipulate the data over a mesh
             and to render it.
