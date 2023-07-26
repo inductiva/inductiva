@@ -52,3 +52,7 @@ def main(_):
                                   output_dir=FLAGS.output_dir)
 
     logging.info("Outputs stored in %s", output_path)
+
+
+if __name__ == "__main__":
+    app.run(main)
