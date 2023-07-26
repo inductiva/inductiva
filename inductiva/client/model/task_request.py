@@ -39,7 +39,7 @@ class TaskRequest(schemas.DictSchema):
             method = schemas.StrSchema
             params = schemas.DictSchema
 
-            class resource_pool(
+            class machine_group_id(
                     schemas.ComposedSchema,):
 
                 class MetaOapg:
@@ -89,7 +89,7 @@ class TaskRequest(schemas.DictSchema):
                                            datetime, uuid.UUID, int, float,
                                            decimal.Decimal, None, list, tuple,
                                            bytes],
-                ) -> 'resource_pool':
+                ) -> 'machine_group_id':
                     return super().__new__(
                         cls,
                         *_args,
@@ -100,7 +100,7 @@ class TaskRequest(schemas.DictSchema):
             __annotations__ = {
                 "method": method,
                 "params": params,
-                "resource_pool": resource_pool,
+                "machine_group_id": machine_group_id,
             }
 
     method: MetaOapg.properties.method
@@ -120,8 +120,8 @@ class TaskRequest(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["resource_pool"]
-    ) -> MetaOapg.properties.resource_pool:
+        self, name: typing_extensions.Literal["machine_group_id"]
+    ) -> MetaOapg.properties.machine_group_id:
         ...
 
     @typing.overload
@@ -131,7 +131,7 @@ class TaskRequest(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "method",
         "params",
-        "resource_pool",
+        "machine_group_id",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -150,8 +150,8 @@ class TaskRequest(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["resource_pool"]
-    ) -> typing.Union[MetaOapg.properties.resource_pool, schemas.Unset]:
+        self, name: typing_extensions.Literal["machine_group_id"]
+    ) -> typing.Union[MetaOapg.properties.machine_group_id, schemas.Unset]:
         ...
 
     @typing.overload
@@ -163,7 +163,7 @@ class TaskRequest(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "method",
         "params",
-        "resource_pool",
+        "machine_group_id",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -182,12 +182,12 @@ class TaskRequest(schemas.DictSchema):
             dict,
             frozendict.frozendict,
         ],
-        resource_pool: typing.Union[MetaOapg.properties.resource_pool, dict,
-                                    frozendict.frozendict, str, date, datetime,
-                                    uuid.UUID, int, float, decimal.Decimal,
-                                    bool, None, list, tuple, bytes, io.FileIO,
-                                    io.BufferedReader,
-                                    schemas.Unset] = schemas.unset,
+        machine_group_id: typing.Union[MetaOapg.properties.machine_group_id,
+                                       dict, frozendict.frozendict, str, date,
+                                       datetime, uuid.UUID, int, float,
+                                       decimal.Decimal, bool, None, list, tuple,
+                                       bytes, io.FileIO, io.BufferedReader,
+                                       schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -199,7 +199,7 @@ class TaskRequest(schemas.DictSchema):
             *_args,
             method=method,
             params=params,
-            resource_pool=resource_pool,
+            machine_group_id=machine_group_id,
             _configuration=_configuration,
             **kwargs,
         )

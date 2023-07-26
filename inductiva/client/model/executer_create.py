@@ -131,7 +131,6 @@ class ExecuterCreate(schemas.DictSchema):
                         **kwargs,
                     )
 
-            resource_pool_id = schemas.StrSchema
             __annotations__ = {
                 "create_time": create_time,
                 "supported_executer_types": supported_executer_types,
@@ -140,7 +139,6 @@ class ExecuterCreate(schemas.DictSchema):
                 "memory": memory,
                 "cpu_info": cpu_info,
                 "host_info": host_info,
-                "resource_pool_id": resource_pool_id,
             }
 
     memory: MetaOapg.properties.memory
@@ -194,12 +192,6 @@ class ExecuterCreate(schemas.DictSchema):
         ...
 
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["resource_pool_id"]
-    ) -> MetaOapg.properties.resource_pool_id:
-        ...
-
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -211,7 +203,6 @@ class ExecuterCreate(schemas.DictSchema):
         "memory",
         "cpu_info",
         "host_info",
-        "resource_pool_id",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -260,12 +251,6 @@ class ExecuterCreate(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["resource_pool_id"]
-    ) -> typing.Union[MetaOapg.properties.resource_pool_id, schemas.Unset]:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -278,7 +263,6 @@ class ExecuterCreate(schemas.DictSchema):
         "memory",
         "cpu_info",
         "host_info",
-        "resource_pool_id",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -336,8 +320,6 @@ class ExecuterCreate(schemas.DictSchema):
             list,
             tuple,
         ],
-        resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id,
-                                       str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -354,7 +336,6 @@ class ExecuterCreate(schemas.DictSchema):
             cpu_count_physical=cpu_count_physical,
             host_info=host_info,
             supported_executer_types=supported_executer_types,
-            resource_pool_id=resource_pool_id,
             _configuration=_configuration,
             **kwargs,
         )

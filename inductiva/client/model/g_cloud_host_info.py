@@ -59,6 +59,7 @@ class GCloudHostInfo(schemas.DictSchema):
             vm_id = schemas.StrSchema
             preemptible = schemas.BoolSchema
             vm_metadata = schemas.DictSchema
+            machine_group_id = schemas.StrSchema
             __annotations__ = {
                 "host_type": host_type,
                 "vm_type": vm_type,
@@ -66,6 +67,7 @@ class GCloudHostInfo(schemas.DictSchema):
                 "vm_id": vm_id,
                 "preemptible": preemptible,
                 "vm_metadata": vm_metadata,
+                "machine_group_id": machine_group_id,
             }
 
     vm_id: MetaOapg.properties.vm_id
@@ -112,6 +114,12 @@ class GCloudHostInfo(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["machine_group_id"]
+    ) -> MetaOapg.properties.machine_group_id:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -122,6 +130,7 @@ class GCloudHostInfo(schemas.DictSchema):
         "vm_id",
         "preemptible",
         "vm_metadata",
+        "machine_group_id",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -164,6 +173,12 @@ class GCloudHostInfo(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["machine_group_id"]
+    ) -> typing.Union[MetaOapg.properties.machine_group_id, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -175,6 +190,7 @@ class GCloudHostInfo(schemas.DictSchema):
         "vm_id",
         "preemptible",
         "vm_metadata",
+        "machine_group_id",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -209,6 +225,8 @@ class GCloudHostInfo(schemas.DictSchema):
             MetaOapg.properties.vm_name,
             str,
         ],
+        machine_group_id: typing.Union[MetaOapg.properties.machine_group_id,
+                                       str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -224,6 +242,7 @@ class GCloudHostInfo(schemas.DictSchema):
             vm_metadata=vm_metadata,
             host_type=host_type,
             vm_name=vm_name,
+            machine_group_id=machine_group_id,
             _configuration=_configuration,
             **kwargs,
         )

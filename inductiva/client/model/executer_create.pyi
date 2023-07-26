@@ -112,7 +112,6 @@ class ExecuterCreate(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            resource_pool_id = schemas.StrSchema
             __annotations__ = {
                 "create_time": create_time,
                 "supported_executer_types": supported_executer_types,
@@ -121,7 +120,6 @@ class ExecuterCreate(
                 "memory": memory,
                 "cpu_info": cpu_info,
                 "host_info": host_info,
-                "resource_pool_id": resource_pool_id,
             }
     
     memory: MetaOapg.properties.memory
@@ -154,12 +152,9 @@ class ExecuterCreate(
     def __getitem__(self, name: typing_extensions.Literal["host_info"]) -> MetaOapg.properties.host_info: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["resource_pool_id"]) -> MetaOapg.properties.resource_pool_id: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "host_info", "resource_pool_id", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "host_info", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -186,12 +181,9 @@ class ExecuterCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["host_info"]) -> MetaOapg.properties.host_info: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["resource_pool_id"]) -> typing.Union[MetaOapg.properties.resource_pool_id, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "host_info", "resource_pool_id", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "host_info", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -205,7 +197,6 @@ class ExecuterCreate(
         cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical, decimal.Decimal, int, ],
         host_info: typing.Union[MetaOapg.properties.host_info, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         supported_executer_types: typing.Union[MetaOapg.properties.supported_executer_types, list, tuple, ],
-        resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ExecuterCreate':
@@ -219,7 +210,6 @@ class ExecuterCreate(
             cpu_count_physical=cpu_count_physical,
             host_info=host_info,
             supported_executer_types=supported_executer_types,
-            resource_pool_id=resource_pool_id,
             _configuration=_configuration,
             **kwargs,
         )
