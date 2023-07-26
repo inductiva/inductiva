@@ -194,6 +194,41 @@ class FluidTank(Scenario):
 
         return FluidTankOutput(output_path)
 
+    def simulate_async(
+        self,
+        simulator: Simulator = SPlisHSPlasH(),
+        resource_pool_id: Optional[UUID] = None,
+        device: Literal["cpu", "gpu"] = "cpu",
+        simulation_time: float = 5,
+        resolution: Literal["low", "medium", "high"] = "low",
+        output_time_step: float = 0.1,
+        particle_sorting: bool = False,
+    ):
+        """Simulates the scenario.
+
+        Args:
+            simulator: Simulator to use.
+            device: Device in which to run the simulation.
+            simulation_time: Simulation time, in seconds.
+            output_time_step: Time step between output files, in seconds.
+            resolution: Resolution of the simulation. Controls the particle
+                radius and time step.
+            particle_sorting: Whether to use particle sorting.
+        """
+
+        self.simulation_time = simulation_time
+        self.particle_radius = ParticleRadius[resolution.upper()].value
+        self.time_step = TimeStep[resolution.upper()].value
+        self.output_time_step = output_time_step
+        self.particle_sorting = particle_sorting
+
+        return super().simulate_async(
+            simulator,
+            resource_pool_id=resource_pool_id,
+            device=device,
+            sim_config_filename=self.get_config_filename(simulator),
+        )
+
     def get_bounding_box(self):
         """Gets the bounding box of the tank.
 
