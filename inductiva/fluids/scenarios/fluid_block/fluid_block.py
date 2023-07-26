@@ -56,7 +56,7 @@ class FluidBlock(Scenario):
                  kinematic_viscosity: float,
                  dimensions: List[float],
                  position: Optional[List[float]] = None,
-                 inital_velocity: Optional[List[float]] = None):
+                 initial_velocity: Optional[List[float]] = None):
         """Initializes the fluid block scenario.
 
         Args:
@@ -81,10 +81,10 @@ class FluidBlock(Scenario):
         else:
             self.position = position
 
-        if inital_velocity is None:
+        if initial_velocity is None:
             self.initial_velocity = [0, 0, 0]
         else:
-            self.initial_velocity = inital_velocity
+            self.initial_velocity = initial_velocity
 
     def simulate(
         self,
