@@ -11,3 +11,4 @@ from .fluid_tank import (
     CircularTankInlet,
 )
 from .heat_sink import HeatSink
+from .coastal_area import (CoastalArea, CoastalAreaOutput)
