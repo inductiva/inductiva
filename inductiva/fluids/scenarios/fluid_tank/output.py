@@ -6,13 +6,14 @@ from typing import Optional
 import xarray as xr
 
 from inductiva.types import Path
+from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.utils import files, visualization
 
 
 class FluidTankOutput:
     """Fluid tank simulation output."""
 
-    def __init__(self, sim_output_path: Path):
+    def __init__(self, sim_output_path: Path, output_time_step: float = 1):
         """Initializes a `FluidTankOutput` object.
 
         Args:
@@ -20,6 +21,7 @@ class FluidTankOutput:
         """
 
         self.sim_output_path = sim_output_path
+        self.output_time_step = output_time_step
 
     def render(
         self,
@@ -40,6 +42,11 @@ class FluidTankOutput:
             fps: Number of frames per second to use in the movie.
             color: Color used to represent the particles.
         """
+
+        convert_vtk_data_dir_to_netcdf(
+            data_dir=os.path.join(self.sim_output_path, "vtk"),
+            output_time_step=self.output_time_step,
+            netcdf_data_dir=os.path.join(self.sim_output_path, "netcdf"))
 
         particle_data = xr.open_mfdataset(
             os.path.join(self.sim_output_path, "netcdf", "*.nc"))

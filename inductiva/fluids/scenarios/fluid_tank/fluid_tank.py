@@ -18,7 +18,6 @@ from inductiva.fluids.shapes import Cylinder
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.fluids.simulators import SPlisHSPlasH
-from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.utils.templates import replace_params_in_template
 from inductiva.fluids.scenarios.fluid_tank.output import FluidTankOutput
 
@@ -186,13 +185,7 @@ class FluidTank(Scenario):
             sim_config_filename=self.get_config_filename(simulator),
         )
 
-        # TODO: Add any kind of post-processing here, e.g. convert files?
-        convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(output_path, "vtk"),
-            output_time_step=self.output_time_step,
-            netcdf_data_dir=os.path.join(output_path, "netcdf"))
-
-        return FluidTankOutput(output_path)
+        return FluidTankOutput(output_path, self.output_time_step)
 
     def simulate_async(
         self,
