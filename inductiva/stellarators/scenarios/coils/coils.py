@@ -141,6 +141,59 @@ class StellaratorCoils(Scenario):
 
         return cls(coils, num_field_periods)
 
+    @classmethod
+    def from_curves_file(cls,
+                         num_field_periods,
+                         num_coils,
+                         coil_currents,
+                         curves_file,
+                         delimiter=',',
+                         max_order=14):
+        """Create StellaratorCoils from Fourier coefficients loaded from a file.
+
+        This function loads a file containing Fourier coefficients for several 
+        coils. The file is expected to have `6*num_coils` many columns, and 
+        `order+1` many rows. The columns are in the following order,
+
+        sin_x_coil1,cos_x_coil1,sin_y_coil1,...,sin_x_coil2,cos_x_coil2,...
+
+        Args:
+            num_field_periods (int): Number of magnetic field periods.
+            num_coils (int): The number of coils per field period.
+            coil_currents (list): List of coil currents.
+            curves_file (str): Name of the file containing Fourier coefficients.
+            delimiter (str): Delimiter used in the file. 
+            max_order (int): Order of the coefficients. 
+
+        Returns:
+            StellaratorCoils: The created StellaratorCoils instance.
+        """
+
+        coils = []
+
+        # Read the file and extract the coefficients
+        with open(curves_file, 'r', encoding='utf-8') as file:
+            for curve in range(num_coils):
+                # Create a new array to store the coefficients for this curve
+                curve_coefficients = np.zeros((6, max_order + 1))
+
+                for order in range(max_order + 1):
+                    # Store all the values of the columns corresponding
+                    # to the curve
+                    line = file.readline().strip().split(delimiter)
+                    curve_coefficients[:, order] = [
+                        float(val) for val in line[6 * curve:6 * (curve + 1)]
+                    ]
+
+                # Create the Coil object
+                coil = Coil(curve_coefficients, coil_currents[curve])
+                coils.append(coil)
+
+                # Reset the file pointer to the beginning
+                file.seek(0)
+
+        return cls(coils, num_field_periods)
+
     def simulate(self):
         pass
 
