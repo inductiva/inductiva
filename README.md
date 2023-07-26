@@ -89,7 +89,7 @@ When the simulation ends, the simulation output files can be found in the output
 
 ### ProteinSolvation
 
-This scenario simulates the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. The position of the atoms in this system is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
+This scenario simulates the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization step](), in which it is ensured that the structure of the protein+water system doesn't have steric clashes and structural issues. Then, the position of the atoms in this system is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
 
 #### Example
 
@@ -97,10 +97,10 @@ First we initialize the scenario:
 ```
 from inductiva.molecules.scenarios.protein_solvation import ProteinSolvation
 
-scenario = ProteinSolvation(pdb_file, temperature = 300, box_size = 2.3)
+scenario = ProteinSolvation(pdb_file, temperature = 300)
 ```
 
-The user needs to provide the path for the PDB file that corresponds to the protein it want to simulate. Also, it can specify the temperature (in Kelvin) and box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
+The user must provide the path for the PDB file  ```pdb_file``` corresponding to the protein the user wants to simulate. Also, it can specify the temperature (in Kelvin). The number above correspond to the default value.
 
 After the initialization, we are ready to simulate the system:
 
@@ -111,11 +111,11 @@ output = scenario.simulate(output_dir = "output_dir",
             nsteps_minim = 5000)
 ```
 
-The simulate method initializes a simulation in the cloud. In this call, we set the parameters:
+The simulate method initializes the simulation. In this call, we set the parameters:
  - output_dir = "output_dir": sets the path of the directory where the simulation output will be downloaded to;
  - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
  - integrator = "md": the simulation can conform either to: the [molecular dynamics paradigm](https://manual.gromacs.org/nightly/reference-manual/algorithms/molecular-dynamics.html) ("md"), to the [brownian motion](https://manual.gromacs.org/2021.2/reference-manual/algorithms/brownian-dynamics.html) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system;
- -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
+ -nsteps_minin = 5000: number of steps for the energy minimization section. 
 
 When the simulation ends, the simulation output files can be found in the output_dir. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
 
