@@ -1,6 +1,6 @@
 """Functions for running simulations via Inductiva Web API."""
 import pathlib
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 from uuid import UUID
 
 from inductiva.tasks import Task
@@ -10,30 +10,16 @@ from inductiva.api.methods import invoke_async_api
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
-    output_dir: pathlib.Path,
-    params: Dict[str, Any],
+    output_dir: Optional[pathlib.Path] = None,
     resource_pool_id: Optional[UUID] = None,
-) -> pathlib.Path:
-    """Run a simulation synchronously via Inductiva Web API."""
-    task = run_async_simulation(api_method_name, input_dir, params,
-                                resource_pool_id)
-    with task:
-        task.wait()
-
-    return task.download_output(output_dir)
-
-
-def run_async_simulation(
-    api_method_name: str,
-    input_dir: pathlib.Path,
-    params: Dict[str, Any],
-    resource_pool_id: Optional[UUID] = None,
-) -> Task:
-    """Run a simulation asynchronously via Inductiva Web API."""
+    run_async: bool = False,
+    **kwargs: Any,
+) -> Union[pathlib.Path,Task]:
+    """Run a simulation via Inductiva Web API."""
 
     params = {
         "sim_dir": input_dir,
-        **params,
+        **kwargs,
     }
     type_annotations = {
         "sim_dir": pathlib.Path,
@@ -43,9 +29,13 @@ def run_async_simulation(
                                params,
                                type_annotations,
                                resource_pool_id=resource_pool_id)
-
+    task = Task(task_id)
     if not isinstance(task_id, str):
         raise RuntimeError(
             f"Expected result to be a string with task_id, got {type(task_id)}")
-
-    return Task(task_id)
+    if run_async:
+        return task
+    else:
+        with task:
+            task.wait()
+        return task.download_output(output_dir)

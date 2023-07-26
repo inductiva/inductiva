@@ -1,6 +1,7 @@
 """Base class for low-level simulators."""
 from abc import ABC, abstractmethod
-from typing import Optional
+import pathlib
+from typing import Optional, Union
 from uuid import UUID
 from inductiva import types
 from inductiva.utils import files
@@ -38,8 +39,9 @@ class Simulator(ABC):
         *_args,
         output_dir: Optional[types.Path] = None,
         resource_pool_id: Optional[UUID] = None,
+        run_async: bool = False,
         **kwargs,
-    ) -> types.Path:
+    ) -> Union[pathlib.Path,Task]:
         """Run the simulation.
 
         Args:
@@ -55,36 +57,12 @@ class Simulator(ABC):
         """
         input_dir = self._setup_input_dir(input_dir)
         output_dir = self._setup_output_dir(output_dir, input_dir)
-
+            
         return tasks.run_simulation(
             self.api_method_name,
             input_dir,
             output_dir,
-            params=kwargs,
+            run_async=run_async,
             resource_pool_id=resource_pool_id,
-        )
-
-    def run_async(
-        self,
-        input_dir: types.Path,
-        *_args,
-        resource_pool_id: Optional[UUID] = None,
-        **kwargs,
-    ) -> Task:
-        """Run the simulation asynchronously.
-
-        Args:
-            input_dir: Path to the directory containing the input files.
-            _args: Unused in this method, but defined to allow for more
-                non-default arguments in method override in subclasses.
-            **kwargs: Additional keyword arguments to be passed to the
-                simulation API method.
-        """
-        self._setup_input_dir(input_dir)
-
-        return tasks.run_async_simulation(
-            self.api_method_name,
-            input_dir,
-            params=kwargs,
-            resource_pool_id=resource_pool_id,
+            **kwargs,
         )

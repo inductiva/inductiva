@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 import tempfile
-from typing import Optional
+from typing import Optional, Union
 from uuid import UUID
 from inductiva.types import Path
 from inductiva.simulation import Simulator
@@ -16,14 +16,13 @@ class Scenario(ABC):
     """Base class for scenarios."""
     valid_simulators = []
 
-    def _setup_output_dir(self, output_dir: str):
+    def _output_dir_name(self, output_dir: str):
         """Setup the scenario output directory."""
         if output_dir is None:
             scenario_name_splitted = split_camel_case(self.__class__.__name__)
-            output_dir_prefix = "-".join(scenario_name_splitted).lower()
-            output_dir = get_timestamped_path(f"{output_dir_prefix}-output")
-        output_dir = resolve_path(output_dir)
-        return output_dir
+            return "-".join(scenario_name_splitted).lower()
+        else:
+            return output_dir
 
     @abstractmethod
     def create_input_files(self, simulator: Simulator, input_dir: Path):
@@ -48,32 +47,21 @@ class Scenario(ABC):
         simulator: Simulator,
         output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
+        run_async: bool = False,
         **kwargs,
-    ) -> Path:
+    ) -> Union[Path, Task]:
         """Simulates the scenario synchronously."""
         self.validate_simulator(simulator)
-        output_dir = self._setup_output_dir(output_dir)
+
         with tempfile.TemporaryDirectory() as input_dir:
-            self.create_input_files(simulator, input_dir)
+            if not run_async:
+                self.create_input_files(simulator, input_dir)
+                output_dir = self._output_dir_name(output_dir)
+
             return simulator.run(
                 input_dir,
                 output_dir=output_dir,
                 resource_pool_id=resource_pool_id,
+                run_async=run_async,
                 **kwargs,
             )
-
-    def simulate_async(
-        self,
-        simulator: Simulator,
-        resource_pool_id: Optional[UUID] = None,
-        **kwargs,
-    ) -> Task:
-        """Simulates the scenario asychronously."""
-        with tempfile.TemporaryDirectory() as input_dir:
-            task = simulator.run_async(
-                input_dir,
-                resource_pool_id=resource_pool_id,
-                **kwargs,
-            )
-
-        return task
