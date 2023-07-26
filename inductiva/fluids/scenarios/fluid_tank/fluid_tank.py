@@ -20,6 +20,7 @@ from inductiva.fluids.fluid_types import WATER
 from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.utils.templates import replace_params_in_template
+from inductiva.fluids.scenarios.fluid_tank.output import FluidTankOutput
 
 from . import mesh_file_utils
 
@@ -191,7 +192,7 @@ class FluidTank(Scenario):
             output_time_step=self.output_time_step,
             netcdf_data_dir=os.path.join(output_path, "netcdf"))
 
-        return output_path
+        return FluidTankOutput(output_path)
 
     def get_bounding_box(self):
         """Gets the bounding box of the tank.
