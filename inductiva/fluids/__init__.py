@@ -12,7 +12,7 @@ from .fluid_types import (
 from .scenarios import DamBreak
 from .scenarios import FluidBlock
 from .scenarios import WindTunnel
-from .scenarios import WindTunnelSimulationOutput
+from .scenarios import WindTunnelOutput
 from .scenarios import (
     FluidTank,
     CubicTankOutlet,
