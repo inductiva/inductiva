@@ -57,20 +57,17 @@ class StellaratorCoils(Scenario):
         coils = []
         for i in range(num_coils):
             toroidal_angle = (i + 0.5) * (2 * np.pi) / (angle_factor)
-            curve_coefficients = np.zeros((6, 2))
 
             # Set the non-zero coefficients
-            circular_curve_coefficients(curve_coefficients, toroidal_angle,
-                                        major_radius, minor_radius)
+            curve_coefficients = get_circular_curve_coefficients(
+                toroidal_angle, major_radius, minor_radius)
 
             # Create the Coil object
             coil = Coil(curve_coefficients, coil_currents[i])
 
             coils.append(coil)
 
-        # Create StellaratorCoils object
-        stellarator_coils = cls(coils, num_field_periods)
-        return stellarator_coils
+        return cls(coils, num_field_periods)
 
     @classmethod
     def from_random_curves(cls,
@@ -112,11 +109,11 @@ class StellaratorCoils(Scenario):
             curve_coefficients = np.zeros((6, max_order + 1))
 
             # Base coefficients to make sure the coils are separated.
-            circular_curve_coefficients(curve_coefficients, toroidal_angle,
-                                        major_radius, minor_radius)
+            curve_coefficients[:, :2] = get_circular_curve_coefficients(
+                toroidal_angle, major_radius, minor_radius)
 
-            # Generate random higher coefficients (decreasing the possible
-            # value to make sure the curve is well behaved)
+            # Generate random higher coefficients (decreasing the range
+            # of the random values to ensure the curve is well behaved).
             for order in range(2, max_order + 1):
                 if order == 2:
                     limits = [-0.1, 0.1]
@@ -142,9 +139,7 @@ class StellaratorCoils(Scenario):
 
             coils.append(coil)
 
-        # Create StellaratorCoils object
-        stellarator_coils = cls(coils, num_field_periods)
-        return stellarator_coils
+        return cls(coils, num_field_periods)
 
     def simulate(self):
         pass
@@ -175,23 +170,26 @@ class Coil:
         self.current = current
 
 
-def circular_curve_coefficients(curve_coefficients, toroidal_angle,
-                                major_radius, minor_radius):
+def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
     """Sets the non-zero coefficients of a circular curve.
 
     Args:
-        curve_coefficients (np.ndarray): Array with Fourier coefficients
-        defining the curve.
         toroidal_angle (float): Angle that defines the position of the
         coil in the torus.
         major_radius (float): distance from the center of the torus 
         (the central axis) to the outer edge of the plasma region.
         minor_radius (float): Radius of the simple initial curves.
-        
+
+    Returns:
+        curve_coefficients (np.ndarray): Array with Fourier coefficients
+        defining the curve.
     """
+    curve_coefficients = np.zeros((6, 2))
 
     curve_coefficients[1, 0] = math.cos(toroidal_angle) * major_radius
     curve_coefficients[1, 1] = math.cos(toroidal_angle) * minor_radius
     curve_coefficients[3, 0] = math.sin(toroidal_angle) * major_radius
     curve_coefficients[3, 1] = math.sin(toroidal_angle) * minor_radius
     curve_coefficients[4, 1] = -minor_radius
+
+    return curve_coefficients
