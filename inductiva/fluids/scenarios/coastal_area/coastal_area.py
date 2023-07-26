@@ -22,7 +22,33 @@ SWASH_CONFIG_FILENAME = "input.sws"
 
 
 class CoastalArea(Scenario):
-    """Coastal area scenario."""
+    """Coastal area scenario.
+    
+    This is a simulation scenario for waves propagating in a coastal area. The
+    bathymetric profile (i.e., the depth of the sea bottom) is fixed to be that
+    of Praia do Carneiro beach, in Porto, Portugal.
+    
+    The scenario is simulated in a 2D box (x points east, y points north) with
+    dimensions 1200 x 400 m, with a resolution of 4 m along both x and y
+    directions. Waves are injected from the lower x boundary (west) with
+    a given amplitude and period. The base water level is also configurable.
+
+    The upper x and lower and upper y boundaries are absorbing. Absorption in
+    these boundaries may not be perfect, so small reflections may be observed.
+
+    Schematic representation of the simulation scenario: x points right, y
+    points up.
+    _________________________________
+    |                               |
+    |                               |
+    |                               |
+    |  injected waves ->     beach  |
+    |                               |
+    |                               |
+    |_______________________________|
+
+    The scenario can be simulated with SWASH.
+    """
 
     valid_simulators = [SWASH]
 
@@ -55,7 +81,7 @@ class CoastalArea(Scenario):
         """Simulates the scenario.
 
         Args:
-            simulator: Simulator to use.
+            simulator: Simulator to use. Supported simulators are: SWASH.
             output_dir: Directory to store the simulation output.
             resource_pool_id: Resource pool to use for the simulation.
             simulation_time: Total simulation time, in seconds.
@@ -85,7 +111,7 @@ class CoastalArea(Scenario):
         """Simulates the scenario asynchronously.
         
         Args:
-            simulator: Simulator to use.
+            simulator: Simulator to use. Supported simulators are: SWASH.
             resource_pool_id: Resource pool to use for the simulation.
             simulation_time: Total simulation time, in seconds.
             time_step: Time step, in seconds.
