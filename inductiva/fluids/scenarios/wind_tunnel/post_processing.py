@@ -79,8 +79,7 @@ class WindTunnelOutput:
 
         _, object_mesh = self.get_mesh_at_time(simulation_time)
 
-        field_notation = OpenFOAMPhysicalField[
-            physical_field.upper()].value
+        field_notation = OpenFOAMPhysicalField[physical_field.upper()].value
         physical_field = MeshData(object_mesh, field_notation)
 
         if save_path is not None:
@@ -245,8 +244,7 @@ class FlowSlice:
         plotter.camera.zoom(1.2)
 
         # Obtain notation for the physical field for the simulator.
-        field_notation = OpenFOAMPhysicalField[
-            physical_field.upper()].value
+        field_notation = OpenFOAMPhysicalField[physical_field.upper()].value
 
         if object_mesh:
             plotter.add_mesh(object_mesh, color=object_color)
@@ -265,7 +263,7 @@ class Streamlines:
     def render_frame(self,
                      object_mesh: pv.PolyData = None,
                      physical_field: Literal["pressure",
-                                                "velocity"] = "pressure",
+                                             "velocity"] = "pressure",
                      off_screen: bool = False,
                      virtual_display: bool = False,
                      background_color: str = "black",
@@ -300,8 +298,7 @@ class Streamlines:
             raise ValueError("Invalid view.")
 
         # Obtain notation for the physical field for the simulator.
-        field_notation = OpenFOAMPhysicalField[
-            physical_field.upper()].value
+        field_notation = OpenFOAMPhysicalField[physical_field.upper()].value
 
         plotter.add_mesh(self.mesh.tube(radius=0.01),
                          scalars=field_notation,
