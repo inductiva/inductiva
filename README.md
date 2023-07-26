@@ -55,6 +55,49 @@ If you would like other simulators to be added, contact us at [simulations@induc
 
 ## Scenarios
 
+### Coastal area
+
+This scenario simulates the propagation of waves in a coastal area, by solving
+the [shallow water equations](https://en.wikipedia.org/wiki/Shallow_water_equations)
+in a given bathymetric profile (i.e., the depth of the sea bottom). For now,
+this profile is fixed to be that of Praia do Carneiro beach, in Porto, Portugal.
+Waves are injected at the boundary opposite to the beach, and propagate towards
+the shore, interacting with the different elements of the bathymetry.
+
+#### Example
+
+Initialize the scenario:
+
+```python
+from inductiva.fluids.scenarios import CoastalArea
+
+scenario = CoastalArea(wave_amplitude=2.5, wave_period=5.5, water_level=1.0)
+```
+
+The user can specify the wave amplitude (in meters) and period (in seconds), as
+well as the base water level (in meters).
+
+Run the simulation:
+
+```python
+output = scenario.simulate(simulation_time=120, time_step=0.1, output_time_step=1)
+```
+
+The user can specify the total simulation time, the adopted time step and the
+time step between outputs (all in seconds).
+
+Visualize the results:
+
+```python
+output.render(quantity="water_level")
+```
+
+This produces a movie of the temporal evolution of the water level in the
+coastal area.
+
+![Coastal area simulation. Water level render.](resources/media/coastal_area.gif)
+
+
 ### MDWaterBox
 
 This scenario simulates a system that consists of a cubic box of water molecules, evolving according to the rules of Molecular Dynamics - the position of the water molecules is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields. This approach is inspired by [this article](https://arxiv.org/abs/2112.03383).
@@ -63,7 +106,7 @@ This scenario simulates a system that consists of a cubic box of water molecules
 
 First we initialize the scenario:
 ```
-from inductiva.molecules.scenarios.md_water_box import MDWaterBox
+from inductiva.molecules.scenarios import MDWaterBox
 
 scenario = MDWaterBox(temperature = 300, box_size = 2.3)
 ```
@@ -73,19 +116,43 @@ The user can specify the temperature (in Kelvin) and box size (length of one of 
 After the initialization, we are ready to simulate the system:
 
 ```
-output = scenario.simulate(output_dir = "output_dir",
-            simulation_time = 10,
-            integrator = "md",
+output = scenario.simulate(simulation_time = 10,
             nsteps_minim = 5000)
 ```
 
 The simulate method initializes a simulation in the cloud. In this call, we set the parameters:
- - output_dir = "output_dir": sets the path of the directory where the simulation output will be downloaded to;
  - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
- - integrator = "md": the simulation can conform either to: the [molecular dynamics paradigm](https://manual.gromacs.org/nightly/reference-manual/algorithms/molecular-dynamics.html) ("md"), to the [brownian motion](https://manual.gromacs.org/2021.2/reference-manual/algorithms/brownian-dynamics.html) one ("bd") or perform [stochastic dynamics](https://manual.gromacs.org/current/reference-manual/algorithms/stochastic-dynamics.html) on the system;
  -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
 
-When the simulation ends, the simulation output files can be found in the output_dir. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
+When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
+
+### ProteinSolvation
+
+This scenario simulates the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization step](), in which it is ensured that the structure of the protein+water system doesn't have steric clashes and structural issues. Then, the position of the atoms in this system is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
+
+#### Example
+
+First we initialize the scenario:
+```
+from inductiva.molecules.scenarios import ProteinSolvation
+
+scenario = ProteinSolvation(pdb_file, temperature = 300)
+```
+
+The user must provide the path for the PDB file  ```pdb_file``` corresponding to the protein the user wants to simulate. Also, it can specify the temperature (in Kelvin). The number above correspond to the default value.
+
+After the initialization, we are ready to simulate the system:
+
+```
+output = scenario.simulate(simulation_time = 10,
+            nsteps_minim = 5000)
+```
+
+The simulate method initializes the simulation. In this call, we set the parameters:
+ - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
+ -nsteps_minin = 5000: number of steps for the energy minimization section. 
+
+When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
 
 ## Installation
 

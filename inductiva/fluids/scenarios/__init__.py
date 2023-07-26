@@ -2,7 +2,7 @@
 from .dam_break import DamBreak
 from .fluid_block import FluidBlock
 from .wind_tunnel import WindTunnel
-from .wind_tunnel import WindTunnelSimulationOutput
+from .wind_tunnel import WindTunnelOutput
 from .fluid_tank import (
     FluidTank,
     CubicTankOutlet,
@@ -11,3 +11,4 @@ from .fluid_tank import (
     CircularTankInlet,
 )
 from .heat_sink import HeatSink
+from .coastal_area import (CoastalArea, CoastalAreaOutput)

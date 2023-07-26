@@ -13,9 +13,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
 import csv
-
-from base64 import b64encode
-from IPython.display import HTML
+import pathlib
 
 import pyvista as pv
 
@@ -24,106 +22,164 @@ from inductiva.utils.visualization import MeshData
 from inductiva.utils import files
 
 
-class WindTunnelSimulationOutput:
+class WindTunnelOutput:
     """Post-Process WindTunnel simulation outputs.
+
+    This class contains several methods to post-process the output 
+    and visualize the results of a WindTunnel simulation.
 
     Current Support:
         OpenFOAM
     """
 
-    def __init__(self, sim_output_path: Path, time_step: int = 100):
+    def __init__(self, sim_output_path: Path):
         """Initializes a `WindTunnelSimulationOutput` object.
 
         Args:
             sim_output_path: Path to simulation output files.
-            time_step: Time step where we read the data.
         """
 
         self.sim_output_path = sim_output_path
-        self.time_step = time_step
-        self.object_data = self.get_object_data()
 
-    def get_object_data(self):  # pylint: disable=unused-argument
-        """Get aerodynamics data over an object inside the WindTunnel.
+    def get_mesh_at_time(self, simulation_time):  # pylint: disable=unused-argument
+        """Get domain and object mesh info after WindTunnel simulation.
 
         Current Support - OpenFOAM
+
+        Args:
+            simulation_time: Time value to obtain simulation mesh.
+
         """
 
-        reading_file = os.path.join(self.sim_output_path, "foam.foam")
+        # The OpenFOAM data reader from PyVista requires that a file named
+        # "foam.foam" exists in the simulation output directory.
+        # Create this file if it does not exist.
+        foam_file_path = os.path.join(self.sim_output_path, "foam.foam")
+        pathlib.Path(foam_file_path).touch(exist_ok=True)
 
-        # Create reading file
-        with open(reading_file, "w", encoding="utf-8") as file:
-            file.close()
+        reader = pv.OpenFOAMReader(foam_file_path)
+        reader.set_active_time_value(simulation_time)
 
-        # Initialize reader and define reading time-step
-        reader = pv.POpenFOAMReader(reading_file)
-        reader.set_active_time_value(self.time_step)
+        full_mesh = reader.read()
+        domain_mesh = full_mesh["internalMesh"]
+        object_mesh = full_mesh["boundary"]["object"]
 
-        mesh = reader.read()
-        object_data = mesh["boundary"]["object"]
+        return domain_mesh, object_mesh
 
-        return object_data
+    def get_object_physical_field(self,
+                                  physical_field: str = "pressure",
+                                  simulation_time: float = 50,
+                                  save_path: Path = None):
+        """Get a physical scalar field over mesh points.
 
-    def get_physical_field(self, physical_property: str = "pressure"):
-        """Get a physical scalar field over mesh points for a certain time_step.
+        Args:
+            simulation_time: Time value to obtain simulation mesh.
 
+        Args:
+            physical_property: Physical property to be read.
         Returns:
             A MeshData object that allow to manipulate the data over a mesh
             and to render it.
         """
-        property_notation = OpenFOAMPhysicalProperty[
-            physical_property.upper()].value
-        physical_field = MeshData(self.object_data, property_notation)
+
+        _, object_mesh = self.get_mesh_at_time(simulation_time)
+
+        field_notation = OpenFOAMPhysicalField[physical_field.upper()].value
+        physical_field = MeshData(object_mesh, field_notation)
+
+        if save_path is not None:
+            save_path = files.resolve_path(save_path)
+            physical_field.mesh.save(save_path)
 
         return physical_field
 
     def get_streamlines(self,
-                        physical_property: Literal["pressure",
-                                                   "velocity"] = "pressure"):
-        """Get streamlines over the object in the WindTunnel."""
+                        simulation_time: float = 50,
+                        max_time: float = 100,
+                        n_points: int = 100,
+                        initial_step_length: float = 1,
+                        source_radius: float = 0.7,
+                        save_path: Path = None):
+        """Get streamlines through the fluid/domain in the WindTunnel.
+        
+        The streamlines are obtained by seeding a set of points
+        at the inlet of the WindTunnel.
 
-        streamlines_path = os.path.join(self.sim_output_path, "postProcessing",
-                                        "sets", "streamLines",
-                                        str(self.time_step))
+        Args:
+            simulation_time: Time value to obtain simulation mesh.
+            max_time: Time used for integration of the streamlines.
+                Not related with simulation time.
+            n_points: Number of points to seed.
+            initial_step_length: Initial step length for the streamlines.
+            source_radius: Radius of the source of the streamlines.
+            save_path: Path to save the streamlines. 
+                Types of files permitted: .vtk, .ply, .stl
+        """
 
-        property_notation = OpenFOAMPhysicalProperty[
-            physical_property.upper()].value
-        streamlines_file = "track0_" + property_notation + ".vtk"
+        mesh, _ = self.get_mesh_at_time(simulation_time)
 
-        streamlines_mesh = pv.read(
-            os.path.join(streamlines_path, streamlines_file))
+        inlet_position = (mesh.bounds[0], 0, 1)
 
-        return streamlines_mesh
+        streamlines_mesh = mesh.streamlines(
+            max_time=max_time,
+            n_points=n_points,
+            initial_step_length=initial_step_length,
+            source_radius=source_radius,
+            source_center=inlet_position)
 
-    def get_flow_plane(self,
-                       physical_property: Literal["pressure",
-                                                  "velocity"] = "pressure"):
-        """Get flow properties in a plane of the domain in WindTunnel."""
+        if save_path is not None:
+            save_path = files.resolve_path(save_path)
+            streamlines_mesh.save(save_path)
 
-        cutting_plane_path = os.path.join(self.sim_output_path,
-                                          "postProcessing", "cuttingPlane",
-                                          str(self.time_step))
+        return Streamlines(streamlines_mesh)
 
-        # Obtain notation for the physical property for the simulator.
-        property_notation = OpenFOAMPhysicalProperty[
-            physical_property.upper()].value
-        cutting_plane_file = property_notation + "_yNormal.vtk"
+    def get_flow_slice(self,
+                       simulation_time: float = 50,
+                       plane: Literal["xy", "xz", "yz"] = "xz",
+                       origin: tuple = (0, 0, 0),
+                       save_path: Path = None):
+        """Get flow properties in a slice of the domain in WindTunnel.
+        
+        Args:
+            simulation_time: Time value to obtain simulation mesh.
+            plane: Orientation of the plane to slice the domain.
+            origin: Origin of the plane.
+            save_path: Path to save the flow slice. 
+                Types of files permitted: .vtk, .ply, .stl
+        """
 
-        cutting_plane_mesh = pv.read(
-            os.path.join(cutting_plane_path, cutting_plane_file))
+        mesh, _ = self.get_mesh_at_time(simulation_time)
 
-        return cutting_plane_mesh
+        if plane == "xy":
+            normal = (0, 0, 1)
+        elif plane == "yz":
+            normal = (1, 0, 0)
+        elif plane == "xz":
+            normal = (0, 1, 0)
+        else:
+            raise ValueError("Invalid view.")
 
-    def get_force_coefficients(self, save_path: Path = None):
+        flow_slice = mesh.slice(normal=normal, origin=origin)
+
+        if save_path is not None:
+            save_path = files.resolve_path(save_path)
+            flow_slice.save(save_path)
+
+        return FlowSlice(flow_slice)
+
+    def get_force_coefficients(self,
+                               simulation_time: float = 50,
+                               save_path: Path = None):
         """Get the force coefficients of the object in the WindTunnel.
         
         The force coefficients are provided in a .dat file during the
         simulation run-time. This file contains 8 lines that are provide
         the general input information. In this function, we read the file,
         ignore the first 8 lines and read the force coefficients for the 
-        time_step chosen.
+        simulation_time chosen.
 
         Args:
+            simulation_time: Time value to obtain simulation mesh.
             save_path: Path to save the force coefficients in a .csv file.
         """
 
@@ -140,8 +196,8 @@ class WindTunnelSimulationOutput:
                 # [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove the # column
                 if index == num_header_lines:
                     force_coefficients.append(line.split()[1:])
-                # Add the force coefficients for the time_step chosen
-                elif index == num_header_lines + self.time_step + 1:
+                # Add the force coefficients for the simulation time chosen
+                elif index == num_header_lines + simulation_time + 1:
                     force_coefficients.append(line.split())
 
         if save_path:
@@ -151,50 +207,111 @@ class WindTunnelSimulationOutput:
 
         return force_coefficients
 
-    def render_flow(self,
-                    flow_property_mesh,
-                    physical_property: Literal["pressure",
-                                               "velocity"] = "pressure",
-                    virtual_display: bool = True,
-                    background_color: str = "black",
-                    flow_cmap: str = "viridis",
-                    object_color: str = "white",
-                    save_path: Path = None):
+
+@dataclass
+class OpenFOAMPhysicalField(Enum):
+    """Defines the notation used for physical field in OpenFOAM."""
+    PRESSURE = "p"
+    VELOCITY = "U"
+
+
+class FlowSlice:
+    """Render flow field in a plane of the domain in WindTunnel."""
+
+    def __init__(self, flow_slice):
+        self.mesh = flow_slice
+
+    def render_frame(self,
+                     object_mesh: pv.PolyData = None,
+                     physical_field: Literal["pressure",
+                                             "velocity"] = "pressure",
+                     off_screen: bool = False,
+                     virtual_display: bool = False,
+                     background_color: str = "black",
+                     flow_cmap: str = "viridis",
+                     object_color: str = "white",
+                     save_path: Path = None):
         """Render flow property over the object in the WindTunnel."""
+
         if save_path is not None:
             save_path = files.resolve_path(save_path)
 
-        off_screen = False
-
         if virtual_display:
-            off_screen = True
             pv.start_xvfb()
-
-        # Obtain notation for the physical property for the simulator.
-        property_notation = OpenFOAMPhysicalProperty[
-            physical_property.upper()].value
 
         plotter = pv.Plotter(off_screen=off_screen)
         plotter.background_color = background_color
-        plotter.add_mesh(self.object_data, color=object_color)
-        plotter.add_mesh(flow_property_mesh,
-                         scalars=property_notation,
-                         cmap=flow_cmap)
-        plotter.view_xz()
+
+        center = self.mesh.center
+        normal = -self.mesh.compute_normals()["Normals"].mean(axis=0)
+        plotter.camera.position = center + normal
+        plotter.camera.focal_point = center
+        plotter.camera.zoom(1.2)
+
+        # Obtain notation for the physical field for the simulator.
+        field_notation = OpenFOAMPhysicalField[physical_field.upper()].value
+
+        if object_mesh:
+            plotter.add_mesh(object_mesh, color=object_color)
+        plotter.add_mesh(self.mesh, scalars=field_notation, cmap=flow_cmap)
+        plotter.reset_camera(bounds=self.mesh.bounds)
         plotter.show(screenshot=save_path)
         plotter.close()
 
-        with open(save_path, "rb") as file_path:
-            png = file_path.read()
-        png_url = "data:image/png;base64," + b64encode(png).decode()
 
-        return HTML(f"""
-                <img src="{png_url}" type="image/png" width="600">
-        """)
+class Streamlines:
+    """Class to render streamlines over the object in the WindTunnel."""
 
+    def __init__(self, streamlines):
+        self.mesh = streamlines
 
-@dataclass
-class OpenFOAMPhysicalProperty(Enum):
-    """Defines the notation used for physical properties in OpenFOAM."""
-    PRESSURE = "p"
-    VELOCITY = "U"
+    def render_frame(self,
+                     object_mesh: pv.PolyData = None,
+                     physical_field: Literal["pressure",
+                                             "velocity"] = "pressure",
+                     off_screen: bool = False,
+                     virtual_display: bool = False,
+                     background_color: str = "black",
+                     flow_cmap: str = "viridis",
+                     view: Literal["isometric", "front", "rear", "top",
+                                   "side"] = "isometric",
+                     object_color: str = "white",
+                     save_path: Path = None):
+        """Render streamlines over the object in the WindTunnel."""
+
+        if save_path is not None:
+            save_path = files.resolve_path(save_path)
+
+        if virtual_display:
+            pv.start_xvfb()
+
+        plotter = pv.Plotter(off_screen=off_screen)
+        plotter.background_color = background_color
+
+        # Set camera position for a nice view.
+        if view == "isometric":
+            plotter.view_vector([-1, -2, 1], viewup=[0.31, 0.90, 0.29])
+        elif view == "front":
+            plotter.view_yz(negative=True)
+        elif view == "rear":
+            plotter.view_yz()
+        elif view == "top":
+            plotter.view_xy()
+        elif view == "side":
+            plotter.view_xz()
+        else:
+            raise ValueError("Invalid view.")
+
+        # Obtain notation for the physical field for the simulator.
+        field_notation = OpenFOAMPhysicalField[physical_field.upper()].value
+
+        plotter.add_mesh(self.mesh.tube(radius=0.01),
+                         scalars=field_notation,
+                         cmap=flow_cmap)
+        if object_mesh:
+            plotter.add_mesh(object_mesh, color=object_color)
+        # Slide along the vectord defined from camera position to focal point,
+        # until all of the meshes are visible.
+        plotter.reset_camera(bounds=self.mesh.bounds, render=False)
+        plotter.show(screenshot=save_path)
+        plotter.close()
