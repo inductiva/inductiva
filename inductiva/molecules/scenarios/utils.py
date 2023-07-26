@@ -2,7 +2,8 @@
 import MDAnalysis as mda
 from MDAnalysis import transformations
 
-def unwrap_trajectory(topology, trajectory): 
+
+def unwrap_trajectory(topology, trajectory):
     """Unwrap the trajectory of a simulation to 
     remove effects from periodic boundary conditions.
     Args:
