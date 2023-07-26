@@ -6,3 +6,4 @@ from .fluid_tank import (
     RectangularTankInlet,
     CircularTankInlet,
 )
+from .output import FluidTankOutput

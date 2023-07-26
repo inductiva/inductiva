@@ -18,8 +18,8 @@ from inductiva.fluids.shapes import Cylinder
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.fluids.simulators import SPlisHSPlasH
-from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.utils.templates import replace_params_in_template
+from inductiva.fluids.scenarios.fluid_tank.output import FluidTankOutput
 
 from . import mesh_file_utils
 
@@ -127,7 +127,7 @@ class FluidTank(Scenario):
         self,
         shape: BaseShape = Cylinder(radius=0.5, height=1),
         fluid: FluidType = WATER,
-        fluid_level: float = 0,
+        fluid_level: float = 0.5,
         inlet: Optional[BaseTankInlet] = CircularTankInlet(radius=0.1),
         outlet: Optional[BaseTankOutlet] = CylindricalTankOutlet(radius=0.1,
                                                                  height=0.1),
@@ -182,16 +182,45 @@ class FluidTank(Scenario):
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             device=device,
-            input_filename=self.get_config_filename(simulator),
+            sim_config_filename=self.get_config_filename(simulator),
         )
 
-        # TODO: Add any kind of post-processing here, e.g. convert files?
-        convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(output_path, "vtk"),
-            output_time_step=self.output_time_step,
-            netcdf_data_dir=os.path.join(output_path, "netcdf"))
+        return FluidTankOutput(output_path, self.output_time_step)
 
-        return output_path
+    def simulate_async(
+        self,
+        simulator: Simulator = SPlisHSPlasH(),
+        resource_pool_id: Optional[UUID] = None,
+        device: Literal["cpu", "gpu"] = "cpu",
+        simulation_time: float = 5,
+        resolution: Literal["low", "medium", "high"] = "low",
+        output_time_step: float = 0.1,
+        particle_sorting: bool = False,
+    ):
+        """Simulates the scenario.
+
+        Args:
+            simulator: Simulator to use.
+            device: Device in which to run the simulation.
+            simulation_time: Simulation time, in seconds.
+            output_time_step: Time step between output files, in seconds.
+            resolution: Resolution of the simulation. Controls the particle
+                radius and time step.
+            particle_sorting: Whether to use particle sorting.
+        """
+
+        self.simulation_time = simulation_time
+        self.particle_radius = ParticleRadius[resolution.upper()].value
+        self.time_step = TimeStep[resolution.upper()].value
+        self.output_time_step = output_time_step
+        self.particle_sorting = particle_sorting
+
+        return super().simulate_async(
+            simulator,
+            resource_pool_id=resource_pool_id,
+            device=device,
+            sim_config_filename=self.get_config_filename(simulator),
+        )
 
     def get_bounding_box(self):
         """Gets the bounding box of the tank.
