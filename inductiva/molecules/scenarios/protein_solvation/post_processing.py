@@ -44,11 +44,10 @@ class ProteinSolvationOutput:
 
         universe = unwrap_trajectory(topology, trajectory)
         view = nv.show_mdanalysis(universe)
-        view.add_representation(representation, selection="not water")
+        view.add_representation(representation,
+                                selection="not water and not ion")
         if add_backbone:
             view.add_representation("cartoon", selection="protein")
-        view.center()
-        view.background = "white"
         print("System Information:")
         print(f"Number of atoms in the system: {len(universe.atoms)}")
         print(f"Number of amino acids:"

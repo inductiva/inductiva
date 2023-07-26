@@ -4,8 +4,8 @@ from MDAnalysis import transformations
 
 
 def unwrap_trajectory(topology, trajectory):
-    """Unwrap the trajectory of a simulation to 
-    remove effects from periodic boundary conditions.
+    """Unwrap visualization of the trajectory to deal with 
+    Periodic Boundary Conditions.
     Args:
         topology: Path to the topology file.
         trajectory: Path to the trajectory file."""

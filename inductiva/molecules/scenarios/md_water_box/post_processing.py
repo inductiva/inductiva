@@ -32,8 +32,6 @@ class MDWaterBoxOutput:
         universe = unwrap_trajectory(topology, trajectory)
         view = nv.show_mdanalysis(universe)
         view.add_ball_and_stick("all")
-        view.center()
-        view.background = "white"
         print("System Information:")
         print(f"Number of atoms in the system: {len(universe.atoms)}")
         print(f"Number of trajectory frames: {len(universe.trajectory)}")
