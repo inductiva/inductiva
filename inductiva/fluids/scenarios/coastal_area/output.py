@@ -72,28 +72,28 @@ def read_swash_grid_positions_file(file_path: str) -> Tuple[np.ndarray]:
     return x_array, y_array
 
 
-def read_swash_quantity_file(file_path: str, quantity: str,
-                             grid_positions_file_path: str):
-    """Reads a SWASH output file containing a quantity."""
+def read_swash_quantity_file(file_path: str, quantity: str):
+    """Reads a SWASH output file containing a quantity.
 
-    # Read grid positions
-    x_array, y_array = read_swash_grid_positions_file(grid_positions_file_path)
-
-    # Read data file
-    data_dict = read_swash_output_file(file_path)
-
-    # Convert data dictionary to lists of times and data arrays
+    SWASH outputs are stored in .mat files. Here, we first read the contents
+    of one of these files as a dictionary, and then convert the dictionary
+    to a list of times and a list of data arrays.
 
     # The list of times is built from the keys of the dictionary:
     # the keys end with a number, in format 123456_789, identifying the time
     # instant 12 hours, 34 minutes, 56 seconds and 789 milliseconds; we
     # strip the times from the keys and convert them to seconds.
 
-    # The list of data arrays is build from the values of the dictionary:
+    # The list of data arrays is built from the values of the dictionary:
     # the values correspond to the data values at each of the time instants
     # represented by the corresponding keys; we read each value as a 2D
     # tensor with indices (x, y).
+    """
 
+    # Read data file
+    data_dict = read_swash_output_file(file_path)
+
+    # Convert data dictionary to lists of times and data arrays
     time_list = []
     data_list = []
 
@@ -117,7 +117,7 @@ def read_swash_quantity_file(file_path: str, quantity: str,
             time_list.append(time_s)
             data_list.append(transposed_data_values)
 
-    return (x_array, y_array), time_list, data_list
+    return time_list, data_list
 
 
 def _render_quantity_data(x_array: np.ndarray,
@@ -222,11 +222,12 @@ class CoastalAreaOutput:
               automatically determined from the data.
         """
 
-        (x_array, y_array), time_list, data_list = read_swash_quantity_file(
+        x_array, y_array = read_swash_grid_positions_file(
+            os.path.join(self.sim_output_path, GRID_POSITIONS_FILE_NAME))
+
+        time_list, data_list = read_swash_quantity_file(
             file_path=os.path.join(self.sim_output_path, quantity + ".mat"),
             quantity=quantity,
-            grid_positions_file_path=os.path.join(self.sim_output_path,
-                                                  GRID_POSITIONS_FILE_NAME),
         )
 
         _render_quantity_data(
