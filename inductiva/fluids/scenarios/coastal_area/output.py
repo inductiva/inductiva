@@ -205,10 +205,11 @@ class CoastalAreaOutput:
         cmap: str = "viridis",
         clim: Optional[Sequence[float]] = None,
     ):
-        """Renders temporal evolution of a quantity.
+        """Renders temporal evolution of a physical quantity.
         
-        A movie is produced representing the temporal evolution of a quantity
-        exported in simulations of the coastal area scenario.
+        A movie is produced representing the temporal evolution of a physical
+        quantity exported in simulations of the coastal area scenario. Available
+        quantities are: water_level, velocity_x, velocity_y, velocity_magnitude.
          
         The movie is saved in the `movie_path` location.
 
