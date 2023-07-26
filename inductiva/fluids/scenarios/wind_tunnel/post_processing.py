@@ -38,10 +38,14 @@ class WindTunnelOutput:
 
         self.sim_output_path = sim_output_path
 
-    def get_mesh_data(self, time_step):  # pylint: disable=unused-argument
-        """Get aerodynamics data over an object inside the WindTunnel.
+    def get_mesh_at_time(self, simulation_time):  # pylint: disable=unused-argument
+        """Get domain and object mesh info after WindTunnel simulation.
 
         Current Support - OpenFOAM
+
+        Args:
+            simulation_time: Time value to obtain simulation mesh.
+
         """
 
         # The OpenFOAM data reader from PyVista requires that a file named
@@ -51,11 +55,7 @@ class WindTunnelOutput:
         pathlib.Path(foam_file_path).touch(exist_ok=True)
 
         reader = pv.OpenFOAMReader(foam_file_path)
-        reading_file = os.path.join(self.sim_output_path, "foam.foam")
-
-        # Initialize reader and define reading time-step
-        reader = pv.POpenFOAMReader(reading_file)
-        reader.set_active_time_value(time_step)
+        reader.set_active_time_value(simulation_time)
 
         full_mesh = reader.read()
         domain_mesh = full_mesh["internalMesh"]
@@ -63,18 +63,21 @@ class WindTunnelOutput:
 
         return domain_mesh, object_mesh
 
-    def get_physical_field(self,
-                           physical_property: str = "pressure",
-                           time_step: float = 50,
-                           save_path: Path = None):
-        """Get a physical scalar field over mesh points for a certain time_step.
+    def get_object_physical_field(self,
+                                  physical_property: str = "pressure",
+                                  simulation_time: float = 50,
+                                  save_path: Path = None):
+        """Get a physical scalar field over mesh points.
+
+        Args:
+            simulation_time: Time value to obtain simulation mesh.
 
         Returns:
             A MeshData object that allow to manipulate the data over a mesh
             and to render it.
         """
 
-        _, object_mesh = self.get_mesh_data(time_step)
+        _, object_mesh = self.get_mesh_at_time(simulation_time)
 
         property_notation = OpenFOAMPhysicalProperty[
             physical_property.upper()].value
@@ -87,31 +90,34 @@ class WindTunnelOutput:
         return physical_field
 
     def get_streamlines(self,
-                        time_step: float = 50,
-                        max_steps: float = 100,
+                        simulation_time: float = 50,
+                        max_time: float = 100,
                         n_points: int = 100,
                         initial_step_length: float = 1,
                         source_radius: float = 0.7,
                         save_path: Path = None):
-        """Get streamlines over the object in the WindTunnel.
+        """Get streamlines through the fluid/domain in the WindTunnel.
         
         The streamlines are obtained by seeding a set of points
         at the inlet of the WindTunnel.
 
         Args:
-            time_step: Simulation time step to obtain the streamlines.
-            max_steps: Number of steps to visualize the particles through the flow.
+            simulation_time: Time value to obtain simulation mesh.
+            max_time: Time used for integration of the streamlines.
+                Not related with simulation time.
             n_points: Number of points to seed.
             initial_step_length: Initial step length for the streamlines.
             source_radius: Radius of the source of the streamlines.
+            save_path: Path to save the streamlines. 
+                Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, _ = self.get_mesh_data(time_step)
+        mesh, _ = self.get_mesh_at_time(simulation_time)
 
         inlet_position = (mesh.bounds[0], 0, 1)
 
         streamlines_mesh = mesh.streamlines(
-            max_time=max_steps,
+            max_time=max_time,
             n_points=n_points,
             initial_step_length=initial_step_length,
             source_radius=source_radius,
@@ -124,13 +130,21 @@ class WindTunnelOutput:
         return Streamlines(streamlines_mesh)
 
     def get_flow_slice(self,
-                       time_step: float = 50,
+                       simulation_time: float = 50,
                        plane: Literal["xy", "xz", "yz"] = "xz",
                        origin: tuple = (0, 0, 0),
                        save_path: Path = None):
-        """Get flow properties in a plane of the domain in WindTunnel."""
+        """Get flow properties in a slice of the domain in WindTunnel.
+        
+        Args:
+            simulation_time: Time value to obtain simulation mesh.
+            plane: Orientation of the plane to slice the domain.
+            origin: Origin of the plane.
+            save_path: Path to save the flow slice. 
+                Types of files permitted: .vtk, .ply, .stl
+        """
 
-        mesh, _ = self.get_mesh_data(time_step)
+        mesh, _ = self.get_mesh_at_time(simulation_time)
 
         if plane == "xy":
             normal = (0, 0, 1)
@@ -150,7 +164,7 @@ class WindTunnelOutput:
         return FlowSlice(flow_slice)
 
     def get_force_coefficients(self,
-                               time_step: float = 50,
+                               simulation_time: float = 50,
                                save_path: Path = None):
         """Get the force coefficients of the object in the WindTunnel.
         
@@ -158,9 +172,10 @@ class WindTunnelOutput:
         simulation run-time. This file contains 8 lines that are provide
         the general input information. In this function, we read the file,
         ignore the first 8 lines and read the force coefficients for the 
-        time_step chosen.
+        simulation_time chosen.
 
         Args:
+            simulation_time: Time value to obtain simulation mesh.
             save_path: Path to save the force coefficients in a .csv file.
         """
 
@@ -177,8 +192,8 @@ class WindTunnelOutput:
                 # [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove the # column
                 if index == num_header_lines:
                     force_coefficients.append(line.split()[1:])
-                # Add the force coefficients for the time_step chosen
-                elif index == num_header_lines + time_step + 1:
+                # Add the force coefficients for the simulation time chosen
+                elif index == num_header_lines + simulation_time + 1:
                     force_coefficients.append(line.split())
 
         if save_path:
