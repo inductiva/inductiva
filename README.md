@@ -55,6 +55,51 @@ If you would like other simulators to be added, contact us at [simulations@induc
 
 ## Scenarios
 
+### Fluid block
+
+This scenario simulates the motion of a fluid block in a unit cubic tank under
+the action of gravity. The fluid motion is simulated using the [Smoothed
+Particle Hydrodynamics](https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics)
+method. The fluid block is initialized with a given velocity, dimensions and
+physical properties (density and viscosity).
+
+#### Example
+
+Initialize the scenario:
+
+```python
+from inductiva import fluids
+scenario = fluids.scenarios.FluidBlock(density=1e3,
+                                       kinematic_viscosity=1e-6,
+                                       position=(0.3, 0.3, 0.3),
+                                       dimensions=(0.4, 0.4, 0.4),
+                                       initial_velocity=(0.0, 0.0, 0.0))
+```
+
+The user can specify the fluid density (in kg/m^3), kinematic viscosity (in
+m^2/s), initial position (in m), dimensions (in m) and velocity (in m/s).
+
+Run the simulation:
+
+```python
+output = scenario.simulate(simulator=fluids.simulators.SPlisHSPlasH(),
+                           simulation_time=1,
+                           time_step=0.001,
+                           output_time_step=0.05)
+```
+
+The user can specify the total simulation time, the adopted time step and the
+time step between outputs (all in seconds). By default, the simulation is run
+with SPliSHSPlasH, but the user can specify a different simulator. The available
+simulators for this scenario are SPlisHSPlasH and DualSPHysics.
+
+Visualize the results:
+
+```python
+output.render()
+```
+
+
 ### Coastal area
 
 This scenario simulates the propagation of waves in a coastal area, by solving
