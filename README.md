@@ -99,6 +99,7 @@ Visualize the results:
 output.render()
 ```
 
+\[TODO @IvanPombo: add gif with render\]
 
 ### Coastal area
 
