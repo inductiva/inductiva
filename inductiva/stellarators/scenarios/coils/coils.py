@@ -166,11 +166,10 @@ class StellaratorCoils(Scenario):
         """
 
         # Reads all the coefficients from the file to a numpy 2D array
-        # with `order+1` rows and `6*num_coils` columns.
-        curves_data = np.loadtxt(fname=curves_file, delimiter=delimiter)
-
-        # Transpose the array to be in the desired format.
-        curves_data = np.transpose(curves_data)
+        # with `order+1` columns and `6*num_coils` rows.
+        curves_data = np.loadtxt(fname=curves_file,
+                                 delimiter=delimiter,
+                                 unpack=True)
 
         # Gets the number of coils.
         num_coils = int((curves_data.shape[0]) / 6)
