@@ -1,6 +1,7 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
 import MDAnalysis as mda
+from MDAnalysis import transformations
 import nglview as nv
 from pathlib import Path
 
@@ -20,14 +21,14 @@ class MDWaterBoxOutput:
 
         self.sim_output_dir = sim_output_path
 
-    def render(self):
-        """Visualize the simulation outputs in a notebook using NGLView."""
+    def render_interactive(self):
+        """Render the simulation outputs in an interactive visualization."""
 
         topology = os.path.join(self.sim_output_dir, "eql.tpr")
         trajectory = os.path.join(self.sim_output_dir, "eql.xtc")
         universe = mda.Universe(topology, trajectory, all_coordinates=True)
         atoms = universe.atoms
-        transformation = mda.transformations.unwrap(atoms)
+        transformation = transformations.unwrap(atoms)
         universe.trajectory.add_transformations(transformation)
 
         view = nv.show_mdanalysis(universe)

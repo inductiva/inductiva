@@ -4,6 +4,7 @@ from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
+import tempfile
 from uuid import UUID
 
 from inductiva.types import Path
@@ -13,15 +14,17 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template,
                                        replace_params_in_template)
 from inductiva.scenarios import Scenario
-from inductiva.utils.files import remove_files_with_tag
 from inductiva.utils import files
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
+COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
 
 class ProteinSolvation(Scenario):
     """Solvated protein scenario."""
+
+    valid_simulators = [GROMACS]
 
     def __init__(self, protein_pdb: str, temperature: float = 300):
         """
@@ -76,19 +79,14 @@ class ProteinSolvation(Scenario):
                 - "System": The whole system (Protein + Water).
         """
 
-        #Edit commands.json according to the charge of the protein
-        commands_path = os.path.join(self.template_dir, "commands.json")
+        self.visualized_section = visualized_section
 
-        replace_params_in_template(self.template_dir, "commands.json.jinja",
-                                   {"visualized_section": visualized_section},
-                                   commands_path)
-
-        commands = self.read_commands_from_file(commands_path)
         self.nsteps = int(
             simulation_time * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
+        commands = self.get_commands()
         return super().simulate(simulator,
                                 output_dir,
                                 resource_pool_id=resource_pool_id,
@@ -126,14 +124,9 @@ class ProteinSolvation(Scenario):
                 - "System": The whole system (Protein + Water).
         """
 
-        #Edit commands.json according to the charge of the protein
-        template_path = os.path.join(self.template_dir, "commands.json.jinja")
-        commands_path = os.path.join(self.template_dir, "commands.json")
-        replace_params_in_template(template_path,
-                                   {"visualized_section": visualized_section},
-                                   commands_path)
+        self.visualized_section = visualized_section
 
-        commands = self.read_commands_from_file(commands_path)
+        commands = self.get_commands()
 
         self.nsteps = int(
             simulation_time * 1e6 / 2
@@ -145,46 +138,43 @@ class ProteinSolvation(Scenario):
                                       resource_pool_id=resource_pool_id,
                                       commands=commands)
 
-    @singledispatchmethod
-    def gen_config(self, simulator: Simulator):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def get_commands(self):
+        """Returns the commands for the simulation."""
+
+        commands_template_path = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                              GROMACS_TEMPLATE_INPUT_DIR,
+                                              COMMANDS_TEMPLATE_FILE_NAME)
+
+        with tempfile.NamedTemporaryFile() as commands_file:
+            replace_params_in_template(
+                template_path=commands_template_path,
+                params={"visualized_section": self.visualized_section},
+                output_file_path=commands_file.name,
+            )
+
+            commands = self.read_commands_from_file(commands_file.name)
+
+        return commands
 
     @singledispatchmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
-
-    @singledispatchmethod
-    def get_config_filename(self, simulator: Simulator):  # pylint: disable=unused-argument
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def create_input_files(self, simulator: Simulator):
+        pass
 
 
-@ProteinSolvation.get_config_filename.register
-def _(self, simulator: GROMACS):  # pylint: disable=unused-argument
-    pass
-
-
-@ProteinSolvation.gen_aux_files.register
+@ProteinSolvation.create_input_files.register
 def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
-    """Setup the working directory for the simulation."""
+    """Creates GROMACS simulation input files."""
+
     # rename the pdb file to comply with the naming in the commands list
     shutil.copy(self.protein_pdb, os.path.join(input_dir, "protein.pdb"))
-    shutil.copytree(os.path.join(self.template_dir),
-                    os.path.join(input_dir),
-                    dirs_exist_ok=True)
-    remove_files_with_tag(input_dir, ".jinja")
 
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      GROMACS_TEMPLATE_INPUT_DIR)
 
-@ProteinSolvation.gen_config.register
-def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
-    """Generate the mdp configuration files for the simulation."""
+    shutil.copytree(template_files_dir, input_dir, dirs_exist_ok=True)
+
     batch_replace_params_in_template(
-        templates_dir=self.template_dir,
+        templates_dir=input_dir,
         template_filenames=[
             "simulation.mdp.jinja",
             "energy_minimization.mdp.jinja",
@@ -198,4 +188,6 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
         output_filename_paths=[
             os.path.join(input_dir, "simulation.mdp"),
             os.path.join(input_dir, "energy_minimization.mdp"),
-        ])
+        ],
+        remove_templates=True,
+    )

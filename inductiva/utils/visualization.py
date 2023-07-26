@@ -1,14 +1,19 @@
 """Visualization utilities."""
+# pylint: disable=protected-access
 
 import os
 import tempfile
 from typing import Dict, List, Optional
-from base64 import b64encode
+import base64
+import io
+from time import sleep
 from IPython.display import HTML
+from ipywidgets import Output
 
 from absl import logging
 
 import imageio
+import PIL
 import pyvista as pv
 import matplotlib
 import matplotlib.colors as clr
@@ -18,12 +23,72 @@ import xarray as xr
 
 from inductiva.utils import files
 from inductiva.types import Path
+import threading
 
 MPL_CONFIG_PARAMS = {
     "font.size": 14,
     "axes.titlesize": "medium",
     "figure.dpi": 100,
 }
+
+
+def create_movie_from_widget(view,
+                             output_path="movie.mp4",
+                             fps=8,
+                             start=0,
+                             stop=-1,
+                             step=1,
+                             timeout=0.2):
+    """Create a movie from a ipywidget view.
+    Args: 
+        view: ipywidget visualization.
+        output_path: name of the output movie file.
+        fps: frame rate (frames per second). 
+        start: starting frame. 
+        stop: ending frame number.
+        step: step between frames.
+        timeout: the waiting time between rendering two consecutive frames.
+    """
+    if stop < 0:
+        stop = view.max_frame + 1
+    frames_range = range(start, stop, step)
+    max_frame_digits = len(str(stop))
+    event = threading.Event()
+
+    def _make(event):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            for i in tqdm(frames_range):
+                if not event.is_set():
+                    view.frame = i
+                    sleep(timeout)  # time to update the view
+                    iw = view.render_image()
+                    image_data = view._image_data
+                    sleep(timeout)
+                    filename = os.path.join(
+                        tmp_dir, f"frame-{str(i).zfill(max_frame_digits)}.png")
+                    try:
+                        decode_save_image(image_data, filename)
+                    except PIL.UnidentifiedImageError:
+                        print(f"Error: Unidentified image at frame {i}")
+                        continue
+                    iw.close()
+                    sleep(timeout)
+
+            if not event.is_set():
+                with Output():
+                    create_movie_from_frames(tmp_dir, output_path, fps)
+
+    thread = threading.Thread(target=_make, args=(event,))
+    thread.daemon = True
+    thread.start()
+
+
+def decode_save_image(image_data, filename):
+    """Decode image data bytes and save to file."""
+    im_bytes = base64.b64decode(image_data)
+    im_bytes = io.BytesIO(im_bytes)
+    image = PIL.Image.open(im_bytes)
+    image.save(filename, "PNG")
 
 
 def create_movie_from_frames(frames_dir: str,
@@ -494,7 +559,7 @@ class MeshData:
 
         with open(save_path, "rb") as file_path:
             png = file_path.read()
-        png_url = "data:image/png;base64," + b64encode(png).decode()
+        png_url = "data:image/png;base64," + base64.b64encode(png).decode()
 
         return HTML(f"""
                 <img src="{png_url}" type="image/png" width="600">

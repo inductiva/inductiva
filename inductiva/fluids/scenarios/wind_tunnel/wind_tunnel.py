@@ -1,11 +1,12 @@
 """Wind tunnel scenario to run an object over an air flow."""
 
+from dataclasses import dataclass
+from enum import Enum
 from functools import singledispatchmethod
 import os
 import shutil
+import tempfile
 from typing import Optional, List, Literal
-from enum import Enum
-from dataclasses import dataclass
 from uuid import UUID
 
 from absl import logging
@@ -18,14 +19,13 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template,
                                        replace_params_in_template)
 from inductiva.utils import files
-from inductiva.utils.files import remove_files_with_tag
 from inductiva.fluids.scenarios.wind_tunnel.post_processing import WindTunnelSimulationOutput
 from inductiva.tasks import Task
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
-COMMANDS_TEMPLATE_NAME = "commands.json.jinja"
+COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
 
 @dataclass
@@ -65,6 +65,8 @@ class WindTunnel(Scenario):
     - Some post-processing of the data occurs at run-time: streamlines,
     pressure_field, cutting planes and force coefficients.
     """
+
+    valid_simulators = [OpenFOAM]
 
     def __init__(self,
                  flow_velocity: List[float] = None,
@@ -185,74 +187,44 @@ class WindTunnel(Scenario):
         )
 
     def get_commands(self):
-        """Returns the commands for the simulation.
-        """
-        templates_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                      OPENFOAM_TEMPLATE_INPUT_DIR)
+        """Returns the commands for the simulation."""
 
-        template_path = os.path.join(templates_path, COMMANDS_TEMPLATE_NAME)
-        commands_file_path = os.path.join(templates_path, "commands.json")
+        commands_template_path = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                              OPENFOAM_TEMPLATE_INPUT_DIR,
+                                              COMMANDS_TEMPLATE_FILE_NAME)
 
-        replace_params_in_template(template_path, {"n_cores": self.n_cores},
-                                   commands_file_path)
+        with tempfile.NamedTemporaryFile() as commands_file:
+            replace_params_in_template(
+                template_path=commands_template_path,
+                params={"n_cores": self.n_cores},
+                output_file_path=commands_file.name,
+            )
 
-        commands = self.read_commands_from_file(commands_file_path)
+            commands = self.read_commands_from_file(commands_file.name)
 
         return commands
 
     @singledispatchmethod
-    @classmethod
-    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
-        raise ValueError(
-            f"Simulator not supported for `{cls.__name__}` scenario.")
-
-    @singledispatchmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
-
-    @singledispatchmethod
-    def gen_config(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def create_input_files(self, simulator: Simulator):
+        pass
 
 
-@WindTunnel.get_config_filename.register
-def _(self, simulator: OpenFOAM):  # pylint: disable=unused-argument
-    pass
-
-
-@WindTunnel.gen_aux_files.register
+@WindTunnel.create_input_files.register
 def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
+    """Creates OpenFOAM simulation input files."""
+
     # The WindTunnel with OpenFOAM requires changing multiple files
-    template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
 
     # Copy all files from the template dir to the input directory
-    shutil.copytree(template_dir, input_dir, dirs_exist_ok=True, symlinks=True)
-
-    # Remove all files that have .jinja in input_dir
-    remove_files_with_tag(input_dir, ".jinja")
-
-
-@WindTunnel.gen_config.register
-def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argument
-    """Generates the configuration files for OpenFOAM."""
-
-    # The WindTunnel with OpenFOAM requires changing multiple files
-    template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
-
-    # Add object path to its respective place
-    object_input_dir_path = os.path.join(input_dir, "constant", "triSurface")
-    os.mkdir(object_input_dir_path)
-    shutil.copy(self.object_path,
-                os.path.join(object_input_dir_path, "object.obj"))
+    shutil.copytree(template_files_dir,
+                    input_dir,
+                    dirs_exist_ok=True,
+                    symlinks=True)
 
     batch_replace_params_in_template(
-        templates_dir=template_dir,
+        templates_dir=input_dir,
         template_filenames=[
             os.path.join("0", "include",
                          "initialConditions_template.openfoam.jinja"),
@@ -275,4 +247,11 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
             os.path.join(input_dir, "system", "blockMeshDict"),
             os.path.join(input_dir, "system", "decomposeParDict"),
             os.path.join(input_dir, "system", "snappyHexMeshDict")
-        ])
+        ],
+        remove_templates=True,
+    )
+
+    # Add object path to its respective place
+    object_dir = os.path.join(input_dir, "constant", "triSurface")
+    os.mkdir(object_dir)
+    shutil.copy(self.object_path, os.path.join(object_dir, "object.obj"))

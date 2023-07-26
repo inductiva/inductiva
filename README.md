@@ -53,6 +53,64 @@ Currently, we have available the following simulators:
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
+## Scenarios
+
+### MDWaterBox
+
+This scenario simulates a system that consists of a cubic box of water molecules, evolving according to the rules of Molecular Dynamics - the position of the water molecules is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields. This approach is inspired by [this article](https://arxiv.org/abs/2112.03383).
+
+#### Example
+
+First we initialize the scenario:
+```
+from inductiva.molecules.scenarios import MDWaterBox
+
+scenario = MDWaterBox(temperature = 300, box_size = 2.3)
+```
+
+The user can specify the temperature (in Kelvin) and box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
+
+After the initialization, we are ready to simulate the system:
+
+```
+output = scenario.simulate(simulation_time = 10,
+            nsteps_minim = 5000)
+```
+
+The simulate method initializes a simulation in the cloud. In this call, we set the parameters:
+ - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
+ -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
+
+When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
+
+### ProteinSolvation
+
+This scenario simulates the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization step](), in which it is ensured that the structure of the protein+water system doesn't have steric clashes and structural issues. Then, the position of the atoms in this system is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
+
+#### Example
+
+First we initialize the scenario:
+```
+from inductiva.molecules.scenarios import ProteinSolvation
+
+scenario = ProteinSolvation(pdb_file, temperature = 300)
+```
+
+The user must provide the path for the PDB file  ```pdb_file``` corresponding to the protein the user wants to simulate. Also, it can specify the temperature (in Kelvin). The number above correspond to the default value.
+
+After the initialization, we are ready to simulate the system:
+
+```
+output = scenario.simulate(simulation_time = 10,
+            nsteps_minim = 5000)
+```
+
+The simulate method initializes the simulation. In this call, we set the parameters:
+ - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
+ -nsteps_minin = 5000: number of steps for the energy minimization section. 
+
+When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
+
 ## Installation
 
 It is super simple to start using the API if you are already familiar with Python package management.
