@@ -46,6 +46,7 @@ class ProteinSolvationOutput:
                                 selection="not water and not ion")
         if add_backbone:
             view.add_representation("cartoon", selection="protein")
+        view.center()
 
         print("System Information: ")
         print(f"Number of atoms in the system: {len(universe.atoms)}")
@@ -130,4 +131,5 @@ class ProteinSolvationOutput:
             residue.atoms.tempfactors = value
         view = nv.show_mdanalysis(universe)
         view.update_representation(color_scheme="bfactor")
+        view.center()
         return view
