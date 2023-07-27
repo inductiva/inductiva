@@ -24,12 +24,12 @@ def align_trajectory_to_average(universe, trajectory_output_path):
         trajectory_output_path: Path to the aligned trajectory file."""
     average = align.AverageStructure(universe,
                                      universe,
-                                     select='protein',
+                                     select="protein and name CA",
                                      ref_frame=0).run()
     average_trajectory = average.results.universe
 
     align.AlignTraj(universe,
                     average_trajectory,
-                    select='protein',
+                    select="protein and name CA",
                     filename=trajectory_output_path,
                     in_memory=False).run()

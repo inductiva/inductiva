@@ -66,7 +66,12 @@ class ProteinSolvationOutput:
 
     def calculate_rmsf_trajectory(self, nglview_visualization=True):
         """Calculate the root mean square fluctuation (RMSF) of the protein 
-        residues over the trajectory.
+        residues over the trajectory. It is typically calculated for the C&alpha 
+        atom of each residue. It is the square root of the variance of 
+        the fluctuation around the average position:
+        &rhoi = √⟨(xi - ⟨xi⟩)²⟩
+        It quantifies how much a structure diverges from a reference over time, 
+        the RSMF can reveal which areas of the system are the most mobile. 
         Args:
             nglview_visualization: Whether to return visualization of the 
             RMSF using nglview or not."""
@@ -77,27 +82,19 @@ class ProteinSolvationOutput:
         align_universe = mda.Universe(self.topology, aligned_trajectory_path)
 
         # Calculate RMSF per atom
-        atoms = align_universe.select_atoms("protein")
-        rmsf = rms.RMSF(atoms).run()
+        c_alphas = align_universe.select_atoms("protein and name CA")
+        rmsf = rms.RMSF(c_alphas).run()
         df_rmsf_per_atom = pd.DataFrame({
             "rmsf": rmsf.rmsf,
-            "residue_number": atoms.resids
+            "residue_number": c_alphas.resids
         })
-        df_rmsf_per_residue = df_rmsf_per_atom.groupby("residue_number").agg(
-            mean_rmsf=("rmsf", "mean"), std_rmsf=("rmsf", "std"))
-        residue_number = df_rmsf_per_residue.index
-        mean_rmsf = df_rmsf_per_residue["mean_rmsf"]
-        std_rmsf = df_rmsf_per_residue["std_rmsf"]
 
         # Plot the data
-        plt.errorbar(residue_number,
-                     mean_rmsf,
-                     yerr=std_rmsf,
-                     fmt="o",
-                     capsize=5)
+        plt.plot(df_rmsf_per_atom["residue_number"],
+                     df_rmsf_per_atom["rmsf"])
         plt.xlabel("Residue Number")
         plt.ylabel("RMSF")
-        plt.title("RMSF with Standard Deviation per residue")
+        plt.title("RMSF per residue")
         plt.grid(True)
         plt.show()
 
@@ -106,7 +103,7 @@ class ProteinSolvationOutput:
                 "tempfactors")  # add empty attribute for all atoms
             protein = self.universe.select_atoms(
                 "protein")  # select protein atoms
-            for residue, r_value in zip(protein.residues, rmsf.results.rmsd):
+            for residue, r_value in zip(protein.residues, rmsf.rmsf):
                 residue.atoms.tempfactors = r_value
 
             view = nv.show_mdanalysis(self.universe)
