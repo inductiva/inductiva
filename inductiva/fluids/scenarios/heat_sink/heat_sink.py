@@ -8,7 +8,7 @@ from uuid import UUID
 from inductiva.tasks import Task
 from inductiva.types import Path
 from inductiva.fluids.simulators import OpenFOAM
-from inductiva.fluids.scenarios.output import HeatSinkOutput
+from inductiva.fluids.scenarios.heat_sink.output import HeatSinkOutput
 from inductiva.simulation import Simulator
 from inductiva.scenarios import Scenario
 from inductiva.utils.templates import (TEMPLATES_PATH,
