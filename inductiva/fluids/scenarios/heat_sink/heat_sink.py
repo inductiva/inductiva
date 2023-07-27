@@ -8,6 +8,7 @@ from uuid import UUID
 from inductiva.tasks import Task
 from inductiva.types import Path
 from inductiva.fluids.simulators import OpenFOAM
+from inductiva.fluids.scenarios.output import HeatSinkOutput
 from inductiva.simulation import Simulator
 from inductiva.scenarios import Scenario
 from inductiva.utils.templates import (TEMPLATES_PATH,
@@ -119,10 +120,12 @@ class HeatSink(Scenario):
 
         commands = self.get_commands()
 
-        return super().simulate(simulator,
-                                output_dir,
-                                resource_pool_id=resource_pool_id,
-                                commands=commands)
+        output = super().simulate(simulator,
+                                  output_dir,
+                                  resource_pool_id=resource_pool_id,
+                                  commands=commands)
+
+        return HeatSinkOutput(output)
 
     def simulate_async(
         self,
