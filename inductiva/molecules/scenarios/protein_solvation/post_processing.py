@@ -3,13 +3,19 @@ import os
 import nglview as nv
 from pathlib import Path
 from typing import Literal
-from ..utils import unwrap_trajectory
+from ..utils import unwrap_trajectory, align_trajectory_to_average
+from MDAnalysis.analysis import rms
+import MDAnalysis as mda
+import pandas as pd
+from matplotlib import pyplot as plt
 
 
 class ProteinSolvationOutput:
     """Post process the simulation output of a ProteinSolvation scenario."""
 
-    def __init__(self, sim_output_path: Path = None):
+    def __init__(self,
+                 sim_output_path: Path = None,
+                 use_compressed_trajectory: bool = False):
         """Initializes a `ProteinSolvationOutput` object.
 
         Given a simulation output directory that contains the standard files
@@ -17,42 +23,94 @@ class ProteinSolvationOutput:
         methods to visualize the simulation outputs in a notebook interactively.
 
         Args:
-            sim_output_path: Path to the simulation output directory."""
-
+            sim_output_path: Path to the simulation output directory.
+            use_compressed_trajectory: Whether to use the compressed 
+            trajectory."""
         self.sim_output_dir = sim_output_path
+        self.topology = os.path.join(self.sim_output_dir,
+                                     "solvated_protein.tpr")
+
+        if use_compressed_trajectory:
+            self.trajectory = os.path.join(self.sim_output_dir,
+                                           "trajectory.xtc")
+        else:
+            self.trajectory = os.path.join(self.sim_output_dir,
+                                           "solvated_protein.trr")
+        self.universe = unwrap_trajectory(self.topology, self.trajectory)
 
     def render_interactive(self,
                            representation: Literal["cartoon", "ball+stick",
                                                    "line", "point",
                                                    "ribbon"] = "ball+stick",
-                           add_backbone: bool = True,
-                           use_compressed_trajectory: bool = False):
+                           add_backbone: bool = True):
         """Render the simulation outputs in an interactive visualization.
         Args: 
             representation: The protein representation to use for the 
             visualization.
             add_backbone: Whether to add the protein backbone to the 
             visualization.
-            use_compressed_trajectory: Whether to use the compressed trajectory. 
             """
-        topology = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
-        if use_compressed_trajectory:
-            trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")
-        else:
-            trajectory = os.path.join(self.sim_output_dir,
-                                      "solvated_protein.trr")
-
-        universe = unwrap_trajectory(topology, trajectory)
-        view = nv.show_mdanalysis(universe)
+        view = nv.show_mdanalysis(self.universe)
         view.add_representation(representation,
                                 selection="not water and not ion")
         if add_backbone:
             view.add_representation("cartoon", selection="protein")
         print("System Information:")
-        print(f"Number of atoms in the system: {len(universe.atoms)}")
+        print(f"Number of atoms in the system: {len(self.universe.atoms)}")
         print(f"Number of amino acids:"
-              f"{universe.select_atoms('protein').n_residues}")
+              f"{self.universe.select_atoms('protein').n_residues}")
         print(f"Number of solvent molecules:"
-              f"{universe.select_atoms('not protein').n_residues}")
-        print(f"Number of trajectory frames: {len(universe.trajectory)}")
+              f"{self.universe.select_atoms('not protein').n_residues}")
+        print(f"Number of trajectory frames: {len(self.universe.trajectory)}")
         return view
+
+    def calculate_rmsf_trajectory(self, nglview_visualization=True):
+        """Calculate the root mean square fluctuation (RMSF) of the protein 
+        residues over the trajectory.
+        Args:
+            nglview_visualization: Whether to return visualization of the 
+            RMSF using nglview or not."""
+
+        aligned_trajectory_path = os.path.join(self.sim_output_dir,
+                                               "aligned_traj.dcd")
+        align_trajectory_to_average(self.universe, aligned_trajectory_path)
+        align_universe = mda.Universe(self.topology, aligned_trajectory_path)
+
+        # Calculate RMSF per atom
+        atoms = align_universe.select_atoms("protein")
+        rmsf = rms.RMSF(atoms).run()
+        df_rmsf_per_atom = pd.DataFrame({
+            "rmsf": rmsf.rmsf,
+            "residue_number": atoms.resids
+        })
+        df_rmsf_per_residue = df_rmsf_per_atom.groupby("residue_number").agg(
+            mean_rmsf=("rmsf", "mean"), std_rmsf=("rmsf", "std"))
+        residue_number = df_rmsf_per_residue.index
+        mean_rmsf = df_rmsf_per_residue["mean_rmsf"]
+        std_rmsf = df_rmsf_per_residue["std_rmsf"]
+
+        # Plot the data
+        plt.errorbar(residue_number,
+                     mean_rmsf,
+                     yerr=std_rmsf,
+                     fmt="o",
+                     capsize=5)
+        plt.xlabel("Residue Number")
+        plt.ylabel("RMSF")
+        plt.title("RMSF with Standard Deviation per residue")
+        plt.grid(True)
+        plt.show()
+
+        if nglview_visualization:
+            self.universe.add_TopologyAttr(
+                "tempfactors")  # add empty attribute for all atoms
+            protein = self.universe.select_atoms(
+                "protein")  # select protein atoms
+            for residue, r_value in zip(protein.residues, rmsf.results.rmsd):
+                residue.atoms.tempfactors = r_value
+
+            view = nv.show_mdanalysis(self.universe)
+            view.update_representation(color_scheme="bfactor")
+            return df_rmsf_per_atom, view
+
+        return df_rmsf_per_atom

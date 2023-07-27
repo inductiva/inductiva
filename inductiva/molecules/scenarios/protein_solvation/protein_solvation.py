@@ -13,6 +13,7 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils import files
+from .post_processing import ProteinSolvationOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
@@ -85,10 +86,11 @@ class ProteinSolvation(Scenario):
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
         commands = self.get_commands()
-        return super().simulate(simulator,
+        output_path = super().simulate(simulator,
                                 output_dir,
                                 resource_pool_id=resource_pool_id,
                                 commands=commands)
+        return ProteinSolvationOutput(output_path)
 
     def simulate_async(
             self,
