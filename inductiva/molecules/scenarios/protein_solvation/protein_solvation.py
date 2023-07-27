@@ -87,9 +87,9 @@ class ProteinSolvation(Scenario):
         self.nsteps_minim = nsteps_minim
         commands = self.get_commands()
         output_path = super().simulate(simulator,
-                                output_dir,
-                                resource_pool_id=resource_pool_id,
-                                commands=commands)
+                                       output_dir,
+                                       resource_pool_id=resource_pool_id,
+                                       commands=commands)
         return ProteinSolvationOutput(output_path)
 
     def simulate_async(

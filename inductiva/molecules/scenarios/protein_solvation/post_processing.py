@@ -90,8 +90,7 @@ class ProteinSolvationOutput:
         })
 
         # Plot the data
-        plt.plot(df_rmsf_per_atom["residue_number"],
-                     df_rmsf_per_atom["rmsf"])
+        plt.plot(df_rmsf_per_atom["residue_number"], df_rmsf_per_atom["rmsf"])
         plt.xlabel("Residue Number")
         plt.ylabel("RMSF")
         plt.title("RMSF per residue")
