@@ -85,6 +85,7 @@ class UserCreate(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            is_internal = schemas.BoolSchema
             __annotations__ = {
                 "username": username,
                 "email": email,
@@ -92,6 +93,7 @@ class UserCreate(
                 "is_active": is_active,
                 "is_admin": is_admin,
                 "bucket_name": bucket_name,
+                "is_internal": is_internal,
             }
     
     api_key: MetaOapg.properties.api_key
@@ -117,9 +119,12 @@ class UserCreate(
     def __getitem__(self, name: typing_extensions.Literal["bucket_name"]) -> MetaOapg.properties.bucket_name: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["is_internal"]) -> MetaOapg.properties.is_internal: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["username", "email", "api_key", "is_active", "is_admin", "bucket_name", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["username", "email", "api_key", "is_active", "is_admin", "bucket_name", "is_internal", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -143,9 +148,12 @@ class UserCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["bucket_name"]) -> typing.Union[MetaOapg.properties.bucket_name, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["is_internal"]) -> typing.Union[MetaOapg.properties.is_internal, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["username", "email", "api_key", "is_active", "is_admin", "bucket_name", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["username", "email", "api_key", "is_active", "is_admin", "bucket_name", "is_internal", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -158,6 +166,7 @@ class UserCreate(
         is_active: typing.Union[MetaOapg.properties.is_active, bool, schemas.Unset] = schemas.unset,
         is_admin: typing.Union[MetaOapg.properties.is_admin, bool, schemas.Unset] = schemas.unset,
         bucket_name: typing.Union[MetaOapg.properties.bucket_name, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        is_internal: typing.Union[MetaOapg.properties.is_internal, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'UserCreate':
@@ -170,6 +179,7 @@ class UserCreate(
             is_active=is_active,
             is_admin=is_admin,
             bucket_name=bucket_name,
+            is_internal=is_internal,
             _configuration=_configuration,
             **kwargs,
         )

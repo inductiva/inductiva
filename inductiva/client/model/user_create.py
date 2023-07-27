@@ -100,6 +100,7 @@ class UserCreate(schemas.DictSchema):
                         **kwargs,
                     )
 
+            is_internal = schemas.BoolSchema
             __annotations__ = {
                 "username": username,
                 "email": email,
@@ -107,6 +108,7 @@ class UserCreate(schemas.DictSchema):
                 "is_active": is_active,
                 "is_admin": is_admin,
                 "bucket_name": bucket_name,
+                "is_internal": is_internal,
             }
 
     api_key: MetaOapg.properties.api_key
@@ -150,6 +152,12 @@ class UserCreate(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["is_internal"]
+    ) -> MetaOapg.properties.is_internal:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -160,6 +168,7 @@ class UserCreate(schemas.DictSchema):
         "is_active",
         "is_admin",
         "bucket_name",
+        "is_internal",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -202,6 +211,12 @@ class UserCreate(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["is_internal"]
+    ) -> typing.Union[MetaOapg.properties.is_internal, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -213,6 +228,7 @@ class UserCreate(schemas.DictSchema):
         "is_active",
         "is_admin",
         "bucket_name",
+        "is_internal",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -244,6 +260,8 @@ class UserCreate(schemas.DictSchema):
                                   None, list, tuple, bytes, io.FileIO,
                                   io.BufferedReader,
                                   schemas.Unset] = schemas.unset,
+        is_internal: typing.Union[MetaOapg.properties.is_internal, bool,
+                                  schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -259,6 +277,7 @@ class UserCreate(schemas.DictSchema):
             is_active=is_active,
             is_admin=is_admin,
             bucket_name=bucket_name,
+            is_internal=is_internal,
             _configuration=_configuration,
             **kwargs,
         )
