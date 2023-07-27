@@ -16,15 +16,17 @@ class MDWaterBoxOutput:
         visualize the simulation outputs in a notebook interactively.
 
         Args:
-            sim_output_path: Path to the simulation output directory.
-            use_compressed_trajectory: Whether to use the compressed trajectory
-            or the full precision trajectory."""
+            sim_output_path: Path to the simulation output directory."""
 
         self.sim_output_dir = sim_output_path
         self.topology = os.path.join(self.sim_output_dir, "eql.tpr")
 
     def render_interactive(self, use_compressed_trajectory: bool = False):
-        """Render the simulation outputs in an interactive visualization."""
+        """Render the simulation outputs in an interactive visualization.
+        Args: 
+            use_compressed_trajectory: Whether to use the compressed trajectory
+            or the full precision trajectory."""
+
         if use_compressed_trajectory:
             self.trajectory = os.path.join(self.sim_output_dir,
                                            "trajectory.xtc")
