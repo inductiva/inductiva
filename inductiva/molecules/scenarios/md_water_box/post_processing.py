@@ -8,8 +8,7 @@ from ..utils import unwrap_trajectory
 class MDWaterBoxOutput:
     """Post process the simulation output of a MDWaterBox scenario."""
 
-    def __init__(self, sim_output_path: Path = None, 
-                 use_compressed_trajectory: bool = False):
+    def __init__(self, sim_output_path: Path = None):
         """Initializes a `MDWaterBoxOutput` object.
 
         Given a simulation output directory that contains the standard files
@@ -17,18 +16,20 @@ class MDWaterBoxOutput:
         visualize the simulation outputs in a notebook interactively.
 
         Args:
-            sim_output_path: Path to the simulation output directory."""
+            sim_output_path: Path to the simulation output directory.
+            use_compressed_trajectory: Whether to use the compressed trajectory
+            or the full precision trajectory."""
 
         self.sim_output_dir = sim_output_path
         self.topology = os.path.join(self.sim_output_dir, "eql.tpr")
+
+    def render_interactive(self, use_compressed_trajectory: bool = False):
+        """Render the simulation outputs in an interactive visualization."""
         if use_compressed_trajectory:
-            self.trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")
+            self.trajectory = os.path.join(self.sim_output_dir,
+                                           "trajectory.xtc")
         else:
             self.trajectory = os.path.join(self.sim_output_dir, "eql.trr")
-
-    def render_interactive(self):
-        """Render the simulation outputs in an interactive visualization."""
-
         universe = unwrap_trajectory(self.topology, self.trajectory)
         view = nv.show_mdanalysis(universe)
         view.add_ball_and_stick("all")
