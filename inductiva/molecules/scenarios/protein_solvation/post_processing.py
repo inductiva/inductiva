@@ -80,9 +80,9 @@ class ProteinSolvationOutput:
         These atoms make the backbone of the protein.The RMSF is the square root 
         of the variance of the fluctuation around the average position:
         &rhoi = √⟨(xi - ⟨xi⟩)²⟩
-        It quantifies how much a structure diverges from a reference over time, 
-        the RSMF can reveal which areas of the system are the most mobile.
-        Check 
+        It quantifies how much a structure diverges from the average structure 
+        over time, the RSMF can reveal which areas of the system are the most 
+        mobile. Check 
         https://userguide.mdanalysis.org/stable/examples/analysis/alignment_and_rms/rmsf.html 
         for more details.
 
