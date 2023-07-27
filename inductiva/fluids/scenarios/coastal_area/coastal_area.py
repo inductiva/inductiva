@@ -96,10 +96,10 @@ class CoastalArea(Scenario):
 
         output = super().simulate(
             simulator,
-            sim_config_filename=SWASH_CONFIG_FILENAME,
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             run_async=run_async,
+            sim_config_filename=SWASH_CONFIG_FILENAME,
         )
         if run_async:
             return output

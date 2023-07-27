@@ -101,21 +101,21 @@ class FluidBlock(Scenario):
         self.time_step = time_step
         self.output_time_step = output_time_step
 
-        output_path = super().simulate(
-            simulator,
-            output_dir=output_dir,
-            resource_pool_id=resource_pool_id,
-            run_async=run_async,
-            device=device,
-        )
+        output = super().simulate(simulator=simulator,
+                                  output_dir=output_dir,
+                                  resource_pool_id=resource_pool_id,
+                                  run_async=run_async,
+                                  device=device)
 
         # TODO: Add any kind of post-processing here, e.g. convert files?
         # convert_vtk_data_dir_to_netcdf(
         #     data_dir=os.path.join(output_path, "vtk"),
         #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
         #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
-
-        return SPHSimulationOutput(output_path)
+        if run_async:
+            return output
+        else:
+            return SPHSimulationOutput(output)
 
     @singledispatchmethod
     def get_config_filename(self, simulator: Simulator):
