@@ -19,20 +19,18 @@ class MDWaterBoxOutput:
             sim_output_path: Path to the simulation output directory."""
 
         self.sim_output_dir = sim_output_path
-        self.topology = os.path.join(self.sim_output_dir, "eql.tpr")
 
     def render_interactive(self, use_compressed_trajectory: bool = False):
         """Render the simulation outputs in an interactive visualization.
         Args: 
             use_compressed_trajectory: Whether to use the compressed trajectory
             or the full precision trajectory."""
-
+        topology = os.path.join(self.sim_output_dir, "eql.tpr")
         if use_compressed_trajectory:
-            self.trajectory = os.path.join(self.sim_output_dir,
-                                           "trajectory.xtc")
+            trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")
         else:
-            self.trajectory = os.path.join(self.sim_output_dir, "eql.trr")
-        universe = unwrap_trajectory(self.topology, self.trajectory)
+            trajectory = os.path.join(self.sim_output_dir, "eql.trr")
+        universe = unwrap_trajectory(topology, trajectory)
         view = nv.show_mdanalysis(universe)
         view.add_ball_and_stick("all")
         print("System Information:")
