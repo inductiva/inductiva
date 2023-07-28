@@ -1,9 +1,12 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
 import nglview as nv
+import matplotlib.pyplot as plt
 from pathlib import Path
 from typing import Literal
-from ..utils import unwrap_trajectory
+from MDAnalysis.analysis import rms
+import MDAnalysis as mda
+from inductiva.molecules.scenarios.utils import unwrap_trajectory, align_trajectory_to_average
 
 
 class ProteinSolvationOutput:
@@ -25,16 +28,41 @@ class ProteinSolvationOutput:
                            representation: Literal["cartoon", "ball+stick",
                                                    "line", "point",
                                                    "ribbon"] = "ball+stick",
-                           add_backbone: bool = True,
-                           use_compressed_trajectory: bool = False):
-        """Render the simulation outputs in an interactive visualization.
+                           use_compressed_trajectory: bool = False,
+                           add_backbone: bool = True):
+        """
+        Render the simulation outputs in an interactive visualization.
         Args: 
             representation: The protein representation to use for the 
             visualization.
             add_backbone: Whether to add the protein backbone to the 
             visualization.
-            use_compressed_trajectory: Whether to use the compressed trajectory. 
+            use_compressed_trajectory: Whether to use the compressed 
+            trajectory or the full precision one.
             """
+        universe = self.construct_universe(use_compressed_trajectory)
+        view = nv.show_mdanalysis(universe)
+        view.add_representation(representation,
+                                selection="not water and not ion")
+        if add_backbone:
+            view.add_representation("cartoon", selection="protein")
+        view.center()
+
+        print("System Information: ")
+        print(f"Number of atoms in the system: {len(universe.atoms)}")
+        print(f"Number of amino acids: "
+              f"{universe.select_atoms('protein').n_residues}")
+        print(f"Number of solvent molecules:"
+              f"{universe.select_atoms('not protein').n_residues}")
+        print(f"Number of trajectory frames: {len(universe.trajectory)}")
+        return view
+
+    def construct_universe(self, use_compressed_trajectory: bool = False):
+        """Construct a MDAnalysis universe from the simulation output.
+
+        Args:
+            use_compressed_trajectory: Whether to use the compressed trajectory
+            or the full precision trajectory."""
         topology = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
         if use_compressed_trajectory:
             trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")
@@ -43,16 +71,65 @@ class ProteinSolvationOutput:
                                       "solvated_protein.trr")
 
         universe = unwrap_trajectory(topology, trajectory)
+        return universe
+
+    def calculate_rmsf_trajectory(self,
+                                  use_compressed_trajectory: bool = False):
+        """Calculate the root mean square fluctuation (RMSF) over a trajectory.  
+
+        It is typically calculated for the alpha carbon atom of each residue. 
+        These atoms make the backbone of the protein.The RMSF is the square root 
+        of the variance of the fluctuation around the average position:
+        &rhoi = √⟨(xi - ⟨xi⟩)²⟩
+        It quantifies how much a structure diverges from the average structure 
+        over time, the RSMF can reveal which areas of the system are the most 
+        mobile. Check 
+        https://userguide.mdanalysis.org/stable/examples/analysis/alignment_and_rms/rmsf.html 
+        for more details.
+
+        Args:
+            nglview_visualization: Whether to return visualization of the 
+            RMSF using nglview or not."""
+
+        universe = self.construct_universe(use_compressed_trajectory)
+        topology = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
+
+        aligned_trajectory_path = os.path.join(self.sim_output_dir,
+                                               "aligned_traj.dcd")
+        align_trajectory_to_average(universe, aligned_trajectory_path)
+        align_universe = mda.Universe(topology, aligned_trajectory_path)
+
+        # Calculate RMSF for carbon alpha atoms
+        c_alphas = align_universe.select_atoms("protein and name CA")
+        rmsf = rms.RMSF(c_alphas).run()
+        residue_number = c_alphas.resids
+        rmsf_values = rmsf.results.rmsf
+
+        # Plot the data
+        plt.plot(residue_number, rmsf_values)
+        plt.xlabel("Residue Number")
+        plt.ylabel("RMSF")
+        plt.title("RMSF per residue")
+        plt.grid(True)
+        plt.show()
+        return rmsf_values
+
+    def render_attribute_per_residue(self,
+                                     residue_attributes,
+                                     use_compressed_trajectory: bool = False):
+        """Render a specific protein attribute in an interactive visualization.
+        Args: 
+            residue_attributes: The per residue values of the attribute you want 
+            to visualize.
+            use_compressed_trajectory: Whether to use the compressed trajectory 
+            or the full precision trajectory.
+            """
+        universe = self.construct_universe(use_compressed_trajectory)
+        universe.add_TopologyAttr("tempfactors")
+        protein = universe.select_atoms("protein")
+        for residue, value in zip(protein.residues, residue_attributes):
+            residue.atoms.tempfactors = value
         view = nv.show_mdanalysis(universe)
-        view.add_representation(representation,
-                                selection="not water and not ion")
-        if add_backbone:
-            view.add_representation("cartoon", selection="protein")
-        print("System Information:")
-        print(f"Number of atoms in the system: {len(universe.atoms)}")
-        print(f"Number of amino acids:"
-              f"{universe.select_atoms('protein').n_residues}")
-        print(f"Number of solvent molecules:"
-              f"{universe.select_atoms('not protein').n_residues}")
-        print(f"Number of trajectory frames: {len(universe.trajectory)}")
+        view.update_representation(color_scheme="bfactor")
+        view.center()
         return view

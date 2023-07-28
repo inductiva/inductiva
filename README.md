@@ -14,7 +14,7 @@ Example of how to run the dam break scenario:
 ```python
 from inductiva import fluids
 
-scenario = fluids.scenarios.DamBreak(dimensions=(1., 0.3, 0.3))
+scenario = fluids.DamBreak(dimensions=(1., 0.3, 0.3))
 
 output = scenario.simulate()
 video = output.render()
@@ -26,7 +26,7 @@ Example of how to run a low-level simulation:
 ```python
 from inductiva import fluids
 
-simulator = fluids.simulators.DualSPHysics()
+simulator = fluids.DualSPHysics()
 
 output_dir = simulator.run(input_dir="FlowCylinder",
                            sim_config_filename="CaseFlowCylinder_Re200_Def.xml",
@@ -69,11 +69,12 @@ Initialize the scenario:
 
 ```python
 from inductiva import fluids
-scenario = fluids.scenarios.FluidBlock(density=1e3,
-                                       kinematic_viscosity=1e-6,
-                                       position=(0.3, 0.3, 0.3),
-                                       dimensions=(0.4, 0.4, 0.4),
-                                       initial_velocity=(0.0, 0.0, 0.0))
+
+scenario = fluids.FluidBlock(density=1e3,
+                             kinematic_viscosity=1e-6,
+                             position=(0.3, 0.3, 0.3),
+                             dimensions=(0.4, 0.4, 0.4),
+                             initial_velocity=(0.0, 0.0, 0.0))
 ```
 
 The user can specify the fluid density (in kg/m^3), kinematic viscosity (in
@@ -101,14 +102,12 @@ output.render()
 
 \[TODO @IvanPombo: add gif with render\]
 
-### Fluid tank
+### Wind Tunnel
 
-This scenario simulates the motion of a fluid in a cubic or cylindrical tank.
-Fluid is injected in the tank via an inlet located at the top of the tank, and
-flows out of the tank via an outlet located at the bottom of the tank. The
-motion of the fluid is controled by gravity. The simulation is performed using
-the [Smoothed Particle Hydrodynamics](https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics)
-method.
+This scenario simulates the aerodynamics of an object inside a virtual
+[Wind Tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air flow velocity.
+At the moment, the system is modelled with the steady-state equations for incompressible flow and
+the $k-\epsilon$ turbulence models.
 
 #### Example
 
@@ -116,31 +115,56 @@ Initialize the scenario:
 
 ```python
 from inductiva import fluids
-scenario = fluids.scenarios.FluidTank(fluid=fluids.WATER, fluid_level=0.5)
+
+scenario = fluids.WindTunnel(
+    flow_velocity=[30, 0, 0],
+    domain_geometry={"x": [-6, 12], "y": [-5, 5], "z": [0, 10]})
 ```
 
-The user can specify the fluid (e.g. water, honey or oil), the fluid level (in
-meters), as well as the tank shape and its inlet and outlet properties.
+The user can specify the flow velocity vector (in m/s) and the domain geometry (in m).
 
 Run the simulation:
 
 ```python
-output = scenario.simulate(simulation_time=5,
-                           output_time_step=0.1,
-                           resolution="medium")
+output = scenario.simulate(object_path="vehicle.obj",
+                           simulation_time = 100,
+                           output_time_step = 50,
+                           resolution = "medium")
 ```
 
-The user can specify the total simulation time and the time step between outputs
-(all in seconds). The user can also specify the resolution of the simulation
-(low, medium or high).
+The user needs to specify the object to insert inside the wind tunnel and thereafter,
+select the total simulation time, the step between outputs and the resolution of the simulation.
 
-Visualize the results:
+After the simulation has finished, the user has the possibility to obtain several metrics:
 
 ```python
-output.render()
+
+pressure_field = output.get_physical_field("pressure")
+
+slice = output.get_flow_slice("velocity")
+
+streamlines = output.get_streamlines("velocity")
 ```
 
-![Fluid tank simulation.](resources/media/fluid_tank.gif)
+Visualize the outputs:
+
+```python
+pressure_field.render()
+```
+
+\[TODO @IvanPombo: add gif with render\]
+
+```python
+pressure_field.render_frame()
+```
+
+\[TODO @IvanPombo: add gif with render\]
+
+```python
+pressure_field.render_frame()
+```
+
+\[TODO @IvanPombo: add gif with render\]
 
 ### Coastal area
 
@@ -156,9 +180,11 @@ the shore, interacting with the different elements of the bathymetry.
 Initialize the scenario:
 
 ```python
-from inductiva.fluids.scenarios import CoastalArea
+from inductiva import fluids
 
-scenario = CoastalArea(wave_amplitude=2.5, wave_period=5.5, water_level=1.0)
+scenario = fluids.CoastalArea(wave_amplitude=2.5,
+                              wave_period=5.5,
+                              water_level=1.0)
 ```
 
 The user can specify the wave amplitude (in meters) and period (in seconds), as
@@ -167,7 +193,9 @@ well as the base water level (in meters).
 Run the simulation:
 
 ```python
-output = scenario.simulate(simulation_time=120, time_step=0.1, output_time_step=1)
+output = scenario.simulate(simulation_time=120,
+                           time_step=0.1,
+                           output_time_step=1)
 ```
 
 The user can specify the total simulation time, the adopted time step and the
@@ -187,59 +215,74 @@ coastal area.
 
 ### MDWaterBox
 
-This scenario simulates a system that consists of a cubic box of water molecules, evolving according to the rules of Molecular Dynamics - the position of the water molecules is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields. This approach is inspired by [this article](https://arxiv.org/abs/2112.03383).
+This scenario simulates a system that consists of a cubic box filled with water molecules, evolving according to the rules of Molecular Dynamics: this means that the water molecules' positions are updated according to Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields. The implementation of this scenario was inspired by [this article](https://arxiv.org/abs/2112.03383). 
 
 #### Example
 
 First we initialize the scenario:
 ```
-from inductiva.molecules.scenarios import MDWaterBox
+from inductiva import molecules
 
-scenario = MDWaterBox(temperature = 300, box_size = 2.3)
+scenario = molecules.MDWaterBox(temperature = 300, box_size = 2.3)
 ```
 
-The user can specify the temperature (in Kelvin) and box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
+The user can specify the temperature (in Kelvin) and the box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
 
 After the initialization, we are ready to simulate the system:
 
+```python
+output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
 ```
 output = scenario.simulate(simulation_time = 10,
-            nsteps_minim = 5000)
+                           nsteps_minim = 5000)
+
+The simulate method initializes a simulation using cloud resources. The user can set the duration of the simulation in nanoseconds and the number of steps for the energy minimization.
+
+Finally, we can visualize the simulation: 
+```python
+view = output.render_interactive()
+view
 ```
+This renders the trajectory in an interactive visualization that can be manipulated in a jupyter notebook: 
+<p align="center">
+  <img width="900" height="300" src="https://github.com/inductiva/inductiva/assets/114397668/6cc809ed-085b-4fc6-b1a6-358be03cd061">
+</p>
 
-The simulate method initializes a simulation in the cloud. In this call, we set the parameters:
- - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
- -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
-
-When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
 
 ### ProteinSolvation
 
-This scenario simulates the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization step](), in which it is ensured that the structure of the protein+water system doesn't have steric clashes and structural issues. Then, the position of the atoms in this system is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
+The ProteinSolvation scenario models the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization](https://manual.gromacs.org/current/reference-manual/algorithms/energy-minimization.html) process to eliminate any steric clashes or structural issues within the protein-water system. After this, the position of the atoms in this system is updated according to Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
 
 #### Example
 
 First we initialize the scenario:
 ```
-from inductiva.molecules.scenarios import ProteinSolvation
+from inductiva import molecules
 
-scenario = ProteinSolvation(pdb_file, temperature = 300)
+scenario = molecules.ProteinSolvation(pdb_file, temperature = 300)
 ```
 
-The user must provide the path for the PDB file  ```pdb_file``` corresponding to the protein the user wants to simulate. Also, it can specify the temperature (in Kelvin). The number above correspond to the default value.
+The user must provide the path for the PDB file (pdb_file) corresponding to the protein to be simulated. Aditionally, one can specify the temperature (in Kelvin), which defaults to 300 K. 
 
-After the initialization, we are ready to simulate the system:
+After the initialization, we are ready to run the simulation:
 
+```python
+output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
 ```
 output = scenario.simulate(simulation_time = 10,
-            nsteps_minim = 5000)
+                           nsteps_minim = 5000)
+The simulate method initializes the simulation. In this call, we can set the simulation duration (in ns) and the number of steps for the energy minimization. 
+
+Visualize the results: 
+```python
+view = ouptut.render_interctive(representation= "ball+stick", add_backbone=True)
 ```
 
-The simulate method initializes the simulation. In this call, we set the parameters:
- - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
- -nsteps_minin = 5000: number of steps for the energy minimization section. 
+This yields an interactive visualization of the protein's trajectory that can be visualized and manipulated in a standard jupyter notebook. The user can specify the representation used for the protein and choose to add the backbone to the visualization.  
+<p align="center">
+  <img width="900" height="300" src="https://github.com/inductiva/inductiva/assets/114397668/d8eb9c0b-8809-4da6-97a1-3448f2809af3">
+</p>
 
-When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
 
 ## Installation
 
