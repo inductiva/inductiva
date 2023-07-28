@@ -51,11 +51,11 @@ class Scenario(ABC):
     ) -> Union[Path, Task]:
         """Simulates the scenario synchronously."""
         self.validate_simulator(simulator)
-        self.create_input_files(simulator, input_dir)
+        output_dir = self._output_dir_name(output_dir)
 
         with tempfile.TemporaryDirectory() as input_dir:
-            if not run_async:
-                output_dir = self._output_dir_name(output_dir)
+            self.create_input_files(simulator, input_dir)
+                
             return simulator.run(
                 input_dir,
                 output_dir=output_dir,

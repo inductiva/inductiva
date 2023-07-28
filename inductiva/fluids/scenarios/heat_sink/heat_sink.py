@@ -102,9 +102,9 @@ class HeatSink(Scenario):
         simulator: Simulator = OpenFOAM(),
         output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
+        run_async: bool = False,
         simulation_time=300,
         output_time_step=10,
-        run_async: bool = False,
     ):
         """Simulates the scenario.
 

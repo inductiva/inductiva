@@ -74,10 +74,10 @@ class CoastalArea(Scenario):
         simulator: Simulator = SWASH(),
         output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
+        run_async: bool = False,
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
-        run_async: bool = False,
     ):
         """Simulates the scenario.
 

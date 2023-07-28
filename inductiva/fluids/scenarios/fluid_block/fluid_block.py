@@ -91,6 +91,7 @@ class FluidBlock(Scenario):
         simulator: Simulator = DualSPHysics(),
         output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
+        run_async: bool = False,
         device: Literal["cpu", "gpu"] = "gpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
@@ -98,7 +99,6 @@ class FluidBlock(Scenario):
         particle_sorting: bool = True,
         time_step: float = 0.001,
         output_time_step: float = 1 / 60,
-        run_async: bool = False,
     ):
         """Simulates the scenario.
 

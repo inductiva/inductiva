@@ -101,12 +101,12 @@ class WindTunnel(Scenario):
                  simulator: Simulator = OpenFOAM(),
                  output_dir: Optional[Path] = None,
                  resource_pool_id: Optional[UUID] = None,
+                 run_async: bool = False,
                  object_path: Optional[Path] = None,
                  simulation_time: float = 100,
                  output_time_step: float = 50,
                  resolution: Literal["high", "medium", "low"] = "medium",
-                 n_cores: int = 1,
-                 run_async: bool = False):
+                 n_cores: int = 1):
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
