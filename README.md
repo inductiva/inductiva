@@ -146,59 +146,75 @@ coastal area.
 
 ### MDWaterBox
 
-This scenario simulates a system that consists of a cubic box of water molecules, evolving according to the rules of Molecular Dynamics - the position of the water molecules is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields. This approach is inspired by [this article](https://arxiv.org/abs/2112.03383).
+This scenario simulates a system that consists of a cubic box filled with water molecules, evolving according to the rules of Molecular Dynamics: this means that the water molecules' positions are updated according to Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields. The implementation of this scenario was inspired by [this article](https://arxiv.org/abs/2112.03383). 
 
 #### Example
 
 First we initialize the scenario:
-```
+```python
 from inductiva.molecules.scenarios import MDWaterBox
 
 scenario = MDWaterBox(temperature = 300, box_size = 2.3)
 ```
 
-The user can specify the temperature (in Kelvin) and box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
+The user can specify the temperature (in Kelvin) and the box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
 
 After the initialization, we are ready to simulate the system:
 
-```
-output = scenario.simulate(simulation_time = 10,
-            nsteps_minim = 5000)
+```python
+output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
 ```
 
-The simulate method initializes a simulation in the cloud. In this call, we set the parameters:
+The simulate method initializes a simulation using cloud resources. In this call, we set the following parameters:
  - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
- -nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step. 
+ - nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step.
 
-When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
+The simulation output files can be found in inductiva_output/task_id folder.
+
+Finally, we can visualize the simulation: 
+```python
+view = output.render_interactive()
+view
+```
+This renders the trajectory in an interactive visualization that can be manipulated in a jupyter notebook. 
 
 ### ProteinSolvation
 
-This scenario simulates the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization step](), in which it is ensured that the structure of the protein+water system doesn't have steric clashes and structural issues. Then, the position of the atoms in this system is updated using Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
+The ProteinSolvation scenario models the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization](https://manual.gromacs.org/current/reference-manual/algorithms/energy-minimization.html) process to eliminate any steric clashes or structural issues within the protein-water system. After this, the position of the atoms in this system is updated according to Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
 
 #### Example
 
 First we initialize the scenario:
-```
+```python
 from inductiva.molecules.scenarios import ProteinSolvation
 
 scenario = ProteinSolvation(pdb_file, temperature = 300)
 ```
 
-The user must provide the path for the PDB file  ```pdb_file``` corresponding to the protein the user wants to simulate. Also, it can specify the temperature (in Kelvin). The number above correspond to the default value.
+The user must provide the path for the PDB file (pdb_file) corresponding to the protein to be simulated. Aditionally, one can specify the temperature (in Kelvin), which defaults to 300 K. 
 
-After the initialization, we are ready to simulate the system:
+After the initialization, we are ready to run the simulation:
 
-```
-output = scenario.simulate(simulation_time = 10,
-            nsteps_minim = 5000)
+```python
+output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
 ```
 
 The simulate method initializes the simulation. In this call, we set the parameters:
- - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
- -nsteps_minin = 5000: number of steps for the energy minimization section. 
+ - simulation_time = 10: sets the trajectorie time to span 10 **nanosecons**;
+ - nsteps_minin = 5000: sets the number of steps for the energy minimization section. 
 
-When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. Also, the object simulation can be used to visualize some aspects of the outputs. In particular, ```output.render_interactive()``` yields an interactive visualization that can be visualized in a standard jupyter notebook.
+When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. 
+
+Visualize the results: 
+```python
+view = ouptut.render_interctive(representation= "ball+stick", add_backbone=True)
+```
+
+This yields an interactive visualization of the protein's trajectory that can be visualized and manipulated in a standard jupyter notebook. The user can specify the representation used for the protein and choose to add the backbone to the visualization.  
+
+![ezgif com-video-to-gif](https://github.com/inductiva/inductiva/assets/114397668/d3b9d526-5e21-40c6-9bac-66627cdf5dfa)
+
+
 
 ## Installation
 
