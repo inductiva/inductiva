@@ -20,7 +20,6 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.utils import files
 from inductiva.fluids.scenarios.wind_tunnel.post_processing import WindTunnelOutput
-from inductiva.tasks import Task
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
@@ -102,6 +101,7 @@ class WindTunnel(Scenario):
                  simulator: Simulator = OpenFOAM(),
                  output_dir: Optional[Path] = None,
                  resource_pool_id: Optional[UUID] = None,
+                 run_async: bool = False,
                  object_path: Optional[Path] = None,
                  simulation_time: float = 100,
                  output_time_step: float = 50,
@@ -114,7 +114,7 @@ class WindTunnel(Scenario):
                 Valid simulators: OpenFOAM.
             object_path: Path to object inserted in the wind tunnel.
             output_dir: Path to the directory where the simulation output
-                is downloaded.
+                is downloaded when running synchronously.
             simulation_time: Simulation time (s).
             output_time_step: Interval between simulation outputs (s).
             n_cores: Number of cores to use for the simulation.
@@ -135,56 +135,16 @@ class WindTunnel(Scenario):
 
         commands = self.get_commands()
 
-        output_path = super().simulate(
-            simulator,
-            output_dir=output_dir,
-            resource_pool_id=resource_pool_id,
-            n_cores=n_cores,
-            commands=commands,
-        )
-
-        return WindTunnelOutput(output_path)
-
-    def simulate_async(self,
-                       simulator: Simulator = OpenFOAM(),
-                       resource_pool_id: Optional[UUID] = None,
-                       object_path: Optional[Path] = None,
-                       simulation_time: float = 100,
-                       output_time_step: float = 50,
-                       resolution: Literal["high", "medium", "low"] = "medium",
-                       n_cores: int = 1) -> Task:
-        """Simulates the wind tunnel scenario asynchronously.
-
-        Args:
-            simulator: Simulator used to simulate the scenario.
-                Valid simulators: OpenFOAM.
-            object_path: Path to object inserted in the wind tunnel.
-            simulation_time: Simulation time (s).
-            output_time_step: Interval between simulation outputs (s).
-            n_cores: Number of cores to use for the simulation.
-            resolution: Level of detail for the simulation. It can be
-                "high", "medium" or "low".
-            resource_pool_id: Id of the resource pool to use for the simulation.
-            """
-
-        if object_path:
-            self.object_path = files.resolve_path(object_path)
+        output = super().simulate(simulator,
+                                  output_dir=output_dir,
+                                  resource_pool_id=resource_pool_id,
+                                  run_async=run_async,
+                                  n_cores=n_cores,
+                                  commands=commands)
+        if run_async:
+            return output
         else:
-            logging.info("WindTunnel is empty. Object path not specified.")
-
-        self.resolution = MeshResolution[resolution.upper()].value
-        self.simulation_time = simulation_time
-        self.output_time_step = output_time_step
-        self.n_cores = n_cores
-
-        commands = self.get_commands()
-
-        return super().simulate_async(
-            simulator,
-            resource_pool_id=resource_pool_id,
-            n_cores=n_cores,
-            commands=commands,
-        )
+            return WindTunnelOutput(output)
 
     def get_commands(self):
         """Returns the commands for the simulation."""

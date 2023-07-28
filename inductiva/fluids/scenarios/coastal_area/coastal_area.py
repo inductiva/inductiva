@@ -7,7 +7,6 @@ from typing import Optional
 import shutil
 from uuid import UUID
 
-from inductiva.tasks import Task
 from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
@@ -24,11 +23,11 @@ SWASH_CONFIG_FILENAME = "input.sws"
 
 class CoastalArea(Scenario):
     """Coastal area scenario.
-    
+
     This is a simulation scenario for waves propagating in a coastal area. The
     bathymetric profile (i.e., the depth of the sea bottom) is fixed to be that
     of Praia do Carneiro beach, in Porto, Portugal.
-    
+
     The scenario is simulated in a 2D box (x points east, y points north) with
     dimensions 1200 x 400 m, with a resolution of 4 m along both x and y
     directions. Waves are injected from the lower x boundary (west) with
@@ -75,6 +74,7 @@ class CoastalArea(Scenario):
         simulator: Simulator = SWASH(),
         output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
+        run_async: bool = False,
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
@@ -94,42 +94,17 @@ class CoastalArea(Scenario):
         self.time_step = time_step
         self.output_time_step = output_time_step
 
-        output_path = super().simulate(
+        output = super().simulate(
             simulator,
-            sim_config_filename=SWASH_CONFIG_FILENAME,
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
-        )
-
-        return CoastalAreaOutput(output_path)
-
-    def simulate_async(
-        self,
-        simulator: Simulator = SWASH(),
-        resource_pool_id: Optional[UUID] = None,
-        simulation_time: float = 100,
-        time_step: float = 0.1,
-        output_time_step: float = 1,
-    ) -> Task:
-        """Simulates the scenario asynchronously.
-        
-        Args:
-            simulator: Simulator to use. Supported simulators are: SWASH.
-            resource_pool_id: Resource pool to use for the simulation.
-            simulation_time: Total simulation time, in seconds.
-            time_step: Time step, in seconds.
-            output_time_step: Time step for the output, in seconds.
-        """
-
-        self.simulation_time = simulation_time
-        self.time_step = time_step
-        self.output_time_step = output_time_step
-
-        return super().simulate_async(
-            simulator,
+            run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,
-            resource_pool_id=resource_pool_id,
         )
+        if run_async:
+            return output
+        else:
+            return CoastalAreaOutput(output)
 
     @singledispatchmethod
     def get_config_filename(self, simulator: Simulator):

@@ -91,6 +91,7 @@ class FluidBlock(Scenario):
         simulator: Simulator = DualSPHysics(),
         output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
+        run_async: bool = False,
         device: Literal["cpu", "gpu"] = "gpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
@@ -113,8 +114,9 @@ class FluidBlock(Scenario):
             simulation_time: The simulation time, in seconds.
             adaptive_time_step: Whether to use adaptive time stepping.
             particle_sorting: Whether to use particle sorting.
-            time_step: The time step, in seconds.
-            output_time_step: Time step for the output, in seconds.
+            time_step: Time step, in seconds.
+            output_time_step: Time step between outputs, in seconds.
+            run_async: Whether to run the simulation asynchronously.
         """
 
         # TODO: Avoid storing these as class attributes.
@@ -125,17 +127,21 @@ class FluidBlock(Scenario):
         self.time_step = time_step
         self.output_time_step = output_time_step
 
-        output_path = super().simulate(
-            simulator,
-            output_dir=output_dir,
-            resource_pool_id=resource_pool_id,
-            device=device,
-            sim_config_filename=self.get_config_filename(simulator),
-        )
+        output = super().simulate(simulator=simulator,
+                                  output_dir=output_dir,
+                                  resource_pool_id=resource_pool_id,
+                                  run_async=run_async,
+                                  device=device)
 
-        # TODO: What to return when the simulation is performed with
-        # DualSPHysics?
-        return SPHSimulationOutput(output_path)
+        # TODO: Add any kind of post-processing here, e.g. convert files?
+        # convert_vtk_data_dir_to_netcdf(
+        #     data_dir=os.path.join(output_path, "vtk"),
+        #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
+        #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
+        if run_async:
+            return output
+        else:
+            return SPHSimulationOutput(output)
 
     @singledispatchmethod
     def get_config_filename(self, simulator: Simulator):

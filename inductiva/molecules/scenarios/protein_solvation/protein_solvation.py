@@ -49,6 +49,7 @@ class ProteinSolvation(Scenario):
             simulator: Simulator = GROMACS(),
             output_dir: Optional[Path] = None,
             resource_pool_id: Optional[UUID] = None,
+            run_async: bool = False,
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000,
@@ -76,6 +77,7 @@ class ProteinSolvation(Scenario):
                 Options:
                 - "Protein-H": The protein with hydrogens. This is the default.
                 - "System": The whole system (Protein + Water).
+            run_async: Whether to run the simulation asynchronously.
         """
 
         self.visualized_section = visualized_section
@@ -86,57 +88,15 @@ class ProteinSolvation(Scenario):
         self.integrator = integrator
         self.nsteps_minim = nsteps_minim
         commands = self.get_commands()
-        output_path = super().simulate(simulator,
-                                       output_dir,
-                                       resource_pool_id=resource_pool_id,
-                                       commands=commands)
-        return ProteinSolvationOutput(output_path)
-
-    def simulate_async(
-            self,
-            simulator: Simulator = GROMACS(),
-            resource_pool_id: Optional[UUID] = None,
-            simulation_time: float = 10,  # ns
-            integrator: Literal["md", "sd", "bd"] = "md",
-            nsteps_minim: int = 5000,
-            visualized_section: str = "Protein-H"):
-        """Simulate the solvation of a protein scenario asyncronously.
-
-        Args:
-            simulation_time: The simulation time in ns.
-            integrator: The integrator to use for the simulation. Options:
-                - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
-                integrating Newton's equations of motion.
-                - "sd" (Steepest Descent): Stochastic dynamics integrator with
-                leap-frog scheme.
-                - "bd" (Brownian Dynamics): Euler integrator for Brownian or
-                position Langevin dynamics.
-
-            For more details on the integrators, refer to the GROMACS
-            documentation at
-            https://manual.gromacs.org/current/user-guide/mdp-options.html.
-
-            nsteps_minim: Number of steps for energy minimization.
-            visualized_section: The section of the protein to visualize in the
-            simulation.
-                Options:
-                - "Protein-H": The protein with hydrogens. This is the default.
-                - "System": The whole system (Protein + Water).
-        """
-
-        self.visualized_section = visualized_section
-
-        commands = self.get_commands()
-
-        self.nsteps = int(
-            simulation_time * 1e6 / 2
-        )  # convert to fs and divide by the time step of the simulation (2 fs)
-        self.integrator = integrator
-        self.nsteps_minim = nsteps_minim
-
-        return super().simulate_async(simulator,
-                                      resource_pool_id=resource_pool_id,
-                                      commands=commands)
+        output = super().simulate(simulator,
+                                  output_dir,
+                                  resource_pool_id=resource_pool_id,
+                                  commands=commands,
+                                  run_async=run_async)
+        if run_async:
+            return output
+        else:
+            return ProteinSolvationOutput(output)
 
     def get_commands(self):
         """Returns the commands for the simulation."""

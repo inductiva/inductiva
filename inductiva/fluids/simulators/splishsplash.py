@@ -1,6 +1,6 @@
 """DualSPHysics module of the API."""
 import pathlib
-from typing import Literal, Optional
+from typing import Literal, Optional, Union
 from uuid import UUID
 
 from inductiva import types
@@ -22,7 +22,8 @@ class SPlisHSPlasH(Simulator):
         output_dir: Optional[types.Path] = None,
         resource_pool_id: Optional[UUID] = None,
         device: Literal["gpu", "cpu"] = "cpu",
-    ) -> pathlib.Path:
+        run_async: bool = False,
+    ) -> Union[pathlib.Path, Task]:
         """Run the simulation.
 
         Args:
@@ -37,23 +38,3 @@ class SPlisHSPlasH(Simulator):
             device=device,
             input_filename=sim_config_filename,
         )
-
-    def run_async(
-        self,
-        input_dir: types.Path,
-        sim_config_filename: str,
-        resource_pool_id: Optional[UUID] = None,
-        device: Literal["gpu", "cpu"] = "cpu",
-    ) -> Task:
-        """Run the simulation asynchronously.
-
-        Args:
-            sim_config_filename: Name of the simulation configuration file.
-            device: Device in which to run the simulation.
-            other arguments: See the documentation of the base class.
-            """
-
-        return super().run_async(input_dir,
-                                 resource_pool_id=resource_pool_id,
-                                 device=device,
-                                 input_filename=sim_config_filename)
