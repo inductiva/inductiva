@@ -1,6 +1,6 @@
 """Functions for running simulations via Inductiva Web API."""
 import pathlib
-from typing import Any, Dict, Optional, Union
+from typing import Any, Optional, Union
 from uuid import UUID
 
 from inductiva.tasks import Task

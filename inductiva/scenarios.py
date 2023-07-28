@@ -55,7 +55,7 @@ class Scenario(ABC):
 
         with tempfile.TemporaryDirectory() as input_dir:
             self.create_input_files(simulator, input_dir)
-                
+
             return simulator.run(
                 input_dir,
                 output_dir=output_dir,

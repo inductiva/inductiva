@@ -49,11 +49,11 @@ class ProteinSolvation(Scenario):
             simulator: Simulator = GROMACS(),
             output_dir: Optional[Path] = None,
             resource_pool_id: Optional[UUID] = None,
+            run_async: bool = False,
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             nsteps_minim: int = 5000,
-            visualized_section: str = "Protein-H",
-            run_async: bool = False):
+            visualized_section: str = "Protein-H"):
         """Simulate the solvation of a protein.
 
         Args:

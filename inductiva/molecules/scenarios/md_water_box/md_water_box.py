@@ -51,10 +51,10 @@ class MDWaterBox(Scenario):
             simulator: Simulator = GROMACS(),
             output_dir: Optional[Path] = None,
             resource_pool_id: Optional[UUID] = None,
+            run_async: bool = False,
             simulation_time: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
-            nsteps_minim: int = 5000,
-            run_async: bool = False):
+            nsteps_minim: int = 5000):
         """Simulate the water box scenario using molecular dynamics.
 
         Args:
@@ -90,7 +90,7 @@ class MDWaterBox(Scenario):
                                   commands=commands,
                                   run_async=run_async)
         if run_async:
-            output
+            return output
         else:
             return MDWaterBoxOutput(output)
 
