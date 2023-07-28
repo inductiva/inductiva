@@ -14,7 +14,7 @@ Example of how to run the dam break scenario:
 ```python
 from inductiva import fluids
 
-scenario = fluids.scenarios.DamBreak(dimensions=(1., 0.3, 0.3))
+scenario = fluids.DamBreak(dimensions=(1., 0.3, 0.3))
 
 output = scenario.simulate()
 video = output.render()
@@ -26,7 +26,7 @@ Example of how to run a low-level simulation:
 ```python
 from inductiva import fluids
 
-simulator = fluids.simulators.DualSPHysics()
+simulator = fluids.DualSPHysics()
 
 output_dir = simulator.run(input_dir="FlowCylinder",
                            sim_config_filename="CaseFlowCylinder_Re200_Def.xml",
@@ -69,11 +69,12 @@ Initialize the scenario:
 
 ```python
 from inductiva import fluids
-scenario = fluids.scenarios.FluidBlock(density=1e3,
-                                       kinematic_viscosity=1e-6,
-                                       position=(0.3, 0.3, 0.3),
-                                       dimensions=(0.4, 0.4, 0.4),
-                                       initial_velocity=(0.0, 0.0, 0.0))
+
+scenario = fluids.FluidBlock(density=1e3,
+                             kinematic_viscosity=1e-6,
+                             position=(0.3, 0.3, 0.3),
+                             dimensions=(0.4, 0.4, 0.4),
+                             initial_velocity=(0.0, 0.0, 0.0))
 ```
 
 The user can specify the fluid density (in kg/m^3), kinematic viscosity (in
@@ -101,6 +102,70 @@ output.render()
 
 \[TODO @IvanPombo: add gif with render\]
 
+### Wind Tunnel
+
+This scenario simulates the aerodynamics of an object inside a virtual
+[Wind Tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air flow velocity.
+At the moment, the system is modelled with the steady-state equations for incompressible flow and
+the $k-\epsilon$ turbulence models.
+
+#### Example
+
+Initialize the scenario:
+
+```python
+from inductiva import fluids
+
+scenario = fluids.WindTunnel(
+    flow_velocity=[30, 0, 0],
+    domain_geometry={"x": [-6, 12], "y": [-5, 5], "z": [0, 10]})
+```
+
+The user can specify the flow velocity vector (in m/s) and the domain geometry (in m).
+
+Run the simulation:
+
+```python
+output = scenario.simulate(object_path="vehicle.obj",
+                           simulation_time = 100,
+                           output_time_step = 50,
+                           resolution = "medium")
+```
+
+The user needs to specify the object to insert inside the wind tunnel and thereafter,
+select the total simulation time, the step between outputs and the resolution of the simulation.
+
+After the simulation has finished, the user has the possibility to obtain several metrics:
+
+```python
+
+pressure_field = output.get_physical_field("pressure")
+
+slice = output.get_flow_slice("velocity")
+
+streamlines = output.get_streamlines("velocity")
+```
+
+Visualize the outputs:
+
+```python
+pressure_field.render()
+```
+
+\[TODO @IvanPombo: add gif with render\]
+
+```python
+pressure_field.render_frame()
+```
+
+\[TODO @IvanPombo: add gif with render\]
+
+```python
+pressure_field.render_frame()
+```
+
+\[TODO @IvanPombo: add gif with render\]
+
 ### Coastal area
 
 This scenario simulates the propagation of waves in a coastal area, by solving
@@ -115,9 +180,11 @@ the shore, interacting with the different elements of the bathymetry.
 Initialize the scenario:
 
 ```python
-from inductiva.fluids.scenarios import CoastalArea
+from inductiva import fluids
 
-scenario = CoastalArea(wave_amplitude=2.5, wave_period=5.5, water_level=1.0)
+scenario = fluids.CoastalArea(wave_amplitude=2.5,
+                              wave_period=5.5,
+                              water_level=1.0)
 ```
 
 The user can specify the wave amplitude (in meters) and period (in seconds), as
@@ -126,7 +193,9 @@ well as the base water level (in meters).
 Run the simulation:
 
 ```python
-output = scenario.simulate(simulation_time=120, time_step=0.1, output_time_step=1)
+output = scenario.simulate(simulation_time=120,
+                           time_step=0.1,
+                           output_time_step=1)
 ```
 
 The user can specify the total simulation time, the adopted time step and the
@@ -151,10 +220,10 @@ This scenario simulates a system that consists of a cubic box filled with water 
 #### Example
 
 First we initialize the scenario:
-```python
-from inductiva.molecules.scenarios import MDWaterBox
+```
+from inductiva import molecules
 
-scenario = MDWaterBox(temperature = 300, box_size = 2.3)
+scenario = molecules.MDWaterBox(temperature = 300, box_size = 2.3)
 ```
 
 The user can specify the temperature (in Kelvin) and the box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
@@ -164,6 +233,8 @@ After the initialization, we are ready to simulate the system:
 ```python
 output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
 ```
+output = scenario.simulate(simulation_time = 10,
+                           nsteps_minim = 5000)
 
 The simulate method initializes a simulation using cloud resources. The user can set the duration of the simulation in nanoseconds and the number of steps for the energy minimization.
 
@@ -185,10 +256,10 @@ The ProteinSolvation scenario models the dynamics of a protein whose structure i
 #### Example
 
 First we initialize the scenario:
-```python
-from inductiva.molecules.scenarios import ProteinSolvation
+```
+from inductiva import molecules
 
-scenario = ProteinSolvation(pdb_file, temperature = 300)
+scenario = molecules.ProteinSolvation(pdb_file, temperature = 300)
 ```
 
 The user must provide the path for the PDB file (pdb_file) corresponding to the protein to be simulated. Aditionally, one can specify the temperature (in Kelvin), which defaults to 300 K. 
@@ -198,6 +269,8 @@ After the initialization, we are ready to run the simulation:
 ```python
 output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
 ```
+output = scenario.simulate(simulation_time = 10,
+                           nsteps_minim = 5000)
 The simulate method initializes the simulation. In this call, we can set the simulation duration (in ns) and the number of steps for the energy minimization. 
 
 Visualize the results: 
