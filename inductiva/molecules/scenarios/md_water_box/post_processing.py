@@ -21,17 +21,19 @@ class MDWaterBoxOutput:
         self.sim_output_dir = sim_output_path
 
     def render_interactive(self, use_compressed_trajectory: bool = False):
-        """Render the simulation outputs in an interactive visualization."""
-
+        """Render the simulation outputs in an interactive visualization.
+        Args: 
+            use_compressed_trajectory: Whether to use the compressed trajectory
+            or the full precision trajectory."""
         topology = os.path.join(self.sim_output_dir, "eql.tpr")
         if use_compressed_trajectory:
             trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")
         else:
             trajectory = os.path.join(self.sim_output_dir, "eql.trr")
-
         universe = unwrap_trajectory(topology, trajectory)
         view = nv.show_mdanalysis(universe)
         view.add_ball_and_stick("all")
+        view.center()
         print("System Information:")
         print(f"Number of atoms in the system: {len(universe.atoms)}")
         print(f"Number of trajectory frames: {len(universe.trajectory)}")
