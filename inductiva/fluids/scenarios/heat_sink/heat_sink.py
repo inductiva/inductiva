@@ -72,6 +72,8 @@ class HeatSink(Scenario):
       |___________|_______|___________|
                     |___|
                  heat source
+
+    The scenario can be simulated with OpenFOAM.
     """
 
     valid_simulators = [OpenFOAM]
