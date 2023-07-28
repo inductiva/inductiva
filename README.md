@@ -165,18 +165,18 @@ After the initialization, we are ready to simulate the system:
 output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
 ```
 
-The simulate method initializes a simulation using cloud resources. In this call, we set the following parameters:
- - simulation_time = 10: sets the trajectories time to span 10 **nanosecons**;
- - nsteps_minin = 5000: sets the number of minimization steps in the energy minimization step.
-
-The simulation output files can be found in inductiva_output/task_id folder.
+The simulate method initializes a simulation using cloud resources. The user can set the duration of the simulation in nanoseconds and the number of steps for the energy minimization.
 
 Finally, we can visualize the simulation: 
 ```python
 view = output.render_interactive()
 view
 ```
-This renders the trajectory in an interactive visualization that can be manipulated in a jupyter notebook. 
+This renders the trajectory in an interactive visualization that can be manipulated in a jupyter notebook: 
+<p align="center">
+  <img width="900" height="300" src="https://github.com/inductiva/inductiva/assets/114397668/6cc809ed-085b-4fc6-b1a6-358be03cd061">
+</p>
+
 
 ### ProteinSolvation
 
@@ -198,12 +198,7 @@ After the initialization, we are ready to run the simulation:
 ```python
 output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
 ```
-
-The simulate method initializes the simulation. In this call, we set the parameters:
- - simulation_time = 10: sets the trajectorie time to span 10 **nanosecons**;
- - nsteps_minin = 5000: sets the number of steps for the energy minimization section. 
-
-When the simulation ends, the simulation output files can be found in inductiva_output/task_id folder. 
+The simulate method initializes the simulation. In this call, we can set the simulation duration (in ns) and the number of steps for the energy minimization. 
 
 Visualize the results: 
 ```python
@@ -211,9 +206,9 @@ view = ouptut.render_interctive(representation= "ball+stick", add_backbone=True)
 ```
 
 This yields an interactive visualization of the protein's trajectory that can be visualized and manipulated in a standard jupyter notebook. The user can specify the representation used for the protein and choose to add the backbone to the visualization.  
-
-![ezgif com-video-to-gif](https://github.com/inductiva/inductiva/assets/114397668/d3b9d526-5e21-40c6-9bac-66627cdf5dfa)
-
+<p align="center">
+  <img width="900" height="300" src="https://github.com/inductiva/inductiva/assets/114397668/d8eb9c0b-8809-4da6-97a1-3448f2809af3">
+</p>
 
 
 ## Installation
