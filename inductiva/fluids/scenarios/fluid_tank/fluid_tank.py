@@ -1,5 +1,4 @@
-"""Classes describing fluid tank scenarios."""
-
+"""Fluid tank scenario."""
 from dataclasses import dataclass, field
 from enum import Enum
 from functools import singledispatchmethod
@@ -119,7 +118,40 @@ class CylindricalTankOutlet(BaseTankOutlet):
 
 
 class FluidTank(Scenario):
-    """Fluid tank."""
+    """Fluid tank scenario.
+    
+    This is a simulation scenario for a fluid tank. The tank has a 3D shape that
+    may be cubic or cylindrical. Fluid is injected in the tank via an inlet
+    located at the top of the tank, and flows out of the tank via an outlet
+    located at the bottom of the tank. The motion of the fluid is controled
+    by gravity. The fluid properties such as density and kinematic viscosity
+    are configurable. The initial fluid level in the tank is also configurable,
+    as well as the inlet and outlet positions and dimensions.
+
+    The main axis of the tank is the z axis. The inlet and outlet are located at
+    the top and bottom of the tank, respectively, along the z axis. Fluid is
+    injected from the inlet in the negative z direction with a given velocity.
+
+    Schematic representation of the simulation scenario: e.g. x/y points right,
+    z points up.
+    
+       inlet        
+    _____________________
+    |    |              |
+    |    v              |
+    |                   |
+    |                   |
+    |___________________|  fluid level
+    |                   |
+    |                   |
+    |                   |
+    |                   |
+    |___________________|
+                    |
+                    v  outlet    
+    
+    The scenario can be simulated with SPlisHSPlasH.
+    """
 
     valid_simulators = [SPlisHSPlasH]
 
@@ -135,11 +167,11 @@ class FluidTank(Scenario):
         """Initializes a fluid tank.
 
         Args:
-            shape: Shape of the tank.
-            fluid: Fluid type.
-            fluid_level: Fluid level initially in the tank.
-            inlet: Inlet of the tank.
-            outlet: Outlet of the tank.
+            shape: The shape of the tank.
+            fluid: The fluid type.
+            fluid_level: The fluid level initially in the tank.
+            inlet: The inlet of the tank.
+            outlet: The outlet of the tank.
         """
         self.shape = shape
         self.fluid = fluid
@@ -161,13 +193,14 @@ class FluidTank(Scenario):
         """Simulates the scenario.
 
         Args:
-            simulator: Simulator to use.
+            simulator: Simulator to use. Supported simulators are: SPlisHSPlasH.
             output_dir: Directory to store the simulation output.
-            device: Device in which to run the simulation.
-            simulation_time: Simulation time, in seconds.
-            output_time_step: Time step between output files, in seconds.
+            resource_pool_id: Resource pool to use for the simulation.
+            simulation_time: Total simulation time, in seconds.
+            output_time_step: Time step for the output, in seconds.
             resolution: Resolution of the simulation. Controls the particle
-                radius and time step.
+              radius and time step. Accepted values are: "low", "medium",
+              "high".
             particle_sorting: Whether to use particle sorting.
         """
 
