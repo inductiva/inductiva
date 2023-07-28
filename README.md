@@ -14,7 +14,7 @@ Example of how to run the dam break scenario:
 ```python
 from inductiva import fluids
 
-scenario = fluids.DamBreak(dimensions=(1., 0.3, 0.3))
+scenario = fluids.scenarios.DamBreak(dimensions=(1., 0.3, 0.3))
 
 output = scenario.simulate()
 video = output.render()
@@ -26,7 +26,7 @@ Example of how to run a low-level simulation:
 ```python
 from inductiva import fluids
 
-simulator = fluids.DualSPHysics()
+simulator = fluids..simulators.DualSPHysics()
 
 output_dir = simulator.run(input_dir="FlowCylinder",
                            sim_config_filename="CaseFlowCylinder_Re200_Def.xml",
@@ -70,7 +70,7 @@ Initialize the scenario:
 ```python
 from inductiva import fluids
 
-scenario = fluids.FluidBlock(density=1e3,
+scenario = fluids.scenarios.FluidBlock(density=1e3,
                              kinematic_viscosity=1e-6,
                              position=(0.3, 0.3, 0.3),
                              dimensions=(0.4, 0.4, 0.4),
@@ -116,7 +116,7 @@ Initialize the scenario:
 ```python
 from inductiva import fluids
 
-scenario = fluids.WindTunnel(
+scenario = fluids.scenarios.WindTunnel(
     flow_velocity=[30, 0, 0],
     domain_geometry={"x": [-6, 12], "y": [-5, 5], "z": [0, 10]})
 ```
@@ -140,10 +140,6 @@ After the simulation has finished, the user has the possibility to obtain severa
 ```python
 
 pressure_field = output.get_physical_field("pressure")
-
-slice = output.get_flow_slice("velocity")
-
-streamlines = output.get_streamlines("velocity")
 ```
 
 Visualize the outputs:
@@ -154,17 +150,6 @@ pressure_field.render()
 
 \[TODO @IvanPombo: add gif with render\]
 
-```python
-pressure_field.render_frame()
-```
-
-\[TODO @IvanPombo: add gif with render\]
-
-```python
-pressure_field.render_frame()
-```
-
-\[TODO @IvanPombo: add gif with render\]
 
 ### Coastal area
 
@@ -182,7 +167,7 @@ Initialize the scenario:
 ```python
 from inductiva import fluids
 
-scenario = fluids.CoastalArea(wave_amplitude=2.5,
+scenario = fluids.scenarios.CoastalArea(wave_amplitude=2.5,
                               wave_period=5.5,
                               water_level=1.0)
 ```
@@ -223,7 +208,7 @@ First we initialize the scenario:
 ```
 from inductiva import molecules
 
-scenario = molecules.MDWaterBox(temperature = 300, box_size = 2.3)
+scenario = molecules.scenarios.MDWaterBox(temperature = 300, box_size = 2.3)
 ```
 
 The user can specify the temperature (in Kelvin) and the box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
@@ -259,7 +244,7 @@ First we initialize the scenario:
 ```
 from inductiva import molecules
 
-scenario = molecules.ProteinSolvation(pdb_file, temperature = 300)
+scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature = 300)
 ```
 
 The user must provide the path for the PDB file (pdb_file) corresponding to the protein to be simulated. Aditionally, one can specify the temperature (in Kelvin), which defaults to 300 K. 
