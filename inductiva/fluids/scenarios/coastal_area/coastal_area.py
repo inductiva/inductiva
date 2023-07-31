@@ -25,7 +25,14 @@ SWASH_BATHYMETRY_FILENAME = "bathymetry.bot"
 
 
 class Bathymetry:
-    """TODO."""
+    """Represents a bathymetric profile.
+    
+    A bathymetric profile defines the depth of the sea bottom as a function of
+    space, here described in Cartesian coordinates (x, y). Here, a bathymetry is
+    represented as a 2D array with the depths, in meters, at each point of a
+    regular grid. The grid is defined by the range of x and y values. Positive
+    depths are below the water level.
+    """
 
     def __init__(
         self,
@@ -33,6 +40,14 @@ class Bathymetry:
         x_range: Sequence[float],
         y_range: Sequence[float],
     ):
+        """Initializes a `Bathymetry` object.
+        
+        Args:
+            depths: A 2D array with the depths, in meters. The first and second
+              dimensions correspond to the x and y directions, respectively.
+            x_range: The range of x values, in meters.
+            y_range: The range of y values, in meters.
+        """
         self.depths = depths
         self.x_range = x_range
         self.y_range = y_range
@@ -44,30 +59,46 @@ class Bathymetry:
         x_range: Sequence[float],
         y_range: Sequence[float],
     ):
-        """TODO."""
+        """Creates a `Bathymetry` object from a text file.
+        
+        The depth values are read from a text file. The text file must contain
+        a 2D array with the depths, in meters. The first and second dimensions
+        of the array in the text file (i.e. rows and columns) correspond to the
+        x and y directions, respectively.
+
+        Args:
+            text_file_path: Path to the text file.
+            x_range: The range of x values, in meters.
+            y_range: The range of y values, in meters.
+        """
 
         depths = np.loadtxt(text_file_path)
         return cls(depths, x_range, y_range)
 
     def to_text_file(self, text_file_path: str):
+        """Writes the bathymetry to a text file.
+
+        Args:
+            text_file_path: Path to the text file.
+        """
 
         np.savetxt(text_file_path, self.depths)
 
     @property
     def shape(self):
-        """TODO."""
+        """Returns the shape of the 2D array defining the bathymetry."""
 
         return self.depths.shape
 
     @property
     def x_delta(self):
-        """TODO."""
+        """Returns the distance between two consecutive points along x."""
 
         return (self.x_range[1] - self.x_range[0]) / self.shape[0]
 
     @property
     def y_delta(self):
-        """TODO."""
+        """Returns the distance between two consecutive points along y."""
 
         return (self.y_range[1] - self.y_range[0]) / self.shape[1]
 
@@ -114,7 +145,12 @@ class CoastalArea(Scenario):
         """Initializes a `CoastalArea` object.
 
         Args:
+            bathymetry: The bathymetric profile.
             water_level: The water level, in meters.
+            wave_source_location: The location of the wave source. Supported
+              locations are: N (north), S (south), E (east), W (west),
+              corresponding to the upper, lower, right and left boundaries of
+              the simulation domain, respectively.
             wave_amplitude: The amplitude of the wave, in meters.
             wave_period: The period of the wave, in seconds.
         """
