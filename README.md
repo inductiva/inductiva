@@ -94,9 +94,14 @@ flow_slice.render("velocity")
 
 ![F1 car in WindTunnel](resources/media/wind_tunnel.png)
 
-### Fluid Tank
+### Fluid tank
 
-This scenario simulates the motion of a fluid block inside tank under the action of gravity. The tank has a 3D shape that may be cubic or cylindrical. Fluid is injected in the tank via an inlet located at the top of the tank, and flows out of the tank via an outlet located at the bottom of the tank. The fluid motion is simulated using the Smoothed Particle Hydrodynamics method.
+This scenario simulates the motion of a fluid in a cubic or cylindrical tank.
+Fluid is injected into the tank via an inlet located at the top of the tank and
+flows out of the tank via an outlet located at the bottom of the tank. The
+motion of the fluid is controlled by gravity. The simulation is performed using
+the [Smoothed Particle Hydrodynamics](https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics)
+method.
 
 #### Example
 
@@ -104,23 +109,25 @@ Initialize the scenario:
 
 ```python
 from inductiva import fluids
-
 scenario = fluids.scenarios.FluidTank(shape=fluids.shapes.Cube(),
-                                      fluid_level=0.7)
+                                      fluid=fluids.WATER,
+                                      fluid_level=0.5)
 ```
 
-The user can select the shape of the tank (either a cube or a cylinder), the fluid type, fluid_level and the inlet and outlet shape.
+The user can specify the fluid (e.g. water, honey or oil), the fluid level (in
+meters), as well as the tank shape and its inlet and outlet properties.
 
 Run the simulation:
 
 ```python
-
-output = scenario.simulate(simulation_time=10,
-                           time_step=0.01,
-                           output_time_step=0.1)
+output = scenario.simulate(simulation_time=5,
+                           output_time_step=0.1,
+                           resolution="medium")
 ```
 
-The user can specify the total simulation time, the adopted time step, the time step between outputs (all in seconds) and the resolution of the simulation (low, medium, high). By default, the simulation is run with SPliSHSPlasH, but the user can specify a different simulator. The available simulators for this scenario are SPlisHSPlasH and DualSPHysics.
+The user can specify the total simulation time and the time step between outputs
+(all in seconds). The user can also specify the resolution of the simulation
+(low, medium or high).
 
 Visualize the results:
 
@@ -128,8 +135,7 @@ Visualize the results:
 output.render()
 ```
 
-![Fluid Tank simulation render.](resources/media/fluid_tank.gif)
-
+![Fluid tank simulation.](resources/media/fluid_tank.gif)
 
 ### Coastal area
 
