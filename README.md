@@ -5,12 +5,9 @@
 
 # Large scale simulations made simple
 
-**Inductiva API** provides open-source physical simulation from your laptop. Users can start simulating right away, with no hardware setup issues and no software configuration headaches. We provide a transparent way to scale your simulations to the next level with one line of code.
+**Inductiva API** provides open-source physical simulation from your laptop. With no configuration headaches, users can easily scale simulations to the next level with one line of code.
 
 Whether you want to use simulation to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here for you. 
-
-Our goal is to provide researchers and engineers with an easy and fast way to scale their simulations and explore various designs. 
-
 
 ## Scenarios
 
@@ -44,7 +41,7 @@ Users can set the simulation duration (in ns) and the number of steps for the en
 
 Visualize the results: 
 ```python
-view = ouptut.render_interctive(representation="ball+stick", add_backbone=True)
+view = ouptut.render_interactive(representation="ball+stick", add_backbone=True)
 ```
 
 This yields an interactive visualization of the protein's trajectory that can be visualized and manipulated in a standard jupyter notebook. The user can specify the representation used for the protein and choose to add the backbone to the visualization.  
@@ -110,7 +107,7 @@ Initialize the scenario:
 
 ```python
 from inductiva import fluids
-scenario = fluids.scenarios.FluidTank(shape=fluids.shapes.Cube(),
+scenario = fluids.scenarios.FluidTank(shape=fluids.shapes.Cylinder(),
                                       fluid=fluids.WATER,
                                       fluid_level=0.5)
 ```
@@ -218,12 +215,12 @@ output_dir = simulator.run(input_dir="FlowCylinder",
 
 The user must specify the input directory, the simulation configuration file, the output directory and the device to run the simulation on.
 
-Find more examples of simulations at the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
+Find more examples of simulations in the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
 
 
 ## Manage Resources
 
-**Inductiva API** provides a simple way to manage the hardware resources used to run the simulations. Users can launch virtual machines, list the available machines and terminate them.
+**Inductiva API** provides a simple way to manage the hardware resources used to run the simulations. Users can launch virtual machines, list the available machines and terminate them. This is a feature available only to admins.
 In this way, users do not need to wait for their simulations in a queue and can have full control of the hardware used.
 
 Start your machines and run your simulations:
@@ -232,8 +229,8 @@ Start your machines and run your simulations:
 
 import inductiva
 
-machine = inductiva.resources.launch_machines(name="test_machine",
-                                              machine_type="c2-standard-16")
+machines = inductiva.admin.launch_machines(name="test_machine",
+                                           machine_type="c2-standard-16")
 
 # Example with ProteinSolvation scenario
 scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature=300)
@@ -260,19 +257,39 @@ Let's look at an example using the wind tunnel scenario:
 ```python
 from inductiva import fluids
 
-scenario = fluids.scenarios.WindTunnel(
-    flow_velocity=[30, 0, 0],
-    domain_geometry={"x": [-6, 12], "y": [-5, 5], "z": [0, 10]})
+# Initialize scenario with defaults
+scenario = fluids.scenarios.WindTunnel()
 
-# Path to a folder containing a set of objects
-objects_path_list = ["object_1.obj", "object_2.obj", ..., "object_1000.obj"]
+# Path to a set of objects
+object_path = "path/to/vehicle.obj"
 
-for object_path in objects_path_list:
-    task = scenario.simulate(object_path=object_path,
-                      simulation_time=100,
-                      output_time_step=50,
-                      resolution="medium",
-                      run_async=True)
+# Run simulation
+task = scenario.simulate(object_path=object_path,
+                         run_async=True)
+
+# Blocking call to obtain the results
+output = task.get_output()
+```
+
+In this way, the simulation is launched asynchronously and the user can continue with other tasks. When the user wants to retrieve the results, they can do so by calling the `get_output()` method. This method will block until the results are ready.
+
+Running simulations asynchronously allows users to launch multiple simulations in parallel. Let's look at an example:
+
+```python
+from inductiva import fluids
+
+# Initialize scenario with defaults
+scenario = fluids.scenarios.WindTunnel()
+
+# Path to a set of vehicles
+vehicle_path_list = ["vehicle_1.obj", "vehicle_2.obj", ..., "vehicle_1000.obj"]
+
+tasks_list = []
+
+for vehicle in vehicle_path_list:
+    task = scenario.simulate(object_path=vehicle,
+                             run_async=True)
+    tasks_list.append(task)
 ```
 
 All of the simulations will be launched in one go. The user can check the status of the simulations and retrieve the results when they are ready. Check the FAQ section for more information on how to do this.
@@ -286,7 +303,7 @@ One just needs to do
 pip install inductiva
 ```
 
-and your are good to go! You are ready to start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
+and you are good to go! You are ready to start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
 
 ## API access tokens
 
@@ -304,10 +321,6 @@ inductiva.api_key = "YOUR_API_KEY"
 
 ## FAQ:
 
-[Task Management]()
-[Machine Group]()
-[Getting Started]()
-
-
-
-
+- [Getting Started]()
+- [Task Management]()
+- [Machine Group]()
