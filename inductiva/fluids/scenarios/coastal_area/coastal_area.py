@@ -7,6 +7,8 @@ from typing import Literal, Optional, Sequence
 import shutil
 from uuid import UUID
 
+import numpy as np
+
 from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
@@ -19,6 +21,9 @@ SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
 SWASH_CONFIG_TEMPLATE_FILENAME = "input.sws.jinja"
 SWASH_CONFIG_FILENAME = "input.sws"
+SWASH_BATHYMETRY_FILENAME = "bathymetry.bot"
+
+
 class Bathymetry:
     """TODO."""
 
@@ -100,7 +105,9 @@ class CoastalArea(Scenario):
 
     def __init__(
         self,
+        bathymetry: Bathymetry,
         water_level: float = 0,
+        wave_source_location: Literal["N", "S", "E", "W"] = "W",
         wave_amplitude: float = 2,
         wave_period: float = 10,
     ):
@@ -111,7 +118,9 @@ class CoastalArea(Scenario):
             wave_amplitude: The amplitude of the wave, in meters.
             wave_period: The period of the wave, in seconds.
         """
+        self.bathymetry = bathymetry
         self.water_level = water_level
+        self.wave_source_location = wave_source_location
         self.wave_amplitude = wave_amplitude
         self.wave_period = wave_period
 
@@ -189,12 +198,25 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
     # SWASH uses as amplitude the peak-to-peak amplitude.
     wave_amplitude = 2 * self.wave_amplitude
 
+    # All boundaries except the wave source are absorbing.
+    absorbing_boundary_locations = ["N", "S", "E", "W"]
+    absorbing_boundary_locations.remove(self.wave_source_location)
+
     replace_params_in_template(
         template_path=config_template_file_path,
         params={
+            "bathymetry_filename": SWASH_BATHYMETRY_FILENAME,
+            "x_range": self.bathymetry.x_range,
+            "y_range": self.bathymetry.y_range,
+            "x_num": self.bathymetry.shape[0] - 1,
+            "y_num": self.bathymetry.shape[1] - 1,
+            "x_delta": self.bathymetry.x_delta,
+            "y_delta": self.bathymetry.y_delta,
             "water_level": self.water_level,
+            "wave_source_location": self.wave_source_location,
             "wave_amplitude": wave_amplitude,
             "wave_period": self.wave_period,
+            "absorbing_boundary_locations": absorbing_boundary_locations,
             "simulation_time_hmsms": simulation_time_hmsms,
             "time_step": self.time_step,
             "output_time_step": self.output_time_step,
@@ -202,6 +224,9 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
         output_file_path=config_file_path,
         remove_template=True,
     )
+
+    bathymetry_file_path = os.path.join(input_dir, SWASH_BATHYMETRY_FILENAME)
+    self.bathymetry.to_text_file(bathymetry_file_path)
 
 
 def _convert_time_to_hmsms(time: float) -> str:
