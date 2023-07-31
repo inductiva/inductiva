@@ -7,14 +7,14 @@
 
 **Inductiva API** provides dozens of open-source physical simulation packages from your laptop. Users can start simulating right away, with no hardware setup issues and no software configuration headaches. We provide a transparent way to scale your simulations to the next level with one line of code.
 
-Whether you want to start applying simulation to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here for you. 
+Whether you want to use simulation to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here for you. 
 
 Our goal is to provide researchers and engineers with an easy and fast way to scale their simulations and explore various designs. 
 
 
 ## Scenarios
 
-**Inductiva API** contains pre-built scenarios that define a particular physical system ready to simulate. Users can select some parameters within the scenario that configure the system, run the simulation and visualize the results.
+**Inductiva API** contains pre-built scenarios that define physical systems of interest ready to simulate. Users can choose some parameters and configure the system according to their needs, run the simulation using the most adequate resources and visualize the results.
 
 Let's go through the currently available scenarios in **Inductiva API**.
 
@@ -25,7 +25,8 @@ The ProteinSolvation scenario models the dynamics of a protein whose structure i
 #### Example
 
 Initialize the scenario:
-```
+
+```python
 from inductiva import molecules
 
 scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature = 300)
@@ -184,7 +185,7 @@ coastal area.
 
 ## Simulators
 
-**Inductiva API** has available several open-source simulators ready to be used via a Python interface. Users familiar with the simulators can easily start to run simulations using their previously prepared simulation configuration files. In this way, they can take advantage of performant hardware to speed up their simulation and exploration. 
+**Inductiva API** has available several open-source simulators ready to use via a Python interface. Users familiar with the simulators can easily start running simulations with their previously prepared simulation configuration files. In this way, they can take advantage of performant hardware to speed up their simulation and exploration. 
 
 ### Simulators Available
 
@@ -224,9 +225,9 @@ Visualize the results:
 Find more examples of simulations at the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
 
 
-## Manage Machines
+## Manage Resources
 
-**Inductiva API** provides a simple way to manage the machines used to run the simulations. Users can launch machines, list the available machines and terminate them.
+**Inductiva API** provides a simple way to manage the hardware resources used to run the simulations. Users can launch virtual machines, list the available machines and terminate them.
 In this way, users do not need to wait for their simulations in a queue and can have full control of the hardware used.
 
 **Inductiva API** simplifies simulation at scale.
@@ -256,9 +257,9 @@ machine.kill()
 
 ## Async API
 
-Up until now, all examples have run synchronously, which allows users to get feedback about the simulation while it is running. However, this is not always the best option. For example, if the user wants to run a large number of simulations, it is better to run them asynchronously. This way, the user can launch all the simulations and then check the results when they are ready.
+Up until now, all examples have run synchronously, which allows users to get feedback while the simulation is running. However, this is not always the best option. For example, if the user wants to run a large number of simulations, it is better to run them asynchronously. This way, the user can launch all the simulations and then check the results when they are ready.
 
-Let's look at an example with the wind tunnel:
+Let's look at an example using the wind tunnel scenario:
 
 ```python
 from inductiva import fluids
