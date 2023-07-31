@@ -5,7 +5,7 @@
 
 # Large scale simulations made simple
 
-**Inductiva API** provides dozens of open-source physical simulation packages from your laptop. Users can start simulating right away, with no hardware setup issues and no software configuration headaches. We provide a transparent way to scale your simulations to the next level with one line of code.
+**Inductiva API** provides open-source physical simulation from your laptop. Users can start simulating right away, with no hardware setup issues and no software configuration headaches. We provide a transparent way to scale your simulations to the next level with one line of code.
 
 Whether you want to use simulation to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here for you. 
 
@@ -29,7 +29,7 @@ Initialize the scenario:
 ```python
 from inductiva import molecules
 
-scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature = 300)
+scenario = molecules.scenarios.ProteinSolvation("protein.pdb", temperature=300)
 ```
 
 The user must provide the path for the PDB file (pdb_file) corresponding to the protein to be simulated. Additionally, the temperature (in Kelvin) can be specified, which defaults to 300 K. 
@@ -37,14 +37,14 @@ The user must provide the path for the PDB file (pdb_file) corresponding to the 
 Run the simulation:
 
 ```python
-output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
+output = scenario.simulate(simulation_time=10, nsteps_minim=5000)
 ```
 
 Users can set the simulation duration (in ns) and the number of steps for the energy minimization. 
 
 Visualize the results: 
 ```python
-view = ouptut.render_interctive(representation= "ball+stick", add_backbone=True)
+view = ouptut.render_interctive(representation="ball+stick", add_backbone=True)
 ```
 
 This yields an interactive visualization of the protein's trajectory that can be visualized and manipulated in a standard jupyter notebook. The user can specify the representation used for the protein and choose to add the backbone to the visualization.  
@@ -57,7 +57,7 @@ This yields an interactive visualization of the protein's trajectory that can be
 ### Wind Tunnel
 
 This scenario models the aerodynamics of an object inside a virtual
-[Wind Tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air-flow velocity. Air is injected on a side wall of the wind tunnel, the flow changes according to the structure of the object and leaves through an outlet on the other side. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models.
+[Wind Tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air flow velocity. Air is injected on a side wall of the wind tunnel, the flow changes according to the structure of the object and leaves through an outlet on the other side. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models.
 
 #### Example
 
@@ -77,9 +77,9 @@ Run the simulation:
 
 ```python
 output = scenario.simulate(object_path="vehicle.obj",
-                           simulation_time = 100,
-                           output_time_step = 50,
-                           resolution = "medium")
+                           simulation_time=100,
+                           output_time_step=50,
+                           resolution="medium")
 ```
 
 The user must provide the path for the object to be inserted in the wind tunnel. Additionally, users can choose the total simulation time, the time step interval to output data and the resolution of the simulation.
@@ -218,10 +218,6 @@ output_dir = simulator.run(input_dir="FlowCylinder",
 
 The user must specify the input directory, the simulation configuration file, the output directory and the device to run the simulation on.
 
-Visualize the results:
-
-<img src="resources/media/simulators.gif" alt="DualSPHysics simulation" width="50%" height="50%">
-
 Find more examples of simulations at the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
 
 
@@ -229,8 +225,6 @@ Find more examples of simulations at the [tutorials section](https://github.com/
 
 **Inductiva API** provides a simple way to manage the hardware resources used to run the simulations. Users can launch virtual machines, list the available machines and terminate them.
 In this way, users do not need to wait for their simulations in a queue and can have full control of the hardware used.
-
-**Inductiva API** simplifies simulation at scale.
 
 Start your machines and run your simulations:
 
@@ -242,12 +236,14 @@ machine = inductiva.resources.launch_machines(name="test_machine",
                                               machine_type="c2-standard-16")
 
 # Example with ProteinSolvation scenario
-scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature = 300)
+scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature=300)
 
-output = scenario.simulate(simulation_time = 10,
+output = scenario.simulate(simulation_time=10,
                            nsteps_minim = 5000,
                            resources=machine)
 ```
+
+To launch resources users must select a name for the resources group, the type of machine to be launched and the number of machines, with the available options being the machines available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types).
 
 But do not forget to kill your machines:
 ```python
@@ -269,14 +265,14 @@ scenario = fluids.scenarios.WindTunnel(
     domain_geometry={"x": [-6, 12], "y": [-5, 5], "z": [0, 10]})
 
 # Path to a folder containing a set of objects
-objects_path = ["object_1.obj", "object_2.obj", ..., "object_1000.obj"]
+objects_path_list = ["object_1.obj", "object_2.obj", ..., "object_1000.obj"]
 
-for object in objects_path:
-    task = scenario.simulate(object_path=object,
-                      simulation_time = 100,
-                      output_time_step = 50,
-                      resolution = "medium",
-                      async=True)
+for object_path in objects_path_list:
+    task = scenario.simulate(object_path=object_path,
+                      simulation_time=100,
+                      output_time_step=50,
+                      resolution="medium",
+                      run_async=True)
 ```
 
 All of the simulations will be launched in one go. The user can check the status of the simulations and retrieve the results when they are ready. Check the FAQ section for more information on how to do this.
@@ -292,15 +288,13 @@ pip install inductiva
 
 and your are good to go! You are ready to start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
 
-Notice that, in a local computer you just need to do this once. When opening the tutorials in Google Colab, you may need to re-install this between notebooks.
-
 ## API access tokens
 
-To use **Inductiva API** you will need an API token to log in. Please request your demo API token via the following Google Form (we will reply to you by email):
+To use **Inductiva API** you will need an API token. Please request your demo API token via the following Google Form (we will reply to you by email):
 
 [Request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform)
 
-Before running simulations you just need to add the following line and your are good to go:
+Before running simulations you just need to add the following line and you are good to go:
 
 ```python
 import inductiva
