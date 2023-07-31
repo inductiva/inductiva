@@ -106,17 +106,18 @@ class Bathymetry:
 class CoastalArea(Scenario):
     """Coastal area scenario.
 
-    This is a simulation scenario for waves propagating in a coastal area. The
-    bathymetric profile (i.e., the depth of the sea bottom) is fixed to be that
-    of Praia do Carneiro beach, in Porto, Portugal.
+    This is a simulation scenario for waves propagating in a coastal area
+    represented by an arbitrary bathymetric profile (i.e., the map of depths of
+    the sea bottom).
 
     The scenario is simulated in a 2D box (x points east, y points north) with
-    dimensions 1200 x 400 m, with a resolution of 4 m along both x and y
-    directions. Waves are injected from the lower x boundary (west) with
-    a given amplitude and period. The base water level is also configurable.
+    dimensions defined by the bathymetric profile. Waves are injected from one
+    of the boundaries of the simulation domain with a given amplitude and
+    period. The base water level is also configurable.
 
-    The upper x and lower and upper y boundaries are absorbing. Absorption in
-    these boundaries may not be perfect, so small reflections may be observed.
+    The remaining three boundaries of the simulation domain are absorbing.
+    Absorption in these boundaries may not be perfect, so small reflections may
+    be observed.
 
     Schematic representation of the simulation scenario: x points right, y
     points up.
@@ -128,6 +129,8 @@ class CoastalArea(Scenario):
     |                               |
     |                               |
     |_______________________________|
+    Note that waves may be injected from other boundaries, and that the beach
+    may be located elsewhere in the simulation domain.
 
     The scenario can be simulated with SWASH.
     """
