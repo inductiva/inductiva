@@ -3,7 +3,7 @@
 from functools import singledispatchmethod
 import math
 import os
-from typing import Optional
+from typing import Literal, Optional, Sequence
 import shutil
 from uuid import UUID
 
@@ -19,6 +19,52 @@ SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
 SWASH_CONFIG_TEMPLATE_FILENAME = "input.sws.jinja"
 SWASH_CONFIG_FILENAME = "input.sws"
+class Bathymetry:
+    """TODO."""
+
+    def __init__(
+        self,
+        depths: np.ndarray,
+        x_range: Sequence[float],
+        y_range: Sequence[float],
+    ):
+        self.depths = depths
+        self.x_range = x_range
+        self.y_range = y_range
+
+    @classmethod
+    def from_text_file(
+        cls,
+        text_file_path: str,
+        x_range: Sequence[float],
+        y_range: Sequence[float],
+    ):
+        """TODO."""
+
+        depths = np.loadtxt(text_file_path)
+        return cls(depths, x_range, y_range)
+
+    def to_text_file(self, text_file_path: str):
+
+        np.savetxt(text_file_path, self.depths)
+
+    @property
+    def shape(self):
+        """TODO."""
+
+        return self.depths.shape
+
+    @property
+    def x_delta(self):
+        """TODO."""
+
+        return (self.x_range[1] - self.x_range[0]) / self.shape[0]
+
+    @property
+    def y_delta(self):
+        """TODO."""
+
+        return (self.y_range[1] - self.y_range[0]) / self.shape[1]
 
 
 class CoastalArea(Scenario):
