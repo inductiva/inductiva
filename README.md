@@ -7,7 +7,7 @@
 
 **Inductiva API** provides open-source physical simulation from your laptop. With no configuration headaches, users can easily scale simulations to the next level with one line of code.
 
-Whether you want to use simulation to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here for you. 
+Whether you want to simulate pre-build scenarios to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here for you. 
 
 ## Scenarios
 
@@ -15,9 +15,9 @@ Whether you want to use simulation to solve scientific/engineering problems or y
 
 Let's go through the currently available scenarios in **Inductiva API**.
 
-### ProteinSolvation
+### Protein solvation
 
-The ProteinSolvation scenario models the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization](https://manual.gromacs.org/current/reference-manual/algorithms/energy-minimization.html) process to eliminate any steric clashes or structural issues within the protein-water system. After this, the position of the atoms in this system is updated according to Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
+The protein solvation scenario models the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization](https://manual.gromacs.org/current/reference-manual/algorithms/energy-minimization.html) process to eliminate any steric clashes or structural issues within the protein-water system. After this, the position of the atoms in this system is updated according to Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
 
 #### Example
 
@@ -29,7 +29,7 @@ from inductiva import molecules
 scenario = molecules.scenarios.ProteinSolvation("protein.pdb", temperature=300)
 ```
 
-The user must provide the path for the PDB file (pdb_file) corresponding to the protein to be simulated. Additionally, the temperature (in Kelvin) can be specified, which defaults to 300 K. 
+The user must provide the path for the PDB file corresponding to the protein to be simulated. Additionally, the temperature (in Kelvin) can be specified, which defaults to 300 K. 
 
 Run the simulation:
 
@@ -51,10 +51,10 @@ This yields an interactive visualization of the protein's trajectory that can be
 </p>
 
 
-### Wind Tunnel
+### Wind tunnel
 
 This scenario models the aerodynamics of an object inside a virtual
-[Wind Tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air flow velocity. Air is injected on a side wall of the wind tunnel, the flow changes according to the structure of the object and leaves through an outlet on the other side. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models.
+[wind tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air flow velocity. Air is injected on a side wall of the wind tunnel, the flow changes according to the structure of the object and leaves through an outlet on the other side. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models.
 
 #### Example
 
@@ -182,9 +182,7 @@ coastal area.
 
 ## Simulators
 
-**Inductiva API** has available several open-source simulators ready to use via a Python interface. Users familiar with the simulators can easily start running simulations with their previously prepared simulation configuration files. In this way, they can take advantage of performant hardware to speed up their simulation and exploration. 
-
-### Simulators Available
+**Inductiva API** has available several open-source simulators ready to use. Users familiar with the simulators can easily start running simulations with their previously prepared simulation configuration files. In this way, they can take advantage of performant hardware to speed up their simulation and exploration. 
 
 The simulators we provide are all open-source and have their own dedicated documentation.
 
@@ -193,7 +191,7 @@ Currently, we have available the following simulators:
 - [DualSPHysics](https://github.com/DualSPHysics/DualSPHysics)
 - [OpenFOAM](https://www.openfoam.com/)
 - [SWASH](https://swash.sourceforge.io/)
-- [xBeach](https://oss.deltares.nl/web/xbeach/)
+- [XBeach](https://oss.deltares.nl/web/xbeach/)
 - [GROMACS](https://www.gromacs.org/)
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
@@ -217,36 +215,6 @@ The user must specify the input directory, the simulation configuration file, th
 
 Find more examples of simulations in the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
 
-
-## Manage Resources
-
-**Inductiva API** provides a simple way to manage the hardware resources used to run the simulations. Users can launch virtual machines, list the available machines and terminate them. This is a feature available only to admins.
-In this way, users do not need to wait for their simulations in a queue and can have full control of the hardware used.
-
-Start your machines and run your simulations:
-
-```python
-
-import inductiva
-
-machines = inductiva.admin.launch_machines(name="test_machine",
-                                           machine_type="c2-standard-16")
-
-# Example with ProteinSolvation scenario
-scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature=300)
-
-output = scenario.simulate(simulation_time=10,
-                           nsteps_minim = 5000,
-                           resources=machine)
-```
-
-To launch resources users must select a name for the resources group, the type of machine to be launched and the number of machines, with the available options being the machines available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types).
-
-But do not forget to kill your machines:
-```python
-
-machine.kill()
-```
 
 ## Async API
 
@@ -293,6 +261,36 @@ for vehicle in vehicle_path_list:
 ```
 
 All of the simulations will be launched in one go. The user can check the status of the simulations and retrieve the results when they are ready. Check the FAQ section for more information on how to do this.
+
+## Manage Resources
+
+**Inductiva API** provides a simple way to manage the hardware resources used to run the simulations. Users can launch virtual machines, list the available machines and terminate them. This is a feature available only to admins.
+In this way, users do not need to wait for their simulations in a queue and can have full control of the hardware used.
+
+Start your machines and run your simulations:
+
+```python
+
+import inductiva
+
+machines = inductiva.admin.launch_machines(name="test_machine",
+                                           machine_type="c2-standard-16")
+
+# Example with ProteinSolvation scenario
+scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature=300)
+
+output = scenario.simulate(simulation_time=10,
+                           nsteps_minim = 5000,
+                           resources=machine)
+```
+
+To launch resources users must select a name for the resources group, the type of machine to be launched and the number of machines, with the available options being the machines available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types).
+
+But do not forget to kill your machines:
+```python
+
+machine.kill()
+```
 
 ## Installation
 
