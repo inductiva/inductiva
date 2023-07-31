@@ -213,7 +213,7 @@ The user must specify the input directory, the simulation configuration file, th
 
 Visualize the results:
 
-![DualSPHysic simulation.](resources/media/simulators.gif)
+<img src="resources/media/simulators.gif" alt="DualSPHysics simulation" width="50%" height="50%">
 
 Find more examples of simulations at the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
 
