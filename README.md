@@ -3,111 +3,60 @@
 
 ![linkedin_header](https://user-images.githubusercontent.com/104431973/231184851-0ce34289-593e-4832-aaa2-9aae652113f5.jpg)
 
-## Large scale simulations made simple
+# Large scale simulations made simple
 
-Inductiva API provides dozens of open-source physical simulation packages from your laptop. Users can start simulating right away, with no hardware setup issues and no software configuration headaches. Additionally, we provide a transparent way to scale your simulations to the next-level with one-line of code.
+**Inductiva API** provides dozens of open-source physical simulation packages from your laptop. Users can start simulating right away, with no hardware setup issues and no software configuration headaches. Additionally, we provide a transparent way to scale your simulations to the next-level with one line of code.
 
-One can **run** simulations in two ways:
-- **High-level Simulation:** We provide pre-built scenarios that define a physical model (e.g., the dam break scenario in fluid dynamics). Users are allowed to define some parameters of the scenarios, choose the method of simulation with a few parameters and accelerate their simulations with the best hardware available for them. 
-
-Example of how to run the dam break scenario:
-```python
-from inductiva import fluids
-
-scenario = fluids.scenarios.DamBreak(dimensions=(1., 0.3, 0.3))
-
-output = scenario.simulate()
-video = output.render()
-```
-
-- **Low-level Simulation:** Users familiar with the simulators can submit their previously prepared simulation configuration files. In this way, users can immediatelly take advantage of performant hardware to speed up their simulations, without having to change any of their existing simulation scripts. Moreover, users may want to execute more than just one simulation and via API they can do it in a couple of lines of code. 
-
-Example of how to run a low-level simulation:
-```python
-from inductiva import fluids
-
-simulator = fluids..simulators.DualSPHysics()
-
-output_dir = simulator.run(input_dir="FlowCylinder",
-                           sim_config_filename="CaseFlowCylinder_Re200_Def.xml",
-                           output_dir="Flow",
-                           device="gpu")
-```
-
-Find more examples of simulations at the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
+Whether you want to start applying simulation to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here to help you. 
 
 Our goal is to provide researchers and engineers with an easy and fast way to scale their simulations and explore various designs. 
 
 
-## Simulators
-
-The simulators we provide are all open-source and have their own dedicated documentation.
-
-Currently, we have available the following simulators:
-- [SPlisHSPlasH](https://github.com/InteractiveComputerGraphics/SPlisHSPlasH)
-- [DualSPHysics](https://github.com/DualSPHysics/DualSPHysics)
-- [OpenFOAM](https://www.openfoam.com/)
-- [SWASH](https://swash.sourceforge.io/)
-- [xBeach](https://oss.deltares.nl/web/xbeach/)
-- [GROMACS](https://www.gromacs.org/)
-
-If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
-
 ## Scenarios
 
-### Fluid block
+**Inductiva API** contains pre-built scenarios that define a particular physical system ready to simulate. Users can select some parameters within the scenario that configure the system. Run the simulation and visualize the results.
 
-This scenario simulates the motion of a fluid block in a unit cubic tank under
-the action of gravity. The fluid motion is simulated using the [Smoothed
-Particle Hydrodynamics](https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics)
-method. The fluid block is initialized with a given velocity, dimensions and
-physical properties (density and viscosity).
+Let's go through the currently available scenarios in **Inductiva API**.
+
+### ProteinSolvation
+
+The ProteinSolvation scenario models the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization](https://manual.gromacs.org/current/reference-manual/algorithms/energy-minimization.html) process to eliminate any steric clashes or structural issues within the protein-water system. After this, the position of the atoms in this system is updated according to Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
 
 #### Example
 
 Initialize the scenario:
+```
+from inductiva import molecules
 
-```python
-from inductiva import fluids
-
-scenario = fluids.scenarios.FluidBlock(density=1e3,
-                             kinematic_viscosity=1e-6,
-                             position=(0.3, 0.3, 0.3),
-                             dimensions=(0.4, 0.4, 0.4),
-                             initial_velocity=(0.0, 0.0, 0.0))
+scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature = 300)
 ```
 
-The user can specify the fluid density (in kg/m^3), kinematic viscosity (in
-m^2/s), initial position (in m), dimensions (in m) and velocity (in m/s).
+The user must provide the path for the PDB file (pdb_file) corresponding to the protein to be simulated. Additionally, the temperature (in Kelvin) can be specified, which defaults to 300 K. 
 
 Run the simulation:
 
 ```python
-output = scenario.simulate(simulator=fluids.SPlisHSPlasH(),
-                           simulation_time=1,
-                           time_step=0.001,
-                           output_time_step=0.05)
+output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
 ```
 
-The user can specify the total simulation time, the adopted time step and the
-time step between outputs (all in seconds). By default, the simulation is run
-with SPliSHSPlasH, but the user can specify a different simulator. The available
-simulators for this scenario are SPlisHSPlasH and DualSPHysics.
+Users can set the simulation duration (in ns) and the number of steps for the energy minimization. 
 
-Visualize the results:
-
+Visualize the results: 
 ```python
-output.render()
+view = ouptut.render_interctive(representation= "ball+stick", add_backbone=True)
 ```
 
-\[TODO @IvanPombo: add gif with render\]
+This yields an interactive visualization of the protein's trajectory that can be visualized and manipulated in a standard jupyter notebook. The user can specify the representation used for the protein and choose to add the backbone to the visualization.  
+
+<p align="center">
+  <img width="900" height="300" src="https://github.com/inductiva/inductiva/assets/114397668/d8eb9c0b-8809-4da6-97a1-3448f2809af3">
+</p>
+
 
 ### Wind Tunnel
 
 This scenario simulates the aerodynamics of an object inside a virtual
-[Wind Tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air flow velocity.
-At the moment, the system is modelled with the steady-state equations for incompressible flow and
-the $k-\epsilon$ turbulence models.
+[Wind Tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air-flow velocity. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models.
 
 #### Example
 
@@ -132,31 +81,61 @@ output = scenario.simulate(object_path="vehicle.obj",
                            resolution = "medium")
 ```
 
-The user needs to specify the object to insert inside the wind tunnel and thereafter,
-select the total simulation time, the step between outputs and the resolution of the simulation.
+The user must provide the path for the object to be inserted in the wind tunnel. Additionally, users can choose the total simulation time, the time step interval to output data and the resolution of the simulation.
 
-After the simulation has finished, the user has the possibility to obtain several metrics:
+After the simulation has finished, the user can obtain several metrics and visuals. An example here is given for a slice of the flow:
+
+```python
+
+flow_slice = output.get_flow_slice(simulation_time=100,
+                                   plane="xz")
+flow_slice.render("velocity")
+```
+
+![F1 car in WindTunnel](resources/media/wind_tunnel.png)
+
+### Fluid Tank
+
+This scenario simulates the motion of a fluid block inside tank under the action of gravity. The tank has a 3D shape that may be cubic or cylindrical. Fluid is injected in the tank via an inlet located at the top of the tank, and flows out of the tank via an outlet located at the bottom of the tank. The fluid motion is simulated using the Smoothed Particle Hydrodynamics method.
+
+#### Example
+
+Initialize the scenario:
+
+```python
+from inductiva import fluids
+
+scenario = fluids.scenarios.FluidTank(shape=fluids.shapes.Cube(),
+                                      fluid_level=0.7)
+```
+
+The user can select the shape of the tank (either a cube or a cylinder), the fluid type, fluid_level and the inlet and outlet shape.
+
+Run the simulation:
 
 ```python
 
-pressure_field = output.get_physical_field("pressure")
+output = scenario.simulate(simulation_time=10,
+                           time_step=0.01,
+                           output_time_step=0.1)
 ```
 
-Visualize the outputs:
+The user can specify the total simulation time, the adopted time step, the time step between outputs (all in seconds) and the resolution of the simulation (low, medium, high). By default, the simulation is run with SPliSHSPlasH, but the user can specify a different simulator. The available simulators for this scenario are SPlisHSPlasH and DualSPHysics.
+
+Visualize the results:
 
 ```python
-pressure_field.render()
+output.render()
 ```
 
-\[TODO @IvanPombo: add gif with render\]
+![Fluid Tank simulation render.](resources/media/fluid_tank.gif)
 
 
 ### Coastal area
 
 This scenario simulates the propagation of waves in a coastal area, by solving
 the [shallow water equations](https://en.wikipedia.org/wiki/Shallow_water_equations)
-in a given bathymetric profile (i.e., the depth of the sea bottom). For now,
-this profile is fixed to be that of Praia do Carneiro beach, in Porto, Portugal.
+in a given bathymetric profile (i.e., the depth of the sea bottom). 
 Waves are injected at the boundary opposite to the beach, and propagate towards
 the shore, interacting with the different elements of the bathymetry.
 
@@ -168,8 +147,8 @@ Initialize the scenario:
 from inductiva import fluids
 
 scenario = fluids.scenarios.CoastalArea(wave_amplitude=2.5,
-                              wave_period=5.5,
-                              water_level=1.0)
+                                        wave_period=5.5,
+                                        water_level=1.0)
 ```
 
 The user can specify the wave amplitude (in meters) and period (in seconds), as
@@ -197,77 +176,109 @@ coastal area.
 
 ![Coastal area simulation. Water level render.](resources/media/coastal_area.gif)
 
+## Simulators
 
-### MDWaterBox
+**Inductiva API** has available several open-source simulators ready to be used via a Python interface. Users familiar with the simulators can use their previously prepared simulation configuration files and take advantage of performant hardware to speed up their simulation. 
 
-This scenario simulates a system that consists of a cubic box filled with water molecules, evolving according to the rules of Molecular Dynamics: this means that the water molecules' positions are updated according to Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields. The implementation of this scenario was inspired by [this article](https://arxiv.org/abs/2112.03383). 
+### Simulators Available
 
-#### Example
+The simulators we provide are all open-source and have their own dedicated documentation.
 
-First we initialize the scenario:
-```
-from inductiva import molecules
+Currently, we have available the following simulators:
+- [SPlisHSPlasH](https://github.com/InteractiveComputerGraphics/SPlisHSPlasH)
+- [DualSPHysics](https://github.com/DualSPHysics/DualSPHysics)
+- [OpenFOAM](https://www.openfoam.com/)
+- [SWASH](https://swash.sourceforge.io/)
+- [xBeach](https://oss.deltares.nl/web/xbeach/)
+- [GROMACS](https://www.gromacs.org/)
 
-scenario = molecules.scenarios.MDWaterBox(temperature = 300, box_size = 2.3)
-```
+If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
-The user can specify the temperature (in Kelvin) and the box size (length of one of the cube's edges, in nanometers). The numbers above correspond to the default values.
+### Example
 
-After the initialization, we are ready to simulate the system:
+Example of how to use the simulators:
 
 ```python
-output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
+from inductiva import fluids
+
+simulator = fluids.simulators.DualSPHysics()
+
+output_dir = simulator.run(input_dir="FlowCylinder",
+                           sim_config_filename="CaseFlowCylinder_Re200_Def.xml",
+                           output_dir="Flow",
+                           device="gpu")
 ```
-output = scenario.simulate(simulation_time = 10,
-                           nsteps_minim = 5000)
 
-The simulate method initializes a simulation using cloud resources. The user can set the duration of the simulation in nanoseconds and the number of steps for the energy minimization.
+The user must specify the input directory, the simulation configuration file, the output directory and the device to run the simulation on.
 
-Finally, we can visualize the simulation: 
+Visualize the results:
+
+![DualSPHysic simulation.](resources/media/simulators.gif)
+
+Find more examples of simulations at the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
+
+
+## Manage Machines
+
+**Inductiva API** provides a simple way to manage the machines used to run the simulations. Users can launch machines, list the available machines and terminate them.
+In this way, users do not need to wait for their simulations in a queue and can have full control of the hardware used.
+
+**Inductiva API** simplifies simulation at scale.
+
+Start your machines and run your simulations in them
+
 ```python
-view = output.render_interactive()
-view
-```
-This renders the trajectory in an interactive visualization that can be manipulated in a jupyter notebook: 
-<p align="center">
-  <img width="900" height="300" src="https://github.com/inductiva/inductiva/assets/114397668/6cc809ed-085b-4fc6-b1a6-358be03cd061">
-</p>
 
+import inductiva
 
-### ProteinSolvation
+machine = inductiva.resources.launch_machines(name="test_machine",
+                                              machine_type="c2-standard-16")
 
-The ProteinSolvation scenario models the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization](https://manual.gromacs.org/current/reference-manual/algorithms/energy-minimization.html) process to eliminate any steric clashes or structural issues within the protein-water system. After this, the position of the atoms in this system is updated according to Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
-
-#### Example
-
-First we initialize the scenario:
-```
-from inductiva import molecules
-
+# Example with ProteinSolvation scenario
 scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature = 300)
-```
 
-The user must provide the path for the PDB file (pdb_file) corresponding to the protein to be simulated. Aditionally, one can specify the temperature (in Kelvin), which defaults to 300 K. 
-
-After the initialization, we are ready to run the simulation:
-
-```python
-output = scenario.simulate(simulation_time = 10, nsteps_minim = 5000)
-```
 output = scenario.simulate(simulation_time = 10,
-                           nsteps_minim = 5000)
-The simulate method initializes the simulation. In this call, we can set the simulation duration (in ns) and the number of steps for the energy minimization. 
-
-Visualize the results: 
-```python
-view = ouptut.render_interctive(representation= "ball+stick", add_backbone=True)
+                           nsteps_minim = 5000,
+                           resources=machine)
 ```
 
-This yields an interactive visualization of the protein's trajectory that can be visualized and manipulated in a standard jupyter notebook. The user can specify the representation used for the protein and choose to add the backbone to the visualization.  
-<p align="center">
-  <img width="900" height="300" src="https://github.com/inductiva/inductiva/assets/114397668/d8eb9c0b-8809-4da6-97a1-3448f2809af3">
-</p>
+But do not forget to kill your machines:
+```python
 
+machine.kill()
+```
+
+## Async API
+
+Up until now, all examples have run synchronously, which allows users to get feedback about the simulation while it is running. However, this is not always the best option. For example, if the user wants to run a large number of simulations, it is better to run them asynchronously. This way, the user can launch all the simulations and then check the results when they are ready.
+
+Let's look at an example with the wind tunnel:
+
+```python
+from inductiva import fluids
+
+scenario = fluids.scenarios.WindTunnel(
+    flow_velocity=[30, 0, 0],
+    domain_geometry={"x": [-6, 12], "y": [-5, 5], "z": [0, 10]})
+
+# Path to a folder containing a set of objects
+objects_path = ["object_1.obj", "object_2.obj", ..., "object_1000.obj"]
+
+for object in objects_path:
+    task = scenario.simulate(object_path=object,
+                      simulation_time = 100,
+                      output_time_step = 50,
+                      resolution = "medium",
+                      async=True)
+```
+
+All of the simulations will be launched in one go. The user can check the status of the simulations and retrieve the results when they are ready. Check the FAQ section for more information on how to do this.
+
+## FAQ:
+
+[Task Management]()
+[Machine Group]()
+[]()
 
 ## Installation
 
@@ -287,4 +298,5 @@ between notebooks.
 Please request your demo API token via the following Google Form (we will reply to you by email):
 
 [Request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform)
+
 
