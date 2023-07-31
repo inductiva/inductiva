@@ -14,7 +14,7 @@ Our goal is to provide researchers and engineers with an easy and fast way to sc
 
 ## Scenarios
 
-**Inductiva API** contains pre-built scenarios that define a particular physical system ready to simulate. Users can select some parameters within the scenario that configure the system. Run the simulation and visualize the results.
+**Inductiva API** contains pre-built scenarios that define a particular physical system ready to simulate. Users can select some parameters within the scenario that configure the system, run the simulation and visualize the results.
 
 Let's go through the currently available scenarios in **Inductiva API**.
 
@@ -55,8 +55,8 @@ This yields an interactive visualization of the protein's trajectory that can be
 
 ### Wind Tunnel
 
-This scenario simulates the aerodynamics of an object inside a virtual
-[Wind Tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air-flow velocity. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models.
+This scenario models the aerodynamics of an object inside a virtual
+[Wind Tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air-flow velocity. Air is injected on a side wall of the wind tunnel, the flow changes according to the structure of the object and leaves through an outlet on the other side. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models.
 
 #### Example
 
@@ -178,7 +178,7 @@ coastal area.
 
 ## Simulators
 
-**Inductiva API** has available several open-source simulators ready to be used via a Python interface. Users familiar with the simulators can use their previously prepared simulation configuration files and take advantage of performant hardware to speed up their simulation. 
+**Inductiva API** has available several open-source simulators ready to be used via a Python interface. Users familiar with the simulators can easily start to run simulations using their previously prepared simulation configuration files. In this way, they can take advantage of performant hardware to speed up their simulation and exploration. 
 
 ### Simulators Available
 
@@ -225,7 +225,7 @@ In this way, users do not need to wait for their simulations in a queue and can 
 
 **Inductiva API** simplifies simulation at scale.
 
-Start your machines and run your simulations in them
+Start your machines and run your simulations:
 
 ```python
 
@@ -274,15 +274,10 @@ for object in objects_path:
 
 All of the simulations will be launched in one go. The user can check the status of the simulations and retrieve the results when they are ready. Check the FAQ section for more information on how to do this.
 
-## FAQ:
-
-[Task Management]()
-[Machine Group]()
-[]()
-
 ## Installation
 
 It is super simple to start using the API if you are already familiar with Python package management.
+
 One just needs to do
 ```
 pip install inductiva
@@ -290,13 +285,28 @@ pip install inductiva
 
 and your are good to go! You are ready to start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
 
-Notice that, in a local computer you just need to do this once. When opening the tutorials in Google Colab, you may need to re-install this
-between notebooks.
+Notice that, in a local computer you just need to do this once. When opening the tutorials in Google Colab, you may need to re-install this between notebooks.
 
 ## API access tokens
 
-Please request your demo API token via the following Google Form (we will reply to you by email):
+To use **Inductiva API** you will need an API token to log in. Please request your demo API token via the following Google Form (we will reply to you by email):
 
 [Request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform)
+
+Before running simulations you just need to add the following line and your are good to go:
+
+```python
+import inductiva
+
+inductiva.api_key = "YOUR_API_KEY"
+```
+
+## FAQ:
+
+[Task Management]()
+[Machine Group]()
+[Getting Started]()
+
+
 
 
