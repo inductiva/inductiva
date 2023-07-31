@@ -5,9 +5,9 @@
 
 # Large scale simulations made simple
 
-**Inductiva API** provides dozens of open-source physical simulation packages from your laptop. Users can start simulating right away, with no hardware setup issues and no software configuration headaches. Additionally, we provide a transparent way to scale your simulations to the next-level with one line of code.
+**Inductiva API** provides dozens of open-source physical simulation packages from your laptop. Users can start simulating right away, with no hardware setup issues and no software configuration headaches. We provide a transparent way to scale your simulations to the next level with one line of code.
 
-Whether you want to start applying simulation to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here to help you. 
+Whether you want to start applying simulation to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here for you. 
 
 Our goal is to provide researchers and engineers with an easy and fast way to scale their simulations and explore various designs. 
 
