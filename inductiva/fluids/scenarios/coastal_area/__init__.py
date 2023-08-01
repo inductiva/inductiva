@@ -1,3 +1,3 @@
 #pylint: disable=missing-module-docstring
-from .coastal_area import CoastalArea
+from .coastal_area import (Bathymetry, CoastalArea)
 from .output import CoastalAreaOutput

@@ -3,9 +3,11 @@
 from functools import singledispatchmethod
 import math
 import os
-from typing import Optional
+from typing import Literal, Optional, Sequence
 import shutil
 from uuid import UUID
+
+import numpy as np
 
 from inductiva.types import Path
 from inductiva.scenarios import Scenario
@@ -19,22 +21,103 @@ SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
 SWASH_CONFIG_TEMPLATE_FILENAME = "input.sws.jinja"
 SWASH_CONFIG_FILENAME = "input.sws"
+SWASH_BATHYMETRY_FILENAME = "bathymetry.bot"
+
+
+class Bathymetry:
+    """Represents a bathymetric profile.
+    
+    A bathymetric profile defines the depth of the sea bottom as a function of
+    space, here described in Cartesian coordinates (x, y). Here, a bathymetry is
+    represented as a 2D array with the depths, in meters, at each point of a
+    regular grid. The grid is defined by the range of x and y values. Positive
+    depths are below the water level.
+    """
+
+    def __init__(
+        self,
+        depths: np.ndarray,
+        x_range: Sequence[float],
+        y_range: Sequence[float],
+    ):
+        """Initializes a `Bathymetry` object.
+        
+        Args:
+            depths: A 2D array with the depths, in meters. The first and second
+              dimensions correspond to the x and y directions, respectively.
+            x_range: The range of x values, in meters.
+            y_range: The range of y values, in meters.
+        """
+        self.depths = depths
+        self.x_range = x_range
+        self.y_range = y_range
+
+    @classmethod
+    def from_text_file(
+        cls,
+        text_file_path: str,
+        x_range: Sequence[float],
+        y_range: Sequence[float],
+    ):
+        """Creates a `Bathymetry` object from a text file.
+        
+        The depth values are read from a text file. The text file must contain
+        a 2D array with the depths, in meters. The first and second dimensions
+        of the array in the text file (i.e. rows and columns) correspond to the
+        x and y directions, respectively.
+
+        Args:
+            text_file_path: Path to the text file.
+            x_range: The range of x values, in meters.
+            y_range: The range of y values, in meters.
+        """
+
+        depths = np.loadtxt(text_file_path)
+        return cls(depths, x_range, y_range)
+
+    def to_text_file(self, text_file_path: str):
+        """Writes the bathymetry to a text file.
+
+        Args:
+            text_file_path: Path to the text file.
+        """
+
+        np.savetxt(text_file_path, self.depths)
+
+    @property
+    def shape(self):
+        """Returns the shape of the 2D array defining the bathymetry."""
+
+        return self.depths.shape
+
+    @property
+    def x_delta(self):
+        """Returns the distance between two consecutive points along x."""
+
+        return (self.x_range[1] - self.x_range[0]) / self.shape[0]
+
+    @property
+    def y_delta(self):
+        """Returns the distance between two consecutive points along y."""
+
+        return (self.y_range[1] - self.y_range[0]) / self.shape[1]
 
 
 class CoastalArea(Scenario):
     """Coastal area scenario.
 
-    This is a simulation scenario for waves propagating in a coastal area. The
-    bathymetric profile (i.e., the depth of the sea bottom) is fixed to be that
-    of Praia do Carneiro beach, in Porto, Portugal.
+    This is a simulation scenario for waves propagating in a coastal area
+    represented by an arbitrary bathymetric profile (i.e., the map of depths of
+    the sea bottom).
 
     The scenario is simulated in a 2D box (x points east, y points north) with
-    dimensions 1200 x 400 m, with a resolution of 4 m along both x and y
-    directions. Waves are injected from the lower x boundary (west) with
-    a given amplitude and period. The base water level is also configurable.
+    dimensions defined by the bathymetric profile. Waves are injected from one
+    of the boundaries of the simulation domain with a given amplitude and
+    period. The base water level is also configurable.
 
-    The upper x and lower and upper y boundaries are absorbing. Absorption in
-    these boundaries may not be perfect, so small reflections may be observed.
+    The remaining three boundaries of the simulation domain are absorbing.
+    Absorption in these boundaries may not be perfect, so small reflections may
+    be observed.
 
     Schematic representation of the simulation scenario: x points right, y
     points up.
@@ -46,6 +129,8 @@ class CoastalArea(Scenario):
     |                               |
     |                               |
     |_______________________________|
+    Note that waves may be injected from other boundaries, and that the beach
+    may be located elsewhere in the simulation domain.
 
     The scenario can be simulated with SWASH.
     """
@@ -54,18 +139,27 @@ class CoastalArea(Scenario):
 
     def __init__(
         self,
+        bathymetry: Bathymetry,
         water_level: float = 0,
+        wave_source_location: Literal["N", "S", "E", "W"] = "W",
         wave_amplitude: float = 2,
         wave_period: float = 10,
     ):
         """Initializes a `CoastalArea` object.
 
         Args:
+            bathymetry: The bathymetric profile.
             water_level: The water level, in meters.
+            wave_source_location: The location of the wave source. Supported
+              locations are: N (north), S (south), E (east), W (west),
+              corresponding to the upper, lower, right and left boundaries of
+              the simulation domain, respectively.
             wave_amplitude: The amplitude of the wave, in meters.
             wave_period: The period of the wave, in seconds.
         """
+        self.bathymetry = bathymetry
         self.water_level = water_level
+        self.wave_source_location = wave_source_location
         self.wave_amplitude = wave_amplitude
         self.wave_period = wave_period
 
@@ -143,12 +237,25 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
     # SWASH uses as amplitude the peak-to-peak amplitude.
     wave_amplitude = 2 * self.wave_amplitude
 
+    # All boundaries except the wave source are absorbing.
+    absorbing_boundary_locations = ["N", "S", "E", "W"]
+    absorbing_boundary_locations.remove(self.wave_source_location)
+
     replace_params_in_template(
         template_path=config_template_file_path,
         params={
+            "bathymetry_filename": SWASH_BATHYMETRY_FILENAME,
+            "x_range": self.bathymetry.x_range,
+            "y_range": self.bathymetry.y_range,
+            "x_num": self.bathymetry.shape[0] - 1,
+            "y_num": self.bathymetry.shape[1] - 1,
+            "x_delta": self.bathymetry.x_delta,
+            "y_delta": self.bathymetry.y_delta,
             "water_level": self.water_level,
+            "wave_source_location": self.wave_source_location,
             "wave_amplitude": wave_amplitude,
             "wave_period": self.wave_period,
+            "absorbing_boundary_locations": absorbing_boundary_locations,
             "simulation_time_hmsms": simulation_time_hmsms,
             "time_step": self.time_step,
             "output_time_step": self.output_time_step,
@@ -156,6 +263,9 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
         output_file_path=config_file_path,
         remove_template=True,
     )
+
+    bathymetry_file_path = os.path.join(input_dir, SWASH_BATHYMETRY_FILENAME)
+    self.bathymetry.to_text_file(bathymetry_file_path)
 
 
 def _convert_time_to_hmsms(time: float) -> str:
