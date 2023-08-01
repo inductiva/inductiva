@@ -147,10 +147,13 @@ Initialize a bathymetry from a given text file and the coastal area scenario:
 ```python
 from inductiva import fluids
 
-bathymetry = fluids.scenarios.Bathymetry(text_file_path="bathymetry.txt", 
-                                         x_range=(0, 1200), y_range=(0, 400))
+bathymetry = fluids.scenarios.Bathymetry.from_text_file(
+  text_file_path="bathymetry.bot", 
+  x_range=(0, 1200),
+  y_range=(0, 400))
 
-scenario = fluids.scenarios.CoastalArea(wave_amplitude=2.5,
+scenario = fluids.scenarios.CoastalArea(bathymetry=bathymetry,
+                                        wave_amplitude=2.5,
                                         wave_period=5.5,
                                         water_level=1.0,
                                         wave_source_location="W")
