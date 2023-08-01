@@ -17,6 +17,8 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.fluids.scenarios.coastal_area.output import CoastalAreaOutput
 
+from inductiva.fluids.scenarios.coastal_area import random_bathymetry_utils
+
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
 SWASH_CONFIG_TEMPLATE_FILENAME = "input.sws.jinja"
@@ -73,6 +75,27 @@ class Bathymetry:
         """
 
         depths = np.loadtxt(text_file_path)
+        return cls(depths, x_range, y_range)
+
+    @classmethod
+    def from_random_depths(
+        cls,
+        n,
+        max_depth,
+        initial_roughness,
+        roughness_factor,
+        percentile_above_water,
+        x_range,
+        y_range,
+    ):
+
+        depths = random_bathymetry_utils.create_random_bathymetry(
+            size=2**n + 1,
+            initial_roughness=initial_roughness,
+            roughness_factor=roughness_factor,
+            percentile_above_water=percentile_above_water,
+            max_depth=max_depth)
+
         return cls(depths, x_range, y_range)
 
     def to_text_file(self, text_file_path: str):
