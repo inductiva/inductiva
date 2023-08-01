@@ -1,12 +1,18 @@
 """Visualization utilities."""
+# pylint: disable=protected-access
 
 import os
 import tempfile
 from typing import Dict, List, Optional
+import base64
+import io
+from time import sleep
+from ipywidgets import Output
 
 from absl import logging
 
 import imageio
+import PIL
 import pyvista as pv
 import matplotlib
 import matplotlib.colors as clr
@@ -16,12 +22,72 @@ import xarray as xr
 
 from inductiva.utils import files
 from inductiva.types import Path
+import threading
 
 MPL_CONFIG_PARAMS = {
     "font.size": 14,
     "axes.titlesize": "medium",
     "figure.dpi": 100,
 }
+
+
+def create_movie_from_widget(view,
+                             output_path="movie.mp4",
+                             fps=8,
+                             start=0,
+                             stop=-1,
+                             step=1,
+                             timeout=0.2):
+    """Create a movie from a ipywidget view.
+    Args: 
+        view: ipywidget visualization.
+        output_path: name of the output movie file.
+        fps: frame rate (frames per second). 
+        start: starting frame. 
+        stop: ending frame number.
+        step: step between frames.
+        timeout: the waiting time between rendering two consecutive frames.
+    """
+    if stop < 0:
+        stop = view.max_frame + 1
+    frames_range = range(start, stop, step)
+    max_frame_digits = len(str(stop))
+    event = threading.Event()
+
+    def _make(event):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            for i in tqdm(frames_range):
+                if not event.is_set():
+                    view.frame = i
+                    sleep(timeout)  # time to update the view
+                    iw = view.render_image()
+                    image_data = view._image_data
+                    sleep(timeout)
+                    filename = os.path.join(
+                        tmp_dir, f"frame-{str(i).zfill(max_frame_digits)}.png")
+                    try:
+                        decode_save_image(image_data, filename)
+                    except PIL.UnidentifiedImageError:
+                        print(f"Error: Unidentified image at frame {i}")
+                        continue
+                    iw.close()
+                    sleep(timeout)
+
+            if not event.is_set():
+                with Output():
+                    create_movie_from_frames(tmp_dir, output_path, fps)
+
+    thread = threading.Thread(target=_make, args=(event,))
+    thread.daemon = True
+    thread.start()
+
+
+def decode_save_image(image_data, filename):
+    """Decode image data bytes and save to file."""
+    im_bytes = base64.b64decode(image_data)
+    im_bytes = io.BytesIO(im_bytes)
+    image = PIL.Image.open(im_bytes)
+    image.save(filename, "PNG")
 
 
 def create_movie_from_frames(frames_dir: str,
@@ -440,10 +506,10 @@ class MeshData:
     Imagine we run a WindTunnel simulation with an object inside
     for which a mesh was generated. A possible output of the simulation is
     a mesh of the object with scalar fields over the points defining a certain
-    physical property, e.g., pressure. 
+    physical property, e.g., pressure.
 
     Assume this output mesh is `object_mesh`. To process the pressure field over
-    the data, we can do `pressure_field = MeshData(object_mesh, "p")` 
+    the data, we can do `pressure_field = MeshData(object_mesh, "p")`
 
     `pressure_field.mesh` contains a mesh structure with the pressure field over
     the mesh.
@@ -453,7 +519,7 @@ class MeshData:
 
     def __init__(self, mesh_data, scalar_name: str = None):
         """Initialize a `MeshData` type object.
-        
+
         Args:
             mesh_data: pyvista mesh (PolyData or Unstructured) which
                 contains all of the simulated outputs over the mesh.
@@ -462,7 +528,7 @@ class MeshData:
                 array names and on the specific simulator used.
 
         Attributes:
-            mesh: mesh over the object obtained from 
+            mesh: mesh over the object obtained from
         """
         self.mesh = pv.PolyData(mesh_data.points, faces=mesh_data.faces)
         self.scalar_name = scalar_name
@@ -470,16 +536,19 @@ class MeshData:
         self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
 
     def render(self,
+               off_screen: bool = False,
                background_color: str = "black",
                scalars_cmap: str = "viridis",
-               virtual_display: bool = True,
+               virtual_display: bool = False,
                save_path: Path = None):
         """Render scalar field data over the mesh."""
+        if save_path is not None:
+            save_path = files.resolve_path(save_path)
 
         if virtual_display:
             pv.start_xvfb()
 
-        plotter = pv.Plotter()
+        plotter = pv.Plotter(off_screen=off_screen)
         pv.global_theme.background = background_color
         plotter.add_mesh(self.mesh, scalars=self.scalar_name, cmap=scalars_cmap)
         plotter.show(screenshot=save_path)

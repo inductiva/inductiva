@@ -6,6 +6,7 @@ from uuid import UUID
 
 from inductiva import types
 from inductiva.simulation import Simulator
+from inductiva.tasks import Task
 
 
 class GROMACS(Simulator):
@@ -40,7 +41,7 @@ class GROMACS(Simulator):
         input_dir: types.Path,
         commands: List[dict],
         resource_pool_id: Optional[UUID] = None,
-    ) -> str:
+    ) -> Task:
         """Run a list of GROMACS commands asynchronously.
 
         Args:

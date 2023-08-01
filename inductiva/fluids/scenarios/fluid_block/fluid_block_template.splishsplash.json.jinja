@@ -21,7 +21,7 @@
         {
             "geometryFile": "{{ tank_filename }}",
             "translation": [0, 0, 0],
-            "scale": {{ tank_dimensions }},
+            "scale": {{ tank_dimensions | list }},
             "isDynamic": false
         }
     ],
@@ -37,9 +37,9 @@
         {
             "id": "Fluid",
             "particleFile": "{{ fluid_filename }}",
-            "translation": {{ fluid_position }},
-            "scale": {{ fluid_dimensions }},
-            "initialVelocity": {{ fluid_velocity }}
+            "translation": {{ fluid_position | list }},
+            "scale": {{ fluid_dimensions | list }},
+            "initialVelocity": {{ fluid_velocity | list }}
         }
     ]
 }

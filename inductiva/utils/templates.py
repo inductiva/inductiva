@@ -1,6 +1,8 @@
 """Utils related to template files."""
 
+import os
 from typing import Dict, List
+from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -10,27 +12,36 @@ TEMPLATES_PATH = find_path_to_package("templates")
 
 
 def replace_params_in_template(
-    templates_dir: str,
-    template_filename: str,
+    template_path: str,
     params: Dict,
     output_file_path: str,
+    remove_template: bool = False,
 ) -> None:
     """Replaces parameters in a template file."""
 
-    environment = Environment(loader=FileSystemLoader(templates_dir))
+    template_path = Path(template_path)
+
+    template_dir = template_path.parent
+    template_filename = template_path.name
+
+    environment = Environment(loader=FileSystemLoader(template_dir))
     template = environment.get_template(template_filename)
     stream = template.stream(**params)
     stream.dump(output_file_path)
 
+    if remove_template:
+        os.remove(template_path)
+
 
 def batch_replace_params_in_template(
     templates_dir: str,
-    template_filename_paths: List[str],
+    template_filenames: List[str],
     params: Dict,
     output_filename_paths: List[str],
+    remove_templates: bool = False,
 ) -> None:
     """Replaces parameters in a set of template files.
-    
+
     For some simulators, more than one file needs to be changed.
     Moreover, some parameters are altered in different input files.
     To simplify, we can do a batch change for the same params dict.
@@ -45,6 +56,12 @@ def batch_replace_params_in_template(
             the template files.
     """
 
-    for index, template_filename in enumerate(template_filename_paths):
-        replace_params_in_template(templates_dir, template_filename, params,
-                                   output_filename_paths[index])
+    for index, template_filename in enumerate(template_filenames):
+        template_path = os.path.join(templates_dir, template_filename)
+
+        replace_params_in_template(
+            template_path=template_path,
+            params=params,
+            output_file_path=output_filename_paths[index],
+            remove_template=remove_templates,
+        )

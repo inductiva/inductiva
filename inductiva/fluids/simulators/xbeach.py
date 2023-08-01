@@ -5,6 +5,7 @@ from uuid import UUID
 
 from inductiva import types
 from inductiva.simulation import Simulator
+from inductiva.tasks import Task
 
 
 class XBeach(Simulator):
@@ -43,7 +44,7 @@ class XBeach(Simulator):
         resource_pool_id: Optional[UUID] = None,
         sim_config_filename: Optional[str] = "params.txt",
         n_cores: int = 1,
-    ) -> str:
+    ) -> Task:
         """Run the simulation asynchronously.
 
         Args:

@@ -11,6 +11,7 @@ gmsh
 meshio
 vtk
 xarray
+dask
 matplotlib
 imageio
 pyvista

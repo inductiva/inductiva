@@ -5,6 +5,7 @@ import shutil
 from typing import Optional
 from uuid import UUID
 
+from inductiva.tasks import Task
 from inductiva.types import Path
 from inductiva.fluids.simulators import OpenFOAM
 from inductiva.simulation import Simulator
@@ -22,15 +23,61 @@ COMMANDS_FILE_NAME = "commands.json"
 
 class HeatSink(Scenario):
     """Heat sink scenario.
-    
+
     This is a simulation scenario for a heat sink. A heat source is placed
-    in a box where there is an air flow. A heat sink, placed on top of the 
+    in a box where there is an air flow. A heat sink, placed on top of the
     source, is used to dissipate the heat via convection with the air flow.
 
     The heat source is modeled as a heater with a given power. The heat sink
     is a block of aluminum with thin fins on top. The air flow is introduced
     in the simulation via an inlet, where the air is at a fixed temperature.
+
+    The scenario is simulated in a 3D box with dimensions 8 x 16 x 52 cm in x, y
+    and z directions, respectively. The heat sink is a 4 x 3 x 6 cm block
+    centered in (x, z) in the simulation box. The sink has 1 mm wide fins
+    elongated along the z direction and separated by 2 mm centered in the x
+    direction. The heat source is a 1 x 1 x 1 cm cube that sits under the heat
+    sink. The air flow is injected in the simulation from the lower z boundary,
+    and flows in the positive z direction.
+
+    Schematic representations of the simulation scenario:
+
+    - as seen from the side (zy plane): z points right, y points up, x points
+      into the screen.
+      _________________________________
+      |                               |
+      |                               |
+      |                               |
+      |  air flow ->                  |
+      |           _________           |
+      |           |       | heat      |
+      |           |       | sink      |
+      |           |       |           |
+      |___________|_______|___________|
+                    |___|
+                 heat source
+
+    - as seen from the the inlet of the air flow (xy plane): x points right, y
+      points up, z points out of the screen.
+
+      _________________________________
+      |                               |
+      |                               |
+      |                               |
+      |                               |
+      |                               |
+      |      fins | | | | | heat      |
+      |           | | | | | sink      |
+      |           |_|_|_|_|           |
+      |           |       |           |
+      |___________|_______|___________|
+                    |___|
+                 heat source
+
+    The scenario can be simulated with OpenFOAM.
     """
+
+    valid_simulators = [OpenFOAM]
 
     def __init__(
         self,
@@ -39,6 +86,7 @@ class HeatSink(Scenario):
         heater_power=200,
     ):
         """Initializes the heat sink scenario.
+
         Args:
             air_velocity: The velocity of the air flow, in m/s.
             air_temperature: The temperature of the air flow, in Kelvin. Also
@@ -82,7 +130,7 @@ class HeatSink(Scenario):
         resource_pool_id: Optional[UUID] = None,
         simulation_time=300,
         output_time_step=10,
-    ):
+    ) -> Task:
         """Simulates the scenario asynchronously.
 
         Args:
@@ -102,7 +150,7 @@ class HeatSink(Scenario):
                                       commands=commands)
 
     def get_commands(self):
-        """Returns the commands for the simulation.
+        """Returns the OpenFOAM commands for the simulation.
         """
         commands_file_path = os.path.join(SCENARIO_TEMPLATE_DIR,
                                           OPENFOAM_TEMPLATE_SUBDIR,
@@ -113,32 +161,13 @@ class HeatSink(Scenario):
         return commands
 
     @singledispatchmethod
-    def gen_config(self, simulator: Simulator):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
-
-    @singledispatchmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
-
-    @singledispatchmethod
-    def get_config_filename(self, simulator: Simulator):  # pylint: disable=unused-argument
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def create_input_files(self, simulator: Simulator):
+        pass
 
 
-@HeatSink.get_config_filename.register
-def _(self, simulator: OpenFOAM):  # pylint: disable=unused-argument
-    pass
-
-
-@HeatSink.gen_aux_files.register
+@HeatSink.create_input_files.register
 def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
-    """Setup the working directory for the simulation."""
+    """Creates OpenFOAM simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                       OPENFOAM_TEMPLATE_SUBDIR, FILES_SUBDIR)
@@ -148,11 +177,12 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    params_file_path = os.path.join(input_dir, OPENFOAM_PARAMS_FILE_NAME)
+    template_file_path, params_file_path = (
+        os.path.join(input_dir, file_name) for file_name in
+        [OPENFOAM_TEMPLATE_PARAMS_FILE_NAME, OPENFOAM_PARAMS_FILE_NAME])
 
     replace_params_in_template(
-        templates_dir=input_dir,
-        template_filename=OPENFOAM_TEMPLATE_PARAMS_FILE_NAME,
+        template_path=template_file_path,
         params={
             "simulation_time": self.simulation_time,
             "output_time_step": self.output_time_step,
@@ -161,14 +191,5 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
             "heater_power": self.heater_power
         },
         output_file_path=params_file_path,
+        remove_template=True,
     )
-
-    # TODO (fabiocruz): add option to remove template file in
-    # replace_params_in_template.
-    os.remove(os.path.join(input_dir, OPENFOAM_TEMPLATE_PARAMS_FILE_NAME))
-
-
-@HeatSink.gen_config.register
-def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
-    """Generate the mdp configuration files for the simulation."""
-    pass

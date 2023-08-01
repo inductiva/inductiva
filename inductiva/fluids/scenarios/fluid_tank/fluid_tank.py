@@ -18,8 +18,8 @@ from inductiva.fluids.shapes import Cylinder
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.fluids.simulators import SPlisHSPlasH
-from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
 from inductiva.utils.templates import replace_params_in_template
+from inductiva.fluids.scenarios.fluid_tank.output import FluidTankOutput
 
 from . import mesh_file_utils
 
@@ -121,11 +121,13 @@ class CylindricalTankOutlet(BaseTankOutlet):
 class FluidTank(Scenario):
     """Fluid tank."""
 
+    valid_simulators = [SPlisHSPlasH]
+
     def __init__(
         self,
         shape: BaseShape = Cylinder(radius=0.5, height=1),
         fluid: FluidType = WATER,
-        fluid_level: float = 0,
+        fluid_level: float = 0.5,
         inlet: Optional[BaseTankInlet] = CircularTankInlet(radius=0.1),
         outlet: Optional[BaseTankOutlet] = CylindricalTankOutlet(radius=0.1,
                                                                  height=0.1),
@@ -180,15 +182,45 @@ class FluidTank(Scenario):
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             device=device,
+            sim_config_filename=self.get_config_filename(simulator),
         )
 
-        # TODO: Add any kind of post-processing here, e.g. convert files?
-        convert_vtk_data_dir_to_netcdf(
-            data_dir=os.path.join(output_path, "vtk"),
-            output_time_step=self.output_time_step,
-            netcdf_data_dir=os.path.join(output_path, "netcdf"))
+        return FluidTankOutput(output_path, self.output_time_step)
 
-        return output_path
+    def simulate_async(
+        self,
+        simulator: Simulator = SPlisHSPlasH(),
+        resource_pool_id: Optional[UUID] = None,
+        device: Literal["cpu", "gpu"] = "cpu",
+        simulation_time: float = 5,
+        resolution: Literal["low", "medium", "high"] = "low",
+        output_time_step: float = 0.1,
+        particle_sorting: bool = False,
+    ):
+        """Simulates the scenario.
+
+        Args:
+            simulator: Simulator to use.
+            device: Device in which to run the simulation.
+            simulation_time: Simulation time, in seconds.
+            output_time_step: Time step between output files, in seconds.
+            resolution: Resolution of the simulation. Controls the particle
+                radius and time step.
+            particle_sorting: Whether to use particle sorting.
+        """
+
+        self.simulation_time = simulation_time
+        self.particle_radius = ParticleRadius[resolution.upper()].value
+        self.time_step = TimeStep[resolution.upper()].value
+        self.output_time_step = output_time_step
+        self.particle_sorting = particle_sorting
+
+        return super().simulate_async(
+            simulator,
+            resource_pool_id=resource_pool_id,
+            device=device,
+            sim_config_filename=self.get_config_filename(simulator),
+        )
 
     def get_bounding_box(self):
         """Gets the bounding box of the tank.
@@ -207,23 +239,28 @@ class FluidTank(Scenario):
 
         return bounding_box_min, bounding_box_max
 
-    @singledispatchmethod
-    @classmethod
-    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
-        raise ValueError(
-            f"Simulator not supported for `{cls.__name__}` scenario.")
+    def create_mesh_files(self, output_dir: str):
+        """Creates mesh files for the tank and fluid in the given directory."""
+        mesh_file_utils.create_tank_mesh_file(
+            shape=self.shape,
+            outlet=self.outlet,
+            path=os.path.join(output_dir, TANK_MESH_FILENAME),
+        )
 
-    @singledispatchmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
+        mesh_file_utils.create_tank_fluid_mesh_file(
+            shape=self.shape,
+            fluid_level=self.fluid_level,
+            margin=2 * self.particle_radius,
+            path=os.path.join(output_dir, FLUID_MESH_FILENAME),
         )
 
     @singledispatchmethod
-    def gen_config(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def get_config_filename(self, simulator: Simulator):
+        pass
+
+    @singledispatchmethod
+    def create_input_files(self, simulator: Simulator):
+        pass
 
 
 @FluidTank.get_config_filename.register
@@ -232,26 +269,11 @@ def _(cls, simulator: SPlisHSPlasH) -> str:  # pylint: disable=unused-argument
     return SPLISHSPLASH_CONFIG_FILENAME
 
 
-@FluidTank.gen_aux_files.register
+@FluidTank.create_input_files.register
 def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argument
-    """Generates auxiliary files for SPlisHSPlasH."""
-    mesh_file_utils.create_tank_mesh_file(
-        shape=self.shape,
-        outlet=self.outlet,
-        path=os.path.join(input_dir, TANK_MESH_FILENAME),
-    )
+    """Creates SPlisHSPlasH simulation input files."""
 
-    mesh_file_utils.create_tank_fluid_mesh_file(
-        shape=self.shape,
-        fluid_level=self.fluid_level,
-        margin=2 * self.particle_radius,
-        path=os.path.join(input_dir, FLUID_MESH_FILENAME),
-    )
-
-
-@FluidTank.gen_config.register
-def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-argument
-    """Generates the configuration file for SPlisHSPlasH."""
+    self.create_mesh_files(input_dir)
 
     bounding_box_min, bounding_box_max = self.get_bounding_box()
     inlet_position = [
@@ -261,8 +283,8 @@ def _(self, simulator: SPlisHSPlasH, input_dir: str):  # pylint: disable=unused-
     ]
 
     replace_params_in_template(
-        templates_dir=os.path.dirname(__file__),
-        template_filename=SPLISHSPLASH_TEMPLATE_FILENAME,
+        template_path=os.path.join(os.path.dirname(__file__),
+                                   SPLISHSPLASH_TEMPLATE_FILENAME),
         params={
             "simulation_time": self.simulation_time,
             "time_step": self.time_step,

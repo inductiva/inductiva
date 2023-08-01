@@ -1,11 +1,12 @@
 """Wind tunnel scenario to run an object over an air flow."""
 
+from dataclasses import dataclass
+from enum import Enum
 from functools import singledispatchmethod
 import os
 import shutil
+import tempfile
 from typing import Optional, List, Literal
-from enum import Enum
-from dataclasses import dataclass
 from uuid import UUID
 
 from absl import logging
@@ -17,13 +18,14 @@ from inductiva.fluids.simulators import OpenFOAM
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template,
                                        replace_params_in_template)
-from inductiva.utils.files import remove_files_with_tag
-from inductiva.fluids.scenarios.wind_tunnel.post_processing import WindTunnelSimulationOutput
+from inductiva.utils import files
+from inductiva.fluids.scenarios.wind_tunnel.post_processing import WindTunnelOutput
+from inductiva.tasks import Task
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
-COMMANDS_TEMPLATE_NAME = "commands.json.jinja"
+COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
 
 @dataclass
@@ -37,10 +39,34 @@ class MeshResolution(Enum):
 class WindTunnel(Scenario):
     """Physical scenario of a configurable wind tunnel simulation.
 
-    In this scenario, an object is inserted in a wind tunnel described by the
-    user. The object is then subject to an air flow determined for which the
-    direction and magnitude is defined by the user.
+    A wind tunnel is a tool used in aerodynamic research to study the
+    effects of air moving past solid objects. Here, the tunnel consists
+    of a box object in 3D space (x, y, z) space, where air flows in the
+    positive x-direction with a certain velocity.
+            
+    An arbitrary object is placed within the tunnel, sucht that air flows
+    around it, as illustrated in the schematic below:
+    |--------------------------------|
+    |->          _____               |
+    |->        _/     |              |
+    |->_______|_o___O_|______________|
+
+    This scenario solves steady-state continuity and momentum equations
+    (time-independent) with incompressible flow. 
+    The simulation solves the time-independent equations for several
+    time steps, based on the state of the previous one. The end goal is
+    to determine the steady-state of the system, i.e., where the flow
+    does not change in time anymore.
+
+    Currently, the following variables are fixed:
+    - The fluid being inject is air.
+    - The flow is incompressible (this restricts the max air velocity).
+    - Air only flows in the positive x-direction.
+    - Some post-processing of the data occurs at run-time: streamlines,
+    pressure_field, cutting planes and force coefficients.
     """
+
+    valid_simulators = [OpenFOAM]
 
     def __init__(self,
                  flow_velocity: List[float] = None,
@@ -48,9 +74,9 @@ class WindTunnel(Scenario):
         """Initializes the `WindTunnel` conditions.
 
         Args:
-            flow_velocity (dict): Velocity of the air flow in m/s.
+            flow_velocity (dict): Velocity of the air flow (m/s).
             domain (dict): List containing the lower and upper boundary of
-                the wind tunnel in each (x, y, z) direction. It is the
+                the wind tunnel in each (x, y, z) direction (m). It is the
                 natural description with the default OpenFOAM simulator.
         """
         if flow_velocity is None:
@@ -84,17 +110,21 @@ class WindTunnel(Scenario):
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
+            simulator: Simulator used to simulate the scenario.
+                Valid simulators: OpenFOAM.
             object_path: Path to object inserted in the wind tunnel.
-            simulator: Simulator to use for the simulation.
             output_dir: Path to the directory where the simulation output
                 is downloaded.
-            simulation_time: Simulation time, in seconds.
-            write_interval: Interval between simulation outputs, in seconds.
+            simulation_time: Simulation time (s).
+            output_time_step: Interval between simulation outputs (s).
             n_cores: Number of cores to use for the simulation.
-            """
+            resolution: Level of detail of the mesh used for the simulation.
+                Options: "high", "medium" or "low".
+            resource_pool_id: Id of the resource pool to use for the simulation.
+        """
 
         if object_path:
-            self.object_path = object_path
+            self.object_path = files.resolve_path(object_path)
         else:
             logging.info("WindTunnel is empty. Object path not specified.")
 
@@ -113,7 +143,7 @@ class WindTunnel(Scenario):
             commands=commands,
         )
 
-        return WindTunnelSimulationOutput(output_path, simulation_time)
+        return WindTunnelOutput(output_path)
 
     def simulate_async(self,
                        simulator: Simulator = OpenFOAM(),
@@ -122,21 +152,23 @@ class WindTunnel(Scenario):
                        simulation_time: float = 100,
                        output_time_step: float = 50,
                        resolution: Literal["high", "medium", "low"] = "medium",
-                       n_cores: int = 1):
+                       n_cores: int = 1) -> Task:
         """Simulates the wind tunnel scenario asynchronously.
 
         Args:
+            simulator: Simulator used to simulate the scenario.
+                Valid simulators: OpenFOAM.
             object_path: Path to object inserted in the wind tunnel.
-            simulator: Simulator to use for the simulation.
-            output_dir: Path to the directory where the simulation output
-                is downloaded.
-            simulation_time: Simulation time, in seconds.
-            write_interval: Interval between simulation outputs, in seconds.
+            simulation_time: Simulation time (s).
+            output_time_step: Interval between simulation outputs (s).
             n_cores: Number of cores to use for the simulation.
+            resolution: Level of detail for the simulation. It can be
+                "high", "medium" or "low".
+            resource_pool_id: Id of the resource pool to use for the simulation.
             """
 
         if object_path:
-            self.object_path = object_path
+            self.object_path = files.resolve_path(object_path)
         else:
             logging.info("WindTunnel is empty. Object path not specified.")
 
@@ -147,84 +179,53 @@ class WindTunnel(Scenario):
 
         commands = self.get_commands()
 
-        task_id = super().simulate_async(
+        return super().simulate_async(
             simulator,
             resource_pool_id=resource_pool_id,
             n_cores=n_cores,
             commands=commands,
         )
 
-        return task_id
-
     def get_commands(self):
-        """Returns the commands for the simulation.
-        """
-        templates_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                      OPENFOAM_TEMPLATE_INPUT_DIR)
-        commands_file_path = os.path.join(templates_path, "commands.json")
+        """Returns the commands for the simulation."""
 
-        replace_params_in_template(templates_path, "commands.json.jinja",
-                                   {"n_cores": self.n_cores},
-                                   commands_file_path)
+        commands_template_path = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                              OPENFOAM_TEMPLATE_INPUT_DIR,
+                                              COMMANDS_TEMPLATE_FILE_NAME)
 
-        commands = self.read_commands_from_file(commands_file_path)
+        with tempfile.NamedTemporaryFile() as commands_file:
+            replace_params_in_template(
+                template_path=commands_template_path,
+                params={"n_cores": self.n_cores},
+                output_file_path=commands_file.name,
+            )
+
+            commands = self.read_commands_from_file(commands_file.name)
 
         return commands
 
     @singledispatchmethod
-    @classmethod
-    def get_config_filename(cls, simulator: Simulator):  # pylint: disable=unused-argument
-        raise ValueError(
-            f"Simulator not supported for `{cls.__name__}` scenario.")
-
-    @singledispatchmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
-
-    @singledispatchmethod
-    def gen_config(self, simulator: Simulator, input_dir: str):
-        raise ValueError(
-            f"Simulator not supported for `{self.__class__.__name__}` scenario."
-        )
+    def create_input_files(self, simulator: Simulator):
+        pass
 
 
-@WindTunnel.get_config_filename.register
-def _(self, simulator: OpenFOAM):  # pylint: disable=unused-argument
-    pass
-
-
-@WindTunnel.gen_aux_files.register
+@WindTunnel.create_input_files.register
 def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
+    """Creates OpenFOAM simulation input files."""
+
     # The WindTunnel with OpenFOAM requires changing multiple files
-    template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
 
     # Copy all files from the template dir to the input directory
-    shutil.copytree(template_dir, input_dir, dirs_exist_ok=True, symlinks=True)
-
-    # Remove all files that have .jinja in input_dir
-    remove_files_with_tag(input_dir, ".jinja")
-
-
-@WindTunnel.gen_config.register
-def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argument
-    """Generates the configuration files for OpenFOAM."""
-
-    # The WindTunnel with OpenFOAM requires changing multiple files
-    template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
-
-    # Add object path to its respective place
-    object_input_dir_path = os.path.join(input_dir, "constant", "triSurface")
-    os.mkdir(object_input_dir_path)
-    shutil.copy(self.object_path,
-                os.path.join(object_input_dir_path, "object.obj"))
+    shutil.copytree(template_files_dir,
+                    input_dir,
+                    dirs_exist_ok=True,
+                    symlinks=True)
 
     batch_replace_params_in_template(
-        templates_dir=template_dir,
-        template_filename_paths=[
+        templates_dir=input_dir,
+        template_filenames=[
             os.path.join("0", "include",
                          "initialConditions_template.openfoam.jinja"),
             os.path.join("system", "controlDict_template.openfoam.jinja"),
@@ -246,4 +247,11 @@ def _(self, simulator: OpenFOAM, input_dir: str):  # pylint: disable=unused-argu
             os.path.join(input_dir, "system", "blockMeshDict"),
             os.path.join(input_dir, "system", "decomposeParDict"),
             os.path.join(input_dir, "system", "snappyHexMeshDict")
-        ])
+        ],
+        remove_templates=True,
+    )
+
+    # Add object path to its respective place
+    object_dir = os.path.join(input_dir, "constant", "triSurface")
+    os.mkdir(object_dir)
+    shutil.copy(self.object_path, os.path.join(object_dir, "object.obj"))

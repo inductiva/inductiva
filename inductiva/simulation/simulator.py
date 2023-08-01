@@ -2,9 +2,10 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 from uuid import UUID
-from inductiva import api
 from inductiva import types
 from inductiva.utils import files
+from inductiva.tasks import Task
+from inductiva import tasks
 
 
 class Simulator(ABC):
@@ -55,7 +56,7 @@ class Simulator(ABC):
         input_dir = self._setup_input_dir(input_dir)
         output_dir = self._setup_output_dir(output_dir, input_dir)
 
-        return api.run_simulation(
+        return tasks.run_simulation(
             self.api_method_name,
             input_dir,
             output_dir,
@@ -69,7 +70,7 @@ class Simulator(ABC):
         *_args,
         resource_pool_id: Optional[UUID] = None,
         **kwargs,
-    ) -> str:
+    ) -> Task:
         """Run the simulation asynchronously.
 
         Args:
@@ -81,7 +82,7 @@ class Simulator(ABC):
         """
         self._setup_input_dir(input_dir)
 
-        return api.run_async_simulation(
+        return tasks.run_async_simulation(
             self.api_method_name,
             input_dir,
             params=kwargs,

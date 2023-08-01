@@ -8,12 +8,13 @@ from inductiva.types import Path
 from inductiva.simulation import Simulator
 from inductiva.utils.files import resolve_path, get_timestamped_path
 from inductiva.utils.misc import split_camel_case
-from inductiva.tasks.methods import get_task_info, fetch_task_output
 import json
+from inductiva.tasks import Task
 
 
 class Scenario(ABC):
     """Base class for scenarios."""
+    valid_simulators = []
 
     def _setup_output_dir(self, output_dir: str):
         """Setup the scenario output directory."""
@@ -24,37 +25,8 @@ class Scenario(ABC):
         output_dir = resolve_path(output_dir)
         return output_dir
 
-    def _setup_config(self, simulator: Simulator, input_dir: Path):
-        """Setup the scenario configuration files and arguments."""
-        self.gen_aux_files(simulator, input_dir)
-        self.gen_config(simulator, input_dir)
-
-        args = ()
-        config_filename = self.get_config_filename(simulator)
-        if config_filename:
-            args += (config_filename,)
-        return args
-
-    def download_outputs(self, output_dir: str = None):
-        """Download the outputs of an async simulation to output_dir."""
-
-        if not get_task_info(self.task_id)["status"]:
-            raise ValueError("Simulation not finished.")
-
-        fetch_task_output(self.task_id, output_dir=output_dir, return_type=None)
-
     @abstractmethod
-    def gen_aux_files(self, simulator: Simulator, input_dir: Path):
-        """To be implemented in subclasses."""
-        pass
-
-    @abstractmethod
-    def gen_config(self, simulator: Simulator, input_dir: Path):
-        """To be implemented in subclasses."""
-        pass
-
-    @abstractmethod
-    def get_config_filename(self, simulator: Simulator):
+    def create_input_files(self, simulator: Simulator, input_dir: Path):
         """To be implemented in subclasses."""
         pass
 
@@ -64,6 +36,13 @@ class Scenario(ABC):
             commands = json.load(f)
         return commands
 
+    def validate_simulator(self, simulator: Simulator):
+        """Checks if the scenario can be simulated with the given simulator."""
+        if type(simulator) not in self.valid_simulators:
+            raise ValueError(
+                f"Simulator not supported for `{self.__class__.__name__}` "
+                "scenario.")
+
     def simulate(
         self,
         simulator: Simulator,
@@ -71,13 +50,13 @@ class Scenario(ABC):
         resource_pool_id: Optional[UUID] = None,
         **kwargs,
     ) -> Path:
-        """Simulates the scenario for a single simulator call."""
+        """Simulates the scenario synchronously."""
+        self.validate_simulator(simulator)
         output_dir = self._setup_output_dir(output_dir)
         with tempfile.TemporaryDirectory() as input_dir:
-            args = self._setup_config(simulator, input_dir)
+            self.create_input_files(simulator, input_dir)
             return simulator.run(
                 input_dir,
-                *args,
                 output_dir=output_dir,
                 resource_pool_id=resource_pool_id,
                 **kwargs,
@@ -88,15 +67,13 @@ class Scenario(ABC):
         simulator: Simulator,
         resource_pool_id: Optional[UUID] = None,
         **kwargs,
-    ) -> str:
+    ) -> Task:
         """Simulates the scenario asychronously."""
-
         with tempfile.TemporaryDirectory() as input_dir:
-            args = self._setup_config(simulator, input_dir)
-            task_id = simulator.run_async(
+            task = simulator.run_async(
                 input_dir,
-                *args,
                 resource_pool_id=resource_pool_id,
                 **kwargs,
             )
-        return task_id
+
+        return task
