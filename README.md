@@ -46,10 +46,7 @@ view = ouptut.render_interactive(representation="ball+stick", add_backbone=True)
 
 This yields an interactive visualization of the protein's trajectory that can be visualized and manipulated in a standard jupyter notebook. The user can specify the representation used for the protein and choose to add the backbone to the visualization.  
 
-<p align="center">
-  <img width="900" height="300" src="https://github.com/inductiva/inductiva/assets/114397668/d8eb9c0b-8809-4da6-97a1-3448f2809af3">
-</p>
-
+![Protein solvation simulation.](resources/media/protein_solvation.gif)
 
 ### Wind tunnel
 
