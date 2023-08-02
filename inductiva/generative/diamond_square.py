@@ -66,8 +66,8 @@ def square_step(random_array, inter_center_distance, noise_range):
                             |---+---+---|
                             |   | S |   |
                             +-----------+
-    For each square in the array, set the midpoint to be the average of the four
-    corner points plus a random value."""
+    For each diamond in the array, set the midpoint to be the average of the
+    four corner points plus a random value."""
 
     square_offsets = [[-1, 0], [0, -1], [1, 0], [0, 1]]
     map_length = random_array.shape[0]
