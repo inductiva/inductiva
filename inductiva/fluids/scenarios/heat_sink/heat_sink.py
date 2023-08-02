@@ -123,7 +123,7 @@ class HeatSink(Scenario):
                                 resource_pool_id=resource_pool_id,
                                 run_async=run_async,
                                 commands=commands)
-        
+
         task.set_output_class(HeatSinkOutput)
 
         return task

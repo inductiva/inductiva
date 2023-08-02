@@ -140,7 +140,7 @@ class WindTunnel(Scenario):
                                 run_async=run_async,
                                 n_cores=n_cores,
                                 commands=commands)
-        
+
         task.set_output_class(WindTunnelOutput)
 
         return task

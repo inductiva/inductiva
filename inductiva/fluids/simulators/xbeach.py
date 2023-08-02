@@ -1,5 +1,5 @@
 """DualSPHysics module of the API."""
-from typing import Optional, Union
+from typing import Optional
 from uuid import UUID
 
 from inductiva import types

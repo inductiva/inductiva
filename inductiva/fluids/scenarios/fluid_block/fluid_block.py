@@ -125,9 +125,9 @@ class FluidBlock(Scenario):
         self.output_time_step = output_time_step
 
         task = super().simulate(simulator=simulator,
-                                  resource_pool_id=resource_pool_id,
-                                  run_async=run_async,
-                                  device=device)
+                                resource_pool_id=resource_pool_id,
+                                run_async=run_async,
+                                device=device)
 
         # TODO: Add any kind of post-processing here, e.g. convert files?
         # convert_vtk_data_dir_to_netcdf(

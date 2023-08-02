@@ -45,13 +45,12 @@ def main(_):
 
     gromacs_sim = inductiva.md.simulators.GROMACS()
 
-    output_path = gromacs_sim.run(input_dir=FLAGS.sim_dir,
+    task = gromacs_sim.run(input_dir=FLAGS.sim_dir,
                                   sim_config_filename=FLAGS.sim_config_filename,
                                   protein_filename=FLAGS.protein_filename,
-                                  topology_filename=FLAGS.topology_filename,
-                                  output_dir=FLAGS.output_dir)
+                                  topology_filename=FLAGS.topology_filename)
 
-    logging.info("Outputs stored in %s", output_path)
+    logging.info("Task id: %s", task.id)
 
 
 if __name__ == "__main__":

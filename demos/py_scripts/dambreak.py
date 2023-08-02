@@ -53,7 +53,6 @@ def main(_):
         simulator=simulator_cls(),
         resolution=FLAGS.resolution,
         simulation_time=FLAGS.simulation_time,
-        output_dir=FLAGS.output_dir,
         device=FLAGS.device,
     )
 

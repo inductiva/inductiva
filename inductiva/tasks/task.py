@@ -157,9 +157,9 @@ class Task:
         self.wait()
         _, output_dir = api.download_output(self._api, self.id, output_dir)
         output_dir = files.resolve_path(output_dir)
-        
+
         if self._output_class:
-            return self._output_class(output_dir) 
+            return self._output_class(output_dir)
         else:
             return output_dir
 

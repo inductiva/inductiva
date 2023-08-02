@@ -85,7 +85,7 @@ class MDWaterBox(Scenario):
                                 resource_pool_id=resource_pool_id,
                                 commands=commands,
                                 run_async=run_async)
-        
+
         task.set_output_class(MDWaterBoxOutput)
 
         return task

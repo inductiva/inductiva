@@ -33,14 +33,13 @@ def main(_):
 
     swash_sim = inductiva.fluids.SWASH()
 
-    output_path = swash_sim.run(
+    task = swash_sim.run(
         input_dir=FLAGS.sim_dir,
         sim_config_filename=FLAGS.sim_config_filename,
-        output_dir=FLAGS.output_dir,
         n_cores=FLAGS.n_cores,
     )
 
-    logging.info("Outputs stored in %s", output_path)
+    logging.info("Task ID %s", task.id)
 
 
 if __name__ == "__main__":

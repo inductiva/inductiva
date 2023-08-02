@@ -4,7 +4,7 @@ from typing import Any, Optional
 from uuid import UUID
 
 from inductiva import tasks
-from inductiva.api.methods import invoke_async_api
+from inductiva.api import methods
 
 
 def run_simulation(
@@ -24,17 +24,17 @@ def run_simulation(
         "sim_dir": pathlib.Path,
     }
 
-    task_id = invoke_async_api(api_method_name,
-                               params,
-                               type_annotations,
-                               resource_pool_id=resource_pool_id)
-    task = Task(task_id)
+    task_id = methods.invoke_async_api(api_method_name,
+                                       params,
+                                       type_annotations,
+                                       resource_pool_id=resource_pool_id)
+    task = tasks.Task(task_id)
     if not isinstance(task_id, str):
         raise RuntimeError(
             f"Expected result to be a string with task_id, got {type(task_id)}")
 
     # Blocking call for sync execution
-    if not(run_async):
+    if not run_async:
         with task:
             task.wait()
 
