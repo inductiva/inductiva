@@ -178,3 +178,21 @@ class Task:
                                                 "%Y-%m-%dT%H:%M:%S.%f+00:00")
 
         return (end_time - start_time).total_seconds()
+
+    def get_machine(self) -> str:
+        """Get the machine type used in the task.
+
+        Streamlines the process of obtaining the task info, extracting the
+        machine type from the comprehensive task info.
+
+        Returns:
+            The machine type.
+        """
+
+        params = self._get_path_params()
+        task_info = dict(self._api.get_task(params).body)
+
+        machine_info = dict(task_info["executer"])
+        machine_type = machine_info["vm_type"].split("/")[-1]
+
+        return machine_type
