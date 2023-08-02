@@ -6,7 +6,6 @@ import os
 from typing import List, Literal, Optional
 from uuid import UUID
 
-from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.shapes import BaseShape
@@ -182,7 +181,6 @@ class FluidTank(Scenario):
     def simulate(
         self,
         simulator: Simulator = SPlisHSPlasH(),
-        output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "cpu",
@@ -195,7 +193,6 @@ class FluidTank(Scenario):
 
         Args:
             simulator: Simulator to use. Supported simulators are: SPlisHSPlasH.
-            output_dir: Directory to store the simulation output.
             resource_pool_id: Resource pool to use for the simulation.
             simulation_time: Total simulation time, in seconds.
             output_time_step: Time step for the output, in seconds.
@@ -214,7 +211,6 @@ class FluidTank(Scenario):
 
         task = super().simulate(
             simulator,
-            output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             run_async=run_async,
             device=device,

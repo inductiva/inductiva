@@ -100,7 +100,6 @@ class WindTunnel(Scenario):
 
     def simulate(self,
                  simulator: Simulator = OpenFOAM(),
-                 output_dir: Optional[Path] = None,
                  resource_pool_id: Optional[UUID] = None,
                  run_async: bool = False,
                  object_path: Optional[Path] = None,
@@ -137,11 +136,10 @@ class WindTunnel(Scenario):
         commands = self.get_commands()
 
         task = super().simulate(simulator,
-                                  output_dir=output_dir,
-                                  resource_pool_id=resource_pool_id,
-                                  run_async=run_async,
-                                  n_cores=n_cores,
-                                  commands=commands)
+                                resource_pool_id=resource_pool_id,
+                                run_async=run_async,
+                                n_cores=n_cores,
+                                commands=commands)
         
         task.set_output_class(WindTunnelOutput)
 

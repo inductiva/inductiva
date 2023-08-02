@@ -9,7 +9,6 @@ from uuid import UUID
 
 import numpy as np
 
-from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import SWASH
@@ -166,7 +165,6 @@ class CoastalArea(Scenario):
     def simulate(
         self,
         simulator: Simulator = SWASH(),
-        output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
         simulation_time: float = 100,
@@ -177,7 +175,6 @@ class CoastalArea(Scenario):
 
         Args:
             simulator: Simulator to use. Supported simulators are: SWASH.
-            output_dir: Directory to store the simulation output.
             resource_pool_id: Resource pool to use for the simulation.
             simulation_time: Total simulation time, in seconds.
             time_step: Time step, in seconds.

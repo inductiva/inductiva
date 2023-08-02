@@ -6,7 +6,6 @@ from typing import Optional
 from uuid import UUID
 from inductiva.fluids.scenarios.heat_sink.output import HeatSinkOutput
 
-from inductiva.types import Path
 from inductiva.fluids.simulators import OpenFOAM
 from inductiva.simulation import Simulator
 from inductiva.scenarios import Scenario
@@ -100,7 +99,6 @@ class HeatSink(Scenario):
     def simulate(
         self,
         simulator: Simulator = OpenFOAM(),
-        output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
         simulation_time=300,
@@ -110,8 +108,6 @@ class HeatSink(Scenario):
 
         Args:
             simulator: The simulator to use for the simulation.
-            output_dir: The output directory to save the simulation results when
-              running synchronously.
             simulation_time: The simulation time, in seconds.
             output_time_step: The time step to save the simulation results, in
               seconds.
@@ -124,10 +120,9 @@ class HeatSink(Scenario):
         commands = self.get_commands()
 
         task = super().simulate(simulator,
-                                  output_dir,
-                                  resource_pool_id=resource_pool_id,
-                                  run_async=run_async,
-                                  commands=commands)
+                                resource_pool_id=resource_pool_id,
+                                run_async=run_async,
+                                commands=commands)
         
         task.set_output_class(HeatSinkOutput)
 

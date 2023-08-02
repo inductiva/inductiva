@@ -9,7 +9,6 @@ from inductiva.fluids.simulators import DualSPHysics
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
-from inductiva.types import Path
 
 from inductiva.fluids.scenarios._post_processing import SPHSimulationOutput
 
@@ -53,7 +52,6 @@ class DamBreak(FluidBlock):
     def simulate(
         self,
         simulator: Simulator = DualSPHysics(),
-        output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
         device: Literal["cpu", "gpu"] = "gpu",
         resolution: Literal["high", "medium", "low"] = "medium",
@@ -64,7 +62,6 @@ class DamBreak(FluidBlock):
 
         Args:
             simulator: Simulator to use.
-            output_dir: Directory to store the simulation output.
             device: Device in which to run the simulation.
             resolution: Resolution of the simulation.
             simulation_time: Simulation time, in seconds.
@@ -74,12 +71,11 @@ class DamBreak(FluidBlock):
         particle_radius = ParticleRadius[resolution.upper()].value
 
         task = super().simulate(simulator=simulator,
-                                      output_dir=output_dir,
-                                      resource_pool_id=resource_pool_id,
-                                      device=device,
-                                      particle_radius=particle_radius,
-                                      simulation_time=simulation_time,
-                                      run_async=run_async)
+                                resource_pool_id=resource_pool_id,
+                                device=device,
+                                particle_radius=particle_radius,
+                                simulation_time=simulation_time,
+                                run_async=run_async)
 
         task.set_output_class(SPHSimulationOutput)
 
