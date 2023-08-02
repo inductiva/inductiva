@@ -15,6 +15,7 @@ from inductiva.client.model.body_upload_task_input import BodyUploadTaskInput
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.executer_create import ExecuterCreate
 from inductiva.client.model.executer_id import ExecuterID
+from inductiva.client.model.file_info import FileInfo
 from inductiva.client.model.g_cloud_executer import GCloudExecuter
 from inductiva.client.model.g_cloud_host_info import GCloudHostInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
@@ -23,6 +24,7 @@ from inductiva.client.model.inductiva_host_info import InductivaHostInfo
 from inductiva.client.model.instance import Instance
 from inductiva.client.model.instance_create import InstanceCreate
 from inductiva.client.model.instance_group import InstanceGroup
+from inductiva.client.model.output_archive_info import OutputArchiveInfo
 from inductiva.client.model.resource_pool_id import ResourcePoolID
 from inductiva.client.model.task import Task
 from inductiva.client.model.task_request import TaskRequest
