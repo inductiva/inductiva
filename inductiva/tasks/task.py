@@ -173,8 +173,8 @@ class Task:
 
         #Format the time to datetime type
         end_time = datetime.datetime.strptime(str(info["end_time"]),
-                                        "%Y-%m-%dT%H:%M:%S.%f+00:00")
+                                              "%Y-%m-%dT%H:%M:%S.%f+00:00")
         start_time = datetime.datetime.strptime(str(info["start_time"]),
-                                        "%Y-%m-%dT%H:%M:%S.%f+00:00")
+                                                "%Y-%m-%dT%H:%M:%S.%f+00:00")
 
         return (end_time - start_time).total_seconds()
