@@ -4,6 +4,7 @@ import time
 from absl import logging
 from typing import Dict, Any
 from typing_extensions import TypedDict
+from datetime import datetime
 
 from inductiva.client.models import TaskStatusCode
 from inductiva import api
@@ -155,3 +156,22 @@ class Task:
 
     def _get_path_params(self) -> _PathParams:
         return {"task_id": self.id}
+
+    def get_time(self) -> float:
+        """Get the time the task took to complete.
+
+        Returns:
+            The time in seconds.
+        """
+
+        if self.get_status() != TaskStatusCode.SUCCESS:
+            raise RuntimeError("Task is not completed.")
+
+        else:
+            info = dict(self._api.get_task(self._get_path_params()).body)
+            end_time = datetime.strptime(str(info["end_time"]),
+                                         "%Y-%m-%dT%H:%M:%S.%f+00:00")
+            start_time = datetime.strptime(str(info["start_time"]),
+                                           "%Y-%m-%dT%H:%M:%S.%f+00:00")
+
+            return (end_time - start_time).total_seconds()
