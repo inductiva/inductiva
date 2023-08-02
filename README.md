@@ -132,57 +132,6 @@ output.render()
 
 ![Fluid tank simulation.](resources/media/fluid_tank.gif)
 
-### Coastal area
-
-This scenario simulates the propagation of waves in a coastal area, by solving
-the [shallow water equations](https://en.wikipedia.org/wiki/Shallow_water_equations)
-in a given bathymetric profile (i.e., the depth of the sea bottom). 
-Waves are injected at the boundary opposite to the beach, and propagate towards
-the shore, interacting with the different elements of the bathymetry.
-
-#### Example
-
-Initialize a bathymetry from a given text file and the coastal area scenario:
-
-```python
-from inductiva import fluids
-
-bathymetry = fluids.scenarios.Bathymetry.from_text_file(
-  text_file_path="bathymetry.bot", 
-  x_range=(0, 1200),
-  y_range=(0, 400))
-
-scenario = fluids.scenarios.CoastalArea(bathymetry=bathymetry,
-                                        wave_amplitude=2.5,
-                                        wave_period=5.5,
-                                        water_level=1.0,
-                                        wave_source_location="W")
-```
-
-The user can specify the wave amplitude (in meters) and period (in seconds), as
-well as the base water level (in meters).
-
-Run the simulation:
-
-```python
-output = scenario.simulate(simulation_time=120,
-                           time_step=0.1,
-                           output_time_step=1)
-```
-
-The user can specify the total simulation time, the adopted time step and the
-time step between outputs (all in seconds).
-
-Visualize the results:
-
-```python
-output.render(quantity="water_level")
-```
-
-This produces a movie of the temporal evolution of the water level in the
-coastal area.
-
-![Coastal area simulation. Water level render.](resources/media/coastal_area.gif)
 
 ## Simulators
 
