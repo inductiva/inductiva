@@ -3,8 +3,9 @@
 from functools import singledispatchmethod
 import math
 import os
-from typing import Literal, Optional, Sequence
+import random
 import shutil
+from typing import Literal, Optional, Sequence
 from uuid import UUID
 
 import numpy as np
@@ -17,7 +18,7 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.fluids.scenarios.coastal_area.output import CoastalAreaOutput
 
-from inductiva.fluids.scenarios.coastal_area import random_bathymetry_utils
+from inductiva.generative import diamond_square
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
@@ -120,12 +121,23 @@ class Bathymetry:
               water. Must be between 0 and 100.
         """
 
-        depths = random_bathymetry_utils.create_random_bathymetry(
+        corner_values = [
+            random.uniform(0, max_depth),
+            random.uniform(0, max_depth),
+            random.uniform(-max_depth, 0),
+            random.uniform(-max_depth, 0),
+        ]
+
+        depths = diamond_square.create_random_array(
             size=2**n + 1,
+            corner_values=corner_values,
             initial_roughness=initial_roughness,
-            roughness_factor=roughness_factor,
-            percentile_above_water=percentile_above_water,
-            max_depth=max_depth)
+            roughness_factor=roughness_factor)
+
+        # Adjust depths to ensure that a given percentage of the domain is above
+        # sea level (depth < 0).
+        percentile_under_water = np.percentile(depths, percentile_above_water)
+        depths -= percentile_under_water
 
         return cls(depths, x_range, y_range)
 
@@ -226,6 +238,7 @@ class CoastalArea(Scenario):
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
+        n_cores: int = 1,
     ):
         """Simulates the scenario.
 
@@ -248,6 +261,7 @@ class CoastalArea(Scenario):
             resource_pool_id=resource_pool_id,
             run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,
+            n_cores=n_cores,
         )
         if run_async:
             return output
