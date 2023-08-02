@@ -31,7 +31,7 @@ def main(_):
     sph_sim = inductiva.fluids.simulators.SPlisHSPlasH()
 
     task = sph_sim.run(input_dir=FLAGS.sim_dir,
-                              sim_config_filename=FLAGS.sim_config_filename)
+                       sim_config_filename=FLAGS.sim_config_filename)
 
     logging.info("Task ID %s", task.id)
 

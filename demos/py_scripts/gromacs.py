@@ -46,9 +46,9 @@ def main(_):
     gromacs_sim = inductiva.md.simulators.GROMACS()
 
     task = gromacs_sim.run(input_dir=FLAGS.sim_dir,
-                                  sim_config_filename=FLAGS.sim_config_filename,
-                                  protein_filename=FLAGS.protein_filename,
-                                  topology_filename=FLAGS.topology_filename)
+                           sim_config_filename=FLAGS.sim_config_filename,
+                           protein_filename=FLAGS.protein_filename,
+                           topology_filename=FLAGS.topology_filename)
 
     logging.info("Task id: %s", task.id)
 
