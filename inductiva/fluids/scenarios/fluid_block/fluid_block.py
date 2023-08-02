@@ -127,7 +127,7 @@ class FluidBlock(Scenario):
         self.time_step = time_step
         self.output_time_step = output_time_step
 
-        output = super().simulate(simulator=simulator,
+        task = super().simulate(simulator=simulator,
                                   output_dir=output_dir,
                                   resource_pool_id=resource_pool_id,
                                   run_async=run_async,
@@ -138,10 +138,9 @@ class FluidBlock(Scenario):
         #     data_dir=os.path.join(output_path, "vtk"),
         #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
         #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
-        if run_async:
-            return output
-        else:
-            return SPHSimulationOutput(output)
+        task.set_output_class(SPHSimulationOutput)
+
+        return task
 
     @singledispatchmethod
     def get_config_filename(self, simulator: Simulator):

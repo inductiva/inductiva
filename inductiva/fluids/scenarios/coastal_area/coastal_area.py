@@ -188,17 +188,17 @@ class CoastalArea(Scenario):
         self.time_step = time_step
         self.output_time_step = output_time_step
 
-        output = super().simulate(
+        task = super().simulate(
             simulator,
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,
         )
-        if run_async:
-            return output
-        else:
-            return CoastalAreaOutput(output)
+
+        task.set_output_class(CoastalAreaOutput)
+
+        return task
 
     @singledispatchmethod
     def get_config_filename(self, simulator: Simulator):

@@ -123,15 +123,15 @@ class HeatSink(Scenario):
 
         commands = self.get_commands()
 
-        output = super().simulate(simulator,
+        task = super().simulate(simulator,
                                   output_dir,
                                   resource_pool_id=resource_pool_id,
                                   run_async=run_async,
                                   commands=commands)
-        if run_async:
-            return output
-        else:
-            return HeatSinkOutput(output)
+        
+        task.set_output_class(HeatSinkOutput)
+
+        return task
 
     def get_commands(self):
         """Returns the OpenFOAM commands for the simulation.

@@ -33,9 +33,10 @@ def run_simulation(
     if not isinstance(task_id, str):
         raise RuntimeError(
             f"Expected result to be a string with task_id, got {type(task_id)}")
-    if run_async:
-        return task
-    else:
+    
+    # Blocking call for sync execution
+    if not(run_async):
         with task:
             task.wait()
-        return task.download_output(output_dir)
+
+    return task

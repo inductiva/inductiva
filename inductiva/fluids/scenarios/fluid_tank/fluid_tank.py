@@ -212,7 +212,7 @@ class FluidTank(Scenario):
         self.output_time_step = output_time_step
         self.particle_sorting = particle_sorting
 
-        output = super().simulate(
+        task = super().simulate(
             simulator,
             output_dir=output_dir,
             resource_pool_id=resource_pool_id,
@@ -221,10 +221,9 @@ class FluidTank(Scenario):
             sim_config_filename=self.get_config_filename(simulator),
         )
 
-        if run_async:
-            return output
-        else:
-            return FluidTankOutput(output, self.output_time_step)
+        task.set_output_class(FluidTankOutput)
+
+        return task
 
     def get_bounding_box(self):
         """Gets the bounding box of the tank.

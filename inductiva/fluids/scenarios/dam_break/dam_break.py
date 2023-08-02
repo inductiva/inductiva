@@ -73,7 +73,7 @@ class DamBreak(FluidBlock):
 
         particle_radius = ParticleRadius[resolution.upper()].value
 
-        sim_output = super().simulate(simulator=simulator,
+        task = super().simulate(simulator=simulator,
                                       output_dir=output_dir,
                                       resource_pool_id=resource_pool_id,
                                       device=device,
@@ -81,7 +81,6 @@ class DamBreak(FluidBlock):
                                       simulation_time=simulation_time,
                                       run_async=run_async)
 
-        if run_async:
-            return sim_output
-        else:
-            return SPHSimulationOutput(sim_output.sim_output_dir)
+        task.set_output_class(SPHSimulationOutput)
+
+        return task

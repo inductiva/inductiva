@@ -33,6 +33,7 @@ class MeshResolution(Enum):
     HIGH = [5, 6]
     MEDIUM = [4, 5]
     LOW = [3, 4]
+    VERY_LOW = [2, 3]
 
 
 class WindTunnel(Scenario):
@@ -135,16 +136,16 @@ class WindTunnel(Scenario):
 
         commands = self.get_commands()
 
-        output = super().simulate(simulator,
+        task = super().simulate(simulator,
                                   output_dir=output_dir,
                                   resource_pool_id=resource_pool_id,
                                   run_async=run_async,
                                   n_cores=n_cores,
                                   commands=commands)
-        if run_async:
-            return output
-        else:
-            return WindTunnelOutput(output)
+        
+        task.set_output_class(WindTunnelOutput)
+
+        return task
 
     def get_commands(self):
         """Returns the commands for the simulation."""
