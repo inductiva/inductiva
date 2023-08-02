@@ -9,6 +9,7 @@ import datetime
 from inductiva.client.models import TaskStatusCode
 from inductiva import api
 from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.utils import files
 
 
 class Task:
@@ -155,8 +156,8 @@ class Task:
         # Blocking call for the task to terminate
         self.wait()
         _, output_dir = api.download_output(self._api, self.id, output_dir)
+        output_dir = files.resolve_path(output_dir)
         
-        logging.info("Prepare Output...")
         if self._output_class:
             return self._output_class(output_dir) 
         else:
@@ -169,6 +170,7 @@ class Task:
             The path to the downloaded output directory.
         """
         _, output_dir = api.download_output(self._api, self.id, output_dir)
+        output_dir = files.resolve_path(output_dir)
 
         return output_dir
 

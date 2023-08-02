@@ -190,7 +190,6 @@ class CoastalArea(Scenario):
 
         task = super().simulate(
             simulator,
-            output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,

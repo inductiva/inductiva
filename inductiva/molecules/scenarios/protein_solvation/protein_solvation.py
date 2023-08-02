@@ -6,7 +6,6 @@ import os
 import shutil
 from uuid import UUID
 
-from inductiva.types import Path
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
@@ -47,7 +46,6 @@ class ProteinSolvation(Scenario):
     def simulate(
             self,
             simulator: Simulator = GROMACS(),
-            output_dir: Optional[Path] = None,
             resource_pool_id: Optional[UUID] = None,
             run_async: bool = False,
             simulation_time: float = 10,  # ns
@@ -57,7 +55,6 @@ class ProteinSolvation(Scenario):
         """Simulate the solvation of a protein.
 
         Args:
-            output_dir: The output directory to save the simulation results.
             simulation_time: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
                 - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
@@ -89,10 +86,9 @@ class ProteinSolvation(Scenario):
         self.nsteps_minim = nsteps_minim
         commands = self.get_commands()
         task = super().simulate(simulator,
-                                  output_dir,
-                                  resource_pool_id=resource_pool_id,
-                                  commands=commands,
-                                  run_async=run_async)
+                                resource_pool_id=resource_pool_id,
+                                commands=commands,
+                                run_async=run_async)
         
         task.set_output_class(ProteinSolvationOutput)
 
