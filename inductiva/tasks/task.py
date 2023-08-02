@@ -168,7 +168,12 @@ class Task:
             raise RuntimeError("Task is not completed.")
 
         else:
-            info = dict(self._api.get_task(self._get_path_params()).body)
+            #Get task params
+            params = self._get_path_params()
+            #Get info about the task
+            info = dict(self._api.get_task(params).body)
+
+            #Format the time to datetime type
             end_time = datetime.strptime(str(info["end_time"]),
                                          "%Y-%m-%dT%H:%M:%S.%f+00:00")
             start_time = datetime.strptime(str(info["start_time"]),
