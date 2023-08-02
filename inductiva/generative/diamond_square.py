@@ -127,6 +127,8 @@ def create_initial_condition(size: int,
     for idx, value in zip(corner_idxs, corner_values):
         initial_condition[idx] = value
 
+    return initial_condition
+
 
 def create_random_array(size: int,
                         corner_values=Sequence[float],
@@ -220,7 +222,6 @@ def create_random_array(size: int,
         Random array.
     """
 
-    # Make sure size is 2^k + 1
     if not math.log2(size - 1).is_integer():
         raise ValueError('`size` must be 2^k + 1.')
 
