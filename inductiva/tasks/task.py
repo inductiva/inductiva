@@ -157,7 +157,7 @@ class Task:
     def _get_path_params(self) -> _PathParams:
         return {"task_id": self.id}
 
-    def get_time(self) -> float:
+    def get_execution_time(self) -> float:
         """Get the time the task took to complete.
 
         Returns:
