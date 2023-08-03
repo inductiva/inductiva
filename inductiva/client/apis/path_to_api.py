@@ -6,6 +6,7 @@ from inductiva.client.apis.paths.tasks_task_id_input import TasksTaskIdInput
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
+from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
 from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.admin_users import AdminUsers
@@ -25,6 +26,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.TASKS_TASK_ID: TasksTaskId,
         PathValues.TASKS: Tasks,
         PathValues.TASKS_TASK_ID_STATUS: TasksTaskIdStatus,
+        PathValues.TASKS_TASK_ID_OUTPUT_LIST: TasksTaskIdOutputList,
         PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
         PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
         PathValues.ADMIN_USERS: AdminUsers,
@@ -44,6 +46,7 @@ path_to_api = PathToApi({
     PathValues.TASKS_TASK_ID: TasksTaskId,
     PathValues.TASKS: Tasks,
     PathValues.TASKS_TASK_ID_STATUS: TasksTaskIdStatus,
+    PathValues.TASKS_TASK_ID_OUTPUT_LIST: TasksTaskIdOutputList,
     PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
     PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
     PathValues.ADMIN_USERS: AdminUsers,
