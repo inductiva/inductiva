@@ -1,5 +1,6 @@
 """Client for Inductiva's web API."""
 import os
+import urllib3
 
 from . import fluids
 from . import core
@@ -15,3 +16,4 @@ api_key = os.environ.get("INDUCTIVA_API_KEY")
 working_dir = None
 
 logging.set_verbosity(logging.INFO)
+urllib3.disable_warnings()
