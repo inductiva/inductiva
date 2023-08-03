@@ -53,7 +53,7 @@ class MDWaterBox(Scenario):
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
-            n_steps_min: int = 5000) -> tasks.Task :
+            n_steps_min: int = 5000) -> tasks.Task:
         """Simulate the water box scenario using molecular dynamics.
 
         Args:

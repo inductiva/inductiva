@@ -160,7 +160,7 @@ class Task:
 
         if self._output_class:
             return self._output_class(output_dir)
-        
+
         return output_dir
 
     def download_output(self, output_dir=None) -> pathlib.Path:
