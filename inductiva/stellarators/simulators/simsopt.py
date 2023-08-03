@@ -7,7 +7,7 @@ from inductiva.simulation import Simulator
 
 
 class Simsopt(Simulator):
-    """Class to invoke a generic Simsopt simulation on the API."""
+    """Invokes a simsopt simulation on the API."""
 
     @property
     def api_method_name(self) -> str:
