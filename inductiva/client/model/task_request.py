@@ -64,11 +64,24 @@ class TaskRequest(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
-                                         datetime, uuid.UUID, int, float,
-                                         decimal.Decimal, bool, None, list,
-                                         tuple, bytes, io.FileIO,
-                                         io.BufferedReader,],
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -115,10 +128,11 @@ class TaskRequest(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(
-        self, name: typing.Union[typing_extensions.Literal["method", "params",
-                                                           "resource_pool",],
-                                 str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "method",
+        "params",
+        "resource_pool",
+    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -146,18 +160,28 @@ class TaskRequest(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(
-        self, name: typing.Union[typing_extensions.Literal["method", "params",
-                                                           "resource_pool",],
-                                 str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "method",
+        "params",
+        "resource_pool",
+    ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict,],
-        method: typing.Union[MetaOapg.properties.method, str,],
-        params: typing.Union[MetaOapg.properties.params, dict,
-                             frozendict.frozendict,],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+        ],
+        method: typing.Union[
+            MetaOapg.properties.method,
+            str,
+        ],
+        params: typing.Union[
+            MetaOapg.properties.params,
+            dict,
+            frozendict.frozendict,
+        ],
         resource_pool: typing.Union[MetaOapg.properties.resource_pool, dict,
                                     frozendict.frozendict, str, date, datetime,
                                     uuid.UUID, int, float, decimal.Decimal,

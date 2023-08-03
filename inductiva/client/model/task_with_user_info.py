@@ -77,11 +77,24 @@ class TaskWithUserInfo(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
-                                         datetime, uuid.UUID, int, float,
-                                         decimal.Decimal, bool, None, list,
-                                         tuple, bytes, io.FileIO,
-                                         io.BufferedReader,],
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -124,11 +137,24 @@ class TaskWithUserInfo(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
-                                         datetime, uuid.UUID, int, float,
-                                         decimal.Decimal, bool, None, list,
-                                         tuple, bytes, io.FileIO,
-                                         io.BufferedReader,],
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -171,11 +197,24 @@ class TaskWithUserInfo(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
-                                         datetime, uuid.UUID, int, float,
-                                         decimal.Decimal, bool, None, list,
-                                         tuple, bytes, io.FileIO,
-                                         io.BufferedReader,],
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -218,11 +257,24 @@ class TaskWithUserInfo(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
-                                         datetime, uuid.UUID, int, float,
-                                         decimal.Decimal, bool, None, list,
-                                         tuple, bytes, io.FileIO,
-                                         io.BufferedReader,],
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -261,11 +313,24 @@ class TaskWithUserInfo(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
-                                         datetime, uuid.UUID, int, float,
-                                         decimal.Decimal, bool, None, list,
-                                         tuple, bytes, io.FileIO,
-                                         io.BufferedReader,],
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -355,14 +420,17 @@ class TaskWithUserInfo(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(
-        self,
-        name: typing.Union[typing_extensions.Literal["task_id", "status",
-                                                     "method_name", "user",
-                                                     "create_time",
-                                                     "input_submit_time",
-                                                     "start_time", "end_time",
-                                                     "executer",], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "task_id",
+        "status",
+        "method_name",
+        "user",
+        "create_time",
+        "input_submit_time",
+        "start_time",
+        "end_time",
+        "executer",
+    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -425,21 +493,33 @@ class TaskWithUserInfo(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(
-        self,
-        name: typing.Union[typing_extensions.Literal["task_id", "status",
-                                                     "method_name", "user",
-                                                     "create_time",
-                                                     "input_submit_time",
-                                                     "start_time", "end_time",
-                                                     "executer",], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "task_id",
+        "status",
+        "method_name",
+        "user",
+        "create_time",
+        "input_submit_time",
+        "start_time",
+        "end_time",
+        "executer",
+    ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict,],
-        method_name: typing.Union[MetaOapg.properties.method_name, str,],
-        task_id: typing.Union[MetaOapg.properties.task_id, str,],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+        ],
+        method_name: typing.Union[
+            MetaOapg.properties.method_name,
+            str,
+        ],
+        task_id: typing.Union[
+            MetaOapg.properties.task_id,
+            str,
+        ],
         user: 'Username',
         status: 'TaskStatusCode',
         create_time: typing.Union[MetaOapg.properties.create_time, dict,

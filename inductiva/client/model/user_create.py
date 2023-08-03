@@ -67,11 +67,24 @@ class UserCreate(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
-                                         datetime, uuid.UUID, int, float,
-                                         decimal.Decimal, bool, None, list,
-                                         tuple, bytes, io.FileIO,
-                                         io.BufferedReader,],
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -148,12 +161,15 @@ class UserCreate(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(
-        self,
-        name: typing.Union[typing_extensions.Literal["username", "email",
-                                                     "api_key", "is_active",
-                                                     "is_admin", "bucket_name",
-                                                     "is_internal",], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "username",
+        "email",
+        "api_key",
+        "is_active",
+        "is_admin",
+        "bucket_name",
+        "is_internal",
+    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -205,20 +221,35 @@ class UserCreate(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(
-        self,
-        name: typing.Union[typing_extensions.Literal["username", "email",
-                                                     "api_key", "is_active",
-                                                     "is_admin", "bucket_name",
-                                                     "is_internal",], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "username",
+        "email",
+        "api_key",
+        "is_active",
+        "is_admin",
+        "bucket_name",
+        "is_internal",
+    ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict,],
-        api_key: typing.Union[MetaOapg.properties.api_key, str,],
-        email: typing.Union[MetaOapg.properties.email, str,],
-        username: typing.Union[MetaOapg.properties.username, str,],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+        ],
+        api_key: typing.Union[
+            MetaOapg.properties.api_key,
+            str,
+        ],
+        email: typing.Union[
+            MetaOapg.properties.email,
+            str,
+        ],
+        username: typing.Union[
+            MetaOapg.properties.username,
+            str,
+        ],
         is_active: typing.Union[MetaOapg.properties.is_active, bool,
                                 schemas.Unset] = schemas.unset,
         is_admin: typing.Union[MetaOapg.properties.is_admin, bool,

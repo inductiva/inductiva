@@ -115,12 +115,14 @@ class GCloudHostInfo(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(
-        self,
-        name: typing.Union[typing_extensions.Literal["host_type", "vm_type",
-                                                     "vm_name", "vm_id",
-                                                     "preemptible",
-                                                     "vm_metadata",], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "host_type",
+        "vm_type",
+        "vm_name",
+        "vm_id",
+        "preemptible",
+        "vm_metadata",
+    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -166,24 +168,47 @@ class GCloudHostInfo(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(
-        self,
-        name: typing.Union[typing_extensions.Literal["host_type", "vm_type",
-                                                     "vm_name", "vm_id",
-                                                     "preemptible",
-                                                     "vm_metadata",], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "host_type",
+        "vm_type",
+        "vm_name",
+        "vm_id",
+        "preemptible",
+        "vm_metadata",
+    ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict,],
-        vm_id: typing.Union[MetaOapg.properties.vm_id, str,],
-        vm_type: typing.Union[MetaOapg.properties.vm_type, str,],
-        preemptible: typing.Union[MetaOapg.properties.preemptible, bool,],
-        vm_metadata: typing.Union[MetaOapg.properties.vm_metadata, dict,
-                                  frozendict.frozendict,],
-        host_type: typing.Union[MetaOapg.properties.host_type, str,],
-        vm_name: typing.Union[MetaOapg.properties.vm_name, str,],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+        ],
+        vm_id: typing.Union[
+            MetaOapg.properties.vm_id,
+            str,
+        ],
+        vm_type: typing.Union[
+            MetaOapg.properties.vm_type,
+            str,
+        ],
+        preemptible: typing.Union[
+            MetaOapg.properties.preemptible,
+            bool,
+        ],
+        vm_metadata: typing.Union[
+            MetaOapg.properties.vm_metadata,
+            dict,
+            frozendict.frozendict,
+        ],
+        host_type: typing.Union[
+            MetaOapg.properties.host_type,
+            str,
+        ],
+        vm_name: typing.Union[
+            MetaOapg.properties.vm_name,
+            str,
+        ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,

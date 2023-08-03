@@ -49,7 +49,9 @@ SchemaFor201ResponseBodyApplicationJson = Instance
 @dataclass
 class ApiResponseFor201(api_client.ApiResponse):
     response: urllib3.HTTPResponse
-    body: typing.Union[SchemaFor201ResponseBodyApplicationJson,]
+    body: typing.Union[
+        SchemaFor201ResponseBodyApplicationJson,
+    ]
     headers: schemas.Unset = schemas.unset
 
 
@@ -67,7 +69,9 @@ SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
 @dataclass
 class ApiResponseFor422(api_client.ApiResponse):
     response: urllib3.HTTPResponse
-    body: typing.Union[SchemaFor422ResponseBodyApplicationJson,]
+    body: typing.Union[
+        SchemaFor422ResponseBodyApplicationJson,
+    ]
     headers: schemas.Unset = schemas.unset
 
 
@@ -91,31 +95,41 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _create_instance_group_oapg(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[ApiResponseFor201,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+    ]:
         ...
 
     @typing.overload
     def _create_instance_group_oapg(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[ApiResponseFor201,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+    ]:
         ...
 
     @typing.overload
     def _create_instance_group_oapg(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -127,19 +141,25 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _create_instance_group_oapg(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[ApiResponseFor201,
-                      api_client.ApiResponseWithoutDeserialization,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
         ...
 
     def _create_instance_group_oapg(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -211,31 +231,41 @@ class CreateInstanceGroup(BaseApi):
     @typing.overload
     def create_instance_group(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[ApiResponseFor201,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+    ]:
         ...
 
     @typing.overload
     def create_instance_group(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[ApiResponseFor201,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+    ]:
         ...
 
     @typing.overload
     def create_instance_group(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -247,19 +277,25 @@ class CreateInstanceGroup(BaseApi):
     @typing.overload
     def create_instance_group(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[ApiResponseFor201,
-                      api_client.ApiResponseWithoutDeserialization,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
         ...
 
     def create_instance_group(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -281,31 +317,41 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[ApiResponseFor201,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+    ]:
         ...
 
     @typing.overload
     def post(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[ApiResponseFor201,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+    ]:
         ...
 
     @typing.overload
     def post(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -317,19 +363,25 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[ApiResponseFor201,
-                      api_client.ApiResponseWithoutDeserialization,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
         ...
 
     def post(
         self,
-        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        body: typing.Union[
+            SchemaForRequestBodyApplicationJson,
+        ],
         content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,

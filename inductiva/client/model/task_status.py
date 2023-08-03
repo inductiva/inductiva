@@ -67,9 +67,10 @@ class TaskStatus(schemas.DictSchema):
         ...
 
     def __getitem__(self,
-                    name: typing.Union[typing_extensions.Literal["id",
-                                                                 "status",],
-                                       str]):
+                    name: typing.Union[typing_extensions.Literal[
+                        "id",
+                        "status",
+                    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -92,15 +93,22 @@ class TaskStatus(schemas.DictSchema):
         ...
 
     def get_item_oapg(self,
-                      name: typing.Union[typing_extensions.Literal["id",
-                                                                   "status",],
-                                         str]):
+                      name: typing.Union[typing_extensions.Literal[
+                          "id",
+                          "status",
+                      ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict,],
-        id: typing.Union[MetaOapg.properties.id, str,],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+        ],
+        id: typing.Union[
+            MetaOapg.properties.id,
+            str,
+        ],
         status: 'TaskStatusCode',
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,

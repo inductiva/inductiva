@@ -37,7 +37,9 @@ SchemaFor201ResponseBodyApplicationJson = ResourcePoolID
 @dataclass
 class ApiResponseFor201(api_client.ApiResponse):
     response: urllib3.HTTPResponse
-    body: typing.Union[SchemaFor201ResponseBodyApplicationJson,]
+    body: typing.Union[
+        SchemaFor201ResponseBodyApplicationJson,
+    ]
     headers: schemas.Unset = schemas.unset
 
 
@@ -64,7 +66,9 @@ class BaseApi(api_client.Api):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[ApiResponseFor201,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+    ]:
         ...
 
     @typing.overload
@@ -84,8 +88,10 @@ class BaseApi(api_client.Api):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[ApiResponseFor201,
-                      api_client.ApiResponseWithoutDeserialization,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
         ...
 
     def _create_resource_pool_oapg(
@@ -149,7 +155,9 @@ class CreateResourcePool(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[ApiResponseFor201,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+    ]:
         ...
 
     @typing.overload
@@ -169,8 +177,10 @@ class CreateResourcePool(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[ApiResponseFor201,
-                      api_client.ApiResponseWithoutDeserialization,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
         ...
 
     def create_resource_pool(
@@ -197,7 +207,9 @@ class ApiForpost(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[ApiResponseFor201,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+    ]:
         ...
 
     @typing.overload
@@ -217,8 +229,10 @@ class ApiForpost(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[ApiResponseFor201,
-                      api_client.ApiResponseWithoutDeserialization,]:
+    ) -> typing.Union[
+            ApiResponseFor201,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
         ...
 
     def post(
