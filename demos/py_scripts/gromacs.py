@@ -56,6 +56,5 @@ def main(_):
     logging.info("Outputs stored in %s", output)
 
 
-
 if __name__ == "__main__":
     app.run(main)
