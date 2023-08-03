@@ -13,6 +13,7 @@ import tempfile
 import shutil
 import numpy as np
 import scipy
+from tqdm import tqdm
 
 from absl import logging
 
@@ -245,3 +246,38 @@ def zip_dir(dir_path, zip_name):
     logging.debug("Compressed inputs to %s", zip_path)
 
     return zip_path
+
+
+def download_file(response, output_path: pathlib.Path, chunk_size=1024) -> None:
+
+    download_size = response.headers.get("content-length", 0)
+
+    with tqdm(
+            total=int(download_size),
+            unit="iB",
+            unit_scale=True,
+    ) as pbar:
+        with open(output_path, "wb") as f:
+            while chunk := response.read(chunk_size):
+                f.write(chunk)
+
+                pbar.update(len(chunk))
+
+
+def uncompress_task_outputs(zip_path: pathlib.Path, output_dir: pathlib.Path):
+
+    with zipfile.ZipFile(zip_path, "r") as zip_f:
+        full_output = True
+        try:
+            zip_f.getinfo("artifacts/")
+        except KeyError:
+            full_output = False
+
+        if full_output:
+            extract_subdir_files(
+                zip_f,
+                "artifacts",
+                output_dir,
+            )
+        else:
+            zip_f.extractall(output_dir)

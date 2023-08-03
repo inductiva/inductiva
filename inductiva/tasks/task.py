@@ -1,14 +1,17 @@
 """Manage running/completed tasks on the Inductiva API."""
 import pathlib
+import shutil
 import time
 from absl import logging
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional
 from typing_extensions import TypedDict
 import datetime
-
+import inductiva
 from inductiva.client.models import TaskStatusCode
 from inductiva import api
 from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.utils import files
+from inductiva.utils import data
 
 
 class Task:
@@ -140,15 +143,65 @@ class Task:
         """
         self._api.kill_task(path_params=self._get_path_params())
 
-    def download_output(self, output_dir=None) -> pathlib.Path:
-        """Download the output of the task.
+    def list_output_files(self):
+        api_response = self._api.get_outputs_list(
+            path_params=self._get_path_params(),)
 
-        Returns:
-            The path to the downloaded output directory.
-        """
-        _, output_dir = api.download_output(self._api, self.id, output_dir)
+        archive_info = api_response.body
+
+        logging.info(" > Archive size: %s", archive_info["size"])
+        for file in archive_info["contents"]:
+            logging.info("\t%s\t\t%s\t%s", file["name"], file["size"],
+                         file["compressed_size"])
+
+    def download_output(
+        self,
+        filenames: List[str],
+        output_dir: Optional[pathlib.Path] = None,
+        uncompress: bool = True,
+        rm_archive: bool = True,
+    ) -> pathlib.Path:
+        response = self._api.download_task_output(
+            path_params=self._get_path_params(),
+            query_params={
+                "filename": filenames
+            },
+            stream=True,
+            skip_deserialization=True,
+        ).response  # use raw urllib3 response
+
+        if output_dir is None:
+            output_dir = files.resolve_path(inductiva.output_dir).joinpath(
+                self.id)
+
+        if output_dir.exists():
+            shutil.rmtree(output_dir)
+
+        output_dir.mkdir(parents=True)
+
+        zip_path = output_dir.joinpath("output.zip")
+
+        data.download_file(response, zip_path)
+
+        response.release_conn()
+
+        if uncompress:
+            data.uncompress_task_outputs(zip_path, output_dir)
+            if rm_archive:
+                zip_path.unlink()
 
         return output_dir
+
+    def download_full_outputs(
+        self,
+        output_dir: Optional[pathlib.Path] = None,
+        uncompress: bool = True,
+        rm_archive: bool = True,
+    ) -> pathlib.Path:
+        return self.download_output(filenames=[],
+                                    output_dir=output_dir,
+                                    uncompress=uncompress,
+                                    rm_archive=rm_archive)
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
