@@ -2,6 +2,7 @@
 import pathlib
 import shutil
 import time
+import json
 from absl import logging
 from typing import Dict, Any, List, Optional
 from typing_extensions import TypedDict
@@ -88,7 +89,8 @@ class Task:
         """
         params = self._get_path_params()
         resp = self._api.get_task(params, skip_deserialization=True).response
-        return resp.json()
+
+        return json.loads(resp.data.decode("utf-8"))
 
     def wait(self, polling_period: int = 5) -> TaskStatusCode:
         """Wait for the task to complete.
