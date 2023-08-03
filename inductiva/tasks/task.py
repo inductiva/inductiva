@@ -151,7 +151,6 @@ class Task:
         """Set the output class of the task."""
         self._output_class = output_class
 
-
     def get_output(self, output_dir=None):
         """Get the output of the task.
 
