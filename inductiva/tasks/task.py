@@ -1,15 +1,18 @@
 """Manage running/completed tasks on the Inductiva API."""
 import pathlib
+import shutil
 import time
 from absl import logging
-from typing import Dict, Any
+from typing import Dict, Any, List, Optional
 from typing_extensions import TypedDict
 import datetime
-
+import inductiva
 from inductiva.client.models import TaskStatusCode
 from inductiva import api
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.utils import files
+from inductiva.utils import data
+from inductiva.utils import output_contents
 
 
 class Task:
@@ -19,7 +22,9 @@ class Task:
         task = scenario.simulate_async(...)
         final_status = task.wait()
         info = task.get_info() # dictionary with info about the task
-        task.download_output() # download the output of the task
+        task.download_outputs(
+            filenames=["file1.txt", "file2.dat"] # download only these files
+        )
 
     Attributes:
         id: The task ID.
@@ -152,25 +157,91 @@ class Task:
         Returns:
             The output of the task.
         """
-
-        # Blocking call for the task to terminate
         self.wait()
-        _, output_dir = api.download_output(self._api, self.id, output_dir)
-        output_dir = files.resolve_path(output_dir)
+        output_dir = self.download_outputs(output_dir)
 
         if self._output_class:
             return self._output_class(output_dir)
 
         return output_dir
 
-    def download_output(self, output_dir=None) -> pathlib.Path:
-        """Download the output of the task.
+    def get_output_files_info(self):
+        """Get information of the output files of the task.
 
         Returns:
-            The path to the downloaded output directory.
+            An instance of the OutputContents class, which can be used to
+            access info about the output files, such as the archive's size,
+            number of files, and information about each file (name, size,
+            compressed size). It can also be used to print that information
+            in a formatted way.
         """
-        _, output_dir = api.download_output(self._api, self.id, output_dir)
-        output_dir = files.resolve_path(output_dir)
+        api_response = self._api.get_outputs_list(
+            path_params=self._get_path_params())
+
+        archive_info = api_response.body
+
+        contents = [
+            output_contents.FileInfo(
+                name=file_info["name"],
+                size=file_info["size"],
+                compressed_size=file_info["compressed_size"],
+            ) for file_info in archive_info["contents"]
+        ]
+
+        return output_contents.OutputContents(
+            size=int(archive_info["size"]),
+            contents=contents,
+        )
+
+    def download_outputs(
+        self,
+        filenames: Optional[List[str]] = None,
+        output_dir: Optional[pathlib.Path] = None,
+        uncompress: bool = True,
+        rm_archive: bool = True,
+    ) -> pathlib.Path:
+        """Download output files of the task.
+
+        Args:
+            filenames: List of filenames to download. If None or empty, all
+                files are downloaded.
+            output_dir: Directory where to download the files. If None, the
+                files are downloaded to the default directory. The default is
+                {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
+            uncompress: Whether to uncompress the archive after downloading it.
+            rm_archive: Whether to remove the archive after uncompressing it.
+                If uncompress is False, this argument is ignored.
+        """
+        api_response = self._api.download_task_output(
+            path_params=self._get_path_params(),
+            query_params={
+                "filename": filenames or [],
+            },
+            stream=True,
+            skip_deserialization=True,
+        )
+        # use raw urllib3 response instead of the generated client response, to
+        # implement our own download logic (with progress bar, first checking
+        # the size of the file, etc.)
+        response = api_response.response
+
+        if output_dir is None:
+            output_dir = files.resolve_path(inductiva.output_dir).joinpath(
+                self.id)
+
+        if output_dir.exists():
+            shutil.rmtree(output_dir)
+
+        output_dir.mkdir(parents=True)
+
+        zip_path = output_dir.joinpath("output.zip")
+
+        data.download_file(response, zip_path)
+
+        if uncompress:
+            data.uncompress_task_outputs(zip_path, output_dir)
+            if rm_archive:
+                zip_path.unlink()
 
         return output_dir
 
@@ -179,7 +250,7 @@ class Task:
         task_id: str
 
     def _get_path_params(self) -> _PathParams:
-        "Get dictionary representing the URL path parameters for API calls."
+        """Get dictionary with the URL path parameters for API calls."""
         return {"task_id": self.id}
 
     def get_execution_time(self) -> float:
