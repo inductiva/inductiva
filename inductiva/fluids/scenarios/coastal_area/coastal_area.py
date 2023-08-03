@@ -9,7 +9,7 @@ from uuid import UUID
 
 import numpy as np
 
-from inductiva.types import Path
+from inductiva import tasks
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import SWASH
@@ -166,18 +166,16 @@ class CoastalArea(Scenario):
     def simulate(
         self,
         simulator: Simulator = SWASH(),
-        output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
-    ):
+    ) -> tasks.Task:
         """Simulates the scenario.
 
         Args:
             simulator: Simulator to use. Supported simulators are: SWASH.
-            output_dir: Directory to store the simulation output.
             resource_pool_id: Resource pool to use for the simulation.
             simulation_time: Total simulation time, in seconds.
             time_step: Time step, in seconds.
@@ -188,17 +186,16 @@ class CoastalArea(Scenario):
         self.time_step = time_step
         self.output_time_step = output_time_step
 
-        output = super().simulate(
+        task = super().simulate(
             simulator,
-            output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,
         )
-        if run_async:
-            return output
-        else:
-            return CoastalAreaOutput(output)
+
+        task.set_output_class(CoastalAreaOutput)
+
+        return task
 
     @singledispatchmethod
     def get_config_filename(self, simulator: Simulator):

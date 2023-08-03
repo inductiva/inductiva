@@ -2,26 +2,16 @@
 
 from abc import ABC, abstractmethod
 import tempfile
-from typing import Optional, Union
+from typing import Optional
 from uuid import UUID
 from inductiva.types import Path
 from inductiva.simulation import Simulator
-from inductiva.utils.misc import split_camel_case
 import json
-from inductiva.tasks import Task
 
 
 class Scenario(ABC):
     """Base class for scenarios."""
     valid_simulators = []
-
-    def _output_dir_name(self, output_dir: str):
-        """Setup the scenario output directory."""
-        if output_dir is None:
-            scenario_name_splitted = split_camel_case(self.__class__.__name__)
-            return "-".join(scenario_name_splitted).lower()
-        else:
-            return output_dir
 
     @abstractmethod
     def create_input_files(self, simulator: Simulator, input_dir: Path):
@@ -44,21 +34,18 @@ class Scenario(ABC):
     def simulate(
         self,
         simulator: Simulator,
-        output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
         **kwargs,
-    ) -> Union[Path, Task]:
+    ):
         """Simulates the scenario synchronously."""
         self.validate_simulator(simulator)
-        output_dir = self._output_dir_name(output_dir)
 
         with tempfile.TemporaryDirectory() as input_dir:
             self.create_input_files(simulator, input_dir)
 
             return simulator.run(
                 input_dir,
-                output_dir=output_dir,
                 resource_pool_id=resource_pool_id,
                 run_async=run_async,
                 **kwargs,

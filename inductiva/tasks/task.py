@@ -35,6 +35,7 @@ class Task:
         """Initialize the instance from a task ID."""
         self.id = task_id
         self._api = TasksApi(api.get_client())
+        self._output_class = None
 
     def __enter__(self):
         """Enter context manager for managing a blocking execution.
@@ -145,6 +146,25 @@ class Task:
         block waiting for confirmation if the task was killed.
         """
         self._api.kill_task(path_params=self._get_path_params())
+
+    def set_output_class(self, output_class):
+        """Set the output class of the task."""
+        self._output_class = output_class
+
+
+    def get_output(self, output_dir=None):
+        """Get the output of the task.
+
+        Returns:
+            The output of the task.
+        """
+        self.wait()
+        output_dir = self.download_outputs(output_dir)
+
+        if self._output_class:
+            return self._output_class(output_dir)
+
+        return output_dir
 
     def get_outputs_info(self):
         """Get information of the output files of the task.

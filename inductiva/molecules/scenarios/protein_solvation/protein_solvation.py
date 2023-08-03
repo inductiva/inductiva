@@ -6,7 +6,7 @@ import os
 import shutil
 from uuid import UUID
 
-from inductiva.types import Path
+from inductiva import tasks
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
@@ -47,18 +47,16 @@ class ProteinSolvation(Scenario):
     def simulate(
             self,
             simulator: Simulator = GROMACS(),
-            output_dir: Optional[Path] = None,
             resource_pool_id: Optional[UUID] = None,
             run_async: bool = False,
-            simulation_time: float = 10,  # ns
+            simulation_time_ns: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
-            nsteps_minim: int = 5000,
-            visualized_section: str = "Protein-H"):
+            n_steps_min: int = 5000,
+            visualized_section: str = "Protein-H") -> tasks.Task:
         """Simulate the solvation of a protein.
 
         Args:
-            output_dir: The output directory to save the simulation results.
-            simulation_time: The simulation time in ns.
+            simulation_time_ns: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
                 - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
@@ -71,7 +69,7 @@ class ProteinSolvation(Scenario):
             documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
-            nsteps_minim: Number of steps for energy minimization.
+            n_steps_min: Number of steps for energy minimization.
             visualized_section: The section of the protein to visualize in the
             simulation.
                 Options:
@@ -83,20 +81,19 @@ class ProteinSolvation(Scenario):
         self.visualized_section = visualized_section
 
         self.nsteps = int(
-            simulation_time * 1e6 / 2
+            simulation_time_ns * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
-        self.nsteps_minim = nsteps_minim
+        self.n_steps_min = n_steps_min
         commands = self.get_commands()
-        output = super().simulate(simulator,
-                                  output_dir,
-                                  resource_pool_id=resource_pool_id,
-                                  commands=commands,
-                                  run_async=run_async)
-        if run_async:
-            return output
-        else:
-            return ProteinSolvationOutput(output)
+        task = super().simulate(simulator,
+                                resource_pool_id=resource_pool_id,
+                                commands=commands,
+                                run_async=run_async)
+
+        task.set_output_class(ProteinSolvationOutput)
+
+        return task
 
     def get_commands(self):
         """Returns the commands for the simulation."""
@@ -135,7 +132,7 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
             "integrator": self.integrator,
             "nsteps": self.nsteps,
             "ref_temp": self.temperature,
-            "nsteps_minim": self.nsteps_minim,
+            "nsteps_minim": self.n_steps_min,
         },
         output_filename_paths=[
             os.path.join(input_dir, "simulation.mdp"),

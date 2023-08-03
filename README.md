@@ -34,7 +34,9 @@ The user must provide the path for the PDB file corresponding to the protein to 
 Run the simulation:
 
 ```python
-output = scenario.simulate(simulation_time=10, nsteps_minim=5000)
+task = scenario.simulate(simulation_time_ns=10, n_steps_min=5000)
+
+output = task.get_output()
 ```
 
 Users can set the simulation duration (in ns) and the number of steps for the energy minimization. 
@@ -70,10 +72,12 @@ The user can specify the flow velocity vector (in m/s) and the domain geometry (
 Run the simulation:
 
 ```python
-output = scenario.simulate(object_path="vehicle.obj",
-                           simulation_time=100,
-                           output_time_step=50,
-                           resolution="medium")
+task = scenario.simulate(object_path="vehicle.obj",
+                         simulation_time=100,
+                         output_time_step=50,
+                         resolution="medium")
+
+output = task.get_output()
 ```
 
 The user must provide the path for the object to be inserted in the wind tunnel. Additionally, users can choose the total simulation time, the time step interval to output data and the resolution of the simulation.
@@ -115,9 +119,11 @@ meters), as well as the tank shape and its inlet and outlet properties.
 Run the simulation:
 
 ```python
-output = scenario.simulate(simulation_time=5,
+task = scenario.simulate(simulation_time=5,
                            output_time_step=0.1,
                            resolution="medium")
+
+output = task.get_output()
 ```
 
 The user can specify the total simulation time and the time step between outputs
