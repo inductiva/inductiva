@@ -20,8 +20,9 @@ class FEniCSx(Simulator):
 
     def run(
         self,
-        input_dir: types.Path,
-        commands: List[dict],
+        mesh_path: types.Path,
+        bc_path: types.Path,
+        material_path: types.Path,
         resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
         run_async: bool = False,
@@ -29,12 +30,15 @@ class FEniCSx(Simulator):
         """Run the simulation.
 
         Args:
-            commands: List of commands to run using the FEniCSx simulator.
+            mesh_path: Path to the mesh file.
+            bc_path: Path to the boundary conditions file.
+            material_path: Path to the material file.
             n_cores: Number of MPI cores to use for the simulation.
             other arguments: See the documentation of the base class.
         """
-        return super().run(input_dir,
+        return super().run(mesh_path,
+                           bc_path,
+                           material_path,
                            resource_pool_id=resource_pool_id,
                            n_cores=n_cores,
-                           commands=commands,
                            run_async=run_async)
