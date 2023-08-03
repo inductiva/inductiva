@@ -14,6 +14,7 @@ import shutil
 import numpy as np
 import scipy
 from tqdm import tqdm
+import urllib3
 
 from absl import logging
 
@@ -248,24 +249,50 @@ def zip_dir(dir_path, zip_name):
     return zip_path
 
 
-def download_file(response, output_path: pathlib.Path, chunk_size=1024) -> None:
+def download_file(
+    response: urllib3.response.HTTPResponse,
+    output_path: pathlib.Path,
+    chunk_size=1024,
+) -> None:
+    """Download a file from a urllib3 response object.
 
+    Use a urllib3 response object to download a file, showing a progress bar.
+
+    Args:
+        response: urllib3 response object.
+        output_path: Path where to store the downloaded file.
+        chunk_size: Size of the chunks in which to download the file.
+    """
+    # if the response header does not contain a content-length,
+    # the progress bar will not be displayed correctly, but download
+    # will still work
     download_size = response.headers.get("content-length", 0)
+
     with tqdm(
             total=int(download_size),
             unit="iB",
             unit_scale=True,
-            unit_divisor=1024,
-    ) as pbar:
+            unit_divisor=1024,  # Use 1 KiB = 1024 bytes instead of 1000 bytes
+    ) as progress_bar:
         with open(output_path, "wb") as f:
             while chunk := response.read(chunk_size):
                 f.write(chunk)
+                progress_bar.update(len(chunk))
 
-                pbar.update(len(chunk))
+    response.release_conn()
 
 
 def uncompress_task_outputs(zip_path: pathlib.Path, output_dir: pathlib.Path):
+    """Uncompress a ZIP archive containing the outputs of a task.
 
+    If the archive contains the directory called artifacts, it means that the
+    download includes the full ouputs of the task with the full directory
+    structure of the outputs (output.json, artifacts/*). Only the contents
+    inside artifacts are extracted to the output directory. If the archive
+    does not contain the artifacts directory, it means that the download
+    only includes a few files, which are directly in the root of the archive,
+    without the `artifacts` directory.
+    """
     with zipfile.ZipFile(zip_path, "r") as zip_f:
         full_output = True
         try:

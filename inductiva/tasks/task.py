@@ -22,7 +22,9 @@ class Task:
         task = scenario.simulate_async(...)
         final_status = task.wait()
         info = task.get_info() # dictionary with info about the task
-        task.download_output() # download the output of the task
+        task.download_outputs(
+            filenames=["file1.txt", "file2.dat"] # download only these files
+        )
 
     Attributes:
         id: The task ID.
@@ -145,8 +147,17 @@ class Task:
         self._api.kill_task(path_params=self._get_path_params())
 
     def get_outputs_info(self):
+        """Get information of the output files of the task.
+
+        Returns:
+            An instance of the OutputContents class, which can be used to
+            access info about the output files, such as the size of archive,
+            number of files, and information about each file (name, size,
+            compressed size). It can also be used to print that information
+            in a formatted way.
+        """
         api_response = self._api.get_outputs_list(
-            path_params=self._get_path_params(),)
+            path_params=self._get_path_params())
 
         archive_info = api_response.body
 
@@ -170,6 +181,18 @@ class Task:
         uncompress: bool = True,
         rm_archive: bool = True,
     ) -> pathlib.Path:
+        """Download output files of the task.
+
+        Args:
+            filenames: List of filenames to download. If None or empty, all
+                files are downloaded.
+            output_dir: Directory where to download the files. If None, the
+                files are downloaded to the default directory. The default is
+                {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
+            uncompress: Whether to uncompress the archive after downloading it.
+            rm_archive: Whether to remove the archive after uncompressing it.
+                If uncompress is False, this argument is ignored.
+        """
         api_response = self._api.download_task_output(
             path_params=self._get_path_params(),
             query_params={
@@ -178,7 +201,7 @@ class Task:
             stream=True,
             skip_deserialization=True,
         )
-        # use raw urllib3 response instead of generated client response, to
+        # use raw urllib3 response instead of the generated client response, to
         # implement our own download logic (with progress bar, first checking
         # the size of the file, etc.)
         response = api_response.response
@@ -196,8 +219,6 @@ class Task:
 
         data.download_file(response, zip_path)
 
-        response.release_conn()
-
         if uncompress:
             data.uncompress_task_outputs(zip_path, output_dir)
             if rm_archive:
@@ -210,7 +231,7 @@ class Task:
         task_id: str
 
     def _get_path_params(self) -> _PathParams:
-        "Get dictionary representing the URL path parameters for API calls."
+        """Get dictionary with the URL path parameters for API calls."""
         return {"task_id": self.id}
 
     def get_execution_time(self) -> float:
