@@ -9,6 +9,7 @@ from uuid import UUID
 
 import numpy as np
 
+from inductiva import tasks
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import SWASH
@@ -170,7 +171,7 @@ class CoastalArea(Scenario):
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
-    ):
+    ) -> tasks.Task:
         """Simulates the scenario.
 
         Args:

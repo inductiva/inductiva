@@ -6,6 +6,7 @@ from typing import List, Literal, Optional
 import shutil
 from uuid import UUID
 
+from inductiva import tasks
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.fluid_types import FluidType
@@ -97,7 +98,7 @@ class FluidBlock(Scenario):
         particle_sorting: bool = True,
         time_step: float = 0.001,
         output_time_step: float = 1 / 60,
-    ):
+    ) -> tasks.Task:
         """Simulates the scenario.
 
         Args:

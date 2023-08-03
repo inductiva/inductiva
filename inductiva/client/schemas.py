@@ -2029,9 +2029,8 @@ def cast_to_allowed_types(
     elif isinstance(arg, (dict, frozendict.frozendict)):
         return frozendict.frozendict({
             key:
-                cast_to_allowed_types(val, from_server,
-                                      validated_path_to_schemas,
-                                      path_to_item + (key,))
+            cast_to_allowed_types(val, from_server, validated_path_to_schemas,
+                                  path_to_item + (key,))
             for key, val in arg.items()
         })
     elif isinstance(arg, (bool, BoolClass)):

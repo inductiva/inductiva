@@ -3,7 +3,7 @@
 from typing import Optional, List
 from uuid import UUID
 
-from inductiva import types
+from inductiva import types, tasks
 from inductiva.simulation import Simulator
 
 
@@ -20,7 +20,7 @@ class GROMACS(Simulator):
         commands: List[dict],
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
-    ):
+    ) -> tasks.Task:
         """Run a list of GROMACS commands.
 
         Args:

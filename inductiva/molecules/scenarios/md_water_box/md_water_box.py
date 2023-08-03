@@ -6,6 +6,7 @@ import shutil
 import tempfile
 from uuid import UUID
 
+from inductiva import tasks
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
@@ -50,13 +51,13 @@ class MDWaterBox(Scenario):
             simulator: Simulator = GROMACS(),
             resource_pool_id: Optional[UUID] = None,
             run_async: bool = False,
-            simulation_time: float = 10,  # ns
+            simulation_time_ns: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
-            nsteps_minim: int = 5000):
+            n_steps_min: int = 5000) -> tasks.Task :
         """Simulate the water box scenario using molecular dynamics.
 
         Args:
-            simulation_time: The simulation time in ns.
+            simulation_time_ns: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
                 - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
@@ -71,14 +72,14 @@ class MDWaterBox(Scenario):
 
             resource_pool_id: The ID of the resource pool to use for the
               simulation.
-            nsteps_minim: Number of steps for energy minimization.
+            n_steps_min: Number of steps for energy minimization.
             run_async: Whether to run the simulation asynchronously.
         """
         self.nsteps = int(
-            simulation_time * 1e6 / 2
+            simulation_time_ns * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
-        self.nsteps_minim = nsteps_minim
+        self.n_steps_min = n_steps_min
 
         commands = self.get_commands()
         task = super().simulate(simulator,
@@ -132,7 +133,7 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
             "integrator": self.integrator,
             "nsteps": self.nsteps,
             "ref_temp": self.temperature,
-            "nsteps_minim": self.nsteps_minim,
+            "nsteps_minin": self.n_steps_min,
         },
         output_filename_paths=[
             os.path.join(input_dir, "simulation.mdp"),

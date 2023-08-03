@@ -60,11 +60,9 @@ class Instance(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self,
-                    name: typing.Union[typing_extensions.Literal[
-                        "name",
-                        "zone",
-                    ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name",
+                                                                       "zone",],
+                                             str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -87,22 +85,15 @@ class Instance(schemas.DictSchema):
         ...
 
     def get_item_oapg(self,
-                      name: typing.Union[typing_extensions.Literal[
-                          "name",
-                          "zone",
-                      ], str]):
+                      name: typing.Union[typing_extensions.Literal["name",
+                                                                   "zone",],
+                                         str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[
-            dict,
-            frozendict.frozendict,
-        ],
-        name: typing.Union[
-            MetaOapg.properties.name,
-            str,
-        ],
+        *_args: typing.Union[dict, frozendict.frozendict,],
+        name: typing.Union[MetaOapg.properties.name, str,],
         zone: typing.Union[MetaOapg.properties.zone, str,
                            schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,

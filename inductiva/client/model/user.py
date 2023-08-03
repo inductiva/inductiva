@@ -78,12 +78,12 @@ class User(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "username",
-        "email",
-        "is_active",
-        "is_admin",
-    ], str]):
+    def __getitem__(self,
+                    name: typing.Union[typing_extensions.Literal["username",
+                                                                 "email",
+                                                                 "is_active",
+                                                                 "is_admin",],
+                                       str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -117,28 +117,19 @@ class User(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "username",
-        "email",
-        "is_active",
-        "is_admin",
-    ], str]):
+    def get_item_oapg(self,
+                      name: typing.Union[typing_extensions.Literal["username",
+                                                                   "email",
+                                                                   "is_active",
+                                                                   "is_admin",],
+                                         str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[
-            dict,
-            frozendict.frozendict,
-        ],
-        email: typing.Union[
-            MetaOapg.properties.email,
-            str,
-        ],
-        username: typing.Union[
-            MetaOapg.properties.username,
-            str,
-        ],
+        *_args: typing.Union[dict, frozendict.frozendict,],
+        email: typing.Union[MetaOapg.properties.email, str,],
+        username: typing.Union[MetaOapg.properties.username, str,],
         is_active: typing.Union[MetaOapg.properties.is_active, bool,
                                 schemas.Unset] = schemas.unset,
         is_admin: typing.Union[MetaOapg.properties.is_admin, bool,

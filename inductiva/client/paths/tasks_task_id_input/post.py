@@ -34,10 +34,7 @@ from . import path
 TaskIdSchema = schemas.StrSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
     'RequestRequiredPathParams', {
-        'task_id': typing.Union[
-            TaskIdSchema,
-            str,
-        ],
+        'task_id': typing.Union[TaskIdSchema, str,],
     })
 RequestOptionalPathParams = typing_extensions.TypedDict(
     'RequestOptionalPathParams', {}, total=False)
@@ -69,9 +66,7 @@ SchemaFor200ResponseBodyApplicationJson = TaskStatus
 @dataclass
 class ApiResponseFor200(api_client.ApiResponse):
     response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor200ResponseBodyApplicationJson,
-    ]
+    body: typing.Union[SchemaFor200ResponseBodyApplicationJson,]
     headers: schemas.Unset = schemas.unset
 
 
@@ -89,9 +84,7 @@ SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
 @dataclass
 class ApiResponseFor422(api_client.ApiResponse):
     response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor422ResponseBodyApplicationJson,
-    ]
+    body: typing.Union[SchemaFor422ResponseBodyApplicationJson,]
     headers: schemas.Unset = schemas.unset
 
 
@@ -123,9 +116,7 @@ class BaseApi(api_client.Api):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,]:
         ...
 
     @typing.overload
@@ -139,9 +130,7 @@ class BaseApi(api_client.Api):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,]:
         ...
 
     @typing.overload
@@ -169,10 +158,8 @@ class BaseApi(api_client.Api):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,
+                      api_client.ApiResponseWithoutDeserialization,]:
         ...
 
     def _upload_task_input_oapg(
@@ -267,9 +254,7 @@ class UploadTaskInput(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,]:
         ...
 
     @typing.overload
@@ -283,9 +268,7 @@ class UploadTaskInput(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,]:
         ...
 
     @typing.overload
@@ -313,10 +296,8 @@ class UploadTaskInput(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,
+                      api_client.ApiResponseWithoutDeserialization,]:
         ...
 
     def upload_task_input(
@@ -354,9 +335,7 @@ class ApiForpost(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,]:
         ...
 
     @typing.overload
@@ -370,9 +349,7 @@ class ApiForpost(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,]:
         ...
 
     @typing.overload
@@ -400,10 +377,8 @@ class ApiForpost(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,
+                      api_client.ApiResponseWithoutDeserialization,]:
         ...
 
     def post(

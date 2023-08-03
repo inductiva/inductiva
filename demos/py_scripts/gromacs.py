@@ -50,7 +50,11 @@ def main(_):
                            protein_filename=FLAGS.protein_filename,
                            topology_filename=FLAGS.topology_filename)
 
+    output = task.get_output(output_dir=FLAGS.output_dir)
+
     logging.info("Task id: %s", task.id)
+    logging.info("Outputs stored in %s", output)
+
 
 
 if __name__ == "__main__":

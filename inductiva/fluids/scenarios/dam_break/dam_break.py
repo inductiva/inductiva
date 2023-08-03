@@ -4,6 +4,7 @@ from enum import Enum
 from dataclasses import dataclass
 from uuid import UUID
 
+from inductiva import tasks
 from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import DualSPHysics
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
@@ -57,7 +58,7 @@ class DamBreak(FluidBlock):
         resolution: Literal["high", "medium", "low"] = "medium",
         simulation_time: float = 1,
         run_async: bool = False,
-    ):
+    ) -> tasks.Task:
         """Simulates the scenario.
 
         Args:

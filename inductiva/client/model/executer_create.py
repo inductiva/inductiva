@@ -52,13 +52,10 @@ class ExecuterCreate(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[
-                        MetaOapg.items,
-                        str,
-                    ]], typing.List[typing.Union[
-                        MetaOapg.items,
-                        str,
-                    ]]],
+                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items,
+                                                                 str,]],
+                                       typing.List[typing.Union[MetaOapg.items,
+                                                                str,]]],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                 ) -> 'supported_executer_types':
@@ -98,24 +95,11 @@ class ExecuterCreate(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[
-                        dict,
-                        frozendict.frozendict,
-                        str,
-                        date,
-                        datetime,
-                        uuid.UUID,
-                        int,
-                        float,
-                        decimal.Decimal,
-                        bool,
-                        None,
-                        list,
-                        tuple,
-                        bytes,
-                        io.FileIO,
-                        io.BufferedReader,
-                    ],
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
+                                         datetime, uuid.UUID, int, float,
+                                         decimal.Decimal, bool, None, list,
+                                         tuple, bytes, io.FileIO,
+                                         io.BufferedReader,],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -203,16 +187,16 @@ class ExecuterCreate(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "create_time",
-        "supported_executer_types",
-        "cpu_count_logical",
-        "cpu_count_physical",
-        "memory",
-        "cpu_info",
-        "host_info",
-        "resource_pool_id",
-    ], str]):
+    def __getitem__(
+        self,
+        name: typing.Union[typing_extensions.Literal["create_time",
+                                                     "supported_executer_types",
+                                                     "cpu_count_logical",
+                                                     "cpu_count_physical",
+                                                     "memory", "cpu_info",
+                                                     "host_info",
+                                                     "resource_pool_id",],
+                           str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -270,72 +254,36 @@ class ExecuterCreate(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "create_time",
-        "supported_executer_types",
-        "cpu_count_logical",
-        "cpu_count_physical",
-        "memory",
-        "cpu_info",
-        "host_info",
-        "resource_pool_id",
-    ], str]):
+    def get_item_oapg(
+        self,
+        name: typing.Union[typing_extensions.Literal["create_time",
+                                                     "supported_executer_types",
+                                                     "cpu_count_logical",
+                                                     "cpu_count_physical",
+                                                     "memory", "cpu_info",
+                                                     "host_info",
+                                                     "resource_pool_id",],
+                           str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[
-            dict,
-            frozendict.frozendict,
-        ],
-        memory: typing.Union[
-            MetaOapg.properties.memory,
-            decimal.Decimal,
-            int,
-        ],
-        cpu_info: typing.Union[
-            MetaOapg.properties.cpu_info,
-            str,
-        ],
-        create_time: typing.Union[
-            MetaOapg.properties.create_time,
-            str,
-            datetime,
-        ],
-        cpu_count_logical: typing.Union[
-            MetaOapg.properties.cpu_count_logical,
-            decimal.Decimal,
-            int,
-        ],
-        cpu_count_physical: typing.Union[
-            MetaOapg.properties.cpu_count_physical,
-            decimal.Decimal,
-            int,
-        ],
-        host_info: typing.Union[
-            MetaOapg.properties.host_info,
-            dict,
-            frozendict.frozendict,
-            str,
-            date,
-            datetime,
-            uuid.UUID,
-            int,
-            float,
-            decimal.Decimal,
-            bool,
-            None,
-            list,
-            tuple,
-            bytes,
-            io.FileIO,
-            io.BufferedReader,
-        ],
+        *_args: typing.Union[dict, frozendict.frozendict,],
+        memory: typing.Union[MetaOapg.properties.memory, decimal.Decimal, int,],
+        cpu_info: typing.Union[MetaOapg.properties.cpu_info, str,],
+        create_time: typing.Union[MetaOapg.properties.create_time, str,
+                                  datetime,],
+        cpu_count_logical: typing.Union[MetaOapg.properties.cpu_count_logical,
+                                        decimal.Decimal, int,],
+        cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical,
+                                         decimal.Decimal, int,],
+        host_info: typing.Union[MetaOapg.properties.host_info, dict,
+                                frozendict.frozendict, str, date, datetime,
+                                uuid.UUID, int, float, decimal.Decimal, bool,
+                                None, list, tuple, bytes, io.FileIO,
+                                io.BufferedReader,],
         supported_executer_types: typing.Union[
-            MetaOapg.properties.supported_executer_types,
-            list,
-            tuple,
-        ],
+            MetaOapg.properties.supported_executer_types, list, tuple,],
         resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id,
                                        str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,

@@ -71,24 +71,11 @@ class InstanceCreate(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[
-                        dict,
-                        frozendict.frozendict,
-                        str,
-                        date,
-                        datetime,
-                        uuid.UUID,
-                        int,
-                        float,
-                        decimal.Decimal,
-                        bool,
-                        None,
-                        list,
-                        tuple,
-                        bytes,
-                        io.FileIO,
-                        io.BufferedReader,
-                    ],
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
+                                         datetime, uuid.UUID, int, float,
+                                         decimal.Decimal, bool, None, list,
+                                         tuple, bytes, io.FileIO,
+                                         io.BufferedReader,],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -128,24 +115,11 @@ class InstanceCreate(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[
-                        dict,
-                        frozendict.frozendict,
-                        str,
-                        date,
-                        datetime,
-                        uuid.UUID,
-                        int,
-                        float,
-                        decimal.Decimal,
-                        bool,
-                        None,
-                        list,
-                        tuple,
-                        bytes,
-                        io.FileIO,
-                        io.BufferedReader,
-                    ],
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
+                                         datetime, uuid.UUID, int, float,
+                                         decimal.Decimal, bool, None, list,
+                                         tuple, bytes, io.FileIO,
+                                         io.BufferedReader,],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -222,15 +196,12 @@ class InstanceCreate(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "name",
-        "machine_type",
-        "spot",
-        "disk_size_gb",
-        "zone",
-        "resource_pool_id",
-        "image_name",
-    ], str]):
+    def __getitem__(
+        self,
+        name: typing.Union[typing_extensions.Literal["name", "machine_type",
+                                                     "spot", "disk_size_gb",
+                                                     "zone", "resource_pool_id",
+                                                     "image_name",], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -282,40 +253,22 @@ class InstanceCreate(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "name",
-        "machine_type",
-        "spot",
-        "disk_size_gb",
-        "zone",
-        "resource_pool_id",
-        "image_name",
-    ], str]):
+    def get_item_oapg(
+        self,
+        name: typing.Union[typing_extensions.Literal["name", "machine_type",
+                                                     "spot", "disk_size_gb",
+                                                     "zone", "resource_pool_id",
+                                                     "image_name",], str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[
-            dict,
-            frozendict.frozendict,
-        ],
-        machine_type: typing.Union[
-            MetaOapg.properties.machine_type,
-            str,
-        ],
-        spot: typing.Union[
-            MetaOapg.properties.spot,
-            bool,
-        ],
-        name: typing.Union[
-            MetaOapg.properties.name,
-            str,
-        ],
-        disk_size_gb: typing.Union[
-            MetaOapg.properties.disk_size_gb,
-            decimal.Decimal,
-            int,
-        ],
+        *_args: typing.Union[dict, frozendict.frozendict,],
+        machine_type: typing.Union[MetaOapg.properties.machine_type, str,],
+        spot: typing.Union[MetaOapg.properties.spot, bool,],
+        name: typing.Union[MetaOapg.properties.name, str,],
+        disk_size_gb: typing.Union[MetaOapg.properties.disk_size_gb,
+                                   decimal.Decimal, int,],
         zone: typing.Union[MetaOapg.properties.zone, str,
                            schemas.Unset] = schemas.unset,
         resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id,

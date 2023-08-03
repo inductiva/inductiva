@@ -38,19 +38,9 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
-        'page': typing.Union[
-            PageSchema,
-            decimal.Decimal,
-            int,
-        ],
-        'per_page': typing.Union[
-            PerPageSchema,
-            decimal.Decimal,
-            int,
-        ],
-        'status': typing.Union[
-            StatusSchema,
-        ],
+        'page': typing.Union[PageSchema, decimal.Decimal, int,],
+        'per_page': typing.Union[PerPageSchema, decimal.Decimal, int,],
+        'status': typing.Union[StatusSchema,],
     },
     total=False)
 
@@ -109,9 +99,7 @@ class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
 @dataclass
 class ApiResponseFor200(api_client.ApiResponse):
     response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor200ResponseBodyApplicationJson,
-    ]
+    body: typing.Union[SchemaFor200ResponseBodyApplicationJson,]
     headers: schemas.Unset = schemas.unset
 
 
@@ -129,9 +117,7 @@ SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
 @dataclass
 class ApiResponseFor422(api_client.ApiResponse):
     response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor422ResponseBodyApplicationJson,
-    ]
+    body: typing.Union[SchemaFor422ResponseBodyApplicationJson,]
     headers: schemas.Unset = schemas.unset
 
 
@@ -160,9 +146,7 @@ class BaseApi(api_client.Api):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,]:
         ...
 
     @typing.overload
@@ -184,10 +168,8 @@ class BaseApi(api_client.Api):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,
+                      api_client.ApiResponseWithoutDeserialization,]:
         ...
 
     def _get_user_tasks_oapg(
@@ -271,9 +253,7 @@ class GetUserTasks(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,]:
         ...
 
     @typing.overload
@@ -295,10 +275,8 @@ class GetUserTasks(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,
+                      api_client.ApiResponseWithoutDeserialization,]:
         ...
 
     def get_user_tasks(
@@ -328,9 +306,7 @@ class ApiForget(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,]:
         ...
 
     @typing.overload
@@ -352,10 +328,8 @@ class ApiForget(BaseApi):
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
+    ) -> typing.Union[ApiResponseFor200,
+                      api_client.ApiResponseWithoutDeserialization,]:
         ...
 
     def get(

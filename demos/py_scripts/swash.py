@@ -39,7 +39,9 @@ def main(_):
         n_cores=FLAGS.n_cores,
     )
 
+    output = task.get_output(output_dir=FLAGS.output_dir)
     logging.info("Task ID %s", task.id)
+    logging.info("Outputs stored in %s", output)
 
 
 if __name__ == "__main__":

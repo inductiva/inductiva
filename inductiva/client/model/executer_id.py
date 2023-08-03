@@ -49,13 +49,10 @@ class ExecuterID(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[
-                        MetaOapg.items,
-                        str,
-                    ]], typing.List[typing.Union[
-                        MetaOapg.items,
-                        str,
-                    ]]],
+                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items,
+                                                                 str,]],
+                                       typing.List[typing.Union[MetaOapg.items,
+                                                                str,]]],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                 ) -> 'redis_streams':
@@ -110,12 +107,12 @@ class ExecuterID(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "uuid",
-        "redis_streams",
-        "redis_consumer_name",
-        "redis_consumer_group",
-    ], str]):
+    def __getitem__(
+        self,
+        name: typing.Union[typing_extensions.Literal["uuid", "redis_streams",
+                                                     "redis_consumer_name",
+                                                     "redis_consumer_group",],
+                           str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -149,37 +146,24 @@ class ExecuterID(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "uuid",
-        "redis_streams",
-        "redis_consumer_name",
-        "redis_consumer_group",
-    ], str]):
+    def get_item_oapg(
+        self,
+        name: typing.Union[typing_extensions.Literal["uuid", "redis_streams",
+                                                     "redis_consumer_name",
+                                                     "redis_consumer_group",],
+                           str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[
-            dict,
-            frozendict.frozendict,
-        ],
+        *_args: typing.Union[dict, frozendict.frozendict,],
         redis_consumer_group: typing.Union[
-            MetaOapg.properties.redis_consumer_group,
-            str,
-        ],
+            MetaOapg.properties.redis_consumer_group, str,],
         redis_consumer_name: typing.Union[
-            MetaOapg.properties.redis_consumer_name,
-            str,
-        ],
-        redis_streams: typing.Union[
-            MetaOapg.properties.redis_streams,
-            list,
-            tuple,
-        ],
-        uuid: typing.Union[
-            MetaOapg.properties.uuid,
-            str,
-        ],
+            MetaOapg.properties.redis_consumer_name, str,],
+        redis_streams: typing.Union[MetaOapg.properties.redis_streams, list,
+                                    tuple,],
+        uuid: typing.Union[MetaOapg.properties.uuid, str,],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,

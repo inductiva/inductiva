@@ -6,6 +6,7 @@ import os
 from typing import List, Literal, Optional
 from uuid import UUID
 
+from inductiva import tasks
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.shapes import BaseShape
@@ -188,7 +189,7 @@ class FluidTank(Scenario):
         resolution: Literal["low", "medium", "high"] = "low",
         output_time_step: float = 0.1,
         particle_sorting: bool = False,
-    ):
+    ) -> tasks.Task:
         """Simulates the scenario.
 
         Args:

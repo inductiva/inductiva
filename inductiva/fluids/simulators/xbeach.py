@@ -2,7 +2,7 @@
 from typing import Optional
 from uuid import UUID
 
-from inductiva import types
+from inductiva import types, tasks
 from inductiva.simulation import Simulator
 
 
@@ -20,7 +20,7 @@ class XBeach(Simulator):
         resource_pool_id: Optional[UUID] = None,
         n_cores: int = 1,
         run_async: bool = False,
-    ):
+    ) -> tasks.Task:
         """Run the simulation.
 
         Args:

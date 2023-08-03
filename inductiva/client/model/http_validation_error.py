@@ -72,9 +72,8 @@ class HTTPValidationError(schemas.DictSchema):
         ...
 
     def __getitem__(self,
-                    name: typing.Union[typing_extensions.Literal[
-                        "detail",
-                    ], str]):
+                    name: typing.Union[typing_extensions.Literal["detail",],
+                                       str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -91,17 +90,13 @@ class HTTPValidationError(schemas.DictSchema):
         ...
 
     def get_item_oapg(self,
-                      name: typing.Union[typing_extensions.Literal[
-                          "detail",
-                      ], str]):
+                      name: typing.Union[typing_extensions.Literal["detail",],
+                                         str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[
-            dict,
-            frozendict.frozendict,
-        ],
+        *_args: typing.Union[dict, frozendict.frozendict,],
         detail: typing.Union[MetaOapg.properties.detail, list, tuple,
                              schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,

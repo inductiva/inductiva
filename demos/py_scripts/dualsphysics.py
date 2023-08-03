@@ -38,7 +38,10 @@ def main(_):
         device=FLAGS.device,
     )
 
+    _ = task.get_output(output_dir=FLAGS.output_dir)
+
     logging.info("Task ID: %s", task.id)
+    logging.info("Outputs stored in %s", FLAGS.output_dir)
 
 
 if __name__ == "__main__":

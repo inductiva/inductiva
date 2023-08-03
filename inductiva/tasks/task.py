@@ -160,8 +160,8 @@ class Task:
 
         if self._output_class:
             return self._output_class(output_dir)
-        else:
-            return output_dir
+        
+        return output_dir
 
     def download_output(self, output_dir=None) -> pathlib.Path:
         """Download the output of the task.

@@ -6,6 +6,7 @@ from typing import Optional
 from uuid import UUID
 from inductiva.fluids.scenarios.heat_sink.output import HeatSinkOutput
 
+from inductiva import tasks
 from inductiva.fluids.simulators import OpenFOAM
 from inductiva.simulation import Simulator
 from inductiva.scenarios import Scenario
@@ -103,7 +104,7 @@ class HeatSink(Scenario):
         run_async: bool = False,
         simulation_time=300,
         output_time_step=10,
-    ):
+    ) -> tasks.Task:
         """Simulates the scenario.
 
         Args:

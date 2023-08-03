@@ -3,7 +3,7 @@
 from typing import Literal, Optional
 from uuid import UUID
 
-from inductiva import types
+from inductiva import types, tasks
 from inductiva.simulation import Simulator
 
 
@@ -21,7 +21,7 @@ class DualSPHysics(Simulator):
         device: Literal["gpu", "cpu"] = "cpu",
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
-    ):
+    ) -> tasks.Task:
         """Run the simulation.
 
         Args:

@@ -34,7 +34,7 @@ The user must provide the path for the PDB file corresponding to the protein to 
 Run the simulation:
 
 ```python
-task = scenario.simulate(simulation_time=10, nsteps_minim=5000)
+task = scenario.simulate(simulation_time_ns=10, n_steps_min=5000)
 
 output = task.get_output()
 ```
@@ -73,9 +73,9 @@ Run the simulation:
 
 ```python
 task = scenario.simulate(object_path="vehicle.obj",
-                           simulation_time=100,
-                           output_time_step=50,
-                           resolution="medium")
+                         simulation_time=100,
+                         output_time_step=50,
+                         resolution="medium")
 
 output = task.get_output()
 ```

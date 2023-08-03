@@ -125,15 +125,14 @@ class GCloudExecuter(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "uuid",
-        "cpu_count_logical",
-        "cpu_count_physical",
-        "memory",
-        "host_type",
-        "vm_type",
-        "vm_name",
-    ], str]):
+    def __getitem__(
+        self,
+        name: typing.Union[typing_extensions.Literal["uuid",
+                                                     "cpu_count_logical",
+                                                     "cpu_count_physical",
+                                                     "memory", "host_type",
+                                                     "vm_type", "vm_name",],
+                           str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -185,54 +184,28 @@ class GCloudExecuter(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "uuid",
-        "cpu_count_logical",
-        "cpu_count_physical",
-        "memory",
-        "host_type",
-        "vm_type",
-        "vm_name",
-    ], str]):
+    def get_item_oapg(
+        self,
+        name: typing.Union[typing_extensions.Literal["uuid",
+                                                     "cpu_count_logical",
+                                                     "cpu_count_physical",
+                                                     "memory", "host_type",
+                                                     "vm_type", "vm_name",],
+                           str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[
-            dict,
-            frozendict.frozendict,
-        ],
-        vm_type: typing.Union[
-            MetaOapg.properties.vm_type,
-            str,
-        ],
-        memory: typing.Union[
-            MetaOapg.properties.memory,
-            decimal.Decimal,
-            int,
-        ],
-        cpu_count_logical: typing.Union[
-            MetaOapg.properties.cpu_count_logical,
-            decimal.Decimal,
-            int,
-        ],
-        cpu_count_physical: typing.Union[
-            MetaOapg.properties.cpu_count_physical,
-            decimal.Decimal,
-            int,
-        ],
-        uuid: typing.Union[
-            MetaOapg.properties.uuid,
-            str,
-        ],
-        host_type: typing.Union[
-            MetaOapg.properties.host_type,
-            str,
-        ],
-        vm_name: typing.Union[
-            MetaOapg.properties.vm_name,
-            str,
-        ],
+        *_args: typing.Union[dict, frozendict.frozendict,],
+        vm_type: typing.Union[MetaOapg.properties.vm_type, str,],
+        memory: typing.Union[MetaOapg.properties.memory, decimal.Decimal, int,],
+        cpu_count_logical: typing.Union[MetaOapg.properties.cpu_count_logical,
+                                        decimal.Decimal, int,],
+        cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical,
+                                         decimal.Decimal, int,],
+        uuid: typing.Union[MetaOapg.properties.uuid, str,],
+        host_type: typing.Union[MetaOapg.properties.host_type, str,],
+        vm_name: typing.Union[MetaOapg.properties.vm_name, str,],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,

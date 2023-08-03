@@ -49,9 +49,7 @@ SchemaFor202ResponseBodyApplicationJson = TaskStatus
 @dataclass
 class ApiResponseFor202(api_client.ApiResponse):
     response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor202ResponseBodyApplicationJson,
-    ]
+    body: typing.Union[SchemaFor202ResponseBodyApplicationJson,]
     headers: schemas.Unset = schemas.unset
 
 
@@ -69,9 +67,7 @@ SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
 @dataclass
 class ApiResponseFor422(api_client.ApiResponse):
     response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor422ResponseBodyApplicationJson,
-    ]
+    body: typing.Union[SchemaFor422ResponseBodyApplicationJson,]
     headers: schemas.Unset = schemas.unset
 
 
@@ -95,41 +91,31 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _submit_task_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor202,
-    ]:
+    ) -> typing.Union[ApiResponseFor202,]:
         ...
 
     @typing.overload
     def _submit_task_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor202,
-    ]:
+    ) -> typing.Union[ApiResponseFor202,]:
         ...
 
     @typing.overload
     def _submit_task_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -141,25 +127,19 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _submit_task_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[
-            ApiResponseFor202,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
+    ) -> typing.Union[ApiResponseFor202,
+                      api_client.ApiResponseWithoutDeserialization,]:
         ...
 
     def _submit_task_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -231,41 +211,31 @@ class SubmitTask(BaseApi):
     @typing.overload
     def submit_task(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor202,
-    ]:
+    ) -> typing.Union[ApiResponseFor202,]:
         ...
 
     @typing.overload
     def submit_task(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor202,
-    ]:
+    ) -> typing.Union[ApiResponseFor202,]:
         ...
 
     @typing.overload
     def submit_task(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -277,25 +247,19 @@ class SubmitTask(BaseApi):
     @typing.overload
     def submit_task(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[
-            ApiResponseFor202,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
+    ) -> typing.Union[ApiResponseFor202,
+                      api_client.ApiResponseWithoutDeserialization,]:
         ...
 
     def submit_task(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -316,41 +280,31 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor202,
-    ]:
+    ) -> typing.Union[ApiResponseFor202,]:
         ...
 
     @typing.overload
     def post(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor202,
-    ]:
+    ) -> typing.Union[ApiResponseFor202,]:
         ...
 
     @typing.overload
     def post(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -362,25 +316,19 @@ class ApiForpost(BaseApi):
     @typing.overload
     def post(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
-    ) -> typing.Union[
-            ApiResponseFor202,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
+    ) -> typing.Union[ApiResponseFor202,
+                      api_client.ApiResponseWithoutDeserialization,]:
         ...
 
     def post(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,

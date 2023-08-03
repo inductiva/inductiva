@@ -66,24 +66,11 @@ class ValidationError(schemas.DictSchema):
 
                         def __new__(
                             cls,
-                            *_args: typing.Union[
-                                dict,
-                                frozendict.frozendict,
-                                str,
-                                date,
-                                datetime,
-                                uuid.UUID,
-                                int,
-                                float,
-                                decimal.Decimal,
-                                bool,
-                                None,
-                                list,
-                                tuple,
-                                bytes,
-                                io.FileIO,
-                                io.BufferedReader,
-                            ],
+                            *_args: typing.Union[dict, frozendict.frozendict,
+                                                 str, date, datetime, uuid.UUID,
+                                                 int, float, decimal.Decimal,
+                                                 bool, None, list, tuple, bytes,
+                                                 io.FileIO, io.BufferedReader,],
                             _configuration: typing.Optional[
                                 schemas.Configuration] = None,
                             **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -101,43 +88,21 @@ class ValidationError(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[
-                        MetaOapg.items,
-                        dict,
-                        frozendict.frozendict,
-                        str,
-                        date,
-                        datetime,
-                        uuid.UUID,
-                        int,
-                        float,
-                        decimal.Decimal,
-                        bool,
-                        None,
-                        list,
-                        tuple,
-                        bytes,
-                        io.FileIO,
-                        io.BufferedReader,
-                    ]], typing.List[typing.Union[
-                        MetaOapg.items,
-                        dict,
-                        frozendict.frozendict,
-                        str,
-                        date,
-                        datetime,
-                        uuid.UUID,
-                        int,
-                        float,
-                        decimal.Decimal,
-                        bool,
-                        None,
-                        list,
-                        tuple,
-                        bytes,
-                        io.FileIO,
-                        io.BufferedReader,
-                    ]]],
+                    _arg: typing.Union[
+                        typing.Tuple[typing.Union[MetaOapg.items, dict,
+                                                  frozendict.frozendict, str,
+                                                  date, datetime, uuid.UUID,
+                                                  int, float, decimal.Decimal,
+                                                  bool, None, list, tuple,
+                                                  bytes, io.FileIO,
+                                                  io.BufferedReader,]],
+                        typing.List[typing.Union[MetaOapg.items, dict,
+                                                 frozendict.frozendict, str,
+                                                 date, datetime, uuid.UUID, int,
+                                                 float, decimal.Decimal, bool,
+                                                 None, list, tuple, bytes,
+                                                 io.FileIO,
+                                                 io.BufferedReader,]]],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                 ) -> 'loc':
@@ -184,11 +149,10 @@ class ValidationError(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "loc",
-        "msg",
-        "type",
-    ], str]):
+    def __getitem__(self,
+                    name: typing.Union[typing_extensions.Literal["loc", "msg",
+                                                                 "type",],
+                                       str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -216,32 +180,18 @@ class ValidationError(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "loc",
-        "msg",
-        "type",
-    ], str]):
+    def get_item_oapg(self,
+                      name: typing.Union[typing_extensions.Literal["loc", "msg",
+                                                                   "type",],
+                                         str]):
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[
-            dict,
-            frozendict.frozendict,
-        ],
-        msg: typing.Union[
-            MetaOapg.properties.msg,
-            str,
-        ],
-        loc: typing.Union[
-            MetaOapg.properties.loc,
-            list,
-            tuple,
-        ],
-        type: typing.Union[
-            MetaOapg.properties.type,
-            str,
-        ],
+        *_args: typing.Union[dict, frozendict.frozendict,],
+        msg: typing.Union[MetaOapg.properties.msg, str,],
+        loc: typing.Union[MetaOapg.properties.loc, list, tuple,],
+        type: typing.Union[MetaOapg.properties.type, str,],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,

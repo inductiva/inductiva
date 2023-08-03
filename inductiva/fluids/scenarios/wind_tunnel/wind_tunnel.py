@@ -11,6 +11,7 @@ from uuid import UUID
 
 from absl import logging
 
+from inductiva import tasks
 from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
@@ -106,7 +107,7 @@ class WindTunnel(Scenario):
                  simulation_time: float = 100,
                  output_time_step: float = 50,
                  resolution: Literal["high", "medium", "low"] = "medium",
-                 n_cores: int = 1):
+                 n_cores: int = 1) -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
