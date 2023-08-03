@@ -6,7 +6,7 @@ from typing import List, Literal, Optional
 import shutil
 from uuid import UUID
 
-from inductiva.types import Path
+from inductiva import tasks
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.fluid_types import FluidType
@@ -89,7 +89,6 @@ class FluidBlock(Scenario):
     def simulate(
         self,
         simulator: Simulator = DualSPHysics(),
-        output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "gpu",
@@ -99,13 +98,12 @@ class FluidBlock(Scenario):
         particle_sorting: bool = True,
         time_step: float = 0.001,
         output_time_step: float = 1 / 60,
-    ):
+    ) -> tasks.Task:
         """Simulates the scenario.
 
         Args:
             simulator: The simulator to use for the simulation. Supported
               simulators are: SPlisHSPlasH, DualSPHysics.
-            output_dir: The output directory to save the simulation results.
             device: Device in which to run the simulation. Available options are
               "cpu" and "gpu".
             particle_radius: Radius of the fluid particles, in meters.
@@ -127,21 +125,19 @@ class FluidBlock(Scenario):
         self.time_step = time_step
         self.output_time_step = output_time_step
 
-        output = super().simulate(simulator=simulator,
-                                  output_dir=output_dir,
-                                  resource_pool_id=resource_pool_id,
-                                  run_async=run_async,
-                                  device=device)
+        task = super().simulate(simulator=simulator,
+                                resource_pool_id=resource_pool_id,
+                                run_async=run_async,
+                                device=device)
 
         # TODO: Add any kind of post-processing here, e.g. convert files?
         # convert_vtk_data_dir_to_netcdf(
         #     data_dir=os.path.join(output_path, "vtk"),
         #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
         #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
-        if run_async:
-            return output
-        else:
-            return SPHSimulationOutput(output)
+        task.set_output_class(SPHSimulationOutput)
+
+        return task
 
     @singledispatchmethod
     def get_config_filename(self, simulator: Simulator):

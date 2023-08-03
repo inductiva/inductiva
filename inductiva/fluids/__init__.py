@@ -21,6 +21,7 @@ from .scenarios import (
     CircularTankInlet,
 )
 from . import scenarios
+from . import shapes
 from .scenarios._post_processing import SPHSimulationOutput
 from .simulators import (
     SWASH,

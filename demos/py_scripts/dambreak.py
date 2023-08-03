@@ -49,16 +49,16 @@ def main(_):
 
     simulator_cls = SIMULATORS[FLAGS.simulator]
 
-    _ = scenario.simulate(
+    task = scenario.simulate(
         simulator=simulator_cls(),
         resolution=FLAGS.resolution,
         simulation_time=FLAGS.simulation_time,
-        output_dir=FLAGS.output_dir,
         device=FLAGS.device,
     )
 
     # Note: video rendering only works with SPlisHSPlasH for now
     # simulation_output.render(color=get_fluid_color(WATER), alpha=0.8)
+    _ = task.get_output()
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 

@@ -1,20 +1,19 @@
 """Functions for running simulations via Inductiva Web API."""
 import pathlib
-from typing import Any, Optional, Union
+from typing import Any, Optional
 from uuid import UUID
 
-from inductiva.tasks import Task
-from inductiva.api.methods import invoke_async_api
+from inductiva import tasks
+from inductiva.api import methods
 
 
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
-    output_dir: Optional[pathlib.Path] = None,
     resource_pool_id: Optional[UUID] = None,
     run_async: bool = False,
     **kwargs: Any,
-) -> Union[pathlib.Path, Task]:
+) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
 
     params = {
@@ -25,17 +24,18 @@ def run_simulation(
         "sim_dir": pathlib.Path,
     }
 
-    task_id = invoke_async_api(api_method_name,
-                               params,
-                               type_annotations,
-                               resource_pool_id=resource_pool_id)
-    task = Task(task_id)
+    task_id = methods.invoke_async_api(api_method_name,
+                                       params,
+                                       type_annotations,
+                                       resource_pool_id=resource_pool_id)
+    task = tasks.Task(task_id)
     if not isinstance(task_id, str):
         raise RuntimeError(
             f"Expected result to be a string with task_id, got {type(task_id)}")
-    if run_async:
-        return task
-    else:
+
+    # Blocking call for sync execution
+    if not run_async:
         with task:
             task.wait()
-        return task.download_output(output_dir)
+
+    return task

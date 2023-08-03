@@ -6,7 +6,7 @@ import os
 from typing import List, Literal, Optional
 from uuid import UUID
 
-from inductiva.types import Path
+from inductiva import tasks
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.shapes import BaseShape
@@ -182,7 +182,6 @@ class FluidTank(Scenario):
     def simulate(
         self,
         simulator: Simulator = SPlisHSPlasH(),
-        output_dir: Optional[Path] = None,
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "cpu",
@@ -190,12 +189,11 @@ class FluidTank(Scenario):
         resolution: Literal["low", "medium", "high"] = "low",
         output_time_step: float = 0.1,
         particle_sorting: bool = False,
-    ):
+    ) -> tasks.Task:
         """Simulates the scenario.
 
         Args:
             simulator: Simulator to use. Supported simulators are: SPlisHSPlasH.
-            output_dir: Directory to store the simulation output.
             resource_pool_id: Resource pool to use for the simulation.
             simulation_time: Total simulation time, in seconds.
             output_time_step: Time step for the output, in seconds.
@@ -212,19 +210,17 @@ class FluidTank(Scenario):
         self.output_time_step = output_time_step
         self.particle_sorting = particle_sorting
 
-        output = super().simulate(
+        task = super().simulate(
             simulator,
-            output_dir=output_dir,
             resource_pool_id=resource_pool_id,
             run_async=run_async,
             device=device,
             sim_config_filename=self.get_config_filename(simulator),
         )
 
-        if run_async:
-            return output
-        else:
-            return FluidTankOutput(output, self.output_time_step)
+        task.set_output_class(FluidTankOutput)
+
+        return task
 
     def get_bounding_box(self):
         """Gets the bounding box of the tank.

@@ -4,10 +4,12 @@ import time
 from absl import logging
 from typing import Dict, Any
 from typing_extensions import TypedDict
+import datetime
 
 from inductiva.client.models import TaskStatusCode
 from inductiva import api
 from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.utils import files
 
 
 class Task:
@@ -28,6 +30,7 @@ class Task:
         """Initialize the instance from a task ID."""
         self.id = task_id
         self._api = TasksApi(api.get_client())
+        self._output_class = None
 
     def __enter__(self):
         """Enter context manager for managing a blocking execution.
@@ -139,6 +142,27 @@ class Task:
         """
         self._api.kill_task(path_params=self._get_path_params())
 
+    def set_output_class(self, output_class):
+        """Set the output class of the task."""
+        self._output_class = output_class
+
+    def get_output(self, output_dir=None):
+        """Get the output of the task.
+
+        Returns:
+            The output of the task.
+        """
+
+        # Blocking call for the task to terminate
+        self.wait()
+        _, output_dir = api.download_output(self._api, self.id, output_dir)
+        output_dir = files.resolve_path(output_dir)
+
+        if self._output_class:
+            return self._output_class(output_dir)
+
+        return output_dir
+
     def download_output(self, output_dir=None) -> pathlib.Path:
         """Download the output of the task.
 
@@ -146,6 +170,7 @@ class Task:
             The path to the downloaded output directory.
         """
         _, output_dir = api.download_output(self._api, self.id, output_dir)
+        output_dir = files.resolve_path(output_dir)
 
         return output_dir
 
@@ -154,4 +179,26 @@ class Task:
         task_id: str
 
     def _get_path_params(self) -> _PathParams:
+        "Get dictionary representing the URL path parameters for API calls."
         return {"task_id": self.id}
+
+    def get_execution_time(self) -> float:
+        """Get the time the task took to complete.
+
+        Returns:
+            The time in seconds.
+        """
+
+        if self.get_status() != TaskStatusCode.SUCCESS:
+            raise RuntimeError("Task is not completed.")
+
+        params = self._get_path_params()
+        info = dict(self._api.get_task(params).body)
+
+        #Format the time to datetime type
+        end_time = datetime.datetime.strptime(str(info["end_time"]),
+                                              "%Y-%m-%dT%H:%M:%S.%f+00:00")
+        start_time = datetime.datetime.strptime(str(info["start_time"]),
+                                                "%Y-%m-%dT%H:%M:%S.%f+00:00")
+
+        return (end_time - start_time).total_seconds()
