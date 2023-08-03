@@ -32,14 +32,16 @@ def main(_):
 
     sph_sim = inductiva.fluids.simulators.DualSPHysics()
 
-    output_path = sph_sim.run(
+    task = sph_sim.run(
         input_dir=FLAGS.sim_dir,
         sim_config_filename=FLAGS.sim_config_filename,
-        output_dir=FLAGS.output_dir,
         device=FLAGS.device,
     )
 
-    logging.info("Outputs stored in %s", output_path)
+    _ = task.get_output(output_dir=FLAGS.output_dir)
+
+    logging.info("Task ID: %s", task.id)
+    logging.info("Outputs stored in %s", FLAGS.output_dir)
 
 
 if __name__ == "__main__":

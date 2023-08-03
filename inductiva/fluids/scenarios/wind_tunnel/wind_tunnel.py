@@ -11,6 +11,7 @@ from uuid import UUID
 
 from absl import logging
 
+from inductiva import tasks
 from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
@@ -33,6 +34,7 @@ class MeshResolution(Enum):
     HIGH = [5, 6]
     MEDIUM = [4, 5]
     LOW = [3, 4]
+    VERY_LOW = [2, 3]
 
 
 class WindTunnel(Scenario):
@@ -99,14 +101,13 @@ class WindTunnel(Scenario):
 
     def simulate(self,
                  simulator: Simulator = OpenFOAM(),
-                 output_dir: Optional[Path] = None,
                  resource_pool_id: Optional[UUID] = None,
                  run_async: bool = False,
                  object_path: Optional[Path] = None,
                  simulation_time: float = 100,
                  output_time_step: float = 50,
                  resolution: Literal["high", "medium", "low"] = "medium",
-                 n_cores: int = 1):
+                 n_cores: int = 1) -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
@@ -135,16 +136,15 @@ class WindTunnel(Scenario):
 
         commands = self.get_commands()
 
-        output = super().simulate(simulator,
-                                  output_dir=output_dir,
-                                  resource_pool_id=resource_pool_id,
-                                  run_async=run_async,
-                                  n_cores=n_cores,
-                                  commands=commands)
-        if run_async:
-            return output
-        else:
-            return WindTunnelOutput(output)
+        task = super().simulate(simulator,
+                                resource_pool_id=resource_pool_id,
+                                run_async=run_async,
+                                n_cores=n_cores,
+                                commands=commands)
+
+        task.set_output_class(WindTunnelOutput)
+
+        return task
 
     def get_commands(self):
         """Returns the commands for the simulation."""

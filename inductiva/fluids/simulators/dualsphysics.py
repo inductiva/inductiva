@@ -1,11 +1,10 @@
 """DualSPHysics module of the API."""
-import pathlib
-from typing import Literal, Optional, Union
+
+from typing import Literal, Optional
 from uuid import UUID
 
-from inductiva import types
+from inductiva import types, tasks
 from inductiva.simulation import Simulator
-from inductiva.tasks import Task
 
 
 class DualSPHysics(Simulator):
@@ -19,11 +18,10 @@ class DualSPHysics(Simulator):
         self,
         input_dir: types.Path,
         sim_config_filename: str,
-        output_dir: Optional[types.Path] = None,
         device: Literal["gpu", "cpu"] = "cpu",
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
-    ) -> Union[pathlib.Path, Task]:
+    ) -> tasks.Task:
         """Run the simulation.
 
         Args:
@@ -32,7 +30,6 @@ class DualSPHysics(Simulator):
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
-                           output_dir=output_dir,
                            resource_pool_id=resource_pool_id,
                            device=device,
                            input_filename=sim_config_filename,
