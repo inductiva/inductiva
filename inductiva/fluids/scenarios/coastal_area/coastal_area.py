@@ -3,11 +3,13 @@
 from functools import singledispatchmethod
 import math
 import os
-from typing import Literal, Optional, Sequence
+import random
 import shutil
+from typing import Literal, Optional, Sequence
 from uuid import UUID
 
 import numpy as np
+import scipy
 
 from inductiva import tasks
 from inductiva.scenarios import Scenario
@@ -16,6 +18,8 @@ from inductiva.fluids.simulators import SWASH
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.fluids.scenarios.coastal_area.output import CoastalAreaOutput
+
+from inductiva.generative import diamond_square
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
@@ -73,6 +77,96 @@ class Bathymetry:
         """
 
         depths = np.loadtxt(text_file_path)
+        return cls(depths, x_range, y_range)
+
+    @classmethod
+    def from_random_depths(
+        cls,
+        x_range: Sequence[float],
+        y_range: Sequence[float],
+        x_num: int,
+        y_num: int,
+        max_depth: float = 10,
+        initial_roughness: float = 1,
+        roughness_factor: float = 0.5,
+        percentile_above_water: float = 20,
+    ):
+        """Creates a `Bathymetry` object with random depths.
+
+        A grid of random depths of shape `(x_num, y_num)` is generated as
+        follows:
+        1. A square grid of random depths is generated using the Diamond-Square
+        algorithm. The randomness of the algorithm is controlled
+        by the `initial_roughness` and `roughness_factor` parameters, that set
+        the initial range of randomness and the rate at which it decreases over
+        iterations of the algorithm, respectively. The size of the resultnig
+        grid is `n`, where `n` is the smallest integer that satisfies
+        `2^n + 1 >= max(x_num, y_num)`.
+        2. The depths of the square grid are interpolated to a grid of shape
+        `(x_num, y_num)`.
+
+        The depths of the corners of the grid are chosen according to a maximum
+        depth value `max_depth` and a percentile of the domain that must be
+        above water `percentile_above_water`. The corners on the lower x
+        boundary (East) are assumed to be below water (i.e. have 0 < depths <
+        `max_depth`). The corners on the upper x boundary (West) are assumed to
+        be above water (i.e. have - `max_depth` < depths < 0).
+        
+        Args:
+            x_range: The range of x values, in meters.
+            y_range: The range of y values, in meters.
+            x_num: Number of grid points in the x direction.
+            y_num: Number of grid points in the y direction.
+            max_depth: Maximum depth value, in meters.
+            initial_roughness: Initial roughness value, in meters. Controls the
+              initial range of randomness of the Diamond-Square algorithm.
+            roughness_factor: Roughness factor. Must be between 0 and 1.
+              Controls the rate at which the range of randomness of the
+              Diamond-Square algorithm decreases over iterations.
+            percentile_above_water: Percentile of the depths that must be above
+              water. Must be between 0 and 100.
+        """
+
+        corner_values = [
+            random.uniform(0, max_depth),
+            random.uniform(0, max_depth),
+            random.uniform(-max_depth, 0),
+            random.uniform(-max_depth, 0),
+        ]
+
+        # Determine the minimum n such that 2^n + 1 >= max(x_num, y_num).
+        n = int(math.log2(max(x_num, y_num) - 1)) + 1
+
+        size_square = 2**n + 1
+
+        depths = diamond_square.create_random_array(
+            size=size_square,
+            corner_values=corner_values,
+            initial_roughness=initial_roughness,
+            roughness_factor=roughness_factor)
+
+        # Adjust depths to ensure that a given percentage of the domain is above
+        # sea level (depth < 0).
+        percentile_under_water = np.percentile(depths, percentile_above_water)
+        depths -= percentile_under_water
+
+        x_square = np.linspace(*x_range, size_square)
+        y_square = np.linspace(*y_range, size_square)
+
+        x_square, y_square = np.meshgrid(x_square, y_square, indexing="ij")
+
+        x = np.linspace(*x_range, x_num)
+        y = np.linspace(*y_range, y_num)
+
+        x, y = np.meshgrid(x, y, indexing="ij")
+
+        depths = scipy.interpolate.griddata(
+            (x_square.flatten(), y_square.flatten()),
+            depths.flatten(),
+            (x, y),
+            method="linear",
+        )
+
         return cls(depths, x_range, y_range)
 
     def to_text_file(self, text_file_path: str):
@@ -171,6 +265,7 @@ class CoastalArea(Scenario):
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
+        n_cores=1,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -180,6 +275,7 @@ class CoastalArea(Scenario):
             simulation_time: Total simulation time, in seconds.
             time_step: Time step, in seconds.
             output_time_step: Time step for the output, in seconds.
+            n_cores: Number of cores to use for the simulation.
         """
 
         self.simulation_time = simulation_time
@@ -191,6 +287,7 @@ class CoastalArea(Scenario):
             resource_pool_id=resource_pool_id,
             run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,
+            n_cores=n_cores,
         )
 
         task.set_output_class(CoastalAreaOutput)
