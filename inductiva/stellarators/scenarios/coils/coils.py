@@ -1,8 +1,15 @@
 """Class for the coils creation."""
-from inductiva.scenarios import Scenario
 import math
 import random
 import numpy as np
+
+from typing import Optional
+from uuid import UUID
+
+from inductiva import tasks
+from inductiva.stellarators.simulators import Simsopt
+from inductiva.simulation import Simulator
+from inductiva.scenarios import Scenario
 
 
 class StellaratorCoils(Scenario):
@@ -13,20 +20,17 @@ class StellaratorCoils(Scenario):
     coils can also be created before creating the StellaratorCoils object. 
 
     Attributes:
-        num_coils (int): The number of coils per field period 
-        (independent coils).
         coils (list): List of `Coil` objects.
         num_field_periods (int): Number of magnetic field periods.
-        Refers to the number of complete magnetic field repetitions 
-        within a stellarator. Represents how many times the magnetic
-        field pattern repeats itself along the toroidal direction.
+          Refers to the number of complete magnetic field repetitions 
+          within a stellarator. Represents how many times the magnetic
+          field pattern repeats itself along the toroidal direction.
     """
 
     def __init__(self, coils, num_field_periods):
         """Initialize the StellaratorCoils object."""
 
         self.coils = coils
-        self.num_coils = len(coils)
         self.num_field_periods = num_field_periods
 
     @classmethod
@@ -42,7 +46,7 @@ class StellaratorCoils(Scenario):
             num_coils (int): The number of coils per field period.
             coil_currents (list): List of coil currents.
             major_radius (float): distance from the center of the torus 
-            (the central axis) to the outer edge of the plasma region.
+              (the central axis) to the outer edge of the plasma region.
             minor_radius (float): Radius of the simple circular curves.
 
         Returns:
@@ -91,7 +95,7 @@ class StellaratorCoils(Scenario):
             coil_currents (list): List of coil currents.
             max_order (int): Maximum order of the coefficients.
             major_radius (float): distance from the center of the torus 
-            (the central axis) to the outer edge of the plasma region.
+              (the central axis) to the outer edge of the plasma region.
             minor_radius (float): Radius of the simple initial curves.
 
         Returns:
@@ -185,8 +189,40 @@ class StellaratorCoils(Scenario):
 
         return cls(coils, num_field_periods)
 
-    def simulate(self):
-        pass
+    def simulate(
+        self,
+        simulator: Simulator = Simsopt(),
+        resource_pool_id: Optional[UUID] = None,
+        run_async: bool = False,
+        magnetic_field_filename: str = 'magnetic_field.npz',
+        plasma_surface_filename: str = 'input.QA',
+    ) -> tasks.Task:
+        """Simulates the scenario.
+
+        Args:
+            simulator: The simulator to use for the simulation.
+            resource_pool_id: The resource pool to use for the simulation.
+        """
+        coil_coefficients = [coil.curve_coefficients for coil in self.coils]
+        coil_currents = np.array([coil.current for coil in self.coils])
+
+        coil_coefficients_filename = 'coil_coefficients.npz'
+        coil_currents_filename = 'coil_currents.npz'
+
+        np.savez(coil_coefficients_filename, *coil_coefficients)
+        np.savez(coil_currents_filename, coil_currents)
+
+        task = super().simulate(
+            simulator,
+            resource_pool_id=resource_pool_id,
+            run_async=run_async,
+            magnetic_field_filename=magnetic_field_filename,
+            coil_coefficients_filename=coil_coefficients_filename,
+            coil_currents_filename=coil_currents_filename,
+            plasma_surface_filename=plasma_surface_filename,
+            num_field_periods=self.num_field_periods)
+
+        return task
 
 
 class Coil:
@@ -203,7 +239,7 @@ class Coil:
 
     Attributes: 
         curve_coefficients (np.ndarray): Array with Fourier coefficients 
-        defining the coil.
+          defining the coil.
         current (float): Coil current.
     """
 
@@ -219,9 +255,9 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
 
     Args:
         toroidal_angle (float): Angle that defines the position of the
-        coil in the torus.
+          coil in the torus.
         major_radius (float): distance from the center of the torus 
-        (the central axis) to the outer edge of the plasma region.
+          (the central axis) to the outer edge of the plasma region.
         minor_radius (float): Radius of the simple initial curves.
 
     Returns:
