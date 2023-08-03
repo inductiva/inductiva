@@ -1,7 +1,9 @@
-urllib3 >= 1.15
-certifi
+certifi >= 14.5.14
+frozendict ~= 2.3.4
+setuptools >= 21.0.0
+typing-extensions ~= 4.3.0
+urllib3 ~= 1.26.7
 python-dateutil
-frozendict
 absl-py
 numpy
 scipy
@@ -17,7 +19,5 @@ imageio
 pyvista
 imageio-ffmpeg
 ipython
-websockets
-typing-extensions
 MDAnalysis
 nglview
