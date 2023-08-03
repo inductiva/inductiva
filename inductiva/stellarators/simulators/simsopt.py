@@ -1,6 +1,7 @@
 """Simsopt module of the API."""
 from typing import Optional
 from uuid import UUID
+import os
 
 from inductiva import types, tasks
 from inductiva.simulation import Simulator
@@ -43,7 +44,10 @@ class Simsopt(Simulator):
             input_dir,
             resource_pool_id=resource_pool_id,
             magnetic_field_filename=magnetic_field_filename,
-            coil_coefficients_filename=coil_coefficients_filename,
-            coil_currents_filename=coil_currents_filename,
-            plasma_surface_filename=plasma_surface_filename,
+            coil_coefficients_filename=os.path.join(input_dir,
+                                                    coil_coefficients_filename),
+            coil_currents_filename=os.path.join(input_dir,
+                                                coil_currents_filename),
+            plasma_surface_filename=os.path.join(input_dir,
+                                                 plasma_surface_filename),
             num_field_periods=num_field_periods)
