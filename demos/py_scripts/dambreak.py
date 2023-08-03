@@ -58,7 +58,7 @@ def main(_):
 
     # Note: video rendering only works with SPlisHSPlasH for now
     # simulation_output.render(color=get_fluid_color(WATER), alpha=0.8)
-    output = task.get_output()
+    _ = task.get_output()
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 
