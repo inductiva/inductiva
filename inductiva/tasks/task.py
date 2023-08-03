@@ -179,7 +179,7 @@ class Task:
 
         return (end_time - start_time).total_seconds()
 
-    def get_machine(self) -> str:
+    def get_machine_type(self) -> str:
         """Get the machine type used in the task.
 
         Streamlines the process of obtaining the task info, extracting the
