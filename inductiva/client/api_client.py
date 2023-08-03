@@ -850,7 +850,7 @@ class OpenApiResponse(JSONDetector):
         if content_disposition is None:
             return None
         match = cls.__filename_content_disposition_pattern.search(
-            content_disposition)
+                content_disposition)
         if not match:
             return None
         return match.group(1)
@@ -894,8 +894,8 @@ class OpenApiResponse(JSONDetector):
         msg = email.message_from_bytes(response.data)
         return {
             part.get_param("name", header="Content-Disposition"):
-            part.get_payload(decode=True).decode(part.get_content_charset())
-            if part.get_content_charset() else part.get_payload()
+                part.get_payload(decode=True).decode(part.get_content_charset())
+                if part.get_content_charset() else part.get_payload()
             for part in msg.get_payload()
         }
 

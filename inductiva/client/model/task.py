@@ -72,11 +72,23 @@ class Task(schemas.DictSchema):
 
                 def __new__(
                     cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date,
-                                         datetime, uuid.UUID, int, float,
-                                         decimal.Decimal, bool, None, list,
-                                         tuple, bytes, io.FileIO,
-                                         io.BufferedReader,],
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
