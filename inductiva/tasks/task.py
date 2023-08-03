@@ -12,6 +12,7 @@ from inductiva import api
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.utils import files
 from inductiva.utils import data
+from inductiva.utils import output_contents
 
 
 class Task:
@@ -143,32 +144,44 @@ class Task:
         """
         self._api.kill_task(path_params=self._get_path_params())
 
-    def list_output_files(self):
+    def get_outputs_info(self):
         api_response = self._api.get_outputs_list(
             path_params=self._get_path_params(),)
 
         archive_info = api_response.body
 
-        logging.info(" > Archive size: %s", archive_info["size"])
-        for file in archive_info["contents"]:
-            logging.info("\t%s\t\t%s\t%s", file["name"], file["size"],
-                         file["compressed_size"])
+        contents = [
+            output_contents.FileInfo(
+                name=file_info["name"],
+                size=file_info["size"],
+                compressed_size=file_info["compressed_size"],
+            ) for file_info in archive_info["contents"]
+        ]
 
-    def download_output(
+        return output_contents.OutputContents(
+            size=int(archive_info["size"]),
+            contents=contents,
+        )
+
+    def download_outputs(
         self,
-        filenames: List[str],
+        filenames: Optional[List[str]] = None,
         output_dir: Optional[pathlib.Path] = None,
         uncompress: bool = True,
         rm_archive: bool = True,
     ) -> pathlib.Path:
-        response = self._api.download_task_output(
+        api_response = self._api.download_task_output(
             path_params=self._get_path_params(),
             query_params={
-                "filename": filenames
+                "filename": filenames or [],
             },
             stream=True,
             skip_deserialization=True,
-        ).response  # use raw urllib3 response
+        )
+        # use raw urllib3 response instead of generated client response, to
+        # implement our own download logic (with progress bar, first checking
+        # the size of the file, etc.)
+        response = api_response.response
 
         if output_dir is None:
             output_dir = files.resolve_path(inductiva.output_dir).joinpath(
@@ -191,17 +204,6 @@ class Task:
                 zip_path.unlink()
 
         return output_dir
-
-    def download_full_outputs(
-        self,
-        output_dir: Optional[pathlib.Path] = None,
-        uncompress: bool = True,
-        rm_archive: bool = True,
-    ) -> pathlib.Path:
-        return self.download_output(filenames=[],
-                                    output_dir=output_dir,
-                                    uncompress=uncompress,
-                                    rm_archive=rm_archive)
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""

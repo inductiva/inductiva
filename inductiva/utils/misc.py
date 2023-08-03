@@ -12,9 +12,12 @@ def format_bytes(n_bytes: int) -> str:
     """Convert bytes to human readable string."""
     res = float(n_bytes)
 
-    for unit in ["bytes", "KiB", "MiB", "GiB", "TiB"]:
+    for unit in ["B", "KiB", "MiB", "GiB", "TiB"]:
         if res < 1024:
-            return f"{res:.2f} {unit}"
+            if unit == "B":
+                return f"{res:.0f} {unit}"
+            else:
+                return f"{res:.2f} {unit}"
         res /= 1024
 
     return f"{format_bytes:.2f} PiB"

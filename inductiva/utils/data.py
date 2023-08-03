@@ -251,11 +251,11 @@ def zip_dir(dir_path, zip_name):
 def download_file(response, output_path: pathlib.Path, chunk_size=1024) -> None:
 
     download_size = response.headers.get("content-length", 0)
-
     with tqdm(
             total=int(download_size),
             unit="iB",
             unit_scale=True,
+            unit_divisor=1024,
     ) as pbar:
         with open(output_path, "wb") as f:
             while chunk := response.read(chunk_size):
