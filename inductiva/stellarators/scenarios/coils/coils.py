@@ -2,14 +2,19 @@
 import math
 import random
 import numpy as np
+import os
 
 from typing import Optional
 from uuid import UUID
 
+from functools import singledispatchmethod
 from inductiva import tasks
 from inductiva.stellarators.simulators import Simsopt
 from inductiva.simulation import Simulator
 from inductiva.scenarios import Scenario
+
+COIL_COEFFICIENTS_FILENAME = 'coil_coefficients.npz'
+COIL_CURRENTS_FILENAME = 'coil_currents.npz'
 
 
 class StellaratorCoils(Scenario):
@@ -26,6 +31,8 @@ class StellaratorCoils(Scenario):
           within a stellarator. Represents how many times the magnetic
           field pattern repeats itself along the toroidal direction.
     """
+
+    valid_simulators = [Simsopt]
 
     def __init__(self, coils, num_field_periods):
         """Initialize the StellaratorCoils object."""
@@ -203,26 +210,22 @@ class StellaratorCoils(Scenario):
             simulator: The simulator to use for the simulation.
             resource_pool_id: The resource pool to use for the simulation.
         """
-        coil_coefficients = [coil.curve_coefficients for coil in self.coils]
-        coil_currents = np.array([coil.current for coil in self.coils])
-
-        coil_coefficients_filename = 'coil_coefficients.npz'
-        coil_currents_filename = 'coil_currents.npz'
-
-        np.savez(coil_coefficients_filename, *coil_coefficients)
-        np.savez(coil_currents_filename, coil_currents)
 
         task = super().simulate(
             simulator,
             resource_pool_id=resource_pool_id,
             run_async=run_async,
             magnetic_field_filename=magnetic_field_filename,
-            coil_coefficients_filename=coil_coefficients_filename,
-            coil_currents_filename=coil_currents_filename,
+            coil_coefficients_filename=COIL_COEFFICIENTS_FILENAME,
+            coil_currents_filename=COIL_CURRENTS_FILENAME,
             plasma_surface_filename=plasma_surface_filename,
             num_field_periods=self.num_field_periods)
 
         return task
+
+    @singledispatchmethod
+    def create_input_files(self, simulator: Simulator):
+        pass
 
 
 class Coil:
@@ -273,3 +276,18 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
     curve_coefficients[4, 1] = -minor_radius
 
     return curve_coefficients
+
+
+@StellaratorCoils.create_input_files.register
+def _(self, simulator: Simsopt, input_dir):  # pylint: disable=unused-argument
+    """Creates Simsopt simulation input files."""
+
+    coil_coefficients = [coil.curve_coefficients for coil in self.coils]
+    coil_currents = np.array([coil.current for coil in self.coils])
+
+    coil_coefficients_filename = os.path.join(input_dir,
+                                              COIL_COEFFICIENTS_FILENAME)
+    coil_currents_filename = os.path.join(input_dir, COIL_CURRENTS_FILENAME)
+
+    np.savez(coil_coefficients_filename, *coil_coefficients)
+    np.savez(coil_currents_filename, coil_currents)
