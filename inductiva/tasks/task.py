@@ -165,12 +165,12 @@ class Task:
 
         return output_dir
 
-    def get_outputs_info(self):
+    def get_output_files_info(self):
         """Get information of the output files of the task.
 
         Returns:
             An instance of the OutputContents class, which can be used to
-            access info about the output files, such as the size of archive,
+            access info about the output files, such as the archive's size,
             number of files, and information about each file (name, size,
             compressed size). It can also be used to print that information
             in a formatted way.
