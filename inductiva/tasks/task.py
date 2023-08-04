@@ -153,14 +153,34 @@ class Task:
         """Set the output class of the task."""
         self._output_class = output_class
 
-    def get_output(self, output_dir=None):
+    def set_default_output_files(self,
+                                 default_output_files_list: List[str] = None):
+        """Set the default output files of the task."""
+
+        self._default_files_list = default_output_files_list
+
+    def get_output(self,
+                   output_dir: Optional[pathlib.Path] = None,
+                   uncompress: bool = True,
+                   rm_archive: bool = True,):
         """Get the output of the task.
+
+        Args:
+            output_dir: Directory where to download the files. If None, the
+                files are downloaded to the default directory. The default is
+                {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
+            uncompress: Whether to uncompress the archive after downloading it.
+            rm_archive: Whether to remove the archive after uncompressing it.
+                If uncompress is False, this argument is ignored.
 
         Returns:
             The output of the task.
         """
         self.wait()
-        output_dir = self.download_outputs(output_dir)
+        output_dir = self.download_outputs(filenames=self._default_files_list,
+                                           output_dir=output_dir,
+                                           uncompress=True,
+                                           rm_archive=True)
 
         if self._output_class:
             return self._output_class(output_dir)

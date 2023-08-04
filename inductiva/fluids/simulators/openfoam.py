@@ -9,9 +9,9 @@ from inductiva.simulation import Simulator
 class OpenFOAM(Simulator):
     """Class to invoke a generic DualSPHysics simulation on the API."""
 
-    def __init__(self, api_method: str = "fvm.openfoam.run_simulation"):
+    def __init__(self, api_method: str = "fvm"):
         super().__init__()
-        self.api_method = api_method
+        self.api_method = api_method + ".openfoam.run_simulation"
 
     @property
     def api_method_name(self) -> str:
