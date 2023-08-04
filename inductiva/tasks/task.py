@@ -159,10 +159,12 @@ class Task:
 
         self._default_files_list = default_output_files_list
 
-    def get_output(self,
-                   output_dir: Optional[pathlib.Path] = None,
-                   uncompress: bool = True,
-                   rm_archive: bool = True,):
+    def get_output(
+        self,
+        output_dir: Optional[pathlib.Path] = None,
+        uncompress: bool = True,
+        rm_archive: bool = True,
+    ):
         """Get the output of the task.
 
         Args:
@@ -179,8 +181,8 @@ class Task:
         self.wait()
         output_dir = self.download_outputs(filenames=self._default_files_list,
                                            output_dir=output_dir,
-                                           uncompress=True,
-                                           rm_archive=True)
+                                           uncompress=uncompress,
+                                           rm_archive=rm_archive)
 
         if self._output_class:
             return self._output_class(output_dir)
