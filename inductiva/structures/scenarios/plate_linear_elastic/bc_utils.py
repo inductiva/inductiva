@@ -95,7 +95,7 @@ class BoundaryConditionsCase:
             for neumann_object in neumann_objects_list:
                 neumann_object_dict = vars(neumann_object)
                 tension_dicts_list.append(neumann_object_dict)
-            neumann_dict = {"tension": tension_dicts_list}
+            neumann_dict = {"neumann": tension_dicts_list}
 
             # Merge dictionaries: boundary conditions dictionary
             bcs_dict = {**bcs_dict, **neumann_dict}
