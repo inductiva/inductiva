@@ -404,9 +404,9 @@ class GeometricCase:
 
         # 4. Gets the holes and plate metrics required for building the mesh
         (plate_mesh_offset, plate_predefined_element_size
-        ) = self._get_plate_metrics_for_mesh_generation()
+         ) = self._get_plate_metrics_for_mesh_generation()
         (holes_mesh_offset, holes_predefined_element_size
-        ) = self._get_holes_metrics_for_mesh_generation()
+         ) = self._get_holes_metrics_for_mesh_generation()
 
         return (plate_curves_id, plate_mesh_offset,
                 plate_predefined_element_size, holes_curve_id,
