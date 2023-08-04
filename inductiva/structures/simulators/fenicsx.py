@@ -4,10 +4,10 @@ from typing import Optional, List
 from uuid import UUID
 
 from inductiva import types, tasks
-from inductiva.simulation import Simulator
+from inductiva import simulation
 
 
-class FEniCSx(Simulator):
+class FEniCSx(simulation.Simulator):
     """Class to invoke a generic FEniCSx simulation on the API."""
 
     def __init__(self, api_method: str = "fem.fenicsx.run_simulation"):
@@ -20,25 +20,29 @@ class FEniCSx(Simulator):
 
     def run(
         self,
-        mesh_path: types.Path,
-        bc_path: types.Path,
-        material_path: types.Path,
+        input_dir: types.Path,
+        geometry_filename: types.Path,
+        mesh_filename: types.Path,
+        bc_filename: types.Path,
+        material_filename: types.Path,
         resource_pool_id: Optional[UUID] = None,
-        n_cores: int = 1,
         run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
 
         Args:
-            mesh_path: Path to the mesh file.
-            bc_path: Path to the boundary conditions file.
-            material_path: Path to the material file.
-            n_cores: Number of MPI cores to use for the simulation.
+            geometry_filename: Filename of the geometry file.
+            mesh_filename: Filename of the mesh file.
+            bc_filename: Filename of the boundary conditions file.
+            material_filename: Filename of the material file.
+            resource_pool_id: Optional UUID of the resource pool to use.
+            run_async: Whether to run the simulation asynchronously.
             other arguments: See the documentation of the base class.
         """
-        return super().run(mesh_path,
-                           bc_path,
-                           material_path,
+        return super().run(input_dir,
+                           geometry_filename,
+                           mesh_filename,
+                           bc_filename,
+                           material_filename,
                            resource_pool_id=resource_pool_id,
-                           n_cores=n_cores,
                            run_async=run_async)
