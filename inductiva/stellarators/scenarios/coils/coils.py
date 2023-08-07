@@ -20,10 +20,11 @@ class StellaratorCoils(scenarios.Scenario):
     A stellarator is a magnetic fusion confinement device that possesses a 
     set of external electromagnetic coils that have current running through 
     them. These coils create a magnetic field that is able to confine a plasma, 
-    at extremely high temperatures, where the nuclear fusion reaction take 
+    at extremely high temperatures, where the nuclear fusion reactions take 
     place.
 
-    When designing a stellarator, one only needs to worry about a certain set of
+    Therefore, designing a stellarator involves defining a set of 
+    electromagnetic coils. This set of coils is defined by a small set of 
     NC independent coils, due to the symmetries involved. There is stellarator 
     symmetry, that mirrors this independent set of coils and then 'number of
     field periods (nfp)' rotational symmetry, that repeats this block of coils
@@ -38,7 +39,7 @@ class StellaratorCoils(scenarios.Scenario):
     very good information. Per Helander's 2014 "Theory of plasma confinement in 
     non-axisymmetric magnetic fields" is a good example. See more details at:
     https://iopscience.iop.org/article/10.1088/0034-4885/77/8/087001
-    
+
     The class can be initialized normally (directly from __init__) providing
     a list of `Coil` objects or from the class methods so that the individual 
     coils can also be created before creating the StellaratorCoils object. 
