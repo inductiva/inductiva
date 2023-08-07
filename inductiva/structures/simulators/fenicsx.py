@@ -1,6 +1,6 @@
 """FEniCSx module of the API for finite element analysiss."""
 
-from typing import Optional, List
+from typing import Optional
 from uuid import UUID
 
 from inductiva import types, tasks
