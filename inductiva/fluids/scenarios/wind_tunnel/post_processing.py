@@ -308,7 +308,7 @@ class Streamlines:
         plotter.add_mesh(self.mesh.tube(radius=0.01),
                          scalars=field_notation,
                          cmap=flow_cmap)
-        
+
         plotter.add_mesh(self.object_mesh, color=object_color)
         # Slide along the vectord defined from camera position to focal point,
         # until all of the meshes are visible.

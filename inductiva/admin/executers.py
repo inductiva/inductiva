@@ -42,9 +42,7 @@ def launch_executer(
     with ApiClient(api_config) as client:
         api_instance = InstanceApi(client)
 
-        logging.info("Launching executer %s of type %s",
-                     name,
-                     executer_type)
+        logging.info("Launching executer %s of type %s", name, executer_type)
 
         body = InstanceCreate(
             name=name,

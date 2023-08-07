@@ -9,7 +9,7 @@ from . import molecules
 from . import tasks
 from . import admin
 
-import absl 
+import absl
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "http://api.inductiva.ai")
 output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
