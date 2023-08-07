@@ -227,6 +227,7 @@ class Task:
         # implement our own download logic (with progress bar, first checking
         # the size of the file, etc.)
         response = api_response.response
+
         output_dir = files.resolve_path(output_dir)
         if output_dir is None:
             output_dir = files.resolve_path(inductiva.output_dir).joinpath(
