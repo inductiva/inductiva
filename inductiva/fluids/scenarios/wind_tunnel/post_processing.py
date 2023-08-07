@@ -86,6 +86,7 @@ class WindTunnelOutput:
 
         field_notation = OpenFOAMPhysicalField[physical_field.upper()].value
         physical_field = MeshData(object_mesh, field_notation)
+        physical_field.mesh = physical_field.mesh.rotate_z(180)
 
         if save_path is not None:
             save_path = files.resolve_path(save_path)
@@ -116,7 +117,7 @@ class WindTunnelOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, _ = self.get_mesh_at_time(simulation_time)
+        mesh, object_mesh = self.get_mesh_at_time(simulation_time)
 
         inlet_position = (mesh.bounds[0], 0, 1)
 
@@ -131,7 +132,7 @@ class WindTunnelOutput:
             save_path = files.resolve_path(save_path)
             streamlines_mesh.save(save_path)
 
-        return Streamlines(streamlines_mesh)
+        return Streamlines(object_mesh, streamlines_mesh)
 
     def get_flow_slice(self,
                        simulation_time: float = 50,
@@ -148,7 +149,7 @@ class WindTunnelOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, _ = self.get_mesh_at_time(simulation_time)
+        mesh, object_mesh = self.get_mesh_at_time(simulation_time)
 
         if plane == "xy":
             normal = (0, 0, 1)
@@ -165,7 +166,7 @@ class WindTunnelOutput:
             save_path = files.resolve_path(save_path)
             flow_slice.save(save_path)
 
-        return FlowSlice(flow_slice)
+        return FlowSlice(object_mesh, flow_slice)
 
     def get_force_coefficients(self,
                                simulation_time: float = 50,
@@ -218,16 +219,16 @@ class OpenFOAMPhysicalField(Enum):
 class FlowSlice:
     """Render flow field in a plane of the domain in WindTunnel."""
 
-    def __init__(self, flow_slice):
+    def __init__(self, object_mesh, flow_slice):
+        self.object_mesh = object_mesh
         self.mesh = flow_slice
 
     def render_frame(self,
-                     object_mesh: pv.PolyData = None,
                      physical_field: Literal["pressure",
                                              "velocity"] = "pressure",
                      off_screen: bool = False,
                      virtual_display: bool = False,
-                     background_color: str = "black",
+                     background_color: str = "white",
                      flow_cmap: str = "viridis",
                      object_color: str = "white",
                      save_path: Path = None):
@@ -251,8 +252,7 @@ class FlowSlice:
         # Obtain notation for the physical field for the simulator.
         field_notation = OpenFOAMPhysicalField[physical_field.upper()].value
 
-        if object_mesh:
-            plotter.add_mesh(object_mesh, color=object_color)
+        plotter.add_mesh(self.object_mesh, color=object_color)
         plotter.add_mesh(self.mesh, scalars=field_notation, cmap=flow_cmap)
         plotter.reset_camera(bounds=self.mesh.bounds)
         plotter.show(screenshot=save_path)
@@ -262,16 +262,16 @@ class FlowSlice:
 class Streamlines:
     """Class to render streamlines over the object in the WindTunnel."""
 
-    def __init__(self, streamlines):
+    def __init__(self, object_mesh, streamlines):
+        self.object_mesh = object_mesh
         self.mesh = streamlines
 
     def render_frame(self,
-                     object_mesh: pv.PolyData = None,
                      physical_field: Literal["pressure",
                                              "velocity"] = "pressure",
                      off_screen: bool = False,
                      virtual_display: bool = False,
-                     background_color: str = "black",
+                     background_color: str = "white",
                      flow_cmap: str = "viridis",
                      view: Literal["isometric", "front", "rear", "top",
                                    "side"] = "isometric",
@@ -308,8 +308,8 @@ class Streamlines:
         plotter.add_mesh(self.mesh.tube(radius=0.01),
                          scalars=field_notation,
                          cmap=flow_cmap)
-        if object_mesh:
-            plotter.add_mesh(object_mesh, color=object_color)
+        
+        plotter.add_mesh(self.object_mesh, color=object_color)
         # Slide along the vectord defined from camera position to focal point,
         # until all of the meshes are visible.
         plotter.reset_camera(bounds=self.mesh.bounds, render=False)
