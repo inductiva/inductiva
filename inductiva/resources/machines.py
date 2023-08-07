@@ -21,7 +21,7 @@ class MachineGroup():
         num_machines: int = 1,
         spot: bool = False,
         disk_size_gb: int = 20,
-        label: Optional[str] = None,
+        zone: Optional[str] = "europe-west1-b",
     ) -> None:
         """Create a MachineGroup object.
 
@@ -30,16 +30,15 @@ class MachineGroup():
             num_machines: The number of machines to launch.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 20 GB.
-            label: The label to assign to the machine group.
+            name: The name to assign to the machine group.
         """
         self.machine_type = machine_type
         self.num_machines = num_machines
         self.spot = spot
         self.disk_size_gb = disk_size_gb
-        self.label = label
-        self.machine_group_id = resources.create_machine_group_id()
         self.name = self._generate_instance_name()
-
+        self.machine_group_id = resources.create_machine_group_id()
+        self.zone = zone
         self.api_config = api.validate_api_key(inductiva.api_key)
 
     def start(self):
@@ -53,7 +52,9 @@ class MachineGroup():
                 spot=self.spot,
                 resource_pool_id=self.machine_group_id,
                 disk_size_gb=self.disk_size_gb,
+                zone=self.zone,
             )
+            # body.resource_pool_id = self.machine_group_id
             try:
                 logging.info("Creating a machine group. \
                              This may take a few minutes.")
@@ -66,14 +67,13 @@ class MachineGroup():
                 logging.info("Spot: %s", self.spot)
                 logging.info("Disk size: %s GB", self.disk_size_gb)
                 logging.info("Machine group ID: %s", self.machine_group_id)
-                if self.label:
-                    logging.info("Label: %s", self.label)
+                if self.name:
+                    logging.info("Name: %s", self.name)
                 logging.info("Machine group successfully created.")
-                logging.info("Estimated cost per hour: %s$",
-                             self.estimate_cost())
 
             except ApiException as e:
                 raise e
+        return self.machine_group_id
 
     def terminate(self):
 
@@ -98,8 +98,8 @@ class MachineGroup():
             api_instance = InstanceApi(client)
 
             try:
-                instance_price = api_instance.get_instance_price(body=Instance(
-                    name=self.machine_type))
+                instance_price = api_instance.get_instance_price(
+                    body=Instance(name=self.machine_type, zone=self.zone))
                 logging.info(
                     "Estimated cost of a machine group is %s$ per hour.",
                     self._get_cost(instance_price))
