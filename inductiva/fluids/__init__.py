@@ -13,6 +13,8 @@ from .scenarios import DamBreak
 from .scenarios import FluidBlock
 from .scenarios import WindTunnel
 from .scenarios import WindTunnelOutput
+from .scenarios import WindTerrain
+from .scenarios import Terrain
 from .scenarios import (
     FluidTank,
     CubicTankOutlet,
