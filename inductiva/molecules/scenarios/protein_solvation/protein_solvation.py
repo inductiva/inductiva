@@ -52,7 +52,6 @@ class ProteinSolvation(Scenario):
             simulation_time_ns: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             n_steps_min: int = 5000,
-            visualized_section: str = "Protein-H",
             delete_machine: bool = False) -> tasks.Task:
         """Simulate the solvation of a protein.
 
@@ -80,8 +79,6 @@ class ProteinSolvation(Scenario):
             delete_machine: Whether to delete the machine after the simulation
             is finished.
         """
-
-        self.visualized_section = visualized_section
 
         self.nsteps = int(
             simulation_time_ns * 1e6 / 2
