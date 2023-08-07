@@ -14,6 +14,7 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.utils import files
 from inductiva.utils import data
 from inductiva.utils import output_contents
+from inductiva import types
 
 
 class Task:
@@ -160,7 +161,7 @@ class Task:
             The output of the task.
         """
         self.wait()
-        output_dir = self.download_outputs(output_dir)
+        output_dir = self.download_outputs(output_dir=output_dir)
 
         if self._output_class:
             return self._output_class(output_dir)
@@ -198,7 +199,7 @@ class Task:
     def download_outputs(
         self,
         filenames: Optional[List[str]] = None,
-        output_dir: Optional[pathlib.Path] = None,
+        output_dir: Optional[types.Path] = None,
         uncompress: bool = True,
         rm_archive: bool = True,
     ) -> pathlib.Path:
@@ -226,11 +227,10 @@ class Task:
         # implement our own download logic (with progress bar, first checking
         # the size of the file, etc.)
         response = api_response.response
-
+        output_dir = files.resolve_path(output_dir)
         if output_dir is None:
             output_dir = files.resolve_path(inductiva.output_dir).joinpath(
                 self.id)
-
         if output_dir.exists():
             shutil.rmtree(output_dir)
 
