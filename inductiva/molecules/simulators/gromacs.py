@@ -14,13 +14,12 @@ class GROMACS(Simulator):
     def api_method_name(self) -> str:
         return "md.gromacs.run_simulation"
 
-    def run(
-        self,
-        input_dir: types.Path,
-        commands: List[dict],
-        resource_pool_id: Optional[UUID] = None,
-        run_async: bool = False,
-    ) -> tasks.Task:
+    def run(self,
+            input_dir: types.Path,
+            commands: List[dict],
+            resource_pool_id: Optional[UUID] = None,
+            run_async: bool = False,
+            delete_machine: bool = False) -> tasks.Task:
         """Run a list of GROMACS commands.
 
         Args:
@@ -33,4 +32,5 @@ class GROMACS(Simulator):
         return super().run(input_dir,
                            resource_pool_id=resource_pool_id,
                            commands=commands,
-                           run_async=run_async)
+                           run_async=run_async,
+                           delete_machine=delete_machine)

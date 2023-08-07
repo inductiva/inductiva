@@ -8,6 +8,7 @@ import datetime
 
 from inductiva.client.models import TaskStatusCode
 from inductiva import api
+from inductiva import admin
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.utils import files
 
@@ -26,11 +27,12 @@ class Task:
         _api: Instance of TasksApi (from the generated API client).
     """
 
-    def __init__(self, task_id: str):
+    def __init__(self, task_id: str, delete_machine: bool = False):
         """Initialize the instance from a task ID."""
         self.id = task_id
         self._api = TasksApi(api.get_client())
         self._output_class = None
+        self.delete_machine = delete_machine
 
     def __enter__(self):
         """Enter context manager for managing a blocking execution.
@@ -130,6 +132,12 @@ class Task:
             prev_status = status
 
             if status in terminal_statuses:
+                if self.delete_machine:
+                    delete_logging_info = f"Deleting the machine \
+                                        {self.get_machine()}"
+
+                    logging.info(delete_logging_info)
+                    admin.kill_executer(self.get_machine())
                 return status
 
             time.sleep(polling_period)
@@ -202,6 +210,24 @@ class Task:
                                                 "%Y-%m-%dT%H:%M:%S.%f+00:00")
 
         return (end_time - start_time).total_seconds()
+
+    def get_machine(self) -> str:
+        """Get the machine used in the task.
+
+        Streamlines the process of obtaining the task info, extracting the
+        machine name from the comprehensive task info.
+
+        Returns:
+            The machine name.
+        """
+
+        params = self._get_path_params()
+        task_info = dict(self._api.get_task(params).body)
+
+        machine_info = dict(task_info["executer"])
+        machine_name = machine_info["vm_name"]
+
+        return machine_name
 
     def get_machine_type(self) -> str:
         """Get the machine type used in the task.

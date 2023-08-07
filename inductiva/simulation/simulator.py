@@ -31,6 +31,7 @@ class Simulator(ABC):
         *_args,
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
+        delete_machine: bool = False,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -49,5 +50,6 @@ class Simulator(ABC):
             input_dir,
             run_async=run_async,
             resource_pool_id=resource_pool_id,
+            delete_machine=delete_machine,
             **kwargs,
         )

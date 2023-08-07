@@ -36,6 +36,7 @@ class Scenario(ABC):
         simulator: Simulator,
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
+        delete_machine: bool = False,
         **kwargs,
     ):
         """Simulates the scenario synchronously."""
@@ -48,5 +49,6 @@ class Scenario(ABC):
                 input_dir,
                 resource_pool_id=resource_pool_id,
                 run_async=run_async,
+                delete_machine=delete_machine,
                 **kwargs,
             )

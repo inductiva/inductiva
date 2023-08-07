@@ -52,7 +52,8 @@ class ProteinSolvation(Scenario):
             simulation_time_ns: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
             n_steps_min: int = 5000,
-            visualized_section: str = "Protein-H") -> tasks.Task:
+            visualized_section: str = "Protein-H",
+            delete_machine: bool = False) -> tasks.Task:
         """Simulate the solvation of a protein.
 
         Args:
@@ -76,6 +77,8 @@ class ProteinSolvation(Scenario):
                 - "Protein-H": The protein with hydrogens. This is the default.
                 - "System": The whole system (Protein + Water).
             run_async: Whether to run the simulation asynchronously.
+            delete_machine: Whether to delete the machine after the simulation
+            is finished.
         """
 
         self.visualized_section = visualized_section
@@ -89,7 +92,8 @@ class ProteinSolvation(Scenario):
         task = super().simulate(simulator,
                                 resource_pool_id=resource_pool_id,
                                 commands=commands,
-                                run_async=run_async)
+                                run_async=run_async,
+                                delete_machine=delete_machine)
 
         task.set_output_class(ProteinSolvationOutput)
 
