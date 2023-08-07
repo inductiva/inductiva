@@ -2,6 +2,8 @@
 from typing import Optional
 from uuid import UUID
 
+from absl import logging
+
 import inductiva
 from inductiva import api
 from inductiva.client import ApiClient, ApiException
@@ -32,13 +34,15 @@ def launch_executer(
     executer_type: str,
     spot: bool = True,
     resource_pool_id: Optional[UUID] = None,
-    disk_size_gb: int = 10,
+    disk_size_gb: int = 30,
 ) -> None:
 
     api_config = api.validate_api_key(inductiva.api_key)
 
     with ApiClient(api_config) as client:
         api_instance = InstanceApi(client)
+
+        logging.info("Launching executer %s of type %s", name, executer_type)
 
         body = InstanceCreate(
             name=name,
@@ -60,6 +64,8 @@ def kill_executer(name: str) -> None:
 
     with ApiClient(api_config) as client:
         api_instance = InstanceApi(client)
+
+        logging.info("Killing executer %s", name)
         try:
             api_instance.delete_instance(body=Instance(name=name))
         except ApiException as e:
