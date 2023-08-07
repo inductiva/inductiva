@@ -154,7 +154,7 @@ class Task:
         """Set the output class of the task."""
         self._output_class = output_class
 
-    def get_output(self, output_dir=None):
+    def get_output(self, output_dir: Optional[types.Path] = None):
         """Get the output of the task.
 
         Returns:
