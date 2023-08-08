@@ -37,7 +37,7 @@ class MachineGroup():
         self.name = self._generate_instance_name()
         self.zone = zone
         # The negative imply that the cost is unknown.
-        self.estimated_cost = -1
+        self.estimated_price = -1
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -71,7 +71,7 @@ class MachineGroup():
                 api_instance.create_instance_group(body=instance_group_config)
                 creation_time_mins = (time.time() - start_time) / 60
 
-                self.estimated_cost = self._compute_estimated_cost(api_instance)
+                self.estimated_price = self._compute_estimated_price(api_instance)
                 logging.info(
                     "Machine group with the specified settings successfully \
                         created.")
@@ -105,8 +105,8 @@ class MachineGroup():
             except inductiva.client.ApiException as api_exception:
                 raise api_exception
 
-    def _compute_estimated_cost(self, api_instance):
-        """Returns an estimated cost per hour of a machine group."""
+    def _compute_estimated_price(self, api_instance):
+        """Returns an estimated price per hour of a machine group."""
 
         instance_price = api_instance.get_instance_price(
             body=inductiva.client.model.instance.Instance(
@@ -138,5 +138,5 @@ class MachineGroup():
         logging.info("Spot: %s", self.spot)
         logging.info("Disk size: %s GB", self.disk_size_gb)
         logging.info("Machine group ID: %s", self.machine_group_id)
-        logging.info("Estimated cost per hour: %s $/h", self.estimated_cost)
+        logging.info("Estimated cost per hour: %s $/h", self.estimated_price)
         logging.info("Name: %s", self.name)
