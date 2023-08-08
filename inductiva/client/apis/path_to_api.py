@@ -18,7 +18,6 @@ from inductiva.client.apis.paths.executers_pools import ExecutersPools
 from inductiva.client.apis.paths.gcp_instances import GcpInstances
 from inductiva.client.apis.paths.gcp_instances_group import GcpInstancesGroup
 from inductiva.client.apis.paths.gcp_instances_price import GcpInstancesPrice
-from inductiva.client.apis.paths.gcp_instances_termination import GcpInstancesTermination
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -39,7 +38,6 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.GCP_INSTANCES: GcpInstances,
         PathValues.GCP_INSTANCES_GROUP: GcpInstancesGroup,
         PathValues.GCP_INSTANCES_PRICE: GcpInstancesPrice,
-        PathValues.GCP_INSTANCES_TERMINATION: GcpInstancesTermination,
     })
 
 path_to_api = PathToApi({
@@ -60,5 +58,4 @@ path_to_api = PathToApi({
     PathValues.GCP_INSTANCES: GcpInstances,
     PathValues.GCP_INSTANCES_GROUP: GcpInstancesGroup,
     PathValues.GCP_INSTANCES_PRICE: GcpInstancesPrice,
-    PathValues.GCP_INSTANCES_TERMINATION: GcpInstancesTermination,
 })
