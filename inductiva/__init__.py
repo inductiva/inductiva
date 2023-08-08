@@ -2,12 +2,18 @@
 import os
 import logging
 import urllib3
-
-from . import fluids
-from . import core
-from . import molecules
-from . import tasks
 from . import admin
+from . import api
+from . import core
+from . import fluids
+from . import generative
+from . import molecules
+from . import resources
+from . import simulation
+from . import structures
+from . import tasks
+from . import templates
+from . import utils
 
 import absl
 
