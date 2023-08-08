@@ -155,11 +155,12 @@ class Task:
         self._output_class = output_class
 
     def get_output(self, output_dir: Optional[types.Path] = None):
-        """Get the output files produced by the task.
+        """Get the output files produced by the task. If the task 
+        is not finished the function will wait until it is to download
+        the output folder contents. 
         Returns:
             The output path of the task.
         Example:
-            Usage of the get_output function:
             task = Task("task_id") 
             output_path = task.get_output()  
             # prints:
