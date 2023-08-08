@@ -16,7 +16,7 @@ class MachineGroup():
         machine_type: str,
         num_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 20,
+        disk_size_gb: int = 5,
         zone: typing.Optional[str] = "europe-west1-b",
     ) -> None:
         """Create a MachineGroup object.
@@ -27,15 +27,13 @@ class MachineGroup():
             more information about machine types.
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB. Minimum is 20 GB.
+            disk_size_gb: The size of the disk in GB.
             zone: The zone where the machines will be launched.
         """
         #TODO: Check if machine type is valid.
         self.machine_type = machine_type
         self.num_machines = num_machines
         self.spot = spot
-        if disk_size_gb < 20:
-            raise ValueError("Disk size must be at least 20 GB.")
         self.disk_size_gb = disk_size_gb
         #TODO: Pass the name generation to the backend
         self.name = self._generate_instance_name()
