@@ -208,7 +208,7 @@ class Task:
         filenames: Optional[List[str]] = None,
         output_dir: Optional[types.Path] = None,
         uncompress: bool = True,
-        rm_archive: bool = True,
+        rm_downloaded_zip_archive: bool = True,
     ) -> pathlib.Path:
         """Download output files of the task.
 
@@ -219,7 +219,7 @@ class Task:
                 files are downloaded to the default directory. The default is
                 {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
             uncompress: Whether to uncompress the archive after downloading it.
-            rm_archive: Whether to remove the archive after uncompressing it.
+            rm_downloaded_zip_archive: Whether to remove the archive after uncompressing it.
                 If uncompress is False, this argument is ignored.
         """
         api_response = self._api.download_task_output(
@@ -250,7 +250,7 @@ class Task:
 
         if uncompress:
             data.uncompress_task_outputs(zip_path, output_dir)
-            if rm_archive:
+            if rm_downloaded_zip_archive:
                 zip_path.unlink()
 
         return output_dir
