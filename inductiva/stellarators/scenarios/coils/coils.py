@@ -1,20 +1,21 @@
 """Class for the coils creation."""
 import math
-import random
-import numpy as np
 import os
+import random
 
+from functools import singledispatchmethod
 from typing import Optional
 from uuid import UUID
 
-from functools import singledispatchmethod
-from inductiva import tasks, stellarators, simulation, scenarios
+import numpy as np
+
+import inductiva
 
 SIMSOPT_COIL_COEFFICIENTS_FILENAME = 'coil_coefficients.npz'
 SIMSOPT_COIL_CURRENTS_FILENAME = 'coil_currents.npz'
 
 
-class StellaratorCoils(scenarios.Scenario):
+class StellaratorCoils(inductiva.scenarios.Scenario):
     """Represents stellarator coils.
 
     A stellarator is a magnetic fusion confinement device that possesses a 
@@ -53,7 +54,7 @@ class StellaratorCoils(scenarios.Scenario):
           Typically varies between 1 and 3.
     """
 
-    valid_simulators = [stellarators.simulators.Simsopt]
+    valid_simulators = [inductiva.stellarators.simulators.Simsopt]
 
     def __init__(self, coils, num_field_periods):
         """Initialize the StellaratorCoils object."""
@@ -219,11 +220,12 @@ class StellaratorCoils(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulation.Simulator = stellarators.simulators.Simsopt(),
+        simulator: inductiva.simulation.Simulator = inductiva.stellarators.
+        simulators.Simsopt(),
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
         plasma_surface_filename: str = 'input.QA',
-    ) -> tasks.Task:
+    ) -> inductiva.tasks.Task:
         """Simulates the scenario.
 
         Args:
@@ -246,7 +248,7 @@ class StellaratorCoils(scenarios.Scenario):
         return task
 
     @singledispatchmethod
-    def create_input_files(self, simulator: simulation.Simulator):
+    def create_input_files(self, simulator: inductiva.simulation.Simulator):
         pass
 
 
@@ -302,7 +304,7 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
 
 
 @StellaratorCoils.create_input_files.register
-def _(self, simulator: stellarators.simulators.Simsopt, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: inductiva.stellarators.simulators.Simsopt, input_dir):  # pylint: disable=unused-argument
     """Creates Simsopt simulation input files."""
 
     coil_coefficients = [coil.curve_coefficients for coil in self.coils]
