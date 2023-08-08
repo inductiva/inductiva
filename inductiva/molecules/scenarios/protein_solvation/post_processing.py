@@ -2,17 +2,17 @@
 import os
 import nglview as nv
 import matplotlib.pyplot as plt
-from typing import Literal, Optional
+from pathlib import Path
+from typing import Literal
+from MDAnalysis.analysis import rms
 import MDAnalysis as mda
-from inductiva.molecules.scenarios import utils
-import time
-from inductiva import types
+from inductiva.molecules.scenarios.utils import unwrap_trajectory, align_trajectory_to_average
 
 
 class ProteinSolvationOutput:
     """Post process the simulation output of a ProteinSolvation scenario."""
 
-    def __init__(self, sim_output_path: Optional[types.Path] = None):
+    def __init__(self, sim_output_path: Path = None):
         """Initializes a `ProteinSolvationOutput` object.
 
         Given a simulation output directory that contains the standard files
@@ -57,9 +57,7 @@ class ProteinSolvationOutput:
         print(f"Number of trajectory frames: {len(universe.trajectory)}")
         return view
 
-    def construct_universe(self,
-                           use_compressed_trajectory: bool = False
-                          ) -> nv.NGLWidget:
+    def construct_universe(self, use_compressed_trajectory: bool = False):
         """Construct a MDAnalysis universe from the simulation output.
 
         Args:
@@ -72,7 +70,7 @@ class ProteinSolvationOutput:
             trajectory = os.path.join(self.sim_output_dir,
                                       "solvated_protein.trr")
 
-        universe = utils.unwrap_trajectory(topology, trajectory)
+        universe = unwrap_trajectory(topology, trajectory)
         return universe
 
     def calculate_rmsf_trajectory(self,
@@ -98,12 +96,12 @@ class ProteinSolvationOutput:
 
         aligned_trajectory_path = os.path.join(self.sim_output_dir,
                                                "aligned_traj.dcd")
-        utils.align_trajectory_to_average(universe, aligned_trajectory_path)
+        align_trajectory_to_average(universe, aligned_trajectory_path)
         align_universe = mda.Universe(topology, aligned_trajectory_path)
 
         # Calculate RMSF for carbon alpha atoms
         c_alphas = align_universe.select_atoms("protein and name CA")
-        rmsf = mda.analysis.rms.RMSF(c_alphas).run()
+        rmsf = rms.RMSF(c_alphas).run()
         residue_number = c_alphas.resids
         rmsf_values = rmsf.results.rmsf
 
@@ -116,10 +114,9 @@ class ProteinSolvationOutput:
         plt.show()
         return rmsf_values
 
-    def render_attribute_per_residue(
-            self,
-            residue_attributes,
-            use_compressed_trajectory: bool = False) -> nv.NGLWidget:
+    def render_attribute_per_residue(self,
+                                     residue_attributes,
+                                     use_compressed_trajectory: bool = False):
         """Render a specific protein attribute in an interactive visualization.
         Args: 
             residue_attributes: The per residue values of the attribute you want 

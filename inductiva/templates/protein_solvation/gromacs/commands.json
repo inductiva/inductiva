@@ -7,5 +7,5 @@
     {"cmd": "gmx grompp -f energy_minimization.mdp -c protein_solv_ions.gro -p topol.top -o em.tpr", "prompts":[]},
     {"cmd": "gmx mdrun -deffnm em -v yes", "prompts":[]},
     {"cmd": "gmx grompp -f simulation.mdp -c em.gro -r em.gro -p topol.top -o solvated_protein.tpr", "prompts":[]},
-    {"cmd": "gmx mdrun -deffnm solvated_protein  -o solvated_protein.trr -x trajectory.xtc -v yes", "prompts":[]}
+    {"cmd": "gmx mdrun -deffnm solvated_protein -x trajectory.xtc -v yes", "prompts":[]}
 ]
