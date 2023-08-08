@@ -219,8 +219,8 @@ class Task:
                 files are downloaded to the default directory. The default is
                 {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
             uncompress: Whether to uncompress the archive after downloading it.
-            rm_downloaded_zip_archive: Whether to remove the archive after uncompressing it.
-                If uncompress is False, this argument is ignored.
+            rm_downloaded_zip_archive: Whether to remove the archive after 
+            uncompressing it. If uncompress is False, this argument is ignored.
         """
         api_response = self._api.download_task_output(
             path_params=self._get_path_params(),
