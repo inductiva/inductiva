@@ -23,10 +23,12 @@ class MachineGroup():
 
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-medium".
-            num_machines: The number of machines to launch.
+            Check https://cloud.google.com/compute/docs/machine-resource for more
+            information about machine types.
+            num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 20 GB.
-            name: The name to assign to the machine group.
+            zone: The zone where the machines will be launched.
         """
         #TODO: Check if machine type is valid.
         self.machine_type = machine_type
