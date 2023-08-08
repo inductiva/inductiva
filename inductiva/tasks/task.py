@@ -55,7 +55,7 @@ class Task:
         """
         return self
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def __exit__(self, exc_type, exc_value, traceback) -> bool:
         """Exit context manager killing the task if an exception was raised."""
         del traceback  # unused
         del exc_type  # unused
@@ -154,7 +154,8 @@ class Task:
         """Set the output class of the task."""
         self._output_class = output_class
 
-    def get_output(self, output_dir: Optional[types.Path] = None):
+    def get_output(self,
+                   output_dir: Optional[types.Path] = None) -> pathlib.Path:
         """Get the output files produced by the task. If the task 
         is not finished the function will wait until it is to download
         the output folder contents. 
@@ -174,7 +175,7 @@ class Task:
 
         return output_dir
 
-    def get_output_files_info(self):
+    def get_output_files_info(self) -> output_contents.OutputContents:
         """Get information of the output files of the task.
 
         Returns:
