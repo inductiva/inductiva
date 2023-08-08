@@ -15,6 +15,7 @@ from inductiva.utils import files
 from inductiva.utils import data
 from inductiva.utils import output_contents
 from inductiva import types
+import warnings
 
 
 class Task:
@@ -228,14 +229,14 @@ class Task:
         # the size of the file, etc.)
         response = api_response.response
 
-        output_dir = files.resolve_path(output_dir)
         if output_dir is None:
             output_dir = files.resolve_path(inductiva.output_dir).joinpath(
                 self.id)
-        if output_dir.exists():
-            shutil.rmtree(output_dir)
+        output_dir = files.resolve_path(output_dir)
 
-        output_dir.mkdir(parents=True)
+        if output_dir.exists():
+            warnings.warn("Path already exists, files may be overwritten.")
+        output_dir.mkdir(parents=True, exist_ok=True)
 
         zip_path = output_dir.joinpath("output.zip")
 
