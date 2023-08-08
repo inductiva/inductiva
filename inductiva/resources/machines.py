@@ -1,7 +1,7 @@
 """Containes MachineGroup class to manage GC resources."""
 import typing
 import uuid
-from time import time
+import time
 
 from absl import logging
 
@@ -33,12 +33,13 @@ class MachineGroup():
         self.num_machines = num_machines
         self.spot = spot
         self.disk_size_gb = disk_size_gb
-        #
+        #TODO: Pass the name generation to the backend
         self.name = self._generate_instance_name()
         self.zone = zone
         self.estimated_cost = -1  # The negative implies that the cost is unknown.
 
-        # Validate the specific user configurations/privileges from the API.
+        # Set the API configuration that carries the information from the client
+        # to the backend.
         self.api_config = inductiva.api.validate_api_key(inductiva.api_key)
 
     def start(self):
@@ -49,8 +50,8 @@ class MachineGroup():
                 client)
 
             #TODO: Set this creation on the backend
-            self.machine_group_id = inductiva.resources.utils.create_machine_group_id(
-            )
+            self.machine_group_id = \
+                inductiva.resources.utils.create_machine_group_id()
             instance_group_config = inductiva.client.model.instance_group.InstanceGroup(
                 name=self.name,
                 machine_type=self.machine_type,
@@ -63,16 +64,18 @@ class MachineGroup():
             try:
                 logging.info("Creating a machine group. \
                              This may take a few minutes.")
-                start_time = time()
+                start_time = time.time()
+                #TODO: Receive here the machine name and ID.
                 api_instance.create_instance_group(body=instance_group_config)
+                creation_time_mins = (time.time() - start_time) / 60
+
                 self.estimated_cost = self._compute_estimated_cost(api_instance)
-                creation_time = (time() - start_time) / 60
                 logging.info(
                     "Machine group with the specified settings successfully \
                         created.")
                 self._log_machine_group_info()
                 logging.info("Machine group successfully created in %s mins.",
-                             creation_time)
+                             creation_time_mins)
 
             except inductiva.client.ApiException as api_exception:
                 raise api_exception
@@ -87,15 +90,15 @@ class MachineGroup():
             try:
                 logging.info("Terminating machine group. \
                              This may take a few minutes.")
-                start_time = time()
+                start_time = time.time()
                 api_instance.delete_instance_group(
                     body=inductiva.client.model.instance.Instance(
                         name=self.name))
-                termination_time = (time() - start_time) / 60
+                termination_time_mins = (time.time() - start_time) / 60
                 logging.info(
                     "Machine group of %s machines successfully \
                     terminated in % s mins.", self.num_machines,
-                    termination_time)
+                    termination_time_mins)
 
             except inductiva.client.ApiException as api_exception:
                 raise api_exception
@@ -117,13 +120,16 @@ class MachineGroup():
         return estimated_price
 
     def _generate_instance_name(self):
-        """Generate instance name based on unique_id."""
+        """Generate instance name based on unique_id.
+        
+        TODO: Pass this to the backend."""
 
         unique_id = uuid.uuid4().hex[:8]
         instance_name = f"api-{unique_id}"
         return instance_name
 
     def _log_machine_group_info(self):
+        """Logs the machine group info."""
 
         logging.info("Machine type: %s", self.machine_type)
         logging.info("Number of machines: %s", self.num_machines)
