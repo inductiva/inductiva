@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.instance import Instance
+from inductiva.client.model.resources import Resources
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.instance_group import InstanceGroup
 
@@ -40,7 +40,7 @@ request_body_instance_group = api_client.RequestBody(
     },
     required=True,
 )
-SchemaFor201ResponseBodyApplicationJson = Instance
+SchemaFor201ResponseBodyApplicationJson = Resources
 
 
 @dataclass

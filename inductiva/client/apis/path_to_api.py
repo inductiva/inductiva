@@ -18,44 +18,88 @@ from inductiva.client.apis.paths.executers_pools import ExecutersPools
 from inductiva.client.apis.paths.gcp_instances import GcpInstances
 from inductiva.client.apis.paths.gcp_instances_group import GcpInstancesGroup
 from inductiva.client.apis.paths.gcp_instances_price import GcpInstancesPrice
+from inductiva.client.apis.paths.gcp_instances_group_resource_pool_id import GcpInstancesGroupResourcePoolId
+from inductiva.client.apis.paths.gcp_instances_storage import GcpInstancesStorage
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
-        PathValues.TASKS_SUBMIT: TasksSubmit,
-        PathValues.TASKS_TASK_ID_INPUT: TasksTaskIdInput,
-        PathValues.TASKS_TASK_ID: TasksTaskId,
-        PathValues.TASKS: Tasks,
-        PathValues.TASKS_TASK_ID_STATUS: TasksTaskIdStatus,
-        PathValues.TASKS_TASK_ID_OUTPUT_LIST: TasksTaskIdOutputList,
-        PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
-        PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
-        PathValues.ADMIN_USERS: AdminUsers,
-        PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
-        PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
-        PathValues.ADMIN_TASKS: AdminTasks,
-        PathValues.EXECUTERS_REGISTER: ExecutersRegister,
-        PathValues.EXECUTERS_POOLS: ExecutersPools,
-        PathValues.GCP_INSTANCES: GcpInstances,
-        PathValues.GCP_INSTANCES_GROUP: GcpInstancesGroup,
-        PathValues.GCP_INSTANCES_PRICE: GcpInstancesPrice,
+        PathValues.TASKS_SUBMIT:
+            TasksSubmit,
+        PathValues.TASKS_TASK_ID_INPUT:
+            TasksTaskIdInput,
+        PathValues.TASKS_TASK_ID:
+            TasksTaskId,
+        PathValues.TASKS:
+            Tasks,
+        PathValues.TASKS_TASK_ID_STATUS:
+            TasksTaskIdStatus,
+        PathValues.TASKS_TASK_ID_OUTPUT_LIST:
+            TasksTaskIdOutputList,
+        PathValues.TASKS_TASK_ID_OUTPUT:
+            TasksTaskIdOutput,
+        PathValues.TASKS_TASK_ID_KILL:
+            TasksTaskIdKill,
+        PathValues.ADMIN_USERS:
+            AdminUsers,
+        PathValues.ADMIN_USERS_USERNAME:
+            AdminUsersUsername,
+        PathValues.ADMIN_USERS_USERNAME_TASKS:
+            AdminUsersUsernameTasks,
+        PathValues.ADMIN_TASKS:
+            AdminTasks,
+        PathValues.EXECUTERS_REGISTER:
+            ExecutersRegister,
+        PathValues.EXECUTERS_POOLS:
+            ExecutersPools,
+        PathValues.GCP_INSTANCES:
+            GcpInstances,
+        PathValues.GCP_INSTANCES_GROUP:
+            GcpInstancesGroup,
+        PathValues.GCP_INSTANCES_PRICE:
+            GcpInstancesPrice,
+        PathValues.GCP_INSTANCES_GROUP_RESOURCE_POOL_ID:
+            GcpInstancesGroupResourcePoolId,
+        PathValues.GCP_INSTANCES_STORAGE:
+            GcpInstancesStorage,
     })
 
 path_to_api = PathToApi({
-    PathValues.TASKS_SUBMIT: TasksSubmit,
-    PathValues.TASKS_TASK_ID_INPUT: TasksTaskIdInput,
-    PathValues.TASKS_TASK_ID: TasksTaskId,
-    PathValues.TASKS: Tasks,
-    PathValues.TASKS_TASK_ID_STATUS: TasksTaskIdStatus,
-    PathValues.TASKS_TASK_ID_OUTPUT_LIST: TasksTaskIdOutputList,
-    PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
-    PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
-    PathValues.ADMIN_USERS: AdminUsers,
-    PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
-    PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
-    PathValues.ADMIN_TASKS: AdminTasks,
-    PathValues.EXECUTERS_REGISTER: ExecutersRegister,
-    PathValues.EXECUTERS_POOLS: ExecutersPools,
-    PathValues.GCP_INSTANCES: GcpInstances,
-    PathValues.GCP_INSTANCES_GROUP: GcpInstancesGroup,
-    PathValues.GCP_INSTANCES_PRICE: GcpInstancesPrice,
+    PathValues.TASKS_SUBMIT:
+        TasksSubmit,
+    PathValues.TASKS_TASK_ID_INPUT:
+        TasksTaskIdInput,
+    PathValues.TASKS_TASK_ID:
+        TasksTaskId,
+    PathValues.TASKS:
+        Tasks,
+    PathValues.TASKS_TASK_ID_STATUS:
+        TasksTaskIdStatus,
+    PathValues.TASKS_TASK_ID_OUTPUT_LIST:
+        TasksTaskIdOutputList,
+    PathValues.TASKS_TASK_ID_OUTPUT:
+        TasksTaskIdOutput,
+    PathValues.TASKS_TASK_ID_KILL:
+        TasksTaskIdKill,
+    PathValues.ADMIN_USERS:
+        AdminUsers,
+    PathValues.ADMIN_USERS_USERNAME:
+        AdminUsersUsername,
+    PathValues.ADMIN_USERS_USERNAME_TASKS:
+        AdminUsersUsernameTasks,
+    PathValues.ADMIN_TASKS:
+        AdminTasks,
+    PathValues.EXECUTERS_REGISTER:
+        ExecutersRegister,
+    PathValues.EXECUTERS_POOLS:
+        ExecutersPools,
+    PathValues.GCP_INSTANCES:
+        GcpInstances,
+    PathValues.GCP_INSTANCES_GROUP:
+        GcpInstancesGroup,
+    PathValues.GCP_INSTANCES_PRICE:
+        GcpInstancesPrice,
+    PathValues.GCP_INSTANCES_GROUP_RESOURCE_POOL_ID:
+        GcpInstancesGroupResourcePoolId,
+    PathValues.GCP_INSTANCES_STORAGE:
+        GcpInstancesStorage,
 })
