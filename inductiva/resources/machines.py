@@ -71,7 +71,8 @@ class MachineGroup():
                 api_instance.create_instance_group(body=instance_group_config)
                 creation_time_mins = (time.time() - start_time) / 60
 
-                self.estimated_price = self._compute_estimated_price(api_instance)
+                self.estimated_price = self._compute_estimated_price(
+                    api_instance)
                 logging.info(
                     "Machine group with the specified settings successfully \
                         created.")
