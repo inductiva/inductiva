@@ -23,8 +23,8 @@ class MachineGroup():
 
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-medium".
-            Check https://cloud.google.com/compute/docs/machine-resource for more
-            information about machine types.
+            Check https://cloud.google.com/compute/docs/machine-resource for 
+            more information about machine types.
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 20 GB.
