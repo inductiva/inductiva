@@ -36,7 +36,8 @@ class MachineGroup():
         #TODO: Pass the name generation to the backend
         self.name = self._generate_instance_name()
         self.zone = zone
-        self.estimated_cost = -1  # The negative implies that the cost is unknown.
+        # The negative imply that the cost is unknown.
+        self.estimated_cost = -1
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -52,15 +53,16 @@ class MachineGroup():
             #TODO: Set this creation on the backend
             self.machine_group_id = \
                 inductiva.resources.utils.create_machine_group_id()
-            instance_group_config = inductiva.client.model.instance_group.InstanceGroup(
-                name=self.name,
-                machine_type=self.machine_type,
-                num_instances=self.num_machines,
-                spot=self.spot,
-                resource_pool_id=self.machine_group_id,
-                disk_size_gb=self.disk_size_gb,
-                zone=self.zone,
-            )
+            instance_group_config = \
+                inductiva.client.model.instance_group.InstanceGroup(
+                    name=self.name,
+                    machine_type=self.machine_type,
+                    num_instances=self.num_machines,
+                    spot=self.spot,
+                    resource_pool_id=self.machine_group_id,
+                    disk_size_gb=self.disk_size_gb,
+                    zone=self.zone,
+                )
             try:
                 logging.info("Creating a machine group. \
                              This may take a few minutes.")
