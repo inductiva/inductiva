@@ -1,4 +1,4 @@
-"""Containes MachineGroup class to manage GC resources."""
+"""MachineGroup class to manage Google Cloud resources."""
 import typing
 import uuid
 import time
