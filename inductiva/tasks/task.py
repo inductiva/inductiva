@@ -1,6 +1,5 @@
 """Manage running/completed tasks on the Inductiva API."""
 import pathlib
-import shutil
 import time
 import json
 from absl import logging
@@ -8,9 +7,9 @@ from typing import Dict, Any, List, Optional
 from typing_extensions import TypedDict
 import datetime
 import inductiva
-from inductiva.client.models import TaskStatusCode
+from inductiva.client import models
 from inductiva import api
-from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.client.apis.tags import tasks_api
 from inductiva.utils import files
 from inductiva.utils import data
 from inductiva.utils import output_contents
@@ -37,7 +36,7 @@ class Task:
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
         self.id = task_id
-        self._api = TasksApi(api.get_client())
+        self._api = tasks_api.TasksApi(api.get_client())
         self._output_class = None
 
     def __enter__(self):
@@ -72,13 +71,13 @@ class Task:
         self.kill()
         return False
 
-    def get_status(self) -> TaskStatusCode:
+    def get_status(self) -> models.TaskStatusCode:
         """Get status of the task.
 
         This method issues a request to the API.
         """
         resp = self._api.get_task_status(self._get_path_params())
-        return TaskStatusCode(resp.body["status"])
+        return models.TaskStatusCode(resp.body["status"])
 
     def get_info(self) -> Dict[str, Any]:
         """Get a dictionary with information about the task.
@@ -94,7 +93,7 @@ class Task:
 
         return json.loads(resp.data.decode("utf-8"))
 
-    def wait(self, polling_period: int = 5) -> TaskStatusCode:
+    def wait(self, polling_period: int = 5) -> models.TaskStatusCode:
         """Wait for the task to complete.
 
         This method issues requests to the API.
@@ -106,32 +105,32 @@ class Task:
             The final status of the task.
         """
         terminal_statuses = {
-            TaskStatusCode.SUCCESS,
-            TaskStatusCode.FAILED,
-            TaskStatusCode.KILLED,
-            TaskStatusCode.EXECUTERFAILED,
-            TaskStatusCode.EXECUTERTERMINATED,
-            TaskStatusCode.SPOTINSTANCEPREEMPTED,
+            models.TaskStatusCode.SUCCESS,
+            models.TaskStatusCode.FAILED,
+            models.TaskStatusCode.KILLED,
+            models.TaskStatusCode.EXECUTERFAILED,
+            models.TaskStatusCode.EXECUTERTERMINATED,
+            models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
         }
 
         prev_status = None
         while True:
             status = self.get_status()
             if status != prev_status:
-                if status == TaskStatusCode.PENDINGINPUT:
+                if status == models.TaskStatusCode.PENDINGINPUT:
                     pass
-                elif status == TaskStatusCode.SUBMITTED:
+                elif status == models.TaskStatusCode.SUBMITTED:
                     logging.info("Waiting for resources...")
-                elif status == TaskStatusCode.STARTED:
+                elif status == models.TaskStatusCode.STARTED:
                     logging.info("The task is being executed remotely.")
-                elif status == TaskStatusCode.SUCCESS:
+                elif status == models.TaskStatusCode.SUCCESS:
                     logging.info("Task completed successfully.")
-                elif status == TaskStatusCode.FAILED:
+                elif status == models.TaskStatusCode.FAILED:
                     logging.info("Task failed.")
                     logging.info("Download the task output and check the "
                                  "'stdout.txt' and 'stderr.txt' files for "
                                  "more information.")
-                elif status == TaskStatusCode.KILLED:
+                elif status == models.TaskStatusCode.KILLED:
                     logging.info("Task killed.")
                 else:
                     logging.info(
@@ -264,7 +263,7 @@ class Task:
             The time in seconds.
         """
 
-        if self.get_status() != TaskStatusCode.SUCCESS:
+        if self.get_status() != models.TaskStatusCode.SUCCESS:
             raise RuntimeError("Task is not completed.")
 
         params = self._get_path_params()
