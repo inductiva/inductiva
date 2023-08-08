@@ -10,7 +10,8 @@ def create_machine_group_id() -> uuid.UUID:
     api_config = inductiva.api.validate_api_key(inductiva.api_key)
 
     with inductiva.client.ApiClient(api_config) as client:
-        api_instance = inductiva.client.apis.tags.executers_api.ExecutersApi(client)
+        api_instance = inductiva.client.apis.tags.executers_api.ExecutersApi(
+            client)
 
         try:
             api_response = api_instance.create_resource_pool()

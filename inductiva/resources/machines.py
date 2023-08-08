@@ -33,6 +33,7 @@ class MachineGroup():
         self.num_machines = num_machines
         self.spot = spot
         self.disk_size_gb = disk_size_gb
+        #
         self.name = self._generate_instance_name()
         self.zone = zone
         self.estimated_cost = -1  # The negative implies that the cost is unknown.
@@ -47,6 +48,7 @@ class MachineGroup():
             api_instance = inductiva.client.apis.tags.instance_api.InstanceApi(
                 client)
 
+            #TODO: Set this creation on the backend
             self.machine_group_id = inductiva.resources.utils.create_machine_group_id(
             )
             instance_group_config = inductiva.client.model.instance_group.InstanceGroup(
@@ -129,5 +131,4 @@ class MachineGroup():
         logging.info("Disk size: %s GB", self.disk_size_gb)
         logging.info("Machine group ID: %s", self.machine_group_id)
         logging.info("Estimated cost per hour: %s $/h", self.estimated_cost)
-        if self.name:
-            logging.info("Name: %s", self.name)
+        logging.info("Name: %s", self.name)
