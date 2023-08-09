@@ -62,7 +62,8 @@ class MachineGroup():
                 logging.info("Creating a machine group. \
                              This may take a few minutes.")
                 start_time = time.time()
-                instance_group = api_instance.create_instance_group(body=instance_group_config)
+                instance_group = api_instance.create_instance_group(
+                    body=instance_group_config)
                 creation_time_mins = (time.time() - start_time) / 60
 
                 self.id = instance_group.body["id"]
