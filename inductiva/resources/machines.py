@@ -59,18 +59,18 @@ class MachineGroup():
                     zone=self.zone,
                 )
             try:
-                logging.info("Creating a machine group. \
-                             This may take a few minutes.")
+                logging.info("Creating a machine group."
+                             "This may take a few minutes.")
                 start_time = time.time()
                 instance_group = api_instance.create_instance_group(
                     body=instance_group_config)
                 creation_time_mins = (time.time() - start_time) / 60
 
                 self.id = instance_group.body["id"]
-                self.estimated_price = self._compute_estimated_price(
-                    api_instance)
+                #self.estimated_price = self._compute_estimated_price(
+                #    api_instance)
 
-                logging.info("Machine group successfully created in %s mins.",
+                logging.info("Machine group successfully created in %.2f mins.",
                              creation_time_mins)
                 self._log_machine_group_info()
 
@@ -85,16 +85,16 @@ class MachineGroup():
                 client)
 
             try:
-                logging.info("Terminating machine group. \
-                             This may take a few minutes.")
+                logging.info("Terminating machine group."
+                             "This may take a few minutes.")
                 start_time = time.time()
                 api_instance.delete_instance_group(
                     body=inductiva.client.model.instance.Instance(
                         id=self.id, zone=self.zone))
                 termination_time_mins = (time.time() - start_time) / 60
                 logging.info(
-                    "Machine group of %s machines successfully \
-                    terminated in % s mins.", self.num_machines,
+                    "Machine group of %s machines successfully"
+                    "terminated in %.2f mins.", self.num_machines,
                     termination_time_mins)
 
             except inductiva.client.ApiException as api_exception:
