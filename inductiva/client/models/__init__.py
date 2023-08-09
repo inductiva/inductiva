@@ -22,10 +22,8 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.inductiva_executer import InductivaExecuter
 from inductiva.client.model.inductiva_host_info import InductivaHostInfo
 from inductiva.client.model.instance import Instance
-from inductiva.client.model.instance_create import InstanceCreate
 from inductiva.client.model.instance_group import InstanceGroup
 from inductiva.client.model.output_archive_info import OutputArchiveInfo
-from inductiva.client.model.resource_pool_id import ResourcePoolID
 from inductiva.client.model.task import Task
 from inductiva.client.model.task_request import TaskRequest
 from inductiva.client.model.task_status import TaskStatus
