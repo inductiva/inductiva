@@ -104,8 +104,8 @@ class MachineGroup():
         """Returns an estimated price per hour of a machine group."""
         #TODO: Contemplate disk size in the price.
         instance_price = api_instance.get_instance_price(
-            body=inductiva.client.model.instance.Instance(
-                id=self.machine_type, zone=self.zone))
+            body=inductiva.client.model.instance.Instance(id=self.machine_type,
+                                                          zone=self.zone))
 
         if self.spot:
             estimated_price = instance_price.body[
