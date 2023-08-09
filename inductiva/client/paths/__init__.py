@@ -21,3 +21,4 @@ class PathValues(str, enum.Enum):
     EXECUTERS_REGISTER = "/executers/register"
     GCP_INSTANCES_GROUP = "/gcp_instances/group"
     GCP_INSTANCES_PRICE = "/gcp_instances/price"
+    GCP_INSTANCES_STATUS = "/gcp_instances/status"

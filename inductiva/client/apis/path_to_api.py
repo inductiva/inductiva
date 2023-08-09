@@ -16,6 +16,7 @@ from inductiva.client.apis.paths.admin_tasks import AdminTasks
 from inductiva.client.apis.paths.executers_register import ExecutersRegister
 from inductiva.client.apis.paths.gcp_instances_group import GcpInstancesGroup
 from inductiva.client.apis.paths.gcp_instances_price import GcpInstancesPrice
+from inductiva.client.apis.paths.gcp_instances_status import GcpInstancesStatus
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -34,6 +35,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.EXECUTERS_REGISTER: ExecutersRegister,
         PathValues.GCP_INSTANCES_GROUP: GcpInstancesGroup,
         PathValues.GCP_INSTANCES_PRICE: GcpInstancesPrice,
+        PathValues.GCP_INSTANCES_STATUS: GcpInstancesStatus,
     })
 
 path_to_api = PathToApi({
@@ -52,4 +54,5 @@ path_to_api = PathToApi({
     PathValues.EXECUTERS_REGISTER: ExecutersRegister,
     PathValues.GCP_INSTANCES_GROUP: GcpInstancesGroup,
     PathValues.GCP_INSTANCES_PRICE: GcpInstancesPrice,
+    PathValues.GCP_INSTANCES_STATUS: GcpInstancesStatus,
 })
