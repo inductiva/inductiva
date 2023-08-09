@@ -9,14 +9,12 @@
 """
 
 from inductiva.client.paths.gcp_instances_group.post import CreateInstanceGroup
-from inductiva.client.paths.gcp_instances.delete import DeleteInstance
 from inductiva.client.paths.gcp_instances_group.delete import DeleteInstanceGroup
 from inductiva.client.paths.gcp_instances_price.get import GetInstancePrice
 
 
 class InstanceApi(
         CreateInstanceGroup,
-        DeleteInstance,
         DeleteInstanceGroup,
         GetInstancePrice,
 ):
