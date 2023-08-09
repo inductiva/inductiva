@@ -1,42 +1,91 @@
 """WindTerrain scenario for air flowing over complex terrains."""
 
-from dataclasses import dataclass
-from enum import Enum
 from functools import singledispatchmethod
 import os
+import random
 import shutil
 import tempfile
-from typing import Optional, List, Literal
-from uuid import UUID
+import typing
+import uuid
 
-from absl import logging
 import numpy as np
 import pyvista as pv
 
 from inductiva import tasks
-from inductiva.types import Path
-from inductiva.scenarios import Scenario
-from inductiva.simulation import Simulator
-from inductiva.fluids.simulators import OpenFOAM
-from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template,
-                                       replace_params_in_template)
-from inductiva.utils import files
-from inductiva.fluids.scenarios.wind_terrain import output
+from inductiva import scenarios
+from inductiva import simulation
+from inductiva.fluids import simulators
+from inductiva.utils import templates
+from inductiva.generative import generate_terrain
 
-
-SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_terrain")
+SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "wind_terrain")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
 COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
+TERRAIN_FILENAME = "terrain.stl"
 
 
 class Terrain:
     """Terrain object."""
 
-    def __init__(self, terrain_file: str):
-        self.path = terrain_file
-        self.mesh = pv.read(terrain_file)
+    def __init__(self, terrain_mesh):
+        """Initializes the `Terrain` object.
+        
+        Args:
+            terrain_mesh (pyvista.StructuredGrid): Terrain mesh."""
+        self.mesh = terrain_mesh
+
+    @classmethod
+    def from_file(cls, terrain_file: str):
+        """Creates a `Terrain` object from a text file."""
+        terrain_mesh = pv.read(terrain_file)
+
+        return cls(terrain_mesh)
+
+    @classmethod
+    def from_random_generation(cls,
+                               x_range: typing.Sequence[float],
+                               y_range: typing.Sequence[float],
+                               x_num: int,
+                               y_num: int,
+                               height_factor: float = 10,
+                               initial_roughness: float = 1,
+                               roughness_factor: float = 0.5):
+        """Creates a `Terrain` object with random elevations.
+        
+        The elevation of the corners are chosen randomly in the 
+        range from 0 to 1. This limits the maximum height of the terrain
+        due to the nature of the terrain generation algorithm.
+        To increase the maximum height we multiply by the `height_factor`
+        to obtain the terrain
+
+        TODO: Improve terrain generation for high discrepancy
+        terrains.
+        """
+        corner_values = [
+            random.uniform(0, 1),
+            random.uniform(0, 1),
+            random.uniform(0, 1),
+            random.uniform(0, 1)
+        ]
+
+        x_grid, y_grid, z_elevation = generate_terrain.generate_grid_elevation(
+            x_range, y_range, x_num, y_num, corner_values, initial_roughness,
+            roughness_factor)
+
+        terrain = pv.StructuredGrid(x_grid, y_grid, z_elevation * height_factor)
+
+        return cls(terrain)
+
+    def to_text_file(self, text_file_path: str):
+        """Saves the terrain to a text file.
+        
+        Args
+            text_file_path: Path to the text file
+        """
+
+        terrain_geometry = self.mesh.extract_geometry()
+        terrain_geometry.save(text_file_path)
 
     @property
     def bounds(self):
@@ -61,8 +110,16 @@ class Terrain:
 
         return terrain_center
 
+    def plot(self):
+        """Returns a plot of the terrain."""
 
-class WindTerrain(Scenario):
+        plot = pv.Plotter()
+        plot.add_mesh(self.mesh)
+        plot.show()
+        plot.close()
+
+
+class WindTerrain(scenarios.Scenario):
     """Physical scenario of a configurable wind terrain simulation.
 
     This scenario solves steady-state continuity and momentum equations
@@ -73,38 +130,42 @@ class WindTerrain(Scenario):
     does not change in time anymore.
     """
 
-    valid_simulators = [OpenFOAM]
+    valid_simulators = [simulators.OpenFOAM]
 
     def __init__(self,
                  terrain: Terrain,
-                 wind_velocity: List[float] = [10, 0, 0],
-                 wind_position: List[float] = None,
-                 altitude_m: float = 100):
+                 wind_velocity: typing.List[float],
+                 wind_position: typing.Optional[typing.List[float]] = None,
+                 altitude_m: float = 300):
         """Initializes the `WindTerrain` conditions.
 
         Args:
-            wind_velocity (dict): Velocity of the air flow (m/s).
+            wind_velocity (List): Velocity of the air flow (m/s).
+            wind_position (List): Position of the wind flow (m) above the height
+            of the terrain.
             terrain (Terrain): Terrain object with the profile of the terrain.
-            altitude_m (float): Altitude above the terrain (m) to simulate
-                the atmosphere.
+            altitude_m (float): Altitude above the terrain (m) to establish an
+                atmosphere. Notice that the wind_position needs to be inside the
+                atmosphere region.
         """
 
-
         self.wind_velocity = np.array(wind_velocity)
-        self.wind_flow = self.wind_velocity / np.linalg.norm(self.wind_velocity)
+        # Compute the wind_direction from the velocity vector.
+        self.wind_direction = self.wind_velocity / np.linalg.norm(self.wind_velocity)
         if wind_position is None:
-            wind_position = [terrain.center["x"],
-                             terrain.center["y"], 
-                             terrain.bounds["z"][1] + 10]
-            
+            wind_position = [
+                terrain.center["x"], terrain.center["y"],
+                terrain.bounds["z"][1] + 10
+            ]
+
         self.wind_position = wind_position
         self.terrain = terrain
         self.altitude_m = altitude_m
 
     def simulate(self,
-                 simulator: Simulator = OpenFOAM(),
+                 simulator: simulation.Simulator = simulators.OpenFOAM(),
+                 resource_pool_id: typing.Optional[uuid.UUID] = None,
                  num_iterations: int = 100,
-                 resource_pool_id: Optional[UUID] = None,
                  run_async: bool = False,
                  n_cores: int = 1) -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
@@ -138,7 +199,7 @@ class WindTerrain(Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         with tempfile.NamedTemporaryFile() as commands_file:
-            replace_params_in_template(
+            templates.replace_params_in_template(
                 template_path=commands_template_path,
                 params={"n_cores": self.n_cores},
                 output_file_path=commands_file.name,
@@ -149,12 +210,12 @@ class WindTerrain(Scenario):
         return commands
 
     @singledispatchmethod
-    def create_input_files(self, simulator: Simulator):
+    def create_input_files(self, simulator: simulation.Simulator):
         pass
 
 
 @WindTerrain.create_input_files.register
-def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
     """Creates OpenFOAM simulation input files."""
 
     # The WindTunnel with OpenFOAM requires changing multiple files
@@ -167,7 +228,7 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    batch_replace_params_in_template(
+    templates.batch_replace_params_in_template(
         templates_dir=input_dir,
         template_filenames=[
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
@@ -175,14 +236,15 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
             os.path.join("system", "decomposeParDict_template.openfoam.jinja"),
             os.path.join("system", "snappyHexMeshDict_template.openfoam.jinja"),
             os.path.join("system", "topoSetDict_template.openfoam.jinja"),
-            os.path.join("0", "include", "ABLConditions_template.openfoam.jinja"),
+            os.path.join("0", "include",
+                         "ABLConditions_template.openfoam.jinja"),
             os.path.join("constant", "fvOptions_template.openfoam.jinja")
         ],
         params={
             "terrain_bounds": self.terrain.bounds,
             "terrain_center": self.terrain.center,
-            "terrain_path": self.terrain.path,
-            "wind_flow_dir": self.wind_flow,
+            "terrain_path": TERRAIN_FILENAME,
+            "wind_flow_dir": self.wind_direction,
             "flow_position": self.wind_position,
             "altitude": self.altitude_m,
             "num_iterations": self.num_iterations,
@@ -203,4 +265,5 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
     # Add terrain path to its respective place
     terrain_dir = os.path.join(input_dir, "constant", "triSurface")
     os.mkdir(terrain_dir)
-    shutil.copy(self.terrain.path, os.path.join(terrain_dir, self.terrain.path))
+    terrain_file_path = os.path.join(terrain_dir, TERRAIN_FILENAME)
+    self.terrain.to_text_file(terrain_file_path)
