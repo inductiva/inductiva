@@ -1,19 +1,15 @@
 """Utils to create the mesh."""
 
-import time
-from typing import List, Optional
+from typing import List
+from typing import Optional
 
-import dolfinx
-from dolfinx.io import gmshio
 import gmsh
-from mpi4py import MPI
-import numpy as np
 
 import geometry_utils
 
 
 class Mesh:
-    """DOLFINx mesh.
+    """Mesh.
 
     Attributes:
         geometry: A geometry_utils.GeometricCase object.
@@ -32,9 +28,9 @@ class Mesh:
         self.glb_ref_fac = glb_ref_fac
         self.loc_ref_fac = loc_ref_fac
 
-    def create_dolfinx_mesh_with_gmsh(self) -> None:
+    def create_mesh_with_gmsh(self) -> None:
         """
-        Creates the DOLFINx mesh with Gmsh.
+        Creates the mesh with Gmsh.
 
         To generate the mesh using Gmsh, we utilize mesh size fields: the 
         "Distance" and "Threshold" fields. Use add_mesh_field_distance to add
@@ -247,30 +243,15 @@ class Mesh:
         gmsh.option.set_number("Mesh.Smoothing", 1000)
 
         # Generate the mesh in 2D
-        start_time = time.time()
         gmsh.model.mesh.generate(dim=2)
-        end_time = time.time()
-        self.runtime = np.round(end_time - start_time, 2)
 
-        # Create a DOLFINx mesh for a given Gmsh model
-        self.dolfinx_mesh, _, _ = gmshio.model_to_mesh(model=gmsh.model(),
-                                                       comm=MPI.COMM_SELF,
-                                                       rank=0,
-                                                       gdim=2)
-
-        # Finalize the Gmsh API
-        gmsh.finalize()
-
-    def write_to_xdmf(self, mesh_path: str) -> None:
-        """Writes the DOLFINx mesh to XDMF file.
-
-        Creates an XDMF file that describes the data and points to a HDF5 file
-        that stores the actual problem data.
+    def write_to_msh(self, mesh_path: str) -> None:
+        """Writes the GMSH mesh to MSH file.
 
         Args:
-            mesh_path: A string representing the mesh file path in XDMF format.
+            mesh_path (str): The mesh file path in MSH format.
         """
+        self.create_mesh_with_gmsh()
 
-        with dolfinx.io.XDMFFile(self.dolfinx_mesh.comm, mesh_path,
-                                 "w") as file:
-            file.write_mesh(self.dolfinx_mesh)
+        gmsh.write(mesh_path)
+        gmsh.finalize()

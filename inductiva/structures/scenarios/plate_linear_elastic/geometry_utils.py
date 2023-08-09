@@ -7,81 +7,100 @@ import json
 import math
 
 
-class RectangularPlate:
+class Plate:
+    """Plate.
+
+    Attributs:
+        plate_type (str): Plate type.
+    """
+
+    def __init__(self, plate_type: str):
+        """Initializes a Plate object."""
+        self.plate_type = plate_type
+
+
+class RectangularPlate(Plate):
     """Rectangular plate.
 
     Attributes:
-        plate_length: A float representing the plate length.
-        plate_width: A float representing the plate width.
+        length (float): Plate length.
+        width (float): Plate width.
     """
 
-    def __init__(self, plate_length: float, plate_width: float) -> None:
+    def __init__(self, length: float, width: float):
         """Initializes a RectangularPlate object."""
-        self.plate_length = plate_length
-        self.plate_width = plate_width
+        super().__init__("rectangular")
+        self.length = length
+        self.width = width
 
 
-class CircularHole:
-    """Circular hole."""
+class Hole:
+    """Hole.
 
-    def __init__(self, center_x: float, center_y: float, radius: float) -> None:
-        """Initializes a CircularHole object.
+    Attributes:
+        hole_type (str): Hole type.
+        center_x (float): x-coordinate of the center.
+        center_y (float): y-coordinate of the center.
+    """
 
-        Attributes:
-            hole_type: A string representing the hole type.
-            center_x: A float representing the x coordinate of hole center.
-            center_y: A float representing the y coordinate of hole center.
-            radius: A float representing the hole radius.
-        """
-        self.hole_type = "circular"
+    def __init__(self, hole_type, center_x, center_y):
+        """Initializes a CirculaHolerHole object."""
+        self.hole_type = hole_type
         self.center_x = center_x
         self.center_y = center_y
+
+
+class CircularHole(Hole):
+    """Circular hole.
+
+    Attributes:
+        center_x (float): x-coordinate of the center.
+        center_y (float): y-coordinate of the center.
+        radius (float): Hole radius.
+    """
+
+    def __init__(self, center_x: float, center_y: float, radius: float) -> None:
+        """Initializes a CircularHole object."""
+        super().__init__("circular", center_x, center_y)
         self.radius = radius
 
 
-class RectangularHole:
-    """Rectangular hole."""
+class RectangularHole(Hole):
+    """Rectangular hole.
+
+    Attributes:
+        center_x (float): x-coordinate of the center.
+        center_y (float): y-coordinate of the center.
+        size_x (float): Size of the hole in the x-direction.
+        size_y (float): Size of the hole in the y-direction.
+        angle (float): Positive angle of rotation in degrees around the hole 
+          center.
+    """
 
     def __init__(self, center_x: float, center_y: float, size_x: float,
                  size_y: float, angle: float) -> None:
-        """Initializes a RectangularHole object.
-
-        Attributes:
-            hole_type: A string representing the hole type.
-            center_x: A float representing the x coordinate of hole center.
-            center_y: A float representing the y coordinate of hole center.
-            size_x: A float representing the hole size in x direction.
-            size_y: A float representing the hole size in y direction.
-            angle: A float representing the positive angle of rotation in
-              degrees around the hole center.
-        """
-        self.hole_type = "rectangular"
-        self.center_x = center_x
-        self.center_y = center_y
+        """Initializes a RectangularHole object."""
+        super().__init__("rectangular", center_x, center_y)
         self.size_x = size_x
         self.size_y = size_y
         self.angle = angle
 
 
-class EllipticalHole:
-    """Elliptical hole."""
+class EllipticalHole(Hole):
+    """Elliptical hole.
+
+    Attributes:
+        center_x (float): x-coordinate of the center.
+        center_y (float): y-coordinate of the center.
+        radius_x (float): Radius of the hole in the x-direction.
+        radius_y (float): Radius of the hole in the y-direction.
+        angle (float): Positive angle of rotation in degrees around the hole
+          center."""
 
     def __init__(self, center_x: float, center_y: float, radius_x: float,
                  radius_y: float, angle: float) -> None:
-        """Initializes a EllipticalHole object.
-
-        Attributes:
-            hole_type: A string representing the hole type.
-            center_x: A float representing the x coordinate of hole center.
-            center_y: A float representing the y coordinate of hole center.
-            radius_x: A float representing the hole radius in x direction.
-            radius_y: A float representing the hole radius in y direction.
-            angle: A float representing the positive angle of rotation in
-              degrees around the hole center.
-        """
-        self.hole_type = "elliptical"
-        self.center_x = center_x
-        self.center_y = center_y
+        """Initializes a EllipticalHole object."""
+        super().__init__("elliptical", center_x, center_y)
         self.radius_x = radius_x
         self.radius_y = radius_y
         self.angle = angle
@@ -93,17 +112,13 @@ class GeometricCase:
     The geometric case is characterized by a plate and a set of holes.
 
     Attributes:
-        plate_object: An instance of one of the RectangularPlate class.
-        list_holes_object: A list of instances of holes classes:
-          CircularHole, RectangularHole, or EllipticalHole.
+        plate_object (RectangularPlate): Plate object.
+        list_holes_object (List[Hole]): The holes objects.
     """
 
-    def __init__(
-        self,
-        plate_object: RectangularPlate,
-        list_holes_objects: Optional[List[CircularHole or RectangularHole or
-                                          EllipticalHole]] = None
-    ) -> None:
+    def __init__(self,
+                 plate_object: RectangularPlate,
+                 list_holes_objects: Optional[List[Hole]] = None) -> None:
         """Initializes a GeometricCase object."""
         self.plate_object = plate_object
         self.list_holes_objects = list_holes_objects
@@ -112,7 +127,7 @@ class GeometricCase:
         """Writes the geometric case to JSON file.
 
         Args:
-            json_path: A string representing the JSON file path.
+            json_path (str): The JSON file path.
         """
 
         # Plate dictionary
@@ -145,8 +160,8 @@ class GeometricCase:
               geometric case.
 
         Returns:
-          tuple: A tuple containing the plate gmsh object and the IDs of the
-            curves that constitute the plate.
+          tuple: The plate gmsh object and the IDs of the curves that constitute
+            the plate.
         """
         if self.plate_object is not None:
 
@@ -155,8 +170,8 @@ class GeometricCase:
                 x=0,
                 y=0,
                 z=0,
-                dx=self.plate_object.plate_width,
-                dy=self.plate_object.plate_length)
+                dx=self.plate_object.width,
+                dy=self.plate_object.length)
 
             gmsh.model.occ.synchronize()
 
@@ -195,11 +210,10 @@ class GeometricCase:
 
             # Rectangular plate
 
-            plate_mesh_offset = min(self.plate_object.plate_width,
-                                    self.plate_object.plate_length) / 2
-            plate_predefined_element_size = (
-                self.plate_object.plate_width * 2 +
-                self.plate_object.plate_length * 2) / 4
+            plate_mesh_offset = min(self.plate_object.width,
+                                    self.plate_object.length) / 2
+            plate_predefined_element_size = (self.plate_object.width * 2 +
+                                             self.plate_object.length * 2) / 4
 
             return plate_mesh_offset, plate_predefined_element_size
 
@@ -215,8 +229,8 @@ class GeometricCase:
               options.
 
         Returns:
-            tuple: A tuple containing the OpenCASCADE CAD representation of the
-              holes and the IDs of the curves of the holes.
+            tuple: The OpenCASCADE CAD representation of the holes and the IDs 
+              of the curves of the holes.
         """
 
         if self.list_holes_objects:
@@ -321,8 +335,8 @@ class GeometricCase:
               options.
 
         Returns:
-            tuple: A tuple containing the mesh offset and the predefined element
-              mesh size for all the holes.
+            tuple: The mesh offset and the predefined element mesh size for all 
+              the holes.
         """
 
         if self.list_holes_objects:
@@ -345,8 +359,8 @@ class GeometricCase:
                     hole_mesh_offset = min(hole_object.size_x,
                                            hole_object.size_y) / 2
                     hole_predefined_element_size = (
-                        self.plate_object.plate_width * 2 +
-                        self.plate_object.plate_length * 2) / 4
+                        self.plate_object.width * 2 +
+                        self.plate_object.length * 2) / 4
 
                 # Elliptical hole
                 elif hole_object.hole_type == "elliptical":
@@ -386,8 +400,8 @@ class GeometricCase:
         will be used.
 
         Returns:
-          tuple: A tuple containing the IDs of the curves, the mesh offset and
-            the predefined element mesh size for the plate and all the holes.
+          tuple: The IDs of the curves, the mesh offset and the predefined 
+            element mesh size for the plate and all the holes.
         """
 
         # 1. Converts the plate object to OpenCASCADE CAD representation
@@ -404,9 +418,9 @@ class GeometricCase:
 
         # 4. Gets the holes and plate metrics required for building the mesh
         (plate_mesh_offset, plate_predefined_element_size
-         ) = self._get_plate_metrics_for_mesh_generation()
+        ) = self._get_plate_metrics_for_mesh_generation()
         (holes_mesh_offset, holes_predefined_element_size
-         ) = self._get_holes_metrics_for_mesh_generation()
+        ) = self._get_holes_metrics_for_mesh_generation()
 
         return (plate_curves_id, plate_mesh_offset,
                 plate_predefined_element_size, holes_curve_id,

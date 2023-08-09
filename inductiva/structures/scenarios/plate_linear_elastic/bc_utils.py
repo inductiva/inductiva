@@ -1,49 +1,52 @@
 """Utils to create the different types of boundary conditions."""
 
-from typing import Optional, List
+from typing import Optional
+from typing import List
+from typing import Literal
+from typing import Union
 
 import json
 
 
-class Dirichlet:
+class DirichletBC:
     """Dirichlet boundary condition.
 
     Attributes:
-        boundary_name: A string representing the boundary name of the plate
-          where the Dirichlet boundary condition will apply. The available
-          options are: left, top, right and bottom.
-        displacement_x: A float representing imposed displacement in
-          x-direction. Only fill it if want to resprtit the displamente. 
+        boundary_name (str): The boundary name of the plate where the Dirichlet
+          boundary condition will apply. 
+          The available options are: left, top, right and bottom.
+        displacement_x (float): The imposed displacement in x-direction. Only
+          fill it if want to resprtit the displamente. 
           Fill this attribute if you want to specify the displacement.
-        displacement_y: A float representing imposed displacement in
-          y-direction. Only fill it if want to resprtit the displamente.
+        displacement_y (float): The imposed displacement in y-direction. Only
+          fill it if want to resprtit the displamente.
           Fill this attribute if you want to specify the displacement.
     """
 
     def __init__(self,
-                 boundary_name: str,
+                 boundary_name: Literal["left", "top", "right", "bottom"],
                  displacement_x: Optional[float] = None,
                  displacement_y: Optional[float] = None) -> None:
-        """Initializes a Dirichlet object."""
+        """Initializes a DirichletBC object."""
         self.boundary_name = boundary_name
         self.displacement_x = displacement_x
         self.displacement_y = displacement_y
 
 
-class Neumann:
+class NeumannBC:
     """Neumann boundary condition.
 
     Attributes:
-        boundary_name: A string representing the boundary name of the plate
-          where the Neumann boundary condition will apply. The available options
-          are: left, top, right and bottom.
-        tension_x: A float representing the tension value in x-direction.
-        tension_y: A float representing the tension value in y-direction.
+        boundary_name (str): The boundary name of the plate where the Neumann 
+          boundary condition will apply. 
+          The available options are: left, top, right and bottom.
+        tension_x (float): The tension value in x-direction.
+        tension_y (float): The tension value in y-direction.
     """
 
-    def __init__(self, boundary_name: str, tension_x: float,
-                 tension_y: float) -> None:
-        """Initializes a Neumann object."""
+    def __init__(self, boundary_name: Literal["left", "top", "right", "bottom"],
+                 tension_x: float, tension_y: float) -> None:
+        """Initializes a NeumannBC object."""
         self.boundary_name = boundary_name
         self.tension_x = tension_x
         self.tension_y = tension_y
@@ -52,14 +55,15 @@ class Neumann:
 class BoundaryConditionsCase:
     """Boundary conditions for a given case.
 
-    The boundary conditions for a given case are characterized by an ID, a
-      list of Dirichlet and Tension boundary conditions.
+    The boundary conditions for a given case are characterized by a list of 
+      Dirichlet and Tension boundary conditions.
 
     Attributes:
-        bcs_objects_list: A list representing the boundary conditions objects.
+        bcs_objects_list (list): The boundary conditions objects.
     """
 
-    def __init__(self, bcs_objects_list: List[Dirichlet or Neumann]) -> None:
+    def __init__(self, bcs_objects_list: List[Union[DirichletBC,
+                                                    NeumannBC]]) -> None:
         """Initializes a BoundaryConditionsCase object."""
         self.bcs_objects_list = bcs_objects_list
 
@@ -67,15 +71,16 @@ class BoundaryConditionsCase:
         """Write the boundary conditions to JSON file.
 
         Args:
-            json_path: A string representing the JSON file path.
+            json_path (str): The JSON file path.
         """
 
         # Divide the bcs_obj_list into two lists based on their types
         dirichlet_objects_list = [
-            obj for obj in self.bcs_objects_list if isinstance(obj, Dirichlet)
+            obj for obj in self.bcs_objects_list
+            if isinstance(obj, DirichletBC)
         ]
         neumann_objects_list = [
-            obj for obj in self.bcs_objects_list if isinstance(obj, Neumann)
+            obj for obj in self.bcs_objects_list if isinstance(obj, NeumannBC)
         ]
 
         # Dirichlet dictionary

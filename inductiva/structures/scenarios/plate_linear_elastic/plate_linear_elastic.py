@@ -1,26 +1,31 @@
 # pylint: disable=unused-argument
-"""Plate linear elastic scenario."""
+"""Deformable plate scenario."""
 
 import os
-from typing import Optional, List
+from typing import List
+from typing import Optional
+
+from functools import singledispatchmethod
 from uuid import UUID
 
-from inductiva import types, tasks
 from inductiva import structures
 from inductiva import simulation
 from inductiva import scenarios
+from inductiva import tasks
+from inductiva import types
 
-from bc_utils import BoundaryConditionsCase
-from geometry_utils import CircularHole
-from geometry_utils import EllipticalHole
-from geometry_utils import GeometricCase
-from geometry_utils import RectangularHole
-from geometry_utils import RectangularPlate
-from material_utils import IsotropicLinearElasticMaterial
-from mesh_utils import Mesh
+import bc_utils
+import geometry_utils
+import material_utils
+import mesh_utils
+
+GEOMETRY_FILENAME = "geometry.json"
+MESH_FILENAME = "mesh.msh"
+BCS_FILENAME = "bcs.json"
+MATERIAL_FILENAME = "material.json"
 
 
-class PlateLinearElastic(scenarios.Scenario):
+class DeformablePlate(scenarios.Scenario):
     """Plate linear elastic scenario.
 
     The plate linear elastic scenario is characterized by the plate, holes,
@@ -28,35 +33,36 @@ class PlateLinearElastic(scenarios.Scenario):
     form the geometry, which is used to create the mesh for the simulation.
     """
 
-    valid_simulators = [structures.simulators.FEniCSx]
+    valid_simulators = [structures.simulators.FEniCSx()]
 
     def __init__(
         self,
-        plate: RectangularPlate,
-        holes: List[CircularHole, RectangularHole or EllipticalHole],
-        bcs: BoundaryConditionsCase,
-        material: IsotropicLinearElasticMaterial,
+        plate: geometry_utils.RectangularPlate,
+        holes: List[geometry_utils.Hole],
+        bcs: bc_utils.BoundaryConditionsCase,
+        material: material_utils.IsotropicLinearElasticMaterial,
     ):
         """Initializes the plate linear elastic scenario.
 
         Args:
-            plate: The rectangular plate geometry (RectangularPlate).
-            holes: List of holes in the plate (CircularHole, RectangularHole, 
-              or EllipticalHole).
-            bcs: The boundary conditions applied to the plate.
-            material: The material properties of the plate 
-              (IsotropicLinearElasticMaterial).
+            plate (RectangularPlate): The rectangular plate geometry.
+            holes (Hole): List of holes in the plate.
+            bcs (BoundaryConditionsCase): The boundary conditions applied to the
+              plate.
+            material (IsotropicLinearElasticMaterial): The material properties
+              of the plate.
         """
         self.plate = plate
         self.holes = holes
         self.bcs = bcs
         self.material = material
 
-        self.geometry = GeometricCase(plate_obj=plate, list_holes_objs=holes)
+        self.geometry = geometry_utils.GeometricCase(plate_obj=plate,
+                                                     list_holes_objs=holes)
 
     def simulate(
         self,
-        simulator: simulation.Simulator = structures.simulators.FEniCSx,
+        simulator: simulation.Simulator = structures.simulators.FEniCSx(),
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
         simulation_time=300,
@@ -67,13 +73,10 @@ class PlateLinearElastic(scenarios.Scenario):
         Args:
             simulator: The simulator to use for the simulation.
             simulation_time: The simulation time, in seconds.
-            output_time_step: The time step to save the simulation results, in
-              seconds.
             resource_pool_id: The resource pool to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
         """
         self.simulation_time = simulation_time
-        self.output_time_step = output_time_step
 
         commands = self.get_commands()
 
@@ -83,30 +86,30 @@ class PlateLinearElastic(scenarios.Scenario):
                                 commands=commands)
         return task
 
+    @singledispatchmethod
+    def create_input_files(self, simulator: simulation.Simulator):
+        pass
 
-@PlateLinearElastic.create_input_files.register
+
+@DeformablePlate.create_input_files.register
 def _(self,
-      simulator: structures.simulators.FEniCSx,
-      input_dir: types.Path,
-      geometry_filename: str = "geometry.json",
-      mesh_filename: str = "mesh.xdmf",
-      bcs_filename: str = "bcs.json",
-      material_filemane: str = "material.json") -> None:
+      simulator: structures.simulators.FEniCSx(),
+      input_dir: types.Path) -> None:
     """Creates FEniCSx simulation input files."""
 
     # Geometry file
-    geometry_path = os.join.path(input_dir, geometry_filename)
+    geometry_path = os.join.path(input_dir, GEOMETRY_FILENAME)
     self.geometry.write_to_json(geometry_path)
 
     # Mesh file
-    mesh = Mesh(self.geometry)
-    mesh_path = os.join.path(input_dir, mesh_filename)
-    mesh.write_to_xdmf(mesh_path)
+    mesh = mesh_utils.Mesh(self.geometry)
+    mesh_path = os.join.path(input_dir, MESH_FILENAME)
+    mesh.write_to_msh(mesh_path)
 
     # BC file
-    bcs_path = os.join.path(input_dir, bcs_filename)
+    bcs_path = os.join.path(input_dir, BCS_FILENAME)
     self.bcs.write_to_json(bcs_path)
 
     # Material file
-    material_path = os.join.path(input_dir, material_filemane)
+    material_path = os.join.path(input_dir, MATERIAL_FILENAME)
     self.material.write_to_json(material_path)
