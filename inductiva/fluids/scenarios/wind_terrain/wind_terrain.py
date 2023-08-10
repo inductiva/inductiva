@@ -173,9 +173,9 @@ class WindTerrain(scenarios.Scenario):
     def simulate(self,
                  simulator: simulation.Simulator = simulators.OpenFOAM(),
                  resource_pool_id: typing.Optional[uuid.UUID] = None,
-                 num_iterations: int = 100,
                  run_async: bool = False,
-                 n_cores: int = 1) -> tasks.Task:
+                 n_cores: int = 1,
+                 num_iterations: int = 100,) -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:

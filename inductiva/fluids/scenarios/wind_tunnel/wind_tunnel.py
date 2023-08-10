@@ -11,7 +11,6 @@ from absl import logging
 
 import inductiva
 from inductiva import tasks, simulation, utils, fluids
-from inductiva.fluids import simulators
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "wind_tunnel")
@@ -62,8 +61,8 @@ class WindTunnel(inductiva.scenarios.Scenario):
     valid_simulators = [fluids.simulators.OpenFOAM]
 
     def __init__(self,
-                 flow_velocity: List[float] = None,
-                 domain: Optional[dict] = None):
+                 flow_velocity: typing.List[float] = None,
+                 domain: typing.Optional[dict] = None):
         """Initializes the `WindTunnel` conditions.
 
         Args:

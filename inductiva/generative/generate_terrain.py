@@ -65,8 +65,8 @@ def generate_grid_elevation(
         initial_roughness=initial_roughness,
         roughness_factor=roughness_factor)
 
-    # Adjust terrain to ensure that a given percentage of the terrain elevation is above
-    # or below the xy-plane.
+    # Adjust terrain to ensure that a given percentage of the terrain elevation
+    # is above or below the xy-plane.
     percentile_translate = np.percentile(z_elevation,
                                          abs(percentile_translate_terrain))
     z_elevation += np.sign(percentile_translate_terrain) * percentile_translate

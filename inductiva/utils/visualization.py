@@ -20,8 +20,6 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import xarray as xr
 
-from inductiva.utils import files
-from inductiva.types import Path
 import threading
 
 MPL_CONFIG_PARAMS = {

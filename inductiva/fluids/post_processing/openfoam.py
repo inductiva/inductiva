@@ -9,6 +9,7 @@ import os
 from dataclasses import dataclass
 import enum
 import typing
+import pathlib
 
 import pyvista as pv
 
@@ -120,7 +121,7 @@ class SteadyStateOutput:
             source_center=inlet_position)
 
         if save_path is not None:
-            save_path = files.resolve_path(save_path)
+            save_path = inductiva.utils.files.resolve_path(save_path)
             streamlines_mesh.save(save_path)
 
         return Streamlines(streamlines_mesh, object_mesh)
@@ -328,8 +329,8 @@ class Streamlines:
                 mesh.
             virtual_display: If True, a virtual display is created. Essential
             to render on a server.
-            view: Camera view of the plot. Options are isometric, front, rear, top,
-                side.
+            view: Camera view of the plot. Options are isometric, front, rear,
+                top, side.
             object_color: Color of the object mesh.
             save_path: Path to save the frame. Types of files permitted: .png
         """
