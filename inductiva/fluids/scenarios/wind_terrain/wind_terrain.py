@@ -171,7 +171,8 @@ class WindTerrain(inductiva.scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: inductiva.simulation.Simulator = fluids.simulators.OpenFOAM(),
+        simulator: inductiva.simulation.Simulator = fluids.simulators.OpenFOAM(
+        ),
         resource_pool_id: typing.Optional[uuid.UUID] = None,
         run_async: bool = False,
         n_cores: int = 1,
@@ -198,7 +199,8 @@ class WindTerrain(inductiva.scenarios.Scenario):
                                 n_cores=n_cores,
                                 commands=commands)
 
-        task.set_output_class(inductiva.fluids.post_processing.SteadyStateOutput)
+        task.set_output_class(
+            inductiva.fluids.post_processing.SteadyStateOutput)
 
         return task
 
