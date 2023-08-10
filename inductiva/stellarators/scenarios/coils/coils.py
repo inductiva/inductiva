@@ -1,32 +1,65 @@
 """Class for the coils creation."""
-from inductiva.scenarios import Scenario
 import math
+import os
 import random
+
+from functools import singledispatchmethod
+from typing import Optional
+from uuid import UUID
+
 import numpy as np
 
+import inductiva
 
-class StellaratorCoils(Scenario):
+SIMSOPT_COIL_COEFFICIENTS_FILENAME = 'coil_coefficients.npz'
+SIMSOPT_COIL_CURRENTS_FILENAME = 'coil_currents.npz'
+
+
+class StellaratorCoils(inductiva.scenarios.Scenario):
     """Represents stellarator coils.
+
+    A stellarator is a magnetic fusion confinement device that possesses a 
+    set of external electromagnetic coils that have current running through 
+    them. These coils create a magnetic field that is able to confine a plasma, 
+    at extremely high temperatures, where the nuclear fusion reactions take 
+    place.
+
+    Therefore, designing a stellarator involves defining a set of 
+    electromagnetic coils. This set of coils is defined by a small set of 
+    NC independent coils, due to the symmetries involved. There is stellarator 
+    symmetry, that mirrors this independent set of coils and then 'number of
+    field periods (nfp)' rotational symmetry, that repeats this block of coils
+    throughout the stellarator in the toroidal direction (the long way around
+    the torus). The number of field periods is the number of complete magnetic 
+    field repetitions within a device. It represents how many times the magnetic
+    field repeats itself along the toroidal direction, lowering the number
+    of independent coils that one has to design. Therefore, the total number
+    of coils in a stellarator device comes out to 2*NC*nfp.
+
+    For more information about stellarators, there are many articles with 
+    very good information. Per Helander's 2014 "Theory of plasma confinement in 
+    non-axisymmetric magnetic fields" is a good example. See more details at:
+    https://iopscience.iop.org/article/10.1088/0034-4885/77/8/087001
 
     The class can be initialized normally (directly from __init__) providing
     a list of `Coil` objects or from the class methods so that the individual 
     coils can also be created before creating the StellaratorCoils object. 
 
     Attributes:
-        num_coils (int): The number of coils per field period 
-        (independent coils).
         coils (list): List of `Coil` objects.
         num_field_periods (int): Number of magnetic field periods.
-        Refers to the number of complete magnetic field repetitions 
-        within a stellarator. Represents how many times the magnetic
-        field pattern repeats itself along the toroidal direction.
+          Refers to the number of complete magnetic field repetitions 
+          within a stellarator. Represents how many times the magnetic
+          field pattern repeats itself along the toroidal direction.
+          Typically varies between 1 and 3.
     """
+
+    valid_simulators = [inductiva.stellarators.simulators.Simsopt]
 
     def __init__(self, coils, num_field_periods):
         """Initialize the StellaratorCoils object."""
 
         self.coils = coils
-        self.num_coils = len(coils)
         self.num_field_periods = num_field_periods
 
     @classmethod
@@ -42,7 +75,7 @@ class StellaratorCoils(Scenario):
             num_coils (int): The number of coils per field period.
             coil_currents (list): List of coil currents.
             major_radius (float): distance from the center of the torus 
-            (the central axis) to the outer edge of the plasma region.
+              (the central axis) to the outer edge of the plasma region.
             minor_radius (float): Radius of the simple circular curves.
 
         Returns:
@@ -91,7 +124,7 @@ class StellaratorCoils(Scenario):
             coil_currents (list): List of coil currents.
             max_order (int): Maximum order of the coefficients.
             major_radius (float): distance from the center of the torus 
-            (the central axis) to the outer edge of the plasma region.
+              (the central axis) to the outer edge of the plasma region.
             minor_radius (float): Radius of the simple initial curves.
 
         Returns:
@@ -185,7 +218,37 @@ class StellaratorCoils(Scenario):
 
         return cls(coils, num_field_periods)
 
-    def simulate(self):
+    def simulate(
+        self,
+        simulator: inductiva.simulation.Simulator = inductiva.stellarators.
+        simulators.Simsopt(),
+        resource_pool_id: Optional[UUID] = None,
+        run_async: bool = False,
+        plasma_surface_filename: str = 'input.QA',
+    ) -> inductiva.tasks.Task:
+        """Simulates the scenario.
+
+        Args:
+            simulator: The simulator to use for the simulation.
+            resource_pool_id: The resource pool to use for the simulation.
+            run_async: Whether to run the simulation asynchronously.
+            plasma_surface_filename: Name of the file with the description of
+              the plasma surface on which the magnetic field will be calculated.
+        """
+
+        task = super().simulate(
+            simulator,
+            resource_pool_id=resource_pool_id,
+            run_async=run_async,
+            coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
+            coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
+            plasma_surface_filename=plasma_surface_filename,
+            num_field_periods=self.num_field_periods)
+
+        return task
+
+    @singledispatchmethod
+    def create_input_files(self, simulator: inductiva.simulation.Simulator):
         pass
 
 
@@ -203,7 +266,8 @@ class Coil:
 
     Attributes: 
         curve_coefficients (np.ndarray): Array with Fourier coefficients 
-        defining the coil.
+          defining the coil. Shape: (6, order + 1), where order is the 
+          maximum order of the Fourier Series representation.
         current (float): Coil current.
     """
 
@@ -219,9 +283,9 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
 
     Args:
         toroidal_angle (float): Angle that defines the position of the
-        coil in the torus.
+          coil in the torus.
         major_radius (float): distance from the center of the torus 
-        (the central axis) to the outer edge of the plasma region.
+          (the central axis) to the outer edge of the plasma region.
         minor_radius (float): Radius of the simple initial curves.
 
     Returns:
@@ -237,3 +301,19 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
     curve_coefficients[4, 1] = -minor_radius
 
     return curve_coefficients
+
+
+@StellaratorCoils.create_input_files.register
+def _(self, simulator: inductiva.stellarators.simulators.Simsopt, input_dir):  # pylint: disable=unused-argument
+    """Creates Simsopt simulation input files."""
+
+    coil_coefficients = [coil.curve_coefficients for coil in self.coils]
+    coil_currents = np.array([coil.current for coil in self.coils])
+
+    coil_coefficients_filename = os.path.join(
+        input_dir, SIMSOPT_COIL_COEFFICIENTS_FILENAME)
+    coil_currents_filename = os.path.join(input_dir,
+                                          SIMSOPT_COIL_CURRENTS_FILENAME)
+
+    np.savez(coil_coefficients_filename, *coil_coefficients)
+    np.savez(coil_currents_filename, coil_currents)

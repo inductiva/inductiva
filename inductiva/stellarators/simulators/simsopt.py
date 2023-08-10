@@ -1,12 +1,13 @@
 """Simsopt module of the API."""
+import os
+
 from typing import Optional
 from uuid import UUID
 
-from inductiva import types, tasks
-from inductiva.simulation import Simulator
+import inductiva
 
 
-class Simsopt(Simulator):
+class Simsopt(inductiva.simulation.Simulator):
     """Invokes a simsopt simulation on the API."""
 
     @property
@@ -15,18 +16,16 @@ class Simsopt(Simulator):
 
     def run(
         self,
-        input_dir: types.Path,
-        magnetic_field_filename: str,
+        input_dir: inductiva.types.Path,
+        plasma_surface_filename: str,
         coil_coefficients_filename: str,
         coil_currents_filename: str,
-        plasma_surface_filename: str,
         num_field_periods: int,
         resource_pool_id: Optional[UUID] = None,
-    ) -> tasks.Task:
+    ) -> inductiva.tasks.Task:
         """Run the simulation.
 
         Args:
-            magnetic_field_filename: Name for the output of the simulation.
             coil_coefficients_filename: Name of the file with the Fourier
               Series coefficients of the coils.
             coil_currents_filename: Name of the file with the current in each
@@ -42,8 +41,10 @@ class Simsopt(Simulator):
         return super().run(
             input_dir,
             resource_pool_id=resource_pool_id,
-            magnetic_field_filename=magnetic_field_filename,
-            coil_coefficients_filename=coil_coefficients_filename,
-            coil_currents_filename=coil_currents_filename,
-            plasma_surface_filename=plasma_surface_filename,
+            coil_coefficients_filename=os.path.join(input_dir,
+                                                    coil_coefficients_filename),
+            coil_currents_filename=os.path.join(input_dir,
+                                                coil_currents_filename),
+            plasma_surface_filename=os.path.join(input_dir,
+                                                 plasma_surface_filename),
             num_field_periods=num_field_periods)
