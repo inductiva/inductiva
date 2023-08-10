@@ -275,7 +275,7 @@ def create_3d_scatter_plot(
     z_limits: typing.Optional[typing.List[float]] = None,
     color_limits: typing.Optional[typing.List[float]] = None,
     color_map: typing.Optional[str] = "viridis",
-    matplotlib_config_params: Optional[typing.Dict] = None,
+    matplotlib_config_params: typing.Optional[typing.Dict] = None,
 ):
     """Creates a 3d scatter plot of a dataset."""
 
