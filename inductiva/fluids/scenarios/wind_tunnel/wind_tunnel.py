@@ -4,6 +4,7 @@ import shutil
 import tempfile
 import enum
 import uuid
+import typing
 from dataclasses import dataclass
 from functools import singledispatchmethod
 
