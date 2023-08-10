@@ -34,9 +34,12 @@ class Instance(schemas.DictSchema):
         class properties:
 
             class id(
-                    schemas.ComposedSchema,):
+                    schemas.UUIDBase,
+                    schemas.ComposedSchema,
+            ):
 
                 class MetaOapg:
+                    format = 'uuid'
                     any_of_0 = schemas.StrSchema
                     any_of_1 = schemas.NoneSchema
 

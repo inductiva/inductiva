@@ -44,9 +44,12 @@ class InstanceGroup(schemas.DictSchema):
             num_instances = schemas.IntSchema
 
             class id(
-                    schemas.ComposedSchema,):
+                    schemas.UUIDBase,
+                    schemas.ComposedSchema,
+            ):
 
                 class MetaOapg:
+                    format = 'uuid'
                     any_of_0 = schemas.StrSchema
                     any_of_1 = schemas.NoneSchema
 
