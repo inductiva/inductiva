@@ -31,4 +31,5 @@ from .simulators import (
     XBeach,
     DualSPHysics,
     SPlisHSPlasH,
+    OpenFOAM
 )
