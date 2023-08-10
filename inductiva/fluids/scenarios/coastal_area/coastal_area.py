@@ -10,15 +10,11 @@ import uuid
 
 import numpy as np
 
-from inductiva import tasks
-from inductiva import scenarios
-from inductiva import simulation
-from inductiva.fluids import simulators
-from inductiva.utils import templates
-from inductiva.generative import generate_terrain
-from inductiva.fluids.scenarios.coastal_area import output
+import inductiva
+from inductiva import fluids
 
-SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "coastal_area")
+SCENARIO_TEMPLATE_DIR = os.path.join(inductiva.utils.templates.TEMPLATES_PATH,
+                                     "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
 SWASH_CONFIG_TEMPLATE_FILENAME = "input.sws.jinja"
 SWASH_CONFIG_FILENAME = "input.sws"
@@ -119,7 +115,7 @@ class Bathymetry:
             random.uniform(-max_depth, 0),
         ]
 
-        _, _, depths = generate_terrain.generate_grid_elevation(
+        _, _, depths = inductiva.generative.generate_grid_elevation(
             x_range, y_range, x_num, y_num, corner_values, initial_roughness,
             roughness_factor, percentile_above_water)
 
@@ -153,7 +149,7 @@ class Bathymetry:
         return (self.y_range[1] - self.y_range[0]) / self.shape[1]
 
 
-class CoastalArea(scenarios.Scenario):
+class CoastalArea(inductiva.scenarios.Scenario):
     """Coastal area scenario.
 
     This is a simulation scenario for waves propagating in a coastal area
@@ -185,7 +181,7 @@ class CoastalArea(scenarios.Scenario):
     The scenario can be simulated with SWASH.
     """
 
-    valid_simulators = [simulators.SWASH]
+    valid_simulators = [fluids.simulators.SWASH]
 
     def __init__(
         self,
@@ -215,14 +211,14 @@ class CoastalArea(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulation.Simulator = simulators.SWASH(),
+        simulator: inductiva.simulation.Simulator = fluids.simulators.SWASH(),
         resource_pool_id: typing.Optional[uuid.UUID] = None,
         run_async: bool = False,
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
         n_cores=1,
-    ) -> tasks.Task:
+    ) -> inductiva.tasks.Task:
         """Simulates the scenario.
 
         Args:
@@ -246,27 +242,28 @@ class CoastalArea(scenarios.Scenario):
             n_cores=n_cores,
         )
 
-        task.set_output_class(output.CoastalAreaOutput)
+        task.set_output_class(
+            inductiva.fluids.scenarios.coastal_area.CoastalAreaOutput)
 
         return task
 
     @singledispatchmethod
-    def get_config_filename(self, simulator: simulation.Simulator):
+    def get_config_filename(self, simulator: inductiva.simulation.Simulator):
         pass
 
     @singledispatchmethod
-    def create_input_files(self, simulator: simulation.Simulator):
+    def create_input_files(self, simulator: inductiva.simulation.Simulator):
         pass
 
 
 @CoastalArea.get_config_filename.register
-def _(cls, simulator: simulators.SWASH):  # pylint: disable=unused-argument
+def _(cls, simulator: fluids.simulators.SWASH):  # pylint: disable=unused-argument
     """Returns the configuration filename for SWASH."""
     return SWASH_CONFIG_FILENAME
 
 
 @CoastalArea.create_input_files.register
-def _(self, simulator: simulators.SWASH, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: fluids.simulators.SWASH, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
@@ -291,7 +288,7 @@ def _(self, simulator: simulators.SWASH, input_dir):  # pylint: disable=unused-a
     absorbing_boundary_locations = ["N", "S", "E", "W"]
     absorbing_boundary_locations.remove(self.wave_source_location)
 
-    templates.replace_params_in_template(
+    inductiva.utils.templates.replace_params_in_template(
         template_path=config_template_file_path,
         params={
             "bathymetry_filename": SWASH_BATHYMETRY_FILENAME,

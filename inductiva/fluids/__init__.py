@@ -24,11 +24,11 @@ from .scenarios import (
 from . import scenarios
 from . import post_processing
 from . import shapes
+from . import simulators
 from .scenarios._post_processing import SPHSimulationOutput
 from .simulators import (
     SWASH,
     XBeach,
     DualSPHysics,
     SPlisHSPlasH,
-    OpenFOAM,
 )

@@ -1,6 +1,7 @@
-"""Visualization processing of steady-state simulations with OpenFOAM.
+"""Post-processing of fluid dynamics steady-state simulations.
 
-This class implements various frame visualization capabilities. Namely:
+This class implements various post-processing capabilities with
+visuals associated. Namely:
     - Pressure over object;
     - Cutting plane;
     - StreamLines.

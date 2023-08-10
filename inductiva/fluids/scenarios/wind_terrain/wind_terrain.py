@@ -11,11 +11,10 @@ import uuid
 import numpy as np
 import pyvista as pv
 
-from inductiva import tasks, scenarios, simulation, utils
-from inductiva.fluids import simulators, post_processing
-from inductiva.generative import generate_terrain
+import inductiva
+from inductiva import fluids
 
-SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
+SCENARIO_TEMPLATE_DIR = os.path.join(inductiva.utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
@@ -67,7 +66,7 @@ class Terrain:
             random.uniform(0, 1)
         ]
 
-        x_grid, y_grid, z_elevation = generate_terrain.generate_grid_elevation(
+        x_grid, y_grid, z_elevation = inductiva.generative.generate_grid_elevation(
             x_range, y_range, x_num, y_num, corner_values, initial_roughness,
             roughness_factor)
 
@@ -126,7 +125,7 @@ class Terrain:
         plot.close()
 
 
-class WindTerrain(scenarios.Scenario):
+class WindTerrain(inductiva.scenarios.Scenario):
     """Physical scenario of a configurable wind terrain simulation.
 
     This scenario solves steady-state continuity and momentum equations
@@ -137,7 +136,7 @@ class WindTerrain(scenarios.Scenario):
     does not change in time anymore.
     """
 
-    valid_simulators = [simulators.OpenFOAM]
+    valid_simulators = [fluids.simulators.OpenFOAM]
 
     def __init__(self,
                  terrain: Terrain,
@@ -172,12 +171,12 @@ class WindTerrain(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulation.Simulator = simulators.OpenFOAM(),
+        simulator: inductiva.simulation.Simulator = fluids.simulators.OpenFOAM(),
         resource_pool_id: typing.Optional[uuid.UUID] = None,
         run_async: bool = False,
         n_cores: int = 1,
         num_iterations: int = 100,
-    ) -> tasks.Task:
+    ) -> inductiva.tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
@@ -199,7 +198,7 @@ class WindTerrain(scenarios.Scenario):
                                 n_cores=n_cores,
                                 commands=commands)
 
-        task.set_output_class(post_processing.SteadyStateOutput)
+        task.set_output_class(inductiva.fluids.post_processing.SteadyStateOutput)
 
         return task
 
@@ -211,7 +210,7 @@ class WindTerrain(scenarios.Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         with tempfile.NamedTemporaryFile() as commands_file:
-            utils.templates.replace_params_in_template(
+            inductiva.utils.templates.replace_params_in_template(
                 template_path=commands_template_path,
                 params={"n_cores": self.n_cores},
                 output_file_path=commands_file.name,
@@ -222,12 +221,12 @@ class WindTerrain(scenarios.Scenario):
         return commands
 
     @singledispatchmethod
-    def create_input_files(self, simulator: simulation.Simulator):
+    def create_input_files(self, simulator: inductiva.simulation.Simulator):
         pass
 
 
 @WindTerrain.create_input_files.register
-def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: fluids.simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
     """Creates OpenFOAM simulation input files."""
 
     # The WindTunnel with OpenFOAM requires changing multiple files
@@ -240,7 +239,7 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    utils.templates.batch_replace_params_in_template(
+    inductiva.utils.templates.batch_replace_params_in_template(
         templates_dir=input_dir,
         template_filenames=[
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
