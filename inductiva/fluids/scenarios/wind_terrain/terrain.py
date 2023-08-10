@@ -4,7 +4,7 @@ import random
 
 import pyvista as pv
 
-import inductiva.generative.procedural as procedural_gen
+from inductiva.generative import procedural
 
 
 class Terrain:
@@ -67,7 +67,7 @@ class Terrain:
             random.uniform(0, 1)
         ]
 
-        x_grid, y_grid, z_elevation = procedural_gen.generate_random_terrain(
+        x_grid, y_grid, z_elevation = procedural.generate_random_terrain(
             x_range, y_range, x_num, y_num, corner_values, initial_roughness,
             roughness_factor)
 
