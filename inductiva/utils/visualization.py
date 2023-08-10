@@ -4,6 +4,7 @@
 import os
 import tempfile
 import typing
+import base64
 import io
 import time
 import ipywidgets
@@ -121,7 +122,8 @@ def create_movie_from_vtk(vtk_output_dir: str,
                           movie_path: str,
                           virtual_display: bool = True,
                           scalars: str = None,
-                          scalar_limits: typing.Optional[typing.List[float]] = None,
+                          scalar_limits: typing.Optional[
+                              typing.List[float]] = None,
                           camera=None,
                           color: str = "blue",
                           cmap: str = None,
@@ -188,13 +190,14 @@ def create_movie_from_vtk(vtk_output_dir: str,
                                  fps=fps)
 
 
-def create_frame_from_vtk(frame_path: str,
-                          image_frame_path: str,
-                          scalars: str = None,
-                          scalar_limits: typing.Optional[typing.List[float]] = None,
-                          camera=None,
-                          color: str = None,
-                          cmap: str = None):
+def create_frame_from_vtk(
+        frame_path: str,
+        image_frame_path: str,
+        scalars: str = None,
+        scalar_limits: typing.Optional[typing.List[float]] = None,
+        camera=None,
+        color: str = None,
+        cmap: str = None):
     """Render a .png image from a vtk file."""
 
     frame = pv.read(frame_path)
