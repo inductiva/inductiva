@@ -23,7 +23,7 @@ internalField   uniform $turbulentEpsilon;
 
 boundaryField
 {
-    terrain
+    object
     {
         type            epsilonWallFunction;
         Cmu             0.09;

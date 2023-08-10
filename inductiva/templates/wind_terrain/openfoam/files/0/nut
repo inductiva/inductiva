@@ -35,7 +35,7 @@ boundaryField
         value           uniform 0;
     }
 
-    terrain
+    object
     {
         type            nutkAtmRoughWallFunction;
         z0              $z0;

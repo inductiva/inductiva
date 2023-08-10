@@ -8,8 +8,8 @@
     {"cmd": "mpirun --allow-run-as-root -np {{ n_cores }} topoSet -parallel", "prompts": []},
     {"cmd": "mpirun --allow-run-as-root -np {{ n_cores }} simpleFoam -parallel", "prompts":[]},
     {"cmd": "reconstructParMesh -constant", "prompts":[]},
-    {"cmd": "reconstructPar", "prompts":[]},
-    {% else %} {"cmd": "topoSet", "prompts": []},
-    {"cmd": "simpleFoam", "prompts":[]}
+    {"cmd": "reconstructPar", "prompts":[]}
+    {% else %} {"cmd": "topoSet", "prompts": []}, 
+    {"cmd": "simpleFoam", "prompts":[]},
     {% endif %}
 ]

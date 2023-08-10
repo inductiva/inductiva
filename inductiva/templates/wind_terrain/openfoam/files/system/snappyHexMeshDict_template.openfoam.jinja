@@ -36,7 +36,7 @@ geometry
         max ({{ flow_position[0] + 10}} {{ flow_position[1] + 10 }} {{ flow_position[2] + 10 }});
     }
 
-    terrain
+    object
     {
         type triSurfaceMesh;
         file "{{ terrain_path }}";
@@ -111,7 +111,7 @@ castellatedMeshControls
 
     refinementSurfaces
     {
-        terrain
+        object
         {
             // Surface-wise min and max refinement level
             level (2 2);

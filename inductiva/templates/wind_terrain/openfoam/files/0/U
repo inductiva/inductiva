@@ -36,7 +36,7 @@ boundaryField
         #include        "include/ABLConditions"
     }
 
-    terrain
+    object
     {
         type            uniformFixedValue;
         uniformValue    (0 0 0);

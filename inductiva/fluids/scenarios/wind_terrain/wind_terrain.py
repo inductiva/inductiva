@@ -1,4 +1,4 @@
-"""WindTerrain scenario for air flowing over complex terrains."""
+"""Wind terrain scenario for air flowing over complex terrains."""
 
 from functools import singledispatchmethod
 import os
@@ -11,14 +11,12 @@ import uuid
 import numpy as np
 import pyvista as pv
 
-from inductiva import tasks
-from inductiva import scenarios
-from inductiva import simulation
-from inductiva.fluids import simulators
-from inductiva.utils import templates
+from inductiva import tasks, scenarios, simulation, utils
+from inductiva.fluids import simulators, post_processing
 from inductiva.generative import generate_terrain
 
-SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "wind_terrain")
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
+                                     "wind_terrain")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
 COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
@@ -110,6 +108,15 @@ class Terrain:
 
         return terrain_center
 
+    @property
+    def mesh_resolution(self):
+        """Returns the resolution of the terrain mesh."""
+
+        num_cells = self.mesh.n_cells
+        num_points = self.mesh.n_points
+
+        return num_cells, num_points
+
     def plot(self):
         """Returns a plot of the terrain."""
 
@@ -151,7 +158,8 @@ class WindTerrain(scenarios.Scenario):
 
         self.wind_velocity = np.array(wind_velocity)
         # Compute the wind_direction from the velocity vector.
-        self.wind_direction = self.wind_velocity / np.linalg.norm(self.wind_velocity)
+        self.wind_direction = self.wind_velocity / np.linalg.norm(
+            self.wind_velocity)
         if wind_position is None:
             wind_position = [
                 terrain.center["x"], terrain.center["y"],
@@ -189,6 +197,8 @@ class WindTerrain(scenarios.Scenario):
                                 n_cores=n_cores,
                                 commands=commands)
 
+        task.set_output_class(post_processing.openfoam.SteadyStateOutput)
+
         return task
 
     def get_commands(self):
@@ -199,7 +209,7 @@ class WindTerrain(scenarios.Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         with tempfile.NamedTemporaryFile() as commands_file:
-            templates.replace_params_in_template(
+            utils.templates.replace_params_in_template(
                 template_path=commands_template_path,
                 params={"n_cores": self.n_cores},
                 output_file_path=commands_file.name,
@@ -228,7 +238,7 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    templates.batch_replace_params_in_template(
+    utils.templates.batch_replace_params_in_template(
         templates_dir=input_dir,
         template_filenames=[
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),

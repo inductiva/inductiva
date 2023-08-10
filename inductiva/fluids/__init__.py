@@ -12,7 +12,6 @@ from .fluid_types import (
 from .scenarios import DamBreak
 from .scenarios import FluidBlock
 from .scenarios import WindTunnel
-from .scenarios import WindTunnelOutput
 from .scenarios import WindTerrain
 from .scenarios import Terrain
 from .scenarios import (
@@ -23,6 +22,7 @@ from .scenarios import (
     CircularTankInlet,
 )
 from . import scenarios
+from . import post_processing
 from . import shapes
 from .scenarios._post_processing import SPHSimulationOutput
 from .simulators import (

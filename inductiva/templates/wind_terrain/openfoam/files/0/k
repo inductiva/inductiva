@@ -35,7 +35,7 @@ boundaryField
         #include        "include/ABLConditions"
     }
 
-    terrain
+    object
     {
         type            kqRWallFunction;
         value           uniform 0.0;
