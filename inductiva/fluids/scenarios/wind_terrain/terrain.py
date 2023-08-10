@@ -132,6 +132,7 @@ class Terrain:
             colormap: Colormap to use.
             lighting: Enable or disable view direction lighting.
                 It highlights the details in the terrain.
+        TODO: camera play
         """
 
         # Create Elevation from z-values to plot by it.
