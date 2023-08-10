@@ -14,6 +14,7 @@ from . import structures
 from . import tasks
 from . import templates
 from . import utils
+from . import stellarators
 
 import absl
 

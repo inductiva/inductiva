@@ -4,10 +4,10 @@ import os
 from typing import Optional
 from uuid import UUID
 
-import inductiva
+from inductiva import simulation, tasks, types
 
 
-class Simsopt(inductiva.simulation.Simulator):
+class Simsopt(simulation.Simulator):
     """Invokes a simsopt simulation on the API."""
 
     @property
@@ -16,13 +16,13 @@ class Simsopt(inductiva.simulation.Simulator):
 
     def run(
         self,
-        input_dir: inductiva.types.Path,
+        input_dir: types.Path,
         plasma_surface_filename: str,
         coil_coefficients_filename: str,
         coil_currents_filename: str,
         num_field_periods: int,
         resource_pool_id: Optional[UUID] = None,
-    ) -> inductiva.tasks.Task:
+    ) -> tasks.Task:
         """Run the simulation.
 
         Args:
