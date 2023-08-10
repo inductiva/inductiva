@@ -93,18 +93,6 @@ class Bathymetry:
     ):
         """Creates a `Bathymetry` object with random depths.
 
-        A grid of random depths of shape `(x_num, y_num)` is generated as
-        follows:
-        1. A square grid of random depths is generated using the Diamond-Square
-        algorithm. The randomness of the algorithm is controlled
-        by the `initial_roughness` and `roughness_factor` parameters, that set
-        the initial range of randomness and the rate at which it decreases over
-        iterations of the algorithm, respectively. The size of the resultnig
-        grid is `n`, where `n` is the smallest integer that satisfies
-        `2^n + 1 >= max(x_num, y_num)`.
-        2. The depths of the square grid are interpolated to a grid of shape
-        `(x_num, y_num)`.
-
         The depths of the corners of the grid are chosen according to a maximum
         depth value `max_depth` and a percentile of the domain that must be
         above water `percentile_above_water`. The corners on the lower x
