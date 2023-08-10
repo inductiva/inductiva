@@ -3,11 +3,10 @@
 
 import os
 import tempfile
-from typing import Dict, List, Optional
-import base64
+import typing
 import io
-from time import sleep
-from ipywidgets import Output
+import time
+import ipywidgets
 
 from absl import logging
 
@@ -58,10 +57,10 @@ def create_movie_from_widget(view,
             for i in tqdm(frames_range):
                 if not event.is_set():
                     view.frame = i
-                    sleep(timeout)  # time to update the view
+                    time.sleep(timeout)  # time to update the view
                     iw = view.render_image()
                     image_data = view._image_data
-                    sleep(timeout)
+                    time.sleep(timeout)
                     filename = os.path.join(
                         tmp_dir, f"frame-{str(i).zfill(max_frame_digits)}.png")
                     try:
@@ -70,10 +69,10 @@ def create_movie_from_widget(view,
                         print(f"Error: Unidentified image at frame {i}")
                         continue
                     iw.close()
-                    sleep(timeout)
+                    time.sleep(timeout)
 
             if not event.is_set():
-                with Output():
+                with ipywidgets.Output():
                     create_movie_from_frames(tmp_dir, output_path, fps)
 
     thread = threading.Thread(target=_make, args=(event,))
@@ -122,7 +121,7 @@ def create_movie_from_vtk(vtk_output_dir: str,
                           movie_path: str,
                           virtual_display: bool = True,
                           scalars: str = None,
-                          scalar_limits: Optional[List[float]] = None,
+                          scalar_limits: typing.Optional[typing.List[float]] = None,
                           camera=None,
                           color: str = "blue",
                           cmap: str = None,
@@ -192,7 +191,7 @@ def create_movie_from_vtk(vtk_output_dir: str,
 def create_frame_from_vtk(frame_path: str,
                           image_frame_path: str,
                           scalars: str = None,
-                          scalar_limits: Optional[List[float]] = None,
+                          scalar_limits: typing.Optional[typing.List[float]] = None,
                           camera=None,
                           color: str = None,
                           cmap: str = None):

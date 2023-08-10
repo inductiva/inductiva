@@ -199,7 +199,7 @@ class WindTerrain(scenarios.Scenario):
                                 n_cores=n_cores,
                                 commands=commands)
 
-        task.set_output_class(post_processing.openfoam.SteadyStateOutput)
+        task.set_output_class(post_processing.SteadyStateOutput)
 
         return task
 
