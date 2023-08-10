@@ -27,12 +27,8 @@ def generate_grid_elevation(
     A grid of random elevations of shape `(x_num, y_num)` is generated as
     follows:
     1. A square grid of random elevations is generated using the Diamond-Square
-    algorithm. The randomness of the algorithm is controlled
-    by the `initial_roughness` and `roughness_factor` parameters, that set
-    the initial range of randomness and the rate at which it decreases over
-    iterations of the algorithm, respectively. The size of the resultnig
-    grid is `n`, where `n` is the smallest integer that satisfies
-    `2^n + 1 >= max(x_num, y_num)`.
+    algorithm. The size of the resultnig grid is `n`, where `n` is
+    the smallest integer that satisfies `2^n + 1 >= max(x_num, y_num)`.
     2. The elevations of the square grid are interpolated to a grid of shape
     `(x_num, y_num)`.
 

@@ -9,7 +9,6 @@ from typing import Literal, Optional, Sequence
 from uuid import UUID
 
 import numpy as np
-import scipy
 
 import inductiva
 from inductiva import tasks
@@ -19,7 +18,6 @@ from inductiva.fluids.simulators import SWASH
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.fluids.scenarios.coastal_area.output import CoastalAreaOutput
-
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
