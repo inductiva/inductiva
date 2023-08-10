@@ -6,10 +6,10 @@ import typing
 import numpy as np
 import scipy
 
-import inductiva
+from inductiva.generative import procedural
 
 
-def generate_grid_elevation(
+def generate_random_terrain(
     x_range: typing.Sequence[float],
     y_range: typing.Sequence[float],
     x_num: int,
@@ -56,7 +56,7 @@ def generate_grid_elevation(
     size_square = 2**n_power + 1
 
     # Create elevation for a square grid with side resolution=size_square.
-    z_elevation = inductiva.generative.diamond_square.create_random_array(
+    z_elevation = procedural.diamond_square.create_random_array(
         size=size_square,
         corner_values=corner_values,
         initial_roughness=initial_roughness,
