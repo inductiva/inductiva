@@ -170,12 +170,14 @@ class WindTerrain(scenarios.Scenario):
         self.terrain = terrain
         self.altitude_m = altitude_m
 
-    def simulate(self,
-                 simulator: simulation.Simulator = simulators.OpenFOAM(),
-                 resource_pool_id: typing.Optional[uuid.UUID] = None,
-                 run_async: bool = False,
-                 n_cores: int = 1,
-                 num_iterations: int = 100,) -> tasks.Task:
+    def simulate(
+        self,
+        simulator: simulation.Simulator = simulators.OpenFOAM(),
+        resource_pool_id: typing.Optional[uuid.UUID] = None,
+        run_async: bool = False,
+        n_cores: int = 1,
+        num_iterations: int = 100,
+    ) -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:

@@ -21,6 +21,7 @@ from tqdm import tqdm
 import xarray as xr
 
 import threading
+from inductiva import utils
 
 MPL_CONFIG_PARAMS = {
     "font.size": 14,
@@ -163,8 +164,8 @@ def create_movie_from_vtk(vtk_output_dir: str,
         pv.start_xvfb()
 
     pv.global_theme.background = "white"
-    vtk_output_dir = files.resolve_path(vtk_output_dir)
-    vtk_files = files.get_sorted_files(vtk_output_dir, ".vtk")
+    vtk_output_dir = utils.files.resolve_path(vtk_output_dir)
+    vtk_files = utils.files.get_sorted_files(vtk_output_dir, ".vtk")
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         logging.info("Creating movie frames...")
@@ -216,14 +217,14 @@ def create_2d_scatter_plot(
     image_path: str,
     marker_size: float = 20,
     alpha: float = 1,
-    color: Optional[str] = None,
-    color_var: Optional[str] = None,
-    x_limits: Optional[List[float]] = None,
-    y_limits: Optional[List[float]] = None,
-    color_limits: Optional[List[float]] = None,
-    color_map: Optional[str] = "viridis",
-    aspect: Optional[str] = None,
-    matplotlib_config_params: Optional[Dict] = None,
+    color: typing.Optional[str] = None,
+    color_var: typing.Optional[str] = None,
+    x_limits: typing.Optional[typing.List[float]] = None,
+    y_limits: typing.Optional[typing.List[float]] = None,
+    color_limits: typing.Optional[List[float]] = None,
+    color_map: typing.Optional[str] = "viridis",
+    aspect: typing.Optional[str] = None,
+    matplotlib_config_params: typing.Optional[typing.Dict] = None,
 ):
     """Creates a 2d scatter plot of a dataset."""
 
@@ -268,14 +269,14 @@ def create_3d_scatter_plot(
     image_path: str,
     marker_size: float = 20,
     alpha: float = 1,
-    color: Optional[str] = None,
-    color_var: Optional[str] = None,
-    x_limits: Optional[List[float]] = None,
-    y_limits: Optional[List[float]] = None,
-    z_limits: Optional[List[float]] = None,
-    color_limits: Optional[List[float]] = None,
-    color_map: Optional[str] = "viridis",
-    matplotlib_config_params: Optional[Dict] = None,
+    color: typing.Optional[str] = None,
+    color_var: typing.Optional[str] = None,
+    x_limits: typing.Optional[typing.List[float]] = None,
+    y_limits: typing.Optional[typing.List[float]] = None,
+    z_limits: typing.Optional[typing.List[float]] = None,
+    color_limits: typing.Optional[typing.List[float]] = None,
+    color_map: typing.Optional[str] = "viridis",
+    matplotlib_config_params: Optional[typing.Dict] = None,
 ):
     """Creates a 3d scatter plot of a dataset."""
 
@@ -321,14 +322,14 @@ def create_2d_scatter_plot_movie(
     movie_fps: int = 10,
     marker_size: float = 20,
     alpha: float = 1,
-    color: Optional[str] = None,
-    color_var: Optional[str] = None,
-    x_limits: Optional[List[float]] = None,
-    y_limits: Optional[List[float]] = None,
-    color_limits: Optional[List[float]] = None,
-    color_map: Optional[str] = "viridis",
-    aspect: Optional[str] = None,
-    matplotlib_config_params: Optional[Dict] = None,
+    color: typing.Optional[str] = None,
+    color_var: typing.Optional[str] = None,
+    x_limits: typing.Optional[typing.List[float]] = None,
+    y_limits: typing.Optional[typing.List[float]] = None,
+    color_limits: typing.Optional[typing.List[float]] = None,
+    color_map: typing.Optional[str] = "viridis",
+    aspect: typing.Optional[str] = None,
+    matplotlib_config_params: typing.Optional[typing.Dict] = None,
 ):
     """Creates a movie of the dataset with 2d scatter plots."""
 
@@ -372,14 +373,14 @@ def create_3d_scatter_plot_movie(
     movie_fps: int = 10,
     marker_size: float = 20,
     alpha: float = 1,
-    color: Optional[str] = None,
-    color_var: Optional[str] = None,
-    x_limits: Optional[List[float]] = None,
-    y_limits: Optional[List[float]] = None,
-    z_limits: Optional[List[float]] = None,
-    color_limits: Optional[List[float]] = None,
-    color_map: Optional[str] = "viridis",
-    matplotlib_config_params: Optional[Dict] = None,
+    color: typing.Optional[str] = None,
+    color_var: typing.Optional[str] = None,
+    x_limits: typing.Optional[typing.List[float]] = None,
+    y_limits: typing.Optional[typing.List[float]] = None,
+    z_limits: typing.Optional[typing.List[float]] = None,
+    color_limits: typing.Optional[typing.List[float]] = None,
+    color_map: typing.Optional[str] = "viridis",
+    matplotlib_config_params: typing.Optional[typing.Dict] = None,
 ):
     """Creates a movie of the dataset with 3d scatter plots."""
 
@@ -417,12 +418,12 @@ def create_3d_scatter_plot_movie(
 def create_color_plot(
     data_array: xr.DataArray,
     image_path: str,
-    x_limits: Optional[List[float]] = None,
-    y_limits: Optional[List[float]] = None,
-    color_limits: Optional[List[float]] = None,
-    color_map: Optional[str] = "viridis",
-    aspect: Optional[str] = None,
-    matplotlib_config_params: Optional[Dict] = None,
+    x_limits: typing.Optional[typing.List[float]] = None,
+    y_limits: typing.Optional[typing.List[float]] = None,
+    color_limits: typing.Optional[typing.List[float]] = None,
+    color_map: typing.Optional[str] = "viridis",
+    aspect: typing.Optional[str] = None,
+    matplotlib_config_params: typing.Optional[typing.Dict] = None,
 ):
     """Creates a color plot of a data array."""
 
@@ -458,12 +459,12 @@ def create_color_plot_movie(
     iter_var: str,
     movie_path: str,
     movie_fps: int = 10,
-    x_limits: Optional[List[float]] = None,
-    y_limits: Optional[List[float]] = None,
-    color_limits: Optional[List[float]] = None,
-    color_map: Optional[str] = "viridis",
-    aspect: Optional[str] = None,
-    matplotlib_config_params: Optional[Dict] = None,
+    x_limits: typing.Optional[typing.List[float]] = None,
+    y_limits: typing.Optional[typing.List[float]] = None,
+    color_limits: typing.Optional[typing.List[float]] = None,
+    color_map: typing.Optional[str] = "viridis",
+    aspect: typing.Optional[str] = None,
+    matplotlib_config_params: typing.Optional[typing.Dict] = None,
 ):
     """Creates a movie of the data array with color plots."""
 
