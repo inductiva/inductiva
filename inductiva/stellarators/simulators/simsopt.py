@@ -22,6 +22,7 @@ class Simsopt(simulation.Simulator):
         coil_currents_filename: str,
         num_field_periods: int,
         resource_pool_id: Optional[UUID] = None,
+        run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -41,6 +42,7 @@ class Simsopt(simulation.Simulator):
         return super().run(
             input_dir,
             resource_pool_id=resource_pool_id,
+            run_async=run_async,
             coil_coefficients_filename=os.path.join(input_dir,
                                                     coil_coefficients_filename),
             coil_currents_filename=os.path.join(input_dir,
