@@ -1,0 +1,1 @@
+from .procedural import diamond_square 
