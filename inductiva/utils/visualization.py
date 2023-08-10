@@ -220,7 +220,7 @@ def create_2d_scatter_plot(
     color_var: typing.Optional[str] = None,
     x_limits: typing.Optional[typing.List[float]] = None,
     y_limits: typing.Optional[typing.List[float]] = None,
-    color_limits: typing.Optional[List[float]] = None,
+    color_limits: typing.Optional[typing.List[float]] = None,
     color_map: typing.Optional[str] = "viridis",
     aspect: typing.Optional[str] = None,
     matplotlib_config_params: typing.Optional[typing.Dict] = None,
