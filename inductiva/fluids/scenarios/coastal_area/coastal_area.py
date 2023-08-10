@@ -11,6 +11,7 @@ from uuid import UUID
 import numpy as np
 import scipy
 
+import inductiva
 from inductiva import tasks
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
@@ -19,7 +20,6 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.fluids.scenarios.coastal_area.output import CoastalAreaOutput
 
-from inductiva.generative import diamond_square
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
@@ -134,38 +134,9 @@ class Bathymetry:
             random.uniform(-max_depth, 0),
         ]
 
-        # Determine the minimum n such that 2^n + 1 >= max(x_num, y_num).
-        n = int(math.log2(max(x_num, y_num) - 1)) + 1
-
-        size_square = 2**n + 1
-
-        depths = diamond_square.create_random_array(
-            size=size_square,
-            corner_values=corner_values,
-            initial_roughness=initial_roughness,
-            roughness_factor=roughness_factor)
-
-        # Adjust depths to ensure that a given percentage of the domain is above
-        # sea level (depth < 0).
-        percentile_under_water = np.percentile(depths, percentile_above_water)
-        depths -= percentile_under_water
-
-        x_square = np.linspace(*x_range, size_square)
-        y_square = np.linspace(*y_range, size_square)
-
-        x_square, y_square = np.meshgrid(x_square, y_square, indexing="ij")
-
-        x = np.linspace(*x_range, x_num)
-        y = np.linspace(*y_range, y_num)
-
-        x, y = np.meshgrid(x, y, indexing="ij")
-
-        depths = scipy.interpolate.griddata(
-            (x_square.flatten(), y_square.flatten()),
-            depths.flatten(),
-            (x, y),
-            method="linear",
-        )
+        _, _, depths = inductiva.generative.generate_grid_elevation(
+            x_range, y_range, x_num, y_num, corner_values, initial_roughness,
+            roughness_factor, percentile_above_water)
 
         return cls(depths, x_range, y_range)
 
