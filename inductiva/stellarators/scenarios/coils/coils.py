@@ -3,11 +3,11 @@ import math
 import os
 import random
 import shutil
+import typing
+import uuid
 
 from absl import logging
 from functools import singledispatchmethod
-from typing import Optional
-from uuid import UUID
 
 import numpy as np
 
@@ -227,9 +227,9 @@ class StellaratorCoils(scenarios.Scenario):
     def simulate(
         self,
         simulator: simulation.Simulator = stellarators.simulators.Simsopt(),
-        resource_pool_id: Optional[UUID] = None,
+        resource_pool_id: typing.Optional[uuid.UUID] = None,
         run_async: bool = False,
-        plasma_surface_filepath: Optional[types.Path] = None,
+        plasma_surface_filepath: typing.Optional[types.Path] = None,
     ) -> tasks.Task:
         """Simulates the scenario.
 
