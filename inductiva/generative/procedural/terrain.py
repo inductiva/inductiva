@@ -70,22 +70,48 @@ def generate_random_terrain(
                                          abs(percentile_translate_terrain))
     z_elevation += np.sign(percentile_translate_terrain) * percentile_translate
 
-    # Interpolate from the square grid to the desired grid.
-    x_square = np.linspace(*x_range, size_square)
-    y_square = np.linspace(*y_range, size_square)
+    z_elevation = interpolate_between_grids(x_range, y_range,
+                                            [size_square, size_square],
+                                            [x_num, y_num], z_elevation)
 
-    x_square, y_square = np.meshgrid(x_square, y_square, indexing="ij")
+    return z_elevation
 
-    x_grid = np.linspace(*x_range, x_num)
-    y_grid = np.linspace(*y_range, y_num)
+
+def create_grid(x_range, y_range, resolution):
+    """Create a grid of x and y values.
+
+    Given a [x_range, y_range] and a resolution for
+    each range, we return a meshgrid of x and y values.
+    That is, x_grid[i, j] = x_range[i] and
+    y_grid[i, j] = y_range[j].
+
+    Args:
+        x_range: The range of x values, in meters.
+        y_range: The range of y values, in meters.
+        resolution: Number of grid points in both
+            directions [x_res, y_res]
+    """
+
+    x_grid = np.linspace(*x_range, resolution[0])
+    y_grid = np.linspace(*y_range, resolution[1])
 
     x_grid, y_grid = np.meshgrid(x_grid, y_grid, indexing="ij")
 
-    z_elevation = scipy.interpolate.griddata(
-        (x_square.flatten(), y_square.flatten()),
+    return x_grid, y_grid
+
+
+def interpolate_between_grids(x_range, y_range, prev_resolution, new_resolution,
+                              z_elevation):
+    """Interpolate between two grid with different resolution."""
+
+    x_grid_prev, y_grid_prev = create_grid(x_range, y_range, prev_resolution)
+    x_grid_new, y_grid_new = create_grid(x_range, y_range, new_resolution)
+
+    new_z_elevation = scipy.interpolate.griddata(
+        (x_grid_prev.flatten(), y_grid_prev.flatten()),
         z_elevation.flatten(),
-        (x_grid, y_grid),
+        (x_grid_new, y_grid_new),
         method="linear",
     )
 
-    return x_grid, y_grid, z_elevation
+    return new_z_elevation

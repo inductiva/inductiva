@@ -15,6 +15,7 @@ from . import tasks
 from . import templates
 from . import utils
 from . import stellarators
+from . import world
 
 import absl
 

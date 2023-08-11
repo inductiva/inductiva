@@ -36,9 +36,10 @@ class Terrain:
                                y_range: typing.Sequence[float],
                                x_num: int,
                                y_num: int,
-                               height_factor: float = 10,
                                initial_roughness: float = 1,
                                roughness_factor: float = 0.5,
+                               min_elevation: float = 0,
+                               max_elevation: float = 1,
                                random_seed: int = None):
         """Creates a `Terrain` object with random elevations.
         The elevation of the corners are randomly selected within
@@ -57,23 +58,26 @@ class Terrain:
             y_range = [y_min, y_max]: Range of the y-axis in meters (m).
             x_num: Number of points in the x-axis.
             y_num: Number of points in the y-axis.
-            height_factor: Factor to multiply the elevation by.
             initial_roughness: Initial roughness of the terrain.
             roughness_factor: Factor to multiply the roughness by.
+            min_elevation: Minimum elevation of the terrain.
+            max_elevation: Maximum elevation of the terrain.
+            random_seed: Random seed to use for the terrain generation.
         """
         random.seed(random_seed)
         corner_values = [
-            random.uniform(0, 1),
-            random.uniform(0, 1),
-            random.uniform(0, 1),
-            random.uniform(0, 1)
+            random.uniform(min_elevation, max_elevation),
+            random.uniform(min_elevation, max_elevation),
+            random.uniform(min_elevation, max_elevation),
+            random.uniform(min_elevation, max_elevation)
         ]
 
-        x_grid, y_grid, z_elevation = procedural.generate_random_terrain(
+        z_elevation = procedural.generate_random_terrain(
             x_range, y_range, x_num, y_num, corner_values, initial_roughness,
             roughness_factor, random_seed=random_seed)
+        x_grid, y_grid = procedural.create_grid(x_range, y_range, [x_num, y_num])
 
-        terrain = pv.StructuredGrid(x_grid, y_grid, z_elevation * height_factor)
+        terrain = pv.StructuredGrid(x_grid, y_grid, z_elevation)
 
         return cls(terrain)
 
@@ -157,5 +161,4 @@ class Terrain:
                          cmap=colormap)
 
         plotter.show(screenshot=save_path)
-        print(plotter.camera_position)
         plotter.close()
