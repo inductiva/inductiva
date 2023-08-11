@@ -65,10 +65,10 @@ class ProteinSolvationOutput:
             or the full precision trajectory."""
         topology = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
         if use_compressed_trajectory:
-            trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")
+            trajectory = os.path.join(self.sim_output_dir, "compressed_trajectory.xtc")
         else:
             trajectory = os.path.join(self.sim_output_dir,
-                                      "solvated_protein.trr")
+                                      "full_trajectory.trr")
 
         universe = unwrap_trajectory(topology, trajectory)
         return universe
