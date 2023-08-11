@@ -1,14 +1,14 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
-import numpy as np
-import nglview as nv
-import time
-import matplotlib.pyplot as plt
 import pathlib
-from typing import Literal
-import MDAnalysis as mda
+import time
+import typing
 
-from inductiva.molecules.scenarios import utils
+import matplotlib.pyplot as plt
+import MDAnalysis as mda
+import nglview as nv
+
+import inductiva
 
 
 class ProteinSolvationOutput:
@@ -26,13 +26,14 @@ class ProteinSolvationOutput:
 
         self.sim_output_dir = sim_output_path
 
-    def render_interactive(self,
-                           representation: Literal["cartoon", "ball+stick",
-                                                   "line", "point", "surface",
-                                                   "ribbon"] = "ball+stick",
-                           selection: str = "protein",
-                           use_compressed_trajectory: bool = False,
-                           add_backbone: bool = True):
+    def render_interactive(
+            self,
+            representation: typing.Literal["cartoon", "ball+stick", "line",
+                                           "point", "surface",
+                                           "ribbon"] = "ball+stick",
+            selection: str = "protein",
+            use_compressed_trajectory: bool = False,
+            add_backbone: bool = True):
         """
         Render the simulation outputs in an interactive visualization.
         Args: 
@@ -76,7 +77,8 @@ class ProteinSolvationOutput:
         else:
             trajectory = os.path.join(self.sim_output_dir,
                                       "full_trajectory.trr")
-        universe = utils.unwrap_trajectory(topology, trajectory)
+        universe = inductiva.molecules.scenarios.utils.unwrap_trajectory(
+            topology, trajectory)
         return universe
 
     def calculate_rmsf_trajectory(self,
@@ -98,12 +100,14 @@ class ProteinSolvationOutput:
             RMSF using nglview or not."""
         start_time = time.time()
         universe = self.construct_universe(use_compressed_trajectory)
-        topology = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
+        topology_path = os.path.join(self.sim_output_dir,
+                                     "solvated_protein.tpr")
 
         aligned_trajectory_path = os.path.join(self.sim_output_dir,
                                                "aligned_traj.dcd")
-        utils.align_trajectory_to_average(universe, aligned_trajectory_path)
-        align_universe = mda.Universe(topology, aligned_trajectory_path)
+        inductiva.molecules.scenarios.utils.align_trajectory_to_average(
+            universe, aligned_trajectory_path)
+        align_universe = mda.Universe(topology_path, aligned_trajectory_path)
 
         # Calculate RMSF for carbon alpha atoms
         c_alphas = align_universe.select_atoms("protein and name CA")
@@ -125,8 +129,9 @@ class ProteinSolvationOutput:
     def render_attribute_per_residue(
             self,
             residue_attributes: np.ndarray,
-            representation: Literal["cartoon", "ball+stick", "line", "point",
-                                    "surface", "ribbon"] = "cartoon",
+            representation: typing.Literal["cartoon", "ball+stick", "line",
+                                           "point", "surface",
+                                           "ribbon"] = "cartoon",
             use_compressed_trajectory: bool = False):
         """Render a specific protein attribute in an interactive visualization.
         Args: 
