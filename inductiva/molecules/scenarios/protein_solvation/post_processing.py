@@ -96,7 +96,7 @@ class ProteinSolvationOutput:
         Args:
             nglview_visualization: Whether to return visualization of the 
             RMSF using nglview or not."""
-
+        start_time = time.time()
         universe = self.construct_universe(use_compressed_trajectory)
         topology = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
 
@@ -118,6 +118,8 @@ class ProteinSolvationOutput:
         plt.title("RMSF per residue")
         plt.grid(True)
         plt.show()
+        duration = time.time() - start_time
+        print(f"RMSF calculation took {duration:.2f} seconds.")
         return rmsf_values
 
     def render_attribute_per_residue(
@@ -140,7 +142,7 @@ class ProteinSolvationOutput:
         for residue, value in zip(protein.residues, residue_attributes):
             residue.atoms.tempfactors = value
         view = nv.show_mdanalysis(protein)
-        view.update_representation(color_scheme="bfactor")
         view.add_representation(representation)
+        view.update_representation(color_scheme="bfactor")
         view.center()
         return view
