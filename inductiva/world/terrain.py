@@ -37,6 +37,7 @@ class Terrain:
                                y_range: typing.Sequence[float],
                                x_num: int,
                                y_num: int,
+                               corner_values: typing.List[float],
                                initial_roughness: float = 1,
                                roughness_factor: float = 0.5,
                                min_elevation: float = 0,
@@ -59,19 +60,13 @@ class Terrain:
             y_range = [y_min, y_max]: Range of the y-axis in meters (m).
             x_num: Number of points in the x-axis.
             y_num: Number of points in the y-axis.
+            corner_values: List of the corner values of the terrain.
             initial_roughness: Initial roughness of the terrain.
             roughness_factor: Factor to multiply the roughness by.
             min_elevation: Minimum elevation of the terrain.
             max_elevation: Maximum elevation of the terrain.
             random_seed: Random seed to use for the terrain generation.
         """
-        random.seed(random_seed)
-        corner_values = [
-            random.uniform(min_elevation, max_elevation),
-            random.uniform(min_elevation, max_elevation),
-            random.uniform(min_elevation, max_elevation),
-            random.uniform(min_elevation, max_elevation)
-        ]
 
         z_elevation = procedural.generate_random_terrain(
             x_num=x_num,
