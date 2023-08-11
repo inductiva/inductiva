@@ -1,11 +1,14 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
+import numpy as np
 import nglview as nv
+import time
 import matplotlib.pyplot as plt
 import pathlib
 from typing import Literal
 import MDAnalysis as mda
-from inductiva.molecules.scenarios import utils 
+
+from inductiva.molecules.scenarios import utils
 
 
 class ProteinSolvationOutput:
@@ -25,9 +28,9 @@ class ProteinSolvationOutput:
 
     def render_interactive(self,
                            representation: Literal["cartoon", "ball+stick",
-                                                   "line", "point",
-                                                   "surface","ribbon"] = "ball+stick",
-                            selection: str = "protein",
+                                                   "line", "point", "surface",
+                                                   "ribbon"] = "ball+stick",
+                           selection: str = "protein",
                            use_compressed_trajectory: bool = False,
                            add_backbone: bool = True):
         """
@@ -46,8 +49,7 @@ class ProteinSolvationOutput:
         universe = self.construct_universe(use_compressed_trajectory)
         protein = universe.select_atoms("protein")
         view = nv.show_mdanalysis(protein)
-        view.add_representation(representation,
-                                selection=selection)
+        view.add_representation(representation, selection=selection)
         if add_backbone:
             view.add_representation("cartoon", selection="protein")
         view.center()
@@ -69,7 +71,8 @@ class ProteinSolvationOutput:
             or the full precision trajectory."""
         topology = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
         if use_compressed_trajectory:
-            trajectory = os.path.join(self.sim_output_dir, "compressed_trajectory.xtc")
+            trajectory = os.path.join(self.sim_output_dir,
+                                      "compressed_trajectory.xtc")
         else:
             trajectory = os.path.join(self.sim_output_dir,
                                       "full_trajectory.trr")
@@ -117,13 +120,17 @@ class ProteinSolvationOutput:
         plt.show()
         return rmsf_values
 
-    def render_attribute_per_residue(self,
-                                     residue_attributes,
-                                     use_compressed_trajectory: bool = False):
+    def render_attribute_per_residue(
+            self,
+            residue_attributes: np.ndarray,
+            representation: Literal["cartoon", "ball+stick", "line", "point",
+                                    "surface", "ribbon"] = "cartoon",
+            use_compressed_trajectory: bool = False):
         """Render a specific protein attribute in an interactive visualization.
         Args: 
             residue_attributes: The per residue values of the attribute you want 
             to visualize.
+            representation: The protein representation to use for the visualization.
             use_compressed_trajectory: Whether to use the compressed trajectory 
             or the full precision trajectory.
             """
@@ -134,5 +141,6 @@ class ProteinSolvationOutput:
             residue.atoms.tempfactors = value
         view = nv.show_mdanalysis(protein)
         view.update_representation(color_scheme="bfactor")
+        view.add_representation(representation)
         view.center()
         return view
