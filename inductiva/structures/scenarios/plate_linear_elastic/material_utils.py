@@ -17,16 +17,15 @@ class IsotropicLinearElasticMaterial:
         self.poisson_ratio = poisson_ratio
 
     def to_dict(self) -> dict:
-        """Convert Material properties to a dictionary.
+        """Convert material properties to a dictionary.
 
         Returns:
-            material_dict (dict): Material properties.
+            dict: Material properties.
         """
-        material_dict = {
+        return {
             "young_modulus": self.young_modulus,
-            "poisson_ratio": self.poisson_ratio,
+            "poisson_ratio": self.poisson_ratio
         }
-        return material_dict
 
     def write_to_json(self, json_path: str) -> None:
         """Writes the material to JSON file.

@@ -2,17 +2,12 @@
 """Deformable plate scenario."""
 
 import os
-from typing import List
-from typing import Optional
+from typing import List, Optional
 
 from functools import singledispatchmethod
 from uuid import UUID
 
-from inductiva import structures
-from inductiva import simulation
-from inductiva import scenarios
-from inductiva import tasks
-from inductiva import types
+from inductiva import structures, simulation, scenarios, tasks, types
 
 import bc_utils
 import geometry_utils
@@ -56,7 +51,6 @@ class DeformablePlate(scenarios.Scenario):
         self.holes = holes
         self.bcs = bcs
         self.material = material
-
         self.geometry = geometry_utils.GeometricCase(plate_obj=plate,
                                                      list_holes_objs=holes)
 

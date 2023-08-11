@@ -1,20 +1,36 @@
 """Utils to create the different types of boundary conditions."""
 
-from typing import Optional
-from typing import List
-from typing import Literal
-from typing import Union
+from abc import ABC, abstractmethod
+from typing import Optional, List, Literal
 
 import json
 
 
-class DirichletBC:
+class BC(ABC):
+    """Abstract base class for boundary condition.
+
+    Attributes:
+        boundary_name (float): The boundary name of the plate where the boundary
+          condition will be apply. 
+          The available options are: left, top, right and bottom.
+    """
+
+    def __init__(
+            self, boundary_name: Literal["left", "top", "right",
+                                         "bottom"]) -> None:
+        """Initializes a BC object."""
+        self.boundary_name = boundary_name
+
+    @abstractmethod
+    def to_dict(self):
+        """Abstract method to convert the bc properties to a dictionary."""
+        pass
+
+
+class DirichletBC(BC):
     """Dirichlet boundary condition.
 
     Attributes:
-        boundary_name (str): The boundary name of the plate where the Dirichlet
-          boundary condition will apply. 
-          The available options are: left, top, right and bottom.
         displacement_x (float): The imposed displacement in x-direction. Only
           fill it if want to resprtit the displamente. 
           Fill this attribute if you want to specify the displacement.
@@ -28,18 +44,27 @@ class DirichletBC:
                  displacement_x: Optional[float] = None,
                  displacement_y: Optional[float] = None) -> None:
         """Initializes a DirichletBC object."""
-        self.boundary_name = boundary_name
+        super().__init__(boundary_name)
         self.displacement_x = displacement_x
         self.displacement_y = displacement_y
 
+    def to_dict(self) -> dict:
+        """Convert hole properties to a dictionary.
 
-class NeumannBC:
+        Returns:
+            dict: Hole properties.
+        """
+        return {
+            "boundary_name": self.boundary_name,
+            "displacement_x": self.displacement_x,
+            "displacement_y": self.displacement_y
+        }
+
+
+class NeumannBC(BC):
     """Neumann boundary condition.
 
     Attributes:
-        boundary_name (str): The boundary name of the plate where the Neumann 
-          boundary condition will apply. 
-          The available options are: left, top, right and bottom.
         tension_x (float): The tension value in x-direction.
         tension_y (float): The tension value in y-direction.
     """
@@ -47,9 +72,21 @@ class NeumannBC:
     def __init__(self, boundary_name: Literal["left", "top", "right", "bottom"],
                  tension_x: float, tension_y: float) -> None:
         """Initializes a NeumannBC object."""
-        self.boundary_name = boundary_name
+        super().__init__(boundary_name)
         self.tension_x = tension_x
         self.tension_y = tension_y
+
+    def to_dict(self) -> dict:
+        """Convert hole properties to a dictionary.
+
+        Returns:
+            dict: Hole properties.
+        """
+        return {
+            "boundary_name": self.boundary_name,
+            "tension_x": self.tension_x,
+            "tension_y": self.tension_y
+        }
 
 
 class BoundaryConditionsCase:
@@ -59,13 +96,12 @@ class BoundaryConditionsCase:
       Dirichlet and Tension boundary conditions.
 
     Attributes:
-        bcs_objects_list (list): The boundary conditions objects.
+        bcs (list): The boundary conditions objects.
     """
 
-    def __init__(self, bcs_objects_list: List[Union[DirichletBC,
-                                                    NeumannBC]]) -> None:
+    def __init__(self, bcs: List[BC]) -> None:
         """Initializes a BoundaryConditionsCase object."""
-        self.bcs_objects_list = bcs_objects_list
+        self.bcs = bcs
 
     def write_to_json(self, json_path: str) -> None:
         """Write the boundary conditions to JSON file.
@@ -75,32 +111,27 @@ class BoundaryConditionsCase:
         """
 
         # Divide the bcs_obj_list into two lists based on their types
-        dirichlet_objects_list = [
-            obj for obj in self.bcs_objects_list
-            if isinstance(obj, DirichletBC)
-        ]
-        neumann_objects_list = [
-            obj for obj in self.bcs_objects_list if isinstance(obj, NeumannBC)
-        ]
+        dirichlet_bcs = [bc for bc in self.bcs if isinstance(bc, DirichletBC)]
+        neumann_bcs = [bc for bc in self.bcs if isinstance(bc, NeumannBC)]
 
         # Dirichlet dictionary
-        if dirichlet_objects_list is not None:
-            dirichlet_dicts_list = []
-            for dirichlet_object in dirichlet_objects_list:
-                dirichlet_object_dict = vars(dirichlet_object)
-                dirichlet_dicts_list.append(dirichlet_object_dict)
-            dirichlet_dict = {"dirichlet": dirichlet_dicts_list}
+        if dirichlet_bcs is not None:
+            dirichlet_bcs_dict = []
+            for dirichlet_bc in dirichlet_bcs:
+                dirichlet_bc_dict = dirichlet_bc.to_dict()
+                dirichlet_bcs_dict.append(dirichlet_bc_dict)
+            dirichlet_dict = {"dirichlet": dirichlet_bcs_dict}
 
             # Merge dictionaries: boundary conditions dictionary
             bcs_dict = {**dirichlet_dict}
 
         # Neumann dictionary
-        if neumann_objects_list is not None:
-            tension_dicts_list = []
-            for neumann_object in neumann_objects_list:
-                neumann_object_dict = vars(neumann_object)
-                tension_dicts_list.append(neumann_object_dict)
-            neumann_dict = {"neumann": tension_dicts_list}
+        if neumann_bcs is not None:
+            neumann_bcs_dict = []
+            for neumann_bc in neumann_bcs:
+                neumann_bc_dict = neumann_bc.to_dict()
+                neumann_bcs_dict.append(neumann_bc_dict)
+            neumann_dict = {"neumann": neumann_bcs_dict}
 
             # Merge dictionaries: boundary conditions dictionary
             bcs_dict = {**bcs_dict, **neumann_dict}

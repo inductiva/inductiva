@@ -1,7 +1,6 @@
 """Utils to create the mesh."""
 
-from typing import List
-from typing import Optional
+from typing import List, Optional
 
 import gmsh
 
@@ -13,24 +12,33 @@ class Mesh:
 
     Attributes:
         geometry: A geometry_utils.GeometricCase object.
-        glb_ref_fac (float): The refinement factor for global refinement of the
-          mesh. 
-        loc_ref_fac (float): The refinement factor for local refinement of  the
-          mesh.
+        global_refinement_factor (float): The refinement factor for global
+          refinement of the mesh. A higher value results in a finer mesh
+          overall, increasing the number of elements in the entire mesh, and
+          leading to a more detailed representation of the geometry. Use this
+          factor when you want to globally refine the mesh uniformly, without 
+          specific local focus.
+        local_refinement_factor (float): The refinement factor for local
+          refinement of the mesh. This factor controls the local refinement
+          level of the mesh and is typically used for refining specific regions
+          or features of the mesh. A higher value for this factor indicates a
+          finer mesh in the regions of interest, providing more detailed
+          resolution around certain features. Use this factor when you want to
+          focus on refining specific areas while keeping the rest of the mesh
+          less refined.
     """
 
     def __init__(self,
                  geometry: geometry_utils.GeometricCase,
-                 glb_ref_fac: Optional[float] = 1.0,
-                 loc_ref_fac: Optional[float] = 0.0) -> None:
+                 global_refinement_factor: Optional[float] = 1.0,
+                 local_refinement_factor: Optional[float] = 10.0) -> None:
         """Initializes a Mesh object."""
         self.geometry = geometry
-        self.glb_ref_fac = glb_ref_fac
-        self.loc_ref_fac = loc_ref_fac
+        self.global_refinement_factor = global_refinement_factor
+        self.local_refinement_factor = local_refinement_factor
 
-    def create_mesh_with_gmsh(self) -> None:
-        """
-        Creates the mesh with Gmsh.
+    def _create_mesh_with_gmsh(self) -> None:
+        """Creates the mesh with Gmsh.
 
         To generate the mesh using Gmsh, we utilize mesh size fields: the 
         "Distance" and "Threshold" fields. Use add_mesh_field_distance to add
@@ -167,16 +175,19 @@ class Mesh:
         # Add a new model and set it as the current model
         gmsh.model.add("model")
 
-        # Generate the plate with holes in the OpenCASCADE CAD representation
+        # Generate the plate with holes and get the boundary IDs and mesh
+        # metrics
         (plate_curves_id, plate_mesh_offset, plate_predefined_element_size,
-         holes_curve_id, holes_mesh_offset,
-         holes_predefined_element_size) = self.geometry.to_gmsh()
+         holes_curve_id, holes_mesh_offset, holes_predefined_element_size
+         ) = self.geometry.\
+            generate_plate_with_holes_get_boundary_ids_and_mesh_metrics()
 
         # Add physical markers for the plate and holes
         gmsh.model.addPhysicalGroup(2, [1])
 
         # Calculate the maximum global mesh size
-        global_mesh_size_max = plate_predefined_element_size / self.glb_ref_fac
+        global_mesh_size_max = (plate_predefined_element_size /
+                                self.global_refinement_factor)
 
         mesh_field_id = 0
         mesh_field_threshol_id = []
@@ -196,7 +207,7 @@ class Mesh:
             mesh_field_threshol_id.append(mesh_field_id)
 
         # Check if local refinement is required
-        if self.loc_ref_fac != 0.0:
+        if self.local_refinement_factor > 0.0:
 
             # Loop through holes to apply distance and threshold-based mesh
             # fields
@@ -204,7 +215,7 @@ class Mesh:
 
                 # Calculate the local mesh size
                 local_mesh_size = holes_predefined_element_size[
-                    id_hole] / self.loc_ref_fac
+                    id_hole] / self.local_refinement_factor
 
                 # Loop throught curves for each hole
                 for hole_curve_id in holes_curve_id[id_hole]:
@@ -251,7 +262,7 @@ class Mesh:
         Args:
             mesh_path (str): The mesh file path in MSH format.
         """
-        self.create_mesh_with_gmsh()
+        self._create_mesh_with_gmsh()
 
         gmsh.write(mesh_path)
         gmsh.finalize()
