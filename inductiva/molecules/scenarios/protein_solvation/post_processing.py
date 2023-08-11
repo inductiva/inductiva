@@ -2,17 +2,16 @@
 import os
 import nglview as nv
 import matplotlib.pyplot as plt
-from pathlib import Path
+import pathlib
 from typing import Literal
-from MDAnalysis.analysis import rms
 import MDAnalysis as mda
-from inductiva.molecules.scenarios.utils import unwrap_trajectory, align_trajectory_to_average
+from inductiva.molecules.scenarios import utils 
 
 
 class ProteinSolvationOutput:
     """Post process the simulation output of a ProteinSolvation scenario."""
 
-    def __init__(self, sim_output_path: Path = None):
+    def __init__(self, sim_output_path: pathlib.Path = None):
         """Initializes a `ProteinSolvationOutput` object.
 
         Given a simulation output directory that contains the standard files
@@ -45,7 +44,8 @@ class ProteinSolvationOutput:
             trajectory or the full precision one.
             """
         universe = self.construct_universe(use_compressed_trajectory)
-        view = nv.show_mdanalysis(universe)
+        protein = universe.select_atoms("protein")
+        view = nv.show_mdanalysis(protein)
         view.add_representation(representation,
                                 selection=selection)
         if add_backbone:
@@ -73,7 +73,7 @@ class ProteinSolvationOutput:
         else:
             trajectory = os.path.join(self.sim_output_dir,
                                       "full_trajectory.trr")
-        universe = unwrap_trajectory(topology, trajectory)
+        universe = utils.unwrap_trajectory(topology, trajectory)
         return universe
 
     def calculate_rmsf_trajectory(self,
@@ -99,12 +99,12 @@ class ProteinSolvationOutput:
 
         aligned_trajectory_path = os.path.join(self.sim_output_dir,
                                                "aligned_traj.dcd")
-        align_trajectory_to_average(universe, aligned_trajectory_path)
+        utils.align_trajectory_to_average(universe, aligned_trajectory_path)
         align_universe = mda.Universe(topology, aligned_trajectory_path)
 
         # Calculate RMSF for carbon alpha atoms
         c_alphas = align_universe.select_atoms("protein and name CA")
-        rmsf = rms.RMSF(c_alphas).run()
+        rmsf = mda.analysis.rms.RMSF(c_alphas).run()
         residue_number = c_alphas.resids
         rmsf_values = rmsf.results.rmsf
 
