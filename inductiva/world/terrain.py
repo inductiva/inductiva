@@ -39,8 +39,6 @@ class Terrain:
                                corner_values: typing.List[float],
                                initial_roughness: float = 1,
                                roughness_factor: float = 0.5,
-                               min_elevation: float = 0,
-                               max_elevation: float = 1,
                                random_seed: int = None):
         """Creates a `Terrain` object with random elevations.
         The elevation of the corners are randomly selected within
