@@ -2,17 +2,23 @@
 import math
 import os
 import random
+import shutil
+import typing
+import uuid
 
+from absl import logging
 from functools import singledispatchmethod
-from typing import Optional
-from uuid import UUID
 
 import numpy as np
 
-from inductiva import scenarios, simulation, stellarators, tasks
+from inductiva import scenarios, simulation, stellarators, tasks, types, utils
 
 SIMSOPT_COIL_COEFFICIENTS_FILENAME = 'coil_coefficients.npz'
 SIMSOPT_COIL_CURRENTS_FILENAME = 'coil_currents.npz'
+SIMSOPT_PLASMA_SURFACE_FILENAME = 'input.final'
+SIMSOPT_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
+                                    'stellarator_coils')
+PLASMA_SURFACE_TEMPLATE_FILE_NAME = 'input.example'
 
 
 class StellaratorCoils(scenarios.Scenario):
@@ -221,9 +227,9 @@ class StellaratorCoils(scenarios.Scenario):
     def simulate(
         self,
         simulator: simulation.Simulator = stellarators.simulators.Simsopt(),
-        resource_pool_id: Optional[UUID] = None,
+        resource_pool_id: typing.Optional[uuid.UUID] = None,
         run_async: bool = False,
-        plasma_surface_filename: str = 'input.QA',
+        plasma_surface_filepath: typing.Optional[types.Path] = None,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -231,9 +237,18 @@ class StellaratorCoils(scenarios.Scenario):
             simulator: The simulator to use for the simulation.
             resource_pool_id: The resource pool to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
-            plasma_surface_filename: Name of the file with the description of
+            plasma_surface_filepath: Path to the file with the description of
               the plasma surface on which the magnetic field will be calculated.
         """
+
+        if plasma_surface_filepath:
+            self.plasma_surface_filepath = utils.files.resolve_path(
+                plasma_surface_filepath)
+        else:
+            logging.info('Plasma surface description not provided. '
+                         'Using default file.')
+            self.plasma_surface_filepath = os.path.join(
+                SIMSOPT_TEMPLATE_DIR, PLASMA_SURFACE_TEMPLATE_FILE_NAME)
 
         task = super().simulate(
             simulator,
@@ -241,7 +256,7 @@ class StellaratorCoils(scenarios.Scenario):
             run_async=run_async,
             coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
             coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
-            plasma_surface_filename=plasma_surface_filename,
+            plasma_surface_filename=SIMSOPT_PLASMA_SURFACE_FILENAME,
             num_field_periods=self.num_field_periods)
 
         return task
@@ -314,5 +329,9 @@ def _(self, simulator: stellarators.simulators.Simsopt, input_dir):  # pylint: d
     coil_currents_filename = os.path.join(input_dir,
                                           SIMSOPT_COIL_CURRENTS_FILENAME)
 
+    plasma_surface_filename = os.path.join(input_dir,
+                                           SIMSOPT_PLASMA_SURFACE_FILENAME)
+
     np.savez(coil_coefficients_filename, *coil_coefficients)
     np.savez(coil_currents_filename, coil_currents)
+    shutil.copy(self.plasma_surface_filepath, plasma_surface_filename)
