@@ -132,7 +132,8 @@ class ProteinSolvationOutput:
         Args: 
             residue_attributes: The per residue values of the attribute you want 
             to visualize.
-            representation: The protein representation to use for the visualization.
+            representation: The protein representation to use for the 
+            visualization.
             use_compressed_trajectory: Whether to use the compressed trajectory 
             or the full precision trajectory.
             """
@@ -141,8 +142,8 @@ class ProteinSolvationOutput:
         protein = universe.select_atoms("protein")
         for residue, value in zip(protein.residues, residue_attributes):
             residue.atoms.tempfactors = value
-        view = nv.show_mdanalysis(protein)
-        view.add_representation(representation)
+        view = nv.show_mdanalysis(universe)
+        view.add_representation(representation, selection="protein")
         view.update_representation(color_scheme="bfactor")
         view.center()
         return view
