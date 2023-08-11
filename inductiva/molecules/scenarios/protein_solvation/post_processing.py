@@ -27,7 +27,8 @@ class ProteinSolvationOutput:
     def render_interactive(self,
                            representation: Literal["cartoon", "ball+stick",
                                                    "line", "point",
-                                                   "ribbon"] = "ball+stick",
+                                                   "surface","ribbon"] = "ball+stick",
+                            selection: str = "protein",
                            use_compressed_trajectory: bool = False,
                            add_backbone: bool = True):
         """
@@ -35,6 +36,9 @@ class ProteinSolvationOutput:
         Args: 
             representation: The protein representation to use for the 
             visualization.
+            selection: The selection to use for the representation. Check 
+            https://nglviewer.org/ngl/api/manual/usage/selection-language.html 
+            for details.
             add_backbone: Whether to add the protein backbone to the 
             visualization.
             use_compressed_trajectory: Whether to use the compressed 
@@ -43,7 +47,7 @@ class ProteinSolvationOutput:
         universe = self.construct_universe(use_compressed_trajectory)
         view = nv.show_mdanalysis(universe)
         view.add_representation(representation,
-                                selection="not water and not ion")
+                                selection=selection)
         if add_backbone:
             view.add_representation("cartoon", selection="protein")
         view.center()
@@ -69,7 +73,6 @@ class ProteinSolvationOutput:
         else:
             trajectory = os.path.join(self.sim_output_dir,
                                       "full_trajectory.trr")
-
         universe = unwrap_trajectory(topology, trajectory)
         return universe
 
@@ -129,7 +132,7 @@ class ProteinSolvationOutput:
         protein = universe.select_atoms("protein")
         for residue, value in zip(protein.residues, residue_attributes):
             residue.atoms.tempfactors = value
-        view = nv.show_mdanalysis(universe)
+        view = nv.show_mdanalysis(protein)
         view.update_representation(color_scheme="bfactor")
         view.center()
         return view
