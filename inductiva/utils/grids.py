@@ -4,9 +4,9 @@ import typing
 import scipy
 import numpy as np
 
+
 def get_meshgrid(x_range: typing.Sequence[float],
-                 y_range: typing.Sequence[float],
-                 num_list: typing.List[int]):
+                 y_range: typing.Sequence[float], num_list: typing.List[int]):
     """Create a grid of x and y values.
 
     Given a [x_range, y_range] and a resolution for

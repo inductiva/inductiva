@@ -81,9 +81,9 @@ class Terrain:
             roughness_factor=roughness_factor,
             random_seed=random_seed)
 
-        x_grid, y_grid = inductiva.utils.grids.get_meshgrid(
-            x_range=x_range, y_range=y_range,
-            num_list=num_list)
+        x_grid, y_grid = inductiva.utils.grids.get_meshgrid(x_range=x_range,
+                                                            y_range=y_range,
+                                                            num_list=num_list)
 
         terrain = pv.StructuredGrid(x_grid, y_grid, z_elevation)
 
@@ -134,6 +134,7 @@ class Terrain:
     def plot(self,
              off_screen: bool = False,
              save_path: str = None,
+             show_edges: bool = False,
              background_color: str = "white",
              colormap: str = "cividis",
              lighting: bool = True,
@@ -143,6 +144,7 @@ class Terrain:
         Args:
             off_screen: If True, the plot is not shown.
             save_path: Path to save the screenshot.
+            show_edges: If True, the edges of the mesh are shown.
             background_color: Background color of the plot.
             colormap: Colormap to use.
             lighting: Enable or disable view direction lighting.
@@ -164,6 +166,7 @@ class Terrain:
         plotter.show_grid(mesh=self.mesh, location="outer")
         plotter.background_color = background_color
         plotter.add_mesh(self.mesh,
+                         show_edges=show_edges,
                          scalars="Elevation",
                          lighting=lighting,
                          cmap=colormap)
