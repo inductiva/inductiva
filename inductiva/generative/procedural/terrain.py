@@ -18,6 +18,7 @@ def generate_random_terrain(
     initial_roughness: float = 1,
     roughness_factor: float = 0.5,
     percentile_translate_terrain: float = 0,
+    random_seed: int = None,
 ):
     """Generate a set of elevation values for xy-grid.
     
@@ -60,7 +61,8 @@ def generate_random_terrain(
         size=size_square,
         corner_values=corner_values,
         initial_roughness=initial_roughness,
-        roughness_factor=roughness_factor)
+        roughness_factor=roughness_factor,
+        random_seed=random_seed)
 
     # Adjust terrain to ensure that a given percentage of the terrain elevation
     # is above or below the xy-plane.

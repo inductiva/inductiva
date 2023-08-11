@@ -34,7 +34,7 @@ def kernel_avg(kernel_offsets,
     return np.mean(elements)
 
 
-def diamond_step(random_array, inter_center_distance, noise_range):
+def diamond_step(random_array, inter_center_distance, noise_range, random_seed):
     """The diamond step performed at a given inter center distance on a map.
                             +-----------+
                             | D |   | D |
@@ -49,6 +49,7 @@ def diamond_step(random_array, inter_center_distance, noise_range):
     diamond_offsets = [[-1, -1], [-1, 1], [1, 1], [1, -1]]
     map_length = random_array.shape[0]
     kernel_scale = inter_center_distance // 2
+    random.seed(random_seed)
 
     for i in range(kernel_scale, map_length, inter_center_distance):
         for j in range(kernel_scale, map_length, inter_center_distance):
@@ -57,7 +58,7 @@ def diamond_step(random_array, inter_center_distance, noise_range):
             random_array[i, j] += random.uniform(-noise_range, noise_range)
 
 
-def square_step(random_array, inter_center_distance, noise_range):
+def square_step(random_array, inter_center_distance, noise_range, random_seed):
     """The square step performed at a given inter center distance on a map.
                             +-----------+
                             |   | S |   |
@@ -72,7 +73,7 @@ def square_step(random_array, inter_center_distance, noise_range):
     square_offsets = [[-1, 0], [0, -1], [1, 0], [0, 1]]
     map_length = random_array.shape[0]
     kernel_scale = inter_center_distance // 2
-
+    random.seed(random_seed)
     # Square Step, rows
     for i in range(kernel_scale, map_length, inter_center_distance):
         for j in range(0, map_length, inter_center_distance):
@@ -90,7 +91,8 @@ def square_step(random_array, inter_center_distance, noise_range):
 
 def iterate_diamond_square(initial_condition: np.ndarray,
                            initial_roughness: float = 1,
-                           roughness_factor: float = 0.5):
+                           roughness_factor: float = 0.5,
+                           random_seed: int = None):
     """Performs the diamond-square iteration."""
 
     if initial_condition.shape[0] != initial_condition.shape[1]:
@@ -107,8 +109,9 @@ def iterate_diamond_square(initial_condition: np.ndarray,
 
     while inter_center_distance > 1:
 
-        diamond_step(random_array, inter_center_distance, roughness)
-        square_step(random_array, inter_center_distance, roughness)
+        diamond_step(random_array, inter_center_distance, roughness,
+                     random_seed)
+        square_step(random_array, inter_center_distance, roughness, random_seed)
 
         # Go to a finer grid, and decrease the amount of noise
         inter_center_distance //= 2
@@ -133,7 +136,8 @@ def create_initial_condition(size: int,
 def create_random_array(size: int,
                         corner_values=Sequence[float],
                         initial_roughness: float = 1,
-                        roughness_factor: float = 0.5) -> np.ndarray:
+                        roughness_factor: float = 0.5,
+                        random_seed: int = None) -> np.ndarray:
     """Creates a random square array.
 
     The random array is generated with an implementation of the Diamond-Square
@@ -218,6 +222,7 @@ def create_random_array(size: int,
           roughness is multiplied at every iteration of the Diamond-Square
           algorithm. Determines how smooth the final array is. Smaller values
           lead to smoother arrays.
+        random_seed: Random seed used to generate the random array.
     Returns:
         Random array.
     """
@@ -232,6 +237,6 @@ def create_random_array(size: int,
     initial_condition = create_initial_condition(size, corner_values)
 
     random_array = iterate_diamond_square(initial_condition, initial_roughness,
-                                          roughness_factor)
+                                          roughness_factor, random_seed)
 
     return random_array

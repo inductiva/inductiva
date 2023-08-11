@@ -38,7 +38,8 @@ class Terrain:
                                y_num: int,
                                height_factor: float = 10,
                                initial_roughness: float = 1,
-                               roughness_factor: float = 0.5):
+                               roughness_factor: float = 0.5,
+                               random_seed: int = None):
         """Creates a `Terrain` object with random elevations.
         The elevation of the corners are randomly selected within
         the range of 0 to 1. This limits the maximum terrain height
@@ -60,6 +61,7 @@ class Terrain:
             initial_roughness: Initial roughness of the terrain.
             roughness_factor: Factor to multiply the roughness by.
         """
+        random.seed(random_seed)
         corner_values = [
             random.uniform(0, 1),
             random.uniform(0, 1),
@@ -69,7 +71,7 @@ class Terrain:
 
         x_grid, y_grid, z_elevation = procedural.generate_random_terrain(
             x_range, y_range, x_num, y_num, corner_values, initial_roughness,
-            roughness_factor)
+            roughness_factor, random_seed=random_seed)
 
         terrain = pv.StructuredGrid(x_grid, y_grid, z_elevation * height_factor)
 
@@ -122,7 +124,8 @@ class Terrain:
              save_path: str = None,
              background_color: str = "white",
              colormap: str = "cividis",
-             lighting: bool = True):
+             lighting: bool = True,
+             camera: typing.List[tuple] = None):
         """Renders the terrain.
         
         Args:
@@ -132,16 +135,27 @@ class Terrain:
             colormap: Colormap to use.
             lighting: Enable or disable view direction lighting.
                 It highlights the details in the terrain.
-        TODO: camera play
+            camera: List of tuples given as 
+                [position, focal_point, view_up] that describe
+                the position of the camera, the focal point it focus
+                on and the (negative) direction of the camera.
+                Defaults to None, which finds the best isometric
+                view based on the provided mesh.
         """
 
         # Create Elevation from z-values to plot by it.
         self.mesh["Elevation"] = self.mesh.z.T.reshape(-1)
         plotter = pv.Plotter(off_screen=off_screen)
+        plotter.camera_position = camera
+
+        # Plot the grid on the back of the terrain.
+        plotter.show_grid(mesh=self.mesh, location="outer")
         plotter.background_color = background_color
         plotter.add_mesh(self.mesh,
                          scalars="Elevation",
                          lighting=lighting,
                          cmap=colormap)
+
         plotter.show(screenshot=save_path)
+        print(plotter.camera_position)
         plotter.close()
