@@ -121,7 +121,7 @@ class Bathymetry:
         ]
 
         depths = inductiva.generative.procedural.generate_random_terrain(
-            x_range, y_range, x_num, y_num, corner_values, initial_roughness,
+            x_range, y_range, [x_num, y_num], corner_values, initial_roughness,
             roughness_factor, percentile_above_water)
 
         return cls(depths, x_range, y_range)

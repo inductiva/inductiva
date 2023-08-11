@@ -4,16 +4,15 @@ import math
 import typing
 
 import numpy as np
-import scipy
 
+import inductiva
 from inductiva.generative import procedural
 
 
 def generate_random_terrain(
     x_range: typing.Sequence[float],
     y_range: typing.Sequence[float],
-    x_num: int,
-    y_num: int,
+    num_list: typing.List[int],
     corner_values: typing.Sequence[float],
     initial_roughness: float = 1,
     roughness_factor: float = 0.5,
@@ -36,8 +35,7 @@ def generate_random_terrain(
     Args:
         x_range: The range of x values, in meters.
         y_range: The range of y values, in meters.
-        x_num: Number of grid points in the x direction.
-        y_num: Number of grid points in the y direction.
+        num_list: The number of points in the x and y directions.
         corner_values: Sequence of 4 values establishing the elevation of the 
             grid corners. The order refers to top-left, top-right,
             bottom-left, and bottom-right.
@@ -52,7 +50,7 @@ def generate_random_terrain(
     """
 
     # Determine the minimum n such that 2^n + 1 >= max(x_num, y_num).
-    n_power = int(math.log2(max(x_num, y_num) - 1)) + 1
+    n_power = int(math.log2(max(num_list) - 1)) + 1
 
     size_square = 2**n_power + 1
 
@@ -70,48 +68,11 @@ def generate_random_terrain(
                                          abs(percentile_translate_terrain))
     z_elevation += np.sign(percentile_translate_terrain) * percentile_translate
 
-    z_elevation = interpolate_between_grids(x_range, y_range,
-                                            [size_square, size_square],
-                                            [x_num, y_num], z_elevation)
+    z_elevation = inductiva.utils.grids.interpolate_between_grids(
+        x_range=x_range,
+        y_range=y_range,
+        prev_num_list=[size_square, size_square],
+        new_num_list=num_list,
+        z_array=z_elevation)
 
     return z_elevation
-
-
-def create_grid(x_range, y_range, resolution):
-    """Create a grid of x and y values.
-
-    Given a [x_range, y_range] and a resolution for
-    each range, we return a meshgrid of x and y values.
-    That is, x_grid[i, j] = x_range[i] and
-    y_grid[i, j] = y_range[j].
-
-    Args:
-        x_range: The range of x values, in meters.
-        y_range: The range of y values, in meters.
-        resolution: Number of grid points in both
-            directions [x_res, y_res]
-    """
-
-    x_grid = np.linspace(*x_range, resolution[0])
-    y_grid = np.linspace(*y_range, resolution[1])
-
-    x_grid, y_grid = np.meshgrid(x_grid, y_grid, indexing="ij")
-
-    return x_grid, y_grid
-
-
-def interpolate_between_grids(x_range, y_range, prev_resolution, new_resolution,
-                              z_elevation):
-    """Interpolate between two grid with different resolution."""
-
-    x_grid_prev, y_grid_prev = create_grid(x_range, y_range, prev_resolution)
-    x_grid_new, y_grid_new = create_grid(x_range, y_range, new_resolution)
-
-    new_z_elevation = scipy.interpolate.griddata(
-        (x_grid_prev.flatten(), y_grid_prev.flatten()),
-        z_elevation.flatten(),
-        (x_grid_new, y_grid_new),
-        method="linear",
-    )
-
-    return new_z_elevation
