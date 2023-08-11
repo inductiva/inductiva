@@ -51,8 +51,7 @@ class ProteinSolvation(Scenario):
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
-            n_steps_min: int = 5000,
-            visualized_section: str = "Protein-H") -> tasks.Task:
+            n_steps_min: int = 5000) -> tasks.Task:
         """Simulate the solvation of a protein.
 
         Args:
@@ -70,15 +69,8 @@ class ProteinSolvation(Scenario):
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
             n_steps_min: Number of steps for energy minimization.
-            visualized_section: The section of the protein to visualize in the
-            simulation.
-                Options:
-                - "Protein-H": The protein with hydrogens. This is the default.
-                - "System": The whole system (Protein + Water).
             run_async: Whether to run the simulation asynchronously.
         """
-
-        self.visualized_section = visualized_section
 
         self.nsteps = int(
             simulation_time_ns * 1e6 / 2
