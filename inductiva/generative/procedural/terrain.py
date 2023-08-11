@@ -60,16 +60,13 @@ def generate_random_terrain(
         random_seed=random_seed)
 
     z_elevation = inductiva.utils.grids.interpolate_between_grids(
-        x_num=x_num,
-        y_num=y_num,
-        z_array=z_elevation)
+        x_num=x_num, y_num=y_num, z_array=z_elevation)
 
     return z_elevation
 
 
-def adjust_terrain_elevation(
-        z_elevation: np.ndarray,
-        percentile_translate_terrain: float):
+def adjust_terrain_elevation(z_elevation: np.ndarray,
+                             percentile_translate_terrain: float):
 
     # Adjust terrain to ensure that a given percentage of the terrain elevation
     # is above or below the xy-plane.

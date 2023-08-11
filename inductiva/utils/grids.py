@@ -6,9 +6,7 @@ import numpy as np
 
 
 def get_meshgrid(x_range: typing.Sequence[float],
-                 y_range: typing.Sequence[float],
-                 x_num: int,
-                 y_num: int):
+                 y_range: typing.Sequence[float], x_num: int, y_num: int):
 
     x_grid = np.linspace(*x_range, num=x_num)
     y_grid = np.linspace(*y_range, num=y_num)
@@ -18,9 +16,7 @@ def get_meshgrid(x_range: typing.Sequence[float],
     return x_grid, y_grid
 
 
-def interpolate_between_grids(x_num: int,
-                              y_num: int,
-                              z_array: np.ndarray):
+def interpolate_between_grids(x_num: int, y_num: int, z_array: np.ndarray):
     """Interpolate between two grid with different resolution.
     
     Args:
