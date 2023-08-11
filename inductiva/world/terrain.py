@@ -1,6 +1,5 @@
 """Represent a complex terrain profile."""
 import typing
-import random
 
 import pyvista as pv
 
