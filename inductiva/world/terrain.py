@@ -73,9 +73,17 @@ class Terrain:
         ]
 
         z_elevation = procedural.generate_random_terrain(
-            x_range, y_range, x_num, y_num, corner_values, initial_roughness,
-            roughness_factor, random_seed=random_seed)
-        x_grid, y_grid = procedural.create_grid(x_range, y_range, [x_num, y_num])
+            x_range,
+            y_range,
+            x_num,
+            y_num,
+            corner_values,
+            initial_roughness,
+            roughness_factor,
+            random_seed=random_seed)
+
+        x_grid, y_grid = procedural.create_grid(x_range, y_range,
+                                                [x_num, y_num])
 
         terrain = pv.StructuredGrid(x_grid, y_grid, z_elevation)
 
