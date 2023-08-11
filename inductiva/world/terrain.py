@@ -20,7 +20,7 @@ class Terrain:
     def __init__(self, terrain_mesh):
         """Initializes the `Terrain` object.
         
-        Args:
+        Attributes:
             terrain_mesh (pyvista.StructuredGrid): Terrain mesh."""
         self.mesh = terrain_mesh
 
@@ -35,7 +35,8 @@ class Terrain:
     def from_random_generation(cls,
                                x_range: typing.Sequence[float],
                                y_range: typing.Sequence[float],
-                               num_list: typing.List[int],
+                               x_num: int,
+                               y_num: int,
                                initial_roughness: float = 1,
                                roughness_factor: float = 0.5,
                                min_elevation: float = 0,
@@ -56,8 +57,8 @@ class Terrain:
         Args:
             x_range = [x_min, x_max]: Range of the x-axis in meters (m).
             y_range = [y_min, y_max]: Range of the y-axis in meters (m).
-            num_list: List of number of points in both directions
-                [x_num, y_num].
+            x_num: Number of points in the x-axis.
+            y_num: Number of points in the y-axis.
             initial_roughness: Initial roughness of the terrain.
             roughness_factor: Factor to multiply the roughness by.
             min_elevation: Minimum elevation of the terrain.
@@ -73,9 +74,8 @@ class Terrain:
         ]
 
         z_elevation = procedural.generate_random_terrain(
-            x_range=x_range,
-            y_range=y_range,
-            num_list=num_list,
+            x_num=x_num,
+            y_num=y_num,
             corner_values=corner_values,
             initial_roughness=initial_roughness,
             roughness_factor=roughness_factor,
@@ -83,7 +83,8 @@ class Terrain:
 
         x_grid, y_grid = inductiva.utils.grids.get_meshgrid(x_range=x_range,
                                                             y_range=y_range,
-                                                            num_list=num_list)
+                                                            x_num=x_num,
+                                                            y_num=y_num)
 
         terrain = pv.StructuredGrid(x_grid, y_grid, z_elevation)
 

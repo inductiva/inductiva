@@ -10,13 +10,11 @@ from inductiva.generative import procedural
 
 
 def generate_random_terrain(
-    x_range: typing.Sequence[float],
-    y_range: typing.Sequence[float],
-    num_list: typing.List[int],
+    x_num: int,
+    y_num: int,
     corner_values: typing.Sequence[float],
     initial_roughness: float = 1,
     roughness_factor: float = 0.5,
-    percentile_translate_terrain: float = 0,
     random_seed: int = None,
 ):
     """Generate a set of elevation values for xy-grid.
@@ -33,9 +31,8 @@ def generate_random_terrain(
     `(x_num, y_num)`.
 
     Args:
-        x_range: The range of x values, in meters.
-        y_range: The range of y values, in meters.
-        num_list: The number of points in the x and y directions.
+        x_num: The number of points in the x direction.
+        y_num: The number of points in the y direction.
         corner_values: Sequence of 4 values establishing the elevation of the 
             grid corners. The order refers to top-left, top-right,
             bottom-left, and bottom-right.
@@ -50,7 +47,7 @@ def generate_random_terrain(
     """
 
     # Determine the minimum n such that 2^n + 1 >= max(x_num, y_num).
-    n_power = int(math.log2(max(num_list) - 1)) + 1
+    n_power = int(math.log2(max(x_num, y_num) - 1)) + 1
 
     size_square = 2**n_power + 1
 
@@ -62,17 +59,22 @@ def generate_random_terrain(
         roughness_factor=roughness_factor,
         random_seed=random_seed)
 
+    z_elevation = inductiva.utils.grids.interpolate_between_grids(
+        x_num=x_num,
+        y_num=y_num,
+        z_array=z_elevation)
+
+    return z_elevation
+
+
+def adjust_terrain_elevation(
+        z_elevation: np.ndarray,
+        percentile_translate_terrain: float):
+
     # Adjust terrain to ensure that a given percentage of the terrain elevation
     # is above or below the xy-plane.
     percentile_translate = np.percentile(z_elevation,
                                          abs(percentile_translate_terrain))
     z_elevation += np.sign(percentile_translate_terrain) * percentile_translate
-
-    z_elevation = inductiva.utils.grids.interpolate_between_grids(
-        x_range=x_range,
-        y_range=y_range,
-        prev_num_list=[size_square, size_square],
-        new_num_list=num_list,
-        z_array=z_elevation)
 
     return z_elevation
