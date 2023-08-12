@@ -1,7 +1,9 @@
 """Client for Inductiva's web API."""
 import os
 import logging
-import urllib3
+
+import absl
+
 from . import admin
 from . import api
 from . import core
@@ -15,8 +17,7 @@ from . import tasks
 from . import templates
 from . import utils
 from . import stellarators
-
-import absl
+from . import world
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "http://api.inductiva.ai")
 output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")

@@ -4,20 +4,18 @@ import math
 import typing
 
 import numpy as np
-import scipy
 
+import inductiva
 from inductiva.generative import procedural
 
 
-def generate_random_terrain(
-    x_range: typing.Sequence[float],
-    y_range: typing.Sequence[float],
+def generate_random_map_level(
     x_num: int,
     y_num: int,
     corner_values: typing.Sequence[float],
     initial_roughness: float = 1,
     roughness_factor: float = 0.5,
-    percentile_translate_terrain: float = 0,
+    random_seed: int = None,
 ):
     """Generate a set of elevation values for xy-grid.
     
@@ -33,10 +31,8 @@ def generate_random_terrain(
     `(x_num, y_num)`.
 
     Args:
-        x_range: The range of x values, in meters.
-        y_range: The range of y values, in meters.
-        x_num: Number of grid points in the x direction.
-        y_num: Number of grid points in the y direction.
+        x_num: The number of points in the x direction.
+        y_num: The number of points in the y direction.
         corner_values: Sequence of 4 values establishing the elevation of the 
             grid corners. The order refers to top-left, top-right,
             bottom-left, and bottom-right.
@@ -45,9 +41,7 @@ def generate_random_terrain(
         roughness_factor: Roughness factor. Must be between 0 and 1.
             Controls the rate at which the range of randomness of the
             Diamond-Square algorithm decreases over iterations.
-        percentile_translate_terrain: Percentile of the elevation that must
-            be above xy-plane. Must be between -100 and 100, where negative
-            values set the terrain lower and positive above.
+        random_seed: Random seed to use for the Diamond-Square algorithm.
     """
 
     # Determine the minimum n such that 2^n + 1 >= max(x_num, y_num).
@@ -56,34 +50,29 @@ def generate_random_terrain(
     size_square = 2**n_power + 1
 
     # Create elevation for a square grid with side resolution=size_square.
-    z_elevation = procedural.diamond_square.create_random_array(
+    map_level = procedural.diamond_square.create_random_array(
         size=size_square,
         corner_values=corner_values,
         initial_roughness=initial_roughness,
-        roughness_factor=roughness_factor)
+        roughness_factor=roughness_factor,
+        random_seed=random_seed)
 
-    # Adjust terrain to ensure that a given percentage of the terrain elevation
+    return inductiva.utils.grids.reshape_map(x_num=x_num,
+                                             y_num=y_num,
+                                             map_level=map_level)
+
+
+def adjust_map_level(map_level: np.ndarray, percentile_translate_map: float):
+    """Adjust a map level based on percentile.
+    
+    Args:
+        map_level: The map level to adjust.
+        percentile_translate_map: The percentile of the map level to adjust.
+        """
+    # Adjust a map_level to ensure that a given percentage of it
     # is above or below the xy-plane.
-    percentile_translate = np.percentile(z_elevation,
-                                         abs(percentile_translate_terrain))
-    z_elevation += np.sign(percentile_translate_terrain) * percentile_translate
+    percentile_translate = np.percentile(map_level,
+                                         abs(percentile_translate_map))
+    map_level += np.sign(percentile_translate_map) * percentile_translate
 
-    # Interpolate from the square grid to the desired grid.
-    x_square = np.linspace(*x_range, size_square)
-    y_square = np.linspace(*y_range, size_square)
-
-    x_square, y_square = np.meshgrid(x_square, y_square, indexing="ij")
-
-    x_grid = np.linspace(*x_range, x_num)
-    y_grid = np.linspace(*y_range, y_num)
-
-    x_grid, y_grid = np.meshgrid(x_grid, y_grid, indexing="ij")
-
-    z_elevation = scipy.interpolate.griddata(
-        (x_square.flatten(), y_square.flatten()),
-        z_elevation.flatten(),
-        (x_grid, y_grid),
-        method="linear",
-    )
-
-    return x_grid, y_grid, z_elevation
+    return map_level
