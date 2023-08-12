@@ -16,28 +16,26 @@ def get_meshgrid(x_range: typing.Sequence[float],
     return x_grid, y_grid
 
 
-def interpolate_between_grids(x_num: int, y_num: int, z_array: np.ndarray):
-    """Interpolate between two grid with different resolution.
+def reshape_map(x_num: int, y_num: int, map_level: np.ndarray):
+    """Reshape a map into a different resolution.
     
     Args:
         x_num: New number of grid points in x-direction.
         y_num: New number of grid points in y-direction.
-        z_array: Values on the z-axis of the previous grid.
+        map_level: Values on the z-axis of the previous grid.
     """
 
-    x_grid_prev, y_grid_prev = np.meshgrid(np.arange(z_array.shape[0]),
-                                           np.arange(z_array.shape[1]),
+    x_grid_prev, y_grid_prev = np.meshgrid(np.arange(map_level.shape[0]),
+                                           np.arange(map_level.shape[1]),
                                            indexing="ij")
 
     x_grid_new, y_grid_new = np.meshgrid(np.arange(x_num),
                                          np.arange(y_num),
                                          indexing="ij")
 
-    new_z_array = scipy.interpolate.griddata(
+    return scipy.interpolate.griddata(
         (x_grid_prev.flatten(), y_grid_prev.flatten()),
-        z_array.flatten(),
+        map_level.flatten(),
         (x_grid_new, y_grid_new),
         method="linear",
     )
-
-    return new_z_array

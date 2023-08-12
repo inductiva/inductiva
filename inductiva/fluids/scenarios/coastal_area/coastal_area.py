@@ -120,10 +120,10 @@ class Bathymetry:
             random.uniform(-max_depth, 0),
         ]
 
-        depths = inductiva.generative.procedural.generate_random_terrain(
+        depths = inductiva.generative.procedural.generate_random_map_level(
             x_num, y_num, corner_values, initial_roughness, roughness_factor)
 
-        depths = inductiva.generative.procedural.adjust_terrain_elevation(
+        depths = inductiva.generative.procedural.adjust_map_level(
             depths, percentile_above_water)
 
         return cls(depths, x_range, y_range)

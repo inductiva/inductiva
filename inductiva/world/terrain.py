@@ -65,7 +65,7 @@ class Terrain:
             random_seed: Random seed to use for the terrain generation.
         """
 
-        z_elevation = procedural.generate_random_terrain(
+        map_level = procedural.generate_random_map_level(
             x_num=x_num,
             y_num=y_num,
             corner_values=corner_values,
@@ -78,7 +78,7 @@ class Terrain:
                                                             x_num=x_num,
                                                             y_num=y_num)
 
-        terrain = pv.StructuredGrid(x_grid, y_grid, z_elevation)
+        terrain = pv.StructuredGrid(x_grid, y_grid, map_level)
 
         return cls(terrain)
 

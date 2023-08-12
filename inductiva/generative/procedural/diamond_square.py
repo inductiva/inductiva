@@ -121,7 +121,7 @@ def iterate_diamond_square(initial_condition: np.ndarray,
 
 
 def create_initial_condition(size: int,
-                             corner_values=Sequence[float]) -> np.ndarray:
+                             corner_values: Sequence[float]) -> np.ndarray:
     """Creates a square array with the given corner values."""
 
     initial_condition = np.zeros((size, size), dtype=np.float64)
@@ -134,7 +134,7 @@ def create_initial_condition(size: int,
 
 
 def create_random_array(size: int,
-                        corner_values=Sequence[float],
+                        corner_values: Sequence[float],
                         initial_roughness: float = 1,
                         roughness_factor: float = 0.5,
                         random_seed: int = None) -> np.ndarray:

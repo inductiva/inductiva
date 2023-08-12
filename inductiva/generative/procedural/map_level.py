@@ -9,7 +9,7 @@ import inductiva
 from inductiva.generative import procedural
 
 
-def generate_random_terrain(
+def generate_random_map_level(
     x_num: int,
     y_num: int,
     corner_values: typing.Sequence[float],
@@ -41,9 +41,7 @@ def generate_random_terrain(
         roughness_factor: Roughness factor. Must be between 0 and 1.
             Controls the rate at which the range of randomness of the
             Diamond-Square algorithm decreases over iterations.
-        percentile_translate_terrain: Percentile of the elevation that must
-            be above xy-plane. Must be between -100 and 100, where negative
-            values set the terrain lower and positive above.
+        random_seed: Random seed to use for the Diamond-Square algorithm.
     """
 
     # Determine the minimum n such that 2^n + 1 >= max(x_num, y_num).
@@ -52,26 +50,29 @@ def generate_random_terrain(
     size_square = 2**n_power + 1
 
     # Create elevation for a square grid with side resolution=size_square.
-    z_elevation = procedural.diamond_square.create_random_array(
+    map_level = procedural.diamond_square.create_random_array(
         size=size_square,
         corner_values=corner_values,
         initial_roughness=initial_roughness,
         roughness_factor=roughness_factor,
         random_seed=random_seed)
 
-    z_elevation = inductiva.utils.grids.interpolate_between_grids(
-        x_num=x_num, y_num=y_num, z_array=z_elevation)
+    return inductiva.utils.grids.reshape_map(x_num=x_num,
+                                             y_num=y_num,
+                                             map_level=map_level)
 
-    return z_elevation
 
-
-def adjust_terrain_elevation(z_elevation: np.ndarray,
-                             percentile_translate_terrain: float):
-
-    # Adjust terrain to ensure that a given percentage of the terrain elevation
+def adjust_map_level(map_level: np.ndarray, percentile_translate_map: float):
+    """Adjust a map level based on percentile.
+    
+    Args:
+        map_level: The map level to adjust.
+        percentile_translate_map: The percentile of the map level to adjust.
+        """
+    # Adjust a map_level to ensure that a given percentage of it
     # is above or below the xy-plane.
-    percentile_translate = np.percentile(z_elevation,
-                                         abs(percentile_translate_terrain))
-    z_elevation += np.sign(percentile_translate_terrain) * percentile_translate
+    percentile_translate = np.percentile(map_level,
+                                         abs(percentile_translate_map))
+    map_level += np.sign(percentile_translate_map) * percentile_translate
 
-    return z_elevation
+    return map_level
