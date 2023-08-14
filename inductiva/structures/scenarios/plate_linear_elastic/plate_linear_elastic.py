@@ -72,12 +72,9 @@ class DeformablePlate(scenarios.Scenario):
         """
         self.simulation_time = simulation_time
 
-        commands = self.get_commands()
-
         task = super().simulate(simulator,
                                 resource_pool_id=resource_pool_id,
-                                run_async=run_async,
-                                commands=commands)
+                                run_async=run_async)
         return task
 
     @singledispatchmethod

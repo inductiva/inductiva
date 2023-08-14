@@ -6,7 +6,7 @@ from typing import Optional, List, Literal
 import json
 
 
-class BC(ABC):
+class BoundaryCoundition(ABC):
     """Abstract base class for boundary condition.
 
     Attributes:
@@ -18,7 +18,7 @@ class BC(ABC):
     def __init__(
             self, boundary_name: Literal["left", "top", "right",
                                          "bottom"]) -> None:
-        """Initializes a BC object."""
+        """Initializes a BoundaryCoundition object."""
         self.boundary_name = boundary_name
 
     @abstractmethod
@@ -27,8 +27,18 @@ class BC(ABC):
         pass
 
 
-class DirichletBC(BC):
+class DirichletBC(BoundaryCoundition):
     """Dirichlet boundary condition.
+
+    A Dirichlet boundary condition is a fundamental type of boundary condition
+    extensively employed in Finite Element Analysis (FEA) to define precise
+    values or limitations along certain edges or surfaces within a computational
+    domain.
+
+    Mathematically, the Dirichlet boundary condition is utilized to enforce or
+    set the solution (such as displacement) at specific boundary points. This is
+    done to accurately model real-world restrictions or established behaviors in
+    the context of FEA. 
 
     Attributes:
         displacement_x (float): The imposed displacement in x-direction. Only
@@ -61,8 +71,16 @@ class DirichletBC(BC):
         }
 
 
-class NeumannBC(BC):
-    """Neumann boundary condition.
+class NeumannBC(BoundaryCoundition):
+    """A Neumann boundary condition is a vital aspect of Finite Element Analysis
+    (FEA), used to specify the flux or the rate of change of a solution variable
+    across certain boundaries within a computational domain.
+
+    In mathematical terms, the Neumann boundary condition is employed to
+    describe the gradient, flux, or external influence applied to the solution 
+    (such as stress) along specific boundary regions. This type of boundary 
+    condition is highly valuable in FEA when precise information is available
+    about external forces. 
 
     Attributes:
         tension_x (float): The tension value in x-direction.
@@ -99,7 +117,7 @@ class BoundaryConditionsCase:
         bcs (list): The boundary conditions objects.
     """
 
-    def __init__(self, bcs: List[BC]) -> None:
+    def __init__(self, bcs: List[BoundaryCoundition]) -> None:
         """Initializes a BoundaryConditionsCase object."""
         self.bcs = bcs
 
@@ -116,22 +134,22 @@ class BoundaryConditionsCase:
 
         # Dirichlet dictionary
         if dirichlet_bcs is not None:
-            dirichlet_bcs_dict = []
+            list_of_dirichlet_bc_dicts = []
             for dirichlet_bc in dirichlet_bcs:
                 dirichlet_bc_dict = dirichlet_bc.to_dict()
-                dirichlet_bcs_dict.append(dirichlet_bc_dict)
-            dirichlet_dict = {"dirichlet": dirichlet_bcs_dict}
+                list_of_dirichlet_bc_dicts.append(dirichlet_bc_dict)
+            dirichlet_dict = {"dirichlet": list_of_dirichlet_bc_dicts}
 
             # Merge dictionaries: boundary conditions dictionary
             bcs_dict = {**dirichlet_dict}
 
         # Neumann dictionary
         if neumann_bcs is not None:
-            neumann_bcs_dict = []
+            list_of_neumann_bcs_dicts = []
             for neumann_bc in neumann_bcs:
                 neumann_bc_dict = neumann_bc.to_dict()
-                neumann_bcs_dict.append(neumann_bc_dict)
-            neumann_dict = {"neumann": neumann_bcs_dict}
+                list_of_neumann_bcs_dicts.append(neumann_bc_dict)
+            neumann_dict = {"neumann": list_of_neumann_bcs_dicts}
 
             # Merge dictionaries: boundary conditions dictionary
             bcs_dict = {**bcs_dict, **neumann_dict}
