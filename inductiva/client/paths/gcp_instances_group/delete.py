@@ -24,15 +24,15 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.instance import Instance
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.instance_group import InstanceGroup
 
 from . import path
 
 # body param
-SchemaForRequestBodyApplicationJson = Instance
+SchemaForRequestBodyApplicationJson = InstanceGroup
 
-request_body_instance = api_client.RequestBody(
+request_body_instance_group = api_client.RequestBody(
     content={
         'application/json':
             api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
@@ -42,7 +42,7 @@ request_body_instance = api_client.RequestBody(
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = InstanceGroup
 
 
 @dataclass
@@ -185,7 +185,8 @@ class BaseApi(api_client.Api):
             )
         _fields = None
         _body = None
-        serialized_data = request_body_instance.serialize(body, content_type)
+        serialized_data = request_body_instance_group.serialize(
+            body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
             _fields = serialized_data['fields']
