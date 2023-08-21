@@ -10,6 +10,9 @@ import nglview as nv
 
 import inductiva
 
+FULL_TRAJECTORY_FILE = "full_trajectory.trr"
+COMPRESSED_TRAJECTORY_FILE = "compressed_trajectory.xtc"
+TOPOLOGY_FILE = "solvated_protein.tpr"
 
 class ProteinSolvationOutput:
     """Post process the simulation output of a ProteinSolvation scenario."""
@@ -51,7 +54,7 @@ class ProteinSolvationOutput:
         protein = universe.select_atoms("protein")
         view = nv.show_mdanalysis(protein)
         view.add_representation(representation, selection=selection)
-        if add_backbone:
+        if add_backbone: #hardcoding the backbone as a cartoon representation
             view.add_representation("cartoon", selection="protein")
         view.center()
 
@@ -70,15 +73,16 @@ class ProteinSolvationOutput:
         Args:
             use_compressed_trajectory: Whether to use the compressed trajectory
             or the full precision trajectory."""
-        topology = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
+        topology_path = os.path.join(self.sim_output_dir,
+                                     TOPOLOGY_FILE)
         if use_compressed_trajectory:
-            trajectory = os.path.join(self.sim_output_dir,
-                                      "compressed_trajectory.xtc")
+            trajectory_path = os.path.join(self.sim_output_dir,
+                                           COMPRESSED_TRAJECTORY_FILE)
         else:
-            trajectory = os.path.join(self.sim_output_dir,
-                                      "full_trajectory.trr")
+            trajectory_path = os.path.join(self.sim_output_dir,
+                                           FULL_TRAJECTORY_FILE)
         universe = inductiva.molecules.scenarios.utils.unwrap_trajectory(
-            topology, trajectory)
+            topology_path, trajectory_path)
         return universe
 
     def calculate_rmsf_trajectory(self,
@@ -101,7 +105,7 @@ class ProteinSolvationOutput:
         start_time = time.time()
         universe = self.construct_universe(use_compressed_trajectory)
         topology_path = os.path.join(self.sim_output_dir,
-                                     "solvated_protein.tpr")
+                                     TOPOLOGY_FILE)
 
         aligned_trajectory_path = os.path.join(self.sim_output_dir,
                                                "aligned_traj.dcd")
