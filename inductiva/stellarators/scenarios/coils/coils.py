@@ -230,8 +230,31 @@ class StellaratorCoils(scenarios.Scenario):
         resource_pool_id: typing.Optional[uuid.UUID] = None,
         run_async: bool = False,
         plasma_surface_filepath: typing.Optional[types.Path] = None,
+        num_iterations: int = None,
+        num_samples: int = None,
+        sigma_scaling_factor: float = None,
     ) -> tasks.Task:
         """Simulates the scenario.
+
+        A simulation can be performed in two ways simply by adding some more
+        arguments. 
+        
+        If `num_iterations`, `num_samples` and `sigma_scaling_factor`
+        are all not provided, the simulation merely uses the created device and 
+        performs the computation of the magnetic field produced by its coils
+        on the given plasma surface. Additionally, it produces an output of
+        the objective functions that assess the quality of the device.
+
+        Alternatively, if the arguments are provided, the simulation process
+        is different. It also uses the create device, but as a beginning step.
+        Using this initial device, the simulation adds noise to the coefficients
+        that describe the coils using a normal distribution function, generating
+        `num_samples` configurations. After this, the configuration with the
+        lowest value of the objective functions is used as an initial step for
+        the next iteration, being that this process is repeated `num_iterations`
+        times. All the generated configurations (their Fourier Series 
+        coefficients) and their corresponding objective functions are an output
+        of this process.
 
         Args:
             simulator: The simulator to use for the simulation.
@@ -239,6 +262,17 @@ class StellaratorCoils(scenarios.Scenario):
             run_async: Whether to run the simulation asynchronously.
             plasma_surface_filepath: Path to the file with the description of
               the plasma surface on which the magnetic field will be calculated.
+            num_iterations: Number of iterations to run for the searching 
+              process.
+            num_samples: Number of different stellarator samples generated per 
+              iteration from a configuration. The samples are generated using
+              normal distribution noise for each coefficient of the Fourier 
+              Series that describes the coils.
+            sigma_scaling_factor: Scaling factor for the sigma value used in 
+              the random generation of noise. This argument makes sure that 
+              the noise is generated proportionally to each coefficient. It 
+              also determines the range of search for new values of the
+              coefficients.
         """
 
         if plasma_surface_filepath:
@@ -250,14 +284,32 @@ class StellaratorCoils(scenarios.Scenario):
             self.plasma_surface_filepath = os.path.join(
                 SIMSOPT_TEMPLATE_DIR, PLASMA_SURFACE_TEMPLATE_FILE_NAME)
 
-        task = super().simulate(
-            simulator,
-            resource_pool_id=resource_pool_id,
-            run_async=run_async,
-            coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
-            coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
-            plasma_surface_filename=SIMSOPT_PLASMA_SURFACE_FILENAME,
-            num_field_periods=self.num_field_periods)
+        deciding_args = [
+            arg for arg in (num_iterations, num_samples, sigma_scaling_factor)
+            if arg is not None
+        ]
+
+        if len(deciding_args) not in (0, 3):
+            raise ValueError('If you want to perform the stellarator noise '
+                             'search simulation please provide all 3 '
+                             'necessary arguments. These include:\n '
+                             '"num_iterations", "num_samples" and '
+                             '"sigma_scaling_factor".\nOtherwise, please do '
+                             'not provide any of these.')
+
+        else:
+
+            task = super().simulate(
+                simulator,
+                resource_pool_id=resource_pool_id,
+                run_async=run_async,
+                coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
+                coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
+                plasma_surface_filename=SIMSOPT_PLASMA_SURFACE_FILENAME,
+                num_field_periods=self.num_field_periods,
+                num_iterations=num_iterations,
+                num_samples=num_samples,
+                sigma_scaling_factor=sigma_scaling_factor)
 
         return task
 
