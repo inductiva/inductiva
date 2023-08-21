@@ -7,12 +7,14 @@ import typing
 import matplotlib.pyplot as plt
 import MDAnalysis as mda
 import nglview as nv
+import numpy as np
 
 import inductiva
 
 FULL_TRAJECTORY_FILE = "full_trajectory.trr"
 COMPRESSED_TRAJECTORY_FILE = "compressed_trajectory.xtc"
 TOPOLOGY_FILE = "solvated_protein.tpr"
+
 
 class ProteinSolvationOutput:
     """Post process the simulation output of a ProteinSolvation scenario."""
@@ -54,7 +56,7 @@ class ProteinSolvationOutput:
         protein = universe.select_atoms("protein")
         view = nv.show_mdanalysis(protein)
         view.add_representation(representation, selection=selection)
-        if add_backbone: #hardcoding the backbone as a cartoon representation
+        if add_backbone:  #hardcoding the backbone as a cartoon representation
             view.add_representation("cartoon", selection="protein")
         view.center()
 
@@ -73,8 +75,7 @@ class ProteinSolvationOutput:
         Args:
             use_compressed_trajectory: Whether to use the compressed trajectory
             or the full precision trajectory."""
-        topology_path = os.path.join(self.sim_output_dir,
-                                     TOPOLOGY_FILE)
+        topology_path = os.path.join(self.sim_output_dir, TOPOLOGY_FILE)
         if use_compressed_trajectory:
             trajectory_path = os.path.join(self.sim_output_dir,
                                            COMPRESSED_TRAJECTORY_FILE)
@@ -104,8 +105,7 @@ class ProteinSolvationOutput:
             RMSF using nglview or not."""
         start_time = time.time()
         universe = self.construct_universe(use_compressed_trajectory)
-        topology_path = os.path.join(self.sim_output_dir,
-                                     TOPOLOGY_FILE)
+        topology_path = os.path.join(self.sim_output_dir, TOPOLOGY_FILE)
 
         aligned_trajectory_path = os.path.join(self.sim_output_dir,
                                                "aligned_traj.dcd")
@@ -116,19 +116,21 @@ class ProteinSolvationOutput:
         # Calculate RMSF for carbon alpha atoms
         c_alphas = align_universe.select_atoms("protein and name CA")
         rmsf = mda.analysis.rms.RMSF(c_alphas).run()
-        residue_number = c_alphas.resids
         rmsf_values = rmsf.results.rmsf
+        duration = time.time() - start_time
+        print(f"RMSF calculation took {duration:.2f} seconds.")
+        return rmsf_values
 
+    def plot_rmsf_per_residue(self, rmsf_values: np.array):
+        "Plot RMSF values per residue."
         # Plot the data
+        residue_number = np.arange(len(rmsf_values))
         plt.plot(residue_number, rmsf_values)
         plt.xlabel("Residue Number")
         plt.ylabel("RMSF")
         plt.title("RMSF per residue")
         plt.grid(True)
         plt.show()
-        duration = time.time() - start_time
-        print(f"RMSF calculation took {duration:.2f} seconds.")
-        return rmsf_values
 
     def render_attribute_per_residue(
             self,
