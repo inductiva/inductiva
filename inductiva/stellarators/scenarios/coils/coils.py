@@ -236,23 +236,23 @@ class StellaratorCoils(scenarios.Scenario):
     ) -> tasks.Task:
         """Simulates the scenario.
 
-        The simulation process uses the created device, but as a beginning step.
-        Using this initial device, the simulation adds noise to the coefficients
-        that describe the coils using a normal distribution function, generating
-        `num_samples` configurations. After this, the configuration with the
-        lowest value of the objective functions is used as an initial step for
-        the next iteration. This process is repeated `num_iterations` times. 
-        All the generated configurations (their Fourier Series coefficients) 
-        and their corresponding objective functions are an output of this 
-        process, as well as the magnetic field vector and strength on each 
-        point of the plasma surface.
+        The magnetic field produced on the plasma surface and a set of objective
+        functions are computed for a collection of stellarator coil 
+        configurations with the goal of optimizing a stellarator design.
 
-        This process is designed to find the best stellarator 
-        configuration out of all configurations in a particular range
-        of parameters (a hyper-sphere of Fourier Series coefficients that
-        define the stellarator coils). This way, this search process performed
-        by merely adding noise to an initial stellarator acts as a sort of 
-        optimization, allowing the objective functions to be lowered.
+        The optimization is performed as follows:
+        1. The scenario's coil configuration is used as an initial 
+          configuration.
+        2. Gaussian noise is added to each coil parameter to produce 
+          `num_sample` configurations.
+        3. From these configurations, the one with the lowest value of the
+          objective functions is selected.
+        4. This configuration is then used as an initial configuration for
+          the next iteration.
+        5. The process is repeated `num_iteration` times.
+
+        The simulation also outputs the Fourier Series coefficients describing
+        the coils for each of the configurations obtained during the process.
 
         Args:
             simulator: The simulator to use for the simulation.
