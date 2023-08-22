@@ -7,12 +7,16 @@ from typing import List, Optional
 from functools import singledispatchmethod
 from uuid import UUID
 
-from inductiva import structures, simulation, scenarios, tasks, types
+from inductiva import tasks
+from inductiva.scenarios import Scenario
+from inductiva.simulation import Simulator
+from inductiva.structures.simulators import FEniCSx
+from inductiva.types import Path
 
-import bc_utils
-import geometry_utils
-import material_utils
-import mesh_utils
+from inductiva.structures import bcs, holes, plates, materials
+from . import mesh_utils
+from . import bc_utils
+from . import geometry_utils
 
 GEOMETRY_FILENAME = "geometry.json"
 MESH_FILENAME = "mesh.msh"
@@ -20,7 +24,7 @@ BCS_FILENAME = "bcs.json"
 MATERIAL_FILENAME = "material.json"
 
 
-class DeformablePlate(scenarios.Scenario):
+class DeformablePlate(Scenario):
     """Plate linear elastic scenario.
 
     The plate linear elastic scenario is characterized by the plate, holes,
@@ -28,14 +32,14 @@ class DeformablePlate(scenarios.Scenario):
     form the geometry, which is used to create the mesh for the simulation.
     """
 
-    valid_simulators = [structures.simulators.FEniCSx()]
+    valid_simulators = [FEniCSx]
 
     def __init__(
         self,
-        plate: geometry_utils.RectangularPlate,
-        holes: List[geometry_utils.Hole],
-        bcs: bc_utils.BoundaryConditionsCase,
-        material: material_utils.IsotropicLinearElasticMaterial,
+        plate: plates.RectangularPlate,
+        holes: List[holes.Hole],
+        bcs: List[bcs.BoundaryCoundition],
+        material: materials.IsotropicLinearElasticMaterial,
     ):
         """Initializes the plate linear elastic scenario.
 
@@ -51,17 +55,14 @@ class DeformablePlate(scenarios.Scenario):
         self.holes = holes
         self.bcs = bcs
         self.material = material
-        self.geometry = geometry_utils.GeometricCase(plate_obj=plate,
-                                                     list_holes_objs=holes)
+        self.geometry = geometry_utils.GeometricCase(plate=plate, holes=holes)
+        self.bcs_case = bc_utils.BoundaryConditionsCase(bcs=bcs)
 
-    def simulate(
-        self,
-        simulator: simulation.Simulator = structures.simulators.FEniCSx(),
-        resource_pool_id: Optional[UUID] = None,
-        run_async: bool = False,
-        simulation_time=300,
-        output_time_step=10,
-    ) -> tasks.Task:
+    def simulate(self,
+                 simulator: Simulator = FEniCSx(),
+                 resource_pool_id: Optional[UUID] = None,
+                 run_async: bool = False,
+                 simulation_time=300) -> tasks.Task:
         """Simulates the scenario.
 
         Args:
@@ -74,33 +75,36 @@ class DeformablePlate(scenarios.Scenario):
 
         task = super().simulate(simulator,
                                 resource_pool_id=resource_pool_id,
-                                run_async=run_async)
+                                run_async=run_async,
+                                mesh_filename=MESH_FILENAME,
+                                bcs_filename=BCS_FILENAME,
+                                material_filename=MATERIAL_FILENAME)
         return task
 
     @singledispatchmethod
-    def create_input_files(self, simulator: simulation.Simulator):
+    def create_input_files(self, simulator: Simulator):
         pass
 
 
 @DeformablePlate.create_input_files.register
 def _(self,
-      simulator: structures.simulators.FEniCSx(),
-      input_dir: types.Path) -> None:
+      simulator: FEniCSx,
+      input_dir: Path) -> None:
     """Creates FEniCSx simulation input files."""
 
     # Geometry file
-    geometry_path = os.join.path(input_dir, GEOMETRY_FILENAME)
+    geometry_path = os.path.join(input_dir, GEOMETRY_FILENAME)
     self.geometry.write_to_json(geometry_path)
 
     # Mesh file
-    mesh = mesh_utils.Mesh(self.geometry)
-    mesh_path = os.join.path(input_dir, MESH_FILENAME)
+    mesh = mesh_utils.GmshMesh(self.geometry)
+    mesh_path = os.path.join(input_dir, MESH_FILENAME)
     mesh.write_to_msh(mesh_path)
 
     # BC file
-    bcs_path = os.join.path(input_dir, BCS_FILENAME)
-    self.bcs.write_to_json(bcs_path)
+    bcs_path = os.path.join(input_dir, BCS_FILENAME)
+    self.bcs_case.write_to_json(bcs_path)
 
     # Material file
-    material_path = os.join.path(input_dir, MATERIAL_FILENAME)
+    material_path = os.path.join(input_dir, MATERIAL_FILENAME)
     self.material.write_to_json(material_path)

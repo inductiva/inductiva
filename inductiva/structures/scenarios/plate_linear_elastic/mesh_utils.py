@@ -4,7 +4,7 @@ from typing import List, Optional
 
 import gmsh
 
-import geometry_utils
+from . import geometry_utils
 
 
 def add_mesh_field_distance(mesh_field_id: int, curves_list: List[int],
