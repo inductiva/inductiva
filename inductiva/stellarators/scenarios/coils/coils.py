@@ -236,18 +236,7 @@ class StellaratorCoils(scenarios.Scenario):
     ) -> tasks.Task:
         """Simulates the scenario.
 
-        A simulation can be performed in two ways simply by adding some more
-        arguments. 
-        
-        If `num_iterations`, `num_samples` and `sigma_scaling_factor`
-        are all not provided, the simulation merely uses the created device and 
-        performs the computation of the magnetic field produced by its coils
-        on the given plasma surface. Additionally, it produces an output of
-        the objective functions that assess the quality of the device.
-
-        Alternatively, if the arguments are provided (with `num_iterations` and 
-        `num_samples` both greater than 1), the simulation process
-        is different. It also uses the create device, but as a beginning step.
+        The simulation process uses the created device, but as a beginning step.
         Using this initial device, the simulation adds noise to the coefficients
         that describe the coils using a normal distribution function, generating
         `num_samples` configurations. After this, the configuration with the
@@ -255,9 +244,10 @@ class StellaratorCoils(scenarios.Scenario):
         the next iteration. This process is repeated `num_iterations` times. 
         All the generated configurations (their Fourier Series coefficients) 
         and their corresponding objective functions are an output of this 
-        process.
+        process, as well as the magnetic field vector and strength on each 
+        point of the plasma surface.
 
-        This second process is designed to find the best stellarator 
+        This process is designed to find the best stellarator 
         configuration out of all configurations in a particular range
         of parameters (a hyper-sphere of Fourier Series coefficients that
         define the stellarator coils). This way, this search process performed
