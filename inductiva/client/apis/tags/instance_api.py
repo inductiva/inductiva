@@ -10,6 +10,7 @@
 
 from inductiva.client.paths.gcp_instances_group.post import CreateInstanceGroup
 from inductiva.client.paths.gcp_instances_group.delete import DeleteInstanceGroup
+from inductiva.client.paths.gcp_instances_group_status.get import GetGroupStatus
 from inductiva.client.paths.gcp_instances_price.get import GetInstancePrice
 from inductiva.client.paths.gcp_instances_status.get import GetStatus
 
@@ -17,6 +18,7 @@ from inductiva.client.paths.gcp_instances_status.get import GetStatus
 class InstanceApi(
         CreateInstanceGroup,
         DeleteInstanceGroup,
+        GetGroupStatus,
         GetInstancePrice,
         GetStatus,
 ):
