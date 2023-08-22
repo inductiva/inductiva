@@ -230,9 +230,9 @@ class StellaratorCoils(scenarios.Scenario):
         resource_pool_id: typing.Optional[uuid.UUID] = None,
         run_async: bool = False,
         plasma_surface_filepath: typing.Optional[types.Path] = None,
-        num_iterations: int = None,
-        num_samples: int = None,
-        sigma_scaling_factor: float = None,
+        num_iterations: int = 1,
+        num_samples: int = 1,
+        sigma_scaling_factor: float = 0.1,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -245,16 +245,24 @@ class StellaratorCoils(scenarios.Scenario):
         on the given plasma surface. Additionally, it produces an output of
         the objective functions that assess the quality of the device.
 
-        Alternatively, if the arguments are provided, the simulation process
+        Alternatively, if the arguments are provided (with `num_iterations` and 
+        `num_samples` both greater than 1), the simulation process
         is different. It also uses the create device, but as a beginning step.
         Using this initial device, the simulation adds noise to the coefficients
         that describe the coils using a normal distribution function, generating
         `num_samples` configurations. After this, the configuration with the
         lowest value of the objective functions is used as an initial step for
-        the next iteration, being that this process is repeated `num_iterations`
-        times. All the generated configurations (their Fourier Series 
-        coefficients) and their corresponding objective functions are an output
-        of this process.
+        the next iteration. This process is repeated `num_iterations` times. 
+        All the generated configurations (their Fourier Series coefficients) 
+        and their corresponding objective functions are an output of this 
+        process.
+
+        This second process is designed to find the best stellarator 
+        configuration out of all configurations in a particular range
+        of parameters (a hyper-sphere of Fourier Series coefficients that
+        define the stellarator coils). This way, this search process performed
+        by merely adding noise to an initial stellarator acts as a sort of 
+        optimization, allowing the objective functions to be lowered.
 
         Args:
             simulator: The simulator to use for the simulation.
@@ -284,32 +292,17 @@ class StellaratorCoils(scenarios.Scenario):
             self.plasma_surface_filepath = os.path.join(
                 SIMSOPT_TEMPLATE_DIR, PLASMA_SURFACE_TEMPLATE_FILE_NAME)
 
-        deciding_args = [
-            arg for arg in (num_iterations, num_samples, sigma_scaling_factor)
-            if arg is not None
-        ]
-
-        if len(deciding_args) not in (0, 3):
-            raise ValueError('If you want to perform the stellarator noise '
-                             'search simulation please provide all 3 '
-                             'necessary arguments. These include:\n '
-                             '"num_iterations", "num_samples" and '
-                             '"sigma_scaling_factor".\nOtherwise, please do '
-                             'not provide any of these.')
-
-        else:
-
-            task = super().simulate(
-                simulator,
-                resource_pool_id=resource_pool_id,
-                run_async=run_async,
-                coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
-                coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
-                plasma_surface_filename=SIMSOPT_PLASMA_SURFACE_FILENAME,
-                num_field_periods=self.num_field_periods,
-                num_iterations=num_iterations,
-                num_samples=num_samples,
-                sigma_scaling_factor=sigma_scaling_factor)
+        task = super().simulate(
+            simulator,
+            resource_pool_id=resource_pool_id,
+            run_async=run_async,
+            coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
+            coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
+            plasma_surface_filename=SIMSOPT_PLASMA_SURFACE_FILENAME,
+            num_field_periods=self.num_field_periods,
+            num_iterations=num_iterations,
+            num_samples=num_samples,
+            sigma_scaling_factor=sigma_scaling_factor)
 
         return task
 
