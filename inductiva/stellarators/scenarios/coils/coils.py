@@ -230,8 +230,29 @@ class StellaratorCoils(scenarios.Scenario):
         resource_pool_id: typing.Optional[uuid.UUID] = None,
         run_async: bool = False,
         plasma_surface_filepath: typing.Optional[types.Path] = None,
+        num_iterations: int = 1,
+        num_samples: int = 1,
+        sigma_scaling_factor: float = 0.1,
     ) -> tasks.Task:
         """Simulates the scenario.
+
+        The magnetic field produced on the plasma surface and a set of objective
+        functions are computed for a collection of stellarator coil 
+        configurations with the goal of optimizing a stellarator design.
+
+        The optimization is performed as follows:
+        1. The scenario's coil configuration is used as an initial 
+          configuration.
+        2. Gaussian noise is added to each coil parameter to produce 
+          `num_sample` configurations.
+        3. From these configurations, the one with the lowest value of the
+          objective functions is selected.
+        4. This configuration is then used as an initial configuration for
+          the next iteration.
+        5. The process is repeated `num_iteration` times.
+
+        The simulation also outputs the Fourier Series coefficients describing
+        the coils for each of the configurations obtained during the process.
 
         Args:
             simulator: The simulator to use for the simulation.
@@ -239,6 +260,17 @@ class StellaratorCoils(scenarios.Scenario):
             run_async: Whether to run the simulation asynchronously.
             plasma_surface_filepath: Path to the file with the description of
               the plasma surface on which the magnetic field will be calculated.
+            num_iterations: Number of iterations to run for the searching 
+              process.
+            num_samples: Number of different stellarator samples generated per 
+              iteration from a configuration. The samples are generated using
+              normal distribution noise for each coefficient of the Fourier 
+              Series that describes the coils.
+            sigma_scaling_factor: Scaling factor for the sigma value used in 
+              the random generation of noise. This argument makes sure that 
+              the noise is generated proportionally to each coefficient. It 
+              also determines the range of search for new values of the
+              coefficients.
         """
 
         if plasma_surface_filepath:
@@ -257,7 +289,10 @@ class StellaratorCoils(scenarios.Scenario):
             coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
             coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
             plasma_surface_filename=SIMSOPT_PLASMA_SURFACE_FILENAME,
-            num_field_periods=self.num_field_periods)
+            num_field_periods=self.num_field_periods,
+            num_iterations=num_iterations,
+            num_samples=num_samples,
+            sigma_scaling_factor=sigma_scaling_factor)
 
         return task
 
