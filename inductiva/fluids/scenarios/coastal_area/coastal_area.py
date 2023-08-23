@@ -55,9 +55,9 @@ class Bathymetry:
         self.y_range = y_range
 
     @classmethod
-    def from_text_file(
+    def from_bot_file(
         cls,
-        text_file_path: str,
+        bot_file_path: str,
         x_range: Sequence[float],
         y_range: Sequence[float],
     ):
@@ -74,7 +74,7 @@ class Bathymetry:
             y_range: The range of y values, in meters.
         """
 
-        depths = np.loadtxt(text_file_path)
+        depths = np.loadtxt(bot_file_path)
         return cls(depths, x_range, y_range)
 
     @classmethod
