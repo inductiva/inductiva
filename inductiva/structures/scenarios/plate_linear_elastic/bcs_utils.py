@@ -11,13 +11,13 @@ class BoundaryConditionsCase:
     """Boundary conditions for a given case.
 
     The boundary conditions for a given case are characterized by a list of 
-      Dirichlet and Tension boundary conditions.
+      Dirichlet and Neumann boundary conditions.
 
     Attributes:
         bcs (list): The boundary conditions objects.
     """
 
-    def __init__(self, bcs: List[bcs.BoundaryCoundition]) -> None:
+    def __init__(self, bcs: List[bcs.BoundaryCondition]) -> None:
         """Initializes a BoundaryConditionsCase object."""
         self.bcs = bcs
 

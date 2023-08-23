@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import Optional, Literal
 
 
-class BoundaryCoundition(ABC):
+class BoundaryCondition(ABC):
     """Abstract base class for boundary condition.
 
     Attributes:
@@ -16,7 +16,7 @@ class BoundaryCoundition(ABC):
     def __init__(
             self, boundary_name: Literal["left", "top", "right",
                                          "bottom"]) -> None:
-        """Initializes a BoundaryCoundition object."""
+        """Initializes a BoundaryCondition object."""
         self.boundary_name = boundary_name
 
     @abstractmethod
@@ -25,7 +25,7 @@ class BoundaryCoundition(ABC):
         pass
 
 
-class DirichletBC(BoundaryCoundition):
+class DirichletBC(BoundaryCondition):
     """Dirichlet boundary condition.
 
     A Dirichlet boundary condition is a fundamental type of boundary condition
@@ -69,7 +69,7 @@ class DirichletBC(BoundaryCoundition):
         }
 
 
-class NeumannBC(BoundaryCoundition):
+class NeumannBC(BoundaryCondition):
     """A Neumann boundary condition is a vital aspect of Finite Element Analysis
     (FEA), used to specify the flux or the rate of change of a solution variable
     across certain boundaries within a computational domain.
