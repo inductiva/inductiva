@@ -1,10 +1,9 @@
-"""FEniCSx module of the API for finite element analysiss."""
+"""FEniCSx module of the API for Finite Element Analysis."""
 
 from typing import Optional
 from uuid import UUID
 
-from inductiva import types, tasks
-from inductiva import simulation
+from inductiva import tasks, types, simulation
 
 
 class FEniCSx(simulation.Simulator):
@@ -30,6 +29,9 @@ class FEniCSx(simulation.Simulator):
         """Run the simulation.
 
         Args:
+            mesh_filename: Mesh filename.
+            bcs_filename: Boundary conditions filename.
+            material_filename: Material Filename.
             resource_pool_id: Optional UUID of the resource pool to use.
             run_async: Whether to run the simulation asynchronously.
             other arguments: See the documentation of the base class.
