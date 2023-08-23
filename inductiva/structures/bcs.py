@@ -1,9 +1,7 @@
-"""Utils to create the different types of boundary conditions."""
+"""Utils to create the boundary conditions."""
 
 from abc import ABC, abstractmethod
-from typing import Optional, List, Literal
-
-import json
+from typing import Optional, Literal
 
 
 class BoundaryCoundition(ABC):
