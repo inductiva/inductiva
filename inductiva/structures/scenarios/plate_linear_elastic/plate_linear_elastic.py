@@ -38,7 +38,7 @@ class DeformablePlate(Scenario):
         self,
         plate: plates.RectangularPlate,
         holes: List[holes.Hole],
-        bcs: List[bcs.BoundaryCoundition],
+        bcs: List[bcs.BoundaryCondition],
         material: materials.IsotropicLinearElasticMaterial,
     ):
         """Initializes the plate linear elastic scenario.
