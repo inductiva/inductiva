@@ -147,6 +147,18 @@ class Bathymetry:
         return self.depths.shape
 
     @property
+    def x_range(self):
+        """Returns the range of x values."""
+
+        return (np.min(self.x), np.max(self.x))
+
+    @property
+    def y_range(self):
+        """Returns the range of y values."""
+
+        return (np.min(self.y), np.max(self.y))
+
+    @property
     def x_delta(self):
         """Returns the distance between two consecutive points along x."""
 
