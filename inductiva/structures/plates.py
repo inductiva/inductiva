@@ -1,11 +1,9 @@
-"""Utils to create the geometric case."""
+"""Utils to create the plate."""
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Tuple
+from typing import Tuple
 
 import gmsh
-import json
-import math
 
 
 class Plate(ABC):
