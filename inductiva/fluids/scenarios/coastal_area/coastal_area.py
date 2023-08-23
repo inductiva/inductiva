@@ -30,29 +30,32 @@ class Bathymetry:
     """Represents a bathymetric profile.
     
     A bathymetric profile defines the depth of the sea bottom as a function of
-    space, here described in Cartesian coordinates (x, y). Here, a bathymetry is
-    represented as a 2D array with the depths, in meters, at each point of a
-    regular grid. The grid is defined by the range of x and y values. Positive
-    depths are below the water level.
+    space, here described in Cartesian coordinates (x, y).
+    
+    Here, a bathymetry is represented with:
+    - a 1D array of depths, in meters, measured at arbitrary points in space.
+      Positive depths are below the water level.
+    - two 1D arrays representing the x and y coordinates of the points where the
+      depths are defined, in meters.
     """
 
     def __init__(
         self,
         depths: np.ndarray,
-        x_range: Sequence[float],
-        y_range: Sequence[float],
+        x: np.ndarray,
+        y: np.ndarray,
     ):
         """Initializes a `Bathymetry` object.
         
         Args:
-            depths: A 2D array with the depths, in meters. The first and second
-              dimensions correspond to the x and y directions, respectively.
-            x_range: The range of x values, in meters.
-            y_range: The range of y values, in meters.
+            depths: A 1D array with the depths, in meters.
+            x: A 1D array with the x coordinates of the points where depths are
+              defined, in meters.
+            y: Same as `x`, but for the y coordinates.
         """
         self.depths = depths
-        self.x_range = x_range
-        self.y_range = y_range
+        self.x = x
+        self.y = y
 
     @classmethod
     def from_bot_file(
