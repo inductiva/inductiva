@@ -85,9 +85,12 @@ class ProteinSolvationOutput():
             nglview_visualization: Whether to return visualization of the 
             RMSF using nglview or not."""
         start_time = time.time()
-        topology_path = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
-        full_trajectory_path = os.path.join(self.sim_output_dir, "full_trajectory.trr")
-        full_precision_universe = mda.Universe(topology_path, full_trajectory_path)
+        topology_path = os.path.join(self.sim_output_dir,
+                                     "solvated_protein.tpr")
+        full_trajectory_path = os.path.join(self.sim_output_dir,
+                                            "full_trajectory.trr")
+        full_precision_universe = mda.Universe(topology_path,
+                                               full_trajectory_path)
 
         aligned_trajectory_path = os.path.join(self.sim_output_dir,
                                                "aligned_traj.dcd")
