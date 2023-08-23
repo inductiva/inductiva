@@ -12,7 +12,7 @@ import numpy as np
 import inductiva
 
 COMPRESSED_TRAJECTORY_FILE = "compressed_trajectory.xtc"
-TOPOLOGY_FILE = "solvated_protein.tpr"
+TOPOLOGY_FILE = "protein.gro"
 
 
 class ProteinSolvationOutput():
@@ -68,8 +68,7 @@ class ProteinSolvationOutput():
         print(f"Number of trajectory frames: {len(self.universe.trajectory)}")
         return view
 
-    def calculate_rmsf_trajectory(self,
-                                  use_compressed_trajectory: bool = False):
+    def calculate_rmsf_trajectory(self):
         """Calculate the root mean square fluctuation (RMSF) over a trajectory.  
 
         It is typically calculated for the alpha carbon atom of each residue. 
@@ -86,12 +85,14 @@ class ProteinSolvationOutput():
             nglview_visualization: Whether to return visualization of the 
             RMSF using nglview or not."""
         start_time = time.time()
-        topology_path = os.path.join(self.sim_output_dir, TOPOLOGY_FILE)
+        topology_path = os.path.join(self.sim_output_dir, "solvated_protein.tpr")
+        full_trajectory_path = os.path.join(self.sim_output_dir, "full_trajectory.trr")
+        full_precision_universe = mda.Universe(topology_path, full_trajectory_path)
 
         aligned_trajectory_path = os.path.join(self.sim_output_dir,
                                                "aligned_traj.dcd")
         inductiva.molecules.scenarios.utils.align_trajectory_to_average(
-            self.universe, aligned_trajectory_path)
+            full_precision_universe, aligned_trajectory_path)
         align_universe = mda.Universe(topology_path, aligned_trajectory_path)
 
         # Calculate RMSF for carbon alpha atoms
