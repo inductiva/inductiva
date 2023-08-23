@@ -1,13 +1,12 @@
-"""FEniCSx module of the API for finite element analysiss."""
+"""FEniCSx module of the API for Finite Element Analysis."""
 
 from typing import Optional
 from uuid import UUID
 
-from inductiva import types, tasks
-from inductiva import simulation
+import inductiva
 
 
-class FEniCSx(simulation.Simulator):
+class FEniCSx(inductiva.simulation.Simulator):
     """Class to invoke a generic FEniCSx simulation on the API."""
 
     def __init__(self, api_method: str = "fem.fenicsx.run_simulation"):
@@ -20,29 +19,26 @@ class FEniCSx(simulation.Simulator):
 
     def run(
         self,
-        input_dir: types.Path,
-        geometry_filename: types.Path,
-        mesh_filename: types.Path,
-        bc_filename: types.Path,
-        material_filename: types.Path,
+        input_dir: inductiva.types.Path,
+        mesh_filename: str,
+        bcs_filename: str,
+        material_filename: str,
         resource_pool_id: Optional[UUID] = None,
         run_async: bool = False,
-    ) -> tasks.Task:
+    ) -> inductiva.tasks.Task:
         """Run the simulation.
 
         Args:
-            geometry_filename: Filename of the geometry file.
-            mesh_filename: Filename of the mesh file.
-            bc_filename: Filename of the boundary conditions file.
-            material_filename: Filename of the material file.
+            mesh_filename: Mesh filename.
+            bcs_filename: Boundary conditions filename.
+            material_filename: Material filename.
             resource_pool_id: Optional UUID of the resource pool to use.
             run_async: Whether to run the simulation asynchronously.
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
-                           geometry_filename,
-                           mesh_filename,
-                           bc_filename,
-                           material_filename,
                            resource_pool_id=resource_pool_id,
-                           run_async=run_async)
+                           run_async=run_async,
+                           mesh_filename=mesh_filename,
+                           bcs_filename=bcs_filename,
+                           material_filename=material_filename)
