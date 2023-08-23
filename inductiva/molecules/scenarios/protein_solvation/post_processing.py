@@ -11,12 +11,11 @@ import numpy as np
 
 import inductiva
 
-FULL_TRAJECTORY_FILE = "full_trajectory.trr"
 COMPRESSED_TRAJECTORY_FILE = "compressed_trajectory.xtc"
 TOPOLOGY_FILE = "solvated_protein.tpr"
 
 
-class ProteinSolvationOutput:
+class ProteinSolvationOutput():
     """Post process the simulation output of a ProteinSolvation scenario."""
 
     def __init__(self, sim_output_path: pathlib.Path = None):
@@ -30,6 +29,11 @@ class ProteinSolvationOutput:
             sim_output_path: Path to the simulation output directory."""
 
         self.sim_output_dir = sim_output_path
+        topology_path = os.path.join(self.sim_output_dir, TOPOLOGY_FILE)
+        trajectory_path = os.path.join(self.sim_output_dir,
+                                       COMPRESSED_TRAJECTORY_FILE)
+        self.universe = inductiva.molecules.scenarios.utils.unwrap_trajectory(
+            topology_path, trajectory_path)
 
     def render_interactive(
             self,
@@ -37,7 +41,6 @@ class ProteinSolvationOutput:
                                            "point", "surface",
                                            "ribbon"] = "ball+stick",
             selection: str = "protein",
-            use_compressed_trajectory: bool = False,
             add_backbone: bool = True):
         """
         Render the simulation outputs in an interactive visualization.
@@ -49,42 +52,22 @@ class ProteinSolvationOutput:
             for details.
             add_backbone: Whether to add the protein backbone to the 
             visualization.
-            use_compressed_trajectory: Whether to use the compressed 
-            trajectory or the full precision one.
             """
-        universe = self.construct_universe(use_compressed_trajectory)
-        protein = universe.select_atoms("protein")
-        view = nv.show_mdanalysis(protein)
+        view = nv.show_mdanalysis(self.universe)
         view.add_representation(representation, selection=selection)
         if add_backbone:  #hardcoding the backbone as a cartoon representation
             view.add_representation("cartoon", selection="protein")
         view.center()
 
         print("System Information: ")
-        print(f"Number of atoms in the system: {len(universe.atoms)}")
+        print(f"Number of atoms in the system: {len(self.universe.atoms)}")
         print(f"Number of amino acids: "
-              f"{universe.select_atoms('protein').n_residues}")
+              f"{self.universe.select_atoms('protein').n_residues}")
         print(f"Number of solvent molecules:"
-              f"{universe.select_atoms('not protein').n_residues}")
-        print(f"Number of trajectory frames: {len(universe.trajectory)}")
+              f"{self.universe.select_atoms('not protein').n_residues}")
+        print(f"Number of trajectory frames: {len(self.universe.trajectory)}")
         return view
 
-    def construct_universe(self, use_compressed_trajectory: bool = False):
-        """Construct a MDAnalysis universe from the simulation output.
-
-        Args:
-            use_compressed_trajectory: Whether to use the compressed trajectory
-            or the full precision trajectory."""
-        topology_path = os.path.join(self.sim_output_dir, TOPOLOGY_FILE)
-        if use_compressed_trajectory:
-            trajectory_path = os.path.join(self.sim_output_dir,
-                                           COMPRESSED_TRAJECTORY_FILE)
-        else:
-            trajectory_path = os.path.join(self.sim_output_dir,
-                                           FULL_TRAJECTORY_FILE)
-        universe = inductiva.molecules.scenarios.utils.unwrap_trajectory(
-            topology_path, trajectory_path)
-        return universe
 
     def calculate_rmsf_trajectory(self,
                                   use_compressed_trajectory: bool = False):
@@ -104,13 +87,12 @@ class ProteinSolvationOutput:
             nglview_visualization: Whether to return visualization of the 
             RMSF using nglview or not."""
         start_time = time.time()
-        universe = self.construct_universe(use_compressed_trajectory)
         topology_path = os.path.join(self.sim_output_dir, TOPOLOGY_FILE)
 
         aligned_trajectory_path = os.path.join(self.sim_output_dir,
                                                "aligned_traj.dcd")
         inductiva.molecules.scenarios.utils.align_trajectory_to_average(
-            universe, aligned_trajectory_path)
+            self.universe, aligned_trajectory_path)
         align_universe = mda.Universe(topology_path, aligned_trajectory_path)
 
         # Calculate RMSF for carbon alpha atoms
@@ -137,23 +119,19 @@ class ProteinSolvationOutput:
             residue_attributes: np.ndarray,
             representation: typing.Literal["cartoon", "ball+stick", "line",
                                            "point", "surface",
-                                           "ribbon"] = "cartoon",
-            use_compressed_trajectory: bool = False):
+                                           "ribbon"] = "cartoon"):
         """Render a specific protein attribute in an interactive visualization.
         Args: 
             residue_attributes: The per residue values of the attribute you want 
             to visualize.
             representation: The protein representation to use for the 
             visualization.
-            use_compressed_trajectory: Whether to use the compressed trajectory 
-            or the full precision trajectory.
             """
-        universe = self.construct_universe(use_compressed_trajectory)
-        universe.add_TopologyAttr("tempfactors")
-        protein = universe.select_atoms("protein")
+        self.universe.add_TopologyAttr("tempfactors")
+        protein = self.universe.select_atoms("protein")
         for residue, value in zip(protein.residues, residue_attributes):
             residue.atoms.tempfactors = value
-        view = nv.show_mdanalysis(universe)
+        view = nv.show_mdanalysis(self.universe)
         view.add_representation(representation, selection="protein")
         view.update_representation(color_scheme="bfactor")
         view.center()
