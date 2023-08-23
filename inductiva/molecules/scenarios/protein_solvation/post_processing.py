@@ -2,7 +2,7 @@
 import os
 import pathlib
 import time
-import typing
+from typing import Literal
 
 import matplotlib.pyplot as plt
 import MDAnalysis as mda
@@ -11,8 +11,10 @@ import numpy as np
 
 import inductiva
 
+FULL_TRAJECTORY_FILE = "full_trajectory.trr"
 COMPRESSED_TRAJECTORY_FILE = "compressed_trajectory.xtc"
-TOPOLOGY_FILE = "protein.gro"
+PROTEIN_TOPOLOGY_FILE = "protein.gro"
+SYSTEM_TOPOLOGY_FILE = "solvated_protein.tpr"
 
 
 class ProteinSolvationOutput():
@@ -29,19 +31,18 @@ class ProteinSolvationOutput():
             sim_output_path: Path to the simulation output directory."""
 
         self.sim_output_dir = sim_output_path
-        topology_path = os.path.join(self.sim_output_dir, TOPOLOGY_FILE)
+        topology_path = os.path.join(self.sim_output_dir, PROTEIN_TOPOLOGY_FILE)
         trajectory_path = os.path.join(self.sim_output_dir,
                                        COMPRESSED_TRAJECTORY_FILE)
         self.universe = inductiva.molecules.scenarios.utils.unwrap_trajectory(
             topology_path, trajectory_path)
 
-    def render_interactive(
-            self,
-            representation: typing.Literal["cartoon", "ball+stick", "line",
-                                           "point", "surface",
-                                           "ribbon"] = "ball+stick",
-            selection: str = "protein",
-            add_backbone: bool = True):
+    def render_interactive(self,
+                           representation: Literal["cartoon", "ball+stick",
+                                                   "line", "point", "surface",
+                                                   "ribbon"] = "ball+stick",
+                           selection: str = "protein",
+                           add_backbone: bool = True):
         """
         Render the simulation outputs in an interactive visualization.
         Args: 
@@ -60,11 +61,9 @@ class ProteinSolvationOutput():
         view.center()
 
         print("System Information: ")
-        print(f"Number of atoms in the system: {len(self.universe.atoms)}")
+        print(f"Number of protein atoms: {len(self.universe.atoms)}")
         print(f"Number of amino acids: "
               f"{self.universe.select_atoms('protein').n_residues}")
-        print(f"Number of solvent molecules:"
-              f"{self.universe.select_atoms('not protein').n_residues}")
         print(f"Number of trajectory frames: {len(self.universe.trajectory)}")
         return view
 
@@ -85,10 +84,9 @@ class ProteinSolvationOutput():
             nglview_visualization: Whether to return visualization of the 
             RMSF using nglview or not."""
         start_time = time.time()
-        topology_path = os.path.join(self.sim_output_dir,
-                                     "solvated_protein.tpr")
+        topology_path = os.path.join(self.sim_output_dir, SYSTEM_TOPOLOGY_FILE)
         full_trajectory_path = os.path.join(self.sim_output_dir,
-                                            "full_trajectory.trr")
+                                            FULL_TRAJECTORY_FILE)
         full_precision_universe = mda.Universe(topology_path,
                                                full_trajectory_path)
 
@@ -120,8 +118,8 @@ class ProteinSolvationOutput():
     def render_attribute_per_residue(
         self,
         residue_attributes: np.ndarray,
-        representation: typing.Literal["cartoon", "ball+stick", "line", "point",
-                                       "surface", "ribbon"] = "cartoon"):
+        representation: Literal["cartoon", "ball+stick", "line", "point",
+                                "surface", "ribbon"] = "cartoon"):
         """Render a specific protein attribute in an interactive visualization.
         Args: 
             residue_attributes: The per residue values of the attribute you want 
