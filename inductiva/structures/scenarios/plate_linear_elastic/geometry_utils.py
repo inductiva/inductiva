@@ -75,7 +75,7 @@ class GeometricCase:
         holes_mesh_offset = []
         holes_predefined_element_size = []
 
-        for hole in self.holes:
+        for hole in self.holes_list:
             mesh_offset, predefined_element_size = hole.get_hole_mesh_params()
 
             holes_mesh_offset.append(mesh_offset)
@@ -98,7 +98,7 @@ class GeometricCase:
         holes_gmsh = []
         holes_boundary_ids = []
 
-        for hole in self.holes:
+        for hole in self.holes_list:
             hole_gmsh = hole.to_occ()
             gmsh.model.occ.synchronize()
 
