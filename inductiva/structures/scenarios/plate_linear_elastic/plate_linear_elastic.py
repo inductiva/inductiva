@@ -64,21 +64,17 @@ class DeformablePlate(Scenario):
     def simulate(self,
                  simulator: Simulator = FEniCSx(),
                  resource_pool_id: Optional[UUID] = None,
-                 run_async: bool = False,
-                 simulation_time=300) -> tasks.Task:
+                 run_async: bool = False) -> tasks.Task:
         """Simulates the scenario.
 
         Args:
             simulator: The simulator to use for the simulation.
-            simulation_time: The simulation time, in seconds.
             resource_pool_id: The resource pool to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
             mesh_filename: Mesh filename.
             bcs_filename: Boundary conditions filename.
             material_filename: Material Filename.
         """
-        self.simulation_time = simulation_time
-
         task = super().simulate(simulator,
                                 resource_pool_id=resource_pool_id,
                                 run_async=run_async,
