@@ -15,7 +15,7 @@ from inductiva.types import Path
 
 from inductiva.structures import bcs, holes, plates, materials
 from . import mesh_utils
-from . import bc_utils
+from . import bcs_utils
 from . import geometry_utils
 
 GEOMETRY_FILENAME = "geometry.json"
@@ -50,13 +50,16 @@ class DeformablePlate(Scenario):
               plate.
             material (IsotropicLinearElasticMaterial): The material properties
               of the plate.
+            geometry (GeometricCase): The plate with holes geometry.
+            bcs_case (BoundaryConditionsCase): The boudnary coinditions for the
+             palte with holes.
         """
         self.plate = plate
         self.holes = holes
         self.bcs = bcs
         self.material = material
         self.geometry = geometry_utils.GeometricCase(plate=plate, holes=holes)
-        self.bcs_case = bc_utils.BoundaryConditionsCase(bcs=bcs)
+        self.bcs_case = bcs_utils.BoundaryConditionsCase(bcs=bcs)
 
     def simulate(self,
                  simulator: Simulator = FEniCSx(),
@@ -70,6 +73,9 @@ class DeformablePlate(Scenario):
             simulation_time: The simulation time, in seconds.
             resource_pool_id: The resource pool to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
+            mesh_filename: Mesh filename.
+            bcs_filename: Boundary conditions filename.
+            material_filename: Material Filename.
         """
         self.simulation_time = simulation_time
 
@@ -101,7 +107,7 @@ def _(self,
     mesh_path = os.path.join(input_dir, MESH_FILENAME)
     mesh.write_to_msh(mesh_path)
 
-    # BC file
+    # BCs file
     bcs_path = os.path.join(input_dir, BCS_FILENAME)
     self.bcs_case.write_to_json(bcs_path)
 
