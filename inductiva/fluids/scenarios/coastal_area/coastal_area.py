@@ -78,7 +78,12 @@ class Bathymetry:
         """
 
         depths = np.loadtxt(bot_file_path)
-        return cls(depths, x_range, y_range)
+
+        x, y = np.meshgrid(np.linspace(*x_range, depths.shape[0]),
+                           np.linspace(*y_range, depths.shape[1]),
+                           indexing="ij")
+
+        return cls(depths.flatten(), x.flatten(), y.flatten())
 
     @classmethod
     def from_random_depths(
@@ -129,7 +134,11 @@ class Bathymetry:
         depths = inductiva.generative.procedural.adjust_map_level(
             depths, percentile_above_water)
 
-        return cls(depths, x_range, y_range)
+        x, y = np.meshgrid(np.linspace(*x_range, x_num),
+                           np.linspace(*y_range, y_num),
+                           indexing="ij")
+
+        return cls(depths.flatten(), x.flatten(), y.flatten())
 
     def to_text_file(self, text_file_path: str):
         """Writes the bathymetry to a text file.
