@@ -68,7 +68,6 @@ class ProteinSolvationOutput():
         print(f"Number of trajectory frames: {len(self.universe.trajectory)}")
         return view
 
-
     def calculate_rmsf_trajectory(self,
                                   use_compressed_trajectory: bool = False):
         """Calculate the root mean square fluctuation (RMSF) over a trajectory.  
@@ -115,11 +114,10 @@ class ProteinSolvationOutput():
         plt.show()
 
     def render_attribute_per_residue(
-            self,
-            residue_attributes: np.ndarray,
-            representation: typing.Literal["cartoon", "ball+stick", "line",
-                                           "point", "surface",
-                                           "ribbon"] = "cartoon"):
+        self,
+        residue_attributes: np.ndarray,
+        representation: typing.Literal["cartoon", "ball+stick", "line", "point",
+                                       "surface", "ribbon"] = "cartoon"):
         """Render a specific protein attribute in an interactive visualization.
         Args: 
             residue_attributes: The per residue values of the attribute you want 
