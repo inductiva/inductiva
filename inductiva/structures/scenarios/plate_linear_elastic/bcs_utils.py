@@ -1,7 +1,6 @@
 """Utils to create the different types of boundary conditions."""
 
-from abc import ABC, abstractmethod
-from typing import Optional, List, Literal
+from typing import List
 
 import json
 
