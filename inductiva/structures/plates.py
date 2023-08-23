@@ -26,7 +26,7 @@ class Plate(ABC):
 
     @abstractmethod
     def get_plate_mesh_params(self):
-        """Abstract method for plate mesh parameters."""
+        """Abstract method to get plate mesh parameters."""
         pass
 
 
@@ -81,7 +81,7 @@ class RectangularPlate(Plate):
         return plate_gmsh
 
     def get_plate_mesh_params(self) -> Tuple[float, float]:
-        """Gets the mesh generation parameters for the plate.
+        """Gets the mesh parameters for the plate.
 
         Metrics:
           - mesh_offset (float): Represents an offset for all the boundaries of
