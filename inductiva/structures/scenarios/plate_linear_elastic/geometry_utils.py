@@ -1,6 +1,5 @@
 """Utils to create the geometric case."""
 
-from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple
 
 import gmsh
