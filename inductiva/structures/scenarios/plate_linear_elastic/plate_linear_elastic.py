@@ -37,17 +37,17 @@ class DeformablePlate(Scenario):
     def __init__(
         self,
         plate: plates.RectangularPlate,
-        holes: List[holes.Hole],
-        bcs: List[bcs.BoundaryCondition],
+        holes_list: List[holes.Hole],
+        bcs_list: List[bcs.BoundaryCondition],
         material: materials.IsotropicLinearElasticMaterial,
     ):
         """Initializes the plate linear elastic scenario.
 
         Args:
             plate (RectangularPlate): The rectangular plate geometry.
-            holes (Hole): List of holes in the plate.
-            bcs (BoundaryConditionsCase): The boundary conditions applied to the
-              plate.
+            holes_list (List[Hole]): Holes in the plate.
+            bcs_list (List[BoundaryCondition]): The boundary conditions applied
+              to the plate.
             material (IsotropicLinearElasticMaterial): The material properties
               of the plate.
             geometry (GeometricCase): The plate with holes geometry.
@@ -55,11 +55,12 @@ class DeformablePlate(Scenario):
              palte with holes.
         """
         self.plate = plate
-        self.holes = holes
-        self.bcs = bcs
+        self.holes_list = holes_list
+        self.bcs_list = bcs_list
         self.material = material
-        self.geometry = geometry_utils.GeometricCase(plate=plate, holes=holes)
-        self.bcs_case = bcs_utils.BoundaryConditionsCase(bcs=bcs)
+        self.geometry = geometry_utils.GeometricCase(plate=self.plate,
+                                                     holes_list=self.holes_list)
+        self.bcs_case = bcs_utils.BoundaryConditionsCase(bcs_list=self.bcs_list)
 
     def simulate(self,
                  simulator: Simulator = FEniCSx(),
@@ -73,7 +74,7 @@ class DeformablePlate(Scenario):
             run_async: Whether to run the simulation asynchronously.
             mesh_filename: Mesh filename.
             bcs_filename: Boundary conditions filename.
-            material_filename: Material Filename.
+            material_filename: Material filename.
         """
         task = super().simulate(simulator,
                                 resource_pool_id=resource_pool_id,

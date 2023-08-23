@@ -14,12 +14,12 @@ class BoundaryConditionsCase:
       Dirichlet and Neumann boundary conditions.
 
     Attributes:
-        bcs (list): The boundary conditions objects.
+        bcs_list (list): The boundary conditions objects.
     """
 
-    def __init__(self, bcs: List[bcs.BoundaryCondition]) -> None:
+    def __init__(self, bcs_list: List[bcs.BoundaryCondition]) -> None:
         """Initializes a BoundaryConditionsCase object."""
-        self.bcs = bcs
+        self.bcs_list = bcs_list
 
     def write_to_json(self, json_path: str) -> None:
         """Write the boundary conditions to JSON file.
@@ -30,9 +30,11 @@ class BoundaryConditionsCase:
 
         # Divide the bcs_obj_list into two lists based on their types
         dirichlet_bcs = [
-            bc for bc in self.bcs if isinstance(bc, bcs.DirichletBC)
+            bc for bc in self.bcs_list if isinstance(bc, bcs.DirichletBC)
         ]
-        neumann_bcs = [bc for bc in self.bcs if isinstance(bc, bcs.NeumannBC)]
+        neumann_bcs = [
+            bc for bc in self.bcs_list if isinstance(bc, bcs.NeumannBC)
+        ]
 
         # Dirichlet dictionary
         if dirichlet_bcs is not None:

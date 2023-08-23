@@ -31,15 +31,15 @@ class GeometricCase:
 
     Attributes:
         plate (RectangularPlate): Rectangular plate object.
-        holes (List[Hole]): The holes objects.
+        holes_list (List[Hole]): The holes objects.
     """
 
     def __init__(self,
                  plate: plates.RectangularPlate,
-                 holes: Optional[List[holes.Hole]] = None) -> None:
+                 holes_list: Optional[List[holes.Hole]] = None) -> None:
         """Initializes a GeometricCase object."""
         self.plate = plate
-        self.holes = holes
+        self.holes_list = holes_list
 
     def write_to_json(self, json_path: str) -> None:
         """Writes the geometric case to JSON file.
@@ -50,7 +50,7 @@ class GeometricCase:
 
         # Gemeometric case dictionary
         plate_dict = {"plate": self.plate.to_dict()}
-        holes_dict = {"holes": [hole.to_dict() for hole in self.holes]}
+        holes_dict = {"holes": [hole.to_dict() for hole in self.holes_list]}
         geom_case_dictionary = {**plate_dict, **holes_dict}
 
         # Write JSON file
