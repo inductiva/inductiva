@@ -1,4 +1,4 @@
-"""Utils to create the plate."""
+"""Utils to create plates."""
 
 from abc import ABC, abstractmethod
 from typing import Tuple
