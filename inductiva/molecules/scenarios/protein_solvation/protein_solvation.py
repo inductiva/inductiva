@@ -57,6 +57,7 @@ class ProteinSolvation(Scenario):
 
         Args:
             simulation_time_ns: The simulation time in ns.
+            output_timestep_ps: The output timestep in ps.
             integrator: The integrator to use for the simulation. Options:
                 - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
@@ -76,7 +77,10 @@ class ProteinSolvation(Scenario):
         self.nsteps = int(
             simulation_time_ns * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
-        self.output_frequency = output_timestep_ps * 1000 / 2  # convert to fs and divide by the time step of the simulation (2 fs)
+        self.output_frequency = (
+            output_timestep_ps
+        ) * 1000 / 2  # convert to fs and divide by the time step
+        # of the simulation (2 fs)
         self.integrator = integrator
         self.n_steps_min = n_steps_min
         commands = self.get_commands()
@@ -127,6 +131,7 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
             "nsteps": self.nsteps,
             "ref_temp": self.temperature,
             "nsteps_minim": self.n_steps_min,
+            "output_frequency": self.output_frequency,
         },
         output_filename_paths=[
             os.path.join(input_dir, "simulation.mdp"),
