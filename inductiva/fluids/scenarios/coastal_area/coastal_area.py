@@ -185,15 +185,6 @@ class Bathymetry:
                 np.unique(y_uniques_diffs.round(decimals=2)).size == 1)
 
 
-        return (self.x_range[1] - self.x_range[0]) / self.shape[0]
-
-    @property
-    def y_delta(self):
-        """Returns the distance between two consecutive points along y."""
-
-        return (self.y_range[1] - self.y_range[0]) / self.shape[1]
-
-
 class CoastalArea(Scenario):
     """Coastal area scenario.
 
