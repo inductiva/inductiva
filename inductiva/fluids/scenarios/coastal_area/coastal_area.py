@@ -327,6 +327,15 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
         input_dir, file_name
     ) for file_name in [SWASH_CONFIG_TEMPLATE_FILENAME, SWASH_CONFIG_FILENAME])
 
+    # Compute the bathymetry grid spacing.
+    bathymetry_x_num = len(self.bathymetry.x_uniques())
+    bathymetry_y_num = len(self.bathymetry.y_uniques())
+
+    bathymetry_x_delta = (self.bathymetry.x_range[1] -
+                          self.bathymetry.x_range[0]) / bathymetry_x_num
+    bathymetry_y_delta = (self.bathymetry.y_range[1] -
+                          self.bathymetry.y_range[0]) / bathymetry_y_num
+
     # SWASH requires the simulation time to be formatted as HHMMSS.sss.
     simulation_time_hmsms = _convert_time_to_hmsms(self.simulation_time)
 
@@ -343,10 +352,10 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
             "bathymetry_filename": SWASH_BATHYMETRY_FILENAME,
             "x_range": self.bathymetry.x_range,
             "y_range": self.bathymetry.y_range,
-            "x_num": self.bathymetry.shape[0] - 1,
-            "y_num": self.bathymetry.shape[1] - 1,
-            "x_delta": self.bathymetry.x_delta,
-            "y_delta": self.bathymetry.y_delta,
+            "x_num": bathymetry_x_num - 1,
+            "y_num": bathymetry_y_num - 1,
+            "x_delta": bathymetry_x_delta,
+            "y_delta": bathymetry_y_delta,
             "water_level": self.water_level,
             "wave_source_location": self.wave_source_location,
             "wave_amplitude": wave_amplitude,
