@@ -162,14 +162,22 @@ class Bathymetry:
         return (np.min(self.y), np.max(self.y))
 
     def x_uniques(self, sort: bool = False) -> np.ndarray:
-        """Returns the unique x values."""
+        """Returns the unique x values.
+        
+        Args:
+            sort: Whether to sort the unique values.
+        """
         x_uniques = np.unique(self.x)
         if sort:
             x_uniques = np.sort(x_uniques)
         return x_uniques
 
     def y_uniques(self, sort: bool = False) -> np.ndarray:
-        """Returns the differences between sorted y values."""
+        """Returns the unique y values.
+        
+        Args:
+            sort: Whether to sort the unique values.
+        """
         y_uniques = np.unique(self.y)
         if sort:
             y_uniques = np.sort(y_uniques)
