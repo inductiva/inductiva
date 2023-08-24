@@ -35,15 +35,15 @@ class RectangularPlate(Plate):
 
     Attributes:
         plate_type (str): Plate type.
-        length (float): Plate length.
         width (float): Plate width.
+        length (float): Plate length.
     """
 
-    def __init__(self, length: float, width: float) -> None:
+    def __init__(self, width: float, length: float) -> None:
         """Initializes a RectangularPlate object."""
         self.plate_type = "rectangular"
-        self.length = length
         self.width = width
+        self.length = length
 
     def perimeter(self) -> float:
         """Calculate the perimeter of the plate.
