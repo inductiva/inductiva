@@ -150,19 +150,13 @@ class Bathymetry:
         np.savetxt(text_file_path, self.depths)
 
     @property
-    def shape(self):
-        """Returns the shape of the 2D array defining the bathymetry."""
-
-        return self.depths.shape
-
-    @property
-    def x_range(self):
+    def x_range(self) -> Tuple[float]:
         """Returns the range of x values."""
 
         return (np.min(self.x), np.max(self.x))
 
     @property
-    def y_range(self):
+    def y_range(self) -> Tuple[float]:
         """Returns the range of y values."""
 
         return (np.min(self.y), np.max(self.y))
