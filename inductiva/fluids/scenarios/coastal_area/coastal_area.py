@@ -248,6 +248,11 @@ class CoastalArea(Scenario):
             wave_amplitude: The amplitude of the wave, in meters.
             wave_period: The period of the wave, in seconds.
         """
+
+        if not bathymetry.is_uniform_grid():
+            raise ValueError(
+                "The bathymetry must be defined on a uniform grid.")
+
         self.bathymetry = bathymetry
         self.water_level = water_level
         self.wave_source_location = wave_source_location
