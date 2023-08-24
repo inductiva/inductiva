@@ -161,9 +161,29 @@ class Bathymetry:
 
         return (np.min(self.y), np.max(self.y))
 
-    @property
-    def x_delta(self):
-        """Returns the distance between two consecutive points along x."""
+    def x_uniques(self, sort: bool = False) -> np.ndarray:
+        """Returns the unique x values."""
+        x_uniques = np.unique(self.x)
+        if sort:
+            x_uniques = np.sort(x_uniques)
+        return x_uniques
+
+    def y_uniques(self, sort: bool = False) -> np.ndarray:
+        """Returns the differences between sorted y values."""
+        y_uniques = np.unique(self.y)
+        if sort:
+            y_uniques = np.sort(y_uniques)
+        return y_uniques
+
+    def is_uniform_grid(self) -> bool:
+        """Determines whether the bathymetry is defined on a uniform grid."""
+
+        x_uniques_diffs = np.diff(self.x_uniques(sort=True))
+        y_uniques_diffs = np.diff(self.y_uniques(sort=True))
+
+        return (np.unique(x_uniques_diffs.round(decimals=2)).size == 1 and
+                np.unique(y_uniques_diffs.round(decimals=2)).size == 1)
+
 
         return (self.x_range[1] - self.x_range[0]) / self.shape[0]
 
