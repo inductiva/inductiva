@@ -17,7 +17,7 @@ PROTEIN_TOPOLOGY_FILE = "protein.gro"
 SYSTEM_TOPOLOGY_FILE = "solvated_protein.tpr"
 
 
-class ProteinSolvationOutput():
+class ProteinSolvationOutput:
     """Post process the simulation output of a ProteinSolvation scenario."""
 
     def __init__(self, sim_output_path: pathlib.Path = None):

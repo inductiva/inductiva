@@ -50,6 +50,7 @@ class ProteinSolvation(Scenario):
             resource_pool_id: Optional[UUID] = None,
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
+            output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
             n_steps_min: int = 5000) -> tasks.Task:
         """Simulate the solvation of a protein.
@@ -75,6 +76,7 @@ class ProteinSolvation(Scenario):
         self.nsteps = int(
             simulation_time_ns * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
+        self.output_frequency = output_timestep_ps * 1000 / 2  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.n_steps_min = n_steps_min
         commands = self.get_commands()
