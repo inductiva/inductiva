@@ -1,4 +1,5 @@
 # coding: utf-8
+
 """
 
 
@@ -24,25 +25,21 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.instance import Instance
 from inductiva.client.model.http_validation_error import HTTPValidationError
-from inductiva.client.model.instance_group import InstanceGroup
-
-from . import path
 
 # body param
-SchemaForRequestBodyApplicationJson = InstanceGroup
+SchemaForRequestBodyApplicationJson = Instance
 
-request_body_instance_group = api_client.RequestBody(
+
+request_body_instance = api_client.RequestBody(
     content={
-        'application/json':
-            api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
+        'application/json': api_client.MediaType(
+            schema=SchemaForRequestBodyApplicationJson),
     },
     required=True,
 )
-_auth = [
-    'APIKeyHeader',
-]
-SchemaFor200ResponseBodyApplicationJson = InstanceGroup
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass
@@ -57,9 +54,8 @@ class ApiResponseFor200(api_client.ApiResponse):
 _response_for_200 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json':
-            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
-                                ),
+        'application/json': api_client.MediaType(
+            schema=SchemaFor200ResponseBodyApplicationJson),
     },
 )
 SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
@@ -77,88 +73,71 @@ class ApiResponseFor422(api_client.ApiResponse):
 _response_for_422 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor422,
     content={
-        'application/json':
-            api_client.MediaType(schema=SchemaFor422ResponseBodyApplicationJson
-                                ),
+        'application/json': api_client.MediaType(
+            schema=SchemaFor422ResponseBodyApplicationJson),
     },
 )
-_status_code_to_response = {
-    '200': _response_for_200,
-    '422': _response_for_422,
-}
-_all_accept_content_types = ('application/json',)
+_all_accept_content_types = (
+    'application/json',
+)
 
 
 class BaseApi(api_client.Api):
-
     @typing.overload
-    def _delete_instance_group_oapg(
+    def _get_group_status_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
 
     @typing.overload
-    def _delete_instance_group_oapg(
+    def _get_group_status_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
+
 
     @typing.overload
-    def _delete_instance_group_oapg(
+    def _get_group_status_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization:
-        ...
+    ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _delete_instance_group_oapg(
+    def _get_group_status_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
-        ...
+        ApiResponseFor200,
+        api_client.ApiResponseWithoutDeserialization,
+    ]: ...
 
-    def _delete_instance_group_oapg(
+    def _get_group_status_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -166,7 +145,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Delete Instance Group
+        Get Group Status
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -181,12 +160,10 @@ class BaseApi(api_client.Api):
 
         if body is schemas.unset:
             raise exceptions.ApiValueError(
-                'The required body parameter has an invalid value of: unset. Set a valid value instead'
-            )
+                'The required body parameter has an invalid value of: unset. Set a valid value instead')
         _fields = None
         _body = None
-        serialized_data = request_body_instance_group.serialize(
-            body, content_type)
+        serialized_data = request_body_instance.serialize(body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
             _fields = serialized_data['fields']
@@ -194,7 +171,7 @@ class BaseApi(api_client.Api):
             _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='delete'.upper(),
+            method='get'.upper(),
             headers=_headers,
             fields=_fields,
             body=_body,
@@ -204,193 +181,169 @@ class BaseApi(api_client.Api):
         )
 
         if skip_deserialization:
-            api_response = api_client.ApiResponseWithoutDeserialization(
-                response=response)
+            api_response = api_client.ApiResponseWithoutDeserialization(response=response)
         else:
-            response_for_status = _status_code_to_response.get(
-                str(response.status))
+            response_for_status = _status_code_to_response.get(str(response.status))
             if response_for_status:
-                api_response = response_for_status.deserialize(
-                    response, self.api_client.configuration)
+                api_response = response_for_status.deserialize(response, self.api_client.configuration)
             else:
-                api_response = api_client.ApiResponseWithoutDeserialization(
-                    response=response)
+                api_response = api_client.ApiResponseWithoutDeserialization(response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(status=response.status,
-                                          reason=response.reason,
-                                          api_response=api_response)
+            raise exceptions.ApiException(
+                status=response.status,
+                reason=response.reason,
+                api_response=api_response
+            )
 
         return api_response
 
 
-class DeleteInstanceGroup(BaseApi):
+class GetGroupStatus(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def delete_instance_group(
+    def get_group_status(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
 
     @typing.overload
-    def delete_instance_group(
+    def get_group_status(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
+
 
     @typing.overload
-    def delete_instance_group(
+    def get_group_status(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization:
-        ...
+    ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def delete_instance_group(
+    def get_group_status(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
-        ...
+        ApiResponseFor200,
+        api_client.ApiResponseWithoutDeserialization,
+    ]: ...
 
-    def delete_instance_group(
+    def get_group_status(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_instance_group_oapg(
+        return self._get_group_status_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization)
+            skip_deserialization=skip_deserialization
+        )
 
 
-class ApiFordelete(BaseApi):
+class ApiForget(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def delete(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: typing_extensions.Literal["application/json"] = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
 
     @typing.overload
-    def delete(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
+
 
     @typing.overload
-    def delete(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         skip_deserialization: typing_extensions.Literal[True],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization:
-        ...
+    ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def delete(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = ...,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
-        ...
+        ApiResponseFor200,
+        api_client.ApiResponseWithoutDeserialization,
+    ]: ...
 
-    def delete(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
         content_type: str = 'application/json',
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_instance_group_oapg(
+        return self._get_group_status_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization)
+            skip_deserialization=skip_deserialization
+        )
+
+
