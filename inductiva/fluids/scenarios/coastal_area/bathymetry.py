@@ -245,7 +245,10 @@ class Bathymetry:
     
         Args:
             cmap: Colormap to use. Defaults to the matplotlib default colormap.
-            clim: Color limits.
+            clim: Range of depth values to represent in colors. If `None`, the
+              range is determined automatically from the minumum and maximum
+              depth. Depth values below or above this range are represented with
+              the minimum or maximum colors, respectively.
             path: Path to save the plot. If `None`, the plot is not saved, and
               the matplotlib `Axes` object is returned instead.
         """
