@@ -174,3 +174,50 @@ class Bathymetry:
 
         return (np.unique(x_uniques_diffs.round(decimals=2)).size == 1 and
                 np.unique(y_uniques_diffs.round(decimals=2)).size == 1)
+
+    def plot(
+        self,
+        cmap: Optional[str] = None,
+        clim: Optional[Tuple[float]] = None,
+        path: Optional[str] = None,
+    ) -> Union[matplotlib.axes.Axes, None]:
+        """Plots the bathymetry.
+
+        The bathymetry is represented as a 2D map of depths, with the x and y
+        coordinates of the points where the depths are defined in the axes.
+
+        The plot is produced with matplotlib.
+    
+        Args:
+            cmap: Colormap to use. Defaults to the matplotlib default colormap.
+            clim: Color limits.
+            path: Path to save the plot. If `None`, the plot is not saved, and
+              the matplotlib `Axes` object is returned instead.
+        """
+
+        fig = matplotlib.pyplot.figure()
+        ax = fig.add_subplot()
+
+        pc = ax.tripcolor(
+            self.x,
+            self.y,
+            self.depths,
+            cmap=cmap,
+            clim=clim,
+        )
+        ax.set(
+            aspect="equal",
+            xlim=self.x_range,
+            ylim=self.y_range,
+            xlabel="$x$ [m]",
+            ylabel="$y$ [m]",
+        )
+
+        fig.colorbar(pc, ax=ax, label="Depth [m]")
+
+        if path is not None:
+            fig.savefig(path)
+            matplotlib.pyplot.close(fig)
+
+        else:
+            return ax
