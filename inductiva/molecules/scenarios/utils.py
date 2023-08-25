@@ -10,7 +10,7 @@ def unwrap_trajectory(topology, trajectory):
     Args:
         topology: Path to the topology file.
         trajectory: Path to the trajectory file."""
-    universe = mda.Universe(topology, trajectory, all_coordinates=True)
+    universe = mda.Universe(topology, trajectory, guess_bonds=True)
     atoms = universe.atoms
     transformation = transformations.unwrap(atoms)
     universe.trajectory.add_transformations(transformation)
