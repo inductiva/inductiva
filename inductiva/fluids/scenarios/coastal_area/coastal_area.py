@@ -5,7 +5,7 @@ import math
 import os
 import random
 import shutil
-from typing import Literal, Optional, Sequence
+from typing import Literal, Optional, Sequence, Tuple
 from uuid import UUID
 
 import numpy as np
@@ -30,34 +30,37 @@ class Bathymetry:
     """Represents a bathymetric profile.
     
     A bathymetric profile defines the depth of the sea bottom as a function of
-    space, here described in Cartesian coordinates (x, y). Here, a bathymetry is
-    represented as a 2D array with the depths, in meters, at each point of a
-    regular grid. The grid is defined by the range of x and y values. Positive
-    depths are below the water level.
+    space, here described in Cartesian coordinates (x, y).
+    
+    Here, a bathymetry is represented with:
+    - a 1D array of depths, in meters, measured at arbitrary points in space.
+      Positive depths are below the water level.
+    - two 1D arrays representing the x and y coordinates of the points where the
+      depths are defined, in meters.
     """
 
     def __init__(
         self,
         depths: np.ndarray,
-        x_range: Sequence[float],
-        y_range: Sequence[float],
+        x: np.ndarray,
+        y: np.ndarray,
     ):
         """Initializes a `Bathymetry` object.
         
         Args:
-            depths: A 2D array with the depths, in meters. The first and second
-              dimensions correspond to the x and y directions, respectively.
-            x_range: The range of x values, in meters.
-            y_range: The range of y values, in meters.
+            depths: A 1D array with the depths, in meters.
+            x: A 1D array with the x coordinates of the points where depths are
+              defined, in meters.
+            y: Same as `x`, but for the y coordinates.
         """
         self.depths = depths
-        self.x_range = x_range
-        self.y_range = y_range
+        self.x = x
+        self.y = y
 
     @classmethod
-    def from_text_file(
+    def from_bot_file(
         cls,
-        text_file_path: str,
+        bot_file_path: str,
         x_range: Sequence[float],
         y_range: Sequence[float],
     ):
@@ -74,8 +77,13 @@ class Bathymetry:
             y_range: The range of y values, in meters.
         """
 
-        depths = np.loadtxt(text_file_path)
-        return cls(depths, x_range, y_range)
+        depths = np.loadtxt(bot_file_path)
+
+        x, y = np.meshgrid(np.linspace(*x_range, depths.shape[0]),
+                           np.linspace(*y_range, depths.shape[1]),
+                           indexing="ij")
+
+        return cls(depths.flatten(), x.flatten(), y.flatten())
 
     @classmethod
     def from_random_depths(
@@ -126,7 +134,11 @@ class Bathymetry:
         depths = inductiva.generative.procedural.adjust_map_level(
             depths, percentile_above_water)
 
-        return cls(depths, x_range, y_range)
+        x, y = np.meshgrid(np.linspace(*x_range, x_num),
+                           np.linspace(*y_range, y_num),
+                           indexing="ij")
+
+        return cls(depths.flatten(), x.flatten(), y.flatten())
 
     def to_text_file(self, text_file_path: str):
         """Writes the bathymetry to a text file.
@@ -138,22 +150,47 @@ class Bathymetry:
         np.savetxt(text_file_path, self.depths)
 
     @property
-    def shape(self):
-        """Returns the shape of the 2D array defining the bathymetry."""
+    def x_range(self) -> Tuple[float]:
+        """Returns the range of x values."""
 
-        return self.depths.shape
-
-    @property
-    def x_delta(self):
-        """Returns the distance between two consecutive points along x."""
-
-        return (self.x_range[1] - self.x_range[0]) / self.shape[0]
+        return (np.min(self.x), np.max(self.x))
 
     @property
-    def y_delta(self):
-        """Returns the distance between two consecutive points along y."""
+    def y_range(self) -> Tuple[float]:
+        """Returns the range of y values."""
 
-        return (self.y_range[1] - self.y_range[0]) / self.shape[1]
+        return (np.min(self.y), np.max(self.y))
+
+    def x_uniques(self, sort: bool = False) -> np.ndarray:
+        """Returns the unique x values.
+        
+        Args:
+            sort: Whether to sort the unique values.
+        """
+        x_uniques = np.unique(self.x)
+        if sort:
+            x_uniques = np.sort(x_uniques)
+        return x_uniques
+
+    def y_uniques(self, sort: bool = False) -> np.ndarray:
+        """Returns the unique y values.
+        
+        Args:
+            sort: Whether to sort the unique values.
+        """
+        y_uniques = np.unique(self.y)
+        if sort:
+            y_uniques = np.sort(y_uniques)
+        return y_uniques
+
+    def is_uniform_grid(self) -> bool:
+        """Determines whether the bathymetry is defined on a uniform grid."""
+
+        x_uniques_diffs = np.diff(self.x_uniques(sort=True))
+        y_uniques_diffs = np.diff(self.y_uniques(sort=True))
+
+        return (np.unique(x_uniques_diffs.round(decimals=2)).size == 1 and
+                np.unique(y_uniques_diffs.round(decimals=2)).size == 1)
 
 
 class CoastalArea(Scenario):
@@ -210,6 +247,11 @@ class CoastalArea(Scenario):
             wave_amplitude: The amplitude of the wave, in meters.
             wave_period: The period of the wave, in seconds.
         """
+
+        if not bathymetry.is_uniform_grid():
+            raise ValueError(
+                "The bathymetry must be defined on a uniform grid.")
+
         self.bathymetry = bathymetry
         self.water_level = water_level
         self.wave_source_location = wave_source_location
@@ -284,6 +326,15 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
         input_dir, file_name
     ) for file_name in [SWASH_CONFIG_TEMPLATE_FILENAME, SWASH_CONFIG_FILENAME])
 
+    # Compute the bathymetry grid spacing.
+    bathymetry_x_num = len(self.bathymetry.x_uniques())
+    bathymetry_y_num = len(self.bathymetry.y_uniques())
+
+    bathymetry_x_delta = (self.bathymetry.x_range[1] -
+                          self.bathymetry.x_range[0]) / bathymetry_x_num
+    bathymetry_y_delta = (self.bathymetry.y_range[1] -
+                          self.bathymetry.y_range[0]) / bathymetry_y_num
+
     # SWASH requires the simulation time to be formatted as HHMMSS.sss.
     simulation_time_hmsms = _convert_time_to_hmsms(self.simulation_time)
 
@@ -300,10 +351,10 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
             "bathymetry_filename": SWASH_BATHYMETRY_FILENAME,
             "x_range": self.bathymetry.x_range,
             "y_range": self.bathymetry.y_range,
-            "x_num": self.bathymetry.shape[0] - 1,
-            "y_num": self.bathymetry.shape[1] - 1,
-            "x_delta": self.bathymetry.x_delta,
-            "y_delta": self.bathymetry.y_delta,
+            "x_num": bathymetry_x_num - 1,
+            "y_num": bathymetry_y_num - 1,
+            "x_delta": bathymetry_x_delta,
+            "y_delta": bathymetry_y_delta,
             "water_level": self.water_level,
             "wave_source_location": self.wave_source_location,
             "wave_amplitude": wave_amplitude,
