@@ -77,9 +77,9 @@ class ProteinSolvation(Scenario):
         self.nsteps = int(
             simulation_time_ns * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
-        self.output_frequency = (
-            output_timestep_ps
-        ) * 1000 / 2  # convert to fs and divide by the time step
+        self.output_frequency = int(
+            output_timestep_ps * 1000 /
+            2)  # convert to fs and divide by the time step
         # of the simulation (2 fs)
         self.integrator = integrator
         self.n_steps_min = n_steps_min
