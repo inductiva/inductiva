@@ -3,14 +3,10 @@
 from functools import singledispatchmethod
 import math
 import os
-import random
 import shutil
-from typing import Literal, Optional, Sequence, Tuple
+from typing import Literal, Optional
 from uuid import UUID
 
-import numpy as np
-
-import inductiva
 from inductiva import tasks
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
