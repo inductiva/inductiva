@@ -5,6 +5,7 @@ from typing import Optional, Sequence, Tuple, Union
 
 import matplotlib
 import numpy as np
+import scipy
 import utm
 
 import inductiva
@@ -235,14 +236,26 @@ class Bathymetry:
         cmap: Optional[str] = None,
         clim: Optional[Tuple[float]] = None,
         path: Optional[str] = None,
+        grid_size: int = 500,
+        max_distance: float = 20,
     ) -> Union[matplotlib.axes.Axes, None]:
         """Plots the bathymetry.
 
         The bathymetry is represented as a 2D map of depths, with the x and y
         coordinates of the points where the depths are defined in the axes.
 
-        The plot is produced with matplotlib.
+        The bathymetry data is plotted with a color plot on a uniform grid,
+        defined by the size `grid_size`.
+        
+        The data is interpolated from the points where the bathymetry is defined
+        to the uniform grid using linear interpolation.
+
+        Points on the uniform grid at a distance to points where the bathymetry
+        is defined larger than a threshold distance `max_distance` are not
+        plotted.
     
+        The plot is produced with matplotlib.
+
         Args:
             cmap: Colormap to use. Defaults to the matplotlib default colormap.
             clim: Range of depth values to represent in colors. If `None`, the
@@ -253,16 +266,43 @@ class Bathymetry:
               the matplotlib `Axes` object is returned instead.
         """
 
+        # Create uniform grid for interpolation.
+        x_grid, y_grid = np.meshgrid(np.linspace(*self.x_range, grid_size),
+                                     np.linspace(*self.y_range, grid_size))
+
+        # Interpolate depths to uniform grid.
+        interpolator = scipy.interpolate.LinearNDInterpolator(
+            (self.x, self.y),
+            self.depths,
+        )
+
+        depths_grid = interpolator(x_grid, y_grid)
+
+        # Filter out points that are far from bathymetry locations.
+        tree = scipy.spatial.KDTree(np.c_[self.x, self.y])
+        distance, _ = tree.query(np.c_[x_grid.ravel(), y_grid.ravel()], k=1)
+        distance = distance.reshape(x_grid.shape)
+        depths_grid[distance > max_distance] = np.nan
+
+        # Plot the bathymetry.
+        extent = (
+            self.x_range[0],
+            self.x_range[1],
+            self.y_range[0],
+            self.y_range[1],
+        )
+
         fig = matplotlib.pyplot.figure()
         ax = fig.add_subplot()
 
-        pc = ax.tripcolor(
-            self.x,
-            self.y,
-            self.depths,
+        im = ax.imshow(
+            depths_grid,
             cmap=cmap,
             clim=clim,
+            origin="lower",
+            extent=extent,
         )
+
         ax.set(
             aspect="equal",
             xlim=self.x_range,
@@ -271,7 +311,7 @@ class Bathymetry:
             ylabel="$y$ [m]",
         )
 
-        fig.colorbar(pc, ax=ax, label="Depth [m]")
+        fig.colorbar(im, ax=ax, label="Depth [m]")
 
         if path is not None:
             fig.savefig(path)
