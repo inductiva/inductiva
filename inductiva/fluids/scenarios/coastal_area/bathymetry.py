@@ -5,6 +5,7 @@ from typing import Optional, Sequence, Tuple, Union
 
 import matplotlib
 import numpy as np
+import utm
 
 import inductiva
 
@@ -67,6 +68,60 @@ class Bathymetry:
                            indexing="ij")
 
         return cls(depths.flatten(), x.flatten(), y.flatten())
+
+    @classmethod
+    def from_ascii_xyz_file(
+        cls,
+        ascii_xyz_file_path: str,
+        remove_offset: bool = True,
+    ):
+        """Creates a `Bathymetry` object from an ASCII XYZ file.
+        
+        ASCII XYZ files store bathymetric data in a table where each line
+        corresponds to a location (latitude, longitude pair). Several columns
+        are available to characterize the depth at each location, namely:
+        - longitude, in decimal degrees, e.g. 52.07334567;
+        - latitude, in decimal degrees, e.g. 3.06033283;
+        - the minum depth, in meters, e.g. 35.81;
+        - the maximum depth, in meters, e.g. 35.81;
+        - average depth (over a set of measurements), in meters, e.g. 35.81.
+        - the standard deviation of the depth (over a set of measurements), in
+          meters, e.g. 35.81;
+
+        For more information, see
+        https://emodnet.ec.europa.eu/sites/emodnet.ec.europa.eu/files/public/20171127_DTM_exchange_format_specification_v1.6.pdf.
+
+        In this method, we:
+        - load the latitude and longitude values from the file, and convert
+          them to (x, y) UTM coordinates (see
+          https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system
+          for more information).
+        - use average depth as the local depth value.
+
+        Args:
+            ascii_xyz_file_path: Path to the ASCII XYZ file.
+            remove_offset: Whether to remove the offset of the x and y
+              coordinates. If `True`, the minimum x and y values are subtracted
+              from all x and y values, respectively.
+        """
+
+        # Load only the first, second and fifth columns of the file,
+        # corresponding to longitude, latitude and average depth, respectively.
+        bathymetry_data = np.loadtxt(ascii_xyz_file_path,
+                                     usecols=(0, 1, 4),
+                                     delimiter=";")
+
+        x_lon = bathymetry_data[:, 0]
+        y_lat = bathymetry_data[:, 1]
+        depths = bathymetry_data[:, 2]
+
+        x, y, _, _ = utm.from_latlon(y_lat, x_lon)
+
+        if remove_offset:
+            x = x - x.min()
+            y = y - y.min()
+
+        return cls(depths, x, y)
 
     @classmethod
     def from_random_depths(
