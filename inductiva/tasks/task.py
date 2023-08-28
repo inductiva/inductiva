@@ -164,7 +164,7 @@ class Task:
         self,
         output_dir: Optional[pathlib.Path] = None,
         uncompress: bool = True,
-        rm_archive: bool = True,
+        rm_downloaded_zip_archive: bool = True,
     ):
         """Get the output of the task.
 
@@ -185,10 +185,11 @@ class Task:
             100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]   
         """
         self.wait()
-        output_dir = self.download_outputs(filenames=self._default_files_list,
-                                           output_dir=output_dir,
-                                           uncompress=uncompress,
-                                           rm_archive=rm_archive)
+        output_dir = self.download_outputs(
+            filenames=self._default_files_list,
+            output_dir=output_dir,
+            uncompress=uncompress,
+            rm_downloaded_zip_archive=rm_downloaded_zip_archive)
 
         if self._output_class:
             return self._output_class(output_dir)
