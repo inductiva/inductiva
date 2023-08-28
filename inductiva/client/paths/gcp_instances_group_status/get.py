@@ -24,15 +24,15 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.instance import Instance
 from inductiva.client.model.http_validation_error import HTTPValidationError
-from inductiva.client.model.instance_group import InstanceGroup
 
 from . import path
 
 # body param
-SchemaForRequestBodyApplicationJson = InstanceGroup
+SchemaForRequestBodyApplicationJson = Instance
 
-request_body_instance_group = api_client.RequestBody(
+request_body_instance = api_client.RequestBody(
     content={
         'application/json':
             api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
@@ -42,7 +42,7 @@ request_body_instance_group = api_client.RequestBody(
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = InstanceGroup
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass
@@ -92,7 +92,7 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _delete_instance_group_oapg(
+    def _get_group_status_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -108,7 +108,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _delete_instance_group_oapg(
+    def _get_group_status_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -124,7 +124,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _delete_instance_group_oapg(
+    def _get_group_status_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -138,7 +138,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _delete_instance_group_oapg(
+    def _get_group_status_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -154,7 +154,7 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _delete_instance_group_oapg(
+    def _get_group_status_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -166,7 +166,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Delete Instance Group
+        Get Group Status
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -185,8 +185,7 @@ class BaseApi(api_client.Api):
             )
         _fields = None
         _body = None
-        serialized_data = request_body_instance_group.serialize(
-            body, content_type)
+        serialized_data = request_body_instance.serialize(body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
             _fields = serialized_data['fields']
@@ -194,7 +193,7 @@ class BaseApi(api_client.Api):
             _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='delete'.upper(),
+            method='get'.upper(),
             headers=_headers,
             fields=_fields,
             body=_body,
@@ -224,11 +223,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class DeleteInstanceGroup(BaseApi):
+class GetGroupStatus(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def delete_instance_group(
+    def get_group_status(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -244,7 +243,7 @@ class DeleteInstanceGroup(BaseApi):
         ...
 
     @typing.overload
-    def delete_instance_group(
+    def get_group_status(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -260,7 +259,7 @@ class DeleteInstanceGroup(BaseApi):
         ...
 
     @typing.overload
-    def delete_instance_group(
+    def get_group_status(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -274,7 +273,7 @@ class DeleteInstanceGroup(BaseApi):
         ...
 
     @typing.overload
-    def delete_instance_group(
+    def get_group_status(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -290,7 +289,7 @@ class DeleteInstanceGroup(BaseApi):
     ]:
         ...
 
-    def delete_instance_group(
+    def get_group_status(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -301,7 +300,7 @@ class DeleteInstanceGroup(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_instance_group_oapg(
+        return self._get_group_status_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,
@@ -310,11 +309,11 @@ class DeleteInstanceGroup(BaseApi):
             skip_deserialization=skip_deserialization)
 
 
-class ApiFordelete(BaseApi):
+class ApiForget(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def delete(
+    def get(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -330,7 +329,7 @@ class ApiFordelete(BaseApi):
         ...
 
     @typing.overload
-    def delete(
+    def get(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -346,7 +345,7 @@ class ApiFordelete(BaseApi):
         ...
 
     @typing.overload
-    def delete(
+    def get(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -360,7 +359,7 @@ class ApiFordelete(BaseApi):
         ...
 
     @typing.overload
-    def delete(
+    def get(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -376,7 +375,7 @@ class ApiFordelete(BaseApi):
     ]:
         ...
 
-    def delete(
+    def get(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -387,7 +386,7 @@ class ApiFordelete(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_instance_group_oapg(
+        return self._get_group_status_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,
