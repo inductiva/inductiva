@@ -5,6 +5,7 @@ from typing import Optional, Sequence, Tuple, Union
 
 import matplotlib
 import numpy as np
+import scipy
 import utm
 
 import inductiva
@@ -279,3 +280,36 @@ class Bathymetry:
 
         else:
             return ax
+
+    def to_uniform_grid(self, x_size: int = 200, y_size: int = 200):
+        """Converts the bathymetry to a uniform grid.
+
+        The bathymetry is interpolated to a uniform grid. The grid is defined
+        by the ranges of x and y values, and the number of points in each
+        direction is configurable via the `x_size` and `y_size` arguments.
+
+        Args:
+            x_size: Number of grid points in the x direction.
+            y_size: Number of grid points in the y direction.
+        """
+
+        x_grid, y_grid = np.meshgrid(np.linspace(*self.x_range, x_size),
+                                     np.linspace(*self.y_range, y_size),
+                                     indexing="ij")
+
+        depths_grid = scipy.interpolate.griddata(
+            (self.x, self.y),
+            self.depths,
+            (x_grid, y_grid),
+            method="linear",
+        )
+
+        if np.sum(np.isnan(depths_grid)) > 0:
+            raise ValueError(
+                "The bathymetry cannot be converted to a uniform grid because "
+                "depths are not defined in one or more edge regions of the "
+                "domain.")
+
+        return Bathymetry(depths=depths_grid.flatten(),
+                          x=x_grid.flatten(),
+                          y=y_grid.flatten())
