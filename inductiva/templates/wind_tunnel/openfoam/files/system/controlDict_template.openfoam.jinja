@@ -22,13 +22,13 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         {{ simulation_time }};
+endTime         {{ num_iterations }};
 
 deltaT          1;
 
 writeControl    timeStep;
 
-writeInterval   {{ output_time_step }};
+writeInterval   {{ num_iterations }};
 
 purgeWrite      0;
 
@@ -46,8 +46,6 @@ runTimeModifiable true;
 
 functions
 {
-    #include "streamLines"
-    #include "cuttingPlane"
     #include "forceCoeffs"
 }
 

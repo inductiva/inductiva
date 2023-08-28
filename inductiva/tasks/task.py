@@ -154,11 +154,28 @@ class Task:
         """Set the output class of the task."""
         self._output_class = output_class
 
-    def get_output(self,
-                   output_dir: Optional[types.Path] = None) -> pathlib.Path:
-        """Get the output files produced by the task. If the task 
-        is not finished the function will wait until it is to download
-        the output folder contents. 
+    def set_default_output_files(self,
+                                 default_output_files_list: List[str] = None):
+        """Set the default output files of the task."""
+
+        self._default_files_list = default_output_files_list
+
+    def get_output(
+        self,
+        output_dir: Optional[pathlib.Path] = None,
+        uncompress: bool = True,
+        rm_downloaded_zip_archive: bool = True,
+    ):
+        """Get the output of the task.
+
+        Args:
+            output_dir: Directory where to download the files. If None, the
+                files are downloaded to the default directory. The default is
+                {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
+            uncompress: Whether to uncompress the archive after downloading it.
+            rm_archive: Whether to remove the archive after uncompressing it.
+                If uncompress is False, this argument is ignored.
+
         Returns:
             The output path of the task.
         Example:
@@ -168,7 +185,11 @@ class Task:
             100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]   
         """
         self.wait()
-        output_dir = self.download_outputs(output_dir=output_dir)
+        output_dir = self.download_outputs(
+            filenames=self._default_files_list,
+            output_dir=output_dir,
+            uncompress=uncompress,
+            rm_downloaded_zip_archive=rm_downloaded_zip_archive)
 
         if self._output_class:
             return self._output_class(output_dir)
