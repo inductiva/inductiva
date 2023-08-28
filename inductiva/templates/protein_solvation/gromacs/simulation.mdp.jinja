@@ -4,11 +4,12 @@ nsteps                  = {{ nsteps }}       ; number of steps in simulation
 dt                      = 0.002              ; 2 fs
 
 ; Output control
-nstxtcout               = 1                   ; generate .xtc file 
-nstxout                 = 500                ; save coordinates every 500 iter
-nstvout                 = 500                ; save velocities every 1.0 ps
-nstenergy               = 500                ; save energies every 1.0 ps
-nstlog                  = 500                ; update log file every 1.0 ps
+nstxout                 = {{ output_frequency }}                ; save coordinates every 1.0 ps
+nstvout                 = {{ output_frequency }}                ; save velocities every 1.0 ps
+nstenergy               = {{ output_frequency }}                ; save energies every 1.0 ps
+nstlog                  = {{ output_frequency }}                ; update log file every 1.0 ps
+nstxout-compressed      = {{ output_frequency }}                ; save coordinates every 1.0 ps in the compressed trajectory file
+compressed-x-grps       = protein                               ; save only protein coordinates in the compressed trajectory file 
 
 ; Temperature coupling is on
 tc-grps                 = system             ; single coupling group

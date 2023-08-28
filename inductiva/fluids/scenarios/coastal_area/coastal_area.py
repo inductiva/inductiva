@@ -3,11 +3,9 @@
 from functools import singledispatchmethod
 import math
 import os
-from typing import Literal, Optional, Sequence
 import shutil
+from typing import Literal, Optional
 from uuid import UUID
-
-import numpy as np
 
 from inductiva import tasks
 from inductiva.scenarios import Scenario
@@ -15,6 +13,7 @@ from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import SWASH
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
+from inductiva.fluids.scenarios.coastal_area.bathymetry import Bathymetry
 from inductiva.fluids.scenarios.coastal_area.output import CoastalAreaOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
@@ -22,85 +21,6 @@ SWASH_TEMPLATE_SUBDIR = "swash"
 SWASH_CONFIG_TEMPLATE_FILENAME = "input.sws.jinja"
 SWASH_CONFIG_FILENAME = "input.sws"
 SWASH_BATHYMETRY_FILENAME = "bathymetry.bot"
-
-
-class Bathymetry:
-    """Represents a bathymetric profile.
-    
-    A bathymetric profile defines the depth of the sea bottom as a function of
-    space, here described in Cartesian coordinates (x, y). Here, a bathymetry is
-    represented as a 2D array with the depths, in meters, at each point of a
-    regular grid. The grid is defined by the range of x and y values. Positive
-    depths are below the water level.
-    """
-
-    def __init__(
-        self,
-        depths: np.ndarray,
-        x_range: Sequence[float],
-        y_range: Sequence[float],
-    ):
-        """Initializes a `Bathymetry` object.
-        
-        Args:
-            depths: A 2D array with the depths, in meters. The first and second
-              dimensions correspond to the x and y directions, respectively.
-            x_range: The range of x values, in meters.
-            y_range: The range of y values, in meters.
-        """
-        self.depths = depths
-        self.x_range = x_range
-        self.y_range = y_range
-
-    @classmethod
-    def from_text_file(
-        cls,
-        text_file_path: str,
-        x_range: Sequence[float],
-        y_range: Sequence[float],
-    ):
-        """Creates a `Bathymetry` object from a text file.
-        
-        The depth values are read from a text file. The text file must contain
-        a 2D array with the depths, in meters. The first and second dimensions
-        of the array in the text file (i.e. rows and columns) correspond to the
-        x and y directions, respectively.
-
-        Args:
-            text_file_path: Path to the text file.
-            x_range: The range of x values, in meters.
-            y_range: The range of y values, in meters.
-        """
-
-        depths = np.loadtxt(text_file_path)
-        return cls(depths, x_range, y_range)
-
-    def to_text_file(self, text_file_path: str):
-        """Writes the bathymetry to a text file.
-
-        Args:
-            text_file_path: Path to the text file.
-        """
-
-        np.savetxt(text_file_path, self.depths)
-
-    @property
-    def shape(self):
-        """Returns the shape of the 2D array defining the bathymetry."""
-
-        return self.depths.shape
-
-    @property
-    def x_delta(self):
-        """Returns the distance between two consecutive points along x."""
-
-        return (self.x_range[1] - self.x_range[0]) / self.shape[0]
-
-    @property
-    def y_delta(self):
-        """Returns the distance between two consecutive points along y."""
-
-        return (self.y_range[1] - self.y_range[0]) / self.shape[1]
 
 
 class CoastalArea(Scenario):
@@ -157,6 +77,11 @@ class CoastalArea(Scenario):
             wave_amplitude: The amplitude of the wave, in meters.
             wave_period: The period of the wave, in seconds.
         """
+
+        if not bathymetry.is_uniform_grid():
+            raise ValueError(
+                "The bathymetry must be defined on a uniform grid.")
+
         self.bathymetry = bathymetry
         self.water_level = water_level
         self.wave_source_location = wave_source_location
@@ -171,6 +96,7 @@ class CoastalArea(Scenario):
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
+        n_cores=1,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -180,6 +106,7 @@ class CoastalArea(Scenario):
             simulation_time: Total simulation time, in seconds.
             time_step: Time step, in seconds.
             output_time_step: Time step for the output, in seconds.
+            n_cores: Number of cores to use for the simulation.
         """
 
         self.simulation_time = simulation_time
@@ -191,6 +118,7 @@ class CoastalArea(Scenario):
             resource_pool_id=resource_pool_id,
             run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,
+            n_cores=n_cores,
         )
 
         task.set_output_class(CoastalAreaOutput)
@@ -228,6 +156,15 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
         input_dir, file_name
     ) for file_name in [SWASH_CONFIG_TEMPLATE_FILENAME, SWASH_CONFIG_FILENAME])
 
+    # Compute the bathymetry grid spacing.
+    bathymetry_x_num = len(self.bathymetry.x_uniques())
+    bathymetry_y_num = len(self.bathymetry.y_uniques())
+
+    bathymetry_x_delta = (self.bathymetry.x_range[1] -
+                          self.bathymetry.x_range[0]) / bathymetry_x_num
+    bathymetry_y_delta = (self.bathymetry.y_range[1] -
+                          self.bathymetry.y_range[0]) / bathymetry_y_num
+
     # SWASH requires the simulation time to be formatted as HHMMSS.sss.
     simulation_time_hmsms = _convert_time_to_hmsms(self.simulation_time)
 
@@ -244,10 +181,10 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
             "bathymetry_filename": SWASH_BATHYMETRY_FILENAME,
             "x_range": self.bathymetry.x_range,
             "y_range": self.bathymetry.y_range,
-            "x_num": self.bathymetry.shape[0] - 1,
-            "y_num": self.bathymetry.shape[1] - 1,
-            "x_delta": self.bathymetry.x_delta,
-            "y_delta": self.bathymetry.y_delta,
+            "x_num": bathymetry_x_num - 1,
+            "y_num": bathymetry_y_num - 1,
+            "x_delta": bathymetry_x_delta,
+            "y_delta": bathymetry_y_delta,
             "water_level": self.water_level,
             "wave_source_location": self.wave_source_location,
             "wave_amplitude": wave_amplitude,

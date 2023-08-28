@@ -1,32 +1,71 @@
 """Class for the coils creation."""
-from inductiva.scenarios import Scenario
 import math
+import os
 import random
+import shutil
+import typing
+import uuid
+
+from absl import logging
+from functools import singledispatchmethod
+
 import numpy as np
 
+from inductiva import scenarios, simulation, stellarators, tasks, types, utils
 
-class StellaratorCoils(Scenario):
+SIMSOPT_COIL_COEFFICIENTS_FILENAME = 'coil_coefficients.npz'
+SIMSOPT_COIL_CURRENTS_FILENAME = 'coil_currents.npz'
+SIMSOPT_PLASMA_SURFACE_FILENAME = 'input.final'
+SIMSOPT_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
+                                    'stellarator_coils')
+PLASMA_SURFACE_TEMPLATE_FILE_NAME = 'input.example'
+
+
+class StellaratorCoils(scenarios.Scenario):
     """Represents stellarator coils.
+
+    A stellarator is a magnetic fusion confinement device that possesses a 
+    set of external electromagnetic coils that have current running through 
+    them. These coils create a magnetic field that is able to confine a plasma, 
+    at extremely high temperatures, where the nuclear fusion reactions take 
+    place.
+
+    Therefore, designing a stellarator involves defining a set of 
+    electromagnetic coils. This set of coils is defined by a small set of 
+    NC independent coils, due to the symmetries involved. There is stellarator 
+    symmetry, that mirrors this independent set of coils and then 'number of
+    field periods (nfp)' rotational symmetry, that repeats this block of coils
+    throughout the stellarator in the toroidal direction (the long way around
+    the torus). The number of field periods is the number of complete magnetic 
+    field repetitions within a device. It represents how many times the magnetic
+    field repeats itself along the toroidal direction, lowering the number
+    of independent coils that one has to design. Therefore, the total number
+    of coils in a stellarator device comes out to 2*NC*nfp.
+
+    For more information about stellarators, there are many articles with 
+    very good information. Per Helander's 2014 "Theory of plasma confinement in 
+    non-axisymmetric magnetic fields" is a good example. See more details at:
+    https://iopscience.iop.org/article/10.1088/0034-4885/77/8/087001
 
     The class can be initialized normally (directly from __init__) providing
     a list of `Coil` objects or from the class methods so that the individual 
     coils can also be created before creating the StellaratorCoils object. 
 
     Attributes:
-        num_coils (int): The number of coils per field period 
-        (independent coils).
         coils (list): List of `Coil` objects.
         num_field_periods (int): Number of magnetic field periods.
-        Refers to the number of complete magnetic field repetitions 
-        within a stellarator. Represents how many times the magnetic
-        field pattern repeats itself along the toroidal direction.
+          Refers to the number of complete magnetic field repetitions 
+          within a stellarator. Represents how many times the magnetic
+          field pattern repeats itself along the toroidal direction.
+          Typically varies between 1 and 3.
     """
+
+    valid_simulators = [stellarators.simulators.Simsopt]
 
     def __init__(self, coils, num_field_periods):
         """Initialize the StellaratorCoils object."""
 
         self.coils = coils
-        self.num_coils = len(coils)
         self.num_field_periods = num_field_periods
 
     @classmethod
@@ -42,7 +81,7 @@ class StellaratorCoils(Scenario):
             num_coils (int): The number of coils per field period.
             coil_currents (list): List of coil currents.
             major_radius (float): distance from the center of the torus 
-            (the central axis) to the outer edge of the plasma region.
+              (the central axis) to the outer edge of the plasma region.
             minor_radius (float): Radius of the simple circular curves.
 
         Returns:
@@ -91,7 +130,7 @@ class StellaratorCoils(Scenario):
             coil_currents (list): List of coil currents.
             max_order (int): Maximum order of the coefficients.
             major_radius (float): distance from the center of the torus 
-            (the central axis) to the outer edge of the plasma region.
+              (the central axis) to the outer edge of the plasma region.
             minor_radius (float): Radius of the simple initial curves.
 
         Returns:
@@ -185,7 +224,80 @@ class StellaratorCoils(Scenario):
 
         return cls(coils, num_field_periods)
 
-    def simulate(self):
+    def simulate(
+        self,
+        simulator: simulation.Simulator = stellarators.simulators.Simsopt(),
+        resource_pool_id: typing.Optional[uuid.UUID] = None,
+        run_async: bool = False,
+        plasma_surface_filepath: typing.Optional[types.Path] = None,
+        num_iterations: int = 1,
+        num_samples: int = 1,
+        sigma_scaling_factor: float = 0.1,
+    ) -> tasks.Task:
+        """Simulates the scenario.
+
+        The magnetic field produced on the plasma surface and a set of objective
+        functions are computed for a collection of stellarator coil 
+        configurations with the goal of optimizing a stellarator design.
+
+        The optimization is performed as follows:
+        1. The scenario's coil configuration is used as an initial 
+          configuration.
+        2. Gaussian noise is added to each coil parameter to produce 
+          `num_sample` configurations.
+        3. From these configurations, the one with the lowest value of the
+          objective functions is selected.
+        4. This configuration is then used as an initial configuration for
+          the next iteration.
+        5. The process is repeated `num_iteration` times.
+
+        The simulation also outputs the Fourier Series coefficients describing
+        the coils for each of the configurations obtained during the process.
+
+        Args:
+            simulator: The simulator to use for the simulation.
+            resource_pool_id: The resource pool to use for the simulation.
+            run_async: Whether to run the simulation asynchronously.
+            plasma_surface_filepath: Path to the file with the description of
+              the plasma surface on which the magnetic field will be calculated.
+            num_iterations: Number of iterations to run for the searching 
+              process.
+            num_samples: Number of different stellarator samples generated per 
+              iteration from a configuration. The samples are generated using
+              normal distribution noise for each coefficient of the Fourier 
+              Series that describes the coils.
+            sigma_scaling_factor: Scaling factor for the sigma value used in 
+              the random generation of noise. This argument makes sure that 
+              the noise is generated proportionally to each coefficient. It 
+              also determines the range of search for new values of the
+              coefficients.
+        """
+
+        if plasma_surface_filepath:
+            self.plasma_surface_filepath = utils.files.resolve_path(
+                plasma_surface_filepath)
+        else:
+            logging.info('Plasma surface description not provided. '
+                         'Using default file.')
+            self.plasma_surface_filepath = os.path.join(
+                SIMSOPT_TEMPLATE_DIR, PLASMA_SURFACE_TEMPLATE_FILE_NAME)
+
+        task = super().simulate(
+            simulator,
+            resource_pool_id=resource_pool_id,
+            run_async=run_async,
+            coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
+            coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
+            plasma_surface_filename=SIMSOPT_PLASMA_SURFACE_FILENAME,
+            num_field_periods=self.num_field_periods,
+            num_iterations=num_iterations,
+            num_samples=num_samples,
+            sigma_scaling_factor=sigma_scaling_factor)
+
+        return task
+
+    @singledispatchmethod
+    def create_input_files(self, simulator: simulation.Simulator):
         pass
 
 
@@ -203,7 +315,8 @@ class Coil:
 
     Attributes: 
         curve_coefficients (np.ndarray): Array with Fourier coefficients 
-        defining the coil.
+          defining the coil. Shape: (6, order + 1), where order is the 
+          maximum order of the Fourier Series representation.
         current (float): Coil current.
     """
 
@@ -219,9 +332,9 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
 
     Args:
         toroidal_angle (float): Angle that defines the position of the
-        coil in the torus.
+          coil in the torus.
         major_radius (float): distance from the center of the torus 
-        (the central axis) to the outer edge of the plasma region.
+          (the central axis) to the outer edge of the plasma region.
         minor_radius (float): Radius of the simple initial curves.
 
     Returns:
@@ -237,3 +350,23 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
     curve_coefficients[4, 1] = -minor_radius
 
     return curve_coefficients
+
+
+@StellaratorCoils.create_input_files.register
+def _(self, simulator: stellarators.simulators.Simsopt, input_dir):  # pylint: disable=unused-argument
+    """Creates Simsopt simulation input files."""
+
+    coil_coefficients = [coil.curve_coefficients for coil in self.coils]
+    coil_currents = np.array([coil.current for coil in self.coils])
+
+    coil_coefficients_filename = os.path.join(
+        input_dir, SIMSOPT_COIL_COEFFICIENTS_FILENAME)
+    coil_currents_filename = os.path.join(input_dir,
+                                          SIMSOPT_COIL_CURRENTS_FILENAME)
+
+    plasma_surface_filename = os.path.join(input_dir,
+                                           SIMSOPT_PLASMA_SURFACE_FILENAME)
+
+    np.savez(coil_coefficients_filename, *coil_coefficients)
+    np.savez(coil_currents_filename, coil_currents)
+    shutil.copy(self.plasma_surface_filepath, plasma_surface_filename)
