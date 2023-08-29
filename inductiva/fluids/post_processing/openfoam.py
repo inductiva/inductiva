@@ -1,7 +1,7 @@
 """Post-processing tools of fluid dynamics steady-state simulations.
 
 This class implements various post-processing capabilities for
-the visuals associated. Namely:
+the visualizations associated. Namely:
     - Pressure over object;
     - Cutting plane;
     - Stream lines.
@@ -23,11 +23,11 @@ class SteadyStateOutput:
     """Post-Process steady-state simulation outputs.
 
     This class contains several methods to post-process the output 
-    and visualize the results of a steady-state simulations where
+    and visualize the results of a steady-state simulation where
     time-independent results are obtained.
 
-    To be general we assume that a simulation is performed inside a
-    regular box and a certain object is placed inside the box.
+    To be general we assume that a simulation is performed over a
+    regular box - the domain - and a certain object placed inside.
     The object is either a small object inside the domain or a more
     general object that spreads all through the domain.
     """
@@ -40,13 +40,16 @@ class SteadyStateOutput:
         
         Attributes:
             sim_output_path: Path to simulation output files.
-            last_time_step: Last time step of the simulation.
+            last_iteration: Last iteration of the simulation.
                 Obtained through the output folders.
         """
 
         self.sim_output_path = sim_output_path
+        # Sort all output folders and files by alphabetical order.
         outputs_dir_list = sorted(os.listdir(sim_output_path))
-        self.last_time_step = float(outputs_dir_list[1])
+        # The second folder is the folder containing the output of
+        # the last iteration.
+        self.last_iteration = float(outputs_dir_list[1])
 
     def get_output_mesh(self):  # pylint: disable=unused-argument
         """Get domain and object mesh info at the steady-state."""
@@ -58,7 +61,7 @@ class SteadyStateOutput:
         pathlib.Path(foam_file_path).touch(exist_ok=True)
 
         reader = pv.OpenFOAMReader(foam_file_path)
-        reader.set_active_time_value(self.last_time_step)
+        reader.set_active_time_value(self.last_iteration)
 
         full_mesh = reader.read()
         domain_mesh = full_mesh["internalMesh"]
@@ -74,7 +77,7 @@ class SteadyStateOutput:
             and to render it.
         """
 
-        _, object_mesh = self.get_mesh_at_time(self.last_time_step)
+        _, object_mesh = self.get_output_mesh(self.last_iteration)
 
         field_notation = OpenFOAMPhysicalField["PRESSURE"].value
         physical_field = MeshData(object_mesh, field_notation)
@@ -107,7 +110,7 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, object_mesh = self.get_mesh_at_time(self.last_time_step)
+        mesh, object_mesh = self.get_output_mesh(self.last_iteration)
 
         inlet_position = (mesh.bounds[0], 0, 1)
 
@@ -138,7 +141,7 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, object_mesh = self.get_mesh_at_time(self.last_time_step)
+        mesh, object_mesh = self.get_output_mesh(self.last_iteration)
 
         if plane == "xy":
             normal = (0, 0, 1)

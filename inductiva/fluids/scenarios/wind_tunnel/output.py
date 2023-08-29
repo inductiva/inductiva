@@ -11,11 +11,10 @@ from inductiva import types
 class WindTunnelOutput(post_processing.SteadyStateOutput):
     """Post-Process WindTunnel simulation outputs.
     This class is based on a more general class for post-processing the
-    outputs of steady-state simulations. It inherits the following processing
-    methods:
+    outputs of steady-state simulations. It inherits the following tools:
         - Pressure over object;
         - Cutting plane;
-        - StreamLines;
+        - Stream lines;
 
     Additionally, it provides the following methods:
         - Force coefficients (added here only for this scenario).
@@ -51,7 +50,7 @@ class WindTunnelOutput(post_processing.SteadyStateOutput):
                 if index == num_header_lines:
                     force_coefficients.append(line.split()[1:])
                 # Add the force coefficients for the simulation time chosen
-                elif index == num_header_lines + self.last_time_step + 1:
+                elif index == num_header_lines + self.last_iteration + 1:
                     force_coefficients.append(line.split())
 
         if save_path:
