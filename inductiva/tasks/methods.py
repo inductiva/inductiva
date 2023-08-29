@@ -1,6 +1,6 @@
 """Methods to interact with the tasks submitted to the API."""
 import json
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 import inductiva
 from inductiva import api
@@ -9,9 +9,11 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
 
 
-def _fetch_tasks_from_api(status: Optional[str | models.TaskStatusCode] = None,
-                          page=1,
-                          per_page=10) -> List[Dict]:
+def _fetch_tasks_from_api(
+    status: Optional[Union[str, models.TaskStatusCode]] = None,
+    page=1,
+    per_page=10,
+) -> List[Dict]:
     """Get information about a user's tasks on the API.
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
@@ -48,7 +50,8 @@ def _fetch_tasks_from_api(status: Optional[str | models.TaskStatusCode] = None,
 
 # pylint: disable=redefined-builtin
 def list(num_tasks,
-         status: Optional[str | models.TaskStatusCode] = None) -> None:
+         status: Optional[Union[str, models.TaskStatusCode]] = None) -> None:
+    # pylint: disable=line-too-long
     """List the last N tasks of a user.
 
     This function will fetch info on the last N tasks of a user and print
@@ -56,7 +59,6 @@ def list(num_tasks,
     to get only tasks with that status. Tasks are sorted by submission time
     with the most recent first.
 
-    # pylint: disable=line-too-long
     Example usage:
         # list the last 5 tasks that were successful
         inductiva.tasks.list(5, status="success")
@@ -66,13 +68,13 @@ def list(num_tasks,
         1691081881158823776  openfoam     success      03 Aug, 16:58:02     03 Aug, 16:58:02     0h 1m 20s    n2-standard-32
         1691081409916619414  openfoam     success      03 Aug, 16:50:11     03 Aug, 16:50:11     0h 1m 20s    n2-standard-32
         1691080520213617518  openfoam     success      03 Aug, 16:35:21     03 Aug, 16:35:21     0h 1m 23s    n2-standard-32
-    # pylint: enable=line-too-long
 
     Args:
         num_tasks: The number of tasks to list.
         status: The status of the tasks to list. If None, tasks with any status
             will be listed.
     """
+    # pylint: enable=line-too-long
     status = models.TaskStatusCode(status) if status is not None else None
 
     id_header = "ID"
@@ -94,8 +96,8 @@ def list(num_tasks,
 
 def get(
     num_tasks,
-    status: Optional[str | models.TaskStatusCode] = None
-) -> List[inductiva.Task]:
+    status: Optional[Union[str, models.TaskStatusCode]] = None
+) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
 
     This function will fetch info on the last N tasks of a user and return
@@ -125,6 +127,8 @@ def get(
     status = models.TaskStatusCode(status) if status is not None else None
 
     raw_tasks_info = _fetch_tasks_from_api(status, page=1, per_page=num_tasks)
-    tasks = [inductiva.Task.from_api_info(info) for info in raw_tasks_info]
+    tasks = [
+        inductiva.tasks.Task.from_api_info(info) for info in raw_tasks_info
+    ]
 
     return tasks
