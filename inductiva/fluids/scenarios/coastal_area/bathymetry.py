@@ -336,12 +336,12 @@ class Bathymetry:
                                      np.linspace(*self.y_range, y_size),
                                      indexing="ij")
 
-        depths_grid = scipy.interpolate.griddata(
+        interpolator = scipy.interpolate.LinearNDInterpolator(
             (self.x, self.y),
             self.depths,
-            (x_grid, y_grid),
-            method="linear",
         )
+
+        depths_grid = interpolator(x_grid, y_grid)
 
         if np.sum(np.isnan(depths_grid)) > 0:
             raise ValueError(
