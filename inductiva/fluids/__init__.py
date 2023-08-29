@@ -22,6 +22,7 @@ from .scenarios import (
 )
 from . import scenarios
 from . import shapes
+from . import post_processing
 from .scenarios._post_processing import SPHSimulationOutput
 from .simulators import (
     SWASH,

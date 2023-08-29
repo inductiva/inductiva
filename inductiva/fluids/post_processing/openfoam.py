@@ -1,55 +1,55 @@
-"""Visualization processing of WindTunnel scenario.
+"""Post-processing tools of fluid dynamics steady-state simulations.
 
-This class implements various visualization capabilities for
-the WindTunnel scenario. Namely:
+This class implements various post-processing capabilities for
+the visuals associated. Namely:
     - Pressure over object;
     - Cutting plane;
-    - StreamLines.
+    - Stream lines.
 
-Currently, we only support the OpenFOAM simulator.
+Current Support - OpenFOAM
 """
 import os
 from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
-import csv
 import pathlib
 
 import pyvista as pv
 
-from inductiva.types import Path
-from inductiva.utils.visualization import MeshData
-from inductiva.utils import files
+from inductiva import types, utils
 
 
-class WindTunnelOutput:
-    """Post-Process WindTunnel simulation outputs.
+class SteadyStateOutput:
+    """Post-Process steady-state simulation outputs.
 
     This class contains several methods to post-process the output 
-    and visualize the results of a WindTunnel simulation.
+    and visualize the results of a steady-state simulations where
+    time-independent results are obtained.
 
-    Current Support:
-        OpenFOAM
+    To be general we assume that a simulation is performed inside a
+    regular box and a certain object is placed inside the box.
+    The object is either a small object inside the domain or a more
+    general object that spreads all through the domain.
     """
 
-    def __init__(self, sim_output_path: Path):
-        """Initializes a `WindTunnelSimulationOutput` object.
+    def __init__(self, sim_output_path: types.Path):
+        """Initializes a `SteadyStateOutput` object.
 
         Args:
             sim_output_path: Path to simulation output files.
+        
+        Attributes:
+            sim_output_path: Path to simulation output files.
+            last_time_step: Last time step of the simulation.
+                Obtained through the output folders.
         """
 
         self.sim_output_path = sim_output_path
+        outputs_dir_list = sorted(os.listdir(sim_output_path))
+        self.last_time_step = float(outputs_dir_list[1])
 
-    def get_mesh_at_time(self, simulation_time):  # pylint: disable=unused-argument
-        """Get domain and object mesh info after WindTunnel simulation.
-
-        Current Support - OpenFOAM
-
-        Args:
-            simulation_time: Time value to obtain simulation mesh.
-
-        """
+    def get_output_mesh(self):  # pylint: disable=unused-argument
+        """Get domain and object mesh info at the steady-state."""
 
         # The OpenFOAM data reader from PyVista requires that a file named
         # "foam.foam" exists in the simulation output directory.
@@ -58,7 +58,7 @@ class WindTunnelOutput:
         pathlib.Path(foam_file_path).touch(exist_ok=True)
 
         reader = pv.OpenFOAMReader(foam_file_path)
-        reader.set_active_time_value(simulation_time)
+        reader.set_active_time_value(self.last_time_step)
 
         full_mesh = reader.read()
         domain_mesh = full_mesh["internalMesh"]
@@ -66,42 +66,33 @@ class WindTunnelOutput:
 
         return domain_mesh, object_mesh
 
-    def get_object_physical_field(self,
-                                  physical_field: str = "pressure",
-                                  simulation_time: float = 50,
-                                  save_path: Path = None):
-        """Get a physical scalar field over mesh points.
+    def get_object_pressure_field(self,
+                                  save_path: types.Path = None):
+        """Get a pressure scalar field over mesh points of the object.
 
-        Args:
-            simulation_time: Time value to obtain simulation mesh.
-
-        Args:
-            physical_property: Physical property to be read.
         Returns:
             A MeshData object that allow to manipulate the data over a mesh
             and to render it.
         """
 
-        _, object_mesh = self.get_mesh_at_time(simulation_time)
+        _, object_mesh = self.get_mesh_at_time(self.last_time_step)
 
-        field_notation = OpenFOAMPhysicalField[physical_field.upper()].value
+        field_notation = OpenFOAMPhysicalField["PRESSURE"].value
         physical_field = MeshData(object_mesh, field_notation)
-        physical_field.mesh = physical_field.mesh.rotate_z(180)
 
         if save_path is not None:
-            save_path = files.resolve_path(save_path)
+            save_path = utils.files.resolve_path(save_path)
             physical_field.mesh.save(save_path)
 
         return physical_field
 
     def get_streamlines(self,
-                        simulation_time: float = 50,
                         max_time: float = 100,
                         n_points: int = 100,
                         initial_step_length: float = 1,
                         source_radius: float = 0.7,
-                        save_path: Path = None):
-        """Get streamlines through the fluid/domain in the WindTunnel.
+                        save_path: types.Path = None):
+        """Get streamlines through the fluid/domain.
         
         The streamlines are obtained by seeding a set of points
         at the inlet of the WindTunnel.
@@ -117,7 +108,7 @@ class WindTunnelOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, object_mesh = self.get_mesh_at_time(simulation_time)
+        mesh, object_mesh = self.get_mesh_at_time(self.last_time_step)
 
         inlet_position = (mesh.bounds[0], 0, 1)
 
@@ -129,17 +120,16 @@ class WindTunnelOutput:
             source_center=inlet_position)
 
         if save_path is not None:
-            save_path = files.resolve_path(save_path)
+            save_path = utils.files.resolve_path(save_path)
             streamlines_mesh.save(save_path)
 
         return Streamlines(object_mesh, streamlines_mesh)
 
     def get_flow_slice(self,
-                       simulation_time: float = 50,
                        plane: Literal["xy", "xz", "yz"] = "xz",
                        origin: tuple = (0, 0, 0),
-                       save_path: Path = None):
-        """Get flow properties in a slice of the domain in WindTunnel.
+                       save_path: types.Path = None):
+        """Get flow properties in a slice of the domain.
         
         Args:
             simulation_time: Time value to obtain simulation mesh.
@@ -149,7 +139,7 @@ class WindTunnelOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, object_mesh = self.get_mesh_at_time(simulation_time)
+        mesh, object_mesh = self.get_mesh_at_time(self.last_time_step)
 
         if plane == "xy":
             normal = (0, 0, 1)
@@ -163,50 +153,10 @@ class WindTunnelOutput:
         flow_slice = mesh.slice(normal=normal, origin=origin)
 
         if save_path is not None:
-            save_path = files.resolve_path(save_path)
+            save_path = utils.files.resolve_path(save_path)
             flow_slice.save(save_path)
 
         return FlowSlice(object_mesh, flow_slice)
-
-    def get_force_coefficients(self,
-                               simulation_time: float = 50,
-                               save_path: Path = None):
-        """Get the force coefficients of the object in the WindTunnel.
-        
-        The force coefficients are provided in a .dat file during the
-        simulation run-time. This file contains 8 lines that are provide
-        the general input information. In this function, we read the file,
-        ignore the first 8 lines and read the force coefficients for the 
-        simulation_time chosen.
-
-        Args:
-            simulation_time: Time value to obtain simulation mesh.
-            save_path: Path to save the force coefficients in a .csv file.
-        """
-
-        num_header_lines = 8
-        force_coefficients_path = os.path.join(self.sim_output_path,
-                                               "postProcessing", "forceCoeffs1",
-                                               "0", "forceCoeffs.dat")
-        force_coefficients = []
-
-        with open(force_coefficients_path, "r",
-                  encoding="utf-8") as forces_file:
-            for index, line in enumerate(forces_file.readlines()):
-                # Pick the line 8 of the file:
-                # [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove the # column
-                if index == num_header_lines:
-                    force_coefficients.append(line.split()[1:])
-                # Add the force coefficients for the simulation time chosen
-                elif index == num_header_lines + simulation_time + 1:
-                    force_coefficients.append(line.split())
-
-        if save_path:
-            with open(save_path, "w", encoding="utf-8") as csv_file:
-                csv_writer = csv.writer(csv_file)
-                csv_writer.writerows(force_coefficients)
-
-        return force_coefficients
 
 
 @dataclass
@@ -217,7 +167,7 @@ class OpenFOAMPhysicalField(Enum):
 
 
 class FlowSlice:
-    """Render flow field in a plane of the domain in WindTunnel."""
+    """Render flow field in a plane of the domain."""
 
     def __init__(self, object_mesh, flow_slice):
         self.object_mesh = object_mesh
@@ -231,11 +181,11 @@ class FlowSlice:
                      background_color: str = "white",
                      flow_cmap: str = "viridis",
                      object_color: str = "white",
-                     save_path: Path = None):
-        """Render flow property over the object in the WindTunnel."""
+                     save_path: types.Path = None):
+        """Render flow property over domain."""
 
         if save_path is not None:
-            save_path = files.resolve_path(save_path)
+            save_path = utils.files.resolve_path(save_path)
 
         if virtual_display:
             pv.start_xvfb()
@@ -260,7 +210,7 @@ class FlowSlice:
 
 
 class Streamlines:
-    """Class to render streamlines over the object in the WindTunnel."""
+    """Class to render streamlines through the domain with object."""
 
     def __init__(self, object_mesh, streamlines):
         self.object_mesh = object_mesh
@@ -276,11 +226,11 @@ class Streamlines:
                      view: Literal["isometric", "front", "rear", "top",
                                    "side"] = "isometric",
                      object_color: str = "white",
-                     save_path: Path = None):
-        """Render streamlines over the object in the WindTunnel."""
+                     save_path: types.Path = None):
+        """Render streamlines through domain."""
 
         if save_path is not None:
-            save_path = files.resolve_path(save_path)
+            save_path = utils.files.resolve_path(save_path)
 
         if virtual_display:
             pv.start_xvfb()
@@ -313,5 +263,67 @@ class Streamlines:
         # Slide along the vectord defined from camera position to focal point,
         # until all of the meshes are visible.
         plotter.reset_camera(bounds=self.mesh.bounds, render=False)
+        plotter.show(screenshot=save_path)
+        plotter.close()
+
+
+class MeshData:
+    """MeshData class that allows for mesh data manipulation and render.
+
+    Process outputs of simulation over meshes. We assume that scalar
+    fields are defined over the points of the mesh. In this way, we have
+    a general method to manipulate the data and render the specification
+    data. As of now, this serves a niche, but the goal
+    is to integrate this more generally later on.
+
+    Example:
+    Imagine we run a WindTunnel simulation with an object inside
+    for which a mesh was generated. A possible output of the simulation is
+    a mesh of the object with scalar fields over the points defining a certain
+    physical property, e.g., pressure.
+
+    Assume this output mesh is `object_mesh`. To process the pressure field over
+    the data, we can do `pressure_field = MeshData(object_mesh, "p")`
+
+    `pressure_field.mesh` contains a mesh structure with the pressure field over
+    the mesh.
+
+    `pressure_field.render()` renders the pressure field property over the mesh.
+    """
+
+    def __init__(self, mesh_data, scalar_name: str = None):
+        """Initialize a `MeshData` type object.
+
+        Args:
+            mesh_data: pyvista mesh (PolyData or Unstructured) which
+                contains all of the simulated outputs over the mesh.
+            scalar_name: string that defines the scalar we want to
+                manipulate and render. This names depends on the mesh_data
+                array names and on the specific simulator used.
+
+        Attributes:
+            mesh: Mesh over the object obtained from the simulation.
+        """
+        self.mesh = pv.PolyData(mesh_data.points, faces=mesh_data.faces)
+        self.scalar_name = scalar_name
+        self.mesh.point_data[scalar_name] = mesh_data.point_data[scalar_name]
+        self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
+
+    def render(self,
+               off_screen: bool = False,
+               background_color: str = "black",
+               scalars_cmap: str = "viridis",
+               virtual_display: bool = False,
+               save_path: types.Path = None):
+        """Render scalar field data over the mesh."""
+        if save_path is not None:
+            save_path = utils.files.resolve_path(save_path)
+
+        if virtual_display:
+            pv.start_xvfb()
+
+        plotter = pv.Plotter(off_screen=off_screen)
+        pv.global_theme.background = background_color
+        plotter.add_mesh(self.mesh, scalars=self.scalar_name, cmap=scalars_cmap)
         plotter.show(screenshot=save_path)
         plotter.close()

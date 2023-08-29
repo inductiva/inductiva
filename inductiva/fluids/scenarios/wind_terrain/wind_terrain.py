@@ -127,6 +127,9 @@ class WindOverTerrain(inductiva.scenarios.Scenario):
                                 n_cores=n_cores,
                                 commands=commands)
 
+        task.set_output_class(
+            inductiva.fluids.post_processing.SteadyStateOutput)
+
         return task
 
     def get_commands(self):
