@@ -250,9 +250,9 @@ class Bathymetry:
         The data is interpolated from the points where the bathymetry is defined
         to the uniform grid using linear interpolation.
 
-        Points on the uniform grid at a distance to points where the bathymetry
-        is defined larger than a threshold distance `max_distance` are not
-        plotted.
+        Points on the uniform grid at a distance larger than a threshold
+        distance `max_distance` from points where the bathymetry is defined are
+        omitted.
     
         The plot is produced with matplotlib.
 
@@ -264,6 +264,11 @@ class Bathymetry:
               the minimum or maximum colors, respectively.
             path: Path to save the plot. If `None`, the plot is not saved, and
               the matplotlib `Axes` object is returned instead.
+            grid_size: Size of the uniform grid to which the bathymetry is
+              interpolated before being plotted.
+            max_distance: Threshold distance to filter out points on the
+              uniform grid that are far from points where the bathymetry is
+              defined.
         """
 
         # Create uniform grid for interpolation.
@@ -280,8 +285,13 @@ class Bathymetry:
 
         # Filter out points that are far from bathymetry locations.
         tree = scipy.spatial.KDTree(np.c_[self.x, self.y])
+
+        # Obtain distance between each point on the uniform grid and the
+        # closest bathymetry location.
         distance, _ = tree.query(np.c_[x_grid.ravel(), y_grid.ravel()], k=1)
         distance = distance.reshape(x_grid.shape)
+
+        # Set depths to NaN for points that are far from bathymetry locations.
         depths_grid[distance > max_distance] = np.nan
 
         # Plot the bathymetry.
