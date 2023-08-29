@@ -5,12 +5,11 @@ import os
 import shutil
 import tempfile
 from typing import List, Optional
-import uuid
 
 import numpy as np
 
 import inductiva
-from inductiva import fluids
+from inductiva import fluids, resources
 
 SCENARIO_TEMPLATE_DIR = os.path.join(inductiva.utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
@@ -19,27 +18,30 @@ FILES_SUBDIR = "files"
 COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 TERRAIN_FILENAME = "terrain.stl"
 
+
 class WindOverTerrain(inductiva.scenarios.Scenario):
-    """Wind Flowing over complex terrain scenario.
+    """Wind flowing over complex terrain scenario.
 
     This simulation scenario models the steady-state conditions of
     wind flowing over complex terrain (e.g., mountains, valleys, etc.).
     
-    The terrain is modeled through a 2D surface in a 3D world and defined
+    The terrain is modeled through a 2D surface in a 3D world, defined
     through a mesh. The wind is injected through one of the side walls with
-    a certain vectorail velocity and position. Here, the wind is initialized
-    only on a circular region of the wall to simulate gusts of wind.
+    a certain velocity vector and and at a certain region of the wall. 
+    Here, the wind is initialized only on a circular region of the wall
+    to simulate gusts of wind.
 
-   Schematic representation of the Wind and Simulation scenario:
+    Schematic representation of the wind at the input wall and
+    the simulation scenario both on a 2D xz-planexz (z is the vertical axis):
 
          Wind Injection                 2D Representation of Simulation
      ____________________                     ____________________
     |                    |                   |                    |
     |    * *             |                   |                    |
     |  *     *           |                   |->                  |
-    |  *     *           |                   |->          /\      |
-    |    * *             |                   |         /\/  \     |
-    |____________________|                   |________/______\____|
+    |  *     *           |                   |->          /|      |
+    |    * *             |                   |         /|/ |      |
+    |____________________|                   |________/____|______|
 
     This scenario solves the steady-state continuity and momentum equations
     (time-independent) with the assumption of incompressible flow. 
@@ -48,7 +50,7 @@ class WindOverTerrain(inductiva.scenarios.Scenario):
     to determine the steady-state of the system, i.e., where the flow
     does not change in time anymore.
 
-    This scenarion can be simulation with OpenFOAM.
+    This scenario can be simulated with OpenFOAM.
     """
 
     valid_simulators = [fluids.simulators.OpenFOAM]
@@ -57,18 +59,20 @@ class WindOverTerrain(inductiva.scenarios.Scenario):
                  terrain: inductiva.world.Terrain,
                  wind_velocity: List[float],
                  wind_position: Optional[List[float]] = None,
-                 athmosphere_height: float = 300):
+                 atmosphere_height: float = 300):
         """Initializes the `WindTerrain` conditions.
 
         Args:
             wind_velocity (List): Velocity of the air flow (m/s).
-            wind_position (List): Position of the wind flow (m) above the height
-            of the terrain.
+            wind_position (List): Absolute Position of the wind flow (m).
+                Note: The position needs to be above the terrain to occur
+                any wind flow. 
             terrain (inductiva.world.Terrain): Terrain object that describes
                 the profile of the terrain with a mesh.
-            athmosphere_height (float): Altitude above the terrain (m) to establish an
-                atmosphere. Notice that the wind_position needs to be inside the
-                atmosphere region.
+            atmosphere_height (float): Altitude (m) above the lowest point of
+                terrain (m) that establishes the region of air where wind flows.
+                Notice that the wind_position needs to be inside 
+                this atmosphere region.
         """
 
         self.wind_velocity = np.array(wind_velocity)
@@ -84,30 +88,31 @@ class WindOverTerrain(inductiva.scenarios.Scenario):
         self.wind_position = wind_position
         self.terrain = terrain
 
-        self.top_boundary_height = terrain.bounds["z"][0] + athmosphere_height
+        top_boundary_height = terrain.bounds["z"][0] + atmosphere_height
 
-        if terrain.bounds["z"][1] >= self.top_boundary_height:
+        if terrain.bounds["z"][1] >= top_boundary_height:
             raise ValueError(
                 "The terrain height surpasses the top athmosphere boundary.")
+        else:
+            self.top_boundary_height = top_boundary_height
 
     def simulate(
         self,
         simulator: inductiva.simulation.Simulator = fluids.simulators.OpenFOAM(
         ),
-        resource_pool_id: Optional[uuid.UUID] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         n_cores: int = 1,
         num_iterations: int = 100,
     ) -> inductiva.tasks.Task:
-        """Simulates the wind tunnel scenario synchronously.
+        """Simulates the wind over the terrain scenario.
 
         Args:
             simulator: Simulator used to simulate the scenario.
                 Valid simulators: OpenFOAM.
+            machine_group: The MachineGroup to use for the simulation.
             num_iterations: Number of iterations to run the simulation.
             n_cores: Number of cores to use for the simulation.
-            resource_pool_id: Id of the resource pool to use for the simulation.
-                TODO: Change resource pool id to machine group.
             run_async: Whether to run the simulation asynchronously.
         """
 
@@ -117,13 +122,10 @@ class WindOverTerrain(inductiva.scenarios.Scenario):
         commands = self.get_commands()
 
         task = super().simulate(simulator,
-                                resource_pool_id=resource_pool_id,
+                                machine_group=machine_group,
                                 run_async=run_async,
                                 n_cores=n_cores,
                                 commands=commands)
-
-        task.set_output_class(
-            inductiva.fluids.post_processing.SteadyStateOutput)
 
         return task
 
@@ -150,7 +152,7 @@ class WindOverTerrain(inductiva.scenarios.Scenario):
         pass
 
 
-@WindTerrain.create_input_files.register
+@WindOverTerrain.create_input_files.register
 def _(self, simulator: fluids.simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
     """Creates OpenFOAM simulation input files."""
 
