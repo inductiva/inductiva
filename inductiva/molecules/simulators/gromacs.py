@@ -25,7 +25,7 @@ class GROMACS(Simulator):
         Args:
             input_dir: Path to the directory containing the input files.
             commands: List of commands to run using the GROMACS simulator.
-            machine_group: The MachineGroup to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
         """
         return super().run(input_dir,

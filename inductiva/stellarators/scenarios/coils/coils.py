@@ -256,7 +256,7 @@ class StellaratorCoils(scenarios.Scenario):
 
         Args:
             simulator: The simulator to use for the simulation.
-            machine_group: The MachineGroup to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
             plasma_surface_filepath: Path to the file with the description of
               the plasma surface on which the magnetic field will be calculated.

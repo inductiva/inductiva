@@ -193,7 +193,7 @@ class FluidTank(Scenario):
 
         Args:
             simulator: Simulator to use. Supported simulators are: SPlisHSPlasH.
-            machine_group: The MachineGroup to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             simulation_time: Total simulation time, in seconds.
             output_time_step: Time step for the output, in seconds.
             resolution: Resolution of the simulation. Controls the particle

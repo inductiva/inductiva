@@ -60,11 +60,11 @@ class MachineGroup():
                 )
             try:
                 logging.info("Creating a machine group."
-                             "This may take a few minutes.")
+                             "This may take a few seconds.")
                 start_time = time.time()
                 instance_group = api_instance.create_instance_group(
                     body=instance_group_config)
-                creation_time_mins = time.time() - start_time
+                creation_time_secs = time.time() - start_time
 
                 self.id = instance_group.body["id"]
                 self.name = instance_group.body["name"]
@@ -72,7 +72,7 @@ class MachineGroup():
                 #    api_instance)
 
                 logging.info("Machine group successfully created in %.2f s.",
-                             creation_time_mins)
+                             creation_time_secs)
                 self._log_machine_group_info()
 
             except inductiva.client.ApiException as api_exception:
@@ -99,10 +99,10 @@ class MachineGroup():
                              "This may take a few minutes.")
                 start_time = time.time()
                 api_instance.delete_instance_group(body=instance_group_config)
-                termination_time_mins = time.time() - start_time
+                termination_time_mins = (time.time() - start_time) / 60
                 logging.info(
                     "Machine group of %s machines successfully "
-                    "terminated in %.2f s.", self.num_machines,
+                    "terminated in %.2f mins.", self.num_machines,
                     termination_time_mins)
 
             except inductiva.client.ApiException as api_exception:

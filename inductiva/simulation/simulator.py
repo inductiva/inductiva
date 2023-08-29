@@ -1,4 +1,5 @@
 """Base class for low-level simulators."""
+from typing import Optional
 from abc import ABC, abstractmethod
 
 from inductiva import types, tasks, resources
@@ -25,7 +26,7 @@ class Simulator(ABC):
         self,
         input_dir: types.Path,
         *_args,
-        machine_group: resources.MachineGroup = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         **kwargs,
     ) -> tasks.Task:

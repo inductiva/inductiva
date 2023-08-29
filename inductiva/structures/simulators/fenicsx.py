@@ -31,7 +31,7 @@ class FEniCSx(inductiva.simulation.Simulator):
             mesh_filename: Mesh filename.
             bcs_filename: Boundary conditions filename.
             material_filename: Material filename.
-            machine_group: The MachineGroup to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
             other arguments: See the documentation of the base class.
         """

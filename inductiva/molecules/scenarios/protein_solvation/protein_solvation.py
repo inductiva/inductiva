@@ -55,7 +55,7 @@ class ProteinSolvation(Scenario):
         """Simulate the solvation of a protein.
 
         Args:
-            machine_group: The MachineGroup to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             simulation_time_ns: The simulation time in ns.
             output_timestep_ps: The output timestep in ps.
             integrator: The integrator to use for the simulation. Options:

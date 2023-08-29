@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from inductiva import tasks, resources
 from inductiva.simulation import Simulator
-from inductiva.fluids.simulators import SPlisHSPlasH
+from inductiva.fluids.simulators import DualSPHysics
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
@@ -51,9 +51,9 @@ class DamBreak(FluidBlock):
     # pylint: disable=arguments-renamed
     def simulate(
         self,
-        simulator: Simulator = SPlisHSPlasH(),
+        simulator: Simulator = DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
-        device: Literal["cpu", "gpu"] = "cpu",
+        device: Literal["cpu", "gpu"] = "gpu",
         resolution: Literal["high", "medium", "low"] = "medium",
         simulation_time: float = 1,
         run_async: bool = False,
@@ -62,7 +62,7 @@ class DamBreak(FluidBlock):
 
         Args:
             simulator: Simulator to use.
-            machine_group: The MachineGroup to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             device: Device in which to run the simulation.
             resolution: Resolution of the simulation.
             simulation_time: Simulation time, in seconds.

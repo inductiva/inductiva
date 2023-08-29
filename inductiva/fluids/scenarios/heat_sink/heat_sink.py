@@ -112,7 +112,7 @@ class HeatSink(Scenario):
             simulation_time: The simulation time, in seconds.
             output_time_step: The time step to save the simulation results, in
               seconds.
-            machine_group: The MachineGroup to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
         """
         self.simulation_time = simulation_time

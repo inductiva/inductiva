@@ -1,6 +1,6 @@
 """Functions for running simulations via Inductiva Web API."""
 import pathlib
-from typing import Any
+from typing import Any, Optional
 
 from inductiva import tasks, resources
 from inductiva.api import methods
@@ -9,7 +9,7 @@ from inductiva.api import methods
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
-    machine_group: resources.MachineGroup = None,
+    machine_group: Optional[resources.MachineGroup] = None,
     run_async: bool = False,
     **kwargs: Any,
 ) -> tasks.Task:

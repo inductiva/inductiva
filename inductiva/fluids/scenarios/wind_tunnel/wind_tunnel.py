@@ -128,7 +128,7 @@ class WindTunnel(Scenario):
             n_cores: Number of cores to use for the simulation.
             resolution: Level of detail of the mesh used for the simulation.
                 Options: "high", "medium" or "low".
-            machine_group: The MachineGroup to use for the simulation.
+            machine_group: The machine group to use for the simulation.
         """
 
         if object_path:

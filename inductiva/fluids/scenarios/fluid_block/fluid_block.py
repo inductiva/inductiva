@@ -103,7 +103,7 @@ class FluidBlock(Scenario):
         Args:
             simulator: The simulator to use for the simulation. Supported
               simulators are: SPlisHSPlasH, DualSPHysics.
-            machine_group: The MachineGroup to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             device: Device in which to run the simulation. Available options are
               "cpu" and "gpu".
             particle_radius: Radius of the fluid particles, in meters.
