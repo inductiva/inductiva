@@ -264,6 +264,11 @@ class Bathymetry:
               the minimum or maximum colors, respectively.
             path: Path to save the plot. If `None`, the plot is not saved, and
               the matplotlib `Axes` object is returned instead.
+            grid_size: Size of the uniform grid to which the bathymetry is
+              interpolated before being plotted.
+            max_distance: Threshold distance to filter out points on the
+              uniform grid that are far from points where the bathymetry is
+              defined.
         """
 
         # Create uniform grid for interpolation.
