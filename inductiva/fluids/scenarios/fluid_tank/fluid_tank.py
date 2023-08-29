@@ -4,9 +4,8 @@ from enum import Enum
 from functools import singledispatchmethod
 import os
 from typing import List, Literal, Optional
-from uuid import UUID
 
-from inductiva import tasks
+from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.shapes import BaseShape
@@ -182,7 +181,7 @@ class FluidTank(Scenario):
     def simulate(
         self,
         simulator: Simulator = SPlisHSPlasH(),
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "cpu",
         simulation_time: float = 5,
@@ -194,7 +193,7 @@ class FluidTank(Scenario):
 
         Args:
             simulator: Simulator to use. Supported simulators are: SPlisHSPlasH.
-            resource_pool_id: Resource pool to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             simulation_time: Total simulation time, in seconds.
             output_time_step: Time step for the output, in seconds.
             resolution: Resolution of the simulation. Controls the particle
@@ -212,7 +211,7 @@ class FluidTank(Scenario):
 
         task = super().simulate(
             simulator,
-            resource_pool_id=resource_pool_id,
+            machine_group=machine_group,
             run_async=run_async,
             device=device,
             sim_config_filename=self.get_config_filename(simulator),

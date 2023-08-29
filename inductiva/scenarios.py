@@ -3,7 +3,8 @@
 from abc import ABC, abstractmethod
 import tempfile
 from typing import Optional
-from uuid import UUID
+
+from inductiva import resources
 from inductiva.types import Path
 from inductiva.simulation import Simulator
 import json
@@ -34,7 +35,7 @@ class Scenario(ABC):
     def simulate(
         self,
         simulator: Simulator,
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         **kwargs,
     ):
@@ -46,7 +47,7 @@ class Scenario(ABC):
 
             return simulator.run(
                 input_dir,
-                resource_pool_id=resource_pool_id,
+                machine_group=machine_group,
                 run_async=run_async,
                 **kwargs,
             )

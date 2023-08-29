@@ -1,8 +1,7 @@
 """OpenFOAM module of the API for fluid dynamics."""
 from typing import Optional, List
-from uuid import UUID
 
-from inductiva import types, tasks
+from inductiva import types, tasks, resources
 from inductiva.simulation import Simulator
 
 
@@ -21,7 +20,7 @@ class OpenFOAM(Simulator):
         self,
         input_dir: types.Path,
         commands: List[dict],
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         n_cores: int = 1,
         run_async: bool = False,
     ) -> tasks.Task:
@@ -33,7 +32,7 @@ class OpenFOAM(Simulator):
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
-                           resource_pool_id=resource_pool_id,
+                           machine_group=machine_group,
                            n_cores=n_cores,
                            commands=commands,
                            run_async=run_async)

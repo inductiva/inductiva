@@ -1,8 +1,7 @@
 """DualSPHysics module of the API."""
 from typing import Optional
-from uuid import UUID
 
-from inductiva import types, tasks
+from inductiva import types, tasks, resources
 from inductiva.simulation import Simulator
 
 
@@ -17,7 +16,7 @@ class XBeach(Simulator):
         self,
         input_dir: types.Path,
         sim_config_filename: Optional[str] = "params.txt",
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         n_cores: int = 1,
         run_async: bool = False,
     ) -> tasks.Task:
@@ -32,6 +31,6 @@ class XBeach(Simulator):
             input_dir,
             input_filename=sim_config_filename,
             n_cores=n_cores,
-            resource_pool_id=resource_pool_id,
+            machine_group=machine_group,
             run_async=run_async,
         )

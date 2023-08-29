@@ -4,9 +4,8 @@ from typing import Optional, Literal
 import os
 import shutil
 import tempfile
-from uuid import UUID
 
-from inductiva import tasks
+from inductiva import tasks, resources
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
@@ -49,7 +48,7 @@ class MDWaterBox(Scenario):
     def simulate(
             self,
             simulator: Simulator = GROMACS(),
-            resource_pool_id: Optional[UUID] = None,
+            machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
             integrator: Literal["md", "sd", "bd"] = "md",
@@ -57,6 +56,7 @@ class MDWaterBox(Scenario):
         """Simulate the water box scenario using molecular dynamics.
 
         Args:
+            machine_group: The MachineGroup to use for the simulation.
             simulation_time_ns: The simulation time in ns.
             integrator: The integrator to use for the simulation. Options:
                 - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
@@ -70,8 +70,7 @@ class MDWaterBox(Scenario):
             documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
 
-            resource_pool_id: The ID of the resource pool to use for the
-              simulation.
+            machine_group: The machine group to use for the simulation.
             n_steps_min: Number of steps for energy minimization.
             run_async: Whether to run the simulation asynchronously.
         """
@@ -83,7 +82,7 @@ class MDWaterBox(Scenario):
 
         commands = self.get_commands()
         task = super().simulate(simulator,
-                                resource_pool_id=resource_pool_id,
+                                machine_group=machine_group,
                                 commands=commands,
                                 run_async=run_async)
 

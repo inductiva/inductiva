@@ -7,11 +7,10 @@ import os
 import shutil
 import tempfile
 from typing import Optional, List, Literal
-from uuid import UUID
 
 from absl import logging
 
-from inductiva import tasks
+from inductiva import tasks, resources
 from inductiva.types import Path
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
@@ -111,7 +110,7 @@ class WindTunnel(Scenario):
 
     def simulate(self,
                  simulator: Simulator = OpenFOAM("windtunnel"),
-                 resource_pool_id: Optional[UUID] = None,
+                 machine_group: Optional[resources.MachineGroup] = None,
                  run_async: bool = False,
                  object_path: Optional[Path] = None,
                  num_iterations: float = 100,
@@ -129,7 +128,7 @@ class WindTunnel(Scenario):
             n_cores: Number of cores to use for the simulation.
             resolution: Level of detail of the mesh used for the simulation.
                 Options: "high", "medium" or "low".
-            resource_pool_id: Id of the resource pool to use for the simulation.
+            machine_group: The machine group to use for the simulation.
         """
 
         if object_path:
@@ -144,7 +143,7 @@ class WindTunnel(Scenario):
         commands = self.get_commands()
 
         task = super().simulate(simulator,
-                                resource_pool_id=resource_pool_id,
+                                machine_group=machine_group,
                                 run_async=run_async,
                                 n_cores=n_cores,
                                 commands=commands)
