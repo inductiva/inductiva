@@ -18,6 +18,7 @@ from . import templates
 from . import utils
 from . import stellarators
 from . import world
+from inductiva.tasks import Task
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "http://api.inductiva.ai")
 output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")

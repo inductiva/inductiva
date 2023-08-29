@@ -16,6 +16,15 @@ from inductiva.utils import output_contents
 from inductiva import types
 import warnings
 
+_TASK_TERMINAL_STATUSES = {
+    models.TaskStatusCode.SUCCESS,
+    models.TaskStatusCode.FAILED,
+    models.TaskStatusCode.KILLED,
+    models.TaskStatusCode.EXECUTERFAILED,
+    models.TaskStatusCode.EXECUTERTERMINATED,
+    models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
+}
+
 
 class Task:
     """Represents a running/completed task on the Inductiva API.
@@ -38,6 +47,19 @@ class Task:
         self.id = task_id
         self._api = tasks_api.TasksApi(api.get_client())
         self._output_class = None
+        self._info = None
+        self._status = None
+
+    @classmethod
+    def from_api_info(cls, info: Dict[str, Any]) -> "Task":
+
+        task = cls(info["task_id"])
+        task._info = info
+        task._status = models.TaskStatusCode(info["status"])
+
+        # TODO(luispcunha): construct correct output class from API info.
+
+        return task
 
     def __enter__(self):
         """Enter context manager for managing a blocking execution.
@@ -71,13 +93,61 @@ class Task:
         self.kill()
         return False
 
+    def __str__(self):
+        # Refresh info from API if the status when last queried was not
+        # a terminal status, because info may have changed in the meanwhile
+        # if the last status was not
+        self.get_info()
+        assert self._info is not None
+
+        # e.g. get "openfoam" from "fvm.openfoam.run_simulation"
+        simulator = self._info["method_name"].split(".")[-2]
+
+        submitted = "n/a"
+        started = "n/a"
+        duration = "n/a"
+        vm_type = "n/a"
+
+        if self._info["input_submit_time"] is not None:
+            submitted = datetime.datetime.fromisoformat(
+                self._info["input_submit_time"]).strftime("%d %b, %H:%M:%S")
+
+        if self._info["start_time"] is not None:
+            start_time = datetime.datetime.fromisoformat(
+                self._info["start_time"])
+            started = start_time.strftime("%d %b, %H:%M:%S")
+
+            if self._info["end_time"] is not None:
+                end_time = datetime.datetime.fromisoformat(
+                    self._info["end_time"])
+                duration_s = (end_time - start_time).total_seconds()
+                duration = (f"{int(duration_s // 3600)}h "
+                            f"{int((duration_s % 3600) // 60)}m "
+                            f"{int(duration_s % 60)}s")
+
+        if self._info["executer"] is not None and "vm_type" in self._info[
+                "executer"]:
+            vm_type = self._info["executer"]["vm_type"].split("/")[-1]
+
+        return (f"  {self.id:<20} {simulator:<12} "
+                f"{self._status:<12} {submitted:<20} "
+                f"{started:<20} {duration:<12} "
+                f"{vm_type:<12}")
+
     def get_status(self) -> models.TaskStatusCode:
         """Get status of the task.
 
         This method issues a request to the API.
         """
+        # If the task is in a terminal status and we already have the status,
+        # return it without refreshing it from the API.
+        if self._status is not None and self._status in _TASK_TERMINAL_STATUSES:
+            return self._status
+
         resp = self._api.get_task_status(self._get_path_params())
-        return models.TaskStatusCode(resp.body["status"])
+        self._status = models.TaskStatusCode(resp.body["status"])
+
+        return self._status
 
     def get_info(self) -> Dict[str, Any]:
         """Get a dictionary with information about the task.
@@ -88,10 +158,21 @@ class Task:
 
         This method issues a request to the API.
         """
+        # If the task is in a terminal status and we already have the info,
+        # return it without refreshing it from the API.
+        if self._info is not None and self._status in _TASK_TERMINAL_STATUSES:
+            return self._info
+
         params = self._get_path_params()
         resp = self._api.get_task(params, skip_deserialization=True).response
 
-        return json.loads(resp.data.decode("utf-8"))
+        info = json.loads(resp.data.decode("utf-8"))
+        status = models.TaskStatusCode(info["status"])
+
+        self._info = info
+        self._status = status
+
+        return info
 
     def wait(self, polling_period: int = 5) -> models.TaskStatusCode:
         """Wait for the task to complete.
@@ -104,15 +185,6 @@ class Task:
         Returns:
             The final status of the task.
         """
-        terminal_statuses = {
-            models.TaskStatusCode.SUCCESS,
-            models.TaskStatusCode.FAILED,
-            models.TaskStatusCode.KILLED,
-            models.TaskStatusCode.EXECUTERFAILED,
-            models.TaskStatusCode.EXECUTERTERMINATED,
-            models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
-        }
-
         prev_status = None
         while True:
             status = self.get_status()
@@ -137,7 +209,7 @@ class Task:
                         "An internal error occurred while performing the task.")
             prev_status = status
 
-            if status in terminal_statuses:
+            if status in _TASK_TERMINAL_STATUSES:
                 return status
 
             time.sleep(polling_period)
@@ -179,10 +251,10 @@ class Task:
         Returns:
             The output path of the task.
         Example:
-            task = Task("task_id") 
-            output_path = task.get_output()  
+            task = Task("task_id")
+            output_path = task.get_output()
             # prints:
-            100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]   
+            100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]
         """
         self.wait()
         output_dir = self.download_outputs(
@@ -240,7 +312,7 @@ class Task:
                 files are downloaded to the default directory. The default is
                 {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
             uncompress: Whether to uncompress the archive after downloading it.
-            rm_downloaded_zip_archive: Whether to remove the archive after 
+            rm_downloaded_zip_archive: Whether to remove the archive after
             uncompressing it. If uncompress is False, this argument is ignored.
         """
         api_response = self._api.download_task_output(
