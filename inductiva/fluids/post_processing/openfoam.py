@@ -66,8 +66,7 @@ class SteadyStateOutput:
 
         return domain_mesh, object_mesh
 
-    def get_object_pressure_field(self,
-                                  save_path: types.Path = None):
+    def get_object_pressure_field(self, save_path: types.Path = None):
         """Get a pressure scalar field over mesh points of the object.
 
         Returns:

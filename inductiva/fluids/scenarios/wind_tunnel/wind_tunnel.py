@@ -10,8 +10,7 @@ from typing import Optional, List, Literal
 
 from absl import logging
 
-import inductiva
-from inductiva import tasks, resources, fluids, types
+from inductiva import tasks, resources, fluids, types, simulation, scenarios
 from inductiva.utils import templates, files
 
 SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "wind_tunnel")
@@ -29,7 +28,7 @@ class MeshResolution(enum.Enum):
     VERY_LOW = [2, 3]
 
 
-class WindTunnel(inductiva.scenarios.Scenario):
+class WindTunnel(scenarios.Scenario):
     """Physical scenario of a configurable wind tunnel simulation.
 
     A wind tunnel is a tool used in aerodynamic research to study the
@@ -102,7 +101,7 @@ class WindTunnel(inductiva.scenarios.Scenario):
         ]
 
     def simulate(self,
-                 simulator: inductiva.Simulator = fluids.simulators.OpenFOAM(
+                 simulator: simulation.Simulator = fluids.simulators.OpenFOAM(
                      "windtunnel"),
                  machine_group: Optional[resources.MachineGroup] = None,
                  run_async: bool = False,
@@ -166,7 +165,7 @@ class WindTunnel(inductiva.scenarios.Scenario):
         return commands
 
     @singledispatchmethod
-    def create_input_files(self, simulator: inductiva.Simulator):
+    def create_input_files(self, simulator: simulation.Simulator):
         pass
 
 

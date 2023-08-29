@@ -23,8 +23,7 @@ class WindTunnelOutput(inductiva.fluids.post_processing.SteadyStateOutput):
         OpenFOAM.
     """
 
-    def get_force_coefficients(self,
-                               save_path: inductiva.types.Path = None):
+    def get_force_coefficients(self, save_path: inductiva.types.Path = None):
         """Get the force coefficients of the object in the WindTunnel.
         
         The force coefficients are provided in a .dat file during the

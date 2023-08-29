@@ -9,7 +9,7 @@ from typing import List, Optional
 import numpy as np
 
 import inductiva
-from inductiva import fluids, resources
+from inductiva import fluids, simulation, resources, scenarios
 
 SCENARIO_TEMPLATE_DIR = os.path.join(inductiva.utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
@@ -19,7 +19,7 @@ COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 TERRAIN_FILENAME = "terrain.stl"
 
 
-class WindOverTerrain(inductiva.scenarios.Scenario):
+class WindOverTerrain(scenarios.Scenario):
     """Wind flowing over complex terrain scenario.
 
     This simulation scenario models the steady-state conditions of
@@ -98,7 +98,7 @@ class WindOverTerrain(inductiva.scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: inductiva.simulation.Simulator = fluids.simulators.OpenFOAM(
+        simulator: simulation.Simulator = fluids.simulators.OpenFOAM(
         ),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
@@ -151,7 +151,7 @@ class WindOverTerrain(inductiva.scenarios.Scenario):
         return commands
 
     @singledispatchmethod
-    def create_input_files(self, simulator: inductiva.simulation.Simulator):
+    def create_input_files(self, simulator: simulation.Simulator):
         pass
 
 
