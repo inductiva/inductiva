@@ -5,7 +5,7 @@ import os
 import csv
 
 from inductiva.fluids import post_processing
-from inductiva import fluids, types
+from inductiva import types
 
 
 class WindTunnelOutput(post_processing.SteadyStateOutput):

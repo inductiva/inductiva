@@ -126,8 +126,7 @@ class WindOverTerrain(scenarios.Scenario):
                                 n_cores=n_cores,
                                 commands=commands)
 
-        task.set_output_class(
-            fluids.post_processing.SteadyStateOutput)
+        task.set_output_class(fluids.post_processing.SteadyStateOutput)
 
         return task
 
