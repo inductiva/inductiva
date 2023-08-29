@@ -77,7 +77,7 @@ class SteadyStateOutput:
             and to render it.
         """
 
-        _, object_mesh = self.get_output_mesh(self.last_iteration)
+        _, object_mesh = self.get_output_mesh()
 
         field_notation = OpenFOAMPhysicalField["PRESSURE"].value
         physical_field = MeshData(object_mesh, field_notation)
@@ -110,7 +110,7 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, object_mesh = self.get_output_mesh(self.last_iteration)
+        mesh, object_mesh = self.get_output_mesh()
 
         inlet_position = (mesh.bounds[0], 0, 1)
 
@@ -141,7 +141,7 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, object_mesh = self.get_output_mesh(self.last_iteration)
+        mesh, object_mesh = self.get_output_mesh()
 
         if plane == "xy":
             normal = (0, 0, 1)
