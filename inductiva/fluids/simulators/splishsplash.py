@@ -1,8 +1,7 @@
 """DualSPHysics module of the API."""
 from typing import Literal, Optional
-from uuid import UUID
 
-from inductiva import types, tasks
+from inductiva import types, tasks, resources
 from inductiva.simulation import Simulator
 
 
@@ -17,7 +16,7 @@ class SPlisHSPlasH(Simulator):
         self,
         input_dir: types.Path,
         sim_config_filename: str,
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         device: Literal["gpu", "cpu"] = "cpu",
         run_async: bool = False,
     ) -> tasks.Task:
@@ -30,7 +29,7 @@ class SPlisHSPlasH(Simulator):
         """
         return super().run(
             input_dir,
-            resource_pool_id=resource_pool_id,
+            machine_group=machine_group,
             device=device,
             input_filename=sim_config_filename,
             run_async=run_async,
