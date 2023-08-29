@@ -285,8 +285,13 @@ class Bathymetry:
 
         # Filter out points that are far from bathymetry locations.
         tree = scipy.spatial.KDTree(np.c_[self.x, self.y])
+
+        # Obtain distance between each point on the uniform grid and the
+        # closest bathymetry location.
         distance, _ = tree.query(np.c_[x_grid.ravel(), y_grid.ravel()], k=1)
         distance = distance.reshape(x_grid.shape)
+
+        # Set depths to NaN for points that are far from bathymetry locations.
         depths_grid[distance > max_distance] = np.nan
 
         # Plot the bathymetry.
