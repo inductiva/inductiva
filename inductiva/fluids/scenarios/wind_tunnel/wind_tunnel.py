@@ -7,7 +7,6 @@ import os
 import shutil
 import tempfile
 from typing import Optional, List, Literal
-from uuid import UUID
 
 from absl import logging
 

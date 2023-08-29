@@ -98,8 +98,7 @@ class MachineGroup():
                 logging.info("Terminating machine group."
                              "This may take a few minutes.")
                 start_time = time.time()
-                api_instance.delete_instance_group(
-                    body=instance_group_config)
+                api_instance.delete_instance_group(body=instance_group_config)
                 termination_time_mins = time.time() - start_time
                 logging.info(
                     "Machine group of %s machines successfully "

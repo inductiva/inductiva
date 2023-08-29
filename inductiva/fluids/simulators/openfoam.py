@@ -1,6 +1,5 @@
 """OpenFOAM module of the API for fluid dynamics."""
 from typing import Optional, List
-from uuid import UUID
 
 from inductiva import types, tasks, resources
 from inductiva.simulation import Simulator

@@ -4,7 +4,6 @@ from enum import Enum
 from functools import singledispatchmethod
 import os
 from typing import List, Literal, Optional
-from uuid import UUID
 
 from inductiva import tasks, resources
 from inductiva.scenarios import Scenario

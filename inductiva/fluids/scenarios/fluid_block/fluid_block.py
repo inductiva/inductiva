@@ -4,7 +4,6 @@ from functools import singledispatchmethod
 import os
 from typing import List, Literal, Optional
 import shutil
-from uuid import UUID
 
 from inductiva import tasks, resources
 from inductiva.scenarios import Scenario

@@ -10,8 +10,8 @@ from functools import singledispatchmethod
 
 import numpy as np
 
-from inductiva import (scenarios, simulation, stellarators,
-                       tasks, types, utils, resources)
+from inductiva import (scenarios, simulation, stellarators, tasks, types, utils,
+                       resources)
 
 SIMSOPT_COIL_COEFFICIENTS_FILENAME = 'coil_coefficients.npz'
 SIMSOPT_COIL_CURRENTS_FILENAME = 'coil_currents.npz'
