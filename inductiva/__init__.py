@@ -24,7 +24,9 @@ output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
 api_key = os.environ.get("INDUCTIVA_API_KEY")
 working_dir = None
 
-absl.logging.set_verbosity(logging.INFO)
-
+# Disable urllib3 warnings.
+# TODO: Verify and fix the appearance of this warning.
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
+
+absl.logging.set_verbosity(absl.logging.INFO)
