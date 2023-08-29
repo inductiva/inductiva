@@ -1,12 +1,8 @@
 """Base class for low-level simulators."""
 from abc import ABC, abstractmethod
 
-from typing import Optional
-from uuid import UUID
-
-from inductiva import types
+from inductiva import types, tasks, resources
 from inductiva.utils import files
-from inductiva import tasks
 
 
 class Simulator(ABC):
@@ -29,7 +25,7 @@ class Simulator(ABC):
         self,
         input_dir: types.Path,
         *_args,
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: resources.MachineGroup = None,
         run_async: bool = False,
         **kwargs,
     ) -> tasks.Task:
@@ -48,6 +44,6 @@ class Simulator(ABC):
             self.api_method_name,
             input_dir,
             run_async=run_async,
-            resource_pool_id=resource_pool_id,
+            machine_group=machine_group,
             **kwargs,
         )

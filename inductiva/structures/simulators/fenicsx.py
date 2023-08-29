@@ -1,7 +1,6 @@
 """FEniCSx module of the API for Finite Element Analysis."""
 
 from typing import Optional
-from uuid import UUID
 
 import inductiva
 
@@ -23,7 +22,7 @@ class FEniCSx(inductiva.simulation.Simulator):
         mesh_filename: str,
         bcs_filename: str,
         material_filename: str,
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: Optional[inductiva.resources.MachineGroup] = None,
         run_async: bool = False,
     ) -> inductiva.tasks.Task:
         """Run the simulation.
@@ -32,12 +31,12 @@ class FEniCSx(inductiva.simulation.Simulator):
             mesh_filename: Mesh filename.
             bcs_filename: Boundary conditions filename.
             material_filename: Material filename.
-            resource_pool_id: Optional UUID of the resource pool to use.
+            machine_group: The MachineGroup to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
-                           resource_pool_id=resource_pool_id,
+                           machine_group=machine_group,
                            run_async=run_async,
                            mesh_filename=mesh_filename,
                            bcs_filename=bcs_filename,

@@ -3,10 +3,10 @@ from functools import singledispatchmethod
 import os
 import shutil
 from typing import Optional
-from uuid import UUID
+
 from inductiva.fluids.scenarios.heat_sink.output import HeatSinkOutput
 
-from inductiva import tasks
+from inductiva import tasks, resources
 from inductiva.fluids.simulators import OpenFOAM
 from inductiva.simulation import Simulator
 from inductiva.scenarios import Scenario
@@ -100,7 +100,7 @@ class HeatSink(Scenario):
     def simulate(
         self,
         simulator: Simulator = OpenFOAM(),
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         simulation_time=300,
         output_time_step=10,
@@ -112,7 +112,7 @@ class HeatSink(Scenario):
             simulation_time: The simulation time, in seconds.
             output_time_step: The time step to save the simulation results, in
               seconds.
-            resource_pool_id: The resource pool to use for the simulation.
+            machine_group: The MachineGroup to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
         """
         self.simulation_time = simulation_time
@@ -121,7 +121,7 @@ class HeatSink(Scenario):
         commands = self.get_commands()
 
         task = super().simulate(simulator,
-                                resource_pool_id=resource_pool_id,
+                                machine_group=machine_group,
                                 run_async=run_async,
                                 commands=commands)
 

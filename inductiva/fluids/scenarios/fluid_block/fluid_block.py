@@ -6,7 +6,7 @@ from typing import List, Literal, Optional
 import shutil
 from uuid import UUID
 
-from inductiva import tasks
+from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.fluid_types import FluidType
@@ -89,7 +89,7 @@ class FluidBlock(Scenario):
     def simulate(
         self,
         simulator: Simulator = DualSPHysics(),
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "gpu",
         particle_radius: float = 0.02,
@@ -104,6 +104,7 @@ class FluidBlock(Scenario):
         Args:
             simulator: The simulator to use for the simulation. Supported
               simulators are: SPlisHSPlasH, DualSPHysics.
+            machine_group: The MachineGroup to use for the simulation.
             device: Device in which to run the simulation. Available options are
               "cpu" and "gpu".
             particle_radius: Radius of the fluid particles, in meters.
@@ -126,7 +127,7 @@ class FluidBlock(Scenario):
         self.output_time_step = output_time_step
 
         task = super().simulate(simulator=simulator,
-                                resource_pool_id=resource_pool_id,
+                                machine_group=machine_group,
                                 run_async=run_async,
                                 device=device)
 

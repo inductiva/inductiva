@@ -4,14 +4,14 @@ import os
 import random
 import shutil
 import typing
-import uuid
 
 from absl import logging
 from functools import singledispatchmethod
 
 import numpy as np
 
-from inductiva import scenarios, simulation, stellarators, tasks, types, utils
+from inductiva import (scenarios, simulation, stellarators,
+                       tasks, types, utils, resources)
 
 SIMSOPT_COIL_COEFFICIENTS_FILENAME = 'coil_coefficients.npz'
 SIMSOPT_COIL_CURRENTS_FILENAME = 'coil_currents.npz'
@@ -227,7 +227,7 @@ class StellaratorCoils(scenarios.Scenario):
     def simulate(
         self,
         simulator: simulation.Simulator = stellarators.simulators.Simsopt(),
-        resource_pool_id: typing.Optional[uuid.UUID] = None,
+        machine_group: typing.Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         plasma_surface_filepath: typing.Optional[types.Path] = None,
         num_iterations: int = 1,
@@ -256,7 +256,7 @@ class StellaratorCoils(scenarios.Scenario):
 
         Args:
             simulator: The simulator to use for the simulation.
-            resource_pool_id: The resource pool to use for the simulation.
+            machine_group: The MachineGroup to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
             plasma_surface_filepath: Path to the file with the description of
               the plasma surface on which the magnetic field will be calculated.
@@ -284,7 +284,7 @@ class StellaratorCoils(scenarios.Scenario):
 
         task = super().simulate(
             simulator,
-            resource_pool_id=resource_pool_id,
+            machine_group=machine_group,
             run_async=run_async,
             coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
             coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
