@@ -250,9 +250,9 @@ class Bathymetry:
         The data is interpolated from the points where the bathymetry is defined
         to the uniform grid using linear interpolation.
 
-        Points on the uniform grid at a distance to points where the bathymetry
-        is defined larger than a threshold distance `max_distance` are not
-        plotted.
+        Points on the uniform grid at a distance larger than a threshold
+        distance `max_distance` from points where the bathymetry is defined are
+        omitted.
     
         The plot is produced with matplotlib.
 
