@@ -4,10 +4,11 @@ Currently, we only support the OpenFOAM simulator.
 import os
 import csv
 
-import inductiva
+from inductiva.fluids import post_processing
+from inductiva import fluids, types
 
 
-class WindTunnelOutput(inductiva.fluids.post_processing.SteadyStateOutput):
+class WindTunnelOutput(post_processing.SteadyStateOutput):
     """Post-Process WindTunnel simulation outputs.
     This class is based on a more general class for post-processing the
     outputs of steady-state simulations. It inherits the following processing
@@ -23,7 +24,7 @@ class WindTunnelOutput(inductiva.fluids.post_processing.SteadyStateOutput):
         OpenFOAM.
     """
 
-    def get_force_coefficients(self, save_path: inductiva.types.Path = None):
+    def get_force_coefficients(self, save_path: types.Path = None):
         """Get the force coefficients of the object in the WindTunnel.
         
         The force coefficients are provided in a .dat file during the

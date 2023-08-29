@@ -141,7 +141,7 @@ class WindTunnel(scenarios.Scenario):
                                 n_cores=n_cores,
                                 commands=commands)
 
-        task.set_output_class(fluids.scenarios.WindTunnelOutput)
+        task.set_output_class(fluids.scenarios.wind_tunnel.WindTunnelOutput)
         task.set_default_output_files(self.set_default_output_files())
 
         return task

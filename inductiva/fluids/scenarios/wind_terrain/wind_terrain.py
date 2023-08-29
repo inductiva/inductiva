@@ -9,7 +9,7 @@ from typing import List, Optional
 import numpy as np
 
 import inductiva
-from inductiva import fluids, simulation, resources, scenarios
+from inductiva import fluids, simulation, resources, scenarios, world
 
 SCENARIO_TEMPLATE_DIR = os.path.join(inductiva.utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
@@ -56,7 +56,7 @@ class WindOverTerrain(scenarios.Scenario):
     valid_simulators = [fluids.simulators.OpenFOAM]
 
     def __init__(self,
-                 terrain: inductiva.world.Terrain,
+                 terrain: world.Terrain,
                  wind_velocity: List[float],
                  wind_position: Optional[List[float]] = None,
                  atmosphere_height: float = 300):
@@ -98,8 +98,7 @@ class WindOverTerrain(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulation.Simulator = fluids.simulators.OpenFOAM(
-        ),
+        simulator: simulation.Simulator = fluids.simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         n_cores: int = 1,
@@ -128,7 +127,7 @@ class WindOverTerrain(scenarios.Scenario):
                                 commands=commands)
 
         task.set_output_class(
-            inductiva.fluids.post_processing.SteadyStateOutput)
+            fluids.post_processing.SteadyStateOutput)
 
         return task
 
