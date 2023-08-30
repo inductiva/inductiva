@@ -5,7 +5,7 @@ import os
 import shutil
 import tempfile
 
-from inductiva import tasks, resources
+from inductiva import tasks, resources, utils
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
@@ -97,7 +97,8 @@ class MDWaterBox(Scenario):
                                               GROMACS_TEMPLATE_INPUT_DIR,
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
-        with tempfile.NamedTemporaryFile() as commands_file:
+        commands_path = utils.files.resolve_path()
+        with tempfile.NamedTemporaryFile(dir=commands_path) as commands_file:
             replace_params_in_template(
                 template_path=commands_template_path,
                 params={"box_size": self.box_size},

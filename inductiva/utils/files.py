@@ -34,7 +34,7 @@ def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     return path.with_name(name + path.suffix)
 
 
-def resolve_path(path: types.Path) -> pathlib.Path:
+def resolve_path(path: types.Path = None) -> pathlib.Path:
     """Resolve a path relative to the Inductiva package working directory.
 
     Args:
@@ -44,6 +44,9 @@ def resolve_path(path: types.Path) -> pathlib.Path:
 
     if inductiva.working_dir:
         root = pathlib.Path(inductiva.working_dir)
+
+    if path is None:
+        return root
 
     return pathlib.Path(root, path)
 

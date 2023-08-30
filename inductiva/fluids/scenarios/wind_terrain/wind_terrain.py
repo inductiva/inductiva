@@ -137,7 +137,8 @@ class WindOverTerrain(scenarios.Scenario):
                                               OPENFOAM_TEMPLATE_INPUT_DIR,
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
-        with tempfile.NamedTemporaryFile() as commands_file:
+        commands_path = inductiva.utils.files.resolve_path()
+        with tempfile.NamedTemporaryFile(dir=commands_path) as commands_file:
             inductiva.utils.templates.replace_params_in_template(
                 template_path=commands_template_path,
                 params={"n_cores": self.n_cores},

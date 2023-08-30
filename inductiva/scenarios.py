@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 import tempfile
 from typing import Optional
 
-from inductiva import resources
+from inductiva import resources, utils
 from inductiva.types import Path
 from inductiva.simulation import Simulator
 import json
@@ -42,7 +42,9 @@ class Scenario(ABC):
         """Simulates the scenario synchronously."""
         self.validate_simulator(simulator)
 
-        with tempfile.TemporaryDirectory() as input_dir:
+        input_path = utils.files.resolve_path()
+
+        with tempfile.TemporaryDirectory(dir=input_path) as input_dir:
             self.create_input_files(simulator, input_dir)
 
             return simulator.run(
