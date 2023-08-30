@@ -6,6 +6,8 @@ import os
 import shutil
 from typing import Literal, Optional
 
+from absl import logging
+
 from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
@@ -78,8 +80,9 @@ class CoastalArea(Scenario):
         """
 
         if not bathymetry.is_uniform_grid():
-            raise ValueError(
-                "The bathymetry must be defined on a uniform grid.")
+            logging.info("The bathymetry is not defined on a uniform grid. "
+                         "Attempting to interpolate it to a uniform grid...")
+            bathymetry = bathymetry.to_uniform_grid()
 
         self.bathymetry = bathymetry
         self.water_level = water_level
