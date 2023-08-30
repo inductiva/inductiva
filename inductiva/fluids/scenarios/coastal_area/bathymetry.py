@@ -186,6 +186,10 @@ class Bathymetry:
     ):
         """Writes the bathymetry to a bot file.
 
+        The depth values are interpolated to a regular grid and written to a bot
+        file. The grid size is determined automatically from the range and the
+        number of unique x and y values.
+
         Args:
             text_file_path: Path to the text file.
         """
