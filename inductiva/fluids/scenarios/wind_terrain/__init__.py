@@ -1,2 +1,2 @@
 #pylint: disable=missing-module-docstring
-from .openfoam import SteadyStateOutput
+from .wind_terrain import WindOverTerrain

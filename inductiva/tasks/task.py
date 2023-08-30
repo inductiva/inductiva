@@ -47,6 +47,7 @@ class Task:
         self.id = task_id
         self._api = tasks_api.TasksApi(api.get_client())
         self._output_class = None
+        self._default_files_list = None
         self._info = None
         self._status = None
 

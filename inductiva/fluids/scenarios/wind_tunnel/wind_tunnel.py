@@ -1,35 +1,26 @@
 """Wind tunnel scenario to run an object over an air flow."""
 
 from dataclasses import dataclass
-from enum import Enum
+import enum
 from functools import singledispatchmethod
 import os
 import shutil
 import tempfile
 from typing import Optional, List, Literal
-from uuid import UUID
 
 from absl import logging
 
-from inductiva import tasks
-from inductiva.types import Path
-from inductiva.scenarios import Scenario
-from inductiva.simulation import Simulator
-from inductiva.fluids.simulators import OpenFOAM
-from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template,
-                                       replace_params_in_template)
-from inductiva.utils import files
-from inductiva.fluids.scenarios.wind_tunnel.post_processing import WindTunnelOutput
+from inductiva import tasks, resources, fluids, types, simulation, scenarios
+from inductiva.utils import templates, files
 
-SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "wind_tunnel")
+SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
 COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
 
 @dataclass
-class MeshResolution(Enum):
+class MeshResolution(enum.Enum):
     """Sets particle radius according to resolution."""
     HIGH = [5, 6]
     MEDIUM = [4, 5]
@@ -37,7 +28,7 @@ class MeshResolution(Enum):
     VERY_LOW = [2, 3]
 
 
-class WindTunnel(Scenario):
+class WindTunnel(scenarios.Scenario):
     """Physical scenario of a configurable wind tunnel simulation.
 
     A wind tunnel is a tool used in aerodynamic research to study the
@@ -67,7 +58,7 @@ class WindTunnel(Scenario):
     pressure_field, cutting planes and force coefficients.
     """
 
-    valid_simulators = [OpenFOAM]
+    valid_simulators = [fluids.simulators.OpenFOAM]
 
     def __init__(self,
                  flow_velocity: List[float] = None,
@@ -110,10 +101,11 @@ class WindTunnel(Scenario):
         ]
 
     def simulate(self,
-                 simulator: Simulator = OpenFOAM("windtunnel"),
-                 resource_pool_id: Optional[UUID] = None,
+                 simulator: simulation.Simulator = fluids.simulators.OpenFOAM(
+                     "windtunnel"),
+                 machine_group: Optional[resources.MachineGroup] = None,
                  run_async: bool = False,
-                 object_path: Optional[Path] = None,
+                 object_path: Optional[types.Path] = None,
                  num_iterations: float = 100,
                  resolution: Literal["high", "medium", "low"] = "medium",
                  n_cores: int = 1) -> tasks.Task:
@@ -129,7 +121,7 @@ class WindTunnel(Scenario):
             n_cores: Number of cores to use for the simulation.
             resolution: Level of detail of the mesh used for the simulation.
                 Options: "high", "medium" or "low".
-            resource_pool_id: Id of the resource pool to use for the simulation.
+            machine_group: The machine group to use for the simulation.
         """
 
         if object_path:
@@ -144,12 +136,12 @@ class WindTunnel(Scenario):
         commands = self.get_commands()
 
         task = super().simulate(simulator,
-                                resource_pool_id=resource_pool_id,
+                                machine_group=machine_group,
                                 run_async=run_async,
                                 n_cores=n_cores,
                                 commands=commands)
 
-        task.set_output_class(WindTunnelOutput)
+        task.set_output_class(fluids.scenarios.wind_tunnel.WindTunnelOutput)
         task.set_default_output_files(self.set_default_output_files())
 
         return task
@@ -162,7 +154,7 @@ class WindTunnel(Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         with tempfile.NamedTemporaryFile() as commands_file:
-            replace_params_in_template(
+            templates.replace_params_in_template(
                 template_path=commands_template_path,
                 params={"n_cores": self.n_cores},
                 output_file_path=commands_file.name,
@@ -173,12 +165,12 @@ class WindTunnel(Scenario):
         return commands
 
     @singledispatchmethod
-    def create_input_files(self, simulator: Simulator):
+    def create_input_files(self, simulator: simulation.Simulator):
         pass
 
 
 @WindTunnel.create_input_files.register
-def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: fluids.simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
     """Creates OpenFOAM simulation input files."""
 
     # The WindTunnel with OpenFOAM requires changing multiple files
@@ -191,7 +183,7 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    batch_replace_params_in_template(
+    templates.batch_replace_params_in_template(
         templates_dir=input_dir,
         template_filenames=[
             os.path.join("0", "include",

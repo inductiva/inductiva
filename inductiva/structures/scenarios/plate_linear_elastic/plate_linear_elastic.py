@@ -5,9 +5,8 @@ import os
 from typing import List, Optional
 
 from functools import singledispatchmethod
-from uuid import UUID
 
-from inductiva import tasks
+from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.structures.simulators import FEniCSx
@@ -64,20 +63,20 @@ class DeformablePlate(Scenario):
 
     def simulate(self,
                  simulator: Simulator = FEniCSx(),
-                 resource_pool_id: Optional[UUID] = None,
+                 machine_group: Optional[resources.MachineGroup] = None,
                  run_async: bool = False) -> tasks.Task:
         """Simulates the scenario.
 
         Args:
             simulator: The simulator to use for the simulation.
-            resource_pool_id: The resource pool to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
             mesh_filename: Mesh filename.
             bcs_filename: Boundary conditions filename.
             material_filename: Material filename.
         """
         task = super().simulate(simulator,
-                                resource_pool_id=resource_pool_id,
+                                machine_group=machine_group,
                                 run_async=run_async,
                                 mesh_filename=MESH_FILENAME,
                                 bcs_filename=BCS_FILENAME,

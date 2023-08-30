@@ -1,16 +1,15 @@
 """Functions for running simulations via Inductiva Web API."""
 import pathlib
 from typing import Any, Optional
-from uuid import UUID
 
-from inductiva import tasks
+from inductiva import tasks, resources
 from inductiva.api import methods
 
 
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
-    resource_pool_id: Optional[UUID] = None,
+    machine_group: Optional[resources.MachineGroup] = None,
     run_async: bool = False,
     **kwargs: Any,
 ) -> tasks.Task:
@@ -23,6 +22,10 @@ def run_simulation(
     type_annotations = {
         "sim_dir": pathlib.Path,
     }
+
+    resource_pool_id = None
+    if machine_group is not None:
+        resource_pool_id = machine_group.id
 
     task_id = methods.invoke_async_api(api_method_name,
                                        params,

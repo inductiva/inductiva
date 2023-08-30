@@ -5,9 +5,8 @@ import math
 import os
 import shutil
 from typing import Literal, Optional
-from uuid import UUID
 
-from inductiva import tasks
+from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
 from inductiva.fluids.simulators import SWASH
@@ -91,7 +90,7 @@ class CoastalArea(Scenario):
     def simulate(
         self,
         simulator: Simulator = SWASH(),
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         simulation_time: float = 100,
         time_step: float = 0.1,
@@ -102,7 +101,7 @@ class CoastalArea(Scenario):
 
         Args:
             simulator: Simulator to use. Supported simulators are: SWASH.
-            resource_pool_id: Resource pool to use for the simulation.
+            machine_group: The machine group to use for the simulation.
             simulation_time: Total simulation time, in seconds.
             time_step: Time step, in seconds.
             output_time_step: Time step for the output, in seconds.
@@ -115,7 +114,7 @@ class CoastalArea(Scenario):
 
         task = super().simulate(
             simulator,
-            resource_pool_id=resource_pool_id,
+            machine_group=machine_group,
             run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,
             n_cores=n_cores,

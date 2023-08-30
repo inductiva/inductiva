@@ -21,7 +21,6 @@ from tqdm import tqdm
 import xarray as xr
 
 from inductiva.utils import files
-from inductiva.types import Path
 import threading
 
 MPL_CONFIG_PARAMS = {
@@ -491,65 +490,3 @@ def create_color_plot_movie(
         create_movie_from_frames(frames_dir=tmp_dir,
                                  movie_path=movie_path,
                                  fps=movie_fps)
-
-
-class MeshData:
-    """MeshData class that allows for mesh data manipulation and render.
-
-    Process outputs of simulation over meshes. We assume that scalar
-    fields are defined over the points of the mesh. In this way, we have
-    a general method to manipulate the data and render the specification
-    data. As of now, this serves a niche, but the goal
-    is to integrate this more generally later on.
-
-    Example:
-    Imagine we run a WindTunnel simulation with an object inside
-    for which a mesh was generated. A possible output of the simulation is
-    a mesh of the object with scalar fields over the points defining a certain
-    physical property, e.g., pressure.
-
-    Assume this output mesh is `object_mesh`. To process the pressure field over
-    the data, we can do `pressure_field = MeshData(object_mesh, "p")`
-
-    `pressure_field.mesh` contains a mesh structure with the pressure field over
-    the mesh.
-
-    `pressure_field.render()` renders the pressure field property over the mesh.
-    """
-
-    def __init__(self, mesh_data, scalar_name: str = None):
-        """Initialize a `MeshData` type object.
-
-        Args:
-            mesh_data: pyvista mesh (PolyData or Unstructured) which
-                contains all of the simulated outputs over the mesh.
-            scalar_name: string that defines the scalar we want to
-                manipulate and render. This names depends on the mesh_data
-                array names and on the specific simulator used.
-
-        Attributes:
-            mesh: mesh over the object obtained from
-        """
-        self.mesh = pv.PolyData(mesh_data.points, faces=mesh_data.faces)
-        self.scalar_name = scalar_name
-        self.mesh.point_data[scalar_name] = mesh_data.point_data[scalar_name]
-        self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
-
-    def render(self,
-               off_screen: bool = False,
-               background_color: str = "black",
-               scalars_cmap: str = "viridis",
-               virtual_display: bool = False,
-               save_path: Path = None):
-        """Render scalar field data over the mesh."""
-        if save_path is not None:
-            save_path = files.resolve_path(save_path)
-
-        if virtual_display:
-            pv.start_xvfb()
-
-        plotter = pv.Plotter(off_screen=off_screen)
-        pv.global_theme.background = background_color
-        plotter.add_mesh(self.mesh, scalars=self.scalar_name, cmap=scalars_cmap)
-        plotter.show(screenshot=save_path)
-        plotter.close()

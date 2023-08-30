@@ -4,9 +4,8 @@ from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
-from uuid import UUID
 
-from inductiva import tasks
+from inductiva import tasks, resources
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
@@ -46,8 +45,8 @@ class ProteinSolvation(Scenario):
 
     def simulate(
             self,
-            simulator: Simulator = GROMACS(),
-            resource_pool_id: Optional[UUID] = None,
+            simulator: Simulator = GROMACS("proteinsolvation"),
+            machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
             output_timestep_ps: float = 1,  # ps
@@ -56,6 +55,7 @@ class ProteinSolvation(Scenario):
         """Simulate the solvation of a protein.
 
         Args:
+            machine_group: The machine group to use for the simulation.
             simulation_time_ns: The simulation time in ns.
             output_timestep_ps: The output timestep in ps.
             integrator: The integrator to use for the simulation. Options:
@@ -85,7 +85,7 @@ class ProteinSolvation(Scenario):
         self.n_steps_min = n_steps_min
         commands = self.get_commands()
         task = super().simulate(simulator,
-                                resource_pool_id=resource_pool_id,
+                                machine_group=machine_group,
                                 commands=commands,
                                 run_async=run_async)
 
