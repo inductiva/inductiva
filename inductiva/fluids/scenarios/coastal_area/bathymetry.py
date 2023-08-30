@@ -180,7 +180,10 @@ class Bathymetry:
 
         return cls(depths.flatten(), x.flatten(), y.flatten())
 
-    def to_bot_file(self, bot_file_path: str):
+    def to_bot_file(
+        self,
+        bot_file_path: str,
+    ):
         """Writes the bathymetry to a bot file.
 
         Args:
@@ -199,6 +202,12 @@ class Bathymetry:
             values=self.depths,
             x_grid=(x_grid, y_grid),
         )
+
+        if np.sum(np.isnan(depths_grid)) > 0:
+            raise ValueError(
+                "The bathymetry cannot be converted to a uniform grid because "
+                "depths are not defined in one or more edge regions of the "
+                "domain.")
 
         np.savetxt(bot_file_path, depths_grid)
 
@@ -363,7 +372,11 @@ class Bathymetry:
         else:
             return ax
 
-    def to_uniform_grid(self, x_resolution: float = 2, y_resolution: float = 2):
+    def to_uniform_grid(
+        self,
+        x_resolution: float = 2,
+        y_resolution: float = 2,
+    ):
         """Converts the bathymetry to a uniform grid.
 
         The bathymetry is interpolated to a grid with uniform spacing in the x
