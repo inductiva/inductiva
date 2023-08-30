@@ -50,12 +50,12 @@ class Bathymetry:
         x_range: Sequence[float],
         y_range: Sequence[float],
     ):
-        """Creates a `Bathymetry` object from a text file.
+        """Creates a `Bathymetry` object from a bot file.
         
-        The depth values are read from a text file. The text file must contain
-        a 2D array with the depths, in meters. The first and second dimensions
-        of the array in the text file (i.e. rows and columns) correspond to the
-        x and y directions, respectively.
+        The depth values are read from a bot file, i.e. a text file with a 2D
+        array with the depths, in meters. The first and second dimensions of the
+        array in the text file (i.e. rows and columns) correspond to the x and y
+        directions, respectively.
 
         Args:
             text_file_path: Path to the text file.
@@ -180,14 +180,27 @@ class Bathymetry:
 
         return cls(depths.flatten(), x.flatten(), y.flatten())
 
-    def to_text_file(self, text_file_path: str):
-        """Writes the bathymetry to a text file.
+    def to_bot_file(self, bot_file_path: str):
+        """Writes the bathymetry to a bot file.
 
         Args:
             text_file_path: Path to the text file.
         """
 
-        np.savetxt(text_file_path, self.depths)
+        x_grid, y_grid = inductiva.utils.grids.get_meshgrid(
+            x_range=self.x_range,
+            y_range=self.y_range,
+            x_num=len(self.x_uniques()),
+            y_num=len(self.y_uniques()),
+        )
+
+        depths_grid = inductiva.utils.interpolation.interpolate_to_uniform_grid(
+            x=(self.x, self.y),
+            values=self.depths,
+            x_grid=(x_grid, y_grid),
+        )
+
+        np.savetxt(bot_file_path, depths_grid)
 
     @property
     def x_range(self) -> Tuple[float]:
