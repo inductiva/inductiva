@@ -115,10 +115,13 @@ def list(num_tasks,
     # pylint: disable=line-too-long
     """List the last N tasks of a user.
 
-    This function will fetch info on the last N tasks of a user and print
-    them to stdout formatted as a table. A status can be specified to filter
-    to get only tasks with that status. Tasks are sorted by submission time
-    with the most recent first.
+    This function lists info about the last N tasks (with respect to submission
+    time) of a user to stdout, sorted by submission time with the
+    most recent first.
+    A status can be specified to filter to get only tasks with that status, in
+    which case the last N tasks with that status will be listed.
+    The number of tasks can be less than N if the aren't enough tasks that
+    match the specified criteria.
 
     Example usage:
         # list the last 5 tasks that were successful
@@ -131,7 +134,11 @@ def list(num_tasks,
         1691080520213617518        openfoam              success     03 Aug, 16:35:21     03 Aug, 16:35:21       0h 1m 23s     n2-standard-32
 
     Args:
-        num_tasks: The number of tasks to list.
+        num_tasks: The number of most recent tasks with respect to submission
+            time to list. If filtering criteria (currently status is available)
+            is specified, most recent N tasks that match that criteria will be
+            listed. The actual number of tasks may be less if there
+            aren't enough tasks available.
         status: The status of the tasks to list. If None, tasks with any status
             will be listed.
     """
@@ -148,10 +155,13 @@ def get(
 ) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
 
-    This function will fetch info on the last N tasks of a user and return
-    a list of Task objects. A status can be specified to filter to get only
-    tasks with that status. Tasks are sorted by submission time with the
+    This function fetches info about the last N tasks (with respect to
+    submission time) of a user to stdout, sorted by submission time with the
     most recent first.
+    A status can be specified to filter to get only tasks with that status, in
+    which case the last N tasks with that status will be listed.
+    The number of tasks can be less than N if the aren't enough tasks that match
+    the specified criteria.
 
     Similar to the inductiva.task.list() function, but instead of printing
     to stdout, returns a list of Task objects which can be used to perform
@@ -165,7 +175,11 @@ def get(
             task.kill()
 
     Args:
-        num_tasks: The number of tasks to get.
+        num_tasks: The number of most recent tasks with respect to submission
+            time to fetch. If filtering criteria (currently status is available)
+            is specified, most recent N tasks that match that criteria will be
+            listed. The actual number of tasks may be less if there
+            aren't enough tasks available.
         status: The status of the tasks to get. If None, tasks with any status
             will be returned.
 
