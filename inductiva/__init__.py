@@ -6,6 +6,7 @@ import absl
 
 from . import admin
 from . import api
+from . import tasks
 from . import core
 from . import fluids
 from . import generative
@@ -13,7 +14,6 @@ from . import molecules
 from . import resources
 from . import simulation
 from . import structures
-from . import tasks
 from . import templates
 from . import utils
 from . import stellarators

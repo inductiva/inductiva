@@ -1,4 +1,4 @@
 #pylint: disable=missing-module-docstring
-from .task import Task
-from .methods import fetch_task_output, get_task_status, get_task_info, get_tasks_info
-from .run_simulation import run_simulation
+from inductiva.tasks.task import Task
+from inductiva.tasks.run_simulation import run_simulation
+from inductiva.tasks.methods import get, list  # pylint: disable=redefined-builtin
