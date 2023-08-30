@@ -24,20 +24,47 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.instance import Instance
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
 
-# body param
-SchemaForRequestBodyApplicationJson = Instance
-
-request_body_instance = api_client.RequestBody(
-    content={
-        'application/json':
-            api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
+# Query params
+MachineTypeSchema = schemas.StrSchema
+ZoneSchema = schemas.StrSchema
+RequestRequiredQueryParams = typing_extensions.TypedDict(
+    'RequestRequiredQueryParams', {
+        'machine_type': typing.Union[
+            MachineTypeSchema,
+            str,
+        ],
+    })
+RequestOptionalQueryParams = typing_extensions.TypedDict(
+    'RequestOptionalQueryParams', {
+        'zone': typing.Union[
+            ZoneSchema,
+            str,
+        ],
     },
+    total=False)
+
+
+class RequestQueryParams(RequestRequiredQueryParams,
+                         RequestOptionalQueryParams):
+    pass
+
+
+request_query_machine_type = api_client.QueryParameter(
+    name="machine_type",
+    style=api_client.ParameterStyle.FORM,
+    schema=MachineTypeSchema,
     required=True,
+    explode=True,
+)
+request_query_zone = api_client.QueryParameter(
+    name="zone",
+    style=api_client.ParameterStyle.FORM,
+    schema=ZoneSchema,
+    explode=True,
 )
 _auth = [
     'APIKeyHeader',
@@ -94,10 +121,7 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _get_instance_price_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: typing_extensions.Literal["application/json"] = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -110,27 +134,8 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _get_instance_price_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
-
-    @typing.overload
-    def _get_instance_price_oapg(
-        self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -140,10 +145,7 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _get_instance_price_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -156,10 +158,7 @@ class BaseApi(api_client.Api):
 
     def _get_instance_price_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = 'application/json',
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -171,7 +170,24 @@ class BaseApi(api_client.Api):
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
+        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         used_path = path.value
+
+        prefix_separator_iterator = None
+        for parameter in (
+                request_query_machine_type,
+                request_query_zone,
+        ):
+            parameter_data = query_params.get(parameter.name, schemas.unset)
+            if parameter_data is schemas.unset:
+                continue
+            if prefix_separator_iterator is None:
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
+                )
+            serialized_data = parameter.serialize(parameter_data,
+                                                  prefix_separator_iterator)
+            for serialized_value in serialized_data.values():
+                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -179,24 +195,10 @@ class BaseApi(api_client.Api):
             for accept_content_type in accept_content_types:
                 _headers.add('Accept', accept_content_type)
 
-        if body is schemas.unset:
-            raise exceptions.ApiValueError(
-                'The required body parameter has an invalid value of: unset. Set a valid value instead'
-            )
-        _fields = None
-        _body = None
-        serialized_data = request_body_instance.serialize(body, content_type)
-        _headers.add('Content-Type', content_type)
-        if 'fields' in serialized_data:
-            _fields = serialized_data['fields']
-        elif 'body' in serialized_data:
-            _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
             method='get'.upper(),
             headers=_headers,
-            fields=_fields,
-            body=_body,
             auth_settings=_auth,
             stream=stream,
             timeout=timeout,
@@ -229,10 +231,7 @@ class GetInstancePrice(BaseApi):
     @typing.overload
     def get_instance_price(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: typing_extensions.Literal["application/json"] = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -245,27 +244,8 @@ class GetInstancePrice(BaseApi):
     @typing.overload
     def get_instance_price(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
-
-    @typing.overload
-    def get_instance_price(
-        self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -275,10 +255,7 @@ class GetInstancePrice(BaseApi):
     @typing.overload
     def get_instance_price(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -291,18 +268,14 @@ class GetInstancePrice(BaseApi):
 
     def get_instance_price(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = 'application/json',
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         return self._get_instance_price_oapg(
-            body=body,
-            content_type=content_type,
+            query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -315,10 +288,7 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: typing_extensions.Literal["application/json"] = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -331,27 +301,8 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
-
-    @typing.overload
-    def get(
-        self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -361,10 +312,7 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -377,18 +325,14 @@ class ApiForget(BaseApi):
 
     def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = 'application/json',
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         return self._get_instance_price_oapg(
-            body=body,
-            content_type=content_type,
+            query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

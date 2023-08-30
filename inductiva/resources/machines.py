@@ -127,4 +127,6 @@ class MachineGroup():
         logging.info("Number of machines: %s", self.num_machines)
         logging.info("Spot: %s", self.spot)
         logging.info("Disk size: %s GB", self.disk_size_gb)
-        logging.info("Estimated cost per hour: %s $/h", self.estimated_price)
+        # We won't offer price values just yet, due to a bug.
+        # TODO: Fix the price computation.
+        # logging.info("Estimated cost per hour: %s $/h", self.estimated_price)
