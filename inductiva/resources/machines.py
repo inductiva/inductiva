@@ -103,7 +103,7 @@ class MachineGroup():
         except inductiva.client.ApiException as api_exception:
             raise api_exception
 
-    def compute_estimated_price(self, api_instance):
+    def estimated_price(self, api_instance):
         """Returns an estimated price per hour of a machine group."""
         #TODO: Contemplate disk size in the price.
         body=inductiva.client.model.instance.Instance(name=self.machine_type,
