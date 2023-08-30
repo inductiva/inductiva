@@ -45,7 +45,7 @@ class ProteinSolvation(Scenario):
 
     def simulate(
             self,
-            simulator: Simulator = GROMACS(),
+            simulator: Simulator = GROMACS("proteinsolvation"),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
