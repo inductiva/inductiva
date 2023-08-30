@@ -1,6 +1,9 @@
 """Methods to interact with the tasks submitted to the API."""
 import json
-from typing import Dict, List, Optional, Union
+import datetime
+import pandas as pd
+import numpy as np
+from typing import Dict, List, Optional, Union, Sequence
 
 import inductiva
 from inductiva import api
@@ -48,6 +51,64 @@ def _fetch_tasks_from_api(
             raise e
 
 
+def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
+    columns = [
+        "ID", "Simulator", "Status", "Submitted", "Started", "Duration",
+        "VM Type"
+    ]
+    rows = []
+
+    for task in tasks:
+        info = task.get_info()
+        # e.g., get "openfoam" from "fvm.openfoam.run_simulation"
+        simulator = info["method_name"].split(".")[-2]
+        row = [
+            task.id,
+            simulator,
+            task.get_status(),
+            info.get("input_submit_time", None),
+            info.get("start_time", None),
+            task.get_execution_time(),
+            task.get_machine_type(),
+        ]
+        rows.append(row)
+
+    df = pd.DataFrame(rows, columns=columns)
+
+    # replace None with np.nan so that pandas can format them as "n/a"
+    # by passing na_rep="n/a" to to_string()
+    df.fillna(np.nan, inplace=True)
+
+    def datetime_formatter(dt: str) -> str:
+        return datetime.datetime.fromisoformat(dt).strftime("%d %b, %H:%M:%S")
+
+    def seconds_formatter(secs: float) -> str:
+        return (f"{int(secs // 3600)}h "
+                f"{int((secs % 3600) // 60)}m "
+                f"{int(secs % 60)}s")
+
+    formatters = {
+        "Submitted": datetime_formatter,
+        "Started": datetime_formatter,
+        "Duration": seconds_formatter,
+    }
+
+    # column width is 15 for all columns except the ones
+    # we override below
+    col_space = {col: 15 for col in columns}
+    col_space["Submitted"] = 20
+    col_space["Started"] = 20
+    col_space["Status"] = 20
+    col_space["VM Type"] = 18
+
+    return df.to_string(
+        index=False,
+        na_rep="n/a",
+        formatters=formatters,
+        col_space=col_space,
+    )
+
+
 # pylint: disable=redefined-builtin
 def list(num_tasks,
          status: Optional[Union[str, models.TaskStatusCode]] = None) -> None:
@@ -62,12 +123,12 @@ def list(num_tasks,
     Example usage:
         # list the last 5 tasks that were successful
         inductiva.tasks.list(5, status="success")
-        ID                   Simulator    Status       Submitted            Started              Duration     VM Type
-        1691150776862178362  openfoam     success      04 Aug, 12:06:17     04 Aug, 12:06:18     0h 1m 53s    c2-standard-8
-        1691149904961476240  openfoam     success      04 Aug, 11:51:46     04 Aug, 11:51:46     0h 1m 28s    c2-standard-8
-        1691081881158823776  openfoam     success      03 Aug, 16:58:02     03 Aug, 16:58:02     0h 1m 20s    n2-standard-32
-        1691081409916619414  openfoam     success      03 Aug, 16:50:11     03 Aug, 16:50:11     0h 1m 20s    n2-standard-32
-        1691080520213617518  openfoam     success      03 Aug, 16:35:21     03 Aug, 16:35:21     0h 1m 23s    n2-standard-32
+                         ID       Simulator               Status            Submitted              Started        Duration            VM Type
+        1691150776862178362        openfoam              success     04 Aug, 12:06:17     04 Aug, 12:06:18       0h 1m 53s      c2-standard-8
+        1691149904961476240        openfoam              success     04 Aug, 11:51:46     04 Aug, 11:51:46       0h 1m 28s      c2-standard-8
+        1691081881158823776        openfoam              success     03 Aug, 16:58:02     03 Aug, 16:58:02       0h 1m 20s     n2-standard-32
+        1691081409916619414        openfoam              success     03 Aug, 16:50:11     03 Aug, 16:50:11       0h 1m 20s     n2-standard-32
+        1691080520213617518        openfoam              success     03 Aug, 16:35:21     03 Aug, 16:35:21       0h 1m 23s     n2-standard-32
 
     Args:
         num_tasks: The number of tasks to list.
@@ -76,22 +137,9 @@ def list(num_tasks,
     """
     # pylint: enable=line-too-long
     status = models.TaskStatusCode(status) if status is not None else None
-
-    id_header = "ID"
-    simulator_header = "Simulator"
-    status_header = "Status"
-    submitted_header = "Submitted"
-    started_header = "Started"
-    duration_header = "Duration"
-    vm_type_header = "VM Type"
-
-    print(f"  {id_header:<20} {simulator_header:<12} {status_header:<12}"
-          f" {submitted_header:<20} {started_header:<20} {duration_header:<12}"
-          f" {vm_type_header:<12}")
-
     tasks = get(num_tasks, status=status)
-    for task in tasks:
-        print(task)
+    tasks_str = _list_of_tasks_to_str(tasks)
+    print(tasks_str)
 
 
 def get(

@@ -93,47 +93,6 @@ class Task:
         self.kill()
         return False
 
-    def __str__(self):
-        # Refresh info from API if the status when last queried was not
-        # a terminal status, because info may have changed in the meanwhile
-        # if the last status was not
-        self.get_info()
-        assert self._info is not None
-
-        # e.g. get "openfoam" from "fvm.openfoam.run_simulation"
-        simulator = self._info["method_name"].split(".")[-2]
-
-        submitted = "n/a"
-        started = "n/a"
-        duration = "n/a"
-        vm_type = "n/a"
-
-        if self._info["input_submit_time"] is not None:
-            submitted = datetime.datetime.fromisoformat(
-                self._info["input_submit_time"]).strftime("%d %b, %H:%M:%S")
-
-        if self._info["start_time"] is not None:
-            start_time = datetime.datetime.fromisoformat(
-                self._info["start_time"])
-            started = start_time.strftime("%d %b, %H:%M:%S")
-
-            if self._info["end_time"] is not None:
-                end_time = datetime.datetime.fromisoformat(
-                    self._info["end_time"])
-                duration_s = (end_time - start_time).total_seconds()
-                duration = (f"{int(duration_s // 3600)}h "
-                            f"{int((duration_s % 3600) // 60)}m "
-                            f"{int(duration_s % 60)}s")
-
-        if self._info["executer"] is not None and "vm_type" in self._info[
-                "executer"]:
-            vm_type = self._info["executer"]["vm_type"].split("/")[-1]
-
-        return (f"  {self.id:<20} {simulator:<12} "
-                f"{self._status:<12} {submitted:<20} "
-                f"{started:<20} {duration:<12} "
-                f"{vm_type:<12}")
-
     def get_status(self) -> models.TaskStatusCode:
         """Get status of the task.
 
@@ -145,9 +104,7 @@ class Task:
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
-        self._status = models.TaskStatusCode(resp.body["status"])
-
-        return self._status
+        return models.TaskStatusCode(resp.body["status"])
 
     def get_info(self) -> Dict[str, Any]:
         """Get a dictionary with information about the task.
@@ -356,41 +313,39 @@ class Task:
         """Get dictionary with the URL path parameters for API calls."""
         return {"task_id": self.id}
 
-    def get_execution_time(self) -> float:
+    def get_execution_time(self) -> Optional[float]:
         """Get the time the task took to complete.
 
         Returns:
-            The time in seconds.
+            The time in seconds or None if the task hasn't completed yet.
         """
+        info = self.get_info()
+        if self._status not in _TASK_TERMINAL_STATUSES:
+            return None
+        # start_time may be None if the task was killed before it started
+        if info["start_time"] is None:
+            return None
 
-        if self.get_status() != models.TaskStatusCode.SUCCESS:
-            raise RuntimeError("Task is not completed.")
-
-        params = self._get_path_params()
-        info = dict(self._api.get_task(params).body)
-
-        #Format the time to datetime type
-        end_time = datetime.datetime.strptime(str(info["end_time"]),
-                                              "%Y-%m-%dT%H:%M:%S.%f+00:00")
-        start_time = datetime.datetime.strptime(str(info["start_time"]),
-                                                "%Y-%m-%dT%H:%M:%S.%f+00:00")
+        # Format the time to datetime type
+        start_time = datetime.datetime.fromisoformat(info["start_time"])
+        end_time = datetime.datetime.fromisoformat(info["end_time"])
 
         return (end_time - start_time).total_seconds()
 
-    def get_machine_type(self) -> str:
+    def get_machine_type(self) -> Optional[str]:
         """Get the machine type used in the task.
 
         Streamlines the process of obtaining the task info, extracting the
         machine type from the comprehensive task info.
 
         Returns:
-            The machine type.
+            The machine type, or None if a machine hasn't been assigned yet.
         """
+        info = self.get_info()
+        if info["executer"] is None:
+            return None
 
-        params = self._get_path_params()
-        task_info = dict(self._api.get_task(params).body)
-
-        machine_info = dict(task_info["executer"])
+        machine_info = info["executer"]
         machine_type = machine_info["vm_type"].split("/")[-1]
 
         return machine_type
