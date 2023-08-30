@@ -3,9 +3,10 @@
 import random
 from typing import Optional, Sequence, Tuple, Union
 
+from absl import logging
+
 import matplotlib
 import numpy as np
-import scipy
 import utm
 
 import inductiva
@@ -236,8 +237,8 @@ class Bathymetry:
         cmap: Optional[str] = None,
         clim: Optional[Tuple[float]] = None,
         path: Optional[str] = None,
-        grid_size: int = 500,
-        max_distance: float = 20,
+        grid_resolution: float = 10,
+        threshold_distance: float = 20,
     ) -> Union[matplotlib.axes.Axes, None]:
         """Plots the bathymetry.
 
@@ -245,14 +246,14 @@ class Bathymetry:
         coordinates of the points where the depths are defined in the axes.
 
         The bathymetry data is plotted with a color plot on a uniform grid,
-        defined by the size `grid_size`.
+        defined by the resolution `grid_resolution`.
         
         The data is interpolated from the points where the bathymetry is defined
         to the uniform grid using linear interpolation.
 
         Points on the uniform grid at a distance larger than a threshold
-        distance `max_distance` from points where the bathymetry is defined are
-        omitted.
+        distance `threshold_distance` from points where the bathymetry is
+        defined are omitted.
     
         The plot is produced with matplotlib.
 
@@ -264,35 +265,40 @@ class Bathymetry:
               the minimum or maximum colors, respectively.
             path: Path to save the plot. If `None`, the plot is not saved, and
               the matplotlib `Axes` object is returned instead.
-            grid_size: Size of the uniform grid to which the bathymetry is
-              interpolated before being plotted.
-            max_distance: Threshold distance to filter out points on the
+            grid_resolution: Resolution, in meters, of the uniform grid to which
+              the bathymetry is interpolated before being plotted.
+            threshold_distance: Threshold distance to filter out points on the
               uniform grid that are far from points where the bathymetry is
               defined.
         """
 
-        # Create uniform grid for interpolation.
-        x_grid, y_grid = np.meshgrid(np.linspace(*self.x_range, grid_size),
-                                     np.linspace(*self.y_range, grid_size))
+        # Determine grid size based on ranges and resolution.
+        x_num = int((self.x_range[1] - self.x_range[0]) / grid_resolution)
+        y_num = int((self.y_range[1] - self.y_range[0]) / grid_resolution)
 
-        # Interpolate depths to uniform grid.
-        interpolator = scipy.interpolate.LinearNDInterpolator(
-            (self.x, self.y),
-            self.depths,
+        logging.info(
+            "Plotting the bathymetry on a uniform grid...\n"
+            "- grid resolution %f m \n"
+            "- grid size %d x %d", grid_resolution, x_num, y_num)
+
+        if x_num > 1000 or y_num > 1000:
+            logging.warning(
+                "The plotting grid is large. It may take a while to plot.")
+
+        # Create uniform grid for interpolation.
+        (x_grid, y_grid) = inductiva.utils.grids.get_meshgrid(
+            x_range=self.x_range,
+            y_range=self.y_range,
+            x_num=x_num,
+            y_num=y_num,
         )
 
-        depths_grid = interpolator(x_grid, y_grid)
-
-        # Filter out points that are far from bathymetry locations.
-        tree = scipy.spatial.KDTree(np.c_[self.x, self.y])
-
-        # Obtain distance between each point on the uniform grid and the
-        # closest bathymetry location.
-        distance, _ = tree.query(np.c_[x_grid.ravel(), y_grid.ravel()], k=1)
-        distance = distance.reshape(x_grid.shape)
-
-        # Set depths to NaN for points that are far from bathymetry locations.
-        depths_grid[distance > max_distance] = np.nan
+        depths_grid = inductiva.utils.interpolation.interpolate_to_uniform_grid(
+            x=(self.x, self.y),
+            values=self.depths,
+            x_grid=(x_grid, y_grid),
+            threshold_distance=threshold_distance,
+        )
 
         # Plot the bathymetry.
         extent = (
@@ -306,7 +312,7 @@ class Bathymetry:
         ax = fig.add_subplot()
 
         im = ax.imshow(
-            depths_grid,
+            depths_grid.transpose(),
             cmap=cmap,
             clim=clim,
             origin="lower",
@@ -342,16 +348,19 @@ class Bathymetry:
             y_size: Number of grid points in the y direction.
         """
 
-        x_grid, y_grid = np.meshgrid(np.linspace(*self.x_range, x_size),
-                                     np.linspace(*self.y_range, y_size),
-                                     indexing="ij")
-
-        interpolator = scipy.interpolate.LinearNDInterpolator(
-            (self.x, self.y),
-            self.depths,
+        # Create uniform grid for interpolation.
+        (x_grid, y_grid) = inductiva.utils.grids.get_meshgrid(
+            x_range=self.x_range,
+            y_range=self.y_range,
+            x_num=x_size,
+            y_num=y_size,
         )
 
-        depths_grid = interpolator(x_grid, y_grid)
+        depths_grid = inductiva.utils.interpolation.interpolate_to_uniform_grid(
+            x=(self.x, self.y),
+            values=self.depths,
+            x_grid=(x_grid, y_grid),
+        )
 
         if np.sum(np.isnan(depths_grid)) > 0:
             raise ValueError(
