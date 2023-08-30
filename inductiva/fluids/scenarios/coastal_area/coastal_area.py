@@ -196,7 +196,7 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
             "time_step": self.time_step,
             "output_time_step": self.output_time_step,
         },
-        output_file_path=config_file_path,
+        output_file=config_file_path,
         remove_template=True,
     )
 

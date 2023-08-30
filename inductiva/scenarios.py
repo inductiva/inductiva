@@ -1,8 +1,9 @@
 """Base class for scenarios."""
 
 from abc import ABC, abstractmethod
+import io
 import tempfile
-from typing import Optional
+from typing import Optional, Union
 
 from inductiva import resources
 from inductiva.types import Path
@@ -19,11 +20,15 @@ class Scenario(ABC):
         """To be implemented in subclasses."""
         pass
 
-    def read_commands_from_file(self, commands_path: str):
+    def read_commands_from_file(self, commands_file: Union[str, io.StringIO]):
         "Read list of commands from commands.json file"
-        with open(commands_path, "r", encoding="utf-8") as f:
-            commands = json.load(f)
-        return commands
+        if isinstance(commands_file, str):
+            with open(commands_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+
+        # Make sure already opened file is read from the beginning
+        commands_file.seek(0)
+        return json.load(commands_file)
 
     def validate_simulator(self, simulator: Simulator):
         """Checks if the scenario can be simulated with the given simulator."""

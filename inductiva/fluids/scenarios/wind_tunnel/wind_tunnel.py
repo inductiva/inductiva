@@ -5,7 +5,7 @@ import enum
 from functools import singledispatchmethod
 import os
 import shutil
-import tempfile
+import io
 from typing import Optional, List, Literal
 
 from absl import logging
@@ -35,7 +35,7 @@ class WindTunnel(scenarios.Scenario):
     effects of air moving past solid objects. Here, the tunnel consists
     of a box object in 3D space (x, y, z) space, where air flows in the
     positive x-direction with a certain velocity.
-            
+
     An arbitrary object is placed within the tunnel, sucht that air flows
     around it, as illustrated in the schematic below:
     |--------------------------------|
@@ -44,7 +44,7 @@ class WindTunnel(scenarios.Scenario):
     |->_______|_o___O_|______________|
 
     This scenario solves steady-state continuity and momentum equations
-    (time-independent) with incompressible flow. 
+    (time-independent) with incompressible flow.
     The simulation solves the time-independent equations for several
     time steps, based on the state of the previous one. The end goal is
     to determine the steady-state of the system, i.e., where the flow
@@ -153,14 +153,13 @@ class WindTunnel(scenarios.Scenario):
                                               OPENFOAM_TEMPLATE_INPUT_DIR,
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
-        with tempfile.NamedTemporaryFile() as commands_file:
-            templates.replace_params_in_template(
-                template_path=commands_template_path,
-                params={"n_cores": self.n_cores},
-                output_file_path=commands_file.name,
-            )
-
-            commands = self.read_commands_from_file(commands_file.name)
+        inmemory_file = io.StringIO()
+        templates.replace_params_in_template(
+            template_path=commands_template_path,
+            params={"n_cores": self.n_cores},
+            output_file=inmemory_file,
+        )
+        commands = self.read_commands_from_file(inmemory_file)
 
         return commands
 
