@@ -60,18 +60,19 @@ class MachineGroup():
                 )
             try:
                 logging.info("Creating a machine group."
-                             "This may take a few minutes.")
+                             "This may take a few seconds.")
                 start_time = time.time()
                 instance_group = api_instance.create_instance_group(
                     body=instance_group_config)
-                creation_time_mins = (time.time() - start_time) / 60
+                creation_time_secs = time.time() - start_time
 
                 self.id = instance_group.body["id"]
+                self.name = instance_group.body["name"]
                 #self.estimated_price = self._compute_estimated_price(
                 #    api_instance)
 
-                logging.info("Machine group successfully created in %.2f mins.",
-                             creation_time_mins)
+                logging.info("Machine group successfully created in %.2f s.",
+                             creation_time_secs)
                 self._log_machine_group_info()
 
             except inductiva.client.ApiException as api_exception:
@@ -84,16 +85,23 @@ class MachineGroup():
             api_instance = inductiva.client.apis.tags.instance_api.InstanceApi(
                 client)
 
+            instance_group_config = \
+                inductiva.client.model.instance_group.InstanceGroup(
+                    name=self.name,
+                    machine_type=self.machine_type,
+                    num_instances=self.num_machines,
+                    spot=self.spot,
+                    disk_size_gb=self.disk_size_gb,
+                    zone=self.zone,
+                )
             try:
                 logging.info("Terminating machine group."
                              "This may take a few minutes.")
                 start_time = time.time()
-                api_instance.delete_instance_group(
-                    body=inductiva.client.model.instance.Instance(
-                        id=self.id, zone=self.zone))
+                api_instance.delete_instance_group(body=instance_group_config)
                 termination_time_mins = (time.time() - start_time) / 60
                 logging.info(
-                    "Machine group of %s machines successfully"
+                    "Machine group of %s machines successfully "
                     "terminated in %.2f mins.", self.num_machines,
                     termination_time_mins)
 
@@ -124,4 +132,6 @@ class MachineGroup():
         logging.info("Number of machines: %s", self.num_machines)
         logging.info("Spot: %s", self.spot)
         logging.info("Disk size: %s GB", self.disk_size_gb)
-        logging.info("Estimated cost per hour: %s $/h", self.estimated_price)
+        # We won't offer price values just yet, due to a bug.
+        # TODO: Fix the price computation.
+        # logging.info("Estimated cost per hour: %s $/h", self.estimated_price)

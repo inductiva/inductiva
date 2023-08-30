@@ -1,8 +1,7 @@
 """Simsopt module of the API."""
 from typing import Optional
-from uuid import UUID
 
-from inductiva import simulation, tasks, types
+from inductiva import simulation, tasks, types, resources
 
 
 class Simsopt(simulation.Simulator):
@@ -22,7 +21,7 @@ class Simsopt(simulation.Simulator):
         num_iterations: int,
         num_samples: int,
         sigma_scaling_factor: float,
-        resource_pool_id: Optional[UUID] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
@@ -53,7 +52,7 @@ class Simsopt(simulation.Simulator):
         """
         return super().run(
             input_dir,
-            resource_pool_id=resource_pool_id,
+            machine_group=machine_group,
             run_async=run_async,
             coil_coefficients_filename=coil_coefficients_filename,
             coil_currents_filename=coil_currents_filename,
