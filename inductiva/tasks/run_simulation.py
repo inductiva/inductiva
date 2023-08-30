@@ -23,10 +23,14 @@ def run_simulation(
         "sim_dir": pathlib.Path,
     }
 
+    resource_pool_id = None
+    if machine_group is not None:
+        resource_pool_id = machine_group.id
+
     task_id = methods.invoke_async_api(api_method_name,
                                        params,
                                        type_annotations,
-                                       resource_pool_id=machine_group.id)
+                                       resource_pool_id=resource_pool_id)
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
         raise RuntimeError(
