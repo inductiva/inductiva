@@ -348,6 +348,10 @@ class Bathymetry:
             y_size: Number of grid points in the y direction.
         """
 
+        logging.info(
+            "Interpolating the bathymetry to a uniform grid...\n"
+            "- grid size %d x %d", x_size, y_size)
+
         # Create uniform grid for interpolation.
         (x_grid, y_grid) = inductiva.utils.grids.get_meshgrid(
             x_range=self.x_range,
