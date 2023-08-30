@@ -340,7 +340,7 @@ class Bathymetry:
         else:
             return ax
 
-    def to_uniform_grid(self, x_resolution: int = 2, y_resolution: int = 2):
+    def to_uniform_grid(self, x_resolution: float = 2, y_resolution: float = 2):
         """Converts the bathymetry to a uniform grid.
 
         The bathymetry is interpolated to a grid with uniform spacing in the x
@@ -348,8 +348,8 @@ class Bathymetry:
         by the `x_resolution` and `y_resolution` arguments.
 
         Args:
-            x_size: Number of grid points in the x direction.
-            y_size: Number of grid points in the y direction.
+            x_resolution: Resolution, in meters, of the grid in the x direction.
+            y_resolution: Resolution, in meters, of the grid in the y direction.
         """
 
         # Determine grid size based on ranges and resolution.
