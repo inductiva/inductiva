@@ -281,7 +281,7 @@ class Bathymetry:
             "- grid resolution %f m \n"
             "- grid size %d x %d", grid_resolution, x_num, y_num)
 
-        if x_num > 1000 or y_num > 1000:
+        if x_num > 1000 and y_num > 1000:
             logging.warning(
                 "The plotting grid is large. It may take a while to plot.")
 
