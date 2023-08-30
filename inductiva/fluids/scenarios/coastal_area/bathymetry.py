@@ -201,6 +201,16 @@ class Bathymetry:
 
         return (np.min(self.y), np.max(self.y))
 
+    def x_ptp(self) -> float:
+        """Returns the peak-to-peak range (max - min) of x values."""
+
+        return np.ptp(self.x)
+
+    def y_ptp(self) -> float:
+        """Returns the peak-to-peak range (max - min) of y values."""
+
+        return np.ptp(self.y)
+
     def x_uniques(self, sort: bool = False) -> np.ndarray:
         """Returns the unique x values.
         
@@ -277,8 +287,8 @@ class Bathymetry:
         """
 
         # Determine grid size based on ranges and resolution.
-        x_size = int((self.x_range[1] - self.x_range[0]) / x_resolution)
-        y_size = int((self.y_range[1] - self.y_range[0]) / y_resolution)
+        x_size = int(self.x_ptp() / x_resolution)
+        y_size = int(self.y_ptp() / y_resolution)
 
         logging.info(
             "Plotting the bathymetry on a uniform grid...\n"
@@ -353,8 +363,8 @@ class Bathymetry:
         """
 
         # Determine grid size based on ranges and resolution.
-        x_size = int((self.x_range[1] - self.x_range[0]) / x_resolution)
-        y_size = int((self.y_range[1] - self.y_range[0]) / y_resolution)
+        x_size = int(self.x_ptp() / x_resolution)
+        y_size = int(self.y_ptp() / y_resolution)
 
         logging.info(
             "Interpolating the bathymetry to a uniform grid...\n"
