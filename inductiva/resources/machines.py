@@ -5,6 +5,8 @@ import time
 from absl import logging
 
 import inductiva
+from inductiva import api
+from inductiva.client.apis.tags import instance_api
 
 
 class MachineGroup():
@@ -17,6 +19,8 @@ class MachineGroup():
         spot: bool = False,
         disk_size_gb: int = 20,
         zone: typing.Optional[str] = "europe-west1-b",
+        id: typing.Optional[str] = None,
+        name: typing.Optional[str] = None,
     ) -> None:
         """Create a MachineGroup object.
 
@@ -30,6 +34,7 @@ class MachineGroup():
             zone: The zone where the machines will be launched.
         """
         self.id = None
+        self.name = None
         #TODO: Check if machine type is valid.
         self.machine_type = machine_type
         self.num_machines = num_machines
@@ -41,71 +46,69 @@ class MachineGroup():
 
         # Set the API configuration that carries the information from the client
         # to the backend.
-        self.api_config = inductiva.api.validate_api_key(inductiva.api_key)
+        self._api = instance_api.InstanceApi(api.get_client())
 
     def start(self):
         """Starts a machine group."""
+        instance_group_config = \
+            inductiva.client.model.instance_group.InstanceGroup(
+                machine_type=self.machine_type,
+                num_instances=self.num_machines,
+                spot=self.spot,
+                disk_size_gb=self.disk_size_gb,
+                zone=self.zone,
+            )
+        try:
+            logging.info("Creating a machine group."
+                            "This may take a few minutes.")
+            start_time = time.time()
+            instance_group = self._api.create_instance_group(
+                body=instance_group_config)
+            creation_time_mins = (time.time() - start_time) / 60
 
-        with inductiva.client.ApiClient(self.api_config) as client:
-            api_instance = inductiva.client.apis.tags.instance_api.InstanceApi(
-                client)
+            self.id = instance_group.body["id"]
+            #self.estimated_price = self._compute_estimated_price(
+            #    api_instance)
 
-            instance_group_config = \
-                inductiva.client.model.instance_group.InstanceGroup(
-                    machine_type=self.machine_type,
-                    num_instances=self.num_machines,
-                    spot=self.spot,
-                    disk_size_gb=self.disk_size_gb,
-                    zone=self.zone,
-                )
-            try:
-                logging.info("Creating a machine group."
-                             "This may take a few minutes.")
-                start_time = time.time()
-                instance_group = api_instance.create_instance_group(
-                    body=instance_group_config)
-                creation_time_mins = (time.time() - start_time) / 60
+            logging.info("Machine group successfully created in %.2f mins.",
+                            creation_time_mins)
+            self._log_machine_group_info()
 
-                self.id = instance_group.body["id"]
-                #self.estimated_price = self._compute_estimated_price(
-                #    api_instance)
-
-                logging.info("Machine group successfully created in %.2f mins.",
-                             creation_time_mins)
-                self._log_machine_group_info()
-
-            except inductiva.client.ApiException as api_exception:
-                raise api_exception
+        except inductiva.client.ApiException as api_exception:
+            raise api_exception
 
     def terminate(self):
         """Terminates a machine group."""
 
-        with inductiva.client.ApiClient(self.api_config) as client:
-            api_instance = inductiva.client.apis.tags.instance_api.InstanceApi(
-                client)
+        try:
+            logging.info("Terminating machine group."
+                            "This may take a few minutes.")
+            start_time = time.time()
 
-            try:
-                logging.info("Terminating machine group."
-                             "This may take a few minutes.")
-                start_time = time.time()
-                api_instance.delete_instance_group(
-                    body=inductiva.client.model.instance.Instance(
-                        id=self.id, zone=self.zone))
-                termination_time_mins = (time.time() - start_time) / 60
-                logging.info(
-                    "Machine group of %s machines successfully"
-                    "terminated in %.2f mins.", self.num_machines,
-                    termination_time_mins)
+            instance_group_config = \
+                inductiva.client.model.instance_group.InstanceGroup(
+                    name=self.name,
+                    machine_type=self.machine_type,
+                    num_instances=self.num_machines,
+                    spot=self.spot,
+                    disk_size_gb=self.disk_size_gb,
+                    zone=self.zone)
+            self._api.delete_instance_group(body=instance_group_config)
+            termination_time_mins = (time.time() - start_time) / 60
+            logging.info(
+                "Machine group of %s machines successfully"
+                "terminated in %.2f mins.", self.num_machines,
+                termination_time_mins)
 
-            except inductiva.client.ApiException as api_exception:
-                raise api_exception
+        except inductiva.client.ApiException as api_exception:
+            raise api_exception
 
-    def _compute_estimated_price(self, api_instance):
+    def compute_estimated_price(self, api_instance):
         """Returns an estimated price per hour of a machine group."""
         #TODO: Contemplate disk size in the price.
-        instance_price = api_instance.get_instance_price(
-            body=inductiva.client.model.instance.Instance(id=self.machine_type,
-                                                          zone=self.zone))
+        body=inductiva.client.model.instance.Instance(name=self.machine_type,
+                                                          zone=self.zone)
+        instance_price = self._api.get_instance_price(body=body)
 
         if self.spot:
             estimated_price = instance_price.body[
