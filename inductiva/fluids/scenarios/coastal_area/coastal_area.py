@@ -199,7 +199,7 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
     )
 
     bathymetry_file_path = os.path.join(input_dir, SWASH_BATHYMETRY_FILENAME)
-    self.bathymetry.to_text_file(bathymetry_file_path)
+    self.bathymetry.to_bot_file(bathymetry_file_path)
 
 
 def _convert_time_to_hmsms(time: float) -> str:
