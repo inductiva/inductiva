@@ -21,6 +21,7 @@ from inductiva.client.apis.paths.gcp_instances_status import GcpInstancesStatus
 from inductiva.client.apis.paths.gcp_instances_group_status import GcpInstancesGroupStatus
 from inductiva.client.apis.paths.gcp_instances_storage import GcpInstancesStorage
 from inductiva.client.apis.paths.gcp_instances_groups import GcpInstancesGroups
+from inductiva.client.apis.paths.gcp_instances_group_name import GcpInstancesGroupName
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -44,6 +45,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.GCP_INSTANCES_GROUP_STATUS: GcpInstancesGroupStatus,
         PathValues.GCP_INSTANCES_STORAGE: GcpInstancesStorage,
         PathValues.GCP_INSTANCES_GROUPS: GcpInstancesGroups,
+        PathValues.GCP_INSTANCES_GROUP_NAME: GcpInstancesGroupName,
     })
 
 path_to_api = PathToApi({
@@ -67,4 +69,5 @@ path_to_api = PathToApi({
     PathValues.GCP_INSTANCES_GROUP_STATUS: GcpInstancesGroupStatus,
     PathValues.GCP_INSTANCES_STORAGE: GcpInstancesStorage,
     PathValues.GCP_INSTANCES_GROUPS: GcpInstancesGroups,
+    PathValues.GCP_INSTANCES_GROUP_NAME: GcpInstancesGroupName,
 })
