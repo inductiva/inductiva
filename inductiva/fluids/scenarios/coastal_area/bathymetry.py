@@ -194,24 +194,11 @@ class Bathymetry:
             text_file_path: Path to the text file.
         """
 
-        x_grid, y_grid = inductiva.utils.grids.get_meshgrid(
-            x_range=self.x_range,
-            y_range=self.y_range,
-            x_num=len(self.x_uniques()),
-            y_num=len(self.y_uniques()),
-        )
+        x_resolution = self.x_ptp() / self.x_uniques().size
+        y_resolution = self.y_ptp() / self.y_uniques().size
 
-        depths_grid = inductiva.utils.interpolation.interpolate_to_uniform_grid(
-            x=(self.x, self.y),
-            values=self.depths,
-            x_grid=(x_grid, y_grid),
-        )
-
-        if np.sum(np.isnan(depths_grid)) > 0:
-            raise ValueError(
-                "The bathymetry cannot be converted to a uniform grid because "
-                "depths are not defined in one or more edge regions of the "
-                "domain.")
+        depths_grid, _ = self._interpolate_to_uniform_grid(
+            x_resolution, y_resolution)
 
         np.savetxt(bot_file_path, depths_grid)
 
@@ -383,6 +370,25 @@ class Bathymetry:
     ):
         """Converts the bathymetry to a uniform grid.
 
+        Args:
+            x_resolution: Resolution, in meters, of the grid in the x direction.
+            y_resolution: Resolution, in meters, of the grid in the y direction.
+        """
+
+        depths_grid, (x_grid, y_grid) = self._interpolate_to_uniform_grid(
+            x_resolution, y_resolution)
+
+        return Bathymetry(depths=depths_grid.flatten(),
+                          x=x_grid.flatten(),
+                          y=y_grid.flatten())
+
+    def _interpolate_to_uniform_grid(
+        self,
+        x_resolution: float,
+        y_resolution: float,
+    ):
+        """Interpolates the bathymetry to a uniform grid.
+        
         The bathymetry is interpolated to a grid with uniform spacing in the x
         and y directions. The spacing in the x and y directions is determined
         by the `x_resolution` and `y_resolution` arguments.
@@ -390,15 +396,18 @@ class Bathymetry:
         Args:
             x_resolution: Resolution, in meters, of the grid in the x direction.
             y_resolution: Resolution, in meters, of the grid in the y direction.
+        
+        Returns:
+            depths_grid: A 2D array with the depths on the uniform grid.
+            (x_grid, y_grid): The x and y coordinates of the points where the
+              depths are defined, respectively.
         """
-
         # Determine grid size based on ranges and resolution.
         x_size = int(self.x_ptp() / x_resolution)
         y_size = int(self.y_ptp() / y_resolution)
 
         logging.info(
             "Interpolating the bathymetry to a uniform grid...\n"
-            "Plotting the bathymetry on a uniform grid...\n"
             "- grid resolution %f x %f (m x m) m \n"
             "- grid size %d x %d", x_resolution, y_resolution, x_size, y_size)
 
@@ -418,10 +427,8 @@ class Bathymetry:
 
         if np.sum(np.isnan(depths_grid)) > 0:
             raise ValueError(
-                "The bathymetry cannot be converted to a uniform grid because "
-                "depths are not defined in one or more edge regions of the "
-                "domain.")
+                "The bathymetry cannot be interpolated to a uniform grid "
+                "because depths are not defined in one or more edge regions of "
+                "the domain.")
 
-        return Bathymetry(depths=depths_grid.flatten(),
-                          x=x_grid.flatten(),
-                          y=y_grid.flatten())
+        return depths_grid, (x_grid, y_grid)
