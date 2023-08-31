@@ -102,19 +102,13 @@ class MachineGroup():
     def estimate_price(self):
         """Returns an estimated price per hour of a machine group."""
         #TODO: Contemplate disk size in the price.
-        instance_price = self._api.get_instance_price({
+        estimated_price = self._api.get_instance_price({
             "machine_type": self.machine_type,
-            "zone": self.zone
+            "zone": self.zone,
+            "spot": self.spot
         })
-
-        if self.spot:
-            estimated_price = instance_price.body[
-                "on_demand_price"] * self.num_machines
-        else:
-            estimated_price = instance_price.body[
-                "preemptible_price"] * self.num_machines
-
-        return float(round(estimated_price, 3))
+        logging.info("Estimated price per hour: %s $/h", estimated_price.body)
+        return estimated_price.body
 
     def status(self):
         """Returns the status of a machine group if it exists.
