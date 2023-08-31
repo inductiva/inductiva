@@ -21,6 +21,13 @@ SIMSOPT_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                     'stellarator_coils')
 PLASMA_SURFACE_TEMPLATE_FILENAME = 'input.example'
 OBJECTIVES_WEIGHTS_FILENAME = 'objectives_weights.json'
+DEFAULT_OBJECTIVES_WEIGHTS = {
+    'squared_flux': 1,
+    'coils_length': 2e-03,
+    'mean_squared_curvature': 3e-04,
+    'arclength_variation': 5e-03,
+    'curvature': 3e-04
+}
 
 
 class StellaratorCoils(scenarios.Scenario):
@@ -301,27 +308,19 @@ class StellaratorCoils(scenarios.Scenario):
 
         # Default weights for the objectives.
         if objectives_weights is None:
-            self.objectives_weights = {
-                'squared_flux': 1,
-                'coils_length': 2e-03,
-                'mean_squared_curvature': 3e-04,
-                'arclength_variation': 5e-03,
-                'curvature': 3e-04
-            }
+            self.objectives_weights = DEFAULT_OBJECTIVES_WEIGHTS
 
-        else:
-            for key in objectives_weights:
-                if key not in [
-                        'squared_flux', 'coils_length',
-                        'mean_squared_curvature', 'arclength_variation',
-                        'curvature'
-                ]:
-                    raise ValueError(
-                        'Invalid dictionary keys. '
-                        'Available options include: '
-                        '"squared_flux", "coils_length", '
-                        '"mean_squared_curvature", "arclength_variation" '
-                        'and "curvature".')
+        for key in objectives_weights:
+            if key not in [
+                    'squared_flux', 'coils_length', 'mean_squared_curvature',
+                    'arclength_variation', 'curvature'
+            ]:
+                raise ValueError(
+                    'Invalid dictionary keys. '
+                    'Available options include: '
+                    '"squared_flux", "coils_length", '
+                    '"mean_squared_curvature", "arclength_variation" '
+                    'and "curvature".')
 
         task = super().simulate(
             simulator,
