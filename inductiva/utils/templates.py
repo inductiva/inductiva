@@ -1,7 +1,8 @@
 """Utils related to template files."""
 
 import os
-from typing import Dict, List
+import io
+from typing import Dict, List, Union
 from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
@@ -14,7 +15,7 @@ TEMPLATES_PATH = find_path_to_package("templates")
 def replace_params_in_template(
     template_path: str,
     params: Dict,
-    output_file_path: str,
+    output_file: Union[str, io.StringIO],
     remove_template: bool = False,
 ) -> None:
     """Replaces parameters in a template file."""
@@ -27,7 +28,7 @@ def replace_params_in_template(
     environment = Environment(loader=FileSystemLoader(template_dir))
     template = environment.get_template(template_filename)
     stream = template.stream(**params)
-    stream.dump(output_file_path)
+    stream.dump(output_file)
 
     if remove_template:
         os.remove(template_path)
@@ -62,6 +63,6 @@ def batch_replace_params_in_template(
         replace_params_in_template(
             template_path=template_path,
             params=params,
-            output_file_path=output_filename_paths[index],
+            output_file=output_filename_paths[index],
             remove_template=remove_templates,
         )

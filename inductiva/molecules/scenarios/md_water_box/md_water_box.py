@@ -3,18 +3,16 @@ from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
 import shutil
-import tempfile
+import io
 
 from inductiva import tasks, resources
 from inductiva.molecules.simulators import GROMACS
 from inductiva.simulation import Simulator
-from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template,
-                                       replace_params_in_template)
+from inductiva.utils import templates
 from inductiva.scenarios import Scenario
 from .post_processing import MDWaterBoxOutput
 
-SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "md_water_box")
+SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "md_water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
@@ -97,14 +95,13 @@ class MDWaterBox(Scenario):
                                               GROMACS_TEMPLATE_INPUT_DIR,
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
-        with tempfile.NamedTemporaryFile() as commands_file:
-            replace_params_in_template(
-                template_path=commands_template_path,
-                params={"box_size": self.box_size},
-                output_file_path=commands_file.name,
-            )
-
-            commands = self.read_commands_from_file(commands_file.name)
+        inmemory_file = io.StringIO()
+        templates.replace_params_in_template(
+            template_path=commands_template_path,
+            params={"box_size": self.box_size},
+            output_file=inmemory_file,
+        )
+        commands = self.read_commands_from_file(inmemory_file)
 
         return commands
 
@@ -122,7 +119,7 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
 
     shutil.copytree(template_files_dir, input_dir, dirs_exist_ok=True)
 
-    batch_replace_params_in_template(
+    templates.batch_replace_params_in_template(
         templates_dir=input_dir,
         template_filenames=[
             "simulation.mdp.jinja",

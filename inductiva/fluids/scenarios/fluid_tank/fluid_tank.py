@@ -118,7 +118,7 @@ class CylindricalTankOutlet(BaseTankOutlet):
 
 class FluidTank(Scenario):
     """Fluid tank scenario.
-    
+
     This is a simulation scenario for a fluid tank. The tank has a 3D shape that
     may be cubic or cylindrical. Fluid is injected in the tank via an inlet
     located at the top of the tank, and flows out of the tank via an outlet
@@ -133,8 +133,8 @@ class FluidTank(Scenario):
 
     Schematic representation of the simulation scenario: e.g. x/y points right,
     z points up.
-    
-       inlet        
+
+       inlet
     _____________________
     |    |              |
     |    v              |
@@ -147,8 +147,8 @@ class FluidTank(Scenario):
     |                   |
     |___________________|
                     |
-                    v  outlet    
-    
+                    v  outlet
+
     The scenario can be simulated with SPlisHSPlasH.
     """
 
@@ -299,5 +299,5 @@ def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argum
             "bounding_box_min": bounding_box_min,
             "bounding_box_max": bounding_box_max,
         },
-        output_file_path=os.path.join(input_dir, SPLISHSPLASH_CONFIG_FILENAME),
+        output_file=os.path.join(input_dir, SPLISHSPLASH_CONFIG_FILENAME),
     )

@@ -26,7 +26,7 @@ DUALSPHYSICS_CONFIG_FILENAME = "dam_break.xml"
 
 class FluidBlock(Scenario):
     """Fluid block scenario.
-    
+
     This is a simulation scenario for a fluid block moving in a cubic tank under
     the action of gravity. The tank is a cube of dimensions 1 x 1 x 1 m. The
     fluid block is also cubic, but has configurable dimensions and initial
@@ -188,7 +188,7 @@ def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argum
             "particle_sorting": self.particle_sorting,
             "adaptive_time_step": self.adaptive_time_step,
         },
-        output_file_path=os.path.join(input_dir, SPLISHSPLASH_CONFIG_FILENAME),
+        output_file=os.path.join(input_dir, SPLISHSPLASH_CONFIG_FILENAME),
     )
 
 
@@ -216,5 +216,5 @@ def _(self, simulator: DualSPHysics, input_dir):  # pylint: disable=unused-argum
             "fluid": self.fluid,
             "adaptive_time_step": self.adaptive_time_step,
         },
-        output_file_path=os.path.join(input_dir, DUALSPHYSICS_CONFIG_FILENAME),
+        output_file=os.path.join(input_dir, DUALSPHYSICS_CONFIG_FILENAME),
     )
