@@ -246,6 +246,41 @@ class Bathymetry:
             y_uniques = np.sort(y_uniques)
         return y_uniques
 
+    def crop(self,
+             x_range: Sequence[float],
+             y_range: Sequence[float],
+             remove_offset=True):
+        """Crops the bathymetry to a given range of x and y values.
+        
+        Args:
+            x_range: The range of x values, in meters.
+            y_range: The range of y values, in meters.    
+        """
+        x_min, x_max = x_range
+        y_min, y_max = y_range
+
+        mask = (self.x >= x_min) & (self.x <= x_max) & \
+               (self.y >= y_min) & (self.y <= y_max)
+
+        if np.sum(mask) == 0:
+            raise ValueError(
+                "The bathymetry cannot be cropped because no points are "
+                "defined in the given coordinate ranges.")
+
+        x = self.x[mask]
+        y = self.y[mask]
+        depths = self.depths[mask]
+
+        if remove_offset:
+            x = x - x.min()
+            y = y - y.min()
+
+        return Bathymetry(
+            depths=depths,
+            x=x,
+            y=y,
+        )
+
     def is_uniform_grid(self) -> bool:
         """Determines whether the bathymetry is defined on a uniform grid."""
 
