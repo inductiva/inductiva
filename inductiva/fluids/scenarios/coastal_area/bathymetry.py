@@ -418,16 +418,23 @@ class Bathymetry:
         self,
         x_resolution: float,
         y_resolution: float,
+        threshold_distance: Optional[float] = None,
+        fill_value: Optional[Union[float, str]] = None,
+        nullable: bool = False,
     ):
-        """Interpolates the bathymetry to a uniform grid.
-        
-        The bathymetry is interpolated to a grid with uniform spacing in the x
-        and y directions. The spacing in the x and y directions is determined
-        by the `x_resolution` and `y_resolution` arguments.
+        """Interpolates the bathymetry to a uniform grid.     
 
         Args:
             x_resolution: Resolution, in meters, of the grid in the x direction.
             y_resolution: Resolution, in meters, of the grid in the y direction.
+            threshold_distance: Threshold distance to filter out points on the
+              uniform grid that are far from points where the bathymetry is
+              defined.
+            fill_value: Value to fill the grid points for which no interpolation
+              is possible. If "nearest", the nearest depth value is used.
+            nullable: Whether to allow the bathymetry to be undefined in some
+              grid points. If `False`, an error is raised if the bathymetry is
+              undefined in one or more grid points.
         
         Returns:
             depths_grid: A 2D array with the depths on the uniform grid.
@@ -440,7 +447,7 @@ class Bathymetry:
 
         logging.info(
             "Interpolating the bathymetry to a uniform grid...\n"
-            "- grid resolution %f x %f (m x m) m \n"
+            "- grid resolution %f x %f (m x m) \n"
             "- grid size %d x %d", x_resolution, y_resolution, x_size, y_size)
 
         # Create uniform grid for interpolation.
@@ -451,16 +458,33 @@ class Bathymetry:
             y_num=y_size,
         )
 
-        depths_grid = inductiva.utils.interpolation.interpolate_to_uniform_grid(
+        depths_grid = inductiva.utils.interpolation.interpolate_to_coordinates(
             x=(self.x, self.y),
             values=self.depths,
-            x_grid=(x_grid, y_grid),
-        )
+            x_interpolation=(x_grid, y_grid),
+            method="linear",
+            threshold_distance=threshold_distance)
 
-        if np.sum(np.isnan(depths_grid)) > 0:
+        nan_mask = np.isnan(depths_grid)
+
+        if fill_value is not None:
+            if fill_value == "nearest":
+                nearest_depths_grid = \
+                    inductiva.utils.interpolation.interpolate_to_coordinates(
+                        x=(self.x, self.y),
+                        values=self.depths,
+                        x_interpolation=(x_grid, y_grid),
+                        method="nearest")
+
+                depths_grid[nan_mask] = nearest_depths_grid[nan_mask]
+            else:
+                depths_grid[nan_mask] = fill_value
+
+        nan_mask = np.isnan(depths_grid)
+
+        if not nullable and np.sum(nan_mask) > 0:
             raise ValueError(
                 "The bathymetry cannot be interpolated to a uniform grid "
-                "because depths are not defined in one or more edge regions of "
-                "the domain.")
+                "because depths are not defined in one or more grid points.")
 
         return depths_grid, (x_grid, y_grid)
