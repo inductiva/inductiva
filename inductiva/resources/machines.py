@@ -114,7 +114,11 @@ class MachineGroup():
         """Returns the status of a machine group if it exists.
 
         Otherwise returns None"""
-        return self._api.get_group_status({"name": self.name})
+        response = self._api.get_group_status({"name": self.name})
+
+        if response is None:
+            logging.info("Machine group does not exist.")
+        return response
 
     def _log_machine_group_info(self):
         """Logs the machine group info."""
