@@ -93,7 +93,7 @@ class SteadyStateOutput:
                         n_points: int = 100,
                         initial_step_length: float = 1,
                         source_radius: float = 0.7,
-                        source_center: tuple[float, float, float] = (0, 0, 0),
+                        source_center: tuple = (0, 0, 0),
                         save_path: types.Path = None):
         """Get streamlines through the fluid/domain.
         
