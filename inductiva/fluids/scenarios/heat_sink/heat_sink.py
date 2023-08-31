@@ -170,6 +170,6 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
             "air_temperature": self.air_temperature,
             "heater_power": self.heater_power
         },
-        output_file_path=params_file_path,
+        output_file=params_file_path,
         remove_template=True,
     )

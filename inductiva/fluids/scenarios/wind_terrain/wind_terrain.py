@@ -1,15 +1,16 @@
 """Wind terrain scenario for air flowing over complex terrains."""
 
 from functools import singledispatchmethod
+import io
 import os
 import shutil
-import tempfile
 from typing import List, Optional
 
 import numpy as np
 
 import inductiva
 from inductiva import fluids, simulation, resources, scenarios, world
+from inductiva.utils import templates
 
 SCENARIO_TEMPLATE_DIR = os.path.join(inductiva.utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
@@ -24,10 +25,10 @@ class WindOverTerrain(scenarios.Scenario):
 
     This simulation scenario models the steady-state conditions of
     wind flowing over complex terrain (e.g., mountains, valleys, etc.).
-    
+
     The terrain is modeled through a 2D surface in a 3D world, defined
     through a mesh. The wind is injected through one of the side walls with
-    a certain velocity vector and and at a certain region of the wall. 
+    a certain velocity vector and and at a certain region of the wall.
     Here, the wind is initialized only on a circular region of the wall
     to simulate gusts of wind.
 
@@ -44,7 +45,7 @@ class WindOverTerrain(scenarios.Scenario):
     |____________________|                   |________/____|______|
 
     This scenario solves the steady-state continuity and momentum equations
-    (time-independent) with the assumption of incompressible flow. 
+    (time-independent) with the assumption of incompressible flow.
     The simulation solves the time-independent equations for several
     time steps, based on the state of the previous one. The end goal is
     to determine the steady-state of the system, i.e., where the flow
@@ -66,12 +67,12 @@ class WindOverTerrain(scenarios.Scenario):
             wind_velocity (List): Velocity of the air flow (m/s).
             wind_position (List): Absolute Position of the wind flow (m).
                 Note: The position needs to be above the terrain to occur
-                any wind flow. 
+                any wind flow.
             terrain (inductiva.world.Terrain): Terrain object that describes
                 the profile of the terrain with a mesh.
             atmosphere_height (float): Altitude (m) above the lowest point of
                 terrain (m) that establishes the region of air where wind flows.
-                Notice that the wind_position needs to be inside 
+                Notice that the wind_position needs to be inside
                 this atmosphere region.
         """
 
@@ -137,14 +138,13 @@ class WindOverTerrain(scenarios.Scenario):
                                               OPENFOAM_TEMPLATE_INPUT_DIR,
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
-        with tempfile.NamedTemporaryFile() as commands_file:
-            inductiva.utils.templates.replace_params_in_template(
-                template_path=commands_template_path,
-                params={"n_cores": self.n_cores},
-                output_file_path=commands_file.name,
-            )
-
-            commands = self.read_commands_from_file(commands_file.name)
+        inmemory_file = io.StringIO()
+        templates.replace_params_in_template(
+            template_path=commands_template_path,
+            params={"n_cores": self.n_cores},
+            output_file=inmemory_file,
+        )
+        commands = self.read_commands_from_file(inmemory_file)
 
         return commands
 
@@ -167,7 +167,7 @@ def _(self, simulator: fluids.simulators.OpenFOAM, input_dir):  # pylint: disabl
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    inductiva.utils.templates.batch_replace_params_in_template(
+    templates.batch_replace_params_in_template(
         templates_dir=input_dir,
         template_filenames=[
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),

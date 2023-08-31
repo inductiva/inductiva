@@ -6,6 +6,8 @@ import os
 import shutil
 from typing import Literal, Optional
 
+from absl import logging
+
 from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
@@ -78,8 +80,9 @@ class CoastalArea(Scenario):
         """
 
         if not bathymetry.is_uniform_grid():
-            raise ValueError(
-                "The bathymetry must be defined on a uniform grid.")
+            logging.info("The bathymetry is not defined on a uniform grid. "
+                         "Attempting to interpolate it to a uniform grid...")
+            bathymetry = bathymetry.to_uniform_grid()
 
         self.bathymetry = bathymetry
         self.water_level = water_level
@@ -159,10 +162,8 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
     bathymetry_x_num = len(self.bathymetry.x_uniques())
     bathymetry_y_num = len(self.bathymetry.y_uniques())
 
-    bathymetry_x_delta = (self.bathymetry.x_range[1] -
-                          self.bathymetry.x_range[0]) / bathymetry_x_num
-    bathymetry_y_delta = (self.bathymetry.y_range[1] -
-                          self.bathymetry.y_range[0]) / bathymetry_y_num
+    bathymetry_x_delta = (self.bathymetry.x_ptp()) / bathymetry_x_num
+    bathymetry_y_delta = (self.bathymetry.y_ptp()) / bathymetry_y_num
 
     # SWASH requires the simulation time to be formatted as HHMMSS.sss.
     simulation_time_hmsms = _convert_time_to_hmsms(self.simulation_time)
@@ -193,12 +194,12 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
             "time_step": self.time_step,
             "output_time_step": self.output_time_step,
         },
-        output_file_path=config_file_path,
+        output_file=config_file_path,
         remove_template=True,
     )
 
     bathymetry_file_path = os.path.join(input_dir, SWASH_BATHYMETRY_FILENAME)
-    self.bathymetry.to_text_file(bathymetry_file_path)
+    self.bathymetry.to_bot_file(bathymetry_file_path)
 
 
 def _convert_time_to_hmsms(time: float) -> str:
