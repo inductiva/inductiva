@@ -1,4 +1,5 @@
 """Class for the coils creation."""
+import json
 import math
 import os
 import random
@@ -18,7 +19,8 @@ SIMSOPT_COIL_CURRENTS_FILENAME = 'coil_currents.npz'
 SIMSOPT_PLASMA_SURFACE_FILENAME = 'input.final'
 SIMSOPT_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                     'stellarator_coils')
-PLASMA_SURFACE_TEMPLATE_FILE_NAME = 'input.example'
+PLASMA_SURFACE_TEMPLATE_FILENAME = 'input.example'
+OBJECTIVES_WEIGHTS_FILENAME = 'objectives_weights.json'
 
 
 class StellaratorCoils(scenarios.Scenario):
@@ -233,6 +235,7 @@ class StellaratorCoils(scenarios.Scenario):
         num_iterations: int = 1,
         num_samples: int = 1,
         sigma_scaling_factor: float = 0.1,
+        objectives_weights: dict = None,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -271,6 +274,20 @@ class StellaratorCoils(scenarios.Scenario):
               the noise is generated proportionally to each coefficient. It 
               also determines the range of search for new values of the
               coefficients.
+            objectives_weights: Contains the weights for each objective function
+              that will be used for the construction of the total objective.
+              Only the objectives provided will be used for the calculation.
+              Available options for the keys are: 'squared_flux', 
+              'coils_length', 'mean_squared_curvature', 'arclength_variation' 
+              and 'curvature'. If `objectives_weights` is not provided it 
+              defaults to: {
+                                'squared_flux': 1,
+                                'coils_length': 2e-03,
+                                'mean_squared_curvature': 3e-04,
+                                'arclength_variation': 5e-03,
+                                'curvature': 3e-04
+                            }
+                  
         """
 
         if plasma_surface_filepath:
@@ -280,7 +297,31 @@ class StellaratorCoils(scenarios.Scenario):
             logging.info('Plasma surface description not provided. '
                          'Using default file.')
             self.plasma_surface_filepath = os.path.join(
-                SIMSOPT_TEMPLATE_DIR, PLASMA_SURFACE_TEMPLATE_FILE_NAME)
+                SIMSOPT_TEMPLATE_DIR, PLASMA_SURFACE_TEMPLATE_FILENAME)
+
+        # Default weights for the objectives.
+        if objectives_weights is None:
+            self.objectives_weights = {
+                'squared_flux': 1,
+                'coils_length': 2e-03,
+                'mean_squared_curvature': 3e-04,
+                'arclength_variation': 5e-03,
+                'curvature': 3e-04
+            }
+
+        else:
+            for key in objectives_weights:
+                if key not in [
+                        'squared_flux', 'coils_length',
+                        'mean_squared_curvature', 'arclength_variation',
+                        'curvature'
+                ]:
+                    raise ValueError(
+                        'Invalid dictionary keys. '
+                        'Available options include: '
+                        '"squared_flux", "coils_length", '
+                        '"mean_squared_curvature", "arclength_variation" '
+                        'and "curvature".')
 
         task = super().simulate(
             simulator,
@@ -292,7 +333,8 @@ class StellaratorCoils(scenarios.Scenario):
             num_field_periods=self.num_field_periods,
             num_iterations=num_iterations,
             num_samples=num_samples,
-            sigma_scaling_factor=sigma_scaling_factor)
+            sigma_scaling_factor=sigma_scaling_factor,
+            objectives_weights_filename=OBJECTIVES_WEIGHTS_FILENAME)
 
         return task
 
@@ -370,3 +412,10 @@ def _(self, simulator: stellarators.simulators.Simsopt, input_dir):  # pylint: d
     np.savez(coil_coefficients_filename, *coil_coefficients)
     np.savez(coil_currents_filename, coil_currents)
     shutil.copy(self.plasma_surface_filepath, plasma_surface_filename)
+
+    # Save the objectives weights dictionary.
+    objectives_weights_filepath = os.path.join(input_dir,
+                                               OBJECTIVES_WEIGHTS_FILENAME)
+
+    with open(objectives_weights_filepath, 'w', encoding='utf-8') as json_file:
+        json.dump(self.objectives_weights, json_file)
