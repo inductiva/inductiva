@@ -67,7 +67,7 @@ class MachineGroup():
             self.estimated_price = self.estimate_price()
 
             logging.info("Machine group successfully created in %.2f mins.",
-                            creation_time_mins)
+                         creation_time_mins)
             self._log_machine_group_info()
 
         except inductiva.client.ApiException as api_exception:
@@ -102,8 +102,10 @@ class MachineGroup():
     def estimate_price(self):
         """Returns an estimated price per hour of a machine group."""
         #TODO: Contemplate disk size in the price.
-        instance_price = self._api.get_instance_price(
-            {"machine_type": self.machine_type, "zone":self.zone})
+        instance_price = self._api.get_instance_price({
+            "machine_type": self.machine_type,
+            "zone": self.zone
+        })
 
         if self.spot:
             estimated_price = instance_price.body[
@@ -115,7 +117,9 @@ class MachineGroup():
         return float(round(estimated_price, 3))
 
     def status(self):
-        """Returns the status of a machine group."""
+        """Returns the status of a machine group if it exists.
+
+        Otherwise returns None"""
         return self._api.get_group_status({"name": self.name})
 
     def _log_machine_group_info(self):
