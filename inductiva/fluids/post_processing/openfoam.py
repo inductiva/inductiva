@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
 import pathlib
+from absl import logging
 
 import pyvista as pv
 
@@ -32,27 +33,27 @@ class SteadyStateOutput:
     general object that spreads all through the domain.
     """
 
-    def __init__(self, sim_output_path: types.Path):
+    def __init__(self, sim_output_path: types.Path, post_process: bool = True):
         """Initializes a `SteadyStateOutput` object.
 
         Args:
             sim_output_path: Path to simulation output files.
-        
-        Attributes:
-            sim_output_path: Path to simulation output files.
-            last_iteration: Last iteration of the simulation.
-                Obtained through the output folders.
+            post_process: If True, it assumes that the outputs were
+                processed in the backend. Note, the function
+                `get_output_mesh` will not work if this is True.
         """
 
         self.sim_output_path = sim_output_path
-        # Sort all output folders and files by alphabetical order.
-        outputs_dir_list = sorted(os.listdir(sim_output_path))
-        # The second folder is the folder containing the output of
-        # the last iteration.
-        self.last_iteration = float(outputs_dir_list[1])
+        self.post_process = post_process
 
     def get_output_mesh(self):  # pylint: disable=unused-argument
         """Get domain and object mesh info at the steady-state."""
+
+        if self.post_process:
+            object_mesh = pv.read(os.path.join(self.sim_output_path,
+                                               "constant", "triSurface",
+                                               "object.obj"))
+            return object_mesh
 
         # The OpenFOAM data reader from PyVista requires that a file named
         # "foam.foam" exists in the simulation output directory.
@@ -61,7 +62,12 @@ class SteadyStateOutput:
         pathlib.Path(foam_file_path).touch(exist_ok=True)
 
         reader = pv.OpenFOAMReader(foam_file_path)
-        reader.set_active_time_value(self.last_iteration)
+
+        # Sort all output folders and files by alphabetical order.
+        outputs_dir_list = sorted(os.listdir(self.sim_output_path))
+        # Second folder contains the last iteration outputs.
+        last_iteration = float(outputs_dir_list[1])
+        reader.set_active_time_value(last_iteration)
 
         full_mesh = reader.read()
         domain_mesh = full_mesh["internalMesh"]
@@ -77,16 +83,24 @@ class SteadyStateOutput:
             and to render it.
         """
 
-        _, object_mesh = self.get_output_mesh()
+        if self.post_process:
+            logging.info("Pressure field was computed on the backend. "
+                         "Args passed here were ignored.")
+            object_mesh = pv.read(
+                os.path.join(self.sim_output_path,
+                             "pressure_field.vtk"))
+        else:
+            logging.info("Fetching pressure field over the object.")
+            _, object_mesh = self.get_output_mesh()
 
         field_notation = OpenFOAMPhysicalField["PRESSURE"].value
-        physical_field = MeshData(object_mesh, field_notation)
+        pressure_field = MeshData(object_mesh, field_notation)
 
         if save_path is not None:
             save_path = utils.files.resolve_path(save_path)
-            physical_field.mesh.save(save_path)
+            pressure_field.mesh.save(save_path)
 
-        return physical_field
+        return pressure_field
 
     def get_streamlines(self,
                         max_time: float = 100,
@@ -112,18 +126,26 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, object_mesh = self.get_output_mesh()
+        if self.post_process:
+            logging.info("Streamlines were computed on the backend. "
+                         "Args passed here were ignored.")
+            object_mesh = self.get_output_mesh()
+            streamlines_mesh = pv.read(os.path.join(
+                self.sim_output_path, "streamlines.vtk"))
+        else:
+            logging.info("Computing the streamlines on the fly.")
+            mesh, object_mesh = self.get_output_mesh()
 
-        streamlines_mesh = mesh.streamlines(
-            max_time=max_time,
-            n_points=n_points,
-            initial_step_length=initial_step_length,
-            source_radius=source_radius,
-            source_center=source_center)
+            streamlines_mesh = mesh.streamlines(
+                max_time=max_time,
+                n_points=n_points,
+                initial_step_length=initial_step_length,
+                source_radius=source_radius,
+                source_center=source_center)
 
-        if save_path is not None:
-            save_path = utils.files.resolve_path(save_path)
-            streamlines_mesh.save(save_path)
+            if save_path is not None:
+                save_path = utils.files.resolve_path(save_path)
+                streamlines_mesh.save(save_path)
 
         return Streamlines(object_mesh, streamlines_mesh)
 
@@ -141,22 +163,31 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, object_mesh = self.get_output_mesh()
-
-        if plane == "xy":
-            normal = (0, 0, 1)
-        elif plane == "yz":
-            normal = (1, 0, 0)
-        elif plane == "xz":
-            normal = (0, 1, 0)
+        if self.post_process:
+            logging.info("Flow slices were computed on the backend. "
+                         "The origin and save_path arg are ignored.")
+            object_mesh = self.get_output_mesh()
+            flow_slice_name = plane + "_flow_slice.vtk"
+            flow_slice = pv.read(os.path.join(
+                self.sim_output_path, flow_slice_name))
         else:
-            raise ValueError("Invalid view.")
+            logging.info("Computing the flow on a slice.")
+            mesh, object_mesh = self.get_output_mesh()
 
-        flow_slice = mesh.slice(normal=normal, origin=origin)
+            if plane == "xy":
+                normal = (0, 0, 1)
+            elif plane == "yz":
+                normal = (1, 0, 0)
+            elif plane == "xz":
+                normal = (0, 1, 0)
+            else:
+                raise ValueError("Invalid view.")
 
-        if save_path is not None:
-            save_path = utils.files.resolve_path(save_path)
-            flow_slice.save(save_path)
+            flow_slice = mesh.slice(normal=normal, origin=origin)
+
+            if save_path is not None:
+                save_path = utils.files.resolve_path(save_path)
+                flow_slice.save(save_path)
 
         return FlowSlice(object_mesh, flow_slice)
 
@@ -228,7 +259,7 @@ class Streamlines:
                      view: Literal["isometric", "front", "rear", "top",
                                    "side"] = "isometric",
                      object_color: str = "white",
-                     streamline_radius: float = 0.5,
+                     streamline_radius: float = 0.1,
                      save_path: types.Path = None):
         """Render streamlines through domain."""
 

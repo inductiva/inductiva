@@ -180,9 +180,10 @@ class Task:
         """
         self._api.kill_task(path_params=self._get_path_params())
 
-    def set_output_class(self, output_class):
+    def set_output_class(self, output_class, **kwargs):
         """Set the output class of the task."""
         self._output_class = output_class
+        self._output_class_kwargs = kwargs
 
     def set_default_output_files(self,
                                  default_output_files_list: List[str] = None):
@@ -222,7 +223,8 @@ class Task:
             rm_downloaded_zip_archive=rm_downloaded_zip_archive)
 
         if self._output_class:
-            return self._output_class(output_dir)
+            return self._output_class(output_dir,
+                                      self._output_class_kwargs)
 
         return output_dir
 

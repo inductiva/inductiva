@@ -36,26 +36,33 @@ class WindTunnelOutput(post_processing.SteadyStateOutput):
             save_path: Path to save the force coefficients in a .csv file.
         """
 
-        num_header_lines = 8
-        force_coefficients_path = os.path.join(self.sim_output_path,
-                                               "postProcessing", "forceCoeffs1",
-                                               "0", "forceCoeffs.dat")
-        force_coefficients = []
+        if self.post_process:
+            force_coefficients_path = os.path.join(self.sim_output_path,
+                                                   "force_coefficients.csv")
+            with open(force_coefficients_path, "r", encoding="utf-8") as csv_file:
+                csv_reader = csv.reader(csv_file)
+                force_coefficients = list(csv_reader)
+        else:
+            num_header_lines = 8
+            force_coefficients_path = os.path.join(self.sim_output_path,
+                                                "postProcessing", "forceCoeffs1",
+                                                "0", "forceCoeffs.dat")
+            force_coefficients = []
 
-        with open(force_coefficients_path, "r",
-                  encoding="utf-8") as forces_file:
-            for index, line in enumerate(forces_file.readlines()):
-                # Pick the line 8 of the file:
-                # [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove the # column
-                if index == num_header_lines:
-                    force_coefficients.append(line.split()[1:])
-                # Add the force coefficients for the simulation time chosen
-                elif index == num_header_lines + self.last_iteration + 1:
-                    force_coefficients.append(line.split())
+            with open(force_coefficients_path, "r",
+                    encoding="utf-8") as forces_file:
+                for index, line in enumerate(forces_file.readlines()):
+                    # Pick the line 8 of the file:
+                    # [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove the # column
+                    if index == num_header_lines:
+                        force_coefficients.append(line.split()[1:])
+                    # Add the force coefficients for the simulation time chosen
+                    elif index == num_header_lines + self.last_iteration + 1:
+                        force_coefficients.append(line.split())
 
-        if save_path:
-            with open(save_path, "w", encoding="utf-8") as csv_file:
-                csv_writer = csv.writer(csv_file)
-                csv_writer.writerows(force_coefficients)
+            if save_path:
+                with open(save_path, "w", encoding="utf-8") as csv_file:
+                    csv_writer = csv.writer(csv_file)
+                    csv_writer.writerows(force_coefficients)
 
         return force_coefficients
