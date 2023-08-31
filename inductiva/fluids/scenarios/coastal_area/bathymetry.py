@@ -389,16 +389,26 @@ class Bathymetry:
         self,
         x_resolution: float = 2,
         y_resolution: float = 2,
+        fill_value: Optional[Union[float, str]] = None,
     ):
         """Converts the bathymetry to a uniform grid.
+
+        The bathymetry is interpolated to a grid with uniform resolution (i.e.
+        spacing) in the x and y directions. Linear interpolation is used to
+        interpolate the bathymetry to the grid.
+        
+        Grid points for which no interpolation is possible may be filled with
+        a constant or with the nearest depth value.
 
         Args:
             x_resolution: Resolution, in meters, of the grid in the x direction.
             y_resolution: Resolution, in meters, of the grid in the y direction.
+            fill_value: Value to fill the grid points for which no interpolation
+              is possible. If "nearest", the nearest depth value is used.
         """
 
         depths_grid, (x_grid, y_grid) = self._interpolate_to_uniform_grid(
-            x_resolution, y_resolution)
+            x_resolution, y_resolution, fill_value=fill_value, nullable=False)
 
         return Bathymetry(depths=depths_grid.flatten(),
                           x=x_grid.flatten(),
