@@ -334,33 +334,20 @@ class Bathymetry:
               defined.
         """
 
-        # Determine grid size based on ranges and resolution.
-        x_size = int(self.x_ptp() / x_resolution)
-        y_size = int(self.y_ptp() / y_resolution)
+        logging.info("Plotting the bathymetry on a uniform grid...")
+        depths_grid, _ = self._interpolate_to_uniform_grid(
+            x_resolution,
+            y_resolution,
+            threshold_distance=threshold_distance,
+            nullable=True,
+        )
 
-        logging.info(
-            "Plotting the bathymetry on a uniform grid...\n"
-            "- grid resolution %f x %f (m x m) m \n"
-            "- grid size %d x %d", x_resolution, y_resolution, x_size, y_size)
+        x_size = self.x_ptp() / x_resolution
+        y_size = self.y_ptp() / y_resolution
 
         if x_size > 1000 and y_size > 1000:
             logging.warning(
                 "The plotting grid is large. It may take a while to plot.")
-
-        # Create uniform grid for interpolation.
-        (x_grid, y_grid) = inductiva.utils.grids.get_meshgrid(
-            x_range=self.x_range,
-            y_range=self.y_range,
-            x_num=x_size,
-            y_num=y_size,
-        )
-
-        depths_grid = inductiva.utils.interpolation.interpolate_to_uniform_grid(
-            x=(self.x, self.y),
-            values=self.depths,
-            x_grid=(x_grid, y_grid),
-            threshold_distance=threshold_distance,
-        )
 
         # Plot the bathymetry.
         extent = (
