@@ -162,10 +162,8 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
     bathymetry_x_num = len(self.bathymetry.x_uniques())
     bathymetry_y_num = len(self.bathymetry.y_uniques())
 
-    bathymetry_x_delta = (self.bathymetry.x_range[1] -
-                          self.bathymetry.x_range[0]) / bathymetry_x_num
-    bathymetry_y_delta = (self.bathymetry.y_range[1] -
-                          self.bathymetry.y_range[0]) / bathymetry_y_num
+    bathymetry_x_delta = (self.bathymetry.x_ptp()) / bathymetry_x_num
+    bathymetry_y_delta = (self.bathymetry.y_ptp()) / bathymetry_y_num
 
     # SWASH requires the simulation time to be formatted as HHMMSS.sss.
     simulation_time_hmsms = _convert_time_to_hmsms(self.simulation_time)
@@ -201,7 +199,7 @@ def _(self, simulator: SWASH, input_dir):  # pylint: disable=unused-argument
     )
 
     bathymetry_file_path = os.path.join(input_dir, SWASH_BATHYMETRY_FILENAME)
-    self.bathymetry.to_text_file(bathymetry_file_path)
+    self.bathymetry.to_bot_file(bathymetry_file_path)
 
 
 def _convert_time_to_hmsms(time: float) -> str:
