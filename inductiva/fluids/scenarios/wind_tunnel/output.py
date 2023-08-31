@@ -39,18 +39,20 @@ class WindTunnelOutput(post_processing.SteadyStateOutput):
         if self.post_process:
             force_coefficients_path = os.path.join(self.sim_output_path,
                                                    "force_coefficients.csv")
-            with open(force_coefficients_path, "r", encoding="utf-8") as csv_file:
+            with open(force_coefficients_path, "r",
+                      encoding="utf-8") as csv_file:
                 csv_reader = csv.reader(csv_file)
                 force_coefficients = list(csv_reader)
         else:
             num_header_lines = 8
             force_coefficients_path = os.path.join(self.sim_output_path,
-                                                "postProcessing", "forceCoeffs1",
-                                                "0", "forceCoeffs.dat")
+                                                   "postProcessing",
+                                                   "forceCoeffs1", "0",
+                                                   "forceCoeffs.dat")
             force_coefficients = []
 
             with open(force_coefficients_path, "r",
-                    encoding="utf-8") as forces_file:
+                      encoding="utf-8") as forces_file:
                 for index, line in enumerate(forces_file.readlines()):
                     # Pick the line 8 of the file:
                     # [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove the # column

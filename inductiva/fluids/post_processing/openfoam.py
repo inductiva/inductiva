@@ -50,9 +50,9 @@ class SteadyStateOutput:
         """Get domain and object mesh info at the steady-state."""
 
         if self.post_process:
-            object_mesh = pv.read(os.path.join(self.sim_output_path,
-                                               "constant", "triSurface",
-                                               "object.obj"))
+            object_mesh = pv.read(
+                os.path.join(self.sim_output_path, "constant", "triSurface",
+                             "object.obj"))
             return object_mesh
 
         # The OpenFOAM data reader from PyVista requires that a file named
@@ -87,8 +87,7 @@ class SteadyStateOutput:
             logging.info("Pressure field was computed on the backend. "
                          "Args passed here were ignored.")
             object_mesh = pv.read(
-                os.path.join(self.sim_output_path,
-                             "pressure_field.vtk"))
+                os.path.join(self.sim_output_path, "pressure_field.vtk"))
         else:
             logging.info("Fetching pressure field over the object.")
             _, object_mesh = self.get_output_mesh()
@@ -130,8 +129,8 @@ class SteadyStateOutput:
             logging.info("Streamlines were computed on the backend. "
                          "Args passed here were ignored.")
             object_mesh = self.get_output_mesh()
-            streamlines_mesh = pv.read(os.path.join(
-                self.sim_output_path, "streamlines.vtk"))
+            streamlines_mesh = pv.read(
+                os.path.join(self.sim_output_path, "streamlines.vtk"))
         else:
             logging.info("Computing the streamlines on the fly.")
             mesh, object_mesh = self.get_output_mesh()
@@ -168,8 +167,8 @@ class SteadyStateOutput:
                          "The origin and save_path arg are ignored.")
             object_mesh = self.get_output_mesh()
             flow_slice_name = plane + "_flow_slice.vtk"
-            flow_slice = pv.read(os.path.join(
-                self.sim_output_path, flow_slice_name))
+            flow_slice = pv.read(
+                os.path.join(self.sim_output_path, flow_slice_name))
         else:
             logging.info("Computing the flow on a slice.")
             mesh, object_mesh = self.get_output_mesh()

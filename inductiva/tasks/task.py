@@ -223,8 +223,7 @@ class Task:
             rm_downloaded_zip_archive=rm_downloaded_zip_archive)
 
         if self._output_class:
-            return self._output_class(output_dir,
-                                      self._output_class_kwargs)
+            return self._output_class(output_dir, self._output_class_kwargs)
 
         return output_dir
 
