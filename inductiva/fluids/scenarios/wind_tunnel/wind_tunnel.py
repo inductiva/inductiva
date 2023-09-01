@@ -95,7 +95,8 @@ class WindTunnel(scenarios.Scenario):
 
         return [
             "pressure_field.vtk", "streamlines.vtk", "stdout.txt", "stderr.txt",
-            "force_coefficients.csv", "constant/triSurface/object.obj"
+            "force_coefficients.csv", "xy_slice.vtk", "xz_flow_slice.vtk",
+            "yz_flow_slice.vtk", "constant/triSurface/object.obj"
         ]
 
     def simulate(self,
@@ -106,8 +107,7 @@ class WindTunnel(scenarios.Scenario):
                  object_path: Optional[types.Path] = None,
                  num_iterations: float = 100,
                  resolution: Literal["high", "medium", "low"] = "medium",
-                 n_cores: int = 1,
-                 post_process: bool = True) -> tasks.Task:
+                 n_cores: int = 1) -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
@@ -121,9 +121,6 @@ class WindTunnel(scenarios.Scenario):
             resolution: Level of detail of the mesh used for the simulation.
                 Options: "high", "medium" or "low".
             machine_group: The machine group to use for the simulation.
-            post_process: A boolean indicating whether to run post-processing
-                on the backend. This interacts with the output class to
-                appropriately read the files.
         """
 
         if object_path:
@@ -143,15 +140,8 @@ class WindTunnel(scenarios.Scenario):
                                 n_cores=n_cores,
                                 commands=commands)
 
-        # Set the output files only if post-processing is enabled, otherwise
-        # download everything.
-        # TODO: Currently, this still executes the default post-processing
-        # in the backend. Later, we allow users to disable it with this arg.
-        if post_process:
-            task.set_default_output_files(self.set_default_output_files())
-
-        task.set_output_class(fluids.scenarios.wind_tunnel.WindTunnelOutput,
-                              post_process=post_process)
+        task.set_default_output_files(self.set_default_output_files())
+        task.set_output_class(fluids.scenarios.wind_tunnel.WindTunnelOutput)
 
         return task
 

@@ -13,6 +13,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
 import pathlib
+import glob
 from absl import logging
 
 import pyvista as pv
@@ -33,23 +34,41 @@ class SteadyStateOutput:
     general object that spreads all through the domain.
     """
 
-    def __init__(self, sim_output_path: types.Path, post_process: bool = True):
+    def __init__(self, sim_output_path: types.Path):
         """Initializes a `SteadyStateOutput` object.
 
         Args:
             sim_output_path: Path to simulation output files.
-            post_process: If True, it assumes that the outputs were
-                processed in the backend. Note, the function
-                `get_output_mesh` will not work if this is True.
+            default_output_files_list: List of default output files
+                that are computed on the backend and saved to the
+                simulation output directory.
         """
 
         self.sim_output_path = sim_output_path
-        self.post_process = post_process
+        self.full_output = self.inspect_output()
+
+    def inspect_output(self):
+        """Inspect the output of the simulation."""
+
+        default_output_files_list = [
+            "pressure_field.vtk", "streamlines.vtk", "stdout.txt", "stderr.txt",
+            "force_coefficients.csv", "xy_slice.vtk", "xz_flow_slice.vtk",
+            "yz_flow_slice.vtk", "constant/triSurface/object.obj"
+        ]
+
+        sim_output_files = glob.glob(
+            os.path.join(self.sim_output_path, "**"),
+            recursive=True)
+
+        if sim_output_files == default_output_files_list:
+            return False
+
+        return True
 
     def get_output_mesh(self):  # pylint: disable=unused-argument
         """Get domain and object mesh info at the steady-state."""
 
-        if self.post_process:
+        if self.full_output:
             object_mesh = pv.read(
                 os.path.join(self.sim_output_path, "constant", "triSurface",
                              "object.obj"))
@@ -83,7 +102,7 @@ class SteadyStateOutput:
             and to render it.
         """
 
-        if self.post_process:
+        if self.full_output:
             logging.info("Pressure field was computed on the backend. "
                          "Args passed here were ignored.")
             object_mesh = pv.read(
@@ -125,7 +144,7 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        if self.post_process:
+        if self.full_output:
             logging.info("Streamlines were computed on the backend. "
                          "Args passed here were ignored.")
             object_mesh = self.get_output_mesh()
@@ -162,7 +181,7 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        if self.post_process:
+        if self.full_output:
             logging.info("Flow slices were computed on the backend. "
                          "The origin and save_path arg are ignored.")
             object_mesh = self.get_output_mesh()

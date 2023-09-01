@@ -180,10 +180,9 @@ class Task:
         """
         self._api.kill_task(path_params=self._get_path_params())
 
-    def set_output_class(self, output_class, **kwargs):
+    def set_output_class(self, output_class):
         """Set the output class of the task."""
         self._output_class = output_class
-        self._output_class_kwargs = kwargs
 
     def set_default_output_files(self,
                                  default_output_files_list: List[str] = None):
@@ -193,6 +192,7 @@ class Task:
 
     def get_output(
         self,
+        full_output: bool = True,
         output_dir: Optional[pathlib.Path] = None,
         uncompress: bool = True,
         rm_downloaded_zip_archive: bool = True,
@@ -200,6 +200,8 @@ class Task:
         """Get the output of the task.
 
         Args:
+            full_output: Whether to download all the files in the output
+                archive. If False, only the default files are downloaded.
             output_dir: Directory where to download the files. If None, the
                 files are downloaded to the default directory. The default is
                 {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
@@ -216,14 +218,20 @@ class Task:
             100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]
         """
         self.wait()
+
+        if full_output:
+            filenames = []
+        else:
+            filenames = self._default_files_list
+
         output_dir = self.download_outputs(
-            filenames=self._default_files_list,
+            filenames=filenames,
             output_dir=output_dir,
             uncompress=uncompress,
             rm_downloaded_zip_archive=rm_downloaded_zip_archive)
 
         if self._output_class:
-            return self._output_class(output_dir, self._output_class_kwargs)
+            return self._output_class(output_dir)
 
         return output_dir
 
