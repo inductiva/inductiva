@@ -4,7 +4,7 @@ import inductiva
 from inductiva.client.apis.tags import instance_api
 
 
-def get_used():
+def get_space_used():
     """Returns the occupied storage size in GB."""
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
