@@ -62,6 +62,7 @@ class MachineGroup():
                 body=instance_group_config)
             creation_time_mins = (time.time() - start_time) / 60
 
+            self.id = instance_group.body["id"]
             self.name = instance_group.body["name"]
             self.estimated_price = self.estimate_price()
 
@@ -101,12 +102,20 @@ class MachineGroup():
     def estimate_price(self):
         """Returns an estimated price per hour of a machine group."""
         #TODO: Contemplate disk size in the price.
-        estimated_price = self._api.get_instance_price({"machine_type": self.machine_type,
+        instance_price = self._api.get_instance_price({
+            "machine_type": self.machine_type,
             "zone": self.zone,
-            "spot": self.spot
         })
-        logging.info("Estimated price per hour: %s $/h", estimated_price.body)
-        return estimated_price.body
+        if self.spot:
+            estimated_price = instance_price.body[
+                "on_demand_price"] * self.num_machines
+        else:
+            estimated_price = instance_price.body[
+                "preemptible_price"] * self.num_machines
+        estimated_price = float(round(estimated_price, 3))
+        logging.info("Estimated price per hour: %s $/h", estimated_price)
+
+        return estimated_price
 
     def status(self):
         """Returns the status of a machine group if it exists.
@@ -116,7 +125,7 @@ class MachineGroup():
 
         if response.body == "notFound":
             logging.info(f"Machine group {self.name} does not exist.")
-        return response
+        return response.body
 
     def _log_machine_group_info(self):
         """Logs the machine group info."""
