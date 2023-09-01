@@ -50,13 +50,13 @@ def get_machine_group(name: str):
         api = instance_api.InstanceApi(inductiva.api.get_client())
         response = api.get_instance_group({"name": name})
 
-        return resources.MachineGroup(
-            name=response.body["name"],
+        mg = resources.MachineGroup(
             machine_type=response.body["machine_type"],
             num_machines=response.body["num_instances"],
             spot=response.body["spot"],
             disk_size_gb=response.body["disk_size_gb"],
             zone=response.body["zone"])
+        mg.name = response.body["name"]
 
     except inductiva.client.ApiException as api_exception:
         raise api_exception

@@ -17,9 +17,8 @@ class MachineGroup():
         machine_type: str,
         num_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 20,
+        disk_size_gb: int = 30,
         zone: typing.Optional[str] = "europe-west1-b",
-        name: typing.Optional[str] = None,
     ) -> None:
         """Create a MachineGroup object.
 
@@ -29,11 +28,11 @@ class MachineGroup():
             more information about machine types.
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 20 GB.
+            disk_size_gb: The size of the disk in GB, recommended min. is 30 GB.
             zone: The zone where the machines will be launched.
         """
         self.id = None
-        self.name = name
+        self.name = None
         #TODO: Check if machine type is valid.
         self.machine_type = machine_type
         self.num_machines = num_machines
@@ -63,7 +62,7 @@ class MachineGroup():
                 body=instance_group_config)
             creation_time_mins = (time.time() - start_time) / 60
 
-            self.id = instance_group.body["id"]
+            self.name = instance_group.body["name"]
             self.estimated_price = self.estimate_price()
 
             logging.info("Machine group successfully created in %.2f mins.",
@@ -102,8 +101,7 @@ class MachineGroup():
     def estimate_price(self):
         """Returns an estimated price per hour of a machine group."""
         #TODO: Contemplate disk size in the price.
-        estimated_price = self._api.get_instance_price({
-            "machine_type": self.machine_type,
+        estimated_price = self._api.get_instance_price({"machine_type": self.machine_type,
             "zone": self.zone,
             "spot": self.spot
         })
@@ -116,8 +114,8 @@ class MachineGroup():
         Otherwise returns None"""
         response = self._api.get_group_status({"name": self.name})
 
-        if response is None:
-            logging.info("Machine group does not exist.")
+        if response.body == "notFound":
+            logging.info(f"Machine group {self.name} does not exist.")
         return response
 
     def _log_machine_group_info(self):
