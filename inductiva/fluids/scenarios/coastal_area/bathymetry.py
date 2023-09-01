@@ -459,9 +459,9 @@ class Bathymetry:
         )
 
         depths_grid = inductiva.utils.interpolation.interpolate_to_coordinates(
-            x=(self.x, self.y),
+            coordinates=(self.x, self.y),
             values=self.depths,
-            x_interpolation=(x_grid, y_grid),
+            interpolation_coordinates=(x_grid, y_grid),
             method="linear",
             threshold_distance=threshold_distance)
 
@@ -471,9 +471,9 @@ class Bathymetry:
             if fill_value == "nearest":
                 nearest_depths_grid = \
                     inductiva.utils.interpolation.interpolate_to_coordinates(
-                        x=(self.x, self.y),
+                        coordinates=(self.x, self.y),
                         values=self.depths,
-                        x_interpolation=(x_grid, y_grid),
+                        interpolation_coordinates=(x_grid, y_grid),
                         method="nearest")
 
                 depths_grid[nan_mask] = nearest_depths_grid[nan_mask]
