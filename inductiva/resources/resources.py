@@ -5,17 +5,6 @@ from inductiva.client.apis.tags import instance_api
 from inductiva import resources
 
 
-def get_storage_size():
-    """Returns the occupied storage size in GB."""
-    try:
-        api = instance_api.InstanceApi(inductiva.api.get_client())
-        instance_price = api.get_storage_size()
-        logging.info("Total storage used: %s GB", float(round(instance_price.body, 3)))
-        return float(round(instance_price.body, 3))
-    except inductiva.client.ApiException as api_exception:
-        raise api_exception
-
-
 def list_machine_groups():
     """Lists all active machine group names.
 
@@ -32,9 +21,8 @@ def list_machine_groups():
         machine_group_names = []
         for machine_group in response.body:
             machine_group_names.append(machine_group["name"])
-            logging.info("Name: %s; Number of machines: %s; Created at: %s", 
-                         machine_group["name"], 
-                         machine_group["num_instances"], 
+            logging.info("Name: %s; Number of machines: %s; Created at: %s",
+                         machine_group["name"], machine_group["num_instances"],
                          machine_group["create_time"])
         return machine_group_names
 
@@ -46,7 +34,10 @@ def get_machine_group(name: str):
     """Returns a 'MachineGroup' object.
 
     Given the name of the machine group, returns a 'MachineGroup' object
-    with the attributes of that machine group."""
+    with the attributes of that machine group.
+
+    Args:
+        name: Name of the machine group."""
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
         response = api.get_instance_group({"name": name})

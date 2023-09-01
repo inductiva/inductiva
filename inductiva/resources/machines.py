@@ -124,7 +124,7 @@ class MachineGroup():
         response = self._api.get_group_status({"name": self.name})
 
         if response.body == "notFound":
-            logging.info(f"Machine group does not exist: {self.name}.")
+            logging.info("Machine group does not exist: %f.", self.name)
         return response.body
 
     def _log_machine_group_info(self):
