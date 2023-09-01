@@ -55,7 +55,7 @@ class WindTunnelOutput(post_processing.SteadyStateOutput):
                       encoding="utf-8") as forces_file:
                 for index, line in enumerate(forces_file.readlines()):
                     # Pick the line 8 of the file:
-                    # [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove the # column
+                    # [#, Time, Cm, Cd, Cl, Cl(f), Cl(r)] and remove # column
                     if index == num_header_lines:
                         force_coefficients.append(line.split()[1:])
                     # Add the force coefficients for the simulation time chosen

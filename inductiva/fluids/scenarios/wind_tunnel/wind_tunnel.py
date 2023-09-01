@@ -146,7 +146,7 @@ class WindTunnel(scenarios.Scenario):
         # Set the output files only if post-processing is enabled, otherwise
         # download everything.
         # TODO: Currently, this still executes the default post-processing
-        # in the backend. Later, we will allow users to disable it with this arg.
+        # in the backend. Later, we allow users to disable it with this arg.
         if post_process:
             task.set_default_output_files(self.set_default_output_files())
 
