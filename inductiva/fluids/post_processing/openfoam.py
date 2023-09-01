@@ -70,7 +70,7 @@ class SteadyStateOutput:
     def get_output_mesh(self):  # pylint: disable=unused-argument
         """Get domain and object mesh info at the steady-state."""
 
-        if self.full_output:
+        if not self.full_output:
             object_mesh = pv.read(
                 os.path.join(self.sim_output_path, "constant", "triSurface",
                              "object.obj"))
@@ -104,7 +104,7 @@ class SteadyStateOutput:
             and to render it.
         """
 
-        if self.full_output:
+        if not self.full_output:
             logging.info("Pressure field was computed on the backend. "
                          "Args passed here were ignored.")
             object_mesh = pv.read(
@@ -146,7 +146,7 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        if self.full_output:
+        if not self.full_output:
             logging.info("Streamlines were computed on the backend. "
                          "Args passed here were ignored.")
             object_mesh = self.get_output_mesh()
@@ -183,7 +183,7 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        if self.full_output:
+        if not self.full_output:
             logging.info("Flow slices were computed on the backend. "
                          "The origin and save_path arg are ignored.")
             object_mesh = self.get_output_mesh()

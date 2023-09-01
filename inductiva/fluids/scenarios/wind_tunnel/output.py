@@ -36,7 +36,7 @@ class WindTunnelOutput(post_processing.SteadyStateOutput):
             save_path: Path to save the force coefficients in a .csv file.
         """
 
-        if self.post_process:
+        if not self.full_output:
             force_coefficients_path = os.path.join(self.sim_output_path,
                                                    "force_coefficients.csv")
             with open(force_coefficients_path, "r",
