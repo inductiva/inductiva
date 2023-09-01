@@ -21,6 +21,7 @@ class Simsopt(simulation.Simulator):
         num_iterations: int,
         num_samples: int,
         sigma_scaling_factor: float,
+        objectives_weights_filename: str,
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
     ) -> tasks.Task:
@@ -48,6 +49,9 @@ class Simsopt(simulation.Simulator):
               the noise is generated proportionally to each coefficient. It 
               also determines the range of search for new values of the
               coefficients.
+            objectives_weights_filename: Name of the file with the weights for
+              each objective function used in the construction of the total 
+              objective.
             other arguments: See the documentation of the base class.
         """
         return super().run(
@@ -60,4 +64,5 @@ class Simsopt(simulation.Simulator):
             num_field_periods=num_field_periods,
             num_iterations=num_iterations,
             num_samples=num_samples,
-            sigma_scaling_factor=sigma_scaling_factor)
+            sigma_scaling_factor=sigma_scaling_factor,
+            objectives_weights_filename=objectives_weights_filename)

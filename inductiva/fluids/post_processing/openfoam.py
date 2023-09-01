@@ -93,6 +93,7 @@ class SteadyStateOutput:
                         n_points: int = 100,
                         initial_step_length: float = 1,
                         source_radius: float = 0.7,
+                        source_center: tuple = (0, 0, 0),
                         save_path: types.Path = None):
         """Get streamlines through the fluid/domain.
         
@@ -106,20 +107,19 @@ class SteadyStateOutput:
             n_points: Number of points to seed.
             initial_step_length: Initial step length for the streamlines.
             source_radius: Radius of the source of the streamlines.
+            source_center: Center of the source of the streamlines.
             save_path: Path to save the streamlines. 
                 Types of files permitted: .vtk, .ply, .stl
         """
 
         mesh, object_mesh = self.get_output_mesh()
 
-        inlet_position = (mesh.bounds[0], 0, 1)
-
         streamlines_mesh = mesh.streamlines(
             max_time=max_time,
             n_points=n_points,
             initial_step_length=initial_step_length,
             source_radius=source_radius,
-            source_center=inlet_position)
+            source_center=source_center)
 
         if save_path is not None:
             save_path = utils.files.resolve_path(save_path)
@@ -228,6 +228,7 @@ class Streamlines:
                      view: Literal["isometric", "front", "rear", "top",
                                    "side"] = "isometric",
                      object_color: str = "white",
+                     streamline_radius: float = 0.5,
                      save_path: types.Path = None):
         """Render streamlines through domain."""
 
@@ -257,7 +258,7 @@ class Streamlines:
         # Obtain notation for the physical field for the simulator.
         field_notation = OpenFOAMPhysicalField[physical_field.upper()].value
 
-        plotter.add_mesh(self.mesh.tube(radius=0.01),
+        plotter.add_mesh(self.mesh.tube(radius=streamline_radius),
                          scalars=field_notation,
                          cmap=flow_cmap)
 
