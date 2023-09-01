@@ -108,10 +108,10 @@ class MachineGroup():
         })
         if self.spot:
             estimated_price = instance_price.body[
-                "on_demand_price"] * self.num_machines
+                "preemptible_price"] * self.num_machines
         else:
             estimated_price = instance_price.body[
-                "preemptible_price"] * self.num_machines
+                "on_demand_price"] * self.num_machines
         estimated_price = float(round(estimated_price, 3))
         logging.info("Estimated price per hour: %s $/h", estimated_price)
 
@@ -124,7 +124,7 @@ class MachineGroup():
         response = self._api.get_group_status({"name": self.name})
 
         if response.body == "notFound":
-            logging.info(f"Machine group {self.name} does not exist.")
+            logging.info(f"Machine group does not exist: {self.name}.")
         return response.body
 
     def _log_machine_group_info(self):
