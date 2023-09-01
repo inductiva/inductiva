@@ -1,51 +1,68 @@
 """Interpolation utilities."""
 
-from typing import Tuple
+from typing import Literal, Optional, Tuple
 
 import numpy as np
 import scipy
 
 
-def interpolate_to_uniform_grid(x: Tuple[np.ndarray],
-                                values: np.ndarray,
-                                x_grid: Tuple[np.ndarray],
-                                threshold_distance=None):
-    """Interpolate values to a uniform grid.
+def interpolate_to_coordinates(
+    coordinates: Tuple[np.ndarray],
+    values: np.ndarray,
+    interpolation_coordinates: Tuple[np.ndarray],
+    method: Literal["nearest", "linear"] = "linear",
+    threshold_distance: Optional[float] = None,
+):
+    """Interpolate values defined at coordinates x to interpolation coordinates.
 
     Args:
-        x: Tuple of arrays with the coordinates of the points where values are
-          defined.
+        coordinates: Tuple of arrays with the coordinates of the points where
+          values are defined.
         values: Array with the values defined at the points defined by `x`.
-        x_grid: Tuple of arrays with the coordinates of the points where values
-          will be interpolated.
-        threshold_distance: If not None, points in `x_grid` that are further
-          than `threshold_distance` from the closest point in `x` will be set to
-          NaN.
+        interpolation_coordinates: Tuple of arrays with the coordinates of the
+          points where values are interpolated to.
+        threshold_distance: If not `None`, points in `interpolation_coordinates`
+          that are farther than `threshold_distance` from the closest point in
+          `coordinates` are set to `np.NAN`.
     
     Returns:
-        Array with the interpolated values.
+        Array with the interpolated values. Its shape matches that of the
+        interpolation coordinate arrays.
     """
 
-    interpolator = scipy.interpolate.LinearNDInterpolator(x, values)
+    if method == "nearest":
+        interpolator = scipy.interpolate.NearestNDInterpolator(
+            coordinates, values)
+    elif method == "linear":
+        interpolator = scipy.interpolate.LinearNDInterpolator(
+            coordinates, values)
+    else:
+        raise ValueError("Invalid interpolation method.")
 
-    values_grid = interpolator(x_grid)
+    values_interpolation = interpolator(interpolation_coordinates)
 
     if threshold_distance is not None:
         # Filter out points that are far from x.
-        tree = scipy.spatial.KDTree(np.transpose(x))
+        tree = scipy.spatial.KDTree(np.transpose(coordinates))
 
-        # Obtain distance between each point on the uniform grid and the closest
+        # Obtain distance between each interpolation point and the closest
         # location where values are defined.
-        x_grid_shape = np.shape(x_grid)
+        interpolation_coordinates_shape = np.shape(interpolation_coordinates)
 
-        distance, _ = tree.query(
-            np.transpose(np.reshape(x_grid, (x_grid_shape[0], -1))),
-            k=1,
-        )
-        distance = distance.reshape(x_grid_shape[1:])
+        # Queries to the KDTree require that interpolation coordinates are
+        # provided in shape num_points x dim_coordinates, where num_points
+        # is the number of points to query and dim_coordinates is the number
+        # of coordinates per point.
+        # Reshape interpolation coordinates to match that shape.
+        interpolation_coordinates_reshaped = np.reshape(
+            interpolation_coordinates, (interpolation_coordinates_shape[0], -1))
+        interpolation_coordinates_reshaped = np.transpose(
+            interpolation_coordinates_reshaped)
+        distance, _ = tree.query(interpolation_coordinates_reshaped, k=1)
+        distance = distance.reshape(interpolation_coordinates_shape[1:])
 
         # Set values to NaN for points that are far from locations where values
         # are defined.
-        values_grid[distance > threshold_distance] = np.nan
+        values_interpolation[distance > threshold_distance] = np.nan
 
-    return values_grid
+    return values_interpolation
