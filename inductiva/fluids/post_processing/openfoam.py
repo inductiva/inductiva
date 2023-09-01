@@ -50,15 +50,17 @@ class SteadyStateOutput:
     def inspect_output(self):
         """Inspect the output of the simulation."""
 
+        # TODO: Transport these files in a simpler way from the task.
+        # For such, a change to all of the post-processing output classes may
+        # be required.
         default_output_files_list = [
             "pressure_field.vtk", "streamlines.vtk", "stdout.txt", "stderr.txt",
-            "force_coefficients.csv", "xy_slice.vtk", "xz_flow_slice.vtk",
+            "force_coefficients.csv", "xy_flow_slice.vtk", "xz_flow_slice.vtk",
             "yz_flow_slice.vtk", "constant/triSurface/object.obj"
         ]
 
-        sim_output_files = glob.glob(
-            os.path.join(self.sim_output_path, "**"),
-            recursive=True)
+        sim_output_files = glob.glob(os.path.join(self.sim_output_path, "**"),
+                                     recursive=True)
 
         if sim_output_files == default_output_files_list:
             return False
