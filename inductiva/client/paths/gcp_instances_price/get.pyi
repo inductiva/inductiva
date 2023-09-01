@@ -29,13 +29,11 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
 MachineTypeSchema = schemas.StrSchema
-SpotSchema = schemas.BoolSchema
 ZoneSchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
         'machine_type': typing.Union[MachineTypeSchema, str, ],
-        'spot': typing.Union[SpotSchema, bool, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -55,13 +53,6 @@ request_query_machine_type = api_client.QueryParameter(
     name="machine_type",
     style=api_client.ParameterStyle.FORM,
     schema=MachineTypeSchema,
-    required=True,
-    explode=True,
-)
-request_query_spot = api_client.QueryParameter(
-    name="spot",
-    style=api_client.ParameterStyle.FORM,
-    schema=SpotSchema,
     required=True,
     explode=True,
 )
@@ -170,7 +161,6 @@ class BaseApi(api_client.Api):
         prefix_separator_iterator = None
         for parameter in (
             request_query_machine_type,
-            request_query_spot,
             request_query_zone,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
