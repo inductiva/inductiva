@@ -219,7 +219,10 @@ class Task:
         """
         self.wait()
 
-        filenames = self._default_files_list if not full else None
+        # Check if default files are set by the output class
+        filenames = None
+        if self._default_files_list and not full:
+            filenames = self._default_files_list
 
         output_dir = self.download_outputs(
             filenames=filenames,
