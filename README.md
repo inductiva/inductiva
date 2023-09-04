@@ -161,7 +161,7 @@ scenario = fluids.scenarios.CoastalArea(bathymetry=bathymetry,
                                         wave_period=5.5)
 ```
 
-To run a simulation:
+To run a simulation: 
 
 ```python
 task = scenario.simulate(simulation_time=100, output_time_step=1)
