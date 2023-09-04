@@ -48,7 +48,11 @@ class SteadyStateOutput:
         self.full_output = self.inspect_output()
 
     def inspect_output(self):
-        """Inspect the output of the simulation."""
+        """Inspect the output of the simulation.
+        
+        Return True if the simulation output contains more files than
+        the default ones. This is used to determine if the post-processing
+        was computed on the backend or not."""
 
         # TODO: Transport these files in a simpler way from the task.
         # For such, a change to all of the post-processing output classes may
@@ -62,12 +66,9 @@ class SteadyStateOutput:
         sim_output_files = glob.glob(os.path.join(self.sim_output_path, "**"),
                                      recursive=True)
 
-        if sim_output_files == default_output_files_list:
-            return False
+        return sim_output_files != default_output_files_list
 
-        return True
-
-    def get_output_mesh(self):  # pylint: disable=unused-argument
+    def get_output_mesh(self):
         """Get domain and object mesh info at the steady-state."""
 
         if not self.full_output:
