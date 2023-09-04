@@ -50,6 +50,7 @@ class WindTunnelOutput(post_processing.SteadyStateOutput):
                                                    "forceCoeffs1", "0",
                                                    "forceCoeffs.dat")
             force_coefficients = []
+            last_iteration = int(self.get_last_iteration())
 
             with open(force_coefficients_path, "r",
                       encoding="utf-8") as forces_file:
@@ -59,7 +60,7 @@ class WindTunnelOutput(post_processing.SteadyStateOutput):
                     if index == num_header_lines:
                         force_coefficients.append(line.split()[1:])
                     # Add the force coefficients for the simulation time chosen
-                    elif index == num_header_lines + self.last_iteration + 1:
+                    elif index == num_header_lines + last_iteration + 1:
                         force_coefficients.append(line.split())
 
             if save_path:

@@ -68,6 +68,16 @@ class SteadyStateOutput:
 
         return sim_output_files != default_output_files_list
 
+    def get_last_iteration(self):
+        """Get the last iteration of the simulation from simulation outputs."""
+
+        # Sort all output folders and files by alphabetical order.
+        outputs_dir_list = sorted(os.listdir(self.sim_output_path))
+        # Second folder contains the last iteration outputs.
+        last_iteration = float(outputs_dir_list[1])
+
+        return last_iteration
+
     def get_output_mesh(self):
         """Get domain and object mesh info at the steady-state."""
 
@@ -84,12 +94,7 @@ class SteadyStateOutput:
         pathlib.Path(foam_file_path).touch(exist_ok=True)
 
         reader = pv.OpenFOAMReader(foam_file_path)
-
-        # Sort all output folders and files by alphabetical order.
-        outputs_dir_list = sorted(os.listdir(self.sim_output_path))
-        # Second folder contains the last iteration outputs.
-        last_iteration = float(outputs_dir_list[1])
-        reader.set_active_time_value(last_iteration)
+        reader.set_active_time_value(self.get_last_iteration())
 
         full_mesh = reader.read()
         domain_mesh = full_mesh["internalMesh"]
@@ -365,11 +370,11 @@ class MeshData:
         self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
 
     def render_frame(self,
-               off_screen: bool = False,
-               background_color: str = "black",
-               scalars_cmap: str = "viridis",
-               virtual_display: bool = False,
-               save_path: types.Path = None):
+                     off_screen: bool = False,
+                     background_color: str = "black",
+                     scalars_cmap: str = "viridis",
+                     virtual_display: bool = False,
+                     save_path: types.Path = None):
         """Render scalar field data over the mesh."""
         if save_path is not None:
             save_path = utils.files.resolve_path(save_path)

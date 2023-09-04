@@ -95,7 +95,7 @@ class WindTunnel(scenarios.Scenario):
 
         return [
             "pressure_field.vtk", "streamlines.vtk", "stdout.txt", "stderr.txt",
-            "force_coefficients.csv", "xy_slice.vtk", "xz_flow_slice.vtk",
+            "force_coefficients.csv", "xy_flow_slice.vtk", "xz_flow_slice.vtk",
             "yz_flow_slice.vtk", "constant/triSurface/object.obj"
         ]
 
