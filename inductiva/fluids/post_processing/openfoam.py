@@ -364,7 +364,7 @@ class MeshData:
         self.mesh.point_data[scalar_name] = mesh_data.point_data[scalar_name]
         self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
 
-    def render(self,
+    def render_frame(self,
                off_screen: bool = False,
                background_color: str = "black",
                scalars_cmap: str = "viridis",
