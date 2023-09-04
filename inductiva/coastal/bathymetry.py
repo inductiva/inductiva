@@ -169,7 +169,15 @@ class Bathymetry:
         ]
 
         depths = inductiva.generative.procedural.generate_random_map_level(
+            x_num,
+            y_num,
+            corner_values,
+            initial_roughness,
+            roughness_factor,
+        )
 
+        depths = inductiva.generative.procedural.adjust_map_level(
+            depths, percentile_above_water)
 
         x, y = np.meshgrid(np.linspace(*x_range, x_num),
                            np.linspace(*y_range, y_num),
