@@ -25,8 +25,6 @@ from . import post_processing
 from .post_processing import SteadyStateOutput
 from .scenarios._post_processing import SPHSimulationOutput
 from .simulators import (
-    SWASH,
-    XBeach,
     DualSPHysics,
     SPlisHSPlasH,
     OpenFOAM,

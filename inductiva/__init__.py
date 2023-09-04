@@ -9,6 +9,7 @@ from . import api
 from . import tasks
 from . import core
 from . import fluids
+from . import coastal
 from . import generative
 from . import molecules
 from . import resources
