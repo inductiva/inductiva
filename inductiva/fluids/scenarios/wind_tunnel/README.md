@@ -69,7 +69,7 @@ pressure_field = output.get_object_pressure_field()
 pressure_field.render_frame()
 ```
 
-![Default Pressure Field](resources/openfoam/default_pressure_field.png)
+![Default Pressure Field](resources/media/openfoam/default_pressure_field.png)
 
 ```python
 # Get the streamlines and visualize them
@@ -81,7 +81,7 @@ streamlines.render_frame(physical_field="velocity",
                          save_path="default_streamlines.png")
 ```
 
-![Default Streamlines](resources/openfoam/default_streamlines.png)
+![Default Streamlines](resources/media/openfoam/default_streamlines.png)
 
 ```python
 flow_slice = output.get_flow_slice(plane="xz")
@@ -90,7 +90,7 @@ flow_slice.render_frame(physical_field="pressure",
                         save_path="default_flow_slice.png")
 ```
 
-![Default Flow Slice](resources/openfoam/default_flow_slice.png)
+![Default Flow Slice](resources/media/openfoam/default_flow_slice.png)
 
 #### Example for general Post-processing
 
@@ -102,7 +102,7 @@ pressure_field = output.get_object_pressure_field()
 pressure_field.render_frame(save_path="pressure_field.png")
 ```
 
-![Pressure Field](resources/openfoam/pressure_field.png)
+![Pressure Field](resources/media/openfoam/pressure_field.png)
 
 ```python
 # Get the streamlines and visualize them
@@ -119,7 +119,7 @@ streamlines.render_frame(physical_field="pressure",
                          save_path="streamlines.png")
 ```
 
-![Streamlines](resources/openfoam/streamlines.png)
+![Streamlines](resources/media/openfoam/streamlines.png)
 
 ```python
 flow_slice = output.get_flow_slice(plane="xz",
@@ -130,4 +130,4 @@ flow_slice.render_frame(physical_field="velocity",
                         save_path="flow_slice.png")
 ```
 
-![Flow slice](resources/openfoam/flow_slice.png)
+![Flow slice](resources/media/openfoam/flow_slice.png)
