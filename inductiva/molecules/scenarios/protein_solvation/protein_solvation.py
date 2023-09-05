@@ -43,6 +43,16 @@ class ProteinSolvation(Scenario):
         self.protein_pdb = files.resolve_path(protein_pdb)
         self.temperature = temperature
 
+    def set_small_files(self):
+        """Set the downloadable files as the compressed trajectory.
+
+        Instead of downloading the full trajectory, the user can choose
+        to download only the compressed trajectory file. This requires
+        the name of the compressed trajectory file to be set as the
+        default output file at simulate() time."""
+
+        return ["compressed_trajectory.xtc"]
+
     def simulate(
             self,
             simulator: Simulator = GROMACS("proteinsolvation"),
@@ -51,7 +61,8 @@ class ProteinSolvation(Scenario):
             simulation_time_ns: float = 10,  # ns
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
-            n_steps_min: int = 5000) -> tasks.Task:
+            n_steps_min: int = 5000,
+            compressed_trajectory: bool = False) -> tasks.Task:
         """Simulate the solvation of a protein.
 
         Args:
@@ -90,6 +101,9 @@ class ProteinSolvation(Scenario):
                                 run_async=run_async)
 
         task.set_output_class(ProteinSolvationOutput)
+
+        if compressed_trajectory is True:
+            task.set_default_output_files(self.set_small_files())
 
         return task
 
