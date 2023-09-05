@@ -46,6 +46,7 @@ class SteadyStateOutput:
 
         self.sim_output_path = sim_output_path
         self.full_output = self.inspect_output()
+        print(self.full_output)
 
     def inspect_output(self):
         """Inspect the output of the simulation.
@@ -60,13 +61,16 @@ class SteadyStateOutput:
         default_output_files_list = [
             "pressure_field.vtk", "streamlines.vtk", "stdout.txt", "stderr.txt",
             "force_coefficients.csv", "xy_flow_slice.vtk", "xz_flow_slice.vtk",
-            "yz_flow_slice.vtk", "constant/triSurface/object.obj"
+            "yz_flow_slice.vtk", "object.obj"
         ]
 
-        sim_output_files = glob.glob(os.path.join(self.sim_output_path, "**"),
+        sim_output_files = glob.glob(os.path.join(self.sim_output_path, "**", "*.*"),
                                      recursive=True)
 
-        return sim_output_files != default_output_files_list
+        for index, file in enumerate(sim_output_files):
+            sim_output_files[index] = file.split("/")[-1]
+
+        return sorted(sim_output_files) != sorted(default_output_files_list)
 
     def get_last_iteration(self):
         """Get the last iteration of the simulation from simulation outputs."""
