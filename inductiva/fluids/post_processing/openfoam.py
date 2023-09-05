@@ -64,7 +64,8 @@ class SteadyStateOutput:
             "yz_flow_slice.vtk", "object.obj"
         ]
 
-        sim_output_files = glob.glob(os.path.join(self.sim_output_path, "**", "*.*"),
+        sim_output_files = glob.glob(os.path.join(self.sim_output_path, "**",
+                                                  "*.*"),
                                      recursive=True)
 
         for index, file in enumerate(sim_output_files):
