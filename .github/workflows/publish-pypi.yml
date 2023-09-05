@@ -1,10 +1,10 @@
 # Workflow that publishes package to PyPI.
 # The workflow is triggered on push of a tag that starts with "v", e.g. v0.3.0.
-# The worflow will build the package and then publish it to PyPI. Note that the
+# The workflow will build the package and then publish it to PyPI. Note that the
 # version specified in the tag is not the used for the package version on PyPI.
 # The version used is the one specified in the package's setup.cfg file. Ensure
 # that the version specified in the setup.cfg file in the repository is the
-# same used in the tag that triggers the worflow for consistency between the
+# same used in the tag that triggers the workflow for consistency between the
 # repository and the published package.
 name: Publish to PyPI
 
