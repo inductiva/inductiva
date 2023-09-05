@@ -45,6 +45,8 @@ The simulation outputs of the wind tunnel are:
 - `flow_slice`: Slice of the flow that represents the airflow over the domain and interacting with the object.
 - `force_coefficients`: Force coefficients that represent the forces acting on the object. These are the drag and lift coefficients.
 
+### Default vs Full Post-processing Tools
+
 Since at times the output files can be large, the user can choose to get only some of the default outputs that are post-processed
 on run-time by just doing `task.get_output()`. Otherwise, the user can choose to get all the outputs with `task.get_output(full=True)` and post-process as he wishes locally. 
 
@@ -57,16 +59,50 @@ In any case, to obtain the metrics above the user can use the following post-pro
 
 For the pressure field, streamlines and flow slices there are easy-to-use visualizations. See the example below.
 
-### Example:
+#### Example for default files:
 
 ```python
-
-# Get the full output from WindTunnel simulation
-output = task.get_output(full=True)
+# Get the default files from WindTunnel simulation
+output = task.get_output()
 
 pressure_field = output.get_object_pressure_field()
 pressure_field.render_frame()
 ```
+
+![Default Pressure Field](resources/openfoam/default_pressure_field.png)
+
+```python
+# Get the streamlines and visualize them
+streamlines = output.get_streamlines()
+streamlines.render_frame(physical_field="velocity",
+                         flow_cmap="viridis",
+                         view="isometric",
+                         streamline_radius=0.1
+                         save_path="default_streamlines.png")
+```
+
+![Default Streamlines](resources/openfoam/default_streamlines.png)
+
+```python
+flow_slice = output.get_flow_slice(plane="xz")
+flow_slice.render_frame(physical_field="pressure",
+                        flow_cmap="viridis",
+                        save_path="default_flow_slice.png")
+```
+
+![Default Flow Slice](resources/openfoam/default_flow_slice.png)
+
+#### Example for general Post-processing
+
+```python
+# Get all the WindTunnel simulation files
+output = task.get_output(full=True)
+
+pressure_field = output.get_object_pressure_field()
+pressure_field.render_frame(save_path="pressure_field.png")
+```
+
+![Pressure Field](resources/openfoam/pressure_field.png)
 
 ```python
 # Get the streamlines and visualize them
@@ -75,13 +111,23 @@ streamlines = output.get_streamlines(max_time=200,
                                      initial_step_length=0.1,
                                      source_radius=0.5,
                                      source_center=[-3, 0, 1])
-streamlines.render_frame()
+
+streamlines.render_frame(physical_field="pressure",
+                         flow_cmap="viridis",
+                         view="isometric",
+                         streamline_radius=0.1
+                         save_path="streamlines.png")
 ```
+
+![Streamlines](resources/openfoam/streamlines.png)
 
 ```python
+flow_slice = output.get_flow_slice(plane="xz",
+                                   origin=(0,0,0))
 
-flow_slice = output.get_flow_slice(plane="xz", origin=[0, 0, 0])
-flow_slice.render_frame()
+flow_slice.render_frame(physical_field="velocity",
+                        flow_cmap="Blues",
+                        save_path="flow_slice.png")
 ```
 
-
+![Flow slice](resources/openfoam/flow_slice.png)
