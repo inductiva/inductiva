@@ -11,11 +11,11 @@ from absl import logging
 from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
 from inductiva.simulation import Simulator
-from inductiva.fluids.simulators import SWASH
+from inductiva.coastal.simulators import SWASH
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
-from inductiva.fluids.scenarios.coastal_area.bathymetry import Bathymetry
-from inductiva.fluids.scenarios.coastal_area.output import CoastalAreaOutput
+from inductiva.coastal.bathymetry import Bathymetry
+from inductiva.coastal.output import CoastalAreaOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
