@@ -313,17 +313,20 @@ All of the simulations will be launched in one go. The user can check the status
 
 ### Using the `Task` class
 
-As you may have noticed, both the sync and async runs of the scenarios show above return a `Task` object to the user.
-This object provides several methods to manage a task submitted to the **Inductiva API**.
+As shown above, both the sync and async runs of the scenarios shown above return a `Task` object.
+This object provides methods for managing a specific task submitted to the **Inductiva API**.
 For instance, you can get information about the task (its current status, when it started, information on the machine it is running, ...), kill it while
 it is still running if you've changed your mind, or download its output files (all of them or only those you need) after it completed.
 
 Check out some examples after submitting an asynchronous simulation:
 
 ```python
-# `scenario`` constructed as in the examples above.
+# `scenario` constructed as in the examples above.
 # ... stands for arguments related to each specific scenario.
 task = scenario.simulate(..., run_async=True)
+
+# Get status of the task.
+status = task.get_status()
 
 # Kill a task that is running in the API.
 task.kill()
@@ -335,10 +338,8 @@ Or if you
 
 task = scenario.simulate(..., run_async=True)
 
-# Get the current status of the task.
-status = task.get_status()
-
-# Block until the results are ready and get an output object.
+# Get the output of the task. If the task is still running, this will block
+# until the outputs are ready.
 # `output` objects vary depending on the scenario, exposing methods to
 # manipulate the results that are relevant for that scenario!
 output = task.get_output()
@@ -383,9 +384,9 @@ output_dir = task.download_outputs(uncompress=False)
 
 ### Retrieving tasks from previous sessions
 
-The real usefulness of the API arises from its hability to run long-running tasks asynchronously. Of course, this is not handy if you need to keep your Python session on to persist the task objects representing async running
+The real usefulness of the API arises from its ability to run long tasks asynchronously. Of course, this is not handy if you need to keep your Python session on to persist the task objects representing async running
 simulations!
-You can retrieve tasks and reconstruct the `Task` objects of older tasks using the `inductiva.tasks.get()` function.
+You can retrieve tasks and reconstruct the `Task` objects of previously created tasks using the `inductiva.tasks.get()` function.
 It requires an argument named `last_n`, which specifies the number of most recent tasks submitted to the API to retrieve. It returns a list of `Task` objects -- the same objects that you get from the call to `scenario.simulate()` -- so that you can resume manipulating the task and its results.
 Additionally, you can filter tasks by their current status, which allows you to get, for instance, only tasks that failed or only
 tasks that are submitted and not yet started.
