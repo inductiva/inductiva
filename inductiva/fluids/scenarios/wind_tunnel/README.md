@@ -14,7 +14,7 @@ The simulation parameters available for the user to configure are:
 - resolution: Controls the resolution of the meshing that is done prior to the simulation. The higher the resolution, the finer the meshing. Possibilities: "high", "medium", "low".
 
 Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`, `n_cores`.
-Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in [Tasks](../../../../README.md).
+Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in the [Tasks section](../../../../README.md).
 
 ### Example:
 
