@@ -1,20 +1,20 @@
 # Wind Tunnel Scenario
 
-This scenario models the aerodynamics of an object inside a virtual wind tunnel for a given airflow velocity. Air is injected on a side wall of the wind tunnel, the flow changes according to the structure of the object and leaves through an outlet on the other side. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models.
+This scenario models the aerodynamics of an object inside a virtual wind tunnel for a given airflow velocity. Air is injected on a side wall of the wind tunnel and leaves through an outlet on the opposite side. The air flow within the tunnel is modified according to the structure of the object. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models. The simulation is currently performed with the OpenFOAM simulator.
 
 To initialize the scenario, the user can define the following parameters:
 - Dimensions of the wind tunnel in meters, e.g. `{"x": [-5, 15], "y": [-5, 5], "z": [0, 8]}`.
 - Airflow velocity in m/s, e.g. `[30, 0, 0]`. Notice that the airflow is injected from the negative x-direction.
 
-Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in STL or OBJ format (currently tested). Notice, that appropriate meshing will be done during the simulation.
+Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in STL or OBJ format. Notice that, the required meshing step will automatically be made before starting the simulation. The meshing is done with the snappyHexMesh tool of OpenFOAM.
 
-The user can further define the following simulation parameters:
-- simulator: The simulator to be used for the simulation. Currently, only `OpenFOAM` is supported.
-- num_iterations: Number of iterations for the steady-state simulation.
-- resolution: Resolution of the meshing. The higher the resolution, the finer the meshing.
+The user is performing steady-state simulations of a vehicle inside the wind tunnel with air flowing. The simulation uses an iterative algorithm that converges to the steady-state of the flow. 
+The simulation parameters available for the user to configure are:
+- num_iterations: Set the maximum number of iterations for the algorithm to converge.
+- resolution: Controls the resolution of the meshing that is done prior to the simulation. The higher the resolution, the finer the meshing. Possibilities: "high", "medium", "low".
 
 Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`, `n_cores`.
-Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access instantly post-processing tools. See more in [Tasks](inductiva/tasks/README.md).
+Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in [Tasks](../../../../README.md).
 
 ### Example:
 
@@ -32,29 +32,33 @@ task = scenario.simulate(
     num_iterations=1000, resolution=0.5,
     run_async=True, n_cores=4)
 
-# Get the simulation output on your local machine.
+# Download the simulation output to your local machine.
 output = task.get_output()
 ```
 
-## Output and Post-Processing:
+This last step is essential to download the simulation files into your local machine 
+and apply the post-processing and visualizations to understand the aerodynamics of the object.
 
-The `WindTunnel` scenario allows users to extract metrics about the object under the established flow velocity.
-The simulation outputs of the wind tunnel are:
-- `pressure_field`: Pressure field of the airflow over the object.
-- `streamlines`: Streamlines of the airflow over the domain and interacting with the object.
-- `flow_slice`: Slice of the flow that represents the airflow over the domain and interacting with the object.
-- `force_coefficients`: Force coefficients that represent the forces acting on the object. These are the drag and lift coefficients.
+## Output and Post-Processing
 
-### Default vs Full Post-processing Tools
+The simulation output is comprised of several files spread throughout several directories. These files contain data about the airflow over the object, from which valuable metrics can be extracted to understand the aerodynamics of the object. To obtain these metrics a few post-processing steps are required to be done.
+
+The `WindTunnel` scenario allows users to extract the following metrics:
+- Pressure field: Pressure field of the airflow over the object.
+- Streamlines: Streamlines of the airflow over the domain and interacting with the object.
+- Flow slice: Slice of the flow that represents the airflow over the domain and interacting with the object.
+- Force coefficients: Force coefficients that represent the forces acting on the object. These are the drag and lift coefficients.
+
+### Post-processing Tools
 
 Since at times the output files can be large, the user can choose to get only some of the default outputs that are post-processed
-on run-time by just doing `task.get_output()` (e.g., pressure field, streamlines and flow_slice). Otherwise, the user can choose to get all the outputs with `task.get_output(full=True)` and post-process as he wishes locally. 
+remotely by just doing `output=task.get_output()` (e.g., pressure field, streamlines and flow_slice). Otherwise, the user can choose to get all the outputs with `output=task.get_output(all_files=True)` and post-process as he wishes locally. 
 
-In any case, to obtain the metrics above the user can use the following post-processing tools:
-- `get_output_mesh`: Returns the mesh of the airflow over the entire domain and data on the object.
-- `get_object_pressure_field`: Returns the pressure field of the airflow over the object.
-- `get_streamlines`: Input parameters - `max_time`, `n_points`, `initial_step_length`, `source_radius`, `source_center`. Returns a mesh of the streamlines with pressure and velocity components of airflow over the domain.
-- `get_flow_slice`: Input parameters - `plane`, `origin`. Returns a mesh of the flow slice with pressure and velocity components.
+In any case, to obtain these metrics the user can use the following post-processing tools available through the `output` object:
+- `get_output_mesh`: Returns a pyvista mesh of the airflow over the entire domain and data on the object.
+- `get_object_pressure_field`: Returns a pyvista mesh with the pressure field of the airflow over the object.
+- `get_streamlines`: Input parameters - `max_time`, `n_points`, `initial_step_length`, `source_radius`, `source_center`. Returns a pyvista mesh of the streamlines with pressure and velocity components of airflow over the domain.
+- `get_flow_slice`: Input parameters - `plane`, `origin`. Returns a pyvista mesh of the flow slice with pressure and velocity components.
 - `get_force_coefficients`: Returns the force coefficients that represent the forces acting on the object. These are the drag and lift coefficients.
 
 For the pressure field, streamlines and flow slices there are easy-to-use visualizations, which have some configuration parameters. See the example below for the general overview of these parameters.
@@ -107,7 +111,7 @@ flow_slice.render_frame(physical_field="pressure",
 
 ```python
 # Get all the WindTunnel simulation files
-output = task.get_output(full=True)
+output = task.get_output(all_files=True)
 
 # Get a pressure field mesh
 pressure_field = output.get_object_pressure_field()
