@@ -43,7 +43,7 @@ def main(_):
     inductiva.api_key = "user-key"
     inductiva.api_url = FLAGS.api_url
 
-    gromacs_sim = inductiva.md.simulators.GROMACS()
+    gromacs_sim = inductiva.simulators.GROMACS()
 
     task = gromacs_sim.run(input_dir=FLAGS.sim_dir,
                            sim_config_filename=FLAGS.sim_config_filename,

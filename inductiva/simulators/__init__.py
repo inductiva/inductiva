@@ -5,3 +5,4 @@ from .xbeach import XBeach
 from .splishsplash import SPlisHSPlasH
 from .dualsphysics import DualSPHysics
 from .openfoam import OpenFOAM
+from .gromacs import GROMACS

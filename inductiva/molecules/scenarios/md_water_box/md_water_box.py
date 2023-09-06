@@ -6,7 +6,7 @@ import shutil
 import io
 
 from inductiva import tasks, resources
-from inductiva.molecules.simulators import GROMACS
+from inductiva.simulators import GROMACS
 from inductiva.simulators import Simulator
 from inductiva.utils import templates
 from inductiva.scenarios import Scenario
