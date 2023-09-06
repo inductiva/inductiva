@@ -110,7 +110,7 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
 
 
 # pylint: disable=redefined-builtin
-def list(num_tasks,
+def list(last_n,
          status: Optional[Union[str, models.TaskStatusCode]] = None) -> None:
     # pylint: disable=line-too-long
     """List the last N tasks of a user.
@@ -134,7 +134,7 @@ def list(num_tasks,
         1691080520213617518        openfoam              success     03 Aug, 16:35:21     03 Aug, 16:35:21       0h 1m 23s     n2-standard-32
 
     Args:
-        num_tasks: The number of most recent tasks with respect to submission
+        last_n: The number of most recent tasks with respect to submission
             time to list. If filtering criteria (currently status is available)
             is specified, most recent N tasks that match that criteria will be
             listed. The actual number of tasks may be less if there
@@ -144,13 +144,13 @@ def list(num_tasks,
     """
     # pylint: enable=line-too-long
     status = models.TaskStatusCode(status) if status is not None else None
-    tasks = get(num_tasks, status=status)
+    tasks = get(last_n, status=status)
     tasks_str = _list_of_tasks_to_str(tasks)
     print(tasks_str)
 
 
 def get(
-    num_tasks,
+    last_n,
     status: Optional[Union[str, models.TaskStatusCode]] = None
 ) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
@@ -175,7 +175,7 @@ def get(
             task.kill()
 
     Args:
-        num_tasks: The number of most recent tasks with respect to submission
+        last_n: The number of most recent tasks with respect to submission
             time to fetch. If filtering criteria (currently status is available)
             is specified, most recent N tasks that match that criteria will be
             listed. The actual number of tasks may be less if there
@@ -188,7 +188,7 @@ def get(
     """
     status = models.TaskStatusCode(status) if status is not None else None
 
-    raw_tasks_info = _fetch_tasks_from_api(status, page=1, per_page=num_tasks)
+    raw_tasks_info = _fetch_tasks_from_api(status, page=1, per_page=last_n)
     tasks = [
         inductiva.tasks.Task.from_api_info(info) for info in raw_tasks_info
     ]
