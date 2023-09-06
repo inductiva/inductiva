@@ -237,14 +237,13 @@ class FlowSlice:
         self.mesh = flow_slice
 
     def render(self,
-                     physical_field: Literal["pressure",
-                                             "velocity"] = "pressure",
-                     off_screen: bool = False,
-                     virtual_display: bool = False,
-                     background_color: str = "white",
-                     flow_cmap: str = "viridis",
-                     object_color: str = "white",
-                     save_path: types.Path = None):
+               physical_field: Literal["pressure", "velocity"] = "pressure",
+               off_screen: bool = False,
+               virtual_display: bool = False,
+               background_color: str = "white",
+               flow_cmap: str = "viridis",
+               object_color: str = "white",
+               save_path: types.Path = None):
         """Render flow property over domain."""
 
         if save_path is not None:
@@ -280,17 +279,16 @@ class Streamlines:
         self.mesh = streamlines
 
     def render(self,
-                     physical_field: Literal["pressure",
-                                             "velocity"] = "pressure",
-                     off_screen: bool = False,
-                     virtual_display: bool = False,
-                     background_color: str = "white",
-                     flow_cmap: str = "viridis",
-                     view: Literal["isometric", "front", "rear", "top",
-                                   "side"] = "isometric",
-                     object_color: str = "white",
-                     streamline_radius: float = 0.1,
-                     save_path: types.Path = None):
+               physical_field: Literal["pressure", "velocity"] = "pressure",
+               off_screen: bool = False,
+               virtual_display: bool = False,
+               background_color: str = "white",
+               flow_cmap: str = "viridis",
+               view: Literal["isometric", "front", "rear", "top",
+                             "side"] = "isometric",
+               object_color: str = "white",
+               streamline_radius: float = 0.1,
+               save_path: types.Path = None):
         """Render streamlines through domain."""
 
         if save_path is not None:
@@ -374,11 +372,11 @@ class MeshData:
         self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
 
     def render(self,
-                     off_screen: bool = False,
-                     background_color: str = "black",
-                     scalars_cmap: str = "viridis",
-                     virtual_display: bool = False,
-                     save_path: types.Path = None):
+               off_screen: bool = False,
+               background_color: str = "black",
+               scalars_cmap: str = "viridis",
+               virtual_display: bool = False,
+               save_path: types.Path = None):
         """Render scalar field data over the mesh."""
         if save_path is not None:
             save_path = utils.files.resolve_path(save_path)
