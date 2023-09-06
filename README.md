@@ -315,10 +315,14 @@ All of the simulations will be launched in one go. The user can check the status
 
 As shown above, both the sync and async runs of the scenarios shown above return a `Task` object.
 This object provides methods for managing a specific task submitted to the **Inductiva API**.
-For instance, you can get information about the task (its current status, when it started, information on the machine it is running, ...), kill it while
-it is still running if you've changed your mind, or download its output files (all of them or only those you need) after it completed.
+For instance, you can:
+ * Get its status;
+ * Get the machine type where it ran/is running;
+ * Kill it if you've changed your mind;
+ * Download output files (all of them or only the important ones);
+ * Get its execution time.
 
-Check out some examples after submitting an asynchronous simulation:
+Check out some example usage of `Task` after submitting an asynchronous simulation:
 
 ```python
 # `scenario` constructed as in the examples above.
@@ -327,12 +331,12 @@ task = scenario.simulate(..., run_async=True)
 
 # Get status of the task.
 status = task.get_status()
+print(status) # would be, e.g., "submitted", "started", "success", "failed", "killed"
 
-# Kill a task that is running in the API.
-task.kill()
+# Kill a task that hasn't completed yet.
+if status == "submitted" or status == "started":
+    task.kill()
 ```
-
-Or if you
 
 ```python
 
