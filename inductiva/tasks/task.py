@@ -192,7 +192,7 @@ class Task:
 
     def get_output(
         self,
-        full: bool = False,
+        all_files: bool = True,
         output_dir: Optional[pathlib.Path] = None,
         uncompress: bool = True,
         rm_downloaded_zip_archive: bool = True,
@@ -200,7 +200,7 @@ class Task:
         """Get the output of the task.
 
         Args:
-            full: Whether to download all the files in the output
+            all_files: Whether to download all the files in the output
                 archive. If False, only the default files are downloaded.
             output_dir: Directory where to download the files. If None, the
                 files are downloaded to the default directory. The default is
@@ -221,7 +221,7 @@ class Task:
 
         # Check if default files are set by the output class
         filenames = None
-        if self._default_files_list and not full:
+        if self._default_files_list and not all_files:
             filenames = self._default_files_list
 
         output_dir = self.download_outputs(

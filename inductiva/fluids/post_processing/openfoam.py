@@ -46,7 +46,6 @@ class SteadyStateOutput:
 
         self.sim_output_path = sim_output_path
         self.full_output = self.inspect_output()
-        print(self.full_output)
 
     def inspect_output(self):
         """Inspect the output of the simulation.
@@ -237,7 +236,7 @@ class FlowSlice:
         self.object_mesh = object_mesh
         self.mesh = flow_slice
 
-    def render_frame(self,
+    def render(self,
                      physical_field: Literal["pressure",
                                              "velocity"] = "pressure",
                      off_screen: bool = False,
@@ -280,7 +279,7 @@ class Streamlines:
         self.object_mesh = object_mesh
         self.mesh = streamlines
 
-    def render_frame(self,
+    def render(self,
                      physical_field: Literal["pressure",
                                              "velocity"] = "pressure",
                      off_screen: bool = False,
@@ -374,7 +373,7 @@ class MeshData:
         self.mesh.point_data[scalar_name] = mesh_data.point_data[scalar_name]
         self.mesh.cell_data[scalar_name] = mesh_data.cell_data[scalar_name]
 
-    def render_frame(self,
+    def render(self,
                      off_screen: bool = False,
                      background_color: str = "black",
                      scalars_cmap: str = "viridis",
