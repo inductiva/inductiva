@@ -7,10 +7,10 @@ import shutil
 
 from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
-from inductiva.simulation import Simulator
+from inductiva.simulators import Simulator
 from inductiva.fluids.fluid_types import FluidType
-from inductiva.fluids.simulators import SPlisHSPlasH
-from inductiva.fluids.simulators import DualSPHysics
+from inductiva.simulators import SPlisHSPlasH
+from inductiva.simulators import DualSPHysics
 from inductiva.utils.templates import replace_params_in_template
 from inductiva.fluids.scenarios._post_processing import SPHSimulationOutput
 

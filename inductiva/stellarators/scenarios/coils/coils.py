@@ -11,7 +11,7 @@ from functools import singledispatchmethod
 
 import numpy as np
 
-from inductiva import (scenarios, simulation, stellarators, tasks, types, utils,
+from inductiva import (scenarios, simulators, stellarators, tasks, types, utils,
                        resources)
 
 SIMSOPT_COIL_COEFFICIENTS_FILENAME = 'coil_coefficients.npz'
@@ -235,7 +235,7 @@ class StellaratorCoils(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulation.Simulator = stellarators.simulators.Simsopt(),
+        simulator: simulators.Simulator = stellarators.simulators.Simsopt(),
         machine_group: typing.Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         plasma_surface_filepath: typing.Optional[types.Path] = None,
@@ -338,7 +338,7 @@ class StellaratorCoils(scenarios.Scenario):
         return task
 
     @singledispatchmethod
-    def create_input_files(self, simulator: simulation.Simulator):
+    def create_input_files(self, simulator: simulators.Simulator):
         pass
 
 

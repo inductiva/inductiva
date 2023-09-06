@@ -10,8 +10,8 @@ from absl import logging
 
 from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
-from inductiva.simulation import Simulator
-from inductiva.coastal.simulators import SWASH
+from inductiva.simulators import Simulator
+from inductiva.simulators import SWASH
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)
 from inductiva.coastal.bathymetry import Bathymetry

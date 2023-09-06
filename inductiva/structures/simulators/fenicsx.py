@@ -5,7 +5,7 @@ from typing import Optional
 import inductiva
 
 
-class FEniCSx(inductiva.simulation.Simulator):
+class FEniCSx(inductiva.simulators.Simulator):
     """Class to invoke a generic FEniCSx simulation on the API."""
 
     def __init__(self, api_method: str = "fem.fenicsx.run_simulation"):
