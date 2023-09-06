@@ -9,7 +9,7 @@ from functools import singledispatchmethod
 from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
 from inductiva.simulators import Simulator
-from inductiva.structures.simulators import FEniCSx
+from inductiva.simulators import FEniCSx
 from inductiva.types import Path
 
 from inductiva.structures import bcs, holes, plates, materials

@@ -7,3 +7,4 @@ from .dualsphysics import DualSPHysics
 from .openfoam import OpenFOAM
 from .gromacs import GROMACS
 from .simsopt import Simsopt
+from .fenicsx import FEniCSx
