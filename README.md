@@ -328,6 +328,6 @@ inductiva.api_key = "YOUR_API_KEY"
 
 ## FAQ:
 
-- [Getting Started]()
-- [Task Management]()
-- [Machine Group]()
+- [Getting Started](#installation)
+- [Task Management](#task-management)
+- [Machine Group](inductiva/resources/README.md)
