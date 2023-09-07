@@ -14,7 +14,7 @@ The simulation parameters available for the user to configure are:
 - resolution: Controls the resolution of the meshing that is done prior to the simulation. The higher the resolution, the finer the meshing. Possibilities: "high", "medium", "low".
 
 Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`, `n_cores`.
-Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in the [Tasks section](../../../../README.md).
+Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in the [Tasks section](../../README.md).
 
 ### Example:
 
@@ -78,7 +78,7 @@ pressure_field = output.get_object_pressure_field()
 pressure_field.render_frame()
 ```
 
-<img src="../../../../resources/media/openfoam/default_pressure_field.png" width="400" height="300" />
+<img src="../../resources/media/openfoam/default_pressure_field.png" width="400" height="300" />
 
 ```python
 # Get a mesh of the streamlines 
@@ -92,7 +92,7 @@ streamlines.render_frame(physical_field="velocity",
                          save_path="default_streamlines.png")
 ```
 
-<img src="../../../../resources/media/openfoam/default_streamlines.png" width="400" height="300" />
+<img src="../../resources/media/openfoam/default_streamlines.png" width="400" height="300" />
 
 
 ```python
@@ -105,7 +105,7 @@ flow_slice.render_frame(physical_field="pressure",
                         save_path="default_flow_slice.png")
 ```
 
-<img src="../../../../resources/media/openfoam/default_flow_slice.png" width="400" height="300" />
+<img src="../../resources/media/openfoam/default_flow_slice.png" width="400" height="300" />
 
 ### Example for general Post-processing
 
@@ -120,7 +120,7 @@ pressure_field = output.get_object_pressure_field()
 pressure_field.render_frame(save_path="pressure_field.png")
 ```
 
-<img src="../../../../resources/media/openfoam/pressure_field.png" width="400" height="300" />
+<img src="../../resources/media/openfoam/pressure_field.png" width="400" height="300" />
 
 ```python
 # Get the streamlines mesh
@@ -138,7 +138,7 @@ streamlines.render_frame(physical_field="pressure",
                          save_path="streamlines.png")
 ```
 
-<img src="../../../../resources/media/openfoam/streamlines.png" width="400" height="300" />
+<img src="../../resources/media/openfoam/streamlines.png" width="400" height="300" />
 
 ```python
 
@@ -152,4 +152,4 @@ flow_slice.render_frame(physical_field="velocity",
                         save_path="flow_slice.png")
 ```
 
-<img src="../../../../resources/media/openfoam/flow_slice.png" width="400" height="300" />
+<img src="../../resources/media/openfoam/flow_slice.png" width="400" height="300" />
