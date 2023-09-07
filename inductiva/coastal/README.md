@@ -1,6 +1,6 @@
 # Coastal dynamics
 
-Inductiva API supports simuulation of coastal dynamics via two simulators:
+Inductiva API supports simulation of coastal dynamics via two simulators:
 [SWASH](https://swash.sourceforge.io/) and [XBeach](https://oss.deltares.nl/web/xbeach/).
 These simulators solve the [shallow-water equations](https://en.wikipedia.org/wiki/Shallow_water_equations),
 a reduced version of the Navier-Stokes equations valid for small depth-to-length
