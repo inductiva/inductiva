@@ -43,15 +43,17 @@ class ProteinSolvation(Scenario):
         self.protein_pdb = files.resolve_path(protein_pdb)
         self.temperature = temperature
 
-    def set_small_files(self):
-        """Set the downloadable files as the compressed trajectory.
+    def set_default_output_files(self):
+        """Set the downloadable files as the compressed trajectory adjacent.
 
         Instead of downloading the full trajectory, the user can choose
-        to download only the compressed trajectory file. This requires
-        the name of the compressed trajectory file to be set as the
-        default output file at simulate() time."""
+        to download only the compressed trajectory file. The following files
+        are set as the default ones, and will be the only ones downloaded if
+        the user does not require the full trajectory at task.get_output()."""
 
-        return ["compressed_trajectory.xtc"]
+        return [
+            "protein.gro", "compressed_trajectory.xtc", "solvated_protein.tpr"
+        ]
 
     def simulate(
             self,
@@ -61,8 +63,7 @@ class ProteinSolvation(Scenario):
             simulation_time_ns: float = 10,  # ns
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
-            n_steps_min: int = 5000,
-            compressed_trajectory: bool = False) -> tasks.Task:
+            n_steps_min: int = 5000) -> tasks.Task:
         """Simulate the solvation of a protein.
 
         Args:
@@ -101,9 +102,7 @@ class ProteinSolvation(Scenario):
                                 run_async=run_async)
 
         task.set_output_class(ProteinSolvationOutput)
-
-        if compressed_trajectory is True:
-            task.set_default_output_files(self.set_small_files())
+        task.set_default_output_files(self.set_default_output_files())
 
         return task
 
