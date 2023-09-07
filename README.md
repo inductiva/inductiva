@@ -9,12 +9,12 @@ Inductiva is a Python package designed for executing large-scale simulations of 
 
 This offers several distinct advantages:
 
-* Eliminates the need to install and manage complex simulation software along with their library dependencies.
-* Effortlessly run hundreds or even thousands of simulations concurrently.
-* There's no requirement to oversee a cluster or employ specialists in distributed systems.
-* Hardware configurations are optimized for each simulation (e.g., CPU vs. GPU, appropriate number of CPU cores, RAM, etc.).
-* You're not limited to a graphical interface or complex configuration scripts. Instead, you write small Python programs that seamlessly integrate with your existing codebase.
-* It consolidates various simulation domains, including fluid dynamics, molecular dynamics, plasmas, and structural mechanics, under a single unified entry point.
+- 📦 Eliminates the need to install and manage complex simulation software along with their library dependencies.
+- ⚡ Effortlessly run hundreds or even thousands of simulations concurrently.
+- 🚫 There's no requirement to oversee a cluster or employ specialists in distributed systems.
+- 🛠️ Hardware configurations are optimized for each simulation (e.g., CPU vs. GPU, appropriate number of CPU cores, RAM, etc.).
+- 🐍 You're not limited to a graphical interface or intricate configuration scripts. Instead, you write small Python programs that seamlessly integrate with your existing codebase.
+- 🔄 It consolidates various simulation domains, including fluid dynamics, molecular dynamics, plasmas, and structural mechanics, under a single unified entry point.
 
 
 ## Scenarios
