@@ -16,7 +16,6 @@ This offers several distinct advantages:
 * You're not limited to a graphical interface or complex configuration scripts. Instead, you write small Python programs that seamlessly integrate with your existing codebase.
 * It consolidates various simulation domains, including fluid dynamics, molecular dynamics, plasmas, and structural mechanics, under a single unified entry point.
 
-In addition to these "computational" aspects, inductiva provides a set of pre-packaged simulation scenarios, that you can run with a couple of lines of Python code. Keep reading!
 
 ## Scenarios
 
