@@ -3,11 +3,19 @@
 
 ![linkedin_header](https://user-images.githubusercontent.com/104431973/231184851-0ce34289-593e-4832-aaa2-9aae652113f5.jpg)
 
-# Large scale simulations made simple
+# Inductiva API Python client
 
-**Inductiva API** provides open-source physical simulation from your laptop. With no configuration headaches, users can easily scale simulations to the next level with one line of code.
+Inductiva is a Python package designed for executing large-scale simulations of physical systems directly in the cloud.
 
-Whether you want to simulate pre-build scenarios to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here for you.
+This offers several distinct advantages:
+
+* Eliminates the need to install and manage complex simulation software along with their library dependencies.
+* Effortlessly run hundreds or even thousands of simulations concurrently.
+* There's no requirement to oversee a cluster or employ specialists in distributed systems.
+* Hardware configurations are optimized for each simulation (e.g., CPU vs. GPU, appropriate number of CPU cores, RAM, etc.).
+* You're not limited to a graphical interface or intricate configuration scripts. Instead, you can write concise Python programs that seamlessly integrate with your existing codebase.
+
+In addition to these "computational" aspects, inductiva package provides a set of pre-packaged simulation scenarios, that you can run with a couple of lines of Python code. Keep reading!
 
 ## Scenarios
 
