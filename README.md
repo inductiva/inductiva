@@ -16,6 +16,25 @@ This offers several distinct advantages:
 - 🐍 You're not limited to a graphical interface or intricate configuration scripts. Instead, you write small Python programs that seamlessly integrate with your existing codebase.
 - 🔄 It consolidates various simulation domains, including fluid dynamics, molecular dynamics, plasmas, and structural mechanics, under a single unified entry point.
 
+## Installation
+
+On your terminal:
+
+```
+pip install inductiva
+```
+
+## API access tokens
+
+Please [request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform)  and add the following line to your code:
+
+```python
+import inductiva
+
+inductiva.api_key = "YOUR_API_KEY"
+```
+
+And you are good to go! You can start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
 
 ## Scenarios
 
@@ -468,31 +487,6 @@ But do not forget to kill your machines:
 ```python
 
 machine.kill()
-```
-
-## Installation
-
-It is super simple to start using the API if you are already familiar with Python package management.
-
-One just needs to do
-```
-pip install inductiva
-```
-
-and you are good to go! You are ready to start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
-
-## API access tokens
-
-To use **Inductiva API** you will need an API token. Please request your demo API token via the following Google Form (we will reply to you by email):
-
-[Request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform)
-
-Before running simulations you just need to add the following line and you are good to go:
-
-```python
-import inductiva
-
-inductiva.api_key = "YOUR_API_KEY"
 ```
 
 ## FAQ:
