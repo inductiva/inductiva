@@ -3,7 +3,7 @@
 from typing import Optional, List
 
 from inductiva import types, tasks, resources
-from inductiva.simulation import Simulator
+from inductiva.simulators import Simulator
 
 
 class GROMACS(Simulator):

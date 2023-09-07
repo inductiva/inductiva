@@ -7,7 +7,7 @@ from typing import List, Literal, Optional
 
 from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
-from inductiva.simulation import Simulator
+from inductiva.simulators import Simulator
 from inductiva.fluids.shapes import BaseShape
 from inductiva.fluids.shapes import Rectangle
 from inductiva.fluids.shapes import Circle
@@ -15,7 +15,7 @@ from inductiva.fluids.shapes import Cube
 from inductiva.fluids.shapes import Cylinder
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
-from inductiva.fluids.simulators import SPlisHSPlasH
+from inductiva.simulators import SPlisHSPlasH
 from inductiva.utils.templates import replace_params_in_template
 from inductiva.fluids.scenarios.fluid_tank.output import FluidTankOutput
 

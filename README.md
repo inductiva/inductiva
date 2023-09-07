@@ -247,9 +247,8 @@ If you would like other simulators to be added, contact us at [simulations@induc
 Example of how to use the simulators:
 
 ```python
-from inductiva import fluids
 
-simulator = fluids.simulators.DualSPHysics()
+simulator = inductiva.simulators.DualSPHysics()
 
 output_dir = simulator.run(input_dir="FlowCylinder",
                            sim_config_filename="CaseFlowCylinder_Re200_Def.xml",

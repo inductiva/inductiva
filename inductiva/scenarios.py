@@ -7,7 +7,7 @@ from typing import Optional, Union
 
 from inductiva import resources
 from inductiva.types import Path
-from inductiva.simulation import Simulator
+from inductiva.simulators import Simulator
 import json
 
 
