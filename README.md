@@ -15,7 +15,7 @@ This offers several distinct advantages:
 * Hardware configurations are optimized for each simulation (e.g., CPU vs. GPU, appropriate number of CPU cores, RAM, etc.).
 * You're not limited to a graphical interface or intricate configuration scripts. Instead, you can write concise Python programs that seamlessly integrate with your existing codebase.
 
-In addition to these "computational" aspects, inductiva package provides a set of pre-packaged simulation scenarios, that you can run with a couple of lines of Python code. Keep reading!
+In addition to these "computational" aspects, inductiva provides a set of pre-packaged simulation scenarios, that you can run with a couple of lines of Python code. Keep reading!
 
 ## Scenarios
 
