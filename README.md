@@ -435,21 +435,22 @@ inductiva.tasks.list(5, status="success")
 
 ## Manage Resources
 
-**Inductiva API** provides a simple way to manage the hardware resources used to run simulations.
-This allows the user to have control over hardware that will be used exclusively for their experiments.
-Resources are controlled via machine groups. Users can create objects of type `MachineGroup`, and then use them to start and terminate the machines. Creating a `MachineGroup` requires specifying the type of Virtual Machine to use and the number of homogeneous machines that should be launched as part of the group. Currently, the available options for the `machine_type` are the ones available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types). Once a `MachineGroup` is created, simply pass it as argument to your simulations, and they will be scheduled to run on those machines. Note that launching several machines in the group serves to run simulations in parallel, *i.e.*, one in each machine, and machines in the same machine group do not perform the same simulation cooperatively.
+By default, simulation requests are processed by a shared pool of machines serving multiple users. If you require dedicated resources, the **Inductiva API** allows you to easily set up virtual machines reserved solely for your simulations. These are managed via machine groups, *i.e.*, groups of homogeneous machines with specific requested properties that can be started and terminated on demand. With the `MachineGroup` class, users can configure, start, and terminate machines. Creating a `MachineGroup` requires specifying the type of Virtual Machine to use and the number of such VMs that will compose the group. Currently, the available options for the `machine_type` are the ones available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types). Once a `MachineGroup` is created, simply pass it as argument to your simulations, which will then be scheduled to run on those machines. Note that a `MachineGroup` is literally a group of individual machines that do not communicate with each other. In other words, a `MachineGroup` is not a computational cluster where the load of each simulatin is divided over all machines of the cluster
 
-#### Example usage:
+### Examples
+
+
+#### Running one simulation in a specific machine type
 
 ```python
 
 import inductiva
 from inductiva import molecules
 
-# Create a MachineGroup object with the desired configuration
+# Create a MachineGroup object with a single machine of the desired type
 mg = inductiva.resources.MachineGroup(
     machine_type="c2-standard-4",
-    num_machines=2,
+    num_machines=1,
     disk_size_gb=40,
 )
 
@@ -464,15 +465,58 @@ scenario = molecules.scenarios.ProteinSolvation(
     protein_pdb=my_pdb_file, temperature=300)
 
 # Pass your machine group object when submitting a simulation so that it runs
-# on one of the group's machines!
-output = scenario.simulate(machine_group=mg)
+# on the desired machine
+task = scenario.simulate(machine_group=mg, run_async=False)
 
+
+# Once you don't need it anymore, terminate the machines
+mg.terminate()
+```
+
+#### Launch hundreds of simulations to run in parallel in a group of machines
+
+
+```python
+
+import inductiva
+from inductiva import molecules
+
+# Create a MachineGroup with 10 machines
+mg = inductiva.resources.MachineGroup(
+    machine_type="c2d-standard-16",
+    num_machines=10,
+    disk_size_gb=40,
+)
+
+price_per_hour = mg.estimate_cloud_cost()
+
+# Start the machines
+mg.start()
+
+# Create a list of e.g. 100 protein files you want to simulate
+my_pdb_files = get_my_pdb_file_paths()
+tasks = []
+
+# And simulate the solvation of the proteins on your newly started machines
+for my_pdb_file in my_pdb_files:
+    scenario = molecules.scenarios.ProteinSolvation(
+        protein_pdb=my_pdb_file, temperature=300)
+
+    # Tasks will be submitted asynchronously to the new machine group
+    task = scenario.simulate(machine_group=mg, run_async=True)
+    tasks.append(task)
+
+# Block until all tasks complete
+for task in tasks:
+    task.wait()
 
 # Once you don't need them anymore, terminate the machines
 mg.terminate()
 ```
 
-You can also list your active machine groups, and use the names that appear in the console to recreate a `MachineGroup` object of a previously created machine group.
+#### List active machine groups
+
+You can also list your active machine groups, and use the names that appear in the console to recreate a `MachineGroup` object of a previously created machine group:
 
 ```python
 import inductiva
