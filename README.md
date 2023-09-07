@@ -435,32 +435,56 @@ inductiva.tasks.list(5, status="success")
 
 ## Manage Resources
 
-**Inductiva API** provides a simple way to manage the hardware resources used to run the simulations. Users can launch virtual machines, list the available machines and terminate them. This is a feature available only to admins.
-In this way, users do not need to wait for their simulations in a queue and can have full control of the hardware used.
+**Inductiva API** provides a simple way to manage the hardware resources used to run simulations.
+This allows the user to have control over hardware that will be used exclusively for their experiments.
+Resources are controlled via machine groups. Users can create objects of type `MachineGroup`, and then use them to start and terminate the machines. Creating a `MachineGroup` requires specifying the type of Virtual Machine to use and the number of homogeneous machines that should be launched as part of the group. Currently, the available options for the `machine_type` are the ones available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types). Once a `MachineGroup` is created, simply pass it as argument to your simulations, and they will be scheduled to run on those machines. Note that launching several machines in the group serves to run simulations in parallel, *i.e.*, one in each machine, and machines in the same machine group do not perform the same simulation cooperatively.
 
-Start your machines and run your simulations:
+#### Example usage:
 
 ```python
 
 import inductiva
+from inductiva import molecules
 
-machines = inductiva.admin.launch_machines(name="test_machine",
-                                           machine_type="c2-standard-16")
+# Create a MachineGroup object with the desired configuration
+mg = inductiva.resources.MachineGroup(
+    machine_type="c2-standard-4",
+    num_machines=2,
+    disk_size_gb=40,
+)
+
+# Estimate the hourly cost (in $) of the cloud resources requested
+price_per_hour = mg.estimate_cloud_cost()
+
+# Start the machines
+mg.start()
 
 # Example with ProteinSolvation scenario
-scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature=300)
+scenario = molecules.scenarios.ProteinSolvation(
+    protein_pdb=my_pdb_file, temperature=300)
 
-output = scenario.simulate(simulation_time=10,
-                           nsteps_minim = 5000,
-                           resources=machine)
+# Pass your machine group object when submitting a simulation so that it runs
+# on one of the group's machines!
+output = scenario.simulate(machine_group=mg)
+
+
+# Once you don't need them anymore, terminate the machines
+mg.terminate()
 ```
 
-To launch resources users must select a name for the resources group, the type of machine to be launched and the number of machines, with the available options being the machines available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types).
+You can also list your active machine groups, and use the names that appear in the console to recreate a `MachineGroup` object of a previously created machine group.
 
-But do not forget to kill your machines:
 ```python
+import inductiva
 
-machine.kill()
+inductiva.resources.list_active_machine_groups()
+#                                     Name         VM Type   # machines         Created at
+# api-131ce403-6974-4269-94e5-e4451c81b367  c2d-standard-8            2   07 Sep, 12:29:47
+# api-24e497af-d135-4a59-bdd1-854bf0176cbf   c2-standard-4            4   07 Sep, 15:31:32
+
+# Create a MachineGroup object by using its name and resume using it
+mg = inductiva.resources.get_machine_group("api-24e497af-d135-4a59-bdd1-854bf0176cbf")
+
 ```
 
 ## Installation
