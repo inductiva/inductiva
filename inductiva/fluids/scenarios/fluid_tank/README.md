@@ -1,4 +1,4 @@
-### Fluid tank
+# Fluid tank
 
 This scenario simulates the motion of a fluid in a cubic or cylindrical tank.
 Fluid is injected into the tank via an inlet located at the top of the tank and
@@ -7,7 +7,7 @@ motion of the fluid is controlled by gravity. The simulation is performed using
 the [Smoothed Particle Hydrodynamics](https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics)
 method.
 
-#### Example
+### Example
 
 Initialize the scenario:
 
