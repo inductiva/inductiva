@@ -52,7 +52,8 @@ class ProteinSolvation(Scenario):
         the user does not require the full trajectory at task.get_output()."""
 
         return [
-            "protein.gro", "compressed_trajectory.xtc", "solvated_protein.tpr"
+            "protein.gro", "compressed_trajectory.xtc", "solvated_protein.tpr",
+            "topol.top"
         ]
 
     def simulate(
@@ -96,6 +97,7 @@ class ProteinSolvation(Scenario):
         self.integrator = integrator
         self.n_steps_min = n_steps_min
         commands = self.get_commands()
+
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 commands=commands,
