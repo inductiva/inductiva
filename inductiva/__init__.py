@@ -14,7 +14,7 @@ from . import generative
 from . import molecules
 from . import resources
 from . import simulation
-from . import structures
+# from . import structures
 from . import templates
 from . import utils
 from . import stellarators
