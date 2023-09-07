@@ -23,7 +23,7 @@ from inductiva.types import Path
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input, unpack_output)
 from inductiva.utils.meta import get_method_name, get_type_annotations
-from inductiva import utils
+from inductiva.utils import format_utils
 
 
 def validate_api_key(api_key: Optional[str]) -> Configuration:
@@ -86,7 +86,8 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     )
     file_size = os.path.getsize(input_zip_path)
     logging.info("Input archive created.")
-    logging.info("Input archive size: %s", utils.format_bytes(file_size))
+    logging.info("Input archive size: %s",
+                 format_utils.bytes_formatter(file_size))
 
     logging.info("Uploading input...")
     try:

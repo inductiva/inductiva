@@ -1,8 +1,5 @@
 """Methods to interact with the tasks submitted to the API."""
 import json
-import datetime
-import pandas as pd
-import numpy as np
 from typing import Dict, List, Optional, Union, Sequence
 
 import inductiva
@@ -10,6 +7,7 @@ from inductiva import api
 from inductiva.client import ApiClient, ApiException
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
+from inductiva.utils import format_utils
 
 
 def _fetch_tasks_from_api(
@@ -73,39 +71,25 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
         ]
         rows.append(row)
 
-    df = pd.DataFrame(rows, columns=columns)
-
-    # replace None with np.nan so that pandas can format them as "n/a"
-    # by passing na_rep="n/a" to to_string()
-    df.fillna(np.nan, inplace=True)
-
-    def datetime_formatter(dt: str) -> str:
-        return datetime.datetime.fromisoformat(dt).strftime("%d %b, %H:%M:%S")
-
-    def seconds_formatter(secs: float) -> str:
-        return (f"{int(secs // 3600)}h "
-                f"{int((secs % 3600) // 60)}m "
-                f"{int(secs % 60)}s")
-
     formatters = {
-        "Submitted": datetime_formatter,
-        "Started": datetime_formatter,
-        "Duration": seconds_formatter,
+        "Submitted": format_utils.datetime_formatter,
+        "Started": format_utils.datetime_formatter,
+        "Duration": format_utils.seconds_formatter,
     }
 
-    # column width is 15 for all columns except the ones
-    # we override below
-    col_space = {col: 15 for col in columns}
-    col_space["Submitted"] = 20
-    col_space["Started"] = 20
-    col_space["Status"] = 20
-    col_space["VM Type"] = 18
+    override_col_space = {
+        "Submitted": 20,
+        "Started": 20,
+        "Status": 20,
+        "VM Type": 18,
+    }
 
-    return df.to_string(
-        index=False,
-        na_rep="n/a",
+    return format_utils.get_tabular_str(
+        rows,
+        columns,
+        default_col_space=15,
+        override_col_space=override_col_space,
         formatters=formatters,
-        col_space=col_space,
     )
 
 
