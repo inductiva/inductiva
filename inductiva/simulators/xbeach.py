@@ -2,7 +2,7 @@
 from typing import Optional
 
 from inductiva import types, tasks, resources
-from inductiva.simulation import Simulator
+from inductiva.simulators import Simulator
 
 
 class XBeach(Simulator):

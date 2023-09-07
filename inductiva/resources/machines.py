@@ -55,8 +55,10 @@ class MachineGroup():
                 zone=self.zone,
             )
         try:
-            logging.info("Creating a machine group."
+            logging.info("Creating a machine group. "
                          "This may take up to a few minutes.")
+            logging.info("Note that stopping this process will not interrupt "
+                         "the creation of the machine group. Please wait...")
             start_time = time.time()
             instance_group = self._api.create_instance_group(
                 body=instance_group_config)
@@ -64,7 +66,7 @@ class MachineGroup():
 
             self.id = instance_group.body["id"]
             self.name = instance_group.body["name"]
-            self.estimated_price = self.estimate_price()
+            self.estimated_price = self.estimate_cloud_cost()
 
             logging.info("Machine group successfully created in %.2f mins.",
                          creation_time_mins)
@@ -77,7 +79,7 @@ class MachineGroup():
         """Terminates a machine group."""
 
         try:
-            logging.info("Terminating machine group."
+            logging.info("Terminating machine group. "
                          "This may take up to a few minutes.")
             start_time = time.time()
 
@@ -92,30 +94,34 @@ class MachineGroup():
             self._api.delete_instance_group(body=instance_group_config)
             termination_time_mins = (time.time() - start_time) / 60
             logging.info(
-                "Machine group of %s machines successfully"
+                "Machine group of %s machines successfully "
                 "terminated in %.2f mins.", self.num_machines,
                 termination_time_mins)
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
 
-    def estimate_price(self):
-        """Returns an estimated price per hour of a machine group."""
+    def estimate_cloud_cost(self) -> float:
+        """Returns the estimated cost per hour of a machine group.
+
+        Note that this is an estimate of the cost incurred in cloud resources,
+        and is not binding of the actual price of the machine group.
+        """
         #TODO: Contemplate disk size in the price.
         instance_price = self._api.get_instance_price({
             "machine_type": self.machine_type,
             "zone": self.zone,
         })
         if self.spot:
-            estimated_price = instance_price.body[
+            estimated_cost = instance_price.body[
                 "preemptible_price"] * self.num_machines
         else:
-            estimated_price = instance_price.body[
+            estimated_cost = instance_price.body[
                 "on_demand_price"] * self.num_machines
-        estimated_price = float(round(estimated_price, 3))
-        logging.info("Estimated price per hour: %s $/h", estimated_price)
+        estimated_cost = float(round(estimated_cost, 3))
+        logging.info("Estimated cloud cost per hour: %s $/h", estimated_cost)
 
-        return estimated_price
+        return estimated_cost
 
     def status(self):
         """Returns the status of a machine group if it exists.

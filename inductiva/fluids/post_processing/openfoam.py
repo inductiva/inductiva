@@ -13,6 +13,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
 import pathlib
+import glob
+from absl import logging
 
 import pyvista as pv
 
@@ -37,22 +39,57 @@ class SteadyStateOutput:
 
         Args:
             sim_output_path: Path to simulation output files.
-        
-        Attributes:
-            sim_output_path: Path to simulation output files.
-            last_iteration: Last iteration of the simulation.
-                Obtained through the output folders.
+            default_output_files_list: List of default output files
+                that are computed on the backend and saved to the
+                simulation output directory.
         """
 
         self.sim_output_path = sim_output_path
-        # Sort all output folders and files by alphabetical order.
-        outputs_dir_list = sorted(os.listdir(sim_output_path))
-        # The second folder is the folder containing the output of
-        # the last iteration.
-        self.last_iteration = float(outputs_dir_list[1])
+        self.full_output = self.inspect_output()
 
-    def get_output_mesh(self):  # pylint: disable=unused-argument
+    def inspect_output(self):
+        """Inspect the output of the simulation.
+        
+        Return True if the simulation output contains more files than
+        the default ones. This is used to determine if the post-processing
+        was computed on the backend or not."""
+
+        # TODO: Transport these files in a simpler way from the task.
+        # For such, a change to all of the post-processing output classes may
+        # be required.
+        default_output_files_list = [
+            "pressure_field.vtk", "streamlines.vtk", "stdout.txt", "stderr.txt",
+            "force_coefficients.csv", "xy_flow_slice.vtk", "xz_flow_slice.vtk",
+            "yz_flow_slice.vtk", "object.obj"
+        ]
+
+        sim_output_files = glob.glob(os.path.join(self.sim_output_path, "**",
+                                                  "*.*"),
+                                     recursive=True)
+
+        for index, file in enumerate(sim_output_files):
+            sim_output_files[index] = file.split("/")[-1]
+
+        return sorted(sim_output_files) != sorted(default_output_files_list)
+
+    def get_last_iteration(self):
+        """Get the last iteration of the simulation from simulation outputs."""
+
+        # Sort all output folders and files by alphabetical order.
+        outputs_dir_list = sorted(os.listdir(self.sim_output_path))
+        # Second folder contains the last iteration outputs.
+        last_iteration = float(outputs_dir_list[1])
+
+        return last_iteration
+
+    def get_output_mesh(self):
         """Get domain and object mesh info at the steady-state."""
+
+        if not self.full_output:
+            object_mesh = pv.read(
+                os.path.join(self.sim_output_path, "constant", "triSurface",
+                             "object.obj"))
+            return object_mesh
 
         # The OpenFOAM data reader from PyVista requires that a file named
         # "foam.foam" exists in the simulation output directory.
@@ -61,7 +98,7 @@ class SteadyStateOutput:
         pathlib.Path(foam_file_path).touch(exist_ok=True)
 
         reader = pv.OpenFOAMReader(foam_file_path)
-        reader.set_active_time_value(self.last_iteration)
+        reader.set_active_time_value(self.get_last_iteration())
 
         full_mesh = reader.read()
         domain_mesh = full_mesh["internalMesh"]
@@ -77,16 +114,23 @@ class SteadyStateOutput:
             and to render it.
         """
 
-        _, object_mesh = self.get_output_mesh()
+        if not self.full_output:
+            logging.info("Pressure field was computed on the backend. "
+                         "Args passed here were ignored.")
+            object_mesh = pv.read(
+                os.path.join(self.sim_output_path, "pressure_field.vtk"))
+        else:
+            logging.info("Fetching pressure field over the object.")
+            _, object_mesh = self.get_output_mesh()
 
         field_notation = OpenFOAMPhysicalField["PRESSURE"].value
-        physical_field = MeshData(object_mesh, field_notation)
+        pressure_field = MeshData(object_mesh, field_notation)
 
         if save_path is not None:
             save_path = utils.files.resolve_path(save_path)
-            physical_field.mesh.save(save_path)
+            pressure_field.mesh.save(save_path)
 
-        return physical_field
+        return pressure_field
 
     def get_streamlines(self,
                         max_time: float = 100,
@@ -112,18 +156,26 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, object_mesh = self.get_output_mesh()
+        if not self.full_output:
+            logging.info("Streamlines were computed on the backend. "
+                         "Args passed here were ignored.")
+            object_mesh = self.get_output_mesh()
+            streamlines_mesh = pv.read(
+                os.path.join(self.sim_output_path, "streamlines.vtk"))
+        else:
+            logging.info("Computing the streamlines on the fly.")
+            mesh, object_mesh = self.get_output_mesh()
 
-        streamlines_mesh = mesh.streamlines(
-            max_time=max_time,
-            n_points=n_points,
-            initial_step_length=initial_step_length,
-            source_radius=source_radius,
-            source_center=source_center)
+            streamlines_mesh = mesh.streamlines(
+                max_time=max_time,
+                n_points=n_points,
+                initial_step_length=initial_step_length,
+                source_radius=source_radius,
+                source_center=source_center)
 
-        if save_path is not None:
-            save_path = utils.files.resolve_path(save_path)
-            streamlines_mesh.save(save_path)
+            if save_path is not None:
+                save_path = utils.files.resolve_path(save_path)
+                streamlines_mesh.save(save_path)
 
         return Streamlines(object_mesh, streamlines_mesh)
 
@@ -141,22 +193,31 @@ class SteadyStateOutput:
                 Types of files permitted: .vtk, .ply, .stl
         """
 
-        mesh, object_mesh = self.get_output_mesh()
-
-        if plane == "xy":
-            normal = (0, 0, 1)
-        elif plane == "yz":
-            normal = (1, 0, 0)
-        elif plane == "xz":
-            normal = (0, 1, 0)
+        if not self.full_output:
+            logging.info("Flow slices were computed on the backend. "
+                         "The origin and save_path arg are ignored.")
+            object_mesh = self.get_output_mesh()
+            flow_slice_name = plane + "_flow_slice.vtk"
+            flow_slice = pv.read(
+                os.path.join(self.sim_output_path, flow_slice_name))
         else:
-            raise ValueError("Invalid view.")
+            logging.info("Computing the flow on a slice.")
+            mesh, object_mesh = self.get_output_mesh()
 
-        flow_slice = mesh.slice(normal=normal, origin=origin)
+            if plane == "xy":
+                normal = (0, 0, 1)
+            elif plane == "yz":
+                normal = (1, 0, 0)
+            elif plane == "xz":
+                normal = (0, 1, 0)
+            else:
+                raise ValueError("Invalid view.")
 
-        if save_path is not None:
-            save_path = utils.files.resolve_path(save_path)
-            flow_slice.save(save_path)
+            flow_slice = mesh.slice(normal=normal, origin=origin)
+
+            if save_path is not None:
+                save_path = utils.files.resolve_path(save_path)
+                flow_slice.save(save_path)
 
         return FlowSlice(object_mesh, flow_slice)
 
@@ -175,15 +236,14 @@ class FlowSlice:
         self.object_mesh = object_mesh
         self.mesh = flow_slice
 
-    def render_frame(self,
-                     physical_field: Literal["pressure",
-                                             "velocity"] = "pressure",
-                     off_screen: bool = False,
-                     virtual_display: bool = False,
-                     background_color: str = "white",
-                     flow_cmap: str = "viridis",
-                     object_color: str = "white",
-                     save_path: types.Path = None):
+    def render(self,
+               physical_field: Literal["pressure", "velocity"] = "pressure",
+               off_screen: bool = False,
+               virtual_display: bool = False,
+               background_color: str = "white",
+               flow_cmap: str = "viridis",
+               object_color: str = "white",
+               save_path: types.Path = None):
         """Render flow property over domain."""
 
         if save_path is not None:
@@ -218,18 +278,17 @@ class Streamlines:
         self.object_mesh = object_mesh
         self.mesh = streamlines
 
-    def render_frame(self,
-                     physical_field: Literal["pressure",
-                                             "velocity"] = "pressure",
-                     off_screen: bool = False,
-                     virtual_display: bool = False,
-                     background_color: str = "white",
-                     flow_cmap: str = "viridis",
-                     view: Literal["isometric", "front", "rear", "top",
-                                   "side"] = "isometric",
-                     object_color: str = "white",
-                     streamline_radius: float = 0.5,
-                     save_path: types.Path = None):
+    def render(self,
+               physical_field: Literal["pressure", "velocity"] = "pressure",
+               off_screen: bool = False,
+               virtual_display: bool = False,
+               background_color: str = "white",
+               flow_cmap: str = "viridis",
+               view: Literal["isometric", "front", "rear", "top",
+                             "side"] = "isometric",
+               object_color: str = "white",
+               streamline_radius: float = 0.1,
+               save_path: types.Path = None):
         """Render streamlines through domain."""
 
         if save_path is not None:

@@ -7,8 +7,8 @@ from typing import Optional
 from inductiva.fluids.scenarios.heat_sink.output import HeatSinkOutput
 
 from inductiva import tasks, resources
-from inductiva.fluids.simulators import OpenFOAM
-from inductiva.simulation import Simulator
+from inductiva.simulators import OpenFOAM
+from inductiva.simulators import Simulator
 from inductiva.scenarios import Scenario
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        replace_params_in_template)

@@ -2,7 +2,7 @@
 from typing import Literal, Optional
 
 from inductiva import types, tasks, resources
-from inductiva.simulation import Simulator
+from inductiva.simulators import Simulator
 
 
 class SPlisHSPlasH(Simulator):

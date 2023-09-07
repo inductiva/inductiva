@@ -3,9 +3,36 @@ from absl import logging
 import inductiva
 from inductiva.client.apis.tags import instance_api
 from inductiva import resources
+from inductiva.utils import format_utils
 
 
-def list_machine_groups():
+def _machine_group_list_to_str(machine_groups) -> str:
+    """Returns a string representation of a list of machine groups."""
+    columns = ["Name", "VM Type", "# machines", "Created at"]
+    rows = []
+
+    for machine_group in machine_groups:
+        rows.append([
+            machine_group["name"], machine_group["machine_type"],
+            machine_group["num_instances"], machine_group["create_time"]
+        ])
+
+    formatters = {"Created at": format_utils.datetime_formatter}
+    override_col_space = {
+        "VM Type": 15,
+        "# machines": 12,
+    }
+
+    return format_utils.get_tabular_str(
+        rows,
+        columns,
+        default_col_space=18,
+        override_col_space=override_col_space,
+        formatters=formatters,
+    )
+
+
+def list_active_machine_groups():
     """Lists all active machine group names.
 
     Returns:
@@ -18,12 +45,14 @@ def list_machine_groups():
             logging.info("No active machine groups found.")
             return response.body
 
-        machine_group_names = []
-        for machine_group in response.body:
-            machine_group_names.append(machine_group["name"])
-            logging.info("Name: %s; Number of machines: %s; Created at: %s",
-                         machine_group["name"], machine_group["num_instances"],
-                         machine_group["create_time"])
+        machine_groups = list(response.body)
+        machine_group_names = [
+            machine_group["name"] for machine_group in machine_groups
+        ]
+
+        logging.info("Active machine groups:\n%s",
+                     _machine_group_list_to_str(machine_groups))
+
         return machine_group_names
 
     except inductiva.client.ApiException as api_exception:

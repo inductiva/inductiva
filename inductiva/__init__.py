@@ -8,12 +8,12 @@ from . import admin
 from . import api
 from . import tasks
 from . import core
+from . import simulators
 from . import fluids
 from . import coastal
 from . import generative
 from . import molecules
 from . import resources
-from . import simulation
 # from . import structures
 from . import templates
 from . import utils
