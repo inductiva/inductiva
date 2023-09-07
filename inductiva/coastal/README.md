@@ -6,6 +6,40 @@ These simulators solve the [shallow-water equations](https://en.wikipedia.org/wi
 a reduced version of the Navier-Stokes equations valid for small depth-to-length
 ratios (i.e., shallow water).
 
+You can invoke each of these simulators directly to execute your own simulation
+scripts, or you can make use of the `CoastalArea` scenario, a high-level
+interface for simulating wave conditions on bathymetries you can load.
+
+## Invoking SWASH or XBeach directly
+
+SWASH or XBeach can be invoked directly to run simulation input files you have
+created. For example, to run a SWASH simulation which input files are stored in
+the `simulation_input_dir` directory and whose main configuration file is
+`INPUT.sws`, you can do:
+
+```python
+import inductiva
+
+simulator = inductiva.simulators.SWASH()
+
+task = simulator.run(
+    input_dir="simulation_input_dir",
+    sim_config_filename="INPUT.sws",
+    n_cores=4,
+)
+
+output = task.get_output()
+```
+
+Note that this runs the simulation in parallel, using 4 cores.
+
+To run an XBeach simulation, the interface is the same, except that you need to
+use the `XBeach` simulator class:
+
+```python
+simulator = inductiva.simulators.XBeach()
+```
+
 ## Coastal area scenario
 
 This scenario simulates waves propagating in a coastal area represented by a
