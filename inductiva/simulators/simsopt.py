@@ -1,10 +1,10 @@
 """Simsopt module of the API."""
 from typing import Optional
 
-from inductiva import simulation, tasks, types, resources
+from inductiva import simulators, tasks, types, resources
 
 
-class Simsopt(simulation.Simulator):
+class Simsopt(simulators.Simulator):
     """Invokes a simsopt simulation on the API."""
 
     @property

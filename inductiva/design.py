@@ -4,7 +4,7 @@ from typing import Any, List, Optional
 from absl import logging
 
 from inductiva import types
-from inductiva.simulation import Simulator
+from inductiva.simulators import Simulator
 from inductiva.utils import templates
 from inductiva.utils import files
 
