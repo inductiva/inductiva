@@ -73,6 +73,6 @@ def adjust_map_level(map_level: np.ndarray, percentile_translate_map: float):
     # is above or below the xy-plane.
     percentile_translate = np.percentile(map_level,
                                          abs(percentile_translate_map))
-    map_level += np.sign(percentile_translate_map) * percentile_translate
+    map_level -= np.sign(percentile_translate_map) * percentile_translate
 
     return map_level
