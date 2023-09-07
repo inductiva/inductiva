@@ -388,9 +388,8 @@ output_dir = task.download_outputs(uncompress=False)
 
 ### Retrieving tasks from previous sessions
 
-A fundamental aspect of the API is its ability to run long tasks asynchronously. Of course, this is not handy if you need to keep your Python session on to persist the task objects representing async running
-simulations!
-You can retrieve tasks and reconstruct the `Task` objects  -- the same objects that you get from the call to `scenario.simulate()` -- of previously created tasks using the `inductiva.tasks.get()` function.
+A fundamental aspect of the API is its ability to run long tasks asynchronously.
+You can retrieve previously created tasks and reconstruct the `Task` objects  -- the same objects that you get from the call to `scenario.simulate()` -- using the `inductiva.tasks.get()` function.
 It requires an argument named `last_n`, which specifies the number of most recent tasks submitted to the API to retrieve. It returns a list of `Task` objects so that you can resume manipulating the task and its results.
 Additionally, you can filter tasks by their current status, which allows you to get, for instance, only tasks that failed or only
 tasks that are submitted and not yet started.
