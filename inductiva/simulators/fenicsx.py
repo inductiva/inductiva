@@ -2,10 +2,11 @@
 
 from typing import Optional
 
-import inductiva
+from inductiva import types, tasks, resources
+from inductiva.simulators import Simulator
 
 
-class FEniCSx(inductiva.simulation.Simulator):
+class FEniCSx(Simulator):
     """Class to invoke a generic FEniCSx simulation on the API."""
 
     def __init__(self, api_method: str = "fem.fenicsx.run_simulation"):
@@ -18,13 +19,13 @@ class FEniCSx(inductiva.simulation.Simulator):
 
     def run(
         self,
-        input_dir: inductiva.types.Path,
+        input_dir: types.Path,
         mesh_filename: str,
         bcs_filename: str,
         material_filename: str,
-        machine_group: Optional[inductiva.resources.MachineGroup] = None,
+        machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-    ) -> inductiva.tasks.Task:
+    ) -> tasks.Task:
         """Run the simulation.
 
         Args:

@@ -6,8 +6,8 @@ import os
 import shutil
 
 from inductiva import tasks, resources
-from inductiva.molecules.simulators import GROMACS
-from inductiva.simulation import Simulator
+from inductiva.simulators import GROMACS
+from inductiva.simulators import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template)
 from inductiva.scenarios import Scenario

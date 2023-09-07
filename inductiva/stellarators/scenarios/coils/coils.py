@@ -11,8 +11,7 @@ from functools import singledispatchmethod
 
 import numpy as np
 
-from inductiva import (scenarios, simulation, stellarators, tasks, types, utils,
-                       resources)
+from inductiva import (scenarios, simulators, tasks, types, utils, resources)
 
 SIMSOPT_COIL_COEFFICIENTS_FILENAME = 'coil_coefficients.npz'
 SIMSOPT_COIL_CURRENTS_FILENAME = 'coil_currents.npz'
@@ -69,7 +68,7 @@ class StellaratorCoils(scenarios.Scenario):
           Typically varies between 1 and 3.
     """
 
-    valid_simulators = [stellarators.simulators.Simsopt]
+    valid_simulators = [simulators.Simsopt]
 
     def __init__(self, coils, num_field_periods):
         """Initialize the StellaratorCoils object."""
@@ -235,7 +234,7 @@ class StellaratorCoils(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulation.Simulator = stellarators.simulators.Simsopt(),
+        simulator: simulators.Simulator = simulators.Simsopt(),
         machine_group: typing.Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         plasma_surface_filepath: typing.Optional[types.Path] = None,
@@ -338,7 +337,7 @@ class StellaratorCoils(scenarios.Scenario):
         return task
 
     @singledispatchmethod
-    def create_input_files(self, simulator: simulation.Simulator):
+    def create_input_files(self, simulator: simulators.Simulator):
         pass
 
 
@@ -394,7 +393,7 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
 
 
 @StellaratorCoils.create_input_files.register
-def _(self, simulator: stellarators.simulators.Simsopt, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.Simsopt, input_dir):  # pylint: disable=unused-argument
     """Creates Simsopt simulation input files."""
 
     coil_coefficients = [coil.curve_coefficients for coil in self.coils]

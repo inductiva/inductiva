@@ -4,8 +4,8 @@ from enum import Enum
 from dataclasses import dataclass
 
 from inductiva import tasks, resources
-from inductiva.simulation import Simulator
-from inductiva.fluids.simulators import DualSPHysics
+from inductiva.simulators import Simulator
+from inductiva.simulators import DualSPHysics
 from inductiva.fluids.scenarios.fluid_block import FluidBlock
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER

@@ -1,35 +1,34 @@
-"""DualSPHysics module of the API."""
+"""SWASH module of the API."""
+from typing import Optional
 
-from typing import Literal, Optional
-
+from inductiva.simulators import Simulator
 from inductiva import types, tasks, resources
-from inductiva.simulation import Simulator
 
 
-class DualSPHysics(Simulator):
-    """Class to invoke a generic DualSPHysics simulation on the API."""
+class SWASH(Simulator):
+    """Class to invoke a generic SWASH simulation on the API."""
 
     @property
     def api_method_name(self) -> str:
-        return "sph.dualsphysics.run_simulation"
+        return "sw.swash.run_simulation"
 
     def run(
         self,
         input_dir: types.Path,
         sim_config_filename: str,
-        device: Literal["gpu", "cpu"] = "cpu",
         machine_group: Optional[resources.MachineGroup] = None,
+        n_cores: int = 1,
         run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
 
         Args:
-            device: Device in which to run the simulation.
+            n_cores: Number of MPI cores to use for the simulation.
             sim_config_filename: Name of the simulation configuration file.
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
                            machine_group=machine_group,
-                           device=device,
                            input_filename=sim_config_filename,
+                           n_cores=n_cores,
                            run_async=run_async)

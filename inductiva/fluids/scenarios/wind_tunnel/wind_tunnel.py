@@ -10,7 +10,7 @@ from typing import Optional, List, Literal
 
 from absl import logging
 
-from inductiva import tasks, resources, fluids, types, simulation, scenarios
+from inductiva import tasks, resources, fluids, types, simulators, scenarios
 from inductiva.utils import templates, files
 
 SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "wind_tunnel")
@@ -58,7 +58,7 @@ class WindTunnel(scenarios.Scenario):
     pressure_field, cutting planes and force coefficients.
     """
 
-    valid_simulators = [fluids.simulators.OpenFOAM]
+    valid_simulators = [simulators.OpenFOAM]
 
     def __init__(self,
                  flow_velocity: List[float] = None,
@@ -100,7 +100,7 @@ class WindTunnel(scenarios.Scenario):
         ]
 
     def simulate(self,
-                 simulator: simulation.Simulator = fluids.simulators.OpenFOAM(
+                 simulator: simulators.Simulator = simulators.OpenFOAM(
                      "windtunnel"),
                  machine_group: Optional[resources.MachineGroup] = None,
                  run_async: bool = False,
@@ -163,12 +163,12 @@ class WindTunnel(scenarios.Scenario):
         return commands
 
     @singledispatchmethod
-    def create_input_files(self, simulator: simulation.Simulator):
+    def create_input_files(self, simulator: simulators.Simulator):
         pass
 
 
 @WindTunnel.create_input_files.register
-def _(self, simulator: fluids.simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
     """Creates OpenFOAM simulation input files."""
 
     # The WindTunnel with OpenFOAM requires changing multiple files
