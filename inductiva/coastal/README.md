@@ -16,9 +16,9 @@ Here we shall use the bathymetry data from Algarve available [here](https://sext
 as an example.
 
 ```python
-from inductiva import fluids
+import inductiva
 
-bathymetry = fluids.scenarios.coastal_area.Bathymety.from_ascii_xyz_file(
+bathymetry = inductiva.coastal.Bathymety.from_ascii_xyz_file(
     ascii_xyz_file_path="590_HR_Lidar_Algarve.emo")
 ```
 
@@ -60,10 +60,10 @@ boundary of the domain (i.e. the lower y boundary), with a wave amplitude of 5 m
 and a wave period of 5.5 s:
 
 ```python
-scenario = fluids.scenarios.CoastalArea(bathymetry=bathymetry,
-                                        wave_source_location="S",
-                                        wave_amplitude=5,
-                                        wave_period=5.5)
+scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
+                                         wave_source_location="S",
+                                         wave_amplitude=5,
+                                         wave_period=5.5)
 ```
 
 To run a simulation:
