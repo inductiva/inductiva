@@ -356,6 +356,9 @@ class Task:
             return None
 
         machine_info = info["executer"]
+        if "vm_type" not in machine_info:
+            return "inductiva-machine"
+
         machine_type = machine_info["vm_type"].split("/")[-1]
 
         return machine_type
