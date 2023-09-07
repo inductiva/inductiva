@@ -322,7 +322,7 @@ For instance, you can:
  * Download output files (all of them or only the important ones);
  * Get its execution time.
 
-Check out some example usage of `Task` after submitting an asynchronous simulation:
+Check out some example usage of `Task`:
 
 ```python
 # `scenario` constructed as in the examples above.
@@ -388,13 +388,13 @@ output_dir = task.download_outputs(uncompress=False)
 
 ### Retrieving tasks from previous sessions
 
-The real usefulness of the API arises from its ability to run long tasks asynchronously. Of course, this is not handy if you need to keep your Python session on to persist the task objects representing async running
+A fundamental aspect of the API is its ability to run long tasks asynchronously. Of course, this is not handy if you need to keep your Python session on to persist the task objects representing async running
 simulations!
-You can retrieve tasks and reconstruct the `Task` objects of previously created tasks using the `inductiva.tasks.get()` function.
-It requires an argument named `last_n`, which specifies the number of most recent tasks submitted to the API to retrieve. It returns a list of `Task` objects -- the same objects that you get from the call to `scenario.simulate()` -- so that you can resume manipulating the task and its results.
+You can retrieve tasks and reconstruct the `Task` objects  -- the same objects that you get from the call to `scenario.simulate()` -- of previously created tasks using the `inductiva.tasks.get()` function.
+It requires an argument named `last_n`, which specifies the number of most recent tasks submitted to the API to retrieve. It returns a list of `Task` objects so that you can resume manipulating the task and its results.
 Additionally, you can filter tasks by their current status, which allows you to get, for instance, only tasks that failed or only
 tasks that are submitted and not yet started.
-Examples:
+#### Examples:
 
 ```python
 import inductiva
