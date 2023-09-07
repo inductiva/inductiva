@@ -1,4 +1,4 @@
-### Coastal area
+# Coastal area
 
 This scenario simulates waves propagating in a coastal area represented by a
 bathymetric profile (i.e., the map of depths of the sea bottom as a function
@@ -7,7 +7,7 @@ boundaries of the simulation with a given amplitude and period. The simulation
 is performed using the [SWASH](https://swash.sourceforge.io/) simulator, which
 solves th [shallow-water equations](https://en.wikipedia.org/wiki/Shallow_water_equations).
 
-#### Example
+### Example
 
 Start by creating or loading a bathymetry. This can be done e.g. by reading an
 [ASCII XYZ file](https://emodnet.ec.europa.eu/sites/emodnet.ec.europa.eu/files/public/20171127_DTM_exchange_format_specification_v1.6.pdf),
