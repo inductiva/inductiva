@@ -13,7 +13,8 @@ This offers several distinct advantages:
 * Effortlessly run hundreds or even thousands of simulations concurrently.
 * There's no requirement to oversee a cluster or employ specialists in distributed systems.
 * Hardware configurations are optimized for each simulation (e.g., CPU vs. GPU, appropriate number of CPU cores, RAM, etc.).
-* You're not limited to a graphical interface or intricate configuration scripts. Instead, you can write concise Python programs that seamlessly integrate with your existing codebase.
+* You're not limited to a graphical interface or complex configuration scripts. Instead, you write small Python programs that seamlessly integrate with your existing codebase.
+* It consolidates various simulation domains, including fluid dynamics, molecular dynamics, plasmas, and structural mechanics, under a single unified entry point.
 
 In addition to these "computational" aspects, inductiva provides a set of pre-packaged simulation scenarios, that you can run with a couple of lines of Python code. Keep reading!
 
