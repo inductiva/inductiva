@@ -1,11 +1,18 @@
-# Coastal area
+# Coastal dynamics
+
+Inductiva API supports simuulation of coastal dynamics via two simulators:
+[SWASH](https://swash.sourceforge.io/) and [XBeach](https://oss.deltares.nl/web/xbeach/).
+These simulators solve the [shallow-water equations](https://en.wikipedia.org/wiki/Shallow_water_equations),
+a reduced version of the Navier-Stokes equations valid for small depth-to-length
+ratios (i.e., shallow water).
+
+## Coastal area scenario
 
 This scenario simulates waves propagating in a coastal area represented by a
 bathymetric profile (i.e., the map of depths of the sea bottom as a function
 of spatial coordinates x, y). Waves are injected into the domain from one of the
 boundaries of the simulation with a given amplitude and period. The simulation
-is performed using the [SWASH](https://swash.sourceforge.io/) simulator, which
-solves th [shallow-water equations](https://en.wikipedia.org/wiki/Shallow_water_equations).
+is performed using the [SWASH](https://swash.sourceforge.io/) simulator.
 
 ### Example
 
