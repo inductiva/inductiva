@@ -73,7 +73,12 @@ scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
                                          wave_period=5.5)
 ```
 
-To run a simulation:
+In case the bathymetry is not defined on a regular grid when creating a
+scenario, interpolation to a regular grid is automatically attempted with a
+default resolution of 2 m x 2 m and no pre-configured strategy to fill depths at
+positions missing in the bathymetry.
+
+Once the scenario is created, run the simulation as follows:
 
 ```python
 task = scenario.simulate(simulation_time=100, output_time_step=1)
