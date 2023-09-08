@@ -41,6 +41,17 @@ And you are good to go! You can start [exploring our tutorial notebooks](https:/
 **Inductiva API** contains pre-built scenarios that define physical systems of interest ready to simulate. Users can choose some parameters and configure the system according to their needs, run the simulation using the most adequate resources and visualize the results.
 
 
+
+### Available scenarios
+
+These are currently available scenarios:
+
+- [Coastal Dynamics](inductiva/coastal/README.md)
+- [Wind Tunnel](inductiva/fluids/scenarios/wind_tunnel/README.md)
+- [Fluid Tank](inductiva/fluids/scenarios/fluid_tank/README.md)
+- [Protein Solvation](inductiva/molecules/scenarios/protein_solvation/README.md)
+
+
 ## Simulators
 
 **Inductiva API** has available several open-source simulators ready to use. Users familiar with the simulators can easily start running simulations with their previously prepared simulation configuration files. In this way, they can take advantage of performant hardware to speed up their simulation and exploration.
