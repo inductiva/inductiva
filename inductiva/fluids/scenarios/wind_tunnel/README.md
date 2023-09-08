@@ -1,17 +1,16 @@
 # Wind Tunnel Scenario
 
-This scenario models the aerodynamics of an object inside a virtual wind tunnel for a given airflow velocity. Air is injected on a side wall of the wind tunnel and leaves through an outlet on the opposite side. The air flow within the tunnel is modified according to the structure of the object. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models. The simulation is currently performed with the OpenFOAM simulator.
+This scenario models the aerodynamics of an object inside a virtual wind tunnel for a given airflow velocity. Air is injected through one side of the wind tunnel and exits through an outlet on the opposite side. The air flow within the tunnel is modified according to the structure of the object. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models. The simulation is currently performed with the OpenFOAM simulator.
 
 To initialize the scenario, the user can define the following parameters:
-- Dimensions of the wind tunnel in meters, e.g. `{"x": [-5, 15], "y": [-5, 5], "z": [0, 8]}`.
-- Airflow velocity in m/s, e.g. `[30, 0, 0]`. Notice that the airflow is injected from the negative x-direction.
+- `domain`: Dimensions of the wind tunnel in meters, e.g. `{"x": [-5, 15], "y": [-5, 5], "z": [0, 8]}`.
+- `flow_velocity`: Airflow velocity in m/s, e.g. `[30, 0, 0]`. Notice that the airflow is injected from the negative x-direction.
 
-Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in STL or OBJ format. Notice that, the required meshing step will automatically be made before starting the simulation. The meshing is done with the snappyHexMesh tool of OpenFOAM.
+Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in STL or OBJ format. Notice that, the required meshing step will automatically be made before starting the simulation. The meshing is done with the [snappyHexMesh tool](https://www.openfoam.com/documentation/user-guide/4-mesh-generation-and-conversion/4.4-mesh-generation-with-the-snappyhexmesh-utility) of OpenFOAM.
 
-The user is performing steady-state simulations of a vehicle inside the wind tunnel with air flowing. The simulation uses an iterative algorithm that converges to the steady-state of the flow. 
 The simulation parameters available for the user to configure are:
-- num_iterations: Set the maximum number of iterations for the algorithm to converge.
-- resolution: Controls the resolution of the meshing that is done prior to the simulation. The higher the resolution, the finer the meshing. Possibilities: "high", "medium", "low".
+- `num_iterations`: Set the maximum number of iterations for the iterative algorithm to converge.
+- `resolution`: Controls the resolution of the meshing that is done prior to the simulation. The higher the resolution, the finer the meshing. Possibilities: "high", "medium", "low".
 
 Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`, `n_cores`.
 Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in the [Tasks section](../../../../README.md).
@@ -41,9 +40,7 @@ and apply the post-processing and visualizations to understand the aerodynamics 
 
 ## Output and Post-Processing
 
-The simulation output is comprised of several files spread throughout several directories. These files contain data about the airflow over the object, from which valuable metrics can be extracted to understand the aerodynamics of the object. To obtain these metrics a few post-processing steps are required to be done.
-
-The `WindTunnel` scenario allows users to extract the following metrics:
+The simulation output will contain several sub-directories with files that can be post-processed to extract relevant metrics, such as:
 - Pressure field: Pressure field of the airflow over the object.
 - Streamlines: Streamlines of the airflow over the domain and interacting with the object.
 - Flow slice: Slice of the flow that represents the airflow over the domain and interacting with the object.
