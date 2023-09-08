@@ -50,49 +50,6 @@ This yields an interactive visualization of the protein's trajectory that can be
 
 ![Protein solvation simulation.](resources/media/protein_solvation.gif)
 
-### Wind tunnel
-
-This scenario models the aerodynamics of an object inside a virtual
-[wind tunnel](https://en.wikipedia.org/wiki/Wind_tunnel) for a given air flow velocity. Air is injected on a side wall of the wind tunnel, the flow changes according to the structure of the object and leaves through an outlet on the other side. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models.
-
-#### Example
-
-Initialize the scenario:
-
-```python
-from inductiva import fluids
-
-scenario = fluids.scenarios.WindTunnel(
-    flow_velocity=[30, 0, 0],
-    domain_geometry={"x": [-6, 12], "y": [-5, 5], "z": [0, 10]})
-```
-
-The user can specify the flow velocity vector (in m/s) and the domain geometry (in m).
-
-Run the simulation:
-
-```python
-task = scenario.simulate(object_path="vehicle.obj",
-                         simulation_time=100,
-                         output_time_step=50,
-                         resolution="medium")
-
-output = task.get_output()
-```
-
-The user must provide the path for the object to be inserted in the wind tunnel. Additionally, users can choose the total simulation time, the time step interval to output data and the resolution of the simulation.
-
-After the simulation has finished, the user can obtain several metrics and visuals. An example here is given for a slice of the flow:
-
-```python
-
-flow_slice = output.get_flow_slice(simulation_time=100,
-                                   plane="xz")
-flow_slice.render("velocity")
-```
-
-![F1 car in WindTunnel](resources/media/wind_tunnel.png)
-
 ### Fluid tank
 
 This scenario simulates the motion of a fluid in a cubic or cylindrical tank.
