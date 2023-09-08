@@ -192,6 +192,7 @@ class Task:
 
     def get_output(
         self,
+        all_files: bool = True,
         output_dir: Optional[pathlib.Path] = None,
         uncompress: bool = True,
         rm_downloaded_zip_archive: bool = True,
@@ -199,6 +200,8 @@ class Task:
         """Get the output of the task.
 
         Args:
+            all_files: Whether to download all the files in the output
+                archive. If False, only the default files are downloaded.
             output_dir: Directory where to download the files. If None, the
                 files are downloaded to the default directory. The default is
                 {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
@@ -215,8 +218,14 @@ class Task:
             100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]
         """
         self.wait()
+
+        # Check if default files are set by the output class
+        filenames = None
+        if self._default_files_list and not all_files:
+            filenames = self._default_files_list
+
         output_dir = self.download_outputs(
-            filenames=self._default_files_list,
+            filenames=filenames,
             output_dir=output_dir,
             uncompress=uncompress,
             rm_downloaded_zip_archive=rm_downloaded_zip_archive)
@@ -347,6 +356,9 @@ class Task:
             return None
 
         machine_info = info["executer"]
+        if "vm_type" not in machine_info:
+            return "inductiva-machine"
+
         machine_type = machine_info["vm_type"].split("/")[-1]
 
         return machine_type

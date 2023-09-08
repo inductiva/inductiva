@@ -8,6 +8,12 @@ class FluidType:
     density: float
     kinematic_viscosity: float
 
+    def to_dict(self):
+        return {
+            "density": self.density,
+            "kinematic_viscosity": self.kinematic_viscosity,
+        }
+
 
 WATER = FluidType(
     density=1e3,

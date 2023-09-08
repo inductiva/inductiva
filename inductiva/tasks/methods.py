@@ -1,8 +1,5 @@
 """Methods to interact with the tasks submitted to the API."""
 import json
-import datetime
-import pandas as pd
-import numpy as np
 from typing import Dict, List, Optional, Union, Sequence
 
 import inductiva
@@ -10,6 +7,7 @@ from inductiva import api
 from inductiva.client import ApiClient, ApiException
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
+from inductiva.utils import format_utils
 
 
 def _fetch_tasks_from_api(
@@ -73,44 +71,30 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
         ]
         rows.append(row)
 
-    df = pd.DataFrame(rows, columns=columns)
-
-    # replace None with np.nan so that pandas can format them as "n/a"
-    # by passing na_rep="n/a" to to_string()
-    df.fillna(np.nan, inplace=True)
-
-    def datetime_formatter(dt: str) -> str:
-        return datetime.datetime.fromisoformat(dt).strftime("%d %b, %H:%M:%S")
-
-    def seconds_formatter(secs: float) -> str:
-        return (f"{int(secs // 3600)}h "
-                f"{int((secs % 3600) // 60)}m "
-                f"{int(secs % 60)}s")
-
     formatters = {
-        "Submitted": datetime_formatter,
-        "Started": datetime_formatter,
-        "Duration": seconds_formatter,
+        "Submitted": format_utils.datetime_formatter,
+        "Started": format_utils.datetime_formatter,
+        "Duration": format_utils.seconds_formatter,
     }
 
-    # column width is 15 for all columns except the ones
-    # we override below
-    col_space = {col: 15 for col in columns}
-    col_space["Submitted"] = 20
-    col_space["Started"] = 20
-    col_space["Status"] = 20
-    col_space["VM Type"] = 18
+    override_col_space = {
+        "Submitted": 20,
+        "Started": 20,
+        "Status": 20,
+        "VM Type": 18,
+    }
 
-    return df.to_string(
-        index=False,
-        na_rep="n/a",
+    return format_utils.get_tabular_str(
+        rows,
+        columns,
+        default_col_space=15,
+        override_col_space=override_col_space,
         formatters=formatters,
-        col_space=col_space,
     )
 
 
 # pylint: disable=redefined-builtin
-def list(num_tasks,
+def list(last_n,
          status: Optional[Union[str, models.TaskStatusCode]] = None) -> None:
     # pylint: disable=line-too-long
     """List the last N tasks of a user.
@@ -134,7 +118,7 @@ def list(num_tasks,
         1691080520213617518        openfoam              success     03 Aug, 16:35:21     03 Aug, 16:35:21       0h 1m 23s     n2-standard-32
 
     Args:
-        num_tasks: The number of most recent tasks with respect to submission
+        last_n: The number of most recent tasks with respect to submission
             time to list. If filtering criteria (currently status is available)
             is specified, most recent N tasks that match that criteria will be
             listed. The actual number of tasks may be less if there
@@ -144,13 +128,13 @@ def list(num_tasks,
     """
     # pylint: enable=line-too-long
     status = models.TaskStatusCode(status) if status is not None else None
-    tasks = get(num_tasks, status=status)
+    tasks = get(last_n, status=status)
     tasks_str = _list_of_tasks_to_str(tasks)
     print(tasks_str)
 
 
 def get(
-    num_tasks,
+    last_n,
     status: Optional[Union[str, models.TaskStatusCode]] = None
 ) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
@@ -175,7 +159,7 @@ def get(
             task.kill()
 
     Args:
-        num_tasks: The number of most recent tasks with respect to submission
+        last_n: The number of most recent tasks with respect to submission
             time to fetch. If filtering criteria (currently status is available)
             is specified, most recent N tasks that match that criteria will be
             listed. The actual number of tasks may be less if there
@@ -188,7 +172,7 @@ def get(
     """
     status = models.TaskStatusCode(status) if status is not None else None
 
-    raw_tasks_info = _fetch_tasks_from_api(status, page=1, per_page=num_tasks)
+    raw_tasks_info = _fetch_tasks_from_api(status, page=1, per_page=last_n)
     tasks = [
         inductiva.tasks.Task.from_api_info(info) for info in raw_tasks_info
     ]

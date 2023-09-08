@@ -7,7 +7,6 @@ from absl import app
 
 import inductiva
 from inductiva.fluids.scenarios.fluid_tank import FluidTank
-from inductiva.fluids.simulators import SPlisHSPlasH
 from inductiva.fluids.shapes import Cylinder
 
 FLAGS = flags.FLAGS
@@ -37,7 +36,8 @@ def main(_):
         fluid_level=FLAGS.fluid_level,
     )
 
-    scenario.simulate(simulator=SPlisHSPlasH(), device=FLAGS.device)
+    scenario.simulate(simulator=inductiva.simulators.SPlisHSPlasH(),
+                      device=FLAGS.device)
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 

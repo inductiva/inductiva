@@ -2,7 +2,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from inductiva.utils import misc
+from inductiva.utils import format_utils
 
 
 @dataclass
@@ -29,13 +29,14 @@ class OutputContents:
         name_header = "Name"
 
         lines = [
-            f"Archive size: {misc.format_bytes(self.size)}",
+            f"Archive size: {format_utils.bytes_formatter(self.size)}",
             "Contents:",
             f"  {size_header:<12} {compressed_header:<12} {name_header:<12}",
         ]
         for file in self.contents:
-            lines.append(f"  {misc.format_bytes(file.size):<12}"
-                         f" {misc.format_bytes(file.compressed_size):<12}"
-                         f" {file.name:<12}")
+            lines.append(
+                f"  {format_utils.bytes_formatter(file.size):<12}"
+                f" {format_utils.bytes_formatter(file.compressed_size):<12}"
+                f" {file.name:<12}")
 
         return "\n".join(lines)

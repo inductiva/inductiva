@@ -136,6 +136,7 @@ class Bathymetry:
         initial_roughness: float = 1,
         roughness_factor: float = 0.5,
         percentile_above_water: float = 20,
+        random_seed=None,
     ):
         """Creates a `Bathymetry` object with random depths.
 
@@ -159,7 +160,10 @@ class Bathymetry:
               Diamond-Square algorithm decreases over iterations.
             percentile_above_water: Percentile of the depths that must be above
               water. Must be between 0 and 100.
+            random_seed: Random seed to use.
         """
+
+        random.seed(random_seed)
 
         corner_values = [
             random.uniform(0, max_depth),
@@ -169,7 +173,13 @@ class Bathymetry:
         ]
 
         depths = inductiva.generative.procedural.generate_random_map_level(
-            x_num, y_num, corner_values, initial_roughness, roughness_factor)
+            x_num,
+            y_num,
+            corner_values,
+            initial_roughness,
+            roughness_factor,
+            random_seed=random_seed,
+        )
 
         depths = inductiva.generative.procedural.adjust_map_level(
             depths, percentile_above_water)

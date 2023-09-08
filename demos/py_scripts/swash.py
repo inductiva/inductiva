@@ -31,7 +31,7 @@ def main(_):
     inductiva.api_url = FLAGS.api_url
     inductiva.working_dir = FLAGS.working_dir
 
-    swash_sim = inductiva.fluids.SWASH()
+    swash_sim = inductiva.simulators.SWASH()
 
     task = swash_sim.run(
         input_dir=FLAGS.sim_dir,

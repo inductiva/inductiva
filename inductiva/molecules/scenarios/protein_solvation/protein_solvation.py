@@ -6,8 +6,8 @@ import os
 import shutil
 
 from inductiva import tasks, resources
-from inductiva.molecules.simulators import GROMACS
-from inductiva.simulation import Simulator
+from inductiva.simulators import GROMACS
+from inductiva.simulators import Simulator
 from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template)
 from inductiva.scenarios import Scenario
@@ -42,6 +42,19 @@ class ProteinSolvation(Scenario):
                                          GROMACS_TEMPLATE_INPUT_DIR)
         self.protein_pdb = files.resolve_path(protein_pdb)
         self.temperature = temperature
+
+    def set_default_output_files(self):
+        """Set the default output files for the Protein Solvation Scenario.
+
+        Instead of downloading the full trajectory, the user can choose
+        to download only the compressed trajectory file. The following files
+        are set as the default ones, and will be the only ones downloaded if
+        the user does not require the full trajectory at task.get_output()."""
+
+        return [
+            "protein.gro", "compressed_trajectory.xtc", "solvated_protein.tpr",
+            "topol.top"
+        ]
 
     def simulate(
             self,
@@ -84,12 +97,14 @@ class ProteinSolvation(Scenario):
         self.integrator = integrator
         self.n_steps_min = n_steps_min
         commands = self.get_commands()
+
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 commands=commands,
                                 run_async=run_async)
 
         task.set_output_class(ProteinSolvationOutput)
+        task.set_default_output_files(self.set_default_output_files())
 
         return task
 

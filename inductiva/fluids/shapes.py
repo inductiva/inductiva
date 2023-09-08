@@ -16,6 +16,11 @@ class BaseShape:
         """Returns the bounding box of the shape."""
         pass
 
+    @abstractmethod
+    def to_dict(self) -> dict:
+        """Returns a dictionary representation of the shape."""
+        pass
+
 
 @dataclass
 class Base2DShape(BaseShape):
@@ -41,6 +46,14 @@ class Rectangle(Base2DShape):
             [self.position[i] + self.dimensions[i] for i in range(2)],
         )
 
+    def to_dict(self) -> dict:
+        """Returns a dictionary representation of the rectangle."""
+        return {
+            "type": "rectangle",
+            "position": self.position,
+            "dimensions": self.dimensions,
+        }
+
 
 @dataclass
 class Circle(Base2DShape):
@@ -60,6 +73,14 @@ class Circle(Base2DShape):
             ],
         )
 
+    def to_dict(self) -> dict:
+        """Returns a dictionary representation of the circle."""
+        return {
+            "type": "circle",
+            "position": self.position,
+            "radius": self.radius,
+        }
+
 
 @dataclass
 class Cube(Base3DShape):
@@ -72,6 +93,14 @@ class Cube(Base3DShape):
             self.position,
             [self.position[i] + self.dimensions[i] for i in range(3)],
         )
+
+    def to_dict(self) -> dict:
+        """Returns a dictionary representation of the cube."""
+        return {
+            "type": "cube",
+            "position": self.position,
+            "dimensions": self.dimensions,
+        }
 
 
 @dataclass
@@ -94,3 +123,12 @@ class Cylinder(Base3DShape):
                 self.position[2] + self.height,
             ],
         )
+
+    def to_dict(self) -> dict:
+        """Returns a dictionary representation of the cylinder."""
+        return {
+            "type": "cylinder",
+            "position": self.position,
+            "radius": self.radius,
+            "height": self.height,
+        }
