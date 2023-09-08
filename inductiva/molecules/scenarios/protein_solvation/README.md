@@ -45,3 +45,31 @@ Moreover, the hardware and interaction are configured with the usual general par
  # Get the simulation output on your local machine.
  output = task.get_output()
  ```
+The last code line downloads the files necessary to render and post-process our simulation.
+
+## Output and Post-processing 
+The simulation output folder contains trajectory data spanning the simulation duration and the protein's topology. These files are necessary to generate an interactive trajectory visualization using [NGLview](https://github.com/nglviewer/nglview). Users have the flexibility to select the protein's representation type, including options to display or hide the backbone, and they can also specify the criteria for visualization selection. You can refer to the [documentation](https://nglviewer.org/ngl/api/manual/usage/selection-language.html) for guidance on creating custom selections according to your preferences.
+
+```python
+ output = task.get_output()
+ output.render_interactive(representation="ribbon", add_backbone=True, selection="protein")
+ ```
+![protein_solvation](https://github.com/inductiva/inductiva/assets/114397668/e9dfe7d9-9c2b-4be4-90c3-0d68a2a7b9fd)
+
+Users also have the option to plot the RMSF (Root Mean Square Fluctuation) over the simulation for each residue within the protein structure. [RMSF](https://userguide.mdanalysis.org/stable/examples/analysis/alignment_and_rms/rmsf.html) measures the extent to which a structure deviates from its average configuration over time, offering insights into the mobility of specific protein residues. 
+
+```python
+ rmsf_values = output.plot_rmsf_per_residue()
+ ```
+<p align="center">
+  <img src="https://github.com/inductiva/inductiva/assets/114397668/811bc191-6944-4b77-a0e2-0ba99b679246" alt="Centered Image">
+</p>
+
+Furthermore, you have the capability to visualize attributes for each amino acid, including metrics like RMSF (Root Mean Square Fluctuation), or any other properties that you compute independently.
+
+```python
+output.render_attribute_per_residue(rmsf_values)
+ ```
+<p align="center">
+  <img src="https://github.com/inductiva/inductiva/assets/114397668/e9bbe012-030b-4e70-8774-fc2ff7bfb8e4" alt="Centered Image">
+</p>
