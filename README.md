@@ -41,6 +41,24 @@ And you are good to go! You can start [exploring our tutorial notebooks](https:/
 **Inductiva API** contains pre-built scenarios that define physical systems of interest ready to simulate. Users can choose some parameters and configure the system according to their needs, run the simulation using the most adequate resources and visualize the results.
 
 
+### Example
+
+Example of how to use a scenario:
+
+```python
+ import inductiva
+
+ # Initialize the scenario
+ scenario = inductiva.molecules.scenarios.ProteinSolvation(
+     protein_pdb = "alanine.pdb"
+     temperature = 300)
+
+ # Run a simulation
+ task = scenario.simulate(simulation_time_ns = 20)
+
+ # Get the simulation output on your local machine.
+ output = task.get_output()
+ ```
 
 ### Available scenarios
 
