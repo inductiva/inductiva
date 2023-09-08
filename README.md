@@ -21,7 +21,7 @@ This offers several distinct advantages:
 On your terminal:
 
 ```
-pip install inductiva
+pip install --upgrade inductiva
 ```
 
 ## API access tokens
