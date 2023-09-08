@@ -62,7 +62,7 @@ Users also have the option to plot the RMSF (Root Mean Square Fluctuation) over 
  rmsf_values = output.plot_rmsf_per_residue()
  ```
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/assets/114397668/811bc191-6944-4b77-a0e2-0ba99b679246" alt="Centered Image">
+  <img src="https://github.com/inductiva/inductiva/assets/114397668/811bc191-6944-4b77-a0e2-0ba99b679246" alt="Centered Image" width="350" height="250">
 </p>
 
 Furthermore, you have the capability to visualize attributes for each amino acid, including metrics like RMSF (Root Mean Square Fluctuation), or any other properties that you compute independently.
@@ -71,5 +71,4 @@ Furthermore, you have the capability to visualize attributes for each amino acid
 output.render_attribute_per_residue(rmsf_values)
  ```
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/assets/114397668/e9bbe012-030b-4e70-8774-fc2ff7bfb8e4" alt="Centered Image">
-</p>
+  <img src="https://github.com/inductiva/inductiva/assets/114397668/e9bbe012-030b-4e70-8774-fc2ff7bfb8e4" alt="Centered Image" width="350" height="250">
