@@ -67,8 +67,19 @@ class ProteinSolvationOutput:
         print(f"Number of trajectory frames: {len(self.universe.trajectory)}")
         return view
 
-    def plot_rmsf_per_residue(self, rmsf_values: np.array):
-        "Plot RMSF values per residue."
+    def plot_rmsf_per_residue(self):
+        """Plot the root mean square fluctuation (RMSF) over a trajectory.  
+
+        It is typically calculated for the alpha carbon atom of each residue. 
+        These atoms make the backbone of the protein.The RMSF is the square root 
+        of the variance of the fluctuation around the average position:
+        &rhoi = √⟨(xi - ⟨xi⟩)²⟩
+        It quantifies how much a structure diverges from the average structure 
+        over time, the RSMF can reveal which areas of the system are the most 
+        mobile. Check 
+        https://userguide.mdanalysis.org/stable/examples/analysis/alignment_and_rms/rmsf.html 
+        for more details."""
+
         rmsf_values = np.load(RMSF_VALUES_FILE)
         # Plot the data
         residue_number = np.arange(len(rmsf_values))
