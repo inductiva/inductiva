@@ -11,10 +11,10 @@ import numpy as np
 
 import inductiva
 
-FULL_TRAJECTORY_FILE = "full_trajectory.trr"
 COMPRESSED_TRAJECTORY_FILE = "compressed_trajectory.xtc"
 PROTEIN_TOPOLOGY_FILE = "protein.gro"
 SYSTEM_TOPOLOGY_FILE = "solvated_protein.tpr"
+RMSF_VALUES_FILE = "rmsf_values.npy"
 
 
 class ProteinSolvationOutput:
@@ -67,45 +67,9 @@ class ProteinSolvationOutput:
         print(f"Number of trajectory frames: {len(self.universe.trajectory)}")
         return view
 
-    def calculate_rmsf_trajectory(self):
-        """Calculate the root mean square fluctuation (RMSF) over a trajectory.  
-
-        It is typically calculated for the alpha carbon atom of each residue. 
-        These atoms make the backbone of the protein.The RMSF is the square root 
-        of the variance of the fluctuation around the average position:
-        &rhoi = √⟨(xi - ⟨xi⟩)²⟩
-        It quantifies how much a structure diverges from the average structure 
-        over time, the RSMF can reveal which areas of the system are the most 
-        mobile. Check 
-        https://userguide.mdanalysis.org/stable/examples/analysis/alignment_and_rms/rmsf.html 
-        for more details.
-
-        Args:
-            nglview_visualization: Whether to return visualization of the 
-            RMSF using nglview or not."""
-        start_time = time.time()
-        topology_path = os.path.join(self.sim_output_dir, SYSTEM_TOPOLOGY_FILE)
-        full_trajectory_path = os.path.join(self.sim_output_dir,
-                                            FULL_TRAJECTORY_FILE)
-        full_precision_universe = mda.Universe(topology_path,
-                                               full_trajectory_path)
-
-        aligned_trajectory_path = os.path.join(self.sim_output_dir,
-                                               "aligned_traj.dcd")
-        inductiva.molecules.scenarios.utils.align_trajectory_to_average(
-            full_precision_universe, aligned_trajectory_path)
-        align_universe = mda.Universe(topology_path, aligned_trajectory_path)
-
-        # Calculate RMSF for carbon alpha atoms
-        c_alphas = align_universe.select_atoms("protein and name CA")
-        rmsf = mda.analysis.rms.RMSF(c_alphas).run()
-        rmsf_values = rmsf.results.rmsf
-        duration = time.time() - start_time
-        print(f"RMSF calculation took {duration:.2f} seconds.")
-        return rmsf_values
-
     def plot_rmsf_per_residue(self, rmsf_values: np.array):
         "Plot RMSF values per residue."
+        rmsf_values = np.load(RMSF_VALUES_FILE)
         # Plot the data
         residue_number = np.arange(len(rmsf_values))
         plt.plot(residue_number, rmsf_values)
