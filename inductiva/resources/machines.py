@@ -57,8 +57,9 @@ class MachineGroup():
         try:
             logging.info("Creating a machine group. "
                          "This may take up to a few minutes.")
-            logging.info("Note that stopping this process will not interrupt "
-                         "the creation of the machine group. Please wait...")
+            logging.info("Note that stopping this local process will not "
+                         "interrupt the creation of the machine group. "
+                         "Please wait...")
             start_time = time.time()
             instance_group = self._api.create_instance_group(
                 body=instance_group_config)

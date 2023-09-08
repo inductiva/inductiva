@@ -299,35 +299,7 @@ inductiva.tasks.list(5, status="success")
 ```
 
 
-## Manage Resources
 
-**Inductiva API** provides a simple way to manage the hardware resources used to run the simulations. Users can launch virtual machines, list the available machines and terminate them. This is a feature available only to admins.
-In this way, users do not need to wait for their simulations in a queue and can have full control of the hardware used.
-
-Start your machines and run your simulations:
-
-```python
-
-import inductiva
-
-machines = inductiva.admin.launch_machines(name="test_machine",
-                                           machine_type="c2-standard-16")
-
-# Example with ProteinSolvation scenario
-scenario = molecules.scenarios.ProteinSolvation(pdb_file, temperature=300)
-
-output = scenario.simulate(simulation_time=10,
-                           nsteps_minim = 5000,
-                           resources=machine)
-```
-
-To launch resources users must select a name for the resources group, the type of machine to be launched and the number of machines, with the available options being the machines available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types).
-
-But do not forget to kill your machines:
-```python
-
-machine.kill()
-```
 
 ## Installation
 
@@ -356,6 +328,6 @@ inductiva.api_key = "YOUR_API_KEY"
 
 ## FAQ:
 
-- [Getting Started]()
-- [Task Management]()
-- [Machine Group]()
+- [Getting Started](#installation)
+- [Task Management](#task-management)
+- [Machine Group](inductiva/resources/README.md)
