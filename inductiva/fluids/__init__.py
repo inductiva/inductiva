@@ -16,7 +16,6 @@ from .scenarios import (
     FluidTank,
     CubicTankOutlet,
     CylindricalTankOutlet,
-    RectangularTankInlet,
     CircularTankInlet,
 )
 from . import scenarios

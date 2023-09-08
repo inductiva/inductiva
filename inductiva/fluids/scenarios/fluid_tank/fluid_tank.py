@@ -1,7 +1,8 @@
 """Fluid tank scenario."""
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from functools import singledispatchmethod
+import json
 import os
 from typing import List, Literal, Optional
 
@@ -9,7 +10,6 @@ from inductiva import tasks, resources
 from inductiva.scenarios import Scenario
 from inductiva.simulators import Simulator
 from inductiva.fluids.shapes import BaseShape
-from inductiva.fluids.shapes import Rectangle
 from inductiva.fluids.shapes import Circle
 from inductiva.fluids.shapes import Cube
 from inductiva.fluids.shapes import Cylinder
@@ -19,10 +19,9 @@ from inductiva.simulators import SPlisHSPlasH
 from inductiva.utils.templates import replace_params_in_template
 from inductiva.fluids.scenarios.fluid_tank.output import FluidTankOutput
 
-from . import mesh_file_utils
-
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_tank_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_tank.json"
+TANK_JSON_FILENAME = "tank.json"
 TANK_MESH_FILENAME = "tank.obj"
 FLUID_MESH_FILENAME = "fluid.obj"
 
@@ -44,23 +43,41 @@ class TimeStep(Enum):
 
 
 # Tank inlets.
-@dataclass
 class BaseTankInlet:
     """Base tank inlet."""
-    fluid_velocity: float = 1
-    position: List[float] = field(default_factory=lambda: [0, 0])
+
+    def __init__(self, fluid_velocity: float):
+        """Initializes a base tank inlet.
+
+        Args:
+            fluid_velocity: Fluid velocity.
+        """
+        self.fluid_velocity = fluid_velocity
+
+    def to_dict(self) -> dict:
+        """Returns a dictionary representation of the inlet."""
+        return {
+            "fluid_velocity": self.fluid_velocity,
+        }
 
 
-@dataclass
-class RectangularTankInlet(BaseTankInlet, Rectangle):
-    """Rectangular tank inlet."""
-    pass
-
-
-@dataclass
-class CircularTankInlet(BaseTankInlet, Circle):
+class CircularTankInlet(BaseTankInlet):
     """Circular tank inlet."""
-    pass
+
+    def __init__(self,
+                 fluid_velocity: float = 1,
+                 position: List[float] = (0, 0),
+                 radius: float = 0.1):
+        """Initializes a circular tank inlet."""
+        self.shape = Circle(radius=radius, position=position)
+        super().__init__(fluid_velocity=fluid_velocity)
+
+    def to_dict(self) -> dict:
+        """Returns a dictionary representation of the inlet."""
+        return {
+            **super().to_dict(),
+            "shape": self.shape.to_dict(),
+        }
 
 
 # Tank outlets.
@@ -90,6 +107,10 @@ class CubicTankOutlet(BaseTankOutlet):
             position=[*top_base_position, -dimensions[2]],
         )
 
+    def to_dict(self) -> dict:
+        """Returns a dictionary representation of the outlet."""
+        return {"shape": self.shape.to_dict()}
+
 
 class CylindricalTankOutlet(BaseTankOutlet):
     """Cylindrical tank outlet."""
@@ -114,6 +135,10 @@ class CylindricalTankOutlet(BaseTankOutlet):
             height=height,
             position=[*top_base_position, -height],
         )
+
+    def to_dict(self) -> dict:
+        """Returns a dictionary representation of the outlet."""
+        return {"shape": self.shape.to_dict()}
 
 
 class FluidTank(Scenario):
@@ -180,7 +205,7 @@ class FluidTank(Scenario):
 
     def simulate(
         self,
-        simulator: Simulator = SPlisHSPlasH(),
+        simulator: Simulator = SPlisHSPlasH("fluid_tank"),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "cpu",
@@ -213,6 +238,7 @@ class FluidTank(Scenario):
             simulator,
             machine_group=machine_group,
             run_async=run_async,
+            particle_radius=self.particle_radius,
             device=device,
             sim_config_filename=self.get_config_filename(simulator),
         )
@@ -238,20 +264,21 @@ class FluidTank(Scenario):
 
         return bounding_box_min, bounding_box_max
 
-    def create_mesh_files(self, output_dir: str):
-        """Creates mesh files for the tank and fluid in the given directory."""
-        mesh_file_utils.create_tank_mesh_file(
-            shape=self.shape,
-            outlet=self.outlet,
-            path=os.path.join(output_dir, TANK_MESH_FILENAME),
-        )
+    def to_dict(self) -> dict:
+        """Returns a dictionary representation of the scenario."""
+        return {
+            "shape": self.shape.to_dict(),
+            "fluid": self.fluid.to_dict(),
+            "fluid_level": self.fluid_level,
+            "inlet": self.inlet.to_dict(),
+            "outlet": self.outlet.to_dict(),
+        }
 
-        mesh_file_utils.create_tank_fluid_mesh_file(
-            shape=self.shape,
-            fluid_level=self.fluid_level,
-            margin=2 * self.particle_radius,
-            path=os.path.join(output_dir, FLUID_MESH_FILENAME),
-        )
+    def create_json_file(self, output_path):
+        """Creates a JSON file with the scenario parameters."""
+
+        with open(output_path, "w", encoding="utf-8") as file:
+            json.dump(self.to_dict(), file)
 
     @singledispatchmethod
     def get_config_filename(self, simulator: Simulator):
@@ -272,12 +299,12 @@ def _(cls, simulator: SPlisHSPlasH) -> str:  # pylint: disable=unused-argument
 def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
-    self.create_mesh_files(input_dir)
+    self.create_json_file(os.path.join(input_dir, TANK_JSON_FILENAME))
 
     bounding_box_min, bounding_box_max = self.get_bounding_box()
     inlet_position = [
-        self.inlet.position[0],
-        self.inlet.position[1],
+        self.inlet.shape.position[0],
+        self.inlet.shape.position[1],
         bounding_box_max[2],
     ]
 
@@ -294,7 +321,7 @@ def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argum
             "fluid_filename": FLUID_MESH_FILENAME,
             "fluid": self.fluid,
             "inlet_position": inlet_position,
-            "inlet_width": int(self.inlet.radius / self.particle_radius),
+            "inlet_width": int(self.inlet.shape.radius / self.particle_radius),
             "inlet_fluid_velocity": self.inlet.fluid_velocity,
             "bounding_box_min": bounding_box_min,
             "bounding_box_max": bounding_box_max,

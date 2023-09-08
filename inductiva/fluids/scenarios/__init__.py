@@ -7,7 +7,6 @@ from .fluid_tank import (
     FluidTank,
     CubicTankOutlet,
     CylindricalTankOutlet,
-    RectangularTankInlet,
     CircularTankInlet,
 )
 from .heat_sink import HeatSink

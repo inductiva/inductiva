@@ -9,8 +9,6 @@ numpy
 scipy
 jinja2
 tqdm
-gmsh
-meshio
 vtk
 xarray
 dask
