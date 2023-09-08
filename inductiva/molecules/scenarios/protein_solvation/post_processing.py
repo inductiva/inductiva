@@ -1,11 +1,9 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
 import pathlib
-import time
 from typing import Literal
 
 import matplotlib.pyplot as plt
-import MDAnalysis as mda
 import nglview as nv
 import numpy as np
 
