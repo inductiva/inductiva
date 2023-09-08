@@ -40,50 +40,38 @@ And you are good to go! You can start [exploring our tutorial notebooks](https:/
 
 **Inductiva API** contains pre-built scenarios that define physical systems of interest ready to simulate. Users can choose some parameters and configure the system according to their needs, run the simulation using the most adequate resources and visualize the results.
 
-Let's go through the currently available scenarios in **Inductiva API**.
 
-### Protein solvation
+### Example
 
-The protein solvation scenario models the dynamics of a protein whose structure is described by a PDB file. The protein is placed in a cubic box filled with water. If the protein has a non-zero electric charge, charged ions are added to the solution to neutralize the system. First, the system undergoes an [energy minimization](https://manual.gromacs.org/current/reference-manual/algorithms/energy-minimization.html) process to eliminate any steric clashes or structural issues within the protein-water system. After this, the position of the atoms in this system is updated according to Newton's equation in discrete time steps. The force that acts upon the particles is computed using standard molecular force fields.
-
-#### Example
-
-Initialize the scenario:
+Example of how to use a scenario:
 
 ```python
-from inductiva import molecules
+ import inductiva
 
-scenario = molecules.scenarios.ProteinSolvation("protein.pdb", temperature=300)
-```
+ # Initialize the scenario
+ scenario = inductiva.molecules.scenarios.ProteinSolvation(
+     protein_pdb = "protein_pdb_file.pdb"
+     temperature = 300)
 
-The user must provide the path for the PDB file corresponding to the protein to be simulated. Additionally, the temperature (in Kelvin) can be specified, which defaults to 300 K.
+ # Run a simulation
+ task = scenario.simulate(simulation_time_ns = 20)
 
-Run the simulation:
+ # Get the simulation output on your local machine.
+ output = task.get_output()
 
-```python
-task = scenario.simulate(simulation_time_ns=10, n_steps_min=5000)
+ # Visualize the protein trajectory
+ output.render_interactive()
+ ```
 
-output = task.get_output()
-```
+This allows us to visualize the protein trajectory.
 
-Users can set the simulation duration (in ns) and the number of steps for the energy minimization.
-
-Visualize the results:
-```python
-view = ouptut.render_interactive(representation="ball+stick", add_backbone=True)
-```
-
-This yields an interactive visualization of the protein's trajectory that can be visualized and manipulated in a standard jupyter notebook. The user can specify the representation used for the protein and choose to add the backbone to the visualization.
-
-![Protein solvation simulation.](resources/media/protein_solvation.gif)
-
-
+![Protein solvation simulation.](resources/media/protein_solvation_big_molecule.gif)
 
 ### Available scenarios
 
 These are currently available scenarios:
 
-- [Coastal Dynamics](inductiva/coastal/README.md)
+- [Coastal Area](inductiva/coastal/README.md#coastal-area-scenario)
 - [Wind Tunnel](inductiva/fluids/scenarios/wind_tunnel/README.md)
 - [Fluid Tank](inductiva/fluids/scenarios/fluid_tank/README.md)
 - [Protein Solvation](inductiva/molecules/scenarios/protein_solvation/README.md)
