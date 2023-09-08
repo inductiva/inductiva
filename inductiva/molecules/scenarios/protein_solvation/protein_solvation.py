@@ -53,7 +53,7 @@ class ProteinSolvation(Scenario):
 
         return [
             "protein.gro", "compressed_trajectory.xtc", "solvated_protein.tpr",
-            "topol.top"
+            "topol.top", "rmsf_values.npy"
         ]
 
     def simulate(
