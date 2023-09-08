@@ -44,7 +44,7 @@ class ProteinSolvation(Scenario):
         self.temperature = temperature
 
     def set_default_output_files(self):
-        """Set the downloadable files as the compressed trajectory adjacent.
+        """Set the default output files for the Protein Solvation Scenario.
 
         Instead of downloading the full trajectory, the user can choose
         to download only the compressed trajectory file. The following files
