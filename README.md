@@ -50,7 +50,7 @@ Example of how to use a scenario:
 
  # Initialize the scenario
  scenario = inductiva.molecules.scenarios.ProteinSolvation(
-     protein_pdb = "alanine.pdb"
+     protein_pdb = "protein_pdb_file.pdb"
      temperature = 300)
 
  # Run a simulation
@@ -58,13 +58,20 @@ Example of how to use a scenario:
 
  # Get the simulation output on your local machine.
  output = task.get_output()
+
+ # Visualize the protein trajectory
+ output.render_interactive()
  ```
+
+This allows us to visualize the protein trajectory.
+
+![Protein solvation simulation.](resources/media/protein_solvation_big_molecule.gif)
 
 ### Available scenarios
 
 These are currently available scenarios:
 
-- [Coastal Dynamics](inductiva/coastal/README.md)
+- [Coastal Area](inductiva/coastal/README.md#coastal-area-scenario)
 - [Wind Tunnel](inductiva/fluids/scenarios/wind_tunnel/README.md)
 - [Fluid Tank](inductiva/fluids/scenarios/fluid_tank/README.md)
 - [Protein Solvation](inductiva/molecules/scenarios/protein_solvation/README.md)
