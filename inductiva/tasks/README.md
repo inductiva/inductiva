@@ -1,18 +1,16 @@
 # Task management
 
 
-### Using the `Task` class
 
-As shown in the [scenarios](../../README.md#scenarios) examples, both the sync and [async](../../README.md#async-api) runs of the scenarios shown above return a `Task` object.
-This object provides methods for managing a specific task submitted to the **Inductiva API**.
-For instance, you can:
+The `Task` class provides methods for managing a specific task submitted to the **Inductiva API**. You get an instance of `Task` everytime you create a simulation. Moreover, you can [retrieve previously created tasks](#retrieving-tasks-from-previous-sessions).
+With a `Task` object, you can:
  * Get its status;
  * Get the machine type where it ran/is running;
  * Kill it if you've changed your mind;
  * Download output files (all of them or only the important ones);
  * Get its execution time.
 
-Check out some example usage of `Task`:
+### Examples:
 
 ```python
 # `scenario` constructed as in the examples above.
@@ -49,8 +47,6 @@ files = outputs_info.contents # List of individual files available.
 
 # Pretty print information on the output archive.
 print(outputs_info)
-# Console logs:
-#
 # Archive size: 1.64 GiB
 # Contents:
 #  Size         Compressed   Name
@@ -64,27 +60,23 @@ print(outputs_info)
 # Download only those you are interested in:
 output_dir = task.download_outputs(
     filenames=["important_file1.txt", "important_file2.txt"])
-# Console logs:
-#
 # 100%|██████████| 4.82M/4.82M [00:00<00:00, 273MiB/s]
 
 # Or all the generated files for archival, without extracting the
 # downloaded zip.
 output_dir = task.download_outputs(uncompress=False)
-# Console logs:
-#
 # 100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]
 ```
 
-### Retrieving tasks from previous sessions
+## Retrieving tasks from previous sessions
 
 A fundamental aspect of the API is its ability to run long tasks asynchronously.
-You can retrieve previously created tasks and reconstruct the `Task` objects  -- the same objects that you get from the call to `scenario.simulate()` -- using the `inductiva.tasks.get()` function.
+You can retrieve previously created tasks and reconstruct the `Task` objects - the same objects that you get from the call to `scenario.simulate()` - using the `inductiva.tasks.get()` function.
 It requires an argument named `last_n`, which specifies the number of most recent tasks submitted to the API to retrieve. It returns a list of `Task` objects so that you can resume manipulating the task and its results.
 Additionally, you can filter tasks by their current status, which allows you to get, for instance, only tasks that failed or only
 tasks that are submitted and not yet started.
 
-#### Examples:
+### Examples:
 
 ```python
 import inductiva
@@ -113,8 +105,6 @@ import inductiva
 
 # list the last 5 tasks that were successful
 inductiva.tasks.list(5, status="success")
-# Console logs:
-#
 #                     ID       Simulator               Status            Submitted              Started        Duration            VM Type
 #  1691150776862178362        openfoam              success     04 Aug, 12:06:17     04 Aug, 12:06:18       0h 1m 53s      c2-standard-8
 #  1691149904961476240        openfoam              success     04 Aug, 11:51:46     04 Aug, 11:51:46       0h 1m 28s      c2-standard-8
