@@ -78,6 +78,17 @@ This yields an interactive visualization of the protein's trajectory that can be
 ![Protein solvation simulation.](resources/media/protein_solvation.gif)
 
 
+
+### Available scenarios
+
+These are currently available scenarios:
+
+- [Coastal Dynamics](inductiva/coastal/README.md)
+- [Wind Tunnel](inductiva/fluids/scenarios/wind_tunnel/README.md)
+- [Fluid Tank](inductiva/fluids/scenarios/fluid_tank/README.md)
+- [Protein Solvation](inductiva/molecules/scenarios/protein_solvation/README.md)
+
+
 ## Simulators
 
 **Inductiva API** has available several open-source simulators ready to use. Users familiar with the simulators can easily start running simulations with their previously prepared simulation configuration files. In this way, they can take advantage of performant hardware to speed up their simulation and exploration.
