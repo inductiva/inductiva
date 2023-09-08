@@ -88,6 +88,7 @@ class ProteinSolvationOutput:
         plt.grid(True)
         plt.show()
 
+        return rmsf_values
 
     def render_attribute_per_residue(
         self,
