@@ -65,7 +65,10 @@ Example of how to use a scenario:
 
 This allows us to visualize the protein trajectory.
 
-![Protein solvation simulation.](resources/media/protein_solvation_big_molecule.gif)
+<div align="center">
+  <img src="resources/media/protein_solvation_big_molecule.gif" alt="Protein solvation simulation." width="300" >
+</div>
+
 
 ### Available scenarios
 
