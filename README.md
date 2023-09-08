@@ -3,11 +3,38 @@
 
 ![linkedin_header](https://user-images.githubusercontent.com/104431973/231184851-0ce34289-593e-4832-aaa2-9aae652113f5.jpg)
 
-# Large scale simulations made simple
+# Inductiva API Python client
 
-**Inductiva API** provides open-source physical simulation from your laptop. With no configuration headaches, users can easily scale simulations to the next level with one line of code.
+Inductiva is a Python package designed for executing large-scale simulations of physical systems directly in the cloud.
 
-Whether you want to simulate pre-build scenarios to solve scientific/engineering problems or you are a power user of a specific open-source simulator, **Inductiva API** is here for you.
+This offers several distinct advantages:
+
+- 🔄 It consolidates various simulation domains, including fluid dynamics, molecular dynamics, plasmas, and structural mechanics, under a single unified entry point.
+- 📦 Eliminates the need to install and manage complex simulation software and corresponding dependencies.
+- 🚀 Allows running hundreds or even thousands of simulations concurrently, with no additional effort.
+- 💽 Automatically optimizes hardware configurations for each type of simulation (e.g., CPU vs. GPU, appropriate number of CPU cores, RAM, etc.).
+- 🐍 You're not limited to a graphical interface or intricate configuration scripts. Instead, you write small Python programs that seamlessly integrate with your existing codebase.
+
+
+## Installation
+
+On your terminal:
+
+```
+pip install inductiva
+```
+
+## API access tokens
+
+Please [request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform)  and add the following line to your code:
+
+```python
+import inductiva
+
+inductiva.api_key = "YOUR_API_KEY"
+```
+
+And you are good to go! You can start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
 
 ## Scenarios
 
@@ -300,31 +327,6 @@ inductiva.tasks.list(5, status="success")
 
 
 
-
-## Installation
-
-It is super simple to start using the API if you are already familiar with Python package management.
-
-One just needs to do
-```
-pip install inductiva
-```
-
-and you are good to go! You are ready to start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
-
-## API access tokens
-
-To use **Inductiva API** you will need an API token. Please request your demo API token via the following Google Form (we will reply to you by email):
-
-[Request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform)
-
-Before running simulations you just need to add the following line and you are good to go:
-
-```python
-import inductiva
-
-inductiva.api_key = "YOUR_API_KEY"
-```
 
 ## FAQ:
 
