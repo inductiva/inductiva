@@ -8,27 +8,37 @@ To initialize the scenario, the user can define the following parameters:
 
 Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in STL or OBJ format. Notice that, the required meshing step will automatically be made before starting the simulation. The meshing is done with the [snappyHexMesh tool](https://www.openfoam.com/documentation/user-guide/4-mesh-generation-and-conversion/4.4-mesh-generation-with-the-snappyhexmesh-utility) of OpenFOAM.
 
+To test this scenario we have available one example of a vehicle geometry in OBJ format - [download it here](/resources/geometry/test_vehicle.obj). The user can also use his own geometry file, as long as it is in STL or OBJ format.
+
 The simulation parameters available for the user to configure are:
 - `num_iterations`: Set the maximum number of iterations for the iterative algorithm to converge.
 - `resolution`: Controls the resolution of the meshing that is done prior to the simulation. The higher the resolution, the finer the meshing. Possibilities: "high", "medium", "low".
 
 Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`, `n_cores`.
-Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in the [Tasks section](../../../../README.md).
+Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in the [Tasks section](inductiva/tasks/README.md).
+
+
+
 
 ### Example:
+
+To run this example download a vehicle geometry in OBJ format from [here](/resources/geometry/test_vehicle.obj) and
+do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
 
 ```python
 import inductiva
 
+inductiva.api_key = "YOUR_API_KEY"
+
 # Initialize the scenario
 scenario = inductiva.fluids.scenarios.WindTunnel(
     flow_velocity=[30, 0, 0],
-    dimensions={"x": [-5, 15], "y": [-5, 5], "z": [0, 8]})
+    domain={"x": [-5, 15], "y": [-5, 5], "z": [0, 8]})
 
 # Run a simulation
 task = scenario.simulate(
-    object_path="f1.obj",
-    num_iterations=1000, resolution=0.5,
+    object_path="test_vehicle.obj",
+    num_iterations=100, resolution="medium",
     run_async=True, n_cores=4)
 
 # Download the simulation output to your local machine.
@@ -75,7 +85,7 @@ pressure_field = output.get_object_pressure_field()
 pressure_field.render_frame()
 ```
 
-<img src="../../../../resources/media/openfoam/default_pressure_field.png" width="400" height="300" />
+<img src="/resources/media/openfoam/default_pressure_field.png" width="400" height="300" />
 
 ```python
 # Get a mesh of the streamlines 
@@ -89,7 +99,7 @@ streamlines.render_frame(physical_field="velocity",
                          save_path="default_streamlines.png")
 ```
 
-<img src="../../../../resources/media/openfoam/default_streamlines.png" width="400" height="300" />
+<img src="/resources/media/openfoam/default_streamlines.png" width="400" height="300" />
 
 
 ```python
@@ -102,7 +112,7 @@ flow_slice.render_frame(physical_field="pressure",
                         save_path="default_flow_slice.png")
 ```
 
-<img src="../../../../resources/media/openfoam/default_flow_slice.png" width="400" height="300" />
+<img src="/resources/media/openfoam/default_flow_slice.png" width="400" height="300" />
 
 ### Example for general Post-processing
 
@@ -117,7 +127,7 @@ pressure_field = output.get_object_pressure_field()
 pressure_field.render_frame(save_path="pressure_field.png")
 ```
 
-<img src="../../../../resources/media/openfoam/pressure_field.png" width="400" height="300" />
+<img src="/resources/media/openfoam/pressure_field.png" width="400" height="300" />
 
 ```python
 # Get the streamlines mesh
@@ -135,7 +145,7 @@ streamlines.render_frame(physical_field="pressure",
                          save_path="streamlines.png")
 ```
 
-<img src="../../../../resources/media/openfoam/streamlines.png" width="400" height="300" />
+<img src="/resources/media/openfoam/streamlines.png" width="400" height="300" />
 
 ```python
 
@@ -149,4 +159,4 @@ flow_slice.render_frame(physical_field="velocity",
                         save_path="flow_slice.png")
 ```
 
-<img src="../../../../resources/media/openfoam/flow_slice.png" width="400" height="300" />
+<img src="/resources/media/openfoam/flow_slice.png" width="400" height="300" />
