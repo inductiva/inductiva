@@ -43,18 +43,18 @@ And you are good to go! You can start [exploring our tutorial notebooks](https:/
 
 ### Example
 
-Example of how to use a scenario:
+To test this scenario we have available one example of a protein PDB file - [download it here](inductiva/resources/alanine.pdb).
 
 ```python
  import inductiva
 
  # Initialize the scenario
  scenario = inductiva.molecules.scenarios.ProteinSolvation(
-     protein_pdb = "protein_pdb_file.pdb"
+     protein_pdb = "protein_pdb_file.pdb",
      temperature = 300)
 
  # Run a simulation
- task = scenario.simulate(simulation_time_ns = 20)
+ task = scenario.simulate(simulation_time_ns = 0.5)
 
  # Get the simulation output on your local machine.
  output = task.get_output()
