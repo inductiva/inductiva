@@ -8,12 +8,17 @@ To initialize the scenario, the user can define the following parameters:
 
 Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in STL or OBJ format. Notice that, the required meshing step will automatically be made before starting the simulation. The meshing is done with the [snappyHexMesh tool](https://www.openfoam.com/documentation/user-guide/4-mesh-generation-and-conversion/4.4-mesh-generation-with-the-snappyhexmesh-utility) of OpenFOAM.
 
+To test this scenario we have made available one example of a vehicle geometry in OBJ format. [Download it from here](../../../../resources/geometry/test_vehicle.obj). The user can also use his own geometry file, as long as it is in STL or OBJ format.
+
 The simulation parameters available for the user to configure are:
 - `num_iterations`: Set the maximum number of iterations for the iterative algorithm to converge.
 - `resolution`: Controls the resolution of the meshing that is done prior to the simulation. The higher the resolution, the finer the meshing. Possibilities: "high", "medium", "low".
 
 Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`, `n_cores`.
 Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in the [Tasks section](../../../../README.md).
+
+
+
 
 ### Example:
 
@@ -23,12 +28,12 @@ import inductiva
 # Initialize the scenario
 scenario = inductiva.fluids.scenarios.WindTunnel(
     flow_velocity=[30, 0, 0],
-    dimensions={"x": [-5, 15], "y": [-5, 5], "z": [0, 8]})
+    domain={"x": [-5, 15], "y": [-5, 5], "z": [0, 8]})
 
 # Run a simulation
 task = scenario.simulate(
-    object_path="f1.obj",
-    num_iterations=1000, resolution=0.5,
+    object_path="test_vehicle.obj",
+    num_iterations=100, resolution="medium",
     run_async=True, n_cores=4)
 
 # Download the simulation output to your local machine.
