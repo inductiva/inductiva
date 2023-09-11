@@ -42,8 +42,9 @@ class ProteinSolvationOutput:
                                        COMPRESSED_TRAJECTORY_FILE)
 
         if self.universe is None:
-            self.universe = inductiva.molecules.scenarios.utils.unwrap_trajectory(
-                topology_path, trajectory_path)
+            self.universe = \
+                inductiva.molecules.scenarios.utils.unwrap_trajectory(
+                    topology_path, trajectory_path)
 
     def render_interactive(self,
                            representation: Literal["cartoon", "ball+stick",
