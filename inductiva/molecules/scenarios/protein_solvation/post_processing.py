@@ -5,13 +5,13 @@ from typing import Literal
 
 import matplotlib.pyplot as plt
 import numpy as np
-
 try:
     import nglview as nv
 except ImportError:
     nv = None
 
 import inductiva
+from inductiva.utils import optional_deps
 
 COMPRESSED_TRAJECTORY_FILE = "compressed_trajectory.xtc"
 PROTEIN_TOPOLOGY_FILE = "protein.gro"
@@ -36,6 +36,7 @@ class ProteinSolvationOutput:
         # universe will be loaded only when needed
         self.universe = None
 
+    @optional_deps.needs_molecolules_extra_deps
     def _load_universe(self):
         topology_path = os.path.join(self.sim_output_dir, PROTEIN_TOPOLOGY_FILE)
         trajectory_path = os.path.join(self.sim_output_dir,
@@ -46,6 +47,7 @@ class ProteinSolvationOutput:
                 inductiva.molecules.scenarios.utils.unwrap_trajectory(
                     topology_path, trajectory_path)
 
+    @optional_deps.needs_molecolules_extra_deps
     def render_interactive(self,
                            representation: Literal["cartoon", "ball+stick",
                                                    "line", "point", "surface",
@@ -64,9 +66,6 @@ class ProteinSolvationOutput:
             visualization.
             """
         self._load_universe()
-
-        if nv is None:
-            raise RuntimeError("NGLView is not installed.")
 
         view = nv.show_mdanalysis(self.universe)
         view.add_representation(representation, selection=selection)
@@ -106,6 +105,7 @@ class ProteinSolvationOutput:
 
         return rmsf_values
 
+    @optional_deps.needs_molecolules_extra_deps
     def render_attribute_per_residue(
         self,
         residue_attributes: np.ndarray,
@@ -119,8 +119,6 @@ class ProteinSolvationOutput:
             visualization.
             """
         self._load_universe()
-        if nv is None:
-            raise RuntimeError("NGLView is not installed.")
 
         self.universe.add_TopologyAttr("tempfactors")
         protein = self.universe.select_atoms("protein")

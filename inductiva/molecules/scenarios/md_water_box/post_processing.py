@@ -8,6 +8,8 @@ except ImportError:
 from pathlib import Path
 from ..utils import unwrap_trajectory
 
+from inductiva.utils import optional_deps
+
 
 class MDWaterBoxOutput:
     """Post process the simulation output of a MDWaterBox scenario."""
@@ -24,13 +26,12 @@ class MDWaterBoxOutput:
 
         self.sim_output_dir = sim_output_path
 
+    @optional_deps.needs_molecolules_extra_deps
     def render_interactive(self, use_compressed_trajectory: bool = False):
         """Render the simulation outputs in an interactive visualization.
         Args:
             use_compressed_trajectory: Whether to use the compressed trajectory
             or the full precision trajectory."""
-        if nv is None:
-            raise RuntimeError("NGLView is not installed.")
 
         topology = os.path.join(self.sim_output_dir, "eql.tpr")
         if use_compressed_trajectory:

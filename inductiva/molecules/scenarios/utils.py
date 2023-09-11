@@ -8,20 +8,16 @@ except ImportError:
     transformations = None
     align = None
 
-
-def _check_mdanalysis() -> None:
-    if mda is None or transformations is None or align is None:
-        raise ImportError("MDAnalysis is not installed.")
+from inductiva.utils import optional_deps
 
 
+@optional_deps.needs_molecolules_extra_deps
 def unwrap_trajectory(topology, trajectory):
     """Unwrap visualization of the trajectory to deal with
     Periodic Boundary Conditions.
     Args:
         topology: Path to the topology file.
         trajectory: Path to the trajectory file."""
-    _check_mdanalysis()
-
     universe = mda.Universe(topology, trajectory, guess_bonds=True)
     atoms = universe.atoms
     transformation = transformations.unwrap(atoms)
@@ -29,13 +25,12 @@ def unwrap_trajectory(topology, trajectory):
     return universe
 
 
+@optional_deps.needs_molecolules_extra_deps
 def align_trajectory_to_average(universe, trajectory_output_path):
     """Align the trajectory to the average structure.
     Args:
         universe: The universe MDAnalysis object.
         trajectory_output_path: Path to the aligned trajectory file."""
-    _check_mdanalysis()
-
     average = align.AverageStructure(universe,
                                      universe,
                                      select="protein and name CA",
