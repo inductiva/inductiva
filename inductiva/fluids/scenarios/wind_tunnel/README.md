@@ -22,10 +22,13 @@ Launching a simulation returns a task object, which can be used to verify the st
 
 ### Example:
 
-Download a vehicle geometry in OBJ format from [here](../../../../resources/geometry/test_vehicle.obj).
+To run this example download a vehicle geometry in OBJ format from [here](../../../../resources/geometry/test_vehicle.obj) and
+do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
 
 ```python
 import inductiva
+
+inductiva.api_key = "YOUR_API_KEY"
 
 # Initialize the scenario
 scenario = inductiva.fluids.scenarios.WindTunnel(
