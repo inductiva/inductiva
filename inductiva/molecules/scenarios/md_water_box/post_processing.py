@@ -1,6 +1,10 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
-import nglview as nv
+try:
+    import nglview as nv
+except ImportError:
+    nv = None
+
 from pathlib import Path
 from ..utils import unwrap_trajectory
 
@@ -22,9 +26,12 @@ class MDWaterBoxOutput:
 
     def render_interactive(self, use_compressed_trajectory: bool = False):
         """Render the simulation outputs in an interactive visualization.
-        Args: 
+        Args:
             use_compressed_trajectory: Whether to use the compressed trajectory
             or the full precision trajectory."""
+        if nv is None:
+            raise RuntimeError("NGLView is not installed.")
+
         topology = os.path.join(self.sim_output_dir, "eql.tpr")
         if use_compressed_trajectory:
             trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")
