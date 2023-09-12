@@ -66,17 +66,17 @@ Example of how to use a scenario:
 This allows us to visualize the protein trajectory.
 
 <p align="center">
-  <img src="resources/media/protein_solvation_big_molecule.gif" alt="Protein solvation simulation" width="350">
+  <img src="https://github.com/inductiva/inductiva/blob/main/resources/media/protein_solvation_big_molecule.gif?raw=True" alt="Protein solvation simulation" width="350">
 </p>
 
 ### Available scenarios
 
-These are currently available scenarios:
+These are the currently available scenarios:
 
-- [Coastal Area](inductiva/coastal/README.md#coastal-area-scenario)
-- [Wind Tunnel](inductiva/fluids/scenarios/wind_tunnel/README.md)
-- [Fluid Tank](inductiva/fluids/scenarios/fluid_tank/README.md)
-- [Protein Solvation](inductiva/molecules/scenarios/protein_solvation/README.md)
+- [Coastal Area](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal)
+- [Wind Tunnel](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/scenarios/wind_tunnel)
+- [Fluid Tank](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/scenarios/fluid_tank)
+- [Protein Solvation](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/scenarios/protein_solvation)
 
 
 ## Simulators
@@ -164,6 +164,5 @@ All of the simulations will be launched in one go. The user can check the status
 
 ## FAQ:
 
-- [Getting Started](#installation)
-- [Task Management](inductiva/tasks/README.md)
-- [Machine Group](inductiva/resources/README.md)
+- [Task Management](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks)
+- [Machine Group](https://github.com/inductiva/inductiva/tree/main/inductiva/resources)
