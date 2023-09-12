@@ -327,7 +327,7 @@ class Bathymetry:
         x_resolution: float = 10,
         y_resolution: float = 10,
         threshold_distance: float = 20,
-    ):
+    ) -> Union["matplotlib.axes.Axes", None]:
         """Plots the bathymetry.
 
         The bathymetry is represented as a 2D map of depths, with the x and y

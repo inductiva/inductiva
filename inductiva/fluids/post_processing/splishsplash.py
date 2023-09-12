@@ -46,7 +46,7 @@ def convert_vtk_data_dir_to_netcdf(
         xr_dataset.to_netcdf(os.path.join(netcdf_data_dir, f"{file_stem}.nc"))
 
 
-def read_vtk_file_to_xr_dataset(file_path: str, time: float):
+def read_vtk_file_to_xr_dataset(file_path: str, time: float) -> "xr.Dataset":
     """Reads a single simulation output file to an xarray Dataset.
 
     Args:

@@ -30,8 +30,10 @@ except ImportError:
 
 try:
     import pyvista as pv
+    import xarray as xr
 except ImportError:
     pv = None
+    xr = None
 
 from inductiva.utils import files, optional_deps
 import threading
@@ -226,7 +228,7 @@ def create_frame_from_vtk(frame_path: str,
 
 @optional_deps.needs_fluids_extra_deps
 def create_2d_scatter_plot(
-    xr_dataset,
+    xr_dataset: "xr.Dataset",
     x_var: str,
     y_var: str,
     image_path: str,
@@ -278,7 +280,7 @@ def create_2d_scatter_plot(
 
 @optional_deps.needs_fluids_extra_deps
 def create_3d_scatter_plot(
-    xr_dataset,
+    xr_dataset: "xr.Dataset",
     x_var: str,
     y_var: str,
     z_var: str,
@@ -331,7 +333,7 @@ def create_3d_scatter_plot(
 
 @optional_deps.needs_fluids_extra_deps
 def create_2d_scatter_plot_movie(
-    xr_dataset,
+    xr_dataset: "xr.Dataset",
     iter_var: str,
     x_var: str,
     y_var: str,
@@ -382,7 +384,7 @@ def create_2d_scatter_plot_movie(
 
 @optional_deps.needs_fluids_extra_deps
 def create_3d_scatter_plot_movie(
-    xr_dataset,
+    xr_dataset: "xr.Dataset",
     iter_var: str,
     x_var: str,
     y_var: str,
@@ -435,7 +437,7 @@ def create_3d_scatter_plot_movie(
 
 @optional_deps.needs_fluids_extra_deps
 def create_color_plot(
-    xr_data_array,
+    xr_data_array: "xr.DataArray",
     image_path: str,
     x_limits: Optional[List[float]] = None,
     y_limits: Optional[List[float]] = None,
@@ -475,7 +477,7 @@ def create_color_plot(
 
 @optional_deps.needs_fluids_extra_deps
 def create_color_plot_movie(
-    xr_data_array,
+    xr_data_array: "xr.DataArray",
     iter_var: str,
     movie_path: str,
     movie_fps: int = 10,
