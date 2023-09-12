@@ -31,16 +31,20 @@ Moreover, the hardware and interaction are configured with the usual general par
 
 ### Example
 
+To test this scenario we have available one example of a protein PDB file - [download it here](inductiva/resources/alanine.pdb).
+
 ```python
  import inductiva
 
+inductiva.api_key = "YOUR_API_KEY"
+
  # Initialize the scenario
  scenario = inductiva.molecules.scenarios.ProteinSolvation(
-     protein_pdb = "alanine.pdb"
+     protein_pdb = "alanine.pdb",
      temperature = 300)
 
  # Run a simulation
- task = scenario.simulate(simulation_time_ns = 20)
+ task = scenario.simulate(simulation_time_ns = 0.5)
 
  # Get the simulation output on your local machine.
  output = task.get_output()
