@@ -2,14 +2,11 @@
 
 Example usage, e.g., to check if numpy is installed:
 
-def _check_numpy():
-    import numpy
-
 extra_msg = "You can install it with `pip install numpy`."
 
 needs_numpy = functools.partial(
     _needs_optional_deps,
-    _check_numpy,
+    ["numpy"],
     extra_msg,
 )
 
@@ -19,48 +16,48 @@ def load_from_np():
     ...
 """
 
+import importlib
 import functools
 
 
-def _needs_optional_deps(check_fn, extra_info, func):
+def _needs_optional_deps(module_names, extra_msg, func):
     """Decorator to check if optional dependencies are installed."""
 
+    @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        try:
-            check_fn()
-        except ImportError as e:
-            msg = (f"{str(e)}, required to use function "
-                   f"'{func.__qualname__}'.")
+        missing_imports = []
 
-            if extra_info:
-                msg += f" {extra_info}"
+        for module_name in module_names:
+            try:
+                importlib.import_module(module_name)
+            except ImportError:
+                missing_imports.append(module_name)
 
-            raise RuntimeError(msg) from e
+        if missing_imports:
+            missing_imports_quoted = [f"'{m}'" for m in missing_imports]
+            missing_imports_str = ", ".join(missing_imports_quoted)
+
+            msg = (f"Dependencies required to use function "
+                   f"'{func.__qualname__}' missing: {missing_imports_str}.")
+
+            if extra_msg:
+                msg += f" {extra_msg}"
+
+            raise RuntimeError(msg)
 
         return func(*args, **kwargs)
 
     return wrapper
 
 
-def _check_molecules_optional_deps():
-    # pylint: disable=import-outside-toplevel
-    import MDAnalysis as mda
-    import nglview as nv
-
-    # unused
-    del mda
-    del nv
-    # pylint: enable=import-outside-toplevel
-
-
 molecules_missing_deps_msg = (
-    "You can install this and other missing dependencies for 'molecules'"
+    "You can install this and other missing dependencies for 'molecules' "
     "with `pip install 'inductiva[molecules_extra]'`.")
 
 # Apply the two first arguments to _needs_optional_deps function, creating
 # a new decorator function with those arguments already set.
-needs_molecolules_extra_deps = functools.partial(
+needs_molecules_extra_deps = functools.partial(
     _needs_optional_deps,
-    _check_molecules_optional_deps,
+    ["MDAnalysis", "nglview"],
     molecules_missing_deps_msg,
 )

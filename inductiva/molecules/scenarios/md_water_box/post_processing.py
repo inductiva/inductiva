@@ -26,7 +26,7 @@ class MDWaterBoxOutput:
 
         self.sim_output_dir = sim_output_path
 
-    @optional_deps.needs_molecolules_extra_deps
+    @optional_deps.needs_molecules_extra_deps
     def render_interactive(self, use_compressed_trajectory: bool = False):
         """Render the simulation outputs in an interactive visualization.
         Args:

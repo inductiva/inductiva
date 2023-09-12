@@ -11,7 +11,7 @@ except ImportError:
 from inductiva.utils import optional_deps
 
 
-@optional_deps.needs_molecolules_extra_deps
+@optional_deps.needs_molecules_extra_deps
 def unwrap_trajectory(topology, trajectory):
     """Unwrap visualization of the trajectory to deal with
     Periodic Boundary Conditions.
@@ -25,7 +25,7 @@ def unwrap_trajectory(topology, trajectory):
     return universe
 
 
-@optional_deps.needs_molecolules_extra_deps
+@optional_deps.needs_molecules_extra_deps
 def align_trajectory_to_average(universe, trajectory_output_path):
     """Align the trajectory to the average structure.
     Args:

@@ -36,7 +36,7 @@ class ProteinSolvationOutput:
         # universe will be loaded only when needed
         self.universe = None
 
-    @optional_deps.needs_molecolules_extra_deps
+    @optional_deps.needs_molecules_extra_deps
     def _load_universe(self):
         topology_path = os.path.join(self.sim_output_dir, PROTEIN_TOPOLOGY_FILE)
         trajectory_path = os.path.join(self.sim_output_dir,
@@ -47,7 +47,7 @@ class ProteinSolvationOutput:
                 inductiva.molecules.scenarios.utils.unwrap_trajectory(
                     topology_path, trajectory_path)
 
-    @optional_deps.needs_molecolules_extra_deps
+    @optional_deps.needs_molecules_extra_deps
     def render_interactive(self,
                            representation: Literal["cartoon", "ball+stick",
                                                    "line", "point", "surface",
@@ -105,7 +105,7 @@ class ProteinSolvationOutput:
 
         return rmsf_values
 
-    @optional_deps.needs_molecolules_extra_deps
+    @optional_deps.needs_molecules_extra_deps
     def render_attribute_per_residue(
         self,
         residue_attributes: np.ndarray,
