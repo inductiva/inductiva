@@ -51,7 +51,7 @@ def _needs_optional_deps(module_names, extra_msg, func):
 
 
 molecules_missing_deps_msg = (
-    "You can install this and other missing dependencies for 'molecules' "
+    "You can install the missing dependencies for 'molecules' "
     "with `pip install 'inductiva[molecules_extra]'`.")
 
 # Apply the two first arguments to _needs_optional_deps function, creating
