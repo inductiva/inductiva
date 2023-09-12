@@ -36,6 +36,8 @@ To test this scenario we have available one example of a protein PDB file - [dow
 ```python
  import inductiva
 
+inductiva.api_key = "YOUR_API_KEY"
+
  # Initialize the scenario
  scenario = inductiva.molecules.scenarios.ProteinSolvation(
      protein_pdb = "alanine.pdb",

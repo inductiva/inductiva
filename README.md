@@ -48,9 +48,11 @@ To test this scenario we have available one example of a protein PDB file - [dow
 ```python
  import inductiva
 
+inductiva.api_key = "YOUR_API_KEY"
+
  # Initialize the scenario
  scenario = inductiva.molecules.scenarios.ProteinSolvation(
-     protein_pdb = "protein_pdb_file.pdb",
+     protein_pdb = "alanine.pdb",
      temperature = 300)
 
  # Run a simulation
@@ -65,7 +67,7 @@ To test this scenario we have available one example of a protein PDB file - [dow
 
 This allows us to visualize the protein trajectory.
 
-![Protein solvation simulation.](resources/media/protein_solvation_big_molecule.gif)
+![Protein solvation simulation.](resources/media/alanine_traject.gif)
 
 ### Available scenarios
 
