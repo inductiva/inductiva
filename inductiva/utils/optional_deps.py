@@ -65,13 +65,13 @@ needs_molecules_extra_deps = functools.partial(
 
 needs_fluids_extra_deps = functools.partial(
     _needs_optional_deps,
-    ["pyvista", "vtk", "xarray", "dask", "imageio", "matplotlib"],
+    ["pyvista", "vtk", "scipy", "xarray", "dask", "imageio", "matplotlib"],
     _missing_deps_msg("fluids"),
 )
 
 needs_coastal_extra_deps = functools.partial(
     _needs_optional_deps,
-    ["utm", "imageio", "matplotlib"],
+    ["utm", "imageio", "scipy", "matplotlib"],
     _missing_deps_msg("coastal"),
 )
 
