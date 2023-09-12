@@ -17,7 +17,6 @@ except ImportError:
     np = None
     _vtk_data_to_numpy = None
 
-
 from inductiva.utils.files import get_sorted_files
 
 

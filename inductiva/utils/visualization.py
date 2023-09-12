@@ -30,11 +30,8 @@ except ImportError:
 
 try:
     import pyvista as pv
-    import xarray as xr
 except ImportError:
-    xr = None
     pv = None
-
 
 from inductiva.utils import files, optional_deps
 import threading
@@ -497,7 +494,7 @@ def create_color_plot_movie(
         for i, (_, data_array_i) in tqdm(enumerate(var_iterator),
                                          total=len(var_iterator)):
             create_color_plot(
-                data_array=data_array_i,
+                xr_data_array=data_array_i,
                 x_limits=x_limits,
                 y_limits=y_limits,
                 color_limits=color_limits,
