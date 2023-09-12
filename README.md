@@ -21,7 +21,7 @@ This offers several distinct advantages:
 On your terminal:
 
 ```
-pip install inductiva
+pip install --upgrade inductiva
 ```
 
 ## API access tokens
@@ -67,16 +67,18 @@ inductiva.api_key = "YOUR_API_KEY"
 
 This allows us to visualize the protein trajectory.
 
-![Protein solvation simulation.](resources/media/alanine_traject.gif)
+<p align="center">
+  <img src="https://github.com/inductiva/inductiva/blob/main/resources/media/alanine_traject.gif?raw=True" alt="Protein solvation simulation" width="350">
+</p>
 
 ### Available scenarios
 
-These are currently available scenarios:
+These are the currently available scenarios:
 
-- [Coastal Area](inductiva/coastal/README.md#coastal-area-scenario)
-- [Wind Tunnel](inductiva/fluids/scenarios/wind_tunnel/README.md)
-- [Fluid Tank](inductiva/fluids/scenarios/fluid_tank/README.md)
-- [Protein Solvation](inductiva/molecules/scenarios/protein_solvation/README.md)
+- [Coastal Area](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal)
+- [Wind Tunnel](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/scenarios/wind_tunnel)
+- [Fluid Tank](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/scenarios/fluid_tank)
+- [Protein Solvation](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/scenarios/protein_solvation)
 
 
 ## Simulators
@@ -164,6 +166,5 @@ All of the simulations will be launched in one go. The user can check the status
 
 ## FAQ:
 
-- [Getting Started](#installation)
-- [Task Management](inductiva/tasks/README.md)
-- [Machine Group](inductiva/resources/README.md)
+- [Task Management](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks)
+- [Machine Group](https://github.com/inductiva/inductiva/tree/main/inductiva/resources)

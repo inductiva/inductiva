@@ -192,7 +192,7 @@ class Task:
 
     def get_output(
         self,
-        all_files: bool = True,
+        all_files: bool = False,
         output_dir: Optional[pathlib.Path] = None,
         uncompress: bool = True,
         rm_downloaded_zip_archive: bool = True,
