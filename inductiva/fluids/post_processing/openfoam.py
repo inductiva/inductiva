@@ -14,11 +14,16 @@ from enum import Enum
 from typing import Literal
 import pathlib
 import glob
+
 from absl import logging
 
-import pyvista as pv
+try:
+    import pyvista as pv
+except ImportError:
+    pv = None
 
 from inductiva import types, utils
+from inductiva.utils import optional_deps
 
 
 class SteadyStateOutput:
@@ -82,6 +87,7 @@ class SteadyStateOutput:
 
         return last_iteration
 
+    @optional_deps.needs_fluids_extra_deps
     def get_output_mesh(self):
         """Get domain and object mesh info at the steady-state."""
 
@@ -106,6 +112,7 @@ class SteadyStateOutput:
 
         return domain_mesh, object_mesh
 
+    @optional_deps.needs_fluids_extra_deps
     def get_object_pressure_field(self, save_path: types.Path = None):
         """Get a pressure scalar field over mesh points of the object.
 
@@ -132,6 +139,7 @@ class SteadyStateOutput:
 
         return pressure_field
 
+    @optional_deps.needs_fluids_extra_deps
     def get_streamlines(self,
                         max_time: float = 100,
                         n_points: int = 100,
@@ -179,6 +187,7 @@ class SteadyStateOutput:
 
         return Streamlines(object_mesh, streamlines_mesh)
 
+    @optional_deps.needs_fluids_extra_deps
     def get_flow_slice(self,
                        plane: Literal["xy", "xz", "yz"] = "xz",
                        origin: tuple = (0, 0, 0),

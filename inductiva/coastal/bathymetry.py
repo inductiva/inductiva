@@ -5,11 +5,16 @@ from typing import Optional, Sequence, Tuple, Union
 
 from absl import logging
 
-import matplotlib
 import numpy as np
-import utm
+try:
+    import matplotlib
+    import utm
+except ImportError:
+    matplotlib = None
+    utm = None
 
 import inductiva
+from inductiva.utils import optional_deps
 
 
 class Bathymetry:
@@ -25,6 +30,7 @@ class Bathymetry:
       depths are defined, in meters.
     """
 
+    @optional_deps.needs_coastal_extra_deps
     def __init__(
         self,
         depths: np.ndarray,
@@ -44,6 +50,7 @@ class Bathymetry:
         self.y = y
 
     @classmethod
+    @optional_deps.needs_coastal_extra_deps
     def from_bot_file(
         cls,
         bot_file_path: str,
@@ -72,6 +79,7 @@ class Bathymetry:
         return cls(depths.flatten(), x.flatten(), y.flatten())
 
     @classmethod
+    @optional_deps.needs_coastal_extra_deps
     def from_ascii_xyz_file(
         cls,
         ascii_xyz_file_path: str,
@@ -126,6 +134,7 @@ class Bathymetry:
         return cls(depths, x, y)
 
     @classmethod
+    @optional_deps.needs_coastal_extra_deps
     def from_random_depths(
         cls,
         x_range: Sequence[float],
@@ -190,6 +199,7 @@ class Bathymetry:
 
         return cls(depths.flatten(), x.flatten(), y.flatten())
 
+    @optional_deps.needs_coastal_extra_deps
     def to_bot_file(
         self,
         bot_file_path: str,
@@ -213,27 +223,32 @@ class Bathymetry:
         np.savetxt(bot_file_path, depths_grid)
 
     @property
+    @optional_deps.needs_coastal_extra_deps
     def x_range(self) -> Tuple[float]:
         """Returns the range of x values."""
 
         return (np.min(self.x), np.max(self.x))
 
     @property
+    @optional_deps.needs_coastal_extra_deps
     def y_range(self) -> Tuple[float]:
         """Returns the range of y values."""
 
         return (np.min(self.y), np.max(self.y))
 
+    @optional_deps.needs_coastal_extra_deps
     def x_ptp(self) -> float:
         """Returns the peak-to-peak range (max - min) of x values."""
 
         return np.ptp(self.x)
 
+    @optional_deps.needs_coastal_extra_deps
     def y_ptp(self) -> float:
         """Returns the peak-to-peak range (max - min) of y values."""
 
         return np.ptp(self.y)
 
+    @optional_deps.needs_coastal_extra_deps
     def x_uniques(self, sort: bool = False) -> np.ndarray:
         """Returns the unique x values.
         
@@ -245,6 +260,7 @@ class Bathymetry:
             x_uniques = np.sort(x_uniques)
         return x_uniques
 
+    @optional_deps.needs_coastal_extra_deps
     def y_uniques(self, sort: bool = False) -> np.ndarray:
         """Returns the unique y values.
         
@@ -256,6 +272,7 @@ class Bathymetry:
             y_uniques = np.sort(y_uniques)
         return y_uniques
 
+    @optional_deps.needs_coastal_extra_deps
     def crop(self,
              x_range: Sequence[float],
              y_range: Sequence[float],
@@ -291,6 +308,7 @@ class Bathymetry:
             y=y,
         )
 
+    @optional_deps.needs_coastal_extra_deps
     def is_uniform_grid(self) -> bool:
         """Determines whether the bathymetry is defined on a uniform grid."""
 
@@ -300,6 +318,7 @@ class Bathymetry:
         return (np.unique(x_uniques_diffs.round(decimals=2)).size == 1 and
                 np.unique(y_uniques_diffs.round(decimals=2)).size == 1)
 
+    @optional_deps.needs_coastal_extra_deps
     def plot(
         self,
         cmap: Optional[str] = None,
@@ -308,7 +327,7 @@ class Bathymetry:
         x_resolution: float = 10,
         y_resolution: float = 10,
         threshold_distance: float = 20,
-    ) -> Union[matplotlib.axes.Axes, None]:
+    ) -> Union["matplotlib.axes.Axes", None]:
         """Plots the bathymetry.
 
         The bathymetry is represented as a 2D map of depths, with the x and y
@@ -395,6 +414,7 @@ class Bathymetry:
         else:
             return ax
 
+    @optional_deps.needs_coastal_extra_deps
     def to_uniform_grid(
         self,
         x_resolution: float = 2,
@@ -424,6 +444,7 @@ class Bathymetry:
                           x=x_grid.flatten(),
                           y=y_grid.flatten())
 
+    @optional_deps.needs_coastal_extra_deps
     def _interpolate_to_uniform_grid(
         self,
         x_resolution: float,

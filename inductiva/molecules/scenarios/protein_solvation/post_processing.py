@@ -3,12 +3,13 @@ import os
 import pathlib
 from typing import Literal
 
-import matplotlib.pyplot as plt
 import numpy as np
 try:
+    import matplotlib.pyplot as plt
     import nglview as nv
 except ImportError:
     nv = None
+    plt = None
 
 import inductiva
 from inductiva.utils import optional_deps
@@ -80,6 +81,7 @@ class ProteinSolvationOutput:
         print(f"Number of trajectory frames: {len(self.universe.trajectory)}")
         return view
 
+    @optional_deps.needs_molecules_extra_deps
     def plot_rmsf_per_residue(self):
         """Plot the root mean square fluctuation (RMSF) over a trajectory.
 

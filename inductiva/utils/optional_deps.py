@@ -50,14 +50,33 @@ def _needs_optional_deps(module_names, extra_msg, func):
     return wrapper
 
 
-molecules_missing_deps_msg = (
-    "You can install the missing dependencies for 'molecules' "
-    "with `pip install 'inductiva[molecules_extra]'`.")
+def _missing_deps_msg(extra_deps_name):
+    return (f"You can install the missing dependencies for '{extra_deps_name}' "
+            f"with `pip install 'inductiva[{extra_deps_name}_extra]'`.")
+
 
 # Apply the two first arguments to _needs_optional_deps function, creating
 # a new decorator function with those arguments already set.
 needs_molecules_extra_deps = functools.partial(
     _needs_optional_deps,
-    ["MDAnalysis", "nglview"],
-    molecules_missing_deps_msg,
+    ["MDAnalysis", "nglview", "imageio", "matplotlib"],
+    _missing_deps_msg("molecules"),
+)
+
+needs_fluids_extra_deps = functools.partial(
+    _needs_optional_deps,
+    ["pyvista", "vtk", "xarray", "dask", "imageio", "matplotlib"],
+    _missing_deps_msg("fluids"),
+)
+
+needs_coastal_extra_deps = functools.partial(
+    _needs_optional_deps,
+    ["utm", "imageio", "matplotlib"],
+    _missing_deps_msg("coastal"),
+)
+
+needs_common_extra_deps = functools.partial(
+    _needs_optional_deps,
+    ["imageio", "matplotlib"],
+    _missing_deps_msg("common"),
 )

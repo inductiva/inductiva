@@ -18,10 +18,16 @@ This offers several distinct advantages:
 
 ## Installation
 
-On your terminal:
+Inductiva package is simple to install, just run on your terminal:
 
 ```
 pip install --upgrade inductiva
+```
+
+These will provide the default installation of the package, that allow you to submit jobs, control machines and run simulations. To use the visualization and post-processing tools, you need to install extra dependencies depending on your area: `molecules_extra`, `fluids_extra` or `coastal_extra`. For example, for molecules:
+
+```
+pip install inductiva[molecules_extra]
 ```
 
 ## API access tokens
