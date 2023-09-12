@@ -1,8 +1,14 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
-import nglview as nv
+try:
+    import nglview as nv
+except ImportError:
+    nv = None
+
 from pathlib import Path
 from ..utils import unwrap_trajectory
+
+from inductiva.utils import optional_deps
 
 
 class MDWaterBoxOutput:
@@ -20,11 +26,13 @@ class MDWaterBoxOutput:
 
         self.sim_output_dir = sim_output_path
 
+    @optional_deps.needs_molecules_extra_deps
     def render_interactive(self, use_compressed_trajectory: bool = False):
         """Render the simulation outputs in an interactive visualization.
-        Args: 
+        Args:
             use_compressed_trajectory: Whether to use the compressed trajectory
             or the full precision trajectory."""
+
         topology = os.path.join(self.sim_output_dir, "eql.tpr")
         if use_compressed_trajectory:
             trajectory = os.path.join(self.sim_output_dir, "trajectory.xtc")

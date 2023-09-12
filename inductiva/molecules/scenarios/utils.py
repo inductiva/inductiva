@@ -1,11 +1,19 @@
 """Tools to analyze molecular dynamics simulations."""
-import MDAnalysis as mda
-from MDAnalysis import transformations
-from MDAnalysis.analysis import align
+try:
+    import MDAnalysis as mda
+    from MDAnalysis import transformations
+    from MDAnalysis.analysis import align
+except ImportError:
+    mda = None
+    transformations = None
+    align = None
+
+from inductiva.utils import optional_deps
 
 
+@optional_deps.needs_molecules_extra_deps
 def unwrap_trajectory(topology, trajectory):
-    """Unwrap visualization of the trajectory to deal with 
+    """Unwrap visualization of the trajectory to deal with
     Periodic Boundary Conditions.
     Args:
         topology: Path to the topology file.
@@ -17,8 +25,9 @@ def unwrap_trajectory(topology, trajectory):
     return universe
 
 
+@optional_deps.needs_molecules_extra_deps
 def align_trajectory_to_average(universe, trajectory_output_path):
-    """Align the trajectory to the average structure. 
+    """Align the trajectory to the average structure.
     Args:
         universe: The universe MDAnalysis object.
         trajectory_output_path: Path to the aligned trajectory file."""
