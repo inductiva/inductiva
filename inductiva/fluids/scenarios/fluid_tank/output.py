@@ -3,11 +3,14 @@
 import os
 from typing import Optional
 
-import xarray as xr
+try:
+    import xarray as xr
+except ImportError:
+    xr = None
 
 from inductiva.types import Path
 from inductiva.fluids.post_processing.splishsplash import convert_vtk_data_dir_to_netcdf
-from inductiva.utils import files, visualization
+from inductiva.utils import files, visualization, optional_deps
 
 
 class FluidTankOutput:
@@ -23,6 +26,7 @@ class FluidTankOutput:
         self.sim_output_path = sim_output_path
         self.output_time_step = output_time_step
 
+    @optional_deps.needs_fluids_extra_deps
     def render(
         self,
         movie_path: Path = "movie.mp4",
