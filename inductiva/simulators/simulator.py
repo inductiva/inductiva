@@ -1,6 +1,6 @@
 """Base class for low-level simulators."""
 from typing import Optional
-from abc import ABC, abstractmethod
+from abc import ABC
 
 from inductiva import types, tasks, resources
 from inductiva.utils import files
@@ -9,10 +9,24 @@ from inductiva.utils import files
 class Simulator(ABC):
     """Base simulator class."""
 
-    @property
-    @abstractmethod
-    def api_method_name(self) -> str:
-        pass
+    def __init__(self):
+        self.api_method_name = ""
+
+    def override_api_method_prefix(self, prefix: str):
+        """Override the API method prefix.
+
+        Example:
+            # prefix = "protein_solvation"
+            "md.gromacs.run_simulation" becomes
+              "protein_solvation.gromacs.run_simulation"
+
+        Args:
+            prefix: The new prefix to use.
+        """
+        last_elements = self.api_method_name.split(".")[1:]
+        all_elements = [prefix] + last_elements
+
+        self.api_method_name = ".".join(all_elements)
 
     def _setup_input_dir(self, input_dir: types.Path):
         """Setup the simulator input directory."""

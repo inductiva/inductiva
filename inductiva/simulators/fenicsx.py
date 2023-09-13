@@ -9,13 +9,9 @@ from inductiva.simulators import Simulator
 class FEniCSx(Simulator):
     """Class to invoke a generic FEniCSx simulation on the API."""
 
-    def __init__(self, api_method: str = "fem.fenicsx.run_simulation"):
+    def __init__(self):
         super().__init__()
-        self.api_method = api_method
-
-    @property
-    def api_method_name(self) -> str:
-        return self.api_method
+        self.api_method = "fem.fenicsx.run_simulation"
 
     def run(
         self,

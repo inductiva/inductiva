@@ -9,9 +9,9 @@ from inductiva.simulators import Simulator
 class DualSPHysics(Simulator):
     """Class to invoke a generic DualSPHysics simulation on the API."""
 
-    @property
-    def api_method_name(self) -> str:
-        return "sph.dualsphysics.run_simulation"
+    def __init__(self):
+        super().__init__()
+        self.api_method_name = "sph.dualsphysics.run_simulation"
 
     def run(
         self,

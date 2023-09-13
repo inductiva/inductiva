@@ -100,8 +100,7 @@ class WindTunnel(scenarios.Scenario):
         ]
 
     def simulate(self,
-                 simulator: simulators.Simulator = simulators.OpenFOAM(
-                     "windtunnel"),
+                 simulator: simulators.Simulator = simulators.OpenFOAM(),
                  machine_group: Optional[resources.MachineGroup] = None,
                  run_async: bool = False,
                  object_path: Optional[types.Path] = None,
@@ -122,6 +121,7 @@ class WindTunnel(scenarios.Scenario):
                 Options: "high", "medium" or "low".
             machine_group: The machine group to use for the simulation.
         """
+        simulator.override_api_method_prefix("windtunnel")
 
         if object_path:
             self.object_path = files.resolve_path(object_path)
