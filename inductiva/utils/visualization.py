@@ -7,20 +7,35 @@ from typing import Dict, List, Optional
 import base64
 import io
 from time import sleep
-from ipywidgets import Output
 
 from absl import logging
-
-import imageio
-import PIL
-import pyvista as pv
-import matplotlib
-import matplotlib.colors as clr
-import matplotlib.pyplot as plt
 from tqdm import tqdm
-import xarray as xr
+try:
+    import imageio
+    import matplotlib
+    import matplotlib.colors as clr
+    import matplotlib.pyplot as plt
+except ImportError:
+    imageio = None
+    matplotlib = None
+    clr = None
+    plt = None
 
-from inductiva.utils import files
+try:
+    import ipywidgets
+    import PIL
+except ImportError:
+    ipywidgets = None
+    PIL = None
+
+try:
+    import pyvista as pv
+    import xarray as xr
+except ImportError:
+    pv = None
+    xr = None
+
+from inductiva.utils import files, optional_deps
 import threading
 
 MPL_CONFIG_PARAMS = {
@@ -30,6 +45,7 @@ MPL_CONFIG_PARAMS = {
 }
 
 
+@optional_deps.needs_molecules_extra_deps
 def create_movie_from_widget(view,
                              output_path="movie.mp4",
                              fps=8,
@@ -73,7 +89,7 @@ def create_movie_from_widget(view,
                     sleep(timeout)
 
             if not event.is_set():
-                with Output():
+                with ipywidgets.Output():
                     create_movie_from_frames(tmp_dir, output_path, fps)
 
     thread = threading.Thread(target=_make, args=(event,))
@@ -210,8 +226,9 @@ def create_frame_from_vtk(frame_path: str,
                cmap=cmap)
 
 
+@optional_deps.needs_fluids_extra_deps
 def create_2d_scatter_plot(
-    dataset: xr.Dataset,
+    xr_dataset: "xr.Dataset",
     x_var: str,
     y_var: str,
     image_path: str,
@@ -239,7 +256,7 @@ def create_2d_scatter_plot(
         if color_var is not None and color_limits is not None:
             color_norm = clr.Normalize(*color_limits)
 
-        dataset.plot.scatter(
+        xr_dataset.plot.scatter(
             ax=ax,
             x=x_var,
             y=y_var,
@@ -261,8 +278,9 @@ def create_2d_scatter_plot(
         plt.close(fig)
 
 
+@optional_deps.needs_fluids_extra_deps
 def create_3d_scatter_plot(
-    dataset: xr.Dataset,
+    xr_dataset: "xr.Dataset",
     x_var: str,
     y_var: str,
     z_var: str,
@@ -291,7 +309,7 @@ def create_3d_scatter_plot(
         if color_var is not None and color_limits is not None:
             color_norm = clr.Normalize(*color_limits)
 
-        dataset.plot.scatter(
+        xr_dataset.plot.scatter(
             ax=ax,
             x=x_var,
             y=z_var,
@@ -313,8 +331,9 @@ def create_3d_scatter_plot(
         plt.close(fig)
 
 
+@optional_deps.needs_fluids_extra_deps
 def create_2d_scatter_plot_movie(
-    dataset: xr.Dataset,
+    xr_dataset: "xr.Dataset",
     iter_var: str,
     x_var: str,
     y_var: str,
@@ -335,11 +354,11 @@ def create_2d_scatter_plot_movie(
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         logging.info("Creating movie frames...")
-        var_iterator = dataset.groupby(iter_var)
+        var_iterator = xr_dataset.groupby(iter_var)
         for i, (_, dataset_i) in tqdm(enumerate(var_iterator),
                                       total=len(var_iterator)):
             create_2d_scatter_plot(
-                dataset=dataset_i,
+                xr_dataset=dataset_i,
                 x_var=x_var,
                 y_var=y_var,
                 marker_size=marker_size,
@@ -363,8 +382,9 @@ def create_2d_scatter_plot_movie(
                                  fps=movie_fps)
 
 
+@optional_deps.needs_fluids_extra_deps
 def create_3d_scatter_plot_movie(
-    dataset: xr.Dataset,
+    xr_dataset: "xr.Dataset",
     iter_var: str,
     x_var: str,
     y_var: str,
@@ -386,11 +406,11 @@ def create_3d_scatter_plot_movie(
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         logging.info("Creating movie frames...")
-        var_iterator = dataset.groupby(iter_var)
+        var_iterator = xr_dataset.groupby(iter_var)
         for i, (_, dataset_i) in tqdm(enumerate(var_iterator),
                                       total=len(var_iterator)):
             create_3d_scatter_plot(
-                dataset=dataset_i,
+                xr_dataset=dataset_i,
                 x_var=x_var,
                 y_var=y_var,
                 z_var=z_var,
@@ -415,8 +435,9 @@ def create_3d_scatter_plot_movie(
                                  fps=movie_fps)
 
 
+@optional_deps.needs_fluids_extra_deps
 def create_color_plot(
-    data_array: xr.DataArray,
+    xr_data_array: "xr.DataArray",
     image_path: str,
     x_limits: Optional[List[float]] = None,
     y_limits: Optional[List[float]] = None,
@@ -438,7 +459,7 @@ def create_color_plot(
         if color_limits is not None:
             color_norm = clr.Normalize(*color_limits)
 
-        data_array.plot.pcolormesh(
+        xr_data_array.plot.pcolormesh(
             ax=ax,
             xlim=x_limits,
             ylim=y_limits,
@@ -454,8 +475,9 @@ def create_color_plot(
         plt.close(fig)
 
 
+@optional_deps.needs_fluids_extra_deps
 def create_color_plot_movie(
-    data_array: xr.DataArray,
+    xr_data_array: "xr.DataArray",
     iter_var: str,
     movie_path: str,
     movie_fps: int = 10,
@@ -470,11 +492,11 @@ def create_color_plot_movie(
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         logging.info("Creating movie frames...")
-        var_iterator = data_array.groupby(iter_var)
+        var_iterator = xr_data_array.groupby(iter_var)
         for i, (_, data_array_i) in tqdm(enumerate(var_iterator),
                                          total=len(var_iterator)):
             create_color_plot(
-                data_array=data_array_i,
+                xr_data_array=data_array_i,
                 x_limits=x_limits,
                 y_limits=y_limits,
                 color_limits=color_limits,

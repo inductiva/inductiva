@@ -1,10 +1,14 @@
 """Represent a complex terrain profile."""
 import typing
 
-import pyvista as pv
+try:
+    import pyvista as pv
+except ImportError:
+    pv = None
 
 import inductiva
 from inductiva.generative import procedural
+from inductiva.utils import optional_deps
 
 
 class Terrain:
@@ -31,6 +35,7 @@ class Terrain:
         return cls(terrain_mesh)
 
     @classmethod
+    @optional_deps.needs_fluids_extra_deps
     def from_random_generation(cls,
                                x_range: typing.Sequence[float],
                                y_range: typing.Sequence[float],
@@ -82,6 +87,7 @@ class Terrain:
 
         return cls(terrain)
 
+    @optional_deps.needs_fluids_extra_deps
     def to_text_file(self, text_file_path: str):
         """Saves the terrain to a text file.
         
@@ -93,6 +99,7 @@ class Terrain:
         terrain_geometry.save(text_file_path)
 
     @property
+    @optional_deps.needs_fluids_extra_deps
     def bounds(self):
         """Returns the bounds of the terrain."""
 
@@ -105,6 +112,7 @@ class Terrain:
         return terrain_bounds
 
     @property
+    @optional_deps.needs_fluids_extra_deps
     def center(self):
         """Returns the center of the terrain."""
 
@@ -116,6 +124,7 @@ class Terrain:
         return terrain_center
 
     @property
+    @optional_deps.needs_fluids_extra_deps
     def mesh_resolution(self):
         """Returns the resolution of the terrain mesh."""
 
@@ -124,6 +133,7 @@ class Terrain:
 
         return num_cells, num_points
 
+    @optional_deps.needs_fluids_extra_deps
     def plot(self,
              off_screen: bool = False,
              save_path: str = None,

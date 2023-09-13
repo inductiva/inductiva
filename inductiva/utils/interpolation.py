@@ -3,7 +3,10 @@
 from typing import Literal, Optional, Tuple
 
 import numpy as np
-import scipy
+try:
+    import scipy
+except ImportError:
+    scipy = None
 
 
 def interpolate_to_coordinates(

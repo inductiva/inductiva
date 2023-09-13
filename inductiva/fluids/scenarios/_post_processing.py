@@ -1,7 +1,7 @@
 """Post process SPH simulation outputs."""
 import os
 
-from inductiva.utils.visualization import create_movie_from_vtk
+from inductiva.utils import visualization, optional_deps
 from inductiva.types import Path
 
 
@@ -16,6 +16,7 @@ class SPHSimulationOutput:
             """
         self.sim_output_dir = sim_output_path
 
+    @optional_deps.needs_fluids_extra_deps
     def render(self,
                virtual_display: bool = False,
                movie_path: str = "movie.mp4",
@@ -33,9 +34,10 @@ class SPHSimulationOutput:
 
         vtk_dir = os.path.join(self.sim_output_dir, "vtk")
 
-        create_movie_from_vtk(vtk_dir,
-                              movie_path,
-                              virtual_display=virtual_display,
-                              camera=[(3., 3., 2.), (0., 0., 0.), (1., 1., 2.)],
-                              fps=fps,
-                              color=color)
+        visualization.create_movie_from_vtk(vtk_dir,
+                                            movie_path,
+                                            virtual_display=virtual_display,
+                                            camera=[(3., 3., 2.), (0., 0., 0.),
+                                                    (1., 1., 2.)],
+                                            fps=fps,
+                                            color=color)

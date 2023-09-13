@@ -10,7 +10,7 @@ import numpy as np
 
 import inductiva
 from inductiva import fluids, simulators, resources, scenarios, world
-from inductiva.utils import templates
+from inductiva.utils import templates, optional_deps
 
 SCENARIO_TEMPLATE_DIR = os.path.join(inductiva.utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
@@ -56,6 +56,7 @@ class WindOverTerrain(scenarios.Scenario):
 
     valid_simulators = [simulators.OpenFOAM]
 
+    @optional_deps.needs_fluids_extra_deps
     def __init__(self,
                  terrain: world.Terrain,
                  wind_velocity: List[float],

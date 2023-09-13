@@ -4,10 +4,13 @@ import os
 import pathlib
 from typing import Literal, Sequence
 
-import pyvista as pv
+try:
+    import pyvista as pv
+except ImportError:
+    pv = None
 
 from inductiva.types import Path
-from inductiva.utils import files
+from inductiva.utils import files, optional_deps
 
 
 class HeatSinkOutput:
@@ -22,6 +25,7 @@ class HeatSinkOutput:
 
         self.sim_output_path = sim_output_path
 
+    @optional_deps.needs_fluids_extra_deps
     def render(
         self,
         movie_path: Path = "movie.mp4",

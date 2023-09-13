@@ -11,8 +11,6 @@ import pathlib
 import zipfile
 import tempfile
 import shutil
-import numpy as np
-import scipy
 from tqdm import tqdm
 import urllib3
 
@@ -49,13 +47,7 @@ def get_validate_request_params(original_params: dict,
 
     for variable in original_params:
         param_type = type_annotations.get(variable, None)
-        if param_type in (np.ndarray, scipy.sparse):
-            params[variable] = {
-                "shape": original_params[variable].shape,
-            }
-        elif param_type == pathlib.Path:
-            # TODO: what kind of information do we want to send for validation
-            # of a SplishSplash simulation?
+        if param_type == pathlib.Path:
             params[variable] = str(original_params[variable])
         else:
             params[variable] = original_params[variable]
@@ -78,20 +70,6 @@ def pack_param(name: str, value, param_type, dst_dir):
         that are sent as a file, the value is the path of the file relative
         to `dst_dir`.
     """
-    if param_type == np.ndarray:
-        param_filename = f"{name}.npy"
-        param_fullpath = os.path.join(dst_dir, param_filename)
-        np.save(param_fullpath, value)
-        logging.debug("Stored %s to %s", name, param_fullpath)
-        return param_filename
-
-    if param_type == scipy.sparse:
-        param_filename = f"{name}.npz"
-        param_fullpath = os.path.join(dst_dir, param_filename)
-        scipy.sparse.save_npz(param_fullpath, value)
-        logging.debug("Stored %s to %s", name, param_fullpath)
-        return param_filename
-
     if param_type == pathlib.Path:
         dst_dir_name = name
         dst_fullpath = os.path.join(dst_dir, dst_dir_name)
@@ -164,8 +142,6 @@ def unpack_value(value: str, var_type, output_dir: Path):
     Return:
         Returns the unpacked value with the type defined by `var_type`.
     """
-    if var_type == np.ndarray:
-        return np.load(os.path.join(output_dir, value))
 
     if var_type == pathlib.Path:
         return pathlib.Path(os.path.join(output_dir, value))

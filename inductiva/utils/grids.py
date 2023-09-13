@@ -1,8 +1,11 @@
 """Utility functions to manipulate grid data."""
 import typing
 
-import scipy
 import numpy as np
+try:
+    import scipy
+except ImportError:
+    scipy = None
 
 
 def get_meshgrid(x_range: typing.Sequence[float],

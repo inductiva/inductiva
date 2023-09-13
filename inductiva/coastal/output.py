@@ -4,12 +4,16 @@ import os
 import tempfile
 from typing import Dict, Literal, Optional, Sequence, Tuple
 
-import matplotlib.pyplot as plt
 import numpy as np
-import scipy
+try:
+    import matplotlib.pyplot as plt
+    import scipy
+except ImportError:
+    plt = None
+    scipy = None
 
 from inductiva.types import Path
-from inductiva.utils import visualization
+from inductiva.utils import visualization, optional_deps
 
 # Labels used in SWASH simulation outputs.
 QUANTITY_SWASH_LABELS = {
@@ -38,6 +42,7 @@ QUANTITY_UNITS = {
 GRID_POSITIONS_FILE_NAME = "grid_positions.mat"
 
 
+@optional_deps.needs_coastal_extra_deps
 def read_swash_output_file(file_path: str) -> Dict[str, np.ndarray]:
     """Reads a SWASH output file.
     
@@ -55,6 +60,7 @@ def read_swash_output_file(file_path: str) -> Dict[str, np.ndarray]:
     return data_dict
 
 
+@optional_deps.needs_coastal_extra_deps
 def read_swash_grid_positions_file(file_path: str) -> Tuple[np.ndarray]:
     """Reads a SWASH output file containing grid positions."""
 
@@ -72,6 +78,7 @@ def read_swash_grid_positions_file(file_path: str) -> Tuple[np.ndarray]:
     return x_array, y_array
 
 
+@optional_deps.needs_coastal_extra_deps
 def read_swash_grid_quantity_file(file_path: str, quantity: str):
     """Reads a SWASH output file containing a quantity defined over a grid.
 
@@ -120,6 +127,7 @@ def read_swash_grid_quantity_file(file_path: str, quantity: str):
     return time_list, data_list
 
 
+@optional_deps.needs_coastal_extra_deps
 def _render_quantity_grid_data(x_array: np.ndarray,
                                y_array: np.ndarray,
                                time_list: Sequence[float],
@@ -192,6 +200,7 @@ class CoastalAreaOutput:
 
         self.sim_output_path = sim_output_path
 
+    @optional_deps.needs_coastal_extra_deps
     def render(
         self,
         quantity: Literal[
