@@ -6,11 +6,11 @@ from dataclasses import dataclass
 from inductiva import tasks, resources
 from inductiva.simulators import Simulator
 from inductiva.simulators import DualSPHysics
-from inductiva.fluids.scenarios.fluid_block import FluidBlock
+from inductiva.fluids.fluid_block import FluidBlock
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 
-from inductiva.fluids.scenarios._post_processing import SPHSimulationOutput
+from inductiva.fluids._post_processing import SPHSimulationOutput
 
 
 @dataclass
@@ -53,7 +53,7 @@ class DamBreak(FluidBlock):
         self,
         simulator: Simulator = DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
-        device: Literal["cpu", "gpu"] = "gpu",
+        device: Literal["cpu", "gpu"] = "cpu",
         resolution: Literal["high", "medium", "low"] = "medium",
         simulation_time: float = 1,
         run_async: bool = False,

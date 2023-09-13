@@ -11,17 +11,20 @@ from inductiva.simulators import Simulator
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.simulators import SPlisHSPlasH
 from inductiva.simulators import DualSPHysics
-from inductiva.utils.templates import replace_params_in_template
-from inductiva.fluids.scenarios._post_processing import SPHSimulationOutput
+from inductiva.utils import templates
+from inductiva.fluids._post_processing import SPHSimulationOutput
 
 TANK_DIMENSIONS = [1, 1, 1]
 
+SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "fluid_block")
+SPLISHPLASH_TEMPLATE_INPUT_DIR = "splishsplash"
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
 UNIT_BOX_MESH_FILENAME = "unit_box.obj"
 
+DUALSPHYSICS_TEMPLATE_INPUT_DIR = "dualsphysics"
 DUALSPHYSICS_TEMPLATE_FILENAME = "fluid_block_template.dualsphysics.xml.jinja"
-DUALSPHYSICS_CONFIG_FILENAME = "dam_break.xml"
+DUALSPHYSICS_CONFIG_FILENAME = "fluid_block.xml"
 
 
 class FluidBlock(Scenario):
@@ -90,7 +93,7 @@ class FluidBlock(Scenario):
         simulator: Simulator = DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        device: Literal["cpu", "gpu"] = "gpu",
+        device: Literal["cpu", "gpu"] = "cpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
         adaptive_time_step: bool = True,
@@ -160,16 +163,18 @@ def _(cls, simulator: SPlisHSPlasH):  # pylint: disable=unused-argument
 def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      SPLISHPLASH_TEMPLATE_INPUT_DIR)
     # Copy the unit box mesh file to the input directory.
-    unit_box_file_path = os.path.join(os.path.dirname(__file__),
+    unit_box_file_path = os.path.join(template_files_dir,
                                       UNIT_BOX_MESH_FILENAME)
     shutil.copy(unit_box_file_path, input_dir)
 
     # Generate the simulation configuration file.
     fluid_margin = 2 * self.particle_radius
 
-    replace_params_in_template(
-        template_path=os.path.join(os.path.dirname(__file__),
+    templates.replace_params_in_template(
+        template_path=os.path.join(template_files_dir,
                                    SPLISHSPLASH_TEMPLATE_FILENAME),
         params={
             "simulation_time": self.simulation_time,
@@ -204,8 +209,10 @@ def _(cls, simulator: DualSPHysics):  # pylint: disable=unused-argument
 def _(self, simulator: DualSPHysics, input_dir):  # pylint: disable=unused-argument
     """Creates DualSPHysics simulation input files."""
 
-    replace_params_in_template(
-        template_path=os.path.join(os.path.dirname(__file__),
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      DUALSPHYSICS_TEMPLATE_INPUT_DIR)
+    templates.replace_params_in_template(
+        template_path=os.path.join(template_files_dir,
                                    DUALSPHYSICS_TEMPLATE_FILENAME),
         params={
             "simulation_time": self.simulation_time,

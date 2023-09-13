@@ -14,7 +14,7 @@ Initialize the scenario:
 ```python
 import inductiva
 
-scenario = inductiva.fluids.scenarios.FluidTank(
+scenario = inductiva.fluids.FluidTank(
     shape=inductiva.fluids.shapes.Cylinder(),
     fluid=inductiva.fluids.WATER,
     fluid_level=0.5)

@@ -10,7 +10,7 @@ from inductiva.simulators import GROMACS
 from inductiva.simulators import Simulator
 from inductiva.utils import templates
 from inductiva.scenarios import Scenario
-from .post_processing import MDWaterBoxOutput
+from inductiva.molecules.md_water_box.post_processing import MDWaterBoxOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "md_water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"

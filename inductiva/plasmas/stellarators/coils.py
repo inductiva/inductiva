@@ -309,7 +309,7 @@ class StellaratorCoils(scenarios.Scenario):
         if objectives_weights is None:
             self.objectives_weights = DEFAULT_OBJECTIVES_WEIGHTS
 
-        for key in objectives_weights:
+        for key in self.objectives_weights:
             if key not in [
                     'squared_flux', 'coils_length', 'mean_squared_curvature',
                     'arclength_variation', 'curvature'

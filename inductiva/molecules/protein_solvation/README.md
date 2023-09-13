@@ -39,7 +39,7 @@ To test this scenario we have available one example of a protein PDB file - [dow
 inductiva.api_key = "YOUR_API_KEY"
 
  # Initialize the scenario
- scenario = inductiva.molecules.scenarios.ProteinSolvation(
+ scenario = inductiva.molecules.ProteinSolvation(
      protein_pdb = "alanine.pdb",
      temperature = 300)
 
