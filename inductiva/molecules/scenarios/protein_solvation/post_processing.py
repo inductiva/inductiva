@@ -3,12 +3,15 @@ import os
 import pathlib
 from typing import Literal
 
-import matplotlib.pyplot as plt
 import numpy as np
 try:
+    import matplotlib.pyplot as plt
     import nglview as nv
+    import IPython as ip
 except ImportError:
     nv = None
+    plt = None
+    ip = None
 
 import inductiva
 from inductiva.utils import optional_deps
@@ -35,6 +38,7 @@ class ProteinSolvationOutput:
         self.sim_output_dir = sim_output_path
         # universe will be loaded only when needed
         self.universe = None
+        self.ipython_kernel = self.get_ipython_kernel()
 
     @optional_deps.needs_molecules_extra_deps
     def _load_universe(self):
@@ -65,6 +69,7 @@ class ProteinSolvationOutput:
             add_backbone: Whether to add the protein backbone to the
             visualization.
             """
+        self.enable_vizualization()
         self._load_universe()
 
         view = nv.show_mdanalysis(self.universe)
@@ -80,6 +85,7 @@ class ProteinSolvationOutput:
         print(f"Number of trajectory frames: {len(self.universe.trajectory)}")
         return view
 
+    @optional_deps.needs_molecules_extra_deps
     def plot_rmsf_per_residue(self):
         """Plot the root mean square fluctuation (RMSF) over a trajectory.
 
@@ -118,6 +124,7 @@ class ProteinSolvationOutput:
             representation: The protein representation to use for the
             visualization.
             """
+        self.enable_vizualization()
         self._load_universe()
 
         self.universe.add_TopologyAttr("tempfactors")
@@ -129,3 +136,20 @@ class ProteinSolvationOutput:
         view.update_representation(color_scheme="bfactor")
         view.center()
         return view
+
+    @optional_deps.needs_molecules_extra_deps
+    def get_ipython_kernel(self):
+        """Check if the current environment have an IPython kernel."""
+        return ip.get_ipython()
+
+    @optional_deps.needs_molecules_extra_deps
+    def enable_vizualization(self):
+        """Enable vizualization if IPython is available."""
+
+        if self.ipython_kernel is None:
+            raise ImportError("IPython is not available. Visualization is "
+                              "only available in a python notebook.")
+
+        if 'google.cloud' in str(self.ipython_kernel):
+            import google.colab
+            google.colab.output.enable_custom_widget_manager()
