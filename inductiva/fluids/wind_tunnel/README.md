@@ -31,7 +31,7 @@ import inductiva
 inductiva.api_key = "YOUR_API_KEY"
 
 # Initialize the scenario
-scenario = inductiva.fluids.scenarios.WindTunnel(
+scenario = inductiva.fluids.WindTunnel(
     flow_velocity=[30, 0, 0],
     domain={"x": [-5, 15], "y": [-5, 5], "z": [0, 8]})
 
