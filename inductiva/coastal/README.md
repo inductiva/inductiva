@@ -25,6 +25,7 @@ simulator = inductiva.simulators.SWASH()
 task = simulator.run(
     input_dir="simulation_input_dir",
     sim_config_filename="INPUT.sws",
+    n_cores=4,
 )
 
 output = task.get_output()
