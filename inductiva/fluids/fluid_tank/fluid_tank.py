@@ -16,9 +16,11 @@ from inductiva.fluids.shapes import Cylinder
 from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.simulators import SPlisHSPlasH
-from inductiva.utils.templates import replace_params_in_template
+from inductiva.utils import templates
 from inductiva.fluids.fluid_tank.output import FluidTankOutput
 
+SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "fluid_tank")
+SPLISHSPLASH_TEMPLATE_INPUT_DIR = "splishsplash"
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_tank_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_tank.json"
 TANK_JSON_FILENAME = "tank.json"
@@ -299,6 +301,8 @@ def _(cls, simulator: SPlisHSPlasH) -> str:  # pylint: disable=unused-argument
 def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      SPLISHSPLASH_TEMPLATE_INPUT_DIR)
     self.create_json_file(os.path.join(input_dir, TANK_JSON_FILENAME))
 
     bounding_box_min, bounding_box_max = self.get_bounding_box()
@@ -308,8 +312,8 @@ def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argum
         bounding_box_max[2],
     ]
 
-    replace_params_in_template(
-        template_path=os.path.join(os.path.dirname(__file__),
+    templates.replace_params_in_template(
+        template_path=os.path.join(template_files_dir,
                                    SPLISHSPLASH_TEMPLATE_FILENAME),
         params={
             "simulation_time": self.simulation_time,
