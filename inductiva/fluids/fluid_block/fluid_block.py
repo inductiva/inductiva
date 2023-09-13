@@ -62,8 +62,8 @@ class FluidBlock(Scenario):
         """Initializes the fluid block scenario.
 
         Args:
-            density: The density of the fluid in kg/m^3. For DualSPHysics, the range
-                of valid values is [700, 1300].
+            density: The density of the fluid in kg/m^3. Valid
+                range is [400, 2000] Kg/m3.
             kinematic_viscosity: The kinematic viscosity of the fluid, in m^2/s. 
                 Reference value for water is 1e-6 m^2/s.
             dimensions: The fluid block dimensions (in x, y, z), in meters.
@@ -72,6 +72,9 @@ class FluidBlock(Scenario):
             initial_velocity: The initial velocity of the fluid block (in x, y,
               z), in m/s.
         """
+
+        if not (400 <= density <= 2000):
+            raise ValueError("`density` must be in range [400, 2000] Kg/m3.")
 
         self.fluid = FluidType(density=density,
                                kinematic_viscosity=kinematic_viscosity)
