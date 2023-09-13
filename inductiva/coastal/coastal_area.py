@@ -98,7 +98,6 @@ class CoastalArea(Scenario):
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
-        n_cores=1,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -108,7 +107,6 @@ class CoastalArea(Scenario):
             simulation_time: Total simulation time, in seconds.
             time_step: Time step, in seconds.
             output_time_step: Time step for the output, in seconds.
-            n_cores: Number of cores to use for the simulation.
         """
 
         self.simulation_time = simulation_time
@@ -120,7 +118,6 @@ class CoastalArea(Scenario):
             machine_group=machine_group,
             run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,
-            n_cores=n_cores,
         )
 
         task.set_output_class(CoastalAreaOutput)
