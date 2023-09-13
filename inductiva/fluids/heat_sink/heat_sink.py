@@ -4,7 +4,7 @@ import os
 import shutil
 from typing import Optional
 
-from inductiva.fluids.scenarios.heat_sink.output import HeatSinkOutput
+from inductiva.fluids.heat_sink.output import HeatSinkOutput
 
 from inductiva import tasks, resources
 from inductiva.simulators import OpenFOAM
