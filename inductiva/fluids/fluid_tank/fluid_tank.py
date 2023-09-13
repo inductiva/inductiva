@@ -17,7 +17,7 @@ from inductiva.fluids.fluid_types import FluidType
 from inductiva.fluids.fluid_types import WATER
 from inductiva.simulators import SPlisHSPlasH
 from inductiva.utils.templates import replace_params_in_template
-from inductiva.fluids.scenarios.fluid_tank.output import FluidTankOutput
+from inductiva.fluids.fluid_tank.output import FluidTankOutput
 
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_tank_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_tank.json"
