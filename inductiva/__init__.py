@@ -17,7 +17,7 @@ from . import resources
 # from . import structures
 from . import templates
 from . import utils
-from . import stellarators
+from . import plasmas
 from . import world
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "http://api.inductiva.ai")
