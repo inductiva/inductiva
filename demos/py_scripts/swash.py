@@ -22,7 +22,6 @@ flags.DEFINE_string("output_dir", None,
 
 flags.DEFINE_string("working_dir", None,
                     "Directory to which paths are relative to.")
-flags.DEFINE_integer("n_cores", 1, "Number of cores to use.")
 
 
 def main(_):
@@ -36,7 +35,6 @@ def main(_):
     task = swash_sim.run(
         input_dir=FLAGS.sim_dir,
         sim_config_filename=FLAGS.sim_config_filename,
-        n_cores=FLAGS.n_cores,
     )
 
     output = task.get_output(output_dir=FLAGS.output_dir)
