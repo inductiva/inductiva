@@ -7,9 +7,14 @@ import numpy as np
 try:
     import matplotlib.pyplot as plt
     import nglview as nv
+    import IPython as ip
+    import google.colab as gc
+
 except ImportError:
     nv = None
     plt = None
+    ip = None
+    gc = None
 
 import inductiva
 from inductiva.utils import optional_deps
@@ -36,6 +41,7 @@ class ProteinSolvationOutput:
         self.sim_output_dir = sim_output_path
         # universe will be loaded only when needed
         self.universe = None
+        self.ipython_kernel = self.get_ipython_kernel()
 
     @optional_deps.needs_molecules_extra_deps
     def _load_universe(self):
@@ -66,6 +72,7 @@ class ProteinSolvationOutput:
             add_backbone: Whether to add the protein backbone to the
             visualization.
             """
+        self.enable_vizualization()
         self._load_universe()
 
         view = nv.show_mdanalysis(self.universe)
@@ -120,6 +127,7 @@ class ProteinSolvationOutput:
             representation: The protein representation to use for the
             visualization.
             """
+        self.enable_vizualization()
         self._load_universe()
 
         self.universe.add_TopologyAttr("tempfactors")
@@ -131,3 +139,19 @@ class ProteinSolvationOutput:
         view.update_representation(color_scheme="bfactor")
         view.center()
         return view
+
+    @optional_deps.needs_molecules_extra_deps
+    def get_ipython_kernel(self):
+        """Check if the current environment have an IPython kernel."""
+        return ip.get_ipython()
+
+    @optional_deps.needs_molecules_extra_deps
+    def enable_vizualization(self):
+        """Enable vizualization if IPython is available."""
+
+        if self.ipython_kernel is None:
+            raise ImportError("IPython is not available. Visualization is "
+                              "only available in a python notebook.")
+
+        if "google.cloud" in str(self.ipython_kernel):
+            gc.output.enable_custom_widget_manager()
