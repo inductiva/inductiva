@@ -6,7 +6,7 @@ from absl import flags
 from absl import app
 
 import inductiva
-from inductiva.fluids.scenarios.fluid_tank import FluidTank
+from inductiva.fluids.fluid_tank import FluidTank
 from inductiva.fluids.shapes import Cylinder
 
 FLAGS = flags.FLAGS

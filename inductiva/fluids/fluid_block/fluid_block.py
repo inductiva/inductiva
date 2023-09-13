@@ -12,7 +12,7 @@ from inductiva.fluids.fluid_types import FluidType
 from inductiva.simulators import SPlisHSPlasH
 from inductiva.simulators import DualSPHysics
 from inductiva.utils.templates import replace_params_in_template
-from inductiva.fluids.scenarios._post_processing import SPHSimulationOutput
+from inductiva.fluids._post_processing import SPHSimulationOutput
 
 TANK_DIMENSIONS = [1, 1, 1]
 

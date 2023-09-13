@@ -45,7 +45,7 @@ class ProteinSolvationOutput:
 
         if self.universe is None:
             self.universe = \
-                inductiva.molecules.scenarios.utils.unwrap_trajectory(
+                inductiva.molecules.utils.unwrap_trajectory(
                     topology_path, trajectory_path)
 
     @optional_deps.needs_molecules_extra_deps

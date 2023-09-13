@@ -10,6 +10,7 @@ from . import tasks
 from . import simulators
 from . import fluids
 from . import coastal
+from . import scenarios
 from . import generative
 from . import molecules
 from . import resources

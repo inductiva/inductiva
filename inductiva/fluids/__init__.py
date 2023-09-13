@@ -9,17 +9,19 @@ from .fluid_types import (
     BEER,
     HONEY,
 )
-from .scenarios import DamBreak
-from .scenarios import FluidBlock
-from .scenarios import WindTunnel
-from .scenarios import (
+from .dam_break import DamBreak
+from .fluid_block import FluidBlock
+from .wind_tunnel import WindTunnel
+from .wind_terrain import WindOverTerrain
+from .fluid_tank import (
     FluidTank,
     CubicTankOutlet,
     CylindricalTankOutlet,
     CircularTankInlet,
 )
-from . import scenarios
+from .heat_sink import HeatSink
+from ._post_processing import SPHSimulationOutput
+
 from . import shapes
 from . import post_processing
 from .post_processing import SteadyStateOutput
-from .scenarios._post_processing import SPHSimulationOutput

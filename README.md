@@ -57,7 +57,7 @@ To test this scenario we have available one example of a protein PDB file - [dow
 inductiva.api_key = "YOUR_API_KEY"
 
  # Initialize the scenario
- scenario = inductiva.molecules.scenarios.ProteinSolvation(
+ scenario = inductiva.molecules.ProteinSolvation(
      protein_pdb = "alanine.pdb",
      temperature = 300)
 
@@ -132,7 +132,7 @@ Let's look at an example using the wind tunnel scenario:
 from inductiva import fluids
 
 # Initialize scenario with defaults
-scenario = fluids.scenarios.WindTunnel()
+scenario = fluids.WindTunnel()
 
 # Path to a set of objects
 object_path = "path/to/vehicle.obj"
@@ -153,7 +153,7 @@ Running simulations asynchronously allows users to launch multiple simulations i
 from inductiva import fluids
 
 # Initialize scenario with defaults
-scenario = fluids.scenarios.WindTunnel()
+scenario = fluids.WindTunnel()
 
 # Path to a set of vehicles
 vehicle_path_list = ["vehicle_1.obj", "vehicle_2.obj", ..., "vehicle_1000.obj"]

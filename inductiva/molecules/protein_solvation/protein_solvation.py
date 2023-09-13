@@ -12,7 +12,7 @@ from inductiva.utils.templates import (TEMPLATES_PATH,
                                        batch_replace_params_in_template)
 from inductiva.scenarios import Scenario
 from inductiva.utils import files
-from .post_processing import ProteinSolvationOutput
+from inductiva.molecules.protein_solvation.post_processing import ProteinSolvationOutput
 
 SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"

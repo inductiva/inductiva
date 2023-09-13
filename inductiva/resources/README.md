@@ -26,7 +26,7 @@ price_per_hour = mg.estimate_cloud_cost()
 mg.start()
 
 # Example with ProteinSolvation scenario
-scenario = molecules.scenarios.ProteinSolvation(
+scenario = molecules.ProteinSolvation(
     protein_pdb=my_pdb_file, temperature=300)
 
 # Pass your machine group object when submitting a simulation so that it runs
@@ -64,7 +64,7 @@ tasks = []
 
 # And simulate the solvation of the proteins on your newly started machines
 for my_pdb_file in my_pdb_files:
-    scenario = molecules.scenarios.ProteinSolvation(
+    scenario = molecules.ProteinSolvation(
         protein_pdb=my_pdb_file, temperature=300)
 
     # Tasks will be submitted asynchronously to the new machine group
