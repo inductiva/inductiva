@@ -137,7 +137,7 @@ class MachineGroup():
     def _log_machine_group_info(self):
         """Logs the machine group info."""
 
-        logging.info("ID: %s", self.id)
+        logging.info("Name: %s", self.name)
         logging.info("Machine type: %s", self.machine_type)
         logging.info("Number of machines: %s", self.num_machines)
         logging.info("Spot: %s", self.spot)
