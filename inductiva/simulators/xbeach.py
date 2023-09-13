@@ -17,14 +17,16 @@ class XBeach(Simulator):
         input_dir: types.Path,
         sim_config_filename: Optional[str] = "params.txt",
         machine_group: Optional[resources.MachineGroup] = None,
-        n_cores: int = 1,
+        n_cores: int = None,
         run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
 
         Args:
             sim_config_filename: Name of the simulation configuration file.
-            n_cores: Number of MPI cores to use for the simulation.
+            n_cores: Number of MPI cores to use for the simulation. If None,
+              the maximum number of cores available in the machine group will be
+              used.
             other arguments: See the documentation of the base class.
         """
         return super().run(
