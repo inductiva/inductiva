@@ -5,11 +5,12 @@ import tempfile
 from typing import Dict, Literal, Optional, Sequence, Tuple
 
 import numpy as np
-import scipy
 try:
     import matplotlib.pyplot as plt
+    import scipy
 except ImportError:
     plt = None
+    scipy = None
 
 from inductiva.types import Path
 from inductiva.utils import visualization, optional_deps
