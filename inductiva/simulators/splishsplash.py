@@ -8,13 +8,9 @@ from inductiva.simulators import Simulator
 class SPlisHSPlasH(Simulator):
     """Class to invoke a generic SPlisHSPlasH simulation on the API."""
 
-    def __init__(self, api_method: str = "sph"):
+    def __init__(self):
         super().__init__()
-        self.api_method = api_method + ".splishsplash.run_simulation"
-
-    @property
-    def api_method_name(self) -> str:
-        return self.api_method
+        self.api_method_name = "sph.splishsplash.run_simulation"
 
     def run(
         self,

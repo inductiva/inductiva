@@ -9,13 +9,9 @@ from inductiva.simulators import Simulator
 class GROMACS(Simulator):
     """Class to invoke any GROMACS command on the API."""
 
-    def __init__(self, api_method: str = "md"):
+    def __init__(self):
         super().__init__()
-        self.api_method = api_method + ".gromacs.run_simulation"
-
-    @property
-    def api_method_name(self) -> str:
-        return self.api_method
+        self.api_method_name = "md.gromacs.run_simulation"
 
     def run(
         self,

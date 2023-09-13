@@ -58,7 +58,7 @@ class ProteinSolvation(Scenario):
 
     def simulate(
             self,
-            simulator: Simulator = GROMACS("proteinsolvation"),
+            simulator: Simulator = GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
@@ -86,6 +86,7 @@ class ProteinSolvation(Scenario):
             n_steps_min: Number of steps for energy minimization.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("proteinsolvation")
 
         self.nsteps = int(
             simulation_time_ns * 1e6 / 2

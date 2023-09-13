@@ -205,7 +205,7 @@ class FluidTank(Scenario):
 
     def simulate(
         self,
-        simulator: Simulator = SPlisHSPlasH("fluid_tank"),
+        simulator: Simulator = SPlisHSPlasH(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "cpu",
@@ -227,6 +227,7 @@ class FluidTank(Scenario):
             particle_sorting: Whether to use particle sorting.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("fluid_tank")
 
         self.simulation_time = simulation_time
         self.particle_radius = ParticleRadius[resolution.upper()].value

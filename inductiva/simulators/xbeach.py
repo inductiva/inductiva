@@ -8,9 +8,9 @@ from inductiva.simulators import Simulator
 class XBeach(Simulator):
     """Class to invoke a generic XBeach simulation on the API."""
 
-    @property
-    def api_method_name(self) -> str:
-        return "sw.xbeach.run_simulation"
+    def __init__(self):
+        super().__init__()
+        self.api_method_name = "sw.xbeach.run_simulation"
 
     def run(
         self,

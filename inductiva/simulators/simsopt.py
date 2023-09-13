@@ -7,9 +7,9 @@ from inductiva import simulators, tasks, types, resources
 class Simsopt(simulators.Simulator):
     """Invokes a simsopt simulation on the API."""
 
-    @property
-    def api_method_name(self) -> str:
-        return "stellarators.simsopt.run_simulation"
+    def __init__(self):
+        super().__init__()
+        self.api_method_name = "stellarators.simsopt.run_simulation"
 
     def run(
         self,
@@ -35,22 +35,22 @@ class Simsopt(simulators.Simulator):
             plasma_surface_filename: Name of the file with the description of
               the plasma surface on which the magnetic field will be calculated.
             num_field_periods: Number of magnetic field periods.
-              Refers to the number of complete magnetic field repetitions 
+              Refers to the number of complete magnetic field repetitions
               within a stellarator. Represents how many times the magnetic
               field pattern repeats itself along the toroidal direction.
-            num_iterations: Number of iterations to run for the searching 
+            num_iterations: Number of iterations to run for the searching
               process.
-            num_samples: Number of different stellarator samples generated per 
+            num_samples: Number of different stellarator samples generated per
               iteration from a configuration. The samples are generated using
-              normal distribution noise for each coefficient of the Fourier 
+              normal distribution noise for each coefficient of the Fourier
               Series that describes the coils.
-            sigma_scaling_factor: Scaling factor for the sigma value used in 
-              the random generation of noise. This argument makes sure that 
-              the noise is generated proportionally to each coefficient. It 
+            sigma_scaling_factor: Scaling factor for the sigma value used in
+              the random generation of noise. This argument makes sure that
+              the noise is generated proportionally to each coefficient. It
               also determines the range of search for new values of the
               coefficients.
             objectives_weights_filename: Name of the file with the weights for
-              each objective function used in the construction of the total 
+              each objective function used in the construction of the total
               objective.
             other arguments: See the documentation of the base class.
         """
