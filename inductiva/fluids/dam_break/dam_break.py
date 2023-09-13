@@ -53,7 +53,7 @@ class DamBreak(FluidBlock):
         self,
         simulator: Simulator = DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
-        device: Literal["cpu", "gpu"] = "gpu",
+        device: Literal["cpu", "gpu"] = "cpu",
         resolution: Literal["high", "medium", "low"] = "medium",
         simulation_time: float = 1,
         run_async: bool = False,
