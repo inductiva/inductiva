@@ -82,9 +82,9 @@ This allows us to visualize the protein trajectory.
 These are the currently available scenarios:
 
 - [Coastal Area](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal)
-- [Wind Tunnel](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/scenarios/wind_tunnel)
-- [Fluid Tank](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/scenarios/fluid_tank)
-- [Protein Solvation](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/scenarios/protein_solvation)
+- [Wind Tunnel](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/wind_tunnel)
+- [Fluid Tank](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/fluid_tank)
+- [Protein Solvation](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/protein_solvation)
 
 
 ## Simulators
@@ -114,7 +114,7 @@ simulator = inductiva.simulators.DualSPHysics()
 output_dir = simulator.run(input_dir="FlowCylinder",
                            sim_config_filename="CaseFlowCylinder_Re200_Def.xml",
                            output_dir="Flow",
-                           device="gpu")
+                           device="cpu")
 ```
 
 The user must specify the input directory, the simulation configuration file, the output directory and the device to run the simulation on.
