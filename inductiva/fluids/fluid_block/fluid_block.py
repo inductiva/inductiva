@@ -62,8 +62,10 @@ class FluidBlock(Scenario):
         """Initializes the fluid block scenario.
 
         Args:
-            density: The density of the fluid in kg/m^3.
-            kinematic_viscosity: The kinematic viscosity of the fluid, in m^2/s.
+            density: The density of the fluid in kg/m^3. For DualSPHysics, the range
+                of valid values is [700, 1300].
+            kinematic_viscosity: The kinematic viscosity of the fluid, in m^2/s. 
+                Reference value for water is 1e-6 m^2/s.
             dimensions: The fluid block dimensions (in x, y, z), in meters.
             position: The position of the fluid block in the tank (in x, y, z),
               in meters.
