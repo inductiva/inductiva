@@ -1,3 +1,4 @@
+"""Tests for the Simulator class."""
 import inductiva
 
 
