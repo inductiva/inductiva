@@ -1,2 +1,2 @@
 #pylint: disable=missing-module-docstring
-from .scenarios import StellaratorCoils
+from .coils import StellaratorCoils
