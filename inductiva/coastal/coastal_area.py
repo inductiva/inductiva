@@ -11,7 +11,8 @@ from absl import logging
 from inductiva import tasks, resources, simulators, scenarios, utils
 from inductiva import coastal
 
-SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH, "coastal_area")
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
+                                     "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
 SWASH_CONFIG_TEMPLATE_FILENAME = "input.sws.jinja"
 SWASH_CONFIG_FILENAME = "input.sws"

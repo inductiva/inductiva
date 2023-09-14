@@ -7,7 +7,8 @@ import shutil
 
 from inductiva import tasks, resources, simulators, scenarios, utils, molecules
 
-SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH, "protein_solvation")
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
+                                     "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 COMMANDS_TEMPLATE_FILE_NAME = "commands.json"
 
