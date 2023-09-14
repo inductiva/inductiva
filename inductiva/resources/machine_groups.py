@@ -69,31 +69,13 @@ def list():
     with the 'get' function."""
     # pylint: enable=line-too-long
 
-    machine_group_list = get_all()
+    machine_group_list = get()
     if len(machine_group_list) != 0:
         print("Active machine groups:")
         print(_machine_group_list_to_str(machine_group_list))
 
 
-def get(name: str):
-    """Returns a 'MachineGroup' object.
-
-    Given the name of the machine group, returns a 'MachineGroup' object
-    with the attributes of that machine group.
-
-    Args:
-        name: Name of the machine group."""
-    try:
-        api = instance_api.InstanceApi(inductiva.api.get_client())
-        response = api.get_instance_group({"name": name})
-
-        return resources.MachineGroup.from_api_response(response.body)
-
-    except inductiva.client.ApiException as api_exception:
-        raise api_exception
-
-
-def get_all():
+def get():
     """Returns a list of 'MachineGroup' objects."""
 
     # Retrive the active machine group names
