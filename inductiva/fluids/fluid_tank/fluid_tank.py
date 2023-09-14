@@ -169,7 +169,7 @@ class FluidTank(scenarios.Scenario):
     The scenario can be simulated with SPlisHSPlasH.
     """
 
-    valid_simulators = [simulators.Splishsplash]
+    valid_simulators = [simulators.SplishSplash]
 
     def __init__(
         self,
@@ -198,7 +198,7 @@ class FluidTank(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulators.Simulator = simulators.Splishsplash(),
+        simulator: simulators.Simulator = simulators.SplishSplash(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "cpu",
@@ -284,13 +284,13 @@ class FluidTank(scenarios.Scenario):
 
 
 @FluidTank.get_config_filename.register
-def _(cls, simulator: simulators.Splishsplash) -> str:  # pylint: disable=unused-argument
+def _(cls, simulator: simulators.SplishSplash) -> str:  # pylint: disable=unused-argument
     """Returns the config filename for SPlisHSPlasH."""
     return SPLISHSPLASH_CONFIG_FILENAME
 
 
 @FluidTank.create_input_files.register
-def _(self, simulator: simulators.Splishsplash, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,

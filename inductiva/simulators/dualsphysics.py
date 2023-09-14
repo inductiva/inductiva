@@ -6,7 +6,7 @@ from inductiva import types, tasks, resources
 from inductiva.simulators import Simulator
 
 
-class Dualsphysics(Simulator):
+class DualSPHysics(Simulator):
     """Class to invoke a generic DualSPHysics simulation on the API."""
 
     def __init__(self):

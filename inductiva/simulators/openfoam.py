@@ -4,7 +4,7 @@ from typing import Optional, List
 from inductiva import types, tasks, resources, simulators
 
 
-class Openfoam(simulators.Simulator):
+class OpenFOAM(simulators.Simulator):
     """Class to invoke a generic OpenFOAM simulation on the API."""
 
     def __init__(self):

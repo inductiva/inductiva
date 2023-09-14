@@ -6,14 +6,13 @@ from absl import flags
 from absl import app
 
 import inductiva
-from inductiva.fluids.simulators import SPlisHSPlasH
-from inductiva.fluids.simulators import DualSPHysics
+from inductiva.simulators import SplishSplash, DualSPHysics
 from inductiva.fluids.fluid_types import WATER
 # from inductiva.fluids.fluid_types import get_fluid_color
 from inductiva.utils.flags import cast_list_to_float
 
 SIMULATORS = {
-    "splishsplash": SPlisHSPlasH,
+    "splishsplash": SplishSplash,
     "dualsphysics": DualSPHysics,
 }
 
