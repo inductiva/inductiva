@@ -38,25 +38,27 @@ To test this scenario we have available one example of a protein PDB file - [dow
 
 inductiva.api_key = "YOUR_API_KEY"
 
- # Initialize the scenario
- scenario = inductiva.molecules.ProteinSolvation(
-     protein_pdb = "alanine.pdb",
+# Initialize the scenario
+insulin = inductiva.molecules.examples.load_insulin()
+scenario = inductiva.molecules.ProteinSolvation(
+     protein_pdb = insulin,
      temperature = 300)
 
- # Run a simulation
- task = scenario.simulate(simulation_time_ns = 0.5)
+# Run a simulation
+task = scenario.simulate(simulation_time_ns = 0.01)
 
- # Get the simulation output on your local machine.
- output = task.get_output()
+# Get the simulation output on your local machine.
+output = task.get_output()
  ```
+This may take up to 1 minute, depending on which machine you use.  
 The last code line downloads the files necessary to render and post-process our simulation.
 
 ## Output and Post-processing 
 The simulation output folder contains trajectory data spanning the simulation duration and the protein's topology. These files are necessary to generate an interactive trajectory visualization using [NGLview](https://github.com/nglviewer/nglview). Users have the flexibility to select the protein's representation type, including options to display or hide the backbone, and they can also specify the criteria for visualization selection. You can refer to the [documentation](https://nglviewer.org/ngl/api/manual/usage/selection-language.html) for guidance on creating custom selections according to your preferences.
 
 ```python
- output = task.get_output()
- output.render_interactive(representation="ribbon", add_backbone=True, selection="protein")
+output = task.get_output()
+output.render_interactive(representation="ribbon", add_backbone=True, selection="protein")
  ```
 ![protein_solvation](https://github.com/inductiva/inductiva/assets/114397668/e9dfe7d9-9c2b-4be4-90c3-0d68a2a7b9fd)
 
