@@ -44,7 +44,7 @@ class DamBreak(fluids.FluidBlock):
     # pylint: disable=arguments-renamed
     def simulate(
         self,
-        simulator: simulators.Simulator = simulators.Dualsphysics(),
+        simulator: simulators.Simulator = simulators.DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
         device: Literal["cpu", "gpu"] = "cpu",
         resolution: Literal["high", "medium", "low"] = "medium",

@@ -4,7 +4,7 @@ from typing import Optional
 from inductiva import types, tasks, resources, simulators
 
 
-class Swash(simulators.Simulator):
+class SWASH(simulators.Simulator):
     """Class to invoke a generic SWASH simulation on the API."""
 
     def __init__(self):

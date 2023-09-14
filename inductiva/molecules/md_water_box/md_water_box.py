@@ -16,7 +16,7 @@ COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 class MDWaterBox(scenarios.Scenario):
     """Molecular dynamics water box scenario."""
 
-    valid_simulators = [simulators.Gromacs]
+    valid_simulators = [simulators.GROMACS]
 
     def __init__(
         self,
@@ -41,7 +41,7 @@ class MDWaterBox(scenarios.Scenario):
 
     def simulate(
             self,
-            simulator: simulators.Simulator = simulators.Gromacs(),
+            simulator: simulators.Simulator = simulators.GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
@@ -107,7 +107,7 @@ class MDWaterBox(scenarios.Scenario):
 
 
 @MDWaterBox.create_input_files.register
-def _(self, simulator: simulators.Gromacs, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.GROMACS, input_dir):  # pylint: disable=unused-argument
     """Creates GROMACS simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,

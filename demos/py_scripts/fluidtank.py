@@ -36,7 +36,7 @@ def main(_):
         fluid_level=FLAGS.fluid_level,
     )
 
-    scenario.simulate(simulator=inductiva.simulators.SPlisHSPlasH(),
+    scenario.simulate(simulator=inductiva.simulators.SplishSplash(),
                       device=FLAGS.device)
 
     logging.info("Local time: %s", time.perf_counter() - time_start)

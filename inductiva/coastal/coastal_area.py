@@ -51,7 +51,7 @@ class CoastalArea(scenarios.Scenario):
     The scenario can be simulated with SWASH.
     """
 
-    valid_simulators = [simulators.Swash]
+    valid_simulators = [simulators.SWASH]
 
     def __init__(
         self,
@@ -87,7 +87,7 @@ class CoastalArea(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulators.Simulator = simulators.Swash(),
+        simulator: simulators.Simulator = simulators.SWASH(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         simulation_time: float = 100,
@@ -134,13 +134,13 @@ class CoastalArea(scenarios.Scenario):
 
 
 @CoastalArea.get_config_filename.register
-def _(cls, simulator: simulators.Swash):  # pylint: disable=unused-argument
+def _(cls, simulator: simulators.SWASH):  # pylint: disable=unused-argument
     """Returns the configuration filename for SWASH."""
     return SWASH_CONFIG_FILENAME
 
 
 @CoastalArea.create_input_files.register
-def _(self, simulator: simulators.Swash, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.SWASH, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,

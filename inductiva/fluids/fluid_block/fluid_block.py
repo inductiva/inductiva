@@ -45,7 +45,7 @@ class FluidBlock(scenarios.Scenario):
     The scenario can be simulated with SPlisHSPlasH and DualSPHysics.
     """
 
-    valid_simulators = [simulators.Splishsplash, simulators.Dualsphysics]
+    valid_simulators = [simulators.SplishSplash, simulators.DualSPHysics]
 
     def __init__(self,
                  density: float,
@@ -89,7 +89,7 @@ class FluidBlock(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulators.Simulator = simulators.Dualsphysics(),
+        simulator: simulators.Simulator = simulators.DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "cpu",
@@ -153,13 +153,13 @@ class FluidBlock(scenarios.Scenario):
 
 
 @FluidBlock.get_config_filename.register
-def _(cls, simulator: simulators.Splishsplash):  # pylint: disable=unused-argument
+def _(cls, simulator: simulators.SplishSplash):  # pylint: disable=unused-argument
     """Returns the configuration filename for SPlisHSPlasH."""
     return SPLISHSPLASH_CONFIG_FILENAME
 
 
 @FluidBlock.create_input_files.register
-def _(self, simulator: simulators.Splishsplash, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
@@ -199,13 +199,13 @@ def _(self, simulator: simulators.Splishsplash, input_dir):  # pylint: disable=u
 
 
 @FluidBlock.get_config_filename.register
-def _(cls, simulator: simulators.Dualsphysics):  # pylint: disable=unused-argument
+def _(cls, simulator: simulators.DualSPHysics):  # pylint: disable=unused-argument
     """Returns the configuration filename for DualSPHysics."""
     return DUALSPHYSICS_CONFIG_FILENAME
 
 
 @FluidBlock.create_input_files.register
-def _(self, simulator: simulators.Dualsphysics, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.DualSPHysics, input_dir):  # pylint: disable=unused-argument
     """Creates DualSPHysics simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,

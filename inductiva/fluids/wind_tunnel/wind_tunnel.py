@@ -58,7 +58,7 @@ class WindTunnel(scenarios.Scenario):
     pressure_field, cutting planes and force coefficients.
     """
 
-    valid_simulators = [simulators.Openfoam]
+    valid_simulators = [simulators.OpenFOAM]
 
     def __init__(self,
                  flow_velocity: List[float] = None,
@@ -100,7 +100,7 @@ class WindTunnel(scenarios.Scenario):
         ]
 
     def simulate(self,
-                 simulator: simulators.Simulator = simulators.Openfoam(),
+                 simulator: simulators.Simulator = simulators.OpenFOAM(),
                  machine_group: Optional[resources.MachineGroup] = None,
                  run_async: bool = False,
                  object_path: Optional[types.Path] = None,
@@ -168,7 +168,7 @@ class WindTunnel(scenarios.Scenario):
 
 
 @WindTunnel.create_input_files.register
-def _(self, simulator: simulators.Openfoam, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
     """Creates OpenFOAM simulation input files."""
 
     # The WindTunnel with OpenFOAM requires changing multiple files

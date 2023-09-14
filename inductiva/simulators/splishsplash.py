@@ -5,7 +5,7 @@ from inductiva import types, tasks, resources
 from inductiva.simulators import Simulator
 
 
-class Splishsplash(Simulator):
+class SplishSplash(Simulator):
     """Class to invoke a generic SPlisHSPlasH simulation on the API."""
 
     def __init__(self):

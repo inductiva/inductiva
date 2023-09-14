@@ -16,7 +16,7 @@ COMMANDS_TEMPLATE_FILE_NAME = "commands.json"
 class ProteinSolvation(scenarios.Scenario):
     """Solvated protein scenario."""
 
-    valid_simulators = [simulators.Gromacs]
+    valid_simulators = [simulators.GROMACS]
 
     def __init__(self, protein_pdb: str, temperature: float = 300):
         """
@@ -52,7 +52,7 @@ class ProteinSolvation(scenarios.Scenario):
 
     def simulate(
             self,
-            simulator: simulators.Simulator = simulators.Gromacs(),
+            simulator: simulators.Simulator = simulators.GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
@@ -119,7 +119,7 @@ class ProteinSolvation(scenarios.Scenario):
 
 
 @ProteinSolvation.create_input_files.register
-def _(self, simulator: simulators.Gromacs, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.GROMACS, input_dir):  # pylint: disable=unused-argument
     """Creates GROMACS simulation input files."""
 
     # rename the pdb file to comply with the naming in the commands list

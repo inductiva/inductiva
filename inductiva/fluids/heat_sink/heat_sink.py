@@ -71,7 +71,7 @@ class HeatSink(scenarios.Scenario):
     The scenario can be simulated with OpenFOAM.
     """
 
-    valid_simulators = [simulators.Openfoam]
+    valid_simulators = [simulators.OpenFOAM]
 
     def __init__(
         self,
@@ -93,7 +93,7 @@ class HeatSink(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulators.Simulator = simulators.Openfoam(),
+        simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         simulation_time=300,
@@ -140,7 +140,7 @@ class HeatSink(scenarios.Scenario):
 
 
 @HeatSink.create_input_files.register
-def _(self, simulator: simulators.Openfoam, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
     """Creates OpenFOAM simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
