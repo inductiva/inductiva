@@ -49,20 +49,21 @@ And you are good to go! You can start [exploring our tutorial notebooks](https:/
 
 ### Example
 
-To test this scenario we have available one example of a protein PDB file - [download it here](inductiva/resources/alanine.pdb).
-
 ```python
  import inductiva
 
 inductiva.api_key = "YOUR_API_KEY"
 
+ # Load example protein
+ insulin = inductiva.molecules.examples.load_insulin()
+
  # Initialize the scenario
  scenario = inductiva.molecules.ProteinSolvation(
-     protein_pdb = "alanine.pdb",
+     protein_pdb = insulin,
      temperature = 300)
 
  # Run a simulation
- task = scenario.simulate(simulation_time_ns = 0.5)
+ task = scenario.simulate(simulation_time_ns = 0.01)
 
  # Get the simulation output on your local machine.
  output = task.get_output()
@@ -74,7 +75,7 @@ inductiva.api_key = "YOUR_API_KEY"
 This allows us to visualize the protein trajectory.
 
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/blob/main/resources/media/alanine_traject.gif?raw=True" alt="Protein solvation simulation" width="350">
+  <img src="https://github.com/inductiva/inductiva/assets/114397668/12927e51-b3b7-4a44-94fd-8d8782d489cf" alt="Protein solvation simulation" width="350">
 </p>
 
 ### Available scenarios
