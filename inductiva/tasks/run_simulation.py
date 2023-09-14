@@ -38,7 +38,7 @@ def run_simulation(
 
     # Blocking call for sync execution
     if not run_async:
-        with task:
+        with task.sync_context():
             task.wait()
 
     return task
