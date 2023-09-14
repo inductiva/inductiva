@@ -17,7 +17,7 @@ class MachineGroup():
         machine_type: str,
         num_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 30,
+        disk_size_gb: int = 40,
         zone: typing.Optional[str] = "europe-west1-b",
     ) -> None:
         """Create a MachineGroup object.
@@ -28,7 +28,7 @@ class MachineGroup():
             more information about machine types.
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 30 GB.
+            disk_size_gb: The size of the disk in GB, recommended min. is 40 GB.
             zone: The zone where the machines will be launched.
         """
         self.id = None
@@ -43,6 +43,16 @@ class MachineGroup():
         # Set the API configuration that carries the information from the client
         # to the backend.
         self._api = instance_api.InstanceApi(api.get_client())
+
+    @classmethod
+    def from_api_response(cls, resp: dict):
+        """Creates a MachineGroup object from an API response."""
+
+        machine_group = cls(resp["machine_type"], resp["num_instances"],
+                            resp["spot"], resp["disk_size_gb"], resp["zone"])
+        machine_group.name = resp["name"]
+
+        return machine_group
 
     def start(self):
         """Starts a machine group."""

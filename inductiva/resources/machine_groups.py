@@ -36,7 +36,23 @@ def _machine_group_list_to_str(machine_groups) -> str:
     )
 
 
-def list_active_machine_groups():
+def _fetch_machine_groups_from_api():
+    """Get all active machine groups of a user from the API."""
+    try:
+        api = instance_api.InstanceApi(inductiva.api.get_client())
+        response = api.list_active_user_instance_groups()
+        if len(response.body) == 0:
+            logging.info("No active machine groups found.")
+            return response.body
+
+        return response.body
+
+    except inductiva.client.ApiException as api_exception:
+        raise api_exception
+
+
+# pylint: disable=redefined-builtin
+def list():
     # pylint: disable=line-too-long
     """Lists all active machine groups info.
 
@@ -50,34 +66,15 @@ def list_active_machine_groups():
     api-8e6bf7d8-4888-4de9-bda5-268484b46e6f   c2-standard-4            1                 40      False   13 Sep, 07:37:49
 
     The name of the machine group can be used to retrieve a MachineGroup object
-    with the 'get_machine_group' function.
-
-    Returns:
-        List of machine group names.
-    """
+    with the 'get' function."""
     # pylint: enable=line-too-long
-    try:
-        api = instance_api.InstanceApi(inductiva.api.get_client())
-        response = api.list_active_user_instance_groups()
-        if len(response.body) == 0:
-            logging.info("No active machine groups found.")
-            return response.body
 
-        machine_groups = list(response.body)
-        machine_group_names = [
-            machine_group["name"] for machine_group in machine_groups
-        ]
-
-        logging.info("Active machine groups:\n%s",
-                     _machine_group_list_to_str(machine_groups))
-
-        return machine_group_names
-
-    except inductiva.client.ApiException as api_exception:
-        raise api_exception
+    machine_groups = _fetch_machine_groups_from_api()
+    print("Active machine groups:")
+    print(_machine_group_list_to_str(machine_groups))
 
 
-def get_machine_group(name: str):
+def get(name: str):
     """Returns a 'MachineGroup' object.
 
     Given the name of the machine group, returns a 'MachineGroup' object
@@ -89,23 +86,21 @@ def get_machine_group(name: str):
         api = instance_api.InstanceApi(inductiva.api.get_client())
         response = api.get_instance_group({"name": name})
 
-        mg = resources.MachineGroup(machine_type=response.body["machine_type"],
-                                    num_machines=response.body["num_instances"],
-                                    spot=response.body["spot"],
-                                    disk_size_gb=response.body["disk_size_gb"],
-                                    zone=response.body["zone"])
-        mg.name = response.body["name"]
-        return mg
+        return resources.MachineGroup.from_api_response(response.body)
 
     except inductiva.client.ApiException as api_exception:
         raise api_exception
 
 
-def get_machine_groups():
+def get_all():
     """Returns a list of 'MachineGroup' objects."""
 
     # Retrive the active machine group names
-    machine_group_name = list_active_machine_groups()
-    machine_groups = [get_machine_group(name) for name in machine_group_name]
+    machine_groups = _fetch_machine_groups_from_api()
 
-    return machine_groups
+    machine_group_list = [
+        inductiva.resources.MachineGroup.from_api_response(mg)
+        for mg in machine_groups
+    ]
+
+    return machine_group_list
