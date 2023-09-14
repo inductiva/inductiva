@@ -41,12 +41,11 @@ def download_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
     api_url = f"https://files.rcsb.org/download/{pdb_id}.pdb"
 
     local_file_path = f"{pdb_id}.pdb"
-
+    save_dir = inductiva.utils.files.resolve_path(save_dir)
     if save_dir is not None:
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         local_file_path = os.path.join(save_dir, local_file_path)
-    local_file_path = inductiva.utils.files.resolve_path(local_file_path)
     try:
         urllib.request.urlretrieve(api_url, local_file_path)
         logging.info("File downloaded to %s", local_file_path)
