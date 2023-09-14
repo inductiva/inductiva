@@ -71,7 +71,7 @@ class FluidBlock(scenarios.Scenario):
             raise ValueError("`density` must be in range [400, 2000] Kg/m3.")
 
         self.fluid = fluids.FluidType(density=density,
-                               kinematic_viscosity=kinematic_viscosity)
+                                      kinematic_viscosity=kinematic_viscosity)
 
         if len(dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
