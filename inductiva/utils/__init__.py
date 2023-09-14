@@ -4,3 +4,4 @@ from . import files
 from . import interpolation
 from . import optional_deps
 from . import templates
+from . import examples
