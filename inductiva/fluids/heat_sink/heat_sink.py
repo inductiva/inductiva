@@ -4,16 +4,10 @@ import os
 import shutil
 from typing import Optional
 
-from inductiva.fluids.heat_sink.output import HeatSinkOutput
+from inductiva import tasks, resources, simulators, scenarios, utils
 
-from inductiva import tasks, resources
-from inductiva.simulators import OpenFOAM
-from inductiva.simulators import Simulator
-from inductiva.scenarios import Scenario
-from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       replace_params_in_template)
-
-SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "heat_sink")
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
+                                     "heat_sink")
 OPENFOAM_TEMPLATE_SUBDIR = "openfoam"
 FILES_SUBDIR = "files"
 OPENFOAM_TEMPLATE_PARAMS_FILE_NAME = "parameters.jinja"
@@ -21,7 +15,7 @@ OPENFOAM_PARAMS_FILE_NAME = "parameters"
 COMMANDS_FILE_NAME = "commands.json"
 
 
-class HeatSink(Scenario):
+class HeatSink(scenarios.Scenario):
     """Heat sink scenario.
 
     This is a simulation scenario for a heat sink. A heat source is placed
@@ -77,7 +71,7 @@ class HeatSink(Scenario):
     The scenario can be simulated with OpenFOAM.
     """
 
-    valid_simulators = [OpenFOAM]
+    valid_simulators = [simulators.Openfoam]
 
     def __init__(
         self,
@@ -99,7 +93,7 @@ class HeatSink(Scenario):
 
     def simulate(
         self,
-        simulator: Simulator = OpenFOAM(),
+        simulator: simulators.Simulator = simulators.Openfoam(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         simulation_time=300,
@@ -125,7 +119,7 @@ class HeatSink(Scenario):
                                 run_async=run_async,
                                 commands=commands)
 
-        task.set_output_class(HeatSinkOutput)
+        task.set_output_class(fluids.HeatSinkOutput)
 
         return task
 
@@ -141,12 +135,12 @@ class HeatSink(Scenario):
         return commands
 
     @singledispatchmethod
-    def create_input_files(self, simulator: Simulator):
+    def create_input_files(self, simulator: simulators.Simulator):
         pass
 
 
 @HeatSink.create_input_files.register
-def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.Openfoam, input_dir):  # pylint: disable=unused-argument
     """Creates OpenFOAM simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
@@ -161,7 +155,7 @@ def _(self, simulator: OpenFOAM, input_dir):  # pylint: disable=unused-argument
         os.path.join(input_dir, file_name) for file_name in
         [OPENFOAM_TEMPLATE_PARAMS_FILE_NAME, OPENFOAM_PARAMS_FILE_NAME])
 
-    replace_params_in_template(
+    utils.templates.replace_params_in_template(
         template_path=template_file_path,
         params={
             "simulation_time": self.simulation_time,

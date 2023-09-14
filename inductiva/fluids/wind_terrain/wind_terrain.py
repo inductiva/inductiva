@@ -9,10 +9,9 @@ from typing import List, Optional
 import numpy as np
 
 import inductiva
-from inductiva import fluids, simulators, resources, scenarios, world
-from inductiva.utils import templates, optional_deps
+from inductiva import fluids, simulators, resources, scenarios, world, utils
 
-SCENARIO_TEMPLATE_DIR = os.path.join(inductiva.utils.templates.TEMPLATES_PATH,
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
@@ -54,9 +53,9 @@ class WindOverTerrain(scenarios.Scenario):
     This scenario can be simulated with OpenFOAM.
     """
 
-    valid_simulators = [simulators.OpenFOAM]
+    valid_simulators = [simulators.Openfoam]
 
-    @optional_deps.needs_fluids_extra_deps
+    @utils.optional_deps.needs_fluids_extra_deps
     def __init__(self,
                  terrain: world.Terrain,
                  wind_velocity: List[float],
@@ -100,7 +99,7 @@ class WindOverTerrain(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulators.Simulator = simulators.OpenFOAM(),
+        simulator: simulators.Simulator = simulators.Openfoam(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         n_cores: int = 1,
@@ -140,7 +139,7 @@ class WindOverTerrain(scenarios.Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         inmemory_file = io.StringIO()
-        templates.replace_params_in_template(
+        utils.templates.replace_params_in_template(
             template_path=commands_template_path,
             params={"n_cores": self.n_cores},
             output_file=inmemory_file,
@@ -155,7 +154,7 @@ class WindOverTerrain(scenarios.Scenario):
 
 
 @WindOverTerrain.create_input_files.register
-def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.Openfoam, input_dir):  # pylint: disable=unused-argument
     """Creates OpenFOAM simulation input files."""
 
     # The WindTunnel with OpenFOAM requires changing multiple files
@@ -168,7 +167,7 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    templates.batch_replace_params_in_template(
+    utils.templates.batch_replace_params_in_template(
         templates_dir=input_dir,
         template_filenames=[
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
