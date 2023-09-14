@@ -5,22 +5,18 @@ import os
 import shutil
 import io
 
-from inductiva import tasks, resources
-from inductiva.simulators import GROMACS
-from inductiva.simulators import Simulator
-from inductiva.utils import templates
-from inductiva.scenarios import Scenario
-from inductiva.molecules.md_water_box.post_processing import MDWaterBoxOutput
+from inductiva import tasks, resources, simulators, scenarios, utils, molecules
 
-SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "md_water_box")
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
+                                     "md_water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
 
-class MDWaterBox(Scenario):
+class MDWaterBox(scenarios.Scenario):
     """Molecular dynamics water box scenario."""
 
-    valid_simulators = [GROMACS]
+    valid_simulators = [simulators.Gromacs]
 
     def __init__(
         self,
@@ -45,7 +41,7 @@ class MDWaterBox(Scenario):
 
     def simulate(
             self,
-            simulator: Simulator = GROMACS(),
+            simulator: simulators.Simulator = simulators.Gromacs(),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
@@ -84,7 +80,7 @@ class MDWaterBox(Scenario):
                                 commands=commands,
                                 run_async=run_async)
 
-        task.set_output_class(MDWaterBoxOutput)
+        task.set_output_class(molecules.MDWaterBoxOutput)
 
         return task
 
@@ -96,7 +92,7 @@ class MDWaterBox(Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         inmemory_file = io.StringIO()
-        templates.replace_params_in_template(
+        utils.templates.replace_params_in_template(
             template_path=commands_template_path,
             params={"box_size": self.box_size},
             output_file=inmemory_file,
@@ -106,12 +102,12 @@ class MDWaterBox(Scenario):
         return commands
 
     @singledispatchmethod
-    def create_input_files(self, simulator: Simulator):
+    def create_input_files(self, simulator: simulators.Simulator):
         pass
 
 
 @MDWaterBox.create_input_files.register
-def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.Gromacs, input_dir):  # pylint: disable=unused-argument
     """Creates GROMACS simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
@@ -119,7 +115,7 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
 
     shutil.copytree(template_files_dir, input_dir, dirs_exist_ok=True)
 
-    templates.batch_replace_params_in_template(
+    utils.templates.batch_replace_params_in_template(
         templates_dir=input_dir,
         template_filenames=[
             "simulation.mdp.jinja",

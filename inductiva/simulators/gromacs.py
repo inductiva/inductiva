@@ -2,11 +2,10 @@
 
 from typing import Optional, List
 
-from inductiva import types, tasks, resources
-from inductiva.simulators import Simulator
+from inductiva import types, tasks, resources, simulators
 
 
-class GROMACS(Simulator):
+class Gromacs(simulators.Simulator):
     """Class to invoke any GROMACS command on the API."""
 
     def __init__(self):
