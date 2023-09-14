@@ -1,25 +1,15 @@
 """Fluid tank scenario."""
 from dataclasses import dataclass
-from enum import Enum
+import enum
 from functools import singledispatchmethod
 import json
 import os
 from typing import List, Literal, Optional
 
-from inductiva import tasks, resources
-from inductiva.scenarios import Scenario
-from inductiva.simulators import Simulator
-from inductiva.fluids.shapes import BaseShape
-from inductiva.fluids.shapes import Circle
-from inductiva.fluids.shapes import Cube
-from inductiva.fluids.shapes import Cylinder
-from inductiva.fluids.fluid_types import FluidType
-from inductiva.fluids.fluid_types import WATER
-from inductiva.simulators import SPlisHSPlasH
-from inductiva.utils import templates
-from inductiva.fluids.fluid_tank.output import FluidTankOutput
+from inductiva import fluids, resources, simulators, scenarios, tasks, utils
 
-SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "fluid_tank")
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
+                                     "fluid_tank")
 SPLISHSPLASH_TEMPLATE_INPUT_DIR = "splishsplash"
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_tank_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_tank.json"
@@ -29,7 +19,7 @@ FLUID_MESH_FILENAME = "fluid.obj"
 
 
 @dataclass
-class ParticleRadius(Enum):
+class ParticleRadius(enum.Enum):
     """Sets particle radius according to resolution."""
     HIGH = 0.005
     MEDIUM = 0.01
@@ -37,7 +27,7 @@ class ParticleRadius(Enum):
 
 
 @dataclass
-class TimeStep(Enum):
+class TimeStep(enum.Enum):
     """Sets time step according to resolution."""
     HIGH = 0.0025
     MEDIUM = 0.005
@@ -71,7 +61,7 @@ class CircularTankInlet(BaseTankInlet):
                  position: List[float] = (0, 0),
                  radius: float = 0.1):
         """Initializes a circular tank inlet."""
-        self.shape = Circle(radius=radius, position=position)
+        self.shape = fluids.shapes.Circle(radius=radius, position=position)
         super().__init__(fluid_velocity=fluid_velocity)
 
     def to_dict(self) -> dict:
@@ -104,7 +94,7 @@ class CubicTankOutlet(BaseTankOutlet):
         """
         top_base_position = top_base_position or [0, 0]
 
-        self.shape = Cube(
+        self.shape = fluids.shapes.Cube(
             dimensions=dimensions,
             position=[*top_base_position, -dimensions[2]],
         )
@@ -132,7 +122,7 @@ class CylindricalTankOutlet(BaseTankOutlet):
         """
         top_base_position = top_base_position or [0, 0]
 
-        self.shape = Cylinder(
+        self.shape = fluids.shapes.Cylinder(
             radius=radius,
             height=height,
             position=[*top_base_position, -height],
@@ -143,7 +133,7 @@ class CylindricalTankOutlet(BaseTankOutlet):
         return {"shape": self.shape.to_dict()}
 
 
-class FluidTank(Scenario):
+class FluidTank(scenarios.Scenario):
     """Fluid tank scenario.
 
     This is a simulation scenario for a fluid tank. The tank has a 3D shape that
@@ -179,12 +169,13 @@ class FluidTank(Scenario):
     The scenario can be simulated with SPlisHSPlasH.
     """
 
-    valid_simulators = [SPlisHSPlasH]
+    valid_simulators = [simulators.Splishsplash]
 
     def __init__(
         self,
-        shape: BaseShape = Cylinder(radius=0.5, height=1),
-        fluid: FluidType = WATER,
+        shape: fluids.shapes.BaseShape = fluids.shapes.Cylinder(radius=0.5,
+                                                                height=1),
+        fluid: fluids.FluidType = fluids.WATER,
         fluid_level: float = 0.5,
         inlet: Optional[BaseTankInlet] = CircularTankInlet(radius=0.1),
         outlet: Optional[BaseTankOutlet] = CylindricalTankOutlet(radius=0.1,
@@ -207,7 +198,7 @@ class FluidTank(Scenario):
 
     def simulate(
         self,
-        simulator: Simulator = SPlisHSPlasH(),
+        simulator: simulators.Simulator = simulators.Splishsplash(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "cpu",
@@ -246,7 +237,7 @@ class FluidTank(Scenario):
             sim_config_filename=self.get_config_filename(simulator),
         )
 
-        task.set_output_class(FluidTankOutput)
+        task.set_output_class(fluids.FluidTankOutput)
 
         return task
 
@@ -284,22 +275,22 @@ class FluidTank(Scenario):
             json.dump(self.to_dict(), file)
 
     @singledispatchmethod
-    def get_config_filename(self, simulator: Simulator):
+    def get_config_filename(self, simulator: simulators.Simulator):
         pass
 
     @singledispatchmethod
-    def create_input_files(self, simulator: Simulator):
+    def create_input_files(self, simulator: simulators.Simulator):
         pass
 
 
 @FluidTank.get_config_filename.register
-def _(cls, simulator: SPlisHSPlasH) -> str:  # pylint: disable=unused-argument
+def _(cls, simulator: simulators.Splishsplash) -> str:  # pylint: disable=unused-argument
     """Returns the config filename for SPlisHSPlasH."""
     return SPLISHSPLASH_CONFIG_FILENAME
 
 
 @FluidTank.create_input_files.register
-def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.Splishsplash, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
@@ -313,7 +304,7 @@ def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argum
         bounding_box_max[2],
     ]
 
-    templates.replace_params_in_template(
+    utils.templates.replace_params_in_template(
         template_path=os.path.join(template_files_dir,
                                    SPLISHSPLASH_TEMPLATE_FILENAME),
         params={
