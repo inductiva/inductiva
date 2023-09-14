@@ -41,8 +41,8 @@ def download_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
     api_url = f"https://files.rcsb.org/download/{pdb_id}.pdb"
 
     local_file_path = f"{pdb_id}.pdb"
-    save_dir = inductiva.utils.files.resolve_path(save_dir)
     if save_dir is not None:
+        save_dir = inductiva.utils.files.resolve_path(save_dir)
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         local_file_path = os.path.join(save_dir, local_file_path)
