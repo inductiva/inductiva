@@ -35,7 +35,7 @@ wide and long. It can be inspected by plotting it.
 bathymetry.plot()
 ```
 
-![Raw bathymetry.](resources/media/bathymetry_random.png)
+![Raw bathymetry.](/resources/media/bathymetry_random.png)
 
 The bathymetry is ready to be used in a simulation scenario. In this case, we set
 the wave source location to the west boundary of the domain (i.e. the lower x
@@ -65,4 +65,4 @@ To visualize the results, we can generate and save a movie of the simulation:
 output.render(movie_path = "movie_path.mp4")
 ```
 
-![Coastal area simulation.](resources/media/random_coastal_area.gif)
+![Coastal area simulation.](/resources/media/random_coastal_area.gif)
