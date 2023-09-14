@@ -1,4 +1,4 @@
-"""DualSPHysics module of the API."""
+"""DualSPHysics simulator module of the API."""
 
 from typing import Literal, Optional
 
@@ -6,7 +6,7 @@ from inductiva import types, tasks, resources
 from inductiva.simulators import Simulator
 
 
-class DualSPHysics(Simulator):
+class Dualsphysics(Simulator):
     """Class to invoke a generic DualSPHysics simulation on the API."""
 
     def __init__(self):

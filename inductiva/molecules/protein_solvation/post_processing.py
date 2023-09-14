@@ -101,8 +101,8 @@ class ProteinSolvationOutput:
         mobile. Check
         https://userguide.mdanalysis.org/stable/examples/analysis/alignment_and_rms/rmsf.html
         for more details."""
-
-        rmsf_values = np.load(RMSF_VALUES_FILE)
+        rmsf_values_path = os.path.join(self.sim_output_dir, RMSF_VALUES_FILE)
+        rmsf_values = np.load(rmsf_values_path)
         # Plot the data
         residue_number = np.arange(len(rmsf_values))
         plt.plot(residue_number, rmsf_values)
