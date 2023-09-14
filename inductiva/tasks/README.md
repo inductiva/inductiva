@@ -1,6 +1,51 @@
-# Task management
+# Tasks
 
 
+The **Inductiva API** client provides the ability to run complex simulations and contains easy-to-use tools to manage them. Each simulation submitted - with `scenario.simulate()` or `simulation.run()` - returns a `Task` object that contains methods to manage the simulation.
+
+
+Here, you'll learn:
+
+- [Submitting tasks sync vs. async](#submitting-tasks-sync-vs-async): the different ways you can submit a task.
+- [Managing tasks](#managing-tasks): the methods you can use to interact with a specific task.
+- [Retrieving tasks from previous sessions](#retrieving-tasks-from-previous-sessions): getting information from previously ran tasks.
+
+## Submitting tasks sync vs. async
+
+The **Inductiva API** client allows running simulations both synchronously and asynchronously.
+This can be achieved by specifying the `run_async` argument to `scenario.simulate()` and `simulator.run()` calls.
+When a task is submitted synchronously, the client blocks until its outputs are ready.
+Note that if the local process is interrupted (with `CTRL+C` or a client-side exception), the task running remotely will be killed.
+On the other hand, when a task is submitted asynchronously, the client unblocks after  submitting the simulation. The the user immediately gets a `Task` object, which is described in further detail [below](#managing-tasks). If the user calls `task.wait()`, the task will block until it completes, but without interrupting the remote task if the local process is interrupted.
+
+To recap:
+
+```python
+
+my_scenario = inductiva.molecules.ProteinSolvation(
+    protein_pdb="my_protein.pdb"
+)
+
+# Run simulation blocking the client, and killing the remote task if the local
+# process is interrupted.
+task = my_scenario.simulate()
+
+# Run simulation without blocking the client.
+task = my_scenario.simulate(run_async=True)
+
+# Run simulation async, blocking the client after submitting the task.
+task = my_senario.simulate(run_async=True)
+# This will block the client until the task completes.
+task.wait()
+
+# Run simulation async, turning it into a blocking call with the behavior of
+# killing the remote process if the local process is killed.
+task = my_scenario.simulate(run_async=True)
+with task.sync_context():
+    task.wait()
+```
+
+## Managing tasks
 
 The `Task` class provides methods for managing a specific task submitted to the **Inductiva API**. You get an instance of `Task` everytime you create a simulation. Moreover, you can [retrieve previously created tasks](#retrieving-tasks-from-previous-sessions).
 With a `Task` object, you can:

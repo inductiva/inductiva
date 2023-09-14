@@ -1,5 +1,6 @@
 """Manage running/completed tasks on the Inductiva API."""
 import pathlib
+import contextlib
 import time
 import json
 from absl import logging
@@ -62,37 +63,32 @@ class Task:
 
         return task
 
-    def __enter__(self):
-        """Enter context manager for managing a blocking execution.
+    @contextlib.contextmanager
+    def sync_context(self):
+        """Enter context manager for blocking sync execution.
 
-        If an exception/ctrl+c is caught while in the context manager, the task
-        is killed.
+        This turns an asynchronous task into a blocking task.
+        If an exception/ctrl+c is caught while in the context manager, the
+        remote task is killed.
 
         Usage:
-            task = scenario.simulate_async(...)
-            with task:
+            task = scenario.simulate(..., run_async=True)
+
+            with task.sync_context():
                 # If an exception happens here or ctrl+c is pressed, the task
                 # will be killed.
                 task.wait()
 
         """
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback) -> bool:
-        """Exit context manager killing the task if an exception was raised."""
-        del traceback  # unused
-        del exc_type  # unused
-
-        if exc_value is None:
-            return True
-
-        if isinstance(exc_value, KeyboardInterrupt):
+        try:
+            yield
+        except KeyboardInterrupt:
             logging.info("Caught SIGINT: terminating blocking task...")
-        elif exc_value is not None:
-            logging.info("Caught exception: terminating blocking task...")
-
-        self.kill()
-        return False
+            self.kill()
+        except Exception as e:
+            logging.error("Caught exception: terminating blocking task...")
+            self.kill()
+            raise e
 
     def get_status(self) -> models.TaskStatusCode:
         """Get status of the task.
@@ -105,6 +101,7 @@ class Task:
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
+
         return models.TaskStatusCode(resp.body["status"])
 
     def get_info(self) -> Dict[str, Any]:
