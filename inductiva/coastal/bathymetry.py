@@ -351,7 +351,7 @@ class Bathymetry:
         necessary, the user can control the spacing in the x and y directions
         using the `x_resolution` and `y_resolution` arguments.
 
-        For non-uniform grids of if the resoltuion is specified, the data is
+        For non-uniform grids or if the resoltuion is specified, the data is
         interpolated from the points where the bathymetry is defined
         to the resized uniform grid using linear interpolation.
 
@@ -504,10 +504,9 @@ class Bathymetry:
         y_size = int(self.y_ptp() / y_resolution)
 
         logging.info(
-                "Interpolating the bathymetry to a uniform grid of dimensions:\n"
-                "- grid resolution %.2f x %.2f (m x m) \n"
-                "- grid size %d x %d", x_resolution, y_resolution, x_size,
-            y_size)
+            "Interpolating the bathymetry to a grid of dimensions:\n"
+            "- grid resolution %.2f x %.2f (m x m) \n"
+            "- grid size %d x %d", x_resolution, y_resolution, x_size, y_size)
 
         # Create uniform grid for interpolation.
         (x_grid, y_grid) = inductiva.utils.grids.get_meshgrid(
