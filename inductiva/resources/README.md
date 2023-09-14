@@ -86,14 +86,11 @@ You can also list your active machine groups, and use the names that appear in t
 ```python
 import inductiva
 
-inductiva.resources.list_active_machine_groups()
+inductiva.resources.list()
 #                                     Name         VM Type   # machines    Disk Size in GB       Spot         Created at
 # api-1b1f724c-5cfe-4d87-8439-9689aa139723   c2-standard-4            1                 40      False   13 Sep, 07:38:50
 # api-8e6bf7d8-4888-4de9-bda5-268484b46e6f   c2-standard-4            1                 40      False   13 Sep, 07:37:49
 
-# Create a MachineGroup object by using its name and resume it using
-mg = inductiva.resources.get_machine_group("api-24e497af-d135-4a59-bdd1-854bf0176cbf")
-
-# Or get a list of all the MachineGroup objects (for example, if you want to terminate it at once)
-mg_list = inductiva.resources.get_machine_groups()
+# Get a list of all the MachineGroup objects (for example, if you want to terminate them all at once)
+mg_list = inductiva.resources.get()
 ```
