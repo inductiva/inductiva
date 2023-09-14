@@ -5,24 +5,17 @@ from typing import Optional, Literal
 import os
 import shutil
 
-from inductiva import tasks, resources
-from inductiva.simulators import GROMACS
-from inductiva.simulators import Simulator
-from inductiva.utils.templates import (TEMPLATES_PATH,
-                                       batch_replace_params_in_template)
-from inductiva.scenarios import Scenario
-from inductiva.utils import files
-from inductiva.molecules.protein_solvation.post_processing import ProteinSolvationOutput
+from inductiva import tasks, resources, simulators, scenarios, utils, molecules
 
-SCENARIO_TEMPLATE_DIR = os.path.join(TEMPLATES_PATH, "protein_solvation")
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH, "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
 COMMANDS_TEMPLATE_FILE_NAME = "commands.json"
 
 
-class ProteinSolvation(Scenario):
+class ProteinSolvation(scenarios.Scenario):
     """Solvated protein scenario."""
 
-    valid_simulators = [GROMACS]
+    valid_simulators = [simulators.Gromacs]
 
     def __init__(self, protein_pdb: str, temperature: float = 300):
         """
@@ -40,7 +33,7 @@ class ProteinSolvation(Scenario):
         """
         self.template_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                          GROMACS_TEMPLATE_INPUT_DIR)
-        self.protein_pdb = files.resolve_path(protein_pdb)
+        self.protein_pdb = utils.files.resolve_path(protein_pdb)
         self.temperature = temperature
 
     def set_default_output_files(self):
@@ -58,7 +51,7 @@ class ProteinSolvation(Scenario):
 
     def simulate(
             self,
-            simulator: Simulator = GROMACS(),
+            simulator: simulators.Simulator = simulators.Gromacs(),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
@@ -104,7 +97,7 @@ class ProteinSolvation(Scenario):
                                 commands=commands,
                                 run_async=run_async)
 
-        task.set_output_class(ProteinSolvationOutput)
+        task.set_output_class(molecules.ProteinSolvationOutput)
         task.set_default_output_files(self.set_default_output_files())
 
         return task
@@ -120,12 +113,12 @@ class ProteinSolvation(Scenario):
         return commands
 
     @singledispatchmethod
-    def create_input_files(self, simulator: Simulator):
+    def create_input_files(self, simulator: simulators.Simulator):
         pass
 
 
 @ProteinSolvation.create_input_files.register
-def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.Gromacs, input_dir):  # pylint: disable=unused-argument
     """Creates GROMACS simulation input files."""
 
     # rename the pdb file to comply with the naming in the commands list
@@ -136,7 +129,7 @@ def _(self, simulator: GROMACS, input_dir):  # pylint: disable=unused-argument
 
     shutil.copytree(template_files_dir, input_dir, dirs_exist_ok=True)
 
-    batch_replace_params_in_template(
+    utils.templates.batch_replace_params_in_template(
         templates_dir=input_dir,
         template_filenames=[
             "simulation.mdp.jinja",

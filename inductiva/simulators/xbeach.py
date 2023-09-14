@@ -1,11 +1,10 @@
 """DualSPHysics module of the API."""
 from typing import Optional
 
-from inductiva import types, tasks, resources
-from inductiva.simulators import Simulator
+from inductiva import types, tasks, resources, simulators
 
 
-class XBeach(Simulator):
+class Xbeach(simulators.Simulator):
     """Class to invoke a generic XBeach simulation on the API."""
 
     def __init__(self):

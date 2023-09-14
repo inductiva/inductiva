@@ -1,11 +1,10 @@
 """SWASH module of the API."""
 from typing import Optional
 
-from inductiva.simulators import Simulator
-from inductiva import types, tasks, resources
+from inductiva import types, tasks, resources, simulators
 
 
-class SWASH(Simulator):
+class Swash(simulators.Simulator):
     """Class to invoke a generic SWASH simulation on the API."""
 
     def __init__(self):
