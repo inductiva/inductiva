@@ -1,11 +1,11 @@
-"""DualSPHysics module of the API."""
+"""Splishsplash simulator module of the API."""
 from typing import Literal, Optional
 
 from inductiva import types, tasks, resources
 from inductiva.simulators import Simulator
 
 
-class SPlisHSPlasH(Simulator):
+class Splishsplash(Simulator):
     """Class to invoke a generic SPlisHSPlasH simulation on the API."""
 
     def __init__(self):

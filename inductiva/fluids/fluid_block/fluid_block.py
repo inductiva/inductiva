@@ -5,18 +5,11 @@ import os
 from typing import List, Literal, Optional
 import shutil
 
-from inductiva import tasks, resources
-from inductiva.scenarios import Scenario
-from inductiva.simulators import Simulator
-from inductiva.fluids.fluid_types import FluidType
-from inductiva.simulators import SPlisHSPlasH
-from inductiva.simulators import DualSPHysics
-from inductiva.utils import templates
-from inductiva.fluids._post_processing import SPHSimulationOutput
+from inductiva import tasks, resources, fluids, scenarios, simulators, utils
 
 TANK_DIMENSIONS = [1, 1, 1]
 
-SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "fluid_block")
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH, "fluid_block")
 SPLISHPLASH_TEMPLATE_INPUT_DIR = "splishsplash"
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
@@ -27,7 +20,7 @@ DUALSPHYSICS_TEMPLATE_FILENAME = "fluid_block_template.dualsphysics.xml.jinja"
 DUALSPHYSICS_CONFIG_FILENAME = "fluid_block.xml"
 
 
-class FluidBlock(Scenario):
+class FluidBlock(scenarios.Scenario):
     """Fluid block scenario.
 
     This is a simulation scenario for a fluid block moving in a cubic tank under
@@ -48,10 +41,10 @@ class FluidBlock(Scenario):
     |                               |
     |_______________________________|
 
-    The scenario can be simulated with SPlisSPlasH and DualSPHysics.
+    The scenario can be simulated with SPlisHSPlasH and DualSPHysics.
     """
 
-    valid_simulators = [SPlisHSPlasH, DualSPHysics]
+    valid_simulators = [simulators.Splishsplash, simulators.Dualsphysics]
 
     def __init__(self,
                  density: float,
@@ -71,8 +64,8 @@ class FluidBlock(Scenario):
               z), in m/s.
         """
 
-        self.fluid = FluidType(density=density,
-                               kinematic_viscosity=kinematic_viscosity)
+        self.fluid = fluids.FluidType(density=density,
+                                      kinematic_viscosity=kinematic_viscosity)
 
         if len(dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
@@ -90,7 +83,7 @@ class FluidBlock(Scenario):
 
     def simulate(
         self,
-        simulator: Simulator = DualSPHysics(),
+        simulator: simulators.Simulator = simulators.Dualsphysics(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         device: Literal["cpu", "gpu"] = "cpu",
@@ -140,27 +133,27 @@ class FluidBlock(Scenario):
         #     data_dir=os.path.join(output_path, "vtk"),
         #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
         #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
-        task.set_output_class(SPHSimulationOutput)
+        task.set_output_class(fluids.SPHSimulationOutput)
 
         return task
 
     @singledispatchmethod
-    def get_config_filename(self, simulator: Simulator):
+    def get_config_filename(self, simulator: simulators.Simulator):
         pass
 
     @singledispatchmethod
-    def create_input_files(self, simulator: Simulator):
+    def create_input_files(self, simulator: simulators.Simulator):
         pass
 
 
 @FluidBlock.get_config_filename.register
-def _(cls, simulator: SPlisHSPlasH):  # pylint: disable=unused-argument
+def _(cls, simulator: simulators.Splishsplash):  # pylint: disable=unused-argument
     """Returns the configuration filename for SPlisHSPlasH."""
     return SPLISHSPLASH_CONFIG_FILENAME
 
 
 @FluidBlock.create_input_files.register
-def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.Splishsplash, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
@@ -173,7 +166,7 @@ def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argum
     # Generate the simulation configuration file.
     fluid_margin = 2 * self.particle_radius
 
-    templates.replace_params_in_template(
+    utils.templates.replace_params_in_template(
         template_path=os.path.join(template_files_dir,
                                    SPLISHSPLASH_TEMPLATE_FILENAME),
         params={
@@ -200,18 +193,18 @@ def _(self, simulator: SPlisHSPlasH, input_dir):  # pylint: disable=unused-argum
 
 
 @FluidBlock.get_config_filename.register
-def _(cls, simulator: DualSPHysics):  # pylint: disable=unused-argument
+def _(cls, simulator: simulators.Dualsphysics):  # pylint: disable=unused-argument
     """Returns the configuration filename for DualSPHysics."""
     return DUALSPHYSICS_CONFIG_FILENAME
 
 
 @FluidBlock.create_input_files.register
-def _(self, simulator: DualSPHysics, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.Dualsphysics, input_dir):  # pylint: disable=unused-argument
     """Creates DualSPHysics simulation input files."""
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                       DUALSPHYSICS_TEMPLATE_INPUT_DIR)
-    templates.replace_params_in_template(
+    utils.templates.replace_params_in_template(
         template_path=os.path.join(template_files_dir,
                                    DUALSPHYSICS_TEMPLATE_FILENAME),
         params={
