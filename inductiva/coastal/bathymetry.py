@@ -365,12 +365,13 @@ class Bathymetry:
 
         if not self.is_uniform_grid():
             logging.info("Plotting the bathymetry on a uniform grid...")
-            depths_grid, _ = self._interpolate_to_uniform_grid(
-                x_resolution,
-                y_resolution,
-                threshold_distance=threshold_distance,
-                nullable=True,
-            )
+
+        depths_grid, _ = self._interpolate_to_uniform_grid(
+            x_resolution,
+            y_resolution,
+            threshold_distance=threshold_distance,
+            nullable=True,
+        )
 
         x_size = self.x_ptp() / x_resolution
         y_size = self.y_ptp() / y_resolution
@@ -477,10 +478,12 @@ class Bathymetry:
         x_size = int(self.x_ptp() / x_resolution)
         y_size = int(self.y_ptp() / y_resolution)
 
-        logging.info(
-            "Interpolating the bathymetry to a uniform grid...\n"
-            "- grid resolution %f x %f (m x m) \n"
-            "- grid size %d x %d", x_resolution, y_resolution, x_size, y_size)
+        if not self.is_uniform_grid():
+            logging.info(
+                "Interpolating the bathymetry to a uniform grid...\n"
+                "- grid resolution %f x %f (m x m) \n"
+                "- grid size %d x %d", x_resolution, y_resolution, x_size,
+                y_size)
 
         # Create uniform grid for interpolation.
         (x_grid, y_grid) = inductiva.utils.grids.get_meshgrid(
