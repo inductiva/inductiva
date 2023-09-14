@@ -2,7 +2,6 @@
 from absl import logging
 import inductiva
 from inductiva.client.apis.tags import instance_api
-from inductiva import resources
 from inductiva.utils import format_utils
 
 
