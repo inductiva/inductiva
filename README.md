@@ -109,7 +109,7 @@ Example of how to use the simulators:
 
 ```python
 
-simulator = inductiva.simulators.DualSPHysics()
+simulator = inductiva.simulators.Dualsphysics()
 
 output_dir = simulator.run(input_dir="FlowCylinder",
                            sim_config_filename="CaseFlowCylinder_Re200_Def.xml",

@@ -30,7 +30,7 @@ def main(_):
 
     inductiva.api_url = FLAGS.api_url
 
-    sph_sim = inductiva.simulators.DualSPHysics()
+    sph_sim = inductiva.simulators.Dualsphysics()
 
     task = sph_sim.run(
         input_dir=FLAGS.sim_dir,
