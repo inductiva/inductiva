@@ -56,7 +56,8 @@ def download_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
     return file_path
 
 
-def download_inductiva_resources(file_name: str, save_dir: Optional[str] = None) -> str:
+def download_inductiva_resources(file_name: str,
+                                 save_dir: Optional[str] = None) -> str:
     """Download a file from the resources folder of Inductiva Github.
 
     Args:
@@ -73,7 +74,9 @@ def download_inductiva_resources(file_name: str, save_dir: Optional[str] = None)
     return file_path
 
 
-def download_from_external_url(api_url: str, file_path: str, save_dir: Optional[str] = None) -> str:
+def download_from_external_url(api_url: str,
+                               file_path: str,
+                               save_dir: Optional[str] = None) -> str:
     """Download a file from an external URL.
 
     Args:
@@ -96,4 +99,4 @@ def download_from_external_url(api_url: str, file_path: str, save_dir: Optional[
         logging.error("Could not download file from %s", api_url)
         logging.error("%s", url_error)
 
-    return  file_path
+    return file_path
