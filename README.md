@@ -27,12 +27,12 @@ pip install --upgrade inductiva
 These will provide the default installation of the package, that allow you to submit jobs, control machines and run simulations. To use the visualization and post-processing tools, you need to install extra dependencies depending on your area: `molecules_extra`, `fluids_extra` or `coastal_extra`. For example, for molecules:
 
 ```
-pip install inductiva[molecules_extra]
+pip install --upgrade "inductiva[molecules_extra]"
 ```
 
 ## API access tokens
 
-Please [request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform)  and add the following line to your code:
+Please [request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform) and add the following line to your code:
 
 ```python
 import inductiva

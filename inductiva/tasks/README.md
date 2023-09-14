@@ -1,4 +1,52 @@
-# Task management
+# Tasks
+
+## Submitting tasks
+
+### Sync. vs Async.
+
+The **Inductiva API** client allows running simulations both synchronously and asynchronously.
+This can be achieved by specifying the `run_async` argument to `scenario.simulate()` and `simulator.run()` calls.
+When tasks are submitted synchronously, the client blocks until the task's outputs are ready.
+Note that if the local process on blocking tasks is interrupted (for instance, with `CTRL+C` or a client-side exception), the task running remotely will be killed.
+When run tasks asynchronously, on the other hand, the client unblocks after successfuly submitting the simulation, and the user immediately gets a `Task` object, which is described in further detail [below](#managing-tasks). If the user calls `task.wait()`, the task will block until it completes, but without interrupting the remote task if the local process is interrupted.
+
+To recap:
+
+```python
+
+my_scenario = inductiva.molecules.ProteinSolvation(
+    protein_pdb="my_protein.pdb"
+)
+
+# Run simulation blocking the client, and killing the remote task if the local
+# process is interrupted.
+task = my_scenario.simulate()
+
+# Run simulation without blocking the client.
+task = my_scenario.simulate(run_async=True)
+
+# Run simulation async, blocking the client after submitting the task.
+task = my_senario.simulate(run_async=True)
+# This will block the client until the task complets..
+task.wait()
+
+# Run simulation async, turning it into a blocking call with the behavior of
+# killing the remote process if the local process is killed.
+task = my_scenario.simulate(run_async=True)
+with task.sync_context()
+    task.wait()
+```
+
+
+Running the task synchronously but without interrupting the remote process when can be achieved by
+submitting the task as
+
+
+
+
+
+## Managing tasks
+
 
 
 
