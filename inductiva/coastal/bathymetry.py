@@ -397,14 +397,6 @@ class Bathymetry:
                 nullable=True,
             )
 
-            x_size = self.x_ptp() / x_resolution
-            y_size = self.y_ptp() / y_resolution
-
-        if x_size > 1000 and y_size > 1000:
-            logging.warning(
-                "The plotting grid is large. It may take a while to plot."
-                " Consider using a smaller grid resolution.")
-
         # Plot the bathymetry.
         extent = (
             self.x_range[0],
