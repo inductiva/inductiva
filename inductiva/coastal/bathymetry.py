@@ -19,10 +19,10 @@ from inductiva.utils import optional_deps
 
 class Bathymetry:
     """Represents a bathymetric profile.
-    
+
     A bathymetric profile defines the depth of the sea bottom as a function of
     space, here described in Cartesian coordinates (x, y).
-    
+
     Here, a bathymetry is represented with:
     - a 1D array of depths, in meters, measured at arbitrary points in space.
       Positive depths are below the water level.
@@ -38,7 +38,7 @@ class Bathymetry:
         y: np.ndarray,
     ):
         """Initializes a `Bathymetry` object.
-        
+
         Args:
             depths: A 1D array with the depths, in meters.
             x: A 1D array with the x coordinates of the points where depths are
@@ -58,7 +58,7 @@ class Bathymetry:
         y_range: Sequence[float],
     ):
         """Creates a `Bathymetry` object from a bot file.
-        
+
         The depth values are read from a bot file, i.e. a text file with a 2D
         array with the depths, in meters. The first and second dimensions of the
         array in the text file (i.e. rows and columns) correspond to the x and y
@@ -86,7 +86,7 @@ class Bathymetry:
         remove_offset: bool = True,
     ):
         """Creates a `Bathymetry` object from an ASCII XYZ file.
-        
+
         ASCII XYZ files store bathymetric data in a table where each line
         corresponds to a location (latitude, longitude pair). Several columns
         are available to characterize the depth at each location, namely:
@@ -363,13 +363,14 @@ class Bathymetry:
               defined.
         """
 
-        logging.info("Plotting the bathymetry on a uniform grid...")
-        depths_grid, _ = self._interpolate_to_uniform_grid(
-            x_resolution,
-            y_resolution,
-            threshold_distance=threshold_distance,
-            nullable=True,
-        )
+        if not self.is_uniform_grid():
+            logging.info("Plotting the bathymetry on a uniform grid...")
+            depths_grid, _ = self._interpolate_to_uniform_grid(
+                x_resolution,
+                y_resolution,
+                threshold_distance=threshold_distance,
+                nullable=True,
+            )
 
         x_size = self.x_ptp() / x_resolution
         y_size = self.y_ptp() / y_resolution
