@@ -4,11 +4,10 @@ Currently, we only support the OpenFOAM simulator.
 import os
 import csv
 
-from inductiva.fluids import post_processing
-from inductiva import types
+from inductiva import fluids, types
 
 
-class WindTunnelOutput(post_processing.SteadyStateOutput):
+class WindTunnelOutput(fluids.SteadyStateOutput):
     """Post-Process WindTunnel simulation outputs.
     This class is based on a more general class for post-processing the
     outputs of steady-state simulations. It inherits the following tools:

@@ -4,7 +4,7 @@ from .swash import SWASH
 from .xbeach import XBeach
 from .splishsplash import Splishsplash
 from .dualsphysics import Dualsphysics
-from .openfoam import OpenFOAM
+from .openfoam import Openfoam
 from .gromacs import GROMACS
 from .simsopt import Simsopt
 from .fenicsx import FEniCSx

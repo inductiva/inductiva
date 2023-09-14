@@ -1,11 +1,10 @@
 """OpenFOAM module of the API for fluid dynamics."""
 from typing import Optional, List
 
-from inductiva import types, tasks, resources
-from inductiva.simulators import Simulator
+from inductiva import types, tasks, resources, simulators
 
 
-class OpenFOAM(Simulator):
+class Openfoam(simulators.Simulator):
     """Class to invoke a generic OpenFOAM simulation on the API."""
 
     def __init__(self):
