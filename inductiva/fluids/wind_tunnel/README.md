@@ -38,8 +38,8 @@ scenario = inductiva.fluids.WindTunnel(
 # Run a simulation
 task = scenario.simulate(
     object_path="test_vehicle.obj",
-    num_iterations=100, resolution="medium",
-    run_async=True, n_cores=4)
+    num_iterations=50, resolution="low",
+    n_cores=2)
 
 # Download the simulation output to your local machine.
 output = task.get_output()
