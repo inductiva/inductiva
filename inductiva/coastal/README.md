@@ -65,4 +65,4 @@ To visualize the results, we can generate and save a movie of the simulation:
 output.render(movie_path = "movie_path.mp4")
 ```
 
-![Coastal area simulation.](resources/media/bathymetry_velocities.mp4)
+![Coastal area simulation.](resources/media/random_coastal_area.gif)
