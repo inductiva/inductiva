@@ -3,14 +3,7 @@ from typing import List, Literal, Optional
 from enum import Enum
 from dataclasses import dataclass
 
-from inductiva import tasks, resources
-from inductiva.simulators import Simulator
-from inductiva.simulators import DualSPHysics
-from inductiva.fluids.fluid_block import FluidBlock
-from inductiva.fluids.fluid_types import FluidType
-from inductiva.fluids.fluid_types import WATER
-
-from inductiva.fluids._post_processing import SPHSimulationOutput
+from inductiva import tasks, resources, simulators, fluids
 
 
 @dataclass
@@ -21,12 +14,12 @@ class ParticleRadius(Enum):
     LOW = 0.02
 
 
-class DamBreak(FluidBlock):
+class DamBreak(fluids.FluidBlock):
     """Physical scenario of a dam break simulation."""
 
     def __init__(
         self,
-        fluid: FluidType = WATER,
+        fluid: fluids.FluidType = fluids.WATER,
         dimensions: Optional[List[float]] = None,
         position: Optional[List[float]] = None,
     ):
@@ -51,7 +44,7 @@ class DamBreak(FluidBlock):
     # pylint: disable=arguments-renamed
     def simulate(
         self,
-        simulator: Simulator = DualSPHysics(),
+        simulator: simulators.Simulator = simulators.Dualsphysics(),
         machine_group: Optional[resources.MachineGroup] = None,
         device: Literal["cpu", "gpu"] = "cpu",
         resolution: Literal["high", "medium", "low"] = "medium",
@@ -78,6 +71,6 @@ class DamBreak(FluidBlock):
                                 simulation_time=simulation_time,
                                 run_async=run_async)
 
-        task.set_output_class(SPHSimulationOutput)
+        task.set_output_class(fluids.SPHSimulationOutput)
 
         return task
