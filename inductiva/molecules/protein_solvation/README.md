@@ -38,18 +38,19 @@ To test this scenario we have available one example of a protein PDB file - [dow
 
 inductiva.api_key = "YOUR_API_KEY"
 
- # Initialize the scenario
- lysozyme = inductiva.molecules.examples.load_lysozyme()
- scenario = inductiva.molecules.ProteinSolvation(
+# Initialize the scenario
+lysozyme = inductiva.molecules.examples.load_lysozyme()
+scenario = inductiva.molecules.ProteinSolvation(
      protein_pdb = lysozyme,
      temperature = 300)
 
- # Run a simulation
- task = scenario.simulate(simulation_time_ns = 0.5)
+# Run a simulation
+task = scenario.simulate(simulation_time_ns = 0.1)
 
- # Get the simulation output on your local machine.
- output = task.get_output()
+# Get the simulation output on your local machine.
+output = task.get_output()
  ```
+ This may take up to 5 minutes, depending on which machine you use.  
 The last code line downloads the files necessary to render and post-process our simulation.
 
 ## Output and Post-processing 
