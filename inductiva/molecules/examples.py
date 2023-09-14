@@ -1,4 +1,5 @@
-"Set of functions to load example molecules to run GROMACS simulations."
+"""Functions to download and load example molecules for GROMACS simulations 
+from the RCSB PDB database."""
 import requests
 
 
