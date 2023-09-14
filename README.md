@@ -30,6 +30,8 @@ These will provide the default installation of the package, that allow you to su
 pip install --upgrade "inductiva[molecules_extra]"
 ```
 
+If you had trouble installing the package, check the [FAQ](#1-trouble-installing) for more details.
+
 ## API access tokens
 
 Please [request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform) and add the following line to your code:
@@ -170,7 +172,42 @@ All of the simulations will be launched in one go. The user can check the status
 
 
 
-## FAQ:
+## More info:
 
-- [Task Management](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks)
-- [Machine Group](https://github.com/inductiva/inductiva/tree/main/inductiva/resources)
+- [Managing submitted tasks](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks)
+- [Managing computation resources](https://github.com/inductiva/inductiva/tree/main/inductiva/resources)
+
+## FAQ
+
+### 1. Trouble installing
+
+If installing the package failed, you can retry it on a new Python virtual environment. A [virtual environment](https://docs.python.org/3/library/venv.html) allows you to have a fresh Python environment with isolated dependencies. In your shell, run:
+
+```
+python -m venv <venv>
+```
+
+In that command, you should replace `<venv>` with the path (*e.g.*, `.venv`) in which you would like to create the environment. Then, to activate the environment (again, correctly replacing `<venv>`), run:
+
+For `bash`/`zsh`:
+
+```
+source <venv>/bin/activate
+```
+
+For `cmd.exe` (Windows):
+
+```
+C:\> <venv>\Scripts\activate.bat
+```
+
+For `PowerShell` (Windows):
+```
+PS C:\> <venv>\Scripts\Activate.ps1
+```
+
+After activating the virtual environment, you can install the package as described above:
+
+```
+pip install --upgrade inductiva
+```
