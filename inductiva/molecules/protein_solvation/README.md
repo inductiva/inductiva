@@ -45,12 +45,12 @@ scenario = inductiva.molecules.ProteinSolvation(
      temperature = 300)
 
 # Run a simulation
-task = scenario.simulate(simulation_time_ns = 0.05)
+task = scenario.simulate(simulation_time_ns = 0.01)
 
 # Get the simulation output on your local machine.
 output = task.get_output()
  ```
-This may take up to 5 minutes, depending on which machine you use.  
+This may take up to 2 minutes, depending on which machine you use.  
 The last code line downloads the files necessary to render and post-process our simulation.
 
 ## Output and Post-processing 
