@@ -39,8 +39,9 @@ To test this scenario we have available one example of a protein PDB file - [dow
 inductiva.api_key = "YOUR_API_KEY"
 
  # Initialize the scenario
+ lysozyme = inductiva.molecules.examples.load_lysozyme()
  scenario = inductiva.molecules.ProteinSolvation(
-     protein_pdb = "alanine.pdb",
+     protein_pdb = lysozyme,
      temperature = 300)
 
  # Run a simulation
