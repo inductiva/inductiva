@@ -4,7 +4,7 @@ import os
 import shutil
 from typing import Optional
 
-from inductiva import tasks, resources, simulators, scenarios, utils
+from inductiva import fluids, tasks, resources, simulators, scenarios, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "heat_sink")
