@@ -1,9 +1,9 @@
 # Fluid Block
 
 This scenario simulates the motion of a fluid in a cubic tank. 
-Fluid is initial set as a cube and then allowed to flow under the influence of gravity.
+The fluid starts as a cube and then flows under the effect of gravity.
 The simulation is performed using the [Smoothed Particle Hydrodynamics](https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics)
-method. Currently, this scenario runs with both [SPlisHSPlasH](https://github.com/inductiva/inductiva/blob/main/inductiva/simulators/splishsplash.py) and [DualSPHysics](https://github.com/inductiva/inductiva/blob/main/inductiva/simulators/dualsphysics.py).
+method. Currently, this scenario runs with the following simulators: [SPlisHSPlasH](https://github.com/inductiva/inductiva/blob/main/inductiva/simulators/splishsplash.py) and [DualSPHysics](https://github.com/inductiva/inductiva/blob/main/inductiva/simulators/dualsphysics.py).
 
 This scenario allows users to play with the different properties of fluids, namely, the density and the kinematic viscosity of the fluid.
 Further, users can select the size of the initial fluid block, the initial position and the initial velocity. 
@@ -28,7 +28,7 @@ task = scenario.simulate(simulation_time=2)
 output = task.get_output()
 ```
 
-To visualize the results, users will need to the extra dependencies of the fluid package with `pip install --upgrade "inductiva[fluids_extra]"`. 
+To visualize the results, users will need to install the extra dependencies of the fluid package with `pip install --upgrade "inductiva[fluids_extra]"`. 
 Then run the following code:
 
 ```python
@@ -38,6 +38,6 @@ output.render()
 <p align="center">
   <img src="https://github.com/inductiva/inductiva/assets/" alt="Centered Image" width="350" height="250">
 
-Remark: For those running on Colab or a headless server, further extra dependencies are required. Install them with `!apt install libgl1-mesa-glx xvfb`. Moreover, activate the parameter `virtual_display=True` in the render method, like `output.render(virtual_display=True)`.
+Remark: For those running on Google Colab or a headless server, further extra dependencies are required. Install them with `!apt install libgl1-mesa-glx xvfb`. Moreover, activate the parameter `virtual_display=True` in the render method, like `output.render(virtual_display=True)`.
 
 Further, ou can alter the `color` of the particles and `fps` of the rendering!
