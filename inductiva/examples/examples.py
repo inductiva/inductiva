@@ -67,7 +67,7 @@ def download_inductiva_resources(file_name: str, save_dir: Optional[str] = None)
     """
 
     api_url = "https://github.com/inductiva/inductiva/tree/" \
-              f"ip-download-examples/resources/examples/{file_name}"
+              f"main/resources/examples/{file_name}"
     file_path = download_from_external_url(api_url, file_name, save_dir)
 
     return file_path
