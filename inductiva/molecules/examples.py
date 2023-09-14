@@ -3,21 +3,21 @@ from the RCSB PDB database."""
 import urllib
 
 
-def load_hemoglobin():
+def load_hemoglobin() -> str:
     """Load the hemoglobin molecule.
     Returns:
         The path to the downloaded PDB file."""
     return download_from_rcsb("1A3N")
 
 
-def load_lysozyme():
+def load_lysozyme() -> str:
     """Load lysozyme protein.
     Returns:
         The path to the downloaded PDB file."""
     return download_from_rcsb("1AKI")
 
 
-def download_from_rcsb(pdb_id):
+def download_from_rcsb(pdb_id: str) -> str:
     """Download a PDB file from the RCSB database according 
     to its pdb ID.
     Args:
