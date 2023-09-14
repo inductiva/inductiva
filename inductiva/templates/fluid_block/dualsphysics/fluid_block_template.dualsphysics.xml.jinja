@@ -53,6 +53,8 @@
             <parameter key="TimeMax" value="{{ simulation_time }}" comment="Time of simulation" units_comment="seconds" />
             <parameter key="TimeOut" value="{{ output_time_step }}" comment="Time frequency in which the data is exported" units_comment="seconds" />
             <simulationdomain comment="Defines domain of simulation (default=Uses minimum and maximum position of the generated particles)">
+            <parameter key="RhopOutMin" value="400" comment="Minimum rhop valid (default=200)" units_comment="kg/m^3" />
+            <parameter key="RhopOutMax" value="3000" comment="Maximum rhop valid (default=3000)" units_comment="kg/m^3" />
                 <posmin x="default" y="default" z="default" comment="e.g.: x=0.5, y=default-1, z=default-10%" />
                 <posmax x="default" y="default" z="default + 50%" />
             </simulationdomain>
