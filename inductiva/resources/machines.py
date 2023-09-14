@@ -33,6 +33,7 @@ class MachineGroup():
         """
         self.id = None
         self.name = None
+        self.create_time = None
         #TODO: Check if machine type is valid.
         self.machine_type = machine_type
         self.num_machines = num_machines
@@ -48,9 +49,11 @@ class MachineGroup():
     def from_api_response(cls, resp: dict):
         """Creates a MachineGroup object from an API response."""
 
-        machine_group = cls(resp["machine_type"], resp["num_instances"],
-                            resp["spot"], resp["disk_size_gb"], resp["zone"])
+        machine_group = cls(resp["machine_type"], int(resp["num_instances"]),
+                            bool(resp["spot"]), resp["disk_size_gb"],
+                            resp["zone"])
         machine_group.name = resp["name"]
+        machine_group.create_time = resp["create_time"]
 
         return machine_group
 

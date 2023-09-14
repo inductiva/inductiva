@@ -6,18 +6,18 @@ from inductiva import resources
 from inductiva.utils import format_utils
 
 
-def _machine_group_list_to_str(machine_groups) -> str:
+def _machine_group_list_to_str(machine_group_list) -> str:
     """Returns a string representation of a list of machine groups."""
     columns = [
         "Name", "VM Type", "# machines", "Disk Size in GB", "Spot", "Created at"
     ]
     rows = []
 
-    for machine_group in machine_groups:
+    for machine_group in machine_group_list:
         rows.append([
-            machine_group["name"], machine_group["machine_type"],
-            machine_group["num_instances"], machine_group["disk_size_gb"],
-            bool(machine_group["spot"]), machine_group["create_time"]
+            machine_group.name, machine_group.machine_type,
+            machine_group.num_machines, machine_group.disk_size_gb,
+            machine_group.spot, machine_group.create_time
         ])
 
     formatters = {"Created at": format_utils.datetime_formatter}
@@ -69,9 +69,10 @@ def list():
     with the 'get' function."""
     # pylint: enable=line-too-long
 
-    machine_groups = _fetch_machine_groups_from_api()
-    print("Active machine groups:")
-    print(_machine_group_list_to_str(machine_groups))
+    machine_group_list = get_all()
+    if len(machine_group_list) != 0:
+        print("Active machine groups:")
+        print(_machine_group_list_to_str(machine_group_list))
 
 
 def get(name: str):
@@ -99,8 +100,8 @@ def get_all():
     machine_groups = _fetch_machine_groups_from_api()
 
     machine_group_list = [
-        inductiva.resources.MachineGroup.from_api_response(mg)
-        for mg in machine_groups
+        inductiva.resources.MachineGroup.from_api_response(mg) \
+            for mg in machine_groups
     ]
 
     return machine_group_list
