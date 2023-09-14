@@ -55,8 +55,10 @@ class FluidBlock(scenarios.Scenario):
         """Initializes the fluid block scenario.
 
         Args:
-            density: The density of the fluid in kg/m^3.
-            kinematic_viscosity: The kinematic viscosity of the fluid, in m^2/s.
+            density: The density of the fluid in kg/m^3. Valid
+                range is [400, 2000] Kg/m3.
+            kinematic_viscosity: The kinematic viscosity of the fluid, in m^2/s. 
+                Reference value for water is 1e-6 m^2/s.
             dimensions: The fluid block dimensions (in x, y, z), in meters.
             position: The position of the fluid block in the tank (in x, y, z),
               in meters.
@@ -64,8 +66,11 @@ class FluidBlock(scenarios.Scenario):
               z), in m/s.
         """
 
-        self.fluid = fluids.FluidType(density=density,
-                                      kinematic_viscosity=kinematic_viscosity)
+        if not 400 <= density <= 2000:
+            raise ValueError("`density` must be in range [400, 2000] Kg/m3.")
+
+        self.fluid = FluidType(density=density,
+                               kinematic_viscosity=kinematic_viscosity)
 
         if len(dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
