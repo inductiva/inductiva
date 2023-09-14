@@ -6,6 +6,7 @@ import absl
 
 from . import admin
 from . import api
+from . import examples
 from . import tasks
 from . import simulators
 from . import fluids

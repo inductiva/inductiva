@@ -1,10 +1,11 @@
-"""Functions to download and load example molecules for GROMACS simulations 
-from the RCSB PDB database."""
-from absl import logging
+"""Functions to download and load examples from URLs.
+
+It contains several samples of molecules and a test_vehicle."""
 import os
 from typing import Optional
-
 from urllib import request, error
+
+from absl import logging
 
 import inductiva
 
@@ -30,6 +31,15 @@ def load_lysozyme(save_dir: Optional[str] = None) -> str:
     return download_from_rcsb("1AKI", save_dir)
 
 
+def load_test_vehicle(save_dir: Optional[str] = None) -> str:
+    """Load a test vehicle from Inductiva Github.
+
+    Returns:
+        The path to the downloaded OBJ file."""
+
+    return download_inductiva_resources("test_vehicle.obj", save_dir)
+
+
 def download_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
     """Download a PDB file from the RCSB database according 
     to its pdb ID.
@@ -46,15 +56,33 @@ def download_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
     return file_path
 
 
-def download_inductiva_resources(file_path: str, save_dir: Optional[str] = None) -> str:
+def download_inductiva_resources(file_name: str, save_dir: Optional[str] = None) -> str:
+    """Download a file from the resources folder of Inductiva Github.
 
-    api_url = f"https://github.com/inductiva/inductiva/blob/main/resources/{file_path}"
-    file_path = download_from_external_url(api_url, file_path, save_dir)
+    Args:
+        file_name: The name of the file to download.
+            Currently available: ["test_vehicle.obj", "alanine.pdb"]
+    Returns:
+        The path to the downloaded file.
+    """
+
+    api_url = "https://github.com/inductiva/inductiva/tree/" \
+              f"ip-download-examples/resources/examples/{file_name}"
+    file_path = download_from_external_url(api_url, file_name, save_dir)
 
     return file_path
 
 
 def download_from_external_url(api_url: str, file_path: str, save_dir: Optional[str] = None) -> str:
+    """Download a file from an external URL.
+
+    Args:
+        api_url: The URL to download the file from.
+        file_path: The name of the file to download.
+        save_dir: The directory to save the file to.
+    Returns:
+        The path to the downloaded file.
+    """
 
     if save_dir is not None:
         save_dir = inductiva.utils.files.resolve_path(save_dir)
@@ -64,8 +92,8 @@ def download_from_external_url(api_url: str, file_path: str, save_dir: Optional[
     try:
         request.urlretrieve(api_url, file_path)
         logging.info("File downloaded to %s", file_path)
-    except error.URLError as e:
+    except error.URLError as url_error:
         logging.error("Could not download file from %s", api_url)
-        logging.error("%s", e)
+        logging.error("%s", url_error)
 
     return  file_path

@@ -2,4 +2,3 @@
 from .protein_solvation import (ProteinSolvation, ProteinSolvationOutput)
 from .md_water_box import (MDWaterBox, MDWaterBoxOutput)
 from . import utils
-from . import examples
