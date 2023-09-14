@@ -1,8 +1,16 @@
 # Tasks
 
-## Submitting tasks
 
-### Sync. vs Async.
+The **Inductiva API** client provides the ability to run complex simulations and contains easy-to-use tools to manage them. Each simulation submitted - with `scenario.simulate()` or `simulation.run()` - returns a `Task` object that contains methods to manage the simulation.
+
+
+Here, you'll learn:
+
+- [Submitting tasks sync vs. async](#submitting-tasks-sync-vs-async): the different ways you can submit a task.
+- [Managing tasks](#managing-tasks): the methods you can use to interact with a specific task.
+- [Retrieving tasks from previous sessions](#retrieving-tasks-from-previous-sessions): getting information from previously ran tasks.
+
+## Submitting tasks sync vs. async
 
 The **Inductiva API** client allows running simulations both synchronously and asynchronously.
 This can be achieved by specifying the `run_async` argument to `scenario.simulate()` and `simulator.run()` calls.
@@ -37,15 +45,7 @@ with task.sync_context():
     task.wait()
 ```
 
-
-
-
-
-
 ## Managing tasks
-
-
-
 
 The `Task` class provides methods for managing a specific task submitted to the **Inductiva API**. You get an instance of `Task` everytime you create a simulation. Moreover, you can [retrieve previously created tasks](#retrieving-tasks-from-previous-sessions).
 With a `Task` object, you can:
