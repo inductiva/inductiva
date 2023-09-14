@@ -505,7 +505,7 @@ class Bathymetry:
 
         logging.info(
                 "Interpolating the bathymetry to a uniform grid of dimensions:\n"
-                "- grid resolution %f x %f (m x m) \n"
+                "- grid resolution %.2f x %.2f (m x m) \n"
                 "- grid size %d x %d", x_resolution, y_resolution, x_size,
             y_size)
 
