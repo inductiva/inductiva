@@ -34,7 +34,7 @@ class DamBreak(fluids.FluidBlock):
             """
 
         if dimensions is None:
-            dimensions = [0.3, 1, 1]
+            dimensions = [0.3, 0.3, 0.3]
 
         super().__init__(density=fluid.density,
                          kinematic_viscosity=fluid.kinematic_viscosity,
@@ -47,7 +47,7 @@ class DamBreak(fluids.FluidBlock):
         simulator: simulators.Simulator = simulators.Dualsphysics(),
         machine_group: Optional[resources.MachineGroup] = None,
         device: Literal["cpu", "gpu"] = "cpu",
-        resolution: Literal["high", "medium", "low"] = "medium",
+        resolution: Literal["high", "medium", "low"] = "low",
         simulation_time: float = 1,
         run_async: bool = False,
     ) -> tasks.Task:
