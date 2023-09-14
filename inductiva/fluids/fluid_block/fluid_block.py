@@ -9,7 +9,8 @@ from inductiva import tasks, resources, fluids, scenarios, simulators, utils
 
 TANK_DIMENSIONS = [1, 1, 1]
 
-SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH, "fluid_block")
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
+                                     "fluid_block")
 SPLISHPLASH_TEMPLATE_INPUT_DIR = "splishsplash"
 SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
@@ -69,7 +70,7 @@ class FluidBlock(scenarios.Scenario):
         if not 400 <= density <= 2000:
             raise ValueError("`density` must be in range [400, 2000] Kg/m3.")
 
-        self.fluid = FluidType(density=density,
+        self.fluid = fluids.FluidType(density=density,
                                kinematic_viscosity=kinematic_viscosity)
 
         if len(dimensions) != 3:
