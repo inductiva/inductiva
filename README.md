@@ -30,7 +30,7 @@ These will provide the default installation of the package, that allow you to su
 pip install --upgrade "inductiva[molecules_extra]"
 ```
 
-If you had trouble installing the package, check the [FAQ](#1-trouble-installing) for more details.
+If you had issues with the installation, check the [FAQ](#1-trouble-installing) for more details.
 
 ## API access tokens
 
@@ -179,7 +179,7 @@ All of the simulations will be launched in one go. The user can check the status
 
 ## FAQ
 
-### 1. Trouble installing
+### 1. Installation troubleshooting
 
 If installing the package failed, you can retry it on a new Python virtual environment. A [virtual environment](https://docs.python.org/3/library/venv.html) allows you to have a fresh Python environment with isolated dependencies. In your shell, run:
 
@@ -206,7 +206,7 @@ For `PowerShell` (Windows):
 PS C:\> <venv>\Scripts\Activate.ps1
 ```
 
-After activating the virtual environment, you can install the package as described above:
+After activating the virtual environment, you can install the package as described below:
 
 ```
 pip install --upgrade inductiva
