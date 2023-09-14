@@ -1,4 +1,4 @@
-"""Splishsplash simulator module of the API."""
+"""SplisHSPlasH simulator module of the API."""
 from typing import Literal, Optional
 
 from inductiva import types, tasks, resources
