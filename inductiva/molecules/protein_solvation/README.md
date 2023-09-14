@@ -45,20 +45,20 @@ scenario = inductiva.molecules.ProteinSolvation(
      temperature = 300)
 
 # Run a simulation
-task = scenario.simulate(simulation_time_ns = 0.1)
+task = scenario.simulate(simulation_time_ns = 0.05)
 
 # Get the simulation output on your local machine.
 output = task.get_output()
  ```
- This may take up to 5 minutes, depending on which machine you use.  
+This may take up to 5 minutes, depending on which machine you use.  
 The last code line downloads the files necessary to render and post-process our simulation.
 
 ## Output and Post-processing 
 The simulation output folder contains trajectory data spanning the simulation duration and the protein's topology. These files are necessary to generate an interactive trajectory visualization using [NGLview](https://github.com/nglviewer/nglview). Users have the flexibility to select the protein's representation type, including options to display or hide the backbone, and they can also specify the criteria for visualization selection. You can refer to the [documentation](https://nglviewer.org/ngl/api/manual/usage/selection-language.html) for guidance on creating custom selections according to your preferences.
 
 ```python
- output = task.get_output()
- output.render_interactive(representation="ribbon", add_backbone=True, selection="protein")
+output = task.get_output()
+output.render_interactive(representation="ribbon", add_backbone=True, selection="protein")
  ```
 ![protein_solvation](https://github.com/inductiva/inductiva/assets/114397668/e9dfe7d9-9c2b-4be4-90c3-0d68a2a7b9fd)
 
