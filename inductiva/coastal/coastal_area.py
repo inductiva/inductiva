@@ -11,6 +11,7 @@ from absl import logging
 from inductiva import tasks, resources, simulators, scenarios, utils
 from inductiva import coastal
 
+import matplotlib.pyplot as plt
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
@@ -107,7 +108,6 @@ class CoastalArea(scenarios.Scenario):
               the maximum number of cores available in the machine group will be
               used.
         """
-
         self.simulation_time = simulation_time
         self.time_step = time_step
         self.output_time_step = output_time_step
@@ -196,7 +196,10 @@ def _(self, simulator: simulators.Swash, input_dir):  # pylint: disable=unused-a
     )
 
     bathymetry_file_path = os.path.join(input_dir, SWASH_BATHYMETRY_FILENAME)
-    self.bathymetry.to_bot_file(bathymetry_file_path)
+    depths_grid = self.bathymetry.depths.reshape((bathymetry_x_num,
+                                                  bathymetry_y_num))
+
+    self.bathymetry.to_bot_file(bathymetry_file_path, depths_grid)
 
 
 def _convert_time_to_hmsms(time: float) -> str:

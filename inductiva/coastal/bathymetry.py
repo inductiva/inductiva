@@ -203,6 +203,7 @@ class Bathymetry:
     def to_bot_file(
         self,
         bot_file_path: str,
+        depths_grid: np.ndarray
     ):
         """Writes the bathymetry to a bot file.
 
@@ -213,12 +214,6 @@ class Bathymetry:
         Args:
             text_file_path: Path to the text file.
         """
-
-        x_resolution = self.x_ptp() / self.x_uniques().size
-        y_resolution = self.y_ptp() / self.y_uniques().size
-
-        depths_grid, _ = self._interpolate_to_uniform_grid(
-            x_resolution, y_resolution)
 
         np.savetxt(bot_file_path, depths_grid)
 

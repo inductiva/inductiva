@@ -3,6 +3,7 @@
 import os
 import tempfile
 from typing import Dict, Literal, Optional, Sequence, Tuple
+from absl import logging
 
 import numpy as np
 try:
@@ -239,6 +240,8 @@ class CoastalAreaOutput:
             file_path=os.path.join(self.sim_output_path, quantity + ".mat"),
             quantity=quantity,
         )
+
+        logging.info(f"Saving movie to {movie_path}")
 
         _render_quantity_grid_data(
             x_array=x_array,
