@@ -39,7 +39,7 @@ To test this scenario we have available one example of a protein PDB file - [dow
 inductiva.api_key = "YOUR_API_KEY"
 
 # Initialize the scenario
-insulin = inductiva.molecules.examples.load_insulin()
+insulin = inductiva.examples.load_insulin()
 scenario = inductiva.molecules.ProteinSolvation(
      protein_pdb = insulin,
      temperature = 300)
