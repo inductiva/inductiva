@@ -249,6 +249,18 @@ class Bathymetry:
         return np.ptp(self.y)
 
     @optional_deps.needs_coastal_extra_deps
+    def x_num(self) -> int:
+        """Returns the length of unique x values."""
+
+        return int(len(self.x_uniques()))
+
+    @optional_deps.needs_coastal_extra_deps
+    def y_num(self) -> int:
+        """Returns the length of unique y values."""
+
+        return int(len(self.x_uniques()))
+
+    @optional_deps.needs_coastal_extra_deps
     def x_uniques(self, sort: bool = False) -> np.ndarray:
         """Returns the unique x values.
 
@@ -324,8 +336,8 @@ class Bathymetry:
         cmap: Optional[str] = None,
         clim: Optional[Tuple[float]] = None,
         path: Optional[str] = None,
-        x_resolution: float = 10,
-        y_resolution: float = 10,
+        x_resolution: float = None,
+        y_resolution: float = None,
         threshold_distance: float = 20,
     ) -> Union["matplotlib.axes.Axes", None]:
         """Plots the bathymetry.
@@ -334,11 +346,14 @@ class Bathymetry:
         coordinates of the points where the depths are defined in the axes.
 
         The bathymetry data is plotted with a color plot on a grid with uniform
-        spacing in the x and y directions. The spacing in the x and y directions
-        is controlled by the `x_resolution` and `y_resolution` arguments.
+        spacing in the x and y directions. If the user does not specify the
+        resolution, the plotted mesh has the bathymetry resolution. If
+        necessary, the user can control the spacing in the x and y directions
+        using the `x_resolution` and `y_resolution` arguments.
 
-        The data is interpolated from the points where the bathymetry is defined
-        to the uniform grid using linear interpolation.
+        For non-uniform grids of if the resoltuion is specified, the data is
+        interpolated from the points where the bathymetry is defined
+        to the resized uniform grid using linear interpolation.
 
         Points on the uniform grid at a distance larger than a threshold
         distance `threshold_distance` from points where the bathymetry is
@@ -355,30 +370,40 @@ class Bathymetry:
             path: Path to save the plot. If `None`, the plot is not saved, and
               the matplotlib `Axes` object is returned instead.
             x_resolution: Resolution, in meters, of the plotting grid in the x
-              direction.
+              direction. If `None`, the resolution is determined by the
+              bathymetry
             y_resolution: Resolution, in meters, of the plotting grid in the y
-              direction.
+              direction. If `None`, the resolution is determined by the
+              bathymetry
             threshold_distance: Threshold distance to filter out points on the
               uniform grid that are far from points where the bathymetry is
               defined.
         """
 
-        if not self.is_uniform_grid():
-            logging.info("Plotting the bathymetry on a uniform grid...")
+        if self.is_uniform_grid(
+        ) and x_resolution is None and y_resolution is None:
+            x_size = self.x_num()
+            y_size = self.y_num()
 
-        depths_grid, _ = self._interpolate_to_uniform_grid(
-            x_resolution,
-            y_resolution,
-            threshold_distance=threshold_distance,
-            nullable=True,
-        )
+            depths_grid = self.depths.reshape((x_size, y_size))
 
-        x_size = self.x_ptp() / x_resolution
-        y_size = self.y_ptp() / y_resolution
+        else:
+            logging.info("Plotting the bathymetry on resized uniform grid...")
+
+            depths_grid, _ = self._interpolate_to_uniform_grid(
+                x_resolution,
+                y_resolution,
+                threshold_distance=threshold_distance,
+                nullable=True,
+            )
+
+            x_size = self.x_ptp() / x_resolution
+            y_size = self.y_ptp() / y_resolution
 
         if x_size > 1000 and y_size > 1000:
             logging.warning(
-                "The plotting grid is large. It may take a while to plot.")
+                "The plotting grid is large. It may take a while to plot."
+                " Consider using a smaller grid resolution.")
 
         # Plot the bathymetry.
         extent = (
