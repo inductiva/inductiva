@@ -6,6 +6,8 @@ from typing import Optional
 
 import urllib
 
+import inductiva
+
 
 def load_insulin(save_dir: Optional[str] = None) -> str:
     """Load the insulin molecule.
@@ -44,7 +46,7 @@ def download_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         local_file_path = os.path.join(save_dir, local_file_path)
-
+    local_file_path = inductiva.utils.files.resolve_path(local_file_path)
     try:
         urllib.request.urlretrieve(api_url, local_file_path)
         logging.info("File downloaded to %s", local_file_path)
