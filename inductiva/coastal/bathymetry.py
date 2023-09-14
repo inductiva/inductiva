@@ -200,11 +200,7 @@ class Bathymetry:
         return cls(depths.flatten(), x.flatten(), y.flatten())
 
     @optional_deps.needs_coastal_extra_deps
-    def to_bot_file(
-        self,
-        bot_file_path: str,
-        depths_grid: np.ndarray
-    ):
+    def to_bot_file(self, bot_file_path: str, depths_grid: np.ndarray):
         """Writes the bathymetry to a bot file.
 
         The depth values are interpolated to a regular grid and written to a bot

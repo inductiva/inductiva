@@ -237,7 +237,7 @@ class CoastalAreaOutput:
             quantity=quantity,
         )
 
-        logging.info("Saving movie to %s" % movie_path)
+        logging.info("Saving movie to movie_path")
 
         _render_quantity_grid_data(
             x_array=x_array,
