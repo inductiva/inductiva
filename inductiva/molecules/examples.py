@@ -1,22 +1,23 @@
 """Functions to download and load example molecules for GROMACS simulations 
 from the RCSB PDB database."""
 import requests
+from inductiva.utils import optional_deps
 
-
+@optional_deps.needs_molecules_extra_deps
 def load_hemoglobin():
     """Load the hemoglobin molecule.
     Returns:
         The path to the downloaded PDB file."""
     return download_from_rcsb("1A3N")
 
-
+@optional_deps.needs_molecules_extra_deps
 def load_lysozyme():
     """Load lysozyme protein.
     Returns:
         The path to the downloaded PDB file."""
     return download_from_rcsb("1AKI")
 
-
+@optional_deps.needs_molecules_extra_deps
 def download_from_rcsb(pdb_id):
     """Download a PDB file from the RCSB database according 
     to its pdb ID.
