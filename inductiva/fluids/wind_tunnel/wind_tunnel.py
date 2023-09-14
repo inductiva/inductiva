@@ -10,10 +10,9 @@ from typing import Optional, List, Literal
 
 from absl import logging
 
-from inductiva import tasks, resources, fluids, types, simulators, scenarios
-from inductiva.utils import templates, files
+from inductiva import tasks, resources, fluids, types, simulators, scenarios, utils
 
-SCENARIO_TEMPLATE_DIR = os.path.join(templates.TEMPLATES_PATH, "wind_tunnel")
+SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH, "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
 COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
@@ -124,7 +123,7 @@ class WindTunnel(scenarios.Scenario):
         simulator.override_api_method_prefix("windtunnel")
 
         if object_path:
-            self.object_path = files.resolve_path(object_path)
+            self.object_path = utils.files.resolve_path(object_path)
         else:
             logging.info("WindTunnel is empty. Object path not specified.")
 
@@ -141,7 +140,7 @@ class WindTunnel(scenarios.Scenario):
                                 commands=commands)
 
         task.set_default_output_files(self.get_default_output_files())
-        task.set_output_class(fluids.wind_tunnel.WindTunnelOutput)
+        task.set_output_class(fluids.WindTunnelOutput)
 
         return task
 
@@ -153,7 +152,7 @@ class WindTunnel(scenarios.Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         inmemory_file = io.StringIO()
-        templates.replace_params_in_template(
+        utils.templates.replace_params_in_template(
             template_path=commands_template_path,
             params={"n_cores": self.n_cores},
             output_file=inmemory_file,
@@ -181,7 +180,7 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    templates.batch_replace_params_in_template(
+    utils.templates.batch_replace_params_in_template(
         templates_dir=input_dir,
         template_filenames=[
             os.path.join("0", "include",
