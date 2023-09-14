@@ -155,7 +155,7 @@ class Bathymetry:
         boundary (East) are assumed to be below water (i.e. have 0 < depths <
         `max_depth`). The corners on the upper x boundary (West) are assumed to
         be above water (i.e. have - `max_depth` < depths < 0).
-        
+
         Args:
             x_range: The range of x values, in meters.
             y_range: The range of y values, in meters.
@@ -251,7 +251,7 @@ class Bathymetry:
     @optional_deps.needs_coastal_extra_deps
     def x_uniques(self, sort: bool = False) -> np.ndarray:
         """Returns the unique x values.
-        
+
         Args:
             sort: Whether to sort the unique values.
         """
@@ -263,7 +263,7 @@ class Bathymetry:
     @optional_deps.needs_coastal_extra_deps
     def y_uniques(self, sort: bool = False) -> np.ndarray:
         """Returns the unique y values.
-        
+
         Args:
             sort: Whether to sort the unique values.
         """
@@ -278,10 +278,10 @@ class Bathymetry:
              y_range: Sequence[float],
              remove_offset=True):
         """Crops the bathymetry to a given range of x and y values.
-        
+
         Args:
             x_range: The range of x values, in meters.
-            y_range: The range of y values, in meters.    
+            y_range: The range of y values, in meters.
         """
         x_min, x_max = x_range
         y_min, y_max = y_range
@@ -336,14 +336,14 @@ class Bathymetry:
         The bathymetry data is plotted with a color plot on a grid with uniform
         spacing in the x and y directions. The spacing in the x and y directions
         is controlled by the `x_resolution` and `y_resolution` arguments.
-        
+
         The data is interpolated from the points where the bathymetry is defined
         to the uniform grid using linear interpolation.
 
         Points on the uniform grid at a distance larger than a threshold
         distance `threshold_distance` from points where the bathymetry is
         defined are omitted.
-    
+
         The plot is produced with matplotlib.
 
         Args:
@@ -427,7 +427,7 @@ class Bathymetry:
         The bathymetry is interpolated to a grid with uniform resolution (i.e.
         spacing) in the x and y directions. Linear interpolation is used to
         interpolate the bathymetry to the grid.
-        
+
         Grid points for which no interpolation is possible may be filled with
         a constant or with the nearest depth value.
 
@@ -454,7 +454,7 @@ class Bathymetry:
         fill_value: Optional[Union[float, str]] = None,
         nullable: bool = False,
     ):
-        """Interpolates the bathymetry to a uniform grid.     
+        """Interpolates the bathymetry to a uniform grid.
 
         Args:
             x_resolution: Resolution, in meters, of the grid in the x direction.
@@ -467,7 +467,7 @@ class Bathymetry:
             nullable: Whether to allow the bathymetry to be undefined in some
               grid points. If `False`, an error is raised if the bathymetry is
               undefined in one or more grid points.
-        
+
         Returns:
             depths_grid: A 2D array with the depths on the uniform grid.
             (x_grid, y_grid): The x and y coordinates of the points where the
