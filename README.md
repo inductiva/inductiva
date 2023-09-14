@@ -198,12 +198,12 @@ source <venv>/bin/activate
 For `cmd.exe` (Windows):
 
 ```
-C:\> <venv>\Scripts\activate.bat
+<venv>\Scripts\activate.bat
 ```
 
 For `PowerShell` (Windows):
 ```
-PS C:\> <venv>\Scripts\Activate.ps1
+<venv>\Scripts\Activate.ps1
 ```
 
 After activating the virtual environment, you can install the package as described below:
