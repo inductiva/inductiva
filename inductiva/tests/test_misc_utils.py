@@ -1,6 +1,7 @@
 # pylint: disable=missing-docstring
 from inductiva.utils.misc import split_camel_case
 
+
 def test_split_camel_case():
     assert split_camel_case("DamBreak") == ["Dam", "Break"]
     assert split_camel_case("CamelCamelCase") == ["Camel", "Camel", "Case"]
