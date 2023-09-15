@@ -30,11 +30,8 @@ Moreover, the hardware and interaction are configured with the usual general par
  Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in [Tasks](inductiva/README.md).
 
 ### Example
-
-To test this scenario you can download a protein PDB file from the RCSB database using the Inductiva package.. Below, we download the insulin protein with the PDB ID "1ZNI".
-
+To test this scenario, you can download a protein from the RCSB database using its PDB ID. For this example, let's consider insulin with a PDB ID of 1ZNI.
 Do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
-
 
 ```python
 import inductiva
@@ -45,8 +42,10 @@ inductiva.api_key = "YOUR_API_KEY"
 insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
 
 # Initialize the scenario
+insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
 scenario = inductiva.molecules.ProteinSolvation(
      protein_pdb = insulin_pdb_file,
+
      temperature = 300)
 
 # Run a simulation
@@ -62,18 +61,20 @@ The last code line downloads the files necessary to render and post-process our 
 The simulation output folder contains trajectory data spanning the simulation duration and the protein's topology. These files are necessary to generate an interactive trajectory visualization using [NGLview](https://github.com/nglviewer/nglview). Users have the flexibility to select the protein's representation type, including options to display or hide the backbone, and they can also specify the criteria for visualization selection. You can refer to the [documentation](https://nglviewer.org/ngl/api/manual/usage/selection-language.html) for guidance on creating custom selections according to your preferences.
 
 ```python
-output = task.get_output()
-output.render_interactive(representation="ribbon", add_backbone=True, selection="protein")
+output.render_interactive(representation="ball+stick", add_backbone=True, selection="protein")
  ```
-![protein_solvation](https://github.com/inductiva/inductiva/assets/114397668/e9dfe7d9-9c2b-4be4-90c3-0d68a2a7b9fd)
+<p align="center">
+  <img src="https://github.com/inductiva/inductiva/assets/114397668/4d2265c1-dfe7-435f-936d-f4d607e29a04" alt="Centered Image" width="350" height="250">
+</p>
 
 Users also have the option to plot the RMSF (Root Mean Square Fluctuation) over the simulation for each residue within the protein structure. [RMSF](https://userguide.mdanalysis.org/stable/examples/analysis/alignment_and_rms/rmsf.html) measures the extent to which a structure deviates from its average configuration over time, offering insights into the mobility of specific protein residues. 
 
 ```python
  rmsf_values = output.plot_rmsf_per_residue()
  ```
+
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/assets/114397668/811bc191-6944-4b77-a0e2-0ba99b679246" alt="Centered Image" width="350" height="250">
+  <img src="https://github.com/inductiva/inductiva/assets/114397668/9735edee-ce60-4a73-959a-8a5c127986c6" alt="Centered Image" width="400" height="300">
 </p>
 
 Furthermore, you have the capability to visualize attributes for each amino acid, including metrics like RMSF (Root Mean Square Fluctuation), or any other properties that you compute independently.
@@ -81,5 +82,9 @@ Furthermore, you have the capability to visualize attributes for each amino acid
 ```python
 output.render_attribute_per_residue(rmsf_values)
  ```
+
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/assets/114397668/e9bbe012-030b-4e70-8774-fc2ff7bfb8e4" alt="Centered Image" width="350" height="250">
+  <img src="https://github.com/inductiva/inductiva/assets/114397668/459e39fa-570b-46d3-a54d-54d0b72298ac" alt="Centered Image" width="350" height="250">
+</p>
+
+In the visualization of the RMSF colored protein backbone, the red parts represent residues with higher mobility.
