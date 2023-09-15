@@ -22,7 +22,7 @@ Launching a simulation returns a task object, which can be used to verify the st
 
 ### Example:
 
-To run this example you need a vehicle. You can fetch any vehicle you like directly with Inductiva package. On this example, we download a vehicle saved in our Github repository.
+To run this example you need an object. You can fetch any object you like directly with Inductiva package. On this example, we download a test object saved in our Github repository.
 
 Do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
 
@@ -31,11 +31,11 @@ import inductiva
 
 inductiva.api_key = "YOUR_API_KEY"
 
-# Url to a test vehicle in Inductiva Github repository
-vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
+# Url to a test object in Inductiva Github repository
+object_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
               "/resources/test_vehicle.obj"
-test_vehicle_path = inductiva.utils.files.download_from_url(
-    url=vehicle_url, local_file_path="test_vehicle.obj")
+test_object_path = inductiva.utils.files.download_from_url(
+    url=vehicle_url, local_file_path="test_object.obj")
 
 # Initialize the scenario
 scenario = inductiva.fluids.WindTunnel(
@@ -44,7 +44,7 @@ scenario = inductiva.fluids.WindTunnel(
 
 # Run a simulation
 task = scenario.simulate(
-    object_path=test_vehicle_path,
+    object_path=test_object_path,
     num_iterations=50, resolution="low",
     n_cores=2)
 

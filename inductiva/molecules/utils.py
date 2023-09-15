@@ -55,8 +55,8 @@ def download_pdb_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
         The path to the downloaded PDB file.
     """
     file_path = f"{pdb_id}.pdb"
-    api_url = f"https://files.rcsb.org/download/{file_path}"
+    pdb_url = f"https://files.rcsb.org/download/{file_path}"
 
-    file_path = files.download_from_url(api_url, file_path, save_dir)
+    file_path = files.download_from_url(pdb_url, file_path, save_dir)
 
     return file_path

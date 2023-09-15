@@ -31,7 +31,7 @@ Moreover, the hardware and interaction are configured with the usual general par
 
 ### Example
 
-To test this scenario you can download a protein PDB file from the RCSB database directly from Inductiva package. Below, we download the insulin protein with the PDB ID "1ZNI".
+To test this scenario you can download a protein PDB file from the RCSB database using the Inductiva package.. Below, we download the insulin protein with the PDB ID "1ZNI".
 
 Do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
 
