@@ -122,7 +122,7 @@ def download_from_url(url: str,
     if save_dir is not None:
         local_file_path = pathlib.Path(save_dir, local_file_path)
 
-    local_file_path = inductiva.utils.files.resolve_path(local_file_path)
+    local_file_path = resolve_path(local_file_path)
 
     if not local_file_path.parent.exists():
         local_file_path.parent.mkdir(parents=True)
