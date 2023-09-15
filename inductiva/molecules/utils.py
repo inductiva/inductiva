@@ -51,6 +51,10 @@ def download_pdb_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
     to its pdb ID.
     Args:
         pdb_id: The PDB identifier of the molecule to download.
+        save_dir: The directory to save the file to. If None
+            is passed, this will download to the current working
+            directory. If the save_dir passed does not exist, this
+            method will try to create it. 
     Returns:
         The path to the downloaded PDB file.
     """

@@ -6,9 +6,9 @@ To initialize the scenario, the user can define the following parameters:
 - `domain`: Dimensions of the wind tunnel in meters, e.g. `{"x": [-5, 15], "y": [-5, 5], "z": [0, 8]}`.
 - `flow_velocity`: Airflow velocity in m/s, e.g. `[30, 0, 0]`. Notice that the airflow is injected from the negative x-direction.
 
-Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in STL or OBJ format. Notice that, the required meshing step will automatically be made before starting the simulation. The meshing is done with the [snappyHexMesh tool](https://www.openfoam.com/documentation/user-guide/4-mesh-generation-and-conversion/4.4-mesh-generation-with-the-snappyhexmesh-utility) of OpenFOAM.
+Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in [STL](https://en.wikipedia.org/wiki/STL_(file_format)) or [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) format. Notice that, the required meshing step will automatically be made before starting the simulation. The meshing is done with the [snappyHexMesh tool](https://www.openfoam.com/documentation/user-guide/4-mesh-generation-and-conversion/4.4-mesh-generation-with-the-snappyhexmesh-utility) of OpenFOAM.
 
-To test this scenario we have available one example of a vehicle geometry in OBJ format - [download it here](/resources/geometry/test_vehicle.obj). The user can also use his own geometry file, as long as it is in STL or OBJ format.
+To test this scenario we make available one example, but users can use their own files, as long as it is in STL or OBJ format.
 
 The simulation parameters available for the user to configure are:
 - `num_iterations`: Set the maximum number of iterations for the iterative algorithm to converge.
@@ -18,11 +18,9 @@ Moreover, the hardware and interaction are configured with the usual general par
 Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in the [Tasks section](inductiva/tasks/README.md).
 
 
-
-
 ### Example:
 
-To run this example you need an object. You can fetch any object you like directly with Inductiva package. On this example, we download a test object saved in our Github repository.
+To run this example you need an object of OBJ or STL format. See below how to fetch one that we have available in our Github repository.
 
 Do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
 
@@ -33,9 +31,8 @@ inductiva.api_key = "YOUR_API_KEY"
 
 # Url to a test object in Inductiva Github repository
 object_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
-              "/resources/test_vehicle.obj"
-test_object_path = inductiva.utils.files.download_from_url(
-    url=vehicle_url, local_file_path="test_object.obj")
+              "/resources/test_object.obj"
+object_path = inductiva.utils.files.download_from_url(url=object_url)
 
 # Initialize the scenario
 scenario = inductiva.fluids.WindTunnel(
@@ -44,7 +41,7 @@ scenario = inductiva.fluids.WindTunnel(
 
 # Run a simulation
 task = scenario.simulate(
-    object_path=test_object_path,
+    object_path=object_path,
     num_iterations=50, resolution="low",
     n_cores=2)
 

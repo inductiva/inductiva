@@ -107,17 +107,24 @@ def get_sorted_files(data_dir: str,
 
 
 def download_from_url(url: str,
-                      local_file_path: str,
+                      local_file_path: Optional[str] = None,
                       save_dir: Optional[str] = None) -> str:
     """Download a file from an URL.
 
     Args:
         url: The URL to download the file from.
         local_file_path: Name attributed to the file to download.
-        save_dir: The directory to save the file to.
+            If None is passed, it attributes the name given to
+            the file on the url.
+        save_dir: The directory to save the file to. If None
+            is passed, this will download to the current working
+            directory. If the save_dir passed does not exist, this
+            method will try to create it. 
     Returns:
         The path to the downloaded file.
     """
+    if local_file_path is None:
+        local_file_path = url.split("/")[-1]
 
     if save_dir is not None:
         local_file_path = pathlib.Path(save_dir, local_file_path)
@@ -130,8 +137,7 @@ def download_from_url(url: str,
     try:
         urllib.request.urlretrieve(url, local_file_path)
         logging.info("File downloaded to %s", local_file_path)
+        return str(local_file_path.absolute())
     except urllib.error.URLError as url_error:
         logging.error("Could not download file from %s", url)
-        logging.error("%s", url_error)
-
-    return str(local_file_path.absolute())
+        raise url_error
