@@ -512,3 +512,63 @@ def create_color_plot_movie(
         create_movie_from_frames(frames_dir=tmp_dir,
                                  movie_path=movie_path,
                                  fps=movie_fps)
+
+
+@optional_deps.needs_structures_extra_deps
+def create_2d_field_from_xdmf(xdmf_path: str,
+                              field_path: str,
+                              field_array: list,
+                              file_name: str = "field",
+                              scalar_bar: bool = True,
+                              transparent_background: bool = True) -> None:
+    """Converts field data from an XDMF file to a 2D image using PyVista.
+
+    Args:
+        xdmf_path (str): The path to the XDMF file containing the mesh data.
+        field_path (str): The path where the resulting image will be saved.
+        field_array (list): The field data to be visualized and converted to an 
+          image.
+        file_name (str, optional): The name of the field in the visualization.
+          Default is "field".
+        scalar_bar (bool, optional): Whether to include a scalar bar legend in 
+          the visualization. Default is True.
+        transparent_background (bool, optional): Whether the background of the
+          saved image should be transparent. Default is True.
+    """
+
+    # Start PyVista virtual framebuffer
+    pv.start_xvfb()
+
+    # Read the XDMF file and create a PyVista data object
+    reader = pv.get_reader(xdmf_path)
+    data = reader.read()
+
+    # Initialize the PyVista plotter
+    plotter = pv.Plotter()
+
+    # Add the field data to the PyVista data object and set it as active scalars
+    data.point_data[file_name] = field_array
+    data.set_active_scalars(file_name)
+
+    # Add the data object to the plotter with customizable settings
+    plotter.add_mesh(data, show_edges=True, cmap="jet", show_scalar_bar=False)
+
+    # Optionally, add a scalar bar to the visualization
+    if scalar_bar:
+        plotter.add_scalar_bar(file_name, vertical=True, interactive=True)
+
+    # Set the view to XY plane
+    plotter.view_xy()
+
+    # Set the background color to white
+    plotter.background_color = "white"
+
+    # Render off-screen
+    plotter.off_screen = True
+
+    # Adjust camera view
+    plotter.camera.tight()
+
+    # Save a screenshot of the plot to the specified field_path
+    plotter.screenshot(field_path,
+                       transparent_background=transparent_background)
