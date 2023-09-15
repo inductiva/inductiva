@@ -42,11 +42,11 @@ import inductiva
 inductiva.api_key = "YOUR_API_KEY"
 
 # Download the insulin protein (ID - "1ZNI") from RCSB database
-insulin = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
+insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
 
 # Initialize the scenario
 scenario = inductiva.molecules.ProteinSolvation(
-     protein_pdb = insulin,
+     protein_pdb = insulin_pdb_file,
      temperature = 300)
 
 # Run a simulation

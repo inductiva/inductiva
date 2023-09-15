@@ -32,7 +32,7 @@ inductiva.api_key = "YOUR_API_KEY"
 # Url to a test object in Inductiva Github repository
 object_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
               "/resources/test_object.obj"
-object_path = inductiva.utils.files.download_from_url(url=object_url)
+object_path = inductiva.utils.files.download_from_url(object_url)
 
 # Initialize the scenario
 scenario = inductiva.fluids.WindTunnel(
