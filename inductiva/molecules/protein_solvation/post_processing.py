@@ -1,5 +1,6 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
+import sys
 import pathlib
 from typing import Literal
 
@@ -154,8 +155,7 @@ class ProteinSolvationOutput:
             raise ImportError("IPython is not available. Visualization is "
                               "only available in a python notebook.")
 
-        if "google.cloud" in str(self.ipython_kernel):
-            print("here")
+        if 'google.colab' in sys.modules:
             gc.output.enable_custom_widget_manager()
         else: 
             print("condition false")
