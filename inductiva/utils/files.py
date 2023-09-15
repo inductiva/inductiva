@@ -3,6 +3,10 @@ import os
 import time
 import pathlib
 from typing import Optional
+import urllib.error
+import urllib.request
+
+from absl import logging
 
 import inductiva
 from inductiva import types
@@ -100,3 +104,34 @@ def get_sorted_files(data_dir: str,
     files = sorted(files, key=get_alphanum_key)
 
     return files
+
+
+def download_from_url(url: str,
+                      local_file_path: str,
+                      save_dir: Optional[str] = None) -> str:
+    """Download a file from an URL.
+
+    Args:
+        url: The URL to download the file from.
+        local_file_path: Name attributed to the file to download.
+        save_dir: The directory to save the file to.
+    Returns:
+        The path to the downloaded file.
+    """
+
+    if save_dir is not None:
+        local_file_path = pathlib.Path(save_dir, local_file_path)
+
+    local_file_path = inductiva.utils.files.resolve_path(local_file_path)
+
+    if not local_file_path.parent.exists():
+        local_file_path.parent.mkdir(parents=True)
+
+    try:
+        urllib.request.urlretrieve(url, local_file_path)
+        logging.info("File downloaded to %s", local_file_path)
+    except urllib.error.URLError as url_error:
+        logging.error("Could not download file from %s", url)
+        logging.error("%s", url_error)
+
+    return str(local_file_path.absolute())

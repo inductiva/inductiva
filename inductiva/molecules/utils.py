@@ -1,4 +1,6 @@
 """Tools to analyze molecular dynamics simulations."""
+from typing import Optional
+
 try:
     import MDAnalysis as mda
     from MDAnalysis import transformations
@@ -8,7 +10,7 @@ except ImportError:
     transformations = None
     align = None
 
-from inductiva.utils import optional_deps
+from inductiva.utils import optional_deps, files
 
 
 @optional_deps.needs_molecules_extra_deps
@@ -42,3 +44,19 @@ def align_trajectory_to_average(universe, trajectory_output_path):
                     select="protein and name CA",
                     filename=trajectory_output_path,
                     in_memory=False).run()
+
+
+def download_pdb_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
+    """Download a PDB file from the RCSB database according 
+    to its pdb ID.
+    Args:
+        pdb_id: The PDB identifier of the molecule to download.
+    Returns:
+        The path to the downloaded PDB file.
+    """
+    file_path = f"{pdb_id}.pdb"
+    api_url = f"https://files.rcsb.org/download/{file_path}"
+
+    file_path = files.download_from_url(api_url, file_path, save_dir)
+
+    return file_path

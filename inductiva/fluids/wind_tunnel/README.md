@@ -22,14 +22,18 @@ Launching a simulation returns a task object, which can be used to verify the st
 
 ### Example:
 
-To run this example you will need a vehicle. We left you one sample [here](/resources/geometry/test_vehicle.obj), which you can load via `inductiva.examples.load_test_vehicle()`. Do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
+To run this example you need a vehicle. You can fetch any vehicle you like directly with Inductiva package. On this example, we download a vehicle saved in our Github repository.
+
+Do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
 
 ```python
 import inductiva
 
 inductiva.api_key = "YOUR_API_KEY"
 
-test_vehicle_path = inductiva.examples.load_test_vehicle()
+# Url to a test vehicle in Inductiva Github repository
+vehicle_url = "https://github.com/inductiva/inductiva/tree/main/resources/test_vehicle.obj"
+test_vehicle_path = inductiva.utils.files.download_from_url(url=vehicle_url)
 
 # Initialize the scenario
 scenario = inductiva.fluids.WindTunnel(
