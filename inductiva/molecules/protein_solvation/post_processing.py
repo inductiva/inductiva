@@ -8,12 +8,14 @@ try:
     import matplotlib.pyplot as plt
     import nglview as nv
     import IPython as ip
-    import google.colab as gc
-
-except ImportError:
+except:
     nv = None
     plt = None
     ip = None
+
+try:
+    import google.colab as gc
+except ImportError:
     gc = None
 
 import inductiva
