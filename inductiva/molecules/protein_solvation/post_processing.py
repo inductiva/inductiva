@@ -8,7 +8,7 @@ try:
     import matplotlib.pyplot as plt
     import nglview as nv
     import IPython as ip
-except:
+except ImportError:
     nv = None
     plt = None
     ip = None
@@ -150,7 +150,7 @@ class ProteinSolvationOutput:
     @optional_deps.needs_molecules_extra_deps
     def enable_vizualization(self):
         """Enable vizualization if IPython is available."""
-
+        print(str(self.ipython_kernel))
         if self.ipython_kernel is None:
             raise ImportError("IPython is not available. Visualization is "
                               "only available in a python notebook.")
