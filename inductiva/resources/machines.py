@@ -17,7 +17,7 @@ class MachineGroup():
         machine_type: str,
         num_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 30,
+        disk_size_gb: int = 40,
         zone: typing.Optional[str] = "europe-west1-b",
     ) -> None:
         """Create a MachineGroup object.
@@ -28,11 +28,12 @@ class MachineGroup():
             more information about machine types.
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 30 GB.
+            disk_size_gb: The size of the disk in GB, recommended min. is 40 GB.
             zone: The zone where the machines will be launched.
         """
         self.id = None
         self.name = None
+        self.create_time = None
         #TODO: Check if machine type is valid.
         self.machine_type = machine_type
         self.num_machines = num_machines
@@ -43,6 +44,18 @@ class MachineGroup():
         # Set the API configuration that carries the information from the client
         # to the backend.
         self._api = instance_api.InstanceApi(api.get_client())
+
+    @classmethod
+    def from_api_response(cls, resp: dict):
+        """Creates a MachineGroup object from an API response."""
+
+        machine_group = cls(resp["machine_type"], int(resp["num_instances"]),
+                            bool(resp["spot"]), resp["disk_size_gb"],
+                            resp["zone"])
+        machine_group.name = resp["name"]
+        machine_group.create_time = resp["create_time"]
+
+        return machine_group
 
     def start(self):
         """Starts a machine group."""
@@ -137,7 +150,7 @@ class MachineGroup():
     def _log_machine_group_info(self):
         """Logs the machine group info."""
 
-        logging.info("ID: %s", self.id)
+        logging.info("Name: %s", self.name)
         logging.info("Machine type: %s", self.machine_type)
         logging.info("Number of machines: %s", self.num_machines)
         logging.info("Spot: %s", self.spot)

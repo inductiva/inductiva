@@ -2,6 +2,7 @@
 import os
 import time
 import pathlib
+from typing import Optional
 
 import inductiva
 from inductiva import types
@@ -34,18 +35,32 @@ def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     return path.with_name(name + path.suffix)
 
 
-def resolve_path(path: types.Path) -> pathlib.Path:
+def resolve_path(path: Optional[types.Path]) -> pathlib.Path:
     """Resolve a path relative to the Inductiva package working directory.
+
+    This takes in a path and returns it resolved relative to the
+    "inductiva.working_dir" setting.
+    Note:
+    If the working directory is not set, the current working directory of
+    the script is used.
+    If the path is absolute, it will override the working directory and be
+    returned as is.
+    If the path is None, the working directory will be returned.
+    Check the tests in "test_files_utils.py" for examples.
+
 
     Args:
         path: Path to a file or directory.
     """
-    root = pathlib.Path.cwd()
+    resolved_path = pathlib.Path.cwd()
 
     if inductiva.working_dir:
-        root = pathlib.Path(inductiva.working_dir)
+        resolved_path = pathlib.Path(inductiva.working_dir)
 
-    return pathlib.Path(root, path)
+    if path is not None:
+        resolved_path = pathlib.Path(resolved_path, path)
+
+    return resolved_path
 
 
 def get_sorted_files(data_dir: str,
