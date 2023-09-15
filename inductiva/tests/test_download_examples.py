@@ -1,3 +1,4 @@
+"""Test examples download."""
 import pathlib
 import inductiva
 
