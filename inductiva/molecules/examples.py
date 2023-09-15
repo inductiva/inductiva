@@ -1,10 +1,11 @@
-"""Functions to download and load example molecules for GROMACS simulations 
+"""Functions to download and load example molecules for GROMACS simulations
 from the RCSB PDB database."""
+import pathlib
 from absl import logging
-import os
 from typing import Optional
 
-import urllib
+import urllib.request
+import urllib.error
 
 import inductiva
 
@@ -31,7 +32,7 @@ def load_lysozyme(save_dir: Optional[str] = None) -> str:
 
 
 def download_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
-    """Download a PDB file from the RCSB database according 
+    """Download a PDB file from the RCSB database according
     to its pdb ID.
     Args:
         pdb_id: The PDB identifier of the molecule to download.
@@ -42,14 +43,18 @@ def download_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
 
     local_file_path = f"{pdb_id}.pdb"
     if save_dir is not None:
-        save_dir = inductiva.utils.files.resolve_path(save_dir)
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir)
-        local_file_path = os.path.join(save_dir, local_file_path)
+        local_file_path = pathlib.Path(save_dir, local_file_path)
+
+    local_file_path = inductiva.utils.files.resolve_path(local_file_path)
+
+    if not local_file_path.parent.exists():
+        local_file_path.parent.mkdir(parents=True)
+
     try:
         urllib.request.urlretrieve(api_url, local_file_path)
         logging.info("File downloaded to %s", local_file_path)
     except urllib.error.URLError as e:
         logging.error("Could not download file from %s", api_url)
         logging.error("%s", e)
-    return local_file_path
+
+    return str(local_file_path.absolute())
