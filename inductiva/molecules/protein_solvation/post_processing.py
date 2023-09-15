@@ -1,6 +1,5 @@
 "Postprocessing steps for the MDWaterBox scenario."
 import os
-import sys
 import pathlib
 from typing import Literal
 
