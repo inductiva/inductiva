@@ -157,6 +157,4 @@ class ProteinSolvationOutput:
 
         if self.ipython_kernel.__module__.startswith("google.colab"):
             gc.output.enable_custom_widget_manager()
-        else: 
-            print("condition false")
-            print(str(self.ipython_kernel))
+
