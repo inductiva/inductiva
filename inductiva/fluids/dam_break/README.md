@@ -18,7 +18,7 @@ inductiva.api_key = "ADD_API_KEY_HERE"
 # Initialize the scenario
 scenario = inductiva.fluids.DamBreak()
 
-# Default simulator is Dualsphysics
+# Default simulator is DualSPHysics
 task = scenario.simulate()
 
 output = task.get_output()

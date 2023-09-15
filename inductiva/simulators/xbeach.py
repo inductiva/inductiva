@@ -4,7 +4,7 @@ from typing import Optional
 from inductiva import types, tasks, resources, simulators
 
 
-class Xbeach(simulators.Simulator):
+class XBeach(simulators.Simulator):
     """Class to invoke a generic XBeach simulation on the API."""
 
     def __init__(self):
