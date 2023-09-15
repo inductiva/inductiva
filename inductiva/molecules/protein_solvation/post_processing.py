@@ -150,7 +150,6 @@ class ProteinSolvationOutput:
     @optional_deps.needs_molecules_extra_deps
     def enable_vizualization(self):
         """Enable vizualization if IPython is available."""
-        print(str(self.ipython_kernel))
         if self.ipython_kernel is None:
             raise ImportError("IPython is not available. Visualization is "
                               "only available in a python notebook.")
@@ -158,3 +157,5 @@ class ProteinSolvationOutput:
         if "google.cloud" in str(self.ipython_kernel):
             print("here")
             gc.output.enable_custom_widget_manager()
+        else : 
+            print("condition false")
