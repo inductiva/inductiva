@@ -157,5 +157,6 @@ class ProteinSolvationOutput:
         if "google.cloud" in str(self.ipython_kernel):
             print("here")
             gc.output.enable_custom_widget_manager()
-        else : 
+        else: 
             print("condition false")
+            print(str(self.ipython_kernel))
