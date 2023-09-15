@@ -19,10 +19,10 @@ from inductiva.utils import optional_deps
 
 class Bathymetry:
     """Represents a bathymetric profile.
-    
+
     A bathymetric profile defines the depth of the sea bottom as a function of
     space, here described in Cartesian coordinates (x, y).
-    
+
     Here, a bathymetry is represented with:
     - a 1D array of depths, in meters, measured at arbitrary points in space.
       Positive depths are below the water level.
@@ -38,7 +38,7 @@ class Bathymetry:
         y: np.ndarray,
     ):
         """Initializes a `Bathymetry` object.
-        
+
         Args:
             depths: A 1D array with the depths, in meters.
             x: A 1D array with the x coordinates of the points where depths are
@@ -58,7 +58,7 @@ class Bathymetry:
         y_range: Sequence[float],
     ):
         """Creates a `Bathymetry` object from a bot file.
-        
+
         The depth values are read from a bot file, i.e. a text file with a 2D
         array with the depths, in meters. The first and second dimensions of the
         array in the text file (i.e. rows and columns) correspond to the x and y
@@ -86,7 +86,7 @@ class Bathymetry:
         remove_offset: bool = True,
     ):
         """Creates a `Bathymetry` object from an ASCII XYZ file.
-        
+
         ASCII XYZ files store bathymetric data in a table where each line
         corresponds to a location (latitude, longitude pair). Several columns
         are available to characterize the depth at each location, namely:
@@ -155,7 +155,7 @@ class Bathymetry:
         boundary (East) are assumed to be below water (i.e. have 0 < depths <
         `max_depth`). The corners on the upper x boundary (West) are assumed to
         be above water (i.e. have - `max_depth` < depths < 0).
-        
+
         Args:
             x_range: The range of x values, in meters.
             y_range: The range of y values, in meters.
@@ -249,9 +249,21 @@ class Bathymetry:
         return np.ptp(self.y)
 
     @optional_deps.needs_coastal_extra_deps
+    def x_num(self) -> int:
+        """Returns the length of unique x values."""
+
+        return int(len(self.x_uniques()))
+
+    @optional_deps.needs_coastal_extra_deps
+    def y_num(self) -> int:
+        """Returns the length of unique y values."""
+
+        return int(len(self.x_uniques()))
+
+    @optional_deps.needs_coastal_extra_deps
     def x_uniques(self, sort: bool = False) -> np.ndarray:
         """Returns the unique x values.
-        
+
         Args:
             sort: Whether to sort the unique values.
         """
@@ -263,7 +275,7 @@ class Bathymetry:
     @optional_deps.needs_coastal_extra_deps
     def y_uniques(self, sort: bool = False) -> np.ndarray:
         """Returns the unique y values.
-        
+
         Args:
             sort: Whether to sort the unique values.
         """
@@ -278,10 +290,10 @@ class Bathymetry:
              y_range: Sequence[float],
              remove_offset=True):
         """Crops the bathymetry to a given range of x and y values.
-        
+
         Args:
             x_range: The range of x values, in meters.
-            y_range: The range of y values, in meters.    
+            y_range: The range of y values, in meters.
         """
         x_min, x_max = x_range
         y_min, y_max = y_range
@@ -324,8 +336,8 @@ class Bathymetry:
         cmap: Optional[str] = None,
         clim: Optional[Tuple[float]] = None,
         path: Optional[str] = None,
-        x_resolution: float = 10,
-        y_resolution: float = 10,
+        x_resolution: float = None,
+        y_resolution: float = None,
         threshold_distance: float = 20,
     ) -> Union["matplotlib.axes.Axes", None]:
         """Plots the bathymetry.
@@ -334,16 +346,19 @@ class Bathymetry:
         coordinates of the points where the depths are defined in the axes.
 
         The bathymetry data is plotted with a color plot on a grid with uniform
-        spacing in the x and y directions. The spacing in the x and y directions
-        is controlled by the `x_resolution` and `y_resolution` arguments.
-        
-        The data is interpolated from the points where the bathymetry is defined
-        to the uniform grid using linear interpolation.
+        spacing in the x and y directions. If the user does not specify the
+        resolution, the plotted mesh has the bathymetry resolution. If
+        necessary, the user can control the spacing in the x and y directions
+        using the `x_resolution` and `y_resolution` arguments.
+
+        For non-uniform grids or if the resoltuion is specified, the data is
+        interpolated from the points where the bathymetry is defined
+        to the resized uniform grid using linear interpolation.
 
         Points on the uniform grid at a distance larger than a threshold
         distance `threshold_distance` from points where the bathymetry is
         defined are omitted.
-    
+
         The plot is produced with matplotlib.
 
         Args:
@@ -355,28 +370,32 @@ class Bathymetry:
             path: Path to save the plot. If `None`, the plot is not saved, and
               the matplotlib `Axes` object is returned instead.
             x_resolution: Resolution, in meters, of the plotting grid in the x
-              direction.
+              direction. If `None`, the resolution is determined by the
+              bathymetry
             y_resolution: Resolution, in meters, of the plotting grid in the y
-              direction.
+              direction. If `None`, the resolution is determined by the
+              bathymetry
             threshold_distance: Threshold distance to filter out points on the
               uniform grid that are far from points where the bathymetry is
               defined.
         """
 
-        logging.info("Plotting the bathymetry on a uniform grid...")
-        depths_grid, _ = self._interpolate_to_uniform_grid(
-            x_resolution,
-            y_resolution,
-            threshold_distance=threshold_distance,
-            nullable=True,
-        )
+        if self.is_uniform_grid(
+        ) and x_resolution is None and y_resolution is None:
+            x_size = self.x_num()
+            y_size = self.y_num()
 
-        x_size = self.x_ptp() / x_resolution
-        y_size = self.y_ptp() / y_resolution
+            depths_grid = self.depths.reshape((x_size, y_size))
 
-        if x_size > 1000 and y_size > 1000:
-            logging.warning(
-                "The plotting grid is large. It may take a while to plot.")
+        else:
+            logging.info("Plotting the bathymetry on resized uniform grid...")
+
+            depths_grid, _ = self._interpolate_to_uniform_grid(
+                x_resolution,
+                y_resolution,
+                threshold_distance=threshold_distance,
+                nullable=True,
+            )
 
         # Plot the bathymetry.
         extent = (
@@ -426,7 +445,7 @@ class Bathymetry:
         The bathymetry is interpolated to a grid with uniform resolution (i.e.
         spacing) in the x and y directions. Linear interpolation is used to
         interpolate the bathymetry to the grid.
-        
+
         Grid points for which no interpolation is possible may be filled with
         a constant or with the nearest depth value.
 
@@ -453,7 +472,7 @@ class Bathymetry:
         fill_value: Optional[Union[float, str]] = None,
         nullable: bool = False,
     ):
-        """Interpolates the bathymetry to a uniform grid.     
+        """Interpolates the bathymetry to a uniform grid.
 
         Args:
             x_resolution: Resolution, in meters, of the grid in the x direction.
@@ -466,7 +485,7 @@ class Bathymetry:
             nullable: Whether to allow the bathymetry to be undefined in some
               grid points. If `False`, an error is raised if the bathymetry is
               undefined in one or more grid points.
-        
+
         Returns:
             depths_grid: A 2D array with the depths on the uniform grid.
             (x_grid, y_grid): The x and y coordinates of the points where the
@@ -477,8 +496,8 @@ class Bathymetry:
         y_size = int(self.y_ptp() / y_resolution)
 
         logging.info(
-            "Interpolating the bathymetry to a uniform grid...\n"
-            "- grid resolution %f x %f (m x m) \n"
+            "Interpolating the bathymetry to a grid of dimensions:\n"
+            "- grid resolution %.2f x %.2f (m x m) \n"
             "- grid size %d x %d", x_resolution, y_resolution, x_size, y_size)
 
         # Create uniform grid for interpolation.
