@@ -8,12 +8,14 @@ try:
     import matplotlib.pyplot as plt
     import nglview as nv
     import IPython as ip
-    import google.colab as gc
-
 except ImportError:
     nv = None
     plt = None
     ip = None
+
+try:
+    import google.colab as gc
+except ImportError:
     gc = None
 
 import inductiva
@@ -148,10 +150,9 @@ class ProteinSolvationOutput:
     @optional_deps.needs_molecules_extra_deps
     def enable_vizualization(self):
         """Enable vizualization if IPython is available."""
-
         if self.ipython_kernel is None:
             raise ImportError("IPython is not available. Visualization is "
                               "only available in a python notebook.")
 
-        if "google.cloud" in str(self.ipython_kernel):
+        if self.ipython_kernel.__module__.startswith("google.colab"):
             gc.output.enable_custom_widget_manager()

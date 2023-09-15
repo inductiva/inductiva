@@ -31,15 +31,21 @@ Moreover, the hardware and interaction are configured with the usual general par
 
 ### Example
 To test this scenario, you can download a protein from the RCSB database using its PDB ID. For this example, let's consider insulin with a PDB ID of 1ZNI.
+Do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
+
 ```python
 import inductiva
 
 inductiva.api_key = "YOUR_API_KEY"
 
+# Download the insulin protein (ID - "1ZNI") from RCSB database
+insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
+
 # Initialize the scenario
-insulin_path = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
+insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
 scenario = inductiva.molecules.ProteinSolvation(
-     protein_pdb = insulin_path,
+     protein_pdb = insulin_pdb_file,
+
      temperature = 300)
 
 # Run a simulation

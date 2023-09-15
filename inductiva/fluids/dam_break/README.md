@@ -10,6 +10,8 @@ After the scenario has been initialized, users are ready to launch the simulatio
 
 ### Example
 
+Do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
+
 ```python
 import inductiva
 
