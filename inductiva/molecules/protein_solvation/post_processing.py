@@ -155,7 +155,7 @@ class ProteinSolvationOutput:
             raise ImportError("IPython is not available. Visualization is "
                               "only available in a python notebook.")
 
-        if 'google.colab' in sys.modules:
+        if self.ipython_kernel.__module__.startswith("google.colab"):
             gc.output.enable_custom_widget_manager()
         else: 
             print("condition false")
