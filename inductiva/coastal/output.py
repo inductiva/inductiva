@@ -211,7 +211,7 @@ class CoastalAreaOutput:
             "velocity_magnitude",
         ] = "water_level",
         movie_path: Path = "movie.mp4",
-        fps: int = 10,
+        fps: int = 5,
         cmap: str = "viridis",
         clim: Optional[Sequence[float]] = None,
     ):
@@ -241,7 +241,7 @@ class CoastalAreaOutput:
             quantity=quantity,
         )
 
-        logging.info("Saving movie to movie_path")
+        logging.info("Starting to render video from simulation data...")
 
         _render_quantity_grid_data(
             x_array=x_array,
@@ -254,3 +254,5 @@ class CoastalAreaOutput:
             cmap=cmap,
             clim=clim,
         )
+
+        logging.info("Writing mp4 file to %s.", movie_path)

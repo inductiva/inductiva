@@ -324,6 +324,7 @@ class Bathymetry:
     @optional_deps.needs_coastal_extra_deps
     def plot(
         self,
+        show: bool = False,
         cmap: Optional[str] = None,
         clim: Optional[Tuple[float]] = None,
         path: Optional[str] = None,
@@ -422,6 +423,8 @@ class Bathymetry:
             matplotlib.pyplot.close(fig)
 
         else:
+            if show:
+                matplotlib.pyplot.show()
             return ax
 
     @optional_deps.needs_coastal_extra_deps
