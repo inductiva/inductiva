@@ -156,4 +156,5 @@ class ProteinSolvationOutput:
                               "only available in a python notebook.")
 
         if "google.cloud" in str(self.ipython_kernel):
+            print("here")
             gc.output.enable_custom_widget_manager()
