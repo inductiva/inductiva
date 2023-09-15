@@ -10,7 +10,7 @@ is performed using the [SWASH](https://swash.sourceforge.io/) simulator.
 
 Note: You can follow this example in a notebook or run the script
 `random_bathymetry_demo.py` available in this folder, that contains all the code
-snippets exhibited here. If that script 
+snippets exhibited here. Don't forget to insert your API key for the script to work!
 
 The bathymetry that we use can be loaded from a real scenario or randomly generated
 by us. To avoid having to download any data for now, we will start by run a simulation
