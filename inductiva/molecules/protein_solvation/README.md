@@ -42,7 +42,6 @@ inductiva.api_key = "YOUR_API_KEY"
 insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
 
 # Initialize the scenario
-insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
 scenario = inductiva.molecules.ProteinSolvation(
      protein_pdb = insulin_pdb_file,
 
@@ -64,7 +63,7 @@ The simulation output folder contains trajectory data spanning the simulation du
 output.render_interactive(representation="ball+stick", add_backbone=True, selection="protein")
  ```
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/assets/114397668/4d2265c1-dfe7-435f-936d-f4d607e29a04" alt="Centered Image" width="350" height="250">
+  <img src="https://github.com/inductiva/inductiva/assets/114397668/87e58f32-c23d-4115-929a-71ef8c789033" alt="Centered Image" width="350" height="250">
 </p>
 
 Users also have the option to plot the RMSF (Root Mean Square Fluctuation) over the simulation for each residue within the protein structure. [RMSF](https://userguide.mdanalysis.org/stable/examples/analysis/alignment_and_rms/rmsf.html) measures the extent to which a structure deviates from its average configuration over time, offering insights into the mobility of specific protein residues. 
