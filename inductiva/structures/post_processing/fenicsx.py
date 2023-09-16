@@ -18,6 +18,24 @@ class FEniCSxSimulationOutput:
             """
         self.sim_output_path = sim_output_path
 
+    def remove_time_value_lines(self, output_file_path):
+        # Read the Xdmf file
+        with open(self.sim_output_path, 'r') as file:
+            xdmf_content = file.readlines()
+
+        # Create an empty list to store the modified content
+        new_xdmf_content = []
+
+        # Iterate through the lines in the file
+        for line in xdmf_content:
+            # Check if the line contains a Time Value
+            if not '<Time Value=' in line:
+                new_xdmf_content.append(line)
+
+        # Write the modified content back to the output file
+        with open(output_file_path, 'w') as file:
+            file.writelines(new_xdmf_content)
+
     @inductiva.utils.optional_deps.needs_structures_extra_deps
     def render(self,
                field_names: list = None,
@@ -33,8 +51,10 @@ class FEniCSxSimulationOutput:
             transparent_background (bool, optional): Whether the background of
               the saved images should be transparent. Default is True.
         """
+
         # Read simulation output data
         reader = pv.get_reader(self.sim_output_path)
+
         data = reader.read()
 
         if field_names is None:
