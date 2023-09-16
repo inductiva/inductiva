@@ -1,6 +1,7 @@
 """Post-process FEniCSx simulation outputs."""
 
 import os
+import tempfile
 
 import pyvista as pv
 
@@ -18,9 +19,20 @@ class FEniCSxSimulationOutput:
             """
         self.sim_output_path = sim_output_path
 
-    def remove_time_value_lines(self, output_file_path):
-        # Read the Xdmf file
-        with open(self.sim_output_path, 'r') as file:
+    def remove_time_values_from_xdmf(self, output_file_path: str) -> None:
+        """Removes Time Value lines from an XDMF file.
+
+        This method is crucial due to PyVista's limitations in inspecting time
+        values directly.
+        It reads an XDMF file, removes lines containing Time Values, and writes
+        the modified content to a new file.
+
+        Args: 
+            output_file_path: The path to save the modified XDMF content.
+        """
+
+        # Read the XDMF file
+        with open(self.sim_output_path, "r", encoding="utf-8") as file:
             xdmf_content = file.readlines()
 
         # Create an empty list to store the modified content
@@ -28,12 +40,13 @@ class FEniCSxSimulationOutput:
 
         # Iterate through the lines in the file
         for line in xdmf_content:
+
             # Check if the line contains a Time Value
-            if not '<Time Value=' in line:
+            if "<Time Value=" not in line:
                 new_xdmf_content.append(line)
 
         # Write the modified content back to the output file
-        with open(output_file_path, 'w') as file:
+        with open(output_file_path, "w", encoding="utf-8") as file:
             file.writelines(new_xdmf_content)
 
     @inductiva.utils.optional_deps.needs_structures_extra_deps
@@ -52,10 +65,22 @@ class FEniCSxSimulationOutput:
               the saved images should be transparent. Default is True.
         """
 
-        # Read simulation output data
-        reader = pv.get_reader(self.sim_output_path)
+        # Create a temporary directory
+        temp_dir = tempfile.mkdtemp()
 
+        # Specify the filename within the temporary directory
+        temp_file_path = os.path.join(temp_dir, "temp_results.xdmf")
+
+        # Remove time values from the XDMF file
+        self.remove_time_values_from_xdmf(self.sim_output_path)
+
+        # Read simulation output data
+        reader = pv.get_reader(temp_file_path)
         data = reader.read()
+
+        # Clean up temporary files and directory
+        os.remove(temp_file_path)
+        os.rmdir(temp_dir)
 
         if field_names is None:
 
