@@ -10,11 +10,13 @@ is performed using the [SWASH](https://swash.sourceforge.io/) simulator.
 
 Note: You can follow this example in a notebook or run the script
 `random_bathymetry_demo.py` available in this folder, that contains all the code
-snippets exhibited here. Don't forget to insert your API key for the script to work!
+snippets exhibited here. Don't forget to insert your API key
+(`inductiva.api_key = "your_api_key"`) for the script to work! (You can get one by
+filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link))
 
 The bathymetry that we use can be loaded from a real scenario or randomly generated
 by us. To avoid having to download any data for now, we will start by run a simulation
-on synthetic bathymetry , that is procedurally generated using the API.
+on synthetic bathymetry, that is procedurally generated using the API.
 
 We start by generating a random bathymetry.
 ```python
