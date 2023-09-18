@@ -118,6 +118,7 @@ class FluidBlock(scenarios.Scenario):
             output_time_step: Time step between outputs, in seconds.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("fluid_block")
 
         # TODO: Avoid storing these as class attributes.
         self.particle_radius = particle_radius
@@ -133,13 +134,6 @@ class FluidBlock(scenarios.Scenario):
             run_async=run_async,
             device=device,
             sim_config_filename=self.get_config_filename(simulator))
-
-        # TODO: Add any kind of post-processing here, e.g. convert files?
-        # convert_vtk_data_dir_to_netcdf(
-        #     data_dir=os.path.join(output_path, "vtk"),
-        #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
-        #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
-        task.set_output_class(fluids.SPHSimulationOutput)
 
         return task
 

@@ -61,16 +61,20 @@ class DamBreak(fluids.FluidBlock):
             simulation_time: Simulation time, in seconds.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("dam_break")
 
-        particle_radius = ParticleRadius[resolution.upper()].value
+        self.particle_radius = ParticleRadius[resolution.upper()].value
+        self.simulation_time = simulation_time
+        self.adaptive_time_step = True
+        self.particle_sorting = True
+        self.time_step = 0.001
+        self.output_time_step = 1 / 60
 
-        task = super().simulate(simulator=simulator,
-                                machine_group=machine_group,
-                                device=device,
-                                particle_radius=particle_radius,
-                                simulation_time=simulation_time,
-                                run_async=run_async)
-
-        task.set_output_class(fluids.SPHSimulationOutput)
+        task = super(fluids.FluidBlock, self).simulate(
+            simulator=simulator,
+            machine_group=machine_group,
+            device=device,
+            run_async=run_async,
+            sim_config_filename=self.get_config_filename(simulator))
 
         return task

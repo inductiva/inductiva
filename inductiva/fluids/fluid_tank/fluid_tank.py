@@ -237,8 +237,6 @@ class FluidTank(scenarios.Scenario):
             sim_config_filename=self.get_config_filename(simulator),
         )
 
-        task.set_output_class(fluids.FluidTankOutput)
-
         return task
 
     def get_bounding_box(self):

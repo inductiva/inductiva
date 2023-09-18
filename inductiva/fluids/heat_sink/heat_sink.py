@@ -109,6 +109,8 @@ class HeatSink(scenarios.Scenario):
             machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("heat_sink")
+
         self.simulation_time = simulation_time
         self.output_time_step = output_time_step
 
@@ -118,8 +120,6 @@ class HeatSink(scenarios.Scenario):
                                 machine_group=machine_group,
                                 run_async=run_async,
                                 commands=commands)
-
-        task.set_output_class(fluids.HeatSinkOutput)
 
         return task
 

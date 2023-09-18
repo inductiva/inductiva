@@ -295,6 +295,7 @@ class StellaratorCoils(scenarios.Scenario):
                             }
                   
         """
+        simulator.override_api_method_prefix("stellarators")
 
         if plasma_surface_filepath:
             self.plasma_surface_filepath = utils.files.resolve_path(

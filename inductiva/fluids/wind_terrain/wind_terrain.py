@@ -115,6 +115,7 @@ class WindOverTerrain(scenarios.Scenario):
             n_cores: Number of cores to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("wind_terrain")
 
         self.num_iterations = num_iterations
         self.n_cores = n_cores
@@ -126,8 +127,6 @@ class WindOverTerrain(scenarios.Scenario):
                                 run_async=run_async,
                                 n_cores=n_cores,
                                 commands=commands)
-
-        task.set_output_class(fluids.post_processing.SteadyStateOutput)
 
         return task
 
