@@ -6,5 +6,5 @@ from .splishsplash import SplishSplash
 from .dualsphysics import DualSPHysics
 from .openfoam import OpenFOAM
 from .gromacs import GROMACS
-from .simsopt import Simsopt
+from .simsopt import SIMSOPT
 from .fenicsx import FEniCSx

@@ -68,7 +68,7 @@ class StellaratorCoils(scenarios.Scenario):
           Typically varies between 1 and 3.
     """
 
-    valid_simulators = [simulators.Simsopt]
+    valid_simulators = [simulators.SIMSOPT]
 
     def __init__(self, coils, num_field_periods):
         """Initialize the StellaratorCoils object."""
@@ -234,7 +234,7 @@ class StellaratorCoils(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulators.Simulator = simulators.Simsopt(),
+        simulator: simulators.Simulator = simulators.SIMSOPT(),
         machine_group: typing.Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         plasma_surface_filepath: typing.Optional[types.Path] = None,
@@ -393,7 +393,7 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
 
 
 @StellaratorCoils.create_input_files.register
-def _(self, simulator: simulators.Simsopt, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.SIMSOPT, input_dir):  # pylint: disable=unused-argument
     """Creates Simsopt simulation input files."""
 
     coil_coefficients = [coil.curve_coefficients for coil in self.coils]

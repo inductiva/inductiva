@@ -4,7 +4,7 @@ from typing import Optional
 from inductiva import simulators, tasks, types, resources
 
 
-class Simsopt(simulators.Simulator):
+class SIMSOPT(simulators.Simulator):
     """Invokes a simsopt simulation on the API."""
 
     def __init__(self):
