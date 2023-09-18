@@ -165,4 +165,4 @@ flow_slice.render(physical_field="velocity",
 
 <img src="/resources/media/openfoam/flow_slice.png" width="400" height="300" />
 
-**Remark: ** For those running on Google Colab or a headless server, further extra dependencies are required. Install them with `!apt install libgl1-mesa-glx xvfb`. Moreover, change the parameter `virtual_display` in the render method to `True`, like `streamlines.render(virtual_display=True)`.
+**Remark: ** For those running on Google Colab or a headless server, further extra dependencies are required. Install them with `!apt install libgl1-mesa-glx xvfb`. Moreover, change the parameter `virtual_display` in the render method to `True`, and pass a path to save the result, like `streamlines.render(virtual_display=True, save_path="streamlines.png")`.  
