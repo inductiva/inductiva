@@ -5,6 +5,7 @@ from inductiva.client.apis.tags.admin_api import AdminApi
 from inductiva.client.apis.tags.executers_api import ExecutersApi
 from inductiva.client.apis.tags.instance_api import InstanceApi
 from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.client.apis.tags.users_api import UsersApi
 
 TagToApi = typing_extensions.TypedDict(
     'TagToApi', {
@@ -12,6 +13,7 @@ TagToApi = typing_extensions.TypedDict(
         TagValues.EXECUTERS: ExecutersApi,
         TagValues.INSTANCE: InstanceApi,
         TagValues.TASKS: TasksApi,
+        TagValues.USERS: UsersApi,
     })
 
 tag_to_api = TagToApi({
@@ -19,4 +21,5 @@ tag_to_api = TagToApi({
     TagValues.EXECUTERS: ExecutersApi,
     TagValues.INSTANCE: InstanceApi,
     TagValues.TASKS: TasksApi,
+    TagValues.USERS: UsersApi,
 })

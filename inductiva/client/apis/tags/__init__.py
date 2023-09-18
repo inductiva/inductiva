@@ -10,3 +10,4 @@ class TagValues(str, enum.Enum):
     EXECUTERS = "executers"
     INSTANCE = "instance"
     TASKS = "tasks"
+    USERS = "users"
