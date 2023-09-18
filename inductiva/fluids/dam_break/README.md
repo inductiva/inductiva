@@ -32,7 +32,7 @@ output.render()
 ```
 
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/blob/f52d0a733276996e02fdde942a4974c0a75d5038/resources/media/dam_break.gif" alt="Centered Image" width="350" height="250">
+  <img src="https://github.com/inductiva/inductiva/blob/f52d0a733276996e02fdde942a4974c0a75d5038/resources/media/dam_break.gif" alt="Centered Image" width="400" height="300">
 
 **Remark:** For those running on Google Colab or a headless server, further extra dependencies are required. Install them with `!apt install libgl1-mesa-glx xvfb`. Moreover, change the parameter `virtual_display` in the render method to `True`, like `output.render(virtual_display=True)`.
 
