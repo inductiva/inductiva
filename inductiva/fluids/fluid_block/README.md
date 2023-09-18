@@ -41,4 +41,4 @@ output.render()
 **Remark:** For those running on Google Colab or a headless server, further extra dependencies are required. Install them with `!apt install libgl1-mesa-glx xvfb`. 
 Moreover, change the parameter `virtual_display` in the render method to `True`, like `output.render(virtual_display=True)`.
 
-Further, out can alter the `color` of the particles and `fps` of the rendering!
+Further, one can alter the `color` of the particles and `fps` of the rendering!
