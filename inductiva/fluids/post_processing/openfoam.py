@@ -259,6 +259,8 @@ class FlowSlice:
             save_path = utils.files.resolve_path(save_path)
 
         if virtual_display:
+            # Set off_screen to True, since screens aren't available.
+            off_screen = True
             pv.start_xvfb()
 
         plotter = pv.Plotter(off_screen=off_screen)
@@ -304,6 +306,8 @@ class Streamlines:
             save_path = utils.files.resolve_path(save_path)
 
         if virtual_display:
+            # Set off_screen to True, since screens aren't available.
+            off_screen = True
             pv.start_xvfb()
 
         plotter = pv.Plotter(off_screen=off_screen)
@@ -382,7 +386,7 @@ class MeshData:
 
     def render(self,
                off_screen: bool = False,
-               background_color: str = "black",
+               background_color: str = "white",
                scalars_cmap: str = "viridis",
                virtual_display: bool = False,
                save_path: types.Path = None):
@@ -391,6 +395,8 @@ class MeshData:
             save_path = utils.files.resolve_path(save_path)
 
         if virtual_display:
+            # Set off_screen to True, since screens aren't available.
+            off_screen = True
             pv.start_xvfb()
 
         plotter = pv.Plotter(off_screen=off_screen)
