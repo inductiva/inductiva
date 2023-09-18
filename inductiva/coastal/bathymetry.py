@@ -200,10 +200,7 @@ class Bathymetry:
         return cls(depths.flatten(), x.flatten(), y.flatten())
 
     @optional_deps.needs_coastal_extra_deps
-    def to_bot_file(
-        self,
-        bot_file_path: str,
-    ):
+    def to_bot_file(self, bot_file_path: str, depths_grid: np.ndarray):
         """Writes the bathymetry to a bot file.
 
         The depth values are interpolated to a regular grid and written to a bot
@@ -213,12 +210,6 @@ class Bathymetry:
         Args:
             text_file_path: Path to the text file.
         """
-
-        x_resolution = self.x_ptp() / self.x_uniques().size
-        y_resolution = self.y_ptp() / self.y_uniques().size
-
-        depths_grid, _ = self._interpolate_to_uniform_grid(
-            x_resolution, y_resolution)
 
         np.savetxt(bot_file_path, depths_grid)
 
@@ -333,6 +324,7 @@ class Bathymetry:
     @optional_deps.needs_coastal_extra_deps
     def plot(
         self,
+        show: bool = False,
         cmap: Optional[str] = None,
         clim: Optional[Tuple[float]] = None,
         path: Optional[str] = None,
@@ -431,6 +423,8 @@ class Bathymetry:
             matplotlib.pyplot.close(fig)
 
         else:
+            if show:
+                matplotlib.pyplot.show()
             return ax
 
     @optional_deps.needs_coastal_extra_deps
