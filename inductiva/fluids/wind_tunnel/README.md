@@ -86,7 +86,7 @@ output = task.get_output()
 pressure_field = output.get_object_pressure_field()
 
 # Render
-pressure_field.render_frame()
+pressure_field.render()
 ```
 
 <img src="/resources/media/openfoam/default_pressure_field.png" width="400" height="300" />
@@ -96,11 +96,11 @@ pressure_field.render_frame()
 streamlines = output.get_streamlines()
 
 # Render the streamlines
-streamlines.render_frame(physical_field="velocity",
-                         flow_cmap="viridis",
-                         view="isometric",
-                         streamline_radius=0.1
-                         save_path="default_streamlines.png")
+streamlines.render(physical_field="velocity",
+                   flow_cmap="viridis",
+                   view="isometric",
+                   streamline_radius=0.1
+                   save_path="default_streamlines.png")
 ```
 
 <img src="/resources/media/openfoam/default_streamlines.png" width="400" height="300" />
@@ -111,9 +111,9 @@ streamlines.render_frame(physical_field="velocity",
 flow_slice = output.get_flow_slice(plane="xz")
 
 # Render the pressure field over the slice
-flow_slice.render_frame(physical_field="pressure",
-                        flow_cmap="viridis",
-                        save_path="default_flow_slice.png")
+flow_slice.render(physical_field="pressure",
+                  flow_cmap="viridis",
+                  save_path="default_flow_slice.png")
 ```
 
 <img src="/resources/media/openfoam/default_flow_slice.png" width="400" height="300" />
@@ -128,7 +128,7 @@ output = task.get_output(all_files=True)
 pressure_field = output.get_object_pressure_field()
 
 # Render
-pressure_field.render_frame(save_path="pressure_field.png")
+pressure_field.render(save_path="pressure_field.png")
 ```
 
 <img src="/resources/media/openfoam/pressure_field.png" width="400" height="300" />
@@ -142,11 +142,11 @@ streamlines = output.get_streamlines(max_time=200,
                                      source_center=[-3, 0, 1])
 
 # Render the streamlines
-streamlines.render_frame(physical_field="pressure",
-                         flow_cmap="viridis",
-                         view="isometric",
-                         streamline_radius=0.1
-                         save_path="streamlines.png")
+streamlines.render(physical_field="pressure",
+                   flow_cmap="viridis",
+                   view="isometric",
+                   streamline_radius=0.1
+                   save_path="streamlines.png")
 ```
 
 <img src="/resources/media/openfoam/streamlines.png" width="400" height="300" />
@@ -158,9 +158,11 @@ flow_slice = output.get_flow_slice(plane="xz",
                                    origin=(0,0,0))
 
 # Render the velocity field over the flow slice.
-flow_slice.render_frame(physical_field="velocity",
-                        flow_cmap="Blues",
-                        save_path="flow_slice.png")
+flow_slice.render(physical_field="velocity",
+                  flow_cmap="Blues",
+                  save_path="flow_slice.png")
 ```
 
 <img src="/resources/media/openfoam/flow_slice.png" width="400" height="300" />
+
+**Remark: ** For those running on Google Colab or a headless server, further extra dependencies are required. Install them with `!apt install libgl1-mesa-glx xvfb`. Moreover, change the parameter `virtual_display` in the render method to `True`, like `streamlines.render(virtual_display=True)`.
