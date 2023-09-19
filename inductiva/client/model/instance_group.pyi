@@ -37,6 +37,8 @@ class InstanceGroup(
         required = {
             "machine_type",
             "spot",
+            "name",
+            "id",
             "disk_size_gb",
             "num_instances",
         }
@@ -46,95 +48,19 @@ class InstanceGroup(
             machine_type = schemas.StrSchema
             spot = schemas.BoolSchema
             disk_size_gb = schemas.IntSchema
-            
-            
-            class id(
-                schemas.UUIDBase,
-                schemas.ComposedSchema,
-            ):
-            
-            
-                class MetaOapg:
-                    format = 'uuid'
-                    any_of_0 = schemas.StrSchema
-                    any_of_1 = schemas.NoneSchema
-                    
-                    @classmethod
-                    @functools.lru_cache()
-                    def any_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            cls.any_of_0,
-                            cls.any_of_1,
-                        ]
-            
-            
-                def __new__(
-                    cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'id':
-                    return super().__new__(
-                        cls,
-                        *_args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
-            
-            
-            class name(
-                schemas.ComposedSchema,
-            ):
-            
-            
-                class MetaOapg:
-                    any_of_0 = schemas.StrSchema
-                    any_of_1 = schemas.NoneSchema
-                    
-                    @classmethod
-                    @functools.lru_cache()
-                    def any_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            cls.any_of_0,
-                            cls.any_of_1,
-                        ]
-            
-            
-                def __new__(
-                    cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'name':
-                    return super().__new__(
-                        cls,
-                        *_args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
+            id = schemas.UUIDSchema
+            name = schemas.StrSchema
             zone = schemas.StrSchema
             
             
             class create_time(
+                schemas.DateTimeBase,
                 schemas.ComposedSchema,
             ):
             
             
                 class MetaOapg:
+                    format = 'date-time'
                     any_of_0 = schemas.StrSchema
                     any_of_1 = schemas.NoneSchema
                     
@@ -169,11 +95,13 @@ class InstanceGroup(
             
             
             class delete_time(
+                schemas.DateTimeBase,
                 schemas.ComposedSchema,
             ):
             
             
                 class MetaOapg:
+                    format = 'date-time'
                     any_of_0 = schemas.StrSchema
                     any_of_1 = schemas.NoneSchema
                     
@@ -219,6 +147,8 @@ class InstanceGroup(
     
     machine_type: MetaOapg.properties.machine_type
     spot: MetaOapg.properties.spot
+    name: MetaOapg.properties.name
+    id: MetaOapg.properties.id
     disk_size_gb: MetaOapg.properties.disk_size_gb
     num_instances: MetaOapg.properties.num_instances
     
@@ -270,10 +200,10 @@ class InstanceGroup(
     def get_item_oapg(self, name: typing_extensions.Literal["disk_size_gb"]) -> MetaOapg.properties.disk_size_gb: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> typing.Union[MetaOapg.properties.id, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["id"]) -> MetaOapg.properties.id: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["zone"]) -> typing.Union[MetaOapg.properties.zone, schemas.Unset]: ...
@@ -296,10 +226,10 @@ class InstanceGroup(
         *_args: typing.Union[dict, frozendict.frozendict, ],
         machine_type: typing.Union[MetaOapg.properties.machine_type, str, ],
         spot: typing.Union[MetaOapg.properties.spot, bool, ],
+        name: typing.Union[MetaOapg.properties.name, str, ],
+        id: typing.Union[MetaOapg.properties.id, str, uuid.UUID, ],
         disk_size_gb: typing.Union[MetaOapg.properties.disk_size_gb, decimal.Decimal, int, ],
         num_instances: typing.Union[MetaOapg.properties.num_instances, decimal.Decimal, int, ],
-        id: typing.Union[MetaOapg.properties.id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        name: typing.Union[MetaOapg.properties.name, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         zone: typing.Union[MetaOapg.properties.zone, str, schemas.Unset] = schemas.unset,
         create_time: typing.Union[MetaOapg.properties.create_time, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         delete_time: typing.Union[MetaOapg.properties.delete_time, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -311,10 +241,10 @@ class InstanceGroup(
             *_args,
             machine_type=machine_type,
             spot=spot,
+            name=name,
+            id=id,
             disk_size_gb=disk_size_gb,
             num_instances=num_instances,
-            id=id,
-            name=name,
             zone=zone,
             create_time=create_time,
             delete_time=delete_time,
