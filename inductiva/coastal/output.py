@@ -200,6 +200,25 @@ class CoastalAreaOutput:
         """
 
         self.sim_output_path = sim_output_path
+        self.check_stability()
+
+    @optional_deps.needs_coastal_extra_deps
+    def check_stability(self):
+
+        time_list, data_list = read_swash_grid_quantity_file(
+            file_path=os.path.join(self.sim_output_path, "water_level.mat"),
+            quantity="water_level",
+        )
+
+        # Check if water level is stable
+        inital_max_water_level = np.max(data_list[0])
+        final_max_water_level = np.max(data_list[-1])
+
+        if final_max_water_level > 2*inital_max_water_level:
+            logging.info("Simulation can show unstable results.\n"
+                         "Check the simulation visualization to corroborate.\n"
+                         "If the results are unstable, try increasing "
+                         "the simulation resolution.")
 
     @optional_deps.needs_coastal_extra_deps
     def render(
