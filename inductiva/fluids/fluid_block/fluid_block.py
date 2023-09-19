@@ -172,7 +172,7 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
     # Generate the simulation configuration file.
     fluid_margin = 2 * self.particle_radius
 
-    utils.templates.replace_params_in_template(
+    utils.templates.replace_params(
         template_path=os.path.join(template_files_dir,
                                    SPLISHSPLASH_TEMPLATE_FILENAME),
         params={
@@ -210,7 +210,7 @@ def _(self, simulator: simulators.DualSPHysics, input_dir):  # pylint: disable=u
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                       DUALSPHYSICS_TEMPLATE_INPUT_DIR)
-    utils.templates.replace_params_in_template(
+    utils.templates.replace_params(
         template_path=os.path.join(template_files_dir,
                                    DUALSPHYSICS_TEMPLATE_FILENAME),
         params={

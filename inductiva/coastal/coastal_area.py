@@ -171,7 +171,7 @@ def _(self, simulator: simulators.SWASH, input_dir):  # pylint: disable=unused-a
     absorbing_boundary_locations = ["N", "S", "E", "W"]
     absorbing_boundary_locations.remove(self.wave_source_location)
 
-    utils.templates.replace_params_in_template(
+    utils.templates.replace_params(
         template_path=config_template_file_path,
         params={
             "bathymetry_filename": SWASH_BATHYMETRY_FILENAME,

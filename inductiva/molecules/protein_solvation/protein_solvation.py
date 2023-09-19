@@ -130,7 +130,7 @@ def _(self, simulator: simulators.GROMACS, input_dir):  # pylint: disable=unused
 
     shutil.copytree(template_files_dir, input_dir, dirs_exist_ok=True)
 
-    utils.templates.batch_replace_params_in_template(
+    utils.templates.batch_replace_params(
         templates_dir=input_dir,
         template_filenames=[
             "simulation.mdp.jinja",

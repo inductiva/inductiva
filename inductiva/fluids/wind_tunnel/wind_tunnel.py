@@ -153,7 +153,7 @@ class WindTunnel(scenarios.Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         inmemory_file = io.StringIO()
-        utils.templates.replace_params_in_template(
+        utils.templates.replace_params(
             template_path=commands_template_path,
             params={"n_cores": self.n_cores},
             output_file=inmemory_file,
@@ -181,7 +181,7 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    utils.templates.batch_replace_params_in_template(
+    utils.templates.batch_replace_params(
         templates_dir=input_dir,
         template_filenames=[
             os.path.join("0", "include",

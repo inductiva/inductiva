@@ -45,7 +45,7 @@ def explore_design_space(simulator: Simulator,
         template_path = os.path.join(input_dir, template_filename)
         input_file = os.path.join(input_dir, input_filename)
 
-        templates.replace_params_in_template(
+        templates.replace_params(
             template_path,
             {tag: value},
             input_file,

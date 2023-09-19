@@ -92,7 +92,7 @@ class MDWaterBox(scenarios.Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         inmemory_file = io.StringIO()
-        utils.templates.replace_params_in_template(
+        utils.templates.replace_params(
             template_path=commands_template_path,
             params={"box_size": self.box_size},
             output_file=inmemory_file,
@@ -115,7 +115,7 @@ def _(self, simulator: simulators.GROMACS, input_dir):  # pylint: disable=unused
 
     shutil.copytree(template_files_dir, input_dir, dirs_exist_ok=True)
 
-    utils.templates.batch_replace_params_in_template(
+    utils.templates.batch_replace_params(
         templates_dir=input_dir,
         template_filenames=[
             "simulation.mdp.jinja",

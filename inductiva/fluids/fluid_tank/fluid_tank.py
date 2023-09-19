@@ -304,7 +304,7 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
         bounding_box_max[2],
     ]
 
-    utils.templates.replace_params_in_template(
+    utils.templates.replace_params(
         template_path=os.path.join(template_files_dir,
                                    SPLISHSPLASH_TEMPLATE_FILENAME),
         params={
