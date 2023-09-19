@@ -1,4 +1,4 @@
-"""Definition of configurations to connect tasks to simulation output classes."""
+"""Connect tasks to simulation output classes via method_name."""
 from inductiva import fluids, molecules, coastal
 
 OUTPUT_CONSTS = {

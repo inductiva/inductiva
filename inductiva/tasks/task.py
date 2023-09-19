@@ -217,7 +217,7 @@ class Task:
         # For some scenarios, there are None default files
         filenames = None
         output_class = None
-        if method_name in output_consts.OUTPUT_CONSTS.keys():
+        if method_name in output_consts.OUTPUT_CONSTS:
             output_class = output_consts.OUTPUT_CONSTS[method_name][
                 "output_class"]
             if not all_files:
