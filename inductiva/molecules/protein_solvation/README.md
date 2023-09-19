@@ -26,7 +26,7 @@ The user can further define the following simulation parameters:
     Default value if "md".
 - `n_steps_min`: Number of steps for energy minimization. Default value is 5000.
 
-Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`, `n_cores`.
+Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`.
  Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in [Tasks](inductiva/README.md).
 
 ### Example

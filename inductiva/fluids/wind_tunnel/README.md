@@ -6,7 +6,9 @@ To initialize the scenario, the user can define the following parameters:
 - `domain`: Dimensions of the wind tunnel in meters, e.g. `{"x": [-5, 15], "y": [-5, 5], "z": [0, 8]}`.
 - `flow_velocity`: Airflow velocity in m/s, e.g. `[30, 0, 0]`. Notice that the airflow is injected from the negative x-direction.
 
-Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in [STL](https://en.wikipedia.org/wiki/STL_(file_format)) or [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) format. Notice that, the required meshing step will automatically be made before starting the simulation. The meshing is done with the [snappyHexMesh tool](https://www.openfoam.com/documentation/user-guide/4-mesh-generation-and-conversion/4.4-mesh-generation-with-the-snappyhexmesh-utility) of OpenFOAM.
+Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in [STL](https://en.wikipedia.org/wiki/STL_(file_format)) or [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) format. Notice that:
+- the object is not re-scaled automatically, so the user must either change the dimensions of the domain or scale the object himself.
+- the required meshing step is automatically done on the backend before the simulation starts with [snappyHexMesh tool](https://www.openfoam.com/documentation/user-guide/4-mesh-generation-and-conversion/4.4-mesh-generation-with-the-snappyhexmesh-utility) of OpenFOAM.
 
 To test this scenario we make available one example, but users can use their own files, as long as it is in STL or OBJ format.
 
