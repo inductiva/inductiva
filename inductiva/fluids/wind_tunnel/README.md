@@ -29,10 +29,10 @@ import inductiva
 
 inductiva.api_key = "YOUR_API_KEY"
 
-# Url to a test object in Inductiva Github repository
-object_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
-              "/resources/test_object.obj"
-object_path = inductiva.utils.files.download_from_url(object_url)
+# Url to a test an object in Inductiva Github repository
+vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
+              "/resources/vehicle.obj"
+vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 
 # Initialize the scenario
 scenario = inductiva.fluids.WindTunnel(
@@ -41,7 +41,7 @@ scenario = inductiva.fluids.WindTunnel(
 
 # Run a simulation
 task = scenario.simulate(
-    object_path=object_path,
+    object_path=vehicle_path,
     num_iterations=50, resolution="low",
     n_cores=2)
 
