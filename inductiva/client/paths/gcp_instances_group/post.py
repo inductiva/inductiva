@@ -93,7 +93,7 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _create_instance_group_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -109,7 +109,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _create_instance_group_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -125,7 +125,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _create_instance_group_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -139,7 +139,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _create_instance_group_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -155,7 +155,7 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _create_instance_group_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -167,7 +167,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Create Instance Group
+        Register Instance Group
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -225,11 +225,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class CreateInstanceGroup(BaseApi):
+class RegisterInstanceGroup(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def create_instance_group(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -245,7 +245,7 @@ class CreateInstanceGroup(BaseApi):
         ...
 
     @typing.overload
-    def create_instance_group(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -261,7 +261,7 @@ class CreateInstanceGroup(BaseApi):
         ...
 
     @typing.overload
-    def create_instance_group(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -275,7 +275,7 @@ class CreateInstanceGroup(BaseApi):
         ...
 
     @typing.overload
-    def create_instance_group(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -291,7 +291,7 @@ class CreateInstanceGroup(BaseApi):
     ]:
         ...
 
-    def create_instance_group(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -302,7 +302,7 @@ class CreateInstanceGroup(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._create_instance_group_oapg(
+        return self._register_instance_group_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,
@@ -388,7 +388,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._create_instance_group_oapg(
+        return self._register_instance_group_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,
