@@ -97,7 +97,7 @@ class WindTunnel(scenarios.Scenario):
                  object_path: Optional[types.Path] = None,
                  num_iterations: float = 100,
                  resolution: Literal["high", "medium", "low"] = "medium",
-                 n_cores: int = 1) -> tasks.Task:
+                 n_cores: int = 2) -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:

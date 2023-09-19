@@ -201,7 +201,6 @@ class FluidTank(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.SplishSplash(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        device: Literal["cpu", "gpu"] = "cpu",
         simulation_time: float = 5,
         resolution: Literal["low", "medium", "high"] = "low",
         output_time_step: float = 0.1,
@@ -233,7 +232,6 @@ class FluidTank(scenarios.Scenario):
             machine_group=machine_group,
             run_async=run_async,
             particle_radius=self.particle_radius,
-            device=device,
             sim_config_filename=self.get_config_filename(simulator),
         )
 
