@@ -206,11 +206,7 @@ class Task:
         """
         self.wait()
 
-        # Check if already have the info and the task is in a terminal status.
-        if self._info is not None and self._status in _TASK_TERMINAL_STATUSES:
-            method_name = self._info["method_name"]
-        else:
-            method_name = self.get_info()["method_name"]
+        method_name = self.get_info()["method_name"]
         method_name = method_name.split(".")[0]
 
         # Set the default files for the output class
