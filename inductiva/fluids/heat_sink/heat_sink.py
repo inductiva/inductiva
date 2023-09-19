@@ -155,7 +155,7 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
         os.path.join(input_dir, file_name) for file_name in
         [OPENFOAM_TEMPLATE_PARAMS_FILE_NAME, OPENFOAM_PARAMS_FILE_NAME])
 
-    utils.templates.replace_params_in_template(
+    utils.templates.replace_params(
         template_path=template_file_path,
         params={
             "simulation_time": self.simulation_time,
