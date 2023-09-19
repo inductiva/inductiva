@@ -29,7 +29,6 @@ class SplishSplash(Simulator):
         return super().run(
             input_dir,
             machine_group=machine_group,
-            device="cpu",
             input_filename=sim_config_filename,
             run_async=run_async,
         )
