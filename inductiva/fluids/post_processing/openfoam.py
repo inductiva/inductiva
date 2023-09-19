@@ -278,7 +278,9 @@ class FlowSlice:
         plotter.add_mesh(self.object_mesh, color=object_color)
         plotter.add_mesh(self.mesh, scalars=field_notation, cmap=flow_cmap)
         plotter.reset_camera(bounds=self.mesh.bounds)
-        plotter.show(screenshot=save_path)
+        if save_path is not None:
+            plotter.show(screenshot=save_path)
+            logging.info("Flow slice rendering saved to %s", save_path)
         plotter.close()
 
 
@@ -338,7 +340,9 @@ class Streamlines:
         # Slide along the vectord defined from camera position to focal point,
         # until all of the meshes are visible.
         plotter.reset_camera(bounds=self.mesh.bounds, render=False)
-        plotter.show(screenshot=save_path)
+        if save_path is not None:
+            plotter.show(screenshot=save_path)
+            logging.info("Streamlines rendering saved to %s", save_path)
         plotter.close()
 
 
@@ -402,5 +406,7 @@ class MeshData:
         plotter = pv.Plotter(off_screen=off_screen)
         pv.global_theme.background = background_color
         plotter.add_mesh(self.mesh, scalars=self.scalar_name, cmap=scalars_cmap)
-        plotter.show(screenshot=save_path)
+        if save_path is not None:
+            plotter.show(screenshot=save_path)
+            logging.info("Data rendering was saved to %s", save_path)
         plotter.close()
