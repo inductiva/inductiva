@@ -145,7 +145,7 @@ streamlines = output.get_streamlines(max_time=200,
 streamlines.render(physical_field="pressure",
                    flow_cmap="viridis",
                    view="isometric",
-                   streamline_radius=0.1
+                   streamline_radius=0.1,
                    save_path="streamlines.png")
 ```
 

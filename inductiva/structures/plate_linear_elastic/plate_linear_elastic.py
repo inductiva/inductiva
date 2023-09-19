@@ -75,6 +75,7 @@ class DeformablePlate(Scenario):
             bcs_filename: Boundary conditions filename.
             material_filename: Material filename.
         """
+        simulator.override_api_method_prefix("deformable_plate")
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 run_async=run_async,

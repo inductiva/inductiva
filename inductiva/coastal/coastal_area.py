@@ -107,6 +107,8 @@ class CoastalArea(scenarios.Scenario):
               the maximum number of cores available in the machine group will be
               used.
         """
+        simulator.override_api_method_prefix("coastal_area")
+
         self.simulation_time = simulation_time
         self.time_step = time_step
         self.output_time_step = output_time_step
@@ -118,8 +120,6 @@ class CoastalArea(scenarios.Scenario):
             sim_config_filename=SWASH_CONFIG_FILENAME,
             n_cores=n_cores,
         )
-
-        task.set_output_class(coastal.CoastalAreaOutput)
 
         return task
 

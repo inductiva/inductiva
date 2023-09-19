@@ -5,7 +5,7 @@ import os
 import shutil
 import io
 
-from inductiva import tasks, resources, simulators, scenarios, utils, molecules
+from inductiva import tasks, resources, simulators, scenarios, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "md_water_box")
@@ -68,6 +68,8 @@ class MDWaterBox(scenarios.Scenario):
             n_steps_min: Number of steps for energy minimization.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("mdwater_box")
+
         self.nsteps = int(
             simulation_time_ns * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
@@ -79,8 +81,6 @@ class MDWaterBox(scenarios.Scenario):
                                 machine_group=machine_group,
                                 commands=commands,
                                 run_async=run_async)
-
-        task.set_output_class(molecules.MDWaterBoxOutput)
 
         return task
 

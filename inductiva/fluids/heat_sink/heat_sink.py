@@ -4,7 +4,7 @@ import os
 import shutil
 from typing import Optional
 
-from inductiva import fluids, tasks, resources, simulators, scenarios, utils
+from inductiva import tasks, resources, simulators, scenarios, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "heat_sink")
@@ -109,6 +109,8 @@ class HeatSink(scenarios.Scenario):
             machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("heat_sink")
+
         self.simulation_time = simulation_time
         self.output_time_step = output_time_step
 
@@ -118,8 +120,6 @@ class HeatSink(scenarios.Scenario):
                                 machine_group=machine_group,
                                 run_async=run_async,
                                 commands=commands)
-
-        task.set_output_class(fluids.HeatSinkOutput)
 
         return task
 

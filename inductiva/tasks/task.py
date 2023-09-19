@@ -15,6 +15,8 @@ from inductiva.utils import files
 from inductiva.utils import data
 from inductiva.utils import output_contents
 from inductiva import types
+from inductiva import output_consts
+
 import warnings
 
 _TASK_TERMINAL_STATUSES = {
@@ -47,8 +49,6 @@ class Task:
         """Initialize the instance from a task ID."""
         self.id = task_id
         self._api = tasks_api.TasksApi(api.get_client())
-        self._output_class = None
-        self._default_files_list = None
         self._info = None
         self._status = None
 
@@ -177,16 +177,6 @@ class Task:
         """
         self._api.kill_task(path_params=self._get_path_params())
 
-    def set_output_class(self, output_class):
-        """Set the output class of the task."""
-        self._output_class = output_class
-
-    def set_default_output_files(self,
-                                 default_output_files_list: List[str] = None):
-        """Set the default output files of the task."""
-
-        self._default_files_list = default_output_files_list
-
     def get_output(
         self,
         all_files: bool = False,
@@ -207,7 +197,9 @@ class Task:
                 If uncompress is False, this argument is ignored.
 
         Returns:
-            The output path of the task.
+            Either, return a Scenario output class if the task method name is
+            a scenario with an output class, or return an output path otherwise.
+
         Example:
             task = Task("task_id")
             output_path = task.get_output()
@@ -216,10 +208,19 @@ class Task:
         """
         self.wait()
 
-        # Check if default files are set by the output class
+        # Fetch just the first part of the method_name (e.g., "wind_tunnel")
+        method_name = self.get_info()["method_name"].split(".")[0]
+
+        # Set the default files for the output class
+        # For some scenarios, there are None default files
         filenames = None
-        if self._default_files_list and not all_files:
-            filenames = self._default_files_list
+        output_class = None
+        if method_name in output_consts.OUTPUT_CONSTS:
+            output_class = output_consts.OUTPUT_CONSTS[method_name][
+                "output_class"]
+            if not all_files:
+                filenames = output_consts.OUTPUT_CONSTS[method_name][
+                    "default_files"]
 
         output_dir = self.download_outputs(
             filenames=filenames,
@@ -227,8 +228,8 @@ class Task:
             uncompress=uncompress,
             rm_downloaded_zip_archive=rm_downloaded_zip_archive)
 
-        if self._output_class:
-            return self._output_class(output_dir)
+        if output_class is not None:
+            return output_class(output_dir)
 
         return output_dir
 

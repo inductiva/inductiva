@@ -5,7 +5,7 @@ from typing import Optional, Literal
 import os
 import shutil
 
-from inductiva import tasks, resources, simulators, scenarios, utils, molecules
+from inductiva import tasks, resources, simulators, scenarios, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "protein_solvation")
@@ -37,19 +37,6 @@ class ProteinSolvation(scenarios.Scenario):
         self.protein_pdb = utils.files.resolve_path(protein_pdb)
         self.temperature = temperature
 
-    def set_default_output_files(self):
-        """Set the default output files for the Protein Solvation Scenario.
-
-        Instead of downloading the full trajectory, the user can choose
-        to download only the compressed trajectory file. The following files
-        are set as the default ones, and will be the only ones downloaded if
-        the user does not require the full trajectory at task.get_output()."""
-
-        return [
-            "protein.gro", "compressed_trajectory.xtc", "solvated_protein.tpr",
-            "topol.top", "rmsf_values.npy"
-        ]
-
     def simulate(
             self,
             simulator: simulators.Simulator = simulators.GROMACS(),
@@ -80,7 +67,7 @@ class ProteinSolvation(scenarios.Scenario):
             n_steps_min: Number of steps for energy minimization.
             run_async: Whether to run the simulation asynchronously.
         """
-        simulator.override_api_method_prefix("proteinsolvation")
+        simulator.override_api_method_prefix("protein_solvation")
 
         self.nsteps = int(
             simulation_time_ns * 1e6 / 2
@@ -97,9 +84,6 @@ class ProteinSolvation(scenarios.Scenario):
                                 machine_group=machine_group,
                                 commands=commands,
                                 run_async=run_async)
-
-        task.set_output_class(molecules.ProteinSolvationOutput)
-        task.set_default_output_files(self.set_default_output_files())
 
         return task
 
