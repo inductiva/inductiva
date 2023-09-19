@@ -87,7 +87,7 @@ You can also list your active machine groups, and use the names that appear in t
 import inductiva
 
 inductiva.resources.list()
-#                                     Name         VM Type   # machines    Disk Size in GB       Spot         Created at
+#                                     Name         VM Type   # machines    Disk Size in GB       Spot         Started at
 # api-1b1f724c-5cfe-4d87-8439-9689aa139723   c2-standard-4            1                 40      False   13 Sep, 07:38:50
 # api-8e6bf7d8-4888-4de9-bda5-268484b46e6f   c2-standard-4            1                 40      False   13 Sep, 07:37:49
 

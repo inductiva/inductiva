@@ -1,6 +1,7 @@
 """Functions to manage or retrieve user resources."""
 from absl import logging
 import inductiva
+import inductiva.client
 from inductiva.client.apis.tags import instance_api
 from inductiva.utils import format_utils
 
@@ -8,7 +9,7 @@ from inductiva.utils import format_utils
 def _machine_group_list_to_str(machine_group_list) -> str:
     """Returns a string representation of a list of machine groups."""
     columns = [
-        "Name", "VM Type", "# machines", "Disk Size in GB", "Spot", "Created at"
+        "Name", "VM Type", "# machines", "Disk Size in GB", "Spot", "Started at"
     ]
     rows = []
 
@@ -19,7 +20,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
             machine_group.spot, machine_group.create_time
         ])
 
-    formatters = {"Created at": format_utils.datetime_formatter}
+    formatters = {"Started at": format_utils.datetime_formatter}
     override_col_space = {
         "VM Type": 15,
         "# machines": 12,
@@ -60,7 +61,7 @@ def list():
     each machine group as folllows:
 
     INFO:absl:Active machine groups:
-                                        Name         VM Type   # machines    Disk Size in GB       Spot         Created at
+                                        Name         VM Type   # machines    Disk Size in GB       Spot         Started at
     api-1b1f724c-5cfe-4d87-8439-9689aa139723   c2-standard-4            1                 40      False   13 Sep, 07:38:50
     api-8e6bf7d8-4888-4de9-bda5-268484b46e6f   c2-standard-4            1                 40      False   13 Sep, 07:37:49
 

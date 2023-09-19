@@ -2,7 +2,7 @@
 
 from functools import singledispatchmethod
 import os
-from typing import List, Literal, Optional
+from typing import List, Optional
 import shutil
 
 from inductiva import tasks, resources, fluids, scenarios, simulators, utils
@@ -92,7 +92,6 @@ class FluidBlock(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        device: Literal["cpu", "gpu"] = "cpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
         adaptive_time_step: bool = True,
@@ -106,8 +105,6 @@ class FluidBlock(scenarios.Scenario):
             simulator: The simulator to use for the simulation. Supported
               simulators are: SPlisHSPlasH, DualSPHysics.
             machine_group: The machine group to use for the simulation.
-            device: Device in which to run the simulation. Available options are
-              "cpu" and "gpu".
             particle_radius: Radius of the fluid particles, in meters.
               Determines the resolution of the simulation. Lower values result
               in higher resolution and longer simulation times.
@@ -132,7 +129,6 @@ class FluidBlock(scenarios.Scenario):
             simulator=simulator,
             machine_group=machine_group,
             run_async=run_async,
-            device=device,
             sim_config_filename=self.get_config_filename(simulator))
 
         return task

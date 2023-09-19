@@ -102,7 +102,7 @@ class WindOverTerrain(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        n_cores: int = 1,
+        n_cores: int = 2,
         num_iterations: int = 100,
     ) -> inductiva.tasks.Task:
         """Simulates the wind over the terrain scenario.

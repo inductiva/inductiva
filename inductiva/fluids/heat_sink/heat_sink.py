@@ -116,9 +116,11 @@ class HeatSink(scenarios.Scenario):
 
         commands = self.get_commands()
 
+        # TODO: Address the mpirun runs of HeatSink
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 run_async=run_async,
+                                n_cores=1,
                                 commands=commands)
 
         return task

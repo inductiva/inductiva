@@ -118,11 +118,10 @@ simulator = inductiva.simulators.DualSPHysics()
 
 output_dir = simulator.run(input_dir="FlowCylinder",
                            sim_config_filename="CaseFlowCylinder_Re200_Def.xml",
-                           output_dir="Flow",
-                           device="cpu")
+                           output_dir="Flow")
 ```
 
-The user must specify the input directory, the simulation configuration file, the output directory and the device to run the simulation on.
+The user must specify the input directory, the simulation configuration file and the output directory.
 
 Find more examples of simulations in the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
 

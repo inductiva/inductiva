@@ -20,8 +20,6 @@ flags.DEFINE_float("fluid_level", 0.5,
 
 flags.DEFINE_string("output_dir", "output",
                     "Destination directory for output files.")
-flags.DEFINE_enum("device", "cpu", ["cpu", "gpu"],
-                  "Device in which device the simulation will run.")
 
 
 def main(_):
@@ -36,8 +34,7 @@ def main(_):
         fluid_level=FLAGS.fluid_level,
     )
 
-    scenario.simulate(simulator=inductiva.simulators.SplishSplash(),
-                      device=FLAGS.device)
+    scenario.simulate(simulator=inductiva.simulators.SplishSplash())
 
     logging.info("Local time: %s", time.perf_counter() - time_start)
 
