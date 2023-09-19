@@ -5,7 +5,7 @@ from typing import Optional, Literal
 import os
 import shutil
 
-from inductiva import tasks, resources, simulators, scenarios, utils, molecules
+from inductiva import tasks, resources, simulators, scenarios, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "protein_solvation")

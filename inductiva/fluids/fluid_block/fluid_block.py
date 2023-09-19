@@ -5,7 +5,7 @@ import os
 from typing import List, Literal, Optional
 import shutil
 
-from inductiva import tasks, resources, fluids, scenarios, simulators, utils
+from inductiva import tasks, resources, scenarios, simulators, utils
 
 TANK_DIMENSIONS = [1, 1, 1]
 

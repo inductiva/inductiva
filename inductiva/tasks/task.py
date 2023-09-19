@@ -15,7 +15,7 @@ from inductiva.utils import files
 from inductiva.utils import data
 from inductiva.utils import output_contents
 from inductiva import types
-from inductiva.tasks import output_consts
+from inductiva import output_consts
 
 import warnings
 

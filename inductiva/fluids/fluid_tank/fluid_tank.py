@@ -6,7 +6,7 @@ import json
 import os
 from typing import List, Literal, Optional
 
-from inductiva import fluids, resources, simulators, scenarios, tasks, utils
+from inductiva import resources, fluids, simulators, scenarios, tasks, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "fluid_tank")

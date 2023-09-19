@@ -70,6 +70,8 @@ class DamBreak(fluids.FluidBlock):
         self.time_step = 0.001
         self.output_time_step = 1 / 60
 
+        # Inherit the simulate from the Parent of FluidBlock (Scenario) to
+        # avoid overriding the api_method_prefix with the one of FluidBlock.
         task = super(fluids.FluidBlock, self).simulate(
             simulator=simulator,
             machine_group=machine_group,

@@ -9,7 +9,7 @@ from typing import List, Optional
 import numpy as np
 
 import inductiva
-from inductiva import fluids, simulators, resources, scenarios, world, utils
+from inductiva import simulators, resources, scenarios, world, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")

@@ -10,7 +10,7 @@ from typing import Optional, List, Literal
 
 from absl import logging
 
-from inductiva import tasks, resources, fluids, types, simulators, scenarios, utils
+from inductiva import tasks, resources, types, simulators, scenarios, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "wind_tunnel")
