@@ -197,7 +197,8 @@ class Task:
                 If uncompress is False, this argument is ignored.
 
         Returns:
-            The output path of the task.
+            Either, return a Scenario output class if the task method name is
+            a scenario with an output class, or return an output path otherwise.
         Example:
             task = Task("task_id")
             output_path = task.get_output()
