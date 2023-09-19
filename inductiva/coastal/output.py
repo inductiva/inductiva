@@ -205,7 +205,7 @@ class CoastalAreaOutput:
     @optional_deps.needs_coastal_extra_deps
     def check_stability(self):
 
-        time_list, data_list = read_swash_grid_quantity_file(
+        _, data_list = read_swash_grid_quantity_file(
             file_path=os.path.join(self.sim_output_path, "water_level.mat"),
             quantity="water_level",
         )
@@ -214,7 +214,7 @@ class CoastalAreaOutput:
         inital_max_water_level = np.max(data_list[0])
         final_max_water_level = np.max(data_list[-1])
 
-        if final_max_water_level > 2*inital_max_water_level:
+        if final_max_water_level > 2 * inital_max_water_level:
             logging.info("Simulation can show unstable results.\n"
                          "Check the simulation visualization to corroborate.\n"
                          "If the results are unstable, try increasing "
@@ -223,12 +223,8 @@ class CoastalAreaOutput:
     @optional_deps.needs_coastal_extra_deps
     def render(
         self,
-        quantity: Literal[
-            "water_level",
-            "velocity_x",
-            "velocity_y",
-            "velocity_magnitude",
-        ] = "water_level",
+        quantity: Literal["water_level", "velocity_x", "velocity_y",
+                          "velocity_magnitude",] = "water_level",
         movie_path: Path = "movie.mp4",
         fps: int = 5,
         cmap: str = "viridis",
