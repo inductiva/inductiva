@@ -217,10 +217,12 @@ class Task:
         # For some scenarios, there are None default files
         filenames = None
         output_class = None
-        if method_name in output_consts.SCENARIO_METHODS_NAMES:
+        if method_name in output_consts.OUTPUT_CONSTS.keys():
+            output_class = output_consts.OUTPUT_CONSTS[method_name][
+                "output_class"]
             if not all_files:
-                filenames = output_consts.DEFAULT_OUTPUT_FILES[method_name]
-            output_class = output_consts.OUTPUT_CLASSES[method_name]
+                filenames = output_consts.OUTPUT_CONSTS[method_name][
+                    "default_files"]
 
         output_dir = self.download_outputs(
             filenames=filenames,
