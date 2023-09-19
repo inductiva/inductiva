@@ -74,7 +74,19 @@ In any case, to obtain these metrics the user can use the following post-process
 - `get_flow_slice`: Input parameters - `plane`, `origin`. Returns a pyvista mesh of the flow slice with pressure and velocity components.
 - `get_force_coefficients`: Returns the force coefficients that represent the forces acting on the object. These are the drag and lift coefficients.
 
-For the pressure field, streamlines and flow slices there are easy-to-use visualizations, which have some configuration parameters. See the example below for the general overview of these parameters.
+#### Visualizations
+
+For the pressure field, streamlines and flow slices there are easy-to-use visualizations, which have some configuration parameters (see the examples below for a general overview of these parameters). To render any of these objects one does `streamlines.render()`. **Remark: ** For those running on Google Colab or a headless server, further extra dependencies are required. Install them with 
+
+```
+!apt install libgl1-mesa-glx xvfb
+```
+
+Moreover, change the parameter `virtual_display` in the render method to `True`, and pass a path to save the result, like 
+
+```python
+streamlines.render(virtual_display=True, save_path="streamlines.png")
+```
 
 The next example fetches the default post-processed files and renders the respective visualizations. The last one, fetches the full simulation output, and with the same interface the user can configure the post-processing tools to extract the metrics he desires and render the visualizations.
 
@@ -166,15 +178,3 @@ flow_slice.render(physical_field="velocity",
 ```
 
 <img src="/resources/media/openfoam/flow_slice.png" width="400" height="300" />
-
-**Remark: ** For those running on Google Colab or a headless server, further extra dependencies are required. Install them with 
-
-```
-!apt install libgl1-mesa-glx xvfb
-```
-
-Moreover, change the parameter `virtual_display` in the render method to `True`, and pass a path to save the result, like 
-
-```python
-streamlines.render(virtual_display=True, save_path="streamlines.png")
-```
