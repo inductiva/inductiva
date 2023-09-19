@@ -68,7 +68,8 @@ Since at times the output files can be large, the user can choose to get only so
 remotely by just doing `output=task.get_output()` (e.g., pressure field, streamlines and flow_slice). Otherwise, the user can choose to get all the outputs with `output=task.get_output(all_files=True)` and post-process as he wishes locally. 
 
 In any case, to obtain these metrics the user can use the following post-processing tools available through the `output` object:
-- `get_output_mesh`: Returns a pyvista mesh of the airflow over the entire domain and data on the object.
+- `get_output_mesh`: Returns two pyvista meshes, one of the airflow over the entire domain and the other of data on the object.
+    These meshes contain the results of the simulation, which are breakdown and visualized with the next tools.
 - `get_object_pressure_field`: Returns a pyvista mesh with the pressure field of the airflow over the object.
 - `get_streamlines`: Input parameters - `max_time`, `n_points`, `initial_step_length`, `source_radius`, `source_center`. Returns a pyvista mesh of the streamlines with pressure and velocity components of airflow over the domain.
 - `get_flow_slice`: Input parameters - `plane`, `origin`. Returns a pyvista mesh of the flow slice with pressure and velocity components.
