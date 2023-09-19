@@ -49,35 +49,37 @@ And you are good to go! You can start [exploring our tutorial notebooks](https:/
 **Inductiva API** contains pre-built scenarios that define physical systems of interest ready to simulate. Users can choose some parameters and configure the system according to their needs, run the simulation using the most adequate resources and visualize the results.
 
 
-### Example
+### WindTunnel Example
 
 ```python
- import inductiva
+import inductiva
 
 inductiva.api_key = "YOUR_API_KEY"
 
-# Download the insulin protein (ID - "1ZNI") from RCSB database
-insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
+# Url to a test object in Inductiva Github repository
+vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
+              "/resources/vehicle.obj"
+vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 
- # Initialize the scenario
- scenario = inductiva.molecules.ProteinSolvation(
-     protein_pdb = insulin_pdb_file,
-     temperature = 300)
+# Initialize the scenario
+scenario = inductiva.fluids.WindTunnel(
+    flow_velocity=[30, 0, 0],
+    domain={"x": [-5, 15], "y": [-5, 5], "z": [0, 8]})
 
- # Run a simulation
- task = scenario.simulate(simulation_time_ns = 0.01)
+# Run a simulation
+task = scenario.simulate(
+    object_path=vehicle_path, num_iterations=50, resolution="low")
 
- # Get the simulation output on your local machine.
- output = task.get_output()
+# Download the simulation output to your local machine.
+output = task.get_output()
 
- # Visualize the protein trajectory
- output.render_interactive()
- ```
-
-This allows us to visualize the protein trajectory.
+# Render the results
+pressure_field = output.get_object_pressure_field()
+pressure_field.render()
+```
 
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/assets/114397668/87e58f32-c23d-4115-929a-71ef8c789033" alt="Protein solvation simulation" width="350">
+  <img src="https://github.com/inductiva/inductiva/blob/2d1842fba734e2961d1edf6b0c6a5d5f36cda22c/resources/media/openfoam/pressure_field.png" alt="Pressure Field of a vehicle." width="400" height="330" >
 </p>
 
 ### Available scenarios
