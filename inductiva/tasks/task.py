@@ -199,6 +199,7 @@ class Task:
         Returns:
             Either, return a Scenario output class if the task method name is
             a scenario with an output class, or return an output path otherwise.
+
         Example:
             task = Task("task_id")
             output_path = task.get_output()
