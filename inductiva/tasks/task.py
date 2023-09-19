@@ -206,8 +206,8 @@ class Task:
         """
         self.wait()
 
-        method_name = self.get_info()["method_name"]
-        method_name = method_name.split(".")[0]
+        # Fetch just the first part of the method_name (e.g., "wind_tunnel")
+        method_name = self.get_info()["method_name"].split(".")[0]
 
         # Set the default files for the output class
         # For some scenarios, there are None default files
