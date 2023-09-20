@@ -150,7 +150,8 @@ class CoastalArea(scenarios.Scenario):
             wave_boundary = depths_grid[:, 0]
 
         else:
-            raise ValueError("Invalid wave source location.")
+            raise ValueError("Invalid wave source location. "
+                             "Supported locations are: N, S, E, W")
 
         #The greater the value of depth, the deeper the water, so
         #we want to check the minimum depth using the min value
