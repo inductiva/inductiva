@@ -177,6 +177,36 @@ class Task:
         """
         self._api.kill_task(path_params=self._get_path_params())
 
+    def _get_output_config(self, all_files: bool = False):
+        """Get configuration of the output wrt the task method name.
+        
+        Args:
+            all_files: Whether to download all the files in the output.
+
+        Returns:
+            The output class and default files for the task related
+            with classes that have these features configured. If the task
+            method name does not refer to a scenario, the filenames will
+            be all downloaded.
+        """
+
+        # Fetch the first part of the method_name (e.g., "wind_tunnel")
+        method_name = self.get_info()["method_name"].split(".")[0]
+
+        # Set the default files for the output class
+        # For some scenarios, there are None default files
+        filenames = None
+        output_class = None
+
+        if method_name in output_consts.OUTPUT_CONSTS:
+            output_class = output_consts.OUTPUT_CONSTS[method_name][
+                "output_class"]
+            if not all_files:
+                filenames = output_consts.OUTPUT_CONSTS[method_name][
+                    "default_files"]
+
+        return output_class, filenames
+
     def get_output(
         self,
         all_files: bool = False,
@@ -206,21 +236,17 @@ class Task:
             # prints:
             100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]
         """
-        self.wait()
+        # Get terminal status
+        status = self.wait()
 
-        # Fetch just the first part of the method_name (e.g., "wind_tunnel")
-        method_name = self.get_info()["method_name"].split(".")[0]
-
-        # Set the default files for the output class
-        # For some scenarios, there are None default files
-        filenames = None
-        output_class = None
-        if method_name in output_consts.OUTPUT_CONSTS:
-            output_class = output_consts.OUTPUT_CONSTS[method_name][
-                "output_class"]
-            if not all_files:
-                filenames = output_consts.OUTPUT_CONSTS[method_name][
-                    "default_files"]
+        if status == models.TaskStatusCode.SUCCESS:
+            output_class, filenames = self._get_output_config(all_files)
+        else:
+            output_class = None
+            filenames = ["stdout.txt", "stderr.txt"]
+            logging.info("Task failed. Downloading 'stdout.txt' and"
+                         "'stderr.txt'."
+                         "Any post-processing after this point will fail.")
 
         output_dir = self.download_outputs(
             filenames=filenames,
@@ -228,6 +254,7 @@ class Task:
             uncompress=uncompress,
             rm_downloaded_zip_archive=rm_downloaded_zip_archive)
 
+        # output_class can only be not None if the task is successful
         if output_class is not None:
             return output_class(output_dir)
 
