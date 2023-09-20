@@ -59,6 +59,9 @@ The last code line downloads the files necessary to render and post-process our 
 ## Output and Post-processing 
 The simulation output folder contains trajectory data spanning the simulation duration and the protein's topology. These files are necessary to generate an interactive trajectory visualization using [NGLview](https://github.com/nglviewer/nglview). Users have the flexibility to select the protein's representation type, including options to display or hide the backbone, and they can also specify the criteria for visualization selection. You can refer to the [documentation](https://nglviewer.org/ngl/api/manual/usage/selection-language.html) for guidance on creating custom selections according to your preferences.
 
+**Note:** To access these tools the user needs to install the extra dependencies for the molecules package with
+`pip install --upgrade "inductiva[molecules_extra]"`. Moreover, currently, the visualization tools only work in the Jupyter Notebook environment.
+
 ```python
 output.render_interactive(representation="ball+stick", add_backbone=True, selection="protein")
  ```

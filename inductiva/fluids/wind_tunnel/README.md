@@ -61,6 +61,9 @@ The simulation output will contain several sub-directories with files that can b
 - Flow slice: Slice of the flow that represents the airflow over the domain and interacting with the object.
 - Force coefficients: Force coefficients that represent the forces acting on the object. These are the drag and lift coefficients.
 
+**Note:** To access these tools the user needs to install the extra dependencies for the fluids package with
+`pip install --upgrade "inductiva[fluids_extra]"`.
+
 ### Post-processing Tools
 
 Since at times the output files can be large, the user can choose to get only some of the default outputs that are post-processed

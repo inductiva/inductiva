@@ -6,6 +6,9 @@ of spatial coordinates x, y). Waves are injected into the domain from one of the
 boundaries of the simulation with a given amplitude and period. The simulation
 is performed using the [SWASH](https://swash.sourceforge.io/) simulator.
 
+**Note:**  Some of the following tools require the installation of extra dependencies for the coastal package with
+`pip install --upgrade "inductiva[coastal_extra]"`.
+
 ### Example
 
 Note: You can follow this example in a notebook or run the script

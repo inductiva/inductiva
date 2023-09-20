@@ -39,7 +39,8 @@ The user can specify the total simulation time and the time step between outputs
 (all in seconds). The user can also specify the resolution of the simulation
 (low, medium or high).
 
-Visualize the results:
+To visualize the results, users will need to install the extra dependencies of the fluid package with `pip install --upgrade "inductiva[fluids_extra]"`. 
+Then run the following code:
 
 ```python
 output.render()
