@@ -45,7 +45,8 @@ class ProteinSolvation(scenarios.Scenario):
             simulation_time_ns: float = 10,  # ns
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
-            n_steps_min: int = 5000) -> tasks.Task:
+            n_steps_min: int = 5000,
+            ingore_warnings: bool = False) -> tasks.Task:
         """Simulate the solvation of a protein.
 
         Args:
@@ -59,11 +60,13 @@ class ProteinSolvation(scenarios.Scenario):
                 leap-frog scheme.
                 - "bd" (Brownian Dynamics): Euler integrator for Brownian or
                 position Langevin dynamics.
-
             For more details on the integrators, refer to the GROMACS
             documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
-
+            ignore_warnings: Whether to ignore warnings during grompp (gromacs 
+            preprocessor). If set to False, the simulation will fail if there 
+            are warnings. If True, the simulation will run, but the results 
+            may have inaccuracies. Use with caution. 
             n_steps_min: Number of steps for energy minimization.
             run_async: Whether to run the simulation asynchronously.
         """
@@ -78,6 +81,10 @@ class ProteinSolvation(scenarios.Scenario):
         # of the simulation (2 fs)
         self.integrator = integrator
         self.n_steps_min = n_steps_min
+        self.ignore_warnings = 0
+        if ingore_warnings:
+            self.ignore_warnings = -1
+
         commands = self.get_commands()
 
         task = super().simulate(simulator,
@@ -117,10 +124,12 @@ def _(self, simulator: simulators.GROMACS, input_dir):  # pylint: disable=unused
     utils.templates.batch_replace_params(
         templates_dir=input_dir,
         template_filenames=[
+            "commands.json.jinja",
             "simulation.mdp.jinja",
             "energy_minimization.mdp.jinja",
         ],
         params={
+            "max_warn": self.ignore_warnings,
             "integrator": self.integrator,
             "nsteps": self.nsteps,
             "ref_temp": self.temperature,

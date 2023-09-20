@@ -44,7 +44,6 @@ insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI
 # Initialize the scenario
 scenario = inductiva.molecules.ProteinSolvation(
      protein_pdb = insulin_pdb_file,
-
      temperature = 300)
 
 # Run a simulation
