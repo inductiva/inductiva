@@ -3,6 +3,7 @@
 from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
+import io
 import shutil
 
 from inductiva import tasks, resources, simulators, scenarios, utils
@@ -10,7 +11,7 @@ from inductiva import tasks, resources, simulators, scenarios, utils
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
-COMMANDS_TEMPLATE_FILE_NAME = "commands.json"
+COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
 
 class ProteinSolvation(scenarios.Scenario):
@@ -101,7 +102,14 @@ class ProteinSolvation(scenarios.Scenario):
                                               GROMACS_TEMPLATE_INPUT_DIR,
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
-        commands = self.read_commands_from_file(commands_template_path)
+        inmemory_file = io.StringIO()
+        utils.templates.replace_params(
+            template_path=commands_template_path,
+            params={"max_warn": self.ignore_warnings},
+            output_file=inmemory_file,
+        )
+        commands = self.read_commands_from_file(inmemory_file)
+
         return commands
 
     @singledispatchmethod
@@ -124,12 +132,10 @@ def _(self, simulator: simulators.GROMACS, input_dir):  # pylint: disable=unused
     utils.templates.batch_replace_params(
         templates_dir=input_dir,
         template_filenames=[
-            "commands.json.jinja",
             "simulation.mdp.jinja",
             "energy_minimization.mdp.jinja",
         ],
         params={
-            "max_warn": self.ignore_warnings,
             "integrator": self.integrator,
             "nsteps": self.nsteps,
             "ref_temp": self.temperature,
