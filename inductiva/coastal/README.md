@@ -42,7 +42,7 @@ bathymetry.plot(show=True)
 ```
 
 <p align="center">
-  <img src="https://github.com/inductiva/resources/bathymetry/bathymetry_random.png" alt="Raw bathymetry" width="350" height="250">
+  <img src="/resources/bathymetry/bathymetry_random.png" alt="Raw bathymetry" width="350" height="250">
 </p>
 
 The bathymetry is ready to be used in a simulation scenario. In this case, we set
@@ -76,7 +76,7 @@ output.render(movie_path = "movie_path.mp4")
 ```
 
 <p align="center">
-  <img src="https://github.com/inductiva/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="350" height="250">
+  <img src="/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="350" height="250">
 </p>
 
 ### Example with a real bathymetry
