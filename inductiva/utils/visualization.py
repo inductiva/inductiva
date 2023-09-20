@@ -519,7 +519,11 @@ def create_2d_field_from_xdmf(xdmf_path: str,
                               field_path: str,
                               field_array: list,
                               file_name: str = "field",
+                              show_edges: bool = True,
+                              colormap: str = "jet",
+                              off_screen: bool = True,
                               scalar_bar: bool = True,
+                              background_color: str = "white",
                               transparent_background: bool = True) -> None:
     """Converts field data from an XDMF file to a 2D image using PyVista.
 
@@ -530,8 +534,17 @@ def create_2d_field_from_xdmf(xdmf_path: str,
           image.
         file_name (str, optional): The name of the field in the visualization.
           Default is "field".
+        show_edges (bool, optional): Whether to display mesh edges. Default is
+          True.
+        colormap (str, optional): The colormap to apply to the field data.
+          Default is "jet".
+        off_screen (bool, optional): Whether to render the visualization 
+          off-screen. Set to True for non-interactive rendering. Default is 
+          True.
         scalar_bar (bool, optional): Whether to include a scalar bar legend in 
           the visualization. Default is True.
+        background_color (str, optional): The background color of the
+          visualization. Default is "white".
         transparent_background (bool, optional): Whether the background of the
           saved image should be transparent. Default is True.
     """
@@ -551,7 +564,10 @@ def create_2d_field_from_xdmf(xdmf_path: str,
     data.set_active_scalars(file_name)
 
     # Add the data object to the plotter with customizable settings
-    plotter.add_mesh(data, show_edges=True, cmap="jet", show_scalar_bar=False)
+    plotter.add_mesh(data,
+                     show_edges=show_edges,
+                     cmap=colormap,
+                     show_scalar_bar=False)
 
     # Optionally, add a scalar bar to the visualization
     if scalar_bar:
@@ -561,10 +577,10 @@ def create_2d_field_from_xdmf(xdmf_path: str,
     plotter.view_xy()
 
     # Set the background color to white
-    plotter.background_color = "white"
+    plotter.background_color = background_color
 
     # Render off-screen
-    plotter.off_screen = True
+    plotter.off_screen = off_screen
 
     # Adjust camera view
     plotter.camera.tight()

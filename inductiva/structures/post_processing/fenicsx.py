@@ -52,15 +52,28 @@ class FEniCSxSimulationOutput:
     @inductiva.utils.optional_deps.needs_structures_extra_deps
     def render(self,
                field_names: list = None,
+               show_edges: bool = True,
+               colormap: str = "jet",
+               off_screen: bool = True,
                scalar_bar: bool = True,
+               background_color: str = "white",
                transparent_background: bool = True) -> None:
         """Render the simulation fields as images.
 
         Args:
             field_names (list, optional): List of field names to render. Default
               is None.
+            show_edges (bool, optional): Whether to display mesh edges. Default is
+              True.
+            colormap (str, optional): The colormap to apply to the field data.
+              Default is "jet".
+            off_screen (bool, optional): Whether to render the visualization 
+              off-screen. Set to True for non-interactive rendering. Default is 
+              True.
             scalar_bar (bool, optional): Whether to include a scalar bar legend
               in the visualization. Default is True.
+            background_color (str, optional): The background color of the
+              visualization. Default is "white".
             transparent_background (bool, optional): Whether the background of
               the saved images should be transparent. Default is True.
         """
@@ -145,5 +158,9 @@ class FEniCSxSimulationOutput:
                 field_path=field_path,
                 field_array=field_array,
                 file_name=field_name,
+                show_edges=show_edges,
+                colormap=colormap,
+                off_screen=off_screen,
+                background_color=background_color,
                 scalar_bar=scalar_bar,
                 transparent_background=transparent_background)
