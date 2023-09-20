@@ -41,7 +41,9 @@ wide and 100m long. It can be inspected by plotting it.
 bathymetry.plot(show=True)
 ```
 
-![Raw bathymetry.](/resources/bathymetry/bathymetry_random.png)
+<p align="center">
+  <img src="https://github.com/inductiva/resources/bathymetry/bathymetry_random.png" alt="Raw bathymetry" width="350" height="250">
+</p>
 
 The bathymetry is ready to be used in a simulation scenario. In this case, we set
 the wave source location to the west boundary of the domain (i.e. the lower x
@@ -73,7 +75,9 @@ output_time_step.
 output.render(movie_path = "movie_path.mp4")
 ```
 
-![Coastal area simulation.](/resources/media/random_coastal_area.gif)
+<p align="center">
+  <img src="https://github.com/inductiva/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="350" height="250">
+</p>
 
 ### Example with a real bathymetry
 
