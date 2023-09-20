@@ -325,7 +325,7 @@ class Bathymetry:
     def plot(
         self,
         show: bool = False,
-        cmap: Optional[str] = None,
+        cmap: str = "coolwarm",
         clim: Optional[Tuple[float]] = None,
         path: Optional[str] = None,
         x_resolution: float = 10,
@@ -336,7 +336,11 @@ class Bathymetry:
         """Plots the bathymetry.
 
         The bathymetry is represented as a 2D map of depths, with the x and y
-        coordinates of the points where the depths are defined in the axes.
+        coordinates of the points where the depths are defined in the axes. The
+        plot shows the height of the various points in the bathymetry is
+        defined, with the opposite signal convention of the bathymetry (i.e,
+        the bellow water level points are given by negative height instead of
+        positive depth).
 
         The bathymetry data is plotted with a color plot on a grid with uniform
         spacing in the x and y directions. If the user does not specify the
@@ -404,7 +408,7 @@ class Bathymetry:
         ax = fig.add_subplot()
 
         im = ax.imshow(
-            depths_grid.transpose(),
+            -1 * depths_grid.transpose(),
             cmap=cmap,
             clim=clim,
             origin="lower",
@@ -419,7 +423,7 @@ class Bathymetry:
             ylabel="$y$ [m]",
         )
 
-        fig.colorbar(im, ax=ax, label="Depth [m]")
+        fig.colorbar(im, ax=ax, label="Height [m]")
 
         if path is not None:
             fig.savefig(path)
