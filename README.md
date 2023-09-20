@@ -89,10 +89,12 @@ pressure_field.render()
 
 These are the currently available scenarios:
 
-- [Coastal Area](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal)
-- [Wind Tunnel](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/wind_tunnel)
-- [Fluid Tank](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/fluid_tank)
-- [Protein Solvation](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/protein_solvation)
+| Scenario               | Visualization                     |
+| ---------------------- | --------------------------------- |
+| [Protein Solvation](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/protein_solvation) | <div align="center"><img src="resources/media/protein_solvation_big_molecule.gif" alt="Protein Solvation simulation" width="150" height="150" /></div> |
+| [Coastal Area](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal) | <div align="center"><img src="/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="250" height="150" /></div> |
+| [Wind Tunnel](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/wind_tunnel) | <div align="center"><img src="/resources/media/openfoam/default_pressure_field.png" width="300" height="200" /></div> |
+| [Fluid Tank](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/fluid_tank) | <div align="center"><img src="resources/media/fluid_tank.gif" alt="Fluid Tank simulation" width="250" height="150" /></div> |
 
 
 ## Simulators
@@ -165,9 +167,13 @@ Running simulations asynchronously allows users to launch multiple simulations i
 ```python
 from inductiva import fluids
 
-task_list = []
+vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
+              "/resources/vehicle.obj"
+vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 
-for velocity in range(50):
+task_list = []
+velocity_list=[1, 10, 20, 30, 40]
+for velocity in velocity_list:
   scenario = fluids.WindTunnel(flow_velocity=[velocity, 0, 0])
   task = scenario.simulate(object_path=vehicle_path, run_async=True)
   task_list.append(task)
