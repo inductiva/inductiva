@@ -1,6 +1,6 @@
 # Wind Tunnel Scenario
 
-This scenario models the aerodynamics of an object inside a virtual wind tunnel for a given airflow velocity. This scenario models air as an incompressible fluid and thus for the maximum speed available is 100 m/s.
+This scenario models the aerodynamics of an object inside a virtual wind tunnel for a given airflow velocity. To model the air as an incompressible fluid and simplify the equations of motion under study, we restrict ourselves here to maximum speeds available is 100 m/s. Above this, the model is innacurate since it does not account for the compressibility of the air at those speeds.
 Air is injected through one side of the wind tunnel and exits through an outlet on the opposite side. The air flow within the tunnel is modified according to the structure of the object. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models. The simulation is currently performed with the OpenFOAM simulator.
 
 ### Example:
@@ -9,7 +9,7 @@ Air is injected through one side of the wind tunnel and exits through an outlet 
 
 This example requires an object of OBJ or STL format, we make one available through the code.
 
-Do not forget to insert your API Key (get one by filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link)).
+Do not forget to insert your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/main#api-access-tokens) to see how get one).
 
 ```python
 import inductiva
@@ -52,11 +52,9 @@ Now, the user is ready to simulate the steady state. Here, the user chooses the 
 - the object is not re-scaled automatically, so the user must either change the dimensions of the domain or scale the object himself.
 - the required meshing step is automatically done on the backend before the simulation starts with [snappyHexMesh tool](https://www.openfoam.com/documentation/user-guide/4-mesh-generation-and-conversion/4.4-mesh-generation-with-the-snappyhexmesh-utility) of OpenFOAM.
 
-To test this scenario we make available one example, but users can use their own files, as long as it is in STL or OBJ format.
-
 The simulation parameters available for the user to configure are:
 - `num_iterations`: Set the maximum number of iterations for the iterative algorithm to converge.
-- `resolution`: Controls the resolution of the meshing that is done prior to the simulation. The higher the resolution, the finer the meshing. Possibilities: "high", "medium", "low".
+- `resolution`: Controls the resolution of the meshing that is done prior to the simulation. The higher the resolution, the finer the meshing. Available options: "high", "medium", "low".
 
 Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`, `n_cores`.
 Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in the [Tasks section](inductiva/tasks/README.md).
