@@ -125,8 +125,8 @@ bathymetry = inductiva.coastal.Bathymetry.from_ascii_xyz_file(
     ascii_xyz_file_path = bathymetry_path)
 ```
 
-The bathymetry can be inspected by plotting it with a given resolution, in this
-case 200m x 200m:
+This bathymetry huge, since it contains the data of the entire Algarve region, so to visualize it
+we need to specify a given resolution. In this case 200m x 200m:
 
 ```python
 bathymetry.plot(x_resolution=200, y_resolution=200, show=True)
