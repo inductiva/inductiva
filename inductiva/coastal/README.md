@@ -86,8 +86,7 @@ import inductiva
 
 bathymetry_url = "https://downloads.emodnet-bathymetry.eu/high_resolution/590_HR_Lidar_Algarve.emo.zip"
 
-bathymetry_path = inductiva.utils.files.download_from_url(bathymetry_url,
-local_file_path = "590_HR_Lidar_Algarve.emo")
+bathymetry_path = inductiva.utils.files.download_from_url(bathymetry_url)
 
 bathymetry = inductiva.coastal.Bathymetry.from_ascii_xyz_file(
     ascii_xyz_file_path = bathymetry_path)
