@@ -154,9 +154,10 @@ class Task:
                     logging.info("Task completed successfully.")
                 elif status == models.TaskStatusCode.FAILED:
                     logging.info("Task failed.")
-                    logging.info("Download the task output and check the "
-                                 "'stdout.txt' and 'stderr.txt' files for "
-                                 "more information.")
+                    logging.info("Download the 'stdout.txt' and 'stderr.txt' "
+                                 "files with `task.get_output()` for "
+                                 "more detail. "
+                                 "Post-processing tools will fail.")
                 elif status == models.TaskStatusCode.KILLED:
                     logging.info("Task killed.")
                 else:
@@ -176,6 +177,39 @@ class Task:
         block waiting for confirmation if the task was killed.
         """
         self._api.kill_task(path_params=self._get_path_params())
+
+    def _get_output_config(self, all_files: bool = False):
+        """Get configuration of the output with the task method name.
+        
+        Args:
+            all_files: Whether to download all the files in the output.
+
+        Returns:
+            output_class, filenames - If the task method name is not of
+                a scenario, this method returns None, None and all
+                simulation are downloaded. Otherwise, and if available,
+                it returns the output_class of that
+                respective scenario and the filenames of that simulation.
+                If all_files is False, then the filenames are the default
+                files set for that scenario.
+        """
+
+        # Fetch the first part of the method_name (e.g., "wind_tunnel")
+        method_name = self.get_info()["method_name"].split(".")[0]
+
+        # Set the default files for the output class
+        # For some scenarios, there are None default files
+        filenames = None
+        output_class = None
+
+        if method_name in output_consts.OUTPUT_CONSTS:
+            output_class = output_consts.OUTPUT_CONSTS[method_name][
+                "output_class"]
+            if not all_files:
+                filenames = output_consts.OUTPUT_CONSTS[method_name][
+                    "default_files"]
+
+        return output_class, filenames
 
     def get_output(
         self,
@@ -206,21 +240,15 @@ class Task:
             # prints:
             100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]
         """
-        self.wait()
+        # Get terminal status
+        status = self.wait()
 
-        # Fetch just the first part of the method_name (e.g., "wind_tunnel")
-        method_name = self.get_info()["method_name"].split(".")[0]
-
-        # Set the default files for the output class
-        # For some scenarios, there are None default files
-        filenames = None
-        output_class = None
-        if method_name in output_consts.OUTPUT_CONSTS:
-            output_class = output_consts.OUTPUT_CONSTS[method_name][
-                "output_class"]
-            if not all_files:
-                filenames = output_consts.OUTPUT_CONSTS[method_name][
-                    "default_files"]
+        if status == models.TaskStatusCode.SUCCESS:
+            output_class, filenames = self._get_output_config(all_files)
+        else:
+            output_class = None
+            logging.info("Downloading the 'stdout.txt' and 'stderr.txt' files.")
+            filenames = ["stdout.txt", "stderr.txt"]
 
         output_dir = self.download_outputs(
             filenames=filenames,
@@ -228,9 +256,13 @@ class Task:
             uncompress=uncompress,
             rm_downloaded_zip_archive=rm_downloaded_zip_archive)
 
+        # output_class can only be not None if the task is successful
         if output_class is not None:
+            logging.info("Post-processing tools are available "
+                         "through the output object.")
             return output_class(output_dir)
 
+        logging.info("The output was downloaded to %s.", output_dir)
         return output_dir
 
     def get_output_files_info(self) -> output_contents.OutputContents:
