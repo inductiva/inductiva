@@ -252,7 +252,7 @@ class FlowSlice:
                background_color: str = "white",
                flow_cmap: str = "viridis",
                object_color: str = "white",
-               save_path: types.Path = None):
+               save_path: types.Path = "flow_slice.png"):
         """Render flow property over domain."""
 
         if save_path is not None:
@@ -301,7 +301,7 @@ class Streamlines:
                              "side"] = "isometric",
                object_color: str = "white",
                streamline_radius: float = 0.1,
-               save_path: types.Path = None):
+               save_path: types.Path = "streamlines.png"):
         """Render streamlines through domain."""
 
         if save_path is not None:
@@ -393,7 +393,7 @@ class MeshData:
                background_color: str = "white",
                scalars_cmap: str = "viridis",
                virtual_display: bool = False,
-               save_path: types.Path = None):
+               save_path: types.Path = "pressure_field.png"):
         """Render scalar field data over the mesh."""
         if save_path is not None:
             save_path = utils.files.resolve_path(save_path)
