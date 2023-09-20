@@ -47,7 +47,7 @@ class ProteinSolvation(scenarios.Scenario):
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
             n_steps_min: int = 5000,
-            ingore_warnings: bool = False) -> tasks.Task:
+            ignore_warnings: bool = False) -> tasks.Task:
         """Simulate the solvation of a protein.
 
         Args:
@@ -83,7 +83,7 @@ class ProteinSolvation(scenarios.Scenario):
         self.integrator = integrator
         self.n_steps_min = n_steps_min
         self.ignore_warnings = 0
-        if ingore_warnings:
+        if ignore_warnings:
             self.ignore_warnings = -1
 
         commands = self.get_commands()
