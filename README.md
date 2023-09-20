@@ -48,8 +48,9 @@ And you are good to go! You can start [exploring our tutorial notebooks](https:/
 
 **Inductiva API** contains pre-built scenarios that define physical systems of interest ready to simulate. Users can choose some parameters and configure the system according to their needs, run the simulation using the most adequate resources and visualize the results.
 
-
 ### WindTunnel Example
+
+To run this simulation you just need the default installation of Inductiva package. To visualize the results (second code snippet), the extra dependencies for fluids are required to be installed (see above).
 
 ```python
 import inductiva
@@ -72,7 +73,9 @@ task = scenario.simulate(
 
 # Download the simulation output to your local machine.
 output = task.get_output()
+```
 
+```python
 # Render the results
 pressure_field = output.get_object_pressure_field()
 pressure_field.render()
