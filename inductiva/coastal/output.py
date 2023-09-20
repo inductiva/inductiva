@@ -223,12 +223,8 @@ class CoastalAreaOutput:
     @optional_deps.needs_coastal_extra_deps
     def render(
         self,
-        quantity: Literal[
-            "water_level",
-            "velocity_x",
-            "velocity_y",
-            "velocity_magnitude",
-        ] = "water_level",
+        quantity: Literal["water_level", "velocity_x", "velocity_y",
+                          "velocity_magnitude",] = "water_level",
         movie_path: Path = "movie.mp4",
         fps: int = 5,
         cmap: str = "viridis",
