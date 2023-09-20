@@ -59,7 +59,7 @@ scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
 Once the scenario is created, run the simulation as follows:
 
 ```python
-task = scenario.simulate(simulation_time=360, output_time_step=1)
+task = scenario.simulate(simulation_time=80, output_time_step=1)
 
 output = task.get_output()
 ```
