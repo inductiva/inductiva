@@ -42,7 +42,7 @@ bathymetry.plot(show=True)
 ```
 
 <p align="center">
-  <img src="/resources/bathymetry/bathymetry_random.png" alt="Raw bathymetry" width="350" height="250">
+  <img src="/resources/bathymetry/bathymetry_random.png" alt="Raw bathymetry" width="550" height="550">
 </p>
 
 The bathymetry is ready to be used in a simulation scenario. In this case, we set
@@ -76,7 +76,7 @@ output.render(movie_path = "movie_path.mp4")
 ```
 
 <p align="center">
-  <img src="/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="350" height="250">
+  <img src="/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="550" height="550">
 </p>
 
 ### Example with a real bathymetry
@@ -106,7 +106,9 @@ case 200m x 200m:
 bathymetry.plot(x_resolution=200, y_resolution=200)
 ```
 
-![Raw bathymetry.](resources/media/bathymetry.png)
+<p align="center">
+  <img src="/resources/media/bathymetry.png" alt="Algarve bath" width="550" height="550">
+</p>
 
 Raw bathymetry data will often span an area too large and sparsely sampled to
 be used in a simulation. In this case, the user can crop the bathymetry to a
@@ -117,7 +119,9 @@ bathymetry = bathymetry.crop(x_range=(51000, 52000), y_range=(12150, 13000))
 bathymetry.plot()
 ```
 
-![Cropped bathymetry.](resources/media/bathymetry_cropped.png)
+<p align="center">
+  <img src="/resources/media/bathymetry_cropped.png" alt="Algarve bath" width="550" height="550">
+</p>
 
 To be used in a simulation, the bathymetry data must be interpolated to a
 regular grid with custom resolution, in this case 5m x 5m. In case some
@@ -165,4 +169,6 @@ To visualize the results:
 output.render()
 ```
 
-![Coastal area simulation.](resources/media/coastal_area.gif)
+<p align="center">
+  <img src="resources/media/coastal_area.gif" alt="Algarve bath" width="550" height="550">
+</p>
