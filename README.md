@@ -5,15 +5,15 @@
 
 # Inductiva API Python client
 
-Inductiva is a Python package designed for executing large-scale simulations of physical systems directly in the cloud.
+Inductiva is a Python package for executing large-scale simulations of physical systems directly in the cloud.
 
-This offers several distinct advantages:
+Inductiva API offers distinct advantages:
 
-- 🔄 It consolidates various simulation domains, including fluid dynamics, molecular dynamics, plasmas, and structural mechanics, under a single unified entry point.
-- 📦 Eliminates the need to install and manage complex simulation software and corresponding dependencies.
-- 🚀 Allows running hundreds or even thousands of simulations concurrently, with no additional effort.
+- 🔄 It consolidates various simulation domains, including fluid and molecular dynamics, plasmas, and structural mechanics, under a single unified entry point.
+- 📦 Eliminates the need for installing and managing complex simulation software and corresponding dependencies.
+- 🚀 Allows running hundreds or even thousands of simulations concurrently, with no coding.
 - 💽 Automatically optimizes hardware configurations for each type of simulation (e.g., CPU vs. GPU, appropriate number of CPU cores, RAM, etc.).
-- 🐍 You're not limited to a graphical interface or intricate configuration scripts. Instead, you write small Python programs that seamlessly integrate with your existing codebase.
+- 🐍 With Inductiva API, you are not limited to a pre-defined GUI or intricate configuration languages and scripts. Instead, you write small python programs that seamlessly integrate with your existing codebase and ML framework.
 
 
 ## Installation
@@ -24,13 +24,13 @@ Inductiva package is simple to install, just run on your terminal:
 pip install --upgrade inductiva
 ```
 
-These will provide the default installation of the package, that allow you to submit jobs, control machines and run simulations. To use the visualization and post-processing tools, you need to install extra dependencies depending on your area: `molecules_extra`, `fluids_extra` or `coastal_extra`. For example, for molecules:
+This will provide the core functionalities of the API, which allows you to submit jobs, control machines and run simulations. To use the visualization and post-processing tools, you need to install additional optional dependencies specific to different scientific domains: `molecules_extra`, `fluids_extra` or `coastal_extra`. For example, for fluid dynamics:
 
 ```
-pip install --upgrade "inductiva[molecules_extra]"
+pip install --upgrade "inductiva[fluids_extra]"
 ```
 
-If you had issues with the installation, check the [FAQ](#1-trouble-installing) for more details.
+If you have issues with the installation, check the [Installation troubleshooting](#installation-troubleshooting) for more information.
 
 ## API access tokens
 
@@ -44,13 +44,13 @@ inductiva.api_key = "YOUR_API_KEY"
 
 And you are good to go! You can start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
 
-## Scenarios
+## Pre-built Simulation Scenarios
 
-**Inductiva API** contains pre-built scenarios that define physical systems of interest ready to simulate. Users can choose some parameters and configure the system according to their needs, run the simulation using the most adequate resources and visualize the results.
+**Inductiva API** contains pre-built simulation scenarios that define physical systems of interest ready to simulate. Users can choose some parameters and configure the system according to their needs, run the simulation using the most adequate resources and visualize the results.
 
 ### WindTunnel Example
 
-To run this simulation you just need the default installation of Inductiva package. To visualize the results (second code snippet), the extra dependencies for fluids are required to be installed (see above).
+To run this simulation you just need the default installation of the Inductiva package. To visualize the results (second code snippet), the extra dependencies for fluid dynamics are required (see above).
 
 ```python
 import inductiva
@@ -85,7 +85,7 @@ pressure_field.render()
   <img src="https://github.com/inductiva/inductiva/blob/2d1842fba734e2961d1edf6b0c6a5d5f36cda22c/resources/media/openfoam/pressure_field.png" alt="Pressure Field of a vehicle." width="400" height="330" >
 </p>
 
-### Available scenarios
+### Available Simulation Scenarios
 
 These are the currently available scenarios:
 
@@ -141,11 +141,13 @@ from inductiva import fluids
 # Initialize scenario with defaults
 scenario = fluids.WindTunnel()
 
-# Path to a set of objects
-object_path = "path/to/vehicle.obj"
+# Url to a test object in Inductiva Github repository
+vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
+              "/resources/vehicle.obj"
+vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 
 # Run simulation
-task = scenario.simulate(object_path=object_path,
+task = scenario.simulate(object_path=vehicle_path,
                          run_async=True)
 
 # Blocking call to obtain the results
@@ -159,18 +161,12 @@ Running simulations asynchronously allows users to launch multiple simulations i
 ```python
 from inductiva import fluids
 
-# Initialize scenario with defaults
-scenario = fluids.WindTunnel()
+task_list = []
 
-# Path to a set of vehicles
-vehicle_path_list = ["vehicle_1.obj", "vehicle_2.obj", ..., "vehicle_1000.obj"]
-
-tasks_list = []
-
-for vehicle in vehicle_path_list:
-    task = scenario.simulate(object_path=vehicle,
-                             run_async=True)
-    tasks_list.append(task)
+for velocity in range(50):
+  scenario = fluids.WindTunnel(flow_velocity=[velocity, 0, 0])
+  task = scenario.simulate(object_path=vehicle_path, run_async=True)
+  task_list.append(task)
 ```
 
 All of the simulations will be launched in one go. The user can check the status of the simulations and retrieve the results when they are ready. Check the FAQ section for more information on how to do this.
@@ -182,10 +178,15 @@ All of the simulations will be launched in one go. The user can check the status
 - [Managing submitted tasks](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks)
 - [Managing computation resources](https://github.com/inductiva/inductiva/tree/main/inductiva/resources)
 
-## FAQ
+## Installation troubleshooting
+### Why can't I install the optional packages?
+Depending on your shell, you may encounter issues when trying to install optional packages such as `inductiva[molecules_extra]`. This is because certain shells interpret brackets, like those in `[molecules_extra]`, in a special way. To prevent any misinterpretation or errors, enclose the package name and its extras in double quotes. To ensure a successful installation, please use the following command:
 
-### 1. Installation troubleshooting
+```bash
+pip install --upgrade "inductiva[molecules_extra]"
+```
 
+### Why can't I install Inductiva package? 
 If installing the package failed, you can retry it on a new Python virtual environment. A [virtual environment](https://docs.python.org/3/library/venv.html) allows you to have a fresh Python environment with isolated dependencies. In your shell, run:
 
 ```
