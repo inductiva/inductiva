@@ -328,8 +328,9 @@ class Bathymetry:
         cmap: Optional[str] = None,
         clim: Optional[Tuple[float]] = None,
         path: Optional[str] = None,
-        x_resolution: float = None,
-        y_resolution: float = None,
+        x_resolution: float = 10,
+        y_resolution: float = 10,
+        resize: bool = False,
         threshold_distance: float = 20,
     ) -> Union["matplotlib.axes.Axes", None]:
         """Plots the bathymetry.
@@ -362,18 +363,20 @@ class Bathymetry:
             path: Path to save the plot. If `None`, the plot is not saved, and
               the matplotlib `Axes` object is returned instead.
             x_resolution: Resolution, in meters, of the plotting grid in the x
-              direction. If `None`, the resolution is determined by the
-              bathymetry
+              direction. Only used if the bathymetry is not uniform or if we
+              are resizing it.
             y_resolution: Resolution, in meters, of the plotting grid in the y
-              direction. If `None`, the resolution is determined by the
-              bathymetry
+              direction. Only used if the bathymetry is not uniform or if we
+              are resizing it.
+            resize: Whether to resize the bathymetry before plotting it. When
+                `False`, the bathymetry is plotted on the original grid if
+                it is already uniform.
             threshold_distance: Threshold distance to filter out points on the
               uniform grid that are far from points where the bathymetry is
               defined.
         """
 
-        if self.is_uniform_grid(
-        ) and x_resolution is None and y_resolution is None:
+        if self.is_uniform_grid() and not resize:
             x_size = self.x_num()
             y_size = self.y_num()
 

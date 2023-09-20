@@ -46,7 +46,7 @@ GRID_POSITIONS_FILE_NAME = "grid_positions.mat"
 @optional_deps.needs_coastal_extra_deps
 def read_swash_output_file(file_path: str) -> Dict[str, np.ndarray]:
     """Reads a SWASH output file.
-    
+
     The output is read as a dictionary, where the keys are the names of the
     variables and the values are the corresponding arrays.
     """
@@ -223,19 +223,23 @@ class CoastalAreaOutput:
     @optional_deps.needs_coastal_extra_deps
     def render(
         self,
-        quantity: Literal["water_level", "velocity_x", "velocity_y",
-                          "velocity_magnitude",] = "water_level",
+        quantity: Literal[
+            "water_level",
+            "velocity_x",
+            "velocity_y",
+            "velocity_magnitude",
+        ] = "water_level",
         movie_path: Path = "movie.mp4",
         fps: int = 5,
         cmap: str = "viridis",
         clim: Optional[Sequence[float]] = None,
     ):
         """Renders temporal evolution of a physical quantity.
-        
+
         A movie is produced representing the temporal evolution of a physical
         quantity exported in simulations of the coastal area scenario. Available
         quantities are: water_level, velocity_x, velocity_y, velocity_magnitude.
-         
+
         The movie is saved in the `movie_path` location.
 
         Args:
