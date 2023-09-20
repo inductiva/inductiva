@@ -154,9 +154,9 @@ class Task:
                     logging.info("Task completed successfully.")
                 elif status == models.TaskStatusCode.FAILED:
                     logging.info("Task failed.")
-                    logging.info("Download the task output and check the "
-                                 "'stdout.txt' and 'stderr.txt' files for "
-                                 "more information. "
+                    logging.info("Download the 'stdout.txt' and 'stderr.txt' "
+                                 "files with `task.get_output()` for "
+                                 "more detail. "
                                  "Post-processing tools will fail.")
                 elif status == models.TaskStatusCode.KILLED:
                     logging.info("Task killed.")
@@ -179,16 +179,19 @@ class Task:
         self._api.kill_task(path_params=self._get_path_params())
 
     def _get_output_config(self, all_files: bool = False):
-        """Get configuration of the output wrt the task method name.
+        """Get configuration of the output with the task method name.
         
         Args:
             all_files: Whether to download all the files in the output.
 
         Returns:
-            The output class and default files for the task related
-            with classes that have these features configured. If the task
-            method name does not refer to a scenario, the filenames will
-            be all downloaded.
+            output_class, filenames - If the task method name is not of
+                a scenario, this method returns None, None and all
+                simulation are downloaded. Otherwise, and if available,
+                it returns the output_class of that
+                respective scenario and the filenames of that simulation.
+                If all_files is False, then the filenames are the default
+                files set for that scenario.
         """
 
         # Fetch the first part of the method_name (e.g., "wind_tunnel")
