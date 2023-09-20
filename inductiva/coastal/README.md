@@ -42,7 +42,7 @@ bathymetry.plot(show=True)
 ```
 
 <p align="center">
-  <img src="/resources/bathymetry/bathymetry_random.png" alt="Raw bathymetry" width="550" height="550">
+  <img src="/resources/bathymetry/bathymetry_random.png" alt="Raw bathymetry" width="550" height="450">
 </p>
 
 The bathymetry is ready to be used in a simulation scenario. In this case, we set
@@ -76,7 +76,7 @@ output.render(movie_path = "movie_path.mp4")
 ```
 
 <p align="center">
-  <img src="/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="550" height="550">
+  <img src="/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="550" height="450">
 </p>
 
 ### Example with a real bathymetry
@@ -107,7 +107,7 @@ bathymetry.plot(x_resolution=200, y_resolution=200)
 ```
 
 <p align="center">
-  <img src="/resources/media/bathymetry.png" alt="Algarve bath" width="550" height="550">
+  <img src="/resources/media/bathymetry.png" alt="Algarve bath" width="550" height="450">
 </p>
 
 Raw bathymetry data will often span an area too large and sparsely sampled to
@@ -120,7 +120,7 @@ bathymetry.plot()
 ```
 
 <p align="center">
-  <img src="/resources/media/bathymetry_cropped.png" alt="Algarve bath" width="550" height="550">
+  <img src="/resources/media/bathymetry_cropped.png" alt="Algarve bath" width="550" height="450">
 </p>
 
 To be used in a simulation, the bathymetry data must be interpolated to a
@@ -170,5 +170,6 @@ output.render()
 ```
 
 <p align="center">
-  <img src="resources/media/coastal_area.gif" alt="Algarve bath" width="550" height="550">
+  <img src="resources/media/coastal_area.gif" alt="Algarve bath" width="550" height="450">
 </p>
+
