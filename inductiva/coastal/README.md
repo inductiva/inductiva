@@ -11,48 +11,53 @@ is performed using the [SWASH](https://swash.sourceforge.io/) simulator.
 
 ### Example 1: Simulating waves on a synthetic bathymetry
 
-Note: You can follow this example in your machine. Don't forget to insert your API key
-(`inductiva.api_key = "your_api_key"`) for the script to work! (You can get one by
-filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link))
+You can follow this example in your machine to simulate and visualize the wave propagation in a random bathymetry
+that represents a Coastal Area.
+
+Do not forget to insert your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/main#api-access-tokens) to see how get one).
 
 ```python
-    bathymetry = inductiva.coastal.Bathymetry.from_random_depths(x_range=(0,
-                                                                          100),
-                                                                 y_range=(0,
-                                                                          100),
-                                                                 x_num=100,
-                                                                 y_num=100,
-                                                                 max_depth=1,
-                                                                 random_seed=12)
+import inductiva
 
-    scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
+inductiva.api_key = "YOUR_API_KEY"
+bathymetry = inductiva.coastal.Bathymetry.from_random_depths(x_range=(0,100),
+          y_range=(0,100),
+          x_num=100,
+          y_num=100,
+          max_depth=1,
+          random_seed=12,
+          initial_roughness=1,
+          roughness_factor=0.5,
+          percentile_above_water=20)
+
+scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
                                              wave_source_location="W",
                                              wave_amplitude=0.1,
                                              wave_period=5.5)
 
-    task = scenario.simulate(simulation_time=360, output_time_step=1)
+task = scenario.simulate(simulation_time=80, output_time_step=1, fps=5)
 
-    output = task.get_output()
+output = task.get_output()
 
-    output.render(movie_path="movie_path.mp4")
-  ````
+output.render(movie_path="movie_path.mp4")
+```
 
-The bathymetry that we use can be loaded from a real scenario or randomly generated
-by us. To avoid having to download any data for now, we will start by run a simulation
+To avoid having to download any data for now, we will start by run a simulation
 on synthetic bathymetry, that is procedurally generated using the API.
 
 We start by generating a random bathymetry.
 ```python
 import inductiva
 
-bathymetry = inductiva.coastal.Bathymetry.from_random_depths(
-        x_range=(0, 100),
-        y_range=(0, 100),
-        x_num=100,
-        y_num=100,
-        max_depth=1,
-        random_seed=12,
-        roughness_factor=0.5)
+bathymetry = inductiva.coastal.Bathymetry.from_random_depths(x_range=(0,100),
+          y_range=(0,100),
+          x_num=100,
+          y_num=100,
+          max_depth=1,
+          random_seed=12,
+          initial_roughness=1,
+          roughness_factor=0.5,
+          percentile_above_water=20)
 ```
 
 This bathymetry is defined in a 100x100 grid, that represent a domain 100m
@@ -80,7 +85,7 @@ scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
 Once the scenario is created, run the simulation as follows:
 
 ```python
-task = scenario.simulate(simulation_time=80, output_time_step=1)
+task = scenario.simulate(simulation_time=80, output_time_step=1, fps=5)
 
 output = task.get_output()
 ```
@@ -100,7 +105,7 @@ output.render(movie_path = "movie_path.mp4")
   <img src="/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="550" height="450">
 </p>
 
-### Example with a real bathymetry
+### Example 2: Simulating waves on a real bathymetry
 
 Now let's perform our simulations with real data!
 
