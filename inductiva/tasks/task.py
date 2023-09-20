@@ -244,6 +244,7 @@ class Task:
             output_class, filenames = self._get_output_config(all_files)
         else:
             output_class = None
+            logging.info("Downloading the 'stdout.txt' and 'stderr.txt' files.")
             filenames = ["stdout.txt", "stderr.txt"]
 
         output_dir = self.download_outputs(
@@ -254,8 +255,11 @@ class Task:
 
         # output_class can only be not None if the task is successful
         if output_class is not None:
+            logging.info("Post-processing tools are available " 
+                         "through the output object.")
             return output_class(output_dir)
 
+        logging.info("The output was downloaded to %s.", output_dir)
         return output_dir
 
     def get_output_files_info(self) -> output_contents.OutputContents:
