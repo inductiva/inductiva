@@ -84,7 +84,7 @@ class CoastalArea(scenarios.Scenario):
         self.water_level = water_level
         self.wave_source_location = wave_source_location
         self.wave_amplitude = wave_amplitude
-        self._check_valid_wave_amplitude()
+        self._check_valid_wave()
         self.wave_period = wave_period
 
     def simulate(
@@ -128,7 +128,7 @@ class CoastalArea(scenarios.Scenario):
     def create_input_files(self, simulator: simulators.Simulator):
         pass
 
-    def _check_valid_wave_amplitude(self):
+    def _check_valid_wave(self):
         """Checks that the wave amplitude is valid.
 
         Raises:
