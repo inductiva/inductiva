@@ -79,14 +79,18 @@ Now let's perform our simulations with real data!
 Start by loading a bathymetry. This can be done e.g. by reading an
 [ASCII XYZ file](https://emodnet.ec.europa.eu/sites/emodnet.ec.europa.eu/files/public/20171127_DTM_exchange_format_specification_v1.6.pdf),
 a standard format for bathymetry data (for examples, see e.g. the [European Marine Observation and Data Network](https://emodnet.ec.europa.eu/geoviewer/#!/)).
-Here we shall use the bathymetry data from Algarve that you can download [here](https://downloads.emodnet-bathymetry.eu/high_resolution/590_HR_Lidar_Algarve.emo.zip)
-as an example.
+Here we shall use the bathymetry data from Algarve.
 
 ```python
 import inductiva
 
+bathymetry_url = "https://downloads.emodnet-bathymetry.eu/high_resolution/590_HR_Lidar_Algarve.emo.zip"
+
+bathymetry_path = inductiva.utils.files.download_from_url(bathymetry_url,
+local_file_path = "590_HR_Lidar_Algarve.emo")
+
 bathymetry = inductiva.coastal.Bathymetry.from_ascii_xyz_file(
-    ascii_xyz_file_path="590_HR_Lidar_Algarve.emo")
+    ascii_xyz_file_path = bathymetry_path)
 ```
 
 The bathymetry can be inspected by plotting it with a given resolution, in this
