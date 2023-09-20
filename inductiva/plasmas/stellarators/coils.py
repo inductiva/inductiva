@@ -11,21 +11,21 @@ from functools import singledispatchmethod
 
 import numpy as np
 
-from inductiva import (scenarios, simulators, tasks, types, utils, resources)
+from inductiva import scenarios, simulators, tasks, types, utils, resources
 
-SIMSOPT_COIL_COEFFICIENTS_FILENAME = 'coil_coefficients.npz'
-SIMSOPT_COIL_CURRENTS_FILENAME = 'coil_currents.npz'
-SIMSOPT_PLASMA_SURFACE_FILENAME = 'input.final'
+SIMSOPT_COIL_COEFFICIENTS_FILENAME = "coil_coefficients.npz"
+SIMSOPT_COIL_CURRENTS_FILENAME = "coil_currents.npz"
+SIMSOPT_PLASMA_SURFACE_FILENAME = "input.final"
 SIMSOPT_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
-                                    'stellarator_coils')
-PLASMA_SURFACE_TEMPLATE_FILENAME = 'input.example'
-OBJECTIVES_WEIGHTS_FILENAME = 'objectives_weights.json'
+                                    "stellarator_coils")
+PLASMA_SURFACE_TEMPLATE_FILENAME = "input.example"
+OBJECTIVES_WEIGHTS_FILENAME = "objectives_weights.json"
 DEFAULT_OBJECTIVES_WEIGHTS = {
-    'squared_flux': 1,
-    'coils_length': 2e-03,
-    'mean_squared_curvature': 3e-04,
-    'arclength_variation': 5e-03,
-    'curvature': 3e-04
+    "squared_flux": 1,
+    "coils_length": 2e-03,
+    "mean_squared_curvature": 3e-04,
+    "arclength_variation": 5e-03,
+    "curvature": 3e-04
 }
 
 
@@ -41,8 +41,8 @@ class StellaratorCoils(scenarios.Scenario):
     Therefore, designing a stellarator involves defining a set of 
     electromagnetic coils. This set of coils is defined by a small set of 
     NC independent coils, due to the symmetries involved. There is stellarator 
-    symmetry, that mirrors this independent set of coils and then 'number of
-    field periods (nfp)' rotational symmetry, that repeats this block of coils
+    symmetry, that mirrors this independent set of coils and then "number of
+    field periods (nfp)" rotational symmetry, that repeats this block of coils
     throughout the stellarator in the toroidal direction (the long way around
     the torus). The number of field periods is the number of complete magnetic 
     field repetitions within a device. It represents how many times the magnetic
@@ -51,7 +51,7 @@ class StellaratorCoils(scenarios.Scenario):
     of coils in a stellarator device comes out to 2*NC*nfp.
 
     For more information about stellarators, there are many articles with 
-    very good information. Per Helander's 2014 "Theory of plasma confinement in 
+    very good information. Per Helander"s 2014 "Theory of plasma confinement in 
     non-axisymmetric magnetic fields" is a good example. See more details at:
     https://iopscience.iop.org/article/10.1088/0034-4885/77/8/087001
 
@@ -68,7 +68,7 @@ class StellaratorCoils(scenarios.Scenario):
           Typically varies between 1 and 3.
     """
 
-    valid_simulators = [simulators.Simsopt]
+    valid_simulators = [simulators.SIMSOPT]
 
     def __init__(self, coils, num_field_periods):
         """Initialize the StellaratorCoils object."""
@@ -126,7 +126,7 @@ class StellaratorCoils(scenarios.Scenario):
                            minor_radius=0.5):
         """Creates random curves.
 
-        Creates a number of 'num_coils' random curves. The random coils are 
+        Creates a number of "num_coils" random curves. The random coils are 
         created by first creating simple equally spaced coils and then randomly 
         varying the higher order coefficients of the Fourier series describing 
         the coils. This ensures that the coils are not created on top of each 
@@ -193,7 +193,7 @@ class StellaratorCoils(scenarios.Scenario):
                          num_field_periods,
                          coil_currents,
                          curves_file,
-                         delimiter=','):
+                         delimiter=","):
         """Create StellaratorCoils from Fourier coefficients loaded from a file.
 
         This function loads a file containing Fourier coefficients for several 
@@ -234,7 +234,7 @@ class StellaratorCoils(scenarios.Scenario):
 
     def simulate(
         self,
-        simulator: simulators.Simulator = simulators.Simsopt(),
+        simulator: simulators.Simulator = simulators.SIMSOPT(),
         machine_group: typing.Optional[resources.MachineGroup] = None,
         run_async: bool = False,
         plasma_surface_filepath: typing.Optional[types.Path] = None,
@@ -250,7 +250,7 @@ class StellaratorCoils(scenarios.Scenario):
         configurations with the goal of optimizing a stellarator design.
 
         The optimization is performed as follows:
-        1. The scenario's coil configuration is used as an initial 
+        1. The scenario"s coil configuration is used as an initial 
           configuration.
         2. Gaussian noise is added to each coil parameter to produce 
           `num_sample` configurations.
@@ -283,25 +283,26 @@ class StellaratorCoils(scenarios.Scenario):
             objectives_weights: Contains the weights for each objective function
               that will be used for the construction of the total objective.
               Only the objectives provided will be used for the calculation.
-              Available options for the keys are: 'squared_flux', 
-              'coils_length', 'mean_squared_curvature', 'arclength_variation' 
-              and 'curvature'. If `objectives_weights` is not provided it 
+              Available options for the keys are: "squared_flux", 
+              "coils_length", "mean_squared_curvature", "arclength_variation" 
+              and "curvature". If `objectives_weights` is not provided it 
               defaults to: {
-                                'squared_flux': 1,
-                                'coils_length': 2e-03,
-                                'mean_squared_curvature': 3e-04,
-                                'arclength_variation': 5e-03,
-                                'curvature': 3e-04
+                                "squared_flux": 1,
+                                "coils_length": 2e-03,
+                                "mean_squared_curvature": 3e-04,
+                                "arclength_variation": 5e-03,
+                                "curvature": 3e-04
                             }
                   
         """
+        simulator.override_api_method_prefix("stellarators")
 
         if plasma_surface_filepath:
             self.plasma_surface_filepath = utils.files.resolve_path(
                 plasma_surface_filepath)
         else:
-            logging.info('Plasma surface description not provided. '
-                         'Using default file.')
+            logging.info("Plasma surface description not provided. "
+                         "Using default file.")
             self.plasma_surface_filepath = os.path.join(
                 SIMSOPT_TEMPLATE_DIR, PLASMA_SURFACE_TEMPLATE_FILENAME)
 
@@ -311,15 +312,15 @@ class StellaratorCoils(scenarios.Scenario):
 
         for key in self.objectives_weights:
             if key not in [
-                    'squared_flux', 'coils_length', 'mean_squared_curvature',
-                    'arclength_variation', 'curvature'
+                    "squared_flux", "coils_length", "mean_squared_curvature",
+                    "arclength_variation", "curvature"
             ]:
                 raise ValueError(
-                    'Invalid dictionary keys. '
-                    'Available options include: '
-                    '"squared_flux", "coils_length", '
-                    '"mean_squared_curvature", "arclength_variation" '
-                    'and "curvature".')
+                    "Invalid dictionary keys. "
+                    "Available options include: "
+                    "`squared_flux`, `coils_length`, "
+                    "`mean_squared_curvature`, `arclength_variation` "
+                    "and `curvature`.")
 
         task = super().simulate(
             simulator,
@@ -393,7 +394,7 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
 
 
 @StellaratorCoils.create_input_files.register
-def _(self, simulator: simulators.Simsopt, input_dir):  # pylint: disable=unused-argument
+def _(self, simulator: simulators.SIMSOPT, input_dir):  # pylint: disable=unused-argument
     """Creates Simsopt simulation input files."""
 
     coil_coefficients = [coil.curve_coefficients for coil in self.coils]
@@ -415,5 +416,5 @@ def _(self, simulator: simulators.Simsopt, input_dir):  # pylint: disable=unused
     objectives_weights_filepath = os.path.join(input_dir,
                                                OBJECTIVES_WEIGHTS_FILENAME)
 
-    with open(objectives_weights_filepath, 'w', encoding='utf-8') as json_file:
+    with open(objectives_weights_filepath, "w", encoding="utf-8") as json_file:
         json.dump(self.objectives_weights, json_file)

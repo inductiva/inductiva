@@ -16,7 +16,7 @@ class OpenFOAM(simulators.Simulator):
         input_dir: types.Path,
         commands: List[dict],
         machine_group: Optional[resources.MachineGroup] = None,
-        n_cores: int = 1,
+        n_cores: int = 2,
         run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.

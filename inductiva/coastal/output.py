@@ -3,6 +3,7 @@
 import os
 import tempfile
 from typing import Dict, Literal, Optional, Sequence, Tuple
+from absl import logging
 
 import numpy as np
 try:
@@ -45,7 +46,7 @@ GRID_POSITIONS_FILE_NAME = "grid_positions.mat"
 @optional_deps.needs_coastal_extra_deps
 def read_swash_output_file(file_path: str) -> Dict[str, np.ndarray]:
     """Reads a SWASH output file.
-    
+
     The output is read as a dictionary, where the keys are the names of the
     variables and the values are the corresponding arrays.
     """
@@ -199,6 +200,25 @@ class CoastalAreaOutput:
         """
 
         self.sim_output_path = sim_output_path
+        self.check_stability()
+
+    @optional_deps.needs_coastal_extra_deps
+    def check_stability(self):
+
+        _, data_list = read_swash_grid_quantity_file(
+            file_path=os.path.join(self.sim_output_path, "water_level.mat"),
+            quantity="water_level",
+        )
+
+        # Check if water level is stable
+        inital_max_water_level = np.max(data_list[0])
+        final_max_water_level = np.max(data_list[-1])
+
+        if final_max_water_level > 2 * inital_max_water_level:
+            logging.info("Simulation can show unstable results.\n"
+                         "Check the simulation visualization to corroborate.\n"
+                         "If the results are unstable, try increasing "
+                         "the simulation resolution.")
 
     @optional_deps.needs_coastal_extra_deps
     def render(
@@ -210,16 +230,16 @@ class CoastalAreaOutput:
             "velocity_magnitude",
         ] = "water_level",
         movie_path: Path = "movie.mp4",
-        fps: int = 10,
+        fps: int = 5,
         cmap: str = "viridis",
         clim: Optional[Sequence[float]] = None,
     ):
         """Renders temporal evolution of a physical quantity.
-        
+
         A movie is produced representing the temporal evolution of a physical
         quantity exported in simulations of the coastal area scenario. Available
         quantities are: water_level, velocity_x, velocity_y, velocity_magnitude.
-         
+
         The movie is saved in the `movie_path` location.
 
         Args:
@@ -240,6 +260,8 @@ class CoastalAreaOutput:
             quantity=quantity,
         )
 
+        logging.info("Starting to render video from simulation data...")
+
         _render_quantity_grid_data(
             x_array=x_array,
             y_array=y_array,
@@ -251,3 +273,5 @@ class CoastalAreaOutput:
             cmap=cmap,
             clim=clim,
         )
+
+        logging.info("Writing mp4 file to %s.", movie_path)

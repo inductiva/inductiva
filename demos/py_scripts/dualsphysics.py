@@ -21,8 +21,6 @@ flags.DEFINE_string("output_dir",
                     None,
                     "Directory where the outputs will be stored.",
                     required=True)
-flags.DEFINE_string("device", "gpu",
-                    "Device in which device the simulation will run.")
 
 
 def main(_):
@@ -35,7 +33,6 @@ def main(_):
     task = sph_sim.run(
         input_dir=FLAGS.sim_dir,
         sim_config_filename=FLAGS.sim_config_filename,
-        device=FLAGS.device,
     )
 
     _ = task.get_output(output_dir=FLAGS.output_dir)

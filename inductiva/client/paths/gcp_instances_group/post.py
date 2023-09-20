@@ -24,16 +24,16 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.instance import Instance
+from inductiva.client.model.instance_group_create import InstanceGroupCreate
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.instance_group import InstanceGroup
 
 from . import path
 
 # body param
-SchemaForRequestBodyApplicationJson = InstanceGroup
+SchemaForRequestBodyApplicationJson = InstanceGroupCreate
 
-request_body_instance_group = api_client.RequestBody(
+request_body_instance_group_create = api_client.RequestBody(
     content={
         'application/json':
             api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
@@ -43,7 +43,7 @@ request_body_instance_group = api_client.RequestBody(
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor201ResponseBodyApplicationJson = Instance
+SchemaFor201ResponseBodyApplicationJson = InstanceGroup
 
 
 @dataclass
@@ -93,7 +93,7 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _create_instance_group_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -109,7 +109,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _create_instance_group_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -125,7 +125,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _create_instance_group_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -139,7 +139,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _create_instance_group_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -155,7 +155,7 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _create_instance_group_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -167,7 +167,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Create Instance Group
+        Register Instance Group
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -186,7 +186,7 @@ class BaseApi(api_client.Api):
             )
         _fields = None
         _body = None
-        serialized_data = request_body_instance_group.serialize(
+        serialized_data = request_body_instance_group_create.serialize(
             body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
@@ -225,11 +225,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class CreateInstanceGroup(BaseApi):
+class RegisterInstanceGroup(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def create_instance_group(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -245,7 +245,7 @@ class CreateInstanceGroup(BaseApi):
         ...
 
     @typing.overload
-    def create_instance_group(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -261,7 +261,7 @@ class CreateInstanceGroup(BaseApi):
         ...
 
     @typing.overload
-    def create_instance_group(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -275,7 +275,7 @@ class CreateInstanceGroup(BaseApi):
         ...
 
     @typing.overload
-    def create_instance_group(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -291,7 +291,7 @@ class CreateInstanceGroup(BaseApi):
     ]:
         ...
 
-    def create_instance_group(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -302,7 +302,7 @@ class CreateInstanceGroup(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._create_instance_group_oapg(
+        return self._register_instance_group_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,
@@ -388,7 +388,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._create_instance_group_oapg(
+        return self._register_instance_group_oapg(
             body=body,
             content_type=content_type,
             accept_content_types=accept_content_types,

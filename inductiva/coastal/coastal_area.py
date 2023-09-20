@@ -93,7 +93,6 @@ class CoastalArea(scenarios.Scenario):
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
-        n_cores=None,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -103,10 +102,8 @@ class CoastalArea(scenarios.Scenario):
             simulation_time: Total simulation time, in seconds.
             time_step: Time step, in seconds.
             output_time_step: Time step for the output, in seconds.
-            n_cores: Number of cores to use for the simulation. If None,
-              the maximum number of cores available in the machine group will be
-              used.
         """
+        simulator.override_api_method_prefix("coastal_area")
 
         self.simulation_time = simulation_time
         self.time_step = time_step
@@ -117,10 +114,7 @@ class CoastalArea(scenarios.Scenario):
             machine_group=machine_group,
             run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,
-            n_cores=n_cores,
         )
-
-        task.set_output_class(coastal.CoastalAreaOutput)
 
         return task
 
@@ -172,7 +166,7 @@ def _(self, simulator: simulators.SWASH, input_dir):  # pylint: disable=unused-a
     absorbing_boundary_locations = ["N", "S", "E", "W"]
     absorbing_boundary_locations.remove(self.wave_source_location)
 
-    utils.templates.replace_params_in_template(
+    utils.templates.replace_params(
         template_path=config_template_file_path,
         params={
             "bathymetry_filename": SWASH_BATHYMETRY_FILENAME,
@@ -196,7 +190,10 @@ def _(self, simulator: simulators.SWASH, input_dir):  # pylint: disable=unused-a
     )
 
     bathymetry_file_path = os.path.join(input_dir, SWASH_BATHYMETRY_FILENAME)
-    self.bathymetry.to_bot_file(bathymetry_file_path)
+    depths_grid = self.bathymetry.depths.reshape(
+        (bathymetry_x_num, bathymetry_y_num))
+
+    self.bathymetry.to_bot_file(bathymetry_file_path, depths_grid)
 
 
 def _convert_time_to_hmsms(time: float) -> str:

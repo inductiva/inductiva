@@ -12,7 +12,7 @@ from inductiva.utils.files import find_path_to_package
 TEMPLATES_PATH = find_path_to_package("templates")
 
 
-def replace_params_in_template(
+def replace_params(
     template_path: str,
     params: Dict,
     output_file: Union[str, io.StringIO],
@@ -34,7 +34,7 @@ def replace_params_in_template(
         os.remove(template_path)
 
 
-def batch_replace_params_in_template(
+def batch_replace_params(
     templates_dir: str,
     template_filenames: List[str],
     params: Dict,
@@ -60,7 +60,7 @@ def batch_replace_params_in_template(
     for index, template_filename in enumerate(template_filenames):
         template_path = os.path.join(templates_dir, template_filename)
 
-        replace_params_in_template(
+        replace_params(
             template_path=template_path,
             params=params,
             output_file=output_filename_paths[index],

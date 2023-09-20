@@ -2,7 +2,7 @@
 
 from functools import singledispatchmethod
 import os
-from typing import List, Literal, Optional
+from typing import List, Optional
 import shutil
 
 from inductiva import tasks, resources, fluids, scenarios, simulators, utils
@@ -92,7 +92,6 @@ class FluidBlock(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        device: Literal["cpu", "gpu"] = "cpu",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
         adaptive_time_step: bool = True,
@@ -106,8 +105,6 @@ class FluidBlock(scenarios.Scenario):
             simulator: The simulator to use for the simulation. Supported
               simulators are: SPlisHSPlasH, DualSPHysics.
             machine_group: The machine group to use for the simulation.
-            device: Device in which to run the simulation. Available options are
-              "cpu" and "gpu".
             particle_radius: Radius of the fluid particles, in meters.
               Determines the resolution of the simulation. Lower values result
               in higher resolution and longer simulation times.
@@ -118,6 +115,7 @@ class FluidBlock(scenarios.Scenario):
             output_time_step: Time step between outputs, in seconds.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("fluid_block")
 
         # TODO: Avoid storing these as class attributes.
         self.particle_radius = particle_radius
@@ -131,15 +129,7 @@ class FluidBlock(scenarios.Scenario):
             simulator=simulator,
             machine_group=machine_group,
             run_async=run_async,
-            device=device,
             sim_config_filename=self.get_config_filename(simulator))
-
-        # TODO: Add any kind of post-processing here, e.g. convert files?
-        # convert_vtk_data_dir_to_netcdf(
-        #     data_dir=os.path.join(output_path, "vtk"),
-        #     output_time_step=SPLISHSPLASH_OUTPUT_TIM_STEP,
-        #     netcdf_data_dir=os.path.join(output_path, "netcdf"))
-        task.set_output_class(fluids.SPHSimulationOutput)
 
         return task
 
@@ -172,7 +162,7 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
     # Generate the simulation configuration file.
     fluid_margin = 2 * self.particle_radius
 
-    utils.templates.replace_params_in_template(
+    utils.templates.replace_params(
         template_path=os.path.join(template_files_dir,
                                    SPLISHSPLASH_TEMPLATE_FILENAME),
         params={
@@ -210,7 +200,7 @@ def _(self, simulator: simulators.DualSPHysics, input_dir):  # pylint: disable=u
 
     template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                       DUALSPHYSICS_TEMPLATE_INPUT_DIR)
-    utils.templates.replace_params_in_template(
+    utils.templates.replace_params(
         template_path=os.path.join(template_files_dir,
                                    DUALSPHYSICS_TEMPLATE_FILENAME),
         params={

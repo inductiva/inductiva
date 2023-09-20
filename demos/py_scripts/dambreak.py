@@ -31,8 +31,6 @@ flags.DEFINE_enum("simulator", "splishsplash", SIMULATORS.keys(),
 flags.DEFINE_string("output_dir", None,
                     "Destination directory for output files.")
 flags.DEFINE_float("simulation_time", 1, "Simulation time in seconds.")
-flags.DEFINE_string("device", "gpu",
-                    "Device in which device the simulation will run.")
 
 
 def main(_):
@@ -52,7 +50,6 @@ def main(_):
         simulator=simulator_cls(),
         resolution=FLAGS.resolution,
         simulation_time=FLAGS.simulation_time,
-        device=FLAGS.device,
     )
 
     # Note: video rendering only works with SPlisHSPlasH for now

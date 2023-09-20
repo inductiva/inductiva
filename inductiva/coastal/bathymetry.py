@@ -200,10 +200,7 @@ class Bathymetry:
         return cls(depths.flatten(), x.flatten(), y.flatten())
 
     @optional_deps.needs_coastal_extra_deps
-    def to_bot_file(
-        self,
-        bot_file_path: str,
-    ):
+    def to_bot_file(self, bot_file_path: str, depths_grid: np.ndarray):
         """Writes the bathymetry to a bot file.
 
         The depth values are interpolated to a regular grid and written to a bot
@@ -213,12 +210,6 @@ class Bathymetry:
         Args:
             text_file_path: Path to the text file.
         """
-
-        x_resolution = self.x_ptp() / self.x_uniques().size
-        y_resolution = self.y_ptp() / self.y_uniques().size
-
-        depths_grid, _ = self._interpolate_to_uniform_grid(
-            x_resolution, y_resolution)
 
         np.savetxt(bot_file_path, depths_grid)
 
@@ -333,17 +324,23 @@ class Bathymetry:
     @optional_deps.needs_coastal_extra_deps
     def plot(
         self,
-        cmap: Optional[str] = None,
+        show: bool = False,
+        cmap: str = "coolwarm",
         clim: Optional[Tuple[float]] = None,
         path: Optional[str] = None,
-        x_resolution: float = None,
-        y_resolution: float = None,
+        x_resolution: float = 10,
+        y_resolution: float = 10,
+        resize: bool = False,
         threshold_distance: float = 20,
     ) -> Union["matplotlib.axes.Axes", None]:
         """Plots the bathymetry.
 
         The bathymetry is represented as a 2D map of depths, with the x and y
-        coordinates of the points where the depths are defined in the axes.
+        coordinates of the points where the depths are defined in the axes. The
+        plot shows the height of the various points in the bathymetry is
+        defined, with the opposite signal convention of the bathymetry (i.e,
+        the bellow water level points are given by negative height instead of
+        positive depth).
 
         The bathymetry data is plotted with a color plot on a grid with uniform
         spacing in the x and y directions. If the user does not specify the
@@ -370,18 +367,20 @@ class Bathymetry:
             path: Path to save the plot. If `None`, the plot is not saved, and
               the matplotlib `Axes` object is returned instead.
             x_resolution: Resolution, in meters, of the plotting grid in the x
-              direction. If `None`, the resolution is determined by the
-              bathymetry
+              direction. Only used if the bathymetry is not uniform or if we
+              are resizing it.
             y_resolution: Resolution, in meters, of the plotting grid in the y
-              direction. If `None`, the resolution is determined by the
-              bathymetry
+              direction. Only used if the bathymetry is not uniform or if we
+              are resizing it.
+            resize: Whether to resize the bathymetry before plotting it. When
+                `False`, the bathymetry is plotted on the original grid if
+                it is already uniform.
             threshold_distance: Threshold distance to filter out points on the
               uniform grid that are far from points where the bathymetry is
               defined.
         """
 
-        if self.is_uniform_grid(
-        ) and x_resolution is None and y_resolution is None:
+        if self.is_uniform_grid() and not resize:
             x_size = self.x_num()
             y_size = self.y_num()
 
@@ -409,7 +408,7 @@ class Bathymetry:
         ax = fig.add_subplot()
 
         im = ax.imshow(
-            depths_grid.transpose(),
+            -1 * depths_grid.transpose(),
             cmap=cmap,
             clim=clim,
             origin="lower",
@@ -424,13 +423,15 @@ class Bathymetry:
             ylabel="$y$ [m]",
         )
 
-        fig.colorbar(im, ax=ax, label="Depth [m]")
+        fig.colorbar(im, ax=ax, label="Height [m]")
 
         if path is not None:
             fig.savefig(path)
             matplotlib.pyplot.close(fig)
 
         else:
+            if show:
+                matplotlib.pyplot.show()
             return ax
 
     @optional_deps.needs_coastal_extra_deps

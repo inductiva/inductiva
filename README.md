@@ -48,36 +48,41 @@ And you are good to go! You can start [exploring our tutorial notebooks](https:/
 
 **Inductiva API** contains pre-built scenarios that define physical systems of interest ready to simulate. Users can choose some parameters and configure the system according to their needs, run the simulation using the most adequate resources and visualize the results.
 
+### WindTunnel Example
 
-### Example
+To run this simulation you just need the default installation of Inductiva package. To visualize the results (second code snippet), the extra dependencies for fluids are required to be installed (see above).
 
 ```python
- import inductiva
+import inductiva
 
 inductiva.api_key = "YOUR_API_KEY"
 
- # Load example protein
- insulin = inductiva.molecules.examples.load_insulin()
+# Url to a test object in Inductiva Github repository
+vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
+              "/resources/vehicle.obj"
+vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 
- # Initialize the scenario
- scenario = inductiva.molecules.ProteinSolvation(
-     protein_pdb = insulin,
-     temperature = 300)
+# Initialize the scenario
+scenario = inductiva.fluids.WindTunnel(
+    flow_velocity=[30, 0, 0],
+    domain={"x": [-5, 15], "y": [-5, 5], "z": [0, 8]})
 
- # Run a simulation
- task = scenario.simulate(simulation_time_ns = 0.01)
+# Run a simulation
+task = scenario.simulate(
+    object_path=vehicle_path, num_iterations=50, resolution="low")
 
- # Get the simulation output on your local machine.
- output = task.get_output()
+# Download the simulation output to your local machine.
+output = task.get_output()
+```
 
- # Visualize the protein trajectory
- output.render_interactive()
- ```
-
-This allows us to visualize the protein trajectory.
+```python
+# Render the results
+pressure_field = output.get_object_pressure_field()
+pressure_field.render()
+```
 
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/assets/114397668/12927e51-b3b7-4a44-94fd-8d8782d489cf" alt="Protein solvation simulation" width="350">
+  <img src="https://github.com/inductiva/inductiva/blob/2d1842fba734e2961d1edf6b0c6a5d5f36cda22c/resources/media/openfoam/pressure_field.png" alt="Pressure Field of a vehicle." width="400" height="330" >
 </p>
 
 ### Available scenarios
@@ -116,11 +121,10 @@ simulator = inductiva.simulators.DualSPHysics()
 
 output_dir = simulator.run(input_dir="FlowCylinder",
                            sim_config_filename="CaseFlowCylinder_Re200_Def.xml",
-                           output_dir="Flow",
-                           device="cpu")
+                           output_dir="Flow")
 ```
 
-The user must specify the input directory, the simulation configuration file, the output directory and the device to run the simulation on.
+The user must specify the input directory, the simulation configuration file and the output directory.
 
 Find more examples of simulations in the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
 

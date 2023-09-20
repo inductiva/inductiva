@@ -38,8 +38,9 @@ output.render()
 ```
 
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/assets/" alt="Centered Image" width="350" height="250">
+  <img src="https://github.com/inductiva/inductiva/blob/f52d0a733276996e02fdde942a4974c0a75d5038/resources/media/fluid_block.gif" alt="Centered Image" width="400" height="300">
 
-Remark: For those running on Google Colab or a headless server, further extra dependencies are required. Install them with `!apt install libgl1-mesa-glx xvfb`. Moreover, activate the parameter `virtual_display=True` in the render method, like `output.render(virtual_display=True)`.
+**Remark:** For those running on Google Colab or a headless server, further extra dependencies are required. Install them with `!apt install libgl1-mesa-glx xvfb`. 
+Moreover, change the parameter `virtual_display` in the render method to `True`, and pass a path to save the result, like `streamlines.render(virtual_display=True, save_path="streamlines.png")`. 
 
-Further, ou can alter the `color` of the particles and `fps` of the rendering!
+Further, one can alter the `color` of the particles and `fps` of the rendering!

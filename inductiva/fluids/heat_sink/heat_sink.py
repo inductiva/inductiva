@@ -4,7 +4,7 @@ import os
 import shutil
 from typing import Optional
 
-from inductiva import fluids, tasks, resources, simulators, scenarios, utils
+from inductiva import tasks, resources, simulators, scenarios, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "heat_sink")
@@ -109,17 +109,19 @@ class HeatSink(scenarios.Scenario):
             machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("heat_sink")
+
         self.simulation_time = simulation_time
         self.output_time_step = output_time_step
 
         commands = self.get_commands()
 
+        # TODO: Address the mpirun runs of HeatSink
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 run_async=run_async,
+                                n_cores=1,
                                 commands=commands)
-
-        task.set_output_class(fluids.HeatSinkOutput)
 
         return task
 
@@ -155,7 +157,7 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
         os.path.join(input_dir, file_name) for file_name in
         [OPENFOAM_TEMPLATE_PARAMS_FILE_NAME, OPENFOAM_PARAMS_FILE_NAME])
 
-    utils.templates.replace_params_in_template(
+    utils.templates.replace_params(
         template_path=template_file_path,
         params={
             "simulation_time": self.simulation_time,

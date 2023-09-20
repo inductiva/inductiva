@@ -26,7 +26,7 @@ The user can further define the following simulation parameters:
     Default value if "md".
 - `n_steps_min`: Number of steps for energy minimization. Default value is 5000.
 
-Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`, `n_cores`.
+Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`.
  Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in [Tasks](inductiva/README.md).
 
 ### Example
@@ -42,7 +42,6 @@ inductiva.api_key = "YOUR_API_KEY"
 insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
 
 # Initialize the scenario
-insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
 scenario = inductiva.molecules.ProteinSolvation(
      protein_pdb = insulin_pdb_file,
 
@@ -60,11 +59,14 @@ The last code line downloads the files necessary to render and post-process our 
 ## Output and Post-processing 
 The simulation output folder contains trajectory data spanning the simulation duration and the protein's topology. These files are necessary to generate an interactive trajectory visualization using [NGLview](https://github.com/nglviewer/nglview). Users have the flexibility to select the protein's representation type, including options to display or hide the backbone, and they can also specify the criteria for visualization selection. You can refer to the [documentation](https://nglviewer.org/ngl/api/manual/usage/selection-language.html) for guidance on creating custom selections according to your preferences.
 
+**Note:** To access these tools the user needs to install the extra dependencies for the molecules package with
+`pip install --upgrade "inductiva[molecules_extra]"`. Moreover, currently, the visualization tools only work in the Jupyter Notebook environment.
+
 ```python
 output.render_interactive(representation="ball+stick", add_backbone=True, selection="protein")
  ```
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/assets/114397668/4d2265c1-dfe7-435f-936d-f4d607e29a04" alt="Centered Image" width="350" height="250">
+  <img src="https://github.com/inductiva/inductiva/assets/114397668/87e58f32-c23d-4115-929a-71ef8c789033" alt="Centered Image" width="350" height="250">
 </p>
 
 Users also have the option to plot the RMSF (Root Mean Square Fluctuation) over the simulation for each residue within the protein structure. [RMSF](https://userguide.mdanalysis.org/stable/examples/analysis/alignment_and_rms/rmsf.html) measures the extent to which a structure deviates from its average configuration over time, offering insights into the mobility of specific protein residues. 
