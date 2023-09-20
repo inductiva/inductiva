@@ -1,4 +1,4 @@
-# Coastal area scenario
+# Coastal Area scenario
 
 This scenario simulates waves propagating in a coastal area represented by a
 bathymetric profile (i.e., the map of depths of the sea bottom as a function
@@ -11,8 +11,7 @@ is performed using the [SWASH](https://swash.sourceforge.io/) simulator.
 
 ### Example
 
-Note: You can follow this example in a notebook or run the script
-`random_bathymetry_demo.py` available in this folder, that contains all the code
+Note: You can follow this example in a notebook or run [this script](/demos/py_scripts/coastal_area.py), that contains all the code
 snippets exhibited here. Don't forget to insert your API key
 (`inductiva.api_key = "your_api_key"`) for the script to work! (You can get one by
 filling this [form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform?usp=sf_link))
@@ -30,28 +29,31 @@ bathymetry = inductiva.coastal.Bathymetry.from_random_depths(
         y_range=(0, 100),
         x_num=100,
         y_num=100,
-        max_depth=50)
+        max_depth=1,
+        random_seed=12,
+        roughness_factor=0.5)
 ```
 
-This bathymetry is defined in a 50x50 grid, that represent a domain 100m
+This bathymetry is defined in a 100x100 grid, that represent a domain 100m
 wide and 100m long. It can be inspected by plotting it.
 
 ```python
-bathymetry.plot()
+bathymetry.plot(show=True)
 ```
 
-![Raw bathymetry.](/resources/bathymetry/bathymetry_random.png)
+<p align="center">
+  <img src="/resources/bathymetry/bathymetry_random.png" alt="Raw bathymetry" width="550" height="450">
+</p>
 
 The bathymetry is ready to be used in a simulation scenario. In this case, we set
 the wave source location to the west boundary of the domain (i.e. the lower x
-boundary), with a wave amplitude of 5m and a wave period of 5.5 s:
+boundary), with a wave amplitude of 0.1m and a wave period of 5.5 s:
 
 ```python
 scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
                                          wave_source_location="W",
-                                         wave_amplitude=5,
-                                         wave_period=5.5,
-                                         random_seed=12)
+                                         wave_amplitude=0.1,
+                                         wave_period=5.5)
 ```
 
 Once the scenario is created, run the simulation as follows:
@@ -73,7 +75,9 @@ output_time_step.
 output.render(movie_path = "movie_path.mp4")
 ```
 
-![Coastal area simulation.](/resources/media/random_coastal_area.gif)
+<p align="center">
+  <img src="/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="550" height="450">
+</p>
 
 ### Example with a real bathymetry
 
@@ -99,10 +103,12 @@ The bathymetry can be inspected by plotting it with a given resolution, in this
 case 200m x 200m:
 
 ```python
-bathymetry.plot(x_resolution=200, y_resolution=200)
+bathymetry.plot(x_resolution=200, y_resolution=200, show=True)
 ```
 
-![Raw bathymetry.](resources/media/bathymetry.png)
+<p align="center">
+  <img src="/resources/media/bathymetry.png" alt="Algarve bath" width="550" height="450">
+</p>
 
 Raw bathymetry data will often span an area too large and sparsely sampled to
 be used in a simulation. In this case, the user can crop the bathymetry to a
@@ -113,7 +119,9 @@ bathymetry = bathymetry.crop(x_range=(51000, 52000), y_range=(12150, 13000))
 bathymetry.plot()
 ```
 
-![Cropped bathymetry.](resources/media/bathymetry_cropped.png)
+<p align="center">
+  <img src="/resources/media/bathymetry_cropped.png" alt="Algarve bath" width="550" height="450">
+</p>
 
 To be used in a simulation, the bathymetry data must be interpolated to a
 regular grid with custom resolution, in this case 5m x 5m. In case some
@@ -161,4 +169,7 @@ To visualize the results:
 output.render()
 ```
 
-![Coastal area simulation.](resources/media/coastal_area.gif)
+<p align="center">
+  <img src="resources/media/coastal_area.gif" alt="Algarve bath" width="550" height="450">
+</p>
+
