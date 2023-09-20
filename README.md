@@ -116,15 +116,19 @@ If you would like other simulators to be added, contact us at [simulations@induc
 Example of how to use the simulators:
 
 ```python
+import inductiva
+
+input_dir = inductiva.utils.files.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "dualsph-flow-cylinder.zip"
+)
 
 simulator = inductiva.simulators.DualSPHysics()
 
-output_dir = simulator.run(input_dir="FlowCylinder",
-                           sim_config_filename="CaseFlowCylinder_Re200_Def.xml",
-                           output_dir="Flow")
+output_dir = simulator.run(input_dir=input_dir)
 ```
 
-The user must specify the input directory, the simulation configuration file and the output directory.
+The user must specify the input directory containing the files to run the simulation. In the above example, a directory with the configuration of a simulation is downloaded, and passed as argument to the simulator call.
 
 Find more examples of simulations in the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
 

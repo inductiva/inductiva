@@ -249,7 +249,7 @@ class Bathymetry:
     def y_num(self) -> int:
         """Returns the length of unique y values."""
 
-        return int(len(self.x_uniques()))
+        return int(len(self.y_uniques()))
 
     @optional_deps.needs_coastal_extra_deps
     def x_uniques(self, sort: bool = False) -> np.ndarray:
@@ -274,6 +274,12 @@ class Bathymetry:
         if sort:
             y_uniques = np.sort(y_uniques)
         return y_uniques
+
+    @optional_deps.needs_coastal_extra_deps
+    def depths_grid(self) -> np.ndarray:
+        """Returns the depths as a 2D grid."""
+
+        return self.depths.reshape((self.x_num(), self.y_num()))
 
     @optional_deps.needs_coastal_extra_deps
     def crop(self,
