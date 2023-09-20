@@ -6,7 +6,7 @@ import json
 import os
 from typing import List, Literal, Optional
 
-from inductiva import fluids, resources, simulators, scenarios, tasks, utils
+from inductiva import resources, fluids, simulators, scenarios, tasks, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "fluid_tank")
@@ -201,7 +201,6 @@ class FluidTank(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.SplishSplash(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        device: Literal["cpu", "gpu"] = "cpu",
         simulation_time: float = 5,
         resolution: Literal["low", "medium", "high"] = "low",
         output_time_step: float = 0.1,
@@ -233,11 +232,8 @@ class FluidTank(scenarios.Scenario):
             machine_group=machine_group,
             run_async=run_async,
             particle_radius=self.particle_radius,
-            device=device,
             sim_config_filename=self.get_config_filename(simulator),
         )
-
-        task.set_output_class(fluids.FluidTankOutput)
 
         return task
 
@@ -304,7 +300,7 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
         bounding_box_max[2],
     ]
 
-    utils.templates.replace_params_in_template(
+    utils.templates.replace_params(
         template_path=os.path.join(template_files_dir,
                                    SPLISHSPLASH_TEMPLATE_FILENAME),
         params={

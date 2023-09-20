@@ -5,7 +5,7 @@ import os
 import shutil
 import io
 
-from inductiva import tasks, resources, simulators, scenarios, utils, molecules
+from inductiva import tasks, resources, simulators, scenarios, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "md_water_box")
@@ -68,6 +68,8 @@ class MDWaterBox(scenarios.Scenario):
             n_steps_min: Number of steps for energy minimization.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("mdwater_box")
+
         self.nsteps = int(
             simulation_time_ns * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
@@ -80,8 +82,6 @@ class MDWaterBox(scenarios.Scenario):
                                 commands=commands,
                                 run_async=run_async)
 
-        task.set_output_class(molecules.MDWaterBoxOutput)
-
         return task
 
     def get_commands(self):
@@ -92,7 +92,7 @@ class MDWaterBox(scenarios.Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         inmemory_file = io.StringIO()
-        utils.templates.replace_params_in_template(
+        utils.templates.replace_params(
             template_path=commands_template_path,
             params={"box_size": self.box_size},
             output_file=inmemory_file,
@@ -115,7 +115,7 @@ def _(self, simulator: simulators.GROMACS, input_dir):  # pylint: disable=unused
 
     shutil.copytree(template_files_dir, input_dir, dirs_exist_ok=True)
 
-    utils.templates.batch_replace_params_in_template(
+    utils.templates.batch_replace_params(
         templates_dir=input_dir,
         template_filenames=[
             "simulation.mdp.jinja",

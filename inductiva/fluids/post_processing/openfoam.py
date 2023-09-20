@@ -259,6 +259,8 @@ class FlowSlice:
             save_path = utils.files.resolve_path(save_path)
 
         if virtual_display:
+            # Set off_screen to True, since screens aren't available.
+            off_screen = True
             pv.start_xvfb()
 
         plotter = pv.Plotter(off_screen=off_screen)
@@ -276,7 +278,9 @@ class FlowSlice:
         plotter.add_mesh(self.object_mesh, color=object_color)
         plotter.add_mesh(self.mesh, scalars=field_notation, cmap=flow_cmap)
         plotter.reset_camera(bounds=self.mesh.bounds)
-        plotter.show(screenshot=save_path)
+        if save_path is not None:
+            plotter.show(screenshot=save_path)
+            logging.info("Flow slice rendering saved to %s", save_path)
         plotter.close()
 
 
@@ -304,6 +308,8 @@ class Streamlines:
             save_path = utils.files.resolve_path(save_path)
 
         if virtual_display:
+            # Set off_screen to True, since screens aren't available.
+            off_screen = True
             pv.start_xvfb()
 
         plotter = pv.Plotter(off_screen=off_screen)
@@ -334,7 +340,9 @@ class Streamlines:
         # Slide along the vectord defined from camera position to focal point,
         # until all of the meshes are visible.
         plotter.reset_camera(bounds=self.mesh.bounds, render=False)
-        plotter.show(screenshot=save_path)
+        if save_path is not None:
+            plotter.show(screenshot=save_path)
+            logging.info("Streamlines rendering saved to %s", save_path)
         plotter.close()
 
 
@@ -382,7 +390,7 @@ class MeshData:
 
     def render(self,
                off_screen: bool = False,
-               background_color: str = "black",
+               background_color: str = "white",
                scalars_cmap: str = "viridis",
                virtual_display: bool = False,
                save_path: types.Path = None):
@@ -391,10 +399,14 @@ class MeshData:
             save_path = utils.files.resolve_path(save_path)
 
         if virtual_display:
+            # Set off_screen to True, since screens aren't available.
+            off_screen = True
             pv.start_xvfb()
 
         plotter = pv.Plotter(off_screen=off_screen)
         pv.global_theme.background = background_color
         plotter.add_mesh(self.mesh, scalars=self.scalar_name, cmap=scalars_cmap)
-        plotter.show(screenshot=save_path)
+        if save_path is not None:
+            plotter.show(screenshot=save_path)
+            logging.info("Data rendering was saved to %s", save_path)
         plotter.close()

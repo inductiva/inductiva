@@ -6,7 +6,9 @@ To initialize the scenario, the user can define the following parameters:
 - `domain`: Dimensions of the wind tunnel in meters, e.g. `{"x": [-5, 15], "y": [-5, 5], "z": [0, 8]}`.
 - `flow_velocity`: Airflow velocity in m/s, e.g. `[30, 0, 0]`. Notice that the airflow is injected from the negative x-direction.
 
-Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in [STL](https://en.wikipedia.org/wiki/STL_(file_format)) or [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) format. Notice that, the required meshing step will automatically be made before starting the simulation. The meshing is done with the [snappyHexMesh tool](https://www.openfoam.com/documentation/user-guide/4-mesh-generation-and-conversion/4.4-mesh-generation-with-the-snappyhexmesh-utility) of OpenFOAM.
+Now, the user is ready to simulate the steady state. Here, the user chooses the object to be inserted inside the wind tunnel. This object is defined with a geometry file in [STL](https://en.wikipedia.org/wiki/STL_(file_format)) or [OBJ](https://en.wikipedia.org/wiki/Wavefront_.obj_file) format. Notice that:
+- the object is not re-scaled automatically, so the user must either change the dimensions of the domain or scale the object himself.
+- the required meshing step is automatically done on the backend before the simulation starts with [snappyHexMesh tool](https://www.openfoam.com/documentation/user-guide/4-mesh-generation-and-conversion/4.4-mesh-generation-with-the-snappyhexmesh-utility) of OpenFOAM.
 
 To test this scenario we make available one example, but users can use their own files, as long as it is in STL or OBJ format.
 
@@ -29,10 +31,10 @@ import inductiva
 
 inductiva.api_key = "YOUR_API_KEY"
 
-# Url to a test object in Inductiva Github repository
-object_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
-              "/resources/test_object.obj"
-object_path = inductiva.utils.files.download_from_url(object_url)
+# Url to a test an object in Inductiva Github repository
+vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
+              "/resources/vehicle.obj"
+vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 
 # Initialize the scenario
 scenario = inductiva.fluids.WindTunnel(
@@ -41,9 +43,8 @@ scenario = inductiva.fluids.WindTunnel(
 
 # Run a simulation
 task = scenario.simulate(
-    object_path=object_path,
-    num_iterations=50, resolution="low",
-    n_cores=2)
+    object_path=vehicle_path,
+    num_iterations=50, resolution="low")
 
 # Download the simulation output to your local machine.
 output = task.get_output()
@@ -66,13 +67,26 @@ Since at times the output files can be large, the user can choose to get only so
 remotely by just doing `output=task.get_output()` (e.g., pressure field, streamlines and flow_slice). Otherwise, the user can choose to get all the outputs with `output=task.get_output(all_files=True)` and post-process as he wishes locally. 
 
 In any case, to obtain these metrics the user can use the following post-processing tools available through the `output` object:
-- `get_output_mesh`: Returns a pyvista mesh of the airflow over the entire domain and data on the object.
+- `get_output_mesh`: Returns two pyvista meshes, one of the airflow over the entire domain and the other of data on the object.
+    These meshes contain the results of the simulation, which are breakdown and visualized with the next tools.
 - `get_object_pressure_field`: Returns a pyvista mesh with the pressure field of the airflow over the object.
 - `get_streamlines`: Input parameters - `max_time`, `n_points`, `initial_step_length`, `source_radius`, `source_center`. Returns a pyvista mesh of the streamlines with pressure and velocity components of airflow over the domain.
 - `get_flow_slice`: Input parameters - `plane`, `origin`. Returns a pyvista mesh of the flow slice with pressure and velocity components.
 - `get_force_coefficients`: Returns the force coefficients that represent the forces acting on the object. These are the drag and lift coefficients.
 
-For the pressure field, streamlines and flow slices there are easy-to-use visualizations, which have some configuration parameters. See the example below for the general overview of these parameters.
+#### Visualizations
+
+For the pressure field, streamlines and flow slices there are easy-to-use visualizations, which have some configuration parameters (see the examples below for a general overview of these parameters). To render any of these objects one does `streamlines.render()`. **Remark: ** For those running on Google Colab or a headless server, further extra dependencies are required. Install them with 
+
+```
+!apt install libgl1-mesa-glx xvfb
+```
+
+Moreover, change the parameter `virtual_display` in the render method to `True`, and pass a path to save the result, like 
+
+```python
+streamlines.render(virtual_display=True, save_path="streamlines.png")
+```
 
 The next example fetches the default post-processed files and renders the respective visualizations. The last one, fetches the full simulation output, and with the same interface the user can configure the post-processing tools to extract the metrics he desires and render the visualizations.
 
@@ -86,7 +100,7 @@ output = task.get_output()
 pressure_field = output.get_object_pressure_field()
 
 # Render
-pressure_field.render_frame()
+pressure_field.render()
 ```
 
 <img src="/resources/media/openfoam/default_pressure_field.png" width="400" height="300" />
@@ -96,11 +110,11 @@ pressure_field.render_frame()
 streamlines = output.get_streamlines()
 
 # Render the streamlines
-streamlines.render_frame(physical_field="velocity",
-                         flow_cmap="viridis",
-                         view="isometric",
-                         streamline_radius=0.1
-                         save_path="default_streamlines.png")
+streamlines.render(physical_field="velocity",
+                   flow_cmap="viridis",
+                   view="isometric",
+                   streamline_radius=0.1
+                   save_path="default_streamlines.png")
 ```
 
 <img src="/resources/media/openfoam/default_streamlines.png" width="400" height="300" />
@@ -111,9 +125,9 @@ streamlines.render_frame(physical_field="velocity",
 flow_slice = output.get_flow_slice(plane="xz")
 
 # Render the pressure field over the slice
-flow_slice.render_frame(physical_field="pressure",
-                        flow_cmap="viridis",
-                        save_path="default_flow_slice.png")
+flow_slice.render(physical_field="pressure",
+                  flow_cmap="viridis",
+                  save_path="default_flow_slice.png")
 ```
 
 <img src="/resources/media/openfoam/default_flow_slice.png" width="400" height="300" />
@@ -128,7 +142,7 @@ output = task.get_output(all_files=True)
 pressure_field = output.get_object_pressure_field()
 
 # Render
-pressure_field.render_frame(save_path="pressure_field.png")
+pressure_field.render(save_path="pressure_field.png")
 ```
 
 <img src="/resources/media/openfoam/pressure_field.png" width="400" height="300" />
@@ -142,11 +156,11 @@ streamlines = output.get_streamlines(max_time=200,
                                      source_center=[-3, 0, 1])
 
 # Render the streamlines
-streamlines.render_frame(physical_field="pressure",
-                         flow_cmap="viridis",
-                         view="isometric",
-                         streamline_radius=0.1
-                         save_path="streamlines.png")
+streamlines.render(physical_field="pressure",
+                   flow_cmap="viridis",
+                   view="isometric",
+                   streamline_radius=0.1,
+                   save_path="streamlines.png")
 ```
 
 <img src="/resources/media/openfoam/streamlines.png" width="400" height="300" />
@@ -158,9 +172,9 @@ flow_slice = output.get_flow_slice(plane="xz",
                                    origin=(0,0,0))
 
 # Render the velocity field over the flow slice.
-flow_slice.render_frame(physical_field="velocity",
-                        flow_cmap="Blues",
-                        save_path="flow_slice.png")
+flow_slice.render(physical_field="velocity",
+                  flow_cmap="Blues",
+                  save_path="flow_slice.png")
 ```
 
 <img src="/resources/media/openfoam/flow_slice.png" width="400" height="300" />

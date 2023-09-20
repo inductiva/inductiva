@@ -9,7 +9,7 @@ from typing import List, Optional
 import numpy as np
 
 import inductiva
-from inductiva import fluids, simulators, resources, scenarios, world, utils
+from inductiva import simulators, resources, scenarios, world, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
@@ -102,7 +102,7 @@ class WindOverTerrain(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        n_cores: int = 1,
+        n_cores: int = 2,
         num_iterations: int = 100,
     ) -> inductiva.tasks.Task:
         """Simulates the wind over the terrain scenario.
@@ -115,6 +115,7 @@ class WindOverTerrain(scenarios.Scenario):
             n_cores: Number of cores to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
         """
+        simulator.override_api_method_prefix("wind_terrain")
 
         self.num_iterations = num_iterations
         self.n_cores = n_cores
@@ -127,8 +128,6 @@ class WindOverTerrain(scenarios.Scenario):
                                 n_cores=n_cores,
                                 commands=commands)
 
-        task.set_output_class(fluids.post_processing.SteadyStateOutput)
-
         return task
 
     def get_commands(self):
@@ -139,7 +138,7 @@ class WindOverTerrain(scenarios.Scenario):
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
         inmemory_file = io.StringIO()
-        utils.templates.replace_params_in_template(
+        utils.templates.replace_params(
             template_path=commands_template_path,
             params={"n_cores": self.n_cores},
             output_file=inmemory_file,
@@ -167,7 +166,7 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
                     dirs_exist_ok=True,
                     symlinks=True)
 
-    utils.templates.batch_replace_params_in_template(
+    utils.templates.batch_replace_params(
         templates_dir=input_dir,
         template_filenames=[
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
