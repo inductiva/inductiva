@@ -255,7 +255,7 @@ class Task:
 
         # output_class can only be not None if the task is successful
         if output_class is not None:
-            logging.info("Post-processing tools are available " 
+            logging.info("Post-processing tools are available "
                          "through the output object.")
             return output_class(output_dir)
 
