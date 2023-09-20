@@ -5,6 +5,7 @@ import math
 import os
 import shutil
 from typing import Literal, Optional
+import numpy as np
 
 from absl import logging
 
@@ -83,6 +84,7 @@ class CoastalArea(scenarios.Scenario):
         self.water_level = water_level
         self.wave_source_location = wave_source_location
         self.wave_amplitude = wave_amplitude
+        self._check_valid_wave_amplitude()
         self.wave_period = wave_period
 
     def simulate(
@@ -125,6 +127,39 @@ class CoastalArea(scenarios.Scenario):
     @singledispatchmethod
     def create_input_files(self, simulator: simulators.Simulator):
         pass
+
+    def _check_valid_wave_amplitude(self):
+        """Checks that the wave amplitude is valid.
+
+        Raises:
+            ValueError: If the wave amplitude is not valid.
+        """
+
+        depths_grid = self.bathymetry.depths_grid()
+
+        if self.wave_source_location == "W":
+            wave_boundary = depths_grid[0, :]
+
+        elif self.wave_source_location == "E":
+            wave_boundary = depths_grid[-1, :]
+
+        elif self.wave_source_location == "N":
+            wave_boundary = depths_grid[:, -1]
+
+        elif self.wave_source_location == "S":
+            wave_boundary = depths_grid[:, 0]
+
+        else:
+            raise ValueError("Invalid wave source location.")
+
+        #The greater the value of depth, the deeper the water, so
+        #we want to check the minimum depth using the min value
+
+        minimum_depth = np.min(wave_boundary)
+        if self.wave_amplitude > minimum_depth:
+            raise ValueError("Wave amplitude cannot be larger than the "
+                             "minimum depth of the bathymetry in the "
+                             "boundary where waves are generated.")
 
 
 @CoastalArea.get_config_filename.register
