@@ -156,7 +156,8 @@ class Task:
                     logging.info("Task failed.")
                     logging.info("Download the task output and check the "
                                  "'stdout.txt' and 'stderr.txt' files for "
-                                 "more information.")
+                                 "more information. "
+                                 "Post-processing tools will fail.")
                 elif status == models.TaskStatusCode.KILLED:
                     logging.info("Task killed.")
                 else:
@@ -244,9 +245,6 @@ class Task:
         else:
             output_class = None
             filenames = ["stdout.txt", "stderr.txt"]
-            logging.info("Task failed. Downloading 'stdout.txt' and"
-                         "'stderr.txt'."
-                         "Any post-processing after this point will fail.")
 
         output_dir = self.download_outputs(
             filenames=filenames,
