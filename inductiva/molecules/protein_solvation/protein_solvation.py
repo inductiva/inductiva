@@ -3,6 +3,7 @@
 from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
+import io
 import shutil
 
 from inductiva import tasks, resources, simulators, scenarios, utils
@@ -10,7 +11,7 @@ from inductiva import tasks, resources, simulators, scenarios, utils
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "protein_solvation")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
-COMMANDS_TEMPLATE_FILE_NAME = "commands.json"
+COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
 
 class ProteinSolvation(scenarios.Scenario):
@@ -45,7 +46,8 @@ class ProteinSolvation(scenarios.Scenario):
             simulation_time_ns: float = 10,  # ns
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
-            n_steps_min: int = 5000) -> tasks.Task:
+            n_steps_min: int = 5000,
+            ingore_warnings: bool = False) -> tasks.Task:
         """Simulate the solvation of a protein.
 
         Args:
@@ -59,11 +61,13 @@ class ProteinSolvation(scenarios.Scenario):
                 leap-frog scheme.
                 - "bd" (Brownian Dynamics): Euler integrator for Brownian or
                 position Langevin dynamics.
-
             For more details on the integrators, refer to the GROMACS
             documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
-
+            ignore_warnings: Whether to ignore warnings during grompp (gromacs 
+            preprocessor). If set to False, the simulation will fail if there 
+            are warnings. If True, the simulation will run, but the results 
+            may have inaccuracies. Use with caution. 
             n_steps_min: Number of steps for energy minimization.
             run_async: Whether to run the simulation asynchronously.
         """
@@ -78,6 +82,10 @@ class ProteinSolvation(scenarios.Scenario):
         # of the simulation (2 fs)
         self.integrator = integrator
         self.n_steps_min = n_steps_min
+        self.ignore_warnings = 0
+        if ingore_warnings:
+            self.ignore_warnings = -1
+
         commands = self.get_commands()
 
         task = super().simulate(simulator,
@@ -94,7 +102,14 @@ class ProteinSolvation(scenarios.Scenario):
                                               GROMACS_TEMPLATE_INPUT_DIR,
                                               COMMANDS_TEMPLATE_FILE_NAME)
 
-        commands = self.read_commands_from_file(commands_template_path)
+        inmemory_file = io.StringIO()
+        utils.templates.replace_params(
+            template_path=commands_template_path,
+            params={"max_warn": self.ignore_warnings},
+            output_file=inmemory_file,
+        )
+        commands = self.read_commands_from_file(inmemory_file)
+
         return commands
 
     @singledispatchmethod
