@@ -160,9 +160,9 @@ class CoastalArea(scenarios.Scenario):
         if self.wave_amplitude > minimum_depth:
             raise ValueError("Wave amplitude is larger than the "
                              "minimum depth of the bathymetry in the "
-                             "boundary where waves are generated."
+                             "boundary where waves are generated. \n"
                              "This can be due to a very high wave "
-                             "amplitude the waves are being generated "
+                             "amplitude or the waves are being generated "
                              "on land")
 
 
