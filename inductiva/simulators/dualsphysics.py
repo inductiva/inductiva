@@ -16,7 +16,7 @@ class DualSPHysics(Simulator):
     def run(
         self,
         input_dir: types.Path,
-        sim_config_filename: str,
+        sim_config_filename: str = "config.xml",
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
     ) -> tasks.Task:

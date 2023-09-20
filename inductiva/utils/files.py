@@ -107,31 +107,29 @@ def get_sorted_files(data_dir: str,
     return files
 
 
-def _unzip_single_file(zip_path: pathlib.Path,
-                       dest_path: pathlib.Path) -> pathlib.Path:
-    """Unzip a single file from a zip archive.
+def _unzip(zip_path: pathlib.Path, dest_path: pathlib.Path):
+    """Unzip a zip archive.
 
-    Note: this is an helper function for the `download_from_url` function.
-    It raises an exception if the ZIP contains more than one file.
+    If the ZIP contains one file, dest_path will be the path of that single
+    file. If the ZIP contains multiple files, dest_path will be the path
+    of the directory containing the files.
     """
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         files = zip_ref.namelist()
-        if len(files) != 1:
-            raise ValueError("Zip archive should contain exactly one file.")
-
-        # Unzip the file to the directory of dest_path
-        unzipped_file_path = zip_ref.extract(files[0], dest_path.parent)
+        if len(files) == 1:
+            # Unzip the file to the directory of dest_path
+            unzipped_file_path = pathlib.Path(
+                zip_ref.extract(files[0], dest_path.parent))
+            pathlib.Path(unzipped_file_path).rename(dest_path)
+        else:
+            dest_path.mkdir(parents=True, exist_ok=True)
+            zip_ref.extractall(dest_path.parent)
 
     # Rename the file to dest_path
-    pathlib.Path(unzipped_file_path).rename(dest_path)
     zip_path.unlink()
 
-    return dest_path
 
-
-def download_from_url(url: str,
-                      local_file_path: Optional[str] = None,
-                      save_dir: Optional[str] = None) -> str:
+def download_from_url(url: str, save_dir: Optional[str] = None) -> str:
     """Download a file from an URL.
 
     If the file is a ZIP archive containing a single file, the method
@@ -150,10 +148,8 @@ def download_from_url(url: str,
     Returns:
         The path to the downloaded file.
     """
-    if local_file_path is None:
-        local_file_path = url.split("/")[-1]
-
-    local_path = pathlib.Path(local_file_path)
+    local_path = url.split("/")[-1]
+    local_path = pathlib.Path(local_path)
 
     if save_dir is not None:
         local_path = pathlib.Path(save_dir, local_path)
@@ -169,6 +165,7 @@ def download_from_url(url: str,
         logging.error("Could not download file from %s", url)
         raise url_error
 
+    # File was downloaded to a temporary file
     downloaded_to = pathlib.Path(downloaded_to)
     is_zip = headers.get_content_type() == "application/zip"
 
@@ -179,7 +176,7 @@ def download_from_url(url: str,
         if local_path.suffix == ".zip":  # Remove the .zip extension
             local_path = local_path.with_suffix("")
 
-        _unzip_single_file(downloaded_to, local_path)
+        _unzip(downloaded_to, local_path)
     else:
         # Rename the file to the correct path
         downloaded_to.rename(local_path)
