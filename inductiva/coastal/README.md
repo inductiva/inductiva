@@ -103,7 +103,7 @@ The bathymetry can be inspected by plotting it with a given resolution, in this
 case 200m x 200m:
 
 ```python
-bathymetry.plot(x_resolution=200, y_resolution=200)
+bathymetry.plot(x_resolution=200, y_resolution=200, show=True)
 ```
 
 <p align="center">
