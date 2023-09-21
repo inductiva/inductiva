@@ -120,7 +120,7 @@ def _unzip(zip_path: pathlib.Path, dest_path: pathlib.Path):
             # Unzip the file to the directory of dest_path
             unzipped_file_path = pathlib.Path(
                 zip_ref.extract(files[0], dest_path.parent))
-            pathlib.Path(unzipped_file_path).rename(dest_path)
+            pathlib.Path(unzipped_file_path).replace(dest_path)
         else:
             dest_path.mkdir(parents=True, exist_ok=True)
             zip_ref.extractall(dest_path.parent)
@@ -178,7 +178,10 @@ def download_from_url(url: str, save_dir: Optional[str] = None) -> str:
 
         _unzip(downloaded_to, local_path)
     else:
-        # Rename the file to the correct path
-        downloaded_to.rename(local_path)
+        # Rename the file to the correct path;
+        # using replace instead of rename to have consistent behaviour
+        # on windows and linux if the file already exists.
+        # If the file exists, it will be overwritten.
+        downloaded_to.replace(local_path)
 
     return str(local_path.absolute())
