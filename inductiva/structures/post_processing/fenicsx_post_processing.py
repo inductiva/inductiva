@@ -11,7 +11,7 @@ TEMP_SOLVER_OUTPUT_FILENAME = "temp_results.xdmf"
 
 
 class DeformablePlateOutput:
-    """Post-process DeformablePlate simulation outputs."""
+    """Post-process DeformablePlate FEniCSx simulation outputs."""
 
     def __init__(self, sim_output_path: types.Path):
         """Initializes a 'DeformablePlateOutput' object.
@@ -23,7 +23,7 @@ class DeformablePlateOutput:
 
     @utils.optional_deps.needs_structures_extra_deps
     def render(self,
-               field_names: list = ["von_mises"],
+               field_names: list = None,
                show_edges: bool = True,
                colormap: str = "jet",
                off_screen: bool = True,
@@ -34,9 +34,9 @@ class DeformablePlateOutput:
 
         Args:
             field_names (list, optional): List of field names to render. Default
-              is ["von_mises"].
-            show_edges (bool, optional): Whether to display mesh edges. Default is
-              True.
+              is None.
+            show_edges (bool, optional): Whether to display mesh edges. Default
+              is True.
             colormap (str, optional): The colormap to apply to the field data.
               Default is "jet".
             off_screen (bool, optional): Whether to render the visualization 
@@ -112,7 +112,7 @@ class DeformablePlateOutput:
                 field_array = py_multiblock[keys[field_id]].get_array(
                     0)[:, subfield_id]
 
-            elif field_name == "von_mises":
+            elif field_name == "von_mises" or field_name is None:
                 # For the special case of "von_mises" field, find its index in
                 # the dataset keys
                 field_id = keys.index(field_name)
