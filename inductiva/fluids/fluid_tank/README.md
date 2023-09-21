@@ -10,7 +10,7 @@ method.
 
 ### Example
 
-The SPH engines available for running this scenario are DualSPHysics and SplishSplash.
+The SPH simulators available for running this scenario are DualSPHysics and SplishSplash.
 
 Albeit this is a quite simple simulation scenario, the Fluid Tank Scenario illustrates the
 SPH capabilities of the API. If you would like to use other more complex SPH scenarios,
@@ -21,6 +21,8 @@ your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/
 
 ```python
 import inductiva
+
+inductiva.api_key="YOUR_API_KEY"
 
 scenario = inductiva.fluids.FluidTank(
     shape=inductiva.fluids.shapes.Cylinder((radius=0.5, height=1)),
@@ -45,7 +47,7 @@ For the cylinder the radius and height can be specified, whilst the cube only
 - `fluid`: The fluid being simulated. Supports WATER, OLIVE_OIL, LIQUID_PROPANE,
 JET_FUEL, GEAR_OIL, BEER and HONEY. Different fluid types have different physical
 properties, namely the density and kinematic viscosity;
-- `fluid level`: The fluid level initially in the tank;
+- `fluid_level`: The fluid level initially in the tank;
 - `inlet`: Circular inlet whose radius is configurable;
 - `outlet`: Outlet shape. Supported shapes are CylindricalTankOutlet and 
 CubicTankOutlet. Cylindrical requires radius and height. Cubic only requires the
