@@ -136,7 +136,7 @@ output_dir = simulator.run(input_dir=input_dir)
 
 The user must specify the input directory containing the files to run the simulation. In the above example, a directory with the configuration of a simulation is downloaded, and passed as argument to the simulator call.
 
-Find more examples of simulations in the [tutorials section](https://github.com/inductiva/inductiva/tree/main/demos).
+Find more examples of simulations in the [tutorials section](https://github.com/inductiva/inductiva/tree/258ee549d7db93248b80632de6056fa427cff1ae/demos/tutorials).
 
 
 ## Async API
