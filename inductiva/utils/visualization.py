@@ -516,7 +516,7 @@ def create_color_plot_movie(
 
 @optional_deps.needs_structures_extra_deps
 def create_2d_field_from_pv_dataset(
-        pv_dataset: pv.UnstructuredGrid(),
+        pv_dataset: pv.core.pointset.UnstructuredGrid,
         field_name: str,
         field_path: str,
         show_edges: bool = True,
@@ -529,8 +529,8 @@ def create_2d_field_from_pv_dataset(
       UnstructuredGrid dataset.
 
     Args:
-        pv_dataset (pv.UnstructuredGrid()): The PyVista UnstructuredGrid
-          dataset.
+        pv_dataset (pv.core.pointset.UnstructuredGrid): The PyVista
+          UnstructuredGrid dataset.
         field_name (str): The name of the field to visualize.
         field_path (str): The path where the resulting image will be saved.
         show_edges (bool, optional): Whether to display mesh edges. Default is
@@ -587,7 +587,7 @@ def create_2d_field_from_pv_dataset(
 
 @optional_deps.needs_structures_extra_deps
 def create_2d_fields_from_pv_dataset(
-        pv_dataset: pv.UnstructuredGrid(),
+        pv_dataset: pv.core.pointset.UnstructuredGrid,
         field_dir: str,
         show_edges: bool = True,
         colormap: str = "jet",
@@ -599,8 +599,8 @@ def create_2d_fields_from_pv_dataset(
       UnstructuredGrid dataset.
 
     Args:
-        pv_dataset (pv.UnstructuredGrid()): The PyVista UnstructuredGrid 
-          dataset.
+        pv_dataset (pv.core.pointset.UnstructuredGrid): The PyVista
+          UnstructuredGrid dataset.
         field_dir (str): Path to the directory where the resulting images will
           be saved.
         field_array (list): The field data to be visualized and converted to an 
