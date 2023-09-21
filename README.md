@@ -146,32 +146,12 @@ Find more examples of simulations in the [tutorials section](https://github.com/
 
 ## Running multiple simulations in parallel
 
-Up until now, all examples have run synchronously, which allows users to get feedback while the simulation is running. However, this is not always the best option. For example, if the user wants to run a large number of simulations, it is better to run them asynchronously. This way, the user can launch all the simulations and then check the results when they are ready.
+Up until now, all simulations were run synchronously which gives feedback while the simulation is running until it finishes. However, this is not always the best option, for example, when launching two simulations it implies that they run one after the other. This
+is not optimal for when users need to launch hundreds of simulations.
+
+To solve this problem **Inductiva API** allows users to run simulations asynchronously. This means that the simulation is launched and the user can continue with other tasks - like launching more simulations. 
 
 Let's look at an example using the wind tunnel scenario:
-
-```python
-import inductiva
-
-# Initialize scenario with defaults
-scenario = inductiva.fluids.WindTunnel()
-
-# Url to a test object in Inductiva Github repository
-vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
-              "/resources/vehicle.obj"
-vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
-
-# Run simulation
-task = scenario.simulate(object_path=vehicle_path,
-                         run_async=True)
-
-# Blocking call to obtain the results
-output = task.get_output()
-```
-
-In this way, the simulation is launched asynchronously and the user can continue with other tasks. When the user wants to retrieve the results, they can do so by calling the `get_output()` method. This method will block until the results are ready.
-
-Running simulations asynchronously allows users to launch multiple simulations in parallel. Let's look at an example:
 
 ```python
 import inductiva
@@ -188,9 +168,9 @@ for velocity in velocity_list:
   task_list.append(task)
 ```
 
-All of the simulations will be launched in one go. The user can check the status of the simulations and retrieve the results when they are ready. Check the FAQ section for more information on how to do this.
+All simulations are launched in one go and the user can continue to work on other things. To check how the simulations are going users can check individual status with `task.get_status()` or a list of the last tasks launched with `inductiva.tasks.list(last_n=5)`.
 
-
+Finally, to retrieve the results the user can use the `task.get_output()` which waits for the simulation to finish before downloading, so it blocks and does not allow to other tasks. Check the [Tasks section](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks) for more information on how to do this.
 
 ## More info:
 
