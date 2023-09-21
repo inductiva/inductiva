@@ -82,17 +82,16 @@ In any case, to obtain these metrics the user can use the following post-process
 
 Each visualization method has extra configuration parameters that can be passed to the `render()` method, see in the examples below for an overview for each of them.
 
-**Remark: ** For those running on Google Colab or a headless server, further extra dependencies are required. Install them with 
-
-```
-!apt install libgl1-mesa-glx xvfb
-```
+**Remark: **
+- For those running on Google Colab or a headless server, further extra dependencies are required. Install them with `!apt install libgl1-mesa-glx xvfb`
 
 Moreover, change the parameter `virtual_display` in the render method to `True`, and pass a path to save the result, like 
 
 ```python
 streamlines.render(virtual_display=True, save_path="streamlines.png")
 ```
+
+- To save your visualizations, please use the 'q' key to close the plotter. Some operating systems, particularly Windows, may encounter issues when attempting to save a screenshot if you use the exit button in the GUI.
 
 The next example fetches the default post-processed files and renders the respective visualizations. The last one, fetches the full simulation outputs, and with the same interface the user can configure the post-processing methods to extract the metrics he desires and render the visualizations.
 
