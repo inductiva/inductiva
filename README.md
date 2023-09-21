@@ -105,15 +105,15 @@ These are the currently available scenarios:
 
 **Inductiva API** has available several open-source simulators ready to use. Users familiar with the simulators can easily start running simulations with their previously prepared simulation configuration files. In this way, they can take advantage of performant hardware to speed up their simulation and exploration.
 
-The simulators we provide are all open-source and have their own dedicated documentation.
-
-Currently, we have available the following simulators:
+The simulators we provide are all open-source and have their own dedicated documentation:
 - [SPlisHSPlasH](https://github.com/InteractiveComputerGraphics/SPlisHSPlasH)
 - [DualSPHysics](https://github.com/DualSPHysics/DualSPHysics)
 - [OpenFOAM](https://www.openfoam.com/)
 - [SWASH](https://swash.sourceforge.io/)
 - [XBeach](https://oss.deltares.nl/web/xbeach/)
 - [GROMACS](https://www.gromacs.org/)
+
+To learn how to use these simulators with Inductiva API, check the example below and the [Simulators section](https://github.com/inductiva/inductiva/tree/main/inductiva/simulators/README.md)
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
@@ -124,14 +124,19 @@ Example of how to use the simulators:
 ```python
 import inductiva
 
+inductiva.api_key = "YOUR_API_KEY"
+
+# Download the configuration files
 input_dir = inductiva.utils.files.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "dualsph-flow-cylinder.zip"
 )
 
+# Initialize the Simulator
 simulator = inductiva.simulators.DualSPHysics()
 
-output_dir = simulator.run(input_dir=input_dir)
+# Run the simulation
+task = simulator.run(input_dir=input_dir)
 ```
 
 The user must specify the input directory containing the files to run the simulation. In the above example, a directory with the configuration of a simulation is downloaded, and passed as argument to the simulator call.
