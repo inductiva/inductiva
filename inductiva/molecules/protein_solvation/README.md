@@ -68,7 +68,7 @@ The simulation output folder contains trajectory data spanning the simulation du
 output.render_interactive(representation="ball+stick", add_backbone=True, selection="protein")
  ```
 <p align="center">
-  <img src="resources/media/md/insulin.gif" alt="Centered Image" width="350" height="250">
+  <img src="https://github.com/inductiva/inductiva/blob/0bc4afcbf6361a309288a755e1469cbdeaba1d5e/resources/media/md/insulin.gif" alt="Centered Image" width="350" height="250">
 </p>
 
 Users also have the option to plot the RMSF (Root Mean Square Fluctuation) over the simulation for each residue within the protein structure. [RMSF](https://userguide.mdanalysis.org/stable/examples/analysis/alignment_and_rms/rmsf.html) measures the extent to which a structure deviates from its average configuration over time, offering insights into the mobility of specific protein residues. 
@@ -76,9 +76,8 @@ Users also have the option to plot the RMSF (Root Mean Square Fluctuation) over 
 ```python
  rmsf_values = output.plot_rmsf_per_residue()
  ```
-
 <p align="center">
-  <img src="resources/media/md/rmsf.png" alt="Centered Image" width="400" height="300">
+  <img src="https://github.com/inductiva/inductiva/blob/0bc4afcbf6361a309288a755e1469cbdeaba1d5e/resources/media/md/rmsf.png" alt="Centered Image" width="400" height="300">
 </p>
 
 Furthermore, you have the capability to visualize attributes for each amino acid, including metrics like RMSF (Root Mean Square Fluctuation), or any other properties that you compute independently.
@@ -88,7 +87,7 @@ output.render_attribute_per_residue(rmsf_values)
  ```
 
 <p align="center">
-  <img src="resources/media/md/rmsf_viz.gif" alt="Centered Image" width="350" height="250">
+  <img src="https://github.com/inductiva/inductiva/blob/0bc4afcbf6361a309288a755e1469cbdeaba1d5e/resources/media/md/rmsf_viz.png" alt="Centered Image" width="350" height="250">
 </p>
 
 In the visualization of the RMSF colored protein backbone, the red parts represent residues with higher mobility.
