@@ -71,9 +71,7 @@ class SteadyStateOutput:
         sim_output_files = glob.glob(os.path.join(self.sim_output_path, "**",
                                                   "*.*"),
                                      recursive=True)
-
-        for index, file in enumerate(sim_output_files):
-            sim_output_files[index] = file.split("/")[-1]
+        sim_output_files = [os.path.basename(file) for file in sim_output_files]
 
         return sorted(sim_output_files) != sorted(default_output_files_list)
 
