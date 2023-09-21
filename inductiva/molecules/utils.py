@@ -14,13 +14,14 @@ from inductiva.utils import optional_deps, files
 
 
 @optional_deps.needs_molecules_extra_deps
-def unwrap_trajectory(topology, trajectory):
+def unwrap_trajectory(topology, trajectory, guess_bonds=True):
     """Unwrap visualization of the trajectory to deal with
     Periodic Boundary Conditions.
     Args:
         topology: Path to the topology file.
-        trajectory: Path to the trajectory file."""
-    universe = mda.Universe(topology, trajectory, guess_bonds=True)
+        trajectory: Path to the trajectory file.
+        guess_bonds: Whether to guess bonds between atoms."""
+    universe = mda.Universe(topology, trajectory, guess_bonds=guess_bonds)
     atoms = universe.atoms
     transformation = transformations.unwrap(atoms)
     universe.trajectory.add_transformations(transformation)

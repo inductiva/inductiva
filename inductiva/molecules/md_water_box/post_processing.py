@@ -36,7 +36,7 @@ class MDWaterBoxOutput:
         topology = os.path.join(self.sim_output_dir, TOPOLOGY_FILE)
         trajectory = os.path.join(self.sim_output_dir, TRAJECTORY_FILE)
 
-        universe = unwrap_trajectory(topology, trajectory)
+        universe = unwrap_trajectory(topology, trajectory, guess_bonds=False)
         view = nv.show_mdanalysis(universe)
         view.add_ball_and_stick("all")
         view.center()
