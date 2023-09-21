@@ -44,7 +44,7 @@ class MDWaterBox(scenarios.Scenario):
             simulator: simulators.Simulator = simulators.GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
-            simulation_time_ns: float = 10,  # ns
+            simulation_time_ns: float = 1,  # ns
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
             n_steps_min: int = 5000) -> tasks.Task:
