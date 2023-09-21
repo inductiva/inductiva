@@ -168,9 +168,9 @@ for velocity in velocity_list:
   task_list.append(task)
 ```
 
-All simulations are launched in one go and the user can continue to work on other things. To check how the simulations are going users can check individual status with `task.get_status()` or a list of the last tasks launched with `inductiva.tasks.list(last_n=5)`.
+All simulations are launched in one go, allowing users to continue working on other things. To monitor the progress of individual simulations, users can use `task.get_status()`, or they can view a list of the most recent tasks launched by using `inductiva.tasks.list(last_n=5)`.
 
-Finally, to retrieve the results the user can use the `task.get_output()` which waits for the simulation to finish before downloading, so it blocks and does not allow to other tasks. Check the [Tasks section](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks) for more information on how to do this.
+Finally, to retrieve the results the user can use task.get_output(), which waits for the simulation to finish before downloading the results. During this waiting period, it temporarily blocks the execution of other code. Check the [Tasks section](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks) for more information on how to do this.
 
 ## More info:
 
