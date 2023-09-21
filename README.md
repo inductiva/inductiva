@@ -146,10 +146,10 @@ Up until now, all examples have run synchronously, which allows users to get fee
 Let's look at an example using the wind tunnel scenario:
 
 ```python
-from inductiva import fluids
+import inductiva
 
 # Initialize scenario with defaults
-scenario = fluids.WindTunnel()
+scenario = inductiva.fluids.WindTunnel()
 
 # Url to a test object in Inductiva Github repository
 vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
@@ -169,7 +169,7 @@ In this way, the simulation is launched asynchronously and the user can continue
 Running simulations asynchronously allows users to launch multiple simulations in parallel. Let's look at an example:
 
 ```python
-from inductiva import fluids
+import inductiva
 
 vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
               "/resources/vehicle.obj"
@@ -178,7 +178,7 @@ vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 task_list = []
 velocity_list=[1, 10, 20, 30, 40]
 for velocity in velocity_list:
-  scenario = fluids.WindTunnel(flow_velocity=[velocity, 0, 0])
+  scenario = inductiva.fluids.WindTunnel(flow_velocity=[velocity, 0, 0])
   task = scenario.simulate(object_path=vehicle_path, run_async=True)
   task_list.append(task)
 ```
