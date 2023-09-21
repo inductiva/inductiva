@@ -180,7 +180,7 @@ class Task:
 
     def _get_output_config(self, all_files: bool = False):
         """Get configuration of the output with the task method name.
-        
+
         Args:
             all_files: Whether to download all the files in the output.
 
@@ -195,7 +195,7 @@ class Task:
         """
 
         # Fetch the first part of the method_name (e.g., "wind_tunnel")
-        method_name = self.get_info()["method_name"].split(".")[0]
+        method_name = self.get_scenario_name()
 
         # Set the default files for the output class
         # For some scenarios, there are None default files
@@ -210,6 +210,17 @@ class Task:
                     "default_files"]
 
         return output_class, filenames
+
+    def get_scenario_name(self) -> Optional[str]:
+        name = self.get_info()["method_name"].split(".")[0]
+        if name in output_consts.OUTPUT_CONSTS:
+            return name
+
+        return None
+
+    def get_simulator_name(self) -> str:
+        # e.g. retrieve openfoam from fvm.openfoam.run_simulation
+        return self.get_info()["method_name"].split(".")[1]
 
     def get_output(
         self,
@@ -353,14 +364,15 @@ class Task:
         """Get dictionary with the URL path parameters for API calls."""
         return {"task_id": self.id}
 
-    def get_execution_time(self) -> Optional[float]:
+    def get_execution_time(self,
+                           fail_if_running: bool = True) -> Optional[float]:
         """Get the time the task took to complete.
 
         Returns:
             The time in seconds or None if the task hasn't completed yet.
         """
         info = self.get_info()
-        if self._status not in _TASK_TERMINAL_STATUSES:
+        if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
             return None
         # start_time may be None if the task was killed before it started
         if info["start_time"] is None:
@@ -368,7 +380,11 @@ class Task:
 
         # Format the time to datetime type
         start_time = datetime.datetime.fromisoformat(info["start_time"])
-        end_time = datetime.datetime.fromisoformat(info["end_time"])
+        end_time = info.get("end_time")
+        if end_time is None:
+            end_time = datetime.datetime.now(datetime.timezone.utc)
+        else:
+            end_time = datetime.datetime.fromisoformat(info["end_time"])
 
         return (end_time - start_time).total_seconds()
 
