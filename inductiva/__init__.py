@@ -13,7 +13,7 @@ from . import scenarios
 from . import generative
 from . import molecules
 from . import resources
-from . import structures
+# from . import structures
 from . import templates
 from . import utils
 from . import plasmas
