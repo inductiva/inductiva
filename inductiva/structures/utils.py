@@ -26,7 +26,8 @@ def remove_time_values_from_xdmf(input_file_path: str,
 
         # Check if the line contains a Time Value
         if "<Time Value=" not in line:
-            # If the line does not contain a Time Value, add it to the new content
+
+            # If the line does not contain a Time Value, add it to the new file
             new_xdmf_content.append(line)
 
     # Write the modified content back to the output file
