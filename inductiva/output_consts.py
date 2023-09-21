@@ -40,12 +40,15 @@ OUTPUT_CONSTS = {
             molecules.ProteinSolvationOutput,
         "default_files": [
             "protein.gro", "compressed_trajectory.xtc", "solvated_protein.tpr",
-            "topol.top", "rmsf_values.npy"
+            "topol.top", "rmsf_values.npy", "stdout.txt", "stderr.txt"
         ]
     },
     "mdwater_box": {
-        "output_class": molecules.MDWaterBoxOutput,
-        "default_files": None
+        "output_class":
+            molecules.MDWaterBoxOutput,
+        "default_files": [
+            "trajectory.xtc", "eql.tpr", "stdout.txt", "stderr.txt"
+        ]
     },
     "stellarators": {
         "output_class": None,
