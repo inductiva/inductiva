@@ -529,7 +529,8 @@ def create_2d_field_from_pv_dataset(
       UnstructuredGrid dataset.
 
     Args:
-        pv_dataset (pv.UnstructuredGrid()): The PyVista UnstructuredGrid dataset.
+        pv_dataset (pv.UnstructuredGrid()): The PyVista UnstructuredGrid
+          dataset.
         field_name (str): The name of the field to visualize.
         field_path (str): The path where the resulting image will be saved.
         show_edges (bool, optional): Whether to display mesh edges. Default is
