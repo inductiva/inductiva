@@ -1,5 +1,4 @@
 """Methods to interact with the user storage resources."""
-from absl import logging
 import inductiva
 from inductiva.client.apis.tags import instance_api
 
@@ -9,8 +8,8 @@ def get_space_used():
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
         instance_price = api.get_storage_size()
-        logging.info("Total storage used: %s GB",
-                     float(round(instance_price.body, 3)))
-        return float(round(instance_price.body, 3))
+        instance_price = float(round(instance_price.body, 3))
+        print(f"Total storage used: {instance_price} GB")
+        return instance_price
     except inductiva.client.ApiException as api_exception:
         raise api_exception

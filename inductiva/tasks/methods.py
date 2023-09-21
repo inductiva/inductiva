@@ -182,6 +182,9 @@ def get(
     Returns:
         List of Task objects.
     """
+    if last_n < 1:
+        raise ValueError("last_n must be >= 1")
+
     status = models.TaskStatusCode(status) if status is not None else None
 
     raw_tasks_info = _fetch_tasks_from_api(status, page=1, per_page=last_n)

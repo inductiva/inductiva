@@ -1,5 +1,4 @@
 """Functions to manage or retrieve user resources."""
-from absl import logging
 import inductiva
 import inductiva.client
 from inductiva.client.apis.tags import instance_api
@@ -42,7 +41,7 @@ def _fetch_machine_groups_from_api():
         api = instance_api.InstanceApi(inductiva.api.get_client())
         response = api.list_active_user_instance_groups()
         if len(response.body) == 0:
-            logging.info("No active machine groups found.")
+            print("No active machine groups found.")
             return response.body
 
         return response.body
