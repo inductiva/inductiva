@@ -119,11 +119,10 @@ class WindTunnel(scenarios.Scenario):
         """
         simulator.override_api_method_prefix("wind_tunnel")
 
-        if object_path:
-            self.object_path = utils.files.resolve_path(object_path)
-        else:
-            logging.info("WindTunnel is empty. Object path not specified.")
+        if object_path is None:
+            raise ValueError("WindTunnel is empty. Object path not specified.")
 
+        self.object_path = utils.files.resolve_path(object_path)
         self.num_iterations = num_iterations
         self.n_cores = n_cores
         self.resolution = MeshResolution[resolution.upper()].value
