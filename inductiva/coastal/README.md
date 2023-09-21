@@ -82,23 +82,24 @@ scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
                                          wave_period=5.5)
 ```
 
-Once the scenario is created, run the simulation as follows:
+Once the scenario is created, run the simulation by specifying the simulation
+time (all the time are in seconds) as follows:
 
 ```python
-task = scenario.simulate(simulation_time=80, output_time_step=1, fps=5)
+task = scenario.simulate(simulation_time=80, time_step=0.1, output_time_step=1)
 
 output = task.get_output()
 ```
 
-The user can specify the total simulation time and the time step between outputs
-(all in seconds).
+The output data will contain the information about the system dynamics (water level
+and velocities). The system evolves in discrete time steps given by the `time_step`
+argument. The system's information is not written to the output files for all time
+steps, but only in `output_time_step` intervals.
 
-To visualize the results, we can generate and save a movie of the simulation. The
-video will have n frames, where n is the ratio between simulation_time and
-output_time_step.
+To visualize the results, we can generate and save a movie of the simulation.
 
 ```python
-output.render(movie_path = "movie_path.mp4")
+output.render(movie_path = "movie_path.mp4", fps=5)
 ```
 
 <p align="center">
@@ -125,8 +126,10 @@ bathymetry = inductiva.coastal.Bathymetry.from_ascii_xyz_file(
     ascii_xyz_file_path = bathymetry_path)
 ```
 
-This bathymetry huge, since it contains the data of the entire Algarve region, so to visualize it
-we need to specify a given resolution. In this case 200m x 200m:
+This bathymetry contains the depth data in 1683395 points, all across the entire Algarve
+region, that spans over 120kms width. To visualize we can specify a resolution for the plot
+(in this case 200m x 200m), which downsizes the bathymetry depths to a size more
+maneagable to the plot.
 
 ```python
 bathymetry.plot(x_resolution=200, y_resolution=200, show=True)
@@ -136,9 +139,9 @@ bathymetry.plot(x_resolution=200, y_resolution=200, show=True)
   <img src="/resources/media/bathymetry.png" alt="Algarve bath" width="550" height="450">
 </p>
 
-Raw bathymetry data will often span an area too large and sparsely sampled to
+This raw bathymetry data spans an area too large and sparsely sampled to
 be used in a simulation. In this case, the user can crop the bathymetry to a
-smaller area of interest:
+smaller coastal area of interest:
 
 ```python
 bathymetry = bathymetry.crop(x_range=(51000, 52000), y_range=(12150, 13000))
