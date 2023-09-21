@@ -45,24 +45,26 @@ output.render(movie_path="movie_path.mp4")
 
 Let's go in depth to each of the steps in the example above.
 
-We start by generating a random bathymetry. This bathymetry is defined in a
-100x100 grid, that represent a domain 100m wide and 100m long:
-```python
-import inductiva
+We start by generating a random bathymetry using the [Diamond-Square algorithm](https://en.wikipedia.org/wiki/Diamond-square_algorithm).
+The bathymetry has the following parameters that can be tuned by the user:
+- `x_range`: The range of x values, in meters;
+- `y_range`: The range of y values, in meters;
+- `x_num`: Number of grid points in the x direction;
+- `y_num`: Number of grid points in the y direction;
+- `max_depth`: Maximum depth value, in meters;
+- `initial_roughness`: Initial roughness value, in meters. Controls the
+  initial range of randomness of the Diamond-Square algorithm;
+- `roughness_factor`: Roughness factor. Must be between 0 and 1.
+  Controls the rate at which the range of randomness of the
+  Diamond-Square algorithm decreases over iterations. The higher the
+  roughness_factor, the rougher the bathymetry;
+- `percentile_above_water`: Percentile of the depths that must be above
+  standard sea level, i.e., have a negative depth (or positive height) value.
+  Must be between 0 and 100;
+- `random_seed`: Since the Diamond-Square is a stochastic algorithm,
+  we can specify a random seed to use.
 
-bathymetry = inductiva.coastal.Bathymetry.from_random_depths(x_range=(0,100),
-          y_range=(0,100),
-          x_num=100,
-          y_num=100,
-          max_depth=1,
-          random_seed=12,
-          initial_roughness=1,
-          roughness_factor=0.5,
-          percentile_above_water=20)
-```
-
-The depths of the bathymetric domain can be inspected in `bathymetry.depths`, and
-visualized with:
+The bathymetry object can be further plotted with:
 
 ```python
 bathymetry.plot(show=True)
@@ -72,30 +74,23 @@ bathymetry.plot(show=True)
   <img src="/resources/bathymetry/bathymetry_random.png" alt="Raw bathymetry" width="550" height="450">
 </p>
 
-The bathymetry is ready to be used in a simulation scenario. In this case, we set
-the wave source location to the west boundary of the domain (i.e. the lower x
-boundary), with a wave amplitude of 0.1m and a wave period of 5.5s:
+After the generation, the bathymetry is ready to be used to initialize the simulation scenario.
+The user needs only to further define the following parameters:
+- `water_level`: The water level, in meters. By deafult is 0 (standard sea-level);
+- `wave_source_location`: The location of the wave source. Supported
+  locations are: N (north), S (south), E (east), W (west),
+  corresponding to the upper, lower, right and left boundaries of
+  the simulation domain, respectively;
+- `wave_amplitude`: The amplitude of the wave, in meters.
+- `wave_period`: The period of the wave, in seconds.
 
-```python
-scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
-                                         wave_source_location="W",
-                                         wave_amplitude=0.1,
-                                         wave_period=5.5)
-```
-
-Once the scenario is created, run the simulation by specifying the simulation
-time (all the time parameters are in seconds) as follows:
-
-```python
-task = scenario.simulate(simulation_time=80, time_step=0.1, output_time_step=1)
-
-output = task.get_output()
-```
-
-The output data will contain the information about the system dynamics (water level
-and velocities). The system evolves in discrete time steps given by the `time_step`
-argument. The system's information is not written to the output files for all time
-steps, but only in `output_time_step` intervals.
+Once the scenario is created, run the simulation by specifying the various
+time parameters of the scenario.simulate() method:
+- `simulation_time`: Total simulation time, in seconds;
+- `time_step`: The system evolve in discrete time steps given by this argument;
+- `output_time_step`: The system's information is written to the output files
+(that contain the water level and velocities). This is not done for all time steps,
+but only in `output_time_step` intervals.
 
 To visualize the results, we can generate and save a movie of the simulation.
 
@@ -146,7 +141,7 @@ smaller coastal area of interest:
 
 ```python
 bathymetry = bathymetry.crop(x_range=(51000, 52000), y_range=(12150, 13000))
-bathymetry.plot()
+bathymetry.plot(show=True)
 ```
 
 <p align="center">
