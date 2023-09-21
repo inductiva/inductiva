@@ -11,8 +11,9 @@ is performed using the [SWASH](https://swash.sourceforge.io/) simulator.
 
 ### Example 1: Simulating waves on a synthetic bathymetry
 
-You can follow this example in your machine to simulate and visualize the wave propagation in a random bathymetry
-that represents a Coastal Area.
+You can follow this example to simulate and visualize the wave propagation in a bathymetry
+that represents a Coastal Area. To avoid having to download any data for now, we will start by run a simulation
+on synthetic bathymetry, that is procedurally generated using the API.
 
 Do not forget to insert your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/main#api-access-tokens) to see how get one).
 
@@ -42,10 +43,10 @@ output = task.get_output()
 output.render(movie_path="movie_path.mp4")
 ```
 
-To avoid having to download any data for now, we will start by run a simulation
-on synthetic bathymetry, that is procedurally generated using the API.
+Let's go in depth to each of the steps in the example above.
 
-We start by generating a random bathymetry.
+We start by generating a random bathymetry. This bathymetry is defined in a
+100x100 grid, that represent a domain 100m wide and 100m long:
 ```python
 import inductiva
 
@@ -60,8 +61,8 @@ bathymetry = inductiva.coastal.Bathymetry.from_random_depths(x_range=(0,100),
           percentile_above_water=20)
 ```
 
-This bathymetry is defined in a 100x100 grid, that represent a domain 100m
-wide and 100m long. It can be inspected by plotting it.
+The depths of the bathymetric domain can be inspected in `bathymetry.depths`, and
+visualized with:
 
 ```python
 bathymetry.plot(show=True)
@@ -73,7 +74,7 @@ bathymetry.plot(show=True)
 
 The bathymetry is ready to be used in a simulation scenario. In this case, we set
 the wave source location to the west boundary of the domain (i.e. the lower x
-boundary), with a wave amplitude of 0.1m and a wave period of 5.5 s:
+boundary), with a wave amplitude of 0.1m and a wave period of 5.5s:
 
 ```python
 scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
@@ -83,7 +84,7 @@ scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
 ```
 
 Once the scenario is created, run the simulation by specifying the simulation
-time (all the time are in seconds) as follows:
+time (all the time parameters are in seconds) as follows:
 
 ```python
 task = scenario.simulate(simulation_time=80, time_step=0.1, output_time_step=1)
