@@ -2,6 +2,8 @@
 
 import os
 
+from typing import List, Optional
+
 import pyvista as pv
 
 from inductiva import structures, types, utils
@@ -23,7 +25,7 @@ class DeformablePlateOutput:
 
     @utils.optional_deps.needs_structures_extra_deps
     def render(self,
-               field_names: list = None,
+               field_names: Optional[List[str]] = None,
                show_edges: bool = True,
                colormap: str = "jet",
                off_screen: bool = True,
