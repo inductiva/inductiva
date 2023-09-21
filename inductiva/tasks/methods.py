@@ -94,7 +94,7 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
 
 
 # pylint: disable=redefined-builtin
-def list(last_n,
+def list(last_n: int = 5,
          status: Optional[Union[str, models.TaskStatusCode]] = None) -> None:
     # pylint: disable=line-too-long
     """List the last N tasks of a user.
@@ -134,7 +134,7 @@ def list(last_n,
 
 
 def get(
-    last_n,
+    last_n: int = 5,
     status: Optional[Union[str, models.TaskStatusCode]] = None
 ) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
