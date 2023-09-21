@@ -51,33 +51,45 @@ def _fetch_tasks_from_api(
 
 def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
     columns = [
-        "ID", "Simulator", "Status", "Submitted", "Started", "Duration",
-        "VM Type"
+        "ID", "Scenario", "Simulator", "Status", "Submitted", "Started",
+        "Duration", "VM Type"
     ]
     rows = []
 
     for task in tasks:
         info = task.get_info()
         # e.g., get "openfoam" from "fvm.openfoam.run_simulation"
-        simulator = info["method_name"].split(".")[-2]
+        simulator = task.get_simulator_name()
+        scenario = task.get_scenario_name()
+        if scenario:
+            scenario = scenario.replace("_", " ")
+
+        end_time = info.get("end_time", None)
+        execution_time = task.get_execution_time(fail_if_running=False)
+
+        if execution_time is not None:
+            execution_time = format_utils.seconds_formatter(execution_time)
+            if end_time is None:
+                execution_time = f"*{execution_time}"
+
         row = [
             task.id,
+            scenario,
             simulator,
             task.get_status(),
             info.get("input_submit_time", None),
             info.get("start_time", None),
-            task.get_execution_time(),
+            execution_time,
             task.get_machine_type(),
         ]
         rows.append(row)
-
     formatters = {
         "Submitted": format_utils.datetime_formatter,
         "Started": format_utils.datetime_formatter,
-        "Duration": format_utils.seconds_formatter,
     }
 
     override_col_space = {
+        "Scenario": 22,
         "Submitted": 20,
         "Started": 20,
         "Status": 20,
