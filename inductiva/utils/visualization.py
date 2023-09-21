@@ -515,25 +515,23 @@ def create_color_plot_movie(
 
 
 @optional_deps.needs_structures_extra_deps
-def create_2d_field_from_xdmf(xdmf_path: str,
-                              field_path: str,
-                              field_array: list,
-                              file_name: str = "field",
-                              show_edges: bool = True,
-                              colormap: str = "jet",
-                              off_screen: bool = True,
-                              scalar_bar: bool = True,
-                              background_color: str = "white",
-                              transparent_background: bool = True) -> None:
-    """Converts field data from an XDMF file to a 2D image using PyVista.
+def create_2d_field_from_pv_dataset(
+        pv_dataset: pv.UnstructuredGrid,
+        field_name: str,
+        field_path: str,
+        show_edges: bool = True,
+        colormap: str = "jet",
+        off_screen: bool = True,
+        scalar_bar: bool = True,
+        background_color: str = "white",
+        transparent_background: bool = True) -> None:
+    """Creates a 2D image representation of a field from a PyVista 
+      UnstructuredGrid dataset.
 
     Args:
-        xdmf_path (str): The path to the XDMF file containing the mesh data.
+        pv_dataset (pv.UnstructuredGrid): The PyVista UnstructuredGrid dataset.
+        field_name (str): The name of the field to visualize.
         field_path (str): The path where the resulting image will be saved.
-        field_array (list): The field data to be visualized and converted to an 
-          image.
-        file_name (str, optional): The name of the field in the visualization.
-          Default is "field".
         show_edges (bool, optional): Whether to display mesh edges. Default is
           True.
         colormap (str, optional): The colormap to apply to the field data.
@@ -548,30 +546,22 @@ def create_2d_field_from_xdmf(xdmf_path: str,
         transparent_background (bool, optional): Whether the background of the
           saved image should be transparent. Default is True.
     """
-
     # Start PyVista virtual framebuffer
     pv.start_xvfb()
-
-    # Read the XDMF file and create a PyVista data object
-    reader = pv.get_reader(xdmf_path)
-    data = reader.read()
 
     # Initialize the PyVista plotter
     plotter = pv.Plotter()
 
-    # Add the field data to the PyVista data object and set it as active scalars
-    data.point_data[file_name] = field_array
-    data.set_active_scalars(file_name)
-
     # Add the data object to the plotter with customizable settings
-    plotter.add_mesh(data,
+    pv_dataset.set_active_scalars(field_name)
+    plotter.add_mesh(pv_dataset,
                      show_edges=show_edges,
                      cmap=colormap,
                      show_scalar_bar=False)
 
     # Optionally, add a scalar bar to the visualization
     if scalar_bar:
-        plotter.add_scalar_bar(file_name, vertical=True, interactive=True)
+        plotter.add_scalar_bar(field_name, vertical=True, interactive=True)
 
     # Set the view to XY plane
     plotter.view_xy()
@@ -583,8 +573,68 @@ def create_2d_field_from_xdmf(xdmf_path: str,
     plotter.off_screen = off_screen
 
     # Adjust camera view
-    plotter.camera.tight()
+    if not scalar_bar:
+        plotter.camera.tight()
 
     # Save a screenshot of the plot to the specified field_path
     plotter.screenshot(field_path,
                        transparent_background=transparent_background)
+
+    # Close the plotter
+    plotter.close()
+
+
+@optional_deps.needs_structures_extra_deps
+def create_2d_fields_from_pv_dataset(
+        pv_dataset: pv.UnstructuredGrid,
+        field_dir: str,
+        show_edges: bool = True,
+        colormap: str = "jet",
+        off_screen: bool = True,
+        scalar_bar: bool = True,
+        background_color: str = "white",
+        transparent_background: bool = True) -> None:
+    """Creates 2D image representations of fields from a PyVista 
+      UnstructuredGrid dataset.
+
+    Args:
+        pv_dataset (pv.UnstructuredGrid): The PyVista UnstructuredGrid 
+          dataset.
+        field_dir (str): Path to the directory where the resulting images will
+          be saved.
+        field_array (list): The field data to be visualized and converted to an 
+          image.
+        show_edges (bool, optional): Whether to display mesh edges. Default is
+          True.
+        colormap (str, optional): The colormap to apply to the field data.
+          Default is "jet".
+        off_screen (bool, optional): Whether to render the visualization 
+          off-screen. Set to True for non-interactive rendering. Default is 
+          True.
+        scalar_bar (bool, optional): Whether to include a scalar bar legend in 
+          the visualization. Default is True.
+        background_color (str, optional): The background color of the
+          visualization. Default is "white".
+        transparent_background (bool, optional): Whether the background of the
+          saved image should be transparent. Default is True.
+    """
+    # Get the list of field names from the point_data of the PyVista dataset
+    field_names = pv_dataset.point_data.keys()
+
+    # Iterate through each field name to create visualizations
+    for field_name in field_names:
+
+        # Define the path to save the visualization image for the current field
+        field_path = os.path.join(field_dir, f"{field_name}.png")
+
+        logging.info(f"Creating the visualization for field: {field_name}.")
+        create_2d_field_from_pv_dataset(
+            pv_dataset=pv_dataset,
+            field_name=field_name,
+            field_path=field_path,
+            show_edges=show_edges,
+            colormap=colormap,
+            off_screen=off_screen,
+            background_color=background_color,
+            scalar_bar=scalar_bar,
+            transparent_background=transparent_background)

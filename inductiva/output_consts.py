@@ -1,5 +1,5 @@
 """Connect tasks to simulation output classes via method_name."""
-from inductiva import fluids, molecules, coastal
+from inductiva import fluids, molecules, coastal, structures
 
 OUTPUT_CONSTS = {
     "wind_tunnel": {
@@ -52,7 +52,7 @@ OUTPUT_CONSTS = {
         "default_files": None
     },
     "deformable_plate": {
-        "output_class": None,
+        "output_class": structures.DeformablePlateOutput,
         "default_files": None
     }
 }
