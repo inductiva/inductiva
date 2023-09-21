@@ -89,6 +89,7 @@ pressure_field.render()
 
 These are the currently available scenarios:
 
+
 <div align="center">
   
 | [**Protein Solvation**](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/protein_solvation) | [**Coastal Area**](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal)  |
@@ -98,7 +99,6 @@ These are the currently available scenarios:
 | <div align="center"><img src="resources/media/fluid_tank.gif" alt="Fluid Tank simulation" width="250" height="150" /></div> | <div align="center"><img src="/resources/media/openfoam/default_pressure_field.png" width="300" height="200" /></div> |
 
 </div>
-
 
 
 ## Simulators
