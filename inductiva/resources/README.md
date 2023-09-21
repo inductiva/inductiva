@@ -42,7 +42,7 @@ scenario = molecules.ProteinSolvation(
 
 # Pass your machine group object when submitting a simulation so that it runs
 # on the desired machine group
-task = scenario.simulate(machine_group=mg)
+task = scenario.simulate(machine_group=mg, ignore_warnings=True)
 
 
 # Once your simulations are done, terminate the machines
@@ -81,7 +81,7 @@ for temperature in range(200, 301):
         protein_pdb=insulin_pdb_file, temperature=temperature)
 
     # Tasks will be submitted to the new machine group
-    task = scenario.simulate(machine_group=mg)
+    task = scenario.simulate(machine_group=mg, ignore_warnings=True)
     tasks.append(task)
 
 # Block until all tasks complete
