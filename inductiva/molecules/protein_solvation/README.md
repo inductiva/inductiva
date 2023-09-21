@@ -10,8 +10,8 @@ To access all the visualization and post-processing features of this scenario, y
 Now, let's dive into an example!
 
 ### Example
-To test this scenario, you can download a protein from the RCSB database using its PDB ID. For this example, let's consider insulin with a PDB ID of 1ZNI.
-Do not forget to insert your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/main#api-access-tokens) to see how get one).
+To test this scenario, you can download directly a protein from the RCSB database using its PDB ID. For this example, let's consider insulin (PDB ID equal to 1ZNI).
+Do not forget to insert your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/main#api-access-tokens) to see how to get one).
 
 ```python
 import inductiva
@@ -33,7 +33,8 @@ task = scenario.simulate(simulation_time_ns = 0.01, ignore_warnings = True)
 output = task.get_output()
  ```
 This may take up to 2 minute, depending on which machine you use. 
-The last code line downloads the files necessary to render and post-process our simulation.
+
+## Scenario Configuration
 To initialize the scenario, the user can define the following parameters:
 - `protein_pdb` : PDB file containing the initial conformation of the protein;
 - `temperature`: Temperature of the system in K.
