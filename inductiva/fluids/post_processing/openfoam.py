@@ -73,7 +73,7 @@ class SteadyStateOutput:
                                      recursive=True)
 
         for index, file in enumerate(sim_output_files):
-            # Find the file name in a path - across platforms.
+            # Find the file name in the absolute path - across platforms.
             sim_output_files[index] = os.path.basename(file)
 
         return sorted(sim_output_files) != sorted(default_output_files_list)

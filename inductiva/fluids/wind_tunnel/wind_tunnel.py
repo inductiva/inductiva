@@ -122,7 +122,7 @@ class WindTunnel(scenarios.Scenario):
         if object_path:
             self.object_path = utils.files.resolve_path(object_path)
         else:
-            logging.info("WindTunnel is empty. Object path not specified.")
+           raise ValueError("WindTunnel is empty. Object path not specified.")
 
         self.num_iterations = num_iterations
         self.n_cores = n_cores
