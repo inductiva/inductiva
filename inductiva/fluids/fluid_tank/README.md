@@ -23,9 +23,11 @@ your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/
 import inductiva
 
 scenario = inductiva.fluids.FluidTank(
-    shape=inductiva.fluids.shapes.Cylinder(),
+    shape=inductiva.fluids.shapes.Cylinder((radius=0.5, height=1)),
     fluid=inductiva.fluids.WATER,
-    fluid_level=0.5)
+    fluid_level=0.5,
+    inlet=inductiva.fluids.CircularTankInlet(radius=0.5),
+    outlet=inductiva.fluids.CylindricalTankOutlet())
 
 task = scenario.simulate(simulation_time=5,
                            output_time_step=0.1,
@@ -35,33 +37,24 @@ output = task.get_output()
 
 output.render()
 ```
-Initialize the scenario:
 
-```python
-import inductiva
-
-scenario = inductiva.fluids.FluidTank(
-    shape=inductiva.fluids.shapes.Cylinder(),
-    fluid=inductiva.fluids.WATER,
-    fluid_level=0.5)
-```
-
-The user can specify the fluid (e.g. water, honey or oil), the fluid level (in
-meters), as well as the tank shape and its inlet and outlet properties.
-
-Run the simulation:
-
-```python
-task = scenario.simulate(simulation_time=5,
-                           output_time_step=0.1,
-                           resolution="medium")
-
-output = task.get_output()
-```
+The initialization of the scenario requires the:
+- `shape`: The shape of the tank. It supports both `Cylinder` and `Cube`shapes.
+For the cylinder the radius and height can be specified, whilst the cube only
+ requires the edge length;
+- `fluid`: The fluid being simulated. Supports WATER, OLIVE_OIL, LIQUID_PROPANE,
+JET_FUEL, GEAR_OIL, BEER and HONEY. Different fluid types have different physical
+properties, namely the density and kinematic viscosity;
+- `fluid level`: The fluid level initially in the tank;
+- `inlet`: Circular inlet whose radius is configurable;
+- `outlet`: Outlet shape. Supported shapes are CylindricalTankOutlet and 
+CubicTankOutlet. Cylindrical requires radius and height. Cubic only requires the
+edge length.
 
 The user can specify the total simulation time and the time step between outputs
 (all in seconds). The user can also specify the resolution of the simulation
-(low, medium or high).
+(low, medium or high). Different resolutions will yield different sized particles
+in the visualizations of the fluid behaviour. 
 
 To visualize the results, users will need to install the extra dependencies of the fluid package with `pip install --upgrade "inductiva[fluids_extra]"`. 
 Then run the following code:
