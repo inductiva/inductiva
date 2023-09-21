@@ -1,7 +1,7 @@
 # Simulators
 
 Inductiva API has available several open-source simulators ready to use. Users that are familiar with the simulators can easily start running simulations with their previously prepared simulation configuration files. In this way, they can take advantage of performant hardware to speed up their simulation and exploration.
-No installation or management of the simulators is required, no need to worry about the hardware, and no need to worry about the software dependencies. Inductiva API takes care of all of that for you.
+No installation or management of the simulators is required, no need to worry about hardware or software dependencies. Inductiva API takes care of all of that for you.
 
 The simulators currently available are all open-source and have their own dedicated documentation:
 - [SPlisHSPlasH](https://github.com/InteractiveComputerGraphics/SPlisHSPlasH)
@@ -11,13 +11,13 @@ The simulators currently available are all open-source and have their own dedica
 - [XBeach](https://oss.deltares.nl/web/xbeach/)
 - [GROMACS](https://www.gromacs.org/)
 
-Check the documentation of each simulator to learn more on how to configure them. Here, we **highlight** how to use the simulators via Inductiva API and how to scale your simulations with simplicity. There is a general structure that all simulators follow, and then there are some specificities for each simulator.
+Check the documentation of each simulator to learn more on how to configure them. Here, we highlight how to use your preferred simulator via Inductiva API and how to scale your simulations with simplicity. There is a general structure that all simulators follow, and then there are some specificities for each simulator.
 
 ## Simulators via Inductiva API
 
-To run a simulation you will need to have prepared the configuration files for the simulator you desire to use. This configuration files should be in a folder that will be passed to the simulator and your simulation is ready to start running.
+To run a simulation, prepare the configuration files for your desired simulator and place them in a designated folder. The simulator will use this folder to perform the simulation.
 
-Here, we present an example with DualSPHysics - a Smoothed-Particle Hydrodynamics simulator - and show how it looks in practice. To simplify we provide the configuration files for this example.
+Here, we present an example using DualSPHysics - a Smoothed-Particle Hydrodynamics simulator - and show how it looks in practice. To simplify we provide the configuration files for this example.
 
 ### Example
 
@@ -41,7 +41,7 @@ simulator = inductiva.simulators.DualSPHysics()
 task = simulator.run(input_dir=input_dir)
 ```
 
-And that is it! Your simulation is already running on the cloud and you obtain a task object that allows you to manage it. You can check it's status with `task.get_status()`, wait for it to finish with `task.wait()`, and download the results with `task.get_output()`.
+And that's it! Your simulation is now running in the cloud, and you have a `task` object that allows you to manage it. You can check its status with `task.get_status()`, wait for it to finish with `task.wait()`, and download the results with `task.get_output()`.
 
 With Inductiva API you don't have immediate access to visualization tools of these simulators. However, you can download the results and use the visualization tools of your choice. For example, for DualSPHysics you can use [Paraview](https://www.paraview.org/) to visualize the results.
 
