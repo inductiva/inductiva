@@ -627,7 +627,7 @@ def create_2d_fields_from_pv_dataset(
         # Define the path to save the visualization image for the current field
         field_path = os.path.join(field_dir, f"{field_name}.png")
 
-        logging.info(f"Creating the visualization for field: {field_name}.")
+        logging.info("Creating the visualization for field: %s.", field_name)
         create_2d_field_from_pv_dataset(
             pv_dataset=pv_dataset,
             field_name=field_name,
