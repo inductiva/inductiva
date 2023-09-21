@@ -144,7 +144,7 @@ The user must specify the input directory containing the files to run the simula
 Find more examples of simulations in the [tutorials section](https://github.com/inductiva/inductiva/tree/258ee549d7db93248b80632de6056fa427cff1ae/demos/tutorials).
 
 
-## Async API
+## Running multiple simulations in parallel
 
 Up until now, all examples have run synchronously, which allows users to get feedback while the simulation is running. However, this is not always the best option. For example, if the user wants to run a large number of simulations, it is better to run them asynchronously. This way, the user can launch all the simulations and then check the results when they are ready.
 
