@@ -91,7 +91,7 @@ Moreover, change the parameter `virtual_display` in the render method to `True`,
 streamlines.render(virtual_display=True, save_path="streamlines.png")
 ```
 
-- To save your visualizations, please use the q-key to close the plotter as some operating systems (namely Windows) will experience issues saving a screenshot  if the exit button in the GUI is pressed.
+- To save your visualizations, please use the 'q' key to close the plotter. Some operating systems, particularly Windows, may encounter issues when attempting to save a screenshot if you use the exit button in the GUI.
 
 The next example fetches the default post-processed files and renders the respective visualizations. The last one, fetches the full simulation outputs, and with the same interface the user can configure the post-processing methods to extract the metrics he desires and render the visualizations.
 
