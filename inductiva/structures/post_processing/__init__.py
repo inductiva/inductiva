@@ -1,2 +1,2 @@
 #pylint: disable=missing-module-docstring
-from .fenicsx import FEniCSxSimulationOutput
+from .fenicsx import DeformablePlateOutput
