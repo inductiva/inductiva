@@ -89,12 +89,16 @@ pressure_field.render()
 
 These are the currently available scenarios:
 
-| Scenario               | Visualization                     |
-| ---------------------- | --------------------------------- |
-| [Protein Solvation](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/protein_solvation) | <div align="center"><img src="resources/media/protein_solvation_big_molecule.gif" alt="Protein Solvation simulation" width="150" height="150" /></div> |
-| [Coastal Area](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal) | <div align="center"><img src="/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="250" height="150" /></div> |
-| [Wind Tunnel](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/wind_tunnel) | <div align="center"><img src="/resources/media/openfoam/default_pressure_field.png" width="300" height="200" /></div> |
-| [Fluid Tank](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/fluid_tank) | <div align="center"><img src="resources/media/fluid_tank.gif" alt="Fluid Tank simulation" width="250" height="150" /></div> |
+<div align="center">
+  
+| [**Protein Solvation**](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/protein_solvation) | [**Coastal Area**](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal)  |
+| :-------------------------: | :-------------------------------: |
+|<div align="center"><img src="resources/media/protein_solvation_big_molecule.gif" alt="Protein Solvation simulation" width="200" height="200" /></div> |  <div align="center"><img src="/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="250" height="150" /></div>  |
+| [**Fluid Tank**](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/fluid_tank) | [**Wind Tunnel**](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/wind_tunnel) |
+| <div align="center"><img src="resources/media/fluid_tank.gif" alt="Fluid Tank simulation" width="250" height="150" /></div> | <div align="center"><img src="/resources/media/openfoam/default_pressure_field.png" width="300" height="200" /></div> |
+
+</div>
+
 
 
 ## Simulators
