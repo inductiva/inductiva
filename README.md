@@ -42,7 +42,7 @@ import inductiva
 inductiva.api_key = "YOUR_API_KEY"
 ```
 
-And you are good to go! You can start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
+And you are good to go! You can start exploring Inductiva API with the examples below.
 
 ## Pre-built Simulation Scenarios
 
@@ -168,7 +168,7 @@ for velocity in velocity_list:
 
 All simulations are launched in one go, allowing users to continue working on other things. To monitor the progress of individual simulations, users can use `task.get_status()`, or they can view a list of the most recent tasks launched by using `inductiva.tasks.list(last_n=5)`.
 
-Finally, to retrieve the results the user can use task.get_output(), which waits for the simulation to finish before downloading the results. During this waiting period, it temporarily blocks the execution of other code. Check the [Tasks section](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks#tasks) for more information on how to do this.
+Finally, to retrieve the results the user can use `task.get_output()`, which waits for the simulation to finish before downloading the results. During this waiting period, it temporarily blocks the execution of other code. Check the [Tasks section](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks#tasks) for more information on how to do this.
 
 ## More info:
 
