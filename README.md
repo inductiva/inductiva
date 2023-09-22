@@ -105,15 +105,15 @@ These are the currently available scenarios:
 
 **Inductiva API** has available several open-source simulators ready to use. Users familiar with the simulators can easily start running simulations with their previously prepared simulation configuration files. In this way, they can take advantage of performant hardware to speed up their simulation and exploration.
 
-The simulators we provide are all open-source and have their own dedicated documentation.
-
-Currently, we have available the following simulators:
+The simulators we provide are all open-source and have their own dedicated documentation:
 - [SPlisHSPlasH](https://github.com/InteractiveComputerGraphics/SPlisHSPlasH)
 - [DualSPHysics](https://github.com/DualSPHysics/DualSPHysics)
 - [OpenFOAM](https://www.openfoam.com/)
 - [SWASH](https://swash.sourceforge.io/)
 - [XBeach](https://oss.deltares.nl/web/xbeach/)
 - [GROMACS](https://www.gromacs.org/)
+
+To learn how to use these simulators with Inductiva API, check the example below and the [Simulators section](https://github.com/inductiva/inductiva/tree/main/inductiva/simulators/README.md)
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
@@ -124,14 +124,19 @@ Example of how to use the simulators:
 ```python
 import inductiva
 
+inductiva.api_key = "YOUR_API_KEY"
+
+# Download the configuration files
 input_dir = inductiva.utils.files.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "dualsph-flow-cylinder.zip"
 )
 
+# Initialize the Simulator
 simulator = inductiva.simulators.DualSPHysics()
 
-output_dir = simulator.run(input_dir=input_dir)
+# Run the simulation
+task = simulator.run(input_dir=input_dir)
 ```
 
 The user must specify the input directory containing the files to run the simulation. In the above example, a directory with the configuration of a simulation is downloaded, and passed as argument to the simulator call.
@@ -139,34 +144,14 @@ The user must specify the input directory containing the files to run the simula
 Find more examples of simulations in the [tutorials section](https://github.com/inductiva/inductiva/tree/258ee549d7db93248b80632de6056fa427cff1ae/demos/tutorials).
 
 
-## Async API
+## Running multiple simulations in parallel
 
-Up until now, all examples have run synchronously, which allows users to get feedback while the simulation is running. However, this is not always the best option. For example, if the user wants to run a large number of simulations, it is better to run them asynchronously. This way, the user can launch all the simulations and then check the results when they are ready.
+Up until now, all simulations were run synchronously which gives feedback while the simulation is running until it finishes. However, this is not always the best option, for example, when launching two simulations it implies that they run one after the other. This
+is not optimal for when users need to launch hundreds of simulations.
+
+To solve this problem **Inductiva API** allows users to run simulations asynchronously. This means that the simulation is launched and the user can continue with other tasks - like launching more simulations. 
 
 Let's look at an example using the wind tunnel scenario:
-
-```python
-import inductiva
-
-# Initialize scenario with defaults
-scenario = inductiva.fluids.WindTunnel()
-
-# Url to a test object in Inductiva Github repository
-vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
-              "/resources/vehicle.obj"
-vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
-
-# Run simulation
-task = scenario.simulate(object_path=vehicle_path,
-                         run_async=True)
-
-# Blocking call to obtain the results
-output = task.get_output()
-```
-
-In this way, the simulation is launched asynchronously and the user can continue with other tasks. When the user wants to retrieve the results, they can do so by calling the `get_output()` method. This method will block until the results are ready.
-
-Running simulations asynchronously allows users to launch multiple simulations in parallel. Let's look at an example:
 
 ```python
 import inductiva
@@ -183,9 +168,9 @@ for velocity in velocity_list:
   task_list.append(task)
 ```
 
-All of the simulations will be launched in one go. The user can check the status of the simulations and retrieve the results when they are ready. Check the FAQ section for more information on how to do this.
+All simulations are launched in one go, allowing users to continue working on other things. To monitor the progress of individual simulations, users can use `task.get_status()`, or they can view a list of the most recent tasks launched by using `inductiva.tasks.list(last_n=5)`.
 
-
+Finally, to retrieve the results the user can use task.get_output(), which waits for the simulation to finish before downloading the results. During this waiting period, it temporarily blocks the execution of other code. Check the [Tasks section](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks) for more information on how to do this.
 
 ## More info:
 
