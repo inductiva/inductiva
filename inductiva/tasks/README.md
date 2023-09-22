@@ -1,7 +1,7 @@
 # Tasks
 
 
-The **Inductiva API** client provides the ability to run complex simulations and contains easy-to-use tools to manage them. Each simulation submitted - with `scenario.simulate()` or `simulation.run()` - runs asynchronously and the client unblocks returning a `Task` object that contains methods to manage the simulation.
+The **Inductiva API** client provides the ability to run complex simulations and contains easy-to-use tools to manage them. Each simulation submitted - with `scenario.simulate()` or `simulation.run()` - runs asynchronously and returns a `Task` object that contains methods to manage the simulation.
 
 Here, you'll learn:
 
@@ -47,7 +47,7 @@ task = my_scenario.simulate()
 # is interrupted. 
 task.wait()
 
-# Turn the simulation into a blocking call. Users can kill
+# Turn the simulation into a blocking call. Users kill
 # the remote process if the local process is killed.
 task = my_scenario.simulate()
 with task.sync_context():

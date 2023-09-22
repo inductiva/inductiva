@@ -144,7 +144,7 @@ The user must specify the input directory containing the files to run the simula
 
 ## Running multiple simulations in parallel
 
-**Inductiva API** allows you to launch multiple simulation in parallel. After a simulation is submitted, the client unblocks - simulations run asynchronously - and can run other tasks. Users are not limited to wait for the simulation to finish.
+**Inductiva API** allows you to launch multiple simulations in parallel. After a simulation is submitted, users are free to execute other commands, since simulation run independently in the background. Users are not limited by waiting for the simulation to finish.
 
 Users can prepare several simulations and launch them all together in parallel. Let's look at an example using the wind tunnel scenario:
 
