@@ -61,10 +61,11 @@ class DeformablePlate(Scenario):
                                                      holes_list=self.holes_list)
         self.bcs_case = bcs_utils.BoundaryConditionsCase(bcs_list=self.bcs_list)
 
-    def simulate(self,
-                 simulator: Simulator = FEniCSx(),
-                 machine_group: Optional[resources.MachineGroup] = None
-                 ) -> tasks.Task:
+    def simulate(
+            self,
+            simulator: Simulator = FEniCSx(),
+            machine_group: Optional[resources.MachineGroup] = None
+    ) -> tasks.Task:
         """Simulates the scenario.
 
         Args:

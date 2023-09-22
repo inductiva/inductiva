@@ -24,8 +24,6 @@ class XBeach(simulators.Simulator):
             sim_config_filename: Name of the simulation configuration file.
             other arguments: See the documentation of the base class.
         """
-        return super().run(
-            input_dir,
-            input_filename=sim_config_filename,
-            machine_group=machine_group
-        )
+        return super().run(input_dir,
+                           input_filename=sim_config_filename,
+                           machine_group=machine_group)
