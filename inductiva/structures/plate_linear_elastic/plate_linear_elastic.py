@@ -63,14 +63,13 @@ class DeformablePlate(Scenario):
 
     def simulate(self,
                  simulator: Simulator = FEniCSx(),
-                 machine_group: Optional[resources.MachineGroup] = None,
-                 run_async: bool = False) -> tasks.Task:
+                 machine_group: Optional[resources.MachineGroup] = None
+                 ) -> tasks.Task:
         """Simulates the scenario.
 
         Args:
             simulator: The simulator to use for the simulation.
             machine_group: The machine group to use for the simulation.
-            run_async: Whether to run the simulation asynchronously.
             mesh_filename: Mesh filename.
             bcs_filename: Boundary conditions filename.
             material_filename: Material filename.
@@ -78,7 +77,6 @@ class DeformablePlate(Scenario):
         simulator.override_api_method_prefix("deformable_plate")
         task = super().simulate(simulator,
                                 machine_group=machine_group,
-                                run_async=run_async,
                                 mesh_filename=MESH_FILENAME,
                                 bcs_filename=BCS_FILENAME,
                                 material_filename=MATERIAL_FILENAME)

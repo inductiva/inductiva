@@ -41,7 +41,6 @@ class Scenario(ABC):
         self,
         simulator: Simulator,
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         **kwargs,
     ):
         """Simulates the scenario synchronously."""
@@ -53,6 +52,5 @@ class Scenario(ABC):
             return simulator.run(
                 input_dir,
                 machine_group=machine_group,
-                run_async=run_async,
                 **kwargs,
             )

@@ -43,7 +43,6 @@ class MDWaterBox(scenarios.Scenario):
             self,
             simulator: simulators.Simulator = simulators.GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
-            run_async: bool = False,
             simulation_time_ns: float = 1,  # ns
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
@@ -66,7 +65,6 @@ class MDWaterBox(scenarios.Scenario):
             documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
             n_steps_min: Number of steps for energy minimization.
-            run_async: Whether to run the simulation asynchronously.
         """
         simulator.override_api_method_prefix("mdwater_box")
 
@@ -83,8 +81,7 @@ class MDWaterBox(scenarios.Scenario):
         commands = self.get_commands()
         task = super().simulate(simulator,
                                 machine_group=machine_group,
-                                commands=commands,
-                                run_async=run_async)
+                                commands=commands)
 
         return task
 

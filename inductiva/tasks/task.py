@@ -72,7 +72,7 @@ class Task:
         remote task is killed.
 
         Usage:
-            task = scenario.simulate(..., run_async=True)
+            task = scenario.simulate(...)
 
             with task.sync_context():
                 # If an exception happens here or ctrl+c is pressed, the task

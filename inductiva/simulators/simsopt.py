@@ -23,7 +23,6 @@ class SIMSOPT(simulators.Simulator):
         sigma_scaling_factor: float,
         objectives_weights_filename: str,
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -57,7 +56,6 @@ class SIMSOPT(simulators.Simulator):
         return super().run(
             input_dir,
             machine_group=machine_group,
-            run_async=run_async,
             coil_coefficients_filename=coil_coefficients_filename,
             coil_currents_filename=coil_currents_filename,
             plasma_surface_filename=plasma_surface_filename,

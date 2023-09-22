@@ -42,7 +42,6 @@ class ProteinSolvation(scenarios.Scenario):
             self,
             simulator: simulators.Simulator = simulators.GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
-            run_async: bool = False,
             simulation_time_ns: float = 10,  # ns
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
@@ -69,7 +68,6 @@ class ProteinSolvation(scenarios.Scenario):
             are warnings. If True, the simulation will run, but the results 
             may have inaccuracies. Use with caution. 
             n_steps_min: Number of steps for energy minimization.
-            run_async: Whether to run the simulation asynchronously.
         """
         simulator.override_api_method_prefix("protein_solvation")
 
@@ -90,8 +88,7 @@ class ProteinSolvation(scenarios.Scenario):
 
         task = super().simulate(simulator,
                                 machine_group=machine_group,
-                                commands=commands,
-                                run_async=run_async)
+                                commands=commands)
 
         return task
 

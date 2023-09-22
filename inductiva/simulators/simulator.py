@@ -41,7 +41,6 @@ class Simulator(ABC):
         input_dir: types.Path,
         *_args,
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -58,7 +57,6 @@ class Simulator(ABC):
         return tasks.run_simulation(
             self.api_method_name,
             input_dir,
-            run_async=run_async,
             machine_group=machine_group,
             **kwargs,
         )

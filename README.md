@@ -164,7 +164,7 @@ task_list = []
 velocity_list=[1, 10, 20, 30, 40]
 for velocity in velocity_list:
   scenario = inductiva.fluids.WindTunnel(flow_velocity=[velocity, 0, 0])
-  task = scenario.simulate(object_path=vehicle_path, run_async=True)
+  task = scenario.simulate(object_path=vehicle_path)
   task_list.append(task)
 ```
 

@@ -200,7 +200,6 @@ class FluidTank(scenarios.Scenario):
         self,
         simulator: simulators.Simulator = simulators.SplishSplash(),
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         simulation_time: float = 5,
         resolution: Literal["low", "medium", "high"] = "low",
         output_time_step: float = 0.1,
@@ -217,7 +216,6 @@ class FluidTank(scenarios.Scenario):
               radius and time step. Accepted values are: "low", "medium",
               "high".
             particle_sorting: Whether to use particle sorting.
-            run_async: Whether to run the simulation asynchronously.
         """
         simulator.override_api_method_prefix("fluid_tank")
 
@@ -230,7 +228,6 @@ class FluidTank(scenarios.Scenario):
         task = super().simulate(
             simulator,
             machine_group=machine_group,
-            run_async=run_async,
             particle_radius=self.particle_radius,
             sim_config_filename=self.get_config_filename(simulator),
         )

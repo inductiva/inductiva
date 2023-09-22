@@ -56,7 +56,7 @@ The simulation parameters available for the user to configure are:
 - `num_iterations`: Set the maximum number of iterations for the iterative algorithm to converge.
 - `resolution`: Controls the resolution of the meshing that is done prior to the simulation. The higher the resolution, the finer the meshing. Available options: "high", "medium", "low".
 
-Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `run_async`, `n_cores`.
+Moreover, the hardware and interaction are configured with the usual general parameters - `machine_group`, `n_cores`.
 Launching a simulation returns a task object, which can be used to verify the status of the simulation, get the simulation outputs and access post-processing tools. See more in the [Tasks section](inductiva/tasks/README.md).
 
 ## Output and Post-Processing
