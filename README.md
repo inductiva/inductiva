@@ -92,10 +92,10 @@ These are the currently available scenarios:
 
 <div align="center">
   
-| [**Protein Solvation**](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/protein_solvation) | [**Coastal Area**](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal)  |
+| [**Protein Solvation**](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/protein_solvation#readme) | [**Coastal Area**](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal#readme)  |
 | :-------------------------: | :-------------------------------: |
 |<div align="center"><img src="https://github.com/inductiva/inductiva/blob/0bc4afcbf6361a309288a755e1469cbdeaba1d5e/resources/media/md/protein_solvation_big_molecule.gif" alt="Protein Solvation simulation" width="200" height="200" /></div> |  <div align="center"><img src="https://github.com/inductiva/inductiva/blob/0bc4afcbf6361a309288a755e1469cbdeaba1d5e/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="250" height="150" /></div>  |
-| [**Fluid Tank**](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/fluid_tank) | [**Wind Tunnel**](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/wind_tunnel) |
+| [**Fluid Tank**](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/fluid_tank#readme) | [**Wind Tunnel**](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/wind_tunnel#readme) |
 | <div align="center"><img src="https://github.com/inductiva/inductiva/blob/0bc4afcbf6361a309288a755e1469cbdeaba1d5e/resources/media/fluid_tank.gif" alt="Fluid Tank simulation" width="250" height="150" /></div> | <div align="center"><img src="https://github.com/inductiva/inductiva/blob/0bc4afcbf6361a309288a755e1469cbdeaba1d5e/resources/media/openfoam/default_pressure_field.png" alt="Wind tunnel simulation" width="300" height="200" /></div> |
 
 </div>
@@ -113,7 +113,7 @@ The simulators we provide are all open-source and have their own dedicated docum
 - [XBeach](https://oss.deltares.nl/web/xbeach/)
 - [GROMACS](https://www.gromacs.org/)
 
-To learn how to use these simulators with Inductiva API, check the example below and the [Simulators section](https://github.com/inductiva/inductiva/tree/main/inductiva/simulators/README.md)
+To learn how to use these simulators with Inductiva API, check the example below and the [Simulators section](https://github.com/inductiva/inductiva/tree/main/inductiva/simulators#readme)
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
@@ -170,12 +170,12 @@ for velocity in velocity_list:
 
 All simulations are launched in one go, allowing users to continue working on other things. To monitor the progress of individual simulations, users can use `task.get_status()`, or they can view a list of the most recent tasks launched by using `inductiva.tasks.list(last_n=5)`.
 
-Finally, to retrieve the results the user can use task.get_output(), which waits for the simulation to finish before downloading the results. During this waiting period, it temporarily blocks the execution of other code. Check the [Tasks section](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks) for more information on how to do this.
+Finally, to retrieve the results the user can use task.get_output(), which waits for the simulation to finish before downloading the results. During this waiting period, it temporarily blocks the execution of other code. Check the [Tasks section](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks#readme) for more information on how to do this.
 
 ## More info:
 
-- [Managing submitted tasks](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks)
-- [Managing computation resources](https://github.com/inductiva/inductiva/tree/main/inductiva/resources)
+- [Managing submitted tasks](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks#readme)
+- [Managing computation resources](https://github.com/inductiva/inductiva/tree/main/inductiva/resources#readme)
 
 ## Installation troubleshooting
 ### Why can't I install the optional packages?
