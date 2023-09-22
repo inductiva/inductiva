@@ -100,7 +100,7 @@ pressure_field.render(virtual_display=True, save_path="pressure_field.png")
 ```
 
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/blob/main/resources/media/openfoam/pressure_field.png" alt="Pressure Field of a vehicle." width="400" height="330" >
+  <img src="https://github.com/inductiva/inductiva/blob/main/resources/media/openfoam/pressure_field.png?raw=true" alt="Pressure Field of a vehicle." width="400" height="330" >
 </p>
 
 ### Available Simulation Scenarios
@@ -112,9 +112,9 @@ These are the currently available scenarios:
   
 | [**Protein Solvation**](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/protein_solvation#protein-solvation-scenario) | [**Coastal Area**](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal#coastal-area-scenario)  |
 | :-------------------------: | :-------------------------------: |
-|<div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/md/protein_solvation_big_molecule.gif" alt="Protein Solvation simulation" width="200" height="200" /></div> |  <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/random_coastal_area.gif" alt="Coastal area simulation" width="250" height="150" /></div>  |
+|<div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/md/protein_solvation_big_molecule.gif?raw=true" alt="Protein Solvation simulation" width="200" height="200" /></div> |  <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/random_coastal_area.gif?raw=true" alt="Coastal area simulation" width="250" height="150" /></div>  |
 | [**Fluid Tank**](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/fluid_tank#fluid-tank-scenario) | [**Wind Tunnel**](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/wind_tunnel#wind-tunnel-scenario) |
-| <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/fluid_tank.gif" alt="Fluid Tank simulation" width="250" height="150" /></div> | <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/openfoam/default_pressure_field.png" alt="Wind tunnel simulation" width="300" height="200" /></div> |
+| <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/fluid_tank.gif?raw=true" alt="Fluid Tank simulation" width="250" height="150" /></div> | <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/openfoam/default_pressure_field.png?raw=true" alt="Wind tunnel simulation" width="300" height="200" /></div> |
 
 </div>
 
