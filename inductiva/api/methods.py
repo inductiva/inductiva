@@ -253,25 +253,6 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def invoke_api_from_fn_ptr(
-    params,
-    function_ptr,
-    output_dir: Optional[Path] = None,
-    resource_pool_id: Optional[UUID] = None,
-):
-    """Perform a task remotely defined by a function pointer."""
-    type_annotations = get_type_annotations(function_ptr)
-    method_name = get_method_name(function_ptr)
-    return invoke_api(
-        method_name,
-        params,
-        output_dir=output_dir,
-        type_annotations=type_annotations,
-        return_type=type_annotations["return"],
-        resource_pool_id=resource_pool_id,
-    )
-
-
 def submit_task(api_instance, task_request, params, type_annotations):
     """Submit a task and send input files to the API."""
 

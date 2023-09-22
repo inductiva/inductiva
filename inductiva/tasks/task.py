@@ -33,7 +33,7 @@ class Task:
     """Represents a running/completed task on the Inductiva API.
 
     Example usage:
-        task = scenario.simulate_async(...)
+        task = scenario.simulate(...)
         final_status = task.wait()
         info = task.get_info() # dictionary with info about the task
         task.download_outputs(

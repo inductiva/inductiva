@@ -146,12 +146,9 @@ Find more examples of simulations in the [tutorials section](https://github.com/
 
 ## Running multiple simulations in parallel
 
-Up until now, all simulations were run synchronously which gives feedback while the simulation is running until it finishes. However, this is not always the best option, for example, when launching two simulations it implies that they run one after the other. This
-is not optimal for when users need to launch hundreds of simulations.
+**Inductiva API** allows you to launch multiple simulation in parallel. After a simulation is submitted, the client unblocks - simulations run asynchronously - and can run other tasks. Users are not limited to wait for the simulation to finish.
 
-To solve this problem **Inductiva API** allows users to run simulations asynchronously. This means that the simulation is launched and the user can continue with other tasks - like launching more simulations. 
-
-Let's look at an example using the wind tunnel scenario:
+Users can prepare several simulations and launch them all together in parallel. Let's look at an example using the wind tunnel scenario:
 
 ```python
 import inductiva
