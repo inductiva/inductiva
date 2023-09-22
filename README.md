@@ -73,12 +73,19 @@ task = scenario.simulate(
 
 # Download the simulation output to your local machine.
 output = task.get_output()
+
+# Get the pressure field over the object
+pressure_field = output.get_object_pressure_field()
 ```
 
+To render the post-processing on a computer with physical display run:
 ```python
-# Render the results
-pressure_field = output.get_object_pressure_field()
 pressure_field.render()
+```
+
+Or, in Colab or headless server, install the extra dependencies `!apt install libgl1-mesa-glx xvfb` and run:
+```python
+pressure_field.render(virtual_display=True, save_path="pressure_field.png")
 ```
 
 <p align="center">
