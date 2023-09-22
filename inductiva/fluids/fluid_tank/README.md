@@ -25,11 +25,11 @@ import inductiva
 inductiva.api_key="YOUR_API_KEY"
 
 scenario = inductiva.fluids.FluidTank(
-    shape=inductiva.fluids.shapes.Cylinder((radius=0.5, height=1)),
+    shape=inductiva.fluids.shapes.Cylinder(radius=0.5, height=1),
     fluid=inductiva.fluids.WATER,
     fluid_level=0.5,
     inlet=inductiva.fluids.CircularTankInlet(radius=0.5),
-    outlet=inductiva.fluids.CylindricalTankOutlet())
+    outlet=inductiva.fluids.CylindricalTankOutlet(radius=0.1, height=0.1))
 
 task = scenario.simulate(simulation_time=5,
                            output_time_step=0.1,
