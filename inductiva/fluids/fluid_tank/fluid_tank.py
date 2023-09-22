@@ -200,7 +200,7 @@ class FluidTank(scenarios.Scenario):
         self,
         simulator: simulators.Simulator = simulators.SplishSplash(),
         machine_group: Optional[resources.MachineGroup] = None,
-        simulation_time: float = 5,
+        simulation_time: float = 1,
         resolution: Literal["low", "medium", "high"] = "low",
         output_time_step: float = 0.1,
         particle_sorting: bool = False,
