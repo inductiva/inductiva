@@ -8,7 +8,7 @@ from inductiva import _cli
 def main():
     parser = argparse.ArgumentParser(
         prog="inductiva",
-        description="CLI tool for Inductiva API.",
+        description="CLI tool for Inductiva API",
     )
 
     parser.add_argument(
@@ -22,21 +22,21 @@ def main():
         "--api-key",
         type=str,
         help=("API key to use. If not provided, it "
-              "will be read from the INDUCTIVA_API_KEY environment variable."),
+              "will be read from the INDUCTIVA_API_KEY environment variable"),
     )
 
     # If no subcommand is provided, print help
-    parser.set_defaults(func=parser.print_help)
+    _cli.utils.show_help_msg(parser)
 
     # Create subcommands
     subparsers = parser.add_subparsers()
     tasks_subparser = subparsers.add_parser(
         "tasks",
-        help="View tasks information.",
+        help="View tasks information",
     )
     resources_subparser = subparsers.add_parser(
         "resources",
-        help="View resources information.",
+        help="View resources information",
     )
 
     # Register subcommands (e.g. list) for each subcommand (e.g. tasks)
