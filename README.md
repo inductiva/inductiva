@@ -50,7 +50,12 @@ And you are good to go! You can start exploring Inductiva API with the examples 
 
 ### WindTunnel Example
 
-To run this simulation you just need the default installation of the Inductiva package. To visualize the results (second code snippet), the extra dependencies for fluid dynamics are required (see above).
+To run this simulation and render the visualizations install the fluids extra dependencies with
+```python
+!pip install --upgrade inductiva[fluids_extra]
+```
+
+Follow the example with:
 
 ```python
 import inductiva
@@ -73,12 +78,25 @@ task = scenario.simulate(
 
 # Download the simulation output to your local machine.
 output = task.get_output()
+
+# Get the pressure field over the object
+pressure_field = output.get_object_pressure_field()
 ```
 
+To render the post-processing on a computer with physical display run:
 ```python
-# Render the results
-pressure_field = output.get_object_pressure_field()
 pressure_field.render()
+```
+
+Or, in Colab or headless server, install the extra dependencies with
+
+```
+!apt install libgl1-mesa-glx xvfb
+``` 
+and run:
+
+```python
+pressure_field.render(virtual_display=True, save_path="pressure_field.png")
 ```
 
 <p align="center">
