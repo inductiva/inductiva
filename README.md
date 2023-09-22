@@ -141,7 +141,7 @@ task = simulator.run(input_dir=input_dir)
 
 The user must specify the input directory containing the files to run the simulation. In the above example, a directory with the configuration of a simulation is downloaded, and passed as argument to the simulator call.
 
-Find more examples of simulations in the [tutorials section](https://github.com/inductiva/inductiva/tree/258ee549d7db93248b80632de6056fa427cff1ae/demos/tutorials).
+Find examples on how to run the others simulators [here](https://github.com/inductiva/inductiva/tree/035e20b4537a438955ce059ef8e5c90516284ed1/inductiva/simulators#simulators).
 
 
 ## Running multiple simulations in parallel
