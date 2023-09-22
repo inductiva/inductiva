@@ -113,7 +113,7 @@ The simulators we provide are all open-source and have their own dedicated docum
 - [XBeach](https://oss.deltares.nl/web/xbeach/)
 - [GROMACS](https://www.gromacs.org/)
 
-To learn how to use these simulators with Inductiva API, check the example below and the [Simulators section](https://github.com/inductiva/inductiva/tree/main/inductiva/simulators/README.md)
+To learn how to use these simulators with Inductiva API, check the example below and the [Simulators section](https://github.com/inductiva/inductiva/tree/main/inductiva/simulators#README.md).
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
@@ -140,8 +140,6 @@ task = simulator.run(input_dir=input_dir)
 ```
 
 The user must specify the input directory containing the files to run the simulation. In the above example, a directory with the configuration of a simulation is downloaded, and passed as argument to the simulator call.
-
-Find examples on how to run the others simulators [here](https://github.com/inductiva/inductiva/tree/035e20b4537a438955ce059ef8e5c90516284ed1/inductiva/simulators#simulators).
 
 
 ## Running multiple simulations in parallel
