@@ -11,7 +11,7 @@ class FEniCSx(Simulator):
 
     def __init__(self):
         super().__init__()
-        self.api_method = "fem.fenicsx.run_simulation"
+        self.api_method_name = "fem.fenicsx.run_simulation"
 
     def run(
         self,

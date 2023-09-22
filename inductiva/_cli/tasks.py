@@ -1,5 +1,6 @@
 """Tasks CLI subcommands."""
 import inductiva
+from inductiva import _cli
 
 
 def list_tasks(args):
@@ -7,8 +8,11 @@ def list_tasks(args):
 
 
 def register_tasks_cli(parser):
+    _cli.utils.show_help_msg(parser)
+
     subparsers = parser.add_subparsers()
-    list_subparser = subparsers.add_parser("list", help="List tasks.")
+
+    list_subparser = subparsers.add_parser("list", help="List tasks")
     list_subparser.add_argument(
         "-n",
         "--last-n",

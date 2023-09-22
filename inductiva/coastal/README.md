@@ -36,11 +36,11 @@ scenario = inductiva.coastal.CoastalArea(bathymetry=bathymetry,
                                              wave_amplitude=0.1,
                                              wave_period=5.5)
 
-task = scenario.simulate(simulation_time=80, output_time_step=1, fps=5)
+task = scenario.simulate(simulation_time=80, output_time_step=1)
 
 output = task.get_output()
 
-output.render(movie_path="movie_path.mp4")
+output.render(movie_path="movie_path.mp4", fps=5)
 ```
 
 Let's go in depth to each of the steps in the example above.

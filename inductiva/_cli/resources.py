@@ -1,5 +1,6 @@
 """Resources CLI subcommand."""
 import inductiva
+from inductiva import _cli
 
 
 def list_resources(args):
@@ -9,9 +10,11 @@ def list_resources(args):
 
 
 def register_resources_cli(parser):
+    _cli.utils.show_help_msg(parser)
     subparsers = parser.add_subparsers()
+
     list_subparser = subparsers.add_parser(
-        "list", help="List currently active resources.")
+        "list", help="List currently active resources")
 
     # Register function to call when this subcommand is used
     list_subparser.set_defaults(func=list_resources)
