@@ -82,7 +82,7 @@ class DeformablePlateOutput:
         ]
 
         # If field_names is None, set it to ["von_mises"]
-        if field_names == None:
+        if field_names is None:
             field_names = ["von_mises"]
 
         # Iterate through the specified field names to render
