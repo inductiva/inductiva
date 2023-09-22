@@ -31,3 +31,5 @@ urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
 absl.logging.set_verbosity(absl.logging.INFO)
+
+__version__ = "0.3.5"
