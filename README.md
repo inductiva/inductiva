@@ -42,7 +42,7 @@ import inductiva
 inductiva.api_key = "YOUR_API_KEY"
 ```
 
-And you are good to go! You can start [exploring our tutorial notebooks](https://github.com/inductiva/inductiva/tree/main/demos).
+And you are good to go! You can start exploring Inductiva API with the examples below.
 
 ## Pre-built Simulation Scenarios
 
