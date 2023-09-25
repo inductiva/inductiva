@@ -31,12 +31,18 @@ class DeformablePlateOutput:
                off_screen: bool = True,
                scalar_bar: bool = True,
                background_color: str = "white",
-               transparent_background: bool = True) -> None:
+               transparent_background: bool = True,
+               virtual_display: bool = True) -> None:
         """Render the simulation fields as images.
 
         Args:
-            field_names (list, optional): List of field names to render. Default
-              is None.
+            field_names (list, optional): List of field names to render. 
+              Default is None. The available options for elements in the list
+              include "displacement_x," "displacement_y," "displacement_z," 
+              "stress_xx", "stress_xy", "stress_xz", "stress_yx", "stress_yy",
+              "stress_yz", "stress_zx", "stress_zy", "stress_zz", "strain_xx",
+              "strain_xy", "strain_xz", "strain_yx", "strain_yy", "strain_yz",
+              "strain_zx", "strain_zy", "strain_zz" and "von_mises".
             show_edges (bool, optional): Whether to display mesh edges. Default
               is True.
             colormap (str, optional): The colormap to apply to the field data.
@@ -50,6 +56,8 @@ class DeformablePlateOutput:
               visualization. Default is "white".
             transparent_background (bool, optional): Whether the background of
               the saved images should be transparent. Default is True.
+            virtual_display: Whether to use a virtual display to render the
+              field.
         """
 
         # Define the XDMF file path for the solver output file
@@ -64,13 +72,13 @@ class DeformablePlateOutput:
 
         # Read simulation output data
         reader = pv.get_reader(temp_file_path)
-        py_multiblock = reader.read()
+        pv_multiblock = reader.read()
 
         # Get the list of available keys (field names) in the PyVista dataset
-        keys = list(py_multiblock.keys())
+        keys = list(pv_multiblock.keys())
 
         # Select the PyVista dataset representing the mesh
-        pv_dataset = py_multiblock["mesh"]
+        pv_dataset = pv_multiblock["mesh"]
 
         # Define a list of valid field names
         valid_field_names = [
@@ -80,10 +88,6 @@ class DeformablePlateOutput:
             "strain_xz", "strain_yx", "strain_yy", "strain_yz", "strain_zx",
             "strain_zy", "strain_zz"
         ]
-
-        # If field_names is None, set it to ["von_mises"]
-        if field_names is None:
-            field_names = ["von_mises"]
 
         # Iterate through the specified field names to render
         for field_name in field_names:
@@ -114,17 +118,24 @@ class DeformablePlateOutput:
                     "zz": 8
                 }[subfield]
 
-                # Extract the specific subfield array from the dataset
-                field_array = py_multiblock[keys[field_id]].get_array(
-                    0)[:, subfield_id]
+                # Extract the specific subfield from the dataset
+                # Get the field key from the list of keys
+                field_key = keys[field_id]
+                # Access the multiblock data using the field key
+                multiblock_data = pv_multiblock[field_key]
+                # Get the subfield array
+                field_array = multiblock_data.get_array(0)[:, subfield_id]
 
             elif field_name == "von_mises" or field_name is None:
                 # For the special case of "von_mises" field, find its index in
                 # the dataset keys
                 field_id = keys.index(field_name)
-
+                # Get the field key from the list of keys
+                field_key = keys[field_id]
+                # Access the multiblock data using the field key
+                multiblock_data = pv_multiblock[field_key]
                 # Extract the "von_mises" field array from the dataset
-                field_array = py_multiblock[keys[field_id]].get_array(0)
+                field_array = multiblock_data.get_array(0)
 
             else:
                 valid_field_names_str = ", ".join(valid_field_names)
@@ -150,7 +161,8 @@ class DeformablePlateOutput:
             off_screen=off_screen,
             background_color=background_color,
             scalar_bar=scalar_bar,
-            transparent_background=transparent_background)
+            transparent_background=transparent_background,
+            virtual_display=virtual_display)
 
         # Clean up temporary files and directory
         os.remove(temp_file_path)

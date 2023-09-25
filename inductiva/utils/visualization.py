@@ -515,21 +515,21 @@ def create_color_plot_movie(
 
 
 @optional_deps.needs_structures_extra_deps
-def create_2d_field_from_pv_dataset(
-        pv_dataset: "pv.UnstructuredGrid",
-        field_name: str,
-        field_path: str,
-        show_edges: bool = True,
-        colormap: str = "jet",
-        off_screen: bool = True,
-        scalar_bar: bool = True,
-        background_color: str = "white",
-        transparent_background: bool = True) -> None:
+def create_2d_field_from_pv_dataset(pv_dataset: "pv.DataSet",
+                                    field_name: str,
+                                    field_path: str,
+                                    show_edges: bool = True,
+                                    colormap: str = "jet",
+                                    off_screen: bool = True,
+                                    scalar_bar: bool = True,
+                                    background_color: str = "white",
+                                    transparent_background: bool = True,
+                                    virtual_display: bool = True) -> None:
     """Creates a 2D image representation of a field from a PyVista 
       UnstructuredGrid dataset.
 
     Args:
-        pv_dataset (pv.UnstructuredGrid): The PyVista UnstructuredGrid dataset.
+        pv_dataset (pv.DataSet): The PyVista dataset.
         field_name (str): The name of the field to visualize.
         field_path (str): The path where the resulting image will be saved.
         show_edges (bool, optional): Whether to display mesh edges. Default is
@@ -545,9 +545,12 @@ def create_2d_field_from_pv_dataset(
           visualization. Default is "white".
         transparent_background (bool, optional): Whether the background of the
           saved image should be transparent. Default is True.
+        virtual_display: Whether to use a virtual display to render the field.
     """
+
     # Start PyVista virtual framebuffer
-    pv.start_xvfb()
+    if virtual_display:
+        pv.start_xvfb()
 
     # Initialize the PyVista plotter
     plotter = pv.Plotter()
@@ -585,20 +588,20 @@ def create_2d_field_from_pv_dataset(
 
 
 @optional_deps.needs_structures_extra_deps
-def create_2d_fields_from_pv_dataset(
-        pv_dataset: "pv.UnstructuredGrid",
-        field_dir: str,
-        show_edges: bool = True,
-        colormap: str = "jet",
-        off_screen: bool = True,
-        scalar_bar: bool = True,
-        background_color: str = "white",
-        transparent_background: bool = True) -> None:
+def create_2d_fields_from_pv_dataset(pv_dataset: "pv.DataSet",
+                                     field_dir: str,
+                                     show_edges: bool = True,
+                                     colormap: str = "jet",
+                                     off_screen: bool = True,
+                                     scalar_bar: bool = True,
+                                     background_color: str = "white",
+                                     transparent_background: bool = True,
+                                     virtual_display: bool = True) -> None:
     """Creates 2D image representations of fields from a PyVista 
       UnstructuredGrid dataset.
 
     Args:
-        pv_dataset (pv.UnstructuredGrid): The PyVista UnstructuredGrid dataset.
+        pv_dataset (pv.DataSet): The PyVista dataset.
         field_dir (str): Path to the directory where the resulting images will
           be saved.
         field_array (list): The field data to be visualized and converted to an 
@@ -616,6 +619,7 @@ def create_2d_fields_from_pv_dataset(
           visualization. Default is "white".
         transparent_background (bool, optional): Whether the background of the
           saved image should be transparent. Default is True.
+        virtual_display: Whether to use a virtual display to render the field.
     """
     # Get the list of field names from the point_data of the PyVista dataset
     field_names = pv_dataset.point_data.keys()
@@ -636,4 +640,5 @@ def create_2d_fields_from_pv_dataset(
             off_screen=off_screen,
             background_color=background_color,
             scalar_bar=scalar_bar,
-            transparent_background=transparent_background)
+            transparent_background=transparent_background,
+            virtual_display=virtual_display)
