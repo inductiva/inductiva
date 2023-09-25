@@ -850,7 +850,7 @@ class OpenApiResponse(JSONDetector):
         if content_disposition is None:
             return None
         match = cls.__filename_content_disposition_pattern.search(
-                content_disposition)
+            content_disposition)
         if not match:
             return None
         return match.group(1)
