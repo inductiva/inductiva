@@ -18,6 +18,7 @@ class SplishSplash(Simulator):
         sim_config_filename: str,
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
+        particle_radius: float = 0.025,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -31,4 +32,5 @@ class SplishSplash(Simulator):
             machine_group=machine_group,
             input_filename=sim_config_filename,
             run_async=run_async,
+            particle_radius=particle_radius,
         )

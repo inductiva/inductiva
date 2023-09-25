@@ -6,11 +6,11 @@ nsteps                  = {{ nsteps }}        ; dt * nsteps = simulation ime in 
 dt                      = 0.002               ; 2 fs
 
 ; Output control
-nstxtcout               = 1                   ; generate .xtc file 
-nstxout                 = 50                  ; save coordinates every 50 iter
-nstvout                 = 50                  ; save velocities every 1.0 ps
-nstenergy               = 50                  ; save energies every 1.0 ps
-nstlog                  = 50                  ; update log file every 1.0 ps
+nstxout                 = {{ output_frequency }}                ; frequency to save coordinates 
+nstvout                 = {{ output_frequency }}                ; frequency to save velocities 
+nstenergy               = {{ output_frequency }}                ; frequency to save energies 
+nstlog                  = {{ output_frequency }}                ; frequency to update log file 
+nstxout-compressed      = {{ output_frequency }}                ; frequency to save coordinates in the compressed trajectory file
 
 ; Temperature coupling is on
 tcoupl                  = Nose-Hoover         ; Nose-Hoover thermostat

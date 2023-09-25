@@ -20,7 +20,9 @@ def bytes_formatter(n_bytes: int) -> str:
 
 
 def datetime_formatter(dt: str) -> str:
-    return datetime.datetime.fromisoformat(dt).strftime("%d %b, %H:%M:%S")
+    # get time in local timezone
+    local_dt = datetime.datetime.fromisoformat(dt).astimezone()
+    return local_dt.strftime("%d %b, %H:%M:%S")
 
 
 def seconds_formatter(secs: float) -> str:

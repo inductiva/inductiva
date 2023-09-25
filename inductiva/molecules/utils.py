@@ -14,13 +14,14 @@ from inductiva.utils import optional_deps, files
 
 
 @optional_deps.needs_molecules_extra_deps
-def unwrap_trajectory(topology, trajectory):
+def unwrap_trajectory(topology, trajectory, guess_bonds=True):
     """Unwrap visualization of the trajectory to deal with
     Periodic Boundary Conditions.
     Args:
         topology: Path to the topology file.
-        trajectory: Path to the trajectory file."""
-    universe = mda.Universe(topology, trajectory, guess_bonds=True)
+        trajectory: Path to the trajectory file.
+        guess_bonds: Whether to guess bonds between atoms."""
+    universe = mda.Universe(topology, trajectory, guess_bonds=guess_bonds)
     atoms = universe.atoms
     transformation = transformations.unwrap(atoms)
     universe.trajectory.add_transformations(transformation)
@@ -47,20 +48,19 @@ def align_trajectory_to_average(universe, trajectory_output_path):
 
 
 def download_pdb_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
-    """Download a PDB file from the RCSB database according 
+    """Download a PDB file from the RCSB database according
     to its pdb ID.
     Args:
         pdb_id: The PDB identifier of the molecule to download.
         save_dir: The directory to save the file to. If None
             is passed, this will download to the current working
             directory. If the save_dir passed does not exist, this
-            method will try to create it. 
+            method will try to create it.
     Returns:
         The path to the downloaded PDB file.
     """
-    file_path = f"{pdb_id}.pdb"
-    pdb_url = f"https://files.rcsb.org/download/{file_path}"
+    pdb_url = f"https://files.rcsb.org/download/{pdb_id}.pdb"
 
-    file_path = files.download_from_url(pdb_url, file_path, save_dir)
+    file_path = files.download_from_url(pdb_url, save_dir)
 
     return file_path

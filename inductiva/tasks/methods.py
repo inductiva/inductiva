@@ -51,33 +51,45 @@ def _fetch_tasks_from_api(
 
 def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
     columns = [
-        "ID", "Simulator", "Status", "Submitted", "Started", "Duration",
-        "VM Type"
+        "ID", "Scenario", "Simulator", "Status", "Submitted", "Started",
+        "Duration", "VM Type"
     ]
     rows = []
 
     for task in tasks:
         info = task.get_info()
         # e.g., get "openfoam" from "fvm.openfoam.run_simulation"
-        simulator = info["method_name"].split(".")[-2]
+        simulator = task.get_simulator_name()
+        scenario = task.get_scenario_name()
+        if scenario:
+            scenario = scenario.replace("_", " ")
+
+        end_time = info.get("end_time", None)
+        execution_time = task.get_execution_time(fail_if_running=False)
+
+        if execution_time is not None:
+            execution_time = format_utils.seconds_formatter(execution_time)
+            if end_time is None:
+                execution_time = f"*{execution_time}"
+
         row = [
             task.id,
+            scenario,
             simulator,
             task.get_status(),
             info.get("input_submit_time", None),
             info.get("start_time", None),
-            task.get_execution_time(),
+            execution_time,
             task.get_machine_type(),
         ]
         rows.append(row)
-
     formatters = {
         "Submitted": format_utils.datetime_formatter,
         "Started": format_utils.datetime_formatter,
-        "Duration": format_utils.seconds_formatter,
     }
 
     override_col_space = {
+        "Scenario": 22,
         "Submitted": 20,
         "Started": 20,
         "Status": 20,
@@ -94,7 +106,7 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
 
 
 # pylint: disable=redefined-builtin
-def list(last_n,
+def list(last_n: int = 5,
          status: Optional[Union[str, models.TaskStatusCode]] = None) -> None:
     # pylint: disable=line-too-long
     """List the last N tasks of a user.
@@ -110,12 +122,12 @@ def list(last_n,
     Example usage:
         # list the last 5 tasks that were successful
         inductiva.tasks.list(5, status="success")
-                         ID       Simulator               Status            Submitted              Started        Duration            VM Type
-        1691150776862178362        openfoam              success     04 Aug, 12:06:17     04 Aug, 12:06:18       0h 1m 53s      c2-standard-8
-        1691149904961476240        openfoam              success     04 Aug, 11:51:46     04 Aug, 11:51:46       0h 1m 28s      c2-standard-8
-        1691081881158823776        openfoam              success     03 Aug, 16:58:02     03 Aug, 16:58:02       0h 1m 20s     n2-standard-32
-        1691081409916619414        openfoam              success     03 Aug, 16:50:11     03 Aug, 16:50:11       0h 1m 20s     n2-standard-32
-        1691080520213617518        openfoam              success     03 Aug, 16:35:21     03 Aug, 16:35:21       0h 1m 23s     n2-standard-32
+                         ID               Scenario       Simulator               Status            Submitted              Started        Duration            VM Type
+        1695309310050950437                    n/a    dualsphysics              started     21 Sep, 16:15:10     21 Sep, 16:15:10       *0h 2m 5s      c2-standard-4
+        1695307352995292367      protein solvation         gromacs              started     21 Sep, 15:42:33     21 Sep, 15:42:35     *0h 34m 41s      c2-standard-4
+        1695306097851999678      protein solvation         gromacs              success     21 Sep, 15:21:38     21 Sep, 15:21:40      0h 15m 43s      c2-standard-4
+        1695294928922012701            wind tunnel        openfoam              success     20 Sep, 12:15:31     20 Sep, 12:15:33       0h 0m 50s      c2-standard-4
+        1695294363618736570            wind tunnel        openfoam              success     20 Sep, 12:06:06     20 Sep, 12:06:06       0h 0m 50s      c2-standard-4
 
     Args:
         last_n: The number of most recent tasks with respect to submission
@@ -134,7 +146,7 @@ def list(last_n,
 
 
 def get(
-    last_n,
+    last_n: int = 5,
     status: Optional[Union[str, models.TaskStatusCode]] = None
 ) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
@@ -170,6 +182,9 @@ def get(
     Returns:
         List of Task objects.
     """
+    if last_n < 1:
+        raise ValueError("last_n must be >= 1")
+
     status = models.TaskStatusCode(status) if status is not None else None
 
     raw_tasks_info = _fetch_tasks_from_api(status, page=1, per_page=last_n)

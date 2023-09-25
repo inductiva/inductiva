@@ -1,0 +1,11 @@
+[
+    {"cmd": "gmx pdb2gmx -f protein.pdb -o protein.gro -water tip3p -ff amber99sb-ildn -ignh", "prompts":[]},
+    {"cmd": "gmx editconf -f protein.gro -o protein_box.gro -c yes -d 1.0 -bt cubic", "prompts":[]},
+    {"cmd": "gmx solvate -cp protein_box.gro -o protein_solv.gro -p topol.top", "prompts":[]},
+    {"cmd": "gmx grompp -f ions.mdp -c protein_solv.gro -p topol.top -o ions.tpr -maxwarn {{ max_warn }}", "prompts":[]},
+    {"cmd": "gmx genion -s ions.tpr -o protein_solv_ions.gro -p topol.top -pname NA -nname CL -neutral yes", "prompts":["SOL"]},
+    {"cmd": "gmx grompp -f energy_minimization.mdp -c protein_solv_ions.gro -p topol.top -o em.tpr -maxwarn {{ max_warn }}", "prompts":[]},
+    {"cmd": "gmx mdrun -deffnm em -v yes", "prompts":[]},
+    {"cmd": "gmx grompp -f simulation.mdp -c em.gro -r em.gro -p topol.top -o solvated_protein.tpr -maxwarn {{ max_warn }}", "prompts":[]},
+    {"cmd": "gmx mdrun -deffnm solvated_protein -o full_trajectory.trr -x compressed_trajectory.xtc -v yes", "prompts":[]}
+]

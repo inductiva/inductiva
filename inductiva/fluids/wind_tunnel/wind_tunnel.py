@@ -9,6 +9,7 @@ import io
 from typing import Optional, List, Literal
 
 from absl import logging
+import numpy as np
 
 from inductiva import tasks, resources, types, simulators, scenarios, utils
 
@@ -66,7 +67,8 @@ class WindTunnel(scenarios.Scenario):
         """Initializes the `WindTunnel` conditions.
 
         Args:
-            flow_velocity (dict): Velocity of the air flow (m/s).
+            flow_velocity (List): Velocity of the air flow (m/s).
+                The maximum velocity magnitude allowed is 100 m/s
             domain (dict): List containing the lower and upper boundary of
                 the wind tunnel in each (x, y, z) direction (m). It is the
                 natural description with the default OpenFOAM simulator.
@@ -76,6 +78,9 @@ class WindTunnel(scenarios.Scenario):
             self.flow_velocity = [30, 0, 0]
         elif len(flow_velocity) != 3:
             raise ValueError("`flow_velocity` must have 3 values.")
+        elif np.linalg.norm(np.array(flow_velocity)) > 100:
+            raise ValueError("The `flow_velocity` magnitude is too high,"
+                             " it must be less than 100 m/s.")
         else:
             self.flow_velocity = flow_velocity
 
@@ -114,11 +119,10 @@ class WindTunnel(scenarios.Scenario):
         """
         simulator.override_api_method_prefix("wind_tunnel")
 
-        if object_path:
-            self.object_path = utils.files.resolve_path(object_path)
-        else:
-            logging.info("WindTunnel is empty. Object path not specified.")
+        if object_path is None:
+            raise ValueError("WindTunnel is empty. Object path not specified.")
 
+        self.object_path = utils.files.resolve_path(object_path)
         self.num_iterations = num_iterations
         self.n_cores = n_cores
         self.resolution = MeshResolution[resolution.upper()].value

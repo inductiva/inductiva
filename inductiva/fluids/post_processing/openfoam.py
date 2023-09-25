@@ -71,9 +71,7 @@ class SteadyStateOutput:
         sim_output_files = glob.glob(os.path.join(self.sim_output_path, "**",
                                                   "*.*"),
                                      recursive=True)
-
-        for index, file in enumerate(sim_output_files):
-            sim_output_files[index] = file.split("/")[-1]
+        sim_output_files = [os.path.basename(file) for file in sim_output_files]
 
         return sorted(sim_output_files) != sorted(default_output_files_list)
 
@@ -252,7 +250,7 @@ class FlowSlice:
                background_color: str = "white",
                flow_cmap: str = "viridis",
                object_color: str = "white",
-               save_path: types.Path = None):
+               save_path: types.Path = "flow_slice.png"):
         """Render flow property over domain."""
 
         if save_path is not None:
@@ -278,8 +276,9 @@ class FlowSlice:
         plotter.add_mesh(self.object_mesh, color=object_color)
         plotter.add_mesh(self.mesh, scalars=field_notation, cmap=flow_cmap)
         plotter.reset_camera(bounds=self.mesh.bounds)
+        plotter.show()
         if save_path is not None:
-            plotter.show(screenshot=save_path)
+            plotter.screenshot(save_path, return_img=False)
             logging.info("Flow slice rendering saved to %s", save_path)
         plotter.close()
 
@@ -301,7 +300,7 @@ class Streamlines:
                              "side"] = "isometric",
                object_color: str = "white",
                streamline_radius: float = 0.1,
-               save_path: types.Path = None):
+               save_path: types.Path = "streamlines.png"):
         """Render streamlines through domain."""
 
         if save_path is not None:
@@ -340,8 +339,9 @@ class Streamlines:
         # Slide along the vectord defined from camera position to focal point,
         # until all of the meshes are visible.
         plotter.reset_camera(bounds=self.mesh.bounds, render=False)
+        plotter.show()
         if save_path is not None:
-            plotter.show(screenshot=save_path)
+            plotter.screenshot(save_path, return_img=False)
             logging.info("Streamlines rendering saved to %s", save_path)
         plotter.close()
 
@@ -393,7 +393,7 @@ class MeshData:
                background_color: str = "white",
                scalars_cmap: str = "viridis",
                virtual_display: bool = False,
-               save_path: types.Path = None):
+               save_path: types.Path = "pressure_field.png"):
         """Render scalar field data over the mesh."""
         if save_path is not None:
             save_path = utils.files.resolve_path(save_path)
@@ -406,7 +406,8 @@ class MeshData:
         plotter = pv.Plotter(off_screen=off_screen)
         pv.global_theme.background = background_color
         plotter.add_mesh(self.mesh, scalars=self.scalar_name, cmap=scalars_cmap)
+        plotter.show()
         if save_path is not None:
-            plotter.show(screenshot=save_path)
+            plotter.screenshot(save_path, return_img=False)
             logging.info("Data rendering was saved to %s", save_path)
         plotter.close()

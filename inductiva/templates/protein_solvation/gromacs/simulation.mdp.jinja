@@ -4,11 +4,11 @@ nsteps                  = {{ nsteps }}       ; number of steps in simulation
 dt                      = 0.002              ; 2 fs
 
 ; Output control
-nstxout                 = {{ output_frequency }}                ; save coordinates every 1.0 ps
-nstvout                 = {{ output_frequency }}                ; save velocities every 1.0 ps
-nstenergy               = {{ output_frequency }}                ; save energies every 1.0 ps
-nstlog                  = {{ output_frequency }}                ; update log file every 1.0 ps
-nstxout-compressed      = {{ output_frequency }}                ; save coordinates every 1.0 ps in the compressed trajectory file
+nstxout                 = {{ output_frequency }}                ; frequency to save coordinates 
+nstvout                 = {{ output_frequency }}                ; frequency to save velocities 
+nstenergy               = {{ output_frequency }}                ; frequency to save energies 
+nstlog                  = {{ output_frequency }}                ; frequency to update log file 
+nstxout-compressed      = {{ output_frequency }}                ; frequency to save coordinates in the compressed trajectory file
 compressed-x-grps       = protein                               ; save only protein coordinates in the compressed trajectory file 
 
 ; Temperature coupling is on

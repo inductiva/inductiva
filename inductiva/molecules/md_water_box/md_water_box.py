@@ -44,7 +44,8 @@ class MDWaterBox(scenarios.Scenario):
             simulator: simulators.Simulator = simulators.GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
-            simulation_time_ns: float = 10,  # ns
+            simulation_time_ns: float = 1,  # ns
+            output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
             n_steps_min: int = 5000) -> tasks.Task:
         """Simulate the water box scenario using molecular dynamics.
@@ -52,6 +53,7 @@ class MDWaterBox(scenarios.Scenario):
         Args:
             machine_group: The MachineGroup to use for the simulation.
             simulation_time_ns: The simulation time in ns.
+            output_timestep_ps: The output timestep in ps.
             integrator: The integrator to use for the simulation. Options:
                 - "md" (Molecular Dynamics): Accurate leap-frog algorithm for
                 integrating Newton's equations of motion.
@@ -63,8 +65,6 @@ class MDWaterBox(scenarios.Scenario):
             For more details on the integrators, refer to the GROMACS
             documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
-
-            machine_group: The machine group to use for the simulation.
             n_steps_min: Number of steps for energy minimization.
             run_async: Whether to run the simulation asynchronously.
         """
@@ -75,6 +75,10 @@ class MDWaterBox(scenarios.Scenario):
         )  # convert to fs and divide by the time step of the simulation (2 fs)
         self.integrator = integrator
         self.n_steps_min = n_steps_min
+        self.output_frequency = int(
+            output_timestep_ps * 1000 /
+            2)  # convert to fs and divide by the time step
+        # of the simulation (2 fs)
 
         commands = self.get_commands()
         task = super().simulate(simulator,
@@ -126,6 +130,7 @@ def _(self, simulator: simulators.GROMACS, input_dir):  # pylint: disable=unused
             "nsteps": self.nsteps,
             "ref_temp": self.temperature,
             "nsteps_minin": self.n_steps_min,
+            "output_frequency": self.output_frequency,
         },
         output_filename_paths=[
             os.path.join(input_dir, "simulation.mdp"),
