@@ -58,13 +58,11 @@ class MachineGroup():
             disk_size_gb=self.disk_size_gb,
             zone=self.zone,
         )
-        logging.info("Registering machine group configuration with the API.")
+        logging.info("Registering machine group configuration:")
         resp = self._api.register_instance_group(body=instance_group_config)
         self.id = resp.body["id"]
         self.name = resp.body["name"]
-        logging.info("Registered machine group:")
-        logging.info(" > ID: %s", self.id)
-        logging.info(" > Name: %s", self.name)
+        self._log_machine_group_info()
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -108,8 +106,8 @@ class MachineGroup():
                 zone=self.zone,
             )
         try:
-            logging.info("Starting a machine group. "
-                         "This may take up to a few minutes.")
+            logging.info("Starting machine group. "
+                         "This may take a few minutes.")
             logging.info("Note that stopping this local process will not "
                          "interrupt the creation of the machine group. "
                          "Please wait...")
@@ -118,9 +116,8 @@ class MachineGroup():
             self._api.start_instance_group(body=request_body)
             creation_time_mins = (time.time() - start_time) / 60
 
-            logging.info("Machine group successfully started in %.2f mins.",
+            logging.info("Machine group successfully started in %.2f mins.\n",
                          creation_time_mins)
-            self._log_machine_group_info()
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
@@ -133,7 +130,7 @@ class MachineGroup():
 
         try:
             logging.info("Terminating machine group. "
-                         "This may take up to a few minutes.")
+                         "This may take a few minutes.")
             start_time = time.time()
 
             request_body = \
@@ -151,7 +148,7 @@ class MachineGroup():
             termination_time_mins = (time.time() - start_time) / 60
             logging.info(
                 "Machine group of %s machines successfully "
-                "terminated in %.2f mins.", self.num_machines,
+                "terminated in %.2f mins.\n", self.num_machines,
                 termination_time_mins)
 
         except inductiva.client.ApiException as api_exception:
@@ -204,10 +201,11 @@ class MachineGroup():
     def _log_machine_group_info(self):
         """Logs the machine group info."""
 
-        logging.info("Name: %s", self.name)
-        logging.info("Machine type: %s", self.machine_type)
-        logging.info("Number of machines: %s", self.num_machines)
-        logging.info("Spot: %s", self.spot)
-        logging.info("Disk size: %s GB", self.disk_size_gb)
-        logging.info("Estimated cost per hour: %s $/h",
+        logging.info("> Name: %s", self.name)
+        logging.info("> Machine type: %s", self.machine_type)
+        logging.info("> Number of machines: %s", self.num_machines)
+        # TODO: Not yet available to users
+        # logging.info("> Spot: %s", self.spot)
+        logging.info("> Disk size: %s GB", self.disk_size_gb)
+        logging.info("> Estimated cost per hour: %s $/h\n",
                      self._get_estimated_cost())

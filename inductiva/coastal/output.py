@@ -14,7 +14,7 @@ except ImportError:
     scipy = None
 
 from inductiva.types import Path
-from inductiva.utils import visualization, optional_deps
+from inductiva.utils import visualization, optional_deps, files
 
 # Labels used in SWASH simulation outputs.
 QUANTITY_SWASH_LABELS = {
@@ -260,7 +260,9 @@ class CoastalAreaOutput:
             quantity=quantity,
         )
 
-        logging.info("Starting to render video from simulation data...")
+        movie_path = files.resolve_path(movie_path)
+        logging.info("Saving rendered movie to %s of the %s with %d fps.",
+                     movie_path, QUANTITY_PLOT_LABELS[quantity], fps)
 
         _render_quantity_grid_data(
             x_array=x_array,
@@ -273,5 +275,3 @@ class CoastalAreaOutput:
             cmap=cmap,
             clim=clim,
         )
-
-        logging.info("Writing mp4 file to %s.", movie_path)

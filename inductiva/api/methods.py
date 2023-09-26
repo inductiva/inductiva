@@ -78,18 +78,16 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         original_params: Params of the request passed by the user.
         type_annotations: Annotations of the params' types.
     """
-    logging.info("Creating input archive...")
+    logging.info("Packing input archive to upload to inductiva.ai.")
     input_zip_path = pack_input(
         params=original_params,
         type_annotations=type_annotations,
         zip_name=task_id,
     )
-    file_size = os.path.getsize(input_zip_path)
-    logging.info("Input archive created.")
-    logging.info("Input archive size: %s",
-                 format_utils.bytes_formatter(file_size))
 
-    logging.info("Uploading input...")
+    file_size = os.path.getsize(input_zip_path)
+    logging.info("Uploading packed input archive with size %s.",
+                 format_utils.bytes_formatter(file_size))
     try:
         with open(input_zip_path, "rb") as zip_fp:
             _ = api_instance.upload_task_input(
@@ -293,8 +291,6 @@ def submit_task(api_instance, task_request, params, type_annotations):
                 type_annotations=type_annotations,
             )
 
-            logging.info("Task request submitted.")
-
     return task_id
 
 
@@ -432,5 +428,11 @@ def invoke_async_api(method_name: str,
                               task_request=task_request,
                               params=params,
                               type_annotations=type_annotations)
+
+        if resource_pool_id is None:
+            logging.info("Task submitted to the default resource pool.")
+        else:
+            logging.info("Task submitted to machine group %s.",
+                         "api-" + resource_pool_id)
 
     return task_id
