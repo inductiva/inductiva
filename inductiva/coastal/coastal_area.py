@@ -91,7 +91,6 @@ class CoastalArea(scenarios.Scenario):
         self,
         simulator: simulators.Simulator = simulators.SWASH(),
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
@@ -114,7 +113,6 @@ class CoastalArea(scenarios.Scenario):
         task = super().simulate(
             simulator,
             machine_group=machine_group,
-            run_async=run_async,
             sim_config_filename=SWASH_CONFIG_FILENAME,
         )
 

@@ -48,7 +48,6 @@ class DamBreak(fluids.FluidBlock):
         machine_group: Optional[resources.MachineGroup] = None,
         resolution: Literal["high", "medium", "low"] = "low",
         simulation_time: float = 1,
-        run_async: bool = False,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -57,7 +56,6 @@ class DamBreak(fluids.FluidBlock):
             machine_group: The machine group to use for the simulation.
             resolution: Resolution of the simulation.
             simulation_time: Simulation time, in seconds.
-            run_async: Whether to run the simulation asynchronously.
         """
         simulator.override_api_method_prefix("dam_break")
 
@@ -73,7 +71,6 @@ class DamBreak(fluids.FluidBlock):
         task = super(fluids.FluidBlock, self).simulate(
             simulator=simulator,
             machine_group=machine_group,
-            run_async=run_async,
             sim_config_filename=self.get_config_filename(simulator))
 
         return task
