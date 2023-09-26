@@ -181,6 +181,7 @@ class SteadyStateOutput:
 
             if save_path is not None:
                 save_path = utils.files.resolve_path(save_path)
+                logging.info("Saving streamlines to %s.", save_path)
                 streamlines_mesh.save(save_path)
 
         return Streamlines(object_mesh, streamlines_mesh)
@@ -224,6 +225,7 @@ class SteadyStateOutput:
 
             if save_path is not None:
                 save_path = utils.files.resolve_path(save_path)
+                logging.info("Saving streamlines to %s.", save_path)
                 flow_slice.save(save_path)
 
         return FlowSlice(object_mesh, flow_slice)
@@ -279,7 +281,7 @@ class FlowSlice:
         plotter.show()
         if save_path is not None:
             plotter.screenshot(save_path, return_img=False)
-            logging.info("Flow slice rendering saved to %s", save_path)
+            logging.info("Flow slice rendering saved to %s.", save_path)
         plotter.close()
 
 
@@ -342,7 +344,7 @@ class Streamlines:
         plotter.show()
         if save_path is not None:
             plotter.screenshot(save_path, return_img=False)
-            logging.info("Streamlines rendering saved to %s", save_path)
+            logging.info("Streamlines rendering saved to %s.", save_path)
         plotter.close()
 
 

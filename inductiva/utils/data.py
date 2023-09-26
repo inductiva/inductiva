@@ -228,7 +228,7 @@ def zip_dir(dir_path, zip_name):
 def download_file(
     response: urllib3.response.HTTPResponse,
     output_path: pathlib.Path,
-    chunk_size=1024,
+    chunk_size=1000,
 ) -> None:
     """Download a file from a urllib3 response object.
 
@@ -244,11 +244,12 @@ def download_file(
     # will still work
     download_size = response.headers.get("content-length", 0)
 
+    
     with tqdm(
             total=int(download_size),
-            unit="iB",
+            unit="B",
             unit_scale=True,
-            unit_divisor=1024,  # Use 1 KiB = 1024 bytes instead of 1000 bytes
+            unit_divisor=1000,  # Use 1 KB = 1000 bytes
     ) as progress_bar:
         with open(output_path, "wb") as f:
             while chunk := response.read(chunk_size):
