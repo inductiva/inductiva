@@ -8,7 +8,6 @@ import base64
 import io
 from time import sleep
 
-from absl import logging
 from tqdm import tqdm
 try:
     import imageio

@@ -244,7 +244,6 @@ def download_file(
     # will still work
     download_size = response.headers.get("content-length", 0)
 
-    
     with tqdm(
             total=int(download_size),
             unit="B",

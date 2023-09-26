@@ -161,7 +161,9 @@ class Task:
                     logging.info("Task killed.\n")
                 else:
                     logging.info(
-                        "An internal error occurred while performing the task.\n")
+                        "An internal error occurred while "
+                        "performing the task.\n"
+                    )
             prev_status = status
 
             if status in _TASK_TERMINAL_STATUSES:
@@ -252,8 +254,9 @@ class Task:
         """
         # Get terminal status
         status = self.wait()
-        if status not in [models.TaskStatusCode.SUCCESS,
-                          models.TaskStatusCode.FAILED]:
+        if status not in [
+                models.TaskStatusCode.SUCCESS, models.TaskStatusCode.FAILED
+        ]:
             logging.info("Task with %s has no output to be retrieved.", status)
             return
 
