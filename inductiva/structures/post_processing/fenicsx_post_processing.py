@@ -9,7 +9,13 @@ import pyvista as pv
 from inductiva import structures, types, utils
 
 SOLVER_OUTPUT_FILENAME = "results.xdmf"
-TEMP_SOLVER_OUTPUT_FILENAME = "temp_results.xdmf"
+VALID_FIELD_NAMES = [
+    "displacement_x", "displacement_y", "displacement_z", "stress_xx",
+    "stress_xy", "stress_xz", "stress_yx", "stress_yy", "stress_yz",
+    "stress_zx", "stress_zy", "stress_zz", "strain_xx", "strain_xy",
+    "strain_xz", "strain_yx", "strain_yy", "strain_yz", "strain_zx",
+    "strain_zy", "strain_zz"
+]
 
 
 class DeformablePlateOutput:
@@ -22,6 +28,12 @@ class DeformablePlateOutput:
             sim_output_path: Path to simulation output files.
         """
         self.sim_output_path = sim_output_path
+
+        # Define the XDMF file path for the solver output file
+        file_path = os.path.join(self.sim_output_path, SOLVER_OUTPUT_FILENAME)
+
+        # Remove time values from the XDMF file
+        structures.utils.remove_time_values_from_xdmf(file_path, file_path)
 
     @utils.optional_deps.needs_structures_extra_deps
     def render(self,
@@ -59,19 +71,11 @@ class DeformablePlateOutput:
             virtual_display: Whether to use a virtual display to render the
               field.
         """
-
         # Define the XDMF file path for the solver output file
         file_path = os.path.join(self.sim_output_path, SOLVER_OUTPUT_FILENAME)
 
-        # Define a XDMF temporary file path
-        temp_file_path = os.path.join(self.sim_output_path,
-                                      TEMP_SOLVER_OUTPUT_FILENAME)
-
-        # Remove time values from the XDMF file
-        structures.utils.remove_time_values_from_xdmf(file_path, temp_file_path)
-
         # Read simulation output data
-        reader = pv.get_reader(temp_file_path)
+        reader = pv.get_reader(file_path)
         pv_multiblock = reader.read()
 
         # Get the list of available keys (field names) in the PyVista dataset
@@ -80,20 +84,13 @@ class DeformablePlateOutput:
         # Select the PyVista dataset representing the mesh
         pv_dataset = pv_multiblock["mesh"]
 
-        # Define a list of valid field names
-        valid_field_names = [
-            "displacement_x", "displacement_y", "displacement_z", "stress_xx",
-            "stress_xy", "stress_xz", "stress_yx", "stress_yy", "stress_yz",
-            "stress_zx", "stress_zy", "stress_zz", "strain_xx", "strain_xy",
-            "strain_xz", "strain_yx", "strain_yy", "strain_yz", "strain_zx",
-            "strain_zy", "strain_zz"
-        ]
+        if field_names is None:
+            field_names = ["von_mises"]
 
         # Iterate through the specified field names to render
         for field_name in field_names:
 
-            if field_name != "von_mises" and field_name in valid_field_names:
-
+            if field_name != "von_mises" and field_name in VALID_FIELD_NAMES:
                 # Split the field_name into the main field and subfield
                 # (e.g., stress_xx -> field='stress', subfield='xx')
                 field, subfield = field_name.split("_")
@@ -126,7 +123,7 @@ class DeformablePlateOutput:
                 # Get the subfield array
                 field_array = multiblock_data.get_array(0)[:, subfield_id]
 
-            elif field_name == "von_mises" or field_name is None:
+            elif field_name == "von_mises":
                 # For the special case of "von_mises" field, find its index in
                 # the dataset keys
                 field_id = keys.index(field_name)
@@ -138,7 +135,7 @@ class DeformablePlateOutput:
                 field_array = multiblock_data.get_array(0)
 
             else:
-                valid_field_names_str = ", ".join(valid_field_names)
+                valid_field_names_str = ", ".join(VALID_FIELD_NAMES)
                 raise ValueError(
                     f"Invalid field_name {field_name}. "
                     f"Valid field names are: {valid_field_names_str}.")
@@ -163,6 +160,3 @@ class DeformablePlateOutput:
             scalar_bar=scalar_bar,
             transparent_background=transparent_background,
             virtual_display=virtual_display)
-
-        # Clean up temporary files and directory
-        os.remove(temp_file_path)
