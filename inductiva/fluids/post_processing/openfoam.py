@@ -281,7 +281,7 @@ class FlowSlice:
         plotter.show()
         if save_path is not None:
             plotter.screenshot(save_path, return_img=False)
-            logging.info("Flow slice rendering saved to %s.", save_path)
+            logging.info("Flow slice render saved to %s.", save_path)
         plotter.close()
 
 
@@ -344,7 +344,7 @@ class Streamlines:
         plotter.show()
         if save_path is not None:
             plotter.screenshot(save_path, return_img=False)
-            logging.info("Streamlines rendering saved to %s.", save_path)
+            logging.info("Streamlines render saved to %s.", save_path)
         plotter.close()
 
 
@@ -411,5 +411,5 @@ class MeshData:
         plotter.show()
         if save_path is not None:
             plotter.screenshot(save_path, return_img=False)
-            logging.info("Data rendering was saved to %s", save_path)
+            logging.info("Mesh data render was saved to %s", save_path)
         plotter.close()

@@ -353,7 +353,7 @@ class Task:
         data.download_file(response, zip_path)
 
         if uncompress:
-            logging.info("Uncompress the outputs to %s.", output_dir)
+            logging.info("Uncompressing the outputs to %s.", output_dir)
             data.uncompress_task_outputs(zip_path, output_dir)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()

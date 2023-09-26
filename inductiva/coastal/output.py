@@ -261,8 +261,8 @@ class CoastalAreaOutput:
         )
 
         movie_path = files.resolve_path(movie_path)
-        logging.info("Rendering video to %s of the %s with %d fps.", movie_path,
-                     QUANTITY_PLOT_LABELS[quantity], fps)
+        logging.info("Saving rendered movie to %s of the %s with %d fps.",
+                     movie_path, QUANTITY_PLOT_LABELS[quantity], fps)
 
         _render_quantity_grid_data(
             x_array=x_array,

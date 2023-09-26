@@ -106,8 +106,8 @@ class MachineGroup():
                 zone=self.zone,
             )
         try:
-            logging.info("Starting a machine group. "
-                         "This may take up to a few minutes.")
+            logging.info("Starting machine group. "
+                         "This may take a few minutes.")
             logging.info("Note that stopping this local process will not "
                          "interrupt the creation of the machine group. "
                          "Please wait...")
@@ -130,7 +130,7 @@ class MachineGroup():
 
         try:
             logging.info("Terminating machine group. "
-                         "This may take up to a few minutes.")
+                         "This may take a few minutes.")
             start_time = time.time()
 
             request_body = \
