@@ -525,8 +525,7 @@ def create_2d_field_from_pv_dataset(pv_dataset: "pv.DataSet",
                                     background_color: str = "white",
                                     transparent_background: bool = True,
                                     virtual_display: bool = True) -> None:
-    """Creates a 2D image representation of a field from a PyVista 
-      UnstructuredGrid dataset.
+    """Creates a 2D image representation of a field from a PyVista dataset.
 
     Args:
         pv_dataset (pv.DataSet): The PyVista dataset.
@@ -597,8 +596,7 @@ def create_2d_fields_from_pv_dataset(pv_dataset: "pv.DataSet",
                                      background_color: str = "white",
                                      transparent_background: bool = True,
                                      virtual_display: bool = True) -> None:
-    """Creates 2D image representations of fields from a PyVista 
-      UnstructuredGrid dataset.
+    """Creates 2D image representations of fields from a PyVista dataset.
 
     Args:
         pv_dataset (pv.DataSet): The PyVista dataset.
