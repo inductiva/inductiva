@@ -80,3 +80,9 @@ needs_common_extra_deps = functools.partial(
     ["imageio", "matplotlib"],
     _missing_deps_msg("common"),
 )
+
+needs_structures_extra_deps = functools.partial(
+    _needs_optional_deps,
+    ["pyvista"],
+    _missing_deps_msg("structures"),
+)

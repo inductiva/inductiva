@@ -512,3 +512,133 @@ def create_color_plot_movie(
         create_movie_from_frames(frames_dir=tmp_dir,
                                  movie_path=movie_path,
                                  fps=movie_fps)
+
+
+@optional_deps.needs_structures_extra_deps
+def create_2d_field_from_pv_dataset(pv_dataset: "pv.DataSet",
+                                    field_name: str,
+                                    field_path: str,
+                                    show_edges: bool = True,
+                                    colormap: str = "jet",
+                                    off_screen: bool = True,
+                                    scalar_bar: bool = True,
+                                    background_color: str = "white",
+                                    transparent_background: bool = True,
+                                    virtual_display: bool = True) -> None:
+    """Creates a 2D image representation of a field from a PyVista 
+      UnstructuredGrid dataset.
+
+    Args:
+        pv_dataset (pv.DataSet): The PyVista dataset.
+        field_name (str): The name of the field to visualize.
+        field_path (str): The path where the resulting image will be saved.
+        show_edges (bool, optional): Whether to display mesh edges. Default is
+          True.
+        colormap (str, optional): The colormap to apply to the field data.
+          Default is "jet".
+        off_screen (bool, optional): Whether to render the visualization 
+          off-screen. Set to True for non-interactive rendering. Default is 
+          True.
+        scalar_bar (bool, optional): Whether to include a scalar bar legend in 
+          the visualization. Default is True.
+        background_color (str, optional): The background color of the
+          visualization. Default is "white".
+        transparent_background (bool, optional): Whether the background of the
+          saved image should be transparent. Default is True.
+        virtual_display: Whether to use a virtual display to render the field.
+    """
+
+    # Start PyVista virtual framebuffer
+    if virtual_display:
+        pv.start_xvfb()
+
+    # Initialize the PyVista plotter
+    plotter = pv.Plotter()
+
+    # Add the data object to the plotter with customizable settings
+    pv_dataset.set_active_scalars(field_name)
+    plotter.add_mesh(pv_dataset,
+                     show_edges=show_edges,
+                     cmap=colormap,
+                     show_scalar_bar=False)
+
+    # Optionally, add a scalar bar to the visualization
+    if scalar_bar:
+        plotter.add_scalar_bar(field_name, vertical=True, interactive=True)
+
+    # Set the view to XY plane
+    plotter.view_xy()
+
+    # Set the background color to white
+    plotter.background_color = background_color
+
+    # Render off-screen
+    plotter.off_screen = off_screen
+
+    # Adjust camera view
+    if not scalar_bar:
+        plotter.camera.tight()
+
+    # Save a screenshot of the plot to the specified field_path
+    plotter.screenshot(field_path,
+                       transparent_background=transparent_background)
+
+    # Close the plotter
+    plotter.close()
+
+
+@optional_deps.needs_structures_extra_deps
+def create_2d_fields_from_pv_dataset(pv_dataset: "pv.DataSet",
+                                     field_dir: str,
+                                     show_edges: bool = True,
+                                     colormap: str = "jet",
+                                     off_screen: bool = True,
+                                     scalar_bar: bool = True,
+                                     background_color: str = "white",
+                                     transparent_background: bool = True,
+                                     virtual_display: bool = True) -> None:
+    """Creates 2D image representations of fields from a PyVista 
+      UnstructuredGrid dataset.
+
+    Args:
+        pv_dataset (pv.DataSet): The PyVista dataset.
+        field_dir (str): Path to the directory where the resulting images will
+          be saved.
+        field_array (list): The field data to be visualized and converted to an 
+          image.
+        show_edges (bool, optional): Whether to display mesh edges. Default is
+          True.
+        colormap (str, optional): The colormap to apply to the field data.
+          Default is "jet".
+        off_screen (bool, optional): Whether to render the visualization 
+          off-screen. Set to True for non-interactive rendering. Default is 
+          True.
+        scalar_bar (bool, optional): Whether to include a scalar bar legend in 
+          the visualization. Default is True.
+        background_color (str, optional): The background color of the
+          visualization. Default is "white".
+        transparent_background (bool, optional): Whether the background of the
+          saved image should be transparent. Default is True.
+        virtual_display: Whether to use a virtual display to render the field.
+    """
+    # Get the list of field names from the point_data of the PyVista dataset
+    field_names = pv_dataset.point_data.keys()
+
+    # Iterate through each field name to create visualizations
+    for field_name in field_names:
+
+        # Define the path to save the visualization image for the current field
+        field_path = os.path.join(field_dir, f"{field_name}.png")
+
+        logging.info("Creating the visualization for field: %s.", field_name)
+        create_2d_field_from_pv_dataset(
+            pv_dataset=pv_dataset,
+            field_name=field_name,
+            field_path=field_path,
+            show_edges=show_edges,
+            colormap=colormap,
+            off_screen=off_screen,
+            background_color=background_color,
+            scalar_bar=scalar_bar,
+            transparent_background=transparent_background,
+            virtual_display=virtual_display)

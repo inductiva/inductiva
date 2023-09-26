@@ -2,11 +2,10 @@
 
 from typing import Optional
 
-from inductiva import types, tasks, resources
-from inductiva.simulators import Simulator
+from inductiva import simulators, types, tasks, resources
 
 
-class FEniCSx(Simulator):
+class FEniCSx(simulators.Simulator):
     """Class to invoke a generic FEniCSx simulation on the API."""
 
     def __init__(self):
