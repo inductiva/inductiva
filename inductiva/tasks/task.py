@@ -160,10 +160,8 @@ class Task:
                 elif status == models.TaskStatusCode.KILLED:
                     logging.info("Task killed.\n")
                 else:
-                    logging.info(
-                        "An internal error occurred while "
-                        "performing the task.\n"
-                    )
+                    logging.info("An internal error occurred while "
+                                 "performing the task.\n")
             prev_status = status
 
             if status in _TASK_TERMINAL_STATUSES:
