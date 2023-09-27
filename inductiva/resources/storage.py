@@ -8,7 +8,7 @@ def get_space_used():
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
         response = api.get_storage_size()
-        storage_used = float(round(response.body, 3))
+        storage_used = float(round(response.body, 2))
         print(f"Total storage used: {storage_used} GB")
         return storage_used
     except inductiva.client.ApiException as api_exception:
