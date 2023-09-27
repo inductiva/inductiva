@@ -3,6 +3,8 @@
 import os
 from typing import Optional
 
+from absl import logging
+
 try:
     import xarray as xr
 except ImportError:
@@ -57,6 +59,7 @@ class FluidTankOutput:
 
         movie_path = files.resolve_path(movie_path)
 
+        logging.info("Rendering movie to %s with %d fps.", movie_path, fps)
         visualization.create_3d_scatter_plot_movie(
             particle_data,
             iter_var="time",

@@ -16,7 +16,6 @@ class XBeach(simulators.Simulator):
         input_dir: types.Path,
         sim_config_filename: Optional[str] = "params.txt",
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -25,9 +24,6 @@ class XBeach(simulators.Simulator):
             sim_config_filename: Name of the simulation configuration file.
             other arguments: See the documentation of the base class.
         """
-        return super().run(
-            input_dir,
-            input_filename=sim_config_filename,
-            machine_group=machine_group,
-            run_async=run_async,
-        )
+        return super().run(input_dir,
+                           input_filename=sim_config_filename,
+                           machine_group=machine_group)

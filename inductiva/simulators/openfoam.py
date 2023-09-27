@@ -17,7 +17,6 @@ class OpenFOAM(simulators.Simulator):
         commands: List[dict],
         machine_group: Optional[resources.MachineGroup] = None,
         n_cores: int = 2,
-        run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -29,5 +28,4 @@ class OpenFOAM(simulators.Simulator):
         return super().run(input_dir,
                            machine_group=machine_group,
                            n_cores=n_cores,
-                           commands=commands,
-                           run_async=run_async)
+                           commands=commands)

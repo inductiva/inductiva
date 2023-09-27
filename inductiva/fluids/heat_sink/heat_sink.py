@@ -95,7 +95,6 @@ class HeatSink(scenarios.Scenario):
         self,
         simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         simulation_time=300,
         output_time_step=10,
     ) -> tasks.Task:
@@ -107,7 +106,6 @@ class HeatSink(scenarios.Scenario):
             output_time_step: The time step to save the simulation results, in
               seconds.
             machine_group: The machine group to use for the simulation.
-            run_async: Whether to run the simulation asynchronously.
         """
         simulator.override_api_method_prefix("heat_sink")
 
@@ -119,7 +117,6 @@ class HeatSink(scenarios.Scenario):
         # TODO: Address the mpirun runs of HeatSink
         task = super().simulate(simulator,
                                 machine_group=machine_group,
-                                run_async=run_async,
                                 n_cores=1,
                                 commands=commands)
 

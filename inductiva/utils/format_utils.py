@@ -8,15 +8,15 @@ def bytes_formatter(n_bytes: int) -> str:
     """Convert bytes to human readable string."""
     res = float(n_bytes)
 
-    for unit in ["B", "KiB", "MiB", "GiB", "TiB"]:
-        if res < 1024:
+    for unit in ["B", "KB", "MB", "GB", "TB"]:
+        if res < 1000:
             if unit == "B":
                 return f"{res:.0f} {unit}"
             else:
                 return f"{res:.2f} {unit}"
-        res /= 1024
+        res /= 1000
 
-    return f"{bytes_formatter:.2f} PiB"
+    return f"{bytes_formatter:.2f} PB"
 
 
 def datetime_formatter(dt: str) -> str:

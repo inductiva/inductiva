@@ -1,6 +1,6 @@
 """Methods that interact with the lower-level inductiva-web-api-client.
 
-The relevant function for usage outside of this file is invoke_api().
+The relevant function for usage outside of this file is invoke_async_api().
 Check the demos directory for examples on how it is used.
 """
 import os
@@ -18,11 +18,9 @@ from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
                                      TaskStatus)
-from inductiva.exceptions import RemoteExecutionError
 from inductiva.types import Path
 from inductiva.utils.data import (extract_output, get_validate_request_params,
-                                  pack_input, unpack_output)
-from inductiva.utils.meta import get_method_name, get_type_annotations
+                                  pack_input)
 from inductiva.utils import format_utils
 
 
@@ -78,18 +76,16 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         original_params: Params of the request passed by the user.
         type_annotations: Annotations of the params' types.
     """
-    logging.info("Creating input archive...")
+    logging.info("Packing input archive to upload to inductiva.ai.")
     input_zip_path = pack_input(
         params=original_params,
         type_annotations=type_annotations,
         zip_name=task_id,
     )
-    file_size = os.path.getsize(input_zip_path)
-    logging.info("Input archive created.")
-    logging.info("Input archive size: %s",
-                 format_utils.bytes_formatter(file_size))
 
-    logging.info("Uploading input...")
+    file_size = os.path.getsize(input_zip_path)
+    logging.info("Uploading packed input archive with size %s.",
+                 format_utils.bytes_formatter(file_size))
     try:
         with open(input_zip_path, "rb") as zip_fp:
             _ = api_instance.upload_task_input(
@@ -253,25 +249,6 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def invoke_api_from_fn_ptr(
-    params,
-    function_ptr,
-    output_dir: Optional[Path] = None,
-    resource_pool_id: Optional[UUID] = None,
-):
-    """Perform a task remotely defined by a function pointer."""
-    type_annotations = get_type_annotations(function_ptr)
-    method_name = get_method_name(function_ptr)
-    return invoke_api(
-        method_name,
-        params,
-        output_dir=output_dir,
-        type_annotations=type_annotations,
-        return_type=type_annotations["return"],
-        resource_pool_id=resource_pool_id,
-    )
-
-
 def submit_task(api_instance, task_request, params, type_annotations):
     """Submit a task and send input files to the API."""
 
@@ -293,93 +270,7 @@ def submit_task(api_instance, task_request, params, type_annotations):
                 type_annotations=type_annotations,
             )
 
-            logging.info("Task request submitted.")
-
     return task_id
-
-
-def invoke_api(method_name: str,
-               params,
-               type_annotations: Dict[Any, Type],
-               output_dir: Optional[Path] = None,
-               return_type: Type = pathlib.Path,
-               resource_pool_id: Optional[UUID] = None):
-    """Perform a task remotely via Inductiva's Web API.
-
-    Currently, the implementation handles the whole flow of the task execution,
-    and blocks until the task finishes execution.
-    The flow is summarized as follows:
-        1. Transform request params into the params used to
-        validate permission to execute the request.
-        2. Submit task via the "POST task/submit" endpoint.
-            Note: HTTP status code 400 informs the requested method is invalid,
-                and HTTP status code 403 informs that the user is not authorized
-                to post such request.
-        3. If the status returned by the previous HTTP request is
-            "pending-input", ZIP inputs and send them via
-            "POST task/{task_id}/input".
-        4. Block execution, polling using the "GET task/{task_id}/status"
-            endpoint until the returned status is "success".
-        5. Download output ZIP with "GET task/{task_id}/output".
-        6. Unpack output ZIP and return correct value based on the
-            type annotations of `function_ptr`.
-
-    Args:
-        request: Request sent to the API for validation.
-        input_dir: Directory containing the input files to be uploaded.
-        output_dir: Directory where to place the output files.
-        return_type: Type of the return value of the task, for unpacking.
-
-    Return:
-        Returns the output of the task.
-    """
-    api_config = validate_api_key(inductiva.api_key)
-
-    request_params = get_validate_request_params(
-        original_params=params,
-        type_annotations=type_annotations,
-    )
-
-    task_request = TaskRequest(
-        method=method_name,
-        params=request_params,
-        resource_pool=resource_pool_id,
-    )
-
-    with ApiClient(api_config) as client:
-        api_instance = TasksApi(client)
-
-        task_id = submit_task(api_instance, task_request, params,
-                              type_annotations)
-
-        block_until_status_is(
-            api_instance=api_instance,
-            task_id=task_id,
-            desired_status={"started"},
-        )
-        logging.info("An executer has picked up the request")
-        logging.info("The requested task is being executed remotely")
-
-        # While the task is executing, use a context manager that kills the
-        # task if some exception or SIGINT is caught.
-        with blocking_task_context(api_instance, task_id):
-            status = block_until_finish(
-                api_instance=api_instance,
-                task_id=task_id,
-            )
-
-            if status == "success":
-                logging.info("Task executed successfuly.")
-            else:
-                logging.info("Task failed.")
-
-        result_list = download_output(api_instance, task_id, output_dir)
-
-        if status == "failed":
-            raise RemoteExecutionError(f"""Remote execution failed.
-        Find more details in: \"{os.path.abspath(output_dir)}\".""")
-
-    return unpack_output(result_list, output_dir, return_type)
 
 
 def invoke_async_api(method_name: str,
@@ -389,8 +280,6 @@ def invoke_async_api(method_name: str,
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
-    The flow is similar to invoke_api, but it does not block until the task
-    is finished.
     The flow is summarized as follows:
         1. Transform request params into the params used to
         validate permission to execute the request.
@@ -432,5 +321,11 @@ def invoke_async_api(method_name: str,
                               task_request=task_request,
                               params=params,
                               type_annotations=type_annotations)
+
+        if resource_pool_id is None:
+            logging.info("Task submitted to the default resource pool.")
+        else:
+            logging.info("Task submitted to machine group %s.",
+                         "api-" + resource_pool_id)
 
     return task_id

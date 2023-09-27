@@ -10,7 +10,6 @@ def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
     machine_group: Optional[resources.MachineGroup] = None,
-    run_async: bool = False,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -35,10 +34,5 @@ def run_simulation(
     if not isinstance(task_id, str):
         raise RuntimeError(
             f"Expected result to be a string with task_id, got {type(task_id)}")
-
-    # Blocking call for sync execution
-    if not run_async:
-        with task.sync_context():
-            task.wait()
 
     return task

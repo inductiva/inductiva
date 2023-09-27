@@ -8,7 +8,6 @@ import base64
 import io
 from time import sleep
 
-from absl import logging
 from tqdm import tqdm
 try:
     import imageio
@@ -184,7 +183,6 @@ def create_movie_from_vtk(vtk_output_dir: str,
     vtk_files = files.get_sorted_files(vtk_output_dir, ".vtk")
 
     with tempfile.TemporaryDirectory() as tmp_dir:
-        logging.info("Creating movie frames...")
         for index, frame_file in enumerate(vtk_files):
             if index % int(round(60 / fps)) == 0:
                 frame_path = os.path.join(vtk_output_dir, frame_file)
@@ -199,7 +197,6 @@ def create_movie_from_vtk(vtk_output_dir: str,
                                       color=color,
                                       cmap=cmap)
 
-        logging.info("Creating movie '%s'.", movie_path)
         create_movie_from_frames(frames_dir=tmp_dir,
                                  movie_path=movie_path,
                                  fps=fps)
@@ -353,7 +350,6 @@ def create_2d_scatter_plot_movie(
     """Creates a movie of the dataset with 2d scatter plots."""
 
     with tempfile.TemporaryDirectory() as tmp_dir:
-        logging.info("Creating movie frames...")
         var_iterator = xr_dataset.groupby(iter_var)
         for i, (_, dataset_i) in tqdm(enumerate(var_iterator),
                                       total=len(var_iterator)):
@@ -374,9 +370,6 @@ def create_2d_scatter_plot_movie(
                 matplotlib_config_params=matplotlib_config_params,
             )
 
-        logging.info("Finished creating movie frames.")
-
-        logging.info("Creating movie '%s'.", movie_path)
         create_movie_from_frames(frames_dir=tmp_dir,
                                  movie_path=movie_path,
                                  fps=movie_fps)
@@ -405,7 +398,6 @@ def create_3d_scatter_plot_movie(
     """Creates a movie of the dataset with 3d scatter plots."""
 
     with tempfile.TemporaryDirectory() as tmp_dir:
-        logging.info("Creating movie frames...")
         var_iterator = xr_dataset.groupby(iter_var)
         for i, (_, dataset_i) in tqdm(enumerate(var_iterator),
                                       total=len(var_iterator)):
@@ -427,9 +419,6 @@ def create_3d_scatter_plot_movie(
                 matplotlib_config_params=matplotlib_config_params,
             )
 
-        logging.info("Finished creating movie frames.")
-
-        logging.info("Creating movie '%s'.", movie_path)
         create_movie_from_frames(frames_dir=tmp_dir,
                                  movie_path=movie_path,
                                  fps=movie_fps)
@@ -491,7 +480,6 @@ def create_color_plot_movie(
     """Creates a movie of the data array with color plots."""
 
     with tempfile.TemporaryDirectory() as tmp_dir:
-        logging.info("Creating movie frames...")
         var_iterator = xr_data_array.groupby(iter_var)
         for i, (_, data_array_i) in tqdm(enumerate(var_iterator),
                                          total=len(var_iterator)):
@@ -506,9 +494,6 @@ def create_color_plot_movie(
                 matplotlib_config_params=matplotlib_config_params,
             )
 
-        logging.info("Finished creating movie frames.")
-
-        logging.info("Creating movie '%s'.", movie_path)
         create_movie_from_frames(frames_dir=tmp_dir,
                                  movie_path=movie_path,
                                  fps=movie_fps)

@@ -91,7 +91,6 @@ class FluidBlock(scenarios.Scenario):
         self,
         simulator: simulators.Simulator = simulators.DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         particle_radius: float = 0.02,
         simulation_time: float = 1,
         adaptive_time_step: bool = True,
@@ -113,7 +112,6 @@ class FluidBlock(scenarios.Scenario):
             particle_sorting: Whether to use particle sorting.
             time_step: Time step, in seconds.
             output_time_step: Time step between outputs, in seconds.
-            run_async: Whether to run the simulation asynchronously.
         """
         simulator.override_api_method_prefix("fluid_block")
 
@@ -128,7 +126,6 @@ class FluidBlock(scenarios.Scenario):
         task = super().simulate(
             simulator=simulator,
             machine_group=machine_group,
-            run_async=run_async,
             sim_config_filename=self.get_config_filename(simulator))
 
         return task

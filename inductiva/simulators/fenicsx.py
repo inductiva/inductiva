@@ -19,7 +19,6 @@ class FEniCSx(simulators.Simulator):
         bcs_filename: str,
         material_filename: str,
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -28,12 +27,10 @@ class FEniCSx(simulators.Simulator):
             bcs_filename: Boundary conditions filename.
             material_filename: Material filename.
             machine_group: The machine group to use for the simulation.
-            run_async: Whether to run the simulation asynchronously.
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
                            machine_group=machine_group,
-                           run_async=run_async,
                            mesh_filename=mesh_filename,
                            bcs_filename=bcs_filename,
                            material_filename=material_filename)
