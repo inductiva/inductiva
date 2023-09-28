@@ -42,6 +42,7 @@ class ExecuterCreate(
             "create_time",
             "cpu_count_logical",
             "cpu_count_physical",
+            "git_commit_hash",
             "host_info",
             "supported_executer_types",
         }
@@ -75,6 +76,7 @@ class ExecuterCreate(
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
             cpu_info = schemas.StrSchema
+            git_commit_hash = schemas.StrSchema
             
             
             class host_info(
@@ -120,6 +122,7 @@ class ExecuterCreate(
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
                 "cpu_info": cpu_info,
+                "git_commit_hash": git_commit_hash,
                 "host_info": host_info,
                 "resource_pool_id": resource_pool_id,
             }
@@ -129,6 +132,7 @@ class ExecuterCreate(
     create_time: MetaOapg.properties.create_time
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
+    git_commit_hash: MetaOapg.properties.git_commit_hash
     host_info: MetaOapg.properties.host_info
     supported_executer_types: MetaOapg.properties.supported_executer_types
     
@@ -151,6 +155,9 @@ class ExecuterCreate(
     def __getitem__(self, name: typing_extensions.Literal["cpu_info"]) -> MetaOapg.properties.cpu_info: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["git_commit_hash"]) -> MetaOapg.properties.git_commit_hash: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["host_info"]) -> MetaOapg.properties.host_info: ...
     
     @typing.overload
@@ -159,7 +166,7 @@ class ExecuterCreate(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "host_info", "resource_pool_id", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "git_commit_hash", "host_info", "resource_pool_id", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -183,6 +190,9 @@ class ExecuterCreate(
     def get_item_oapg(self, name: typing_extensions.Literal["cpu_info"]) -> MetaOapg.properties.cpu_info: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["git_commit_hash"]) -> MetaOapg.properties.git_commit_hash: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["host_info"]) -> MetaOapg.properties.host_info: ...
     
     @typing.overload
@@ -191,7 +201,7 @@ class ExecuterCreate(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "host_info", "resource_pool_id", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "cpu_info", "git_commit_hash", "host_info", "resource_pool_id", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -203,6 +213,7 @@ class ExecuterCreate(
         create_time: typing.Union[MetaOapg.properties.create_time, str, datetime, ],
         cpu_count_logical: typing.Union[MetaOapg.properties.cpu_count_logical, decimal.Decimal, int, ],
         cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical, decimal.Decimal, int, ],
+        git_commit_hash: typing.Union[MetaOapg.properties.git_commit_hash, str, ],
         host_info: typing.Union[MetaOapg.properties.host_info, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         supported_executer_types: typing.Union[MetaOapg.properties.supported_executer_types, list, tuple, ],
         resource_pool_id: typing.Union[MetaOapg.properties.resource_pool_id, str, schemas.Unset] = schemas.unset,
@@ -217,6 +228,7 @@ class ExecuterCreate(
             create_time=create_time,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
+            git_commit_hash=git_commit_hash,
             host_info=host_info,
             supported_executer_types=supported_executer_types,
             resource_pool_id=resource_pool_id,
