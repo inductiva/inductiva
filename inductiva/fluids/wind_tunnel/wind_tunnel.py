@@ -5,7 +5,6 @@ import enum
 from functools import singledispatchmethod
 import os
 import shutil
-import io
 from typing import Optional, List, Literal
 
 from absl import logging

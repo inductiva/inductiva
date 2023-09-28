@@ -1,7 +1,6 @@
 """Wind terrain scenario for air flowing over complex terrains."""
 
 from functools import singledispatchmethod
-import io
 import os
 import shutil
 from typing import List, Optional
@@ -15,7 +14,7 @@ SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
-COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
+COMMANDS_FILE_NAME = "commands.json.jinja"
 TERRAIN_FILENAME = "terrain.stl"
 
 
