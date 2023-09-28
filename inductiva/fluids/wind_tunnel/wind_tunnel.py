@@ -17,7 +17,7 @@ SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
-COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
+COMMANDS_FILE_NAME = "commands.json"
 
 
 @dataclass
@@ -95,13 +95,14 @@ class WindTunnel(scenarios.Scenario):
         else:
             self.domain = domain
 
-    def simulate(self,
-                 simulator: simulators.Simulator = simulators.OpenFOAM(),
-                 machine_group: Optional[resources.MachineGroup] = None,
-                 object_path: Optional[types.Path] = None,
-                 num_iterations: float = 100,
-                 resolution: Literal["high", "medium", "low"] = "medium",
-                 n_cores: int = 2) -> tasks.Task:
+    def simulate(
+            self,
+            simulator: simulators.Simulator = simulators.OpenFOAM(),
+            machine_group: Optional[resources.MachineGroup] = None,
+            object_path: Optional[types.Path] = None,
+            num_iterations: float = 100,
+            resolution: Literal["high", "medium",
+                                "low"] = "medium") -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
@@ -111,7 +112,6 @@ class WindTunnel(scenarios.Scenario):
             output_dir: Path to the directory where the simulation output
                 is downloaded when running synchronously.
             num_iterations: Number of iterations of the simulator.
-            n_cores: Number of cores to use for the simulation.
             resolution: Level of detail of the mesh used for the simulation.
                 Options: "high", "medium" or "low".
             machine_group: The machine group to use for the simulation.
@@ -123,14 +123,12 @@ class WindTunnel(scenarios.Scenario):
 
         self.object_path = utils.files.resolve_path(object_path)
         self.num_iterations = num_iterations
-        self.n_cores = n_cores
         self.resolution = MeshResolution[resolution.upper()].value
 
         commands = self.get_commands()
 
         task = super().simulate(simulator,
                                 machine_group=machine_group,
-                                n_cores=n_cores,
                                 commands=commands)
 
         return task
@@ -138,17 +136,11 @@ class WindTunnel(scenarios.Scenario):
     def get_commands(self):
         """Returns the commands for the simulation."""
 
-        commands_template_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                              OPENFOAM_TEMPLATE_INPUT_DIR,
-                                              COMMANDS_TEMPLATE_FILE_NAME)
+        commands_file_path = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                          OPENFOAM_TEMPLATE_INPUT_DIR,
+                                          COMMANDS_FILE_NAME)
 
-        inmemory_file = io.StringIO()
-        utils.templates.replace_params(
-            template_path=commands_template_path,
-            params={"n_cores": self.n_cores},
-            output_file=inmemory_file,
-        )
-        commands = self.read_commands_from_file(inmemory_file)
+        commands = self.read_commands_from_file(commands_file_path)
 
         return commands
 
@@ -178,13 +170,11 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
                          "initialConditions_template.openfoam.jinja"),
             os.path.join("system", "controlDict_template.openfoam.jinja"),
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
-            os.path.join("system", "decomposeParDict_template.openfoam.jinja"),
             os.path.join("system", "snappyHexMeshDict_template.openfoam.jinja")
         ],
         params={
             "flow_velocity": self.flow_velocity,
             "num_iterations": self.num_iterations,
-            "n_cores": self.n_cores,
             "domain": self.domain,
             "resolution": self.resolution,
         },
@@ -192,7 +182,6 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
             os.path.join(input_dir, "0", "include", "initialConditions"),
             os.path.join(input_dir, "system", "controlDict"),
             os.path.join(input_dir, "system", "blockMeshDict"),
-            os.path.join(input_dir, "system", "decomposeParDict"),
             os.path.join(input_dir, "system", "snappyHexMeshDict")
         ],
         remove_templates=True,
