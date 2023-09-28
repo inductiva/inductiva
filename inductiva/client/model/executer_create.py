@@ -38,6 +38,7 @@ class ExecuterCreate(schemas.DictSchema):
             "create_time",
             "cpu_count_logical",
             "cpu_count_physical",
+            "git_commit_hash",
             "host_info",
             "supported_executer_types",
         }
@@ -75,6 +76,7 @@ class ExecuterCreate(schemas.DictSchema):
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
             cpu_info = schemas.StrSchema
+            git_commit_hash = schemas.StrSchema
 
             class host_info(
                     schemas.ComposedSchema,):
@@ -139,6 +141,7 @@ class ExecuterCreate(schemas.DictSchema):
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
                 "cpu_info": cpu_info,
+                "git_commit_hash": git_commit_hash,
                 "host_info": host_info,
                 "resource_pool_id": resource_pool_id,
             }
@@ -148,6 +151,7 @@ class ExecuterCreate(schemas.DictSchema):
     create_time: MetaOapg.properties.create_time
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
+    git_commit_hash: MetaOapg.properties.git_commit_hash
     host_info: MetaOapg.properties.host_info
     supported_executer_types: MetaOapg.properties.supported_executer_types
 
@@ -189,6 +193,12 @@ class ExecuterCreate(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["git_commit_hash"]
+    ) -> MetaOapg.properties.git_commit_hash:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["host_info"]
     ) -> MetaOapg.properties.host_info:
         ...
@@ -210,6 +220,7 @@ class ExecuterCreate(schemas.DictSchema):
         "cpu_count_physical",
         "memory",
         "cpu_info",
+        "git_commit_hash",
         "host_info",
         "resource_pool_id",
     ], str]):
@@ -254,6 +265,12 @@ class ExecuterCreate(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["git_commit_hash"]
+    ) -> MetaOapg.properties.git_commit_hash:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["host_info"]
     ) -> MetaOapg.properties.host_info:
         ...
@@ -277,6 +294,7 @@ class ExecuterCreate(schemas.DictSchema):
         "cpu_count_physical",
         "memory",
         "cpu_info",
+        "git_commit_hash",
         "host_info",
         "resource_pool_id",
     ], str]):
@@ -311,6 +329,10 @@ class ExecuterCreate(schemas.DictSchema):
             MetaOapg.properties.cpu_count_physical,
             decimal.Decimal,
             int,
+        ],
+        git_commit_hash: typing.Union[
+            MetaOapg.properties.git_commit_hash,
+            str,
         ],
         host_info: typing.Union[
             MetaOapg.properties.host_info,
@@ -352,6 +374,7 @@ class ExecuterCreate(schemas.DictSchema):
             create_time=create_time,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
+            git_commit_hash=git_commit_hash,
             host_info=host_info,
             supported_executer_types=supported_executer_types,
             resource_pool_id=resource_pool_id,
