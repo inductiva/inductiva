@@ -13,8 +13,9 @@ from inductiva.client.paths.gcp_instances_group_status.get import GetGroupStatus
 from inductiva.client.paths.gcp_instances_group_name.get import GetInstanceGroup
 from inductiva.client.paths.gcp_instances_price.get import GetInstancePrice
 from inductiva.client.paths.gcp_instances_status.get import GetStatus
-from inductiva.client.paths.gcp_instances_storage.get import GetStorageSize
+from inductiva.client.paths.gcp_instances_storage_size.get import GetStorageSize
 from inductiva.client.paths.gcp_instances_groups.get import ListActiveUserInstanceGroups
+from inductiva.client.paths.gcp_instances_storage_contents.get import ListStorageContents
 from inductiva.client.paths.gcp_instances_group.post import RegisterInstanceGroup
 from inductiva.client.paths.gcp_instances_group_start.post import StartInstanceGroup
 
@@ -27,6 +28,7 @@ class InstanceApi(
         GetStatus,
         GetStorageSize,
         ListActiveUserInstanceGroups,
+        ListStorageContents,
         RegisterInstanceGroup,
         StartInstanceGroup,
 ):
