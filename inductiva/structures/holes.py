@@ -1,9 +1,7 @@
 """Utils to create the holes."""
 
 from abc import ABC, abstractmethod
-from typing import Tuple
 
-import gmsh
 import math
 
 
@@ -28,16 +26,6 @@ class Hole(ABC):
     @abstractmethod
     def to_dict(self):
         """Abstract method to convert the hole properties to a dictionary."""
-        pass
-
-    @abstractmethod
-    def to_occ(self):
-        """Abstract method to convert the hole to OpenCASCADE CAD."""
-        pass
-
-    @abstractmethod
-    def get_hole_mesh_params(self):
-        """Abstract method for hole mesh parameters."""
         pass
 
 
@@ -73,40 +61,6 @@ class CircularHole(Hole):
             "center_y": self.center_y,
             "radius": self.radius
         }
-
-    def to_occ(self) -> int:
-        """Converts hole to OpenCASCADE CAD representation.
-
-        Returns:
-          hole_gmsh (int): The Gmsh entity ID representing the hole's
-            OpenCASCADE CAD representation.
-        """
-        hole_gmsh = gmsh.model.occ.addDisk(xc=self.center_x,
-                                           yc=self.center_y,
-                                           zc=0,
-                                           rx=self.radius,
-                                           ry=self.radius)
-        return hole_gmsh
-
-    def get_hole_mesh_params(self) -> Tuple[float, float]:
-        """Gets the mesh generation parameters for the hole.
-
-        Metrics:
-          - mesh_offset (float): Represents an offset for the boundaries of the
-            holes, defining a region around the boundaries. Within this region,
-            we have the ability to control the mesh elements size.
-            The offset is equal to the radius.
-          - predefined_element_size (float): Represents the predefined element
-            size, defined as 1/4 of the perimeter.
-
-        Returns:
-            Tuple[float, float]: The mesh offset and the predefined element mesh
-              size for the hole.
-        """
-        mesh_offset = self.radius
-        predefined_element_size = self.perimeter() / 4
-
-        return mesh_offset, predefined_element_size
 
 
 class RectangularHole(Hole):
@@ -149,49 +103,6 @@ class RectangularHole(Hole):
             "half_size_y": self.half_size_y,
             "angle": self.angle
         }
-
-    def to_occ(self) -> int:
-        """Converts hole to OpenCASCADE CAD representation.
-
-        Returns:
-          hole_gmsh (int): The Gmsh entity ID representing the hole's
-            OpenCASCADE CAD representation.
-        """
-        hole_gmsh = gmsh.model.occ.addRectangle(
-            x=self.center_x - self.half_size_x,
-            y=self.center_y - self.half_size_y,
-            z=0,
-            dx=self.half_size_x * 2,
-            dy=self.half_size_y * 2)
-        gmsh.model.occ.rotate(dimTags=[(2, hole_gmsh)],
-                              x=self.center_x,
-                              y=self.center_y,
-                              z=0,
-                              ax=0,
-                              ay=0,
-                              az=1,
-                              angle=math.radians(self.angle))
-        return hole_gmsh
-
-    def get_hole_mesh_params(self) -> Tuple[float, float]:
-        """Gets the mesh generation parameters for the hole.
-
-        Metrics:
-          - mesh_offset (float): Represents an offset for the boundaries of the
-            holes, defining a region around the boundaries. Within this region,
-            we have the ability to control the mesh elements size.
-            The offset is equal to half of the minimum size of the hole.
-          - predefined_element_size (float): Represents the predefined element
-            size, defined as 1/4 of the perimeter.
-
-        Returns:
-            Tuple[float, float]: The mesh offset and the predefined element mesh
-              size for the hole.
-        """
-        mesh_offset = min(self.half_size_x, self.half_size_y) / 2
-        predefined_element_size = self.perimeter() / 4
-
-        return mesh_offset, predefined_element_size
 
 
 class EllipticalHole(Hole):
@@ -237,64 +148,3 @@ class EllipticalHole(Hole):
             "semi_axis_y": self.semi_axis_y,
             "angle": self.angle
         }
-
-    def to_occ(self) -> int:
-        """Converts hole to OpenCASCADE CAD representation.
-
-        Gmsh adheres to a standard where it expects the major axis
-        (larger semi-axis) of an ellipse or disk to be oriented parallel to the
-        X-axis, while the minor axis (smaller semi-axis) should align with the
-        Y-axis.
-
-        When the length of the semi-axis along the X-axis is less than the
-        length of the semi-axis along the Y-axis, the code swaps the major and
-        minor semi-axis values. This adjustment ensures that the shape aligns
-        correctly with Gmsh's convention. Furthermore, a 90-degree rotation is
-        applied to ensure the shape is properly oriented.
-
-        Returns:
-            hole_gmsh (int): The Gmsh entity ID representing the hole's
-              OpenCASCADE CAD representation.
-        """
-        rx, ry = self.semi_axis_x, self.semi_axis_y
-        angle = self.angle
-
-        if self.semi_axis_x < self.semi_axis_y:
-            rx, ry = self.semi_axis_y, self.semi_axis_x
-            angle += 90
-
-        hole_gmsh = gmsh.model.occ.addDisk(xc=self.center_x,
-                                           yc=self.center_y,
-                                           zc=0,
-                                           rx=rx,
-                                           ry=ry)
-        gmsh.model.occ.rotate(dimTags=[(2, hole_gmsh)],
-                              x=self.center_x,
-                              y=self.center_y,
-                              z=0,
-                              ax=0,
-                              ay=0,
-                              az=1,
-                              angle=math.radians(angle))
-
-        return hole_gmsh
-
-    def get_hole_mesh_params(self) -> Tuple[float, float]:
-        """Gets the mesh generation parameters for the hole.
-
-        Metrics:
-          - mesh_offset (float): Represents an offset for the boundaries of the
-            holes, defining a region around the boundaries. Within this region,
-            we have the ability to control the mesh elements size.
-            The offset is equal to the minimum value semi-axis.
-          - predefined_element_size (float): Represents the predefined element
-            size, defined as 1/4 of the perimeter.
-
-        Returns:
-            Tuple[float, float]: The mesh offset and the predefined element mesh
-              size for the hole.
-        """
-        mesh_offset = min(self.semi_axis_x, self.semi_axis_y)
-        predefined_element_size = self.perimeter() / 4
-
-        return mesh_offset, predefined_element_size
