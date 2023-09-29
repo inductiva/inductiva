@@ -45,10 +45,10 @@ class CADObject:
 
         if inplace:
             self.data = data
-        
+
         return self
-    
-    def to_origin(self, inplace: bool = False): 
+
+    def to_origin(self, inplace: bool = False):
         """Translate the CADObject to the origin.
 
         Args:
@@ -57,12 +57,11 @@ class CADObject:
 
         print("Translating object to the origin.")
         data = self.data.translate([-value for value in self.data.center])
-        
+
         if inplace:
             self.data = data
 
         return self
-        
 
     def to_ground(self, inplace: bool = False):
         """Translate the CADObject to the ground.
@@ -135,7 +134,7 @@ class CADObject:
             self.data = data
 
         return self
-    
+
     def scale(self, xyz: Union[float, List[float]], inplace: bool = False):
         """Scale the CADObject by a vector.
         
@@ -155,10 +154,10 @@ class CADObject:
             vector = xyz
 
         data = self.data.scale(vector, inplace=inplace)
-        
+
         if inplace:
             self.data = data
-        
+
         return self
 
     def show(self,
@@ -167,8 +166,7 @@ class CADObject:
              virtual_display: bool = False,
              object_color: str = "white",
              background_color: str = "grey",
-             save_path: str = None
-             ):
+             save_path: str = None):
         """Show the CADObject data in a PyVista plot."""
 
         if virtual_display:
