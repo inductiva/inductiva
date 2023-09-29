@@ -1,0 +1,10 @@
+[
+    {"cmd": "runApplication surfaceFeatures", "prompts": []},
+    {"cmd": "runApplication blockMesh", "prompts":[]},
+    {"cmd": "runApplication decomposePar -copyZero", "prompts":[]},
+    {"cmd": "runParallel snappyHexMesh -overwrite", "prompts":[]},
+    {"cmd": "runParallel potentialFoam", "prompts":[]},
+    {"cmd": "runParallel simpleFoam", "prompts":[]},
+    {"cmd": "runApplication reconstructParMesh -constant", "prompts":[]},
+    {"cmd": "runApplication reconstructPar -latestTime", "prompts": []}
+]

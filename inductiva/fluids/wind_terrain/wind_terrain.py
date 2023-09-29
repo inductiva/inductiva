@@ -1,7 +1,6 @@
 """Wind terrain scenario for air flowing over complex terrains."""
 
 from functools import singledispatchmethod
-import io
 import os
 import shutil
 from typing import List, Optional
@@ -15,7 +14,7 @@ SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
 FILES_SUBDIR = "files"
-COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
+COMMANDS_FILE_NAME = "commands.json.jinja"
 TERRAIN_FILENAME = "terrain.stl"
 
 
@@ -101,7 +100,6 @@ class WindOverTerrain(scenarios.Scenario):
         self,
         simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
-        n_cores: int = 2,
         num_iterations: int = 100,
     ) -> inductiva.tasks.Task:
         """Simulates the wind over the terrain scenario.
@@ -111,18 +109,15 @@ class WindOverTerrain(scenarios.Scenario):
                 Valid simulators: OpenFOAM.
             machine_group: The MachineGroup to use for the simulation.
             num_iterations: Number of iterations to run the simulation.
-            n_cores: Number of cores to use for the simulation.
         """
         simulator.override_api_method_prefix("wind_terrain")
 
         self.num_iterations = num_iterations
-        self.n_cores = n_cores
 
         commands = self.get_commands()
 
         task = super().simulate(simulator,
                                 machine_group=machine_group,
-                                n_cores=n_cores,
                                 commands=commands)
 
         return task
@@ -130,17 +125,11 @@ class WindOverTerrain(scenarios.Scenario):
     def get_commands(self):
         """Returns the commands for the simulation."""
 
-        commands_template_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                              OPENFOAM_TEMPLATE_INPUT_DIR,
-                                              COMMANDS_TEMPLATE_FILE_NAME)
+        commands_file_path = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                          OPENFOAM_TEMPLATE_INPUT_DIR,
+                                          COMMANDS_FILE_NAME)
 
-        inmemory_file = io.StringIO()
-        utils.templates.replace_params(
-            template_path=commands_template_path,
-            params={"n_cores": self.n_cores},
-            output_file=inmemory_file,
-        )
-        commands = self.read_commands_from_file(inmemory_file)
+        commands = self.read_commands_from_file(commands_file_path)
 
         return commands
 
@@ -168,7 +157,6 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
         template_filenames=[
             os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
             os.path.join("system", "controlDict_template.openfoam.jinja"),
-            os.path.join("system", "decomposeParDict_template.openfoam.jinja"),
             os.path.join("system", "snappyHexMeshDict_template.openfoam.jinja"),
             os.path.join("system", "topoSetDict_template.openfoam.jinja"),
             os.path.join("0", "include",
@@ -183,12 +171,10 @@ def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unuse
             "flow_position": self.wind_position,
             "top_boundary_height": self.top_boundary_height,
             "num_iterations": self.num_iterations,
-            "n_cores": self.n_cores,
         },
         output_filename_paths=[
             os.path.join(input_dir, "system", "blockMeshDict"),
             os.path.join(input_dir, "system", "controlDict"),
-            os.path.join(input_dir, "system", "decomposeParDict"),
             os.path.join(input_dir, "system", "snappyHexMeshDict"),
             os.path.join(input_dir, "system", "topoSetDict"),
             os.path.join(input_dir, "0", "include", "ABLConditions"),

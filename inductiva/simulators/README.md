@@ -91,6 +91,8 @@ A single simulation via Inductiva API comprises several steps done via OpenFOAM 
 
 All of these folders should be inside an input directory. Finally, to run a simulation the user needs to configure a list of dictionaries specifying the commands they want to execute on the backend. Below, we run the [motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) from OpenFOAM and show how this is done in practice.
 
+The commands passed to the simulator follow the structure of OpenFOAM, that is, using the prefix `runApplication` the command will execute sequentially and with `runParallel` the command will use the maximum number of cores the machine has available. Hence, you don't need to set the specific number of processes, the simulator will do that for you automatically. In particular, the decomposeParDict will be configured automatically and, at the moment, only the scotch decomposition method is available.
+
 ### Example 
 
 ````python
@@ -101,16 +103,33 @@ inductiva.api_key = "YOUR_API_KEY"
 # Set simulation input directory
 input_dir = "motorbike_tutorial"
 
-# Set the simulation commands
-[{"cmd": "surfaceFeatures", "prompts": []}, {"cmd": "blockMesh", "prompts": []},
-{"cmd": "snappyHexMesh", "prompts": []}, {"cmd": "potentialFoam", "prompts": []},
-{"cmd": "simpleFoam", "prompts": []}]
+# Set the simulation commands for sequential use
+sequential_commands = [
+    {"cmd": "runApplication surfaceFeatures", "prompts": []},
+    {"cmd": "runApplication blockMesh", "prompts": []},
+    {"cmd": "runApplication snappyHexMesh", "prompts": []},
+    {"cmd": "runParallel potentialFoam", "prompts": []},
+    {"cmd": "runApplication simpleFoam", "prompts": []}]
+
+parallel_commands = [
+    {"cmd": "runApplication surfaceFeatures", "prompts": []},
+    {"cmd": "runApplication blockMesh", "prompts":[]},
+    {"cmd": "runApplication decomposePar -copyZero", "prompts":[]},
+    {"cmd": "runParallel snappyHexMesh -overwrite", "prompts":[]},
+    {"cmd": "runParallel potentialFoam", "prompts":[]},
+    {"cmd": "runParallel simpleFoam", "prompts":[]},
+    {"cmd": "runApplication reconstructParMesh -constant", "prompts":[]},
+    {"cmd": "runApplication reconstructPar -latestTime", "prompts": []}
+]
+
 
 # Initialize the Simulator
 simulator = inductiva.simulators.OpenFOAM()
 
 # Run simulation with config files in the input directory
-task = simulator.run(input_dir=input_dir, commands=commands)
+task = simulator.run(input_dir=input_dir, commands=sequential_commands)
+
+task = simulator.run(input_dir=input_dir, commands=parallel_commands)
 ````
 
 ## SWASH simulator
