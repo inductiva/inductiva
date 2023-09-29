@@ -26,13 +26,10 @@ class DeformablePlate(scenarios.Scenario):
 
     valid_simulators = [simulators.FEniCSx]
 
-    def __init__(self,
-                 plate: structures.plates.RectangularPlate,
+    def __init__(self, plate: structures.plates.RectangularPlate,
                  holes_list: List[structures.holes.Hole],
                  bcs_list: List[structures.bcs.BoundaryCondition],
-                 material: structures.materials.IsotropicLinearElasticMaterial,
-                 global_refinement_meshing_factor: float = 1.0,
-                 local_refinement_meshing_factor: float = 0.0):
+                 material: structures.materials.IsotropicLinearElasticMaterial):
         """Initializes the plate linear elastic scenario.
 
         Args:
@@ -45,6 +42,27 @@ class DeformablePlate(scenarios.Scenario):
             geometry (GeometricCase): The plate with holes geometry.
             bcs_case (BoundaryConditionsCase): The boudnary coinditions for the
              palte with holes.
+        """
+        self.plate = plate
+        self.holes_list = holes_list
+        self.bcs_list = bcs_list
+        self.material = material
+        self.geometry = geometry_utils.GeometricCase(plate=self.plate,
+                                                     holes_list=self.holes_list)
+        self.bcs_case = bcs_utils.BoundaryConditionsCase(bcs_list=self.bcs_list)
+
+    def simulate(self,
+                 simulator: simulators.Simulator = simulators.FEniCSx(),
+                 machine_group: Optional[resources.MachineGroup] = None,
+                 run_async: bool = False,
+                 global_refinement_meshing_factor: float = 1.0,
+                 local_refinement_meshing_factor: float = 0.0) -> tasks.Task:
+        """Simulates the scenario.
+
+        Args:
+            simulator: The simulator to use for the simulation.
+            machine_group: The machine group to use for the simulation.
+            run_async: Whether to run the simulation asynchronously.
             global_refinement_meshing_factor (float): The refinement factor for
               global refinement of the mesh. A higher value results in a finer
               mesh overall, increasing the number of elements in the entire
@@ -60,40 +78,16 @@ class DeformablePlate(scenarios.Scenario):
               this factor when you want to focus on refining specific areas
               while keeping the rest of the mesh less refined.
         """
-        self.plate = plate
-        self.holes_list = holes_list
-        self.bcs_list = bcs_list
-        self.material = material
-        self.geometry = geometry_utils.GeometricCase(plate=self.plate,
-                                                     holes_list=self.holes_list)
-        self.bcs_case = bcs_utils.BoundaryConditionsCase(bcs_list=self.bcs_list)
-        self.global_refinement_meshing_factor = global_refinement_meshing_factor
-        self.local_refinement_meshing_factor = local_refinement_meshing_factor
-
-    def simulate(
-        self,
-        simulator: simulators.Simulator = simulators.FEniCSx(),
-        machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
-    ) -> tasks.Task:
-        """Simulates the scenario.
-
-        Args:
-            simulator: The simulator to use for the simulation.
-            machine_group: The machine group to use for the simulation.
-            run_async: Whether to run the simulation asynchronously.
-        """
         simulator.override_api_method_prefix("deformable_plate")
-        task = super().simulate(simulator,
-                                machine_group=machine_group,
-                                run_async=run_async,
-                                geometry_filename=GEOMETRY_FILENAME,
-                                bcs_filename=BCS_FILENAME,
-                                material_filename=MATERIAL_FILENAME,
-                                global_refinement_meshing_factor=self.
-                                global_refinement_meshing_factor,
-                                local_refinement_meshing_factor=self.
-                                local_refinement_meshing_factor)
+        task = super().simulate(
+            simulator,
+            machine_group=machine_group,
+            run_async=run_async,
+            geometry_filename=GEOMETRY_FILENAME,
+            bcs_filename=BCS_FILENAME,
+            material_filename=MATERIAL_FILENAME,
+            global_refinement_meshing_factor=global_refinement_meshing_factor,
+            local_refinement_meshing_factor=local_refinement_meshing_factor)
 
         return task
 
