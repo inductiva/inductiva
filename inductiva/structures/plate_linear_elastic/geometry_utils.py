@@ -39,3 +39,4 @@ class GeometricCase:
         # Write JSON file
         with open(json_path, "w", encoding="utf-8") as write_file:
             json.dump(geom_case_dictionary, write_file, indent=4)
+            

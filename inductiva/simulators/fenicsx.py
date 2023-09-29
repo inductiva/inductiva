@@ -29,20 +29,20 @@ class FEniCSx(simulators.Simulator):
             geometry_filename: Geometry filename.
             bcs_filename: Boundary conditions filename.
             material_filename: Material filename.
-            global_refinement_meshing_factor (float): The refinement factor for global
-              refinement of the mesh. A higher value results in a finer mesh
-              overall, increasing the number of elements in the entire mesh, and
-              leading to a more detailed representation of the geometry. Use
-              this factor when you want to globally refine the mesh uniformly,
-              without specific local focus.
-            local_refinement_meshing_factor (float): The refinement factor for local
-              refinement of the mesh. This factor controls the local refinement
-              level of the mesh and is typically used for refining specific
-              regions or features of the mesh. A higher value for this factor
-              indicates a finer mesh in the regions of interest, providing more
-              detailed resolution around certain features. Use this factor when
-              you want to focus on refining specific areas while keeping the
-              rest of the mesh less refined.
+            global_refinement_meshing_factor (float): The refinement factor for
+              global refinement of the mesh. A higher value results in a finer
+              mesh overall, increasing the number of elements in the entire
+              mesh, and leading to a more detailed representation of the
+              geometry. Use this factor when you want to globally refine the
+              mesh uniformly, without specific local focus.
+            local_refinement_meshing_factor (float): The refinement factor for
+              local refinement of the mesh. This factor controls the local
+              refinement level of the mesh and is typically used for refining
+              specific regions or features of the mesh. A higher value for this
+              factor indicates a finer mesh in the regions of interest,
+              providing more detailed resolution around certain features. Use
+              this factor when you want to focus on refining specific areas
+              while keeping the rest of the mesh less refined.
             machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
             other arguments: See the documentation of the base class.
