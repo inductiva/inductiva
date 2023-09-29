@@ -5,7 +5,7 @@ of the objects to be used inside our simulators, this class
 provides a simple interface to read the objects from a native
 CAD file.
 """
-from typing import List, Literal, Union
+from typing import List, Literal, Optional, Union
 
 try:
     import pyvista as pv
@@ -16,6 +16,7 @@ from inductiva.utils import optional_deps
 
 
 class CADObject:
+    """Class to manipulate CADObjects."""
 
     @optional_deps.needs_fluids_extra_deps
     def __init__(self, filename):
@@ -86,7 +87,7 @@ class CADObject:
 
     def rotate_around_vector(self,
                              vector: List[float],
-                             center: List[float] = [0., 0., 0.],
+                             center: Optional[List[float]] = [0., 0., 0.],
                              angle: float = 0.,
                              inplace: bool = False):
         """Rotate the CADObject by an angle around a vector.
@@ -151,7 +152,7 @@ class CADObject:
             inplace: If True, the object is scaled in place.
         """
 
-        if type(xyz) == float:
+        if isinstance(xyz, float):
             vector = [xyz, xyz, xyz]
             print("Scaling object by a factor of ", xyz)
         else:
@@ -200,7 +201,7 @@ def check_spatial_vector(vector: List[float], vector_name: str):
         raise ValueError(f"{vector_name} must be three dimensional.")
 
     for value in vector:
-        if type(value) != float:
+        if not isinstance(value, float):
             raise ValueError(f"{vector_name} has an invalid value format. "
                              "Vector needs to contain "
                              "only float values.")
