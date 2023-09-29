@@ -48,11 +48,12 @@ class FEniCSx(simulators.Simulator):
             other arguments: See the documentation of the base class.
         """
 
-        return super().run(input_dir,
-                           machine_group=machine_group,
-                           run_async=run_async,
-                           geometry_filename=geometry_filename,
-                           bcs_filename=bcs_filename,
-                           material_filename=material_filename,
-                           global_refinement_meshing_factor=global_refinement_meshing_factor,
-                           local_refinement_meshing_factor=local_refinement_meshing_factor)
+        return super().run(
+            input_dir,
+            machine_group=machine_group,
+            run_async=run_async,
+            geometry_filename=geometry_filename,
+            bcs_filename=bcs_filename,
+            material_filename=material_filename,
+            global_refinement_meshing_factor=global_refinement_meshing_factor,
+            local_refinement_meshing_factor=local_refinement_meshing_factor)

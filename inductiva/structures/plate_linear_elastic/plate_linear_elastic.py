@@ -84,15 +84,16 @@ class DeformablePlate(scenarios.Scenario):
             run_async: Whether to run the simulation asynchronously.
         """
         simulator.override_api_method_prefix("deformable_plate")
-        task = super().simulate(
-            simulator,
-            machine_group=machine_group,
-            run_async=run_async,
-            geometry_filename=GEOMETRY_FILENAME,
-            bcs_filename=BCS_FILENAME,
-            material_filename=MATERIAL_FILENAME,
-            global_refinement_meshing_factor=self.global_refinement_meshing_factor,
-            local_refinement_meshing_factor=self.local_refinement_meshing_factor)
+        task = super().simulate(simulator,
+                                machine_group=machine_group,
+                                run_async=run_async,
+                                geometry_filename=GEOMETRY_FILENAME,
+                                bcs_filename=BCS_FILENAME,
+                                material_filename=MATERIAL_FILENAME,
+                                global_refinement_meshing_factor=self.
+                                global_refinement_meshing_factor,
+                                local_refinement_meshing_factor=self.
+                                local_refinement_meshing_factor)
 
         return task
 
