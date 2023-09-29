@@ -7,11 +7,17 @@ CAD file.
 """
 from typing import List, Literal, Union
 
-import pyvista as pv
+try:
+    import pyvista as pv
+except ImportError:
+    pv = None
+
+from inductiva.utils import optional_deps
 
 
 class CADObject:
 
+    @optional_deps.needs_fluids_extra_deps
     def __init__(self, filename):
         """"Initialize the CADObject class."""
 
