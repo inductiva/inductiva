@@ -87,7 +87,7 @@ class CADObject:
 
     def rotate_around_vector(self,
                              vector: List[float],
-                             center: Optional[List[float]] = [0., 0., 0.],
+                             center: Optional[List[float]] = None,
                              angle: float = 0.,
                              inplace: bool = False):
         """Rotate the CADObject by an angle around a vector.
@@ -95,12 +95,16 @@ class CADObject:
         Args:
             vector: 3D vector to rotate the object around.
             center: 3D center point of the rotation.
+                Default is None, which is converted to [0., 0., 0.]
             angle: Angle in degrees to rotate the object.
             inplace: If True, the object rotation is saved in the data.
         """
 
         check_spatial_vector(vector, "Vector")
         check_spatial_vector(center, "Center")
+
+        if center is None:
+            center = [0., 0., 0.]
 
         print(f"Rotating around {vector} at the center point {center}"
               f" by {angle} degrees")
