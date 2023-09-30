@@ -30,9 +30,12 @@ except ImportError:
 
 try:
     import pyvista as pv
-    import xarray as xr
 except ImportError:
     pv = None
+
+try:   
+    import xarray as xr
+except ImportError:
     xr = None
 
 from inductiva.utils import files, optional_deps
