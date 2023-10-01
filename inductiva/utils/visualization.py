@@ -33,7 +33,7 @@ try:
 except ImportError:
     pv = None
 
-try:   
+try:
     import xarray as xr
 except ImportError:
     xr = None
