@@ -2,6 +2,7 @@
 
 from abc import ABC, abstractmethod
 
+
 class Plate(ABC):
     """Abstract base class for plates."""
 
