@@ -1,8 +1,6 @@
 """Utils to create plates."""
 
 from abc import ABC, abstractmethod
-from typing import Tuple
-
 
 class Plate(ABC):
     """Abstract base class for plates."""
