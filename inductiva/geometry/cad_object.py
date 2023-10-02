@@ -16,16 +16,30 @@ from inductiva.utils import optional_deps
 
 
 class CADObject:
-    """Class to manipulate CADObjects."""
+    """Class to manipulate CADObjects.
+    
+    Computer-aided design (CAD) objects are used to represent
+    the geometry of the objects to be simulated. This class
+    provides a simple interface to read the objects from a
+    native CAD file and manipulate them in space.
+    """
 
     @optional_deps.needs_fluids_extra_deps
     def __init__(self, filename):
-        """"Initialize the CADObject class."""
+        """"Initialize the CADObject class.
+        
+        Args:
+            filename (str): The path to the CAD file
+                to be loaded. 
+                Supported formats: .stl, .ply, .vtk, .obj,
+                .vtu, .ply, .msh and more. Check the link
+                https://github.com/nschloe/meshio for more.
+        """
 
         self.filename = filename
         self.data = pv.read(filename)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """Print information about the CAD object.
         
         TODO: Add more information about the object.
@@ -43,7 +57,10 @@ class CADObject:
 
         Args:
             vector: The vector to translate the object.
-            inplace: If True, the object is translated in place.
+            inplace: If True, the object is saved in the data.
+
+        Returns:
+            The CADObject instance after translating.
         """
         check_spatial_vector(vector, "Vector")
 
@@ -59,26 +76,14 @@ class CADObject:
         """Translate the CADObject to the origin.
 
         Args:
-            inplace: If True, the object is translated in place.
+            inplace: If True, the object is save in the data.
+
+        Returns:
+            The CADObject instance centered in the origin.
         """
 
         print("Translating object to the origin.")
         data = self.data.translate([-value for value in self.data.center])
-
-        if inplace:
-            self.data = data
-
-        return self
-
-    def to_ground(self, inplace: bool = False):
-        """Translate the CADObject to the ground.
-
-        Args:
-            inplace: If True, the object is translated in place.
-        """
-
-        print("Translating object to the ground.")
-        data = self.data.translate([0., 0., -self.data.center[2]])
 
         if inplace:
             self.data = data
@@ -98,6 +103,9 @@ class CADObject:
                 Default is None, which is converted to [0., 0., 0.]
             angle: Angle in degrees to rotate the object.
             inplace: If True, the object rotation is saved in the data.
+
+        Returns:
+            The CADObject instance after rotating around a vector.
         """
 
         check_spatial_vector(vector, "Vector")
@@ -122,9 +130,13 @@ class CADObject:
         """Rotate the CADObject by an angle around an cartesian axis.
         
         Args:
-            axis: Axis to rotate the object around.
+            axis: Axis to rotate the object around. 
+                Available options: "x", "y" and "z".
             angle: Angle in degrees to rotate the object.
             inplace: If True, the object rotation is saved in the data.
+
+        Returns:
+            The CADObject instance after rotating around an axis.
         """
 
         axis_vector_dict = {
@@ -133,11 +145,7 @@ class CADObject:
             "z": [0., 0., 1.]
         }
 
-        if axis in ["x", "y", "z"]:
-            vector = axis_vector_dict[axis]
-        else:
-            raise ValueError("Axis must be one of 'x', 'y', 'z'.")
-
+        vector = axis_vector_dict[axis]
         print(f"Rotating around the {axis}-axis by {angle} degrees.")
         data = self.data.rotate_vector(vector, angle, inplace=inplace)
 
@@ -150,10 +158,13 @@ class CADObject:
         """Scale the CADObject by a vector.
         
         Args:
-            vector: float or 3D vector that define the scale factors,
+            xyz: float or 3D vector that define the scale factors,
                 overall and along x, y, and z, respectively. If a float
                 is passed the same uniform scale is applied to all axes.
             inplace: If True, the object is scaled in place.
+
+        Returns:
+            The CADObject instance after scaling.
         """
 
         if isinstance(xyz, float):
@@ -171,23 +182,14 @@ class CADObject:
 
         return self
 
-    def area(self):
-        """Compute the total area of the CADObject.
-        
-        TODO: Compute front and rear area.
-        """
-
-        return self.data.area
-
-    def bounds(self):
-        """Bounds of the CADObject."""
-
-        return self.data.bounds
-
-    def save(self, filename: str):
+    def save(self, filename: str, binary: bool = False):
         """Save the current mesh to a file.
         
-        Available formas: .stl, .ply. .vtk
+        Args:
+            filename (str): The path to the file to be saved.
+                Available formats: .stl, .ply. and .vtk.
+            binary (bool): Whether to save the file in binary format.
+                If False, the file is saved in ASCII format.
         """
 
         file_format = filename.split(".")[-1]
@@ -196,7 +198,7 @@ class CADObject:
             raise ValueError("File format not supported. "
                              "Available formats: .stl, .ply, .vtk")
 
-        self.data.save(filename)
+        self.data.save(filename, binary)
 
     def show(self,
              show_edges: bool = False,
@@ -204,8 +206,21 @@ class CADObject:
              virtual_display: bool = False,
              object_color: str = "white",
              background_color: str = "grey",
+             n_ticks: int = 2,
              save_path: str = None):
-        """Show the CADObject data in a PyVista plot."""
+        """Show the CADObject data in a PyVista plot.
+        
+        Args:
+        Args:
+            show_edges (bool): Whether to show edges of the CAD object.
+            off_screen (bool): Whether to render off-screen.
+            virtual_display (bool): Whether to use a virtual display
+                (requires xvfb).
+            object_color (str): Color of the CAD object.
+            background_color (str): Background color of the render.
+            save_path (str, optional): If provided, the render will be
+                saved to this path.
+        """
 
         if virtual_display:
             off_screen = True
@@ -217,7 +232,9 @@ class CADObject:
 
         plotter.add_mesh(self.data, show_edges=show_edges, color=object_color)
         # Set axis on the back of the object and add a padding to the grid
-        plotter.show_grid(location="outer", padding=0.3)
+        plotter.show_grid(location="outer", padding=0.3,
+                          n_xlabels=n_ticks, n_ylabels=n_ticks,
+                          n_zlabels=n_ticks, font_size=9)
 
         plotter.show(auto_close=True)
 
@@ -229,7 +246,18 @@ class CADObject:
 
 
 def check_spatial_vector(vector: List[float], vector_name: str):
-    """Check if vector represents a 3D spatial vector."""
+    """Check if vector represents a 3D spatial vector.
+    
+    Args:
+        vector (List[float]): The list to be checked for 3D spatial 
+            vector representation.
+        vector_name (str): A descriptive name for the vector for error
+            messages.
+
+Raises:
+        ValueError: If the input list does not have exactly three
+            float values.
+            If any element in the list is not a float."""
 
     if len(vector) != 3:
         raise ValueError(f"{vector_name} must be three dimensional.")
