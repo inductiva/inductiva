@@ -170,6 +170,28 @@ class CADObject:
             self.data = data
 
         return self
+    
+    def area(self):
+        """Compute the total area of the CADObject.
+        
+        TODO: Compute front and rear area.
+        """
+
+        return self.data.area
+    
+    def save(self, filename: str):
+        """Save the current mesh to a file.
+        
+        Available formas: .stl, .ply. .vtk
+        """
+
+        file_format = filename.split(".")[-1]
+
+        if file_format not in ["stl", "ply", "vtk"]:
+            raise ValueError("File format not supported. "
+                             "Available formats: .stl, .ply, .vtk")
+
+        self.data.save(filename)
 
     def show(self,
              show_edges: bool = False,
@@ -189,6 +211,10 @@ class CADObject:
         plotter.add_camera_orientation_widget()
 
         plotter.add_mesh(self.data, show_edges=show_edges, color=object_color)
+        # Set axis on the back of the object and add a padding to the grid
+        plotter.show_grid(location="outer",
+                          padding=0.3)
+
         plotter.show(auto_close=True)
 
         if save_path is not None:
