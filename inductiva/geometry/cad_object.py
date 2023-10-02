@@ -232,9 +232,12 @@ class CADObject:
 
         plotter.add_mesh(self.data, show_edges=show_edges, color=object_color)
         # Set axis on the back of the object and add a padding to the grid
-        plotter.show_grid(location="outer", padding=0.3,
-                          n_xlabels=n_ticks, n_ylabels=n_ticks,
-                          n_zlabels=n_ticks, font_size=9)
+        plotter.show_grid(location="outer",
+                          padding=0.3,
+                          n_xlabels=n_ticks,
+                          n_ylabels=n_ticks,
+                          n_zlabels=n_ticks,
+                          font_size=9)
 
         plotter.show(auto_close=True)
 
