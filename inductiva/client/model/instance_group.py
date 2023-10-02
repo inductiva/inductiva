@@ -27,15 +27,6 @@ class InstanceGroup(schemas.DictSchema):
     Ref: https://openapi-generator.tech
 
     Do not edit the class manually.
-
-    Schema for creating an instance group.
-
-This schema is a blueprint for both elastic and non-elastic instance
-groups. While most parameters are common, elastic instance groups include
-'min_instances' and 'max_instances' options. These parameters remain in this
-schema for consistency, as other functionalities like request validation,
-instance deletion, and pricing calculations rely on the same parameters in
-both instance group types.
     """
 
     class MetaOapg:
@@ -43,135 +34,19 @@ both instance group types.
             "machine_type",
             "spot",
             "name",
-            "is_elastic",
             "id",
             "disk_size_gb",
             "num_instances",
         }
 
         class properties:
+            num_instances = schemas.IntSchema
             machine_type = schemas.StrSchema
             spot = schemas.BoolSchema
             disk_size_gb = schemas.IntSchema
-            num_instances = schemas.IntSchema
-            is_elastic = schemas.BoolSchema
             id = schemas.UUIDSchema
             name = schemas.StrSchema
             zone = schemas.StrSchema
-
-            class min_instances(
-                    schemas.ComposedSchema,):
-
-                class MetaOapg:
-                    any_of_0 = schemas.IntSchema
-                    any_of_1 = schemas.NoneSchema
-
-                    @classmethod
-                    @functools.lru_cache()
-                    def any_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            cls.any_of_0,
-                            cls.any_of_1,
-                        ]
-
-                def __new__(
-                    cls,
-                    *_args: typing.Union[
-                        dict,
-                        frozendict.frozendict,
-                        str,
-                        date,
-                        datetime,
-                        uuid.UUID,
-                        int,
-                        float,
-                        decimal.Decimal,
-                        bool,
-                        None,
-                        list,
-                        tuple,
-                        bytes,
-                        io.FileIO,
-                        io.BufferedReader,
-                    ],
-                    _configuration: typing.Optional[
-                        schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
-                                           frozendict.frozendict, str, date,
-                                           datetime, uuid.UUID, int, float,
-                                           decimal.Decimal, None, list, tuple,
-                                           bytes],
-                ) -> 'min_instances':
-                    return super().__new__(
-                        cls,
-                        *_args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
-
-            class max_instances(
-                    schemas.ComposedSchema,):
-
-                class MetaOapg:
-                    any_of_0 = schemas.IntSchema
-                    any_of_1 = schemas.NoneSchema
-
-                    @classmethod
-                    @functools.lru_cache()
-                    def any_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            cls.any_of_0,
-                            cls.any_of_1,
-                        ]
-
-                def __new__(
-                    cls,
-                    *_args: typing.Union[
-                        dict,
-                        frozendict.frozendict,
-                        str,
-                        date,
-                        datetime,
-                        uuid.UUID,
-                        int,
-                        float,
-                        decimal.Decimal,
-                        bool,
-                        None,
-                        list,
-                        tuple,
-                        bytes,
-                        io.FileIO,
-                        io.BufferedReader,
-                    ],
-                    _configuration: typing.Optional[
-                        schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
-                                           frozendict.frozendict, str, date,
-                                           datetime, uuid.UUID, int, float,
-                                           decimal.Decimal, None, list, tuple,
-                                           bytes],
-                ) -> 'max_instances':
-                    return super().__new__(
-                        cls,
-                        *_args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
 
             class create_time(
                     schemas.DateTimeBase,
@@ -294,16 +169,13 @@ both instance group types.
                     )
 
             __annotations__ = {
+                "num_instances": num_instances,
                 "machine_type": machine_type,
                 "spot": spot,
                 "disk_size_gb": disk_size_gb,
-                "num_instances": num_instances,
-                "is_elastic": is_elastic,
                 "id": id,
                 "name": name,
                 "zone": zone,
-                "min_instances": min_instances,
-                "max_instances": max_instances,
                 "create_time": create_time,
                 "delete_time": delete_time,
             }
@@ -311,10 +183,15 @@ both instance group types.
     machine_type: MetaOapg.properties.machine_type
     spot: MetaOapg.properties.spot
     name: MetaOapg.properties.name
-    is_elastic: MetaOapg.properties.is_elastic
     id: MetaOapg.properties.id
     disk_size_gb: MetaOapg.properties.disk_size_gb
     num_instances: MetaOapg.properties.num_instances
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["num_instances"]
+    ) -> MetaOapg.properties.num_instances:
+        ...
 
     @typing.overload
     def __getitem__(
@@ -332,18 +209,6 @@ both instance group types.
     def __getitem__(
         self, name: typing_extensions.Literal["disk_size_gb"]
     ) -> MetaOapg.properties.disk_size_gb:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["num_instances"]
-    ) -> MetaOapg.properties.num_instances:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["is_elastic"]
-    ) -> MetaOapg.properties.is_elastic:
         ...
 
     @typing.overload
@@ -366,18 +231,6 @@ both instance group types.
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["min_instances"]
-    ) -> MetaOapg.properties.min_instances:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["max_instances"]
-    ) -> MetaOapg.properties.max_instances:
-        ...
-
-    @typing.overload
-    def __getitem__(
         self, name: typing_extensions.Literal["create_time"]
     ) -> MetaOapg.properties.create_time:
         ...
@@ -393,21 +246,24 @@ both instance group types.
         ...
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "num_instances",
         "machine_type",
         "spot",
         "disk_size_gb",
-        "num_instances",
-        "is_elastic",
         "id",
         "name",
         "zone",
-        "min_instances",
-        "max_instances",
         "create_time",
         "delete_time",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["num_instances"]
+    ) -> MetaOapg.properties.num_instances:
+        ...
 
     @typing.overload
     def get_item_oapg(
@@ -425,18 +281,6 @@ both instance group types.
     def get_item_oapg(
         self, name: typing_extensions.Literal["disk_size_gb"]
     ) -> MetaOapg.properties.disk_size_gb:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["num_instances"]
-    ) -> MetaOapg.properties.num_instances:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["is_elastic"]
-    ) -> MetaOapg.properties.is_elastic:
         ...
 
     @typing.overload
@@ -459,18 +303,6 @@ both instance group types.
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["min_instances"]
-    ) -> typing.Union[MetaOapg.properties.min_instances, schemas.Unset]:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["max_instances"]
-    ) -> typing.Union[MetaOapg.properties.max_instances, schemas.Unset]:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
         self, name: typing_extensions.Literal["create_time"]
     ) -> typing.Union[MetaOapg.properties.create_time, schemas.Unset]:
         ...
@@ -488,16 +320,13 @@ both instance group types.
         ...
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "num_instances",
         "machine_type",
         "spot",
         "disk_size_gb",
-        "num_instances",
-        "is_elastic",
         "id",
         "name",
         "zone",
-        "min_instances",
-        "max_instances",
         "create_time",
         "delete_time",
     ], str]):
@@ -521,10 +350,6 @@ both instance group types.
             MetaOapg.properties.name,
             str,
         ],
-        is_elastic: typing.Union[
-            MetaOapg.properties.is_elastic,
-            bool,
-        ],
         id: typing.Union[
             MetaOapg.properties.id,
             str,
@@ -542,18 +367,6 @@ both instance group types.
         ],
         zone: typing.Union[MetaOapg.properties.zone, str,
                            schemas.Unset] = schemas.unset,
-        min_instances: typing.Union[MetaOapg.properties.min_instances, dict,
-                                    frozendict.frozendict, str, date, datetime,
-                                    uuid.UUID, int, float, decimal.Decimal,
-                                    bool, None, list, tuple, bytes, io.FileIO,
-                                    io.BufferedReader,
-                                    schemas.Unset] = schemas.unset,
-        max_instances: typing.Union[MetaOapg.properties.max_instances, dict,
-                                    frozendict.frozendict, str, date, datetime,
-                                    uuid.UUID, int, float, decimal.Decimal,
-                                    bool, None, list, tuple, bytes, io.FileIO,
-                                    io.BufferedReader,
-                                    schemas.Unset] = schemas.unset,
         create_time: typing.Union[MetaOapg.properties.create_time, dict,
                                   frozendict.frozendict, str, date, datetime,
                                   uuid.UUID, int, float, decimal.Decimal, bool,
@@ -578,13 +391,10 @@ both instance group types.
             machine_type=machine_type,
             spot=spot,
             name=name,
-            is_elastic=is_elastic,
             id=id,
             disk_size_gb=disk_size_gb,
             num_instances=num_instances,
             zone=zone,
-            min_instances=min_instances,
-            max_instances=max_instances,
             create_time=create_time,
             delete_time=delete_time,
             _configuration=_configuration,
