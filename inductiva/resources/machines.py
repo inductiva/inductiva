@@ -19,13 +19,14 @@ class MachineGroup(machines_base.BaseMachineGroup):
         spot: bool = False,
         disk_size_gb: int = 40,
         zone: str = "europe-west1-b",
+        register: bool = True,
     ) -> None:
         """Create a MachineGroup object.
 
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
-            more information about machine types.
+              information about machine types.
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 40 GB.
@@ -40,7 +41,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         self.num_machines = num_machines
         self.is_elastic = False
 
-        if self.register:
+        if register:
             super()._register_machine_group(num_instances=self.num_machines,
                                             is_elastic=self.is_elastic)
 
@@ -73,10 +74,11 @@ class MachineGroup(machines_base.BaseMachineGroup):
         Returns:
             The estimated cost per hour of the machine group in US
               dollars($/h)."""
-        cost = super().estimate_cloud_cost() * self.num_machines
+        #TODO: Contemplate disk size in the price.
+        estimated_cost = round(super()._get_estimated_cost() * self.num_machines, 3)
         logging.info("Estimated cloud cost per hour for all machines : %s $/h",
-                     cost)
-        return cost
+                     estimated_cost)
+        return estimated_cost
 
 
 class ElasticMachineGroup(machines_base.BaseMachineGroup):
@@ -97,6 +99,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         spot: bool = False,
         disk_size_gb: int = 40,
         zone: str = "europe-west1-b",
+        register: bool = True,
     ) -> None:
         """Create an ElasticMachineGroup object.
 
@@ -113,6 +116,9 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             disk_size_gb: The size of the disk in GB, recommended min. is 40 GB.
             zone: The zone where the machines will be launched.
         """
+        if max_machines < min_machines:
+            raise ValueError("`max_machines` should be greater "
+                             "than `min_machines`.")
         super().__init__(
             machine_type=machine_type,
             spot=spot,
@@ -124,11 +130,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self.active_machines = min_machines
         self.is_elastic = True
 
-        if self.max_machines < self.min_machines:
-            raise ValueError("`max_machines` should be greater "
-                             "than `min_machines`.")
-
-        if self.register:
+        if register:
             super()._register_machine_group(min_instances=self.min_machines,
                                             max_instances=self.max_machines,
                                             is_elastic=self.is_elastic,
@@ -139,7 +141,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         machine_group = super().from_api_response(resp)
         machine_group.max_machines = resp["max_instances"]
         machine_group.min_machines = resp["min_instances"]
-        machine_group.active_machines = resp["num_instances"]
+        machine_group.num_active_machines = resp["num_instances"]
         return machine_group
 
     def start(self):
@@ -167,6 +169,12 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         This is only an estimate of running a single machine within a machine
         group in the cloud. The actual cost will vary based on the factors
         such as the quantity and duration the machines running in the cloud."""
-        cost = super().estimate_cloud_cost()
-        logging.info("Estimated cloud cost of a single machine: %s $/h.", cost)
+        cost = super()._get_estimated_cost()
+        logging.info("Minimum estimated cloud cost of the elastic machine group: "
+                     "%s $/h.", round(cost * self.min_machines, 3))
+        logging.info("Maximum estimated cloud cost of the elastic machine group: "
+                     "%s $/h.", round(cost * self.max_machines, 3))
+        logging.info("Note: these is the estimted cost of having minimum and the "
+                     "maximum number of machines up in the cloud. The final cost will "
+                     "vary depending on the total usage of the machines.")
         return cost

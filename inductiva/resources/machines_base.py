@@ -18,13 +18,12 @@ class BaseMachineGroup():
         disk_size_gb: int = 40,
         zone: str = "europe-west1-b"
     ) -> None:
-        """Create a MachineGroup object.
+        """Create a BaseMachineGroup object.
 
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
-            Check https://cloud.google.com/compute/docs/machine-resource for
-            more information about machine types.
-            num_machines: The number of virtual machines to launch.
+              Check https://cloud.google.com/compute/docs/machine-resource for
+              more information about machine types.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 40 GB.
             zone: The zone where the machines will be launched.
@@ -37,7 +36,7 @@ class BaseMachineGroup():
         self._name = None
         self.create_time = None
         self._started = False
-        self.register = True
+
         # Set the API configuration that carries the information from the client
         # to the backend.
         self._api = instance_api.InstanceApi(api.get_client())
@@ -74,12 +73,12 @@ class BaseMachineGroup():
             spot=bool(resp["spot"]),
             disk_size_gb=resp["disk_size_gb"],
             zone=resp["zone"],
+            register=False,
         )
         machine_group._id = resp["id"]
         machine_group._name = resp["name"]
         machine_group.create_time = resp["create_time"]
         machine_group._started = True
-        machine_group.register=False
 
         return machine_group
 
@@ -89,7 +88,7 @@ class BaseMachineGroup():
         Args:
             **kwargs: Depending on the type of machine group to be started,
               this can be num_machines, max_machines, min_machines,
-              or is_elastic."""
+              and is_elastic."""
         if self._started:
             logging.info("Attempting to start a machine group already started.")
             return
@@ -116,13 +115,13 @@ class BaseMachineGroup():
             logging.info("Note that stopping this local process will not "
                          "interrupt the creation of the machine group. "
                          "Please wait...")
-            self._started = True
             start_time = time.time()
             if kwargs.get("is_elastic", True):
                 self._api.start_elastic_instance_group(body=request_body)
             else:
                 self._api.start_instance_group(body=request_body)
             creation_time_mins = (time.time() - start_time) / 60
+            self._started = True
 
             logging.info("Machine group successfully started in %.2f mins.\n",
                          creation_time_mins)
@@ -143,7 +142,7 @@ class BaseMachineGroup():
 
             request_body = \
                 inductiva.client.models.InstanceGroup(
-                    id=str(self.id),
+                    id=self.id,
                     name=self.name,
                     machine_type=self.machine_type,
                     spot=self.spot,
@@ -174,18 +173,8 @@ class BaseMachineGroup():
         else:
             estimated_cost = instance_price.body["on_demand_price"]
 
-        self._estimated_cost = float(round(estimated_cost, 3))
+        self._estimated_cost = float(estimated_cost)
         return self._estimated_cost
-
-    def estimate_cloud_cost(self) -> float:
-        """Returns the estimated cost per hour of a single machine.
-
-        Note: This is an estimate of the cost incurred in cloud resources,
-        and is not binding of the actual price of the machine group.
-        """
-        #TODO: Contemplate disk size in the price.
-        estimated_cost = self._get_estimated_cost()
-        return estimated_cost
 
     def status(self):
         """Returns the status of a machine group if it exists.
@@ -210,5 +199,5 @@ class BaseMachineGroup():
         # TODO: Not yet available to users
         logging.info("> Spot: %s", self.spot)
         logging.info("> Disk size: %s GB", self.disk_size_gb)
-        logging.info("> Estimated cost per hour: %s $/h\n",
+        logging.info("> Estimated cost of a single machine: %s $/h\n",
                      self._get_estimated_cost())
