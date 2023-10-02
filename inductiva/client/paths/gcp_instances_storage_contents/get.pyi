@@ -29,7 +29,20 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
 MaxResultsSchema = schemas.IntSchema
-SortBySchema = schemas.StrSchema
+
+
+class SortBySchema(
+    schemas.EnumBase,
+    schemas.StrSchema
+):
+    
+    @schemas.classproperty
+    def SIZE(cls):
+        return cls("size")
+    
+    @schemas.classproperty
+    def CREATION_TIME(cls):
+        return cls("creation_time")
 AscendingSchema = schemas.BoolSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
