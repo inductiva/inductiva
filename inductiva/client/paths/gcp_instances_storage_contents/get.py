@@ -30,7 +30,25 @@ from . import path
 
 # Query params
 MaxResultsSchema = schemas.IntSchema
-SortBySchema = schemas.StrSchema
+
+
+class SortBySchema(schemas.EnumBase, schemas.StrSchema):
+
+    class MetaOapg:
+        enum_value_to_name = {
+            "size": "SIZE",
+            "creation_time": "CREATION_TIME",
+        }
+
+    @schemas.classproperty
+    def SIZE(cls):
+        return cls("size")
+
+    @schemas.classproperty
+    def CREATION_TIME(cls):
+        return cls("creation_time")
+
+
 AscendingSchema = schemas.BoolSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
