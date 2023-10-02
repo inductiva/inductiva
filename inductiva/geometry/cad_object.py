@@ -170,7 +170,7 @@ class CADObject:
             self.data = data
 
         return self
-    
+
     def area(self):
         """Compute the total area of the CADObject.
         
@@ -178,7 +178,7 @@ class CADObject:
         """
 
         return self.data.area
-    
+
     def save(self, filename: str):
         """Save the current mesh to a file.
         
@@ -212,8 +212,7 @@ class CADObject:
 
         plotter.add_mesh(self.data, show_edges=show_edges, color=object_color)
         # Set axis on the back of the object and add a padding to the grid
-        plotter.show_grid(location="outer",
-                          padding=0.3)
+        plotter.show_grid(location="outer", padding=0.3)
 
         plotter.show(auto_close=True)
 
