@@ -8,12 +8,10 @@ from functools import singledispatchmethod
 
 from inductiva import resources, scenarios, simulators, structures, tasks, types
 
-from . import mesh_utils
 from . import bcs_utils
 from . import geometry_utils
 
 GEOMETRY_FILENAME = "geometry.json"
-MESH_FILENAME = "mesh.msh"
 BCS_FILENAME = "bcs.json"
 MATERIAL_FILENAME = "material.json"
 
@@ -28,13 +26,10 @@ class DeformablePlate(scenarios.Scenario):
 
     valid_simulators = [simulators.FEniCSx]
 
-    def __init__(
-        self,
-        plate: structures.plates.RectangularPlate,
-        holes_list: List[structures.holes.Hole],
-        bcs_list: List[structures.bcs.BoundaryCondition],
-        material: structures.materials.IsotropicLinearElasticMaterial,
-    ):
+    def __init__(self, plate: structures.plates.RectangularPlate,
+                 holes_list: List[structures.holes.Hole],
+                 bcs_list: List[structures.bcs.BoundaryCondition],
+                 material: structures.materials.IsotropicLinearElasticMaterial):
         """Initializes the plate linear elastic scenario.
 
         Args:
@@ -59,24 +54,41 @@ class DeformablePlate(scenarios.Scenario):
     def simulate(self,
                  simulator: simulators.Simulator = simulators.FEniCSx(),
                  machine_group: Optional[resources.MachineGroup] = None,
-                 run_async: bool = False) -> tasks.Task:
+                 run_async: bool = False,
+                 global_refinement_meshing_factor: float = 1.0,
+                 local_refinement_meshing_factor: float = 0.0) -> tasks.Task:
         """Simulates the scenario.
 
         Args:
             simulator: The simulator to use for the simulation.
             machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
-            mesh_filename: Mesh filename.
-            bcs_filename: Boundary conditions filename.
-            material_filename: Material filename.
+            global_refinement_meshing_factor (float): The refinement factor for
+              global refinement of the mesh. A higher value results in a finer
+              mesh overall, increasing the number of elements in the entire
+              mesh, andvleading to a more detailed representation of the
+              geometry. Use this factor when you want to globally refine the
+              mesh uniformly, without specific local focus.
+            local_refinement_meshing_factor (float): The refinement factor for
+              local refinement of the mesh. This factor controls the local
+              refinement level of the mesh and is typically used for refining
+              specific regions or features of the mesh. A higher value for this
+              factor indicates a finer mesh in the regions of interest,
+              providing more detailed resolution around certain features. Use
+              this factor when you want to focus on refining specific areas
+              while keeping the rest of the mesh less refined.
         """
         simulator.override_api_method_prefix("deformable_plate")
-        task = super().simulate(simulator,
-                                machine_group=machine_group,
-                                run_async=run_async,
-                                mesh_filename=MESH_FILENAME,
-                                bcs_filename=BCS_FILENAME,
-                                material_filename=MATERIAL_FILENAME)
+        task = super().simulate(
+            simulator,
+            machine_group=machine_group,
+            run_async=run_async,
+            geometry_filename=GEOMETRY_FILENAME,
+            bcs_filename=BCS_FILENAME,
+            material_filename=MATERIAL_FILENAME,
+            global_refinement_meshing_factor=global_refinement_meshing_factor,
+            local_refinement_meshing_factor=local_refinement_meshing_factor)
+
         return task
 
     @singledispatchmethod
@@ -93,11 +105,6 @@ def _(self,
     # Geometry file
     geometry_path = os.path.join(input_dir, GEOMETRY_FILENAME)
     self.geometry.write_to_json(geometry_path)
-
-    # Mesh file
-    mesh = mesh_utils.GmshMesh(self.geometry)
-    mesh_path = os.path.join(input_dir, MESH_FILENAME)
-    mesh.write_to_msh(mesh_path)
 
     # BCs file
     bcs_path = os.path.join(input_dir, BCS_FILENAME)
