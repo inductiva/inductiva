@@ -28,7 +28,7 @@ from inductiva.client import schemas  # noqa: F401
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
-MaxResultsSchema = schemas.StrSchema
+MaxResultsSchema = schemas.IntSchema
 SortBySchema = schemas.StrSchema
 AscendingSchema = schemas.BoolSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
@@ -39,7 +39,7 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'max_results': typing.Union[MaxResultsSchema, str, ],
+        'max_results': typing.Union[MaxResultsSchema, decimal.Decimal, int, ],
         'sort_by': typing.Union[SortBySchema, str, ],
         'ascending': typing.Union[AscendingSchema, bool, ],
     },

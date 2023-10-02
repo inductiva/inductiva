@@ -29,7 +29,7 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 from . import path
 
 # Query params
-MaxResultsSchema = schemas.StrSchema
+MaxResultsSchema = schemas.IntSchema
 SortBySchema = schemas.StrSchema
 AscendingSchema = schemas.BoolSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
@@ -38,7 +38,8 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
         'max_results': typing.Union[
             MaxResultsSchema,
-            str,
+            decimal.Decimal,
+            int,
         ],
         'sort_by': typing.Union[
             SortBySchema,
