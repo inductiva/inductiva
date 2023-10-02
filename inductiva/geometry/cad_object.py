@@ -179,6 +179,11 @@ class CADObject:
 
         return self.data.area
 
+    def bounds(self):
+        """Bounds of the CADObject."""
+
+        return self.data.bounds
+
     def save(self, filename: str):
         """Save the current mesh to a file.
         
