@@ -6,13 +6,8 @@ from typing import List, Optional
 
 from functools import singledispatchmethod
 
-from inductiva import tasks, resources
-from inductiva.scenarios import Scenario
-from inductiva.simulators import Simulator
-from inductiva.simulators import FEniCSx
-from inductiva.types import Path
+from inductiva import resources, scenarios, simulators, structures, tasks, types
 
-from inductiva.structures import bcs, holes, plates, materials
 from . import mesh_utils
 from . import bcs_utils
 from . import geometry_utils
@@ -23,7 +18,7 @@ BCS_FILENAME = "bcs.json"
 MATERIAL_FILENAME = "material.json"
 
 
-class DeformablePlate(Scenario):
+class DeformablePlate(scenarios.Scenario):
     """Plate linear elastic scenario.
 
     The plate linear elastic scenario is characterized by the plate, holes,
@@ -31,14 +26,14 @@ class DeformablePlate(Scenario):
     form the geometry, which is used to create the mesh for the simulation.
     """
 
-    valid_simulators = [FEniCSx]
+    valid_simulators = [simulators.FEniCSx]
 
     def __init__(
         self,
-        plate: plates.RectangularPlate,
-        holes_list: List[holes.Hole],
-        bcs_list: List[bcs.BoundaryCondition],
-        material: materials.IsotropicLinearElasticMaterial,
+        plate: structures.plates.RectangularPlate,
+        holes_list: List[structures.holes.Hole],
+        bcs_list: List[structures.bcs.BoundaryCondition],
+        material: structures.materials.IsotropicLinearElasticMaterial,
     ):
         """Initializes the plate linear elastic scenario.
 
@@ -84,14 +79,14 @@ class DeformablePlate(Scenario):
         return task
 
     @singledispatchmethod
-    def create_input_files(self, simulator: Simulator):
+    def create_input_files(self, simulator: simulators.Simulator):
         pass
 
 
 @DeformablePlate.create_input_files.register
 def _(self,
-      simulator: FEniCSx,
-      input_dir: Path) -> None:
+      simulator: simulators.FEniCSx,
+      input_dir: types.Path) -> None:
     """Creates FEniCSx simulation input files."""
 
     # Geometry file
