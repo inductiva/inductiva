@@ -142,6 +142,7 @@ class MachineGroup():
                     spot=self.spot,
                     disk_size_gb=self.disk_size_gb,
                     zone=self.zone,
+                    is_elastic=False,
                 )
 
             self._api.delete_instance_group(body=request_body)
