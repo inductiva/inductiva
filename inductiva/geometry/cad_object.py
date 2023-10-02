@@ -24,7 +24,7 @@ class CADObject:
     native CAD file and manipulate them in space.
     """
 
-    @optional_deps.needs_fluids_extra_deps
+    @optional_deps.needs_common_extra_deps
     def __init__(self, filename):
         """"Initialize the CADObject class.
         
