@@ -49,7 +49,23 @@ class SortBySchema(schemas.EnumBase, schemas.StrSchema):
         return cls("creation_time")
 
 
-AscendingSchema = schemas.BoolSchema
+class OrderSchema(schemas.EnumBase, schemas.StrSchema):
+
+    class MetaOapg:
+        enum_value_to_name = {
+            "asc": "ASC",
+            "desc": "DESC",
+        }
+
+    @schemas.classproperty
+    def ASC(cls):
+        return cls("asc")
+
+    @schemas.classproperty
+    def DESC(cls):
+        return cls("desc")
+
+
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -63,9 +79,9 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
             SortBySchema,
             str,
         ],
-        'ascending': typing.Union[
-            AscendingSchema,
-            bool,
+        'order': typing.Union[
+            OrderSchema,
+            str,
         ],
     },
     total=False)
@@ -88,10 +104,10 @@ request_query_sort_by = api_client.QueryParameter(
     schema=SortBySchema,
     explode=True,
 )
-request_query_ascending = api_client.QueryParameter(
-    name="ascending",
+request_query_order = api_client.QueryParameter(
+    name="order",
     style=api_client.ParameterStyle.FORM,
-    schema=AscendingSchema,
+    schema=OrderSchema,
     explode=True,
 )
 _auth = [
@@ -205,7 +221,7 @@ class BaseApi(api_client.Api):
         for parameter in (
                 request_query_max_results,
                 request_query_sort_by,
-                request_query_ascending,
+                request_query_order,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
