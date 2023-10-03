@@ -43,7 +43,20 @@ class SortBySchema(
     @schemas.classproperty
     def CREATION_TIME(cls):
         return cls("creation_time")
-AscendingSchema = schemas.BoolSchema
+
+
+class OrderSchema(
+    schemas.EnumBase,
+    schemas.StrSchema
+):
+    
+    @schemas.classproperty
+    def ASC(cls):
+        return cls("asc")
+    
+    @schemas.classproperty
+    def DESC(cls):
+        return cls("desc")
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
@@ -54,7 +67,7 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
     {
         'max_results': typing.Union[MaxResultsSchema, decimal.Decimal, int, ],
         'sort_by': typing.Union[SortBySchema, str, ],
-        'ascending': typing.Union[AscendingSchema, bool, ],
+        'order': typing.Union[OrderSchema, str, ],
     },
     total=False
 )
@@ -76,10 +89,10 @@ request_query_sort_by = api_client.QueryParameter(
     schema=SortBySchema,
     explode=True,
 )
-request_query_ascending = api_client.QueryParameter(
-    name="ascending",
+request_query_order = api_client.QueryParameter(
+    name="order",
     style=api_client.ParameterStyle.FORM,
-    schema=AscendingSchema,
+    schema=OrderSchema,
     explode=True,
 )
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
@@ -182,7 +195,7 @@ class BaseApi(api_client.Api):
         for parameter in (
             request_query_max_results,
             request_query_sort_by,
-            request_query_ascending,
+            request_query_order,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
