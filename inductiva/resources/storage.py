@@ -17,7 +17,7 @@ def get_space_used():
         raise api_exception
 
 
-def list_contents(max_results: int = 3,
+def list(max_results: int = 3,
                   sort_by: Literal["size", "creation_time"] = "size",
                   order: Literal["asc", "desc"] = "desc"):
     """List and display the contents of the user's storage bucket.
