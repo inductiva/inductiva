@@ -39,7 +39,6 @@ def list_contents(max_results: int = 3,
         123             0 B             29 Sep, 14:13:29
         123456          0 B             29 Sep, 14:13:18
     """
-
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
         contents = api.list_storage_contents({
@@ -49,7 +48,7 @@ def list_contents(max_results: int = 3,
         }).body
         all_contents = []
         for content_name, info in contents.items():
-            size = info["size"]
+            size = info["size_bytes"]
             creation_time = info["creation_time"]
             all_contents.append({
                 "content_name": content_name,
