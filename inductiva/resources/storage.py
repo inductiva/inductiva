@@ -20,8 +20,7 @@ def get_space_used():
 def list_contents(max_results: int = 3,
                   sort_by: Literal["size", "creation_time"] = "size",
                   order: Literal["asc", "desc"] = "desc"):
-    """List and display the contents of the user storage.
-
+    """List and display the contents of the user's storage bucket.
     Args:
         max_results (int): The maximum number of results to return.
         sort_by (str): The field to sort the contents by.
@@ -29,7 +28,8 @@ def list_contents(max_results: int = 3,
         descending order.
     Returns:
         list of dict: A list of dictionaries containing information about 
-        the size, the name and the creation time of each content.
+        the size, the name and the creation time of each content that can
+        easily be converted to a dataframe. 
 
     This function prints a table with the storage content information: 
         Name            Size            Creation Time
@@ -67,7 +67,7 @@ def _print_contents_table(contents):
 
     for content in contents:
         row = [
-            content['content_name'], content['size'], content['creation_time']
+            content["content_name"], content["size"], content["creation_time"]
         ]
         rows.append(row)
     override_col_space = {
