@@ -9,22 +9,19 @@ from inductiva import api
 from inductiva.client.apis.tags import instance_api
 
 
-class MachineGroup():
+class BaseMachineGroup():
     """Class to manage Google Cloud resources."""
-
     def __init__(
         self,
         machine_type: str,
-        num_machines: int = 1,
         spot: bool = False,
         disk_size_gb: int = 40,
         zone: str = "europe-west1-b",
-        register: bool = True,
     ) -> None:
         """Create a MachineGroup object.
 
         Args:
-            machine_type: The type of GC machine to launch. Ex: "e2-medium".
+            machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
             Check https://cloud.google.com/compute/docs/machine-resource for
             more information about machine types.
             num_machines: The number of virtual machines to launch.
@@ -36,29 +33,29 @@ class MachineGroup():
         self.name = None
         self.create_time = None
         self.machine_type = machine_type
-        self.num_machines = num_machines
         self.spot = spot
         self.disk_size_gb = disk_size_gb
         self.zone = zone
         self._started = False
+        self._register = True
 
         # Set the API configuration that carries the information from the client
         # to the backend.
         self._api = instance_api.InstanceApi(api.get_client())
         self._estimated_cost = None
 
-        if register:
+        if self._register:
             self._register_machine_group()
 
-    def _register_machine_group(self):
+    def _register_machine_group(self, **kwargs):
         instance_group_config = inductiva.client.models.InstanceGroupCreate(
             machine_type=self.machine_type,
-            num_instances=self.num_machines,
             spot=self.spot,
             disk_size_gb=self.disk_size_gb,
             zone=self.zone,
+            **kwargs,
         )
-        logging.info("Registering machine group configuration:")
+        logging.info("Registering machine group configurations:")
         resp = self._api.register_instance_group(body=instance_group_config)
         self.id = resp.body["id"]
         self.name = resp.body["name"]
@@ -70,20 +67,19 @@ class MachineGroup():
 
         machine_group = cls(
             machine_type=resp["machine_type"],
-            num_machines=int(resp["num_instances"]),
             spot=bool(resp["spot"]),
             disk_size_gb=resp["disk_size_gb"],
             zone=resp["zone"],
-            register=False,
         )
         machine_group.id = resp["id"]
         machine_group.name = resp["name"]
         machine_group.create_time = resp["create_time"]
         machine_group._started = True
+        machine_group._register=False,
 
         return machine_group
 
-    def start(self):
+    def start(self, **kwargs):
         """Starts a machine group."""
         if self._started:
             logging.info("Attempting to start a machine group already started.")
@@ -100,10 +96,10 @@ class MachineGroup():
                 id=self.id,
                 name=self.name,
                 machine_type=self.machine_type,
-                num_instances=self.num_machines,
                 spot=self.spot,
                 disk_size_gb=self.disk_size_gb,
                 zone=self.zone,
+                **kwargs,
             )
         try:
             logging.info("Starting machine group. "
@@ -122,7 +118,7 @@ class MachineGroup():
         except inductiva.client.ApiException as api_exception:
             raise api_exception
 
-    def terminate(self):
+    def terminate(self, **kwargs):
         """Terminates a machine group."""
         if not self._started or self.id is None or self.name is None:
             logging.info("Attempting to terminate an unstarted machine group.")
@@ -138,18 +134,17 @@ class MachineGroup():
                     id=str(self.id),
                     name=self.name,
                     machine_type=self.machine_type,
-                    num_instances=self.num_machines,
                     spot=self.spot,
                     disk_size_gb=self.disk_size_gb,
                     zone=self.zone,
-                    is_elastic=False,
+                    **kwargs,
                 )
 
             self._api.delete_instance_group(body=request_body)
             termination_time_mins = (time.time() - start_time) / 60
             logging.info(
-                "Machine group of %s machines successfully "
-                "terminated in %.2f mins.\n", self.num_machines,
+                "Machine group '%s' successfully "
+                "terminated in %.2f mins.\n", self.name,
                 termination_time_mins)
 
         except inductiva.client.ApiException as api_exception:
@@ -163,11 +158,9 @@ class MachineGroup():
             "zone": self.zone,
         })
         if self.spot:
-            estimated_cost = instance_price.body[
-                "preemptible_price"] * self.num_machines
+            estimated_cost = instance_price.body["preemptible_price"]
         else:
-            estimated_cost = instance_price.body[
-                "on_demand_price"] * self.num_machines
+            estimated_cost = instance_price.body["on_demand_price"]
 
         self._estimated_cost = float(round(estimated_cost, 3))
         return self._estimated_cost
@@ -204,9 +197,52 @@ class MachineGroup():
 
         logging.info("> Name: %s", self.name)
         logging.info("> Machine type: %s", self.machine_type)
-        logging.info("> Number of machines: %s", self.num_machines)
+        # logging.info("> Number of machines: %s", self.num_machines)
         # TODO: Not yet available to users
-        # logging.info("> Spot: %s", self.spot)
+        logging.info("> Spot: %s", self.spot)
         logging.info("> Disk size: %s GB", self.disk_size_gb)
         logging.info("> Estimated cost per hour: %s $/h\n",
                      self._get_estimated_cost())
+
+
+class MachineGroup(BaseMachineGroup):
+    def __init__(
+        self,
+        machine_type: str,
+        num_machines: int = 1,
+        spot: bool = False,
+        disk_size_gb: int = 40,
+        zone: str = "europe-west1-b",
+    ):
+        super().__init__(
+            machine_type=machine_type,
+            spot=spot,
+            disk_size_gb=disk_size_gb,
+            zone=zone,
+        )
+        self.num_machines = num_machines
+        self._is_elastic = False
+        # self._register_machine_group(num_instances=self.num_machines,
+        #                              is_elastic=self._is_elastic)
+
+    def from_api_response(resp: dict):
+        machine_group = super().from_api_response(resp)
+        machine_group.num_machines = resp["num_instances"]
+        return machine_group
+    
+    def _register_machine_group(self):
+        return super()._register_machine_group(num_instances=self.num_machines,
+                                               is_elastic=self._is_elastic)
+    
+    def start(self):
+        return super().start(num_instances=self.num_machines, is_elastic=self._is_elastic)
+    
+    def terminate(self):
+        return super().terminate(num_instances=self.num_machines, is_elastic=self._is_elastic)
+    
+    def _log_machine_group_info(self):
+        super()._log_machine_group_info()
+        logging.info("> Number of machines: %s", self.num_machines)
+    
+    def estimate_cloud_cost(self):
+        return super().estimate_cloud_cost() * self.num_machines
