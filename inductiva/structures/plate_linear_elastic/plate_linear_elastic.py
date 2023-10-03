@@ -8,12 +8,10 @@ from functools import singledispatchmethod
 
 from inductiva import resources, scenarios, simulators, structures, tasks, types
 
-from . import mesh_utils
 from . import bcs_utils
 from . import geometry_utils
 
 GEOMETRY_FILENAME = "geometry.json"
-MESH_FILENAME = "mesh.msh"
 BCS_FILENAME = "bcs.json"
 MATERIAL_FILENAME = "material.json"
 
@@ -28,13 +26,10 @@ class DeformablePlate(scenarios.Scenario):
 
     valid_simulators = [simulators.FEniCSx]
 
-    def __init__(
-        self,
-        plate: structures.plates.RectangularPlate,
-        holes_list: List[structures.holes.Hole],
-        bcs_list: List[structures.bcs.BoundaryCondition],
-        material: structures.materials.IsotropicLinearElasticMaterial,
-    ):
+    def __init__(self, plate: structures.plates.RectangularPlate,
+                 holes_list: List[structures.holes.Hole],
+                 bcs_list: List[structures.bcs.BoundaryCondition],
+                 material: structures.materials.IsotropicLinearElasticMaterial):
         """Initializes the plate linear elastic scenario.
 
         Args:
@@ -92,11 +87,6 @@ def _(self,
     # Geometry file
     geometry_path = os.path.join(input_dir, GEOMETRY_FILENAME)
     self.geometry.write_to_json(geometry_path)
-
-    # Mesh file
-    mesh = mesh_utils.GmshMesh(self.geometry)
-    mesh_path = os.path.join(input_dir, MESH_FILENAME)
-    mesh.write_to_msh(mesh_path)
 
     # BCs file
     bcs_path = os.path.join(input_dir, BCS_FILENAME)
