@@ -18,7 +18,7 @@ def get_space_used():
 
 
 def list_contents(max_results: int = 3,
-                  sort_by: Literal["size", "creation_time"]= "size",
+                  sort_by: Literal["size", "creation_time"] = "size",
                   order: Literal["asc", "desc"] = "desc"):
     """List and display the contents of the user storage.
 
@@ -87,15 +87,3 @@ def _print_contents_table(contents):
         override_col_space=override_col_space,
         formatters=formatters,
     )
-
-def delete_task_storage(task_id: str):
-    """Deletes the storage associated with a task.
-        Args: 
-            task_id (str): The task id."""
-    try:
-        api = instance_api.InstanceApi(inductiva.api.get_client())
-        response = api.delete_task_storage({"task_id": task_id})
-        print(response.body)
-    except inductiva.client.ApiException as api_exception:
-        raise api_exception 
-
