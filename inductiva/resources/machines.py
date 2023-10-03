@@ -16,7 +16,7 @@ class BaseMachineGroup():
         machine_type: str,
         spot: bool = False,
         disk_size_gb: int = 40,
-        zone: str = "europe-west1-b",
+        zone: str = "europe-west1-b"
     ) -> None:
         """Create a MachineGroup object.
 
@@ -37,15 +37,11 @@ class BaseMachineGroup():
         self.disk_size_gb = disk_size_gb
         self.zone = zone
         self._started = False
-        self._register = True
 
         # Set the API configuration that carries the information from the client
         # to the backend.
         self._api = instance_api.InstanceApi(api.get_client())
         self._estimated_cost = None
-
-        if self._register:
-            self._register_machine_group()
 
     def _register_machine_group(self, **kwargs):
         instance_group_config = inductiva.client.models.InstanceGroupCreate(
@@ -70,12 +66,12 @@ class BaseMachineGroup():
             spot=bool(resp["spot"]),
             disk_size_gb=resp["disk_size_gb"],
             zone=resp["zone"],
+            register=False,
         )
         machine_group.id = resp["id"]
         machine_group.name = resp["name"]
         machine_group.create_time = resp["create_time"]
         machine_group._started = True
-        machine_group._register=False,
 
         return machine_group
 
@@ -109,7 +105,8 @@ class BaseMachineGroup():
                          "Please wait...")
             self._started = True
             start_time = time.time()
-            self._api.start_instance_group(body=request_body)
+            self._api.start_elastic_instance_group(body=request_body)
+            # self._api.start_instance_group(body=request_body)
             creation_time_mins = (time.time() - start_time) / 60
 
             logging.info("Machine group successfully started in %.2f mins.\n",
@@ -173,7 +170,6 @@ class BaseMachineGroup():
         """
         #TODO: Contemplate disk size in the price.
         estimated_cost = self._get_estimated_cost()
-        logging.info("Estimated cloud cost per hour: %s $/h", estimated_cost)
         return estimated_cost
 
     def status(self):
@@ -187,7 +183,6 @@ class BaseMachineGroup():
             return
 
         response = self._api.get_group_status({"name": self.name})
-
         if response.body == "notFound":
             logging.info("Machine group does not exist: %s.", self.name)
         return response.body
@@ -197,7 +192,6 @@ class BaseMachineGroup():
 
         logging.info("> Name: %s", self.name)
         logging.info("> Machine type: %s", self.machine_type)
-        # logging.info("> Number of machines: %s", self.num_machines)
         # TODO: Not yet available to users
         logging.info("> Spot: %s", self.spot)
         logging.info("> Disk size: %s GB", self.disk_size_gb)
@@ -213,6 +207,7 @@ class MachineGroup(BaseMachineGroup):
         spot: bool = False,
         disk_size_gb: int = 40,
         zone: str = "europe-west1-b",
+        register: bool = True,
     ):
         super().__init__(
             machine_type=machine_type,
@@ -222,17 +217,16 @@ class MachineGroup(BaseMachineGroup):
         )
         self.num_machines = num_machines
         self._is_elastic = False
-        # self._register_machine_group(num_instances=self.num_machines,
-        #                              is_elastic=self._is_elastic)
 
-    def from_api_response(resp: dict):
+        if register:
+            super()._register_machine_group(num_instances=self.num_machines,
+                                            is_elastic=self._is_elastic)
+
+    @classmethod
+    def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = resp["num_instances"]
         return machine_group
-    
-    def _register_machine_group(self):
-        return super()._register_machine_group(num_instances=self.num_machines,
-                                               is_elastic=self._is_elastic)
     
     def start(self):
         return super().start(num_instances=self.num_machines, is_elastic=self._is_elastic)
@@ -245,4 +239,63 @@ class MachineGroup(BaseMachineGroup):
         logging.info("> Number of machines: %s", self.num_machines)
     
     def estimate_cloud_cost(self):
-        return super().estimate_cloud_cost() * self.num_machines
+        cost = super().estimate_cloud_cost() * self.num_machines
+        logging.info("Estimated cloud cost per hour for all machines : %s $/h", cost)
+        return cost
+
+
+class ElasticMachineGroup(BaseMachineGroup):
+    def __init__(
+        self,
+        machine_type: str,
+        min_machines: int = 1,
+        max_machines: int = 1,
+        spot: bool = False,
+        disk_size_gb: int = 40,
+        zone: str = "europe-west1-b",
+        register: bool = True,
+    ):
+        super().__init__(
+            machine_type=machine_type,
+            spot=spot,
+            disk_size_gb=disk_size_gb,
+            zone=zone,
+        )
+        self.min_machines = min_machines
+        self.max_machines = max_machines
+        self._is_elastic = True
+
+        if register:
+            super()._register_machine_group(num_instances=self.min_machines,
+                                            min_instances=self.min_machines,
+                                            max_instances=self.max_machines,
+                                            is_elastic=self._is_elastic)
+
+    @classmethod
+    def from_api_response(cls, resp: dict):
+        machine_group = super().from_api_response(resp)
+        machine_group.max_machines = resp["max_instances"]
+        machine_group.min_machines = resp["min_instances"]
+        return machine_group
+    
+    def start(self):
+        return super().start(num_instances=self.min_machines,
+                             min_instances=self.min_machines,
+                             max_instances=self.max_machines,
+                             is_elastic=self._is_elastic)
+    
+    def terminate(self):
+        return super().terminate(num_instances=self.min_machines,
+                                 min_instances=self.min_machines,
+                                 max_instances=self.max_machines,
+                                 is_elastic=self._is_elastic)
+    
+    def _log_machine_group_info(self):
+        super()._log_machine_group_info()
+        logging.info("> Maximum number of machines: %s", self.max_machines)
+        logging.info("> Minimum number of machines: %s", self.min_machines)
+    
+    def estimate_cloud_cost(self):
+        cost = super().estimate_cloud_cost()
+        logging.info("Estimated cloud cost per hour: %s $/h per machine.", cost)
+        return cost
