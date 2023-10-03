@@ -18,8 +18,8 @@ def get_space_used():
 
 
 def listdir(max_results: int = 3,
-         order_by: Literal["size", "creation_time"] = "size",
-         sort_order: Literal["asc", "desc"] = "desc"):
+            order_by: Literal["size", "creation_time"] = "size",
+            sort_order: Literal["asc", "desc"] = "desc"):
     """List and display the contents of the user's storage bucket.
     Args:
         max_results (int): The maximum number of results to return.
