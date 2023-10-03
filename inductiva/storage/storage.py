@@ -17,15 +17,14 @@ def get_space_used():
         raise api_exception
 
 
-# pylint: disable=redefined-builtin
-def list(max_results: int = 3,
+def listdir(max_results: int = 3,
          order_by: Literal["size", "creation_time"] = "size",
          sort_order: Literal["asc", "desc"] = "desc"):
     """List and display the contents of the user's storage bucket.
     Args:
         max_results (int): The maximum number of results to return.
-        sort_by (str): The field to sort the contents by.
-        order (str): Whether to sort the contents in ascending or
+        order_by (str): The field to sort the contents by.
+        sort_order (str): Whether to sort the contents in ascending or
         descending order.
     Returns:
         list of dict: A list of dictionaries containing information about 
