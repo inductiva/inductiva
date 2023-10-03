@@ -22,11 +22,11 @@ forceCoeffs1
     rhoInf          1;           // Redundant for incompressible
     liftDir         (0 0 1);
     dragDir         (1 0 0);
-    CofR            (0.72 0 0);  // Axle midpoint on ground
+    CofR            (0 0 0);  // Axle midpoint on ground
     pitchAxis       (0 1 0);
-    magUInf         20;
+    magUInf         30;
     lRef            1.42;        // Wheelbase length
-    Aref            0.75;        // Estimated
+    Aref            1;        // Estimated
     /*
     binData
     {

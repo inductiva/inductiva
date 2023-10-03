@@ -31,14 +31,14 @@ geometry
     object
     {
         type triSurfaceMesh;
-        file "object.obj";
+        file "{{ object_name }}";
     }
 
     refinementBox
     {
         type searchableBox;
-        min (-4.0 -2.0 0.0);
-        max ( 8.0  2.0 5.0);
+        min ({{ domain["x"][0] }} {{ domain["y"][0] }} {{ domain["z"][0] }});
+        max ({{ domain["x"][1] }} {{ domain["y"][1] }} {{ domain["z"][1] }});
     }
 };
 
@@ -91,7 +91,7 @@ castellatedMeshControls
     features
     (
         {
-            file "object.eMesh";
+            file "{{ object_format }}";
             level {{ resolution[1] }};
         }
     );
@@ -159,7 +159,7 @@ castellatedMeshControls
     // section reachable from the locationInMesh is kept.
     // NOTE: This point should never be on a face, always inside a cell, even
     // after refinement.
-    locationInMesh (3.0001 3.0001 0.43);
+    locationInMesh ({{ domain["x"][0]+1 }} {{ domain["y"][0]+1 }} {{ domain["z"][0]+1 }});
 
 
     // Whether any faceZones (as specified in the refinementSurfaces)
