@@ -4,7 +4,10 @@ import os
 
 from typing import List, Optional
 
-import pyvista as pv
+try:
+    import pyvista as pv
+except ImportError:
+    pv = None
 
 from inductiva import structures, types, utils
 
