@@ -16,7 +16,7 @@ def get_space_used():
     except inductiva.client.ApiException as api_exception:
         raise api_exception
 
-
+# pylint: disable=redefined-builtin
 def list(max_results: int = 3,
                   sort_by: Literal["size", "creation_time"] = "size",
                   order: Literal["asc", "desc"] = "desc"):
