@@ -12,7 +12,6 @@ from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_username import AdminUsersUsername
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
-from inductiva.client.apis.paths.admin_tasks import AdminTasks
 from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.executers_register import ExecutersRegister
 from inductiva.client.apis.paths.gcp_instances_group import GcpInstancesGroup
@@ -26,6 +25,7 @@ from inductiva.client.apis.paths.gcp_instances_storage_contents import GcpInstan
 from inductiva.client.apis.paths.gcp_instances_storage_task_id import GcpInstancesStorageTaskId
 from inductiva.client.apis.paths.gcp_instances_groups import GcpInstancesGroups
 from inductiva.client.apis.paths.gcp_instances_group_name import GcpInstancesGroupName
+from inductiva.client.apis.paths.users import Users
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -40,7 +40,6 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.ADMIN_USERS: AdminUsers,
         PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
         PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
-        PathValues.ADMIN_TASKS: AdminTasks,
         PathValues.ADMIN_GROUPS: AdminGroups,
         PathValues.EXECUTERS_REGISTER: ExecutersRegister,
         PathValues.GCP_INSTANCES_GROUP: GcpInstancesGroup,
@@ -54,6 +53,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.GCP_INSTANCES_STORAGE_TASK_ID: GcpInstancesStorageTaskId,
         PathValues.GCP_INSTANCES_GROUPS: GcpInstancesGroups,
         PathValues.GCP_INSTANCES_GROUP_NAME: GcpInstancesGroupName,
+        PathValues.USERS: Users,
     })
 
 path_to_api = PathToApi({
@@ -68,7 +68,6 @@ path_to_api = PathToApi({
     PathValues.ADMIN_USERS: AdminUsers,
     PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
     PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
-    PathValues.ADMIN_TASKS: AdminTasks,
     PathValues.ADMIN_GROUPS: AdminGroups,
     PathValues.EXECUTERS_REGISTER: ExecutersRegister,
     PathValues.GCP_INSTANCES_GROUP: GcpInstancesGroup,
@@ -82,4 +81,5 @@ path_to_api = PathToApi({
     PathValues.GCP_INSTANCES_STORAGE_TASK_ID: GcpInstancesStorageTaskId,
     PathValues.GCP_INSTANCES_GROUPS: GcpInstancesGroups,
     PathValues.GCP_INSTANCES_GROUP_NAME: GcpInstancesGroupName,
+    PathValues.USERS: Users,
 })
