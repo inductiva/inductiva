@@ -17,7 +17,6 @@ class PathValues(str, enum.Enum):
     ADMIN_USERS = "/admin/users"
     ADMIN_USERS_USERNAME = "/admin/users/{username}"
     ADMIN_USERS_USERNAME_TASKS = "/admin/users/{username}/tasks"
-    ADMIN_TASKS = "/admin/tasks"
     ADMIN_GROUPS = "/admin/groups"
     EXECUTERS_REGISTER = "/executers/register"
     GCP_INSTANCES_GROUP = "/gcp_instances/group"
@@ -31,3 +30,4 @@ class PathValues(str, enum.Enum):
     GCP_INSTANCES_STORAGE_TASK_ID = "/gcp_instances/storage/{task_id}"
     GCP_INSTANCES_GROUPS = "/gcp_instances/groups"
     GCP_INSTANCES_GROUP_NAME = "/gcp_instances/group/{name}"
+    USERS = "/users"

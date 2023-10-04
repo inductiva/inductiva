@@ -24,12 +24,14 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.user import User
+
 from . import path
 
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = User
 
 
 @dataclass
@@ -58,7 +60,7 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _get_authenticated_user_oapg(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -70,7 +72,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _get_authenticated_user_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -80,7 +82,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _get_authenticated_user_oapg(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -92,7 +94,7 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _list_storage_contents_oapg(
+    def _get_authenticated_user_oapg(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -100,7 +102,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        List Storage Contents
+        Get Authenticated User
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -143,11 +145,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class ListStorageContents(BaseApi):
+class GetAuthenticatedUser(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def list_storage_contents(
+    def get_authenticated_user(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -159,7 +161,7 @@ class ListStorageContents(BaseApi):
         ...
 
     @typing.overload
-    def list_storage_contents(
+    def get_authenticated_user(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -169,7 +171,7 @@ class ListStorageContents(BaseApi):
         ...
 
     @typing.overload
-    def list_storage_contents(
+    def get_authenticated_user(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -181,14 +183,14 @@ class ListStorageContents(BaseApi):
     ]:
         ...
 
-    def list_storage_contents(
+    def get_authenticated_user(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._list_storage_contents_oapg(
+        return self._get_authenticated_user_oapg(
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -240,7 +242,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._list_storage_contents_oapg(
+        return self._get_authenticated_user_oapg(
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
