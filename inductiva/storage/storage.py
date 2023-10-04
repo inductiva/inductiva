@@ -38,6 +38,9 @@ def listdir(max_results: int = 3,
         1234567         97.59 KiB       29 Sep, 14:13:24
         123             0 B             29 Sep, 14:13:29
         123456          0 B             29 Sep, 14:13:18
+    You can use this information to delete the contents you don't need 
+    anymore and further inspect task outputs and logs using the Task 
+    class. 
     """
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
