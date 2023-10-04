@@ -3,20 +3,24 @@ import inductiva
 import inductiva.client
 from inductiva.client.apis.tags import instance_api
 from inductiva.utils import format_utils
+from inductiva import resources
 
 
 def _machine_group_list_to_str(machine_group_list) -> str:
     """Returns a string representation of a list of machine groups."""
     columns = [
-        "Name", "VM Type", "# machines", "Disk Size in GB", "Spot", "Started at"
+        "Name", "VM Type", "# machines", "Disk Size in GB", "Spot",
+        "Started at", "Elastic"
     ]
     rows = []
 
     for machine_group in machine_group_list:
+        active_machines = machine_group.active_machines if \
+            machine_group.is_elastic else machine_group.num_machines
         rows.append([
-            machine_group.name, machine_group.machine_type,
-            machine_group.num_machines, machine_group.disk_size_gb,
-            machine_group.spot, machine_group.create_time
+            machine_group.name, machine_group.machine_type, active_machines,
+            machine_group.disk_size_gb, machine_group.spot,
+            machine_group.create_time, machine_group.is_elastic
         ])
 
     formatters = {"Started at": format_utils.datetime_formatter}
@@ -60,9 +64,9 @@ def list():
     each machine group as folllows:
 
     INFO:absl:Active machine groups:
-                                        Name         VM Type   # machines    Disk Size in GB       Spot         Started at
-    api-1b1f724c-5cfe-4d87-8439-9689aa139723   c2-standard-4            1                 40      False   13 Sep, 07:38:50
-    api-8e6bf7d8-4888-4de9-bda5-268484b46e6f   c2-standard-4            1                 40      False   13 Sep, 07:37:49
+                                        Name         VM Type   # machines    Disk Size in GB       Spot         Started at  Elastic
+    api-1b1f724c-5cfe-4d87-8439-9689aa139723   c2-standard-4            1                 40      False   13 Sep, 07:38:50    False
+    api-8e6bf7d8-4888-4de9-bda5-268484b46e6f   c2-standard-4            1                 40      False   13 Sep, 07:37:49     True
 
     The name of the machine group can be used to retrieve a MachineGroup object
     with the 'get' function."""
@@ -79,10 +83,11 @@ def get():
 
     # Retrive the active machine group names
     machine_groups = _fetch_machine_groups_from_api()
+    machine_group_list = []
 
-    machine_group_list = [
-        inductiva.resources.MachineGroup.from_api_response(mg) \
-            for mg in machine_groups
-    ]
+    for mg in machine_groups:
+        mg_class = resources.ElasticMachineGroup if mg[
+            "is_elastic"] else resources.MachineGroup
+        machine_group_list.append(mg_class.from_api_response(mg))
 
     return machine_group_list
