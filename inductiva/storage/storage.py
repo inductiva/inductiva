@@ -88,16 +88,16 @@ def _print_contents_table(contents):
         formatters=formatters,
     )
 
+
 def delete_task_directory(task_id: str):
-    """Deletes the directory of a task from the user's storage bucket.
+    """Deletes the directory containing the task outputs from the user's 
+    storage bucket.
     Args:
         task_id (str): The id of the task whose directory will be deleted.
     """
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
-        api.delete_task_directory({
-            "task_id": task_id
-        })
+        api.delete_task_directory({"task_id": task_id})
         print(f"Task directory deleted successfully.")
     except inductiva.client.ApiException as api_exception:
         raise api_exception
