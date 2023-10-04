@@ -38,7 +38,6 @@ class BaseMachineGroup():
         self.create_time = None
         self._started = False
         self.register = True
-
         # Set the API configuration that carries the information from the client
         # to the backend.
         self._api = instance_api.InstanceApi(api.get_client())
