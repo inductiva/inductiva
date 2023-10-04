@@ -25,77 +25,9 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.user import User
 
-# Query params
-MaxResultsSchema = schemas.IntSchema
-
-
-class SortBySchema(
-    schemas.EnumBase,
-    schemas.StrSchema
-):
-    
-    @schemas.classproperty
-    def SIZE(cls):
-        return cls("size")
-    
-    @schemas.classproperty
-    def CREATION_TIME(cls):
-        return cls("creation_time")
-
-
-class OrderSchema(
-    schemas.EnumBase,
-    schemas.StrSchema
-):
-    
-    @schemas.classproperty
-    def ASC(cls):
-        return cls("asc")
-    
-    @schemas.classproperty
-    def DESC(cls):
-        return cls("desc")
-RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams',
-    {
-    }
-)
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams',
-    {
-        'max_results': typing.Union[MaxResultsSchema, decimal.Decimal, int, ],
-        'sort_by': typing.Union[SortBySchema, str, ],
-        'order': typing.Union[OrderSchema, str, ],
-    },
-    total=False
-)
-
-
-class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams):
-    pass
-
-
-request_query_max_results = api_client.QueryParameter(
-    name="max_results",
-    style=api_client.ParameterStyle.FORM,
-    schema=MaxResultsSchema,
-    explode=True,
-)
-request_query_sort_by = api_client.QueryParameter(
-    name="sort_by",
-    style=api_client.ParameterStyle.FORM,
-    schema=SortBySchema,
-    explode=True,
-)
-request_query_order = api_client.QueryParameter(
-    name="order",
-    style=api_client.ParameterStyle.FORM,
-    schema=OrderSchema,
-    explode=True,
-)
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = User
 
 
 @dataclass
@@ -114,25 +46,6 @@ _response_for_200 = api_client.OpenApiResponse(
             schema=SchemaFor200ResponseBodyApplicationJson),
     },
 )
-SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
-
-
-@dataclass
-class ApiResponseFor422(api_client.ApiResponse):
-    response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor422ResponseBodyApplicationJson,
-    ]
-    headers: schemas.Unset = schemas.unset
-
-
-_response_for_422 = api_client.OpenApiResponse(
-    response_cls=ApiResponseFor422,
-    content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor422ResponseBodyApplicationJson),
-    },
-)
 _all_accept_content_types = (
     'application/json',
 )
@@ -140,9 +53,8 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _get_user_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -152,19 +64,17 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _get_user_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _get_user_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -174,37 +84,20 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _list_storage_contents_oapg(
+    def _get_user_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         """
-        List Storage Contents
+        Get User
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
-        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         used_path = path.value
-
-        prefix_separator_iterator = None
-        for parameter in (
-            request_query_max_results,
-            request_query_sort_by,
-            request_query_order,
-        ):
-            parameter_data = query_params.get(parameter.name, schemas.unset)
-            if parameter_data is schemas.unset:
-                continue
-            if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator()
-            serialized_data = parameter.serialize(parameter_data, prefix_separator_iterator)
-            for serialized_value in serialized_data.values():
-                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -240,13 +133,12 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class ListStorageContents(BaseApi):
+class GetUser(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def list_storage_contents(
+    def get_user(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -256,19 +148,17 @@ class ListStorageContents(BaseApi):
     ]: ...
 
     @typing.overload
-    def list_storage_contents(
+    def get_user(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def list_storage_contents(
+    def get_user(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -278,16 +168,14 @@ class ListStorageContents(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def list_storage_contents(
+    def get_user(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._list_storage_contents_oapg(
-            query_params=query_params,
+        return self._get_user_oapg(
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -301,7 +189,6 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -314,7 +201,6 @@ class ApiForget(BaseApi):
     def get(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -323,7 +209,6 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -335,14 +220,12 @@ class ApiForget(BaseApi):
 
     def get(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._list_storage_contents_oapg(
-            query_params=query_params,
+        return self._get_user_oapg(
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
