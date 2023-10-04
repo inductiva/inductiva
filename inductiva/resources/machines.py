@@ -46,6 +46,7 @@ class MachineGroup():
         # to the backend.
         self._api = instance_api.InstanceApi(api.get_client())
         self._estimated_cost = None
+        self._is_elastic = False
 
         if register:
             self._register_machine_group()
@@ -57,6 +58,7 @@ class MachineGroup():
             spot=self.spot,
             disk_size_gb=self.disk_size_gb,
             zone=self.zone,
+            is_elastic=self._is_elastic,
         )
         logging.info("Registering machine group configuration with the API.")
         resp = self._api.register_instance_group(body=instance_group_config)
@@ -106,6 +108,7 @@ class MachineGroup():
                 spot=self.spot,
                 disk_size_gb=self.disk_size_gb,
                 zone=self.zone,
+                is_elastic=self._is_elastic,
             )
         try:
             logging.info("Starting a machine group. "
@@ -145,6 +148,7 @@ class MachineGroup():
                     spot=self.spot,
                     disk_size_gb=self.disk_size_gb,
                     zone=self.zone,
+                    is_elastic=self._is_elastic,
                 )
 
             self._api.delete_instance_group(body=request_body)
