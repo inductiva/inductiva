@@ -98,6 +98,6 @@ def delete_task_directory(task_id: str):
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
         api.delete_task_directory({"task_id": task_id})
-        print(f"Task directory deleted successfully.")
+        print("Task directory deleted successfully.")
     except inductiva.client.ApiException as api_exception:
         raise api_exception
