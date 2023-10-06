@@ -90,3 +90,20 @@ def _print_contents_table(contents):
         override_col_space=override_col_space,
         formatters=formatters,
     )
+
+
+def rmdir(path: str):
+    """Deletes a directory inside the user's storage in Inductiva API. 
+    Currently, directories are named by the task id of the task that
+    created them, so this function can be used to delete the directory
+    of a task. 
+    Args:
+        path (str): The path to the directory to delete.
+    """
+    try:
+        api = instance_api.InstanceApi(inductiva.api.get_client())
+        api.delete_directory({"dir_name": path})
+        stripped_path = path.rstrip("/")
+        print(f"Directory deleted: {stripped_path}")
+    except inductiva.client.ApiException as api_exception:
+        raise api_exception
