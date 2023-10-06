@@ -22,7 +22,7 @@ from inductiva.client.apis.paths.gcp_instances_status import GcpInstancesStatus
 from inductiva.client.apis.paths.gcp_instances_group_status import GcpInstancesGroupStatus
 from inductiva.client.apis.paths.gcp_instances_storage_size import GcpInstancesStorageSize
 from inductiva.client.apis.paths.gcp_instances_storage_contents import GcpInstancesStorageContents
-from inductiva.client.apis.paths.gcp_instances_storage_dir_name import GcpInstancesStorageDirName
+from inductiva.client.apis.paths.gcp_instances_storage_task_id import GcpInstancesStorageTaskId
 from inductiva.client.apis.paths.gcp_instances_groups import GcpInstancesGroups
 from inductiva.client.apis.paths.gcp_instances_group_name import GcpInstancesGroupName
 from inductiva.client.apis.paths.users import Users
@@ -50,7 +50,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.GCP_INSTANCES_GROUP_STATUS: GcpInstancesGroupStatus,
         PathValues.GCP_INSTANCES_STORAGE_SIZE: GcpInstancesStorageSize,
         PathValues.GCP_INSTANCES_STORAGE_CONTENTS: GcpInstancesStorageContents,
-        PathValues.GCP_INSTANCES_STORAGE_DIR_NAME: GcpInstancesStorageDirName,
+        PathValues.GCP_INSTANCES_STORAGE_TASK_ID: GcpInstancesStorageTaskId,
         PathValues.GCP_INSTANCES_GROUPS: GcpInstancesGroups,
         PathValues.GCP_INSTANCES_GROUP_NAME: GcpInstancesGroupName,
         PathValues.USERS: Users,
@@ -78,7 +78,7 @@ path_to_api = PathToApi({
     PathValues.GCP_INSTANCES_GROUP_STATUS: GcpInstancesGroupStatus,
     PathValues.GCP_INSTANCES_STORAGE_SIZE: GcpInstancesStorageSize,
     PathValues.GCP_INSTANCES_STORAGE_CONTENTS: GcpInstancesStorageContents,
-    PathValues.GCP_INSTANCES_STORAGE_DIR_NAME: GcpInstancesStorageDirName,
+    PathValues.GCP_INSTANCES_STORAGE_TASK_ID: GcpInstancesStorageTaskId,
     PathValues.GCP_INSTANCES_GROUPS: GcpInstancesGroups,
     PathValues.GCP_INSTANCES_GROUP_NAME: GcpInstancesGroupName,
     PathValues.USERS: Users,
