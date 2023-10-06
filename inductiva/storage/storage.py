@@ -103,6 +103,7 @@ def rmdir(path: str):
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
         api.delete_directory({"dir_name": path})
-        print("Task directory deleted successfully.")
+        stripped_path = path.rstrip("/")
+        print(f"Directory deleted: {stripped_path}")
     except inductiva.client.ApiException as api_exception:
         raise api_exception
