@@ -11,13 +11,13 @@ from inductiva.client.apis.tags import instance_api
 
 class BaseMachineGroup():
     """Base class to manage Google Cloud resources."""
-    def __init__(
-        self,
-        machine_type: str,
-        spot: bool = False,
-        disk_size_gb: int = 40,
-        zone: str = "europe-west1-b"
-    ) -> None:
+
+    def __init__(self,
+                 machine_type: str,
+                 spot: bool = False,
+                 disk_size_gb: int = 40,
+                 zone: str = "europe-west1-b",
+                 register: bool = True) -> None:
         """Create a BaseMachineGroup object.
 
         Args:
@@ -36,6 +36,7 @@ class BaseMachineGroup():
         self._name = None
         self.create_time = None
         self._started = False
+        self.register = register
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -62,6 +63,7 @@ class BaseMachineGroup():
         resp = self._api.register_instance_group(body=instance_group_config)
         self._id = resp.body["id"]
         self._name = resp.body["name"]
+        self.register = False
         self._log_machine_group_info()
 
     @classmethod
@@ -155,8 +157,7 @@ class BaseMachineGroup():
             termination_time_mins = (time.time() - start_time) / 60
             logging.info(
                 "Machine group '%s' successfully "
-                "terminated in %.2f mins.\n", self.name,
-                termination_time_mins)
+                "terminated in %.2f mins.\n", self.name, termination_time_mins)
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
@@ -173,7 +174,7 @@ class BaseMachineGroup():
         else:
             estimated_cost = instance_price.body["on_demand_price"]
 
-        self._estimated_cost = float(estimated_cost)
+        self._estimated_cost = estimated_cost
         return self._estimated_cost
 
     def status(self):

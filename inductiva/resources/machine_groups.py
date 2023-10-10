@@ -15,16 +15,18 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         "# machines",
         "Disk Size in GB",
         "Spot",
-        "Started at",
+        "Started at (UTC)",
     ]
     rows = []
 
     for machine_group in machine_group_list:
         if machine_group.is_elastic:
-            num_active_machines = machine_group.num_active_machines
+            n_active_machines = machine_group.num_active_machines
             max_machines = machine_group.max_machines
+            num_active_machines = f"{n_active_machines}/{max_machines}"
         else:
-            machine_group.num_machines
+            # TODO: retrieve the number of max. requested machines from the API
+            num_active_machines = machine_group.num_machines
         rows.append([
             machine_group.name, machine_group.machine_type,
             machine_group.is_elastic, num_active_machines,
@@ -32,11 +34,12 @@ def _machine_group_list_to_str(machine_group_list) -> str:
             machine_group.create_time
         ])
 
-    formatters = {"Started at": format_utils.datetime_formatter}
+    formatters = {"Started at (UTC)": format_utils.datetime_formatter}
     override_col_space = {
         "VM Type": 15,
         "# machines": 12,
         "Spot": 10,
+        "Elastic": 10,
     }
 
     return format_utils.get_tabular_str(
@@ -72,10 +75,10 @@ def list():
     that belong to the user. It outputs all the information relative to
     each machine group as folllows:
 
-    INFO:absl:Active machine groups:
-                                        Name         VM Type   Elastic  # machines    Disk Size in GB       Spot         Started at
-    api-1b1f724c-5cfe-4d87-8439-9689aa139723   c2-standard-4      True   1                 40      False   13 Sep, 07:38:50
-    api-8e6bf7d8-4888-4de9-bda5-268484b46e6f   c2-standard-4     False   1                 40      False   13 Sep, 07:37:49
+    Active machine groups:
+                                        Name         VM Type    Elastic   # machines    Disk Size in GB       Spot   Started at (UTC)
+    api-6359c03d-c4f9-479f-8b11-ba1f8f55a58c   e2-standard-4      False            3                 40      False   10 Oct, 13:40:50
+    api-db2046cf-a6fc-4124-926c-1a24329da5ea   e2-standard-4       True          2/4                 40      False   10 Oct, 12:43:03
 
     The name of the machine group can be used to retrieve a MachineGroup object
     with the 'get' function."""
@@ -98,7 +101,7 @@ def get():
         if mg["is_elastic"]:
             mg_class = resources.ElasticMachineGroup
         else:
-            resources.MachineGroup
+            mg_class = resources.MachineGroup
         machine_group_list.append(mg_class.from_api_response(mg))
 
     return machine_group_list
