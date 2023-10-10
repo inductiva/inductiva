@@ -85,10 +85,11 @@ class MachineGroup(machines_base.BaseMachineGroup):
 class ElasticMachineGroup(machines_base.BaseMachineGroup):
     """Manages an elastic machine group in Google Cloud.
 
-    An ElasticMachineGroup is a set of identical machines that can automatically scale
-    based on CPU load. The group starts with a minimum number of machines and adjusts
-    its size as needed scaling to the maximum number of machines, ensuring both optimal
-    performance and cost efficiency.
+    An ElasticMachineGroup is a set of identical machines that can
+    automatically scale based on CPU load. The group starts with a
+    minimum number of machines and adjusts its size as needed scaling
+    to the maximum number of machines, ensuring both optimal performance
+    and cost efficiency.
 
     Note: The machine group becomes active after calling the 'start' method,
     and billing commences once the machines are initiated.
