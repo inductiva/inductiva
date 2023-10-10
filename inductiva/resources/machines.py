@@ -83,13 +83,15 @@ class MachineGroup(machines_base.BaseMachineGroup):
 
 
 class ElasticMachineGroup(machines_base.BaseMachineGroup):
-    """Class for managing an elastic machine group in Google Cloud.
+    """Manages an elastic machine group in Google Cloud.
 
-    An elastic machine group comprises homogeneous machines with autoscaling.
-    Initially, a minimum number of machines are launched. The group size
-    automatically adjusts based on CPU load, managed in the Inductiva backend.
-    Ensures optimal performance and cost efficiency. Machine group activates
-    after 'start' method call. Billing starts when machines are initiated.
+    An ElasticMachineGroup is a set of identical machines that can automatically scale
+    based on CPU load. The group starts with a minimum number of machines and adjusts
+    its size as needed scaling to the maximum number of machines, ensuring both optimal
+    performance and cost efficiency.
+
+    Note: The machine group becomes active after calling the 'start' method,
+    and billing commences once the machines are initiated.
     """
 
     def __init__(
@@ -171,11 +173,11 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         group in the cloud. The actual cost will vary based on the factors
         such as the quantity and duration the machines running in the cloud."""
         cost = super()._get_estimated_cost()
-        logging.info("Minimum estimated cloud cost: "
-                     "%s $/h.", round(float(cost * self.min_machines), 3))
-        logging.info("Maximum estimated cloud cost: "
-                     "%s $/h.", round(float(cost * self.max_machines), 3))
         logging.info(
             "Note: these is the estimted cost of having minimum and the "
             "maximum number of machines up in the cloud. The final cost will "
             "vary depending on the total usage of the machines.")
+        logging.info("Minimum estimated cloud cost: "
+                     "%s $/h.", round(float(cost * self.min_machines), 3))
+        logging.info("Maximum estimated cloud cost: "
+                     "%s $/h.", round(float(cost * self.max_machines), 3))

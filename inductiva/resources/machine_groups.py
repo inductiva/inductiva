@@ -21,9 +21,9 @@ def _machine_group_list_to_str(machine_group_list) -> str:
 
     for machine_group in machine_group_list:
         if machine_group.is_elastic:
-            n_active_machines = machine_group.num_active_machines
+            num_active_machines = machine_group.num_active_machines
             max_machines = machine_group.max_machines
-            num_active_machines = f"{n_active_machines}/{max_machines}"
+            num_active_machines = f"{num_active_machines}/{max_machines}"
         else:
             # TODO: retrieve the number of max. requested machines from the API
             num_active_machines = machine_group.num_machines
