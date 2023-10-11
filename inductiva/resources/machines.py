@@ -73,7 +73,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
 
         Returns:
             The estimated cost per hour of the machine group in US
-              dollars($/h)."""
+              dollars ($/h)."""
         #TODO: Contemplate disk size in the price.
         estimated_cost = round(
             float(super()._get_estimated_cost() * self.num_machines), 3)
@@ -168,14 +168,14 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         logging.info("> Minimum number of machines: %s", self.min_machines)
 
     def estimate_cloud_cost(self):
-        """Estimates a cost per hour of a single machine in US dollars.
+        """Estimates a cost per hour of min and max machines in US dollars.
 
-        This is only an estimate of running a single machine within a machine
-        group in the cloud. The actual cost will vary based on the factors
-        such as the quantity and duration the machines running in the cloud."""
+        these are the estimted costs of having minimum and the
+        maximum number of machines up in the cloud. The final cost will vary
+        depending on the total usage of the machines."""
         cost = super()._get_estimated_cost()
         logging.info(
-            "Note: these is the estimted cost of having minimum and the "
+            "Note: these are the estimted costs of having minimum and the "
             "maximum number of machines up in the cloud. The final cost will "
             "vary depending on the total usage of the machines.")
         logging.info("Minimum estimated cloud cost: "
