@@ -258,6 +258,7 @@ def invoke_api_from_fn_ptr(
     function_ptr,
     output_dir: Optional[Path] = None,
     resource_pool_id: Optional[UUID] = None,
+    storage_path_prefix: Optional[str] = None,
 ):
     """Perform a task remotely defined by a function pointer."""
     type_annotations = get_type_annotations(function_ptr)
@@ -269,6 +270,7 @@ def invoke_api_from_fn_ptr(
         type_annotations=type_annotations,
         return_type=type_annotations["return"],
         resource_pool_id=resource_pool_id,
+        storage_path_prefix = storage_path_prefix
     )
 
 
@@ -303,7 +305,8 @@ def invoke_api(method_name: str,
                type_annotations: Dict[Any, Type],
                output_dir: Optional[Path] = None,
                return_type: Type = pathlib.Path,
-               resource_pool_id: Optional[UUID] = None):
+               resource_pool_id: Optional[UUID] = None,
+               storage_path_prefix: Optional[str] = None):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -344,6 +347,7 @@ def invoke_api(method_name: str,
         method=method_name,
         params=request_params,
         resource_pool=resource_pool_id,
+        storage_path_prefix=storage_path_prefix
     )
 
     with ApiClient(api_config) as client:
@@ -385,7 +389,8 @@ def invoke_api(method_name: str,
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
-                     resource_pool_id: Optional[UUID] = None) -> str:
+                     resource_pool_id: Optional[UUID] = None,
+                    storage_path_prefix: Optional[str] = None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -423,6 +428,7 @@ def invoke_async_api(method_name: str,
         method=method_name,
         params=request_params,
         resource_pool=resource_pool_id,
+        storage_path_prefix=storage_path_prefix
     )
 
     with ApiClient(api_config) as client:
