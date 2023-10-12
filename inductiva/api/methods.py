@@ -258,7 +258,7 @@ def invoke_api_from_fn_ptr(
     function_ptr,
     output_dir: Optional[Path] = None,
     resource_pool_id: Optional[UUID] = None,
-    storage_path_prefix: Optional[str] = None,
+    storage_path_prefix: Optional[str] = "",
 ):
     """Perform a task remotely defined by a function pointer."""
     type_annotations = get_type_annotations(function_ptr)
@@ -304,7 +304,7 @@ def invoke_api(method_name: str,
                output_dir: Optional[Path] = None,
                return_type: Type = pathlib.Path,
                resource_pool_id: Optional[UUID] = None,
-               storage_path_prefix: Optional[str] = None):
+               storage_path_prefix: Optional[str] = ""):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -326,10 +326,13 @@ def invoke_api(method_name: str,
             type annotations of `function_ptr`.
 
     Args:
-        request: Request sent to the API for validation.
-        input_dir: Directory containing the input files to be uploaded.
+        method_name: Name of the method to be invoked.
+        params: Parameters to be passed to the method.
+        type_annotations: Type annotations of the method.
         output_dir: Directory where to place the output files.
         return_type: Type of the return value of the task, for unpacking.
+        resource_pool_id: ID of the resource pool where the task will be executed.
+        storage_path_prefix: Prefix for the storage path of the user.
 
     Return:
         Returns the output of the task.
@@ -386,7 +389,7 @@ def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
                      resource_pool_id: Optional[UUID] = None,
-                     storage_path_prefix: Optional[str] = None) -> str:
+                     storage_path_prefix: Optional[str] = "") -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -406,8 +409,11 @@ def invoke_async_api(method_name: str,
             become available.
 
     Args:
-        request: Request sent to the API for validation.
-        input_dir: Directory containing the input files to be uploaded.
+        method_name: Name of the method to be invoked.
+        params: Parameters to be passed to the method.
+        type_annotations: Type annotations for the parameters.
+        resource_pool_id: Optional ID of the resource pool.
+        storage_path_prefix: Optional storage path prefix.
 
     Return:
         Returns the task id.
