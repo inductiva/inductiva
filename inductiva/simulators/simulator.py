@@ -42,7 +42,7 @@ class Simulator(ABC):
         *_args,
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        storage_parent_dir: Optional[types.Path] = None,
+        storage_parent_dir: Optional[types.Path] = "",
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.

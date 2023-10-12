@@ -11,13 +11,14 @@ class GROMACS(simulators.Simulator):
     def __init__(self):
         super().__init__()
         self.api_method_name = "md.gromacs.run_simulation"
+
     def run(
         self,
         input_dir: types.Path,
         commands: List[dict],
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        storage_parent_dir: Optional[types.Path] = None,
+        storage_parent_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run a list of GROMACS commands.
 

@@ -11,7 +11,7 @@ def run_simulation(
     input_dir: pathlib.Path,
     machine_group: Optional[resources.MachineGroup] = None,
     run_async: bool = False,
-    storage_parent_dir: Optional[pathlib.Path] = None,
+    storage_parent_dir: Optional[pathlib.Path] = "",
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""

@@ -41,7 +41,7 @@ class ProteinSolvation(scenarios.Scenario):
             simulator: simulators.Simulator = simulators.GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
-            storage_parent_dir: Optional[utils.types.Path] = None,
+            storage_parent_dir: Optional[types.Path] = "",
             simulation_time_ns: float = 10,  # ns
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
@@ -91,8 +91,7 @@ class ProteinSolvation(scenarios.Scenario):
                                 machine_group=machine_group,
                                 commands=commands,
                                 run_async=run_async,
-                                storage_parent_dir=storage_parent_dir
-                                )
+                                storage_parent_dir=storage_parent_dir)
 
         return task
 
