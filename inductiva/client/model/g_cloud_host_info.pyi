@@ -40,7 +40,7 @@ class GCloudHostInfo(
             "vm_id",
             "vm_type",
             "preemptible",
-            "vm_metadata",
+            "vm_zone",
             "host_type",
             "vm_name",
         }
@@ -59,21 +59,21 @@ class GCloudHostInfo(
             vm_type = schemas.StrSchema
             vm_name = schemas.StrSchema
             vm_id = schemas.StrSchema
+            vm_zone = schemas.StrSchema
             preemptible = schemas.BoolSchema
-            vm_metadata = schemas.DictSchema
             __annotations__ = {
                 "host_type": host_type,
                 "vm_type": vm_type,
                 "vm_name": vm_name,
                 "vm_id": vm_id,
+                "vm_zone": vm_zone,
                 "preemptible": preemptible,
-                "vm_metadata": vm_metadata,
             }
     
     vm_id: MetaOapg.properties.vm_id
     vm_type: MetaOapg.properties.vm_type
     preemptible: MetaOapg.properties.preemptible
-    vm_metadata: MetaOapg.properties.vm_metadata
+    vm_zone: MetaOapg.properties.vm_zone
     host_type: MetaOapg.properties.host_type
     vm_name: MetaOapg.properties.vm_name
     
@@ -90,15 +90,15 @@ class GCloudHostInfo(
     def __getitem__(self, name: typing_extensions.Literal["vm_id"]) -> MetaOapg.properties.vm_id: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["preemptible"]) -> MetaOapg.properties.preemptible: ...
+    def __getitem__(self, name: typing_extensions.Literal["vm_zone"]) -> MetaOapg.properties.vm_zone: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["vm_metadata"]) -> MetaOapg.properties.vm_metadata: ...
+    def __getitem__(self, name: typing_extensions.Literal["preemptible"]) -> MetaOapg.properties.preemptible: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["host_type", "vm_type", "vm_name", "vm_id", "preemptible", "vm_metadata", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["host_type", "vm_type", "vm_name", "vm_id", "vm_zone", "preemptible", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -116,15 +116,15 @@ class GCloudHostInfo(
     def get_item_oapg(self, name: typing_extensions.Literal["vm_id"]) -> MetaOapg.properties.vm_id: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["preemptible"]) -> MetaOapg.properties.preemptible: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["vm_zone"]) -> MetaOapg.properties.vm_zone: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["vm_metadata"]) -> MetaOapg.properties.vm_metadata: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["preemptible"]) -> MetaOapg.properties.preemptible: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["host_type", "vm_type", "vm_name", "vm_id", "preemptible", "vm_metadata", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["host_type", "vm_type", "vm_name", "vm_id", "vm_zone", "preemptible", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -134,7 +134,7 @@ class GCloudHostInfo(
         vm_id: typing.Union[MetaOapg.properties.vm_id, str, ],
         vm_type: typing.Union[MetaOapg.properties.vm_type, str, ],
         preemptible: typing.Union[MetaOapg.properties.preemptible, bool, ],
-        vm_metadata: typing.Union[MetaOapg.properties.vm_metadata, dict, frozendict.frozendict, ],
+        vm_zone: typing.Union[MetaOapg.properties.vm_zone, str, ],
         host_type: typing.Union[MetaOapg.properties.host_type, str, ],
         vm_name: typing.Union[MetaOapg.properties.vm_name, str, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -146,7 +146,7 @@ class GCloudHostInfo(
             vm_id=vm_id,
             vm_type=vm_type,
             preemptible=preemptible,
-            vm_metadata=vm_metadata,
+            vm_zone=vm_zone,
             host_type=host_type,
             vm_name=vm_name,
             _configuration=_configuration,
