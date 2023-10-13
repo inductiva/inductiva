@@ -102,20 +102,21 @@ class WindTunnel(scenarios.Scenario):
                  object_path: Optional[types.Path] = None,
                  num_iterations: float = 100,
                  resolution: Literal["high", "medium", "low"] = "medium",
-                 n_cores: int = 2) -> tasks.Task:
+                 n_cores: int = 2,
+                 storage_parent_dir: Optional[str] = "") -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
             simulator: Simulator used to simulate the scenario.
                 Valid simulators: OpenFOAM.
             object_path: Path to object inserted in the wind tunnel.
-            output_dir: Path to the directory where the simulation output
-                is downloaded when running synchronously.
             num_iterations: Number of iterations of the simulator.
             n_cores: Number of cores to use for the simulation.
             resolution: Level of detail of the mesh used for the simulation.
                 Options: "high", "medium" or "low".
             machine_group: The machine group to use for the simulation.
+            run_async: Whether to run the simulation asynchronously.
+            storage_parent_dir: The parent directory where simulation results will be stored.
         """
         simulator.override_api_method_prefix("wind_tunnel")
 
@@ -133,7 +134,8 @@ class WindTunnel(scenarios.Scenario):
                                 machine_group=machine_group,
                                 run_async=run_async,
                                 n_cores=n_cores,
-                                commands=commands)
+                                commands=commands,
+                                storage_parent_dir=storage_parent_dir)
 
         return task
 

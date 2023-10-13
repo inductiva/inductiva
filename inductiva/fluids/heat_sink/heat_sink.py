@@ -98,7 +98,7 @@ class HeatSink(scenarios.Scenario):
         run_async: bool = False,
         simulation_time=300,
         output_time_step=10,
-        storage_parent_dir: Optional[str] = None,
+        storage_parent_dir: Optional[str] = "",
     ) -> tasks.Task:
         """Simulates the scenario.
 

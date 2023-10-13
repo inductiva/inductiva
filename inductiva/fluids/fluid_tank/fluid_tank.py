@@ -205,7 +205,7 @@ class FluidTank(scenarios.Scenario):
         resolution: Literal["low", "medium", "high"] = "low",
         output_time_step: float = 0.1,
         particle_sorting: bool = False,
-        storage_parent_dir: Optional[str] = None,
+        storage_parent_dir: Optional[str] = "",
     ) -> tasks.Task:
         """Simulates the scenario.
 

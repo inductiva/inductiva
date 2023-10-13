@@ -104,7 +104,7 @@ class WindOverTerrain(scenarios.Scenario):
         run_async: bool = False,
         n_cores: int = 2,
         num_iterations: int = 100,
-        storage_parent_dir: Optional[str] = None,
+        storage_parent_dir: Optional[str] = "",
     ) -> inductiva.tasks.Task:
         """Simulates the wind over the terrain scenario.
 

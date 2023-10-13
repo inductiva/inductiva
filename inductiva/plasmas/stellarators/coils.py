@@ -242,6 +242,7 @@ class StellaratorCoils(scenarios.Scenario):
         num_samples: int = 1,
         sigma_scaling_factor: float = 0.1,
         objectives_weights: dict = None,
+        storage_parent_dir: typing.Optional[types.Path] = "",
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -293,6 +294,8 @@ class StellaratorCoils(scenarios.Scenario):
                                 "arclength_variation": 5e-03,
                                 "curvature": 3e-04
                             }
+            storage_parent_dir: Parent directory where the simulation results 
+              will be stored.
                   
         """
         simulator.override_api_method_prefix("stellarators")
@@ -333,7 +336,8 @@ class StellaratorCoils(scenarios.Scenario):
             num_iterations=num_iterations,
             num_samples=num_samples,
             sigma_scaling_factor=sigma_scaling_factor,
-            objectives_weights_filename=OBJECTIVES_WEIGHTS_FILENAME)
+            objectives_weights_filename=OBJECTIVES_WEIGHTS_FILENAME,
+            storage_parent_dir=storage_parent_dir)
 
         return task
 
