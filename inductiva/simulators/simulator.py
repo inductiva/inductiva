@@ -36,6 +36,8 @@ class Simulator(ABC):
                 f"The provided path (\"{input_dir}\") is not a directory.")
         return input_dir
 
+
+
     def run(
         self,
         input_dir: types.Path,
@@ -51,6 +53,10 @@ class Simulator(ABC):
             input_dir: Path to the directory containing the input files.
             _args: Unused in this method, but defined to allow for more
                 non-default arguments in method override in subclasses.
+            machine_group: The machine group to use for the simulation.
+            run_async: Whether to run the simulation asynchronously.
+            storage_parent_dir: Parent directory for storing simulation 
+                               results.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """

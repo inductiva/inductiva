@@ -17,15 +17,19 @@ class SWASH(simulators.Simulator):
         sim_config_filename: str,
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
+        storage_parent_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run the simulation.
 
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
-            other arguments: See the documentation of the base class.
+            machine_group: Optional machine group to run the simulation on.
+            run_async: If True, the simulation will run asynchronously.
+            storage_parent_dir: Directory for storing simulation results.
         """
         return super().run(input_dir,
                            machine_group=machine_group,
                            input_filename=sim_config_filename,
-                           run_async=run_async)
+                           run_async=run_async,
+                           storage_parent_dir=storage_parent_dir)

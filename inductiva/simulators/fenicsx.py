@@ -21,6 +21,7 @@ class FEniCSx(simulators.Simulator):
         global_refinement_meshing_factor: float = 1.0,
         local_refinement_meshing_factor: float = 0.0,
         machine_group: Optional[resources.MachineGroup] = None,
+        storage_parent_dir: Optional[types.Path] = "",
         run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
@@ -44,6 +45,7 @@ class FEniCSx(simulators.Simulator):
               this factor when you want to focus on refining specific areas
               while keeping the rest of the mesh less refined.
             machine_group: The machine group to use for the simulation.
+            storage_parent_dir: Parent directory for storing simulation results.
             run_async: Whether to run the simulation asynchronously.
             other arguments: See the documentation of the base class.
         """
@@ -56,4 +58,5 @@ class FEniCSx(simulators.Simulator):
             bcs_filename=bcs_filename,
             material_filename=material_filename,
             global_refinement_meshing_factor=global_refinement_meshing_factor,
-            local_refinement_meshing_factor=local_refinement_meshing_factor)
+            local_refinement_meshing_factor=local_refinement_meshing_factor,
+            storage_parent_dir=storage_parent_dir)
