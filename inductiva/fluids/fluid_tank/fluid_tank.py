@@ -205,6 +205,7 @@ class FluidTank(scenarios.Scenario):
         resolution: Literal["low", "medium", "high"] = "low",
         output_time_step: float = 0.1,
         particle_sorting: bool = False,
+        storage_parent_dir: Optional[str] = None,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -218,6 +219,7 @@ class FluidTank(scenarios.Scenario):
               "high".
             particle_sorting: Whether to use particle sorting.
             run_async: Whether to run the simulation asynchronously.
+            storage_parent_dir: Directory for storing results.
         """
         simulator.override_api_method_prefix("fluid_tank")
 
@@ -233,6 +235,7 @@ class FluidTank(scenarios.Scenario):
             run_async=run_async,
             particle_radius=self.particle_radius,
             sim_config_filename=self.get_config_filename(simulator),
+            storage_parent_dir=storage_parent_dir,
         )
 
         return task

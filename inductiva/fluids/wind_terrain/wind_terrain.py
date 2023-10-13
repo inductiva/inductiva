@@ -104,6 +104,7 @@ class WindOverTerrain(scenarios.Scenario):
         run_async: bool = False,
         n_cores: int = 2,
         num_iterations: int = 100,
+        storage_parent_dir: Optional[str] = None,
     ) -> inductiva.tasks.Task:
         """Simulates the wind over the terrain scenario.
 
@@ -114,6 +115,7 @@ class WindOverTerrain(scenarios.Scenario):
             num_iterations: Number of iterations to run the simulation.
             n_cores: Number of cores to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
+            storage_parent_dir: The parent directory where simulation results will be stored.
         """
         simulator.override_api_method_prefix("wind_terrain")
 
@@ -126,7 +128,8 @@ class WindOverTerrain(scenarios.Scenario):
                                 machine_group=machine_group,
                                 run_async=run_async,
                                 n_cores=n_cores,
-                                commands=commands)
+                                commands=commands,
+                                storage_parent_dir=storage_parent_dir)
 
         return task
 

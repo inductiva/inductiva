@@ -98,6 +98,7 @@ class HeatSink(scenarios.Scenario):
         run_async: bool = False,
         simulation_time=300,
         output_time_step=10,
+        storage_parent_dir: Optional[str] = None,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -108,6 +109,7 @@ class HeatSink(scenarios.Scenario):
               seconds.
             machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
+            storage_parent_dir: The parent directory where simulation results will be stored.
         """
         simulator.override_api_method_prefix("heat_sink")
 
@@ -121,7 +123,8 @@ class HeatSink(scenarios.Scenario):
                                 machine_group=machine_group,
                                 run_async=run_async,
                                 n_cores=1,
-                                commands=commands)
+                                commands=commands,
+                                storage_parent_dir=storage_parent_dir)
 
         return task
 

@@ -98,6 +98,7 @@ class FluidBlock(scenarios.Scenario):
         particle_sorting: bool = True,
         time_step: float = 0.001,
         output_time_step: float = 1 / 60,
+        storage_parent_dir: Optional[str] = None,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -114,6 +115,7 @@ class FluidBlock(scenarios.Scenario):
             time_step: Time step, in seconds.
             output_time_step: Time step between outputs, in seconds.
             run_async: Whether to run the simulation asynchronously.
+            storage_parent_dir: The parent directory where the simulation results will be stored.
         """
         simulator.override_api_method_prefix("fluid_block")
 
@@ -129,7 +131,8 @@ class FluidBlock(scenarios.Scenario):
             simulator=simulator,
             machine_group=machine_group,
             run_async=run_async,
-            sim_config_filename=self.get_config_filename(simulator))
+            sim_config_filename=self.get_config_filename(simulator),
+            storage_parent_dir=storage_parent_dir)
 
         return task
 
