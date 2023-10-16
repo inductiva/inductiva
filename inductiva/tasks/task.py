@@ -427,7 +427,7 @@ class Task:
         #This path needs to be updated with the self.parent_dir
         # when that feature is added to tasks
         path = os.path.join(self.id, "stdout_live.txt")
-        api = self._api_default.get_file_tail(
+        api_response = self._api_default.get_file_tail(
             query_params={
                 "path": path,
                 "n_lines": n_lines,
@@ -436,7 +436,7 @@ class Task:
             skip_deserialization=False,
         )
 
-        return api.body
+        return api_response.body
 
     def get_resources(self, n_lines: int = 10):
         """Returns last values of computation resources for current task
@@ -455,7 +455,7 @@ class Task:
         #This path needs to be updated with the self.parent_dir
         # when that feature is added to tasks
         path = os.path.join(self.id, "resource_usage.txt")
-        api = self._api_default.get_file_tail(
+        api_response = self._api_default.get_file_tail(
             query_params={
                 "path": path,
                 "n_lines": n_lines,
@@ -464,4 +464,4 @@ class Task:
             skip_deserialization=False,
         )
 
-        return api.body
+        return api_response.body
