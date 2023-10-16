@@ -21,7 +21,7 @@ After determining the total storage space used, you may want to identify which d
 import inductiva
 inductiva.storage.listdir(max_results=10, order_by="size", sort_order="desc")
 ```
-This function generates a table displaying the storage contents: 
+This function generates a table displaying the storage directories: 
 
 ```markdown
 | Name   | Size       | Creation Time   |
