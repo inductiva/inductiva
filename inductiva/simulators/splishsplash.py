@@ -40,5 +40,4 @@ class SplishSplash(Simulator):
             run_async=run_async,
             storage_parent_dir=storage_parent_dir,
             particle_radius=particle_radius,
-
         )

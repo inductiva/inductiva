@@ -36,5 +36,5 @@ class DualSPHysics(Simulator):
         return super().run(input_dir,
                            machine_group=machine_group,
                            input_filename=sim_config_filename,
-                           run_async=run_async, 
+                           run_async=run_async,
                            storage_parent_dir=storage_parent_dir)

@@ -36,8 +36,6 @@ class Simulator(ABC):
                 f"The provided path (\"{input_dir}\") is not a directory.")
         return input_dir
 
-
-
     def run(
         self,
         input_dir: types.Path,
