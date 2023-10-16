@@ -46,10 +46,10 @@ class DamBreak(fluids.FluidBlock):
         self,
         simulator: simulators.Simulator = simulators.DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
-        resolution: Literal["high", "medium", "low"] = "low",
-        simulation_time: float = 1,
         run_async: bool = False,
         storage_parent_dir: Optional[str] = "",
+        resolution: Literal["high", "medium", "low"] = "low",
+        simulation_time: float = 1,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -77,7 +77,7 @@ class DamBreak(fluids.FluidBlock):
             simulator=simulator,
             machine_group=machine_group,
             run_async=run_async,
-            sim_config_filename=self.get_config_filename(simulator),
-            storage_parent_dir=storage_parent_dir)
+            storage_parent_dir=storage_parent_dir,
+            sim_config_filename=self.get_config_filename(simulator))
 
         return task

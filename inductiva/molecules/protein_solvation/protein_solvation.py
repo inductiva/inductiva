@@ -52,7 +52,7 @@ class ProteinSolvation(scenarios.Scenario):
 
         Args:
             simulator: The simulator to use for the simulation.
-            machine_group: The machine group to use for the simulation.
+            machine_group: The machine group o use for the simulation.
             run_async: Whether to run the simulation asynchronously.
             storage_parent_dir: The parent directory for storing simulation
             results.

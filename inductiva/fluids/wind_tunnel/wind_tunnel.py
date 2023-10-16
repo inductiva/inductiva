@@ -99,11 +99,11 @@ class WindTunnel(scenarios.Scenario):
                  simulator: simulators.Simulator = simulators.OpenFOAM(),
                  machine_group: Optional[resources.MachineGroup] = None,
                  run_async: bool = False,
+                 storage_parent_dir: Optional[str] = "",
                  object_path: Optional[types.Path] = None,
                  num_iterations: float = 100,
                  resolution: Literal["high", "medium", "low"] = "medium",
-                 n_cores: int = 2,
-                 storage_parent_dir: Optional[str] = "") -> tasks.Task:
+                 n_cores: int = 2) -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
@@ -116,7 +116,8 @@ class WindTunnel(scenarios.Scenario):
                 Options: "high", "medium" or "low".
             machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
-            storage_parent_dir: The parent directory where simulation results will be stored.
+            storage_parent_dir: The parent directory where simulation 
+            results will be stored.
         """
         simulator.override_api_method_prefix("wind_tunnel")
 
@@ -133,9 +134,9 @@ class WindTunnel(scenarios.Scenario):
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 run_async=run_async,
+                                storage_parent_dir=storage_parent_dir,
                                 n_cores=n_cores,
-                                commands=commands,
-                                storage_parent_dir=storage_parent_dir)
+                                commands=commands)
 
         return task
 
