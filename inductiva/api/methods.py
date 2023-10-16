@@ -331,7 +331,8 @@ def invoke_api(method_name: str,
         type_annotations: Type annotations of the method.
         output_dir: Directory where to place the output files.
         return_type: Type of the return value of the task, for unpacking.
-        resource_pool_id: ID of the resource pool where the task will be executed.
+        resource_pool_id: ID of the resource pool where the task 
+        will be executed.
         storage_path_prefix: Prefix for the storage path of the user.
 
     Return:
