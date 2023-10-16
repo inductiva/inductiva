@@ -222,6 +222,9 @@ class Task:
         # e.g. retrieve openfoam from fvm.openfoam.run_simulation
         return self.get_info()["method_name"].split(".")[1]
 
+    def get_storage_path(self) -> str:
+        return self.get_info()["storage_path_prefix"]
+
     def get_output(
         self,
         all_files: bool = False,
