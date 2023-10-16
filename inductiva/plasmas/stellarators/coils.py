@@ -237,12 +237,12 @@ class StellaratorCoils(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.SIMSOPT(),
         machine_group: typing.Optional[resources.MachineGroup] = None,
         run_async: bool = False,
+        storage_parent_dir: typing.Optional[types.Path] = "",
         plasma_surface_filepath: typing.Optional[types.Path] = None,
         num_iterations: int = 1,
         num_samples: int = 1,
         sigma_scaling_factor: float = 0.1,
         objectives_weights: dict = None,
-        storage_parent_dir: typing.Optional[types.Path] = "",
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -329,6 +329,7 @@ class StellaratorCoils(scenarios.Scenario):
             simulator,
             machine_group=machine_group,
             run_async=run_async,
+            storage_parent_dir=storage_parent_dir,
             coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
             coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
             plasma_surface_filename=SIMSOPT_PLASMA_SURFACE_FILENAME,
@@ -336,8 +337,7 @@ class StellaratorCoils(scenarios.Scenario):
             num_iterations=num_iterations,
             num_samples=num_samples,
             sigma_scaling_factor=sigma_scaling_factor,
-            objectives_weights_filename=OBJECTIVES_WEIGHTS_FILENAME,
-            storage_parent_dir=storage_parent_dir)
+            objectives_weights_filename=OBJECTIVES_WEIGHTS_FILENAME)
 
         return task
 
