@@ -3,6 +3,7 @@ import pathlib
 import contextlib
 import time
 import json
+import os
 from absl import logging
 from typing import Dict, Any, List, Optional
 from typing_extensions import TypedDict
@@ -10,7 +11,7 @@ import datetime
 import inductiva
 from inductiva.client import models
 from inductiva import api
-from inductiva.client.apis.tags import tasks_api
+from inductiva.client.apis.tags import tasks_api, default_api
 from inductiva.utils import files
 from inductiva.utils import data
 from inductiva.utils import output_contents
@@ -49,6 +50,7 @@ class Task:
         """Initialize the instance from a task ID."""
         self.id = task_id
         self._api = tasks_api.TasksApi(api.get_client())
+        self._api_default = default_api.DefaultApi(api.get_client())
         self._info = None
         self._status = None
 
@@ -408,3 +410,58 @@ class Task:
         machine_type = machine_info["vm_type"].split("/")[-1]
 
         return machine_type
+
+    def get_stdout(self, n_lines: int = 10):
+        """Returns tail of stdout.txt file for current task
+
+        Calls the get_file_tail function, specifying the path of the
+        stdout_live.txt file, that contains the live version of the
+        stdout.txt file. The function returns the last n_lines in a list
+        of lines.
+
+        Args:
+            n_lines: Number of lines to return from the end of the file.
+        Returns:
+            A list of strings, each string being a line from the stdout."""
+
+        #This path needs to be updated with the self.parent_dir
+        # when that feature is added to tasks
+        path = os.path.join(self.id, "stdout_live.txt")
+        api = self._api_default.get_file_tail(
+            query_params={
+                "path": path,
+                "n_lines": n_lines,
+            },
+            stream=False,
+            skip_deserialization=False,
+        )
+
+        return api.body
+
+    def get_resources(self, n_lines: int = 10):
+        """Returns last values of computation resources for current task
+
+        Calls the get_file_tail function, specifying the path of the
+        resource_usage.txt file. This file is a .csv file with each line
+        corresponding to: register_time / memory_usage_percent /
+        cpu_usage_percent. The function returns the last n_lines in a list of
+        lines.
+
+        Args:
+            n_lines: Number of lines to return from the end of the file.
+        Returns:
+            List of lines from the end of the resource_usage file."""
+
+        #This path needs to be updated with the self.parent_dir
+        # when that feature is added to tasks
+        path = os.path.join(self.id, "resource_usage.txt")
+        api = self._api_default.get_file_tail(
+            query_params={
+                "path": path,
+                "n_lines": n_lines,
+            },
+            stream=False,
+            skip_deserialization=False,
+        )
+
+        return api.body
