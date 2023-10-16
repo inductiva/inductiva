@@ -201,11 +201,11 @@ class FluidTank(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.SplishSplash(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
+        storage_parent_dir: Optional[str] = "",
         simulation_time: float = 1,
         resolution: Literal["low", "medium", "high"] = "low",
         output_time_step: float = 0.1,
         particle_sorting: bool = False,
-        storage_parent_dir: Optional[str] = "",
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -233,9 +233,9 @@ class FluidTank(scenarios.Scenario):
             simulator,
             machine_group=machine_group,
             run_async=run_async,
+            storage_parent_dir=storage_parent_dir,
             particle_radius=self.particle_radius,
             sim_config_filename=self.get_config_filename(simulator),
-            storage_parent_dir=storage_parent_dir,
         )
 
         return task

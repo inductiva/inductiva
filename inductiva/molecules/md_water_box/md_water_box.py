@@ -56,7 +56,8 @@ class MDWaterBox(scenarios.Scenario):
             Gromacs is the only supported for now.
             machine_group: The MachineGroup to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
-            storage_parent_dir: The parent directory for storing simulation results.
+            storage_parent_dir: The parent directory for storing simulation
+            results.
             simulation_time_ns: The simulation time in ns.
             output_timestep_ps: The output timestep in ps.
             integrator: The integrator to use for the simulation. Options:
