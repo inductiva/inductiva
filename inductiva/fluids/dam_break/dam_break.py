@@ -59,7 +59,8 @@ class DamBreak(fluids.FluidBlock):
             resolution: Resolution of the simulation.
             simulation_time: Simulation time, in seconds.
             run_async: Whether to run the simulation asynchronously.
-            storage_dir: The parent directory where the simulation results will be stored.
+            storage_dir: The parent directory where the simulation results 
+            will be stored.
         """
         simulator.override_api_method_prefix("dam_break")
 
