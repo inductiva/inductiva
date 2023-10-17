@@ -160,7 +160,12 @@ class TaskRequest(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            storage_path_prefix = schemas.StrSchema
+                        
+            class storage_path_prefix(
+                schemas.StrSchema
+            ):
+                pass
+
             __annotations__ = {
                 "method": method,
                 "params": params,
