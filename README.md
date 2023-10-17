@@ -42,6 +42,12 @@ import inductiva
 inductiva.api_key = "YOUR_API_KEY"
 ```
 
+Similarly, you can set the `INDUCTIVA_API_KEY` as an environment variable in your terminal as follows:
+
+```bash
+export INDUCTIVA_API_KEY="YOUR_API_KEY"
+```
+
 And you are good to go! You can start exploring Inductiva API with the examples below.
 
 ## Pre-built Simulation Scenarios
