@@ -64,7 +64,7 @@ inductiva.api_key = "YOUR_API_KEY"
 
 # Url to a test object in Inductiva Github repository
 vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
-              "/resources/vehicle.obj"
+              "/assets/vehicle.obj"
 vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 
 # Initialize the scenario
@@ -92,7 +92,7 @@ Or, in Colab or headless server, install the extra dependencies with
 
 ```
 !apt install libgl1-mesa-glx xvfb
-``` 
+```
 and run:
 
 ```python
@@ -100,7 +100,7 @@ pressure_field.render(virtual_display=True, save_path="pressure_field.png")
 ```
 
 <p align="center">
-  <img src="https://github.com/inductiva/inductiva/blob/main/resources/media/openfoam/pressure_field.png?raw=true" alt="Pressure Field of a vehicle." width="400" height="330" >
+  <img src="https://github.com/inductiva/inductiva/blob/main/assets/media/openfoam/pressure_field.png?raw=true" alt="Pressure Field of a vehicle." width="400" height="330" >
 </p>
 
 ### Available Simulation Scenarios
@@ -109,12 +109,12 @@ These are the currently available scenarios:
 
 
 <div align="center">
-  
+
 | [**Protein Solvation**](https://github.com/inductiva/inductiva/tree/main/inductiva/molecules/protein_solvation#protein-solvation-scenario) | [**Coastal Area**](https://github.com/inductiva/inductiva/tree/main/inductiva/coastal#coastal-area-scenario)  |
 | :-------------------------: | :-------------------------------: |
-|<div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/md/protein_solvation_big_molecule.gif?raw=true" alt="Protein Solvation simulation" width="200" height="200" /></div> |  <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/random_coastal_area.gif?raw=true" alt="Coastal area simulation" width="250" height="150" /></div>  |
+|<div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/assets/media/md/protein_solvation_big_molecule.gif?raw=true" alt="Protein Solvation simulation" width="200" height="200" /></div> |  <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/assets/media/random_coastal_area.gif?raw=true" alt="Coastal area simulation" width="250" height="150" /></div>  |
 | [**Fluid Tank**](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/fluid_tank#fluid-tank-scenario) | [**Wind Tunnel**](https://github.com/inductiva/inductiva/tree/main/inductiva/fluids/wind_tunnel#wind-tunnel-scenario) |
-| <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/fluid_tank.gif?raw=true" alt="Fluid Tank simulation" width="250" height="150" /></div> | <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/resources/media/openfoam/default_pressure_field.png?raw=true" alt="Wind tunnel simulation" width="300" height="200" /></div> |
+| <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/assets/media/fluid_tank.gif?raw=true" alt="Fluid Tank simulation" width="250" height="150" /></div> | <div align="center"><img src="https://github.com/inductiva/inductiva/blob/main/assets/media/openfoam/default_pressure_field.png?raw=true" alt="Wind tunnel simulation" width="300" height="200" /></div> |
 
 </div>
 
@@ -170,7 +170,7 @@ Users can prepare several simulations and launch them all together in parallel. 
 import inductiva
 
 vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
-              "/resources/vehicle.obj"
+              "/assets/vehicle.obj"
 vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 
 task_list = []
@@ -198,7 +198,7 @@ Depending on your shell, you may encounter issues when trying to install optiona
 pip install --upgrade "inductiva[molecules_extra]"
 ```
 
-### Why can't I install Inductiva package? 
+### Why can't I install Inductiva package?
 If installing the package failed, you can retry it on a new Python virtual environment. A [virtual environment](https://docs.python.org/3/library/venv.html) allows you to have a fresh Python environment with isolated dependencies. In your shell, run:
 
 ```
