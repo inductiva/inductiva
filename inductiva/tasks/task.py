@@ -223,7 +223,7 @@ class Task:
         return self.get_info()["method_name"].split(".")[1]
 
     def get_storage_path(self) -> str:
-        return self.get_info()["storage_path_prefix"]
+        return self.get_info()["storage_path"]
 
     def get_output(
         self,
