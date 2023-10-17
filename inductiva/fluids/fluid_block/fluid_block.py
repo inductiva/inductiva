@@ -92,7 +92,7 @@ class FluidBlock(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        storage_parent_dir: Optional[str] = "",
+        storage_dir: Optional[str] = "",
         particle_radius: float = 0.02,
         simulation_time: float = 1,
         adaptive_time_step: bool = True,
@@ -115,7 +115,7 @@ class FluidBlock(scenarios.Scenario):
             time_step: Time step, in seconds.
             output_time_step: Time step between outputs, in seconds.
             run_async: Whether to run the simulation asynchronously.
-            storage_parent_dir: The parent directory where the simulation
+            storage_dir: The parent directory where the simulation
             results will be stored.
 
         """
@@ -133,7 +133,7 @@ class FluidBlock(scenarios.Scenario):
             simulator=simulator,
             machine_group=machine_group,
             run_async=run_async,
-            storage_parent_dir=storage_parent_dir,
+            storage_dir=storage_dir,
             sim_config_filename=self.get_config_filename(simulator))
 
         return task

@@ -22,7 +22,7 @@ class SIMSOPT(simulators.Simulator):
             sigma_scaling_factor: float,
             objectives_weights_filename: str,
             machine_group: Optional[resources.MachineGroup] = None,
-            storage_parent_dir: Optional[types.Path] = "",
+            storage_dir: Optional[types.Path] = "",
             run_async: bool = False) -> tasks.Task:
         """Run the simulation.
 
@@ -51,7 +51,7 @@ class SIMSOPT(simulators.Simulator):
             objectives_weights_filename: Name of the file with the weights for
               each objective function used in the construction of the total
               objective.
-            storage_parent_dir: Directory for storing results.
+            storage_dir: Directory for storing results.
             other arguments: See the documentation of the base class.
         """
         return super().run(
@@ -66,4 +66,4 @@ class SIMSOPT(simulators.Simulator):
             num_samples=num_samples,
             sigma_scaling_factor=sigma_scaling_factor,
             objectives_weights_filename=objectives_weights_filename,
-            storage_parent_dir=storage_parent_dir)
+            storage_dir=storage_dir)

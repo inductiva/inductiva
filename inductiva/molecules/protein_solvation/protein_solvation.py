@@ -41,7 +41,7 @@ class ProteinSolvation(scenarios.Scenario):
             simulator: simulators.Simulator = simulators.GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
-            storage_parent_dir: Optional[types.Path] = "",
+            storage_dir: Optional[types.Path] = "",
             simulation_time_ns: float = 10,  # ns
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
@@ -54,7 +54,7 @@ class ProteinSolvation(scenarios.Scenario):
             simulator: The simulator to use for the simulation.
             machine_group: The machine group o use for the simulation.
             run_async: Whether to run the simulation asynchronously.
-            storage_parent_dir: The parent directory for storing simulation
+            storage_dir: The parent directory for storing simulation
             results.
             simulation_time_ns: The simulation time in ns.
             output_timestep_ps: The output timestep in ps.
@@ -92,7 +92,7 @@ class ProteinSolvation(scenarios.Scenario):
                                 machine_group=machine_group,
                                 commands=commands,
                                 run_async=run_async,
-                                storage_parent_dir=storage_parent_dir)
+                                storage_dir=storage_dir)
 
         return task
 

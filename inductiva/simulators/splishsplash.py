@@ -18,7 +18,7 @@ class SplishSplash(Simulator):
         sim_config_filename: str,
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        storage_parent_dir: Optional[types.Path] = "",
+        storage_dir: Optional[types.Path] = "",
         particle_radius: float = 0.025,
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
@@ -28,7 +28,7 @@ class SplishSplash(Simulator):
             sim_config_filename: Name of the simulation configuration file.
             machine_group: Optional machine group to run the simulation on.
             run_async: If True, the simulation will run asynchronously.
-            storage_parent_dir: Directory for storing simulation results.
+            storage_dir: Directory for storing simulation results.
             particle_radius: Radius of the particles in the simulation.
         Returns:
             Task object representing the simulation task.
@@ -38,6 +38,6 @@ class SplishSplash(Simulator):
             machine_group=machine_group,
             input_filename=sim_config_filename,
             run_async=run_async,
-            storage_parent_dir=storage_parent_dir,
+            storage_dir=storage_dir,
             particle_radius=particle_radius,
         )

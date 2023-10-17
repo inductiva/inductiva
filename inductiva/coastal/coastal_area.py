@@ -92,7 +92,7 @@ class CoastalArea(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.SWASH(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        storage_parent_dir: Optional[str] = "",
+        storage_dir: Optional[str] = "",
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
@@ -104,7 +104,7 @@ class CoastalArea(scenarios.Scenario):
             Default is SWASH.
             machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
-            storage_parent_dir: The parent directory where simulation 
+            storage_dir: The parent directory where simulation 
             results will be stored. 
             simulation_time: The total simulation time, in seconds.
             time_step: The time step, in seconds. 
@@ -123,7 +123,7 @@ class CoastalArea(scenarios.Scenario):
             simulator,
             machine_group=machine_group,
             run_async=run_async,
-            storage_parent_dir=storage_parent_dir,
+            storage_dir=storage_dir,
             sim_config_filename=SWASH_CONFIG_FILENAME,
         )
 

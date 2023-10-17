@@ -237,7 +237,7 @@ class StellaratorCoils(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.SIMSOPT(),
         machine_group: typing.Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        storage_parent_dir: typing.Optional[types.Path] = "",
+        storage_dir: typing.Optional[types.Path] = "",
         plasma_surface_filepath: typing.Optional[types.Path] = None,
         num_iterations: int = 1,
         num_samples: int = 1,
@@ -294,7 +294,7 @@ class StellaratorCoils(scenarios.Scenario):
                                 "arclength_variation": 5e-03,
                                 "curvature": 3e-04
                             }
-            storage_parent_dir: Parent directory where the simulation results 
+            storage_dir: Parent directory where the simulation results 
               will be stored.
                   
         """
@@ -329,7 +329,7 @@ class StellaratorCoils(scenarios.Scenario):
             simulator,
             machine_group=machine_group,
             run_async=run_async,
-            storage_parent_dir=storage_parent_dir,
+            storage_dir=storage_dir,
             coil_coefficients_filename=SIMSOPT_COIL_COEFFICIENTS_FILENAME,
             coil_currents_filename=SIMSOPT_COIL_CURRENTS_FILENAME,
             plasma_surface_filename=SIMSOPT_PLASMA_SURFACE_FILENAME,

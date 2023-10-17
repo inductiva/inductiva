@@ -18,7 +18,7 @@ class GROMACS(simulators.Simulator):
         commands: List[dict],
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        storage_parent_dir: Optional[types.Path] = "",
+        storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run a list of GROMACS commands.
 
@@ -27,7 +27,7 @@ class GROMACS(simulators.Simulator):
             commands: List of commands to run using the GROMACS simulator.
             machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
-            storage_parent_dir: Parent directory for storing simulation 
+            storage_dir: Parent directory for storing simulation 
                                results.
         """
 
@@ -35,4 +35,4 @@ class GROMACS(simulators.Simulator):
                            machine_group=machine_group,
                            commands=commands,
                            run_async=run_async,
-                           storage_parent_dir=storage_parent_dir)
+                           storage_dir=storage_dir)

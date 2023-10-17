@@ -41,7 +41,7 @@ class Scenario(ABC):
         simulator: Simulator,
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
-        storage_parent_dir: Optional[types.Path] = "",
+        storage_dir: Optional[types.Path] = "",
         **kwargs,
     ):
         """Simulates the scenario synchronously."""
@@ -54,6 +54,6 @@ class Scenario(ABC):
                 input_dir,
                 machine_group=machine_group,
                 run_async=run_async,
-                storage_parent_dir=storage_parent_dir,
+                storage_dir=storage_dir,
                 **kwargs,
             )
