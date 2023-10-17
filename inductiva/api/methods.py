@@ -426,7 +426,7 @@ def invoke_async_api(method_name: str,
         original_params=params,
         type_annotations=type_annotations,
     )
-
+    print(storage_path_prefix)
     task_request = TaskRequest(method=method_name,
                                params=request_params,
                                resource_pool=resource_pool_id,
