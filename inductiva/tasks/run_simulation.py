@@ -11,6 +11,7 @@ def run_simulation(
     input_dir: pathlib.Path,
     machine_group: Optional[resources.MachineGroup] = None,
     run_async: bool = False,
+    storage_dir: Optional[pathlib.Path] = "",
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -30,7 +31,8 @@ def run_simulation(
     task_id = methods.invoke_async_api(api_method_name,
                                        params,
                                        type_annotations,
-                                       resource_pool_id=resource_pool_id)
+                                       resource_pool_id=resource_pool_id,
+                                       storage_path_prefix=storage_dir)
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
         raise RuntimeError(

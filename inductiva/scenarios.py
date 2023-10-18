@@ -5,8 +5,7 @@ import io
 import tempfile
 from typing import Optional, Union
 
-from inductiva import resources
-from inductiva.types import Path
+from inductiva import resources, types
 from inductiva.simulators import Simulator
 import json
 
@@ -16,7 +15,7 @@ class Scenario(ABC):
     valid_simulators = []
 
     @abstractmethod
-    def create_input_files(self, simulator: Simulator, input_dir: Path):
+    def create_input_files(self, simulator: Simulator, input_dir: types.Path):
         """To be implemented in subclasses."""
         pass
 
@@ -42,6 +41,7 @@ class Scenario(ABC):
         simulator: Simulator,
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
+        storage_dir: Optional[types.Path] = "",
         **kwargs,
     ):
         """Simulates the scenario synchronously."""
@@ -54,5 +54,6 @@ class Scenario(ABC):
                 input_dir,
                 machine_group=machine_group,
                 run_async=run_async,
+                storage_dir=storage_dir,
                 **kwargs,
             )
