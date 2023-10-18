@@ -211,18 +211,14 @@ class TaskRequest(schemas.DictSchema):
                         **kwargs,
                     )
 
-            class storage_path_prefix(schemas.StrSchema):
-
-                class MetaOapg:
-                    regex = [{
-                        'pattern':
-                            r'^([\w\-=?!.]+(\/[\w\-=?!.]+)*/?|)$',  # noqa: E501
-                    }]
-
+            storage_path_prefix = schemas.StrSchema
             __annotations__ = {
                 "method": method,
                 "params": params,
                 "resource_pool": resource_pool,
+                "client_version": client_version,
+                "scenario_name": scenario_name,
+                "storage_path_prefix": storage_path_prefix,
             }
 
     method: MetaOapg.properties.method
@@ -247,6 +243,24 @@ class TaskRequest(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["client_version"]
+    ) -> MetaOapg.properties.client_version:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["scenario_name"]
+    ) -> MetaOapg.properties.scenario_name:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["storage_path_prefix"]
+    ) -> MetaOapg.properties.storage_path_prefix:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -254,6 +268,9 @@ class TaskRequest(schemas.DictSchema):
         "method",
         "params",
         "resource_pool",
+        "client_version",
+        "scenario_name",
+        "storage_path_prefix",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -278,6 +295,24 @@ class TaskRequest(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["client_version"]
+    ) -> typing.Union[MetaOapg.properties.client_version, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["scenario_name"]
+    ) -> typing.Union[MetaOapg.properties.scenario_name, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["storage_path_prefix"]
+    ) -> typing.Union[MetaOapg.properties.storage_path_prefix, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -286,6 +321,9 @@ class TaskRequest(schemas.DictSchema):
         "method",
         "params",
         "resource_pool",
+        "client_version",
+        "scenario_name",
+        "storage_path_prefix",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -310,6 +348,21 @@ class TaskRequest(schemas.DictSchema):
                                     bool, None, list, tuple, bytes, io.FileIO,
                                     io.BufferedReader,
                                     schemas.Unset] = schemas.unset,
+        client_version: typing.Union[MetaOapg.properties.client_version, dict,
+                                     frozendict.frozendict, str, date, datetime,
+                                     uuid.UUID, int, float, decimal.Decimal,
+                                     bool, None, list, tuple, bytes, io.FileIO,
+                                     io.BufferedReader,
+                                     schemas.Unset] = schemas.unset,
+        scenario_name: typing.Union[MetaOapg.properties.scenario_name, dict,
+                                    frozendict.frozendict, str, date, datetime,
+                                    uuid.UUID, int, float, decimal.Decimal,
+                                    bool, None, list, tuple, bytes, io.FileIO,
+                                    io.BufferedReader,
+                                    schemas.Unset] = schemas.unset,
+        storage_path_prefix: typing.Union[
+            MetaOapg.properties.storage_path_prefix, str,
+            schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -322,6 +375,9 @@ class TaskRequest(schemas.DictSchema):
             method=method,
             params=params,
             resource_pool=resource_pool,
+            client_version=client_version,
+            scenario_name=scenario_name,
+            storage_path_prefix=storage_path_prefix,
             _configuration=_configuration,
             **kwargs,
         )
