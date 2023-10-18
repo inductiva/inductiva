@@ -341,7 +341,7 @@ class Task(schemas.DictSchema):
                         **kwargs,
                     )
 
-            class storage_path_prefix(
+            class storage_path(
                     schemas.ComposedSchema,):
 
                 class MetaOapg:
@@ -390,7 +390,7 @@ class Task(schemas.DictSchema):
                                            datetime, uuid.UUID, int, float,
                                            decimal.Decimal, None, list, tuple,
                                            bytes],
-                ) -> 'storage_path_prefix':
+                ) -> 'storage_path':
                     return super().__new__(
                         cls,
                         *_args,
@@ -407,7 +407,7 @@ class Task(schemas.DictSchema):
                 "start_time": start_time,
                 "end_time": end_time,
                 "executer": executer,
-                "storage_path_prefix": storage_path_prefix,
+                "storage_path": storage_path,
             }
 
     method_name: MetaOapg.properties.method_name
@@ -464,8 +464,8 @@ class Task(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["storage_path_prefix"]
-    ) -> MetaOapg.properties.storage_path_prefix:
+        self, name: typing_extensions.Literal["storage_path"]
+    ) -> MetaOapg.properties.storage_path:
         ...
 
     @typing.overload
@@ -481,7 +481,7 @@ class Task(schemas.DictSchema):
         "start_time",
         "end_time",
         "executer",
-        "storage_path_prefix",
+        "storage_path",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -536,8 +536,8 @@ class Task(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["storage_path_prefix"]
-    ) -> typing.Union[MetaOapg.properties.storage_path_prefix, schemas.Unset]:
+        self, name: typing_extensions.Literal["storage_path"]
+    ) -> typing.Union[MetaOapg.properties.storage_path, schemas.Unset]:
         ...
 
     @typing.overload
@@ -555,7 +555,7 @@ class Task(schemas.DictSchema):
         "start_time",
         "end_time",
         "executer",
-        "storage_path_prefix",
+        "storage_path",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -605,11 +605,12 @@ class Task(schemas.DictSchema):
                                None, list, tuple, bytes, io.FileIO,
                                io.BufferedReader,
                                schemas.Unset] = schemas.unset,
-        storage_path_prefix: typing.Union[
-            MetaOapg.properties.storage_path_prefix, dict,
-            frozendict.frozendict, str, date, datetime, uuid.UUID, int, float,
-            decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO,
-            io.BufferedReader, schemas.Unset] = schemas.unset,
+        storage_path: typing.Union[MetaOapg.properties.storage_path, dict,
+                                   frozendict.frozendict, str, date, datetime,
+                                   uuid.UUID, int, float, decimal.Decimal, bool,
+                                   None, list, tuple, bytes, io.FileIO,
+                                   io.BufferedReader,
+                                   schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -627,7 +628,7 @@ class Task(schemas.DictSchema):
             start_time=start_time,
             end_time=end_time,
             executer=executer,
-            storage_path_prefix=storage_path_prefix,
+            storage_path=storage_path,
             _configuration=_configuration,
             **kwargs,
         )

@@ -211,14 +211,7 @@ class TaskRequest(schemas.DictSchema):
                         **kwargs,
                     )
 
-            class storage_path_prefix(schemas.StrSchema):
-
-                class MetaOapg:
-                    regex = [{
-                        'pattern':
-                            r'^([\w\-=?!.]+(\/[\w\-=?!.]+)*/?|)$',  # noqa: E501
-                    }]
-
+            storage_path_prefix = schemas.StrSchema
             __annotations__ = {
                 "method": method,
                 "params": params,
