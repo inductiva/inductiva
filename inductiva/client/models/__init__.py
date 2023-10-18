@@ -13,8 +13,8 @@
 
 from inductiva.client.model.body_upload_task_input import BodyUploadTaskInput
 from inductiva.client.model.executer import Executer
-from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
-from inductiva.client.model.executer_tracker_register_info import ExecuterTrackerRegisterInfo
+from inductiva.client.model.executer_create import ExecuterCreate
+from inductiva.client.model.executer_id import ExecuterID
 from inductiva.client.model.file_info import FileInfo
 from inductiva.client.model.g_cloud_executer import GCloudExecuter
 from inductiva.client.model.g_cloud_host_info import GCloudHostInfo
@@ -28,7 +28,8 @@ from inductiva.client.model.task import Task
 from inductiva.client.model.task_request import TaskRequest
 from inductiva.client.model.task_status import TaskStatus
 from inductiva.client.model.task_status_code import TaskStatusCode
+from inductiva.client.model.task_with_user_info import TaskWithUserInfo
 from inductiva.client.model.user import User
 from inductiva.client.model.user_create import UserCreate
-from inductiva.client.model.user_type import UserType
+from inductiva.client.model.username import Username
 from inductiva.client.model.validation_error import ValidationError

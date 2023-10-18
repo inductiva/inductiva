@@ -25,22 +25,22 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.executer_tracker_register_info import ExecuterTrackerRegisterInfo
-from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
+from inductiva.client.model.executer_create import ExecuterCreate
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.executer_id import ExecuterID
 
 # body param
-SchemaForRequestBodyApplicationJson = ExecuterTrackerRegisterInfo
+SchemaForRequestBodyApplicationJson = ExecuterCreate
 
 
-request_body_executer_tracker_register_info = api_client.RequestBody(
+request_body_executer_create = api_client.RequestBody(
     content={
         'application/json': api_client.MediaType(
             schema=SchemaForRequestBodyApplicationJson),
     },
     required=True,
 )
-SchemaFor202ResponseBodyApplicationJson = ExecuterTrackerAPIConnectionInfo
+SchemaFor202ResponseBodyApplicationJson = ExecuterID
 
 
 @dataclass
@@ -164,7 +164,7 @@ class BaseApi(api_client.Api):
                 'The required body parameter has an invalid value of: unset. Set a valid value instead')
         _fields = None
         _body = None
-        serialized_data = request_body_executer_tracker_register_info.serialize(body, content_type)
+        serialized_data = request_body_executer_create.serialize(body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
             _fields = serialized_data['fields']
