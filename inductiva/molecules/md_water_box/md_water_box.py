@@ -5,7 +5,7 @@ import os
 import shutil
 import io
 
-from inductiva import tasks, resources, simulators, scenarios, utils
+from inductiva import tasks, types, resources, simulators, scenarios, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "md_water_box")
@@ -44,6 +44,7 @@ class MDWaterBox(scenarios.Scenario):
             simulator: simulators.Simulator = simulators.GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
             run_async: bool = False,
+            storage_dir: Optional[types.Path] = "",
             simulation_time_ns: float = 1,  # ns
             output_timestep_ps: float = 1,  # ps
             integrator: Literal["md", "sd", "bd"] = "md",
@@ -51,7 +52,12 @@ class MDWaterBox(scenarios.Scenario):
         """Simulate the water box scenario using molecular dynamics.
 
         Args:
+            simulator: The Simulator to use for the simulation. 
+            Gromacs is the only supported for now.
             machine_group: The MachineGroup to use for the simulation.
+            run_async: Whether to run the simulation asynchronously.
+            storage_dir: The parent directory for storing simulation
+            results.
             simulation_time_ns: The simulation time in ns.
             output_timestep_ps: The output timestep in ps.
             integrator: The integrator to use for the simulation. Options:
@@ -66,7 +72,6 @@ class MDWaterBox(scenarios.Scenario):
             documentation at
             https://manual.gromacs.org/current/user-guide/mdp-options.html.
             n_steps_min: Number of steps for energy minimization.
-            run_async: Whether to run the simulation asynchronously.
         """
         simulator.override_api_method_prefix("mdwater_box")
 
@@ -84,6 +89,7 @@ class MDWaterBox(scenarios.Scenario):
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 commands=commands,
+                                storage_dir=storage_dir,
                                 run_async=run_async)
 
         return task

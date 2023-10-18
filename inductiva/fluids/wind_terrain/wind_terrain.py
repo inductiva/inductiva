@@ -102,6 +102,7 @@ class WindOverTerrain(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
+        storage_dir: Optional[str] = "",
         n_cores: int = 2,
         num_iterations: int = 100,
     ) -> inductiva.tasks.Task:
@@ -114,6 +115,8 @@ class WindOverTerrain(scenarios.Scenario):
             num_iterations: Number of iterations to run the simulation.
             n_cores: Number of cores to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
+            storage_dir: The parent directory where simulation 
+            results will be stored.
         """
         simulator.override_api_method_prefix("wind_terrain")
 
@@ -125,6 +128,7 @@ class WindOverTerrain(scenarios.Scenario):
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 run_async=run_async,
+                                storage_dir=storage_dir,
                                 n_cores=n_cores,
                                 commands=commands)
 

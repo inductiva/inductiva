@@ -258,18 +258,18 @@ def invoke_api_from_fn_ptr(
     function_ptr,
     output_dir: Optional[Path] = None,
     resource_pool_id: Optional[UUID] = None,
+    storage_path_prefix: Optional[str] = "",
 ):
     """Perform a task remotely defined by a function pointer."""
     type_annotations = get_type_annotations(function_ptr)
     method_name = get_method_name(function_ptr)
-    return invoke_api(
-        method_name,
-        params,
-        output_dir=output_dir,
-        type_annotations=type_annotations,
-        return_type=type_annotations["return"],
-        resource_pool_id=resource_pool_id,
-    )
+    return invoke_api(method_name,
+                      params,
+                      output_dir=output_dir,
+                      type_annotations=type_annotations,
+                      return_type=type_annotations["return"],
+                      resource_pool_id=resource_pool_id,
+                      storage_path_prefix=storage_path_prefix)
 
 
 def submit_task(api_instance, task_request, params, type_annotations):
@@ -303,7 +303,8 @@ def invoke_api(method_name: str,
                type_annotations: Dict[Any, Type],
                output_dir: Optional[Path] = None,
                return_type: Type = pathlib.Path,
-               resource_pool_id: Optional[UUID] = None):
+               resource_pool_id: Optional[UUID] = None,
+               storage_path_prefix: Optional[str] = ""):
     """Perform a task remotely via Inductiva's Web API.
 
     Currently, the implementation handles the whole flow of the task execution,
@@ -325,10 +326,14 @@ def invoke_api(method_name: str,
             type annotations of `function_ptr`.
 
     Args:
-        request: Request sent to the API for validation.
-        input_dir: Directory containing the input files to be uploaded.
+        method_name: Name of the method to be invoked.
+        params: Parameters to be passed to the method.
+        type_annotations: Type annotations of the method.
         output_dir: Directory where to place the output files.
         return_type: Type of the return value of the task, for unpacking.
+        resource_pool_id: ID of the resource pool where the task 
+        will be executed.
+        storage_path_prefix: Prefix for the storage path of the user.
 
     Return:
         Returns the output of the task.
@@ -340,11 +345,10 @@ def invoke_api(method_name: str,
         type_annotations=type_annotations,
     )
 
-    task_request = TaskRequest(
-        method=method_name,
-        params=request_params,
-        resource_pool=resource_pool_id,
-    )
+    task_request = TaskRequest(method=method_name,
+                               params=request_params,
+                               resource_pool=resource_pool_id,
+                               storage_path_prefix=storage_path_prefix)
 
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
@@ -385,7 +389,8 @@ def invoke_api(method_name: str,
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
-                     resource_pool_id: Optional[UUID] = None) -> str:
+                     resource_pool_id: Optional[UUID] = None,
+                     storage_path_prefix: Optional[str] = "") -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -405,8 +410,11 @@ def invoke_async_api(method_name: str,
             become available.
 
     Args:
-        request: Request sent to the API for validation.
-        input_dir: Directory containing the input files to be uploaded.
+        method_name: Name of the method to be invoked.
+        params: Parameters to be passed to the method.
+        type_annotations: Type annotations for the parameters.
+        resource_pool_id: Optional ID of the resource pool.
+        storage_path_prefix: Optional storage path prefix.
 
     Return:
         Returns the task id.
@@ -418,12 +426,11 @@ def invoke_async_api(method_name: str,
         original_params=params,
         type_annotations=type_annotations,
     )
-
-    task_request = TaskRequest(
-        method=method_name,
-        params=request_params,
-        resource_pool=resource_pool_id,
-    )
+    print(storage_path_prefix)
+    task_request = TaskRequest(method=method_name,
+                               params=request_params,
+                               resource_pool=resource_pool_id,
+                               storage_path_prefix=storage_path_prefix)
 
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)

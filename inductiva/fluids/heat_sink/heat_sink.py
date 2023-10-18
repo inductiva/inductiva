@@ -96,6 +96,7 @@ class HeatSink(scenarios.Scenario):
         simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
         run_async: bool = False,
+        storage_dir: Optional[str] = "",
         simulation_time=300,
         output_time_step=10,
     ) -> tasks.Task:
@@ -108,6 +109,8 @@ class HeatSink(scenarios.Scenario):
               seconds.
             machine_group: The machine group to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
+            storage_dir: The parent directory where simulation results 
+            will be stored.
         """
         simulator.override_api_method_prefix("heat_sink")
 
@@ -120,6 +123,7 @@ class HeatSink(scenarios.Scenario):
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 run_async=run_async,
+                                storage_dir=storage_dir,
                                 n_cores=1,
                                 commands=commands)
 
