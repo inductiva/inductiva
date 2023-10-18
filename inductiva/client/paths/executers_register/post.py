@@ -24,23 +24,23 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.executer_create import ExecuterCreate
+from inductiva.client.model.executer_tracker_register_info import ExecuterTrackerRegisterInfo
+from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
-from inductiva.client.model.executer_id import ExecuterID
 
 from . import path
 
 # body param
-SchemaForRequestBodyApplicationJson = ExecuterCreate
+SchemaForRequestBodyApplicationJson = ExecuterTrackerRegisterInfo
 
-request_body_executer_create = api_client.RequestBody(
+request_body_executer_tracker_register_info = api_client.RequestBody(
     content={
         'application/json':
             api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
     },
     required=True,
 )
-SchemaFor202ResponseBodyApplicationJson = ExecuterID
+SchemaFor202ResponseBodyApplicationJson = ExecuterTrackerAPIConnectionInfo
 
 
 @dataclass
@@ -183,7 +183,7 @@ class BaseApi(api_client.Api):
             )
         _fields = None
         _body = None
-        serialized_data = request_body_executer_create.serialize(
+        serialized_data = request_body_executer_tracker_register_info.serialize(
             body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:

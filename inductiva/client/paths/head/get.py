@@ -1,5 +1,4 @@
 # coding: utf-8
-
 """
 
 
@@ -25,9 +24,53 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.user import User
+from inductiva.client.model.http_validation_error import HTTPValidationError
 
-SchemaFor200ResponseBodyApplicationJson = User
+from . import path
+
+# Query params
+NLinesSchema = schemas.IntSchema
+PathSchema = schemas.StrSchema
+RequestRequiredQueryParams = typing_extensions.TypedDict(
+    'RequestRequiredQueryParams', {
+        'path': typing.Union[
+            PathSchema,
+            str,
+        ],
+    })
+RequestOptionalQueryParams = typing_extensions.TypedDict(
+    'RequestOptionalQueryParams', {
+        'n_lines': typing.Union[
+            NLinesSchema,
+            decimal.Decimal,
+            int,
+        ],
+    },
+    total=False)
+
+
+class RequestQueryParams(RequestRequiredQueryParams,
+                         RequestOptionalQueryParams):
+    pass
+
+
+request_query_n_lines = api_client.QueryParameter(
+    name="n_lines",
+    style=api_client.ParameterStyle.FORM,
+    schema=NLinesSchema,
+    explode=True,
+)
+request_query_path = api_client.QueryParameter(
+    name="path",
+    style=api_client.ParameterStyle.FORM,
+    schema=PathSchema,
+    required=True,
+    explode=True,
+)
+_auth = [
+    'APIKeyHeader',
+]
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass
@@ -42,62 +85,110 @@ class ApiResponseFor200(api_client.ApiResponse):
 _response_for_200 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor200ResponseBodyApplicationJson),
+        'application/json':
+            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
+                                ),
     },
 )
-_all_accept_content_types = (
-    'application/json',
+SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
+
+
+@dataclass
+class ApiResponseFor422(api_client.ApiResponse):
+    response: urllib3.HTTPResponse
+    body: typing.Union[
+        SchemaFor422ResponseBodyApplicationJson,
+    ]
+    headers: schemas.Unset = schemas.unset
+
+
+_response_for_422 = api_client.OpenApiResponse(
+    response_cls=ApiResponseFor422,
+    content={
+        'application/json':
+            api_client.MediaType(schema=SchemaFor422ResponseBodyApplicationJson
+                                ),
+    },
 )
+_status_code_to_response = {
+    '200': _response_for_200,
+    '422': _response_for_422,
+}
+_all_accept_content_types = ('application/json',)
 
 
 class BaseApi(api_client.Api):
+
     @typing.overload
-    def _get_authenticated_user_oapg(
+    def _get_file_head_oapg(
         self,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
-    def _get_authenticated_user_oapg(
+    def _get_file_head_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
-    def _get_authenticated_user_oapg(
+    def _get_file_head_oapg(
         self,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
-    def _get_authenticated_user_oapg(
+    def _get_file_head_oapg(
         self,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         """
-        Get Authenticated User
+        Get File Head
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
+        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         used_path = path.value
+
+        prefix_separator_iterator = None
+        for parameter in (
+                request_query_n_lines,
+                request_query_path,
+        ):
+            parameter_data = query_params.get(parameter.name, schemas.unset)
+            if parameter_data is schemas.unset:
+                continue
+            if prefix_separator_iterator is None:
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
+                )
+            serialized_data = parameter.serialize(parameter_data,
+                                                  prefix_separator_iterator)
+            for serialized_value in serialized_data.values():
+                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -115,72 +206,81 @@ class BaseApi(api_client.Api):
         )
 
         if skip_deserialization:
-            api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+            api_response = api_client.ApiResponseWithoutDeserialization(
+                response=response)
         else:
-            response_for_status = _status_code_to_response.get(str(response.status))
+            response_for_status = _status_code_to_response.get(
+                str(response.status))
             if response_for_status:
-                api_response = response_for_status.deserialize(response, self.api_client.configuration)
+                api_response = response_for_status.deserialize(
+                    response, self.api_client.configuration)
             else:
-                api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+                api_response = api_client.ApiResponseWithoutDeserialization(
+                    response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(
-                status=response.status,
-                reason=response.reason,
-                api_response=api_response
-            )
+            raise exceptions.ApiException(status=response.status,
+                                          reason=response.reason,
+                                          api_response=api_response)
 
         return api_response
 
 
-class GetAuthenticatedUser(BaseApi):
+class GetFileHead(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_authenticated_user(
+    def get_file_head(
         self,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
-    def get_authenticated_user(
+    def get_file_head(
         self,
         skip_deserialization: typing_extensions.Literal[True],
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
-    def get_authenticated_user(
+    def get_file_head(
         self,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
-    def get_authenticated_user(
+    def get_file_head(
         self,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_authenticated_user_oapg(
+        return self._get_file_head_oapg(
+            query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
+            skip_deserialization=skip_deserialization)
 
 
 class ApiForget(BaseApi):
@@ -189,47 +289,52 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def get(
         self,
         skip_deserialization: typing_extensions.Literal[True],
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def get(
         self,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def get(
         self,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_authenticated_user_oapg(
+        return self._get_file_head_oapg(
+            query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
-
-
+            skip_deserialization=skip_deserialization)
