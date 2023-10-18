@@ -32,7 +32,8 @@ def listdir(path: str = "/",
         descending order.
 
     Returns:
-        list of dict: List of dictionaries with content's size, name, and creation time.
+        list of dict: List of dictionaries with content's size, name, 
+        and creation time.
 
     This function prints a table with the storage content information. Example:
         Name            Size            Creation Time
