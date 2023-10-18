@@ -415,7 +415,7 @@ class Task:
         """Returns tail of stdout.txt file for current task
 
         Calls the get_file_tail function, specifying the path of the
-        stdout_live.txt file, that contains the live version of the
+        stdout_live.txt file, that contains the most recent version of the
         stdout.txt file. The function returns the last n_lines in a list
         of lines.
 
@@ -438,7 +438,7 @@ class Task:
 
         return api_response.body
 
-    def get_resources(self, n_lines: int = 10):
+    def get_resource_usage(self, n_lines: int = 10):
         """Returns last values of computation resources for current task
 
         Calls the get_file_tail function, specifying the path of the
