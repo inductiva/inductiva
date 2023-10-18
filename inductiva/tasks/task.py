@@ -427,9 +427,7 @@ class Task:
         Returns:
             A list of strings, each string being a line from the stdout."""
 
-        #This path needs to be updated with the self.parent_dir
-        # when that feature is added to tasks
-        path = os.path.join(self.id, "stdout_live.txt")
+        path = os.path.join(self.get_storage_path(), "stdout_live.txt")
         api_response = self._api_default.get_file_tail(
             query_params={
                 "path": path,
@@ -438,6 +436,9 @@ class Task:
             stream=False,
             skip_deserialization=False,
         )
+
+        for line in api_response.body:
+            print(line)
 
         return api_response.body
 
@@ -455,9 +456,7 @@ class Task:
         Returns:
             List of lines from the end of the resource_usage file."""
 
-        #This path needs to be updated with the self.parent_dir
-        # when that feature is added to tasks
-        path = os.path.join(self.id, "resource_usage.txt")
+        path = os.path.join(self.get_storage_path(), "resource_usage.txt")
         api_response = self._api_default.get_file_tail(
             query_params={
                 "path": path,
