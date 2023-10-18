@@ -74,3 +74,7 @@ class TaskStatusCode(
     @schemas.classproperty
     def EXECUTERFAILED(cls):
         return cls("executer-failed")
+    
+    @schemas.classproperty
+    def ZOMBIE(cls):
+        return cls("zombie")
