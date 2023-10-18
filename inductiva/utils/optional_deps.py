@@ -30,7 +30,7 @@ def _needs_optional_deps(module_names, extra_msg, func):
         for module_name in module_names:
             try:
                 importlib.import_module(module_name)
-            except ImportError:
+            except ModuleNotFoundError:
                 missing_imports.append(module_name)
 
         if missing_imports:
