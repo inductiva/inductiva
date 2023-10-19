@@ -7,9 +7,9 @@ from inductiva import types, tasks, resources, simulators
 class OpenFOAM(simulators.Simulator):
     """Class to invoke a generic OpenFOAM simulation on the API."""
 
-    def __init__(self):
+    def __init__(self, version: str = "foundation"):
         super().__init__()
-        self.api_method_name = "fvm.openfoam.run_simulation"
+        self.api_method_name = f"fvm.openfoam_{version}.run_simulation"
 
     def run(self,
             input_dir: types.Path,
