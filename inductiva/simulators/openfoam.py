@@ -5,7 +5,12 @@ from inductiva import types, tasks, resources, simulators
 
 
 class OpenFOAM(simulators.Simulator):
-    """Class to invoke a generic OpenFOAM simulation on the API."""
+    """Class to invoke a generic OpenFOAM simulation on the API.
+    
+    Users can choose between the ESI or the Foundation version
+    by selecting the version on the initiliasation. Be aware, that
+    some input files may only work for a specific version.
+    """
 
     def __init__(self, version: str = "foundation"):
         super().__init__()
