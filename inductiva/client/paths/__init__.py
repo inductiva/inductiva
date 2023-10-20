@@ -32,4 +32,3 @@ class PathValues(str, enum.Enum):
     GCP_INSTANCES_GROUP_NAME = "/gcp_instances/group/{name}"
     USERS = "/users"
     TAIL = "/tail"
-    HEAD = "/head"

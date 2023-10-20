@@ -27,7 +27,6 @@ from inductiva.client.apis.paths.gcp_instances_groups import GcpInstancesGroups
 from inductiva.client.apis.paths.gcp_instances_group_name import GcpInstancesGroupName
 from inductiva.client.apis.paths.users import Users
 from inductiva.client.apis.paths.tail import Tail
-from inductiva.client.apis.paths.head import Head
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -57,7 +56,6 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.GCP_INSTANCES_GROUP_NAME: GcpInstancesGroupName,
         PathValues.USERS: Users,
         PathValues.TAIL: Tail,
-        PathValues.HEAD: Head,
     })
 
 path_to_api = PathToApi({
@@ -87,5 +85,4 @@ path_to_api = PathToApi({
     PathValues.GCP_INSTANCES_GROUP_NAME: GcpInstancesGroupName,
     PathValues.USERS: Users,
     PathValues.TAIL: Tail,
-    PathValues.HEAD: Head,
 })
