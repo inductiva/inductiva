@@ -11,8 +11,14 @@ class OpenFOAM(simulators.Simulator):
     by selecting the version on the initiliasation. Be aware, that
     some input files may only work for a specific version.
     """
+    allowed_openfoam_versions = ["foundation", "esi"]
 
     def __init__(self, version: str = "foundation"):
+        if version not in allowed_openfoam_versions:
+            raise ValueError(
+                f"Version not currently supported."
+                f"Available: {", ".join(allowed_openfoam_versions)}.")
+
         super().__init__()
         self.api_method_name = f"fvm.openfoam_{version}.run_simulation"
 
