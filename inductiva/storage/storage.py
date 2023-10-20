@@ -17,7 +17,7 @@ def get_space_used():
         raise api_exception
 
 
-def listdir(path: str = "/",
+def listdir(path: str = None,
             max_results: int = 10,
             order_by: Literal["size", "creation_time"] = "size",
             sort_order: Literal["asc", "desc"] = "desc"):
@@ -48,7 +48,7 @@ def listdir(path: str = "/",
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
         contents = api.list_storage_contents({
-            "directory": path,
+            "dir_name": path,
             "max_results": max_results,
             "sort_by": order_by,
             "order": sort_order
