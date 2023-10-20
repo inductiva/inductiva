@@ -2,7 +2,7 @@
 import inductiva
 from inductiva.client.apis.tags import instance_api
 from inductiva.utils import format_utils
-from typing import Literal
+from typing import Literal, Optional
 
 
 def get_space_used():
@@ -17,7 +17,7 @@ def get_space_used():
         raise api_exception
 
 
-def listdir(path: str = None,
+def listdir(path: str = "/",
             max_results: int = 10,
             order_by: Literal["size", "creation_time"] = "size",
             sort_order: Literal["asc", "desc"] = "desc"):
@@ -47,12 +47,13 @@ def listdir(path: str = None,
     """
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
-        contents = api.list_storage_contents({
-            "dir_name": path,
-            "max_results": max_results,
-            "sort_by": order_by,
-            "order": sort_order
-        }).body
+        path_params = {"dir_name": path}
+        query_params = {"max_results":max_results,
+                        "sort_by": order_by, 
+                        "order":sort_order}
+
+        contents = api.list_storage_contents(path_params=path_params,
+                                             query_params=query_params).body
         all_contents = []
         for content_name, info in contents.items():
             size = info["size_bytes"]
