@@ -16,7 +16,7 @@ class OpenFOAM(simulators.Simulator):
     def __init__(self, version: str = "foundation"):
         if version not in allowed_openfoam_versions:
             raise ValueError(
-                f"Version not currently supported."
+                "Version not currently supported."
                 f"Available: {", ".join(allowed_openfoam_versions)}.")
 
         super().__init__()
