@@ -18,7 +18,7 @@ class OpenFOAM(simulators.Simulator):
         if version not in AVAILABLE_OPENFOAM_VERSIONS:
             raise ValueError(
                 "Version not currently supported."
-                "Available: %s.", ", ".join(AVAILABLE_OPENFOAM_VERSIONS))
+                "Available: %s." % ", ".join(AVAILABLE_OPENFOAM_VERSIONS))
 
         super().__init__()
         self.api_method_name = f"fvm.openfoam_{version}.run_simulation"
