@@ -3,13 +3,24 @@ from typing import Optional, List
 
 from inductiva import types, tasks, resources, simulators
 
+AVAILABLE_OPENFOAM_VERSIONS = ["foundation", "esi"]
+
 
 class OpenFOAM(simulators.Simulator):
-    """Class to invoke a generic OpenFOAM simulation on the API."""
+    """Class to invoke a generic OpenFOAM simulation on the API.
+    
+    Users can choose between the ESI or the Foundation version
+    by selecting the version on the initiliasation. Be aware, that
+    some input files may only work for a specific version.
+    """
 
-    def __init__(self):
+    def __init__(self, version: str = "foundation"):
+        if version not in AVAILABLE_OPENFOAM_VERSIONS:
+            raise ValueError("Version not currently supported."
+                             f"Available: {AVAILABLE_OPENFOAM_VERSIONS}")
+
         super().__init__()
-        self.api_method_name = "fvm.openfoam.run_simulation"
+        self.api_method_name = f"fvm.openfoam_{version}.run_simulation"
 
     def run(self,
             input_dir: types.Path,
