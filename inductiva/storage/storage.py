@@ -17,8 +17,8 @@ def get_space_used():
         raise api_exception
 
 
-def listdir(path = "/",
-            max_results: int = 3,
+def listdir(path="/",
+            max_results: int = 10,
             order_by: Literal["size", "creation_time"] = "size",
             sort_order: Literal["asc", "desc"] = "desc"):
     """List and display the contents of the user's storage bucket.
@@ -47,7 +47,7 @@ def listdir(path = "/",
     try:
         api = instance_api.InstanceApi(inductiva.api.get_client())
         contents = api.list_storage_contents({
-            "dir_name": path, 
+            "dir_name": path,
             "max_results": max_results,
             "sort_by": order_by,
             "order": sort_order
