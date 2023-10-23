@@ -411,3 +411,51 @@ class Task:
         machine_type = machine_info["vm_type"].split("/")[-1]
 
         return machine_type
+
+    def get_stdout(self, n_lines: int = 10):
+        """Returns tail of stdout.txt file for current task
+        Args:
+            n_lines: Number of lines to return from the end of the file.
+        Returns:
+            A list of strings, each string being a line from the stdout."""
+
+        api_response = self._api.get_stdout_tail(
+            path_params=self._get_path_params(),
+            query_params={
+                "n_lines": n_lines,
+            },
+            stream=False,
+            skip_deserialization=False,
+        )
+
+        for line in api_response.body:
+            print(line)
+
+        return api_response.body
+
+    def get_resources_usage(self, n_lines: int = 10):
+        """Returns tail of resources_usage.txt file for current task
+
+        Calls the get_file_tail function, specifying the path of the
+        resource_usage.txt file. This file is a .csv file with each line
+        corresponding to: register_time / memory_usage_percent /
+        cpu_usage_percent. The function returns the last n_lines in a list of
+        lines.
+        Args:
+            n_lines: Number of lines to return from the end of the file.
+        Returns:
+            A list of strings, each string being a line from the stdout."""
+
+        api_response = self._api.get_resources_tail(
+            path_params=self._get_path_params(),
+            query_params={
+                "n_lines": n_lines,
+            },
+            stream=False,
+            skip_deserialization=False,
+        )
+
+        for line in api_response.body:
+            print(line)
+
+        return api_response.body
