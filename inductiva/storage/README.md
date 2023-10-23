@@ -19,9 +19,9 @@ After determining the total storage space used, you may want to identify which d
 
 ```python
 import inductiva
-inductiva.storage.listdir(max_results=10, order_by="size", sort_order="desc")
+inductiva.storage.listdir(path = "/", max_results=10, order_by="size", sort_order="desc")
 ```
-This function generates a table displaying the storage directories: 
+This will enumerate the contents of the root directory and produce a table showcasing the storage directories: 
 
 ```markdown
 | Name   | Size       | Creation Time   |
@@ -30,6 +30,12 @@ This function generates a table displaying the storage directories:
 | 12345  | 374.85 KiB | 29 Sep, 14:13:10|
 | 1234567| 97.59 KiB  | 29 Sep, 14:13:24|
 | 123    | 0 B        | 29 Sep, 14:13:29|
+```
+To examine the contents of a specific folder, execute: 
+
+```python
+import inductiva
+inductiva.storage.listdir(path = "1234/", max_results=10, order_by="size", sort_order="desc")
 ```
 
 The `order_by` argument allows you to sort the table by size or creation date, while the `sort_order` argument determines whether the list is displayed in ascending or descending order. 
@@ -43,3 +49,4 @@ import inductiva
 inductiva.storage.rmdir(path="1234")
 ```
 Running the above code will permanently delete the directory named "1234" from your remote storage. Please note, this action is irreversible and the deleted directory cannot be restored.
+
