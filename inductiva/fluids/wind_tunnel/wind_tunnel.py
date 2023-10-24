@@ -96,13 +96,13 @@ class WindTunnel(scenarios.Scenario):
             self.params["domain"] = domain
 
     def simulate(
-        self,
-        simulator: simulators.Simulator = simulators.OpenFOAM(),
-        machine_group: Optional[resources.MachineGroup] = None,
-        object_path: Optional[types.Path] = None,
-        num_iterations: float = 100,
-        resolution: Literal["high", "medium",
-                            "low"] = "medium") -> tasks.Task:
+            self,
+            simulator: simulators.Simulator = simulators.OpenFOAM(),
+            machine_group: Optional[resources.MachineGroup] = None,
+            object_path: Optional[types.Path] = None,
+            num_iterations: float = 100,
+            resolution: Literal["high", "medium",
+                                "low"] = "medium") -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
 
         Args:
@@ -124,7 +124,7 @@ class WindTunnel(scenarios.Scenario):
         self.object_path = utils.files.resolve_path(object_path)
         self.params["num_iterations"] = num_iterations
         self.params["resolution"] = MeshResolution[resolution.upper()].value
-        
+
         commands = self.get_commands()
         task = super().simulate(simulator,
                                 machine_group=machine_group,
@@ -137,4 +137,4 @@ class WindTunnel(scenarios.Scenario):
 
         object_dir = os.path.join(input_dir, "constant", "triSurface")
         os.mkdir(object_dir)
-        shutil.copy(self.object_path, os.path.join(object_dir, "object.obj"))    
+        shutil.copy(self.object_path, os.path.join(object_dir, "object.obj"))

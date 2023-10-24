@@ -67,8 +67,8 @@ class FluidBlock(scenarios.Scenario):
         if not 400 <= density <= 2000:
             raise ValueError("`density` must be in range [400, 2000] Kg/m3.")
 
-        self.params["fluid"] = fluids.FluidType(density=density,
-                                      kinematic_viscosity=kinematic_viscosity)
+        self.params["fluid"] = fluids.FluidType(
+            density=density, kinematic_viscosity=kinematic_viscosity)
 
         if len(dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
@@ -154,17 +154,23 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
     fluid_margin = 2 * self.params["particle_radius"]
 
     self.params.update({
-        "fluid_position": [position + fluid_margin for position in self.params["fluid_position"]],
-        "fluid_dimensions": [dimension - 2 * fluid_margin for dimension in self.params["fluid_dimensions"]]
+        "fluid_position": [
+            position + fluid_margin
+            for position in self.params["fluid_position"]
+        ],
+        "fluid_dimensions": [
+            dimension - 2 * fluid_margin
+            for dimension in self.params["fluid_dimensions"]
+        ]
     })
+
 
 @FluidBlock.add_input_files.register
 def _(self, simulator: simulators.SplishSplash, input_dir):
     """Add unit box mesh file to input directory."""
 
-    unit_box_file_path = os.path.join(self.template_files_dir, 
-                                      "unit_box.obj")
-    shutil.copy(unit_box_file_path, input_dir) 
+    unit_box_file_path = os.path.join(self.template_files_dir, "unit_box.obj")
+    shutil.copy(unit_box_file_path, input_dir)
 
 
 @FluidBlock.get_config_filename.register

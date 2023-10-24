@@ -31,7 +31,8 @@ class Scenario(ABC):
     def create_input_files(self, simulator: Simulator, input_dir: Path):
         """Create input files from template."""
 
-        template_files_dir = os.path.join(self.template_files_dir, "sim_config_files")
+        template_files_dir = os.path.join(self.template_files_dir,
+                                          "sim_config_files")
 
         # Copy all files from the template dir to the input directory
         shutil.copytree(template_files_dir,
@@ -39,12 +40,12 @@ class Scenario(ABC):
                         dirs_exist_ok=True,
                         symlinks=True)
 
-        template_filenames = glob.glob(
-            os.path.join("**", "*.jinja"),
-            root_dir=template_files_dir,
-            recursive=True)
+        template_filenames = glob.glob(os.path.join("**", "*.jinja"),
+                                       root_dir=template_files_dir,
+                                       recursive=True)
         output_filename_paths = [
-            os.path.join(input_dir, file.split(".jinja")[0]) for file in template_filenames
+            os.path.join(input_dir,
+                         file.split(".jinja")[0]) for file in template_filenames
         ]
         utils.templates.batch_replace_params(
             templates_dir=input_dir,
@@ -54,7 +55,8 @@ class Scenario(ABC):
             remove_templates=True,
         )
 
-    def get_commands(self, commands_file: Union[str, io.StringIO] = "commands.json"):
+    def get_commands(self,
+                     commands_file: Union[str, io.StringIO] = "commands.json"):
         "Read list of commands from commands.json file"
 
         commands_file = os.path.join(self.template_files_dir, commands_file)
