@@ -132,8 +132,8 @@ class WindTunnel(scenarios.Scenario):
 
         return task
 
-    def add_input_files(self, simulator: simulators.Simulator, input_dir):
-        """Config object file to be in specific input directory."""
+    def add_extra_input_files(self, simulator: simulators.Simulator, input_dir):
+        """Configure object to be in specific place on input directory."""
 
         object_dir = os.path.join(input_dir, "constant", "triSurface")
         os.mkdir(object_dir)

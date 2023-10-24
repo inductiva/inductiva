@@ -20,12 +20,19 @@ class Scenario(ABC):
     params = {}
     template_files_dir = None
 
-    def config_input(self, simulator: Simulator, input_dir: Path):
-        """Possible to be implemented in subclasses."""
+    def config_params(self, simulator: Simulator, input_dir: Path):
+        """Entry-point to further configure params.
+        
+        Useful when a scenario can be configured for several simulators,
+        but params differ in implementation between them.
+        """
         pass
 
-    def add_input_files(self, simulator: Simulator, input_dir: Path):
-        """Possible to be implemented in subclasses."""
+    def add_extra_input_files(self, simulator: Simulator, input_dir: Path):
+        """Entry-point to add extra files used in the simulation.
+        
+        Usefull to files as args to the simulation. E.g., protein or vehicle.
+        """
         pass
 
     def create_input_files(self, simulator: Simulator, input_dir: Path):

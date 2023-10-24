@@ -7,15 +7,10 @@ import shutil
 
 from inductiva import tasks, resources, fluids, scenarios, simulators, utils
 
-TANK_DIMENSIONS = [1, 1, 1]
-
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "fluid_block")
 SPLISHPLASH_TEMPLATE_INPUT_DIR = "splishsplash"
-SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
-
 DUALSPHYSICS_TEMPLATE_INPUT_DIR = "dualsphysics"
-DUALSPHYSICS_CONFIG_FILENAME = "fluid_block.xml"
 
 
 class FluidBlock(scenarios.Scenario):
@@ -129,21 +124,21 @@ class FluidBlock(scenarios.Scenario):
         pass
 
     @singledispatchmethod
-    def config_input(self, simulator: simulators.Simulator, input_dir):
+    def config_params(self, simulator: simulators.Simulator, input_dir):
         pass
 
     @singledispatchmethod
-    def add_input_files(self, simulator: simulators.Simulator, input_dir):
+    def add_extra_input_files(self, simulator: simulators.Simulator, input_dir):
         pass
 
 
 @FluidBlock.get_config_filename.register
 def _(cls, simulator: simulators.SplishSplash):  # pylint: disable=unused-argument
     """Returns the configuration filename for SPlisHSPlasH."""
-    return SPLISHSPLASH_CONFIG_FILENAME
+    return "fluid_block.json"
 
 
-@FluidBlock.config_input.register
+@FluidBlock.config_params.register
 def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
@@ -165,7 +160,7 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
     })
 
 
-@FluidBlock.add_input_files.register
+@FluidBlock.add_extra_input_files.register
 def _(self, simulator: simulators.SplishSplash, input_dir):
     """Add unit box mesh file to input directory."""
 
@@ -176,10 +171,10 @@ def _(self, simulator: simulators.SplishSplash, input_dir):
 @FluidBlock.get_config_filename.register
 def _(cls, simulator: simulators.DualSPHysics):  # pylint: disable=unused-argument
     """Returns the configuration filename for DualSPHysics."""
-    return DUALSPHYSICS_CONFIG_FILENAME
+    return "fluid_block.xml"
 
 
-@FluidBlock.config_input.register
+@FluidBlock.config_params.register
 def _(self, simulator: simulators.DualSPHysics, input_dir):  # pylint: disable=unused-argument
     """Creates DualSPHysics simulation input files."""
 
