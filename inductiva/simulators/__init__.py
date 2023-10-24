@@ -8,3 +8,4 @@ from .openfoam import OpenFOAM
 from .gromacs import GROMACS
 from .simsopt import SIMSOPT
 from .fenicsx import FEniCSx
+from .fds import FDS
