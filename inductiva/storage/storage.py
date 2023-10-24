@@ -21,9 +21,9 @@ def listdir(path="/",
             max_results: int = 10,
             order_by: Literal["size", "creation_time"] = "size",
             sort_order: Literal["asc", "desc"] = "desc"):
-    """List and display the contents of the user's storage bucket.
+    """List and display the contents of the user's storage.
     Args:
-        path (str) : directory inside storage to list from. default is root.
+        path (str): Storage directory to list. Default is root.
         max_results (int): The maximum number of results to return.
         order_by (str): The field to sort the contents by.
         sort_order (str): Whether to sort the contents in ascending or
