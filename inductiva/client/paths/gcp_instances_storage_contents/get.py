@@ -30,7 +30,6 @@ from . import path
 
 # Query params
 DirNameSchema = schemas.StrSchema
-
 MaxResultsSchema = schemas.IntSchema
 
 
@@ -104,7 +103,6 @@ request_query_dir_name = api_client.QueryParameter(
     schema=DirNameSchema,
     explode=True,
 )
-
 request_query_max_results = api_client.QueryParameter(
     name="max_results",
     style=api_client.ParameterStyle.FORM,
