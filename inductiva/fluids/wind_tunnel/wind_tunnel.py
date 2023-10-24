@@ -2,9 +2,7 @@
 
 from dataclasses import dataclass
 import enum
-from functools import singledispatchmethod
 import os
-import glob
 import shutil
 from typing import Optional, List, Literal
 
@@ -132,7 +130,7 @@ class WindTunnel(scenarios.Scenario):
 
         return task
 
-    def add_extra_input_files(self, simulator: simulators.Simulator, input_dir):
+    def add_extra_input_files(self, simulator: simulators.Simulator, input_dir): # pylint: disable=unused-argument
         """Configure object to be in specific place on input directory."""
 
         object_dir = os.path.join(input_dir, "constant", "triSurface")

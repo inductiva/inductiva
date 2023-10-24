@@ -35,7 +35,7 @@ class Scenario(ABC):
         """
         pass
 
-    def create_input_files(self, input_dir: Path): # pylint: disable=unused-argument
+    def create_input_files(self, simulator: Simulator, input_dir: Path): # pylint: disable=unused-argument
         """Create input files from template."""
 
         template_files_dir = os.path.join(self.template_files_dir,
@@ -93,7 +93,7 @@ class Scenario(ABC):
 
         with tempfile.TemporaryDirectory() as input_dir:
             self.config_params(simulator, input_dir)
-            self.create_input_files(input_dir)
+            self.create_input_files(simulator, input_dir)
             self.add_extra_input_files(simulator, input_dir)
 
             return simulator.run(
