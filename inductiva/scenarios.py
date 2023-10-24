@@ -35,7 +35,7 @@ class Scenario(ABC):
         """
         pass
 
-    def create_input_files(self, simulator: Simulator, input_dir: Path): # pylint: disable=unused-argument
+    def create_input_files(self, simulator: Simulator, input_dir: Path):  # pylint: disable=unused-argument
         """Create input files from template."""
 
         template_files_dir = os.path.join(self.template_files_dir,
