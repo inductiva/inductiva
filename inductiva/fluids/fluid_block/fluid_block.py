@@ -12,12 +12,9 @@ TANK_DIMENSIONS = [1, 1, 1]
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "fluid_block")
 SPLISHPLASH_TEMPLATE_INPUT_DIR = "splishsplash"
-SPLISHSPLASH_TEMPLATE_FILENAME = "fluid_block_template.splishsplash.json.jinja"
 SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
-UNIT_BOX_MESH_FILENAME = "unit_box.obj"
 
 DUALSPHYSICS_TEMPLATE_INPUT_DIR = "dualsphysics"
-DUALSPHYSICS_TEMPLATE_FILENAME = "fluid_block_template.dualsphysics.xml.jinja"
 DUALSPHYSICS_CONFIG_FILENAME = "fluid_block.xml"
 
 
@@ -70,22 +67,20 @@ class FluidBlock(scenarios.Scenario):
         if not 400 <= density <= 2000:
             raise ValueError("`density` must be in range [400, 2000] Kg/m3.")
 
-        self.fluid = fluids.FluidType(density=density,
+        self.params["fluid"] = fluids.FluidType(density=density,
                                       kinematic_viscosity=kinematic_viscosity)
 
         if len(dimensions) != 3:
             raise ValueError("`fluid_dimensions` must have 3 values.")
-        self.dimensions = dimensions
+        self.params["fluid_dimensions"] = dimensions
 
         if position is None:
-            self.position = [0, 0, 0]
-        else:
-            self.position = position
+            position = [0, 0, 0]
+        self.params["fluid_position"] = position
 
         if initial_velocity is None:
-            self.initial_velocity = [0, 0, 0]
-        else:
-            self.initial_velocity = initial_velocity
+            initial_velocity = [0, 0, 0]
+        self.params["initial_velocity"] = initial_velocity
 
     def simulate(
         self,
@@ -96,7 +91,7 @@ class FluidBlock(scenarios.Scenario):
         adaptive_time_step: bool = True,
         particle_sorting: bool = True,
         time_step: float = 0.001,
-        output_time_step: float = 1 / 60,
+        output_export_rate: float = 60,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -111,17 +106,16 @@ class FluidBlock(scenarios.Scenario):
             adaptive_time_step: Whether to use adaptive time stepping.
             particle_sorting: Whether to use particle sorting.
             time_step: Time step, in seconds.
-            output_time_step: Time step between outputs, in seconds.
+            output_export_rate: Rate to export outputs per second.
         """
         simulator.override_api_method_prefix("fluid_block")
 
-        # TODO: Avoid storing these as class attributes.
-        self.particle_radius = particle_radius
-        self.simulation_time = simulation_time
-        self.adaptive_time_step = adaptive_time_step
-        self.particle_sorting = particle_sorting
-        self.time_step = time_step
-        self.output_time_step = output_time_step
+        self.params["particle_radius"] = particle_radius
+        self.params["simulation_time"] = simulation_time
+        self.params["adaptive_time_step"] = adaptive_time_step
+        self.params["particle_sorting"] = particle_sorting
+        self.params["time_step"] = time_step
+        self.params["output_export_rate"] = output_export_rate
 
         task = super().simulate(
             simulator=simulator,
@@ -135,7 +129,11 @@ class FluidBlock(scenarios.Scenario):
         pass
 
     @singledispatchmethod
-    def create_input_files(self, simulator: simulators.Simulator):
+    def config_input(self, simulator: simulators.Simulator, input_dir):
+        pass
+
+    @singledispatchmethod
+    def add_input_files(self, simulator: simulators.Simulator, input_dir):
         pass
 
 
@@ -145,44 +143,28 @@ def _(cls, simulator: simulators.SplishSplash):  # pylint: disable=unused-argume
     return SPLISHSPLASH_CONFIG_FILENAME
 
 
-@FluidBlock.create_input_files.register
+@FluidBlock.config_input.register
 def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
 
-    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                      SPLISHPLASH_TEMPLATE_INPUT_DIR)
-    # Copy the unit box mesh file to the input directory.
-    unit_box_file_path = os.path.join(template_files_dir,
-                                      UNIT_BOX_MESH_FILENAME)
-    shutil.copy(unit_box_file_path, input_dir)
+    self.template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                           SPLISHPLASH_TEMPLATE_INPUT_DIR)
 
     # Generate the simulation configuration file.
-    fluid_margin = 2 * self.particle_radius
+    fluid_margin = 2 * self.params["particle_radius"]
 
-    utils.templates.replace_params(
-        template_path=os.path.join(template_files_dir,
-                                   SPLISHSPLASH_TEMPLATE_FILENAME),
-        params={
-            "simulation_time": self.simulation_time,
-            "time_step": self.time_step,
-            "particle_radius": self.particle_radius,
-            "data_export_rate": 1 / self.output_time_step,
-            "tank_filename": UNIT_BOX_MESH_FILENAME,
-            "tank_dimensions": TANK_DIMENSIONS,
-            "fluid_filename": UNIT_BOX_MESH_FILENAME,
-            "fluid": self.fluid,
-            "fluid_position": [
-                position + fluid_margin for position in self.position
-            ],
-            "fluid_dimensions": [
-                dimension - 2 * fluid_margin for dimension in self.dimensions
-            ],
-            "fluid_velocity": self.initial_velocity,
-            "particle_sorting": self.particle_sorting,
-            "adaptive_time_step": self.adaptive_time_step,
-        },
-        output_file=os.path.join(input_dir, SPLISHSPLASH_CONFIG_FILENAME),
-    )
+    self.params.update({
+        "fluid_position": [position + fluid_margin for position in self.params["fluid_position"]],
+        "fluid_dimensions": [dimension - 2 * fluid_margin for dimension in self.params["fluid_dimensions"]]
+    })
+
+@FluidBlock.add_input_files.register
+def _(self, simulator: simulators.SplishSplash, input_dir):
+    """Add unit box mesh file to input directory."""
+
+    unit_box_file_path = os.path.join(self.template_files_dir, 
+                                      "unit_box.obj")
+    shutil.copy(unit_box_file_path, input_dir) 
 
 
 @FluidBlock.get_config_filename.register
@@ -191,25 +173,11 @@ def _(cls, simulator: simulators.DualSPHysics):  # pylint: disable=unused-argume
     return DUALSPHYSICS_CONFIG_FILENAME
 
 
-@FluidBlock.create_input_files.register
+@FluidBlock.config_input.register
 def _(self, simulator: simulators.DualSPHysics, input_dir):  # pylint: disable=unused-argument
     """Creates DualSPHysics simulation input files."""
 
-    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                      DUALSPHYSICS_TEMPLATE_INPUT_DIR)
-    utils.templates.replace_params(
-        template_path=os.path.join(template_files_dir,
-                                   DUALSPHYSICS_TEMPLATE_FILENAME),
-        params={
-            "simulation_time": self.simulation_time,
-            "time_step": self.time_step,
-            "particle_distance": 2 * self.particle_radius,
-            "output_time_step": self.output_time_step,
-            "tank_dimensions": TANK_DIMENSIONS,
-            "fluid_dimensions": self.dimensions,
-            "fluid_position": self.position,
-            "fluid": self.fluid,
-            "adaptive_time_step": self.adaptive_time_step,
-        },
-        output_file=os.path.join(input_dir, DUALSPHYSICS_CONFIG_FILENAME),
-    )
+    self.template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                           DUALSPHYSICS_TEMPLATE_INPUT_DIR)
+
+    self.params["particle_distance"] = 2 * self.params["particle_radius"]

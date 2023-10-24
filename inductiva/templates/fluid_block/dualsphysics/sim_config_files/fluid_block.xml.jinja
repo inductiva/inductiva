@@ -32,7 +32,7 @@
                     <drawbox>
                         <boxfill>bottom | left | right | front | back</boxfill>
                         <point x="0" y="0" z="0" />
-                        <size x="{{ tank_dimensions[0] }}" y="{{ tank_dimensions[1] }}" z="{{ tank_dimensions[2] }}" />
+                        <size x="1" y="1" z="1" />
                     </drawbox>
                     <shapeout file="Box" />
                     <setmkvoid />
@@ -51,7 +51,7 @@
             <parameter key="DtMin" value="0" comment="Minimum time step. Use 0 to defult use (default=coefdtmin*h/speedsound)" units_comment="seconds" />
             <parameter key="DtFixed" value="{{ 0 | int if adaptive_time_step else time_step }}" comment="Fixed Dt value. Use 0 to disable (default=disabled)" units_comment="seconds" />
             <parameter key="TimeMax" value="{{ simulation_time }}" comment="Time of simulation" units_comment="seconds" />
-            <parameter key="TimeOut" value="{{ output_time_step }}" comment="Time frequency in which the data is exported" units_comment="seconds" />
+            <parameter key="TimeOut" value="{{ 1 / output_export_rate }}" comment="Time frequency in which the data is exported" units_comment="seconds" />
             <simulationdomain comment="Defines domain of simulation (default=Uses minimum and maximum position of the generated particles)">
             <parameter key="RhopOutMin" value="400" comment="Minimum rhop valid (default=200)" units_comment="kg/m^3" />
             <parameter key="RhopOutMax" value="3000" comment="Maximum rhop valid (default=3000)" units_comment="kg/m^3" />
