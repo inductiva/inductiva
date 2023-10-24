@@ -3,7 +3,6 @@
 from abc import ABC
 import io
 import shutil
-import glob
 import os
 import tempfile
 from typing import Optional, Union
@@ -47,13 +46,14 @@ class Scenario(ABC):
                         dirs_exist_ok=True,
                         symlinks=True)
 
-        template_filenames = glob.glob(pathname=os.path.join("**", "*.jinja"),
-                                       root_dir=template_files_dir,
-                                       recursive=True)
+        template_filenames = utils.templates.get_template_filenames(
+            template_files_dir)
+
         output_filename_paths = [
             os.path.join(input_dir,
                          file.split(".jinja")[0]) for file in template_filenames
         ]
+
         utils.templates.batch_replace_params(
             templates_dir=input_dir,
             template_filenames=template_filenames,
