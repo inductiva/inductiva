@@ -1,6 +1,6 @@
 """Base class for scenarios."""
 
-from abc import ABC, abstractmethod
+from abc import ABC
 import io
 import shutil
 import glob
@@ -35,7 +35,7 @@ class Scenario(ABC):
         """
         pass
 
-    def create_input_files(self, simulator: Simulator, input_dir: Path):
+    def create_input_files(self, input_dir: Path): # pylint: disable=unused-argument
         """Create input files from template."""
 
         template_files_dir = os.path.join(self.template_files_dir,
@@ -47,7 +47,7 @@ class Scenario(ABC):
                         dirs_exist_ok=True,
                         symlinks=True)
 
-        template_filenames = glob.glob(os.path.join("**", "*.jinja"),
+        template_filenames = glob.glob(pathname=os.path.join("**", "*.jinja"),
                                        root_dir=template_files_dir,
                                        recursive=True)
         output_filename_paths = [
@@ -92,9 +92,9 @@ class Scenario(ABC):
         self.validate_simulator(simulator)
 
         with tempfile.TemporaryDirectory() as input_dir:
-            self.config_input(simulator, input_dir)
-            self.create_input_files(simulator, input_dir)
-            self.add_input_files(simulator, input_dir)
+            self.config_params(simulator, input_dir)
+            self.create_input_files(input_dir)
+            self.add_extra_input_files(simulator, input_dir)
 
             return simulator.run(
                 input_dir,

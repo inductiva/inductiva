@@ -161,7 +161,7 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
 
 
 @FluidBlock.add_extra_input_files.register
-def _(self, simulator: simulators.SplishSplash, input_dir):
+def _(self, simulator: simulators.SplishSplash, input_dir): # pylint: disable=unused-argument
     """Add unit box mesh file to input directory."""
 
     unit_box_file_path = os.path.join(self.template_files_dir, "unit_box.obj")
