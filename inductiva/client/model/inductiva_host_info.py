@@ -33,7 +33,6 @@ class InductivaHostInfo(schemas.DictSchema):
 
     class MetaOapg:
         required = {
-            "hostname",
             "host_type",
         }
 
@@ -50,13 +49,10 @@ class InductivaHostInfo(schemas.DictSchema):
                 def INDUCTIVAHARDWARE(cls):
                     return cls("inductiva-hardware")
 
-            hostname = schemas.StrSchema
             __annotations__ = {
                 "host_type": host_type,
-                "hostname": hostname,
             }
 
-    hostname: MetaOapg.properties.hostname
     host_type: MetaOapg.properties.host_type
 
     @typing.overload
@@ -66,19 +62,13 @@ class InductivaHostInfo(schemas.DictSchema):
         ...
 
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["hostname"]
-    ) -> MetaOapg.properties.hostname:
-        ...
-
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "host_type",
-        "hostname",
-    ], str]):
+    def __getitem__(self,
+                    name: typing.Union[typing_extensions.Literal[
+                        "host_type",
+                    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -90,20 +80,14 @@ class InductivaHostInfo(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["hostname"]
-    ) -> MetaOapg.properties.hostname:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "host_type",
-        "hostname",
-    ], str]):
+    def get_item_oapg(self,
+                      name: typing.Union[typing_extensions.Literal[
+                          "host_type",
+                      ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -111,10 +95,6 @@ class InductivaHostInfo(schemas.DictSchema):
         *_args: typing.Union[
             dict,
             frozendict.frozendict,
-        ],
-        hostname: typing.Union[
-            MetaOapg.properties.hostname,
-            str,
         ],
         host_type: typing.Union[
             MetaOapg.properties.host_type,
@@ -129,7 +109,6 @@ class InductivaHostInfo(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
-            hostname=hostname,
             host_type=host_type,
             _configuration=_configuration,
             **kwargs,

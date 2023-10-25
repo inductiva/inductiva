@@ -36,7 +36,7 @@ class GCloudHostInfo(schemas.DictSchema):
             "vm_id",
             "vm_type",
             "preemptible",
-            "vm_zone",
+            "vm_metadata",
             "host_type",
             "vm_name",
         }
@@ -57,21 +57,21 @@ class GCloudHostInfo(schemas.DictSchema):
             vm_type = schemas.StrSchema
             vm_name = schemas.StrSchema
             vm_id = schemas.StrSchema
-            vm_zone = schemas.StrSchema
             preemptible = schemas.BoolSchema
+            vm_metadata = schemas.DictSchema
             __annotations__ = {
                 "host_type": host_type,
                 "vm_type": vm_type,
                 "vm_name": vm_name,
                 "vm_id": vm_id,
-                "vm_zone": vm_zone,
                 "preemptible": preemptible,
+                "vm_metadata": vm_metadata,
             }
 
     vm_id: MetaOapg.properties.vm_id
     vm_type: MetaOapg.properties.vm_type
     preemptible: MetaOapg.properties.preemptible
-    vm_zone: MetaOapg.properties.vm_zone
+    vm_metadata: MetaOapg.properties.vm_metadata
     host_type: MetaOapg.properties.host_type
     vm_name: MetaOapg.properties.vm_name
 
@@ -101,14 +101,14 @@ class GCloudHostInfo(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["vm_zone"]
-    ) -> MetaOapg.properties.vm_zone:
+        self, name: typing_extensions.Literal["preemptible"]
+    ) -> MetaOapg.properties.preemptible:
         ...
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["preemptible"]
-    ) -> MetaOapg.properties.preemptible:
+        self, name: typing_extensions.Literal["vm_metadata"]
+    ) -> MetaOapg.properties.vm_metadata:
         ...
 
     @typing.overload
@@ -120,8 +120,8 @@ class GCloudHostInfo(schemas.DictSchema):
         "vm_type",
         "vm_name",
         "vm_id",
-        "vm_zone",
         "preemptible",
+        "vm_metadata",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -152,14 +152,14 @@ class GCloudHostInfo(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["vm_zone"]
-    ) -> MetaOapg.properties.vm_zone:
+        self, name: typing_extensions.Literal["preemptible"]
+    ) -> MetaOapg.properties.preemptible:
         ...
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["preemptible"]
-    ) -> MetaOapg.properties.preemptible:
+        self, name: typing_extensions.Literal["vm_metadata"]
+    ) -> MetaOapg.properties.vm_metadata:
         ...
 
     @typing.overload
@@ -173,8 +173,8 @@ class GCloudHostInfo(schemas.DictSchema):
         "vm_type",
         "vm_name",
         "vm_id",
-        "vm_zone",
         "preemptible",
+        "vm_metadata",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -196,9 +196,10 @@ class GCloudHostInfo(schemas.DictSchema):
             MetaOapg.properties.preemptible,
             bool,
         ],
-        vm_zone: typing.Union[
-            MetaOapg.properties.vm_zone,
-            str,
+        vm_metadata: typing.Union[
+            MetaOapg.properties.vm_metadata,
+            dict,
+            frozendict.frozendict,
         ],
         host_type: typing.Union[
             MetaOapg.properties.host_type,
@@ -220,7 +221,7 @@ class GCloudHostInfo(schemas.DictSchema):
             vm_id=vm_id,
             vm_type=vm_type,
             preemptible=preemptible,
-            vm_zone=vm_zone,
+            vm_metadata=vm_metadata,
             host_type=host_type,
             vm_name=vm_name,
             _configuration=_configuration,
