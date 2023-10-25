@@ -462,8 +462,7 @@ class Task:
         )
 
         if verbose:
-            logging.info(
-                "Current resource usage:")
+            logging.info("Current resource usage:")
             print("\n")
             print("Timestamp \t   Memory usage  CPU usage")
 
