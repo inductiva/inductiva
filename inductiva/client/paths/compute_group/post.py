@@ -24,16 +24,16 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.user import User
+from inductiva.client.model.instance_group_create import InstanceGroupCreate
 from inductiva.client.model.http_validation_error import HTTPValidationError
-from inductiva.client.model.user_create import UserCreate
+from inductiva.client.model.instance_group import InstanceGroup
 
 from . import path
 
 # body param
-SchemaForRequestBodyApplicationJson = UserCreate
+SchemaForRequestBodyApplicationJson = InstanceGroupCreate
 
-request_body_user_create = api_client.RequestBody(
+request_body_instance_group_create = api_client.RequestBody(
     content={
         'application/json':
             api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
@@ -43,7 +43,7 @@ request_body_user_create = api_client.RequestBody(
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor201ResponseBodyApplicationJson = User
+SchemaFor201ResponseBodyApplicationJson = InstanceGroup
 
 
 @dataclass
@@ -93,7 +93,7 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _add_user_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -109,7 +109,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _add_user_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -125,7 +125,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _add_user_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -139,7 +139,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _add_user_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -155,7 +155,7 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _add_user_oapg(
+    def _register_instance_group_oapg(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -167,7 +167,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Add User
+        Register Instance Group
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -186,7 +186,8 @@ class BaseApi(api_client.Api):
             )
         _fields = None
         _body = None
-        serialized_data = request_body_user_create.serialize(body, content_type)
+        serialized_data = request_body_instance_group_create.serialize(
+            body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
             _fields = serialized_data['fields']
@@ -224,11 +225,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class AddUser(BaseApi):
+class RegisterInstanceGroup(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def add_user(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -244,7 +245,7 @@ class AddUser(BaseApi):
         ...
 
     @typing.overload
-    def add_user(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -260,7 +261,7 @@ class AddUser(BaseApi):
         ...
 
     @typing.overload
-    def add_user(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -274,7 +275,7 @@ class AddUser(BaseApi):
         ...
 
     @typing.overload
-    def add_user(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -290,7 +291,7 @@ class AddUser(BaseApi):
     ]:
         ...
 
-    def add_user(
+    def register_instance_group(
         self,
         body: typing.Union[
             SchemaForRequestBodyApplicationJson,
@@ -301,12 +302,13 @@ class AddUser(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._add_user_oapg(body=body,
-                                   content_type=content_type,
-                                   accept_content_types=accept_content_types,
-                                   stream=stream,
-                                   timeout=timeout,
-                                   skip_deserialization=skip_deserialization)
+        return self._register_instance_group_oapg(
+            body=body,
+            content_type=content_type,
+            accept_content_types=accept_content_types,
+            stream=stream,
+            timeout=timeout,
+            skip_deserialization=skip_deserialization)
 
 
 class ApiForpost(BaseApi):
@@ -386,9 +388,10 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._add_user_oapg(body=body,
-                                   content_type=content_type,
-                                   accept_content_types=accept_content_types,
-                                   stream=stream,
-                                   timeout=timeout,
-                                   skip_deserialization=skip_deserialization)
+        return self._register_instance_group_oapg(
+            body=body,
+            content_type=content_type,
+            accept_content_types=accept_content_types,
+            stream=stream,
+            timeout=timeout,
+            skip_deserialization=skip_deserialization)

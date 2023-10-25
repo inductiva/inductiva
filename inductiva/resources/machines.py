@@ -6,7 +6,7 @@ from absl import logging
 import inductiva
 import inductiva.client.models
 from inductiva import api
-from inductiva.client.apis.tags import instance_api
+from inductiva.client.apis.tags import compute_api
 
 
 class MachineGroup():
@@ -44,7 +44,7 @@ class MachineGroup():
 
         # Set the API configuration that carries the information from the client
         # to the backend.
-        self._api = instance_api.InstanceApi(api.get_client())
+        self._api = compute_api.ComputeApi(api.get_client())
         self._estimated_cost = None
         self._is_elastic = False
 

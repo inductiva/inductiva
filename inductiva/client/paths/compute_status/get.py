@@ -24,42 +24,68 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.user import User
 from inductiva.client.model.http_validation_error import HTTPValidationError
-from inductiva.client.model.user_create import UserCreate
 
 from . import path
 
-# body param
-SchemaForRequestBodyApplicationJson = UserCreate
-
-request_body_user_create = api_client.RequestBody(
-    content={
-        'application/json':
-            api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
+# Query params
+NameSchema = schemas.StrSchema
+ZoneSchema = schemas.StrSchema
+RequestRequiredQueryParams = typing_extensions.TypedDict(
+    'RequestRequiredQueryParams', {
+        'name': typing.Union[
+            NameSchema,
+            str,
+        ],
+    })
+RequestOptionalQueryParams = typing_extensions.TypedDict(
+    'RequestOptionalQueryParams', {
+        'zone': typing.Union[
+            ZoneSchema,
+            str,
+        ],
     },
+    total=False)
+
+
+class RequestQueryParams(RequestRequiredQueryParams,
+                         RequestOptionalQueryParams):
+    pass
+
+
+request_query_name = api_client.QueryParameter(
+    name="name",
+    style=api_client.ParameterStyle.FORM,
+    schema=NameSchema,
     required=True,
+    explode=True,
+)
+request_query_zone = api_client.QueryParameter(
+    name="zone",
+    style=api_client.ParameterStyle.FORM,
+    schema=ZoneSchema,
+    explode=True,
 )
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor201ResponseBodyApplicationJson = User
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass
-class ApiResponseFor201(api_client.ApiResponse):
+class ApiResponseFor200(api_client.ApiResponse):
     response: urllib3.HTTPResponse
     body: typing.Union[
-        SchemaFor201ResponseBodyApplicationJson,
+        SchemaFor200ResponseBodyApplicationJson,
     ]
     headers: schemas.Unset = schemas.unset
 
 
-_response_for_201 = api_client.OpenApiResponse(
-    response_cls=ApiResponseFor201,
+_response_for_200 = api_client.OpenApiResponse(
+    response_cls=ApiResponseFor200,
     content={
         'application/json':
-            api_client.MediaType(schema=SchemaFor201ResponseBodyApplicationJson
+            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
                                 ),
     },
 )
@@ -84,7 +110,7 @@ _response_for_422 = api_client.OpenApiResponse(
     },
 )
 _status_code_to_response = {
-    '201': _response_for_201,
+    '200': _response_for_200,
     '422': _response_for_422,
 }
 _all_accept_content_types = ('application/json',)
@@ -93,45 +119,23 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _add_user_oapg(
+    def _get_status_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: typing_extensions.Literal["application/json"] = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor201,
+            ApiResponseFor200,
     ]:
         ...
 
     @typing.overload
-    def _add_user_oapg(
+    def _get_status_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor201,
-    ]:
-        ...
-
-    @typing.overload
-    def _add_user_oapg(
-        self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -139,40 +143,51 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _add_user_oapg(
+    def _get_status_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor201,
+            ApiResponseFor200,
             api_client.ApiResponseWithoutDeserialization,
     ]:
         ...
 
-    def _add_user_oapg(
+    def _get_status_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = 'application/json',
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         """
-        Add User
+        Get Status
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
+        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         used_path = path.value
+
+        prefix_separator_iterator = None
+        for parameter in (
+                request_query_name,
+                request_query_zone,
+        ):
+            parameter_data = query_params.get(parameter.name, schemas.unset)
+            if parameter_data is schemas.unset:
+                continue
+            if prefix_separator_iterator is None:
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
+                )
+            serialized_data = parameter.serialize(parameter_data,
+                                                  prefix_separator_iterator)
+            for serialized_value in serialized_data.values():
+                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -180,24 +195,10 @@ class BaseApi(api_client.Api):
             for accept_content_type in accept_content_types:
                 _headers.add('Accept', accept_content_type)
 
-        if body is schemas.unset:
-            raise exceptions.ApiValueError(
-                'The required body parameter has an invalid value of: unset. Set a valid value instead'
-            )
-        _fields = None
-        _body = None
-        serialized_data = request_body_user_create.serialize(body, content_type)
-        _headers.add('Content-Type', content_type)
-        if 'fields' in serialized_data:
-            _fields = serialized_data['fields']
-        elif 'body' in serialized_data:
-            _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='post'.upper(),
+            method='get'.upper(),
             headers=_headers,
-            fields=_fields,
-            body=_body,
             auth_settings=_auth,
             stream=stream,
             timeout=timeout,
@@ -224,49 +225,27 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class AddUser(BaseApi):
+class GetStatus(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def add_user(
+    def get_status(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: typing_extensions.Literal["application/json"] = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor201,
+            ApiResponseFor200,
     ]:
         ...
 
     @typing.overload
-    def add_user(
+    def get_status(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor201,
-    ]:
-        ...
-
-    @typing.overload
-    def add_user(
-        self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -274,84 +253,55 @@ class AddUser(BaseApi):
         ...
 
     @typing.overload
-    def add_user(
+    def get_status(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor201,
+            ApiResponseFor200,
             api_client.ApiResponseWithoutDeserialization,
     ]:
         ...
 
-    def add_user(
+    def get_status(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = 'application/json',
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._add_user_oapg(body=body,
-                                   content_type=content_type,
-                                   accept_content_types=accept_content_types,
-                                   stream=stream,
-                                   timeout=timeout,
-                                   skip_deserialization=skip_deserialization)
+        return self._get_status_oapg(query_params=query_params,
+                                     accept_content_types=accept_content_types,
+                                     stream=stream,
+                                     timeout=timeout,
+                                     skip_deserialization=skip_deserialization)
 
 
-class ApiForpost(BaseApi):
+class ApiForget(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def post(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: typing_extensions.Literal["application/json"] = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor201,
+            ApiResponseFor200,
     ]:
         ...
 
     @typing.overload
-    def post(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor201,
-    ]:
-        ...
-
-    @typing.overload
-    def post(
-        self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -359,36 +309,29 @@ class ApiForpost(BaseApi):
         ...
 
     @typing.overload
-    def post(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor201,
+            ApiResponseFor200,
             api_client.ApiResponseWithoutDeserialization,
     ]:
         ...
 
-    def post(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = 'application/json',
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._add_user_oapg(body=body,
-                                   content_type=content_type,
-                                   accept_content_types=accept_content_types,
-                                   stream=stream,
-                                   timeout=timeout,
-                                   skip_deserialization=skip_deserialization)
+        return self._get_status_oapg(query_params=query_params,
+                                     accept_content_types=accept_content_types,
+                                     stream=stream,
+                                     timeout=timeout,
+                                     skip_deserialization=skip_deserialization)
