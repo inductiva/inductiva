@@ -432,7 +432,7 @@ class Task:
         )
 
         if verbose:
-            logging.info("Yielding the output from stdout:")
+            logging.info("Simulation stdout:")
             print("\n")
             for line in api_response.body:
                 print(line)
@@ -463,7 +463,7 @@ class Task:
 
         if verbose:
             logging.info(
-                "Yielding the current resource usage of the simulation:")
+                "Current resource usage:")
             print("\n")
             print("Timestamp \t   Memory usage  CPU usage")
 
