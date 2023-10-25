@@ -19,6 +19,7 @@ from inductiva.client.apis.paths.executer_tracker_register import ExecuterTracke
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
 from inductiva.client.apis.paths.compute_group_elastic import ComputeGroupElastic
+from inductiva.client.apis.paths.compute_group_gpu import ComputeGroupGpu
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_status import ComputeStatus
 from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
@@ -48,6 +49,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.COMPUTE_GROUP: ComputeGroup,
         PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
         PathValues.COMPUTE_GROUP_ELASTIC: ComputeGroupElastic,
+        PathValues.COMPUTE_GROUP_GPU: ComputeGroupGpu,
         PathValues.COMPUTE_PRICE: ComputePrice,
         PathValues.COMPUTE_STATUS: ComputeStatus,
         PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
@@ -77,6 +79,7 @@ path_to_api = PathToApi({
     PathValues.COMPUTE_GROUP: ComputeGroup,
     PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
     PathValues.COMPUTE_GROUP_ELASTIC: ComputeGroupElastic,
+    PathValues.COMPUTE_GROUP_GPU: ComputeGroupGpu,
     PathValues.COMPUTE_PRICE: ComputePrice,
     PathValues.COMPUTE_STATUS: ComputeStatus,
     PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,

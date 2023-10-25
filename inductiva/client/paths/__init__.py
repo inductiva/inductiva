@@ -24,6 +24,7 @@ class PathValues(str, enum.Enum):
     COMPUTE_GROUP = "/compute/group"
     COMPUTE_GROUP_START = "/compute/group/start"
     COMPUTE_GROUP_ELASTIC = "/compute/group/elastic"
+    COMPUTE_GROUP_GPU = "/compute/group/gpu"
     COMPUTE_PRICE = "/compute/price"
     COMPUTE_STATUS = "/compute/status"
     COMPUTE_GROUP_STATUS = "/compute/group_status"
