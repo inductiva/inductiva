@@ -11,14 +11,15 @@ from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_stdout_tail import TasksTaskIdStdoutTail
 from inductiva.client.apis.paths.tasks_task_id_resources_tail import TasksTaskIdResourcesTail
-from inductiva.client.apis.paths.admin_user import AdminUser
-from inductiva.client.apis.paths.admin_user_username import AdminUserUsername
-from inductiva.client.apis.paths.admin_user_username_tasks import AdminUserUsernameTasks
+from inductiva.client.apis.paths.admin_users import AdminUsers
+from inductiva.client.apis.paths.admin_users_username import AdminUsersUsername
+from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
 from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
 from inductiva.client.apis.paths.compute_group_elastic import ComputeGroupElastic
+from inductiva.client.apis.paths.compute_group_gpu import ComputeGroupGpu
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_status import ComputeStatus
 from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
@@ -40,14 +41,15 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
         PathValues.TASKS_TASK_ID_STDOUT_TAIL: TasksTaskIdStdoutTail,
         PathValues.TASKS_TASK_ID_RESOURCES_TAIL: TasksTaskIdResourcesTail,
-        PathValues.ADMIN_USER: AdminUser,
-        PathValues.ADMIN_USER_USERNAME: AdminUserUsername,
-        PathValues.ADMIN_USER_USERNAME_TASKS: AdminUserUsernameTasks,
+        PathValues.ADMIN_USERS: AdminUsers,
+        PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
+        PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
         PathValues.ADMIN_GROUPS: AdminGroups,
         PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
         PathValues.COMPUTE_GROUP: ComputeGroup,
         PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
         PathValues.COMPUTE_GROUP_ELASTIC: ComputeGroupElastic,
+        PathValues.COMPUTE_GROUP_GPU: ComputeGroupGpu,
         PathValues.COMPUTE_PRICE: ComputePrice,
         PathValues.COMPUTE_STATUS: ComputeStatus,
         PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
@@ -69,14 +71,15 @@ path_to_api = PathToApi({
     PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
     PathValues.TASKS_TASK_ID_STDOUT_TAIL: TasksTaskIdStdoutTail,
     PathValues.TASKS_TASK_ID_RESOURCES_TAIL: TasksTaskIdResourcesTail,
-    PathValues.ADMIN_USER: AdminUser,
-    PathValues.ADMIN_USER_USERNAME: AdminUserUsername,
-    PathValues.ADMIN_USER_USERNAME_TASKS: AdminUserUsernameTasks,
+    PathValues.ADMIN_USERS: AdminUsers,
+    PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
+    PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
     PathValues.ADMIN_GROUPS: AdminGroups,
     PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
     PathValues.COMPUTE_GROUP: ComputeGroup,
     PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
     PathValues.COMPUTE_GROUP_ELASTIC: ComputeGroupElastic,
+    PathValues.COMPUTE_GROUP_GPU: ComputeGroupGpu,
     PathValues.COMPUTE_PRICE: ComputePrice,
     PathValues.COMPUTE_STATUS: ComputeStatus,
     PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,

@@ -1,4 +1,5 @@
 # coding: utf-8
+
 """
 
 
@@ -25,105 +26,63 @@ import frozendict  # noqa: F401
 from inductiva.client import schemas  # noqa: F401
 
 from inductiva.client.model.http_validation_error import HTTPValidationError
-
-from . import path
+from inductiva.client.model.instance_group import InstanceGroup
 
 # Query params
-DirNameSchema = schemas.StrSchema
-MaxResultsSchema = schemas.IntSchema
-
-
-class SortBySchema(schemas.EnumBase, schemas.StrSchema):
-
-    class MetaOapg:
-        enum_value_to_name = {
-            "size": "SIZE",
-            "creation_time": "CREATION_TIME",
-        }
-
-    @schemas.classproperty
-    def SIZE(cls):
-        return cls("size")
-
-    @schemas.classproperty
-    def CREATION_TIME(cls):
-        return cls("creation_time")
-
-
-class OrderSchema(schemas.EnumBase, schemas.StrSchema):
-
-    class MetaOapg:
-        enum_value_to_name = {
-            "asc": "ASC",
-            "desc": "DESC",
-        }
-
-    @schemas.classproperty
-    def ASC(cls):
-        return cls("asc")
-
-    @schemas.classproperty
-    def DESC(cls):
-        return cls("desc")
-
-
+GpuCountSchema = schemas.IntSchema
+GpuTypeSchema = schemas.StrSchema
+ImageNameSchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams', {})
+    'RequestRequiredQueryParams',
+    {
+        'gpu_count': typing.Union[GpuCountSchema, decimal.Decimal, int, ],
+        'gpu_type': typing.Union[GpuTypeSchema, str, ],
+    }
+)
 RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {
-        'dir_name': typing.Union[
-            DirNameSchema,
-            str,
-        ],
-        'max_results': typing.Union[
-            MaxResultsSchema,
-            decimal.Decimal,
-            int,
-        ],
-        'sort_by': typing.Union[
-            SortBySchema,
-            str,
-        ],
-        'order': typing.Union[
-            OrderSchema,
-            str,
-        ],
+    'RequestOptionalQueryParams',
+    {
+        'image_name': typing.Union[ImageNameSchema, str, ],
     },
-    total=False)
+    total=False
+)
 
 
-class RequestQueryParams(RequestRequiredQueryParams,
-                         RequestOptionalQueryParams):
+class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams):
     pass
 
 
-request_query_dir_name = api_client.QueryParameter(
-    name="dir_name",
+request_query_gpu_count = api_client.QueryParameter(
+    name="gpu_count",
     style=api_client.ParameterStyle.FORM,
-    schema=DirNameSchema,
+    schema=GpuCountSchema,
+    required=True,
     explode=True,
 )
-request_query_max_results = api_client.QueryParameter(
-    name="max_results",
+request_query_gpu_type = api_client.QueryParameter(
+    name="gpu_type",
     style=api_client.ParameterStyle.FORM,
-    schema=MaxResultsSchema,
+    schema=GpuTypeSchema,
+    required=True,
     explode=True,
 )
-request_query_sort_by = api_client.QueryParameter(
-    name="sort_by",
+request_query_image_name = api_client.QueryParameter(
+    name="image_name",
     style=api_client.ParameterStyle.FORM,
-    schema=SortBySchema,
+    schema=ImageNameSchema,
     explode=True,
 )
-request_query_order = api_client.QueryParameter(
-    name="order",
-    style=api_client.ParameterStyle.FORM,
-    schema=OrderSchema,
-    explode=True,
+# body param
+SchemaForRequestBodyApplicationJson = InstanceGroup
+
+
+request_body_instance_group = api_client.RequestBody(
+    content={
+        'application/json': api_client.MediaType(
+            schema=SchemaForRequestBodyApplicationJson),
+    },
+    required=True,
 )
-_auth = [
-    'APIKeyHeader',
-]
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
@@ -139,9 +98,8 @@ class ApiResponseFor200(api_client.ApiResponse):
 _response_for_200 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json':
-            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
-                                ),
+        'application/json': api_client.MediaType(
+            schema=SchemaFor200ResponseBodyApplicationJson),
     },
 )
 SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
@@ -159,60 +117,76 @@ class ApiResponseFor422(api_client.ApiResponse):
 _response_for_422 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor422,
     content={
-        'application/json':
-            api_client.MediaType(schema=SchemaFor422ResponseBodyApplicationJson
-                                ),
+        'application/json': api_client.MediaType(
+            schema=SchemaFor422ResponseBodyApplicationJson),
     },
 )
-_status_code_to_response = {
-    '200': _response_for_200,
-    '422': _response_for_422,
-}
-_all_accept_content_types = ('application/json',)
+_all_accept_content_types = (
+    'application/json',
+)
 
 
 class BaseApi(api_client.Api):
-
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _start_instances_with_gpu_oapg(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: typing_extensions.Literal["application/json"] = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
 
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _start_instances_with_gpu_oapg(
         self,
-        skip_deserialization: typing_extensions.Literal[True],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization:
-        ...
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+        ApiResponseFor200,
+    ]: ...
+
 
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _start_instances_with_gpu_oapg(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        skip_deserialization: typing_extensions.Literal[True],
+        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+    ) -> api_client.ApiResponseWithoutDeserialization: ...
+
+    @typing.overload
+    def _start_instances_with_gpu_oapg(
+        self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
-        ...
+        ApiResponseFor200,
+        api_client.ApiResponseWithoutDeserialization,
+    ]: ...
 
-    def _list_storage_contents_oapg(
+    def _start_instances_with_gpu_oapg(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: str = 'application/json',
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -220,7 +194,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        List Storage Contents
+        Start Instances With Gpu
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -230,19 +204,16 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-                request_query_dir_name,
-                request_query_max_results,
-                request_query_sort_by,
-                request_query_order,
+            request_query_gpu_count,
+            request_query_gpu_type,
+            request_query_image_name,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
             if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
-                )
-            serialized_data = parameter.serialize(parameter_data,
-                                                  prefix_separator_iterator)
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator()
+            serialized_data = parameter.serialize(parameter_data, prefix_separator_iterator)
             for serialized_value in serialized_data.values():
                 used_path += serialized_value
 
@@ -252,145 +223,204 @@ class BaseApi(api_client.Api):
             for accept_content_type in accept_content_types:
                 _headers.add('Accept', accept_content_type)
 
+        if body is schemas.unset:
+            raise exceptions.ApiValueError(
+                'The required body parameter has an invalid value of: unset. Set a valid value instead')
+        _fields = None
+        _body = None
+        serialized_data = request_body_instance_group.serialize(body, content_type)
+        _headers.add('Content-Type', content_type)
+        if 'fields' in serialized_data:
+            _fields = serialized_data['fields']
+        elif 'body' in serialized_data:
+            _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='get'.upper(),
+            method='post'.upper(),
             headers=_headers,
+            fields=_fields,
+            body=_body,
             auth_settings=_auth,
             stream=stream,
             timeout=timeout,
         )
 
         if skip_deserialization:
-            api_response = api_client.ApiResponseWithoutDeserialization(
-                response=response)
+            api_response = api_client.ApiResponseWithoutDeserialization(response=response)
         else:
-            response_for_status = _status_code_to_response.get(
-                str(response.status))
+            response_for_status = _status_code_to_response.get(str(response.status))
             if response_for_status:
-                api_response = response_for_status.deserialize(
-                    response, self.api_client.configuration)
+                api_response = response_for_status.deserialize(response, self.api_client.configuration)
             else:
-                api_response = api_client.ApiResponseWithoutDeserialization(
-                    response=response)
+                api_response = api_client.ApiResponseWithoutDeserialization(response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(status=response.status,
-                                          reason=response.reason,
-                                          api_response=api_response)
+            raise exceptions.ApiException(
+                status=response.status,
+                reason=response.reason,
+                api_response=api_response
+            )
 
         return api_response
 
 
-class ListStorageContents(BaseApi):
+class StartInstancesWithGpu(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def list_storage_contents(
+    def start_instances_with_gpu(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: typing_extensions.Literal["application/json"] = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
 
     @typing.overload
-    def list_storage_contents(
+    def start_instances_with_gpu(
         self,
-        skip_deserialization: typing_extensions.Literal[True],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization:
-        ...
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+        ApiResponseFor200,
+    ]: ...
+
 
     @typing.overload
-    def list_storage_contents(
+    def start_instances_with_gpu(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        skip_deserialization: typing_extensions.Literal[True],
+        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+    ) -> api_client.ApiResponseWithoutDeserialization: ...
+
+    @typing.overload
+    def start_instances_with_gpu(
+        self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
-        ...
+        ApiResponseFor200,
+        api_client.ApiResponseWithoutDeserialization,
+    ]: ...
 
-    def list_storage_contents(
+    def start_instances_with_gpu(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: str = 'application/json',
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._list_storage_contents_oapg(
+        return self._start_instances_with_gpu_oapg(
+            body=body,
             query_params=query_params,
+            content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization)
+            skip_deserialization=skip_deserialization
+        )
 
 
-class ApiForget(BaseApi):
+class ApiForpost(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def get(
+    def post(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: typing_extensions.Literal["application/json"] = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
 
     @typing.overload
-    def get(
+    def post(
         self,
-        skip_deserialization: typing_extensions.Literal[True],
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization:
-        ...
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+        ApiResponseFor200,
+    ]: ...
+
 
     @typing.overload
-    def get(
+    def post(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        skip_deserialization: typing_extensions.Literal[True],
+        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+    ) -> api_client.ApiResponseWithoutDeserialization: ...
+
+    @typing.overload
+    def post(
+        self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
-        ...
+        ApiResponseFor200,
+        api_client.ApiResponseWithoutDeserialization,
+    ]: ...
 
-    def get(
+    def post(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationJson,],
+        content_type: str = 'application/json',
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._list_storage_contents_oapg(
+        return self._start_instances_with_gpu_oapg(
+            body=body,
             query_params=query_params,
+            content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization)
+            skip_deserialization=skip_deserialization
+        )
+
+
