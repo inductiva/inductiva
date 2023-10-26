@@ -43,6 +43,7 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
             "spot-instance-preempted": "SPOTINSTANCEPREEMPTED",
             "executer-terminated": "EXECUTERTERMINATED",
             "executer-failed": "EXECUTERFAILED",
+            "zombie": "ZOMBIE",
         }
 
     @schemas.classproperty
@@ -84,3 +85,7 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
     @schemas.classproperty
     def EXECUTERFAILED(cls):
         return cls("executer-failed")
+
+    @schemas.classproperty
+    def ZOMBIE(cls):
+        return cls("zombie")
