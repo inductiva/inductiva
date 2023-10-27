@@ -10,8 +10,6 @@
 
 from inductiva.client.paths.tasks_task_id_output.get import DownloadTaskOutput
 from inductiva.client.paths.tasks_task_id_output_list.get import GetOutputsList
-from inductiva.client.paths.tasks_task_id_resources_tail.get import GetResourcesTail
-from inductiva.client.paths.tasks_task_id_stdout_tail.get import GetStdoutTail
 from inductiva.client.paths.tasks_task_id.get import GetTask
 from inductiva.client.paths.tasks_task_id_status.get import GetTaskStatus
 from inductiva.client.paths.tasks.get import GetUserTasks
@@ -23,8 +21,6 @@ from inductiva.client.paths.tasks_task_id_input.post import UploadTaskInput
 class TasksApi(
         DownloadTaskOutput,
         GetOutputsList,
-        GetResourcesTail,
-        GetStdoutTail,
         GetTask,
         GetTaskStatus,
         GetUserTasks,

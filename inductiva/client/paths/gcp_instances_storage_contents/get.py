@@ -29,8 +29,6 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 from . import path
 
 # Query params
-DirNameSchema = schemas.StrSchema
-
 MaxResultsSchema = schemas.IntSchema
 
 
@@ -72,10 +70,6 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
-        'dir_name': typing.Union[
-            DirNameSchema,
-            str,
-        ],
         'max_results': typing.Union[
             MaxResultsSchema,
             decimal.Decimal,
@@ -97,13 +91,6 @@ class RequestQueryParams(RequestRequiredQueryParams,
                          RequestOptionalQueryParams):
     pass
 
-
-request_query_dir_name = api_client.QueryParameter(
-    name="dir_name",
-    style=api_client.ParameterStyle.FORM,
-    schema=DirNameSchema,
-    explode=True,
-)
 
 request_query_max_results = api_client.QueryParameter(
     name="max_results",
@@ -232,7 +219,6 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-                request_query_dir_name,
                 request_query_max_results,
                 request_query_sort_by,
                 request_query_order,

@@ -9,25 +9,24 @@ from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
 from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
 from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
-from inductiva.client.apis.paths.tasks_task_id_stdout_tail import TasksTaskIdStdoutTail
-from inductiva.client.apis.paths.tasks_task_id_resources_tail import TasksTaskIdResourcesTail
 from inductiva.client.apis.paths.admin_users import AdminUsers
-from inductiva.client.apis.paths.admin_users_username import AdminUsersUsername
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
+from inductiva.client.apis.paths.admin_tasks import AdminTasks
 from inductiva.client.apis.paths.admin_groups import AdminGroups
-from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
-from inductiva.client.apis.paths.compute_group import ComputeGroup
-from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
-from inductiva.client.apis.paths.compute_group_elastic import ComputeGroupElastic
-from inductiva.client.apis.paths.compute_group_gpu import ComputeGroupGpu
-from inductiva.client.apis.paths.compute_price import ComputePrice
-from inductiva.client.apis.paths.compute_status import ComputeStatus
-from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
-from inductiva.client.apis.paths.compute_groups import ComputeGroups
-from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
-from inductiva.client.apis.paths.storage_size import StorageSize
-from inductiva.client.apis.paths.storage_contents import StorageContents
-from inductiva.client.apis.paths.storage_dir_name import StorageDirName
+from inductiva.client.apis.paths.executers_register import ExecutersRegister
+from inductiva.client.apis.paths.gcp_instances_group import GcpInstancesGroup
+from inductiva.client.apis.paths.gcp_instances_group_start import GcpInstancesGroupStart
+from inductiva.client.apis.paths.gcp_instances_group_elastic import GcpInstancesGroupElastic
+from inductiva.client.apis.paths.gcp_instances_price import GcpInstancesPrice
+from inductiva.client.apis.paths.gcp_instances_status import GcpInstancesStatus
+from inductiva.client.apis.paths.gcp_instances_group_status import GcpInstancesGroupStatus
+from inductiva.client.apis.paths.gcp_instances_storage_size import GcpInstancesStorageSize
+from inductiva.client.apis.paths.gcp_instances_storage_contents import GcpInstancesStorageContents
+from inductiva.client.apis.paths.gcp_instances_storage_dir_name import GcpInstancesStorageDirName
+from inductiva.client.apis.paths.gcp_instances_groups import GcpInstancesGroups
+from inductiva.client.apis.paths.gcp_instances_group_name import GcpInstancesGroupName
+from inductiva.client.apis.paths.users import Users
+from inductiva.client.apis.paths.tail import Tail
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -39,25 +38,24 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.TASKS_TASK_ID_OUTPUT_LIST: TasksTaskIdOutputList,
         PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
         PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
-        PathValues.TASKS_TASK_ID_STDOUT_TAIL: TasksTaskIdStdoutTail,
-        PathValues.TASKS_TASK_ID_RESOURCES_TAIL: TasksTaskIdResourcesTail,
         PathValues.ADMIN_USERS: AdminUsers,
-        PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
         PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
+        PathValues.ADMIN_TASKS: AdminTasks,
         PathValues.ADMIN_GROUPS: AdminGroups,
-        PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
-        PathValues.COMPUTE_GROUP: ComputeGroup,
-        PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
-        PathValues.COMPUTE_GROUP_ELASTIC: ComputeGroupElastic,
-        PathValues.COMPUTE_GROUP_GPU: ComputeGroupGpu,
-        PathValues.COMPUTE_PRICE: ComputePrice,
-        PathValues.COMPUTE_STATUS: ComputeStatus,
-        PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
-        PathValues.COMPUTE_GROUPS: ComputeGroups,
-        PathValues.COMPUTE_GROUP_NAME: ComputeGroupName,
-        PathValues.STORAGE_SIZE: StorageSize,
-        PathValues.STORAGE_CONTENTS: StorageContents,
-        PathValues.STORAGE_DIR_NAME: StorageDirName,
+        PathValues.EXECUTERS_REGISTER: ExecutersRegister,
+        PathValues.GCP_INSTANCES_GROUP: GcpInstancesGroup,
+        PathValues.GCP_INSTANCES_GROUP_START: GcpInstancesGroupStart,
+        PathValues.GCP_INSTANCES_GROUP_ELASTIC: GcpInstancesGroupElastic,
+        PathValues.GCP_INSTANCES_PRICE: GcpInstancesPrice,
+        PathValues.GCP_INSTANCES_STATUS: GcpInstancesStatus,
+        PathValues.GCP_INSTANCES_GROUP_STATUS: GcpInstancesGroupStatus,
+        PathValues.GCP_INSTANCES_STORAGE_SIZE: GcpInstancesStorageSize,
+        PathValues.GCP_INSTANCES_STORAGE_CONTENTS: GcpInstancesStorageContents,
+        PathValues.GCP_INSTANCES_STORAGE_DIR_NAME: GcpInstancesStorageDirName,
+        PathValues.GCP_INSTANCES_GROUPS: GcpInstancesGroups,
+        PathValues.GCP_INSTANCES_GROUP_NAME: GcpInstancesGroupName,
+        PathValues.USERS: Users,
+        PathValues.TAIL: Tail,
     })
 
 path_to_api = PathToApi({
@@ -69,23 +67,22 @@ path_to_api = PathToApi({
     PathValues.TASKS_TASK_ID_OUTPUT_LIST: TasksTaskIdOutputList,
     PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
     PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
-    PathValues.TASKS_TASK_ID_STDOUT_TAIL: TasksTaskIdStdoutTail,
-    PathValues.TASKS_TASK_ID_RESOURCES_TAIL: TasksTaskIdResourcesTail,
     PathValues.ADMIN_USERS: AdminUsers,
-    PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
     PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
+    PathValues.ADMIN_TASKS: AdminTasks,
     PathValues.ADMIN_GROUPS: AdminGroups,
-    PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
-    PathValues.COMPUTE_GROUP: ComputeGroup,
-    PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
-    PathValues.COMPUTE_GROUP_ELASTIC: ComputeGroupElastic,
-    PathValues.COMPUTE_GROUP_GPU: ComputeGroupGpu,
-    PathValues.COMPUTE_PRICE: ComputePrice,
-    PathValues.COMPUTE_STATUS: ComputeStatus,
-    PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
-    PathValues.COMPUTE_GROUPS: ComputeGroups,
-    PathValues.COMPUTE_GROUP_NAME: ComputeGroupName,
-    PathValues.STORAGE_SIZE: StorageSize,
-    PathValues.STORAGE_CONTENTS: StorageContents,
-    PathValues.STORAGE_DIR_NAME: StorageDirName,
+    PathValues.EXECUTERS_REGISTER: ExecutersRegister,
+    PathValues.GCP_INSTANCES_GROUP: GcpInstancesGroup,
+    PathValues.GCP_INSTANCES_GROUP_START: GcpInstancesGroupStart,
+    PathValues.GCP_INSTANCES_GROUP_ELASTIC: GcpInstancesGroupElastic,
+    PathValues.GCP_INSTANCES_PRICE: GcpInstancesPrice,
+    PathValues.GCP_INSTANCES_STATUS: GcpInstancesStatus,
+    PathValues.GCP_INSTANCES_GROUP_STATUS: GcpInstancesGroupStatus,
+    PathValues.GCP_INSTANCES_STORAGE_SIZE: GcpInstancesStorageSize,
+    PathValues.GCP_INSTANCES_STORAGE_CONTENTS: GcpInstancesStorageContents,
+    PathValues.GCP_INSTANCES_STORAGE_DIR_NAME: GcpInstancesStorageDirName,
+    PathValues.GCP_INSTANCES_GROUPS: GcpInstancesGroups,
+    PathValues.GCP_INSTANCES_GROUP_NAME: GcpInstancesGroupName,
+    PathValues.USERS: Users,
+    PathValues.TAIL: Tail,
 })
