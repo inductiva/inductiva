@@ -6,7 +6,7 @@ from absl import logging
 import inductiva
 import inductiva.client.models
 from inductiva import api
-from inductiva.client.apis.tags import instance_api
+from inductiva.client.apis.tags import compute_api
 
 
 class BaseMachineGroup():
@@ -40,7 +40,7 @@ class BaseMachineGroup():
 
         # Set the API configuration that carries the information from the client
         # to the backend.
-        self._api = instance_api.InstanceApi(api.get_client())
+        self._api = compute_api.ComputeApi(api.get_client())
         self._estimated_cost = None
 
     @property
@@ -64,7 +64,6 @@ class BaseMachineGroup():
         self._id = resp.body["id"]
         self._name = resp.body["name"]
         self.register = False
-        self._log_machine_group_info()
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -200,5 +199,3 @@ class BaseMachineGroup():
         # TODO: Not yet available to users
         logging.info("> Spot: %s", self.spot)
         logging.info("> Disk size: %s GB", self.disk_size_gb)
-        logging.info("> Estimated cost of a single machine: %s $/h\n",
-                     self._get_estimated_cost())
