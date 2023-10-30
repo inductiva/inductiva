@@ -78,48 +78,10 @@ task = scenario.simulate(machine_group=mg, ignore_warnings=True)
 mg.terminate()
 ```
 
-#### Launch hundreds of simulations to run in parallel in a group of machines
+Once the machine group with the desired configurations are started, you can run hundreds of simulations in parallel in those machines.
 
 
-```python
-
-import inductiva
-from inductiva import molecules
-
-# Create a MachineGroup with 10 machines
-mg = inductiva.resources.MachineGroup(
-    machine_type="c2d-standard-8",
-    num_machines=10,
-    disk_size_gb=40,
-)
-
-price_per_hour = mg.estimate_cloud_cost()
-
-# Start the machines
-mg.start()
-
-# Download the insulin protein (ID - "1ZNI") from RCSB database
-insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
-tasks = []
-
-# And simulate the solvation of the proteins on your newly started machines
-for temperature in range(200, 301):
-    scenario = molecules.ProteinSolvation(
-        protein_pdb=insulin_pdb_file, temperature=temperature)
-
-    # Tasks will be submitted to the new machine group
-    task = scenario.simulate(machine_group=mg, ignore_warnings=True)
-    tasks.append(task)
-
-# Block until all tasks complete
-for task in tasks:
-    task.wait()
-
-# Once you don't need them anymore, terminate the machines
-mg.terminate()
-```
-
-#### List active machine groups
+#### List and get active machine groups
 
 You can also list your active machine groups, or get a list of `MachineGroup` objects of previously created machine groups:
 
@@ -139,3 +101,13 @@ mg_list
 #[<inductiva.resources.machines.MachineGroup at 0x7f8cde53d2a0>,
 # <inductiva.resources.machines.MachineGroup at 0x7f8c58954c70>]
 ```
+
+
+## Resources Quotas
+
+As a user, you are allowed to use resources up to certain limits for free. The current free usage limits are:
+
+- Up to 80 cores
+- Up to 10 machines
+
+At the moment only [general-purpose](https://cloud.google.com/compute/docs/general-purpose-machines), [compute optimized][https://cloud.google.com/compute/docs/compute-optimized-machines], and [memory optimized](https://cloud.google.com/compute/docs/memory-optimized-machines) Google Cloud machines are available via Inductiva API.
