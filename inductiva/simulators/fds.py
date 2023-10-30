@@ -18,6 +18,7 @@ class FDS(Simulator):
         input_dir: types.Path,
         sim_config_filename: str,
         machine_group: Optional[resources.MachineGroup] = None,
+        storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -28,4 +29,5 @@ class FDS(Simulator):
         """
         return super().run(input_dir,
                            machine_group=machine_group,
-                           input_filename=sim_config_filename)
+                           input_filename=sim_config_filename,
+                           storage_dir=storage_dir)

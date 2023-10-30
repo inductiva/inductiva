@@ -7,6 +7,7 @@ from absl import logging
 from typing import Dict, Any, List, Optional
 from typing_extensions import TypedDict
 import datetime
+from dateutil import parser
 import inductiva
 from inductiva.client import models
 from inductiva import api
@@ -221,6 +222,9 @@ class Task:
         # e.g. retrieve openfoam from fvm.openfoam.run_simulation
         return self.get_info()["method_name"].split(".")[1]
 
+    def get_storage_path(self) -> str:
+        return self.get_info()["storage_path"]
+
     def get_output(
         self,
         all_files: bool = False,
@@ -411,3 +415,68 @@ class Task:
         machine_type = machine_info["vm_type"].split("/")[-1]
 
         return machine_type
+
+    def get_stdout(self, n_lines: int = 10, verbose: bool = True):
+        """Returns tail of stdout.txt file for current task
+
+        Args:
+            n_lines: Number of lines to return from the end of the file.
+            verbose: Whether to print the contents.
+        Returns:
+            A list of strings, each string being a line from the stdout."""
+
+        api_response = self._api.get_stdout_tail(
+            path_params=self._get_path_params(),
+            query_params={
+                "n_lines": n_lines,
+            },
+            stream=False,
+            skip_deserialization=False,
+        )
+
+        if verbose:
+            logging.info("Simulation stdout:")
+            print("\n")
+            for line in api_response.body:
+                print(line)
+
+        return api_response.body
+
+    def get_resources_usage(self, n_lines: int = 10, verbose: bool = True):
+        """Returns tail of resources_usage.txt file for current task
+
+        Calls the get_resources_tail function. This file is a .csv file
+        with each line corresponding to: register_time / memory_usage_percent /
+        cpu_usage_percent. The function returns the last n_lines in a list of
+        lines.
+        Args:
+            n_lines: Number of lines to return from the end of the file.
+            verbose: Whether to print the contents.
+        Returns:
+            A list of strings, each string being a line from the stdout."""
+
+        api_response = self._api.get_resources_tail(
+            path_params=self._get_path_params(),
+            query_params={
+                "n_lines": n_lines,
+            },
+            stream=False,
+            skip_deserialization=False,
+        )
+
+        if verbose:
+            logging.info("Current resource usage:")
+            print("\n")
+            print("Timestamp \t   Memory usage  CPU usage")
+
+            for line in api_response.body:
+                date, memory, cpu = line.split(",")
+
+                #Remove the miliseconds from the date
+                datetime_date = parser.parse(date)
+                truncated_datetime = datetime_date.strftime("%Y-%m-%d %H:%M:%S")
+
+                print(f"{truncated_datetime} \t {float(memory):.3f}\
+                       \t {float(cpu):.3f}")
+
+        return api_response.body

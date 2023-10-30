@@ -1,7 +1,7 @@
 """Functions to manage or retrieve user resources."""
 import inductiva
 import inductiva.client
-from inductiva.client.apis.tags import instance_api
+from inductiva.client.apis.tags import compute_api
 from inductiva.utils import format_utils
 from inductiva import resources
 
@@ -54,7 +54,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
 def _fetch_machine_groups_from_api():
     """Get all active machine groups of a user from the API."""
     try:
-        api = instance_api.InstanceApi(inductiva.api.get_client())
+        api = compute_api.ComputeApi(inductiva.api.get_client())
         response = api.list_active_user_instance_groups()
         if len(response.body) == 0:
             print("No active machine groups found.")

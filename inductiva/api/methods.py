@@ -276,7 +276,8 @@ def submit_task(api_instance, task_request, params, type_annotations):
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
-                     resource_pool_id: Optional[UUID] = None) -> str:
+                     resource_pool_id: Optional[UUID] = None,
+                     storage_path_prefix: Optional[str] = "") -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -308,11 +309,10 @@ def invoke_async_api(method_name: str,
         type_annotations=type_annotations,
     )
 
-    task_request = TaskRequest(
-        method=method_name,
-        params=request_params,
-        resource_pool=resource_pool_id,
-    )
+    task_request = TaskRequest(method=method_name,
+                               params=request_params,
+                               resource_pool=resource_pool_id,
+                               storage_path_prefix=storage_path_prefix)
 
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)

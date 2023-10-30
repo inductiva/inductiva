@@ -17,7 +17,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_type: str,
         num_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 40,
+        disk_size_gb: int = 60,
         zone: str = "europe-west1-b",
         register: bool = True,
     ) -> None:
@@ -29,7 +29,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
               information about machine types.
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 40 GB.
+            disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
             zone: The zone where the machines will be launched.
         """
         super().__init__(machine_type=machine_type,
@@ -43,6 +43,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         if register:
             super()._register_machine_group(num_instances=self.num_machines,
                                             is_elastic=self.is_elastic)
+            self._log_machine_group_info()
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -64,6 +65,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
         logging.info("> Number of machines: %s", self.num_machines)
+        self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
         """Estimates a cost per hour of the machine group in US dollars.
@@ -101,7 +103,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         min_machines: int = 1,
         max_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 40,
+        disk_size_gb: int = 60,
         zone: str = "europe-west1-b",
         register: bool = True,
     ) -> None:
@@ -117,7 +119,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             max_machines: The maximum number of machines a machine group
               can scale up to.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 40 GB.
+            disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
             zone: The zone where the machines will be launched.
         """
         if max_machines < min_machines:
@@ -139,6 +141,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
                 max_instances=self.max_machines,
                 is_elastic=self.is_elastic,
                 num_instances=self.num_active_machines)
+            self._log_machine_group_info()
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -166,6 +169,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         super()._log_machine_group_info()
         logging.info("> Maximum number of machines: %s", self.max_machines)
         logging.info("> Minimum number of machines: %s", self.min_machines)
+        self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
         """Estimates a cost per hour of min and max machines in US dollars.

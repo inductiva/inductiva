@@ -9,7 +9,6 @@
 """
 
 from inductiva.client.paths.admin_users.post import AddUser
-from inductiva.client.paths.admin_tasks.get import GetTasks
 from inductiva.client.paths.admin_users_username_tasks.get import GetTasksByUsername
 from inductiva.client.paths.admin_users_username.get import GetUser
 from inductiva.client.paths.admin_groups.get import ListActiveInstanceGroups
@@ -17,7 +16,6 @@ from inductiva.client.paths.admin_groups.get import ListActiveInstanceGroups
 
 class AdminApi(
         AddUser,
-        GetTasks,
         GetTasksByUsername,
         GetUser,
         ListActiveInstanceGroups,

@@ -95,6 +95,7 @@ class HeatSink(scenarios.Scenario):
         self,
         simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
+        storage_dir: Optional[str] = "",
         simulation_time=300,
         output_time_step=10,
     ) -> tasks.Task:
@@ -106,6 +107,8 @@ class HeatSink(scenarios.Scenario):
             output_time_step: The time step to save the simulation results, in
               seconds.
             machine_group: The machine group to use for the simulation.
+            storage_dir: The parent directory where simulation results
+            will be stored.
         """
         simulator.override_api_method_prefix("heat_sink")
 
@@ -117,6 +120,7 @@ class HeatSink(scenarios.Scenario):
         # TODO: Address the mpirun runs of HeatSink
         task = super().simulate(simulator,
                                 machine_group=machine_group,
+                                storage_dir=storage_dir,
                                 commands=commands)
 
         return task

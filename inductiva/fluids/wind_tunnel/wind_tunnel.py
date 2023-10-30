@@ -97,6 +97,7 @@ class WindTunnel(scenarios.Scenario):
             self,
             simulator: simulators.Simulator = simulators.OpenFOAM(),
             machine_group: Optional[resources.MachineGroup] = None,
+            storage_dir: Optional[str] = "",
             object_path: Optional[types.Path] = None,
             num_iterations: float = 100,
             resolution: Literal["high", "medium",
@@ -107,12 +108,12 @@ class WindTunnel(scenarios.Scenario):
             simulator: Simulator used to simulate the scenario.
                 Valid simulators: OpenFOAM.
             object_path: Path to object inserted in the wind tunnel.
-            output_dir: Path to the directory where the simulation output
-                is downloaded when running synchronously.
             num_iterations: Number of iterations of the simulator.
             resolution: Level of detail of the mesh used for the simulation.
                 Options: "high", "medium" or "low".
             machine_group: The machine group to use for the simulation.
+            storage_dir: The parent directory where simulation
+            results will be stored.
         """
         simulator.override_api_method_prefix("wind_tunnel")
 
@@ -126,6 +127,7 @@ class WindTunnel(scenarios.Scenario):
         commands = self.get_commands()
         task = super().simulate(simulator,
                                 machine_group=machine_group,
+                                storage_dir=storage_dir,
                                 commands=commands)
 
         return task

@@ -25,37 +25,38 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.new_user import NewUser
+from inductiva.client.model.user import User
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.user_create import UserCreate
 
 # body param
-SchemaForRequestBodyApplicationJson = NewUser
+SchemaForRequestBodyApplicationJson = UserCreate
 
 
-request_body_new_user = api_client.RequestBody(
+request_body_user_create = api_client.RequestBody(
     content={
         'application/json': api_client.MediaType(
             schema=SchemaForRequestBodyApplicationJson),
     },
     required=True,
 )
-SchemaFor202ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor201ResponseBodyApplicationJson = User
 
 
 @dataclass
-class ApiResponseFor202(api_client.ApiResponse):
+class ApiResponseFor201(api_client.ApiResponse):
     response: urllib3.HTTPResponse
     body: typing.Union[
-        SchemaFor202ResponseBodyApplicationJson,
+        SchemaFor201ResponseBodyApplicationJson,
     ]
     headers: schemas.Unset = schemas.unset
 
 
-_response_for_202 = api_client.OpenApiResponse(
-    response_cls=ApiResponseFor202,
+_response_for_201 = api_client.OpenApiResponse(
+    response_cls=ApiResponseFor201,
     content={
         'application/json': api_client.MediaType(
-            schema=SchemaFor202ResponseBodyApplicationJson),
+            schema=SchemaFor201ResponseBodyApplicationJson),
     },
 )
 SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
@@ -93,7 +94,7 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor202,
+        ApiResponseFor201,
     ]: ...
 
     @typing.overload
@@ -106,7 +107,7 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor202,
+        ApiResponseFor201,
     ]: ...
 
 
@@ -131,7 +132,7 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor202,
+        ApiResponseFor201,
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
@@ -163,7 +164,7 @@ class BaseApi(api_client.Api):
                 'The required body parameter has an invalid value of: unset. Set a valid value instead')
         _fields = None
         _body = None
-        serialized_data = request_body_new_user.serialize(body, content_type)
+        serialized_data = request_body_user_create.serialize(body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
             _fields = serialized_data['fields']
@@ -212,7 +213,7 @@ class AddUser(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor202,
+        ApiResponseFor201,
     ]: ...
 
     @typing.overload
@@ -225,7 +226,7 @@ class AddUser(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor202,
+        ApiResponseFor201,
     ]: ...
 
 
@@ -250,7 +251,7 @@ class AddUser(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor202,
+        ApiResponseFor201,
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
@@ -286,7 +287,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor202,
+        ApiResponseFor201,
     ]: ...
 
     @typing.overload
@@ -299,7 +300,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor202,
+        ApiResponseFor201,
     ]: ...
 
 
@@ -324,7 +325,7 @@ class ApiForpost(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor202,
+        ApiResponseFor201,
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 

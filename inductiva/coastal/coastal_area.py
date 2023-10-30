@@ -91,18 +91,25 @@ class CoastalArea(scenarios.Scenario):
         self,
         simulator: simulators.Simulator = simulators.SWASH(),
         machine_group: Optional[resources.MachineGroup] = None,
+        storage_dir: Optional[str] = "",
         simulation_time: float = 100,
         time_step: float = 0.1,
         output_time_step: float = 1,
     ) -> tasks.Task:
-        """Simulates the scenario.
+        """Simulates the coastal area scenario.
 
         Args:
-            simulator: Simulator to use. Supported simulators are: SWASH.
+            simulator: The simulator to use for the simulation.
+            Default is SWASH.
             machine_group: The machine group to use for the simulation.
-            simulation_time: Total simulation time, in seconds.
-            time_step: Time step, in seconds.
-            output_time_step: Time step for the output, in seconds.
+            storage_dir: The parent directory where simulation
+            results will be stored.
+            simulation_time: The total simulation time, in seconds.
+            time_step: The time step, in seconds.
+            output_time_step: The time step for the output.
+
+        Returns:
+            The task object representing the simulation task.
         """
         simulator.override_api_method_prefix("coastal_area")
 
@@ -113,6 +120,7 @@ class CoastalArea(scenarios.Scenario):
         task = super().simulate(
             simulator,
             machine_group=machine_group,
+            storage_dir=storage_dir,
             sim_config_filename=SWASH_CONFIG_FILENAME,
         )
 
