@@ -16,7 +16,7 @@ Note that these machine groups are literally groups of individual machines that 
 
 
 #### Running a simulation in a specific machine type
-#### Launching `MachineGroup`
+#### Launch `MachineGroup`
 
 ```python
 
@@ -36,7 +36,7 @@ price_per_hour = mg.estimate_cloud_cost()
 # Start the machines
 mg.start()
 ```
-#### Launching `ElasticMachineGroup`
+#### Launch `ElasticMachineGroup`
 
 ```python
 
@@ -44,7 +44,7 @@ import inductiva
 from inductiva import molecules
 
 # Create a ElasticMachineGroup object with minimum 1 machine. Based on the CPU load this machine group
-# will scale up to 5 machines, if there is no load it will scale down back to 1 machine.
+# will scale up to 5 machines, if there is no load it will scale down to 1 machine.
 mg = inductiva.resources.ElasticMachineGroup(
     machine_type="c2-standard-4",
     min_machines=1,
