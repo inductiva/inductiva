@@ -309,12 +309,10 @@ def invoke_async_api(method_name: str,
         type_annotations=type_annotations,
     )
 
-    task_request = TaskRequest(
-        method=method_name,
-        params=request_params,
-        resource_pool=resource_pool_id,
-        storage_path_prefix=storage_path_prefix
-    )
+    task_request = TaskRequest(method=method_name,
+                               params=request_params,
+                               resource_pool=resource_pool_id,
+                               storage_path_prefix=storage_path_prefix)
 
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)

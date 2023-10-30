@@ -98,9 +98,9 @@ class WindTunnel(scenarios.Scenario):
             self,
             simulator: simulators.Simulator = simulators.OpenFOAM(),
             machine_group: Optional[resources.MachineGroup] = None,
+            storage_dir: Optional[str] = "",
             object_path: Optional[types.Path] = None,
             num_iterations: float = 100,
-            storage_dir: Optional[str] = "",
             resolution: Literal["high", "medium",
                                 "low"] = "medium") -> tasks.Task:
         """Simulates the wind tunnel scenario synchronously.
