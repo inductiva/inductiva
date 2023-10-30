@@ -2,10 +2,10 @@
 
 By default, simulation requests are processed by a shared pool of machines serving multiple users. These machines are equipped with 4 cores each, and the pool is limited to a predefined capacity. If you require dedicated resources with custom configurations, the **Inductiva API** allows you to easily set up virtual machines reserved solely for your simulations. These are managed via machine groups, *i.e.*, groups of homogeneous machines with specific requested properties that can be started and terminated on demand.
 
-There are two types of machine groups available: `MachineGroups` and `ElasticMachineGroups`. Both of these classes serve to configure, start, and terminate the machines, and will require specifying the type of Virtual Machine to use. Currently, the available options for the `machine_type` are the ones available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types). The only difference is in a way these groups manage the number of machines up.
+There are two types of machine groups available: `MachineGroup` and `ElasticMachineGroup`. Both of these classes serve to configure, start, and terminate the machines, and will require specifying the type of Virtual Machine to use. Currently, the available options for the `machine_type` are the ones available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types). The only difference is in a way these groups manage the number of machines up.
 
 - `MachineGroup` creates the specified number of machines at once, those machines will be up until they are terminated.
-- `ElasticMachineGroups` starts with a minimum number of machines and dynamically scales up to a maximum number of machines or down based on the CPU load.
+- `ElasticMachineGroup` starts with a minimum number of machines and dynamically scales up to a maximum number of machines or down based on the CPU load.
 
 
 Once a machine group is created, simply pass it as argument to your simulations, which will then be scheduled to run on those machines.
