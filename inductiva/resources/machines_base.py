@@ -15,7 +15,7 @@ class BaseMachineGroup():
     def __init__(self,
                  machine_type: str,
                  spot: bool = False,
-                 disk_size_gb: int = 40,
+                 disk_size_gb: int = 60,
                  zone: str = "europe-west1-b",
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
@@ -25,7 +25,7 @@ class BaseMachineGroup():
               Check https://cloud.google.com/compute/docs/machine-resource for
               more information about machine types.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 40 GB.
+            disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
             zone: The zone where the machines will be launched.
         """
         self.machine_type = machine_type
