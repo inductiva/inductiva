@@ -313,6 +313,7 @@ def invoke_async_api(method_name: str,
         method=method_name,
         params=request_params,
         resource_pool=resource_pool_id,
+        storage_path_prefix=storage_path_prefix
     )
 
     with ApiClient(api_config) as client:
@@ -321,8 +322,7 @@ def invoke_async_api(method_name: str,
         task_id = submit_task(api_instance=api_instance,
                               task_request=task_request,
                               params=params,
-                              type_annotations=type_annotations,
-                              storage_path_prefix=storage_path_prefix)
+                              type_annotations=type_annotations)
 
         if resource_pool_id is None:
             logging.info("Task submitted to the default resource pool.")

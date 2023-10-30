@@ -32,7 +32,7 @@ def run_simulation(
         params,
         type_annotations,
         resource_pool_id=resource_pool_id,
-        storage_dir=storage_dir,
+        storage_path_prefix=storage_dir,
     )
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
