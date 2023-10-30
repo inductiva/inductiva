@@ -8,7 +8,7 @@ AVAILABLE_OPENFOAM_VERSIONS = ["foundation", "esi"]
 
 class OpenFOAM(simulators.Simulator):
     """Class to invoke a generic OpenFOAM simulation on the API.
-    
+
     Users can choose between the ESI or the Foundation version
     by selecting the version on the initiliasation. Be aware, that
     some input files may only work for a specific version.
@@ -22,11 +22,13 @@ class OpenFOAM(simulators.Simulator):
         super().__init__()
         self.api_method_name = f"fvm.openfoam_{version}.run_simulation"
 
-    def run(self,
-            input_dir: types.Path,
-            commands: List[dict],
-            machine_group: Optional[resources.MachineGroup] = None
-           ) -> tasks.Task:
+    def run(
+        self,
+        input_dir: types.Path,
+        commands: List[dict],
+        machine_group: Optional[resources.MachineGroup] = None,
+        storage_dir: Optional[types.Path] = "",
+    ) -> tasks.Task:
         """Run the simulation.
 
         Args:
@@ -35,4 +37,5 @@ class OpenFOAM(simulators.Simulator):
         """
         return super().run(input_dir,
                            machine_group=machine_group,
-                           commands=commands)
+                           commands=commands,
+                           storage_dir=storage_dir)

@@ -5,7 +5,7 @@ import io
 import tempfile
 from typing import Optional, Union
 
-from inductiva import resources
+from inductiva import resources, types
 from inductiva.types import Path
 from inductiva.simulators import Simulator
 import json
@@ -41,6 +41,7 @@ class Scenario(ABC):
         self,
         simulator: Simulator,
         machine_group: Optional[resources.MachineGroup] = None,
+        storage_dir: Optional[types.Path] = "",
         **kwargs,
     ):
         """Simulates the scenario synchronously."""
@@ -52,5 +53,6 @@ class Scenario(ABC):
             return simulator.run(
                 input_dir,
                 machine_group=machine_group,
+                storage_dir=storage_dir,
                 **kwargs,
             )

@@ -41,6 +41,7 @@ class Simulator(ABC):
         input_dir: types.Path,
         *_args,
         machine_group: Optional[resources.MachineGroup] = None,
+        storage_dir: Optional[types.Path] = "",
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -49,6 +50,9 @@ class Simulator(ABC):
             input_dir: Path to the directory containing the input files.
             _args: Unused in this method, but defined to allow for more
                 non-default arguments in method override in subclasses.
+            machine_group: The machine group to use for the simulation.
+            storage_dir: Parent directory for storing simulation
+                               results.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
@@ -58,5 +62,6 @@ class Simulator(ABC):
             self.api_method_name,
             input_dir,
             machine_group=machine_group,
+            storage_dir=storage_dir,
             **kwargs,
         )

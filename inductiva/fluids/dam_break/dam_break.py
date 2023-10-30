@@ -29,7 +29,7 @@ class DamBreak(fluids.FluidBlock):
             fluid: A fluid type to simulate.
             dimensions: A list containing fluid column dimensions,
               in meters.
-            pisition: A list containing fluid column position in a tank,
+            position: A list containing fluid column position in a tank,
               in meters.
             """
 
@@ -46,6 +46,7 @@ class DamBreak(fluids.FluidBlock):
         self,
         simulator: simulators.Simulator = simulators.DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
+        storage_dir: Optional[str] = "",
         resolution: Literal["high", "medium", "low"] = "low",
         simulation_time: float = 1,
     ) -> tasks.Task:
@@ -56,6 +57,8 @@ class DamBreak(fluids.FluidBlock):
             machine_group: The machine group to use for the simulation.
             resolution: Resolution of the simulation.
             simulation_time: Simulation time, in seconds.
+            storage_dir: The parent directory where the simulation results
+            will be stored.
         """
         simulator.override_api_method_prefix("dam_break")
 
@@ -71,6 +74,7 @@ class DamBreak(fluids.FluidBlock):
         task = super(fluids.FluidBlock, self).simulate(
             simulator=simulator,
             machine_group=machine_group,
+            storage_dir=storage_dir,
             sim_config_filename=self.get_config_filename(simulator))
 
         return task

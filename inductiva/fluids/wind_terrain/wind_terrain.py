@@ -100,6 +100,8 @@ class WindOverTerrain(scenarios.Scenario):
         self,
         simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
+        storage_dir: Optional[str] = "",
+
         num_iterations: int = 100,
     ) -> inductiva.tasks.Task:
         """Simulates the wind over the terrain scenario.
@@ -109,6 +111,8 @@ class WindOverTerrain(scenarios.Scenario):
                 Valid simulators: OpenFOAM.
             machine_group: The MachineGroup to use for the simulation.
             num_iterations: Number of iterations to run the simulation.
+            storage_dir: The parent directory where simulation
+            results will be stored.
         """
         simulator.override_api_method_prefix("wind_terrain")
 
@@ -118,6 +122,7 @@ class WindOverTerrain(scenarios.Scenario):
 
         task = super().simulate(simulator,
                                 machine_group=machine_group,
+                                storage_dir=storage_dir,
                                 commands=commands)
 
         return task

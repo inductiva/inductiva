@@ -18,14 +18,20 @@ class DualSPHysics(Simulator):
         input_dir: types.Path,
         sim_config_filename: str = "config.xml",
         machine_group: Optional[resources.MachineGroup] = None,
+        storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
-        """Run the simulation.
+        """Executes a DualSPHysics simulation.
 
         Args:
-            input_dir: Path to the directory of the simulation input files.
-            sim_config_filename: Name of the simulation configuration file.
-            other arguments: See the documentation of the base class.
+            input_dir: Directory with simulation input files.
+            sim_config_filename: Simulation config file.
+            machine_group: Machine group for simulation.
+            storage_dir: Directory for storing results.
+
+        Returns:
+            tasks.Task: An object representing the simulation task.
         """
         return super().run(input_dir,
                            machine_group=machine_group,
-                           input_filename=sim_config_filename)
+                           input_filename=sim_config_filename,
+                           storage_dir=storage_dir)
