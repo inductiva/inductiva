@@ -27,11 +27,13 @@ def run_simulation(
     if machine_group is not None:
         resource_pool_id = machine_group.id
 
-    task_id = methods.invoke_async_api(api_method_name,
-                                       params,
-                                       type_annotations,
-                                       resource_pool_id=resource_pool_id,
-                                       storage_dir=storage_dir,)
+    task_id = methods.invoke_async_api(
+        api_method_name,
+        params,
+        type_annotations,
+        resource_pool_id=resource_pool_id,
+        storage_dir=storage_dir,
+    )
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
         raise RuntimeError(
