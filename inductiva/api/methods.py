@@ -29,8 +29,9 @@ def validate_api_key(api_key: Optional[str]) -> Configuration:
     if inductiva.api_key is None:
         raise ValueError(
             "No API Key specified. "
-            "Set it in the code with \"inductiva.api_key = <YOUR_SECRET_KEY>\""
-            " or set the INDUCTIVA_API_KEY environment variable.")
+            "Use the INDUCTIVA_API_CREDENTIALS environment variable with a "
+            "path to TXT file or set the INDUCTIVA_API_KEY "
+            "environment variable.")
 
     api_config = Configuration(host=inductiva.api_url)
     api_config.api_key["APIKeyHeader"] = api_key

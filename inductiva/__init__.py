@@ -23,7 +23,14 @@ from . import tasks
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "http://api.inductiva.ai")
 output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
-api_key = os.environ.get("INDUCTIVA_API_KEY")
+
+credentials_file_path = os.getenv("INDUCTIVA_API_CREDENTIALS")
+if credentials_file_path:
+    with open(credentials_file_path, 'r') as file:
+        api_key = file.read().strip()
+else:
+    api_key = os.environ.get("INDUCTIVA_API_KEY")
+
 working_dir = None
 
 absl.logging.set_verbosity(absl.logging.INFO)
