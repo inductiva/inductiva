@@ -21,12 +21,10 @@ from inductiva import output_consts
 import warnings
 
 _TASK_TERMINAL_STATUSES = {
-    models.TaskStatusCode.SUCCESS,
-    models.TaskStatusCode.FAILED,
-    models.TaskStatusCode.KILLED,
-    models.TaskStatusCode.EXECUTERFAILED,
+    models.TaskStatusCode.SUCCESS, models.TaskStatusCode.FAILED,
+    models.TaskStatusCode.KILLED, models.TaskStatusCode.EXECUTERFAILED,
     models.TaskStatusCode.EXECUTERTERMINATED,
-    models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
+    models.TaskStatusCode.SPOTINSTANCEPREEMPTED, models.TaskStatusCode.ZOMBIE
 }
 
 
@@ -160,6 +158,9 @@ class Task:
                                  "more detail. \n")
                 elif status == models.TaskStatusCode.KILLED:
                     logging.info("Task killed.\n")
+                elif status == models.TaskStatusCode.ZOMBIE:
+                    logging.info("The machine was terminated while the task "
+                                 "was pending.")
                 else:
                     logging.info("An internal error occurred while "
                                  "performing the task.\n")
