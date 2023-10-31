@@ -2,11 +2,10 @@
 
 By default, simulation requests are processed by a shared pool of machines serving multiple users. These machines are equipped with 4 cores each, and the pool is limited to a predefined capacity. If you require dedicated resources with custom configurations, the **Inductiva API** allows you to easily set up virtual machines reserved solely for your simulations. These are managed via machine groups, *i.e.*, groups of homogeneous machines with specific requested properties that can be started and terminated on demand.
 
-There are two types of machine groups available: `MachineGroup` and `ElasticMachineGroup`. Both of these classes serve to configure, start, and terminate the machines, and will require specifying the type of Virtual Machine to use. Currently, the available options for the `machine_type` are the ones available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types). The only difference is in a way these groups manage the number of machines up.
+There are two types of machine groups available: `MachineGroup` and `ElasticMachineGroup`. Both of these classes serve to configure, start, and terminate the machines, and will require specifying the type of Virtual Machine to use. At the moment only [general-purpose](https://cloud.google.com/compute/docs/general-purpose-machines), (compute optimized)[https://cloud.google.com/compute/docs/compute-optimized-machines], and [memory optimized](https://cloud.google.com/compute/docs/memory-optimized-machines) Google Cloud `machine_types` are available. The only difference is in a way these groups manage the number of machines up.
 
 - `MachineGroup` creates the specified number of machines at once, those machines will be up until they are terminated.
-- `ElasticMachineGroup` starts with a minimum number of machines and dynamically scales up to a maximum number of machines or down based on the CPU load.
-
+- `ElasticMachineGroup` starts with a minimum number of machines and dynamically scales up to a maximum number of machines or down to minimum based on the CPU load.
 
 Once a machine group is created, simply pass it as argument to your simulations, which will then be scheduled to run on those machines.
 
@@ -107,7 +106,5 @@ mg_list
 
 As a user, you are allowed to use resources up to certain limits for free. The current free usage limits are:
 
-- Up to 80 cores
-- Up to 10 machines
-
-At the moment only [general-purpose](https://cloud.google.com/compute/docs/general-purpose-machines), [compute optimized][https://cloud.google.com/compute/docs/compute-optimized-machines], and [memory optimized](https://cloud.google.com/compute/docs/memory-optimized-machines) Google Cloud machines are available via Inductiva API.
+- Up to 80 cores in total at a time, i.e. the sum of all active cores should not exceed 80
+- Up to 10 machines at a time (example: you can have 2 machine groups with 5 machines each, or 1 machine group with 10 machines)
