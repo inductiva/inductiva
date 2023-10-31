@@ -180,8 +180,7 @@ def download_from_url(url: str, save_dir: Optional[str] = None) -> str:
         _unzip(downloaded_to, local_path)
     else:
         # Rename the file to the correct path;
-        # using replace instead of rename to have consistent behaviour
-        # on windows and linux if the file already exists.
+        # Use shutil copy to be consistent among OS's.
         # If the file exists, it will be overwritten.
         shutil.copy(downloaded_to, local_path)
 
