@@ -26,7 +26,7 @@ output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
 
 credentials_file_path = os.getenv("INDUCTIVA_API_CREDENTIALS")
 if credentials_file_path:
-    with open(credentials_file_path, 'r') as file:
+    with open(credentials_file_path, "r", encoding="utf-8") as file:
         api_key = file.read().strip()
 else:
     api_key = os.environ.get("INDUCTIVA_API_KEY")
