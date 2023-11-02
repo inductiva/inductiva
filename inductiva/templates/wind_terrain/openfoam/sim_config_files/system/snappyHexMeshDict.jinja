@@ -39,7 +39,7 @@ geometry
     object
     {
         type triSurfaceMesh;
-        file "{{ terrain_path }}";
+        file "terrain.stl";
     }
 };
 
@@ -177,7 +177,7 @@ castellatedMeshControls
     // section reachable from the locationInMesh is kept.
     // NOTE: This point needs to be strictly inside the box mesh,
     // but above the terrain mesh.
-    locationInMesh ({{ terrain_center["x"] }} {{ terrain_center["y"] }} {{ terrain_bounds["z"][1] + 10}});
+    locationInMesh ({{ terrain.center["x"] }} {{ terrain.center["y"] }} {{ terrain.bounds["z"][1] + 10}});
 
 
     // Whether any faceZones (as specified in the refinementSurfaces)

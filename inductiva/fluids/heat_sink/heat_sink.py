@@ -1,7 +1,5 @@
 """Heat sink scenario."""
-from functools import singledispatchmethod
 import os
-import shutil
 from typing import Optional
 
 from inductiva import tasks, resources, simulators, scenarios, utils
@@ -9,10 +7,6 @@ from inductiva import tasks, resources, simulators, scenarios, utils
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "heat_sink")
 OPENFOAM_TEMPLATE_SUBDIR = "openfoam"
-FILES_SUBDIR = "files"
-OPENFOAM_TEMPLATE_PARAMS_FILE_NAME = "parameters.jinja"
-OPENFOAM_PARAMS_FILE_NAME = "parameters"
-COMMANDS_FILE_NAME = "commands.json"
 
 
 class HeatSink(scenarios.Scenario):
@@ -72,6 +66,8 @@ class HeatSink(scenarios.Scenario):
     """
 
     valid_simulators = [simulators.OpenFOAM]
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      OPENFOAM_TEMPLATE_SUBDIR)
 
     def __init__(
         self,
@@ -87,17 +83,17 @@ class HeatSink(scenarios.Scenario):
               sets the initial temperature of the heater and the heat sink.
             heater_power: The power of the heater, in Watts.
         """
-        self.air_velocity = air_velocity
-        self.air_temperature = air_temperature
-        self.heater_power = heater_power
+        self.params["air_velocity"] = air_velocity
+        self.params["air_temperature"] = air_temperature
+        self.params["heater_power"] = heater_power
 
     def simulate(
         self,
         simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[str] = "",
-        simulation_time=300,
-        output_time_step=10,
+        simulation_time: float = 300,
+        output_time_step: float = 10,
     ) -> tasks.Task:
         """Simulates the scenario.
 
@@ -112,11 +108,10 @@ class HeatSink(scenarios.Scenario):
         """
         simulator.override_api_method_prefix("heat_sink")
 
-        self.simulation_time = simulation_time
-        self.output_time_step = output_time_step
+        self.params["simulation_time"] = simulation_time
+        self.params["output_time_step"] = output_time_step
 
         commands = self.get_commands()
-
         # TODO: Address the mpirun runs of HeatSink
         task = super().simulate(simulator,
                                 machine_group=machine_group,
@@ -124,48 +119,3 @@ class HeatSink(scenarios.Scenario):
                                 commands=commands)
 
         return task
-
-    def get_commands(self):
-        """Returns the OpenFOAM commands for the simulation.
-        """
-        commands_file_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                          OPENFOAM_TEMPLATE_SUBDIR,
-                                          COMMANDS_FILE_NAME)
-
-        commands = self.read_commands_from_file(commands_file_path)
-
-        return commands
-
-    @singledispatchmethod
-    def create_input_files(self, simulator: simulators.Simulator):
-        pass
-
-
-@HeatSink.create_input_files.register
-def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
-    """Creates OpenFOAM simulation input files."""
-
-    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                      OPENFOAM_TEMPLATE_SUBDIR, FILES_SUBDIR)
-
-    shutil.copytree(template_files_dir,
-                    input_dir,
-                    dirs_exist_ok=True,
-                    symlinks=True)
-
-    template_file_path, params_file_path = (
-        os.path.join(input_dir, file_name) for file_name in
-        [OPENFOAM_TEMPLATE_PARAMS_FILE_NAME, OPENFOAM_PARAMS_FILE_NAME])
-
-    utils.templates.replace_params(
-        template_path=template_file_path,
-        params={
-            "simulation_time": self.simulation_time,
-            "output_time_step": self.output_time_step,
-            "air_velocity": self.air_velocity,
-            "air_temperature": self.air_temperature,
-            "heater_power": self.heater_power
-        },
-        output_file=params_file_path,
-        remove_template=True,
-    )

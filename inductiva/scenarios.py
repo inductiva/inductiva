@@ -6,7 +6,7 @@ import json
 import shutil
 import os
 import tempfile
-from typing import Optional, Union
+from typing import Optional
 
 from inductiva import simulators, resources, types, utils
 
@@ -27,7 +27,7 @@ class Scenario(ABC):
         pass
 
     def add_extra_input_files(self, simulator: simulators.Simulator,
-                              input_dir: types.Path):
+                              input_dir: types.Path): 
         """Entry-point to add extra files used in the simulation.
         
         Usefull to files as args to the simulation. E.g., protein or vehicle.
@@ -65,11 +65,28 @@ class Scenario(ABC):
             remove_templates=True,
         )
 
-    def get_commands(self,
-                     commands_file: Union[str, io.StringIO] = "commands.json"):
+    def create_command_file(self):
+        """Create command file from template."""
+
+        commands_file = os.path.join(self.template_files_dir, "commands.json")
+        commands_template_path = commands_file + ".jinja"
+
+        if os.path.isfile(commands_template_path):
+            inmemory_file = io.StringIO()
+            utils.templates.replace_params(
+                template_path=commands_template_path,
+                params=self.params,
+                output_file=inmemory_file,
+            )
+            return inmemory_file
+
+        return commands_file
+
+    def get_commands(self):
         "Read list of commands from commands.json file"
 
-        commands_file = os.path.join(self.template_files_dir, commands_file)
+        commands_file = self.create_command_file()
+
         if isinstance(commands_file, str):
             with open(commands_file, "r", encoding="utf-8") as f:
                 return json.load(f)

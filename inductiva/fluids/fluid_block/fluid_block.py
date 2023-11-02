@@ -1,5 +1,4 @@
-"""Describes the physical scenarios and runs its simulation via API."""
-
+"""Fluid Block scenario."""
 from functools import singledispatchmethod
 import os
 from typing import List, Optional
