@@ -29,6 +29,6 @@ from inductiva.client.model.task_request import TaskRequest
 from inductiva.client.model.task_status import TaskStatus
 from inductiva.client.model.task_status_code import TaskStatusCode
 from inductiva.client.model.user import User
+from inductiva.client.model.user_api_key import UserApiKey
 from inductiva.client.model.user_create import UserCreate
-from inductiva.client.model.user_type import UserType
 from inductiva.client.model.validation_error import ValidationError
