@@ -1,7 +1,6 @@
 """Fluid tank scenario."""
 from dataclasses import dataclass
 import enum
-from functools import singledispatchmethod
 import json
 import os
 from typing import List, Literal, Optional
@@ -288,5 +287,5 @@ class FluidTank(scenarios.Scenario):
         ]
 
         self.params["inlet_width"] = int(self.inlet.shape.radius /
-                                        self.params["particle_radius"])
+                                         self.params["particle_radius"])
         self.params["inlet_fluid_velocity"] = self.inlet.fluid_velocity

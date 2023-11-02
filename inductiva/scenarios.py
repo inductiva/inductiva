@@ -27,7 +27,7 @@ class Scenario(ABC):
         pass
 
     def add_extra_input_files(self, simulator: simulators.Simulator,
-                              input_dir: types.Path): 
+                              input_dir: types.Path):
         """Entry-point to add extra files used in the simulation.
         
         Usefull to files as args to the simulation. E.g., protein or vehicle.

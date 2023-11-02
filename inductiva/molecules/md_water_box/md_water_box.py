@@ -13,7 +13,7 @@ class MDWaterBox(scenarios.Scenario):
     """Molecular dynamics water box scenario."""
 
     valid_simulators = [simulators.GROMACS]
-    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR, 
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
                                       GROMACS_TEMPLATE_INPUT_DIR)
 
     def __init__(
