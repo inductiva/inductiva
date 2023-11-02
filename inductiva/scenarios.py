@@ -2,15 +2,13 @@
 
 from abc import ABC
 import io
+import json
 import shutil
 import os
 import tempfile
 from typing import Optional, Union
 
-from inductiva import resources, types, utils
-from inductiva.types import Path
-from inductiva.simulators import Simulator
-import json
+from inductiva import simulators, resources, types, utils
 
 
 class Scenario(ABC):
@@ -19,7 +17,8 @@ class Scenario(ABC):
     params = {}
     template_files_dir = None
 
-    def config_params(self, simulator: Simulator, input_dir: Path):
+    def config_params(self, simulator: simulators.Simulator,
+                      input_dir: types.Path):
         """Entry-point to further configure params.
         
         Useful when a scenario can be configured for several simulators,
@@ -27,14 +26,16 @@ class Scenario(ABC):
         """
         pass
 
-    def add_extra_input_files(self, simulator: Simulator, input_dir: Path):
+    def add_extra_input_files(self, simulator: simulators.Simulator,
+                              input_dir: types.Path):
         """Entry-point to add extra files used in the simulation.
         
         Usefull to files as args to the simulation. E.g., protein or vehicle.
         """
         pass
 
-    def create_input_files(self, simulator: Simulator, input_dir: Path):  # pylint: disable=unused-argument
+    def create_input_files(self, simulator: simulators.Simulator,  # pylint: disable=unused-argument
+                           input_dir: types.Path):
         """Create input files from template."""
 
         template_files_dir = os.path.join(self.template_files_dir,
@@ -75,7 +76,7 @@ class Scenario(ABC):
         commands_file.seek(0)
         return json.load(commands_file)
 
-    def validate_simulator(self, simulator: Simulator):
+    def validate_simulator(self, simulator: simulators.Simulator):
         """Checks if the scenario can be simulated with the given simulator."""
         if type(simulator) not in self.valid_simulators:
             raise ValueError(
@@ -84,7 +85,7 @@ class Scenario(ABC):
 
     def simulate(
         self,
-        simulator: Simulator,
+        simulator: simulators.Simulator,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
         **kwargs,

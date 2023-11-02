@@ -10,7 +10,9 @@ from inductiva import tasks, resources, fluids, scenarios, simulators, utils
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "fluid_block")
 SPLISHPLASH_TEMPLATE_INPUT_DIR = "splishsplash"
+SPLISHSPLASH_CONFIG_FILENAME = "fluid_block.json"
 DUALSPHYSICS_TEMPLATE_INPUT_DIR = "dualsphysics"
+DUALSPHYSICS_CONFIG_FILENAME = "fluid_block.xml"
 
 
 class FluidBlock(scenarios.Scenario):
@@ -140,7 +142,7 @@ class FluidBlock(scenarios.Scenario):
 @FluidBlock.get_config_filename.register
 def _(cls, simulator: simulators.SplishSplash):  # pylint: disable=unused-argument
     """Returns the configuration filename for SPlisHSPlasH."""
-    return "fluid_block.json"
+    return SPLISHSPLASH_CONFIG_FILENAME
 
 
 @FluidBlock.config_params.register
@@ -176,7 +178,7 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
 @FluidBlock.get_config_filename.register
 def _(cls, simulator: simulators.DualSPHysics):  # pylint: disable=unused-argument
     """Returns the configuration filename for DualSPHysics."""
-    return "fluid_block.xml"
+    return DUALSPHYSICS_CONFIG_FILENAME
 
 
 @FluidBlock.config_params.register
