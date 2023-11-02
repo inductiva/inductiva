@@ -13,15 +13,15 @@
         "gravitation": [0, 0, -9.81],
         "gradKernel": 1,
         "enableVTKExport": true,
-        "dataExportFPS": {{ data_export_rate }},
+        "dataExportFPS": {{ output_export_rate }},
         "particleAttributes": "velocity;density",
         "enableZSort": {{ particle_sorting | tojson }}
     },
     "RigidBodies": [
         {
-            "geometryFile": "{{ tank_filename }}",
+            "geometryFile": "unit_box.obj",
             "translation": [0, 0, 0],
-            "scale": {{ tank_dimensions | list }},
+            "scale": [1, 1, 1],
             "isDynamic": false
         }
     ],
@@ -36,7 +36,7 @@
     "FluidModels": [
         {
             "id": "Fluid",
-            "particleFile": "{{ fluid_filename }}",
+            "particleFile": "unit_box.obj",
             "translation": {{ fluid_position | list }},
             "scale": {{ fluid_dimensions | list }},
             "initialVelocity": {{ fluid_velocity | list }}

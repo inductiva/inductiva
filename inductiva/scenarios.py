@@ -1,27 +1,75 @@
 """Base class for scenarios."""
 
-from abc import ABC, abstractmethod
+from abc import ABC
 import io
+import json
+import shutil
+import os
 import tempfile
 from typing import Optional, Union
 
-from inductiva import resources, types
-from inductiva.types import Path
-from inductiva.simulators import Simulator
-import json
+from inductiva import simulators, resources, types, utils
 
 
 class Scenario(ABC):
     """Base class for scenarios."""
     valid_simulators = []
+    params = {}
+    template_files_dir = None
 
-    @abstractmethod
-    def create_input_files(self, simulator: Simulator, input_dir: Path):
-        """To be implemented in subclasses."""
+    def config_params(self, simulator: simulators.Simulator,
+                      input_dir: types.Path):
+        """Entry-point to further configure params.
+        
+        Useful when a scenario can be configured for several simulators,
+        but params differ in implementation between them.
+        """
         pass
 
-    def read_commands_from_file(self, commands_file: Union[str, io.StringIO]):
+    def add_extra_input_files(self, simulator: simulators.Simulator,
+                              input_dir: types.Path):
+        """Entry-point to add extra files used in the simulation.
+        
+        Usefull to files as args to the simulation. E.g., protein or vehicle.
+        """
+        pass
+
+    def create_input_files(
+            self,
+            simulator: simulators.Simulator,  # pylint: disable=unused-argument
+            input_dir: types.Path):
+        """Create input files from template."""
+
+        template_files_dir = os.path.join(self.template_files_dir,
+                                          "sim_config_files")
+
+        # Copy all files from the template dir to the input directory
+        shutil.copytree(template_files_dir,
+                        input_dir,
+                        dirs_exist_ok=True,
+                        symlinks=True)
+
+        template_filenames = utils.templates.get_template_filenames(
+            template_files_dir)
+
+        output_filename_paths = [
+            os.path.join(input_dir,
+                         file.split(".jinja")[0]) for file in template_filenames
+        ]
+
+        utils.templates.batch_replace_params(
+            templates_dir=input_dir,
+            template_filenames=template_filenames,
+            params=self.params,
+            output_filename_paths=output_filename_paths,
+            remove_templates=True,
+        )
+
+    def get_commands(self,
+                     commands_file: Union[str, io.StringIO] = "commands.json"):
         "Read list of commands from commands.json file"
+
+        commands_file = os.path.join(self.template_files_dir, commands_file)
         if isinstance(commands_file, str):
             with open(commands_file, "r", encoding="utf-8") as f:
                 return json.load(f)
@@ -30,7 +78,7 @@ class Scenario(ABC):
         commands_file.seek(0)
         return json.load(commands_file)
 
-    def validate_simulator(self, simulator: Simulator):
+    def validate_simulator(self, simulator: simulators.Simulator):
         """Checks if the scenario can be simulated with the given simulator."""
         if type(simulator) not in self.valid_simulators:
             raise ValueError(
@@ -39,7 +87,7 @@ class Scenario(ABC):
 
     def simulate(
         self,
-        simulator: Simulator,
+        simulator: simulators.Simulator,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
         **kwargs,
@@ -48,7 +96,9 @@ class Scenario(ABC):
         self.validate_simulator(simulator)
 
         with tempfile.TemporaryDirectory() as input_dir:
+            self.config_params(simulator, input_dir)
             self.create_input_files(simulator, input_dir)
+            self.add_extra_input_files(simulator, input_dir)
 
             return simulator.run(
                 input_dir,

@@ -2,7 +2,6 @@
 
 from dataclasses import dataclass
 import enum
-from functools import singledispatchmethod
 import os
 import shutil
 from typing import Optional, List, Literal
@@ -15,8 +14,6 @@ from inductiva import tasks, resources, types, simulators, scenarios, utils
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "wind_tunnel")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
-FILES_SUBDIR = "files"
-COMMANDS_FILE_NAME = "commands.json"
 
 
 @dataclass
@@ -59,6 +56,8 @@ class WindTunnel(scenarios.Scenario):
     """
 
     valid_simulators = [simulators.OpenFOAM]
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      OPENFOAM_TEMPLATE_INPUT_DIR)
 
     def __init__(self,
                  flow_velocity: List[float] = None,
@@ -74,25 +73,25 @@ class WindTunnel(scenarios.Scenario):
         """
         if flow_velocity is None:
             logging.info("Using a default flow velocity: [30, 0, 0].")
-            self.flow_velocity = [30, 0, 0]
+            self.params["flow_velocity"] = [30, 0, 0]
         elif len(flow_velocity) != 3:
             raise ValueError("`flow_velocity` must have 3 values.")
         elif np.linalg.norm(np.array(flow_velocity)) > 100:
             raise ValueError("The `flow_velocity` magnitude is too high,"
                              " it must be less than 100 m/s.")
         else:
-            self.flow_velocity = flow_velocity
+            self.params["flow_velocity"] = flow_velocity
 
         if domain is None:
             logging.info("Using a default domain: `{\"x\":"
                          "[-5, 15], \"y\": [-4, 4], \"z\": [0, 8]}`.")
-            self.domain = {"x": [-5, 15], "y": [-4, 4], "z": [0, 8]}
+            self.params["domain"] = {"x": [-5, 15], "y": [-4, 4], "z": [0, 8]}
         elif not isinstance(domain, dict):
             raise ValueError(
                 "`domain` must be a dictionary of the type `{\"x\":"
                 "[-5, 15], \"y\": [-4, 4], \"z\": [0, 8]}`.")
         else:
-            self.domain = domain
+            self.params["domain"] = domain
 
     def simulate(
             self,
@@ -122,11 +121,10 @@ class WindTunnel(scenarios.Scenario):
             raise ValueError("WindTunnel is empty. Object path not specified.")
 
         self.object_path = utils.files.resolve_path(object_path)
-        self.num_iterations = num_iterations
-        self.resolution = MeshResolution[resolution.upper()].value
+        self.params["num_iterations"] = num_iterations
+        self.params["resolution"] = MeshResolution[resolution.upper()].value
 
         commands = self.get_commands()
-
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 storage_dir=storage_dir,
@@ -134,61 +132,9 @@ class WindTunnel(scenarios.Scenario):
 
         return task
 
-    def get_commands(self):
-        """Returns the commands for the simulation."""
+    def add_extra_input_files(self, simulator: simulators.Simulator, input_dir):  # pylint: disable=unused-argument
+        """Configure object to be in specific place on input directory."""
 
-        commands_file_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                          OPENFOAM_TEMPLATE_INPUT_DIR,
-                                          COMMANDS_FILE_NAME)
-
-        commands = self.read_commands_from_file(commands_file_path)
-
-        return commands
-
-    @singledispatchmethod
-    def create_input_files(self, simulator: simulators.Simulator):
-        pass
-
-
-@WindTunnel.create_input_files.register
-def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
-    """Creates OpenFOAM simulation input files."""
-
-    # The WindTunnel with OpenFOAM requires changing multiple files
-    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                      OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
-
-    # Copy all files from the template dir to the input directory
-    shutil.copytree(template_files_dir,
-                    input_dir,
-                    dirs_exist_ok=True,
-                    symlinks=True)
-
-    utils.templates.batch_replace_params(
-        templates_dir=input_dir,
-        template_filenames=[
-            os.path.join("0", "include",
-                         "initialConditions_template.openfoam.jinja"),
-            os.path.join("system", "controlDict_template.openfoam.jinja"),
-            os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
-            os.path.join("system", "snappyHexMeshDict_template.openfoam.jinja")
-        ],
-        params={
-            "flow_velocity": self.flow_velocity,
-            "num_iterations": self.num_iterations,
-            "domain": self.domain,
-            "resolution": self.resolution,
-        },
-        output_filename_paths=[
-            os.path.join(input_dir, "0", "include", "initialConditions"),
-            os.path.join(input_dir, "system", "controlDict"),
-            os.path.join(input_dir, "system", "blockMeshDict"),
-            os.path.join(input_dir, "system", "snappyHexMeshDict")
-        ],
-        remove_templates=True,
-    )
-
-    # Add object path to its respective place
-    object_dir = os.path.join(input_dir, "constant", "triSurface")
-    os.mkdir(object_dir)
-    shutil.copy(self.object_path, os.path.join(object_dir, "object.obj"))
+        object_dir = os.path.join(input_dir, "constant", "triSurface")
+        os.mkdir(object_dir)
+        shutil.copy(self.object_path, os.path.join(object_dir, "object.obj"))
