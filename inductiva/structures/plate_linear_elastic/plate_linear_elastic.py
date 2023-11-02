@@ -4,8 +4,6 @@
 import os
 from typing import List, Optional
 
-from functools import singledispatchmethod
-
 from inductiva import resources, scenarios, simulators, structures, tasks, types
 
 from . import bcs_utils
@@ -54,7 +52,7 @@ class DeformablePlate(scenarios.Scenario):
     def simulate(self,
                  simulator: simulators.Simulator = simulators.FEniCSx(),
                  machine_group: Optional[resources.MachineGroup] = None,
-                 storage_dir: Optional[str] = None,
+                 storage_dir: Optional[str] = "",
                  global_refinement_meshing_factor: float = 1.0,
                  local_refinement_meshing_factor: float = 0.0) -> tasks.Task:
         """Simulates the scenario.
@@ -92,25 +90,18 @@ class DeformablePlate(scenarios.Scenario):
 
         return task
 
-    @singledispatchmethod
-    def create_input_files(self, simulator: simulators.Simulator):
-        pass
+    def create_input_files(self, simulator: simulators.FEniCSx,
+                           input_dir: types.Path) -> None:
+        """Creates FEniCSx simulation input files."""
 
+        # Geometry file
+        geometry_path = os.path.join(input_dir, GEOMETRY_FILENAME)
+        self.geometry.write_to_json(geometry_path)
 
-@DeformablePlate.create_input_files.register
-def _(self,
-      simulator: simulators.FEniCSx,
-      input_dir: types.Path) -> None:
-    """Creates FEniCSx simulation input files."""
+        # BCs file
+        bcs_path = os.path.join(input_dir, BCS_FILENAME)
+        self.bcs_case.write_to_json(bcs_path)
 
-    # Geometry file
-    geometry_path = os.path.join(input_dir, GEOMETRY_FILENAME)
-    self.geometry.write_to_json(geometry_path)
-
-    # BCs file
-    bcs_path = os.path.join(input_dir, BCS_FILENAME)
-    self.bcs_case.write_to_json(bcs_path)
-
-    # Material file
-    material_path = os.path.join(input_dir, MATERIAL_FILENAME)
-    self.material.write_to_json(material_path)
+        # Material file
+        material_path = os.path.join(input_dir, MATERIAL_FILENAME)
+        self.material.write_to_json(material_path)
