@@ -7,6 +7,7 @@ import os
 import pathlib
 import signal
 import time
+import json
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
 from uuid import UUID
@@ -329,3 +330,45 @@ def invoke_async_api(method_name: str,
                          "api-" + resource_pool_id)
 
     return task_id
+
+
+def get_backend_version() -> str:
+    """
+    Fetches the version of the backend by making a GET request to the '/version-check' endpoint.
+
+    The function will attempt to establish a connection to the backend using the configuration
+    provided and retrieve the backend's version. If any part of this process fails, 
+    it raises a RuntimeError.
+
+    Returns:
+        str: The version of the backend if fetched successfully.
+
+    Raises:
+        RuntimeError: If there's an issue fetching the backend version or if the response from the
+                      server is not as expected.
+
+    Examples:
+        >>> get_backend_version()
+        '1.0.0'
+
+    """
+    resource_path = "/version-check"
+    api_config = Configuration(host=inductiva.api_url)
+
+    try:
+        with ApiClient(api_config) as client:
+            response = client.call_api(
+                resource_path=resource_path,
+                method="GET",
+            )
+
+            if not response or not response.data or response.status != 200:
+                raise RuntimeError(
+                    f"Failed to get backend version, HTTP response: {response.status}"
+                )
+
+            json_data = json.loads(response.data.decode('utf-8'))
+
+            return json_data.get("version")
+    except Exception as e:
+        raise RuntimeError("Failed to get backend version. %s" % e)

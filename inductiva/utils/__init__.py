@@ -5,3 +5,4 @@ from . import flags
 from . import interpolation
 from . import optional_deps
 from . import templates
+from . import version_check
