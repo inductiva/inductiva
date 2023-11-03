@@ -30,7 +30,7 @@ def validate_api_key(api_key: Optional[str]) -> Configuration:
         raise ValueError(
             "No API Key specified. "
             "Use the INDUCTIVA_API_CREDENTIALS environment variable with a "
-            "path to TXT file or set the INDUCTIVA_API_KEY "
+            "path to a TXT file or set the INDUCTIVA_API_KEY "
             "environment variable.")
 
     api_config = Configuration(host=inductiva.api_url)

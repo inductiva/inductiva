@@ -24,12 +24,16 @@ from . import tasks
 api_url = os.environ.get("INDUCTIVA_API_URL", "http://api.inductiva.ai")
 output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
 
-credentials_file_path = os.getenv("INDUCTIVA_API_CREDENTIALS")
-if credentials_file_path:
-    with open(credentials_file_path, "r", encoding="utf-8") as file:
-        api_key = file.read().strip()
-else:
-    api_key = os.environ.get("INDUCTIVA_API_KEY")
+api_key = os.environ.get("INDUCTIVA_API_KEY")
+
+if not api_key:
+    credentials_file_path = os.getenv("INDUCTIVA_API_CREDENTIALS",
+                                      "~/.inductiva/credentials.txt")
+    try:
+        with open(credentials_file_path, "r", encoding="utf-8") as file:
+            api_key = file.read().strip()
+    except FileNotFoundError:
+        api_key = None
 
 working_dir = None
 
