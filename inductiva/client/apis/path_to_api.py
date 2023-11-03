@@ -12,7 +12,7 @@ from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_stdout_tail import TasksTaskIdStdoutTail
 from inductiva.client.apis.paths.tasks_task_id_resources_tail import TasksTaskIdResourcesTail
 from inductiva.client.apis.paths.admin_users import AdminUsers
-from inductiva.client.apis.paths.admin_users_username import AdminUsersUsername
+from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
 from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
@@ -42,7 +42,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.TASKS_TASK_ID_STDOUT_TAIL: TasksTaskIdStdoutTail,
         PathValues.TASKS_TASK_ID_RESOURCES_TAIL: TasksTaskIdResourcesTail,
         PathValues.ADMIN_USERS: AdminUsers,
-        PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
+        PathValues.ADMIN_USERS_EMAIL_API_KEY: AdminUsersEmailApiKey,
         PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
         PathValues.ADMIN_GROUPS: AdminGroups,
         PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
@@ -72,7 +72,7 @@ path_to_api = PathToApi({
     PathValues.TASKS_TASK_ID_STDOUT_TAIL: TasksTaskIdStdoutTail,
     PathValues.TASKS_TASK_ID_RESOURCES_TAIL: TasksTaskIdResourcesTail,
     PathValues.ADMIN_USERS: AdminUsers,
-    PathValues.ADMIN_USERS_USERNAME: AdminUsersUsername,
+    PathValues.ADMIN_USERS_EMAIL_API_KEY: AdminUsersEmailApiKey,
     PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
     PathValues.ADMIN_GROUPS: AdminGroups,
     PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,

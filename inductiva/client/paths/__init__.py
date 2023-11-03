@@ -17,7 +17,7 @@ class PathValues(str, enum.Enum):
     TASKS_TASK_ID_STDOUT_TAIL = "/tasks/{task_id}/stdout_tail"
     TASKS_TASK_ID_RESOURCES_TAIL = "/tasks/{task_id}/resources_tail"
     ADMIN_USERS = "/admin/users"
-    ADMIN_USERS_USERNAME = "/admin/users/{username}"
+    ADMIN_USERS_EMAIL_API_KEY = "/admin/users/{email}/api_key"
     ADMIN_USERS_USERNAME_TASKS = "/admin/users/{username}/tasks"
     ADMIN_GROUPS = "/admin/groups"
     EXECUTERTRACKER_REGISTER = "/executer-tracker/register"
