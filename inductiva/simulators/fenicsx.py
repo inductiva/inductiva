@@ -22,7 +22,6 @@ class FEniCSx(simulators.Simulator):
         local_refinement_meshing_factor: float = 0.0,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
-        run_async: bool = False,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -46,14 +45,12 @@ class FEniCSx(simulators.Simulator):
               while keeping the rest of the mesh less refined.
             machine_group: The machine group to use for the simulation.
             storage_dir: Parent directory for storing simulation results.
-            run_async: Whether to run the simulation asynchronously.
             other arguments: See the documentation of the base class.
         """
 
         return super().run(
             input_dir,
             machine_group=machine_group,
-            run_async=run_async,
             geometry_filename=geometry_filename,
             bcs_filename=bcs_filename,
             material_filename=material_filename,

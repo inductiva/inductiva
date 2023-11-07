@@ -16,7 +16,6 @@ class XBeach(simulators.Simulator):
         input_dir: types.Path,
         sim_config_filename: Optional[str] = "params.txt",
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run the simulation.
@@ -25,7 +24,6 @@ class XBeach(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
             machine_group: Optional machine group to run the simulation on.
-            run_async: If True, the simulation will run asynchronously.
             storage_dir: Directory for storing simulation results.
             other arguments: See the documentation of the base class.
         """
@@ -33,6 +31,5 @@ class XBeach(simulators.Simulator):
             input_dir,
             input_filename=sim_config_filename,
             machine_group=machine_group,
-            run_async=run_async,
             storage_dir=storage_dir,
         )

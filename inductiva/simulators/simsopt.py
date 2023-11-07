@@ -11,19 +11,20 @@ class SIMSOPT(simulators.Simulator):
         super().__init__()
         self.api_method_name = "stellarators.simsopt.run_simulation"
 
-    def run(self,
-            input_dir: types.Path,
-            plasma_surface_filename: str,
-            coil_coefficients_filename: str,
-            coil_currents_filename: str,
-            num_field_periods: int,
-            num_iterations: int,
-            num_samples: int,
-            sigma_scaling_factor: float,
-            objectives_weights_filename: str,
-            machine_group: Optional[resources.MachineGroup] = None,
-            storage_dir: Optional[types.Path] = "",
-            run_async: bool = False) -> tasks.Task:
+    def run(
+        self,
+        input_dir: types.Path,
+        plasma_surface_filename: str,
+        coil_coefficients_filename: str,
+        coil_currents_filename: str,
+        num_field_periods: int,
+        num_iterations: int,
+        num_samples: int,
+        sigma_scaling_factor: float,
+        objectives_weights_filename: str,
+        machine_group: Optional[resources.MachineGroup] = None,
+        storage_dir: Optional[types.Path] = "",
+    ) -> tasks.Task:
         """Run the simulation.
 
         Args:
@@ -57,7 +58,6 @@ class SIMSOPT(simulators.Simulator):
         return super().run(
             input_dir,
             machine_group=machine_group,
-            run_async=run_async,
             coil_coefficients_filename=coil_coefficients_filename,
             coil_currents_filename=coil_currents_filename,
             plasma_surface_filename=plasma_surface_filename,

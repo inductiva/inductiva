@@ -1,13 +1,13 @@
-"""Describes the physical scenarios and runs its simulation via API."""
+"""DamBreak scenario."""
+import enum
 from typing import List, Literal, Optional
-from enum import Enum
 from dataclasses import dataclass
 
 from inductiva import tasks, resources, simulators, fluids
 
 
 @dataclass
-class ParticleRadius(Enum):
+class ParticleRadius(enum.Enum):
     """Sets particle radius according to resolution."""
     HIGH = 0.008
     MEDIUM = 0.012
@@ -46,7 +46,6 @@ class DamBreak(fluids.FluidBlock):
         self,
         simulator: simulators.Simulator = simulators.DualSPHysics(),
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         storage_dir: Optional[str] = "",
         resolution: Literal["high", "medium", "low"] = "low",
         simulation_time: float = 1,
@@ -58,25 +57,24 @@ class DamBreak(fluids.FluidBlock):
             machine_group: The machine group to use for the simulation.
             resolution: Resolution of the simulation.
             simulation_time: Simulation time, in seconds.
-            run_async: Whether to run the simulation asynchronously.
-            storage_dir: The parent directory where the simulation results 
+            storage_dir: The parent directory where the simulation results
             will be stored.
         """
         simulator.override_api_method_prefix("dam_break")
 
-        self.particle_radius = ParticleRadius[resolution.upper()].value
-        self.simulation_time = simulation_time
-        self.adaptive_time_step = True
-        self.particle_sorting = True
-        self.time_step = 0.001
-        self.output_time_step = 1 / 60
+        self.params["particle_radius"] = ParticleRadius[
+            resolution.upper()].value
+        self.params["simulation_time"] = simulation_time
+        self.params["adaptive_time_step"] = True
+        self.params["particle_sorting"] = True
+        self.params["time_step"] = 0.001
+        self.params["output_export_rate"] = 60
 
         # Inherit the simulate from the Parent of FluidBlock (Scenario) to
         # avoid overriding the api_method_prefix with the one of FluidBlock.
         task = super(fluids.FluidBlock, self).simulate(
             simulator=simulator,
             machine_group=machine_group,
-            run_async=run_async,
             storage_dir=storage_dir,
             sim_config_filename=self.get_config_filename(simulator))
 

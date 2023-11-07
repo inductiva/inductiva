@@ -1,22 +1,20 @@
 """Molecular Dynamics simulation for water box scenario."""
-from functools import singledispatchmethod
 from typing import Optional, Literal
 import os
-import shutil
-import io
 
 from inductiva import tasks, types, resources, simulators, scenarios, utils
 
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "md_water_box")
 GROMACS_TEMPLATE_INPUT_DIR = "gromacs"
-COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
 
 
 class MDWaterBox(scenarios.Scenario):
     """Molecular dynamics water box scenario."""
 
     valid_simulators = [simulators.GROMACS]
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      GROMACS_TEMPLATE_INPUT_DIR)
 
     def __init__(
         self,
@@ -34,16 +32,15 @@ class MDWaterBox(scenarios.Scenario):
             box_size: The size of the box in nm.
         """
 
-        self.temperature = temperature
+        self.params["ref_temp"] = temperature
         if box_size < 2.3:
             raise ValueError("The box size must be greater than 2.3 nm.")
-        self.box_size = box_size
+        self.params["box_size"] = box_size
 
     def simulate(
             self,
             simulator: simulators.Simulator = simulators.GROMACS(),
             machine_group: Optional[resources.MachineGroup] = None,
-            run_async: bool = False,
             storage_dir: Optional[types.Path] = "",
             simulation_time_ns: float = 1,  # ns
             output_timestep_ps: float = 1,  # ps
@@ -52,7 +49,7 @@ class MDWaterBox(scenarios.Scenario):
         """Simulate the water box scenario using molecular dynamics.
 
         Args:
-            simulator: The Simulator to use for the simulation. 
+            simulator: The Simulator to use for the simulation.
             Gromacs is the only supported for now.
             machine_group: The MachineGroup to use for the simulation.
             run_async: Whether to run the simulation asynchronously.
@@ -75,72 +72,21 @@ class MDWaterBox(scenarios.Scenario):
         """
         simulator.override_api_method_prefix("mdwater_box")
 
-        self.nsteps = int(
+        self.params["nsteps"] = int(
             simulation_time_ns * 1e6 / 2
         )  # convert to fs and divide by the time step of the simulation (2 fs)
-        self.integrator = integrator
-        self.n_steps_min = n_steps_min
-        self.output_frequency = int(
+        self.params["integrator"] = integrator
+        self.params["n_steps_min"] = n_steps_min
+        self.params["output_frequency"] = int(
             output_timestep_ps * 1000 /
             2)  # convert to fs and divide by the time step
         # of the simulation (2 fs)
 
         commands = self.get_commands()
+        print(commands)
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 commands=commands,
-                                storage_dir=storage_dir,
-                                run_async=run_async)
+                                storage_dir=storage_dir)
 
         return task
-
-    def get_commands(self):
-        """Returns the commands for the simulation."""
-
-        commands_template_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                              GROMACS_TEMPLATE_INPUT_DIR,
-                                              COMMANDS_TEMPLATE_FILE_NAME)
-
-        inmemory_file = io.StringIO()
-        utils.templates.replace_params(
-            template_path=commands_template_path,
-            params={"box_size": self.box_size},
-            output_file=inmemory_file,
-        )
-        commands = self.read_commands_from_file(inmemory_file)
-
-        return commands
-
-    @singledispatchmethod
-    def create_input_files(self, simulator: simulators.Simulator):
-        pass
-
-
-@MDWaterBox.create_input_files.register
-def _(self, simulator: simulators.GROMACS, input_dir):  # pylint: disable=unused-argument
-    """Creates GROMACS simulation input files."""
-
-    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                      GROMACS_TEMPLATE_INPUT_DIR)
-
-    shutil.copytree(template_files_dir, input_dir, dirs_exist_ok=True)
-
-    utils.templates.batch_replace_params(
-        templates_dir=input_dir,
-        template_filenames=[
-            "simulation.mdp.jinja",
-            "energy_minimization.mdp.jinja",
-        ],
-        params={
-            "integrator": self.integrator,
-            "nsteps": self.nsteps,
-            "ref_temp": self.temperature,
-            "nsteps_minin": self.n_steps_min,
-            "output_frequency": self.output_frequency,
-        },
-        output_filename_paths=[
-            os.path.join(input_dir, "simulation.mdp"),
-            os.path.join(input_dir, "energy_minimization.mdp"),
-        ],
-        remove_templates=True,
-    )

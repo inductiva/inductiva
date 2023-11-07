@@ -4,8 +4,6 @@
 import os
 from typing import List, Optional
 
-from functools import singledispatchmethod
-
 from inductiva import resources, scenarios, simulators, structures, tasks, types
 
 from . import bcs_utils
@@ -54,7 +52,6 @@ class DeformablePlate(scenarios.Scenario):
     def simulate(self,
                  simulator: simulators.Simulator = simulators.FEniCSx(),
                  machine_group: Optional[resources.MachineGroup] = None,
-                 run_async: bool = False,
                  storage_dir: Optional[str] = "",
                  global_refinement_meshing_factor: float = 1.0,
                  local_refinement_meshing_factor: float = 0.0) -> tasks.Task:
@@ -63,9 +60,8 @@ class DeformablePlate(scenarios.Scenario):
         Args:
             simulator: The simulator to use for the simulation.
             machine_group: The machine group to use for the simulation.
-            run_async: Whether to run the simulation asynchronously.
-            storage_dir: The directory in storage to save the simulaiton
-            outputs.
+            storage_dir: The parent directory where simulation
+              results will be stored.
             global_refinement_meshing_factor (float): The refinement factor for
               global refinement of the mesh. A higher value results in a finer
               mesh overall, increasing the number of elements in the entire
@@ -85,7 +81,6 @@ class DeformablePlate(scenarios.Scenario):
         task = super().simulate(
             simulator,
             machine_group=machine_group,
-            run_async=run_async,
             storage_dir=storage_dir,
             geometry_filename=GEOMETRY_FILENAME,
             bcs_filename=BCS_FILENAME,
@@ -95,25 +90,18 @@ class DeformablePlate(scenarios.Scenario):
 
         return task
 
-    @singledispatchmethod
-    def create_input_files(self, simulator: simulators.Simulator):
-        pass
+    def create_input_files(self, simulator: simulators.FEniCSx,
+                           input_dir: types.Path) -> None:
+        """Creates FEniCSx simulation input files."""
 
+        # Geometry file
+        geometry_path = os.path.join(input_dir, GEOMETRY_FILENAME)
+        self.geometry.write_to_json(geometry_path)
 
-@DeformablePlate.create_input_files.register
-def _(self,
-      simulator: simulators.FEniCSx,
-      input_dir: types.Path) -> None:
-    """Creates FEniCSx simulation input files."""
+        # BCs file
+        bcs_path = os.path.join(input_dir, BCS_FILENAME)
+        self.bcs_case.write_to_json(bcs_path)
 
-    # Geometry file
-    geometry_path = os.path.join(input_dir, GEOMETRY_FILENAME)
-    self.geometry.write_to_json(geometry_path)
-
-    # BCs file
-    bcs_path = os.path.join(input_dir, BCS_FILENAME)
-    self.bcs_case.write_to_json(bcs_path)
-
-    # Material file
-    material_path = os.path.join(input_dir, MATERIAL_FILENAME)
-    self.material.write_to_json(material_path)
+        # Material file
+        material_path = os.path.join(input_dir, MATERIAL_FILENAME)
+        self.material.write_to_json(material_path)

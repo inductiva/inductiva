@@ -1,9 +1,7 @@
 """Coastal area scenario."""
 
-from functools import singledispatchmethod
 import math
 import os
-import shutil
 from typing import Literal, Optional
 import numpy as np
 
@@ -15,9 +13,7 @@ from inductiva import coastal
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "coastal_area")
 SWASH_TEMPLATE_SUBDIR = "swash"
-SWASH_CONFIG_TEMPLATE_FILENAME = "input.sws.jinja"
 SWASH_CONFIG_FILENAME = "input.sws"
-SWASH_BATHYMETRY_FILENAME = "bathymetry.bot"
 
 
 class CoastalArea(scenarios.Scenario):
@@ -53,6 +49,8 @@ class CoastalArea(scenarios.Scenario):
     """
 
     valid_simulators = [simulators.SWASH]
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      SWASH_TEMPLATE_SUBDIR)
 
     def __init__(
         self,
@@ -81,17 +79,16 @@ class CoastalArea(scenarios.Scenario):
             bathymetry = bathymetry.to_uniform_grid()
 
         self.bathymetry = bathymetry
-        self.water_level = water_level
-        self.wave_source_location = wave_source_location
+        self.params["water_level"] = water_level
+        self.params["wave_source_location"] = wave_source_location
         self.wave_amplitude = wave_amplitude
         self._check_valid_wave()
-        self.wave_period = wave_period
+        self.params["wave_period"] = wave_period
 
     def simulate(
         self,
         simulator: simulators.Simulator = simulators.SWASH(),
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         storage_dir: Optional[str] = "",
         simulation_time: float = 100,
         time_step: float = 0.1,
@@ -100,14 +97,13 @@ class CoastalArea(scenarios.Scenario):
         """Simulates the coastal area scenario.
 
         Args:
-            simulator: The simulator to use for the simulation. 
+            simulator: The simulator to use for the simulation.
             Default is SWASH.
             machine_group: The machine group to use for the simulation.
-            run_async: Whether to run the simulation asynchronously.
-            storage_dir: The parent directory where simulation 
-            results will be stored. 
+            storage_dir: The parent directory where simulation
+            results will be stored.
             simulation_time: The total simulation time, in seconds.
-            time_step: The time step, in seconds. 
+            time_step: The time step, in seconds.
             output_time_step: The time step for the output.
 
         Returns:
@@ -115,27 +111,21 @@ class CoastalArea(scenarios.Scenario):
         """
         simulator.override_api_method_prefix("coastal_area")
 
-        self.simulation_time = simulation_time
-        self.time_step = time_step
-        self.output_time_step = output_time_step
+        # SWASH requires the simulation time to be formatted as HHMMSS.sss.
+        self.params["simulation_time_hmsms"] = \
+            _convert_time_to_hmsms(simulation_time)
+
+        self.params["time_step"] = time_step
+        self.params["output_time_step"] = output_time_step
 
         task = super().simulate(
             simulator,
             machine_group=machine_group,
-            run_async=run_async,
             storage_dir=storage_dir,
             sim_config_filename=SWASH_CONFIG_FILENAME,
         )
 
         return task
-
-    @singledispatchmethod
-    def get_config_filename(self, simulator: simulators.Simulator):
-        pass
-
-    @singledispatchmethod
-    def create_input_files(self, simulator: simulators.Simulator):
-        pass
 
     def _check_valid_wave(self):
         """Checks that the wave amplitude is valid.
@@ -146,16 +136,16 @@ class CoastalArea(scenarios.Scenario):
 
         depths_grid = self.bathymetry.depths_grid()
 
-        if self.wave_source_location == "W":
+        if self.params["wave_source_location"] == "W":
             wave_boundary = depths_grid[0, :]
 
-        elif self.wave_source_location == "E":
+        elif self.params["wave_source_location"] == "E":
             wave_boundary = depths_grid[-1, :]
 
-        elif self.wave_source_location == "N":
+        elif self.params["wave_source_location"] == "N":
             wave_boundary = depths_grid[:, -1]
 
-        elif self.wave_source_location == "S":
+        elif self.params["wave_source_location"] == "S":
             wave_boundary = depths_grid[:, 0]
 
         else:
@@ -174,74 +164,36 @@ class CoastalArea(scenarios.Scenario):
                              "amplitude or the waves are being generated "
                              "on land")
 
+    def config_params(self, simulator: simulators.SWASH, input_dir):  # pylint: disable=unused-argument
+        """Config further simulation params."""
 
-@CoastalArea.get_config_filename.register
-def _(cls, simulator: simulators.SWASH):  # pylint: disable=unused-argument
-    """Returns the configuration filename for SWASH."""
-    return SWASH_CONFIG_FILENAME
+        # Compute the bathymetry grid spacing.
+        self.params["x_num"] = len(self.bathymetry.x_uniques())
+        self.params["y_num"] = len(self.bathymetry.y_uniques())
+        self.params["x_range"] = self.bathymetry.x_range
+        self.params["y_range"] = self.bathymetry.y_range
 
+        self.params["x_delta"] = (
+            self.bathymetry.x_ptp()) / self.params["x_num"]
+        self.params["y_delta"] = (
+            self.bathymetry.y_ptp()) / self.params["y_num"]
 
-@CoastalArea.create_input_files.register
-def _(self, simulator: simulators.SWASH, input_dir):  # pylint: disable=unused-argument
-    """Creates SPlisHSPlasH simulation input files."""
+        # SWASH uses as amplitude the peak-to-peak amplitude.
+        self.params["wave_amplitude"] = 2 * self.wave_amplitude
 
-    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                      SWASH_TEMPLATE_SUBDIR)
+        # All boundaries except the wave source are absorbing.
+        absorbing_boundary_locations = ["N", "S", "E", "W"]
+        absorbing_boundary_locations.remove(self.params["wave_source_location"])
+        self.params[
+            "absorbing_boundary_locations"] = absorbing_boundary_locations
 
-    shutil.copytree(template_files_dir,
-                    input_dir,
-                    dirs_exist_ok=True,
-                    symlinks=True)
+    def add_extra_input_files(self, simulator: simulators.SWASH, input_dir):  # pylint: disable=unused-argument
+        """Add bathymetry file to the input directory."""
 
-    config_template_file_path, config_file_path = (os.path.join(
-        input_dir, file_name
-    ) for file_name in [SWASH_CONFIG_TEMPLATE_FILENAME, SWASH_CONFIG_FILENAME])
-
-    # Compute the bathymetry grid spacing.
-    bathymetry_x_num = len(self.bathymetry.x_uniques())
-    bathymetry_y_num = len(self.bathymetry.y_uniques())
-
-    bathymetry_x_delta = (self.bathymetry.x_ptp()) / bathymetry_x_num
-    bathymetry_y_delta = (self.bathymetry.y_ptp()) / bathymetry_y_num
-
-    # SWASH requires the simulation time to be formatted as HHMMSS.sss.
-    simulation_time_hmsms = _convert_time_to_hmsms(self.simulation_time)
-
-    # SWASH uses as amplitude the peak-to-peak amplitude.
-    wave_amplitude = 2 * self.wave_amplitude
-
-    # All boundaries except the wave source are absorbing.
-    absorbing_boundary_locations = ["N", "S", "E", "W"]
-    absorbing_boundary_locations.remove(self.wave_source_location)
-
-    utils.templates.replace_params(
-        template_path=config_template_file_path,
-        params={
-            "bathymetry_filename": SWASH_BATHYMETRY_FILENAME,
-            "x_range": self.bathymetry.x_range,
-            "y_range": self.bathymetry.y_range,
-            "x_num": bathymetry_x_num - 1,
-            "y_num": bathymetry_y_num - 1,
-            "x_delta": bathymetry_x_delta,
-            "y_delta": bathymetry_y_delta,
-            "water_level": self.water_level,
-            "wave_source_location": self.wave_source_location,
-            "wave_amplitude": wave_amplitude,
-            "wave_period": self.wave_period,
-            "absorbing_boundary_locations": absorbing_boundary_locations,
-            "simulation_time_hmsms": simulation_time_hmsms,
-            "time_step": self.time_step,
-            "output_time_step": self.output_time_step,
-        },
-        output_file=config_file_path,
-        remove_template=True,
-    )
-
-    bathymetry_file_path = os.path.join(input_dir, SWASH_BATHYMETRY_FILENAME)
-    depths_grid = self.bathymetry.depths.reshape(
-        (bathymetry_x_num, bathymetry_y_num))
-
-    self.bathymetry.to_bot_file(bathymetry_file_path, depths_grid)
+        bathymetry_file_path = os.path.join(input_dir, "bathymetry.bot")
+        depths_grid = self.bathymetry.depths.reshape(
+            (self.params["x_num"], self.params["y_num"]))
+        self.bathymetry.to_bot_file(bathymetry_file_path, depths_grid)
 
 
 def _convert_time_to_hmsms(time: float) -> str:

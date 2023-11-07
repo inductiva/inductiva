@@ -1,0 +1,45 @@
+{
+    "Configuration": {
+        "stopAt": {{ simulation_time }},
+        "timeStepSize": {{ time_step }},
+        "particleRadius": {{ particle_radius }},
+        "simulationMethod": 4,
+        "boundaryHandlingMethod": 0,
+        "kernel": 1,
+        "cflMethod": {{ adaptive_time_step | int }},
+        "cflFactor": 0.5,
+        "cflMinTimeStepSize": 0.0001,
+        "cflMaxTimeStepSize": 0.005,
+        "gravitation": [0, 0, -9.81],
+        "gradKernel": 1,
+        "enableVTKExport": true,
+        "dataExportFPS": {{ output_export_rate }},
+        "particleAttributes": "velocity;density",
+        "enableZSort": {{ particle_sorting | tojson }}
+    },
+    "RigidBodies": [
+        {
+            "geometryFile": "unit_box.obj",
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1],
+            "isDynamic": false
+        }
+    ],
+    "Materials": [
+        {
+            "id": "Fluid",
+            "density0": {{ fluid.density }},
+            "viscosity": {{ fluid.kinematic_viscosity }},
+            "viscosityMethod": 6
+        }
+    ],
+    "FluidModels": [
+        {
+            "id": "Fluid",
+            "particleFile": "unit_box.obj",
+            "translation": {{ fluid_position | list }},
+            "scale": {{ fluid_dimensions | list }},
+            "initialVelocity": {{ fluid_velocity | list }}
+        }
+    ]
+}

@@ -21,12 +21,10 @@ from inductiva import output_consts
 import warnings
 
 _TASK_TERMINAL_STATUSES = {
-    models.TaskStatusCode.SUCCESS,
-    models.TaskStatusCode.FAILED,
-    models.TaskStatusCode.KILLED,
-    models.TaskStatusCode.EXECUTERFAILED,
+    models.TaskStatusCode.SUCCESS, models.TaskStatusCode.FAILED,
+    models.TaskStatusCode.KILLED, models.TaskStatusCode.EXECUTERFAILED,
     models.TaskStatusCode.EXECUTERTERMINATED,
-    models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
+    models.TaskStatusCode.SPOTINSTANCEPREEMPTED, models.TaskStatusCode.ZOMBIE
 }
 
 
@@ -34,7 +32,7 @@ class Task:
     """Represents a running/completed task on the Inductiva API.
 
     Example usage:
-        task = scenario.simulate_async(...)
+        task = scenario.simulate(...)
         final_status = task.wait()
         info = task.get_info() # dictionary with info about the task
         task.download_outputs(
@@ -73,7 +71,7 @@ class Task:
         remote task is killed.
 
         Usage:
-            task = scenario.simulate(..., run_async=True)
+            task = scenario.simulate(...)
 
             with task.sync_context():
                 # If an exception happens here or ctrl+c is pressed, the task
@@ -152,18 +150,20 @@ class Task:
                 elif status == models.TaskStatusCode.STARTED:
                     logging.info("The task is being executed remotely.")
                 elif status == models.TaskStatusCode.SUCCESS:
-                    logging.info("Task completed successfully.")
+                    logging.info("Task completed successfully.\n")
                 elif status == models.TaskStatusCode.FAILED:
                     logging.info("Task failed.")
                     logging.info("Download the 'stdout.txt' and 'stderr.txt' "
                                  "files with `task.get_output()` for "
-                                 "more detail. "
-                                 "Post-processing tools will fail.")
+                                 "more detail. \n")
                 elif status == models.TaskStatusCode.KILLED:
-                    logging.info("Task killed.")
+                    logging.info("Task killed.\n")
+                elif status == models.TaskStatusCode.ZOMBIE:
+                    logging.info("The machine was terminated while the task "
+                                 "was pending.")
                 else:
-                    logging.info(
-                        "An internal error occurred while performing the task.")
+                    logging.info("An internal error occurred while "
+                                 "performing the task.\n")
             prev_status = status
 
             if status in _TASK_TERMINAL_STATUSES:
@@ -257,6 +257,11 @@ class Task:
         """
         # Get terminal status
         status = self.wait()
+        if status not in [
+                models.TaskStatusCode.SUCCESS, models.TaskStatusCode.FAILED
+        ]:
+            logging.info("Task with %s has no output to be retrieved.", status)
+            return
 
         if status == models.TaskStatusCode.SUCCESS:
             output_class, filenames = self._get_output_config(all_files)
@@ -273,8 +278,6 @@ class Task:
 
         # output_class can only be not None if the task is successful
         if output_class is not None:
-            logging.info("Post-processing tools are available "
-                         "through the output object.")
             return output_class(output_dir)
 
         logging.info("The output was downloaded to %s.", output_dir)
@@ -351,13 +354,14 @@ class Task:
 
         zip_path = output_dir.joinpath("output.zip")
 
+        logging.info("Downloading simulation outputs to %s.", zip_path)
         data.download_file(response, zip_path)
 
         if uncompress:
+            logging.info("Uncompressing the outputs to %s.", output_dir)
             data.uncompress_task_outputs(zip_path, output_dir)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
-
         return output_dir
 
     class _PathParams(TypedDict):

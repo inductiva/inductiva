@@ -18,7 +18,6 @@ class DualSPHysics(Simulator):
         input_dir: types.Path,
         sim_config_filename: str = "config.xml",
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Executes a DualSPHysics simulation.
@@ -27,7 +26,6 @@ class DualSPHysics(Simulator):
             input_dir: Directory with simulation input files.
             sim_config_filename: Simulation config file.
             machine_group: Machine group for simulation.
-            run_async: If True, simulation runs asynchronously. 
             storage_dir: Directory for storing results.
 
         Returns:
@@ -36,5 +34,4 @@ class DualSPHysics(Simulator):
         return super().run(input_dir,
                            machine_group=machine_group,
                            input_filename=sim_config_filename,
-                           run_async=run_async,
                            storage_dir=storage_dir)

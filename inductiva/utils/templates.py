@@ -2,6 +2,7 @@
 
 import os
 import io
+import glob
 from typing import Dict, List, Union
 from pathlib import Path
 
@@ -66,3 +67,17 @@ def batch_replace_params(
             output_file=output_filename_paths[index],
             remove_template=remove_templates,
         )
+
+
+def get_template_filenames(template_files_dir):
+    """Get template filenames from directory."""
+    template_paths = glob.glob(os.path.join(template_files_dir, "**",
+                                            "*.jinja"),
+                               recursive=True)
+
+    template_filenames = [
+        os.path.relpath(file_path, start=template_files_dir)
+        for file_path in template_paths
+    ]
+
+    return template_filenames

@@ -1,9 +1,5 @@
 """Wind terrain scenario for air flowing over complex terrains."""
-
-from functools import singledispatchmethod
-import io
 import os
-import shutil
 from typing import List, Optional
 
 import numpy as np
@@ -14,9 +10,6 @@ from inductiva import simulators, resources, scenarios, world, utils
 SCENARIO_TEMPLATE_DIR = os.path.join(utils.templates.TEMPLATES_PATH,
                                      "wind_terrain")
 OPENFOAM_TEMPLATE_INPUT_DIR = "openfoam"
-FILES_SUBDIR = "files"
-COMMANDS_TEMPLATE_FILE_NAME = "commands.json.jinja"
-TERRAIN_FILENAME = "terrain.stl"
 
 
 class WindOverTerrain(scenarios.Scenario):
@@ -54,6 +47,8 @@ class WindOverTerrain(scenarios.Scenario):
     """
 
     valid_simulators = [simulators.OpenFOAM]
+    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                      OPENFOAM_TEMPLATE_INPUT_DIR)
 
     @utils.optional_deps.needs_fluids_extra_deps
     def __init__(self,
@@ -75,35 +70,33 @@ class WindOverTerrain(scenarios.Scenario):
                 Notice that the wind_position needs to be inside
                 this atmosphere region.
         """
-
-        self.wind_velocity = np.array(wind_velocity)
-        # Compute the wind_direction from the velocity vector.
-        self.wind_direction = self.wind_velocity / np.linalg.norm(
-            self.wind_velocity)
+        wind_velocity = np.array(wind_velocity)
+        self.params["wind_velocity"] = wind_velocity
+        # Compute the wind direction from the velocity vector.
+        self.params["wind_flow_dir"] = wind_velocity / np.linalg.norm(
+            wind_velocity)
         if wind_position is None:
             wind_position = [
                 terrain.center["x"], terrain.center["y"],
                 terrain.bounds["z"][1] + 10
             ]
 
-        self.wind_position = wind_position
-        self.terrain = terrain
+        self.params["flow_position"] = wind_position
+        self.params["terrain"] = terrain
 
         top_boundary_height = terrain.bounds["z"][0] + atmosphere_height
 
         if terrain.bounds["z"][1] >= top_boundary_height:
             raise ValueError(
                 "The terrain height surpasses the top athmosphere boundary.")
-        else:
-            self.top_boundary_height = top_boundary_height
+
+        self.params["top_boundary_height"] = top_boundary_height
 
     def simulate(
         self,
         simulator: simulators.Simulator = simulators.OpenFOAM(),
         machine_group: Optional[resources.MachineGroup] = None,
-        run_async: bool = False,
         storage_dir: Optional[str] = "",
-        n_cores: int = 2,
         num_iterations: int = 100,
     ) -> inductiva.tasks.Task:
         """Simulates the wind over the terrain scenario.
@@ -113,99 +106,26 @@ class WindOverTerrain(scenarios.Scenario):
                 Valid simulators: OpenFOAM.
             machine_group: The MachineGroup to use for the simulation.
             num_iterations: Number of iterations to run the simulation.
-            n_cores: Number of cores to use for the simulation.
-            run_async: Whether to run the simulation asynchronously.
-            storage_dir: The parent directory where simulation 
+            storage_dir: The parent directory where simulation
             results will be stored.
         """
         simulator.override_api_method_prefix("wind_terrain")
 
-        self.num_iterations = num_iterations
-        self.n_cores = n_cores
+        self.params["num_iterations"] = num_iterations
 
         commands = self.get_commands()
 
         task = super().simulate(simulator,
                                 machine_group=machine_group,
-                                run_async=run_async,
                                 storage_dir=storage_dir,
-                                n_cores=n_cores,
                                 commands=commands)
 
         return task
 
-    def get_commands(self):
-        """Returns the commands for the simulation."""
+    def add_extra_input_files(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
+        """Configure object to be in specific place on input directory."""
 
-        commands_template_path = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                              OPENFOAM_TEMPLATE_INPUT_DIR,
-                                              COMMANDS_TEMPLATE_FILE_NAME)
-
-        inmemory_file = io.StringIO()
-        utils.templates.replace_params(
-            template_path=commands_template_path,
-            params={"n_cores": self.n_cores},
-            output_file=inmemory_file,
-        )
-        commands = self.read_commands_from_file(inmemory_file)
-
-        return commands
-
-    @singledispatchmethod
-    def create_input_files(self, simulator: simulators.Simulator):
-        pass
-
-
-@WindOverTerrain.create_input_files.register
-def _(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
-    """Creates OpenFOAM simulation input files."""
-
-    # The WindTunnel with OpenFOAM requires changing multiple files
-    template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                      OPENFOAM_TEMPLATE_INPUT_DIR, FILES_SUBDIR)
-
-    # Copy all files from the template dir to the input directory
-    shutil.copytree(template_files_dir,
-                    input_dir,
-                    dirs_exist_ok=True,
-                    symlinks=True)
-
-    utils.templates.batch_replace_params(
-        templates_dir=input_dir,
-        template_filenames=[
-            os.path.join("system", "blockMeshDict_template.openfoam.jinja"),
-            os.path.join("system", "controlDict_template.openfoam.jinja"),
-            os.path.join("system", "decomposeParDict_template.openfoam.jinja"),
-            os.path.join("system", "snappyHexMeshDict_template.openfoam.jinja"),
-            os.path.join("system", "topoSetDict_template.openfoam.jinja"),
-            os.path.join("0", "include",
-                         "ABLConditions_template.openfoam.jinja"),
-            os.path.join("constant", "fvOptions_template.openfoam.jinja")
-        ],
-        params={
-            "terrain_bounds": self.terrain.bounds,
-            "terrain_center": self.terrain.center,
-            "terrain_path": TERRAIN_FILENAME,
-            "wind_flow_dir": self.wind_direction,
-            "flow_position": self.wind_position,
-            "top_boundary_height": self.top_boundary_height,
-            "num_iterations": self.num_iterations,
-            "n_cores": self.n_cores,
-        },
-        output_filename_paths=[
-            os.path.join(input_dir, "system", "blockMeshDict"),
-            os.path.join(input_dir, "system", "controlDict"),
-            os.path.join(input_dir, "system", "decomposeParDict"),
-            os.path.join(input_dir, "system", "snappyHexMeshDict"),
-            os.path.join(input_dir, "system", "topoSetDict"),
-            os.path.join(input_dir, "0", "include", "ABLConditions"),
-            os.path.join(input_dir, "constant", "fvOptions")
-        ],
-        remove_templates=True,
-    )
-
-    # Add terrain path to its respective place
-    terrain_dir = os.path.join(input_dir, "constant", "triSurface")
-    os.mkdir(terrain_dir)
-    terrain_file_path = os.path.join(terrain_dir, TERRAIN_FILENAME)
-    self.terrain.to_text_file(terrain_file_path)
+        terrain_dir = os.path.join(input_dir, "constant", "triSurface")
+        os.mkdir(terrain_dir)
+        terrain_file_path = os.path.join(terrain_dir, "terrain.stl")
+        self.params["terrain"].to_text_file(terrain_file_path)

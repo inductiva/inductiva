@@ -77,7 +77,7 @@ needs_coastal_extra_deps = functools.partial(
 
 needs_common_extra_deps = functools.partial(
     _needs_optional_deps,
-    ["imageio", "matplotlib"],
+    ["imageio", "matplotlib", "pyvista"],
     _missing_deps_msg("common"),
 )
 
