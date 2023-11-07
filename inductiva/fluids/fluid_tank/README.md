@@ -65,4 +65,4 @@ Then run the following code:
 output.render()
 ```
 
-![Fluid tank simulation.](resources/media/fluid_tank.gif)
+![Fluid tank simulation.](/assets/media/fluid_tank.gif)
