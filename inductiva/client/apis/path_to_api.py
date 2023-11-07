@@ -28,6 +28,8 @@ from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_contents import StorageContents
 from inductiva.client.apis.paths.storage_dir_name import StorageDirName
+from inductiva.client.apis.paths.version import Version
+from inductiva.client.apis.paths.version_check import VersionCheck
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -58,6 +60,8 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.STORAGE_SIZE: StorageSize,
         PathValues.STORAGE_CONTENTS: StorageContents,
         PathValues.STORAGE_DIR_NAME: StorageDirName,
+        PathValues.VERSION: Version,
+        PathValues.VERSIONCHECK: VersionCheck,
     })
 
 path_to_api = PathToApi({
@@ -88,4 +92,6 @@ path_to_api = PathToApi({
     PathValues.STORAGE_SIZE: StorageSize,
     PathValues.STORAGE_CONTENTS: StorageContents,
     PathValues.STORAGE_DIR_NAME: StorageDirName,
+    PathValues.VERSION: Version,
+    PathValues.VERSIONCHECK: VersionCheck,
 })

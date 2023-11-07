@@ -11,6 +11,7 @@
 # import sys
 # sys.setrecursionlimit(n)
 
+from inductiva.client.model.backend_version import BackendVersion
 from inductiva.client.model.body_upload_task_input import BodyUploadTaskInput
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
@@ -32,3 +33,4 @@ from inductiva.client.model.user import User
 from inductiva.client.model.user_api_key import UserApiKey
 from inductiva.client.model.user_create import UserCreate
 from inductiva.client.model.validation_error import ValidationError
+from inductiva.client.model.version_comparasion_result import VersionComparasionResult
