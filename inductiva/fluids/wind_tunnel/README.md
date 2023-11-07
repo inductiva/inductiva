@@ -1,7 +1,7 @@
 # Wind Tunnel Scenario
 
-This scenario models the aerodynamics of an object inside a virtual wind tunnel for a given airflow velocity. To model the air as an incompressible fluid and simplify the equations of motion under study, we restrict ourselves here to maximum speeds available is 100 m/s. Above this, the model is innacurate since it does not account for the compressibility of the air at those speeds.
-Air is injected through one side of the wind tunnel and exits through an outlet on the opposite side. The air flow within the tunnel is modified according to the structure of the object. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models. The simulation is currently performed with the OpenFOAM simulator.
+This scenario models the aerodynamics of an object inside a virtual wind tunnel for a given airflow velocity. To model the air as an incompressible fluid and simplify the equations of motion under study, we restrict ourselves here to maximum speeds available is 100 m/s. Above this, the model is inaccurate since it does not account for the compressibility of the air at those speeds.
+Air is injected through one side of the wind tunnel and exits through an outlet on the opposite side. The airflow within the tunnel is modified according to the structure of the object. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models. The simulation is currently performed with the OpenFOAM simulator.
 
 ### Example:
 
@@ -9,7 +9,7 @@ Air is injected through one side of the wind tunnel and exits through an outlet 
 
 This example requires an object of OBJ or STL format, we make one available through the code.
 
-Do not forget to insert your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/main#api-access-tokens) to see how get one).
+Do not forget to insert your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/main#api-access-tokens) to see how to get one).
 
 ```python
 import inductiva
@@ -18,7 +18,7 @@ inductiva.api_key = "YOUR_API_KEY"
 
 # Url to a test an object in Inductiva Github repository
 vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
-              "/resources/vehicle.obj"
+              "/assets/vehicle.obj"
 vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 
 # Initialize the scenario
