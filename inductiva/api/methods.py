@@ -3,11 +3,12 @@
 The relevant function for usage outside of this file is invoke_async_api().
 Check the demos directory for examples on how it is used.
 """
+import json
 import os
 import pathlib
 import signal
 import time
-import json
+from urllib3.exceptions import HTTPError, MaxRetryError, NewConnectionError
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
 from uuid import UUID
@@ -22,7 +23,7 @@ from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
 from inductiva.types import Path
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
-from inductiva.utils import format_utils
+from inductiva.utils import format_utils, version_check
 
 
 def validate_api_key(api_key: Optional[str]) -> Configuration:
@@ -32,6 +33,11 @@ def validate_api_key(api_key: Optional[str]) -> Configuration:
             "No API Key specified. "
             "Set it in the code with \"inductiva.api_key = <YOUR_SECRET_KEY>\""
             " or set the INDUCTIVA_API_KEY environment variable.")
+
+    # Perform version check only on first invocation
+    if not hasattr(validate_api_key, "version_checked"):
+        compare_client_and_backend_versions(inductiva.__version__)
+        validate_api_key.version_checked = True
 
     api_config = Configuration(host=inductiva.api_url)
     api_config.api_key["APIKeyHeader"] = api_key
@@ -332,28 +338,21 @@ def invoke_async_api(method_name: str,
     return task_id
 
 
-def get_backend_version() -> str:
+def compare_client_and_backend_versions(client_version: str):
     """
-    Fetches the version of the backend by making a GET request to the 
-    '/version' endpoint.
+    Compares the provided client version with the backend API version.
 
-    The function will attempt to establish a connection to the backend using 
-    the configuration provided and retrieve the backend's version. 
-    If any part of this process fails, it raises a RuntimeError.
+    This function sends a GET request to the backend API with the client 
+    version as a query parameter. It checks the response from the API to 
+    determine if the client version is compatible with the backend version. 
+    If the client version is not compatible or if there's an issue with the 
+    request, exceptions are raised.
 
-    Returns:
-        str: The version of the backend if fetched successfully.
-
-    Raises:
-        RuntimeError: If there's an issue fetching the backend version or if 
-                      the response from the server is not as expected.
-
-    Examples:
-        >>> get_backend_version()
-        '1.0.0'
-
+    Parameters:
+    - client_version (str): The version of the client to be compared with the 
+    backend version.
     """
-    resource_path = "/version"
+    resource_path = "/version-check?client_version=" + client_version
     api_config = Configuration(host=inductiva.api_url)
 
     try:
@@ -363,12 +362,31 @@ def get_backend_version() -> str:
                 method="GET",
             )
 
-            if not response or not response.data or response.status != 200:
-                raise RuntimeError(f"Failed to get backend version, \
-                        HTTP response: {response.status}")
+            if response.status == 400:
+                raise ValueError("Client version format is incorrect")
 
-            json_data = json.loads(response.data.decode("utf-8"))
+            if response.status == 200:
+                response_data = json.loads(response.data.decode("utf-8"))
 
-            return json_data.get("version")
+                if not response_data["is_valid"]:
+                    raise version_check.VersionCheckException(
+                        f"Client version {client_version} is not compatible \n"
+                        f"with API version {response_data['server_version']}.\n"
+                        f"Please update the client version.")
+
+            else:
+                raise HTTPError(f"HTTP error occurred: {response.status}")
+
+    except (MaxRetryError, NewConnectionError) as exc:
+        raise RuntimeError(
+            "Failed to reach the API. "
+            "Please check your connection and try again.") from exc
+
+    except version_check.VersionCheckException as e:
+        raise RuntimeError(e) from e
+    except HTTPError as e:
+        raise RuntimeError(
+            f"HTTP error occurred while getting API version. {e}") from e
     except Exception as e:
-        raise RuntimeError(f"Failed to get backend version. {e}") from e
+        raise RuntimeError(
+            f"Failed to compare client and API versions. {e}") from e

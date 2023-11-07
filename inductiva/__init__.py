@@ -37,11 +37,3 @@ urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
 __version__ = "0.3.7"
-
-try:
-    backend_version = api.get_backend_version()
-    utils.version_check.compare_versions(__version__, backend_version)
-except utils.version_check.VersionCheckException as e:
-    absl.logging.warning("Version check failed. %s", e)
-except RuntimeError as e:
-    absl.logging.warning("Failed to get backend version. %s", e)
