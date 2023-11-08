@@ -3,12 +3,11 @@
 The relevant function for usage outside of this file is invoke_async_api().
 Check the demos directory for examples on how it is used.
 """
-import json
 import os
 import pathlib
 import signal
 import time
-from urllib3.exceptions import HTTPError, MaxRetryError, NewConnectionError
+from urllib3.exceptions import MaxRetryError, NewConnectionError
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
 from uuid import UUID
@@ -18,6 +17,7 @@ from absl import logging
 import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
                                      TaskStatus)
 from inductiva.types import Path
@@ -352,41 +352,32 @@ def compare_client_and_backend_versions(client_version: str):
     - client_version (str): The version of the client to be compared with the 
     backend version.
     """
-    resource_path = "/version-check?client_version=" + client_version
     api_config = Configuration(host=inductiva.api_url)
 
-    try:
-        with ApiClient(api_config) as client:
-            response = client.call_api(
-                resource_path=resource_path,
-                method="GET",
-            )
+    with ApiClient(api_config) as client:
+        api_instance = VersionApi(client)
+        query_params = {"client_version": client_version}
 
-            if response.status == 400:
-                raise ValueError("Client version format is incorrect")
+        try:
+            api_response = api_instance.compare_client_and_backend_versions(
+                query_params=query_params)
 
-            if response.status == 200:
-                response_data = json.loads(response.data.decode("utf-8"))
+            response = api_response.body
 
-                if not response_data["is_valid"]:
-                    raise version_check.VersionCheckException(
-                        f"Client version {client_version} is not compatible \n"
-                        f"with API version {response_data['server_version']}.\n"
-                        f"Please update the client version.")
+            if not bool(response["is_valid"]):
+                raise version_check.VersionCheckException(
+                    f"Client version {client_version} is not compatible \n"
+                    f"with API version {response['server_version']}.\n"
+                    f"Please update the client version.")
 
-            else:
-                raise HTTPError(f"HTTP error occurred: {response.status}")
-
-    except (MaxRetryError, NewConnectionError) as exc:
-        raise RuntimeError(
-            "Failed to reach the API. "
-            "Please check your connection and try again.") from exc
-
-    except version_check.VersionCheckException as e:
-        raise RuntimeError(e) from e
-    except HTTPError as e:
-        raise RuntimeError(
-            f"HTTP error occurred while getting API version. {e}") from e
-    except Exception as e:
-        raise RuntimeError(
-            f"Failed to compare client and API versions. {e}") from e
+        except (MaxRetryError, NewConnectionError) as exc:
+            raise RuntimeError(
+                "Failed to reach the API. "
+                "Please check your connection and try again.") from exc
+        except version_check.VersionCheckException as e:
+            raise RuntimeError(e) from e
+        except ApiException as e:
+            raise RuntimeError(e) from e
+        except Exception as e:
+            raise RuntimeError(
+                f"Failed to compare client and API versions. {e}") from e
