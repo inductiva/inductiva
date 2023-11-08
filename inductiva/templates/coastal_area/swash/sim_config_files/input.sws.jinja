@@ -1,0 +1,31 @@
+$$$ HEADING
+PROJECT 'inductiva' '00'
+$$$ PHYSICAL CONSTANTS
+SET temp = 14.0
+SET salinity = 0.1
+SET dynvis = 0.001
+SET level = {{ water_level }}
+MODE DYNAMIC TWODIMENSIONAL
+CGRID {{ x_range[0] }} {{ y_range[0] }} 0. {{ x_range[1] }} {{ y_range[1] }} {{ x_num - 1 }} {{ y_num - 1}}
+INPGRID BOTTOM REGULAR {{ x_range[0] }} {{ y_range[0]}} 0. {{ x_num - 1 }} {{ y_num - 1 }} {{ x_delta }} {{ y_delta }}
+READINP BOTTOM 1. 'bathymetry.bot' 5 0 FREE
+INIT CONSTANT 0.000000 0.000000 0.000000
+BOUNDCOND SIDE {{ wave_source_location }} BTYPE WEAKREFL CONSTANT REGULAR {{ wave_amplitude }} {{ wave_period }}
+{% for location in absorbing_boundary_locations %}
+BOUNDCOND SIDE {{ location }} CCW BTYPE RADIATION
+{% endfor %}
+FRICTION MANNING 0.02
+VISCOSITY CONSTANT 0.0
+DISCRET UPW FIRST
+DISCRET CORRDEP FIRST
+TIMEI METHOD EXPLICIT cfllow=0.05  cflhig=0.5
+BLOCK 'COMPGRID' NOHEAD 'grid_positions.mat' LAYOUT 3 XP YP
+QUANTITY WATLEV excv=0.0
+BLOCK 'COMPGRID' NOHEAD 'water_level.mat' LAYOUT 3 WATLEV OUTPUT 000000.000 {{ output_time_step }} SEC
+BLOCK 'COMPGRID' NOHEAD 'velocity_x.mat' LAYOUT 3 VKSI OUTPUT 000000.000 {{ output_time_step }} SEC
+BLOCK 'COMPGRID' NOHEAD 'velocity_y.mat' LAYOUT 3 VETA OUTPUT 000000.000 {{ output_time_step }} SEC
+BLOCK 'COMPGRID' NOHEAD 'velocity_magnitude.mat' LAYOUT 3 VMAG OUTPUT 000000.000 {{ output_time_step }} SEC
+$$$ RUN
+TEST 1,0
+COMPUTE 000000.000 {{ time_step }} SEC {{ simulation_time_hmsms }}
+STOP

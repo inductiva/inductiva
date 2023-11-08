@@ -1,13 +1,13 @@
-"""Describes the physical scenarios and runs its simulation via API."""
+"""DamBreak scenario."""
+import enum
 from typing import List, Literal, Optional
-from enum import Enum
 from dataclasses import dataclass
 
 from inductiva import tasks, resources, simulators, fluids
 
 
 @dataclass
-class ParticleRadius(Enum):
+class ParticleRadius(enum.Enum):
     """Sets particle radius according to resolution."""
     HIGH = 0.008
     MEDIUM = 0.012
@@ -62,12 +62,13 @@ class DamBreak(fluids.FluidBlock):
         """
         simulator.override_api_method_prefix("dam_break")
 
-        self.particle_radius = ParticleRadius[resolution.upper()].value
-        self.simulation_time = simulation_time
-        self.adaptive_time_step = True
-        self.particle_sorting = True
-        self.time_step = 0.001
-        self.output_time_step = 1 / 60
+        self.params["particle_radius"] = ParticleRadius[
+            resolution.upper()].value
+        self.params["simulation_time"] = simulation_time
+        self.params["adaptive_time_step"] = True
+        self.params["particle_sorting"] = True
+        self.params["time_step"] = 0.001
+        self.params["output_export_rate"] = 60
 
         # Inherit the simulate from the Parent of FluidBlock (Scenario) to
         # avoid overriding the api_method_prefix with the one of FluidBlock.

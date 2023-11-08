@@ -132,7 +132,7 @@ class WindTunnel(scenarios.Scenario):
 
         return task
 
-    def add_extra_input_files(self, simulator: simulators.Simulator, input_dir):  # pylint: disable=unused-argument
+    def add_extra_input_files(self, simulator: simulators.OpenFOAM, input_dir):  # pylint: disable=unused-argument
         """Configure object to be in specific place on input directory."""
 
         object_dir = os.path.join(input_dir, "constant", "triSurface")

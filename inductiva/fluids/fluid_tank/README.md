@@ -28,12 +28,12 @@ scenario = inductiva.fluids.FluidTank(
     shape=inductiva.fluids.shapes.Cylinder(radius=0.5, height=1),
     fluid=inductiva.fluids.WATER,
     fluid_level=0.5,
-    inlet=inductiva.fluids.CircularTankInlet(radius=0.5),
+    inlet=inductiva.fluids.CircularTankInlet(radius=0.1),
     outlet=inductiva.fluids.CylindricalTankOutlet(radius=0.1, height=0.1))
 
-task = scenario.simulate(simulation_time=5,
-                           output_time_step=0.1,
-                           resolution="medium")
+task = scenario.simulate(simulation_time=1,
+                         output_export_rate=60,
+                         resolution="low")
 
 output = task.get_output()
 

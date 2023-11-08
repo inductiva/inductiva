@@ -7,7 +7,6 @@ import shutil
 import typing
 
 from absl import logging
-from functools import singledispatchmethod
 
 import numpy as np
 
@@ -338,9 +337,31 @@ class StellaratorCoils(scenarios.Scenario):
 
         return task
 
-    @singledispatchmethod
-    def create_input_files(self, simulator: simulators.Simulator):
-        pass
+    def create_input_files(self, simulator: simulators.SIMSOPT, input_dir):  # pylint: disable=unused-argument
+        """Creates Simsopt simulation input files."""
+
+        coil_coefficients = [coil.curve_coefficients for coil in self.coils]
+        coil_currents = np.array([coil.current for coil in self.coils])
+
+        coil_coefficients_filename = os.path.join(
+            input_dir, SIMSOPT_COIL_COEFFICIENTS_FILENAME)
+        coil_currents_filename = os.path.join(input_dir,
+                                              SIMSOPT_COIL_CURRENTS_FILENAME)
+
+        plasma_surface_filename = os.path.join(input_dir,
+                                               SIMSOPT_PLASMA_SURFACE_FILENAME)
+
+        np.savez(coil_coefficients_filename, *coil_coefficients)
+        np.savez(coil_currents_filename, coil_currents)
+        shutil.copy(self.plasma_surface_filepath, plasma_surface_filename)
+
+        # Save the objectives weights dictionary.
+        objectives_weights_filepath = os.path.join(input_dir,
+                                                   OBJECTIVES_WEIGHTS_FILENAME)
+
+        with open(objectives_weights_filepath, "w",
+                  encoding="utf-8") as json_file:
+            json.dump(self.objectives_weights, json_file)
 
 
 class Coil:
@@ -392,30 +413,3 @@ def get_circular_curve_coefficients(toroidal_angle, major_radius, minor_radius):
     curve_coefficients[4, 1] = -minor_radius
 
     return curve_coefficients
-
-
-@StellaratorCoils.create_input_files.register
-def _(self, simulator: simulators.SIMSOPT, input_dir):  # pylint: disable=unused-argument
-    """Creates Simsopt simulation input files."""
-
-    coil_coefficients = [coil.curve_coefficients for coil in self.coils]
-    coil_currents = np.array([coil.current for coil in self.coils])
-
-    coil_coefficients_filename = os.path.join(
-        input_dir, SIMSOPT_COIL_COEFFICIENTS_FILENAME)
-    coil_currents_filename = os.path.join(input_dir,
-                                          SIMSOPT_COIL_CURRENTS_FILENAME)
-
-    plasma_surface_filename = os.path.join(input_dir,
-                                           SIMSOPT_PLASMA_SURFACE_FILENAME)
-
-    np.savez(coil_coefficients_filename, *coil_coefficients)
-    np.savez(coil_currents_filename, coil_currents)
-    shutil.copy(self.plasma_surface_filepath, plasma_surface_filename)
-
-    # Save the objectives weights dictionary.
-    objectives_weights_filepath = os.path.join(input_dir,
-                                               OBJECTIVES_WEIGHTS_FILENAME)
-
-    with open(objectives_weights_filepath, "w", encoding="utf-8") as json_file:
-        json.dump(self.objectives_weights, json_file)
