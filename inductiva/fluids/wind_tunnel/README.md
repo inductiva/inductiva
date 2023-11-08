@@ -40,7 +40,7 @@ pressure_field = output.get_object_pressure_field()
 # Render
 pressure_field.render()
 ```
-<img src="/resources/media/openfoam/default_pressure_field.png" width="400" height="300" />
+<img src="/assets/media/openfoam/default_pressure_field.png" width="400" height="300" />
 
 ## Scenario configuration
 
@@ -108,7 +108,7 @@ pressure_field = output.get_object_pressure_field()
 pressure_field.render()
 ```
 
-<img src="/resources/media/openfoam/default_pressure_field.png" width="400" height="300" />
+<img src="/assets/media/openfoam/default_pressure_field.png" width="400" height="300" />
 
 ```python
 # Get a mesh of the streamlines 
@@ -122,7 +122,7 @@ streamlines.render(physical_field="velocity",
                    save_path="default_streamlines.png")
 ```
 
-<img src="/resources/media/openfoam/default_streamlines.png" width="400" height="300" />
+<img src="/assets/media/openfoam/default_streamlines.png" width="400" height="300" />
 
 
 ```python
@@ -135,7 +135,7 @@ flow_slice.render(physical_field="pressure",
                   save_path="default_flow_slice.png")
 ```
 
-<img src="/resources/media/openfoam/default_flow_slice.png" width="400" height="300" />
+<img src="/assets/media/openfoam/default_flow_slice.png" width="400" height="300" />
 
 ### Example for general Post-processing
 
@@ -150,7 +150,7 @@ pressure_field = output.get_object_pressure_field()
 pressure_field.render(save_path="pressure_field.png")
 ```
 
-<img src="/resources/media/openfoam/pressure_field.png" width="400" height="300" />
+<img src="/assets/media/openfoam/pressure_field.png" width="400" height="300" />
 
 ```python
 # Get the streamlines mesh
@@ -168,7 +168,7 @@ streamlines.render(physical_field="pressure",
                    save_path="streamlines.png")
 ```
 
-<img src="/resources/media/openfoam/streamlines.png" width="400" height="300" />
+<img src="/assets/media/openfoam/streamlines.png" width="400" height="300" />
 
 ```python
 
@@ -182,4 +182,4 @@ flow_slice.render(physical_field="velocity",
                   save_path="flow_slice.png")
 ```
 
-<img src="/resources/media/openfoam/flow_slice.png" width="400" height="300" />
+<img src="/assets/media/openfoam/flow_slice.png" width="400" height="300" />
