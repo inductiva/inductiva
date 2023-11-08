@@ -11,7 +11,6 @@
 # import sys
 # sys.setrecursionlimit(n)
 
-from inductiva.client.model.body_upload_task_input import BodyUploadTaskInput
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
 from inductiva.client.model.executer_tracker_register_info import ExecuterTrackerRegisterInfo
