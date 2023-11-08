@@ -1,4 +1,4 @@
-name: Trigger web-api version update
+name: Trigger client version update
 
 on:
   push:
@@ -6,13 +6,36 @@ on:
       - "*"
 
 jobs:
-  trigger-server-update:
+  bump-version:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Trigger a workflow in the server repository
-        uses: peter-evans/repository-dispatch@v2
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Update __version__ in inductiva/__init__ file
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          VERSION_PATH_FILE=inductiva/__init__.py
+
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+          if grep -q "__version__ =" $VERSION_PATH_FILE; then
+            # If __version__ exists, update it
+            sed -i "s|__version__ = \".*\"|__version__ = \"$VERSION\"|" $VERSION_PATH_FILE
+          else
+            # If __version__ does not exist, append it
+            echo "__version__ = \"$VERSION\"" >> $VERSION_PATH_FILE
+          fi
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.BOT_REPO_ACCESS }}
-          repository: inductiva/inductiva-web-api
-          event-type: update-version
-          client-payload: '{"tag": "${{ github.ref }}" }'
+          commit-message: Update version to ${{ env.VERSION }}.
+          branch: update-version-${{ env.VERSION }}
+          base: development
+          delete-branch: true
+          title: Update version to ${{ env.VERSION }}
+          body: |
+            Automated changes triggered by a new tag creation ${{ env.VERSION }}
