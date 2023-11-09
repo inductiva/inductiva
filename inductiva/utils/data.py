@@ -239,10 +239,13 @@ def download_file(
         output_path: Path where to store the downloaded file.
         chunk_size: Size of the chunks in which to download the file.
     """
-    # if the response header does not contain a content-length,
+    # if the response header does not contain a x-content-length header,
     # the progress bar will not be displayed correctly, but download
-    # will still work
-    download_size = response.headers.get("content-length", 0)
+    # will still work.
+    # "x-content-length" is a custom header that is set by the API instead
+    # of the standard "content-length" header, because the API needs to use
+    # "transfer-encoding: chunked" to stream the response.
+    download_size = response.headers.get("x-content-length", 0)
 
     with tqdm(
             total=int(download_size),
