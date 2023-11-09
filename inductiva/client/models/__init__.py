@@ -33,4 +33,4 @@ from inductiva.client.model.user import User
 from inductiva.client.model.user_api_key import UserApiKey
 from inductiva.client.model.user_create import UserCreate
 from inductiva.client.model.validation_error import ValidationError
-from inductiva.client.model.version_comparasion_result import VersionComparasionResult
+from inductiva.client.model.version_comparison_result import VersionComparisonResult

@@ -24,7 +24,7 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.version_comparasion_result import VersionComparasionResult
+from inductiva.client.model.version_comparison_result import VersionComparisonResult
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
@@ -54,7 +54,7 @@ request_query_client_version = api_client.QueryParameter(
     required=True,
     explode=True,
 )
-SchemaFor200ResponseBodyApplicationJson = VersionComparasionResult
+SchemaFor200ResponseBodyApplicationJson = VersionComparisonResult
 
 
 @dataclass
