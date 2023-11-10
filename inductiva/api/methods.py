@@ -23,7 +23,7 @@ from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
 from inductiva.types import Path
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
-from inductiva.utils import format_utils, version_check
+from inductiva.utils import format_utils
 
 
 def validate_api_key(api_key: Optional[str]) -> Configuration:
@@ -339,18 +339,20 @@ def invoke_async_api(method_name: str,
 
 
 def compare_client_and_backend_versions(client_version: str):
-    """
-    Compares the provided client version with the backend API version.
+    """ Compares the provided client version 7with the backend API version.
 
-    This function sends a GET request to the backend API with the client 
-    version as a query parameter. It checks the response from the API to 
+    Sends a GET request to the backend API's version comparison endpoint 
+    with the client version as a parameter. Evaluates the response to 
     determine if the client version is compatible with the backend version. 
-    If the client version is not compatible or if there's an issue with the 
-    request, exceptions are raised.
+    Raises exceptions for communication issues or incompatibility.
 
     Parameters:
     - client_version (str): The version of the client to be compared with the 
-    backend version.
+                            backend version.
+
+    Raises:
+    - RuntimeError: If the API cannot be reached, or if the client version is 
+      incompatible with the backend version, or for other general failures.
     """
     api_config = Configuration(host=inductiva.api_url)
 
@@ -359,25 +361,22 @@ def compare_client_and_backend_versions(client_version: str):
         query_params = {"client_version": client_version}
 
         try:
-            api_response = api_instance.compare_client_and_backend_versions(
+            api_instance.compare_client_and_backend_versions(
                 query_params=query_params)
-
-            response = api_response.body
-
-            if not bool(response["is_valid"]):
-                raise version_check.VersionCheckException(
-                    f"Client version {client_version} is not compatible \n"
-                    f"with API version {response['server_version']}.\n"
-                    f"Please update the client version.")
 
         except (MaxRetryError, NewConnectionError) as exc:
             raise RuntimeError(
                 "Failed to reach the API. "
                 "Please check your connection and try again.") from exc
-        except version_check.VersionCheckException as e:
-            raise RuntimeError(e) from e
+
         except ApiException as e:
+            if e.status == 406:
+                raise RuntimeError(
+                    f"Client version {client_version} is not compatible "
+                    f"with API version {e.headers['version']}.\n"
+                    "Please update the client version.") from e
             raise RuntimeError(e) from e
+
         except Exception as e:
             raise RuntimeError(
                 f"Failed to compare client and API versions. {e}") from e
