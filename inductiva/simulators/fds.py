@@ -17,7 +17,7 @@ class FDS(Simulator):
         self,
         input_dir: types.Path,
         sim_config_filename: str,
-        post_processing_config: str,
+        post_processing_config: str = None,
         n_cores: int = 1,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
