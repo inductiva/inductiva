@@ -17,6 +17,7 @@ class FDS(Simulator):
         self,
         input_dir: types.Path,
         sim_config_filename: str,
+        post_processing_config: str,
         n_cores: int = 1,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
@@ -26,10 +27,14 @@ class FDS(Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
+            post_processing_config: Name of the visual configuration file.
+                This refers to Smokeview GUI that is the default FDS
+                visualizer.
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
                            machine_group=machine_group,
                            input_filename=sim_config_filename,
                            storage_dir=storage_dir,
+                           post_processing_config=post_processing_config,
                            n_cores=n_cores)
