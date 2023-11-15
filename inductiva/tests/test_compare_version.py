@@ -6,8 +6,9 @@ from inductiva.api import methods
 from inductiva.client import exceptions
 
 
-@pytest.fixture
-def mock_api_client():
+@pytest.fixture(name="mock_api_client")
+def api_client_fixture():
+    """Mock the API client."""
     with mock.patch("inductiva.api.methods.VersionApi") as mock_api:
         mock_instance = mock.MagicMock()
         mock_api.return_value = mock_instance
@@ -20,13 +21,15 @@ def mock_api_client():
 
 
 # Test successful version match
-def test_version_match(mock_api_client):  # pylint: disable=unused-argument,redefined-outer-name
+def test_version_match(mock_api_client):  # pylint: disable=unused-argument
+    """Test that the method returns successfully when the versions match."""
     # No exception should be raised
     methods.compare_client_and_backend_versions("1.0.0")
 
 
 # Test version mismatch
-def test_version_mismatch(mock_api_client):  # pylint: disable=redefined-outer-name
+def test_version_mismatch(mock_api_client):
+    """Method should raise an exception when the versions do not match."""
     # Create a mock response object
     mock_response = mock.MagicMock()
     mock_response.status = 406
@@ -52,7 +55,8 @@ def test_version_mismatch(mock_api_client):  # pylint: disable=redefined-outer-n
     assert "API version 1.0.1" in str(exc_info.value)
 
 
-def test_invalid_client_version_format(mock_api_client):  # pylint: disable=redefined-outer-name
+def test_invalid_client_version_format(mock_api_client):
+    """Method should raise an exception when the client version is invalid."""
     mock_api_client.compare_client_and_backend_versions.side_effect = exceptions.ApiException(  # pylint: disable=line-too-long
         status=400, reason="Bad Request")
 
