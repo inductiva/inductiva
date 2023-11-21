@@ -147,7 +147,7 @@ class FluidBlock(scenarios.Scenario):
 
 
 @FluidBlock.set_template_dir.register
-def _(self, simulator: simulators.SplishSplash): # pylint: disable=unused-argument
+def _(self, simulator: simulators.SplishSplash):  # pylint: disable=unused-argument
     """Set the template directory for DualSPHysics."""
 
     self.template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
@@ -188,7 +188,7 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
 
 
 @FluidBlock.set_template_dir.register
-def _(self, simulator: simulators.DualSPHysics): # pylint: disable=unused-argument
+def _(self, simulator: simulators.DualSPHysics):  # pylint: disable=unused-argument
     """Set the template directory for DualSPHysics."""
 
     self.template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,

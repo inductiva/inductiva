@@ -120,7 +120,9 @@ class Scenario(ABC):
             self.create_input_files(simulator, input_dir)
             self.add_extra_input_files(simulator, input_dir)
 
-            kwargs = {key: value for key, value in kwargs.items() if value is not None}
+            kwargs = {
+                key: value for key, value in kwargs.items() if value is not None
+            }
 
             return simulator.run(
                 input_dir,
