@@ -1,6 +1,6 @@
 """DualSPHysics simulator module of the API."""
 
-from typing import Optional
+from typing import Optional, List
 
 from inductiva import types, tasks, resources
 from inductiva.simulators import Simulator
@@ -16,7 +16,7 @@ class DualSPHysics(Simulator):
     def run(
         self,
         input_dir: types.Path,
-        sim_config_filename: str = "config.xml",
+        commands: List[dict],
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
@@ -33,5 +33,5 @@ class DualSPHysics(Simulator):
         """
         return super().run(input_dir,
                            machine_group=machine_group,
-                           input_filename=sim_config_filename,
+                           commands=commands,
                            storage_dir=storage_dir)
