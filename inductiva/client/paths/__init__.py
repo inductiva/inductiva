@@ -33,3 +33,5 @@ class PathValues(str, enum.Enum):
     STORAGE_SIZE = "/storage/size"
     STORAGE_CONTENTS = "/storage/contents"
     STORAGE_DIR_NAME = "/storage/{dir_name}"
+    VERSION = "/version"
+    VERSIONCHECK = "/version-check"
