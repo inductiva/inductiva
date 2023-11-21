@@ -7,6 +7,7 @@ import os
 import pathlib
 import signal
 import time
+from urllib3.exceptions import MaxRetryError, NewConnectionError
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
 from uuid import UUID
@@ -16,6 +17,7 @@ from absl import logging
 import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
                                      TaskStatus)
 from inductiva.types import Path
@@ -31,6 +33,11 @@ def validate_api_key(api_key: Optional[str]) -> Configuration:
             "No API Key specified. "
             "Set it in the code with \"inductiva.api_key = <YOUR_SECRET_KEY>\""
             " or set the INDUCTIVA_API_KEY environment variable.")
+
+    # Perform version check only on first invocation
+    if not hasattr(validate_api_key, "version_checked"):
+        compare_client_and_backend_versions(inductiva.__version__)
+        validate_api_key.version_checked = True
 
     api_config = Configuration(host=inductiva.api_url)
     api_config.api_key["APIKeyHeader"] = api_key
@@ -329,3 +336,47 @@ def invoke_async_api(method_name: str,
                          "api-" + resource_pool_id)
 
     return task_id
+
+
+def compare_client_and_backend_versions(client_version: str):
+    """ Compares the provided client version 7with the backend API version.
+
+    Sends a GET request to the backend API's version comparison endpoint 
+    with the client version as a parameter. Evaluates the response to 
+    determine if the client version is compatible with the backend version. 
+    Raises exceptions for communication issues or incompatibility.
+
+    Parameters:
+    - client_version (str): The version of the client to be compared with the 
+                            backend version.
+
+    Raises:
+    - RuntimeError: If the API cannot be reached, or if the client version is 
+      incompatible with the backend version, or for other general failures.
+    """
+    api_config = Configuration(host=inductiva.api_url)
+
+    with ApiClient(api_config) as client:
+        api_instance = VersionApi(client)
+        query_params = {"client_version": client_version}
+
+        try:
+            api_instance.compare_client_and_backend_versions(
+                query_params=query_params)
+
+        except (MaxRetryError, NewConnectionError) as exc:
+            raise RuntimeError(
+                "Failed to reach the API. "
+                "Please check your connection and try again.") from exc
+
+        except ApiException as e:
+            if e.status == 406:
+                raise RuntimeError(
+                    f"Client version {client_version} is not compatible "
+                    f"with API version {e.headers['version']}.\n"
+                    "Please update the client version.") from e
+            raise RuntimeError(e) from e
+
+        except Exception as e:
+            raise RuntimeError(
+                f"Failed to compare client and API versions. {e}") from e
