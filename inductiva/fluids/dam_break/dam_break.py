@@ -70,12 +70,16 @@ class DamBreak(fluids.FluidBlock):
         self.params["time_step"] = 0.001
         self.params["output_export_rate"] = 60
 
+        self.set_template_dir(simulator)
+        commands = self.get_commands()
+
         # Inherit the simulate from the Parent of FluidBlock (Scenario) to
         # avoid overriding the api_method_prefix with the one of FluidBlock.
         task = super(fluids.FluidBlock, self).simulate(
             simulator=simulator,
             machine_group=machine_group,
             storage_dir=storage_dir,
+            commands=commands,
             sim_config_filename=self.get_config_filename(simulator))
 
         return task
