@@ -11,3 +11,4 @@ class TagValues(str, enum.Enum):
     EXECUTERTRACKERS = "executer-trackers"
     STORAGE = "storage"
     TASKS = "tasks"
+    VERSION = "version"
