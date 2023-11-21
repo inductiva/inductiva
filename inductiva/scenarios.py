@@ -87,13 +87,16 @@ class Scenario(ABC):
 
         commands_file = self.create_command_file()
 
-        if isinstance(commands_file, str):
-            with open(commands_file, "r", encoding="utf-8") as f:
-                return json.load(f)
+        if os.path.exists(commands_file):
+            if isinstance(commands_file, str):
+                with open(commands_file, "r", encoding="utf-8") as f:
+                    return json.load(f)
 
-        # Make sure already opened file is read from the beginning
-        commands_file.seek(0)
-        return json.load(commands_file)
+            # Make sure already opened file is read from the beginning
+            commands_file.seek(0)
+            return json.load(commands_file)
+        else:
+            return None
 
     def validate_simulator(self, simulator: simulators.Simulator):
         """Checks if the scenario can be simulated with the given simulator."""
@@ -116,6 +119,8 @@ class Scenario(ABC):
             self.config_params(simulator, input_dir)
             self.create_input_files(simulator, input_dir)
             self.add_extra_input_files(simulator, input_dir)
+
+            kwargs = {key: value for key, value in kwargs.items() if value is not None}
 
             return simulator.run(
                 input_dir,

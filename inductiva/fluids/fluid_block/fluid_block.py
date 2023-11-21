@@ -117,13 +117,21 @@ class FluidBlock(scenarios.Scenario):
         self.params["time_step"] = time_step
         self.params["output_export_rate"] = output_export_rate
 
+        self.set_template_dir(simulator)
+        commands = self.get_commands()
+
         task = super().simulate(
             simulator=simulator,
             machine_group=machine_group,
             storage_dir=storage_dir,
+            commands=commands,
             sim_config_filename=self.get_config_filename(simulator))
 
         return task
+
+    @singledispatchmethod
+    def set_template_dir(self, simulator: simulators.Simulator):
+        pass
 
     @singledispatchmethod
     def get_config_filename(self, simulator: simulators.Simulator):
@@ -138,6 +146,14 @@ class FluidBlock(scenarios.Scenario):
         pass
 
 
+@FluidBlock.set_template_dir.register
+def _(self, simulator: simulators.SplishSplash): # pylint: disable=unused-argument
+    """Set the template directory for DualSPHysics."""
+
+    self.template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                           SPLISHPLASH_TEMPLATE_INPUT_DIR)
+
+
 @FluidBlock.get_config_filename.register
 def _(cls, simulator: simulators.SplishSplash):  # pylint: disable=unused-argument
     """Returns the configuration filename for SPlisHSPlasH."""
@@ -147,9 +163,6 @@ def _(cls, simulator: simulators.SplishSplash):  # pylint: disable=unused-argume
 @FluidBlock.config_params.register
 def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=unused-argument
     """Creates SPlisHSPlasH simulation input files."""
-
-    self.template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                           SPLISHPLASH_TEMPLATE_INPUT_DIR)
 
     # Generate the simulation configuration file.
     fluid_margin = 2 * self.params["particle_radius"]
@@ -174,17 +187,22 @@ def _(self, simulator: simulators.SplishSplash, input_dir):  # pylint: disable=u
     shutil.copy(unit_box_file_path, input_dir)
 
 
+@FluidBlock.set_template_dir.register
+def _(self, simulator: simulators.DualSPHysics): # pylint: disable=unused-argument
+    """Set the template directory for DualSPHysics."""
+
+    self.template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
+                                           DUALSPHYSICS_TEMPLATE_INPUT_DIR)
+
+
 @FluidBlock.get_config_filename.register
 def _(cls, simulator: simulators.DualSPHysics):  # pylint: disable=unused-argument
     """Returns the configuration filename for DualSPHysics."""
-    return DUALSPHYSICS_CONFIG_FILENAME
+    return None
 
 
 @FluidBlock.config_params.register
 def _(self, simulator: simulators.DualSPHysics, input_dir):  # pylint: disable=unused-argument
     """Creates DualSPHysics simulation input files."""
-
-    self.template_files_dir = os.path.join(SCENARIO_TEMPLATE_DIR,
-                                           DUALSPHYSICS_TEMPLATE_INPUT_DIR)
 
     self.params["particle_distance"] = 2 * self.params["particle_radius"]
