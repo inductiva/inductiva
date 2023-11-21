@@ -165,7 +165,7 @@ import inductiva
 inductiva.api_key = "YOUR_API_KEY"
 
 # Set simulation input directory
-input_dir = "swash_example"
+input_dir = "xbeach_example"
 
 # Initialize the Simulator
 simulator = inductiva.simulators.XBeach()
@@ -173,6 +173,31 @@ simulator = inductiva.simulators.XBeach()
 # Run simulation with config files in the input directory
 task = simulator.run(input_dir=input_dir)
 ```
+
+## Reef3D simulator
+
+REEF3D is an open-source hydrodynamics framework with a focus on coastal, marine and hydraulic engineering flows. Tailor-made multiphysics solvers are available for a range of relevant problems (e.g. sediment transport or floating body dynamics). The modular programming approach allows the framework to incorporate a range of different flow solvers which together represent all relevant length scales.  Depending on the wave or flow conditions, the following optimized hydrodynamic modules are available:
+
+- **REEF3D::CFD** solves the Navier-Stokes equations in three-dimensions. For near-field simulations with a complex free surface pattern,  it  uses a two-phase flow approach with the level set method for interface capturing.
+- **REEF3D::FNPF** is a three-dimensional fully nonlinear potential flow solver. It is massively parallelized and can be used to create large-scale phase-resolved sea states at all water depths.
+- **REEF3D::SFLOW** is a depth-averaged model, solving the non-hydrostatic shallow water equations ideal for near-shore hydrodynamics and river flow.
+
+A simulator call will execute the following two steps sequentially: the meshing with **DiveMESH** and the simulation with **Reef3D**. Each step is configured with an input files, `control.txt` and `ctrl.txt`, respectively. Other files may be used to inform the simulator about the grid, geographical data or wave information. Reef3D has strict naming policies for each file and we reccommend users to follow [their guidelines](https://reef3d.wordpress.com/user-guide/). Due to this, the only required argument to run the simulator is the name of the input directory with the respective input files. 
+
+Furthermore, the parallelization strategy is controlled by selecting the machine type even if stated explicitly on the input files otherwise.
+
+### Example
+
+```python
+import inductiva
+
+input_dir = "reef3d_example"
+
+simulator = inductiva.simulators.REEF3D()
+
+task = simulator.run(input_dir=input_dir)
+```
+
 
 ## GROMACS simulator
 
