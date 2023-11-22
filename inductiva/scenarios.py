@@ -87,16 +87,15 @@ class Scenario(ABC):
 
         commands_file = self.create_command_file()
 
-        if os.path.exists(commands_file):
-            if isinstance(commands_file, str):
+        if isinstance(commands_file, str):
+            if os.path.exists(commands_file):
                 with open(commands_file, "r", encoding="utf-8") as f:
                     return json.load(f)
-
-            # Make sure already opened file is read from the beginning
-            commands_file.seek(0)
-            return json.load(commands_file)
-        else:
-            return None
+            else:
+                return None
+        # Make sure already opened file is read from the beginning
+        commands_file.seek(0)
+        return json.load(commands_file)
 
     def validate_simulator(self, simulator: simulators.Simulator):
         """Checks if the scenario can be simulated with the given simulator."""

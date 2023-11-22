@@ -83,7 +83,7 @@ class MDWaterBox(scenarios.Scenario):
         # of the simulation (2 fs)
 
         commands = self.get_commands()
-        print(commands)
+
         task = super().simulate(simulator,
                                 machine_group=machine_group,
                                 commands=commands,
