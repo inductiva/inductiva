@@ -1,7 +1,7 @@
 # Wind Tunnel Scenario
 
-This scenario models the aerodynamics of an object inside a virtual wind tunnel for a given airflow velocity. To model the air as an incompressible fluid and simplify the equations of motion under study, we restrict ourselves here to maximum speeds available is 100 m/s. Above this, the model is innacurate since it does not account for the compressibility of the air at those speeds.
-Air is injected through one side of the wind tunnel and exits through an outlet on the opposite side. The air flow within the tunnel is modified according to the structure of the object. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models. The simulation is currently performed with the OpenFOAM simulator.
+This scenario models the aerodynamics of an object inside a virtual wind tunnel for a given airflow velocity. To model the air as an incompressible fluid and simplify the equations of motion under study, we restrict ourselves here to maximum speeds available is 100 m/s. Above this, the model is inaccurate since it does not account for the compressibility of the air at those speeds.
+Air is injected through one side of the wind tunnel and exits through an outlet on the opposite side. The airflow within the tunnel is modified according to the structure of the object. The system is modelled with the steady-state equations for incompressible flow and the $k-\epsilon$ turbulence models. The simulation is currently performed with the OpenFOAM simulator.
 
 ### Example:
 
@@ -9,7 +9,7 @@ Air is injected through one side of the wind tunnel and exits through an outlet 
 
 This example requires an object of OBJ or STL format, we make one available through the code.
 
-Do not forget to insert your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/main#api-access-tokens) to see how get one).
+Do not forget to insert your API Key (check the [main page](https://github.com/inductiva/inductiva/tree/main#api-access-tokens) to see how to get one).
 
 ```python
 import inductiva
@@ -18,7 +18,7 @@ inductiva.api_key = "YOUR_API_KEY"
 
 # Url to a test an object in Inductiva Github repository
 vehicle_url = "https://raw.githubusercontent.com/inductiva/inductiva/main" \
-              "/resources/vehicle.obj"
+              "/assets/vehicle.obj"
 vehicle_path = inductiva.utils.files.download_from_url(vehicle_url)
 
 # Initialize the scenario
@@ -40,7 +40,7 @@ pressure_field = output.get_object_pressure_field()
 # Render
 pressure_field.render()
 ```
-<img src="/resources/media/openfoam/default_pressure_field.png" width="400" height="300" />
+<img src="/assets/media/openfoam/default_pressure_field.png" width="400" height="300" />
 
 ## Scenario configuration
 
@@ -108,7 +108,7 @@ pressure_field = output.get_object_pressure_field()
 pressure_field.render()
 ```
 
-<img src="/resources/media/openfoam/default_pressure_field.png" width="400" height="300" />
+<img src="/assets/media/openfoam/default_pressure_field.png" width="400" height="300" />
 
 ```python
 # Get a mesh of the streamlines 
@@ -122,7 +122,7 @@ streamlines.render(physical_field="velocity",
                    save_path="default_streamlines.png")
 ```
 
-<img src="/resources/media/openfoam/default_streamlines.png" width="400" height="300" />
+<img src="/assets/media/openfoam/default_streamlines.png" width="400" height="300" />
 
 
 ```python
@@ -135,7 +135,7 @@ flow_slice.render(physical_field="pressure",
                   save_path="default_flow_slice.png")
 ```
 
-<img src="/resources/media/openfoam/default_flow_slice.png" width="400" height="300" />
+<img src="/assets/media/openfoam/default_flow_slice.png" width="400" height="300" />
 
 ### Example for general Post-processing
 
@@ -150,7 +150,7 @@ pressure_field = output.get_object_pressure_field()
 pressure_field.render(save_path="pressure_field.png")
 ```
 
-<img src="/resources/media/openfoam/pressure_field.png" width="400" height="300" />
+<img src="/assets/media/openfoam/pressure_field.png" width="400" height="300" />
 
 ```python
 # Get the streamlines mesh
@@ -168,7 +168,7 @@ streamlines.render(physical_field="pressure",
                    save_path="streamlines.png")
 ```
 
-<img src="/resources/media/openfoam/streamlines.png" width="400" height="300" />
+<img src="/assets/media/openfoam/streamlines.png" width="400" height="300" />
 
 ```python
 
@@ -182,4 +182,4 @@ flow_slice.render(physical_field="velocity",
                   save_path="flow_slice.png")
 ```
 
-<img src="/resources/media/openfoam/flow_slice.png" width="400" height="300" />
+<img src="/assets/media/openfoam/flow_slice.png" width="400" height="300" />

@@ -17,6 +17,8 @@ class FDS(Simulator):
         self,
         input_dir: types.Path,
         sim_config_filename: str,
+        post_processing_filename: str = None,
+        n_cores: int = 1,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
@@ -30,4 +32,6 @@ class FDS(Simulator):
         return super().run(input_dir,
                            machine_group=machine_group,
                            input_filename=sim_config_filename,
-                           storage_dir=storage_dir)
+                           post_processing_config=post_processing_filename,
+                           storage_dir=storage_dir,
+                           n_cores=n_cores)
