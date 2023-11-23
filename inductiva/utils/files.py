@@ -168,12 +168,11 @@ def download_from_url(url: str,
 
     # File was downloaded to a temporary file
     downloaded_to = pathlib.Path(downloaded_to)
-    #is_zip = headers.get_content_type() == "application/zip"
 
     if unzip:
         # Unzip the ZIP archive containing a single zip file to the
         # correct path
-        if local_path.suffix == ".zip":  # Remove the .zip extension
+        if zipfile.is_zipfile(local_path.suffix):
             local_path = local_path.with_suffix("")
         else:
             raise ValueError("The file in the url is not a ZIP archive.")
