@@ -172,12 +172,8 @@ def download_from_url(url: str,
     if unzip:
         # Unzip the ZIP archive containing a single zip file to the
         # correct path
-        if zipfile.is_zipfile(local_path.suffix):
-            local_path = local_path.with_suffix("")
-        else:
-            raise ValueError("The file in the url is not a ZIP archive.")
-
-        _unzip(downloaded_to, local_path)
+        if zipfile.is_zipfile(local_path):
+            _unzip(downloaded_to, local_path.with_suffix(""))
     else:
         # Rename the file to the correct path;
         # Use shutil copy to be consistent among OS's.
