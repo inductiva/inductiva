@@ -169,11 +169,12 @@ def download_from_url(url: str,
     # File was downloaded to a temporary file
     downloaded_to = pathlib.Path(downloaded_to)
 
-    if unzip:
+    if unzip and zipfile.is_zipfile(downloaded_to):
         # Unzip the ZIP archive containing a single zip file to the
         # correct path
-        if zipfile.is_zipfile(local_path):
-            _unzip(downloaded_to, local_path.with_suffix(""))
+        if local_path.suffix == ".zip":
+            local_path = local_path.with_suffix("")
+            _unzip(downloaded_to, local_path)
     else:
         # Rename the file to the correct path;
         # Use shutil copy to be consistent among OS's.
