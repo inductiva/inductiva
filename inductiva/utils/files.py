@@ -130,7 +130,9 @@ def _unzip(zip_path: pathlib.Path, dest_path: pathlib.Path):
     zip_path.unlink()
 
 
-def download_from_url(url: str, save_dir: Optional[str] = None) -> str:
+def download_from_url(url: str,
+                      save_dir: Optional[str] = None,
+                      unzip: bool = False) -> str:
     """Download a file from an URL.
 
     If the file is a ZIP archive containing a single file, the method
@@ -139,13 +141,11 @@ def download_from_url(url: str, save_dir: Optional[str] = None) -> str:
 
     Args:
         url: The URL to download the file from.
-        local_file_path: Name attributed to the file to download.
-            If None is passed, it attributes the name given to
-            the file on the url.
         save_dir: The directory to save the file to. If None
             is passed, this will download to the current working
             directory. If the save_dir passed does not exist, this
             method will try to create it.
+        unzip: Whether to unzip the file after downloading.
     Returns:
         The path to the downloaded file.
     """
@@ -161,21 +161,22 @@ def download_from_url(url: str, save_dir: Optional[str] = None) -> str:
         local_path.parent.mkdir(parents=True)
 
     try:
-        downloaded_to, headers = urllib.request.urlretrieve(url)
+        downloaded_to, _ = urllib.request.urlretrieve(url)
     except urllib.error.URLError as url_error:
         logging.error("Could not download file from %s", url)
         raise url_error
 
     # File was downloaded to a temporary file
     downloaded_to = pathlib.Path(downloaded_to)
-    is_zip = headers.get_content_type() == "application/zip"
+    #is_zip = headers.get_content_type() == "application/zip"
 
-    if is_zip:
+    if unzip:
         # Unzip the ZIP archive containing a single zip file to the
         # correct path
-
         if local_path.suffix == ".zip":  # Remove the .zip extension
             local_path = local_path.with_suffix("")
+        else:
+            raise ValueError("The file in the url is not a ZIP archive.")
 
         _unzip(downloaded_to, local_path)
     else:
