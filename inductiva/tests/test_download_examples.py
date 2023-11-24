@@ -5,12 +5,13 @@ import zipfile
 import inductiva
 
 
-def test_download_from_rcsb(tmp_path: pathlib.Path):
+def test_download_from_rcsb():
     """Check if files with extensions are correctly created."""
-    inductiva.working_dir = tmp_path
-    inductiva.molecules.utils.download_pdb_from_rcsb("1A3N")
-    assert (tmp_path / "1A3N.pdb").exists()
 
+    file_path = inductiva.molecules.utils.download_pdb_from_rcsb("1A3N")
+    pdb_file = file_path.split("/")[-1]
+    assert os.path.exists(file_path)
+    assert pdb_file == "1A3N.pdb"
 
 def test_download_from_url():
     url = "https://storage.googleapis.com/inductiva-api-demo-files/" \
