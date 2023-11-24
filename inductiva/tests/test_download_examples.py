@@ -13,6 +13,7 @@ def test_download_from_rcsb():
     assert os.path.exists(file_path)
     assert pdb_file == "1A3N.pdb"
 
+
 def test_download_from_url():
     url = "https://storage.googleapis.com/inductiva-api-demo-files/" \
           "openfoam-input-example.zip"

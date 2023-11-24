@@ -117,8 +117,7 @@ def _unzip(zip_path: pathlib.Path):
     zip_path.unlink()
 
 
-def download_from_url(url: str,
-                      unzip: bool = False) -> str:
+def download_from_url(url: str, unzip: bool = False) -> str:
     """Download a file from an URL.
 
     This function downloads from a set of files from an url.
@@ -140,12 +139,10 @@ def download_from_url(url: str,
     except urllib.error.URLError as url_error:
         logging.error("Could not download file from %s", url)
         raise url_error
-    print(downloaded_to)
 
     # Unzip all files as they were zipped.
     if unzip and zipfile.is_zipfile(downloaded_to):
         local_path = local_path.with_suffix("")
-        print(local_path)
         _unzip(downloaded_to)
 
     return str(local_path.absolute())
