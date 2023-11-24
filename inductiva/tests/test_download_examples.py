@@ -1,6 +1,5 @@
 """Test examples download."""
 import os
-import pathlib
 import zipfile
 import inductiva
 
@@ -9,7 +8,7 @@ def test_download_from_rcsb():
     """Check if files with extensions are correctly created."""
 
     file_path = inductiva.molecules.utils.download_pdb_from_rcsb("1A3N")
-    pdb_file = file_path.split("/")[-1]
+    pdb_file = file_path.rsplit("/", maxsplit=1)[-1]
     assert os.path.exists(file_path)
     assert pdb_file == "1A3N.pdb"
 

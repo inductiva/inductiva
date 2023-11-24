@@ -2,7 +2,6 @@
 import os
 import time
 import pathlib
-import shutil
 from typing import Optional
 import urllib.error
 import urllib.request

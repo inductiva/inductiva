@@ -1,5 +1,4 @@
 """Tools to analyze molecular dynamics simulations."""
-from typing import Optional
 
 try:
     import MDAnalysis as mda
