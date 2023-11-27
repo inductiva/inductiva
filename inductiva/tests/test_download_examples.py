@@ -1,22 +1,28 @@
 """Test examples download."""
-import pathlib
+import os
+import zipfile
 import inductiva
 
 
-def test_download_from_rcsb(tmp_path: pathlib.Path):
+def test_download_from_rcsb():
     """Check if files with extensions are correctly created."""
-    inductiva.working_dir = tmp_path
-    inductiva.molecules.utils.download_pdb_from_rcsb("1A3N")
-    assert (tmp_path / "1A3N.pdb").exists()
+
+    file_path = inductiva.molecules.utils.download_pdb_from_rcsb("1A3N")
+    pdb_file = file_path.rsplit("/", maxsplit=1)[-1]
+    assert os.path.exists(file_path)
+    assert pdb_file == "1A3N.pdb"
 
 
-def test_download_zip(tmp_path: pathlib.Path):
-    inductiva.working_dir = tmp_path
+def test_download_from_url():
+    url = "https://storage.googleapis.com/inductiva-api-demo-files/" \
+          "openfoam-input-example.zip"
 
-    downloaded_to = inductiva.utils.files.download_from_url(
-        "https://downloads.emodnet-bathymetry.eu/high_resolution/"
-        "590_HR_Lidar_Algarve.emo.zip")
+    # Check if the unzip argument works.
+    download_path = inductiva.utils.files.download_from_url(url, unzip=True)
+    assert os.path.exists(download_path)
+    assert not zipfile.is_zipfile(download_path)
 
-    path = tmp_path / "590_HR_Lidar_Algarve.emo"
-    assert str(path.absolute()) == downloaded_to
-    assert path.exists()
+    # Check if the default is a zip file.
+    download_path = inductiva.utils.files.download_from_url(url)
+    assert os.path.exists(download_path)
+    assert zipfile.is_zipfile(download_path)

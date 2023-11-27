@@ -17,7 +17,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_type: str,
         num_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 60,
+        disk_size_gb: int = 70,
         zone: str = "europe-west1-b",
         register: bool = True,
     ) -> None:
@@ -103,7 +103,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         min_machines: int = 1,
         max_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 60,
+        disk_size_gb: int = 70,
         zone: str = "europe-west1-b",
         register: bool = True,
     ) -> None:

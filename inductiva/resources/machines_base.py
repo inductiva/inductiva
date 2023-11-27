@@ -15,7 +15,7 @@ class BaseMachineGroup():
     def __init__(self,
                  machine_type: str,
                  spot: bool = False,
-                 disk_size_gb: int = 60,
+                 disk_size_gb: int = 70,
                  zone: str = "europe-west1-b",
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.

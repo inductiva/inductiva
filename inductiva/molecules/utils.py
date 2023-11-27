@@ -1,5 +1,4 @@
 """Tools to analyze molecular dynamics simulations."""
-from typing import Optional
 
 try:
     import MDAnalysis as mda
@@ -47,7 +46,7 @@ def align_trajectory_to_average(universe, trajectory_output_path):
                     in_memory=False).run()
 
 
-def download_pdb_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
+def download_pdb_from_rcsb(pdb_id: str) -> str:
     """Download a PDB file from the RCSB database according
     to its pdb ID.
     Args:
@@ -61,6 +60,6 @@ def download_pdb_from_rcsb(pdb_id: str, save_dir: Optional[str] = None) -> str:
     """
     pdb_url = f"https://files.rcsb.org/download/{pdb_id}.pdb"
 
-    file_path = files.download_from_url(pdb_url, save_dir)
+    file_path = files.download_from_url(pdb_url)
 
     return file_path

@@ -9,3 +9,4 @@ from .gromacs import GROMACS
 from .simsopt import SIMSOPT
 from .fenicsx import FEniCSx
 from .fds import FDS
+from .reef3d import REEF3D
