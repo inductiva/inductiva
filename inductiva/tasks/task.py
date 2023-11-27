@@ -426,6 +426,11 @@ class Task:
         Returns:
             A list of strings, each string being a line from the stdout."""
 
+        if self.get_status() in (models.TaskStatusCode.PENDINGINPUT,
+                                 models.TaskStatusCode.SUBMITTED):
+            logging.info("Task did not start yet.")
+            return
+
         api_response = self._api.get_stdout_tail(
             path_params=self._get_path_params(),
             query_params={
@@ -455,6 +460,10 @@ class Task:
             verbose: Whether to print the contents.
         Returns:
             A list of strings, each string being a line from the stdout."""
+        if self.get_status() in (models.TaskStatusCode.PENDINGINPUT,
+                                 models.TaskStatusCode.SUBMITTED):
+            logging.info("Task did not start yet.")
+            return
 
         api_response = self._api.get_resources_tail(
             path_params=self._get_path_params(),
