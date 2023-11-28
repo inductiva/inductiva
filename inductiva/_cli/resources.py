@@ -48,6 +48,7 @@ def terminate_machine(args):
 
     print(f"Machine {machine_name} not found.")
 
+
 def register_resources_cli(parser):
     _cli.utils.show_help_msg(parser)
     subparsers = parser.add_subparsers()
@@ -56,12 +57,13 @@ def register_resources_cli(parser):
         "list", help="List currently active resources")
     available_subparser = subparsers.add_parser(
         "available", help="List available machine types")
-    terminate_subparser = subparsers.add_parser(
-        "terminate", help="Terminate a machine")
+    terminate_subparser = subparsers.add_parser("terminate",
+                                                help="Terminate a machine")
 
-    terminate_subparser.add_argument(
-        "-n", "--machine-name", type=str,
-        help="Name of the machine to terminate")
+    terminate_subparser.add_argument("-n",
+                                     "--machine-name",
+                                     type=str,
+                                     help="Name of the machine to terminate")
 
     # Register function to call when this subcommand is used
     list_subparser.set_defaults(func=list_resources)
