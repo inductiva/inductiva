@@ -3,13 +3,13 @@ import inductiva
 from inductiva import _cli
 
 
-def list_resources(args):
+def list_machine_groups(args):
+    """List machine groups."""
     del args  # unused
     inductiva.resources.machine_groups.list()
-    inductiva.resources.storage.get_space_used()
 
 
-def list_resources_available(args):
+def list_machine_types_available(args):
     """List all available machines"""
     del args  # unused
 
@@ -30,26 +30,26 @@ def list_resources_available(args):
         cores_str = ", ".join(str(core) for core in cores)
         print(f"{machine_type}: [{cores_str}]")
 
-    print("\n E.g. of machine: c2-standard-8\n")
+    print("\n E.g. of machine-type: c2-standard-8\n")
 
 
-def terminate_machine(args):
-    """Terminate a machine with the given name."""
+def terminate_machine_group(args):
+    """Terminate a machine group from a given name."""
     machine_name = args.machine_name
 
-    print("Terminating machine... If exists.")
+    print("Terminating machine group... If exists.")
     machines_list = inductiva.resources.machine_groups.get()
 
     for machine in machines_list:
         if machine.name == machine_name:
             machine.terminate()
-            print(f"Terminated machine {machine_name}")
+            print(f"Terminated machine group: {machine_name}")
             return
 
     print(f"Machine {machine_name} not found.")
 
 
-def register_resources_cli(parser):
+def register_machines_cli(parser):
     _cli.utils.show_help_msg(parser)
     subparsers = parser.add_subparsers()
 
@@ -61,11 +61,11 @@ def register_resources_cli(parser):
         "terminate", help="Terminate a machine-group")
 
     terminate_subparser.add_argument(
-        "machine-group-name",
+        "name",
         type=str,
         help="Name of the machine group to terminate")
 
     # Register function to call when this subcommand is used
-    list_subparser.set_defaults(func=list_resources)
-    available_subparser.set_defaults(func=list_resources_available)
-    terminate_subparser.set_defaults(func=terminate_machine)
+    list_subparser.set_defaults(func=list_machine_groups)
+    available_subparser.set_defaults(func=list_machine_types_available)
+    terminate_subparser.set_defaults(func=terminate_machine_group)

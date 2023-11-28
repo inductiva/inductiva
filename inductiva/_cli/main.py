@@ -34,14 +34,14 @@ def main():
         "tasks",
         help="View tasks information",
     )
-    resources_subparser = subparsers.add_parser(
-        "resources",
-        help="View resources information",
+    machines_subparser = subparsers.add_parser(
+        "machines",
+        help="View machines information",
     )
 
     # Register subcommands (e.g. list) for each subcommand (e.g. tasks)
     _cli.register_tasks_cli(tasks_subparser)
-    _cli.register_resources_cli(resources_subparser)
+    _cli.register_machines_cli(machines_subparser)
 
     args = parser.parse_args()
     if args.api_key:
