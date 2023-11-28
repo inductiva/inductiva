@@ -61,9 +61,7 @@ def register_machines_cli(parser):
         "terminate", help="Terminate a machine-group")
 
     terminate_subparser.add_argument(
-        "name",
-        type=str,
-        help="Name of the machine group to terminate")
+        "name", type=str, help="Name of the machine group to terminate")
 
     # Register function to call when this subcommand is used
     list_subparser.set_defaults(func=list_machine_groups)
