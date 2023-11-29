@@ -35,7 +35,7 @@ def list_machine_types_available(args):
 
 def terminate_machine_group(args):
     """Terminate a machine group from a given name."""
-    machine_name = args.machine_name
+    machine_name = args.name
 
     print("Terminating machine group... If exists.")
     machines_list = inductiva.resources.machine_groups.get()
