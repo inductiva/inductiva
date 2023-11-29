@@ -1,7 +1,7 @@
 """Classes to manage different Google Cloud machine group types."""
 from absl import logging
 
-from inductiva.resources import machines_base, machine_groups
+from inductiva.resources import machines_base
 
 
 class MachineGroup(machines_base.BaseMachineGroup):

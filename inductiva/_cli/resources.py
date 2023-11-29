@@ -34,17 +34,18 @@ def register_resources_cli(parser):
         help="Estimate cost of a machine in the cloud",
     )
 
-    cost_subparser.add_argument(
-        "machine_type",
-        type=str, help="Type of machine to launch")
-    cost_subparser.add_argument(
-        "-z", "--zone",
-        default="europe-west1-b",
-        type=str, help="Type of machine to launch")
-    cost_subparser.add_argument(
-        "--spot",
-        default=False,
-        type=bool, help="Type of machine to launch")
+    cost_subparser.add_argument("machine_type",
+                                type=str,
+                                help="Type of machine to launch")
+    cost_subparser.add_argument("-z",
+                                "--zone",
+                                default="europe-west1-b",
+                                type=str,
+                                help="Type of machine to launch")
+    cost_subparser.add_argument("--spot",
+                                default=False,
+                                type=bool,
+                                help="Type of machine to launch")
 
     # Register function to call when this subcommand is used
     list_subparser.set_defaults(func=list_resources)
