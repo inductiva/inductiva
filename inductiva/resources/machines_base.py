@@ -162,18 +162,21 @@ class BaseMachineGroup():
             raise api_exception
 
     def _get_estimated_cost(self) -> float:
+        """Returns estimate cost of a single machine in the group.
+        
+        This method is an overlay of the more general method, but
+        it verifies if the cost has already been estimated and returns
+        it immediately if it has.
+        """
         if self._estimated_cost is not None:
             return self._estimated_cost
-        instance_price = self._api.get_instance_price({
-            "machine_type": self.machine_type,
-            "zone": self.zone,
-        })
-        if self.spot:
-            estimated_cost = instance_price.body["preemptible_price"]
-        else:
-            estimated_cost = instance_price.body["on_demand_price"]
 
-        self._estimated_cost = estimated_cost
+        self._estimated_cost = inductiva.resources.estimate_machine_cost(
+            self.machine_type,
+            self.zone,
+            self.spot,
+        )
+
         return self._estimated_cost
 
     def status(self):

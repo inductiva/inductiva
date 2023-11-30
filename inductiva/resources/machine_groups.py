@@ -6,6 +6,34 @@ from inductiva.utils import format_utils
 from inductiva import resources
 
 
+def estimate_machine_cost(machine_type: str,
+                          zone: str = "europe-west1-b",
+                          spot: bool = False):
+    """Estimate the cloud cost of one machine per hour in US dollars.
+    
+    Args:
+        machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
+            Check https://cloud.google.com/compute/docs/machine-resource for
+            more information about machine types.
+        zone: The zone where the machines will be launched.
+        spot: Whether to use spot machines.
+    """
+
+    api = compute_api.ComputeApi(inductiva.api.get_client())
+
+    instance_price = api.get_instance_price({
+        "machine_type": machine_type,
+        "zone": zone,
+    })
+
+    if spot:
+        estimated_cost = instance_price.body["preemptible_price"]
+    else:
+        estimated_cost = instance_price.body["on_demand_price"]
+
+    return round(float(estimated_cost), 5)
+
+
 def _machine_group_list_to_str(machine_group_list) -> str:
     """Returns a string representation of a list of machine groups."""
     columns = [
