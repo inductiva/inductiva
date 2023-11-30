@@ -19,7 +19,8 @@ class FEniCSx(simulators.Simulator):
         bcs_filename: str,
         material_filename: str,
         global_refinement_meshing_factor: float = 1.0,
-        local_refinement_meshing_factor: float = 0.0,
+        local_refinement_meshing_factor: float = 1.0,
+        smoothing_meshing_parameter: float = 10.0,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
@@ -43,6 +44,10 @@ class FEniCSx(simulators.Simulator):
               providing more detailed resolution around certain features. Use
               this factor when you want to focus on refining specific areas
               while keeping the rest of the mesh less refined.
+            smoothing_parameter (float): The smoothing parameter for mesh
+              generation. It controls the amount of mesh smoothing applied to
+              the generated mesh. Adjust this parameter for improved mesh
+              quality.
             machine_group: The machine group to use for the simulation.
             storage_dir: Parent directory for storing simulation results.
             other arguments: See the documentation of the base class.
@@ -56,4 +61,5 @@ class FEniCSx(simulators.Simulator):
             material_filename=material_filename,
             global_refinement_meshing_factor=global_refinement_meshing_factor,
             local_refinement_meshing_factor=local_refinement_meshing_factor,
+            smoothing_meshing_parameter=smoothing_meshing_parameter,
             storage_dir=storage_dir)
