@@ -54,7 +54,8 @@ class DeformablePlate(scenarios.Scenario):
                  machine_group: Optional[resources.MachineGroup] = None,
                  storage_dir: Optional[str] = "",
                  global_refinement_meshing_factor: float = 1.0,
-                 local_refinement_meshing_factor: float = 0.0) -> tasks.Task:
+                 local_refinement_meshing_factor: float = 1.0,
+                 smoothing_meshing_parameter: float = 10.0) -> tasks.Task:
         """Simulates the scenario.
 
         Args:
@@ -76,6 +77,10 @@ class DeformablePlate(scenarios.Scenario):
               providing more detailed resolution around certain features. Use
               this factor when you want to focus on refining specific areas
               while keeping the rest of the mesh less refined.
+            smoothing_parameter (float): The smoothing parameter for mesh
+              generation. It controls the amount of mesh smoothing applied to
+              the generated mesh. Adjust this parameter for improved mesh
+              quality.
         """
         simulator.override_api_method_prefix("deformable_plate")
         task = super().simulate(
@@ -86,7 +91,8 @@ class DeformablePlate(scenarios.Scenario):
             bcs_filename=BCS_FILENAME,
             material_filename=MATERIAL_FILENAME,
             global_refinement_meshing_factor=global_refinement_meshing_factor,
-            local_refinement_meshing_factor=local_refinement_meshing_factor)
+            local_refinement_meshing_factor=local_refinement_meshing_factor,
+            smoothing_meshing_parameter=smoothing_meshing_parameter)
 
         return task
 
