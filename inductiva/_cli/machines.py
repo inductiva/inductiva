@@ -1,12 +1,32 @@
-"""Resources CLI subcommand."""
+"""CLI utilities for machines."""
 import inductiva
-from inductiva import _cli
 
 
 def list_machine_groups(args):
     """List machine groups."""
     del args  # unused
     inductiva.resources.machine_groups.list()
+
+
+def start_machine_group(args):
+    """Start a machine group."""
+    machine_type = args.machine_type
+    num_machines = args.num_machines
+    disk_size_gb = args.disk_size
+    zone = args.zone
+    spot = args.spot
+
+
+    machine = inductiva.resources.MachineGroup(
+        machine_type=machine_type,
+        num_machines=num_machines,
+        disk_size_gb=disk_size_gb,
+        zone=zone,
+        spot=spot)
+
+    machine.start()
+
+    print(f"Machine group started.\nName: {machine.name}")
 
 
 def list_machine_types_available(args):
@@ -60,42 +80,3 @@ def terminate_machine_group(args):
             return
 
     print(f"Machine {machine_name} not found.")
-
-
-def register_machines_cli(parser):
-    _cli.utils.show_help_msg(parser)
-    subparsers = parser.add_subparsers()
-
-    list_subparser = subparsers.add_parser(
-        "list", help="List currently active resources")
-
-    cost_subparser = subparsers.add_parser(
-        "cost",
-        help="Estimate cost of a machine in the cloud",
-    )
-    cost_subparser.add_argument("machine_type",
-                                type=str,
-                                help="Type of machine to launch")
-    cost_subparser.add_argument("-z",
-                                "--zone",
-                                default="europe-west1-b",
-                                type=str,
-                                help="Type of machine to launch")
-    cost_subparser.add_argument("--spot",
-                                default=False,
-                                type=bool,
-                                help="Type of machine to launch")
-
-    available_subparser = subparsers.add_parser(
-        "available", help="List available machine types")
-
-    terminate_subparser = subparsers.add_parser(
-        "terminate", help="Terminate a machine-group")
-    terminate_subparser.add_argument(
-        "name", type=str, help="Name of the machine group to terminate")
-
-    # Register function to call when this subcommand is used
-    list_subparser.set_defaults(func=list_machine_groups)
-    available_subparser.set_defaults(func=list_machine_types_available)
-    terminate_subparser.set_defaults(func=terminate_machine_group)
-    cost_subparser.set_defaults(func=estimate_machine_cost)
