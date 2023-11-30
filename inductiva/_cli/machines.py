@@ -33,6 +33,19 @@ def list_machine_types_available(args):
     print("\n E.g. of machine-type: c2-standard-8\n")
 
 
+def estimate_machine_cost(args):
+    machine_type = args.machine_type
+    zone = args.zone
+    spot = args.spot
+
+    cost = inductiva.resources.estimate_machine_cost(
+        machine_type=machine_type,
+        zone=zone,
+        spot=spot,
+    )
+    print(f"Estimated cost of machine: {cost} $/h.")
+
+
 def terminate_machine_group(args):
     """Terminate a machine group from a given name."""
     machine_name = args.name
@@ -55,11 +68,29 @@ def register_machines_cli(parser):
 
     list_subparser = subparsers.add_parser(
         "list", help="List currently active resources")
+
+    cost_subparser = subparsers.add_parser(
+        "cost",
+        help="Estimate cost of a machine in the cloud",
+    )
+    cost_subparser.add_argument("machine_type",
+                                type=str,
+                                help="Type of machine to launch")
+    cost_subparser.add_argument("-z",
+                                "--zone",
+                                default="europe-west1-b",
+                                type=str,
+                                help="Type of machine to launch")
+    cost_subparser.add_argument("--spot",
+                                default=False,
+                                type=bool,
+                                help="Type of machine to launch")
+
     available_subparser = subparsers.add_parser(
         "available", help="List available machine types")
+
     terminate_subparser = subparsers.add_parser(
         "terminate", help="Terminate a machine-group")
-
     terminate_subparser.add_argument(
         "name", type=str, help="Name of the machine group to terminate")
 
@@ -67,3 +98,4 @@ def register_machines_cli(parser):
     list_subparser.set_defaults(func=list_machine_groups)
     available_subparser.set_defaults(func=list_machine_types_available)
     terminate_subparser.set_defaults(func=terminate_machine_group)
+    cost_subparser.set_defaults(func=estimate_machine_cost)
