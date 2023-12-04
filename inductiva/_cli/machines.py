@@ -16,13 +16,11 @@ def start_machine_group(args):
     zone = args.zone
     spot = args.spot
 
-
-    machine = inductiva.resources.MachineGroup(
-        machine_type=machine_type,
-        num_machines=num_machines,
-        disk_size_gb=disk_size_gb,
-        zone=zone,
-        spot=spot)
+    machine = inductiva.resources.MachineGroup(machine_type=machine_type,
+                                               num_machines=num_machines,
+                                               disk_size_gb=disk_size_gb,
+                                               zone=zone,
+                                               spot=spot)
 
     machine.start()
 
