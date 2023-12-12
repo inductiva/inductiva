@@ -19,14 +19,6 @@ OUTPUT_CONSTS = {
         "output_class": fluids.HeatSinkOutput,
         "default_files": None
     },
-    "dam_break": {
-        "output_class": fluids.SPHSimulationOutput,
-        "default_files": None
-    },
-    "fluid_block": {
-        "output_class": fluids.SPHSimulationOutput,
-        "default_files": None
-    },
     "fluid_tank": {
         "output_class": fluids.FluidTankOutput,
         "default_files": None
