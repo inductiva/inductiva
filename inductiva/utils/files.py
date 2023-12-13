@@ -84,10 +84,15 @@ def copy_files(input_paths=None, output_paths=None):
                          "have the same number paths")
 
     for input_path, output_path in zip(input_paths, output_paths):
+        if os.path.isdir(input_path):
+            shutil.copytree(input_path,
+                            output_path,
+                            symlinks=True,
+                            dirs_exist_ok=True)
         if os.path.isfile(input_path):
+            # Create the directory structure of the input_path in output_path
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
             shutil.copy(input_path, output_path)
-        elif os.path.isdir(input_path):
-            shutil.copytree(input_path, output_path, dirs_exist_ok=True)
 
 
 def get_sorted_files(data_dir: str,

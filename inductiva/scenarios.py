@@ -5,7 +5,8 @@ import io
 import json
 import shutil
 import os
-import tempfile
+import random
+import string
 from typing import Optional
 
 import inductiva
@@ -15,7 +16,10 @@ class Scenario(ABC):
     """Base class for scenarios."""
     params = {}
     template_files_dir = None
-    input_dir = "scenario-input-dir"
+    input_base_dir = "scenario-input-dir"
+
+    def _create_input_dir(self):
+        """Create input directory."""
 
     def pre_simulate_hook(self):
         """Hook to be executed before simulation.
@@ -39,7 +43,7 @@ class Scenario(ABC):
         ]
         inductiva.utils.files.copy_files(input_paths, output_paths)
 
-    def create_input_files(self):
+    def _create_input_files(self):
         """Create input files from template."""
 
         # Copy all files from the template dir to the input directory
@@ -64,7 +68,7 @@ class Scenario(ABC):
             remove_templates=True,
         )
 
-    def create_command_file(self):
+    def _create_command_file(self):
         """Create command file from template."""
 
         commands_file = os.path.join(self.template_files_dir, "commands.json")
@@ -84,7 +88,7 @@ class Scenario(ABC):
     def get_commands(self):
         "Read list of commands from commands.json file"
 
-        commands_file = self.create_command_file()
+        commands_file = self._create_command_file()
 
         if isinstance(commands_file, str):
             if os.path.exists(commands_file):
@@ -102,12 +106,18 @@ class Scenario(ABC):
         storage_dir: Optional[inductiva.types.Path] = "",
         **kwargs,
     ):
+        """Run simulation."""
+
+        # Create input directory
+        self.input_dir = \
+            f"{self.input_base_dir}-{inductiva.utils.misc.create_random_tag()}"
         os.mkdir(self.input_dir)
+
         self.pre_simulate_hook()
-        self.create_input_files()
+        self._create_input_files()
 
         return self.simulator.run(
-            self.input_dir,
+            input_dir=self.input_dir,
             machine_group=machine_group,
             storage_dir=storage_dir,
             **kwargs,
