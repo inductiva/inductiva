@@ -8,57 +8,56 @@ import os
 import tempfile
 from typing import Optional
 
-from inductiva import simulators, resources, types, utils
+import inductiva
 
 
 class Scenario(ABC):
     """Base class for scenarios."""
-    valid_simulators = []
     params = {}
     template_files_dir = None
+    input_dir = "scenario-input-dir"
 
-    def config_params(self, simulator: simulators.Simulator,
-                      input_dir: types.Path):
-        """Entry-point to further configure params.
+    def pre_simulate_hook(self):
+        """Hook to be executed before simulation.
         
-        Useful when a scenario can be configured for several simulators,
-        but params differ in implementation between them.
+        This method encapsulates all steps requried to be executed
+        before the simulation is run.
         """
         pass
 
-    def add_extra_input_files(self, simulator: simulators.Simulator,
-                              input_dir: types.Path):
-        """Entry-point to add extra files used in the simulation.
-        
-        Usefull to files as args to the simulation. E.g., protein or vehicle.
-        """
-        pass
+    def add_extra_input_files(self, input_paths=None, output_paths=None):
+        """Entry-point to add extra files used in the simulation."""
 
-    def create_input_files(
-            self,
-            simulator: simulators.Simulator,  # pylint: disable=unused-argument
-            input_dir: types.Path):
+        # Wrap-up in lists
+        if not isinstance(input_paths, list):
+            input_paths = [input_paths]
+        if not isinstance(output_paths, list):
+            output_paths = [output_paths]
+
+        output_paths = [
+            os.path.join(self.input_dir, path) for path in output_paths
+        ]
+        inductiva.utils.files.copy_files(input_paths, output_paths)
+
+    def create_input_files(self):
         """Create input files from template."""
 
-        template_files_dir = os.path.join(self.template_files_dir,
-                                          "sim_config_files")
-
         # Copy all files from the template dir to the input directory
-        shutil.copytree(template_files_dir,
-                        input_dir,
+        shutil.copytree(self.template_files_dir,
+                        self.input_dir,
                         dirs_exist_ok=True,
                         symlinks=True)
 
-        template_filenames = utils.templates.get_template_filenames(
-            template_files_dir)
+        template_filenames = inductiva.utils.templates.get_template_filenames(
+            self.template_files_dir)
 
         output_filename_paths = [
-            os.path.join(input_dir,
+            os.path.join(self.input_dir,
                          file.split(".jinja")[0]) for file in template_filenames
         ]
 
-        utils.templates.batch_replace_params(
-            templates_dir=input_dir,
+        inductiva.utils.templates.batch_replace_params(
+            templates_dir=self.input_dir,
             template_filenames=template_filenames,
             params=self.params,
             output_filename_paths=output_filename_paths,
@@ -73,7 +72,7 @@ class Scenario(ABC):
 
         if os.path.isfile(commands_template_path):
             inmemory_file = io.StringIO()
-            utils.templates.replace_params(
+            inductiva.utils.templates.replace_params(
                 template_path=commands_template_path,
                 params=self.params,
                 output_file=inmemory_file,
@@ -97,35 +96,19 @@ class Scenario(ABC):
         commands_file.seek(0)
         return json.load(commands_file)
 
-    def validate_simulator(self, simulator: simulators.Simulator):
-        """Checks if the scenario can be simulated with the given simulator."""
-        if type(simulator) not in self.valid_simulators:
-            raise ValueError(
-                f"Simulator not supported for `{self.__class__.__name__}` "
-                "scenario.")
-
     def simulate(
         self,
-        simulator: simulators.Simulator,
-        machine_group: Optional[resources.MachineGroup] = None,
-        storage_dir: Optional[types.Path] = "",
+        machine_group: Optional[inductiva.resources.MachineGroup] = None,
+        storage_dir: Optional[inductiva.types.Path] = "",
         **kwargs,
     ):
-        """Simulates the scenario synchronously."""
-        self.validate_simulator(simulator)
+        os.mkdir(self.input_dir)
+        self.pre_simulate_hook()
+        self.create_input_files()
 
-        with tempfile.TemporaryDirectory() as input_dir:
-            self.config_params(simulator, input_dir)
-            self.create_input_files(simulator, input_dir)
-            self.add_extra_input_files(simulator, input_dir)
-
-            kwargs = {
-                key: value for key, value in kwargs.items() if value is not None
-            }
-
-            return simulator.run(
-                input_dir,
-                machine_group=machine_group,
-                storage_dir=storage_dir,
-                **kwargs,
-            )
+        return self.simulator.run(
+            self.input_dir,
+            machine_group=machine_group,
+            storage_dir=storage_dir,
+            **kwargs,
+        )

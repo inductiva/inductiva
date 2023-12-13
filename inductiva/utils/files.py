@@ -2,6 +2,7 @@
 import os
 import time
 import pathlib
+import shutil
 from typing import Optional
 import urllib.error
 import urllib.request
@@ -66,6 +67,27 @@ def resolve_path(path: Optional[types.Path]) -> pathlib.Path:
         resolved_path = pathlib.Path(resolved_path, path)
 
     return resolved_path
+
+
+def copy_files(input_paths=None, output_paths=None):
+    """Copy files, list of files or directories.
+
+    These method is meant to handle the case where the input_paths
+    and output_paths are lists of paths, or a single path. Moreover,
+    the input_paths and output_paths can be a mix of files and
+    directories. The method will copy the files and directories
+    to the output_paths, by order of appearance in the List.
+    """
+
+    if not len(input_paths) == len(output_paths):
+        raise ValueError("Input and output paths must "
+                         "have the same number paths")
+
+    for input_path, output_path in zip(input_paths, output_paths):
+        if os.path.isfile(input_path):
+            shutil.copy(input_path, output_path)
+        elif os.path.isdir(input_path):
+            shutil.copytree(input_path, output_path, dirs_exist_ok=True)
 
 
 def get_sorted_files(data_dir: str,
