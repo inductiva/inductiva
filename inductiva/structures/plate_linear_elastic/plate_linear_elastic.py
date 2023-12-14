@@ -56,7 +56,7 @@ class DeformablePlate(scenarios.Scenario):
                  global_refinement_meshing_factor: float = 1.0,
                  local_refinement_meshing_factor: float = 1.0,
                  smoothing_meshing_parameter: float = 10.0,
-                 mesh_element_degree: int = 1) -> tasks.Task:
+                 mesh_element_order: int = 1) -> tasks.Task:
         """Simulates the scenario.
 
         Args:
@@ -82,7 +82,7 @@ class DeformablePlate(scenarios.Scenario):
               generation. It controls the amount of mesh smoothing applied to
               the generated mesh. Adjust this parameter for improved mesh
               quality.
-            mesh_element_degree (int): The (polynomial) degree of the mesh
+            mesh_element_order (int): The (polynomial) order of the mesh
               element.
         """
         simulator.override_api_method_prefix("deformable_plate")
@@ -96,7 +96,7 @@ class DeformablePlate(scenarios.Scenario):
             global_refinement_meshing_factor=global_refinement_meshing_factor,
             local_refinement_meshing_factor=local_refinement_meshing_factor,
             smoothing_meshing_parameter=smoothing_meshing_parameter,
-            mesh_element_degree=mesh_element_degree)
+            mesh_element_order=mesh_element_order)
 
         return task
 
