@@ -1,7 +1,6 @@
 """Util functions for formatting data for printing to console."""
 import datetime
 import pandas as pd
-import numpy as np
 
 
 def bytes_formatter(n_bytes: int) -> str:
@@ -52,7 +51,7 @@ def get_tabular_str(
 
     # replace None with np.nan so that pandas can format them as "n/a"
     # by passing na_rep="n/a" to to_string()
-    df.fillna(np.nan, inplace=True)
+    df.fillna("n/a", inplace=True)
 
     return df.to_string(
         index=False,
