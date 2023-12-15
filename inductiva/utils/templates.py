@@ -1,83 +1,74 @@
 """Utils related to template files."""
 
 import os
-import io
+import pathlib
 import glob
-from typing import Dict, List, Union
-from pathlib import Path
+import shutil
 
-from jinja2 import Environment, FileSystemLoader
+import jinja2
 
 from inductiva.utils.files import find_path_to_package
 
 TEMPLATES_PATH = find_path_to_package("templates")
 
 
-def replace_params(
-    template_path: str,
-    params: Dict,
-    output_file: Union[str, io.StringIO],
-    remove_template: bool = False,
-) -> None:
-    """Replaces parameters in a template file."""
+def render_from_string(template_string, **render_args):
+    """Render commands with the given arguments."""
 
-    template_path = Path(template_path)
+    template_env = jinja2.Environment(loader=jinja2.BaseLoader())
+    template = template_env.from_string(template_string)
+    string = template.render(**render_args)
 
-    template_dir = template_path.parent
-    template_filename = template_path.name
+    return string
 
-    environment = Environment(loader=FileSystemLoader(template_dir))
-    template = environment.get_template(template_filename)
-    stream = template.stream(**params)
-    stream.dump(output_file)
+
+def render_file(source_file, target_file, remove_template=False, **render_args):
+
+    source_path = pathlib.Path(source_file)
+
+    source_dir = source_path.parent
+    source_file = source_path.name
+
+    environment = jinja2.Environment(loader=jinja2.FileSystemLoader(source_dir))
+    template = environment.get_template(source_file)
+    stream = template.stream(**render_args)
+    stream.dump(target_file)
 
     if remove_template:
-        os.remove(template_path)
+        os.remove(source_path)
 
 
-def batch_replace_params(
-    templates_dir: str,
-    template_filenames: List[str],
-    params: Dict,
-    output_filename_paths: List[str],
-    remove_templates: bool = False,
-) -> None:
-    """Replaces parameters in a set of template files.
+def render_directory(source_dir,
+                     target_dir,
+                     remove_template_dir=False,
+                     **render_args):
 
-    For some simulators, more than one file needs to be changed.
-    Moreover, some parameters are altered in different input files.
-    To simplify, we can do a batch change for the same params dict.
+    shutil.copytree(source_dir, target_dir, dirs_exist_ok=True, symlinks=True)
 
-    Args:
-        templates_dir: Directory with the template files.
-        template_filename_paths: List containing all template files to
-            be changed.
-        params: Dictionary of params that are inserted in the template
-            files.
-        output_filename_paths: List containing the output files in regard of
-            the template files.
-    """
+    jinja_files = get_jinja_files(target_dir)
 
-    for index, template_filename in enumerate(template_filenames):
-        template_path = os.path.join(templates_dir, template_filename)
+    for jinja_file in jinja_files:
+        jinja_path = os.path.join(target_dir, jinja_file)
+        target_path = jinja_path.split(".jinja")[0]
 
-        replace_params(
-            template_path=template_path,
-            params=params,
-            output_file=output_filename_paths[index],
-            remove_template=remove_templates,
-        )
+        render_file(source_file=jinja_path,
+                    target_file=target_path,
+                    remove_template=True,
+                    **render_args)
+
+    if remove_template_dir:
+        shutil.rmtree(source_dir)
 
 
-def get_template_filenames(template_files_dir):
-    """Get template filenames from directory."""
-    template_paths = glob.glob(os.path.join(template_files_dir, "**",
-                                            "*.jinja"),
-                               recursive=True)
+def get_jinja_files(src_dir):
+    """Get all jinja files in a directory."""
 
-    template_filenames = [
-        os.path.relpath(file_path, start=template_files_dir)
-        for file_path in template_paths
+    jinja_paths = glob.glob(os.path.join(src_dir, "**"
+                                         "*.jinja"),
+                            recursive=True)
+
+    jinja_files = [
+        os.path.relpath(file_path, start=src_dir) for file_path in jinja_paths
     ]
 
-    return template_filenames
+    return jinja_files

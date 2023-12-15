@@ -5,6 +5,7 @@ import logging
 import absl
 
 from . import api
+from . import mixins
 from . import output_consts
 from . import simulators
 from . import fluids
