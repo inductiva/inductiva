@@ -8,18 +8,9 @@ from . import api
 from . import mixins
 from . import output_consts
 from . import simulators
-from . import fluids
-from . import coastal
-from . import scenarios
-from . import generative
-from . import molecules
 from . import resources
-from . import structures
 from . import storage
-from . import templates
 from . import utils
-from . import plasmas
-from . import world
 from . import tasks
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
