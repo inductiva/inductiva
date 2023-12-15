@@ -1,3 +1,4 @@
+"""Tests the command manager mixin."""
 import os
 
 import pytest
@@ -6,9 +7,11 @@ from inductiva import mixins
 
 
 @pytest.mark.parametrize("command_template, render_args, command_output", [
-    pytest.param("grep {{ name }} {{ filename }}",
-                 dict(name="time", filename="out.log"), "grep time out.log"),
-    pytest.param("echo inductiva is awesome > awesome.txt", dict(),
+    pytest.param("grep {{ name }} {{ filename }}", {
+        "name": "time",
+        "filename": "out.log"
+    }, "grep time out.log"),
+    pytest.param("echo inductiva is awesome > awesome.txt", {},
                  "echo inductiva is awesome > awesome.txt")
 ],
                          ids=["grep", "echo"])
@@ -27,9 +30,10 @@ def test_add_command(command_template, render_args, command_output):
 
 @pytest.mark.parametrize(
     "commands_file, render_args, command_output",
-    [(os.path.join(os.path.dirname(__file__),
-                   "..", "assets", "commands_template.json.jinja"),
-      dict(name="time"), "echo time logs.txt")])
+    [(os.path.join(os.path.dirname(__file__), "..", "assets",
+                   "commands_template.json.jinja"), {
+                       "name": "time"
+                   }, "echo time logs.txt")])
 def test_add_commands_from_file(commands_file, render_args, command_output):
 
     cmd_manager = mixins.command_manager.CommandManager()

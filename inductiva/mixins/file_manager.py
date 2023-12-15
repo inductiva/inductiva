@@ -21,15 +21,14 @@ class FileManager:
         if root_dir is None:
             logging.info("Root directory not set. "
                          "Setting default root_dir to be `input_dir`.")
-            root_dir = files.resolve_path(
-                f"input_dir-{misc.create_random_tag()}")
+            root_dir = f"input_dir-{misc.create_random_tag()}"
         elif os.path.isdir(root_dir):
             logging.info(
                 "Directory %s already exists."
                 " Adding random tag to directory name.", root_dir)
-            root_dir = files.resolve_path(
-                f"{root_dir}-{misc.create_random_tag(size=5)}")
+            root_dir = f"{root_dir}-{misc.create_random_tag(size=5)}"
 
+        root_dir = files.resolve_path(root_dir)
         os.mkdir(root_dir)
         self.__root_dir = root_dir
 
@@ -91,3 +90,5 @@ class FileManager:
                                    target_dir=os.path.join(
                                        self.__root_dir, target_dir),
                                    **render_args)
+
+        return target_dir

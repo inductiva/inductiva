@@ -41,7 +41,7 @@ class CommandManager:
             if "prompts" not in command:
                 command["prompts"] = []
 
-            self.__commands.append(Command(command["cmd"], Command["prompts"]))
+            self.__commands.append(Command(command["cmd"], command["prompts"]))
         inmemory_file.close()
 
     def get_commands(self):
