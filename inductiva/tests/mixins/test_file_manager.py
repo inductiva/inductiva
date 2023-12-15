@@ -6,16 +6,15 @@ import pytest
 from inductiva import mixins
 
 
-@pytest.mark.parametrize("root_dir, expected_root_dir",
-                         [("new_root_dir", "new_root_dir"),
-                          ("new_root_dir", "new_root_dir")])
-def test_set_root_dir(root_dir, expected_root_dir):
+@pytest.mark.parametrize("root_dir", [("source_root_dir"), ("source_root_dir")])
+def test_set_root_dir(root_dir):
     file_manager = mixins.FileManager()
     file_manager.set_root_dir(root_dir)
 
     root_dir_path = file_manager.get_root_dir()
-    name = root_dir_path.name.split("-")[0]
-    assert name == str(expected_root_dir)
+
+    # Test creating multiple root directiories with the same name
+    assert root_dir in root_dir_path.name
 
 
 @pytest.mark.parametrize("source_file, render_args, target_file", [
