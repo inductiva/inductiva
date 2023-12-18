@@ -1,57 +1,201 @@
 """Tests for the file manager mixin."""
 import os
+import pathlib
 
 import pytest
 
 from inductiva import mixins
 
+TEST_DIR = os.path.join(os.path.dirname(__file__), "assets")
 
-@pytest.mark.parametrize("root_dir", [("source_root_dir"), ("source_root_dir")])
-def test_set_root_dir(root_dir):
+
+@pytest.mark.parametrize("name, listnames, expected_output",
+                         [("test", ["inductiva", "."], "test"),
+                          ("test", ["inductiva", "test"], "test#2"),
+                          ("test", ["inductiva", "test#2"], "test#3"),
+                          ("test", ["inductiva", "test-2"], "test")])
+def test_gen_suffix__input_name__name_with_suffix(name, listnames,
+                                                  expected_output):
+    """Verifies if an input name is returned with a suffix.
+    
+    Goal: Test creation of suffixes when a name already exists in a list
+    of names, with the following structure {name}#{number}.
+    This suffix should increase with each repetition and with the suffix
+    already present in the list.
+    """
+    suffix = mixins.file_manager.gen_suffix(name, listnames)
+
+    desired_output = name + suffix
+    assert desired_output == expected_output
+
+
+@pytest.mark.parametrize(
+    "source_file, render_args, target_file, expected_output",
+    [(os.path.join(TEST_DIR, "template_file.txt.jinja"), {
+        "text": "yes"
+    }, "template_file.txt", "This is a test file, which yes is a jinja file!"),
+     (os.path.join(TEST_DIR, "template.yaml.jinja"), {
+         "simulator": "openfoam"
+     }, "template.yaml", "simulator: openfoam")])
+def test_render_file__valid_file__rendered_file(source_file, render_args,
+                                                target_file, expected_output):
+    """Verify that an input file is rendered correctly.
+    
+    Goal: Test the rendering of a file with given render args. Starting from a
+    given template file we render it from a set of args. The target file is
+    tested to verify if it was rendered correctly from the args.
+    """
+
+    mixins.file_manager.render_file(source_file, target_file, **render_args)
+
+    with open(target_file, "r", encoding="utf-8") as file:
+        file_content = file.read()
+
+    assert expected_output in file_content
+
+
+def test_set_root_dir__valid_input__creates_folder():
+    """Check that with a non-empty input name the root dir is created.
+    
+    Goal: Test root dir creation from a given name. The folder is
+    created in the current working dir, so we want to verify that the
+    root dir was actually created, that the name is correct and that it
+    is instantiated in the current working_dir.
+    """
+
+    root_dir = "test_root_dir"
     file_manager = mixins.FileManager()
+
     file_manager.set_root_dir(root_dir)
+    created_root_dir = file_manager.get_root_dir()
+    assert os.path.isdir(created_root_dir)
+    assert root_dir in created_root_dir.name
+    assert pathlib.Path(os.getcwd()) == created_root_dir.parent
 
-    root_dir_path = file_manager.get_root_dir()
 
-    # Test creating multiple root directiories with the same name
-    assert root_dir in root_dir_path.name
+def test_set_root_dir_null_input__raises_error():
+    """Check that with a null input name an error is raised.
+    
+    Goal: Test the usability of the set_root_dir method when root_dir is None.
+    We capture the error that we raise (ValueError) and match the sentence to
+    validate it is the correct error.
+    """
+    file_manager = mixins.FileManager()
+    with pytest.raises(ValueError) as excinfo:
+        file_manager.set_root_dir(None)
+
+    assert str(excinfo.value) == "Given root directory cannot be None"
 
 
-@pytest.mark.parametrize("source_file, render_args, target_file", [
-    (os.path.join(os.path.dirname(__file__), "test_file.txt"), {}, None),
-    (os.path.join(os.path.dirname(__file__),
-                  "test_file.txt"), {}, "test2_file.txt"),
-    (os.path.join(os.path.dirname(__file__), "template_file.txt.jinja"), {
-        "text": "yes"
-    }, None),
-    (os.path.join(os.path.dirname(__file__), "template_file.txt.jinja"), {
-        "text": "yes"
-    }, "test3_file.txt"),
-])
-def test_add_files(source_file, render_args, target_file):
+def test_get_root_dir__root_is_none__create_default_dir():
+    """Check that with a null root dir the default dir is created.
+    
+    Goal: Test the scenario when the root_dir is created by default, when
+    no root_dir is set first. Hence, the workflow should be still valid to
+    not raise errors during the workflow. 
+    """
+    file_manager = mixins.FileManager()
+    root_dir = file_manager.get_root_dir()
+
+    assert os.path.isdir(root_dir)
+    assert root_dir.name == file_manager.DEFAULT_ROOT_DIR
+
+
+@pytest.mark.parametrize(
+    "source_file, target_file",
+    [(os.path.join(TEST_DIR, "test_file.txt"), None),
+     (os.path.join(TEST_DIR, "test_file.txt"), "added_file.txt")])
+def test_add_file__valid_file__to_target(source_file, target_file):
+    """Check that a non-empty input file is added to the given target.
+    
+    Goal: Test on of the functionalities of the FileManager().add_file method,
+    which adds a source file into a target file, without rendering any args.
+    In this case, the add_file function just copies the file directly.
+    Hence, we verify if the target_file exists after being copied.
+    """
 
     file_manager = mixins.FileManager()
-    file_manager.set_root_dir(os.path.join(os.path.dirname(__file__), "assets"))
+    target_file = file_manager.add_file(source_file, target_file)
+
+    root_dir = file_manager.get_root_dir()
+    assert os.path.isfile(os.path.join(root_dir, target_file))
+
+
+@pytest.mark.parametrize("source_file, render_args, target_file",
+                         [(os.path.join(TEST_DIR, "template_file.txt.jinja"), {
+                             "text": "yes"
+                         }, None),
+                          (os.path.join(TEST_DIR, "template_file.txt.jinja"), {
+                              "text": "yes"
+                          }, "rendered_test_file.txt")])
+def test_add_files__valid_file__render_totarget(source_file, render_args,
+                                                target_file):
+    """Check that a non-empty input file is render to the given target.
+    
+    Goal: Test another functionality of the FileManager().add_file method, which
+    renders template files from render args into a new target file. The render
+    process automatically copies and renders the file on the spot. In case,
+    target_file is None, then the target_file name will be the source file
+    without the template extension.
+    """
+
+    file_manager = mixins.FileManager()
     target_file = file_manager.add_file(source_file, target_file, **render_args)
+    root_dir = file_manager.get_root_dir()
+    assert os.path.isfile(os.path.join(root_dir, target_file))
 
-    assert os.path.isfile(os.path.join(file_manager.get_root_dir(),
-                                       target_file))
 
-
-@pytest.mark.parametrize("source_dir, render_args, target_dir", [
-    (os.path.join(os.path.dirname(__file__), "test_dir"), {}, None),
-    (os.path.join(os.path.dirname(__file__), "test_dir"), {}, "test2_dir"),
-    (os.path.join(os.path.dirname(__file__), "test_dir"), {
-        "text": "yes"
-    }, None),
-    (os.path.join(os.path.dirname(__file__), "test_dir"), {
-        "text": "yes"
-    }, "test3_dir"),
+@pytest.mark.parametrize("source_dir, target_dir", [
+    (TEST_DIR, None),
+    (TEST_DIR, "added_dir"),
 ])
-def test_add_dir(source_dir, render_args, target_dir):
+def test_add_dir__valid_dir__no_args(source_dir, target_dir):
+    """Check that an existing input dir is added to the given target dir.
+    
+    Goal: Test one of the functionalities of FileManager().add_dir which just
+    copies a source dir into a new target dir. If no arguments are passed, then
+    no rendering occurs, which means that even template files are copied as is.
+    All files are copied with the same exact name.
+    """
 
     file_manager = mixins.FileManager()
-    file_manager.set_root_dir(os.path.join(os.path.dirname(__file__), "assets"))
+    target_dir = file_manager.add_dir(source_dir, target_dir)
 
+    root_dir = file_manager.get_root_dir()
+    target_path = os.path.join(root_dir, target_dir)
+    assert os.path.isdir(target_path)
+    assert os.listdir(TEST_DIR) == os.listdir(target_path)
+
+
+@pytest.mark.parametrize("source_dir, render_args, target_dir", [(TEST_DIR, {
+    "text": "yes",
+    "simulator": "openfoam"
+}, None), (TEST_DIR, {
+    "text": "yes",
+    "simulator": "openfoam"
+}, "rendered_dir")])
+def test_add_dir__valid_dir__render_args(source_dir, render_args, target_dir):
+    """Check that an input dir with template files is render to a target dir.
+    
+    Goal: Test another of the functionalities of FileManager().add_dir which
+    copies a directory into another one and renders the template files from the
+    given render_args. All files are copied, even the ones that aren't template
+    files. Then, the template files are rendered and keep the same name but
+    without the template extension.
+    Hence, the rendering occurs only over files with the template extension and
+    if render_args are passed. Further, if render_args doesn't contain all
+    arguments that are on the template files, then those extra arguments are 
+    rendered with None. We leave this to the responsability of the user.
+    """
+    file_manager = mixins.FileManager()
     target_dir = file_manager.add_dir(source_dir, target_dir, **render_args)
-    assert os.path.isdir(os.path.join(file_manager.get_root_dir(), target_dir))
+
+    root_dir = file_manager.get_root_dir()
+    target_path = os.path.join(root_dir, target_dir)
+    assert os.path.isdir(target_path)
+
+    expected_render_files = [
+        file.split(mixins.file_manager.TEMPLATE_EXTENSION)[0]
+        for file in os.listdir(TEST_DIR)
+    ]
+    assert sorted(expected_render_files) == sorted(os.listdir(target_path))
