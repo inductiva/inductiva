@@ -94,6 +94,22 @@ def test_set_root_dir_null_input__raises_error():
     assert str(excinfo.value) == "Given root directory cannot be None"
 
 
+def test_set_root_dir__root_exists__disable_filemanager_suffix(monkeypatch):
+    """Test the env variable to disable the suffix creation.
+    
+    Goal: Test that setting the env variable to True, disables the auto-suffix
+    and raises an error informing the user that the directory already exists.
+    """
+    monkeypatch.setenv("INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX", "True")
+    root_dir = ASSETS_DIR
+
+    with pytest.raises(FileExistsError) as excinfo:
+        file_manager = mixins.FileManager()
+        file_manager.set_root_dir(root_dir)
+
+    assert str(excinfo.value) == f"Directory {root_dir} already exists."
+
+
 def test_get_root_dir__root_is_none__create_default_dir():
     """Check that with a null root dir the default dir is created.
     
