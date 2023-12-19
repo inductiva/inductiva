@@ -57,7 +57,7 @@ class FileManager:
             generated_root_dir = _gen_unique_name(root_dir)
             logging.info(
                 "Directory %s already exists."
-                " Seting root folder to %s.", root_dir, generated_root_dir)
+                " Setting root folder to %s.", root_dir, generated_root_dir)
             root_dir = generated_root_dir
 
         root_dir = inductiva.utils.files.resolve_path(root_dir)
