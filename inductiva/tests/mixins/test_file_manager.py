@@ -1,19 +1,28 @@
 """Tests for the file manager mixin."""
-import os
 import pathlib
+import io
+import os
 
 import pytest
+from pytest import mark
 
 from inductiva import mixins
 
-TEST_DIR = os.path.join(os.path.dirname(__file__), "assets")
+ASSETS_DIR = os.path.join(os.path.dirname(__file__), "assets")
 
 
-@pytest.mark.parametrize("name, listnames, expected_output",
-                         [("test", ["inductiva", "."], "test"),
-                          ("test", ["inductiva", "test"], "test#2"),
-                          ("test", ["inductiva", "test#2"], "test#3"),
-                          ("test", ["inductiva", "test-2"], "test")])
+def path(filename):
+    """Get the path to a file in the assets directory."""
+    return os.path.join(ASSETS_DIR, filename)
+
+
+@mark.parametrize("name, listnames, expected_output",
+                  [("test", ["inductiva", "."], ""),
+                   ("test", ["inductiva", "test"], "2"),
+                   ("test", ["inductiva", "test__2"], "3"),
+                   ("test", ["inductiva", "test-2"], ""),
+                   ("inductiva", ["is", "awesome"], ""),
+                   ("inductiva", ["inductiva", "test"], "2")])
 def test_gen_suffix__input_name__name_with_suffix(name, listnames,
                                                   expected_output):
     """Verifies if an input name is returned with a suffix.
@@ -23,22 +32,21 @@ def test_gen_suffix__input_name__name_with_suffix(name, listnames,
     This suffix should increase with each repetition and with the suffix
     already present in the list.
     """
-    suffix = mixins.file_manager.gen_suffix(name, listnames)
+    suffix = mixins.file_manager._gen_unique_suffix(name, listnames)  #pylint: disable=protected-access
+    suffix_tag = suffix.split(mixins.file_manager.SUFFIX_SEPARATOR)[-1]
 
-    desired_output = name + suffix
-    assert desired_output == expected_output
+    assert suffix_tag == expected_output
 
 
-@pytest.mark.parametrize(
-    "source_file, render_args, target_file, expected_output",
-    [(os.path.join(TEST_DIR, "template_file.txt.jinja"), {
-        "text": "yes"
-    }, "template_file.txt", "This is a test file, which yes is a jinja file!"),
-     (os.path.join(TEST_DIR, "template.yaml.jinja"), {
-         "simulator": "openfoam"
-     }, "template.yaml", "simulator: openfoam")])
+@mark.parametrize("source_file, render_args, expected_output",
+                  [(path("template_file.txt.jinja"), {
+                      "text": "yes"
+                  }, "This is a test file, which yes is a jinja file!"),
+                   (path("template.yaml.jinja"), {
+                       "simulator": "openfoam"
+                   }, "simulator: openfoam")])
 def test_render_file__valid_file__rendered_file(source_file, render_args,
-                                                target_file, expected_output):
+                                                expected_output):
     """Verify that an input file is rendered correctly.
     
     Goal: Test the rendering of a file with given render args. Starting from a
@@ -46,12 +54,11 @@ def test_render_file__valid_file__rendered_file(source_file, render_args,
     tested to verify if it was rendered correctly from the args.
     """
 
-    mixins.file_manager.render_file(source_file, target_file, **render_args)
-
-    with open(target_file, "r", encoding="utf-8") as file:
-        file_content = file.read()
-
-    assert expected_output in file_content
+    with io.StringIO() as f:
+        mixins.file_manager.render_file(source_file, f, **render_args)
+        f.seek(0)
+        file_content = f.read()
+        assert expected_output in file_content
 
 
 def test_set_root_dir__valid_input__creates_folder():
@@ -101,10 +108,9 @@ def test_get_root_dir__root_is_none__create_default_dir():
     assert root_dir.name == file_manager.DEFAULT_ROOT_DIR
 
 
-@pytest.mark.parametrize(
-    "source_file, target_file",
-    [(os.path.join(TEST_DIR, "test_file.txt"), None),
-     (os.path.join(TEST_DIR, "test_file.txt"), "added_file.txt")])
+@mark.parametrize("source_file, target_file",
+                  [(path("test_file.txt"), None),
+                   (path("test_file.txt"), "added_file.txt")])
 def test_add_file__valid_file__to_target(source_file, target_file):
     """Check that a non-empty input file is added to the given target.
     
@@ -121,13 +127,13 @@ def test_add_file__valid_file__to_target(source_file, target_file):
     assert os.path.isfile(os.path.join(root_dir, target_file))
 
 
-@pytest.mark.parametrize("source_file, render_args, target_file",
-                         [(os.path.join(TEST_DIR, "template_file.txt.jinja"), {
-                             "text": "yes"
-                         }, None),
-                          (os.path.join(TEST_DIR, "template_file.txt.jinja"), {
-                              "text": "yes"
-                          }, "rendered_test_file.txt")])
+@mark.parametrize("source_file, render_args, target_file",
+                  [(path("template_file.txt.jinja"), {
+                      "text": "yes"
+                  }, None),
+                   (path("template_file.txt.jinja"), {
+                       "text": "yes"
+                   }, "rendered_test_file.txt")])
 def test_add_files__valid_file__render_totarget(source_file, render_args,
                                                 target_file):
     """Check that a non-empty input file is render to the given target.
@@ -145,9 +151,9 @@ def test_add_files__valid_file__render_totarget(source_file, render_args,
     assert os.path.isfile(os.path.join(root_dir, target_file))
 
 
-@pytest.mark.parametrize("source_dir, target_dir", [
-    (TEST_DIR, None),
-    (TEST_DIR, "added_dir"),
+@mark.parametrize("source_dir, target_dir", [
+    (ASSETS_DIR, None),
+    (ASSETS_DIR, "added_dir"),
 ])
 def test_add_dir__valid_dir__no_args(source_dir, target_dir):
     """Check that an existing input dir is added to the given target dir.
@@ -164,13 +170,13 @@ def test_add_dir__valid_dir__no_args(source_dir, target_dir):
     root_dir = file_manager.get_root_dir()
     target_path = os.path.join(root_dir, target_dir)
     assert os.path.isdir(target_path)
-    assert os.listdir(TEST_DIR) == os.listdir(target_path)
+    assert os.listdir(ASSETS_DIR) == os.listdir(target_path)
 
 
-@pytest.mark.parametrize("source_dir, render_args, target_dir", [(TEST_DIR, {
+@mark.parametrize("source_dir, render_args, target_dir", [(ASSETS_DIR, {
     "text": "yes",
     "simulator": "openfoam"
-}, None), (TEST_DIR, {
+}, None), (ASSETS_DIR, {
     "text": "yes",
     "simulator": "openfoam"
 }, "rendered_dir")])
@@ -192,10 +198,11 @@ def test_add_dir__valid_dir__render_args(source_dir, render_args, target_dir):
 
     root_dir = file_manager.get_root_dir()
     target_path = os.path.join(root_dir, target_dir)
-    assert os.path.isdir(target_path)
 
     expected_render_files = [
         file.split(mixins.file_manager.TEMPLATE_EXTENSION)[0]
-        for file in os.listdir(TEST_DIR)
+        for file in os.listdir(ASSETS_DIR)
     ]
-    assert sorted(expected_render_files) == sorted(os.listdir(target_path))
+    actual_render_files = os.listdir(target_path)
+    assert len(actual_render_files) > 0
+    assert sorted(expected_render_files) == sorted(actual_render_files)

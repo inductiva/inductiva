@@ -15,6 +15,9 @@ from . import tasks
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
 output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
 api_key = os.environ.get("INDUCTIVA_API_KEY")
+disable_filemanager_autosuffix = os.environ.get(
+    "INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX", False)
+
 working_dir = None
 
 absl.logging.set_verbosity(absl.logging.INFO)
