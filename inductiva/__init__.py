@@ -5,7 +5,6 @@ import logging
 import absl
 
 from . import api
-from . import mixins
 from . import simulators
 from . import resources
 from . import storage
@@ -15,8 +14,6 @@ from . import tasks
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
 output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
 api_key = os.environ.get("INDUCTIVA_API_KEY")
-disable_filemanager_autosuffix = os.environ.get(
-    "INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX", False)
 
 working_dir = None
 

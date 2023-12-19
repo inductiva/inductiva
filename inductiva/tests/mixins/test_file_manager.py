@@ -130,7 +130,7 @@ def test_get_root_dir__root_is_none__create_default_dir():
 def test_add_file__valid_file__to_target(source_file, target_file):
     """Check that a non-empty input file is added to the given target.
     
-    Goal: Test on of the functionalities of the FileManager().add_file method,
+    Goal: Test one of the functionalities of the FileManager().add_file method,
     which adds a source file into a target file, without rendering any args.
     In this case, the add_file function just copies the file directly.
     Hence, we verify if the target_file exists after being copied.
@@ -138,6 +138,7 @@ def test_add_file__valid_file__to_target(source_file, target_file):
 
     file_manager = mixins.FileManager()
     target_file = file_manager.add_file(source_file, target_file)
+    print(target_file)
 
     root_dir = file_manager.get_root_dir()
     assert os.path.isfile(os.path.join(root_dir, target_file))

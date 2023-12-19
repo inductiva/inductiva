@@ -16,7 +16,7 @@ import re
 from absl import logging
 import jinja2
 
-import inductiva
+from inductiva.utils import files, format_utils
 
 TEMPLATE_EXTENSION = ".jinja"
 SUFFIX_SEPARATOR = "__"
@@ -39,20 +39,20 @@ class FileManager:
         placed inside a newly created folder with the given
         name. If a folder with the same name already exists,
         the newly created one will be appended with the
-        "#1" suffix. If folders having the "#N" suffix already
-        exist, the given name will be appended with "#{N+1}"
-        where N is determined by the largest existing N.
+        "__1" suffix. If folders having the "__N" suffix already
+        exist, the given name will be appended with "__{N+1}"
+        where N is determined by the directory with the largest N.
 
         Args:
             root_dir: Path to the root directory.
                 If None, an error is raised.
-                If the directory already exists. A new directory
-                name is created following a sequence of #1, #2, #3, etc."""
+        """
 
         if root_dir is None:
             raise ValueError("Given root directory cannot be None")
         elif os.path.isdir(root_dir):
-            if os.getenv("INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX", False):  #pylint: disable=invalid-envvar-default
+            if format_utils.getenv_bool(
+                    "INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX", False):
                 raise FileExistsError(f"Directory {root_dir} already exists.")
             generated_root_dir = _gen_unique_name(root_dir)
             logging.info(
@@ -60,7 +60,7 @@ class FileManager:
                 " Setting root folder to %s.", root_dir, generated_root_dir)
             root_dir = generated_root_dir
 
-        root_dir = inductiva.utils.files.resolve_path(root_dir)
+        root_dir = files.resolve_path(root_dir)
         os.makedirs(root_dir)
         self.__root_dir = root_dir
 
@@ -98,7 +98,7 @@ class FileManager:
         new_target_file = os.path.join(self.__root_dir, new_target_file)
         if source_file.endswith(TEMPLATE_EXTENSION):
             if target_file is None:
-                new_target_file = new_target_file.split(TEMPLATE_EXTENSION)[0]
+                new_target_file, _ = os.path.splitext(new_target_file)
 
             render_file(source_file=source_file,
                         target_file=new_target_file,
