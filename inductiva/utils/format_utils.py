@@ -1,6 +1,14 @@
 """Util functions for formatting data for printing to console."""
+from distutils.util import strtobool
 import datetime
+import os
+
 import pandas as pd
+
+
+def getenv_bool(varname, default):
+    """Get boolean value from environment variable."""
+    return bool(strtobool(os.getenv(varname, str(default))))
 
 
 def bytes_formatter(n_bytes: int) -> str:
