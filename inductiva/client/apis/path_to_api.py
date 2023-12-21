@@ -18,13 +18,9 @@ from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
-from inductiva.client.apis.paths.compute_group_elastic import ComputeGroupElastic
-from inductiva.client.apis.paths.compute_group_gpu import ComputeGroupGpu
 from inductiva.client.apis.paths.compute_price import ComputePrice
-from inductiva.client.apis.paths.compute_status import ComputeStatus
-from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
-from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
+from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_contents import StorageContents
 from inductiva.client.apis.paths.storage_dir_name import StorageDirName
@@ -50,13 +46,9 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
         PathValues.COMPUTE_GROUP: ComputeGroup,
         PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
-        PathValues.COMPUTE_GROUP_ELASTIC: ComputeGroupElastic,
-        PathValues.COMPUTE_GROUP_GPU: ComputeGroupGpu,
         PathValues.COMPUTE_PRICE: ComputePrice,
-        PathValues.COMPUTE_STATUS: ComputeStatus,
-        PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
         PathValues.COMPUTE_GROUPS: ComputeGroups,
-        PathValues.COMPUTE_GROUP_NAME: ComputeGroupName,
+        PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
         PathValues.STORAGE_SIZE: StorageSize,
         PathValues.STORAGE_CONTENTS: StorageContents,
         PathValues.STORAGE_DIR_NAME: StorageDirName,
@@ -82,13 +74,9 @@ path_to_api = PathToApi({
     PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
     PathValues.COMPUTE_GROUP: ComputeGroup,
     PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
-    PathValues.COMPUTE_GROUP_ELASTIC: ComputeGroupElastic,
-    PathValues.COMPUTE_GROUP_GPU: ComputeGroupGpu,
     PathValues.COMPUTE_PRICE: ComputePrice,
-    PathValues.COMPUTE_STATUS: ComputeStatus,
-    PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
     PathValues.COMPUTE_GROUPS: ComputeGroups,
-    PathValues.COMPUTE_GROUP_NAME: ComputeGroupName,
+    PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
     PathValues.STORAGE_SIZE: StorageSize,
     PathValues.STORAGE_CONTENTS: StorageContents,
     PathValues.STORAGE_DIR_NAME: StorageDirName,
