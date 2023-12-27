@@ -30,7 +30,6 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
 NumCpusSchema = schemas.IntSchema
-RamGbSchema = schemas.IntSchema
 
 
 class SpotSchema(
@@ -96,6 +95,7 @@ class SpotSchema(
             _configuration=_configuration,
             **kwargs,
         )
+RamGbSchema = schemas.IntSchema
 
 
 class ProviderSchema(
@@ -110,13 +110,13 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
         'num_cpus': typing.Union[NumCpusSchema, decimal.Decimal, int, ],
-        'ram_gb': typing.Union[RamGbSchema, decimal.Decimal, int, ],
         'spot': typing.Union[SpotSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
+        'ram_gb': typing.Union[RamGbSchema, decimal.Decimal, int, ],
         'provider': typing.Union[ProviderSchema, str, ],
     },
     total=False
@@ -134,18 +134,17 @@ request_query_num_cpus = api_client.QueryParameter(
     required=True,
     explode=True,
 )
-request_query_ram_gb = api_client.QueryParameter(
-    name="ram_gb",
-    style=api_client.ParameterStyle.FORM,
-    schema=RamGbSchema,
-    required=True,
-    explode=True,
-)
 request_query_spot = api_client.QueryParameter(
     name="spot",
     style=api_client.ParameterStyle.FORM,
     schema=SpotSchema,
     required=True,
+    explode=True,
+)
+request_query_ram_gb = api_client.QueryParameter(
+    name="ram_gb",
+    style=api_client.ParameterStyle.FORM,
+    schema=RamGbSchema,
     explode=True,
 )
 request_query_provider = api_client.QueryParameter(
@@ -253,8 +252,8 @@ class BaseApi(api_client.Api):
         prefix_separator_iterator = None
         for parameter in (
             request_query_num_cpus,
-            request_query_ram_gb,
             request_query_spot,
+            request_query_ram_gb,
             request_query_provider,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
