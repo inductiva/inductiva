@@ -24,31 +24,50 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.machine_type_response import MachineTypeResponse
 from inductiva.client.model.http_validation_error import HTTPValidationError
-from inductiva.client.model.instance_group import InstanceGroup
 
 from . import path
 
 # Query params
-GpuCountSchema = schemas.IntSchema
-GpuTypeSchema = schemas.StrSchema
-ImageNameSchema = schemas.StrSchema
+NumCpusSchema = schemas.IntSchema
+RamGbSchema = schemas.IntSchema
+SpotSchema = schemas.BoolSchema
+
+
+class ProviderSchema(schemas.EnumBase, schemas.StrSchema):
+
+    class MetaOapg:
+        enum_value_to_name = {
+            "GCP": "GCP",
+        }
+
+    @schemas.classproperty
+    def GCP(cls):
+        return cls("GCP")
+
+
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {
-        'gpu_count': typing.Union[
-            GpuCountSchema,
+        'num_cpus': typing.Union[
+            NumCpusSchema,
             decimal.Decimal,
             int,
         ],
-        'gpu_type': typing.Union[
-            GpuTypeSchema,
-            str,
+        'ram_gb': typing.Union[
+            RamGbSchema,
+            decimal.Decimal,
+            int,
+        ],
+        'spot': typing.Union[
+            SpotSchema,
+            bool,
         ],
     })
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
-        'image_name': typing.Union[
-            ImageNameSchema,
+        'provider': typing.Union[
+            ProviderSchema,
             str,
         ],
     },
@@ -60,40 +79,37 @@ class RequestQueryParams(RequestRequiredQueryParams,
     pass
 
 
-request_query_gpu_count = api_client.QueryParameter(
-    name="gpu_count",
+request_query_num_cpus = api_client.QueryParameter(
+    name="num_cpus",
     style=api_client.ParameterStyle.FORM,
-    schema=GpuCountSchema,
+    schema=NumCpusSchema,
     required=True,
     explode=True,
 )
-request_query_gpu_type = api_client.QueryParameter(
-    name="gpu_type",
+request_query_ram_gb = api_client.QueryParameter(
+    name="ram_gb",
     style=api_client.ParameterStyle.FORM,
-    schema=GpuTypeSchema,
+    schema=RamGbSchema,
     required=True,
     explode=True,
 )
-request_query_image_name = api_client.QueryParameter(
-    name="image_name",
+request_query_spot = api_client.QueryParameter(
+    name="spot",
     style=api_client.ParameterStyle.FORM,
-    schema=ImageNameSchema,
+    schema=SpotSchema,
+    required=True,
     explode=True,
 )
-# body param
-SchemaForRequestBodyApplicationJson = InstanceGroup
-
-request_body_instance_group = api_client.RequestBody(
-    content={
-        'application/json':
-            api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
-    },
-    required=True,
+request_query_provider = api_client.QueryParameter(
+    name="provider",
+    style=api_client.ParameterStyle.FORM,
+    schema=ProviderSchema,
+    explode=True,
 )
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+SchemaFor200ResponseBodyApplicationJson = MachineTypeResponse
 
 
 @dataclass
@@ -143,12 +159,8 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _start_instances_with_gpu_oapg(
+    def _get_machine_type_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: typing_extensions.Literal["application/json"] = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -160,30 +172,9 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _start_instances_with_gpu_oapg(
+    def _get_machine_type_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
-
-    @typing.overload
-    def _start_instances_with_gpu_oapg(
-        self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -192,12 +183,8 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _start_instances_with_gpu_oapg(
+    def _get_machine_type_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -209,12 +196,8 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _start_instances_with_gpu_oapg(
+    def _get_machine_type_oapg(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = 'application/json',
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -222,7 +205,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Start Instances With Gpu
+        Get Machine Type
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -232,9 +215,10 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-                request_query_gpu_count,
-                request_query_gpu_type,
-                request_query_image_name,
+                request_query_num_cpus,
+                request_query_ram_gb,
+                request_query_spot,
+                request_query_provider,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
@@ -253,25 +237,10 @@ class BaseApi(api_client.Api):
             for accept_content_type in accept_content_types:
                 _headers.add('Accept', accept_content_type)
 
-        if body is schemas.unset:
-            raise exceptions.ApiValueError(
-                'The required body parameter has an invalid value of: unset. Set a valid value instead'
-            )
-        _fields = None
-        _body = None
-        serialized_data = request_body_instance_group.serialize(
-            body, content_type)
-        _headers.add('Content-Type', content_type)
-        if 'fields' in serialized_data:
-            _fields = serialized_data['fields']
-        elif 'body' in serialized_data:
-            _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='post'.upper(),
+            method='get'.upper(),
             headers=_headers,
-            fields=_fields,
-            body=_body,
             auth_settings=_auth,
             stream=stream,
             timeout=timeout,
@@ -298,16 +267,12 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class StartInstancesWithGpu(BaseApi):
+class GetMachineType(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def start_instances_with_gpu(
+    def get_machine_type(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: typing_extensions.Literal["application/json"] = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -319,30 +284,9 @@ class StartInstancesWithGpu(BaseApi):
         ...
 
     @typing.overload
-    def start_instances_with_gpu(
+    def get_machine_type(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
-
-    @typing.overload
-    def start_instances_with_gpu(
-        self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -351,12 +295,8 @@ class StartInstancesWithGpu(BaseApi):
         ...
 
     @typing.overload
-    def start_instances_with_gpu(
+    def get_machine_type(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -368,38 +308,28 @@ class StartInstancesWithGpu(BaseApi):
     ]:
         ...
 
-    def start_instances_with_gpu(
+    def get_machine_type(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = 'application/json',
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._start_instances_with_gpu_oapg(
-            body=body,
+        return self._get_machine_type_oapg(
             query_params=query_params,
-            content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
             skip_deserialization=skip_deserialization)
 
 
-class ApiForpost(BaseApi):
+class ApiForget(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def post(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: typing_extensions.Literal["application/json"] = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -411,30 +341,9 @@ class ApiForpost(BaseApi):
         ...
 
     @typing.overload
-    def post(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
-        query_params: RequestQueryParams = frozendict.frozendict(),
-        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
-        stream: bool = False,
-        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-        skip_deserialization: typing_extensions.Literal[False] = ...,
-    ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
-
-    @typing.overload
-    def post(
-        self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
         skip_deserialization: typing_extensions.Literal[True],
-        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -443,12 +352,8 @@ class ApiForpost(BaseApi):
         ...
 
     @typing.overload
-    def post(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -460,22 +365,16 @@ class ApiForpost(BaseApi):
     ]:
         ...
 
-    def post(
+    def get(
         self,
-        body: typing.Union[
-            SchemaForRequestBodyApplicationJson,
-        ],
-        content_type: str = 'application/json',
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._start_instances_with_gpu_oapg(
-            body=body,
+        return self._get_machine_type_oapg(
             query_params=query_params,
-            content_type=content_type,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

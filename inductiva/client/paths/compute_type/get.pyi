@@ -25,21 +25,35 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.machine_type_response import MachineTypeResponse
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
-NameSchema = schemas.StrSchema
-ZoneSchema = schemas.StrSchema
+NumCpusSchema = schemas.IntSchema
+RamGbSchema = schemas.IntSchema
+SpotSchema = schemas.BoolSchema
+
+
+class ProviderSchema(
+    schemas.EnumBase,
+    schemas.StrSchema
+):
+    
+    @schemas.classproperty
+    def GCP(cls):
+        return cls("GCP")
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
-        'name': typing.Union[NameSchema, str, ],
+        'num_cpus': typing.Union[NumCpusSchema, decimal.Decimal, int, ],
+        'ram_gb': typing.Union[RamGbSchema, decimal.Decimal, int, ],
+        'spot': typing.Union[SpotSchema, bool, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'zone': typing.Union[ZoneSchema, str, ],
+        'provider': typing.Union[ProviderSchema, str, ],
     },
     total=False
 )
@@ -49,20 +63,34 @@ class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams)
     pass
 
 
-request_query_name = api_client.QueryParameter(
-    name="name",
+request_query_num_cpus = api_client.QueryParameter(
+    name="num_cpus",
     style=api_client.ParameterStyle.FORM,
-    schema=NameSchema,
+    schema=NumCpusSchema,
     required=True,
     explode=True,
 )
-request_query_zone = api_client.QueryParameter(
-    name="zone",
+request_query_ram_gb = api_client.QueryParameter(
+    name="ram_gb",
     style=api_client.ParameterStyle.FORM,
-    schema=ZoneSchema,
+    schema=RamGbSchema,
+    required=True,
     explode=True,
 )
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+request_query_spot = api_client.QueryParameter(
+    name="spot",
+    style=api_client.ParameterStyle.FORM,
+    schema=SpotSchema,
+    required=True,
+    explode=True,
+)
+request_query_provider = api_client.QueryParameter(
+    name="provider",
+    style=api_client.ParameterStyle.FORM,
+    schema=ProviderSchema,
+    explode=True,
+)
+SchemaFor200ResponseBodyApplicationJson = MachineTypeResponse
 
 
 @dataclass
@@ -107,7 +135,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _get_status_oapg(
+    def _get_machine_type_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -119,7 +147,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _get_status_oapg(
+    def _get_machine_type_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -129,7 +157,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _get_status_oapg(
+    def _get_machine_type_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -141,7 +169,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _get_status_oapg(
+    def _get_machine_type_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -150,7 +178,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Get Status
+        Get Machine Type
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -160,8 +188,10 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_name,
-            request_query_zone,
+            request_query_num_cpus,
+            request_query_ram_gb,
+            request_query_spot,
+            request_query_provider,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
@@ -206,11 +236,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetStatus(BaseApi):
+class GetMachineType(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_status(
+    def get_machine_type(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -222,7 +252,7 @@ class GetStatus(BaseApi):
     ]: ...
 
     @typing.overload
-    def get_status(
+    def get_machine_type(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -232,7 +262,7 @@ class GetStatus(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get_status(
+    def get_machine_type(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -244,7 +274,7 @@ class GetStatus(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get_status(
+    def get_machine_type(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -252,7 +282,7 @@ class GetStatus(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_status_oapg(
+        return self._get_machine_type_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
@@ -307,7 +337,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_status_oapg(
+        return self._get_machine_type_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
