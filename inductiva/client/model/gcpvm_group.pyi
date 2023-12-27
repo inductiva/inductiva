@@ -170,7 +170,8 @@ class GCPVMGroup(schemas.DictSchema):
             ):
 
                 class MetaOapg:
-                    any_of_0 = schemas.IntSchema
+                    format = 'date-time'
+                    any_of_0 = schemas.StrSchema
                     any_of_1 = schemas.NoneSchema
 
                     @classmethod
@@ -229,7 +230,8 @@ class GCPVMGroup(schemas.DictSchema):
             ):
 
                 class MetaOapg:
-                    any_of_0 = schemas.IntSchema
+                    format = 'date-time'
+                    any_of_0 = schemas.StrSchema
                     any_of_1 = schemas.NoneSchema
 
                     @classmethod
