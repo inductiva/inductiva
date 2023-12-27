@@ -34,7 +34,6 @@ class MachineTypeResponse(schemas.DictSchema):
             "machine_type",
             "num_cpus",
             "price",
-            "spot",
             "ram_gb",
         }
 
@@ -42,7 +41,6 @@ class MachineTypeResponse(schemas.DictSchema):
             machine_type = schemas.StrSchema
             num_cpus = schemas.IntSchema
             ram_gb = schemas.IntSchema
-            spot = schemas.BoolSchema
             price = schemas.NumberSchema
 
             class provider(schemas.EnumBase, schemas.StrSchema):
@@ -60,7 +58,6 @@ class MachineTypeResponse(schemas.DictSchema):
                 "machine_type": machine_type,
                 "num_cpus": num_cpus,
                 "ram_gb": ram_gb,
-                "spot": spot,
                 "price": price,
                 "provider": provider,
             }
@@ -68,7 +65,6 @@ class MachineTypeResponse(schemas.DictSchema):
     machine_type: MetaOapg.properties.machine_type
     num_cpus: MetaOapg.properties.num_cpus
     price: MetaOapg.properties.price
-    spot: MetaOapg.properties.spot
     ram_gb: MetaOapg.properties.ram_gb
 
     @typing.overload
@@ -91,12 +87,6 @@ class MachineTypeResponse(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-            self, name: typing_extensions.Literal["spot"]
-    ) -> MetaOapg.properties.spot:
-        ...
-
-    @typing.overload
-    def __getitem__(
             self, name: typing_extensions.Literal["price"]
     ) -> MetaOapg.properties.price:
         ...
@@ -115,7 +105,6 @@ class MachineTypeResponse(schemas.DictSchema):
         "machine_type",
         "num_cpus",
         "ram_gb",
-        "spot",
         "price",
         "provider",
     ], str]):
@@ -142,12 +131,6 @@ class MachineTypeResponse(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-            self, name: typing_extensions.Literal["spot"]
-    ) -> MetaOapg.properties.spot:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
             self, name: typing_extensions.Literal["price"]
     ) -> MetaOapg.properties.price:
         ...
@@ -168,7 +151,6 @@ class MachineTypeResponse(schemas.DictSchema):
         "machine_type",
         "num_cpus",
         "ram_gb",
-        "spot",
         "price",
         "provider",
     ], str]):
@@ -195,10 +177,6 @@ class MachineTypeResponse(schemas.DictSchema):
             int,
             float,
         ],
-        spot: typing.Union[
-            MetaOapg.properties.spot,
-            bool,
-        ],
         ram_gb: typing.Union[
             MetaOapg.properties.ram_gb,
             decimal.Decimal,
@@ -218,7 +196,6 @@ class MachineTypeResponse(schemas.DictSchema):
             machine_type=machine_type,
             num_cpus=num_cpus,
             price=price,
-            spot=spot,
             ram_gb=ram_gb,
             provider=provider,
             _configuration=_configuration,

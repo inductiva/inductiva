@@ -38,23 +38,21 @@ class MachineTypeResponse(
             "machine_type",
             "num_cpus",
             "price",
-            "spot",
             "ram_gb",
         }
-        
+
         class properties:
             machine_type = schemas.StrSchema
             num_cpus = schemas.IntSchema
             ram_gb = schemas.IntSchema
-            spot = schemas.BoolSchema
             price = schemas.NumberSchema
-            
-            
+
+
             class provider(
                 schemas.EnumBase,
                 schemas.StrSchema
             ):
-                
+
                 @schemas.classproperty
                 def GCP(cls):
                     return cls("GCP")
@@ -62,67 +60,59 @@ class MachineTypeResponse(
                 "machine_type": machine_type,
                 "num_cpus": num_cpus,
                 "ram_gb": ram_gb,
-                "spot": spot,
                 "price": price,
                 "provider": provider,
             }
-    
+
     machine_type: MetaOapg.properties.machine_type
     num_cpus: MetaOapg.properties.num_cpus
     price: MetaOapg.properties.price
-    spot: MetaOapg.properties.spot
     ram_gb: MetaOapg.properties.ram_gb
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["machine_type"]) -> MetaOapg.properties.machine_type: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["num_cpus"]) -> MetaOapg.properties.num_cpus: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["ram_gb"]) -> MetaOapg.properties.ram_gb: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["price"]) -> MetaOapg.properties.price: ...
-    
+
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["provider"]) -> MetaOapg.properties.provider: ...
-    
+
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
-    
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["machine_type", "num_cpus", "ram_gb", "spot", "price", "provider", ], str]):
+
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["machine_type", "num_cpus", "ram_gb", "price", "provider", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    
+
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["machine_type"]) -> MetaOapg.properties.machine_type: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["num_cpus"]) -> MetaOapg.properties.num_cpus: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["ram_gb"]) -> MetaOapg.properties.ram_gb: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["price"]) -> MetaOapg.properties.price: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["provider"]) -> typing.Union[MetaOapg.properties.provider, schemas.Unset]: ...
-    
+
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
-    
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["machine_type", "num_cpus", "ram_gb", "spot", "price", "provider", ], str]):
+
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["machine_type", "num_cpus", "ram_gb", "price", "provider", ], str]):
         return super().get_item_oapg(name)
-    
+
 
     def __new__(
         cls,
@@ -130,7 +120,6 @@ class MachineTypeResponse(
         machine_type: typing.Union[MetaOapg.properties.machine_type, str, ],
         num_cpus: typing.Union[MetaOapg.properties.num_cpus, decimal.Decimal, int, ],
         price: typing.Union[MetaOapg.properties.price, decimal.Decimal, int, float, ],
-        spot: typing.Union[MetaOapg.properties.spot, bool, ],
         ram_gb: typing.Union[MetaOapg.properties.ram_gb, decimal.Decimal, int, ],
         provider: typing.Union[MetaOapg.properties.provider, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -142,7 +131,6 @@ class MachineTypeResponse(
             machine_type=machine_type,
             num_cpus=num_cpus,
             price=price,
-            spot=spot,
             ram_gb=ram_gb,
             provider=provider,
             _configuration=_configuration,
