@@ -276,7 +276,6 @@ class GCPVMGroup(schemas.DictSchema):
                                            datetime, uuid.UUID, int, float,
                                            decimal.Decimal, None, list, tuple,
                                            bytes],
-                ) -> 'max_vms':
                 ) -> 'deletion_timestamp':
                     return super().__new__(
                         cls,
