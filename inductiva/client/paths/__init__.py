@@ -22,6 +22,7 @@ class PathValues(str, enum.Enum):
     ADMIN_GROUPS = "/admin/groups"
     EXECUTERTRACKER_REGISTER = "/executer-tracker/register"
     COMPUTE_GROUP = "/compute/group"
+    COMPUTE_TYPE = "/compute/type"
     COMPUTE_GROUP_START = "/compute/group/start"
     COMPUTE_PRICE = "/compute/price"
     COMPUTE_GROUPS = "/compute/groups"

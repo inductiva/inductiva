@@ -17,6 +17,7 @@ from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUse
 from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.compute_group import ComputeGroup
+from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
@@ -45,6 +46,7 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.ADMIN_GROUPS: AdminGroups,
         PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
         PathValues.COMPUTE_GROUP: ComputeGroup,
+        PathValues.COMPUTE_TYPE: ComputeType,
         PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
         PathValues.COMPUTE_PRICE: ComputePrice,
         PathValues.COMPUTE_GROUPS: ComputeGroups,
@@ -73,6 +75,7 @@ path_to_api = PathToApi({
     PathValues.ADMIN_GROUPS: AdminGroups,
     PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
     PathValues.COMPUTE_GROUP: ComputeGroup,
+    PathValues.COMPUTE_TYPE: ComputeType,
     PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
     PathValues.COMPUTE_PRICE: ComputePrice,
     PathValues.COMPUTE_GROUPS: ComputeGroups,

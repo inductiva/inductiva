@@ -23,6 +23,7 @@ from inductiva.client.model.g_cloud_host_info import GCloudHostInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.inductiva_executer import InductivaExecuter
 from inductiva.client.model.inductiva_host_info import InductivaHostInfo
+from inductiva.client.model.machine_type_response import MachineTypeResponse
 from inductiva.client.model.output_archive_info import OutputArchiveInfo
 from inductiva.client.model.task import Task
 from inductiva.client.model.task_request import TaskRequest
