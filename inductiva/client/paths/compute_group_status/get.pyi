@@ -29,7 +29,16 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
 NameSchema = schemas.StrSchema
-ZoneSchema = schemas.StrSchema
+
+
+class ProviderSchema(
+    schemas.EnumBase,
+    schemas.StrSchema
+):
+    
+    @schemas.classproperty
+    def GCP(cls):
+        return cls("GCP")
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
@@ -39,7 +48,7 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'zone': typing.Union[ZoneSchema, str, ],
+        'provider': typing.Union[ProviderSchema, str, ],
     },
     total=False
 )
@@ -56,10 +65,10 @@ request_query_name = api_client.QueryParameter(
     required=True,
     explode=True,
 )
-request_query_zone = api_client.QueryParameter(
-    name="zone",
+request_query_provider = api_client.QueryParameter(
+    name="provider",
     style=api_client.ParameterStyle.FORM,
-    schema=ZoneSchema,
+    schema=ProviderSchema,
     explode=True,
 )
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
@@ -161,7 +170,7 @@ class BaseApi(api_client.Api):
         prefix_separator_iterator = None
         for parameter in (
             request_query_name,
-            request_query_zone,
+            request_query_provider,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
