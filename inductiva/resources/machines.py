@@ -18,7 +18,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
         num_machines: int = 1,
         spot: bool = False,
         disk_size_gb: int = 70,
-        zone: str = "europe-west1-b",
         register: bool = True,
     ) -> None:
         """Create a MachineGroup object.
@@ -30,36 +29,34 @@ class MachineGroup(machines_base.BaseMachineGroup):
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
-            zone: The zone where the machines will be launched.
         """
         super().__init__(machine_type=machine_type,
                          spot=spot,
                          disk_size_gb=disk_size_gb,
-                         zone=zone,
                          register=register)
         self.num_machines = num_machines
         self.is_elastic = False
 
         if register:
-            super()._register_machine_group(num_instances=self.num_machines,
+            super()._register_machine_group(num_vms=self.num_machines,
                                             is_elastic=self.is_elastic)
             self._log_machine_group_info()
 
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
-        machine_group.num_machines = resp["num_instances"]
+        machine_group.num_machines = int(resp["num_vms"])
         machine_group.register = False
         return machine_group
 
     def start(self):
         """Starts all machines of the machine group."""
-        return super().start(num_instances=self.num_machines,
+        return super().start(num_vms=self.num_machines,
                              is_elastic=self.is_elastic)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
-        return super().terminate(num_instances=self.num_machines,
+        return super().terminate(num_vms=self.num_machines,
                                  is_elastic=self.is_elastic)
 
     def _log_machine_group_info(self):
@@ -103,7 +100,6 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         max_machines: int = 1,
         spot: bool = False,
         disk_size_gb: int = 70,
-        zone: str = "europe-west1-b",
         register: bool = True,
     ) -> None:
         """Create an ElasticMachineGroup object.
@@ -119,7 +115,6 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
               can scale up to.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
-            zone: The zone where the machines will be launched.
         """
         if max_machines < min_machines:
             raise ValueError("`max_machines` should be greater "
@@ -127,7 +122,6 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         super().__init__(machine_type=machine_type,
                          spot=spot,
                          disk_size_gb=disk_size_gb,
-                         zone=zone,
                          register=register)
         self.min_machines = min_machines
         self.max_machines = max_machines
@@ -135,31 +129,30 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self.is_elastic = True
 
         if self.register:
-            super()._register_machine_group(
-                min_instances=self.min_machines,
-                max_instances=self.max_machines,
-                is_elastic=self.is_elastic,
-                num_instances=self.num_active_machines)
+            super()._register_machine_group(min_instances=self.min_machines,
+                                            max_instances=self.max_machines,
+                                            is_elastic=self.is_elastic,
+                                            num_vms=self.num_active_machines)
             self._log_machine_group_info()
 
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
-        machine_group.max_machines = resp["max_instances"]
-        machine_group.min_machines = resp["min_instances"]
-        machine_group.num_active_machines = resp["num_instances"]
+        machine_group.max_machines = int(resp["max_vms"])
+        machine_group.min_machines = int(resp["min_vms"])
+        machine_group.num_active_machines = int(resp["num_vms"])
         return machine_group
 
     def start(self):
         """Starts minimum number of machines."""
-        return super().start(num_instances=self.min_machines,
+        return super().start(num_vms=self.min_machines,
                              min_instances=self.min_machines,
                              max_instances=self.max_machines,
                              is_elastic=self.is_elastic)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
-        return super().terminate(num_instances=self.min_machines,
+        return super().terminate(num_vms=self.min_machines,
                                  min_instances=self.min_machines,
                                  max_instances=self.max_machines,
                                  is_elastic=self.is_elastic)
