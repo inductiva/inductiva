@@ -13,13 +13,11 @@ def start_machine_group(args):
     machine_type = args.machine_type
     num_machines = args.num_machines
     disk_size_gb = args.disk_size
-    zone = args.zone
     spot = args.spot
 
     machine = inductiva.resources.MachineGroup(machine_type=machine_type,
                                                num_machines=num_machines,
                                                disk_size_gb=disk_size_gb,
-                                               zone=zone,
                                                spot=spot)
 
     machine.start()
@@ -53,12 +51,10 @@ def list_machine_types_available(args):
 
 def estimate_machine_cost(args):
     machine_type = args.machine_type
-    zone = args.zone
     spot = args.spot
 
     cost = inductiva.resources.estimate_machine_cost(
         machine_type=machine_type,
-        zone=zone,
         spot=spot,
     )
     print(f"Estimated cost of machine: {cost} $/h.")
