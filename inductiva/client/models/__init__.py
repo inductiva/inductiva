@@ -17,13 +17,13 @@ from inductiva.client.model.executer import Executer
 from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
 from inductiva.client.model.executer_tracker_register_info import ExecuterTrackerRegisterInfo
 from inductiva.client.model.file_info import FileInfo
+from inductiva.client.model.gcpvm_group import GCPVMGroup
 from inductiva.client.model.g_cloud_executer import GCloudExecuter
 from inductiva.client.model.g_cloud_host_info import GCloudHostInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.inductiva_executer import InductivaExecuter
 from inductiva.client.model.inductiva_host_info import InductivaHostInfo
-from inductiva.client.model.instance_group import InstanceGroup
-from inductiva.client.model.instance_group_create import InstanceGroupCreate
+from inductiva.client.model.machine_type_response import MachineTypeResponse
 from inductiva.client.model.output_archive_info import OutputArchiveInfo
 from inductiva.client.model.task import Task
 from inductiva.client.model.task_request import TaskRequest
