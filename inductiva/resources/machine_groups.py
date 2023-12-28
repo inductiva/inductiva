@@ -152,7 +152,8 @@ def get_cheapest_machine_type(num_cpus: int,
     """
     spot = "t" if spot else "f"
     api = compute_api.ComputeApi(inductiva.api.get_client())
-    body = {"num_cpus": num_cpus, "ram_gb": ram_gb, "spot": spot}
+    body = {"num_cpus": num_cpus, "spot": spot}
+    if ram_gb: body["ram_gb"] = ram_gb
     response = api.get_machine_type(body)
 
     logging.info("Machine type: %s", response.body["machine_type"])
