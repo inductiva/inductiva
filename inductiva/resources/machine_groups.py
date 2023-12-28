@@ -134,7 +134,7 @@ def get():
     return machine_group_list
 
 
-def get_machine_type(num_cpus: int,
+def get_cheapest_machine_type(num_cpus: int,
                      ram_gb: Optional[int] = None,
                      spot: bool = False):
     """Get the machine type with the lowest price.
