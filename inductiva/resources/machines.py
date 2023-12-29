@@ -129,8 +129,8 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self.is_elastic = True
 
         if self.register:
-            super()._register_machine_group(min_instances=self.min_machines,
-                                            max_instances=self.max_machines,
+            super()._register_machine_group(min_vms=self.min_machines,
+                                            max_vms=self.max_machines,
                                             is_elastic=self.is_elastic,
                                             num_vms=self.num_active_machines)
             self._log_machine_group_info()
@@ -146,15 +146,15 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
     def start(self):
         """Starts minimum number of machines."""
         return super().start(num_vms=self.min_machines,
-                             min_instances=self.min_machines,
-                             max_instances=self.max_machines,
+                             min_vms=self.min_machines,
+                             max_vms=self.max_machines,
                              is_elastic=self.is_elastic)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
         return super().terminate(num_vms=self.min_machines,
-                                 min_instances=self.min_machines,
-                                 max_instances=self.max_machines,
+                                 min_vms=self.min_machines,
+                                 max_vms=self.max_machines,
                                  is_elastic=self.is_elastic)
 
     def _log_machine_group_info(self):
