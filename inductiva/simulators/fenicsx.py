@@ -21,6 +21,7 @@ class FEniCSx(simulators.Simulator):
         global_refinement_meshing_factor: float = 1.0,
         local_refinement_meshing_factor: float = 1.0,
         smoothing_meshing_parameter: float = 10.0,
+        mesh_element_family: str = "CG",
         mesh_element_order: int = 1,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
@@ -49,6 +50,7 @@ class FEniCSx(simulators.Simulator):
               generation. It controls the amount of mesh smoothing applied to
               the generated mesh. Adjust this parameter for improved mesh
               quality.
+            mesh_element_family (str): The type of mesh element family.
             mesh_element_order (int): The (polynomial) order of the mesh
               element.
             machine_group: The machine group to use for the simulation.
@@ -65,5 +67,6 @@ class FEniCSx(simulators.Simulator):
             global_refinement_meshing_factor=global_refinement_meshing_factor,
             local_refinement_meshing_factor=local_refinement_meshing_factor,
             smoothing_meshing_parameter=smoothing_meshing_parameter,
+            mesh_element_family=mesh_element_family,
             mesh_element_order=mesh_element_order,
             storage_dir=storage_dir)
