@@ -38,35 +38,35 @@ class SpotSchema(
 
 
     class MetaOapg:
-
-
+        
+        
         class any_of_0(
             schemas.EnumBase,
             schemas.StrSchema
         ):
-
+            
             @schemas.classproperty
             def T(cls):
                 return cls("t")
-
+            
             @schemas.classproperty
             def F(cls):
                 return cls("f")
-
-
+        
+        
         class any_of_1(
             schemas.EnumBase,
             schemas.BoolSchema
         ):
-
+            
             @schemas.classproperty
             def TRUE(cls):
                 return cls(True)
-
+            
             @schemas.classproperty
             def FALSE(cls):
                 return cls(False)
-
+        
         @classmethod
         @functools.lru_cache()
         def any_of(cls):
@@ -102,7 +102,7 @@ class ProviderSchema(
     schemas.EnumBase,
     schemas.StrSchema
 ):
-
+    
     @schemas.classproperty
     def GCP(cls):
         return cls("GCP")
@@ -407,3 +407,5 @@ class ApiForget(BaseApi):
             timeout=timeout,
             skip_deserialization=skip_deserialization
         )
+
+
