@@ -16,7 +16,6 @@ class BaseMachineGroup():
                  machine_type: str,
                  spot: bool = False,
                  disk_size_gb: int = 70,
-                 zone: str = "europe-west1-b",
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
 
@@ -26,12 +25,10 @@ class BaseMachineGroup():
               more information about machine types.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
-            zone: The zone where the machines will be launched.
         """
         self.machine_type = machine_type
         self.spot = spot
         self.disk_size_gb = disk_size_gb
-        self.zone = zone
         self._id = None
         self._name = None
         self.create_time = None
@@ -52,15 +49,14 @@ class BaseMachineGroup():
         return self._name
 
     def _register_machine_group(self, **kwargs):
-        instance_group_config = inductiva.client.models.InstanceGroupCreate(
+        instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
             spot=self.spot,
             disk_size_gb=self.disk_size_gb,
-            zone=self.zone,
             **kwargs,
         )
         logging.info("Registering machine group configurations:")
-        resp = self._api.register_instance_group(body=instance_group_config)
+        resp = self._api.register_vm_group(body=instance_group_config)
         self._id = resp.body["id"]
         self._name = resp.body["name"]
         self.register = False
@@ -73,12 +69,11 @@ class BaseMachineGroup():
             machine_type=resp["machine_type"],
             spot=bool(resp["spot"]),
             disk_size_gb=resp["disk_size_gb"],
-            zone=resp["zone"],
             register=False,
         )
         machine_group._id = resp["id"]
         machine_group._name = resp["name"]
-        machine_group.create_time = resp["create_time"]
+        machine_group.create_time = resp["creation_timestamp"]
         machine_group._started = True
 
         return machine_group
@@ -101,13 +96,12 @@ class BaseMachineGroup():
             return
 
         request_body = \
-            inductiva.client.models.InstanceGroup(
+            inductiva.client.models.GCPVMGroup(
                 id=self.id,
                 name=self.name,
                 machine_type=self.machine_type,
                 spot=self.spot,
                 disk_size_gb=self.disk_size_gb,
-                zone=self.zone,
                 **kwargs,
             )
         try:
@@ -117,10 +111,7 @@ class BaseMachineGroup():
                          "interrupt the creation of the machine group. "
                          "Please wait...")
             start_time = time.time()
-            if kwargs.get("is_elastic", True):
-                self._api.start_elastic_instance_group(body=request_body)
-            else:
-                self._api.start_instance_group(body=request_body)
+            self._api.start_vm_group(body=request_body)
             creation_time_mins = (time.time() - start_time) / 60
             self._started = True
 
@@ -142,17 +133,16 @@ class BaseMachineGroup():
             start_time = time.time()
 
             request_body = \
-                inductiva.client.models.InstanceGroup(
+                inductiva.client.models.GCPVMGroup(
                     id=self.id,
                     name=self.name,
                     machine_type=self.machine_type,
                     spot=self.spot,
                     disk_size_gb=self.disk_size_gb,
-                    zone=self.zone,
                     **kwargs,
                 )
 
-            self._api.delete_instance_group(body=request_body)
+            self._api.delete_vm_group(body=request_body)
             termination_time_mins = (time.time() - start_time) / 60
             logging.info(
                 "Machine group '%s' successfully "
@@ -163,7 +153,7 @@ class BaseMachineGroup():
 
     def _get_estimated_cost(self) -> float:
         """Returns estimate cost of a single machine in the group.
-        
+
         This method is an overlay of the more general method, but
         it verifies if the cost has already been estimated and returns
         it immediately if it has.
@@ -173,7 +163,6 @@ class BaseMachineGroup():
 
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
             self.machine_type,
-            self.zone,
             self.spot,
         )
 
@@ -198,7 +187,7 @@ class BaseMachineGroup():
         """Logs the machine group info."""
 
         logging.info("> Name: %s", self.name)
-        logging.info("> Machine type: %s", self.machine_type)
+        logging.info("Machine Type: %s", self.machine_type)
         # TODO: Not yet available to users
         logging.info("> Spot: %s", self.spot)
         logging.info("> Disk size: %s GB", self.disk_size_gb)

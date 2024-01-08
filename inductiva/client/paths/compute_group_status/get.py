@@ -30,7 +30,20 @@ from . import path
 
 # Query params
 NameSchema = schemas.StrSchema
-ZoneSchema = schemas.StrSchema
+
+
+class ProviderSchema(schemas.EnumBase, schemas.StrSchema):
+
+    class MetaOapg:
+        enum_value_to_name = {
+            "GCP": "GCP",
+        }
+
+    @schemas.classproperty
+    def GCP(cls):
+        return cls("GCP")
+
+
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {
         'name': typing.Union[
@@ -40,8 +53,8 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
     })
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
-        'zone': typing.Union[
-            ZoneSchema,
+        'provider': typing.Union[
+            ProviderSchema,
             str,
         ],
     },
@@ -60,10 +73,10 @@ request_query_name = api_client.QueryParameter(
     required=True,
     explode=True,
 )
-request_query_zone = api_client.QueryParameter(
-    name="zone",
+request_query_provider = api_client.QueryParameter(
+    name="provider",
     style=api_client.ParameterStyle.FORM,
-    schema=ZoneSchema,
+    schema=ProviderSchema,
     explode=True,
 )
 _auth = [
@@ -176,7 +189,7 @@ class BaseApi(api_client.Api):
         prefix_separator_iterator = None
         for parameter in (
                 request_query_name,
-                request_query_zone,
+                request_query_provider,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
