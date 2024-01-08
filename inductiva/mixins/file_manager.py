@@ -73,12 +73,15 @@ class FileManager:
         return self.__root_dir
 
     def add_file(self, source_file, target_file=None, **render_args):
-        """Render a file from a template.
+        """Add a file to the root_dir and render in case it is a template file. 
         
-        Renders the given `source_file` using a templating mechanism and writes
-        the output to `target_file`.
+        This method has two modes of operation: either it adds `source_file` to
+        the root directory, or it also renders the file (if it has anything to 
+        render) from the given arguments using a templating mechanism. 
+        For the latter case, the file needs to have the templating extension.
+
         If `target_file` is None, the output is saved inside the manager's root
-        directory to a file with the same name as the source file, but with the
+        directory with the same name as the source file, but with the
         template suffix removed.
         Only template files with the template extension are rendered.
         Other files are copied.
@@ -114,12 +117,11 @@ class FileManager:
         return new_target_file
 
     def add_dir(self, source_dir, target_dir=None, **render_args):
-        """Render a directory from a template.
-        
+        """Add a directory to the root_dir and render all template files.
+
         Create a new directory inside the root_dir, keeping the same
-        structure as the source_dir, and replacing the render_args in
-        the template files. Only file with the template extension are replaced.
-        Other files are added as is.
+        structure as the source_dir and adding all files. Then, it renders the
+        files which are templated with the extension from the given arguments.
 
         Args:
             source_dir: Path to the source directory.
