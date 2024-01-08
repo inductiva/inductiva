@@ -212,6 +212,7 @@ class TaskRequest(schemas.DictSchema):
                     )
 
             storage_path_prefix = schemas.StrSchema
+            use_mpi_cluster = schemas.BoolSchema
             __annotations__ = {
                 "method": method,
                 "params": params,
@@ -219,6 +220,7 @@ class TaskRequest(schemas.DictSchema):
                 "client_version": client_version,
                 "scenario_name": scenario_name,
                 "storage_path_prefix": storage_path_prefix,
+                "use_mpi_cluster": use_mpi_cluster,
             }
 
     method: MetaOapg.properties.method
@@ -261,6 +263,12 @@ class TaskRequest(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["use_mpi_cluster"]
+    ) -> MetaOapg.properties.use_mpi_cluster:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -271,6 +279,7 @@ class TaskRequest(schemas.DictSchema):
         "client_version",
         "scenario_name",
         "storage_path_prefix",
+        "use_mpi_cluster",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -313,6 +322,12 @@ class TaskRequest(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["use_mpi_cluster"]
+    ) -> typing.Union[MetaOapg.properties.use_mpi_cluster, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -324,6 +339,7 @@ class TaskRequest(schemas.DictSchema):
         "client_version",
         "scenario_name",
         "storage_path_prefix",
+        "use_mpi_cluster",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -363,6 +379,8 @@ class TaskRequest(schemas.DictSchema):
         storage_path_prefix: typing.Union[
             MetaOapg.properties.storage_path_prefix, str,
             schemas.Unset] = schemas.unset,
+        use_mpi_cluster: typing.Union[MetaOapg.properties.use_mpi_cluster, bool,
+                                      schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -378,6 +396,7 @@ class TaskRequest(schemas.DictSchema):
             client_version=client_version,
             scenario_name=scenario_name,
             storage_path_prefix=storage_path_prefix,
+            use_mpi_cluster=use_mpi_cluster,
             _configuration=_configuration,
             **kwargs,
         )
