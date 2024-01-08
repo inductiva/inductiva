@@ -60,6 +60,7 @@ class FileManager:
                 " Setting root folder to %s.", root_dir, generated_root_dir)
             root_dir = generated_root_dir
 
+        logging.info("Setting root folder to %s.", root_dir)
         root_dir = files.resolve_path(root_dir)
         os.makedirs(root_dir)
         self.__root_dir = root_dir
@@ -100,7 +101,7 @@ class FileManager:
             if target_file is None:
                 new_target_file, _ = os.path.splitext(new_target_file)
 
-            render_file(source_file=source_file,
+            render_file(template_file=source_file,
                         target_file=new_target_file,
                         **render_args)
         else:
@@ -143,7 +144,7 @@ class FileManager:
                 template_path = os.path.join(target_dir, template_file)
                 target_path = template_path.split(TEMPLATE_EXTENSION)[0]
 
-                render_file(source_file=template_path,
+                render_file(template_file=template_path,
                             target_file=target_path,
                             **render_args)
                 os.remove(template_path)
@@ -151,17 +152,17 @@ class FileManager:
         return target_dir
 
 
-def render_file(source_file, target_file: Union[str, io.StringIO],
+def render_file(template_file, target_file: Union[str, io.StringIO],
                 **render_args):
     """Render a file from a template.
 
     Args:
-        source_file: Path to the source file.
+        template_file: Path to the source file.
         target_file: Path to the target file.
         render_args: Arguments to render the template file.
     """
 
-    source_path = pathlib.Path(source_file)
+    source_path = pathlib.Path(template_file)
 
     source_dir = source_path.parent
     source_file = source_path.name
@@ -207,7 +208,7 @@ def _gen_unique_suffix(name, filenames):
     if exists_derived:
         suffix = f"{SUFFIX_SEPARATOR}{max_suffix+1}"
     elif exists_solo:
-        suffix = F"{SUFFIX_SEPARATOR}2"
+        suffix = f"{SUFFIX_SEPARATOR}2"
     else:
         suffix = ""
     return suffix
