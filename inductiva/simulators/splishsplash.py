@@ -1,22 +1,22 @@
 """SplisHSPlasH simulator module of the API."""
 from typing import Optional
 
-from inductiva import types, tasks, resources
-from inductiva.simulators import Simulator
+from inductiva import types, tasks, simulators
 
 
-class SplishSplash(Simulator):
+class SplishSplash(simulators.Simulator):
     """Class to invoke a generic SPlisHSPlasH simulation on the API."""
 
     def __init__(self):
         super().__init__()
         self.api_method_name = "sph.splishsplash.run_simulation"
 
+    @simulators.simulator.mpi_disabled
     def run(
         self,
         input_dir: types.Path,
         sim_config_filename: str,
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         particle_radius: float = 0.025,
     ) -> tasks.Task:
@@ -25,7 +25,8 @@ class SplishSplash(Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
-            machine_group: Optional machine group to run the simulation on.
+            on: The computational resource to launch the simulation on. If None
+                the simulation is launched in a machine of the default pool.
             storage_dir: Directory for storing simulation results.
             particle_radius: Radius of the particles in the simulation.
         Returns:
@@ -33,7 +34,7 @@ class SplishSplash(Simulator):
         """
         return super().run(
             input_dir,
-            machine_group=machine_group,
+            on=on,
             input_filename=sim_config_filename,
             storage_dir=storage_dir,
             particle_radius=particle_radius,

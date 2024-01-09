@@ -39,6 +39,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         "Name",
         "Machine Type",
         "Elastic",
+        "Type",
         "# machines",
         "Disk Size in GB",
         "Spot",
@@ -56,7 +57,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
             num_active_machines = machine_group.num_machines
         rows.append([
             machine_group.name, machine_group.machine_type,
-            machine_group.is_elastic, num_active_machines,
+            machine_group.is_elastic, machine_group.type, num_active_machines,
             machine_group.disk_size_gb, machine_group.spot,
             machine_group.create_time
         ])
@@ -66,6 +67,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         "Machine Type": 18,
         "# machines": 12,
         "Spot": 10,
+        "Type": 10,
         "Elastic": 10,
     }
 
@@ -127,8 +129,10 @@ def get():
     for mg in machine_groups:
         if mg["is_elastic"]:
             mg_class = resources.ElasticMachineGroup
-        else:
+        elif mg["type"] == "standard":
             mg_class = resources.MachineGroup
+        else:
+            mg_class = resources.MPICluster
         machine_group_list.append(mg_class.from_api_response(mg))
 
     return machine_group_list

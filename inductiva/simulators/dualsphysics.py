@@ -2,22 +2,22 @@
 
 from typing import Optional, List
 
-from inductiva import types, tasks, resources
-from inductiva.simulators import Simulator
+from inductiva import types, tasks, simulators
 
 
-class DualSPHysics(Simulator):
+class DualSPHysics(simulators.Simulator):
     """Class to invoke a generic DualSPHysics simulation on the API."""
 
     def __init__(self):
         super().__init__()
         self.api_method_name = "sph.dualsphysics.run_simulation"
 
+    @simulators.simulator.mpi_disabled
     def run(
         self,
         input_dir: types.Path,
         commands: List[dict],
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Executes a DualSPHysics simulation.
@@ -25,13 +25,14 @@ class DualSPHysics(Simulator):
         Args:
             input_dir: Directory with simulation input files.
             sim_config_filename: Simulation config file.
-            machine_group: Machine group for simulation.
+            on: The computational resource to launch the simulation on. If None
+                the simulation is launched in a machine of the default pool.
             storage_dir: Directory for storing results.
 
         Returns:
             tasks.Task: An object representing the simulation task.
         """
         return super().run(input_dir,
-                           machine_group=machine_group,
+                           on=on,
                            commands=commands,
                            storage_dir=storage_dir)

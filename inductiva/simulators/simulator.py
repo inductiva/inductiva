@@ -6,6 +6,20 @@ from inductiva import types, tasks, resources
 from inductiva.utils import files
 
 
+def mpi_disabled(func):
+    """Decorator that prevents non-MPI simulators to use the MPICluster."""
+
+    def wrapper(*args, **kwargs):
+        resource = kwargs.get("on", None)
+        if resource is not None and isinstance(resource, resources.MPICluster):
+            raise ValueError("MPI is not available for this simulator. "
+                             "Please use a different computational resource.")
+        return func(*args, **kwargs)
+
+    wrapper.mpi_disabled_simulator = True
+    return wrapper
+
+
 class Simulator(ABC):
     """Base simulator class."""
 
@@ -40,7 +54,7 @@ class Simulator(ABC):
         self,
         input_dir: types.Path,
         *_args,
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         **kwargs,
     ) -> tasks.Task:
@@ -50,7 +64,8 @@ class Simulator(ABC):
             input_dir: Path to the directory containing the input files.
             _args: Unused in this method, but defined to allow for more
                 non-default arguments in method override in subclasses.
-            machine_group: The machine group to use for the simulation.
+            on: The computational resource to launch the simulation in. If None
+                the simulation is launched in a machine of the default pool.
             storage_dir: Parent directory for storing simulation
                                results.
             **kwargs: Additional keyword arguments to be passed to the
@@ -61,7 +76,7 @@ class Simulator(ABC):
         return tasks.run_simulation(
             self.api_method_name,
             input_dir,
-            machine_group=machine_group,
+            computational_resources=on,
             storage_dir=storage_dir,
             **kwargs,
         )

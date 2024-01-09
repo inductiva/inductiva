@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from inductiva import simulators, types, tasks, resources
+from inductiva import simulators, types, tasks
 
 
 class FEniCSx(simulators.Simulator):
@@ -12,6 +12,7 @@ class FEniCSx(simulators.Simulator):
         super().__init__()
         self.api_method_name = "fem.fenicsx.run_simulation"
 
+    @simulators.simulator.mpi_disabled
     def run(
         self,
         input_dir: types.Path,
@@ -23,7 +24,7 @@ class FEniCSx(simulators.Simulator):
         smoothing_meshing_parameter: float = 10.0,
         mesh_element_family: str = "CG",
         mesh_element_order: int = 1,
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run the simulation.
@@ -53,14 +54,15 @@ class FEniCSx(simulators.Simulator):
             mesh_element_family (str): The type of mesh element family.
             mesh_element_order (int): The (polynomial) order of the mesh
               element.
-            machine_group: The machine group to use for the simulation.
+            on: The computational resource to launch the simulation on. If None
+                the simulation is launched in a machine of the default pool.
             storage_dir: Parent directory for storing simulation results.
             other arguments: See the documentation of the base class.
         """
 
         return super().run(
             input_dir,
-            machine_group=machine_group,
+            on=on,
             geometry_filename=geometry_filename,
             bcs_filename=bcs_filename,
             material_filename=material_filename,

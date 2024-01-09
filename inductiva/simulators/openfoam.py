@@ -1,7 +1,7 @@
 """OpenFOAM module of the API for fluid dynamics."""
 from typing import Optional, List
 
-from inductiva import types, tasks, resources, simulators
+from inductiva import types, tasks, simulators
 
 AVAILABLE_OPENFOAM_VERSIONS = ["foundation", "esi"]
 
@@ -26,16 +26,19 @@ class OpenFOAM(simulators.Simulator):
         self,
         input_dir: types.Path,
         commands: List[dict],
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run the simulation.
 
         Args:
+            input_dir: Path to the directory of the simulation input files.
             commands: List of commands to run using the OpenFOAM simulator.
+            on: The computational resource to launch the simulation on. If None
+                the simulation is launched in a machine of the default pool.
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
-                           machine_group=machine_group,
+                           on=on,
                            commands=commands,
                            storage_dir=storage_dir)
