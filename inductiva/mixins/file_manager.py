@@ -1,9 +1,7 @@
 """Mixin for file management.
 
-Methods to manage files and directories, within your local computer in
-order to prepare them for the simulation process. This mixin can be
-used to copy files and directories, and render template files with
-the given set of arguments.
+Provides utility classes and functions for managing files and directories
+and rendering template files for generation of simulation inputs.
 """
 from typing import Union
 import pathlib
@@ -74,22 +72,40 @@ class FileManager:
 
     def add_file(self, source_file, target_file=None, **render_args):
         """Add a file to the root_dir and render in case it is a template file. 
-        
-        This method has two modes of operation: either it adds `source_file` to
-        the root directory, or it also renders the file (if it has anything to 
-        render) from the given arguments using a templating mechanism. 
-        For the latter case, the file needs to have the templating extension.
 
-        If `target_file` is None, the output is saved inside the manager's root
-        directory with the same name as the source file, but with the
-        template suffix removed.
-        Only template files with the template extension are rendered.
-        Other files are copied.
+        This method copies the contents of the `source_file` to a `target_file`
+        inside the root directory. If the source file is a template file, it is
+        rendered using the given `render_args` before copying to the target
+        destination.
+
+        If `target_file` is None, the copied file is saved inside the manager's
+        root directory with the same name as the source file; if it is a
+        template file, the template suffix is removed. 
+        A file is considered to be a template file if it ends with the `.jinja`
+        suffix. The rendering arguments are ignored if the source file is not a
+        template file.
 
         Args:
             source_file: Path to the source file.
             target_file: Path to the target file.
             render_args: Arguments to render the template file.
+
+        Examples:
+        a) Add a file to the root directory "example_a":
+            >>> file_manager = FileManager()
+            >>> file_manager.set_root_dir("example_a")
+            >>> file_manager.add_file("input_file.txt")
+        
+        b) Add a file to the root directory "example_b" with a different name:
+            >>> file_manager = FileManager()
+            >>> file_manager.set_root_dir("example_b")
+            >>> file_manager.add_file("input_file.txt", "output_file.txt")
+        
+        c) Render a template file to the root directory "example_c" with a
+        template argument named "value":
+            >>> file_manager = FileManager()
+            >>> file_manager.set_root_dir("example_c")
+            >>> file_manager.add_file("input_file.txt.jinja", value=2)
         """
 
         self.__check_root_dir()
@@ -119,14 +135,40 @@ class FileManager:
     def add_dir(self, source_dir, target_dir=None, **render_args):
         """Add a directory to the root_dir and render all template files.
 
-        Create a new directory inside the root_dir, keeping the same
-        structure as the source_dir and adding all files. Then, it renders the
-        files which are templated with the extension from the given arguments.
+        This method copies the contents of the `source_dir` to a `target_dir`
+        inside the root directory, keeping the structure as the source
+        directory. All template files in the source directory are rendered
+        using the given `render_args` before copying to the target destination.
+        
+        If `target_dir` is None, the source directory is copied to the root
+        directory. All template files will have the template suffix stripped
+        from their name upon copying.
+        A file is considered to be a template file if it ends with the `.jinja`
+        suffix. The rendering arguments are ignored no template file is
+        available in the source directory.
 
         Args:
             source_dir: Path to the source directory.
             target_dir: Path to the target directory.
             render_args: Arguments to render the template files.
+
+        Examples:
+        a) Add a directory to the root directory "example_a":
+            >>> file_manager = FileManager()
+            >>> file_manager.set_root_dir("example_a")
+            >>> file_manager.add_dir("input_dir")
+
+        b) Add directory to the root directory "example_b" with different name:
+            >>> file_manager = FileManager()
+            >>> file_manager.set_root_dir("example_b")
+            >>> file_manager.add_dir("input_dir", "output_dir")
+        
+        c) Render template directory to the root directory with the template
+        arguments named "value" and "name":
+         template argument named "value":
+            >>> file_manager = FileManager()
+            >>> file_manager.set_root_dir("example_c")
+            >>> file_manager.add_dir("input_dir", value=2, name="example")
         """
         self.__check_root_dir()
 
