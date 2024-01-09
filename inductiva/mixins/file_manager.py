@@ -91,18 +91,21 @@ class FileManager:
             render_args: Arguments to render the template file.
 
         Examples:
-        a) Add a file to the root directory "example_a":
+        a) Add a file to the root directory "example_a"
+            (input_file.txt -> example_a/input_file.txt):
             >>> file_manager = FileManager()
             >>> file_manager.set_root_dir("example_a")
             >>> file_manager.add_file("input_file.txt")
         
-        b) Add a file to the root directory "example_b" with a different name:
+        b) Add a file to the root directory "example_b" with a different name
+            (input_file.txt -> example_b/renamed_file.txt):
             >>> file_manager = FileManager()
             >>> file_manager.set_root_dir("example_b")
-            >>> file_manager.add_file("input_file.txt", "output_file.txt")
+            >>> file_manager.add_file("input_file.txt", "renamed_file.txt")
         
         c) Render a template file to the root directory "example_c" with a
-        template argument named "value":
+            template argument named "value" (input_file.txt.jinja ->
+            example_c/input_file.txt):
             >>> file_manager = FileManager()
             >>> file_manager.set_root_dir("example_c")
             >>> file_manager.add_file("input_file.txt.jinja", value=2)
@@ -153,19 +156,20 @@ class FileManager:
             render_args: Arguments to render the template files.
 
         Examples:
-        a) Add a directory to the root directory "example_a":
+        a) Add a directory to the root directory "example_a"
+            (input_dir/ -> example_a/input_dir/):
             >>> file_manager = FileManager()
             >>> file_manager.set_root_dir("example_a")
             >>> file_manager.add_dir("input_dir")
 
-        b) Add directory to the root directory "example_b" with different name:
+        b) Add directory to the root directory "example_b" with different name
+            (input_dir/ -> example_b/renamed_dir/):
             >>> file_manager = FileManager()
             >>> file_manager.set_root_dir("example_b")
-            >>> file_manager.add_dir("input_dir", "output_dir")
+            >>> file_manager.add_dir("input_dir", "renamed_dir")
         
         c) Render template directory to the root directory with the template
-        arguments named "value" and "name":
-         template argument named "value":
+        arguments named "value" and "name" (input_dir/ -> example_c/input_dir/):
             >>> file_manager = FileManager()
             >>> file_manager.set_root_dir("example_c")
             >>> file_manager.add_dir("input_dir", value=2, name="example")
