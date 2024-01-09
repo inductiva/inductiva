@@ -34,6 +34,7 @@ class BaseMachineGroup():
         self.create_time = None
         self._started = False
         self.register = register
+        self._type = "standard"
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -188,6 +189,5 @@ class BaseMachineGroup():
 
         logging.info("> Name: %s", self.name)
         logging.info("Machine Type: %s", self.machine_type)
-        # TODO: Not yet available to users
         logging.info("> Spot: %s", self.spot)
         logging.info("> Disk size: %s GB", self.disk_size_gb)
