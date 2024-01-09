@@ -18,6 +18,8 @@ class GROMACS(simulators.Simulator):
         commands: List[dict],
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
+        save_sim_metadata_dir: Optional[types.Path] = None,
+        extra_sim_metadata_to_save: Optional[dict] = None,
     ) -> tasks.Task:
         """Run a list of GROMACS commands.
 
@@ -29,7 +31,10 @@ class GROMACS(simulators.Simulator):
                                results.
         """
 
-        return super().run(input_dir,
-                           machine_group=machine_group,
-                           commands=commands,
-                           storage_dir=storage_dir)
+        return super().run(
+            input_dir,
+            machine_group=machine_group,
+            commands=commands,
+            storage_dir=storage_dir,
+            save_sim_metadata_dir=save_sim_metadata_dir,
+            extra_sim_metadata_to_save=extra_sim_metadata_to_save)
