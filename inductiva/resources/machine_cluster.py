@@ -1,15 +1,15 @@
-"""Classes to manage different Google Cloud machine group types."""
+"""Class to manage the MPI cluster in Google Cloud."""
 from absl import logging
 
 from inductiva.resources import machines_base
 
 
 class MPICluster(machines_base.BaseMachineGroup):
-    """Class to launch and manage a group of machines in Google Cloud.
+    """Class to launch and manage an MPI cluster in Google Cloud.
 
-    A machine group is a collection of homogenous machines with given the
-    configurations that are launched in Google Cloud.
-    Note: The machine group will be available only after calling 'start' method.
+    A MPI cluster is a collection of homogenous machines all working together on
+    a common task given the configurations that are launched in Google Cloud.
+    Note: The cluster will be available only after calling 'start' method.
     The billing will start only after the machines are started."""
 
     def __init__(
@@ -19,7 +19,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         disk_size_gb: int = 70,
         register: bool = True
     ) -> None:
-        """Create a MachineGroup object.
+        """Create a MPICluster object.
 
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
