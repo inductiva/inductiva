@@ -84,4 +84,4 @@ def _save_metadata(save_sim_metadata_dir, metadata):
     with open(file_path, "w", encoding="utf-8") as f:
         json.dump(metadata, f)
 
-    logging.info(f"Simulation metadata logged to: {file_path}")
+    logging.info("Simulation metadata logged to: %s", file_path)
