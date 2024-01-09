@@ -15,7 +15,6 @@ def run_simulation(
     input_dir: pathlib.Path,
     machine_group: Optional[resources.MachineGroup] = None,
     storage_dir: Optional[types.Path] = "",
-    save_sim_metadata: Optional[bool] = False,
     save_sim_metadata_dir: Optional[types.Path] = None,
     extra_sim_metadata_to_save: Optional[dict] = None,
     **kwargs: Any,
