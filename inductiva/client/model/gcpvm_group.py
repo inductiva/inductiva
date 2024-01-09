@@ -284,6 +284,22 @@ class GCPVMGroup(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class type(schemas.EnumBase, schemas.StrSchema):
+
+                class MetaOapg:
+                    enum_value_to_name = {
+                        "standard": "STANDARD",
+                        "mpi": "MPI",
+                    }
+
+                @schemas.classproperty
+                def STANDARD(cls):
+                    return cls("standard")
+
+                @schemas.classproperty
+                def MPI(cls):
+                    return cls("mpi")
+
             class min_vms(
                     schemas.ComposedSchema,):
 
@@ -419,6 +435,7 @@ class GCPVMGroup(schemas.DictSchema):
                 "name": name,
                 "creation_timestamp": creation_timestamp,
                 "deletion_timestamp": deletion_timestamp,
+                "type": type,
                 "min_vms": min_vms,
                 "max_vms": max_vms,
                 "provider": provider,
@@ -486,6 +503,12 @@ class GCPVMGroup(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+            self, name: typing_extensions.Literal["type"]
+    ) -> MetaOapg.properties.type:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["min_vms"]
     ) -> MetaOapg.properties.min_vms:
         ...
@@ -516,6 +539,7 @@ class GCPVMGroup(schemas.DictSchema):
         "name",
         "creation_timestamp",
         "deletion_timestamp",
+        "type",
         "min_vms",
         "max_vms",
         "provider",
@@ -579,6 +603,12 @@ class GCPVMGroup(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["type"]
+    ) -> typing.Union[MetaOapg.properties.type, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["min_vms"]
     ) -> typing.Union[MetaOapg.properties.min_vms, schemas.Unset]:
         ...
@@ -611,6 +641,7 @@ class GCPVMGroup(schemas.DictSchema):
         "name",
         "creation_timestamp",
         "deletion_timestamp",
+        "type",
         "min_vms",
         "max_vms",
         "provider",
@@ -669,6 +700,8 @@ class GCPVMGroup(schemas.DictSchema):
                                          tuple, bytes, io.FileIO,
                                          io.BufferedReader,
                                          schemas.Unset] = schemas.unset,
+        type: typing.Union[MetaOapg.properties.type, str,
+                           schemas.Unset] = schemas.unset,
         min_vms: typing.Union[MetaOapg.properties.min_vms, dict,
                               frozendict.frozendict, str, date, datetime,
                               uuid.UUID, int, float, decimal.Decimal, bool,
@@ -699,6 +732,7 @@ class GCPVMGroup(schemas.DictSchema):
             name=name,
             creation_timestamp=creation_timestamp,
             deletion_timestamp=deletion_timestamp,
+            type=type,
             min_vms=min_vms,
             max_vms=max_vms,
             provider=provider,
