@@ -34,7 +34,7 @@ class BaseMachineGroup():
         self.create_time = None
         self._started = False
         self.register = register
-        self._type = "standard"
+        self.type = "standard"
 
         # Set the API configuration that carries the information from the client
         # to the backend.

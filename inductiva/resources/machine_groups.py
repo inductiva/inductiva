@@ -57,8 +57,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
             num_active_machines = machine_group.num_machines
         rows.append([
             machine_group.name, machine_group.machine_type,
-            machine_group.is_elastic, machine_group._type,
-            num_active_machines,
+            machine_group.is_elastic, machine_group.type, num_active_machines,
             machine_group.disk_size_gb, machine_group.spot,
             machine_group.create_time
         ])

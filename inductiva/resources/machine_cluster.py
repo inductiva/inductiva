@@ -12,13 +12,11 @@ class MPICluster(machines_base.BaseMachineGroup):
     Note: The cluster will be available only after calling 'start' method.
     The billing will start only after the machines are started."""
 
-    def __init__(
-        self,
-        machine_type: str,
-        num_machines: int = 1,
-        disk_size_gb: int = 70,
-        register: bool = True
-    ) -> None:
+    def __init__(self,
+                 machine_type: str,
+                 num_machines: int = 1,
+                 disk_size_gb: int = 70,
+                 register: bool = True) -> None:
         """Create a MPICluster object.
 
         Args:
@@ -33,12 +31,12 @@ class MPICluster(machines_base.BaseMachineGroup):
                          register=register)
         self.num_machines = num_machines
         self.is_elastic = False
-        self._type = "mpi"
+        self.type = "mpi"
 
         if register:
             super()._register_machine_group(num_vms=self.num_machines,
                                             is_elastic=self.is_elastic,
-                                            type=self._type)
+                                            type=self.type)
             self._log_machine_group_info()
 
     @classmethod
@@ -52,7 +50,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         """Start the MPI Cluster."""
         return super().start(num_vms=self.num_machines,
                              is_elastic=self.is_elastic,
-                             type=self._type)
+                             type=self.type)
 
     def terminate(self):
         """Terminates the MPI Cluster."""
