@@ -1,22 +1,22 @@
 """SplisHSPlasH simulator module of the API."""
 from typing import Optional
 
-from inductiva import types, tasks, resources
-from inductiva.simulators import Simulator
+from inductiva import types, tasks, simulators
 
 
-class SplishSplash(Simulator):
+class SplishSplash(simulators.Simulator):
     """Class to invoke a generic SPlisHSPlasH simulation on the API."""
 
     def __init__(self):
         super().__init__()
         self.api_method_name = "sph.splishsplash.run_simulation"
 
+    @simulators.simulator.mpi_disabled
     def run(
         self,
         input_dir: types.Path,
         sim_config_filename: str,
-        on: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         particle_radius: float = 0.025,
     ) -> tasks.Task:

@@ -2,24 +2,23 @@
 
 from typing import Optional
 
-from inductiva import types, tasks, resources
-from inductiva.simulators import Simulator
+from inductiva import types, tasks, simulators
 
-
-class FDS(Simulator):
+class FDS(simulators.Simulator):
     """Class to invoke a generic FDS simulation on the API."""
 
     def __init__(self):
         super().__init__()
         self.api_method_name = "fdm.fds.run_simulation"
 
+    @simulators.simulator.mpi_disabled
     def run(
         self,
         input_dir: types.Path,
         sim_config_filename: str,
         post_processing_filename: str = None,
         n_cores: int = 1,
-        on: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run the simulation.

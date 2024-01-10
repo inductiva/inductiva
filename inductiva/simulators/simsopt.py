@@ -1,8 +1,7 @@
 """Simsopt module of the API."""
 from typing import Optional
 
-from inductiva import simulators, tasks, types, resources
-
+from inductiva import simulators, tasks, types
 
 class SIMSOPT(simulators.Simulator):
     """Invokes a simsopt simulation on the API."""
@@ -11,6 +10,7 @@ class SIMSOPT(simulators.Simulator):
         super().__init__()
         self.api_method_name = "stellarators.simsopt.run_simulation"
 
+    @simulators.simulator.mpi_disabled
     def run(
         self,
         input_dir: types.Path,
@@ -22,7 +22,7 @@ class SIMSOPT(simulators.Simulator):
         num_samples: int,
         sigma_scaling_factor: float,
         objectives_weights_filename: str,
-        on: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run the simulation.

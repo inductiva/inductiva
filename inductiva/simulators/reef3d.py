@@ -11,7 +11,6 @@ class REEF3D(simulators.Simulator):
     def __init__(self):
         super().__init__()
         self.api_method_name = "reef3d.reef3d.run_simulation"
-        self._is_mpi_available = True
 
     def run(
         self,

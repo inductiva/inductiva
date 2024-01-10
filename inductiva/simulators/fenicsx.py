@@ -2,8 +2,7 @@
 
 from typing import Optional
 
-from inductiva import simulators, types, tasks, resources
-
+from inductiva import simulators, types, tasks
 
 class FEniCSx(simulators.Simulator):
     """Class to invoke a generic FEniCSx simulation on the API."""
@@ -12,6 +11,7 @@ class FEniCSx(simulators.Simulator):
         super().__init__()
         self.api_method_name = "fem.fenicsx.run_simulation"
 
+    @simulators.simulator.mpi_disabled
     def run(
         self,
         input_dir: types.Path,
@@ -23,7 +23,7 @@ class FEniCSx(simulators.Simulator):
         smoothing_meshing_parameter: float = 10.0,
         mesh_element_family: str = "CG",
         mesh_element_order: int = 1,
-        on: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run the simulation.

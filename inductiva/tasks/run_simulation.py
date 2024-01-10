@@ -2,14 +2,14 @@
 import pathlib
 from typing import Any, Optional
 
-from inductiva import tasks, resources, types
+from inductiva import tasks, types
 from inductiva.api import methods
 
 
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
-    on: Optional[resources.machines_base.BaseMachineGroup] = None,
+    computational_resources: Optional[types.ComputationalResources] = None,
     storage_dir: Optional[types.Path] = "",
     **kwargs: Any,
 ) -> tasks.Task:
@@ -25,7 +25,7 @@ def run_simulation(
 
     resource_pool_id = None
     if on is not None:
-        resource_pool_id = on.id
+        resource_pool_id = computational_resources.id
 
     task_id = methods.invoke_async_api(
         api_method_name,

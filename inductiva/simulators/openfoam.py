@@ -21,7 +21,6 @@ class OpenFOAM(simulators.Simulator):
 
         super().__init__()
         self.api_method_name = f"fvm.openfoam_{version}.run_simulation"
-        self._is_mpi_available = True
 
     def run(
         self,

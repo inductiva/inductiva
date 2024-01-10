@@ -6,12 +6,24 @@ from inductiva import types, tasks, resources
 from inductiva.utils import files
 
 
+def mpi_disabled(func):
+    """Decorator that prevents non-MPI simulators to use the MPICluster."""
+    def wrapper(*args, **kwargs):
+        if func.__kwdefaults__ is not None:
+            kwargs.update(func.__kwdefaults__)
+        resource = kwargs.get('on', None)
+        if resource is not None and isinstance(resource, resources.MPICluster):
+            raise Exception("MPI is not available for this simulator. "
+                            "Please use a different computational resource.")
+        return func(*args, **kwargs)
+    return wrapper
+
+
 class Simulator(ABC):
     """Base simulator class."""
 
     def __init__(self):
         self.api_method_name = ""
-        self._is_mpi_available = False
 
     def override_api_method_prefix(self, prefix: str):
         """Override the API method prefix.
@@ -60,14 +72,10 @@ class Simulator(ABC):
         """
         input_dir = self._setup_input_dir(input_dir)
 
-        if not self._is_mpi_available and isinstance(on, resources.MPICluster):
-            raise ValueError("MPI is not available for this simulator. "
-                             "Please use a different computational resource.")
-
         return tasks.run_simulation(
             self.api_method_name,
             input_dir,
-            on=on,
+            computational_resources=on,
             storage_dir=storage_dir,
             **kwargs,
         )

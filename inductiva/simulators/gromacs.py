@@ -4,7 +4,6 @@ from typing import Optional, List
 
 from inductiva import types, tasks, resources, simulators
 
-
 class GROMACS(simulators.Simulator):
     """Class to invoke any GROMACS command on the API."""
 
@@ -12,11 +11,12 @@ class GROMACS(simulators.Simulator):
         super().__init__()
         self.api_method_name = "md.gromacs.run_simulation"
 
+    @simulators.simulator.mpi_disabled
     def run(
         self,
         input_dir: types.Path,
         commands: List[dict],
-        on: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run a list of GROMACS commands.
