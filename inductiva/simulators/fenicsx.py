@@ -4,6 +4,7 @@ from typing import Optional
 
 from inductiva import simulators, types, tasks
 
+
 class FEniCSx(simulators.Simulator):
     """Class to invoke a generic FEniCSx simulation on the API."""
 

@@ -2,7 +2,8 @@
 
 from typing import Optional, List
 
-from inductiva import types, tasks, resources, simulators
+from inductiva import types, tasks, simulators
+
 
 class GROMACS(simulators.Simulator):
     """Class to invoke any GROMACS command on the API."""

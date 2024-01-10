@@ -4,6 +4,7 @@ from typing import Optional
 
 from inductiva import types, tasks, simulators
 
+
 class FDS(simulators.Simulator):
     """Class to invoke a generic FDS simulation on the API."""
 

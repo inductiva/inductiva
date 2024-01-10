@@ -8,14 +8,16 @@ from inductiva.utils import files
 
 def mpi_disabled(func):
     """Decorator that prevents non-MPI simulators to use the MPICluster."""
+
     def wrapper(*args, **kwargs):
         if func.__kwdefaults__ is not None:
             kwargs.update(func.__kwdefaults__)
-        resource = kwargs.get('on', None)
+        resource = kwargs.get("on", None)
         if resource is not None and isinstance(resource, resources.MPICluster):
-            raise Exception("MPI is not available for this simulator. "
+            raise ValueError("MPI is not available for this simulator. "
                             "Please use a different computational resource.")
         return func(*args, **kwargs)
+
     return wrapper
 
 

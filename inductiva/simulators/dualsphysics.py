@@ -4,6 +4,7 @@ from typing import Optional, List
 
 from inductiva import types, tasks, simulators
 
+
 class DualSPHysics(simulators.Simulator):
     """Class to invoke a generic DualSPHysics simulation on the API."""
 

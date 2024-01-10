@@ -3,6 +3,7 @@ from typing import Optional
 
 from inductiva import simulators, tasks, types
 
+
 class SIMSOPT(simulators.Simulator):
     """Invokes a simsopt simulation on the API."""
 

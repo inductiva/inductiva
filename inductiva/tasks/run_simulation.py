@@ -24,7 +24,7 @@ def run_simulation(
     }
 
     resource_pool_id = None
-    if on is not None:
+    if computational_resources is not None:
         resource_pool_id = computational_resources.id
 
     task_id = methods.invoke_async_api(
