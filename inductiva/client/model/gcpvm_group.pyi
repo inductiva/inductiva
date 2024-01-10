@@ -214,20 +214,6 @@ class GCPVMGroup(
                     )
             
             
-            class type(
-                schemas.EnumBase,
-                schemas.StrSchema
-            ):
-                
-                @schemas.classproperty
-                def STANDARD(cls):
-                    return cls("standard")
-                
-                @schemas.classproperty
-                def MPI(cls):
-                    return cls("mpi")
-            
-            
             class min_vms(
                 schemas.ComposedSchema,
             ):
@@ -324,7 +310,6 @@ class GCPVMGroup(
                 "name": name,
                 "creation_timestamp": creation_timestamp,
                 "deletion_timestamp": deletion_timestamp,
-                "type": type,
                 "min_vms": min_vms,
                 "max_vms": max_vms,
                 "provider": provider,
@@ -364,9 +349,6 @@ class GCPVMGroup(
     def __getitem__(self, name: typing_extensions.Literal["deletion_timestamp"]) -> MetaOapg.properties.deletion_timestamp: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["type"]) -> MetaOapg.properties.type: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["min_vms"]) -> MetaOapg.properties.min_vms: ...
     
     @typing.overload
@@ -378,7 +360,7 @@ class GCPVMGroup(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "creation_timestamp", "deletion_timestamp", "type", "min_vms", "max_vms", "provider", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "creation_timestamp", "deletion_timestamp", "min_vms", "max_vms", "provider", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -411,9 +393,6 @@ class GCPVMGroup(
     def get_item_oapg(self, name: typing_extensions.Literal["deletion_timestamp"]) -> typing.Union[MetaOapg.properties.deletion_timestamp, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["type"]) -> typing.Union[MetaOapg.properties.type, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["min_vms"]) -> typing.Union[MetaOapg.properties.min_vms, schemas.Unset]: ...
     
     @typing.overload
@@ -425,7 +404,7 @@ class GCPVMGroup(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "creation_timestamp", "deletion_timestamp", "type", "min_vms", "max_vms", "provider", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "creation_timestamp", "deletion_timestamp", "min_vms", "max_vms", "provider", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -441,7 +420,6 @@ class GCPVMGroup(
         name: typing.Union[MetaOapg.properties.name, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         creation_timestamp: typing.Union[MetaOapg.properties.creation_timestamp, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         deletion_timestamp: typing.Union[MetaOapg.properties.deletion_timestamp, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        type: typing.Union[MetaOapg.properties.type, str, schemas.Unset] = schemas.unset,
         min_vms: typing.Union[MetaOapg.properties.min_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         max_vms: typing.Union[MetaOapg.properties.max_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         provider: typing.Union[MetaOapg.properties.provider, str, schemas.Unset] = schemas.unset,
@@ -460,7 +438,6 @@ class GCPVMGroup(
             name=name,
             creation_timestamp=creation_timestamp,
             deletion_timestamp=deletion_timestamp,
-            type=type,
             min_vms=min_vms,
             max_vms=max_vms,
             provider=provider,
