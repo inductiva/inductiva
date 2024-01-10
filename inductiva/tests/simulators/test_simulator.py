@@ -6,21 +6,13 @@ from unittest import mock
 from pytest import mark
 
 from inductiva import types, simulators, resources
+import inductiva
 
 
 def run_test(input_dir: str, on=Optional[types.ComputationalResources]):
     """Test run method to check mpi_disabled decorator."""
 
     return input_dir, type(on)
-
-
-@pytest.fixture(name="mock_mpi_cluster")
-def mpi_cluster_fixture():
-    """Mock the MPICluster register."""
-
-    mock.patch.object(resources.MPICluster,
-                      "_register_machine_group",
-                      return_value=("id-resource", "name-resource"))
 
 
 def test_override_api_method_prefix():
@@ -32,11 +24,15 @@ def test_override_api_method_prefix():
         "windtunnel.openfoam_foundation.run_simulation"
 
 
-def test_mpi_disabled__run_test__with_mpi_cluster(mock_mpi_cluster):
+@mock.patch.object(resources.MPICluster,
+                   "_register_machine_group",
+                   return_value=("id-resource", "name-resource"))
+def test_mpi_disabled__run_test__with_mpi_cluster(mock):
     """Check that the mpi_disabled decorator raises an error when the
     simulator is not MPI compatible and the user tries to run it on a
     MPICluster."""
 
+    inductiva.api_key = "dummy"
     cluster = resources.MPICluster(machine_type="c2-standard-16",
                                    num_machines=2)
 
@@ -49,11 +45,15 @@ def test_mpi_disabled__run_test__with_mpi_cluster(mock_mpi_cluster):
                                 "Please use a different computational resource."
 
 
-def test_mpi_disabled__run_test__with_machine_group(mock_mpi_cluster):
+@mock.patch.object(resources.MachineGroup,
+                   "_register_machine_group",
+                   return_value=("id-resource", "name-resource"))
+def test_mpi_disabled__run_test__with_machine_group(mock):
     """Check that the mpi_disabled decorator raises an error when the
     simulator is not MPI compatible and the user tries to run it on a
     MPICluster."""
 
+    inductiva.api_key = "dummy"
     cluster = resources.MachineGroup(machine_type="c2-standard-16",
                                      num_machines=2)
 

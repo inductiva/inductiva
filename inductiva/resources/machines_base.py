@@ -61,6 +61,7 @@ class BaseMachineGroup():
         
         Returns:
             The unique ID and name identifying the machine on the API."""
+        print("This is working!")
         instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
             spot=self.spot,
@@ -72,6 +73,7 @@ class BaseMachineGroup():
         id = resp.body["id"]
         name = resp.body["name"]
         self.register = False
+        self._log_machine_group_info()
 
         return id, name
 

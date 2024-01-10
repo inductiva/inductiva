@@ -46,7 +46,6 @@ class MPICluster(machines_base.BaseMachineGroup):
                 num_vms=self.num_machines,
                 is_elastic=self.is_elastic,
                 type=self.type)
-            self._log_machine_group_info()
 
     @classmethod
     def from_api_response(cls, resp: dict):
