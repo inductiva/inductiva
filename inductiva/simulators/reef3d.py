@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from inductiva import simulators, types, tasks, resources
+from inductiva import simulators, types, tasks
 
 
 class REEF3D(simulators.Simulator):
@@ -28,6 +28,4 @@ class REEF3D(simulators.Simulator):
                 the simulation is launched in a machine of the default pool.
             other arguments: See the documentation of the base class.
         """
-        return super().run(input_dir,
-                           on=on,
-                           storage_dir=storage_dir)
+        return super().run(input_dir, on=on, storage_dir=storage_dir)

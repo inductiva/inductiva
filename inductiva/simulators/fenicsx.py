@@ -60,7 +60,7 @@ class FEniCSx(simulators.Simulator):
 
         return super().run(
             input_dir,
-            machine_group=machine_group,
+            on=on,
             geometry_filename=geometry_filename,
             bcs_filename=bcs_filename,
             material_filename=material_filename,

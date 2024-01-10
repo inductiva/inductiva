@@ -1,7 +1,7 @@
 """OpenFOAM module of the API for fluid dynamics."""
 from typing import Optional, List
 
-from inductiva import types, tasks, resources, simulators
+from inductiva import types, tasks, simulators
 
 AVAILABLE_OPENFOAM_VERSIONS = ["foundation", "esi"]
 

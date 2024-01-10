@@ -1,7 +1,7 @@
 """SWASH module of the API."""
 from typing import Optional
 
-from inductiva import types, tasks, resources, simulators
+from inductiva import types, tasks, simulators
 
 
 class SWASH(simulators.Simulator):

@@ -60,7 +60,7 @@ class Simulator(ABC):
         """
         input_dir = self._setup_input_dir(input_dir)
 
-        if not self._is_mpi_available and type(on) == resources.MPICluster:
+        if not self._is_mpi_available and isinstance(on, resources.MPICluster):
             raise ValueError("MPI is not available for this simulator. "
                              "Please use a different computational resource.")
 
