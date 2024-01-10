@@ -27,7 +27,7 @@ def test_override_api_method_prefix():
 @mock.patch.object(resources.MPICluster,
                    "_register_machine_group",
                    return_value=("id-resource", "name-resource"))
-def test_mpi_disabled__run_test__with_mpi_cluster(mocker): # pylint: disable=unused-argument
+def test_mpi_disabled__run_test__with_mpi_cluster(mocker):  # pylint: disable=unused-argument
     """Check that the mpi_disabled decorator raises an error when the
     simulator is not MPI compatible and the user tries to run it on a
     MPICluster."""
@@ -48,7 +48,7 @@ def test_mpi_disabled__run_test__with_mpi_cluster(mocker): # pylint: disable=unu
 @mock.patch.object(resources.MachineGroup,
                    "_register_machine_group",
                    return_value=("id-resource", "name-resource"))
-def test_mpi_disabled__run_test__with_machine_group(mocker): # pylint: disable=unused-argument
+def test_mpi_disabled__run_test__with_machine_group(mocker):  # pylint: disable=unused-argument
     """Check that the mpi_disabled decorator raises an error when the
     simulator is not MPI compatible and the user tries to run it on a
     MPICluster."""
