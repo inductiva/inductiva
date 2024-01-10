@@ -70,12 +70,12 @@ class BaseMachineGroup():
         )
         logging.info("Registering machine group configurations:")
         resp = self._api.register_vm_group(body=instance_group_config)
-        id = resp.body["id"]
+        group_id = resp.body["id"]
         name = resp.body["name"]
         self.register = False
         self._log_machine_group_info()
 
-        return id, name
+        return group_id, name
 
     @classmethod
     def from_api_response(cls, resp: dict):
