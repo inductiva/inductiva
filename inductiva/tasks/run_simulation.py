@@ -66,5 +66,5 @@ def _save_metadata(metadata):
     file_path = pathlib.Path().cwd() / TASK_METADATA_FILENAME
     with open(file_path, "a", encoding="utf-8") as f:
         json.dump(metadata, f)
-        f.write('\n')
+        f.write("\n")
     logging.info("Simulation metadata logged to: %s", file_path)
