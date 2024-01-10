@@ -17,8 +17,6 @@ class SWASH(simulators.Simulator):
         sim_config_filename: str,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
-        save_sim_metadata_dir: Optional[types.Path] = None,
-        extra_sim_metadata_to_save: Optional[dict] = None,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -28,10 +26,7 @@ class SWASH(simulators.Simulator):
             machine_group: Optional machine group to run the simulation on.
             storage_dir: Directory for storing simulation results.
         """
-        return super().run(
-            input_dir,
-            machine_group=machine_group,
-            input_filename=sim_config_filename,
-            storage_dir=storage_dir,
-            save_sim_metadata_dir=save_sim_metadata_dir,
-            extra_sim_metadata_to_save=extra_sim_metadata_to_save)
+        return super().run(input_dir,
+                           machine_group=machine_group,
+                           input_filename=sim_config_filename,
+                           storage_dir=storage_dir)

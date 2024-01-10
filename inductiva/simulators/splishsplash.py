@@ -19,8 +19,6 @@ class SplishSplash(Simulator):
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
         particle_radius: float = 0.025,
-        save_sim_metadata_dir: Optional[types.Path] = None,
-        extra_sim_metadata_to_save: Optional[dict] = None,
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
 
@@ -33,11 +31,8 @@ class SplishSplash(Simulator):
         Returns:
             Task object representing the simulation task.
         """
-        return super().run(
-            input_dir,
-            machine_group=machine_group,
-            input_filename=sim_config_filename,
-            storage_dir=storage_dir,
-            particle_radius=particle_radius,
-            save_sim_metadata_dir=save_sim_metadata_dir,
-            extra_sim_metadata_to_save=extra_sim_metadata_to_save)
+        return super().run(input_dir,
+                           machine_group=machine_group,
+                           input_filename=sim_config_filename,
+                           storage_dir=storage_dir,
+                           particle_radius=particle_radius)
