@@ -1,4 +1,5 @@
 -e .
 pylint>=2.17,<3.0
 pytest
+pytest-mock
 yapf
