@@ -25,7 +25,7 @@ class DualSPHysics(simulators.Simulator):
         Args:
             input_dir: Directory with simulation input files.
             sim_config_filename: Simulation config file.
-            on: The computational resource to launch the simulation in. If None
+            on: The computational resource to launch the simulation on. If None
                 the simulation is launched in a machine of the default pool.
             storage_dir: Directory for storing results.
 

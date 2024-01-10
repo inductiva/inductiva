@@ -10,14 +10,13 @@ def mpi_disabled(func):
     """Decorator that prevents non-MPI simulators to use the MPICluster."""
 
     def wrapper(*args, **kwargs):
-        if func.__kwdefaults__ is not None:
-            kwargs.update(func.__kwdefaults__)
         resource = kwargs.get("on", None)
         if resource is not None and isinstance(resource, resources.MPICluster):
             raise ValueError("MPI is not available for this simulator. "
-                            "Please use a different computational resource.")
+                             "Please use a different computational resource.")
         return func(*args, **kwargs)
 
+    wrapper.mpi_disabled_simulator = True
     return wrapper
 
 

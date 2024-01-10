@@ -34,7 +34,7 @@ class OpenFOAM(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             commands: List of commands to run using the OpenFOAM simulator.
-            on: The computational resource to launch the simulation in. If None
+            on: The computational resource to launch the simulation on. If None
                 the simulation is launched in a machine of the default pool.
             other arguments: See the documentation of the base class.
         """

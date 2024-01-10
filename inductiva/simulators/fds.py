@@ -27,7 +27,7 @@ class FDS(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
-            on: The computational resource to launch the simulation in. If None
+            on: The computational resource to launch the simulation on. If None
                 the simulation is launched in a machine of the default pool.
             other arguments: See the documentation of the base class.
         """

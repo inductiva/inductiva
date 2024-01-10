@@ -54,7 +54,8 @@ class FEniCSx(simulators.Simulator):
             mesh_element_family (str): The type of mesh element family.
             mesh_element_order (int): The (polynomial) order of the mesh
               element.
-            machine_group: The machine group to use for the simulation.
+            on: The computational resource to launch the simulation on. If None
+                the simulation is launched in a machine of the default pool.
             storage_dir: Parent directory for storing simulation results.
             other arguments: See the documentation of the base class.
         """

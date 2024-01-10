@@ -25,6 +25,13 @@ class BaseMachineGroup():
               more information about machine types.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
+            register: Bool that indicates if a machine group should be register
+                or if it was already registered. If set to False by users on
+                initialization, then, the machine group will not be able to be
+                started. This serves has an helper argument for retrieving
+                already registered machine groups that can be started, for
+                example, when retrieving with the `machines_groups.get` method.
+                Users should not set this argument in anyway.
         """
         self.machine_type = machine_type
         self.spot = spot
@@ -50,6 +57,10 @@ class BaseMachineGroup():
         return self._name
 
     def _register_machine_group(self, **kwargs):
+        """Register machine group configuration in API.
+        
+        Returns:
+            The unique ID and name identifying the machine on the API."""
         instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
             spot=self.spot,
@@ -58,9 +69,11 @@ class BaseMachineGroup():
         )
         logging.info("Registering machine group configurations:")
         resp = self._api.register_vm_group(body=instance_group_config)
-        self._id = resp.body["id"]
-        self._name = resp.body["name"]
+        id = resp.body["id"]
+        name = resp.body["name"]
         self.register = False
+
+        return id, name
 
     @classmethod
     def from_api_response(cls, resp: dict):
