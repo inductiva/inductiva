@@ -23,7 +23,7 @@ class FEniCSx(simulators.Simulator):
         smoothing_meshing_parameter: float = 10.0,
         mesh_element_family: str = "CG",
         mesh_element_order: int = 1,
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run the simulation.

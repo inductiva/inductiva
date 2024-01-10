@@ -9,7 +9,7 @@ from inductiva.api import methods
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
-    machine_group: Optional[resources.MachineGroup] = None,
+    on: Optional[resources.machines_base.BaseMachineGroup] = None,
     storage_dir: Optional[types.Path] = "",
     **kwargs: Any,
 ) -> tasks.Task:
@@ -24,8 +24,8 @@ def run_simulation(
     }
 
     resource_pool_id = None
-    if machine_group is not None:
-        resource_pool_id = machine_group.id
+    if on is not None:
+        resource_pool_id = on.id
 
     task_id = methods.invoke_async_api(
         api_method_name,

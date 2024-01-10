@@ -16,7 +16,7 @@ class GROMACS(simulators.Simulator):
         self,
         input_dir: types.Path,
         commands: List[dict],
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run a list of GROMACS commands.
@@ -24,12 +24,13 @@ class GROMACS(simulators.Simulator):
         Args:
             input_dir: Path to the directory containing the input files.
             commands: List of commands to run using the GROMACS simulator.
-            machine_group: The machine group to use for the simulation.
+            on: The computational resource to launch the simulation in. If None
+                the simulation is launched in a machine of the default pool.
             storage_dir: Parent directory for storing simulation
                                results.
         """
 
         return super().run(input_dir,
-                           machine_group=machine_group,
+                           on=on,
                            commands=commands,
                            storage_dir=storage_dir)

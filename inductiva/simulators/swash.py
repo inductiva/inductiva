@@ -10,12 +10,13 @@ class SWASH(simulators.Simulator):
     def __init__(self):
         super().__init__()
         self.api_method_name = "sw.swash.run_simulation"
+        self._is_mpi_available = True
 
     def run(
         self,
         input_dir: types.Path,
         sim_config_filename: str,
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
     ) -> tasks.Task:
         """Run the simulation.
@@ -23,10 +24,11 @@ class SWASH(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
-            machine_group: Optional machine group to run the simulation on.
+            on: The computational resource to launch the simulation in. If None
+                the simulation is launched in a machine of the default pool.
             storage_dir: Directory for storing simulation results.
         """
         return super().run(input_dir,
-                           machine_group=machine_group,
+                           on=on,
                            input_filename=sim_config_filename,
                            storage_dir=storage_dir)
