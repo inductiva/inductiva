@@ -42,7 +42,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         self.type = "mpi"
 
         if register:
-            self._id, self._name = self._register_machine_group(
+            self._register_machine_group(
                 num_vms=self.num_machines,
                 is_elastic=self.is_elastic,
                 type=self.type)

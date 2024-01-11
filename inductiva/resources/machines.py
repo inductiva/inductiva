@@ -46,7 +46,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         self.is_elastic = False
 
         if register:
-            self._id, self._name = self._register_machine_group(
+            self._register_machine_group(
                 num_vms=self.num_machines, is_elastic=self.is_elastic)
 
     @classmethod
@@ -144,7 +144,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self.is_elastic = True
 
         if self.register:
-            self._id, self._name = self._register_machine_group(
+            self._register_machine_group(
                 min_vms=self.min_machines,
                 max_vms=self.max_machines,
                 is_elastic=self.is_elastic,

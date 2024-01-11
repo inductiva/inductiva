@@ -61,7 +61,7 @@ class BaseMachineGroup():
         
         Returns:
             The unique ID and name identifying the machine on the API."""
-        print("This is working!")
+        
         instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
             spot=self.spot,
@@ -70,12 +70,12 @@ class BaseMachineGroup():
         )
         logging.info("Registering machine group configurations:")
         resp = self._api.register_vm_group(body=instance_group_config)
-        group_id = resp.body["id"]
-        name = resp.body["name"]
+        self._id = resp.body["id"]
+        self._name = resp.body["name"]
         self.register = False
         self._log_machine_group_info()
 
-        return group_id, name
+        #return group_id, name
 
     @classmethod
     def from_api_response(cls, resp: dict):
