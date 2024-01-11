@@ -3,9 +3,9 @@ from unittest import mock
 import inductiva
 
 
-def fake_register(self, **kwargs): # pylint: disable = unused-argument
-    self._id = "id-resource" # pylint: disable = proctected-access
-    self._name = "name-resource" # pylint: disable = proctected-access
+def fake_register(self, **kwargs):  # pylint: disable = unused-argument
+    self._id = "id-resource"  # pylint: disable = proctected-access
+    self._name = "name-resource"  # pylint: disable = proctected-access
     self.register = False
 
 
@@ -23,8 +23,8 @@ def test_machines__mpicluster__register():
                                              num_machines=2)
 
     # Check that the cluster has been initialized correctly
-    assert cluster._name == "name-resource"
-    assert cluster._id == "id-resource"
+    assert cluster._name == "name-resource"  # pylint: disable = proctected-access
+    assert cluster._id == "id-resource"  # pylint: disable = proctected-access
     assert cluster.num_machines == 2
     assert cluster.machine_type == "c2-standard-16"
     assert cluster.register is False
@@ -46,8 +46,8 @@ def test_machines__machine_group__register():
                                                num_machines=2)
 
     # Check that the cluster has been initialized correctly
-    assert cluster.name == "name-resource"
-    assert cluster.id == "id-resource"
+    assert cluster._name == "name-resource"  # pylint: disable = proctected-access
+    assert cluster._id == "id-resource"  # pylint: disable = proctected-access
     assert cluster.num_machines == 2
     assert cluster.machine_type == "c2-standard-16"
     assert cluster.register is False
