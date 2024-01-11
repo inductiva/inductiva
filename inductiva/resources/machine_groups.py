@@ -131,8 +131,10 @@ def get():
             mg_class = resources.ElasticMachineGroup
         elif mg["type"] == "standard":
             mg_class = resources.MachineGroup
-        else:
+        elif mg["type"] == "mpi":
             mg_class = resources.MPICluster
+        else:
+            raise ValueError(f"Unknown machine group configuration.")
         machine_group_list.append(mg_class.from_api_response(mg))
 
     return machine_group_list

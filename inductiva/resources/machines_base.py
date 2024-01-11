@@ -1,5 +1,6 @@
 """Base class for machine groups."""
 import time
+import enum
 
 from absl import logging
 
@@ -7,6 +8,13 @@ import inductiva
 import inductiva.client.models
 from inductiva import api
 from inductiva.client.apis.tags import compute_api
+
+
+class ResourceType(enum.Enum):
+    """Enum to represent the type of machine to be launched."""
+
+    STANDARD = "standard"
+    MPI = "mpi"
 
 
 class BaseMachineGroup():
@@ -41,7 +49,7 @@ class BaseMachineGroup():
         self.create_time = None
         self._started = False
         self.register = register
-        self.type = "standard"
+        self.__type = ResourceType.STANDARD.value
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -86,7 +94,6 @@ class BaseMachineGroup():
         )
         machine_group._id = resp["id"]
         machine_group._name = resp["name"]
-        machine_group.spot = bool(resp["spot"])
         machine_group.create_time = resp["creation_timestamp"]
         machine_group._started = True
 

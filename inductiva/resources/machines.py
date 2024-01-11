@@ -43,28 +43,29 @@ class MachineGroup(machines_base.BaseMachineGroup):
                          disk_size_gb=disk_size_gb,
                          register=register)
         self.num_machines = num_machines
-        self.is_elastic = False
+        self.__is_elastic = False
 
         if register:
             self._register_machine_group(num_vms=self.num_machines,
-                                         is_elastic=self.is_elastic)
+                                         is_elastic=self.__is_elastic)
 
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["num_vms"])
+        machine_group.spot = bool(resp["spot"])
         machine_group.register = False
         return machine_group
 
     def start(self):
         """Starts all machines of the machine group."""
         return super().start(num_vms=self.num_machines,
-                             is_elastic=self.is_elastic)
+                             is_elastic=self.__is_elastic)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
         return super().terminate(num_vms=self.num_machines,
-                                 is_elastic=self.is_elastic)
+                                 is_elastic=self.__is_elastic)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
@@ -78,11 +79,11 @@ class MachineGroup(machines_base.BaseMachineGroup):
         specified configurations up in the cloud. The actual cost may vary.
 
         Returns:
-            The estimated cost per hour of the machine group in US
+            The estimated cost per hour of the machine group, in US
               dollars ($/h)."""
         #TODO: Contemplate disk size in the price.
         estimated_cost = super()._get_estimated_cost() * self.num_machines
-        logging.info("Estimated cloud cost per hour for all machines : %s $/h",
+        logging.info("Estimated cloud cost for all machines : %s $/h",
                      estimated_cost)
         return estimated_cost
 
@@ -141,17 +142,18 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self.min_machines = min_machines
         self.max_machines = max_machines
         self.num_active_machines = min_machines
-        self.is_elastic = True
+        self.__is_elastic = True
 
         if self.register:
             self._register_machine_group(min_vms=self.min_machines,
                                          max_vms=self.max_machines,
-                                         is_elastic=self.is_elastic,
+                                         is_elastic=self.__is_elastic,
                                          num_vms=self.num_active_machines)
 
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
+        machine_group.spot = bool(resp["spot"])
         machine_group.max_machines = int(resp["max_vms"])
         machine_group.min_machines = int(resp["min_vms"])
         machine_group.num_active_machines = int(resp["num_vms"])
@@ -162,14 +164,14 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return super().start(num_vms=self.min_machines,
                              min_vms=self.min_machines,
                              max_vms=self.max_machines,
-                             is_elastic=self.is_elastic)
+                             is_elastic=self.__is_elastic)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
         return super().terminate(num_vms=self.min_machines,
                                  min_vms=self.min_machines,
                                  max_vms=self.max_machines,
-                                 is_elastic=self.is_elastic)
+                                 is_elastic=self.__is_elastic)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()

@@ -38,13 +38,13 @@ class MPICluster(machines_base.BaseMachineGroup):
                          disk_size_gb=disk_size_gb,
                          register=register)
         self.num_machines = num_machines
-        self.is_elastic = False
-        self.type = "mpi"
+        self.__type = machines_base.ResourceType.MPI.value
+        self.__is_elastic = False
 
         if register:
             self._register_machine_group(num_vms=self.num_machines,
-                                         is_elastic=self.is_elastic,
-                                         type=self.type)
+                                         is_elastic=self.__is_elastic,
+                                         type=self.__type)
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -56,13 +56,13 @@ class MPICluster(machines_base.BaseMachineGroup):
     def start(self):
         """Start the MPI Cluster."""
         return super().start(num_vms=self.num_machines,
-                             is_elastic=self.is_elastic,
-                             type=self.type)
+                             is_elastic=self.__is_elastic,
+                             type=self.__type)
 
     def terminate(self):
         """Terminates the MPI Cluster."""
         return super().terminate(num_vms=self.num_machines,
-                                 is_elastic=self.is_elastic)
+                                 is_elastic=self.__is_elastic)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
@@ -76,10 +76,10 @@ class MPICluster(machines_base.BaseMachineGroup):
         specified configurations up in the cloud. The actual cost may vary.
 
         Returns:
-            The estimated cost per hour of the machine group in US
+            The estimated cost per hour of the machine group, in US
               dollars ($/h)."""
         #TODO: Contemplate disk size in the price.
         estimated_cost = super()._get_estimated_cost() * self.num_machines
-        logging.info("Estimated cloud cost per hour of the MPI cluster: %s $/h",
+        logging.info("Estimated cloud cost of the MPI cluster: %s $/h",
                      estimated_cost)
         return estimated_cost
