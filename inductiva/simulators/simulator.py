@@ -6,22 +6,21 @@ from inductiva import types, tasks, resources
 from inductiva.utils import files
 
 
-def mpi_disabled(func):
-    """Decorator that prevents non-MPI simulators to use the MPICluster."""
+def mpi_enabled(cls):
+    """Class decorator that adds MPICluster to the supported resources.
+    """
+    supports = getattr(cls, "_supported_resources", None)
+    cls._supported_resources = supports | {resources.MPICluster}
 
-    def wrapper(*args, **kwargs):
-        resource = kwargs.get("on", None)
-        if resource is not None and isinstance(resource, resources.MPICluster):
-            raise ValueError("MPI is not available for this simulator. "
-                             "Please use a different computational resource.")
-        return func(*args, **kwargs)
-
-    wrapper.mpi_disabled_simulator = True
-    return wrapper
+    return cls
 
 
 class Simulator(ABC):
     """Base simulator class."""
+
+    _supported_resources = {
+        resources.MachineGroup, resources.ElasticMachineGroup
+    }
 
     def __init__(self):
         self.api_method_name = ""
@@ -73,6 +72,8 @@ class Simulator(ABC):
         """
         input_dir = self._setup_input_dir(input_dir)
 
+        validate_computational_resources(on, self._standard_resources)
+
         return tasks.run_simulation(
             self.api_method_name,
             input_dir,
@@ -80,3 +81,18 @@ class Simulator(ABC):
             storage_dir=storage_dir,
             **kwargs,
         )
+
+
+def validate_computational_resources(resource, valid_resources):
+    """Validate the computational resources passed to the run method.
+
+    Args:
+        resource: The computational resource to validate.
+        valid_resources: The valid computational resources for the simulator.
+    """
+    if resource is not None and not isinstance(resource,
+                                               tuple(valid_resources)):
+        raise ValueError(
+            f"The computational resource ({resource}) is not valid for "
+            f"this simulator. Valid computational resources are: "
+            f"{valid_resources}.")

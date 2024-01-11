@@ -6,6 +6,7 @@ import inductiva.client
 from inductiva.client.apis.tags import compute_api
 from inductiva.utils import format_utils
 from inductiva import resources
+from . import machines_base
 
 
 def estimate_machine_cost(machine_type: str, spot: bool = False):
@@ -48,17 +49,22 @@ def _machine_group_list_to_str(machine_group_list) -> str:
     rows = []
 
     for machine_group in machine_group_list:
-        if machine_group.is_elastic:
+        is_elastic = False
+        type = machines_base.ResourceType.STANDARD.value
+
+        if isinstance(machine_group, resources.ElasticMachineGroup):
             num_active_machines = machine_group.num_active_machines
             max_machines = machine_group.max_machines
             num_active_machines = f"{num_active_machines}/{max_machines}"
+            is_elastic = True
         else:
-            # TODO: retrieve the number of max. requested machines from the API
             num_active_machines = machine_group.num_machines
+            if isinstance(machine_group, resources.MPICluster):
+                type = machines_base.ResourceType.MPI.value
+
         rows.append([
-            machine_group.name, machine_group.machine_type,
-            machine_group.is_elastic, machine_group.type, num_active_machines,
-            machine_group.disk_size_gb, machine_group.spot,
+            machine_group.name, machine_group.machine_type, is_elastic, type,
+            num_active_machines, machine_group.disk_size_gb, machine_group.spot,
             machine_group.create_time
         ])
 

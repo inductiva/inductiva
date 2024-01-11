@@ -6,6 +6,7 @@ from inductiva import types, tasks, simulators
 AVAILABLE_OPENFOAM_VERSIONS = ["foundation", "esi"]
 
 
+@simulators.simulator.mpi_enabled
 class OpenFOAM(simulators.Simulator):
     """Class to invoke a generic OpenFOAM simulation on the API.
 

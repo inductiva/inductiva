@@ -4,13 +4,13 @@ from typing import Optional
 from inductiva import types, tasks, simulators
 
 
+@simulators.simulator.mpi_enabled
 class XBeach(simulators.Simulator):
     """Class to invoke a generic XBeach simulation on the API."""
 
     def __init__(self):
         super().__init__()
         self.api_method_name = "sw.xbeach.run_simulation"
-        self._is_mpi_available = True
 
     def run(
         self,

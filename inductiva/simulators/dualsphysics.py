@@ -12,7 +12,6 @@ class DualSPHysics(simulators.Simulator):
         super().__init__()
         self.api_method_name = "sph.dualsphysics.run_simulation"
 
-    @simulators.simulator.mpi_disabled
     def run(
         self,
         input_dir: types.Path,

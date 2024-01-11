@@ -4,13 +4,13 @@ from typing import Optional
 from inductiva import types, tasks, simulators
 
 
+@simulators.simulator.mpi_enabled
 class SWASH(simulators.Simulator):
     """Class to invoke a generic SWASH simulation on the API."""
 
     def __init__(self):
         super().__init__()
         self.api_method_name = "sw.swash.run_simulation"
-        self._is_mpi_available = True
 
     def run(
         self,

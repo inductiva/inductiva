@@ -9,10 +9,19 @@ from inductiva import types, simulators, resources
 import inductiva
 
 
-def run_test(input_dir: str, on=Optional[types.ComputationalResources]):
-    """Test run method to check mpi_disabled decorator."""
+class TestSimulator(simulators.Simulator):
+    """Dummy simulator class."""
 
-    return input_dir, type(on)
+    def __init__(self):
+        super().__init__()
+
+    def run(self,
+            input_dir: types.Path,
+            on: Optional[types.ComputationalResources] = None):
+
+        simulators.simulator.validate_computational_resources(
+            on, self._supported_resources)
+        return input_dir, on
 
 
 def test_override_api_method_prefix():
@@ -27,42 +36,85 @@ def test_override_api_method_prefix():
 @mock.patch.object(resources.MPICluster,
                    "_register_machine_group",
                    return_value=("id-resource", "name-resource"))
-def test_mpi_disabled__run_test__with_mpi_cluster(mocker):  # pylint: disable=unused-argument
-    """Check that the mpi_disabled decorator raises an error when the
-    simulator is not MPI compatible and the user tries to run it on a
-    MPICluster."""
+def test_simulator_run__non_mpi_enabled__with_mpi_cluster(mocker):  # pylint: disable=unused-argument
+    """Check non-mpi simulator raises error with MPICluster.
+
+    Goal: Verify that simulators without the mpi_enabled decorator raise an
+    error stating that MPICluster is not available for this simulator."""
 
     inductiva.api_key = "dummy"
     cluster = resources.MPICluster(machine_type="c2-standard-16",
                                    num_machines=2)
 
-    mpi_disabled__run_test = simulators.simulator.mpi_disabled(run_test)
+    simulator = TestSimulator()
 
     with pytest.raises(ValueError) as excinfo:
-        mpi_disabled__run_test(input_dir="test", on=cluster)
+        simulator.run(input_dir="test", on=cluster)
 
-    assert str(excinfo.value) == "MPI is not available for this simulator. " \
-                                "Please use a different computational resource."
+    expected_error = (f"The computational resource ({cluster}) is not valid "
+                      f"for this simulator. Valid computational resources are: "
+                      f"{simulator._supported_resources}.")  # pylint: disable=protected-access
+
+    assert str(excinfo.value) == expected_error
+
+
+@mock.patch.object(resources.MPICluster,
+                   "_register_machine_group",
+                   return_value=("id-resource", "name-resource"))
+def test_simulator_run__mpi_enabled__with_mpi_cluster(mocker):  # pylint: disable=unused-argument
+    """Check mpi simulator validates MPICluster.
+
+    Goal: Verify that mpi_enabled simulators correctly validate the MPICluster
+    on a simulation.run call."""
+
+    inductiva.api_key = "dummy"
+    cluster = resources.MPICluster(machine_type="c2-standard-16",
+                                   num_machines=2)
+
+    mpi_enabled_simulator = simulators.simulator.mpi_enabled(TestSimulator)
+    simulator = mpi_enabled_simulator()
+
+    input_dir, resource = simulator.run(input_dir="test", on=cluster)
+
+    assert input_dir == "test"
+    assert isinstance(resource, resources.MPICluster)
 
 
 @mock.patch.object(resources.MachineGroup,
                    "_register_machine_group",
                    return_value=("id-resource", "name-resource"))
-def test_mpi_disabled__run_test__with_machine_group(mocker):  # pylint: disable=unused-argument
-    """Check that the mpi_disabled decorator raises an error when the
-    simulator is not MPI compatible and the user tries to run it on a
-    MPICluster."""
+def test_simulator_run__non_mpi_enabled__with_machine_group(mocker):  # pylint: disable=unused-argument
+    """Check non-mpi simulator runs correctly with a standard machine group.
+    
+    Goal: Verify that simulators without the mpi_enabled decorator run normally
+    with a standard machine group."""
 
     inductiva.api_key = "dummy"
     cluster = resources.MachineGroup(machine_type="c2-standard-16",
                                      num_machines=2)
 
-    mpi_disabled__run_test = simulators.simulator.mpi_disabled(run_test)
+    simulator = TestSimulator()
 
-    input_dir, on = mpi_disabled__run_test(input_dir="test", on=cluster)
+    input_dir, resource = simulator.run(input_dir="test", on=cluster)
 
     assert input_dir == "test"
-    assert on == resources.MachineGroup
+    assert isinstance(resource, resources.MachineGroup)
+
+
+def test_mpi_enabled__dummy_simulator():
+    """Check mpi_enabled decorator works correctly with a dummy Simulator.
+    
+    Goal: Verify that adding the mpi_enabled decorator to a dummy simulator
+    adds a new resource (MPICluster) to the _standard_resources tuple.
+    """
+
+    mpi_enabled_simulator = simulators.simulator.mpi_enabled(TestSimulator)
+    expected_supported_resources = {
+        resources.MachineGroup, resources.ElasticMachineGroup,
+        resources.MPICluster
+    }
+
+    assert mpi_enabled_simulator._supported_resources == expected_supported_resources
 
 
 @mark.parametrize("simulator", [
@@ -73,14 +125,18 @@ def test_mpi_disabled__run_test__with_machine_group(mocker):  # pylint: disable=
     simulators.DualSPHysics(),
     simulators.SIMSOPT()
 ])
-def test_mpi_disabled__non_mpi_simulators__with_mpi_cluster(simulator):
-    """Validate mpi_disable decorator is set in non-MPI simulators.
+def test_valid_resources__non_mpi_simulators(simulator):
+    """Validate  decorator  in non-MPI simulators.
     
-    Goal: Verify that the non MPI-compatible simulators are decorated with
-    the mpi_disabled function which blocks from using MPICluster. This serves as
-    a second layer to check all the simulators are correctly decorated."""
+    Goal: Verify that the non MPI-compatible simulators are not decorated with
+    the mpi_enabled function and that the _standard_resources only contains
+    the standard machines."""
 
-    assert getattr(simulator.run, "mpi_disabled_simulator", False)
+    expected_supported_resources = {
+        resources.MachineGroup, resources.ElasticMachineGroup
+    }
+
+    assert simulator._supported_resources == expected_supported_resources  # pylint: disable=protected-access
 
 
 @mark.parametrize("simulator", [
@@ -89,11 +145,16 @@ def test_mpi_disabled__non_mpi_simulators__with_mpi_cluster(simulator):
     simulators.SWASH(),
     simulators.XBeach()
 ])
-def test_mpi_disabled__mpi_simulators__with_mpi_cluster(simulator):
-    """Validate mpi_disable decorator is set in non-MPI simulators.
+def test_valid_resources__mpi_simulators(simulator):
+    """Validate the available machines for MPI simulators.
     
-    Goal: Verify that the non MPI-compatible simulators are decorated with
-    the mpi_disabled function which blocks from using MPICluster. This serves as
-    a second layer to check all the simulators are correctly decorated."""
+    Goal: Verify that the MPI-compatible simulators are decorated with
+    the mpi_enabled function and that the _standard_resources is updated
+    correctly."""
 
-    assert not getattr(simulator.run, "mpi_disabled_simulator", False)
+    expected_supported_resources = {
+        resources.MachineGroup, resources.ElasticMachineGroup,
+        resources.MPICluster
+    }
+
+    assert simulator._supported_resources == expected_supported_resources

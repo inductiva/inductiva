@@ -5,6 +5,7 @@ from typing import Optional
 from inductiva import simulators, types, tasks
 
 
+@simulators.simulator.mpi_enabled
 class REEF3D(simulators.Simulator):
     """Class to invoke a generic FDS simulation on the API."""
 
