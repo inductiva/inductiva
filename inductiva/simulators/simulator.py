@@ -10,7 +10,7 @@ def mpi_enabled(cls):
     """Class decorator that adds MPICluster to the supported resources.
     """
     supports = getattr(cls, "_supported_resources", None)
-    cls._supported_resources = supports | {resources.MPICluster}
+    cls._supported_resources = supports | {resources.MPICluster}  # pylint: disable=protected-access
 
     return cls
 
@@ -72,7 +72,7 @@ class Simulator(ABC):
         """
         input_dir = self._setup_input_dir(input_dir)
 
-        validate_computational_resources(on, self._standard_resources)
+        validate_computational_resources(on, self._supported_resources)
 
         return tasks.run_simulation(
             self.api_method_name,

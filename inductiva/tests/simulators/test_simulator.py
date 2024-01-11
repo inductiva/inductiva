@@ -12,9 +12,6 @@ import inductiva
 class TestSimulator(simulators.Simulator):
     """Dummy simulator class."""
 
-    def __init__(self):
-        super().__init__()
-
     def run(self,
             input_dir: types.Path,
             on: Optional[types.ComputationalResources] = None):
@@ -51,9 +48,10 @@ def test_simulator_run__non_mpi_enabled__with_mpi_cluster(mocker):  # pylint: di
     with pytest.raises(ValueError) as excinfo:
         simulator.run(input_dir="test", on=cluster)
 
-    expected_error = (f"The computational resource ({cluster}) is not valid "
-                      f"for this simulator. Valid computational resources are: "
-                      f"{simulator._supported_resources}.")  # pylint: disable=protected-access
+    expected_error = (
+        f"The computational resource ({cluster}) is not valid "  # pylint: disable=protected-access
+        f"for this simulator. Valid computational resources are: "
+        f"{simulator._supported_resources}.")
 
     assert str(excinfo.value) == expected_error
 
@@ -108,13 +106,13 @@ def test_mpi_enabled__dummy_simulator():
     adds a new resource (MPICluster) to the _standard_resources tuple.
     """
 
-    mpi_enabled_simulator = simulators.simulator.mpi_enabled(TestSimulator)
+    mpi_enabled_sim = simulators.simulator.mpi_enabled(TestSimulator)
     expected_supported_resources = {
         resources.MachineGroup, resources.ElasticMachineGroup,
         resources.MPICluster
     }
 
-    assert mpi_enabled_simulator._supported_resources == expected_supported_resources
+    assert mpi_enabled_sim._supported_resources == expected_supported_resources  # pylint: disable=protected-access
 
 
 @mark.parametrize("simulator", [
@@ -157,4 +155,4 @@ def test_valid_resources__mpi_simulators(simulator):
         resources.MPICluster
     }
 
-    assert simulator._supported_resources == expected_supported_resources
+    assert simulator._supported_resources == expected_supported_resources  # pylint: disable=protected-access

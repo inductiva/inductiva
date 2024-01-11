@@ -95,6 +95,7 @@ class BaseMachineGroup():
         machine_group._id = resp["id"]
         machine_group._name = resp["name"]
         machine_group.create_time = resp["creation_timestamp"]
+        machine_group.__type = resp["type"]
         machine_group._started = True
 
         return machine_group
