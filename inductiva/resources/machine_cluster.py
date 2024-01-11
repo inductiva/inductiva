@@ -42,10 +42,9 @@ class MPICluster(machines_base.BaseMachineGroup):
         self.type = "mpi"
 
         if register:
-            self._register_machine_group(
-                num_vms=self.num_machines,
-                is_elastic=self.is_elastic,
-                type=self.type)
+            self._register_machine_group(num_vms=self.num_machines,
+                                         is_elastic=self.is_elastic,
+                                         type=self.type)
 
     @classmethod
     def from_api_response(cls, resp: dict):

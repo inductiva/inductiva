@@ -2,15 +2,16 @@
 from unittest import mock
 import inductiva
 
+
 def fake_register(self, **kwargs):
     self._id = "id-resource"
     self._name = "name-resource"
-    self.register=False
+    self.register = False
 
 
 @mock.patch.object(inductiva.resources.MPICluster,
-                  attribute="_register_machine_group",
-            new=fake_register)
+                   attribute="_register_machine_group",
+                   new=fake_register)
 def test_machines__mpicluster__register():
     """Check the registering of a MPICluster.
     
@@ -31,8 +32,8 @@ def test_machines__mpicluster__register():
 
 
 @mock.patch.object(inductiva.resources.MachineGroup,
-                  attribute="_register_machine_group",
-            new=fake_register)
+                   attribute="_register_machine_group",
+                   new=fake_register)
 def test_machines__machine_group__register():
     """Check the registering of a MachineGroup.
     

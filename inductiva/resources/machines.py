@@ -54,8 +54,8 @@ class MachineGroup(machines_base.BaseMachineGroup):
         self.is_elastic = False
 
         if register:
-            self._register_machine_group(
-                num_vms=self.num_machines, is_elastic=self.is_elastic)
+            self._register_machine_group(num_vms=self.num_machines,
+                                         is_elastic=self.is_elastic)
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -161,11 +161,10 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self.is_elastic = True
 
         if self.register:
-            self._register_machine_group(
-                min_vms=self.min_machines,
-                max_vms=self.max_machines,
-                is_elastic=self.is_elastic,
-                num_vms=self.num_active_machines)
+            self._register_machine_group(min_vms=self.min_machines,
+                                         max_vms=self.max_machines,
+                                         is_elastic=self.is_elastic,
+                                         num_vms=self.num_active_machines)
 
     @classmethod
     def from_api_response(cls, resp: dict):
