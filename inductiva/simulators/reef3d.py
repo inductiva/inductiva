@@ -17,6 +17,7 @@ class REEF3D(simulators.Simulator):
         input_dir: types.Path,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
+        extra_metadata: dict = {},
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -27,4 +28,5 @@ class REEF3D(simulators.Simulator):
         """
         return super().run(input_dir,
                            machine_group=machine_group,
-                           storage_dir=storage_dir)
+                           storage_dir=storage_dir,
+                           extra_metadata=extra_metadata)

@@ -19,6 +19,7 @@ class SplishSplash(Simulator):
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
         particle_radius: float = 0.025,
+        extra_metadata: dict = {},
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
 
@@ -35,4 +36,5 @@ class SplishSplash(Simulator):
                            machine_group=machine_group,
                            input_filename=sim_config_filename,
                            storage_dir=storage_dir,
-                           particle_radius=particle_radius)
+                           particle_radius=particle_radius,
+                           extra_metadata=extra_metadata)

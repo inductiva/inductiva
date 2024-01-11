@@ -17,6 +17,7 @@ class XBeach(simulators.Simulator):
         sim_config_filename: Optional[str] = "params.txt",
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
+        extra_metadata: dict = {},
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -30,4 +31,5 @@ class XBeach(simulators.Simulator):
         return super().run(input_dir,
                            input_filename=sim_config_filename,
                            machine_group=machine_group,
-                           storage_dir=storage_dir)
+                           storage_dir=storage_dir,
+                           extra_metadata=extra_metadata)

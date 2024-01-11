@@ -42,6 +42,7 @@ class Simulator(ABC):
         *_args,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
+        extra_metadata: dict = {},
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -63,5 +64,6 @@ class Simulator(ABC):
             input_dir,
             machine_group=machine_group,
             storage_dir=storage_dir,
+            extra_metadata=extra_metadata,
             **kwargs,
         )

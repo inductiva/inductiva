@@ -7,7 +7,7 @@ from absl import logging
 
 from inductiva import tasks, resources, types
 from inductiva.api import methods
-from inductiva.utils import format_utils
+from inductiva.utils import format_utils, files
 
 TASK_METADATA_FILENAME = "task_metadata.json"
 
@@ -17,6 +17,8 @@ def run_simulation(
     input_dir: pathlib.Path,
     machine_group: Optional[resources.MachineGroup] = None,
     storage_dir: Optional[types.Path] = "",
+    api_invoker=None,
+    extra_metadata={},
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -33,13 +35,17 @@ def run_simulation(
     if machine_group is not None:
         resource_pool_id = machine_group.id
 
-    task_id = methods.invoke_async_api(
+    if api_invoker is None:
+        api_invoker = methods.invoke_async_api
+
+    task_id = api_invoker(
         api_method_name,
         params,
         type_annotations,
         resource_pool_id=resource_pool_id,
         storage_path_prefix=storage_dir,
     )
+
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
         raise RuntimeError(
@@ -55,6 +61,7 @@ def run_simulation(
                 "machine_group_id": resource_pool_id,
             },
             **kwargs,
+            **extra_metadata,
         }
         _save_metadata(metadata)
 
@@ -63,7 +70,7 @@ def run_simulation(
 
 def _save_metadata(metadata):
     """Appends metadata to the TASK_METADATA_FILENAME in the cwd."""
-    file_path = pathlib.Path().cwd() / TASK_METADATA_FILENAME
+    file_path = files.resolve_path(TASK_METADATA_FILENAME)
     with open(file_path, "a", encoding="utf-8") as f:
         json.dump(metadata, f)
         f.write("\n")

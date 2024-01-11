@@ -17,6 +17,7 @@ class SWASH(simulators.Simulator):
         sim_config_filename: str,
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
+        extra_metadata: dict = {},
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -29,4 +30,5 @@ class SWASH(simulators.Simulator):
         return super().run(input_dir,
                            machine_group=machine_group,
                            input_filename=sim_config_filename,
-                           storage_dir=storage_dir)
+                           storage_dir=storage_dir,
+                           extra_metadata=extra_metadata)
