@@ -27,8 +27,7 @@ api_key = os.environ.get("INDUCTIVA_API_KEY")
 working_dir = None
 
 absl.logging.set_verbosity(absl.logging.INFO)
-logging.basicConfig(level=absl.logging.INFO,
-                    format="%(asctime)s %(levelname)s %(message)s",
+logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s",
                     datefmt="%Y-%m-%d %H:%M:%S")
 
 # Disable urllib3 warnings.
