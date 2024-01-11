@@ -28,7 +28,6 @@ def test_machines__mpicluster__register():
     assert cluster.num_machines == 2
     assert cluster.machine_type == "c2-standard-16"
     assert cluster.register is False
-    assert cluster.type == machines_base.ResourcesType.MPI.value  # pylint: disable = protected-access
 
 
 @mock.patch.object(inductiva.resources.MachineGroup,
@@ -51,4 +50,3 @@ def test_machines__machine_group__register():
     assert cluster.num_machines == 2
     assert cluster.machine_type == "c2-standard-16"
     assert cluster.register is False
-    assert cluster._type == machines_base.ResourcesType.STANDARD.value  # pylint: disable = protected-access

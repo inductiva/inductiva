@@ -49,7 +49,6 @@ class BaseMachineGroup():
         self.create_time = None
         self._started = False
         self.register = register
-        self.__type = ResourceType.STANDARD.value
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -95,7 +94,6 @@ class BaseMachineGroup():
         machine_group._id = resp["id"]
         machine_group._name = resp["name"]
         machine_group.create_time = resp["creation_timestamp"]
-        machine_group.__type = resp["type"]
         machine_group._started = True
 
         return machine_group
