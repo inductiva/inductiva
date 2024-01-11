@@ -32,6 +32,13 @@ class BaseMachineGroup():
                 already registered machine groups that can be started, for
                 example, when retrieving with the `machines_groups.get` method.
                 Users should not set this argument in anyway.
+            register: Bool that indicates if a machine group should be register
+                or if it was already registered. If set to False by users on
+                initialization, then, the machine group will not be able to be
+                started. This serves has an helper argument for retrieving
+                already registered machine groups that can be started, for
+                example, when retrieving with the `machines_groups.get` method.
+                Users should not set this argument in anyway.
         """
         self.machine_type = machine_type
         self.spot = spot
@@ -41,6 +48,7 @@ class BaseMachineGroup():
         self.create_time = None
         self._started = False
         self.register = register
+        self.type = "standard"
         self.type = "standard"
 
         # Set the API configuration that carries the information from the client
@@ -70,8 +78,8 @@ class BaseMachineGroup():
         )
         logging.info("Registering machine group configurations:")
         resp = self._api.register_vm_group(body=instance_group_config)
-        self._id = resp.body["id"]
-        self._name = resp.body["name"]
+        group_id = resp.body["id"]
+        name = resp.body["name"]
         self.register = False
         self._log_machine_group_info()
 
@@ -88,6 +96,7 @@ class BaseMachineGroup():
         )
         machine_group._id = resp["id"]
         machine_group._name = resp["name"]
+        machine_group.spot = resp["spot"]
         machine_group.spot = resp["spot"]
         machine_group.create_time = resp["creation_timestamp"]
         machine_group._started = True
