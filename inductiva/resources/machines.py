@@ -39,14 +39,15 @@ class MachineGroup(machines_base.BaseMachineGroup):
             disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
         """
         super().__init__(machine_type=machine_type,
-                         spot=spot,
                          disk_size_gb=disk_size_gb,
                          register=register)
         self.num_machines = num_machines
+        self.spot = spot
         self.__is_elastic = False
 
         if register:
             self._register_machine_group(num_vms=self.num_machines,
+                                         spot=self.spot,
                                          is_elastic=self.__is_elastic)
 
     @classmethod
@@ -60,16 +61,19 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def start(self):
         """Starts all machines of the machine group."""
         return super().start(num_vms=self.num_machines,
-                             is_elastic=self.__is_elastic)
+                             is_elastic=self.__is_elastic,
+                             spot=self.spot)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
         return super().terminate(num_vms=self.num_machines,
-                                 is_elastic=self.__is_elastic)
+                                 is_elastic=self.__is_elastic,
+                                 spot=self.spot)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
         logging.info("> Number of machines: %s", self.num_machines)
+        logging.info("> Spot: %s", self.spot)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
@@ -82,7 +86,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
             The estimated cost per hour of the machine group, in US
               dollars ($/h)."""
         #TODO: Contemplate disk size in the price.
-        estimated_cost = super()._get_estimated_cost() * self.num_machines
+        estimated_cost = super()._get_estimated_cost(self.spot) * self.num_machines
         logging.info("Estimated cloud cost for all machines : %s $/h",
                      estimated_cost)
         return estimated_cost
@@ -136,19 +140,20 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
         super().__init__(machine_type=machine_type,
-                         spot=spot,
                          disk_size_gb=disk_size_gb,
                          register=register)
         self.min_machines = min_machines
         self.max_machines = max_machines
         self.num_active_machines = min_machines
         self.__is_elastic = True
+        self.spot = spot
 
         if self.register:
             self._register_machine_group(min_vms=self.min_machines,
                                          max_vms=self.max_machines,
                                          is_elastic=self.__is_elastic,
-                                         num_vms=self.num_active_machines)
+                                         num_vms=self.num_active_machines,
+                                         spot=self.spot)
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -164,19 +169,22 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return super().start(num_vms=self.min_machines,
                              min_vms=self.min_machines,
                              max_vms=self.max_machines,
-                             is_elastic=self.__is_elastic)
+                             is_elastic=self.__is_elastic,
+                             spot=self.spot)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
         return super().terminate(num_vms=self.min_machines,
                                  min_vms=self.min_machines,
                                  max_vms=self.max_machines,
-                                 is_elastic=self.__is_elastic)
+                                 is_elastic=self.__is_elastic,
+                                 spot=self.spot)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
         logging.info("> Maximum number of machines: %s", self.max_machines)
         logging.info("> Minimum number of machines: %s", self.min_machines)
+        logging.info("> Spot: %s", self.spot)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
@@ -185,7 +193,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         these are the estimted costs of having minimum and the
         maximum number of machines up in the cloud. The final cost will vary
         depending on the total usage of the machines."""
-        cost = super()._get_estimated_cost()
+        cost = super()._get_estimated_cost(self.spot)
         logging.info(
             "Note: these are the estimated costs of having minimum and the "
             "maximum number of machines up in the cloud. The final cost will "

@@ -40,10 +40,12 @@ class MPICluster(machines_base.BaseMachineGroup):
         self.num_machines = num_machines
         self.__type = machines_base.ResourceType.MPI.value
         self.__is_elastic = False
+        self.__spot = False
 
         if register:
             self._register_machine_group(num_vms=self.num_machines,
                                          is_elastic=self.__is_elastic,
+                                         spot=self.__spot,
                                          type=self.__type)
 
     @classmethod
@@ -57,12 +59,14 @@ class MPICluster(machines_base.BaseMachineGroup):
         """Start the MPI Cluster."""
         return super().start(num_vms=self.num_machines,
                              is_elastic=self.__is_elastic,
+                             spot=self.__spot,
                              type=self.__type)
 
     def terminate(self):
         """Terminates the MPI Cluster."""
         return super().terminate(num_vms=self.num_machines,
-                                 is_elastic=self.__is_elastic)
+                                 is_elastic=self.__is_elastic,
+                                 spot=self.__spot)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()

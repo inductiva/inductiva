@@ -25,7 +25,7 @@ class GROMACS(simulators.Simulator):
             input_dir: Path to the directory containing the input files.
             commands: List of commands to run using the GROMACS simulator.
             on: The computational resource to launch the simulation on. If None
-                the simulation is launched in a machine of the default pool.
+                the simulation is submitted to a machine in the default pool.
             storage_dir: Parent directory for storing simulation
                                results.
         """

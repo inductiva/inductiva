@@ -22,7 +22,6 @@ class BaseMachineGroup():
 
     def __init__(self,
                  machine_type: str,
-                 spot: bool = False,
                  disk_size_gb: int = 70,
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
@@ -42,7 +41,6 @@ class BaseMachineGroup():
                 Users should not set this argument in anyway.
         """
         self.machine_type = machine_type
-        self.spot = spot
         self.disk_size_gb = disk_size_gb
         self._id = None
         self._name = None
@@ -71,7 +69,6 @@ class BaseMachineGroup():
 
         instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
-            spot=self.spot,
             disk_size_gb=self.disk_size_gb,
             **kwargs,
         )
@@ -120,7 +117,6 @@ class BaseMachineGroup():
                 id=self.id,
                 name=self.name,
                 machine_type=self.machine_type,
-                spot=self.spot,
                 disk_size_gb=self.disk_size_gb,
                 **kwargs,
             )
@@ -157,7 +153,6 @@ class BaseMachineGroup():
                     id=self.id,
                     name=self.name,
                     machine_type=self.machine_type,
-                    spot=self.spot,
                     disk_size_gb=self.disk_size_gb,
                     **kwargs,
                 )
@@ -171,7 +166,7 @@ class BaseMachineGroup():
         except inductiva.client.ApiException as api_exception:
             raise api_exception
 
-    def _get_estimated_cost(self) -> float:
+    def _get_estimated_cost(self, spot: bool=False) -> float:
         """Returns estimate cost of a single machine in the group.
 
         This method is an overlay of the more general method, but
@@ -183,7 +178,7 @@ class BaseMachineGroup():
 
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
             self.machine_type,
-            self.spot,
+            spot,
         )
 
         return self._estimated_cost
@@ -208,5 +203,4 @@ class BaseMachineGroup():
 
         logging.info("> Name: %s", self.name)
         logging.info("Machine Type: %s", self.machine_type)
-        logging.info("> Spot: %s", self.spot)
         logging.info("> Disk size: %s GB", self.disk_size_gb)

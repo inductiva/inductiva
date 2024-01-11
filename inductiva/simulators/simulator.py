@@ -25,6 +25,11 @@ class Simulator(ABC):
     def __init__(self):
         self.api_method_name = ""
 
+    @classmethod
+    def get_supported_resources(cls):
+        """Get the supported computational resources for this simulator."""
+        return tuple(cls._supported_resources.copy())
+
     def override_api_method_prefix(self, prefix: str):
         """Override the API method prefix.
 
@@ -72,7 +77,7 @@ class Simulator(ABC):
         """
         input_dir = self._setup_input_dir(input_dir)
 
-        validate_computational_resources(on, self._supported_resources)
+        self.validate_computational_resources(on)
 
         return tasks.run_simulation(
             self.api_method_name,
@@ -82,17 +87,18 @@ class Simulator(ABC):
             **kwargs,
         )
 
+    def validate_computational_resources(self, resource):
+        """Validate the computational resources passed to the run method.
 
-def validate_computational_resources(resource, valid_resources):
-    """Validate the computational resources passed to the run method.
+        Args:
+            resource: The computational resource to validate.
+            valid_resources: The valid computational resources for the simulator.
+        """
 
-    Args:
-        resource: The computational resource to validate.
-        valid_resources: The valid computational resources for the simulator.
-    """
-    if resource is not None and not isinstance(resource,
-                                               tuple(valid_resources)):
-        raise ValueError(
-            f"The computational resource ({resource}) is not valid for "
-            f"this simulator. Valid computational resources are: "
-            f"{valid_resources}.")
+        supported_resources = self._supported_resources
+        if resource is not None and not isinstance(resource,
+                                                tuple(supported_resources)):
+            raise ValueError(
+                "The computational resource is invalid. for "
+                "this simulator. Valid computational resources for this "
+                f"simulator are: {supported_resources}.")
