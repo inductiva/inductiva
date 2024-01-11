@@ -18,7 +18,7 @@ def run_simulation(
     machine_group: Optional[resources.MachineGroup] = None,
     storage_dir: Optional[types.Path] = "",
     api_invoker=None,
-    extra_metadata={},
+    extra_metadata=None,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -61,8 +61,9 @@ def run_simulation(
                 "machine_group_id": resource_pool_id,
             },
             **kwargs,
-            **extra_metadata,
         }
+        if extra_metadata is not None:
+            metadata = {**metadata, **extra_metadata}
         _save_metadata(metadata)
 
     return task

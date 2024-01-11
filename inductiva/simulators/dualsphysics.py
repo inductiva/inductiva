@@ -19,7 +19,7 @@ class DualSPHysics(Simulator):
         commands: List[dict],
         machine_group: Optional[resources.MachineGroup] = None,
         storage_dir: Optional[types.Path] = "",
-        extra_metadata: dict = {},
+        extra_metadata: Optional[dict] = None,
     ) -> tasks.Task:
         """Executes a DualSPHysics simulation.
 
