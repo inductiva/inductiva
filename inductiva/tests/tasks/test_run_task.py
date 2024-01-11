@@ -7,6 +7,7 @@ import pytest
 
 from inductiva import tasks
 
+# pylint: disable=R1732
 TEMP_DIR = tempfile.TemporaryDirectory()
 TASK_METADATA_FILENAME = "task_metadata.json"
 
