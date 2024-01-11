@@ -6,6 +6,9 @@ from inductiva import simulators, resources
 import inductiva
 
 
+inductiva.api_key = "dummy"
+
+
 class TesterSimulator(simulators.Simulator):
     """Dummy simulator for testing purposes."""
     pass
@@ -20,13 +23,12 @@ def test_override_api_method_prefix():
         "windtunnel.openfoam_foundation.run_simulation"
 
 
-def test_simulator_run__non_mpi_enabled__with_mpi_cluster():
+def test_validate_computational_resources__not_support_resource__raise_error():
     """Check non-mpi simulator raises error with MPICluster.
 
     Goal: Verify that simulators without the mpi_enabled decorator raise an
     error stating that MPICluster is not available for this simulator."""
 
-    inductiva.api_key = "dummy"
     cluster = resources.MPICluster(machine_type="c2-standard-16",
                                    num_machines=2,
                                    register=False)
@@ -36,46 +38,32 @@ def test_simulator_run__non_mpi_enabled__with_mpi_cluster():
     with pytest.raises(ValueError) as excinfo:
         simulator.validate_computational_resources(cluster)
 
-    expected_error = "The computational resource is invalid."
-
-    assert expected_error in str(excinfo.value)
+    assert "The computational resource is invalid." in str(excinfo.value)
 
 
-def test_simulator_run__mpi_enabled__with_mpi_cluster():
-    """Check mpi simulator validates MPICluster.
-
-    Goal: Verify that mpi_enabled simulators correctly validate the MPICluster
-    on a simulation.run call."""
-
-    inductiva.api_key = "dummy"
-    cluster = resources.MPICluster(machine_type="c2-standard-16",
-                                   num_machines=2,
-                                   register=False)
-
-    MPIEnabledSim = simulators.simulator.mpi_enabled(TesterSimulator)
-    simulator = MPIEnabledSim()
-
-    try:
-        simulator.validate_computational_resources(cluster)
-    except ValueError:
-        assert False, "'validate_computational_resources' raised an exception."
-
-
-def test_simulator_run__non_mpi_enabled__with_machine_group():
+@mark.parametrize("Simulator, resource", [
+    (TesterSimulator,
+     None),
+    (TesterSimulator,
+     resources.MachineGroup(machine_type="c2-standard-16", register=False)),
+    (simulators.simulator.mpi_enabled(TesterSimulator),
+     None),
+    (simulators.simulator.mpi_enabled(TesterSimulator),
+    resources.MPICluster(machine_type="c2-standard-16", register=False)),
+    (simulators.simulator.mpi_enabled(TesterSimulator),
+    resources.MachineGroup(machine_type="c2-standard-16", register=False))])
+def test_validate_computational_resources__valid_resource__no_error(
+    Simulator,
+    resource):
     """Check non-mpi simulator runs correctly with a standard machine group.
     
     Goal: Verify that simulators without the mpi_enabled decorator run normally
     with a standard machine group."""
 
-    inductiva.api_key = "dummy"
-    machine_group = resources.MachineGroup(machine_type="c2-standard-16",
-                                           num_machines=2,
-                                           register=False)
-
-    simulator = TesterSimulator()
+    simulator = Simulator()
 
     try:
-        simulator.validate_computational_resources(machine_group)
+        simulator.validate_computational_resources(resource)
     except ValueError:
         assert False, "'validate_computational_resources' raised an exception."
 

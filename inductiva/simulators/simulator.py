@@ -9,7 +9,7 @@ from inductiva.utils import files
 def mpi_enabled(cls):
     """Class decorator that adds MPICluster to the supported resources.
     """
-    supports = getattr(cls, "_supported_resources", None)
+    supports = getattr(cls, "_supported_resources", set())
     cls._supported_resources = supports | {resources.MPICluster}  # pylint: disable=protected-access
 
     return cls
@@ -28,7 +28,7 @@ class Simulator(ABC):
     @classmethod
     def get_supported_resources(cls):
         """Get the supported computational resources for this simulator."""
-        return tuple(cls._supported_resources.copy())
+        return tuple(cls._supported_resources)
 
     def override_api_method_prefix(self, prefix: str):
         """Override the API method prefix.
@@ -96,9 +96,9 @@ class Simulator(ABC):
         """
 
         supported_resources = self._supported_resources
-        if resource is not None and not isinstance(resource,
-                                                   tuple(supported_resources)):
+        if resource is not None \
+            and not isinstance(resource, tuple(self._supported_resources)):
             raise ValueError(
-                "The computational resource is invalid. for "
-                "this simulator. Valid computational resources for this "
-                f"simulator are: {supported_resources}.")
+                "The computational resource is invalid for this simulator. "
+                f"Expected one of {self._supported_resources} but got "
+                f"{resource}.")
