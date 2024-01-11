@@ -92,7 +92,7 @@ class Simulator(ABC):
 
         Args:
             resource: The computational resource to validate.
-            valid_resources: The valid computational resources for the simulator.
+            valid_resources: The valid computational resources for the simulator
         """
 
         supported_resources = self._supported_resources

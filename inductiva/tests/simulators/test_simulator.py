@@ -1,11 +1,8 @@
 """Tests for the Simulator class."""
-from typing import Optional
-
 import pytest
-from unittest import mock
 from pytest import mark
 
-from inductiva import types, simulators, resources
+from inductiva import simulators, resources
 import inductiva
 
 
@@ -60,7 +57,7 @@ def test_simulator_run__mpi_enabled__with_mpi_cluster():
 
     try:
         simulator.validate_computational_resources(cluster)
-    except:
+    except ValueError:
         assert False, "'validate_computational_resources' raised an exception."
 
 
@@ -79,7 +76,7 @@ def test_simulator_run__non_mpi_enabled__with_machine_group():
 
     try:
         simulator.validate_computational_resources(machine_group)
-    except:
+    except ValueError:
         assert False, "'validate_computational_resources' raised an exception."
 
 
@@ -106,7 +103,7 @@ def test_valid_resources__non_mpi_simulators(simulator):
     the mpi_enabled function and that the _standard_resources only contains
     the standard machines."""
 
-    assert not (resources.MPICluster in simulator.get_supported_resources())
+    assert resources.MPICluster not in simulator.get_supported_resources()
 
 
 @mark.parametrize("simulator", [
