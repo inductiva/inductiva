@@ -44,7 +44,7 @@ def test_validate_computational_resources__unsupported_resource__raise_error():
 
 
 @mark.parametrize(
-    "Simulator, resource",
+    "simulator, resource",
     [(TesterSimulator, None),
      (TesterSimulator,
       resources.MachineGroup(machine_type="c2-standard-16", register=False)),
@@ -54,13 +54,13 @@ def test_validate_computational_resources__unsupported_resource__raise_error():
      (simulators.simulator.mpi_enabled(TesterSimulator),
       resources.MachineGroup(machine_type="c2-standard-16", register=False))])
 def test_validate_computational_resources__valid_resource__no_error(
-        Simulator, resource):
+        simulator, resource):
     """Check non-mpi simulator runs correctly with a standard machine group.
     
     Goal: Verify that simulators without the mpi_enabled decorator run normally
     with a standard machine group."""
 
-    simulator = Simulator()
+    simulator = simulator()
 
     try:
         simulator.validate_computational_resources(resource)
