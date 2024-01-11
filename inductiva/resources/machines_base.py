@@ -166,7 +166,7 @@ class BaseMachineGroup():
         except inductiva.client.ApiException as api_exception:
             raise api_exception
 
-    def _get_estimated_cost(self, spot: bool=False) -> float:
+    def _get_estimated_cost(self, spot: bool = False) -> float:
         """Returns estimate cost of a single machine in the group.
 
         This method is an overlay of the more general method, but

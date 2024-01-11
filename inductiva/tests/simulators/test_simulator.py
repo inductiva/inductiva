@@ -13,6 +13,7 @@ class TesterSimulator(simulators.Simulator):
     """Dummy simulator for testing purposes."""
     pass
 
+
 def test_override_api_method_prefix():
     simulator = simulators.OpenFOAM()
     assert simulator.api_method_name == \
@@ -30,7 +31,8 @@ def test_simulator_run__non_mpi_enabled__with_mpi_cluster():
 
     inductiva.api_key = "dummy"
     cluster = resources.MPICluster(machine_type="c2-standard-16",
-                                   num_machines=2, register=False)
+                                   num_machines=2,
+                                   register=False)
 
     simulator = TesterSimulator()
 
@@ -50,7 +52,8 @@ def test_simulator_run__mpi_enabled__with_mpi_cluster():
 
     inductiva.api_key = "dummy"
     cluster = resources.MPICluster(machine_type="c2-standard-16",
-                       num_machines=2, register=False)
+                                   num_machines=2,
+                                   register=False)
 
     MPIEnabledSim = simulators.simulator.mpi_enabled(TesterSimulator)
     simulator = MPIEnabledSim()
@@ -61,7 +64,6 @@ def test_simulator_run__mpi_enabled__with_mpi_cluster():
         assert False, "'validate_computational_resources' raised an exception."
 
 
-
 def test_simulator_run__non_mpi_enabled__with_machine_group():
     """Check non-mpi simulator runs correctly with a standard machine group.
     
@@ -70,7 +72,8 @@ def test_simulator_run__non_mpi_enabled__with_machine_group():
 
     inductiva.api_key = "dummy"
     machine_group = resources.MachineGroup(machine_type="c2-standard-16",
-                                           num_machines=2, register=False)
+                                           num_machines=2,
+                                           register=False)
 
     simulator = TesterSimulator()
 
@@ -93,12 +96,8 @@ def test_mpi_enabled__dummy_simulator():
 
 
 @mark.parametrize("simulator", [
-    simulators.GROMACS,
-    simulators.SplishSplash,
-    simulators.FEniCSx,
-    simulators.FDS,
-    simulators.DualSPHysics,
-    simulators.SIMSOPT
+    simulators.GROMACS, simulators.SplishSplash, simulators.FEniCSx,
+    simulators.FDS, simulators.DualSPHysics, simulators.SIMSOPT
 ])
 def test_valid_resources__non_mpi_simulators(simulator):
     """Validate  decorator  in non-MPI simulators.
@@ -106,15 +105,12 @@ def test_valid_resources__non_mpi_simulators(simulator):
     Goal: Verify that the non MPI-compatible simulators are not decorated with
     the mpi_enabled function and that the _standard_resources only contains
     the standard machines."""
-    
+
     assert not (resources.MPICluster in simulator.get_supported_resources())
 
 
 @mark.parametrize("simulator", [
-    simulators.OpenFOAM,
-    simulators.REEF3D,
-    simulators.SWASH,
-    simulators.XBeach
+    simulators.OpenFOAM, simulators.REEF3D, simulators.SWASH, simulators.XBeach
 ])
 def test_valid_resources__mpi_simulators(simulator):
     """Validate the available machines for MPI simulators.

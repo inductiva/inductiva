@@ -97,7 +97,7 @@ class Simulator(ABC):
 
         supported_resources = self._supported_resources
         if resource is not None and not isinstance(resource,
-                                                tuple(supported_resources)):
+                                                   tuple(supported_resources)):
             raise ValueError(
                 "The computational resource is invalid. for "
                 "this simulator. Valid computational resources for this "

@@ -86,7 +86,8 @@ class MachineGroup(machines_base.BaseMachineGroup):
             The estimated cost per hour of the machine group, in US
               dollars ($/h)."""
         #TODO: Contemplate disk size in the price.
-        estimated_cost = super()._get_estimated_cost(self.spot) * self.num_machines
+        estimated_cost = super()._get_estimated_cost(
+            self.spot) * self.num_machines
         logging.info("Estimated cloud cost for all machines : %s $/h",
                      estimated_cost)
         return estimated_cost
