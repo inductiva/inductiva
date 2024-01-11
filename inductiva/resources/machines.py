@@ -30,14 +30,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
         example, when retrieving with the `machines_groups.get` method.
         Users should not set this argument.
 
-        The register argument is used to indicate if the machine group should
-        be registered or if it was already registered. If set as False on
-        initialization, then, the machine group is not registered and it
-        can not be started in the cloud. This serves has an helper argument for
-        retrieving already registered machine groups that can be started, for
-        example, when retrieving with the `machines_groups.get` method.
-        Users should not set this argument.
-
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
@@ -118,15 +110,6 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         register: bool = True,
     ) -> None:
         """Create an ElasticMachineGroup object.
-
-        The register argument is used to indicate if the machine group should
-        be registered or if it was already registered. If set as False on
-        initialization, then, the machine group is not registered and it
-        can not be started in the cloud. This serves has an helper argument for
-        retrieving already registered machine groups that can be started, for
-        example, when retrieving with the `machines_groups.get` method.
-        Users should not set this argument.
-        
 
         The register argument is used to indicate if the machine group should
         be registered or if it was already registered. If set as False on
