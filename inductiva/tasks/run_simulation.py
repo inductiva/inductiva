@@ -44,9 +44,9 @@ def run_simulation(
 
     if not format_utils.getenv_bool("DISABLE_TASK_METADATA_LOGGING", False):
         metadata = {
-            "storage_dir": str(storage_dir),
-            "api_method_name": api_method_name,
+            "api_method_name": api_method_name.split(".")[1],
             "machine_group_id": resource_pool_id,
+            "storage_dir": str(storage_dir),
             **kwargs,
         }
         if extra_metadata is not None:
