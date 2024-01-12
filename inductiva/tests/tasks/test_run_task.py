@@ -29,10 +29,10 @@ def _id_in_metadata_file(task_id):
     return task_id in map(lambda x: x["task_id"], json_list)
 
 
-@pytest.mark.parametrize("task_id,disable_logging", [("id_1", True),
-                                                     ("id_2", False),
-                                                     ("id_3", True),
-                                                     ("id_4", False)])
+@pytest.mark.parametrize("task_id,disable_logging", [(".id_1", True),
+                                                     (".id_2", False),
+                                                     (".id_3", True),
+                                                     (".id_4", False)])
 def test_run_simulation_logging(task_id, disable_logging):
     """Tests if the id of the task was added to the file."""
     os.chdir(TEMP_DIR.name)
