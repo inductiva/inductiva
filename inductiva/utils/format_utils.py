@@ -4,6 +4,7 @@ import datetime
 import os
 
 import pandas as pd
+import numpy as np
 
 
 def getenv_bool(varname, default):
@@ -59,7 +60,7 @@ def get_tabular_str(
 
     # replace None with np.nan so that pandas can format them as "n/a"
     # by passing na_rep="n/a" to to_string()
-    df.fillna("n/a", inplace=True)
+    df.fillna(np.nan, inplace=True)
 
     return df.to_string(
         index=False,

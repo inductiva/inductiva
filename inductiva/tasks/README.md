@@ -132,10 +132,10 @@ import inductiva
 
 # list the last 5 tasks that were successful
 inductiva.tasks.list(5, status="success")
-#                   ID               Scenario       Simulator               Status            Submitted              Started        Duration            VM Type
-#  1695309310050950437                    n/a    dualsphysics              started     21 Sep, 16:15:10     21 Sep, 16:15:10       *0h 2m 5s      c2-standard-4
-#  1695307352995292367      protein solvation         gromacs              started     21 Sep, 15:42:33     21 Sep, 15:42:35     *0h 34m 41s      c2-standard-4
-#  1695306097851999678      protein solvation         gromacs              success     21 Sep, 15:21:38     21 Sep, 15:21:40      0h 15m 43s      c2-standard-4
-#  1695294928922012701            wind tunnel        openfoam              success     20 Sep, 12:15:31     20 Sep, 12:15:33       0h 0m 50s      c2-standard-4
-#  1695294363618736570            wind tunnel        openfoam              success     20 Sep, 12:06:06     20 Sep, 12:06:06       0h 0m 50s      c2-standard-4
+#                       ID           Simulator     Status          Submitted          Picked-Up Computation Time  Total Duration            VM Type
+#on61z6u9c17uatqnbios7zjo3 openfoam_foundation    success   12 Jan, 10:27:19   12 Jan, 10:27:42        0h 2m 20s       0h 2m 50s   c2d-standard-112
+#u43sobjkk906566xzmm1x8x8t openfoam_foundation     killed   12 Jan, 10:21:51   12 Jan, 10:22:39        0h 1m 42s        0h 2m 8s   c2d-standard-112
+#k56bidnib55bkiv5jpmo0cp3z openfoam_foundation    started   12 Jan, 10:20:14   12 Jan, 10:22:39       *0h 7m 58s      *0h 7m 58s   c2d-standard-112
+#kgrc1ejk3q80fsh1k2hdgkxjg openfoam_foundation    success   12 Jan, 10:09:25   12 Jan, 10:09:50         0h 7m 8s       0h 7m 38s     c2-standard-30
+#asi7pn43977wzitcu8j848vbq openfoam_foundation    success   12 Jan, 09:44:30   12 Jan, 09:44:54        0h 8m 59s       0h 9m 32s     c2-standard-16
 ```

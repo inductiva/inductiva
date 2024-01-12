@@ -51,8 +51,8 @@ def _fetch_tasks_from_api(
 
 def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
     columns = [
-        "ID", "Simulator", "Status", "Submitted", "Started", "Duration",
-        "VM Type"
+        "ID", "Simulator", "Status", "Submitted", "Picked-Up", "Computation Time",
+        "Total Duration", "VM Type"
     ]
     rows = []
 
@@ -60,34 +60,50 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
         info = task.get_info()
         # e.g., get "openfoam" from "fvm.openfoam.run_simulation"
         simulator = task.get_simulator_name()
+        status = task.get_status()
 
-        end_time = info.get("end_time", None)
-        execution_time = task.get_execution_time(fail_if_running=False)
+        computation_end_time = info.get("computation_end_time", None)
 
+        execution_time = task.get_computation_time(fail_if_running=False)
         if execution_time is not None:
             execution_time = format_utils.seconds_formatter(execution_time)
+            if computation_end_time is None:
+                if status in ["started", "submitted"]:
+                    execution_time = f"*{execution_time}"
+                else:
+                    execution_time = "n/a"
+
+        end_time = info.get("end_time", None)
+        total_time = task.get_total_time(fail_if_running=False)
+        if total_time is not None:
+            total_time = format_utils.seconds_formatter(total_time)
             if end_time is None:
-                execution_time = f"*{execution_time}"
+                if status in ["started", "submitted"]:
+                    total_time = f"*{total_time}"
+                else:
+                    total_time = "n/a"
 
         row = [
             task.id,
             simulator,
-            task.get_status(),
+            status,
             info.get("input_submit_time", None),
             info.get("start_time", None),
             execution_time,
+            total_time,
             task.get_machine_type(),
         ]
         rows.append(row)
+
     formatters = {
         "Submitted": format_utils.datetime_formatter,
-        "Started": format_utils.datetime_formatter,
+        "Picked-Up": format_utils.datetime_formatter,
     }
 
     override_col_space = {
-        "Submitted": 20,
-        "Started": 20,
-        "Status": 20,
+        "Submitted": 18,
+        "Picked-Up": 18,
+        "Status": 10,
         "VM Type": 18,
     }
 

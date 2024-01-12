@@ -274,9 +274,34 @@ class Task:
         """Get dictionary with the URL path parameters for API calls."""
         return {"task_id": self.id}
 
-    def get_execution_time(self,
+    def get_computation_time(self,
                            fail_if_running: bool = True) -> Optional[float]:
-        """Get the time the task took to complete.
+        """Get the time the computation of the task took to complete.
+
+        Returns:
+            The time in seconds or None if the task hasn't completed yet.
+        """
+        info = self.get_info()
+        if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
+            return None
+        # start_time may be None if the task was killed before it started
+        if info["computation_start_time"] is None:
+            return None
+
+        # Format the time to datetime type
+        start_time = datetime.datetime.fromisoformat(
+            info["computation_start_time"])
+        end_time = info.get("computation_end_time")
+        if end_time is None:
+            end_time = datetime.datetime.now(datetime.timezone.utc)
+        else:
+            end_time = datetime.datetime.fromisoformat(
+                info["computation_end_time"])
+
+        return (end_time - start_time).total_seconds()
+
+    def get_total_time(self, fail_if_running: bool = True) -> Optional[float]:
+        """Get the total time the task workflow took to complete.
 
         Returns:
             The time in seconds or None if the task hasn't completed yet.
