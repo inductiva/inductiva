@@ -132,7 +132,8 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
                     )
 
             machine_group_id = schemas.UUIDSchema
-            mpi_head_node = schemas.BoolSchema
+            mpi_cluster = schemas.BoolSchema
+            num_mpi_hosts = schemas.IntSchema
             __annotations__ = {
                 "create_time": create_time,
                 "supported_executer_types": supported_executer_types,
@@ -142,7 +143,8 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
                 "git_commit_hash": git_commit_hash,
                 "host_info": host_info,
                 "machine_group_id": machine_group_id,
-                "mpi_head_node": mpi_head_node,
+                "mpi_cluster": mpi_cluster,
+                "num_mpi_hosts": num_mpi_hosts,
             }
 
     memory: MetaOapg.properties.memory
@@ -203,8 +205,14 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["mpi_head_node"]
-    ) -> MetaOapg.properties.mpi_head_node:
+        self, name: typing_extensions.Literal["mpi_cluster"]
+    ) -> MetaOapg.properties.mpi_cluster:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["num_mpi_hosts"]
+    ) -> MetaOapg.properties.num_mpi_hosts:
         ...
 
     @typing.overload
@@ -220,7 +228,8 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
         "git_commit_hash",
         "host_info",
         "machine_group_id",
-        "mpi_head_node",
+        "mpi_cluster",
+        "num_mpi_hosts",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -275,8 +284,14 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["mpi_head_node"]
-    ) -> typing.Union[MetaOapg.properties.mpi_head_node, schemas.Unset]:
+        self, name: typing_extensions.Literal["mpi_cluster"]
+    ) -> typing.Union[MetaOapg.properties.mpi_cluster, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["num_mpi_hosts"]
+    ) -> typing.Union[MetaOapg.properties.num_mpi_hosts, schemas.Unset]:
         ...
 
     @typing.overload
@@ -294,7 +309,8 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
         "git_commit_hash",
         "host_info",
         "machine_group_id",
-        "mpi_head_node",
+        "mpi_cluster",
+        "num_mpi_hosts",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -355,7 +371,10 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
         machine_group_id: typing.Union[MetaOapg.properties.machine_group_id,
                                        str, uuid.UUID,
                                        schemas.Unset] = schemas.unset,
-        mpi_head_node: typing.Union[MetaOapg.properties.mpi_head_node, bool,
+        mpi_cluster: typing.Union[MetaOapg.properties.mpi_cluster, bool,
+                                  schemas.Unset] = schemas.unset,
+        num_mpi_hosts: typing.Union[MetaOapg.properties.num_mpi_hosts,
+                                    decimal.Decimal, int,
                                     schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
@@ -374,7 +393,8 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
             host_info=host_info,
             supported_executer_types=supported_executer_types,
             machine_group_id=machine_group_id,
-            mpi_head_node=mpi_head_node,
+            mpi_cluster=mpi_cluster,
+            num_mpi_hosts=num_mpi_hosts,
             _configuration=_configuration,
             **kwargs,
         )
