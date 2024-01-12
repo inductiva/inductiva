@@ -51,8 +51,8 @@ def _fetch_tasks_from_api(
 
 def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
     columns = [
-        "ID", "Simulator", "Status", "Submitted", "Picked-Up", "Computation Time",
-        "Total Duration", "VM Type"
+        "ID", "Simulator", "Status", "Submitted", "Picked-Up",
+        "Computation Time", "Total Duration", "VM Type"
     ]
     rows = []
 

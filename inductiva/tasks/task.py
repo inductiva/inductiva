@@ -275,7 +275,7 @@ class Task:
         return {"task_id": self.id}
 
     def get_computation_time(self,
-                           fail_if_running: bool = True) -> Optional[float]:
+                             fail_if_running: bool = True) -> Optional[float]:
         """Get the time the computation of the task took to complete.
 
         Returns:
