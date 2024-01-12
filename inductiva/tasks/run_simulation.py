@@ -2,6 +2,7 @@
 import pathlib
 from typing import Any, Optional
 import json
+import threading
 
 from absl import logging
 
@@ -10,6 +11,9 @@ from inductiva.api import methods
 from inductiva.utils import format_utils, files
 
 TASK_METADATA_FILENAME = "task_metadata.json"
+TASK_METADATA_FILENAME_UPLOAD = "uploaded_metadata.json"
+
+_metadata_lock = threading.RLock()
 
 
 def run_simulation(
@@ -38,6 +42,22 @@ def run_simulation(
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
 
+    if not format_utils.getenv_bool("DISABLE_TASK_METADATA_LOGGING", False):
+        metadata = {
+            "storage_dir": str(storage_dir),
+            "api_method_name": api_method_name,
+            "machine_group_id": resource_pool_id,
+            **kwargs,
+        }
+        if extra_metadata is not None:
+            metadata = {**metadata, **extra_metadata}
+
+        with _metadata_lock:
+            _save_metadata(metadata,
+                           mode="w",
+                           path=pathlib.Path(input_dir) /
+                           TASK_METADATA_FILENAME_UPLOAD)
+
     task_id = api_invoker(
         api_method_name,
         params,
@@ -52,27 +72,25 @@ def run_simulation(
             f"Expected result to be a string with task_id, got {type(task_id)}")
 
     if not format_utils.getenv_bool("DISABLE_TASK_METADATA_LOGGING", False):
-        metadata = {
-            **{
-                "task_id": task_id,
-                "input_dir": str(input_dir),
-                "storage_dir": str(storage_dir),
-                "api_method_name": api_method_name,
-                "machine_group_id": resource_pool_id,
-            },
-            **kwargs,
-        }
-        if extra_metadata is not None:
-            metadata = {**metadata, **extra_metadata}
-        _save_metadata(metadata)
+        with _metadata_lock:
+            _save_metadata({
+                **{
+                    "task_id": task_id,
+                    "input_dir": str(input_dir)
+                },
+                **metadata
+            })
 
     return task
 
 
-def _save_metadata(metadata):
+def _save_metadata(metadata, mode="a", path=None):
     """Appends metadata to the TASK_METADATA_FILENAME in the cwd."""
-    file_path = files.resolve_path(TASK_METADATA_FILENAME)
-    with open(file_path, "a", encoding="utf-8") as f:
+    if path is None:
+        file_path = files.resolve_path(TASK_METADATA_FILENAME)
+    else:
+        file_path = files.resolve_path(path)
+    with open(file_path, mode, encoding="utf-8") as f:
         json.dump(metadata, f)
         f.write("\n")
     logging.info("Simulation metadata logged to: %s", file_path)

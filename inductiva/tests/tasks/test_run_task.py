@@ -5,6 +5,7 @@ import tempfile
 
 import pytest
 
+import inductiva
 from inductiva import tasks
 
 # pylint: disable=R1732
@@ -32,12 +33,15 @@ def _id_in_metadata_file(task_id):
                                                      ("id_2", False),
                                                      ("id_3", True),
                                                      ("id_4", False)])
-def test_run_simulation_logging(task_id, disable_logging, mocker):
+def test_run_simulation_logging(task_id, disable_logging):
     """Tests if the id of the task was added to the file."""
     os.chdir(TEMP_DIR.name)
+    dummy_dir = os.path.join(os.getcwd(), f"dummy_dir_{task_id}")
+    if not os.path.exists(dummy_dir):
+        os.mkdir(dummy_dir)
     os.environ["DISABLE_TASK_METADATA_LOGGING"] = str(disable_logging)
-    mocker.patch("inductiva.tasks.Task")
+    inductiva.api_key = "DUMMY"
     tasks.run_simulation(api_method_name=task_id,
-                         input_dir=TEMP_DIR.name,
+                         input_dir=dummy_dir,
                          api_invoker=_api_invoker)
     assert _id_in_metadata_file(task_id) == (not disable_logging)
