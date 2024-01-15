@@ -307,21 +307,20 @@ class Task:
             The time in seconds or None if the task hasn't completed yet.
         """
         info = self.get_info()
+        # Format the time to datetime type
+        submitted_time = datetime.datetime.fromisoformat(
+            info["input_submit_time"])
+            
         if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
             return None
-        # start_time may be None if the task was killed before it started
-        if info["start_time"] is None:
-            return None
-
-        # Format the time to datetime type
-        start_time = datetime.datetime.fromisoformat(info["start_time"])
+    
         end_time = info.get("end_time")
         if end_time is None:
             end_time = datetime.datetime.now(datetime.timezone.utc)
         else:
             end_time = datetime.datetime.fromisoformat(info["end_time"])
 
-        return (end_time - start_time).total_seconds()
+        return (end_time - submitted_time).total_seconds()
 
     def get_machine_type(self) -> Optional[str]:
         """Get the machine type used in the task.

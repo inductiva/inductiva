@@ -51,8 +51,8 @@ def _fetch_tasks_from_api(
 
 def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
     columns = [
-        "ID", "Simulator", "Status", "Submitted", "Picked-Up",
-        "Computation Time", "Total Duration", "VM Type"
+        "ID", "Simulator", "Status", "Submitted", "Started",
+        "Computation Time", "Total Duration", "Resource Type"
     ]
     rows = []
 
@@ -83,6 +83,15 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
                 else:
                     total_time = "n/a"
 
+        executer = info["executer"]
+        if executer is None:
+            resource_type = "n/a"
+        else:
+            if executer['n_mpi_hosts'] == 1:
+                resource_type = executer["vm_type"]
+            else:
+                resource_type = executer["vm_type"] + f" x{executer['n_mpi_hosts']}"
+
         row = [
             task.id,
             simulator,
@@ -91,20 +100,20 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
             info.get("start_time", None),
             execution_time,
             total_time,
-            task.get_machine_type(),
+            resource_type,
         ]
         rows.append(row)
 
     formatters = {
         "Submitted": format_utils.datetime_formatter,
-        "Picked-Up": format_utils.datetime_formatter,
+        "Started": format_utils.datetime_formatter,
     }
 
     override_col_space = {
         "Submitted": 18,
-        "Picked-Up": 18,
+        "Started": 18,
         "Status": 10,
-        "VM Type": 18,
+        "Resource Type": 18,
     }
 
     return format_utils.get_tabular_str(
