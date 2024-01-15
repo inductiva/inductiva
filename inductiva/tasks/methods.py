@@ -66,7 +66,7 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
 
         execution_time = task.get_computation_time(fail_if_running=False)
         if execution_time is not None:
-            execution_time = format_utils.seconds_formatter(execution_time)
+            execution_time = execution_time
             if computation_end_time is None:
                 if status in ["started", "submitted"]:
                     execution_time = f"*{execution_time}"
@@ -76,7 +76,7 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
         end_time = info.get("end_time", None)
         total_time = task.get_total_time(fail_if_running=False)
         if total_time is not None:
-            total_time = format_utils.seconds_formatter(total_time)
+            total_time = total_time
             if end_time is None:
                 if status in ["started", "submitted"]:
                     total_time = f"*{total_time}"
@@ -91,7 +91,7 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
                 resource_type = executer["vm_type"]
             else:
                 resource_type = executer[
-                    "vm_type"] + f" x {executer['n_mpi_hosts']}"
+                    "vm_type"] + f" x{executer['n_mpi_hosts']}"
 
         row = [
             task.id,
@@ -143,13 +143,12 @@ def list(last_n: int = 5,
     Example usage:
         # list the last 5 tasks that were successful
         inductiva.tasks.list(5, status="success")
-                         ID               Scenario       Simulator               Status            Submitted              Started        Duration            VM Type
-        1695309310050950437                    n/a    dualsphysics              started     21 Sep, 16:15:10     21 Sep, 16:15:10       *0h 2m 5s      c2-standard-4
-        1695307352995292367      protein solvation         gromacs              started     21 Sep, 15:42:33     21 Sep, 15:42:35     *0h 34m 41s      c2-standard-4
-        1695306097851999678      protein solvation         gromacs              success     21 Sep, 15:21:38     21 Sep, 15:21:40      0h 15m 43s      c2-standard-4
-        1695294928922012701            wind tunnel        openfoam              success     20 Sep, 12:15:31     20 Sep, 12:15:33       0h 0m 50s      c2-standard-4
-        1695294363618736570            wind tunnel        openfoam              success     20 Sep, 12:06:06     20 Sep, 12:06:06       0h 0m 50s      c2-standard-4
-
+                           ID           Simulator         Status          Submitted            Started Computation Time  Total Duration       Resource Type
+    i5bnjw9gznqom857o4ohos661 openfoam_foundation        started   15 Jan, 15:02:07   15 Jan, 15:02:26         *03m 18s        *03m 37s    c2d-standard-112
+    tdbs1viqiu0g83icnp048dtjj              reef3d        started   15 Jan, 14:41:16   15 Jan, 14:41:51         *23m 53s        *24m 28s      c2-standard-60
+    ca370nk18dz2enzvp64y8a1r8 openfoam_foundation         failed   15 Jan, 14:40:48   15 Jan, 14:43:16          03m 23s         06m 06s c2d-standard-56 x 4
+    rorv72bagv8s03qqoih5t9tba openfoam_foundation      submitted   15 Jan, 14:39:02                n/a              n/a        *26m 43s                 n/a
+    4yv6mcbyo8x6eewv2xdy2x8ws openfoam_foundation      submitted   15 Jan, 14:38:05                n/a              n/a        *27m 40s                 n/a
     Args:
         last_n: The number of most recent tasks with respect to submission
             time to list. If filtering criteria (currently status is available)

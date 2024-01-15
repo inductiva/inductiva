@@ -34,9 +34,18 @@ def datetime_formatter(dt: str) -> str:
 
 
 def seconds_formatter(secs: float) -> str:
-    return (f"{int(secs // 3600)}h "
-            f"{int((secs % 3600) // 60)}m "
-            f"{int(secs % 60)}s")
+    """Convert seconds to time human readable string."""
+    time_str = ""
+
+    if secs >= 3600:
+        hours = int(secs // 3600)
+        time_str += f"{hours}h "
+
+    mins = int((secs % 3600) // 60)
+    secs = int(secs % 60)
+    time_str += f"{mins:02d}m {secs:02d}s"
+
+    return time_str
 
 
 def get_tabular_str(

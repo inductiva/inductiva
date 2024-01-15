@@ -2,6 +2,8 @@
 import pathlib
 from typing import Any, Optional
 
+from absl import logging
+
 from inductiva import tasks, types
 from inductiva.api import methods
 
@@ -34,6 +36,13 @@ def run_simulation(
         resource_pool_id=resource_pool_id,
         storage_path_prefix=storage_dir,
     )
+
+    if computational_resources is not None:
+        logging.info("Task submitted to machine group %s.",
+                     computational_resources.name)
+    else:
+        logging.info("Task submitted to the default resource pool.")
+
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
         raise RuntimeError(

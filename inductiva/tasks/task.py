@@ -8,14 +8,12 @@ from typing import Dict, Any, List, Optional
 from typing_extensions import TypedDict
 import datetime
 from dateutil import parser
+
 import inductiva
 from inductiva.client import models
-from inductiva import api
+from inductiva import api, types
 from inductiva.client.apis.tags import tasks_api
-from inductiva.utils import files
-from inductiva.utils import data
-from inductiva.utils import output_contents
-from inductiva import types
+from inductiva.utils import files, format_utils, data, output_contents
 
 import warnings
 
@@ -279,7 +277,7 @@ class Task:
         """Get the time the computation of the task took to complete.
 
         Returns:
-            The time in seconds or None if the task hasn't completed yet.
+            The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
         if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
@@ -298,13 +296,14 @@ class Task:
             end_time = datetime.datetime.fromisoformat(
                 info["computation_end_time"])
 
-        return (end_time - start_time).total_seconds()
+        total_seconds = (end_time - start_time).total_seconds()
+        return format_utils.seconds_formatter(total_seconds)
 
     def get_total_time(self, fail_if_running: bool = True) -> Optional[float]:
         """Get the total time the task workflow took to complete.
 
         Returns:
-            The time in seconds or None if the task hasn't completed yet.
+            The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
         # Format the time to datetime type
@@ -320,7 +319,8 @@ class Task:
         else:
             end_time = datetime.datetime.fromisoformat(info["end_time"])
 
-        return (end_time - submitted_time).total_seconds()
+        total_seconds = (end_time - submitted_time).total_seconds()
+        return format_utils.seconds_formatter(total_seconds)
 
     def get_machine_type(self) -> Optional[str]:
         """Get the machine type used in the task.

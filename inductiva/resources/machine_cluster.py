@@ -84,6 +84,6 @@ class MPICluster(machines_base.BaseMachineGroup):
               dollars ($/h)."""
         #TODO: Contemplate disk size in the price.
         estimated_cost = super()._get_estimated_cost() * self.num_machines
-        logging.info("Estimated cloud cost of the MPI cluster: %s $/h",
+        logging.info("Estimated cloud cost of the MPI cluster: %.3f $/h",
                      estimated_cost)
         return estimated_cost

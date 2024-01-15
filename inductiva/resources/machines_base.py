@@ -7,6 +7,7 @@ from absl import logging
 import inductiva
 import inductiva.client.models
 from inductiva import api
+from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
 
 
@@ -128,11 +129,12 @@ class BaseMachineGroup():
                          "Please wait...")
             start_time = time.time()
             self._api.start_vm_group(body=request_body)
-            creation_time_mins = (time.time() - start_time) / 60
+            creation_time = format_utils.seconds_formatter(time.time() -
+                                                           start_time)
             self._started = True
 
-            logging.info("Machine group successfully started in %.2f mins.\n",
-                         creation_time_mins)
+            logging.info("Machine group successfully started in %s mins.\n",
+                         creation_time)
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
@@ -158,10 +160,12 @@ class BaseMachineGroup():
                 )
 
             self._api.delete_vm_group(body=request_body)
-            termination_time_mins = (time.time() - start_time) / 60
+            termination_time = format_utils.seconds_formatter(time.time() -
+                                                              start_time)
             logging.info(
                 "Machine group '%s' successfully "
-                "terminated in %.2f mins.\n", self.name, termination_time_mins)
+                "terminated in %s mins.\n", self.name,
+                format_utils.seconds_formatter(termination_time))
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
@@ -202,5 +206,5 @@ class BaseMachineGroup():
         """Logs the machine group info."""
 
         logging.info("> Name: %s", self.name)
-        logging.info("Machine Type: %s", self.machine_type)
+        logging.info("> Machine Type: %s", self.machine_type)
         logging.info("> Disk size: %s GB", self.disk_size_gb)
