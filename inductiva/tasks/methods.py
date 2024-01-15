@@ -51,8 +51,8 @@ def _fetch_tasks_from_api(
 
 def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
     columns = [
-        "ID", "Simulator", "Status", "Submitted", "Started",
-        "Computation Time", "Total Duration", "Resource Type"
+        "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
+        "Total Duration", "Resource Type"
     ]
     rows = []
 
@@ -90,7 +90,8 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
             if executer['n_mpi_hosts'] == 1:
                 resource_type = executer["vm_type"]
             else:
-                resource_type = executer["vm_type"] + f" x{executer['n_mpi_hosts']}"
+                resource_type = executer[
+                    "vm_type"] + " x" + str(executer["n_mpi_hosts"])
 
         row = [
             task.id,

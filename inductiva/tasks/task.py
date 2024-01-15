@@ -310,10 +310,10 @@ class Task:
         # Format the time to datetime type
         submitted_time = datetime.datetime.fromisoformat(
             info["input_submit_time"])
-            
+
         if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
             return None
-    
+
         end_time = info.get("end_time")
         if end_time is None:
             end_time = datetime.datetime.now(datetime.timezone.utc)
