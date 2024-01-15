@@ -164,8 +164,7 @@ class BaseMachineGroup():
                                                               start_time)
             logging.info(
                 "Machine group '%s' successfully "
-                "terminated in %s mins.\n", self.name,
-                format_utils.seconds_formatter(termination_time))
+                "terminated in %s mins.\n", self.name, termination_time)
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
