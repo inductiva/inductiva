@@ -66,7 +66,6 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
 
         execution_time = task.get_computation_time(fail_if_running=False)
         if execution_time is not None:
-            execution_time = execution_time
             if computation_end_time is None:
                 if status in ["started", "submitted"]:
                     execution_time = f"*{execution_time}"
@@ -76,7 +75,6 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
         end_time = info.get("end_time", None)
         total_time = task.get_total_time(fail_if_running=False)
         if total_time is not None:
-            total_time = total_time
             if end_time is None:
                 if status in ["started", "submitted"]:
                     total_time = f"*{total_time}"
