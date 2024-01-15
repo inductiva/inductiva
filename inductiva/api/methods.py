@@ -7,7 +7,6 @@ import os
 import pathlib
 import signal
 import time
-import warnings
 from urllib3.exceptions import MaxRetryError, NewConnectionError
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
@@ -332,10 +331,6 @@ def invoke_async_api(method_name: str,
 
         if resource_pool_id is None:
             logging.info("Task submitted to the default resource pool.")
-            if inductiva.resources.machine_groups.get():
-                warnings.warn(
-                    "Submiting task to default resource pool with other "
-                    "active machine groups.")
         else:
             logging.info("Task submitted to machine group %s.",
                          "api-" + resource_pool_id)

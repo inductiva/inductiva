@@ -1,7 +1,9 @@
 """Base class for low-level simulators."""
 from typing import Optional
 from abc import ABC
+import warnings
 
+import inductiva
 from inductiva import types, tasks, resources
 from inductiva.utils import files
 
@@ -11,6 +13,7 @@ class Simulator(ABC):
 
     def __init__(self):
         self.api_method_name = ""
+        self.checked_resource_pool = False
 
     def override_api_method_prefix(self, prefix: str):
         """Override the API method prefix.
@@ -36,6 +39,15 @@ class Simulator(ABC):
                 f"The provided path (\"{input_dir}\") is not a directory.")
         return input_dir
 
+    def _check_resource_pool(self, machine_group):
+        if not self.checked_resource_pool:
+            self.checked_resource_pool = True
+            if inductiva.resources.machine_groups.get(
+            ) and machine_group is None:
+                warnings.warn(
+                    "Submiting task to default resource pool with other "
+                    "active machine groups.")
+
     def run(
         self,
         input_dir: types.Path,
@@ -57,6 +69,8 @@ class Simulator(ABC):
                 simulation API method.
         """
         input_dir = self._setup_input_dir(input_dir)
+
+        self._check_resource_pool(machine_group)
 
         return tasks.run_simulation(
             self.api_method_name,
