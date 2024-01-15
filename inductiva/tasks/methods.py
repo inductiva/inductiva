@@ -87,11 +87,11 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
         if executer is None:
             resource_type = "n/a"
         else:
-            if executer['n_mpi_hosts'] == 1:
+            if executer["n_mpi_hosts"] == 1:
                 resource_type = executer["vm_type"]
             else:
                 resource_type = executer[
-                    "vm_type"] + " x" + str(executer["n_mpi_hosts"])
+                    "vm_type"] + f" x {executer['n_mpi_hosts']}"
 
         row = [
             task.id,
