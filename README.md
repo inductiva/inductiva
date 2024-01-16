@@ -10,12 +10,16 @@ This API offers a range of benefits for diverse simulation needs:
 
 **Versatile Simulation Integration**
 It unites various simulation fields such as fluid dynamics, molecular dynamics, plasma physics, and structural mechanics into a single, accessible platform.
+
 **Simplified Setup** 
 Users are freed from the complexities of installing and maintaining intricate simulation software and dependencies.
+
 **Scalable Execution** 
 Facilitates the execution of hundreds to thousands of simultaneous simulations, effortlessly and without extensive coding.
+
 **Optimized Hardware Utilization** 
 Automatically tailors hardware settings to each simulation type, optimizing the use of CPU and GPU resources, core counts, and memory.
+
 **Python-Centric Flexibility** 
 Foregoing restrictive GUIs and complex configuration scripts, Inductiva API allows for the creation of concise Python programs that integrate smoothly with existing codebases and machine learning frameworks.
 
