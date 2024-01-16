@@ -29,6 +29,7 @@ class OpenFOAM(simulators.Simulator):
         commands: List[dict],
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
+        extra_metadata: Optional[dict] = None,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -42,4 +43,5 @@ class OpenFOAM(simulators.Simulator):
         return super().run(input_dir,
                            on=on,
                            commands=commands,
-                           storage_dir=storage_dir)
+                           storage_dir=storage_dir,
+                           extra_metadata=extra_metadata)
