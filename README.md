@@ -3,17 +3,21 @@
 
 ![linkedin_header](https://user-images.githubusercontent.com/104431973/231184851-0ce34289-593e-4832-aaa2-9aae652113f5.jpg)
 
-# Inductiva API Python client
+# Inductiva API: A streamlined platform for deploying simulations on high-capacity servers. 
+This tool provides an intuitive interface for users to set up, execute, and expand their simulation projects with minimal coding effort. Leveraging cutting-edge performance, Inductiva API simplifies the intricate processes, enabling users to focus on results with just a few Python commands.
 
-Inductiva is a Python package for executing large-scale simulations of physical systems directly in the cloud.
+This API offers a range of benefits for diverse simulation needs:
 
-Inductiva API offers distinct advantages:
-
-- 🔄 It consolidates various simulation domains, including fluid and molecular dynamics, plasmas, and structural mechanics, under a single unified entry point.
-- 📦 Eliminates the need for installing and managing complex simulation software and corresponding dependencies.
-- 🚀 Allows running hundreds or even thousands of simulations concurrently, with no coding.
-- 💽 Automatically optimizes hardware configurations for each type of simulation (e.g., CPU vs. GPU, appropriate number of CPU cores, RAM, etc.).
-- 🐍 With Inductiva API, you are not limited to a pre-defined GUI or intricate configuration languages and scripts. Instead, you write small python programs that seamlessly integrate with your existing codebase and ML framework.
+**Versatile Simulation Integration**
+It unites various simulation fields such as fluid dynamics, molecular dynamics, plasma physics, and structural mechanics into a single, accessible platform.
+**Simplified Setup** 
+Users are freed from the complexities of installing and maintaining intricate simulation software and dependencies.
+**Scalable Execution** 
+Facilitates the execution of hundreds to thousands of simultaneous simulations, effortlessly and without extensive coding.
+**Optimized Hardware Utilization** 
+Automatically tailors hardware settings to each simulation type, optimizing the use of CPU and GPU resources, core counts, and memory.
+**Python-Centric Flexibility** 
+Foregoing restrictive GUIs and complex configuration scripts, Inductiva API allows for the creation of concise Python programs that integrate smoothly with existing codebases and machine learning frameworks.
 
 
 ## Installation
