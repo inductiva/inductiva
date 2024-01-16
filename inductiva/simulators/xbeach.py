@@ -1,4 +1,4 @@
-"""DualSPHysics module of the API."""
+"""XBeach module of the API."""
 from typing import Optional
 
 from inductiva import types, tasks, simulators

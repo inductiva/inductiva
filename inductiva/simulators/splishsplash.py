@@ -39,9 +39,3 @@ class SplishSplash(simulators.Simulator):
             storage_dir=storage_dir,
             particle_radius=particle_radius,
         )
-        return super().run(input_dir,
-                           machine_group=machine_group,
-                           input_filename=sim_config_filename,
-                           storage_dir=storage_dir,
-                           particle_radius=particle_radius,
-                           extra_metadata=extra_metadata)
