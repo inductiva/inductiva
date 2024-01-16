@@ -46,7 +46,6 @@ class FileManager:
                 If None, an error is raised.
         """
 
-
         if root_dir is None:
             raise ValueError("Given root directory cannot be None")
 
