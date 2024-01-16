@@ -46,22 +46,24 @@ class FileManager:
                 If None, an error is raised.
         """
 
+
         if root_dir is None:
             raise ValueError("Given root directory cannot be None")
-        elif os.path.isdir(root_dir):
+
+        root_dir = files.resolve_path(root_dir)
+        if os.path.isdir(root_dir):
             if format_utils.getenv_bool(
                     "INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX", False):
                 raise FileExistsError(f"Directory {root_dir} already exists.")
-            generated_root_dir = _gen_unique_name(root_dir)
+            generated_root_dir = _gen_unique_name(str(root_dir))
             logging.info(
                 "Directory %s already exists."
                 " Setting root folder to %s.", root_dir, generated_root_dir)
             root_dir = generated_root_dir
 
         logging.info("Setting root folder to %s.", root_dir)
-        root_dir = files.resolve_path(root_dir)
         os.makedirs(root_dir)
-        self.__root_dir = root_dir
+        self.__root_dir = pathlib.Path(root_dir)
 
     def get_root_dir(self):
         """Get the active root directory for the file manager."""
