@@ -91,7 +91,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     )
 
     file_size = os.path.getsize(input_zip_path)
-    logging.info("Upload packed input archive with size %s.",
+    logging.info("Uploading input archive with size %s.",
                  format_utils.bytes_formatter(file_size))
     try:
         with open(input_zip_path, "rb") as zip_fp:

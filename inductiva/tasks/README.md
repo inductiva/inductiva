@@ -125,13 +125,13 @@ for task in successful_tasks:
 ```
 
 Another function named `list`, which shares the same arguments as `get`, can be used to print information about the
-tasks in tabular format to the console:
+tasks in tabular format to the console. The tasks time with an asterisk (*) means that the task is still running.
 
 ```python
 import inductiva
 
 # list the last 5 tasks that were successful
-inductiva.tasks.list(5, status="success")
+inductiva.tasks.list(5)
 #                       ID           Simulator     Status          Submitted          Picked-Up Computation Time  Total Duration            VM Type
 #on61z6u9c17uatqnbios7zjo3 openfoam_foundation    success   12 Jan, 10:27:19   12 Jan, 10:27:42        0h 2m 20s       0h 2m 50s   c2d-standard-112
 #u43sobjkk906566xzmm1x8x8t openfoam_foundation     killed   12 Jan, 10:21:51   12 Jan, 10:22:39        0h 1m 42s        0h 2m 8s   c2d-standard-112

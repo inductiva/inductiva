@@ -102,9 +102,9 @@ def list(last_n: int = 5,
     # pylint: disable=line-too-long
     """List the last N tasks of a user.
 
-    This function returns a dataframe with info about the last N tasks (with
-    respect to submission time) of a user, sorted by submission time with the
-    most recent first.
+    This function returns a dataframe with information about the last N tasks
+    (with respect to submission time) of a user, sorted by submission time with
+    the most recent first.
     A status can be specified to filter to get only tasks with that status, in
     which case the last N tasks with that status will be listed.
     The number of tasks can be less than N if the aren't enough tasks that
