@@ -1,5 +1,6 @@
 """Base class for machine groups."""
 import time
+import enum
 
 from absl import logging
 
@@ -9,12 +10,18 @@ from inductiva import api
 from inductiva.client.apis.tags import compute_api
 
 
+class ResourceType(enum.Enum):
+    """Enum to represent the type of machine to be launched."""
+
+    STANDARD = "standard"
+    MPI = "mpi"
+
+
 class BaseMachineGroup():
     """Base class to manage Google Cloud resources."""
 
     def __init__(self,
                  machine_type: str,
-                 spot: bool = False,
                  disk_size_gb: int = 70,
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
@@ -25,9 +32,15 @@ class BaseMachineGroup():
               more information about machine types.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
+            register: Bool that indicates if a machine group should be register
+                or if it was already registered. If set to False by users on
+                initialization, then, the machine group will not be able to be
+                started. This serves has an helper argument for retrieving
+                already registered machine groups that can be started, for
+                example, when retrieving with the `machines_groups.get` method.
+                Users should not set this argument in anyway.
         """
         self.machine_type = machine_type
-        self.spot = spot
         self.disk_size_gb = disk_size_gb
         self._id = None
         self._name = None
@@ -49,9 +62,13 @@ class BaseMachineGroup():
         return self._name
 
     def _register_machine_group(self, **kwargs):
+        """Register machine group configuration in API.
+        
+        Returns:
+            The unique ID and name identifying the machine on the API."""
+
         instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
-            spot=self.spot,
             disk_size_gb=self.disk_size_gb,
             **kwargs,
         )
@@ -60,6 +77,7 @@ class BaseMachineGroup():
         self._id = resp.body["id"]
         self._name = resp.body["name"]
         self.register = False
+        self._log_machine_group_info()
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -67,7 +85,6 @@ class BaseMachineGroup():
 
         machine_group = cls(
             machine_type=resp["machine_type"],
-            spot=bool(resp["spot"]),
             disk_size_gb=resp["disk_size_gb"],
             register=False,
         )
@@ -100,7 +117,6 @@ class BaseMachineGroup():
                 id=self.id,
                 name=self.name,
                 machine_type=self.machine_type,
-                spot=self.spot,
                 disk_size_gb=self.disk_size_gb,
                 **kwargs,
             )
@@ -137,7 +153,6 @@ class BaseMachineGroup():
                     id=self.id,
                     name=self.name,
                     machine_type=self.machine_type,
-                    spot=self.spot,
                     disk_size_gb=self.disk_size_gb,
                     **kwargs,
                 )
@@ -151,7 +166,7 @@ class BaseMachineGroup():
         except inductiva.client.ApiException as api_exception:
             raise api_exception
 
-    def _get_estimated_cost(self) -> float:
+    def _get_estimated_cost(self, spot: bool = False) -> float:
         """Returns estimate cost of a single machine in the group.
 
         This method is an overlay of the more general method, but
@@ -163,7 +178,7 @@ class BaseMachineGroup():
 
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
             self.machine_type,
-            self.spot,
+            spot,
         )
 
         return self._estimated_cost
@@ -188,6 +203,4 @@ class BaseMachineGroup():
 
         logging.info("> Name: %s", self.name)
         logging.info("Machine Type: %s", self.machine_type)
-        # TODO: Not yet available to users
-        logging.info("> Spot: %s", self.spot)
         logging.info("> Disk size: %s GB", self.disk_size_gb)

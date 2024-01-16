@@ -2,9 +2,10 @@
 
 from typing import Optional
 
-from inductiva import simulators, types, tasks, resources
+from inductiva import simulators, types, tasks
 
 
+@simulators.simulator.mpi_enabled
 class REEF3D(simulators.Simulator):
     """Class to invoke a generic FDS simulation on the API."""
 
@@ -15,7 +16,7 @@ class REEF3D(simulators.Simulator):
     def run(
         self,
         input_dir: types.Path,
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
     ) -> tasks.Task:
@@ -24,9 +25,11 @@ class REEF3D(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
+            on: The computational resource to launch the simulation on. If None
+                the simulation is submitted to a machine in the default pool.
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
-                           machine_group=machine_group,
+                           on=on,
                            storage_dir=storage_dir,
                            extra_metadata=extra_metadata)

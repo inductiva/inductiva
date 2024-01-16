@@ -22,6 +22,14 @@ class MachineGroup(machines_base.BaseMachineGroup):
     ) -> None:
         """Create a MachineGroup object.
 
+        The register argument is used to indicate if the machine group should
+        be registered or if it was already registered. If set as False on
+        initialization, then, the machine group is not registered and it
+        can not be started in the cloud. This serves has an helper argument for
+        retrieving already registered machine groups that can be started, for
+        example, when retrieving with the `machines_groups.get` method.
+        Users should not set this argument.
+
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
@@ -31,37 +39,41 @@ class MachineGroup(machines_base.BaseMachineGroup):
             disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
         """
         super().__init__(machine_type=machine_type,
-                         spot=spot,
                          disk_size_gb=disk_size_gb,
                          register=register)
         self.num_machines = num_machines
-        self.is_elastic = False
+        self.spot = spot
+        self.__is_elastic = False
 
         if register:
-            super()._register_machine_group(num_vms=self.num_machines,
-                                            is_elastic=self.is_elastic)
-            self._log_machine_group_info()
+            self._register_machine_group(num_vms=self.num_machines,
+                                         spot=self.spot,
+                                         is_elastic=self.__is_elastic)
 
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["num_vms"])
+        machine_group.spot = bool(resp["spot"])
         machine_group.register = False
         return machine_group
 
     def start(self):
         """Starts all machines of the machine group."""
         return super().start(num_vms=self.num_machines,
-                             is_elastic=self.is_elastic)
+                             is_elastic=self.__is_elastic,
+                             spot=self.spot)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
         return super().terminate(num_vms=self.num_machines,
-                                 is_elastic=self.is_elastic)
+                                 is_elastic=self.__is_elastic,
+                                 spot=self.spot)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
         logging.info("> Number of machines: %s", self.num_machines)
+        logging.info("> Spot: %s", self.spot)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
@@ -71,11 +83,11 @@ class MachineGroup(machines_base.BaseMachineGroup):
         specified configurations up in the cloud. The actual cost may vary.
 
         Returns:
-            The estimated cost per hour of the machine group in US
+            The estimated cost per hour of the machine group, in US
               dollars ($/h)."""
-        #TODO: Contemplate disk size in the price.
-        estimated_cost = super()._get_estimated_cost() * self.num_machines
-        logging.info("Estimated cloud cost per hour for all machines : %s $/h",
+        cost_per_machine = super()._get_estimated_cost(self.spot)
+        estimated_cost = cost_per_machine * self.num_machines
+        logging.info("Estimated cloud cost for all machines : %s $/h",
                      estimated_cost)
         return estimated_cost
 
@@ -104,6 +116,14 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
     ) -> None:
         """Create an ElasticMachineGroup object.
 
+        The register argument is used to indicate if the machine group should
+        be registered or if it was already registered. If set as False on
+        initialization, then, the machine group is not registered and it
+        can not be started in the cloud. This serves has an helper argument for
+        retrieving already registered machine groups that can be started, for
+        example, when retrieving with the `machines_groups.get` method.
+        Users should not set this argument.
+        
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
@@ -120,24 +140,25 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
         super().__init__(machine_type=machine_type,
-                         spot=spot,
                          disk_size_gb=disk_size_gb,
                          register=register)
         self.min_machines = min_machines
         self.max_machines = max_machines
         self.num_active_machines = min_machines
-        self.is_elastic = True
+        self.__is_elastic = True
+        self.spot = spot
 
         if self.register:
-            super()._register_machine_group(min_vms=self.min_machines,
-                                            max_vms=self.max_machines,
-                                            is_elastic=self.is_elastic,
-                                            num_vms=self.num_active_machines)
-            self._log_machine_group_info()
+            self._register_machine_group(min_vms=self.min_machines,
+                                         max_vms=self.max_machines,
+                                         is_elastic=self.__is_elastic,
+                                         num_vms=self.num_active_machines,
+                                         spot=self.spot)
 
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
+        machine_group.spot = bool(resp["spot"])
         machine_group.max_machines = int(resp["max_vms"])
         machine_group.min_machines = int(resp["min_vms"])
         machine_group.num_active_machines = int(resp["num_vms"])
@@ -148,19 +169,22 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return super().start(num_vms=self.min_machines,
                              min_vms=self.min_machines,
                              max_vms=self.max_machines,
-                             is_elastic=self.is_elastic)
+                             is_elastic=self.__is_elastic,
+                             spot=self.spot)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
         return super().terminate(num_vms=self.min_machines,
                                  min_vms=self.min_machines,
                                  max_vms=self.max_machines,
-                                 is_elastic=self.is_elastic)
+                                 is_elastic=self.__is_elastic,
+                                 spot=self.spot)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
         logging.info("> Maximum number of machines: %s", self.max_machines)
         logging.info("> Minimum number of machines: %s", self.min_machines)
+        logging.info("> Spot: %s", self.spot)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
@@ -169,12 +193,12 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         these are the estimted costs of having minimum and the
         maximum number of machines up in the cloud. The final cost will vary
         depending on the total usage of the machines."""
-        cost = super()._get_estimated_cost()
+        cost_per_machine = super()._get_estimated_cost(self.spot)
         logging.info(
             "Note: these are the estimated costs of having minimum and the "
             "maximum number of machines up in the cloud. The final cost will "
             "vary depending on the total usage of the machines.")
         logging.info("Minimum estimated cloud cost: "
-                     "%s $/h.", cost * self.min_machines)
+                     "%s $/h.", cost_per_machine * self.min_machines)
         logging.info("Maximum estimated cloud cost: "
-                     "%s $/h.", cost * self.max_machines)
+                     "%s $/h.", cost_per_machine * self.max_machines)

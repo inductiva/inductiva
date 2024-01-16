@@ -1,9 +1,10 @@
-"""DualSPHysics module of the API."""
+"""XBeach module of the API."""
 from typing import Optional
 
-from inductiva import types, tasks, resources, simulators
+from inductiva import types, tasks, simulators
 
 
+@simulators.simulator.mpi_enabled
 class XBeach(simulators.Simulator):
     """Class to invoke a generic XBeach simulation on the API."""
 
@@ -15,7 +16,7 @@ class XBeach(simulators.Simulator):
         self,
         input_dir: types.Path,
         sim_config_filename: Optional[str] = "params.txt",
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
     ) -> tasks.Task:
@@ -24,12 +25,13 @@ class XBeach(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
-            machine_group: Optional machine group to run the simulation on.
+            on: The computational resource to launch the simulation on. If None
+                the simulation is submitted to a machine in the default pool.
             storage_dir: Directory for storing simulation results.
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
                            input_filename=sim_config_filename,
-                           machine_group=machine_group,
+                           on=on,
                            storage_dir=storage_dir,
                            extra_metadata=extra_metadata)

@@ -6,7 +6,7 @@ import threading
 
 from absl import logging
 
-from inductiva import tasks, resources, types
+from inductiva import tasks, types
 from inductiva.api import methods
 from inductiva.utils import format_utils, files
 
@@ -19,7 +19,7 @@ _metadata_lock = threading.RLock()
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
-    machine_group: Optional[resources.MachineGroup] = None,
+    computational_resources: Optional[types.ComputationalResources] = None,
     storage_dir: Optional[types.Path] = "",
     api_invoker=None,
     extra_metadata=None,
@@ -36,8 +36,8 @@ def run_simulation(
     }
 
     resource_pool_id = None
-    if machine_group is not None:
-        resource_pool_id = machine_group.id
+    if computational_resources is not None:
+        resource_pool_id = computational_resources.id
 
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
