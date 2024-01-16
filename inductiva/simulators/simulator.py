@@ -10,7 +10,7 @@ from inductiva.utils import files
 
 class Simulator(ABC):
     """Base simulator class."""
-    __check_active_resources = True
+    _check_active_resources = True
 
     def __init__(self):
         self.api_method_name = ""
@@ -40,8 +40,8 @@ class Simulator(ABC):
         return input_dir
 
     def _check_resource_pool(self, machine_group):
-        if self.__check_active_resources:
-            self.__check_active_resources = False
+        if self._check_active_resources:
+            self._check_active_resources = False
             if machine_group is None:
                 if inductiva.resources.machine_groups.get():
                     warnings.warn(
