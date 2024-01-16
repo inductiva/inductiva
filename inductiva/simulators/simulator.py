@@ -10,10 +10,10 @@ from inductiva.utils import files
 
 class Simulator(ABC):
     """Base simulator class."""
+    __check_active_resources = True
 
     def __init__(self):
         self.api_method_name = ""
-        self.checked_resource_pool = False
 
     def override_api_method_prefix(self, prefix: str):
         """Override the API method prefix.
@@ -40,13 +40,13 @@ class Simulator(ABC):
         return input_dir
 
     def _check_resource_pool(self, machine_group):
-        if not self.checked_resource_pool:
-            self.checked_resource_pool = True
-            if inductiva.resources.machine_groups.get(
-            ) and machine_group is None:
-                warnings.warn(
-                    "Submiting task to default resource pool with other "
-                    "active machine groups.")
+        if self.__check_active_resources:
+            self.__check_active_resources = False
+            if machine_group is None:
+                if inductiva.resources.machine_groups.get():
+                    warnings.warn(
+                        "Submiting task to default resource pool with other "
+                        "active machine groups.")
 
     def run(
         self,
