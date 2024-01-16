@@ -2,6 +2,8 @@
 import json
 from typing import Dict, List, Optional, Union, Sequence
 
+import pandas as pd
+
 import inductiva
 from inductiva import api
 from inductiva.client import ApiClient, ApiException
@@ -49,16 +51,15 @@ def _fetch_tasks_from_api(
             raise e
 
 
-def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
+def _dataframe_of_tasks(tasks: Sequence["inductiva.tasks.Task"]) -> str:
     columns = [
         "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
-        "Total Duration", "Resource Type"
+        "Resource Type"
     ]
     rows = []
 
     for task in tasks:
         info = task.get_info()
-        # e.g., get "openfoam" from "fvm.openfoam.run_simulation"
         simulator = task.get_simulator_name()
         status = task.get_status()
 
@@ -72,56 +73,27 @@ def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
                 else:
                     execution_time = "n/a"
 
-        end_time = info.get("end_time", None)
-        total_time = task.get_total_time(fail_if_running=False)
-        if total_time is not None:
-            if end_time is None:
-                if status in ["started", "submitted"]:
-                    total_time = f"*{total_time}"
-                else:
-                    total_time = "n/a"
-
         executer = info["executer"]
         if executer is None:
-            resource_type = "n/a"
+            resource_type = None
         else:
-            if executer["n_mpi_hosts"] == 1:
-                resource_type = executer["vm_type"]
-            else:
-                resource_type = executer[
-                    "vm_type"] + f" x{executer['n_mpi_hosts']}"
+            resource_type = executer["vm_type"]
+            if executer["n_mpi_hosts"] > 1:
+                resource_type += f" x{executer['n_mpi_hosts']}"
 
         row = [
             task.id,
             simulator,
             status,
-            info.get("input_submit_time", None),
-            info.get("start_time", None),
+            format_utils.datetime_formatter(info.get("input_submit_time",
+                                                     None)),
+            format_utils.datetime_formatter(info.get("start_time", None)),
             execution_time,
-            total_time,
             resource_type,
         ]
         rows.append(row)
 
-    formatters = {
-        "Submitted": format_utils.datetime_formatter,
-        "Started": format_utils.datetime_formatter,
-    }
-
-    override_col_space = {
-        "Submitted": 18,
-        "Started": 18,
-        "Status": 10,
-        "Resource Type": 18,
-    }
-
-    return format_utils.get_tabular_str(
-        rows,
-        columns,
-        default_col_space=15,
-        override_col_space=override_col_space,
-        formatters=formatters,
-    )
+    return pd.DataFrame(rows, columns=columns)
 
 
 # pylint: disable=redefined-builtin
@@ -130,8 +102,8 @@ def list(last_n: int = 5,
     # pylint: disable=line-too-long
     """List the last N tasks of a user.
 
-    This function lists info about the last N tasks (with respect to submission
-    time) of a user to stdout, sorted by submission time with the
+    This function returns a dataframe with info about the last N tasks (with
+    respect to submission time) of a user, sorted by submission time with the
     most recent first.
     A status can be specified to filter to get only tasks with that status, in
     which case the last N tasks with that status will be listed.
@@ -140,13 +112,15 @@ def list(last_n: int = 5,
 
     Example usage:
         # list the last 5 tasks that were successful
-        inductiva.tasks.list(5, status="success")
-                           ID           Simulator         Status          Submitted            Started Computation Time  Total Duration       Resource Type
-    i5bnjw9gznqom857o4ohos661 openfoam_foundation        started   15 Jan, 15:02:07   15 Jan, 15:02:26         *03m 18s        *03m 37s    c2d-standard-112
-    tdbs1viqiu0g83icnp048dtjj              reef3d        started   15 Jan, 14:41:16   15 Jan, 14:41:51         *23m 53s        *24m 28s      c2-standard-60
-    ca370nk18dz2enzvp64y8a1r8 openfoam_foundation         failed   15 Jan, 14:40:48   15 Jan, 14:43:16          03m 23s         06m 06s c2d-standard-56 x 4
-    rorv72bagv8s03qqoih5t9tba openfoam_foundation      submitted   15 Jan, 14:39:02                n/a              n/a        *26m 43s                 n/a
-    4yv6mcbyo8x6eewv2xdy2x8ws openfoam_foundation      submitted   15 Jan, 14:38:05                n/a              n/a        *27m 40s                 n/a
+        listing = inductiva.tasks.list(5)
+        # listing is a dataframe with 5 rows
+        print(listing)
+                           ID           Simulator         Status          Submitted            Started Computation Time        Resource Type
+    i5bnjw9gznqom857o4ohos661 openfoam_foundation        started   15 Jan, 15:02:07   15 Jan, 15:02:26         *03m 18s     c2d-standard-112
+    tdbs1viqiu0g83icnp048dtjj              reef3d        started   15 Jan, 14:41:16   15 Jan, 14:41:51         *23m 53s       c2-standard-60
+    ca370nk18dz2enzvp64y8a1r8 openfoam_foundation         failed   15 Jan, 14:40:48   15 Jan, 14:43:16          03m 23s  c2d-standard-56 x 4
+    rorv72bagv8s03qqoih5t9tba openfoam_foundation      submitted   15 Jan, 14:39:02                n/a              n/a                  n/a
+    4yv6mcbyo8x6eewv2xdy2x8ws openfoam_foundation      submitted   15 Jan, 14:38:05                n/a              n/a                  n/a
     Args:
         last_n: The number of most recent tasks with respect to submission
             time to list. If filtering criteria (currently status is available)
@@ -159,8 +133,9 @@ def list(last_n: int = 5,
     # pylint: enable=line-too-long
     status = models.TaskStatusCode(status) if status is not None else None
     tasks = get(last_n, status=status)
-    tasks_str = _list_of_tasks_to_str(tasks)
-    print(tasks_str)
+    tasks_str = _dataframe_of_tasks(tasks)
+
+    return tasks_str
 
 
 def get(

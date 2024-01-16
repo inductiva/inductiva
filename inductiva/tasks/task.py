@@ -306,14 +306,17 @@ class Task:
             The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
+        if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
+            return None
+        # start_time may be None if the task was killed before it started
+        if info["input_submit_time"] is None:
+            return None
+
         # Format the time to datetime type
         submitted_time = datetime.datetime.fromisoformat(
             info["input_submit_time"])
-
-        if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
-            return None
-
         end_time = info.get("end_time")
+
         if end_time is None:
             end_time = datetime.datetime.now(datetime.timezone.utc)
         else:

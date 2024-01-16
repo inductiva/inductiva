@@ -1,10 +1,22 @@
 """Tasks CLI subcommands."""
-import inductiva
+from inductiva import tasks, utils
 from inductiva import _cli
 
 
 def list_tasks(args):
-    inductiva.tasks.list(last_n=args.last_n)
+    """List tasks."""
+
+    override_col_space = {
+        "Submitted": 18,
+        "Started": 18,
+        "Status": 10,
+        "Computation Time": 20,
+        "Resource Type": 20
+    }
+    print(
+        utils.format_utils.get_dataframe_str(
+            tasks.list(last_n=args.last_n),
+            override_col_space=override_col_space))
 
 
 def register_tasks_cli(parser):

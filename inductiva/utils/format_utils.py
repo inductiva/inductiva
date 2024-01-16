@@ -29,23 +29,15 @@ def bytes_formatter(n_bytes: int) -> str:
 
 def datetime_formatter(dt: str) -> str:
     # get time in local timezone
+    if dt is None:
+        return None
     local_dt = datetime.datetime.fromisoformat(dt).astimezone()
     return local_dt.strftime("%d %b, %H:%M:%S")
 
 
 def seconds_formatter(secs: float) -> str:
     """Convert seconds to time human readable string."""
-    time_str = ""
-
-    if secs >= 3600:
-        hours = int(secs // 3600)
-        time_str += f"{hours}h "
-
-    mins = int((secs % 3600) // 60)
-    secs = int(secs % 60)
-    time_str += f"{mins:02d}m {secs:02d}s"
-
-    return time_str
+    return str(datetime.timedelta(seconds=round(secs)))
 
 
 def get_tabular_str(
@@ -61,7 +53,6 @@ def get_tabular_str(
     is overkill, but since we have `pandas` anyway for now, we can use it.
     """
     df = pd.DataFrame(rows, columns=columns)
-
     formatters = formatters or {}
 
     col_space = {col: default_col_space for col in columns}
@@ -77,3 +68,27 @@ def get_tabular_str(
         formatters=formatters,
         col_space=col_space,
     )
+
+
+def get_dataframe_str(dataframe,
+                      default_col_space=15,
+                      override_col_space=None,
+                      formatters=None):
+    """Converts a dataframe to a string table.
+
+    Temporary solution to display tables. `pandas` dependency to print tables
+    is overkill, but since we have `pandas` anyway for now, we can use it.
+    """
+    formatters = formatters or {}
+
+    col_space = {col: default_col_space for col in dataframe.columns}
+    col_space.update(override_col_space or {})
+
+    # replace None with np.nan so that pandas can format them as "n/a"
+    # by passing na_rep="n/a" to to_string()
+    dataframe.fillna(np.nan, inplace=True)
+
+    return dataframe.to_string(index=False,
+                               na_rep="n/a",
+                               formatters=formatters,
+                               col_space=col_space)

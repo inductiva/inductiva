@@ -5,12 +5,12 @@ from pytest import mark
 from inductiva.utils import format_utils
 
 
-@mark.parametrize("time_input, expected_time", [(60, "01m 00s"),
-                                                (40, "00m 40s"),
-                                                (3600, "1h 00m 00s"),
-                                                (3660, "1h 01m 00s"),
-                                                (3615, "1h 00m 15s"),
-                                                (645, "10m 45s")])
+@mark.parametrize("time_input, expected_time", [(60, "0:01:00"),
+                                                (40, "0:00:40"),
+                                                (3600, "1:00:00"),
+                                                (3660, "1:01:00"),
+                                                (3615, "1:00:15"),
+                                                (645, "0:10:45")])
 def test_seconds_formatter__valid_time__formatted_time(time_input,
                                                        expected_time):
     """Check that the seconds formatter returns the correct string."""
