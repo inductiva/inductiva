@@ -77,7 +77,7 @@ def test_set_root_dir__valid_input__creates_folder():
     created_root_dir = file_manager.get_root_dir()
     assert os.path.isdir(created_root_dir)
     assert root_dir in created_root_dir.name
-    assert pathlib.Path(os.getcwd()) == created_root_dir.parent
+    assert pathlib.Path.cwd() == created_root_dir.parent
 
 
 def test_set_root_dir_null_input__raises_error():
