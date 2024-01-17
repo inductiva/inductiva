@@ -45,8 +45,8 @@ class BaseMachineGroup():
             for machine_type in inductiva.resources.machine_types.MachineType
             for core in machine_type.value
         ]
-        assert (machine_type
-                in allowed_machine_types, "Machine type not supported.")
+        assert machine_type in allowed_machine_types,\
+            "Machine type not supported."
         self.machine_type = machine_type
         self.disk_size_gb = disk_size_gb
         self._id = None
