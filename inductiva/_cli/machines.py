@@ -29,21 +29,10 @@ def list_machine_types_available(args):
     """List all available machines"""
     del args  # unused
 
-    machines_dict = {
-        "c2-standard-": [4, 8, 16, 30, 60],
-        "c3-standard-": [4, 8, 22, 44, 88, 176],
-        "c2d-standard-": [2, 4, 8, 16, 32, 56, 112],
-        "c2d-highcpu-": [2, 4, 8, 16, 32, 56, 112],
-        "e2-standard-": [2, 4, 8, 16, 32],
-        "n2-standard-": [2, 4, 8, 16, 32, 48, 64, 80, 96, 128],
-        "n2d-standard-": [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224],
-        "n1-standard-": [1, 2, 4, 8, 16, 32, 64, 96]
-    }
-
     print("Available machine types\n")
     print("machine-type: [cores-available]")
-    for machine_type, cores in machines_dict.items():
-        cores_str = ", ".join(str(core) for core in cores)
+    for machine_type in inductiva.resources.machine_types.MachineType:
+        cores_str = ", ".join(str(core) for core in machine_type.value)
         print(f"{machine_type}: [{cores_str}]")
 
     print("\n E.g. of machine-type: c2-standard-8\n")

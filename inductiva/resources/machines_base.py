@@ -40,6 +40,13 @@ class BaseMachineGroup():
                 example, when retrieving with the `machines_groups.get` method.
                 Users should not set this argument in anyway.
         """
+        allowed_machine_types = [
+            machine_type.name + str(core)
+            for machine_type in inductiva.resources.machine_types.MachineType
+            for core in machine_type.value
+        ]
+        assert (machine_type
+                in allowed_machine_types, "Machine type not supported.")
         self.machine_type = machine_type
         self.disk_size_gb = disk_size_gb
         self._id = None
