@@ -48,7 +48,7 @@ import inductiva
 # Download the configuration files
 input_dir = inductiva.utils.files.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-input-example.zip"
+    "reef3d-input-example.zip", unzip=True
 )
 
 # Initialize the Simulator
