@@ -133,9 +133,9 @@ def list(last_n: int = 5,
     # pylint: enable=line-too-long
     status = models.TaskStatusCode(status) if status is not None else None
     tasks = get(last_n, status=status)
-    tasks_str = _dataframe_of_tasks(tasks)
+    tasks_df = _dataframe_of_tasks(tasks)
 
-    return tasks_str
+    return tasks_df
 
 
 def get(
