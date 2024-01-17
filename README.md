@@ -48,11 +48,11 @@ import inductiva
 # Download the configuration files
 input_dir = inductiva.utils.files.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "dualsph-flow-cylinder.zip"
+    "reef3d-input-example.zip", unzip=True
 )
 
 # Initialize the Simulator
-simulator = inductiva.simulators.DualSPHysics()
+simulator = inductiva.simulators.REEF3D()
 
 # Run the simulation
 task = simulator.run(input_dir=input_dir)

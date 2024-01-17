@@ -20,6 +20,7 @@ class FDS(simulators.Simulator):
         n_cores: int = 1,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
+        extra_metadata: Optional[dict] = None,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -35,4 +36,5 @@ class FDS(simulators.Simulator):
                            input_filename=sim_config_filename,
                            post_processing_config=post_processing_filename,
                            storage_dir=storage_dir,
-                           n_cores=n_cores)
+                           n_cores=n_cores,
+                           extra_metadata=extra_metadata)
