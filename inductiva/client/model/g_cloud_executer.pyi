@@ -39,6 +39,7 @@ class GCloudExecuter(
         required = {
             "vm_type",
             "memory",
+            "n_mpi_hosts",
             "cpu_count_logical",
             "cpu_count_physical",
             "uuid",
@@ -51,6 +52,7 @@ class GCloudExecuter(
             cpu_count_logical = schemas.IntSchema
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
+            n_mpi_hosts = schemas.IntSchema
             
             
             class host_type(
@@ -68,6 +70,7 @@ class GCloudExecuter(
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
+                "n_mpi_hosts": n_mpi_hosts,
                 "host_type": host_type,
                 "vm_type": vm_type,
                 "vm_name": vm_name,
@@ -75,6 +78,7 @@ class GCloudExecuter(
     
     vm_type: MetaOapg.properties.vm_type
     memory: MetaOapg.properties.memory
+    n_mpi_hosts: MetaOapg.properties.n_mpi_hosts
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
     uuid: MetaOapg.properties.uuid
@@ -94,6 +98,9 @@ class GCloudExecuter(
     def __getitem__(self, name: typing_extensions.Literal["memory"]) -> MetaOapg.properties.memory: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["n_mpi_hosts"]) -> MetaOapg.properties.n_mpi_hosts: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["host_type"]) -> MetaOapg.properties.host_type: ...
     
     @typing.overload
@@ -105,7 +112,7 @@ class GCloudExecuter(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "host_type", "vm_type", "vm_name", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "n_mpi_hosts", "host_type", "vm_type", "vm_name", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -123,6 +130,9 @@ class GCloudExecuter(
     def get_item_oapg(self, name: typing_extensions.Literal["memory"]) -> MetaOapg.properties.memory: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["n_mpi_hosts"]) -> MetaOapg.properties.n_mpi_hosts: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["host_type"]) -> MetaOapg.properties.host_type: ...
     
     @typing.overload
@@ -134,7 +144,7 @@ class GCloudExecuter(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "host_type", "vm_type", "vm_name", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "n_mpi_hosts", "host_type", "vm_type", "vm_name", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -143,6 +153,7 @@ class GCloudExecuter(
         *_args: typing.Union[dict, frozendict.frozendict, ],
         vm_type: typing.Union[MetaOapg.properties.vm_type, str, ],
         memory: typing.Union[MetaOapg.properties.memory, decimal.Decimal, int, ],
+        n_mpi_hosts: typing.Union[MetaOapg.properties.n_mpi_hosts, decimal.Decimal, int, ],
         cpu_count_logical: typing.Union[MetaOapg.properties.cpu_count_logical, decimal.Decimal, int, ],
         cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical, decimal.Decimal, int, ],
         uuid: typing.Union[MetaOapg.properties.uuid, str, ],
@@ -156,6 +167,7 @@ class GCloudExecuter(
             *_args,
             vm_type=vm_type,
             memory=memory,
+            n_mpi_hosts=n_mpi_hosts,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
             uuid=uuid,
