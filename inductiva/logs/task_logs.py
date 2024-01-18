@@ -1,12 +1,13 @@
 import websocket
 
+
 def stream_task_logs(task_id):
     """Stream the logs of a task through a websocket.
     
     Args:
         task_id (int): ID of the task to print the logs of."""
 
-    logs_url = "ws://127.0.0.1:5000/logs"  
+    logs_url = "ws://127.0.0.1:5000/logs"
 
     websocket_url = f"{logs_url}/{task_id}"
 
