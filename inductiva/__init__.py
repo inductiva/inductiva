@@ -15,6 +15,8 @@ from . import logs
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
 output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
 api_key = os.environ.get("INDUCTIVA_API_KEY")
+logs_websocket = os.environ.get("INDUCTIVA_TASK_LOGS_URL",
+                                "ws://127.0.0.1:5000/logs")
 
 working_dir = None
 
