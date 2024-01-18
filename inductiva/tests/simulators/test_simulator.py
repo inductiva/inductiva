@@ -2,6 +2,8 @@
 import pytest
 from pytest import mark
 
+import pathlib
+
 from inductiva import simulators, resources
 import inductiva
 
@@ -105,3 +107,24 @@ def test_valid_resources__mpi_simulators(simulator):
     correctly."""
 
     assert resources.MPICluster in simulator.get_supported_resources()
+
+
+@mark.parametrize("input_dir,expects_assertion_error",
+                  [(pathlib.Path().cwd(), True),
+                   (pathlib.Path().cwd() / "..", True),
+                   (pathlib.Path().cwd() / ".." / "other_dir", False)])
+def test_check_inf_input_dir_is_not_parent(input_dir, expects_assertion_error):
+    simulator = inductiva.simulators.Simulator()
+    simulator.api_method_name = "dummy.method.name"
+    print(input_dir)
+    if expects_assertion_error:
+        with pytest.raises(AssertionError,
+                           match="Input dir cannot be parent of current_dir"):
+            simulator.run(input_dir=input_dir)
+    else:
+        try:
+            simulator.run(input_dir=input_dir)
+        except AssertionError:
+            pytest.fail("Assertion error was not expected.")
+        except Exception as e:  # pylint: disable=W0703
+            assert "Input dir cannot be parent of current_dir" not in str(e)

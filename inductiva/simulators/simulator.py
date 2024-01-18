@@ -2,6 +2,8 @@
 from typing import Optional
 from abc import ABC
 
+import pathlib
+
 from inductiva import types, tasks, resources
 from inductiva.utils import files
 
@@ -54,6 +56,11 @@ class Simulator(ABC):
                 f"The provided path (\"{input_dir}\") is not a directory.")
         return input_dir
 
+    def _check_if_input_dir_is_not_parent(self, input_dir: types.Path):
+        input_dir = pathlib.Path(input_dir).resolve()
+        cwd = pathlib.Path().cwd()
+        return not cwd.is_relative_to(input_dir)
+
     def run(
         self,
         input_dir: types.Path,
@@ -76,6 +83,9 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
+        assert self._check_if_input_dir_is_not_parent(
+            input_dir), "Input dir cannot be parent of current_dir"
+
         input_dir = self._setup_input_dir(input_dir)
 
         self.validate_computational_resources(on)
