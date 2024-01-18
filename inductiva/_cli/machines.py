@@ -31,8 +31,9 @@ def list_machine_types_available(args):
 
     print("Available machine types\n")
     print("machine-type: [cores-available]")
-    for machine_type in inductiva.resources.machine_types.MachineType:
-        cores_str = ", ".join(str(core) for core in machine_type.value)
+    for (machine_type,
+         cores) in inductiva.resources.machine_types.AVAILABLE_MACHINES.items():
+        cores_str = ", ".join(str(core) for core in cores)
         print(f"{machine_type}: [{cores_str}]")
 
     print("\n E.g. of machine-type: c2-standard-8\n")

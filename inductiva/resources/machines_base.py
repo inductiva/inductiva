@@ -41,9 +41,8 @@ class BaseMachineGroup():
                 Users should not set this argument in anyway.
         """
         allowed_machine_types = [
-            machine_type.name + str(core)
-            for machine_type in inductiva.resources.machine_types.MachineType
-            for core in machine_type.value
+            machine_type + str(core) for machine_type, cores in
+            inductiva.resources.AVAILABLE_MACHINES.items() for core in cores
         ]
         assert machine_type in allowed_machine_types,\
             "Machine type not supported."
