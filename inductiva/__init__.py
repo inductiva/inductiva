@@ -10,6 +10,7 @@ from . import resources
 from . import storage
 from . import utils
 from . import tasks
+from . import commands
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
 output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
