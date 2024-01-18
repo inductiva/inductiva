@@ -38,10 +38,15 @@ def main():
         "machines",
         help="View machines information",
     )
+    logs_subparser = subparsers.add_parser(
+        "logs",
+        help="View logs of Task ID",
+    )
 
     # Register subcommands (e.g. list) for each subcommand (e.g. tasks)
     _cli.register_tasks_cli(tasks_subparser)
     _cli.register_machines_cli(machines_subparser)
+    _cli.register_logs_cli(logs_subparser)
 
     args = parser.parse_args()
     if args.api_key:
