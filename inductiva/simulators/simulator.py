@@ -58,8 +58,10 @@ class Simulator(ABC):
 
     def _check_if_input_dir_is_not_parent(self, input_dir: types.Path):
         input_dir = pathlib.Path(input_dir).resolve()
-        cwd = pathlib.Path().cwd()
-        return not cwd.is_relative_to(input_dir)
+        cwd = pathlib.Path().cwd().resolve()
+        input_parts = input_dir.parts
+        cwd_parts = cwd.parts
+        return not input_parts == cwd_parts[:len(input_parts)]
 
     def run(
         self,
