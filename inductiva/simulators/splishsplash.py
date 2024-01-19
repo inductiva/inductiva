@@ -38,4 +38,5 @@ class SplishSplash(simulators.Simulator):
             input_filename=sim_config_filename,
             storage_dir=storage_dir,
             particle_radius=particle_radius,
+            extra_metadata=extra_metadata,
         )

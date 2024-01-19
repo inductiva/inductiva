@@ -25,6 +25,7 @@ class FEniCSx(simulators.Simulator):
         mesh_element_order: int = 1,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
+        extra_metadata: Optional[dict] = None,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -70,4 +71,6 @@ class FEniCSx(simulators.Simulator):
             smoothing_meshing_parameter=smoothing_meshing_parameter,
             mesh_element_family=mesh_element_family,
             mesh_element_order=mesh_element_order,
-            storage_dir=storage_dir)
+            storage_dir=storage_dir,
+            extra_metadata=extra_metadata,
+        )

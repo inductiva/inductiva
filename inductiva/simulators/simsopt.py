@@ -24,6 +24,7 @@ class SIMSOPT(simulators.Simulator):
         objectives_weights_filename: str,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
+        extra_metadata: Optional[dict] = None,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -66,4 +67,6 @@ class SIMSOPT(simulators.Simulator):
             num_samples=num_samples,
             sigma_scaling_factor=sigma_scaling_factor,
             objectives_weights_filename=objectives_weights_filename,
-            storage_dir=storage_dir)
+            storage_dir=storage_dir,
+            extra_metadata=extra_metadata,
+        )
