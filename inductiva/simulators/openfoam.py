@@ -1,7 +1,7 @@
 """OpenFOAM module of the API for fluid dynamics."""
-from typing import Optional, List
+from typing import Optional, List, Union
 
-from inductiva import types, tasks, simulators
+from inductiva import types, tasks, simulators, commands
 
 AVAILABLE_OPENFOAM_VERSIONS = ["foundation", "esi"]
 
@@ -26,7 +26,7 @@ class OpenFOAM(simulators.Simulator):
     def run(
         self,
         input_dir: types.Path,
-        commands: List[dict],
+        commands: List[Union[str, commands.Command]],
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,

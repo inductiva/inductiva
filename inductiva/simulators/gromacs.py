@@ -1,8 +1,9 @@
 """GROMACS module of the API"""
 
-from typing import Optional, List
+from typing import Optional, List, Union
 
-from inductiva import types, tasks, simulators
+import inductiva
+from inductiva import types, tasks, simulators, commands
 
 
 class GROMACS(simulators.Simulator):
@@ -15,7 +16,7 @@ class GROMACS(simulators.Simulator):
     def run(
         self,
         input_dir: types.Path,
-        commands: List[dict],
+        commands: List[Union[str, commands.Command]],
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
