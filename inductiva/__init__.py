@@ -28,4 +28,4 @@ logging.basicConfig(level=absl.logging.INFO,
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.3.10"
+__version__ = "0.4.0"
