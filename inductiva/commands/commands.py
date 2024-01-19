@@ -1,8 +1,12 @@
 """Wrapper class for simulator commands."""
 
 
-class Command(dict):
+class Command:
     """Abstraction class for commands."""
 
     def __init__(self, cmd, *prompts):
-        super().__init__(cmd=cmd, prompts=list(prompts))
+        self.cmd = cmd
+        self.prompts = prompts
+
+    def to_json(self):
+        return self.__dict__

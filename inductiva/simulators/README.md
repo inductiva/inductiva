@@ -105,21 +105,21 @@ input_dir = "motorbike_tutorial"
 
 # Set the simulation commands for sequential use
 sequential_commands = [
-    {"cmd": "runApplication surfaceFeatures", "prompts": []},
-    {"cmd": "runApplication blockMesh", "prompts": []},
-    {"cmd": "runApplication snappyHexMesh", "prompts": []},
-    {"cmd": "runParallel potentialFoam", "prompts": []},
-    {"cmd": "runApplication simpleFoam", "prompts": []}]
+    "runApplication surfaceFeatures",
+    "runApplication blockMesh",
+    "runApplication snappyHexMesh",
+    "runParallel potentialFoam",
+    "runApplication simpleFoam"
 
 parallel_commands = [
-    {"cmd": "runApplication surfaceFeatures", "prompts": []},
-    {"cmd": "runApplication blockMesh", "prompts":[]},
-    {"cmd": "runApplication decomposePar -copyZero", "prompts":[]},
-    {"cmd": "runParallel snappyHexMesh -overwrite", "prompts":[]},
-    {"cmd": "runParallel potentialFoam", "prompts":[]},
-    {"cmd": "runParallel simpleFoam", "prompts":[]},
-    {"cmd": "runApplication reconstructParMesh -constant", "prompts":[]},
-    {"cmd": "runApplication reconstructPar -latestTime", "prompts": []}
+   "runApplication surfaceFeatures",
+   "runApplication blockMesh",
+   "runApplication decomposePar -copyZero",
+   "runParallel snappyHexMesh -overwrite",
+   "runParallel potentialFoam",
+   "runParallel simpleFoam",
+   "runApplication reconstructParMesh -constant",
+   "runApplication reconstructPar -latestTime"
 ]
 
 
@@ -219,13 +219,13 @@ input_dir = "molecules_water_box"
 
 # Set the simulation commands
 commands = [
-    {"cmd": "gmx solvate -cs tip4p -box {{ box_size }} -o conf.gro -p topol.top", "prompts": []},
-    {"cmd": "gmx grompp -f energy_minimization.mdp -o min.tpr -pp min.top -po min.mdp -c conf.gro -p topol.top", "prompts": []},
-    {"cmd": "gmx mdrun -s min.tpr -o min.trr -c min.gro -e min.edr -g min.log", "prompts": []},
-    {"cmd": "gmx grompp -f positions_decorrelation.mdp -o decorr.tpr -pp decorr.top -po decorr.mdp -c min.gro", "prompts": []},
-    {"cmd": "gmx mdrun -s decorr.tpr -o decorr.trr -x  -c decorr.gro -e decorr.edr -g decorr.log", "prompts": []},
-    {"cmd": "gmx grompp -f simulation.mdp -o eql.tpr -pp eql.top -po eql.mdp -c decorr.gro", "prompts": []},
-    {"cmd": "gmx mdrun -s eql.tpr -o eql.trr -x eql.xtc -c eql.gro -e eql.edr -g eql.log", "prompts": []}
+    "gmx solvate -cs tip4p -box {{ box_size }} -o conf.gro -p topol.top",
+    "gmx grompp -f energy_minimization.mdp -o min.tpr -pp min.top -po min.mdp -c conf.gro -p topol.top",
+    "gmx mdrun -s min.tpr -o min.trr -c min.gro -e min.edr -g min.log",
+    "gmx grompp -f positions_decorrelation.mdp -o decorr.tpr -pp decorr.top -po decorr.mdp -c min.gro",
+    "gmx mdrun -s decorr.tpr -o decorr.trr -x  -c decorr.gro -e decorr.edr -g decorr.log",
+    "gmx grompp -f simulation.mdp -o eql.tpr -pp eql.top -po eql.mdp -c decorr.gro",
+   "gmx mdrun -s eql.tpr -o eql.trr -x eql.xtc -c eql.gro -e eql.edr -g eql.log"
 ]
 
 # Initialize the Simulator
