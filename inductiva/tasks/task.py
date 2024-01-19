@@ -8,15 +8,12 @@ from typing import Dict, Any, List, Optional
 from typing_extensions import TypedDict
 import datetime
 from dateutil import parser
+
 import inductiva
 from inductiva.client import models
-from inductiva import api
+from inductiva import api, types
 from inductiva.client.apis.tags import tasks_api
-from inductiva.utils import files
-from inductiva.utils import data
-from inductiva.utils import output_contents
-from inductiva import types
-from inductiva import output_consts
+from inductiva.utils import files, format_utils, data, output_contents
 
 import warnings
 
@@ -154,7 +151,7 @@ class Task:
                 elif status == models.TaskStatusCode.FAILED:
                     logging.info("Task failed.")
                     logging.info("Download the 'stdout.txt' and 'stderr.txt' "
-                                 "files with `task.get_output()` for "
+                                 "files with `task.download_outputs()` for "
                                  "more detail. \n")
                 elif status == models.TaskStatusCode.KILLED:
                     logging.info("Task killed.\n")
@@ -179,109 +176,12 @@ class Task:
         """
         self._api.kill_task(path_params=self._get_path_params())
 
-    def _get_output_config(self, all_files: bool = False):
-        """Get configuration of the output with the task method name.
-
-        Args:
-            all_files: Whether to download all the files in the output.
-
-        Returns:
-            output_class, filenames - If the task method name is not of
-                a scenario, this method returns None, None and all
-                simulation are downloaded. Otherwise, and if available,
-                it returns the output_class of that
-                respective scenario and the filenames of that simulation.
-                If all_files is False, then the filenames are the default
-                files set for that scenario.
-        """
-
-        # Fetch the first part of the method_name (e.g., "wind_tunnel")
-        method_name = self.get_scenario_name()
-
-        # Set the default files for the output class
-        # For some scenarios, there are None default files
-        filenames = None
-        output_class = None
-
-        if method_name in output_consts.OUTPUT_CONSTS:
-            output_class = output_consts.OUTPUT_CONSTS[method_name][
-                "output_class"]
-            if not all_files:
-                filenames = output_consts.OUTPUT_CONSTS[method_name][
-                    "default_files"]
-
-        return output_class, filenames
-
-    def get_scenario_name(self) -> Optional[str]:
-        name = self.get_info()["method_name"].split(".")[0]
-        if name in output_consts.OUTPUT_CONSTS:
-            return name
-
-        return None
-
     def get_simulator_name(self) -> str:
         # e.g. retrieve openfoam from fvm.openfoam.run_simulation
         return self.get_info()["method_name"].split(".")[1]
 
     def get_storage_path(self) -> str:
         return self.get_info()["storage_path"]
-
-    def get_output(
-        self,
-        all_files: bool = False,
-        output_dir: Optional[pathlib.Path] = None,
-        uncompress: bool = True,
-        rm_downloaded_zip_archive: bool = True,
-    ):
-        """Get the output of the task.
-
-        Args:
-            all_files: Whether to download all the files in the output
-                archive. If False, only the default files are downloaded.
-            output_dir: Directory where to download the files. If None, the
-                files are downloaded to the default directory. The default is
-                {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
-            uncompress: Whether to uncompress the archive after downloading it.
-            rm_archive: Whether to remove the archive after uncompressing it.
-                If uncompress is False, this argument is ignored.
-
-        Returns:
-            Either, return a Scenario output class if the task method name is
-            a scenario with an output class, or return an output path otherwise.
-
-        Example:
-            task = Task("task_id")
-            output_path = task.get_output()
-            # prints:
-            100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]
-        """
-        # Get terminal status
-        status = self.wait()
-        if status not in [
-                models.TaskStatusCode.SUCCESS, models.TaskStatusCode.FAILED
-        ]:
-            logging.info("Task with %s has no output to be retrieved.", status)
-            return
-
-        if status == models.TaskStatusCode.SUCCESS:
-            output_class, filenames = self._get_output_config(all_files)
-        else:
-            output_class = None
-            logging.info("Downloading the 'stdout.txt' and 'stderr.txt' files.")
-            filenames = ["stdout.txt", "stderr.txt"]
-
-        output_dir = self.download_outputs(
-            filenames=filenames,
-            output_dir=output_dir,
-            uncompress=uncompress,
-            rm_downloaded_zip_archive=rm_downloaded_zip_archive)
-
-        # output_class can only be not None if the task is successful
-        if output_class is not None:
-            return output_class(output_dir)
-
-        logging.info("The output was downloaded to %s.", output_dir)
-        return output_dir
 
     def get_output_files_info(self) -> output_contents.OutputContents:
         """Get information of the output files of the task.
@@ -372,29 +272,58 @@ class Task:
         """Get dictionary with the URL path parameters for API calls."""
         return {"task_id": self.id}
 
-    def get_execution_time(self,
-                           fail_if_running: bool = True) -> Optional[float]:
-        """Get the time the task took to complete.
+    def get_computation_time(self,
+                             fail_if_running: bool = True) -> Optional[float]:
+        """Get the time the computation of the task took to complete.
 
         Returns:
-            The time in seconds or None if the task hasn't completed yet.
+            The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
         if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
             return None
         # start_time may be None if the task was killed before it started
-        if info["start_time"] is None:
+        if info["computation_start_time"] is None:
             return None
 
         # Format the time to datetime type
-        start_time = datetime.datetime.fromisoformat(info["start_time"])
+        start_time = datetime.datetime.fromisoformat(
+            info["computation_start_time"])
+        end_time = info.get("computation_end_time")
+        if end_time is None:
+            end_time = datetime.datetime.now(datetime.timezone.utc)
+        else:
+            end_time = datetime.datetime.fromisoformat(
+                info["computation_end_time"])
+
+        total_seconds = (end_time - start_time).total_seconds()
+        return format_utils.seconds_formatter(total_seconds)
+
+    def get_total_time(self, fail_if_running: bool = True) -> Optional[float]:
+        """Get the total time the task workflow took to complete.
+
+        Returns:
+            The time in hh mm ss or None if the task hasn't completed yet.
+        """
+        info = self.get_info()
+        if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
+            return None
+        # start_time may be None if the task was killed before it started
+        if info["input_submit_time"] is None:
+            return None
+
+        # Format the time to datetime type
+        submitted_time = datetime.datetime.fromisoformat(
+            info["input_submit_time"])
         end_time = info.get("end_time")
+
         if end_time is None:
             end_time = datetime.datetime.now(datetime.timezone.utc)
         else:
             end_time = datetime.datetime.fromisoformat(info["end_time"])
 
-        return (end_time - start_time).total_seconds()
+        total_seconds = (end_time - submitted_time).total_seconds()
+        return format_utils.seconds_formatter(total_seconds)
 
     def get_machine_type(self) -> Optional[str]:
         """Get the machine type used in the task.

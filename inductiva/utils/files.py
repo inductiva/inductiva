@@ -13,16 +13,6 @@ import inductiva
 from inductiva import types
 
 
-def find_path_to_package(package_dir: str):
-    """Find path to package directory in inductiva library in local computer.
-
-    Args:
-        package_dir: Name of package directory.
-    """
-    return os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", package_dir))
-
-
 def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     """Return a path that does not exist by appending a timestamp.
 

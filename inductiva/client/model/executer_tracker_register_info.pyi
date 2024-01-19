@@ -113,6 +113,8 @@ class ExecuterTrackerRegisterInfo(
                         **kwargs,
                     )
             machine_group_id = schemas.UUIDSchema
+            mpi_cluster = schemas.BoolSchema
+            num_mpi_hosts = schemas.IntSchema
             __annotations__ = {
                 "create_time": create_time,
                 "supported_executer_types": supported_executer_types,
@@ -122,6 +124,8 @@ class ExecuterTrackerRegisterInfo(
                 "git_commit_hash": git_commit_hash,
                 "host_info": host_info,
                 "machine_group_id": machine_group_id,
+                "mpi_cluster": mpi_cluster,
+                "num_mpi_hosts": num_mpi_hosts,
             }
     
     memory: MetaOapg.properties.memory
@@ -157,9 +161,15 @@ class ExecuterTrackerRegisterInfo(
     def __getitem__(self, name: typing_extensions.Literal["machine_group_id"]) -> MetaOapg.properties.machine_group_id: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["mpi_cluster"]) -> MetaOapg.properties.mpi_cluster: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["num_mpi_hosts"]) -> MetaOapg.properties.num_mpi_hosts: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "git_commit_hash", "host_info", "machine_group_id", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "git_commit_hash", "host_info", "machine_group_id", "mpi_cluster", "num_mpi_hosts", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -189,9 +199,15 @@ class ExecuterTrackerRegisterInfo(
     def get_item_oapg(self, name: typing_extensions.Literal["machine_group_id"]) -> typing.Union[MetaOapg.properties.machine_group_id, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["mpi_cluster"]) -> typing.Union[MetaOapg.properties.mpi_cluster, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["num_mpi_hosts"]) -> typing.Union[MetaOapg.properties.num_mpi_hosts, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "git_commit_hash", "host_info", "machine_group_id", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "git_commit_hash", "host_info", "machine_group_id", "mpi_cluster", "num_mpi_hosts", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -206,6 +222,8 @@ class ExecuterTrackerRegisterInfo(
         host_info: typing.Union[MetaOapg.properties.host_info, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         supported_executer_types: typing.Union[MetaOapg.properties.supported_executer_types, list, tuple, ],
         machine_group_id: typing.Union[MetaOapg.properties.machine_group_id, str, uuid.UUID, schemas.Unset] = schemas.unset,
+        mpi_cluster: typing.Union[MetaOapg.properties.mpi_cluster, bool, schemas.Unset] = schemas.unset,
+        num_mpi_hosts: typing.Union[MetaOapg.properties.num_mpi_hosts, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ExecuterTrackerRegisterInfo':
@@ -220,6 +238,8 @@ class ExecuterTrackerRegisterInfo(
             host_info=host_info,
             supported_executer_types=supported_executer_types,
             machine_group_id=machine_group_id,
+            mpi_cluster=mpi_cluster,
+            num_mpi_hosts=num_mpi_hosts,
             _configuration=_configuration,
             **kwargs,
         )

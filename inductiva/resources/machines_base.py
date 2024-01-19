@@ -1,12 +1,21 @@
 """Base class for machine groups."""
 import time
+import enum
 
 from absl import logging
 
 import inductiva
 import inductiva.client.models
 from inductiva import api
+from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
+
+
+class ResourceType(enum.Enum):
+    """Enum to represent the type of machine to be launched."""
+
+    STANDARD = "standard"
+    MPI = "mpi"
 
 
 class BaseMachineGroup():
@@ -14,9 +23,7 @@ class BaseMachineGroup():
 
     def __init__(self,
                  machine_type: str,
-                 spot: bool = False,
                  disk_size_gb: int = 70,
-                 zone: str = "europe-west1-b",
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
 
@@ -26,12 +33,16 @@ class BaseMachineGroup():
               more information about machine types.
             spot: Whether to use spot machines.
             disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
-            zone: The zone where the machines will be launched.
+            register: Bool that indicates if a machine group should be register
+                or if it was already registered. If set to False by users on
+                initialization, then, the machine group will not be able to be
+                started. This serves has an helper argument for retrieving
+                already registered machine groups that can be started, for
+                example, when retrieving with the `machines_groups.get` method.
+                Users should not set this argument in anyway.
         """
         self.machine_type = machine_type
-        self.spot = spot
         self.disk_size_gb = disk_size_gb
-        self.zone = zone
         self._id = None
         self._name = None
         self.create_time = None
@@ -52,18 +63,22 @@ class BaseMachineGroup():
         return self._name
 
     def _register_machine_group(self, **kwargs):
-        instance_group_config = inductiva.client.models.InstanceGroupCreate(
+        """Register machine group configuration in API.
+        
+        Returns:
+            The unique ID and name identifying the machine on the API."""
+
+        instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
-            spot=self.spot,
             disk_size_gb=self.disk_size_gb,
-            zone=self.zone,
             **kwargs,
         )
         logging.info("Registering machine group configurations:")
-        resp = self._api.register_instance_group(body=instance_group_config)
+        resp = self._api.register_vm_group(body=instance_group_config)
         self._id = resp.body["id"]
         self._name = resp.body["name"]
         self.register = False
+        self._log_machine_group_info()
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -71,14 +86,12 @@ class BaseMachineGroup():
 
         machine_group = cls(
             machine_type=resp["machine_type"],
-            spot=bool(resp["spot"]),
             disk_size_gb=resp["disk_size_gb"],
-            zone=resp["zone"],
             register=False,
         )
         machine_group._id = resp["id"]
         machine_group._name = resp["name"]
-        machine_group.create_time = resp["create_time"]
+        machine_group.create_time = resp["creation_timestamp"]
         machine_group._started = True
 
         return machine_group
@@ -101,13 +114,11 @@ class BaseMachineGroup():
             return
 
         request_body = \
-            inductiva.client.models.InstanceGroup(
+            inductiva.client.models.GCPVMGroup(
                 id=self.id,
                 name=self.name,
                 machine_type=self.machine_type,
-                spot=self.spot,
                 disk_size_gb=self.disk_size_gb,
-                zone=self.zone,
                 **kwargs,
             )
         try:
@@ -117,15 +128,13 @@ class BaseMachineGroup():
                          "interrupt the creation of the machine group. "
                          "Please wait...")
             start_time = time.time()
-            if kwargs.get("is_elastic", True):
-                self._api.start_elastic_instance_group(body=request_body)
-            else:
-                self._api.start_instance_group(body=request_body)
-            creation_time_mins = (time.time() - start_time) / 60
+            self._api.start_vm_group(body=request_body)
+            creation_time = format_utils.seconds_formatter(time.time() -
+                                                           start_time)
             self._started = True
 
-            logging.info("Machine group successfully started in %.2f mins.\n",
-                         creation_time_mins)
+            logging.info("Machine group successfully started in %s.",
+                         creation_time)
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
@@ -142,38 +151,38 @@ class BaseMachineGroup():
             start_time = time.time()
 
             request_body = \
-                inductiva.client.models.InstanceGroup(
+                inductiva.client.models.GCPVMGroup(
                     id=self.id,
                     name=self.name,
                     machine_type=self.machine_type,
-                    spot=self.spot,
                     disk_size_gb=self.disk_size_gb,
-                    zone=self.zone,
                     **kwargs,
                 )
 
-            self._api.delete_instance_group(body=request_body)
-            termination_time_mins = (time.time() - start_time) / 60
-            logging.info(
-                "Machine group '%s' successfully "
-                "terminated in %.2f mins.\n", self.name, termination_time_mins)
+            self._api.delete_vm_group(body=request_body)
+            termination_time = format_utils.seconds_formatter(time.time() -
+                                                              start_time)
+            logging.info("Machine group '%s' successfully terminated in %s.",
+                         self.name, termination_time)
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
 
-    def _get_estimated_cost(self) -> float:
+    def _get_estimated_cost(self, spot: bool = False) -> float:
+        """Returns estimate cost of a single machine in the group.
+
+        This method is an overlay of the more general method, but
+        it verifies if the cost has already been estimated and returns
+        it immediately if it has.
+        """
         if self._estimated_cost is not None:
             return self._estimated_cost
-        instance_price = self._api.get_instance_price({
-            "machine_type": self.machine_type,
-            "zone": self.zone,
-        })
-        if self.spot:
-            estimated_cost = instance_price.body["preemptible_price"]
-        else:
-            estimated_cost = instance_price.body["on_demand_price"]
 
-        self._estimated_cost = estimated_cost
+        self._estimated_cost = inductiva.resources.estimate_machine_cost(
+            self.machine_type,
+            spot,
+        )
+
         return self._estimated_cost
 
     def status(self):
@@ -195,7 +204,5 @@ class BaseMachineGroup():
         """Logs the machine group info."""
 
         logging.info("> Name: %s", self.name)
-        logging.info("> Machine type: %s", self.machine_type)
-        # TODO: Not yet available to users
-        logging.info("> Spot: %s", self.spot)
+        logging.info("> Machine Type: %s", self.machine_type)
         logging.info("> Disk size: %s GB", self.disk_size_gb)

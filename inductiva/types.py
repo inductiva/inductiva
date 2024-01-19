@@ -4,3 +4,7 @@ from typing import Union
 from typing_extensions import TypeAlias
 
 Path: TypeAlias = Union[os.PathLike, str]
+
+ComputationalResources: TypeAlias = Union["resources.MachineGroup",
+                                          "resources.ElasticMachineGroup",
+                                          "resources.MPICluster"]

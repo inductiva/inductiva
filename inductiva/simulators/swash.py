@@ -1,9 +1,10 @@
 """SWASH module of the API."""
 from typing import Optional
 
-from inductiva import types, tasks, resources, simulators
+from inductiva import types, tasks, simulators
 
 
+@simulators.simulator.mpi_enabled
 class SWASH(simulators.Simulator):
     """Class to invoke a generic SWASH simulation on the API."""
 
@@ -15,18 +16,21 @@ class SWASH(simulators.Simulator):
         self,
         input_dir: types.Path,
         sim_config_filename: str,
-        machine_group: Optional[resources.MachineGroup] = None,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
+        extra_metadata: Optional[dict] = None,
     ) -> tasks.Task:
         """Run the simulation.
 
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
-            machine_group: Optional machine group to run the simulation on.
+            on: The computational resource to launch the simulation on. If None
+                the simulation is submitted to a machine in the default pool.
             storage_dir: Directory for storing simulation results.
         """
         return super().run(input_dir,
-                           machine_group=machine_group,
+                           on=on,
                            input_filename=sim_config_filename,
-                           storage_dir=storage_dir)
+                           storage_dir=storage_dir,
+                           extra_metadata=extra_metadata)

@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from inductiva import simulators, types, tasks, resources
+from inductiva import simulators, types, tasks
 
 
 class FEniCSx(simulators.Simulator):
@@ -19,9 +19,13 @@ class FEniCSx(simulators.Simulator):
         bcs_filename: str,
         material_filename: str,
         global_refinement_meshing_factor: float = 1.0,
-        local_refinement_meshing_factor: float = 0.0,
-        machine_group: Optional[resources.MachineGroup] = None,
+        local_refinement_meshing_factor: float = 1.0,
+        smoothing_meshing_parameter: float = 10.0,
+        mesh_element_family: str = "CG",
+        mesh_element_order: int = 1,
+        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
+        extra_metadata: Optional[dict] = None,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -43,17 +47,30 @@ class FEniCSx(simulators.Simulator):
               providing more detailed resolution around certain features. Use
               this factor when you want to focus on refining specific areas
               while keeping the rest of the mesh less refined.
-            machine_group: The machine group to use for the simulation.
+            smoothing_parameter (float): The smoothing parameter for mesh
+              generation. It controls the amount of mesh smoothing applied to
+              the generated mesh. Adjust this parameter for improved mesh
+              quality.
+            mesh_element_family (str): The type of mesh element family.
+            mesh_element_order (int): The (polynomial) order of the mesh
+              element.
+            on: The computational resource to launch the simulation on. If None
+                the simulation is submitted to a machine in the default pool.
             storage_dir: Parent directory for storing simulation results.
             other arguments: See the documentation of the base class.
         """
 
         return super().run(
             input_dir,
-            machine_group=machine_group,
+            on=on,
             geometry_filename=geometry_filename,
             bcs_filename=bcs_filename,
             material_filename=material_filename,
             global_refinement_meshing_factor=global_refinement_meshing_factor,
             local_refinement_meshing_factor=local_refinement_meshing_factor,
-            storage_dir=storage_dir)
+            smoothing_meshing_parameter=smoothing_meshing_parameter,
+            mesh_element_family=mesh_element_family,
+            mesh_element_order=mesh_element_order,
+            storage_dir=storage_dir,
+            extra_metadata=extra_metadata,
+        )

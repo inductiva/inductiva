@@ -2,6 +2,8 @@
 import json
 from typing import Dict, List, Optional, Union, Sequence
 
+import pandas as pd
+
 import inductiva
 from inductiva import api
 from inductiva.client import ApiClient, ApiException
@@ -49,60 +51,49 @@ def _fetch_tasks_from_api(
             raise e
 
 
-def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
+def _dataframe_of_tasks(tasks: Sequence["inductiva.tasks.Task"]) -> str:
     columns = [
-        "ID", "Scenario", "Simulator", "Status", "Submitted", "Started",
-        "Duration", "VM Type"
+        "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
+        "Resource Type"
     ]
     rows = []
 
     for task in tasks:
         info = task.get_info()
-        # e.g., get "openfoam" from "fvm.openfoam.run_simulation"
         simulator = task.get_simulator_name()
-        scenario = task.get_scenario_name()
-        if scenario:
-            scenario = scenario.replace("_", " ")
+        status = task.get_status()
 
-        end_time = info.get("end_time", None)
-        execution_time = task.get_execution_time(fail_if_running=False)
+        computation_end_time = info.get("computation_end_time", None)
 
+        execution_time = task.get_computation_time(fail_if_running=False)
         if execution_time is not None:
-            execution_time = format_utils.seconds_formatter(execution_time)
-            if end_time is None:
-                execution_time = f"*{execution_time}"
+            if computation_end_time is None:
+                if status in ["started", "submitted"]:
+                    execution_time = f"*{execution_time}"
+                else:
+                    execution_time = "n/a"
+
+        executer = info["executer"]
+        if executer is None:
+            resource_type = None
+        else:
+            resource_type = executer["vm_type"]
+            if executer["n_mpi_hosts"] > 1:
+                resource_type += f" x{executer['n_mpi_hosts']}"
 
         row = [
             task.id,
-            scenario,
             simulator,
-            task.get_status(),
-            info.get("input_submit_time", None),
-            info.get("start_time", None),
+            status,
+            format_utils.datetime_formatter(info.get("input_submit_time",
+                                                     None)),
+            format_utils.datetime_formatter(info.get("start_time", None)),
             execution_time,
-            task.get_machine_type(),
+            resource_type,
         ]
         rows.append(row)
-    formatters = {
-        "Submitted": format_utils.datetime_formatter,
-        "Started": format_utils.datetime_formatter,
-    }
 
-    override_col_space = {
-        "Scenario": 22,
-        "Submitted": 20,
-        "Started": 20,
-        "Status": 20,
-        "VM Type": 18,
-    }
-
-    return format_utils.get_tabular_str(
-        rows,
-        columns,
-        default_col_space=15,
-        override_col_space=override_col_space,
-        formatters=formatters,
-    )
+    return pd.DataFrame(rows, columns=columns)
 
 
 # pylint: disable=redefined-builtin
@@ -111,9 +102,9 @@ def list(last_n: int = 5,
     # pylint: disable=line-too-long
     """List the last N tasks of a user.
 
-    This function lists info about the last N tasks (with respect to submission
-    time) of a user to stdout, sorted by submission time with the
-    most recent first.
+    This function returns a dataframe with information about the last N tasks
+    (with respect to submission time) of a user, sorted by submission time with
+    the most recent first.
     A status can be specified to filter to get only tasks with that status, in
     which case the last N tasks with that status will be listed.
     The number of tasks can be less than N if the aren't enough tasks that
@@ -121,14 +112,15 @@ def list(last_n: int = 5,
 
     Example usage:
         # list the last 5 tasks that were successful
-        inductiva.tasks.list(5, status="success")
-                         ID               Scenario       Simulator               Status            Submitted              Started        Duration            VM Type
-        1695309310050950437                    n/a    dualsphysics              started     21 Sep, 16:15:10     21 Sep, 16:15:10       *0h 2m 5s      c2-standard-4
-        1695307352995292367      protein solvation         gromacs              started     21 Sep, 15:42:33     21 Sep, 15:42:35     *0h 34m 41s      c2-standard-4
-        1695306097851999678      protein solvation         gromacs              success     21 Sep, 15:21:38     21 Sep, 15:21:40      0h 15m 43s      c2-standard-4
-        1695294928922012701            wind tunnel        openfoam              success     20 Sep, 12:15:31     20 Sep, 12:15:33       0h 0m 50s      c2-standard-4
-        1695294363618736570            wind tunnel        openfoam              success     20 Sep, 12:06:06     20 Sep, 12:06:06       0h 0m 50s      c2-standard-4
-
+        listing = inductiva.tasks.list(5)
+        # listing is a dataframe with 5 rows
+        print(listing)
+                           ID           Simulator         Status          Submitted            Started Computation Time        Resource Type
+    i5bnjw9gznqom857o4ohos661 openfoam_foundation        started   15 Jan, 15:02:07   15 Jan, 15:02:26         *03m 18s     c2d-standard-112
+    tdbs1viqiu0g83icnp048dtjj              reef3d        started   15 Jan, 14:41:16   15 Jan, 14:41:51         *23m 53s       c2-standard-60
+    ca370nk18dz2enzvp64y8a1r8 openfoam_foundation         failed   15 Jan, 14:40:48   15 Jan, 14:43:16          03m 23s  c2d-standard-56 x 4
+    rorv72bagv8s03qqoih5t9tba openfoam_foundation      submitted   15 Jan, 14:39:02                n/a              n/a                  n/a
+    4yv6mcbyo8x6eewv2xdy2x8ws openfoam_foundation      submitted   15 Jan, 14:38:05                n/a              n/a                  n/a
     Args:
         last_n: The number of most recent tasks with respect to submission
             time to list. If filtering criteria (currently status is available)
@@ -141,8 +133,9 @@ def list(last_n: int = 5,
     # pylint: enable=line-too-long
     status = models.TaskStatusCode(status) if status is not None else None
     tasks = get(last_n, status=status)
-    tasks_str = _list_of_tasks_to_str(tasks)
-    print(tasks_str)
+    tasks_df = _dataframe_of_tasks(tasks)
+
+    return tasks_df
 
 
 def get(
