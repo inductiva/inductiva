@@ -2,8 +2,8 @@
 from typing import Optional
 from abc import ABC
 
-import inductiva
 from inductiva import types, tasks, resources
+from inductiva import commands as cmds
 from inductiva.utils import files
 
 
@@ -55,18 +55,17 @@ class Simulator(ABC):
                 f"The provided path (\"{input_dir}\") is not a directory.")
         return input_dir
 
-    def _commands_to_json(self, kwargs):
-        if not "commands" in kwargs:
-            return kwargs
+    def _commands_to_json(self, commands):
 
-        def to_cmd(x):
-            if isinstance(x, inductiva.commands.Command):
-                return x
-            return inductiva.commands.Command(x)
+        def to_cmd_json(x):
+            if isinstance(x, cmds.Command):
+                return x.to_json()
+            elif not isinstance(x, str):
+                raise ValueError("Command should be of type: 'str' "
+                                 "or 'inductiva.commands.Command'.")
+            return cmds.Command(x).to_json()
 
-        commands = [to_cmd(cmd).to_json() for cmd in kwargs["commands"]]
-        kwargs["commands"] = commands
-        return kwargs
+        return [to_cmd_json(cmd) for cmd in commands]
 
     def run(
         self,
@@ -94,7 +93,8 @@ class Simulator(ABC):
 
         self.validate_computational_resources(on)
 
-        kwargs = self._commands_to_json(kwargs)
+        if "commands" in kwargs:
+            kwargs["commands"] = self._commands_to_json(kwargs["commands"])
 
         return tasks.run_simulation(
             self.api_method_name,

@@ -6,7 +6,7 @@ class Command:
 
     def __init__(self, cmd, *prompts):
         self.cmd = cmd
-        self.prompts = prompts
+        self.prompts = list(prompts)
 
     def to_json(self):
         return self.__dict__

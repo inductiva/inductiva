@@ -110,6 +110,8 @@ sequential_commands = [
     "runApplication snappyHexMesh",
     "runParallel potentialFoam",
     "runApplication simpleFoam"
+    "runApplication potentialFoam"
+]
 
 parallel_commands = [
    "runApplication surfaceFeatures",
