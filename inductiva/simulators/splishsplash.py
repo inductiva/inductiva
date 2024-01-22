@@ -17,7 +17,6 @@ class SplishSplash(simulators.Simulator):
         sim_config_filename: str,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
-        particle_radius: float = 0.025,
         extra_metadata: Optional[dict] = None,
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
@@ -28,7 +27,6 @@ class SplishSplash(simulators.Simulator):
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             storage_dir: Directory for storing simulation results.
-            particle_radius: Radius of the particles in the simulation.
         Returns:
             Task object representing the simulation task.
         """
@@ -37,6 +35,5 @@ class SplishSplash(simulators.Simulator):
             on=on,
             input_filename=sim_config_filename,
             storage_dir=storage_dir,
-            particle_radius=particle_radius,
             extra_metadata=extra_metadata,
         )
