@@ -19,7 +19,7 @@ To run the simulation users pass a folder with the above files and all others re
 The parallelization of the simulation is handled automatically by Inductiva API, based on the number of cores available in the machine.
 
 **General Arguments:**
-- `machine_group`: set the machines where the simulations will run. Check [here](Machines) for further detail. If not selected the simulations will be picked-up by a default pool shared by everyone.
+- `on`: set the machines where the simulations will run. Check [here](Machines) for further detail. If not selected the simulations will be picked-up by a default pool shared by everyone.
 - `storage_dir`: set the directory where the output files will be stored in the cloud. If not selected the output files will be stored in a folder named with the task id of the simulation.
 
 For further information on handling the task of the simulation see [here](Tasks).
@@ -40,5 +40,5 @@ reef3d = inductiva.simulators.REEF3D()
 
 task = reef3d.run(input_dir=input_dir)
 
-task.get_output()
+task.download_outputs()
 ```

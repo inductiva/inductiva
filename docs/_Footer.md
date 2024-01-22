@@ -1,1 +1,1 @@
-Inductiva Research Labs, 2023
+Inductiva Research Labs, 2024

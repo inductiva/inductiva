@@ -33,6 +33,6 @@ dualsphysics = inductiva.simulators.DualSPHysics()
 task = dualsphysics.run(input_dir=input_dir,
                      commands=commands)
 
-task.get_output()
+task.download_outputs()
 
 ```

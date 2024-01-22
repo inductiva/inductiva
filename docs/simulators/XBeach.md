@@ -21,5 +21,5 @@ xbeach = inductiva.simulators.XBeach()
 task = xbeach.run(input_dir=input_dir,
                   sim_config_filename="params.txt")
 
-task.get_output()
+task.download_outputs()
 ```

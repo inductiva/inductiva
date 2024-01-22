@@ -42,5 +42,5 @@ openfoam = inductiva.simulators.OpenFOAM(version="foundation")
 # Run simulation with config files in the input directory
 task = openfoam.run(input_dir=input_dir, commands=commands)
 
-task.get_output()
+task.download_outputs()
 ````

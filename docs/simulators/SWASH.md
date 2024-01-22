@@ -19,5 +19,5 @@ swash = inductiva.simulators.SWASH()
 task = swash.run(input_dir=input_dir, 
                  sim_config_filename="input.sws")
 
-task.get_output()
+task.download_outputs()
 ```
