@@ -17,5 +17,6 @@ splishsplash = inductiva.simulators.SplishSplash()
 task = splishsplash.run(input_dir=input_dir,
                      sim_config_filename="config.json")
 
+task.wait()
 task.download_outputs()
 ```
