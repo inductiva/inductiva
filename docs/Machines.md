@@ -28,66 +28,21 @@ price_per_hour = mg.estimate_cloud_cost()
 mg.start()
 ```
 
-Create your simulation scenario and run it on your machine group. Example with ProteinSolvation scenario:
-
+Launch your simulation in the machine group you just launched. For example:
 ```python
-
-# Download the insulin protein (ID - "1ZNI") from RCSB database
-insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
-
-scenario = molecules.ProteinSolvation(
-    protein_pdb=insulin_pdb_file, temperature=300)
-
-# Pass your machine group object when submitting a simulation so that it runs
-# on the desired machine group
-task = scenario.simulate(machine_group=mg, ignore_warnings=True)
-
-
+# Set simulation input directory
+input_dir = inductiva.utils.files.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "reef3d-input-example.zip", unzip=True)
+# Initialize the Simulator
+reef3d = inductiva.simulators.REEF3D()
+# Run simulation with config files in the input directory
+task = reef3d.run(input_dir=input_dir, on=mg)
+task.wait()
 # Once your simulations are done, terminate the machines
 mg.terminate()
+
 ```
-
-#### Launch hundreds of simulations to run in parallel in a group of machines
-
-
-```python
-
-import inductiva
-from inductiva import molecules
-
-# Create a MachineGroup with 10 machines
-mg = inductiva.resources.MachineGroup(
-    machine_type="c2d-standard-8",
-    num_machines=10,
-    disk_size_gb=40,
-)
-
-price_per_hour = mg.estimate_cloud_cost()
-
-# Start the machines
-mg.start()
-
-# Download the insulin protein (ID - "1ZNI") from RCSB database
-insulin_pdb_file = inductiva.molecules.utils.download_pdb_from_rcsb(pdb_id="1ZNI")
-tasks = []
-
-# And simulate the solvation of the proteins on your newly started machines
-for temperature in range(200, 301):
-    scenario = molecules.ProteinSolvation(
-        protein_pdb=insulin_pdb_file, temperature=temperature)
-
-    # Tasks will be submitted to the new machine group
-    task = scenario.simulate(machine_group=mg, ignore_warnings=True)
-    tasks.append(task)
-
-# Block until all tasks complete
-for task in tasks:
-    task.wait()
-
-# Once you don't need them anymore, terminate the machines
-mg.terminate()
-```
-
 #### List active machine groups
 
 You can also list your active machine groups, or get a list of `MachineGroup` objects of previously created machine groups:
