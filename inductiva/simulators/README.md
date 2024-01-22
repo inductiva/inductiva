@@ -41,7 +41,7 @@ simulator = inductiva.simulators.DualSPHysics()
 task = simulator.run(input_dir=input_dir)
 ```
 
-And that's it! Your simulation is now running in the cloud, and you have a `task` object that allows you to manage it. You can check its status with `task.get_status()`, wait for it to finish with `task.wait()`, and download the results with `task.get_output()`.
+And that's it! Your simulation is now running in the cloud, and you have a `task` object that allows you to manage it. You can check its status with `task.get_status()`, wait for it to finish with `task.wait()`, and download the results with `task.download_outputs()`.
 
 With Inductiva API you don't have immediate access to visualization tools of these simulators. However, you can download the results and use the visualization tools of your choice. For example, for DualSPHysics you can use [Paraview](https://www.paraview.org/) to visualize the results.
 
