@@ -68,14 +68,12 @@ my_machine_group.start()
 # Download the configuration files into a folder
 input_dir = inductiva.utils.files.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "dualsph-flow-cylinder.zip"
+    "reef3d-input-example.zip"
 )
-
 # Initialize the Simulator
-simulator = inductiva.simulators.DualSPHysics()
-
+simulator = inductiva.simulators.REEF3D()
 # Run simulation with config files in the input directory
-task = simulator.run(input_dir=input_dir, machine_group=my_machine_group)
+task = simulator.run(input_dir=input_dir, on=my_machine_group)
 
 # Wait for the simulation to finish
 task.wait()

@@ -4,10 +4,10 @@ By default, simulation requests are processed by a shared pool of machines servi
 
 Note that a `MachineGroup` is literally a group of individual machines that do not communicate with each other. In other words, a `MachineGroup` is not a computational cluster where the load of each simulation is divided over all machines of the cluster.
 
-### Examples
+## Examples
 
 
-#### Running a simulation in a specific machine type
+### Running a simulation in a specific machine type
 
 ```python
 
@@ -43,7 +43,7 @@ task.wait()
 mg.terminate()
 
 ```
-#### List active machine groups
+### List active machine groups
 
 You can also list your active machine groups, or get a list of `MachineGroup` objects of previously created machine groups:
 
@@ -59,5 +59,5 @@ inductiva.resources.machine_groups.list()
 mg_list = inductiva.resources.machine_groups.get()
 mg_list
 #[<inductiva.resources.machines.MachineGroup at 0x7f8cde53d2a0>,
-# <inductiva.resources.machines.MachineGroup at 0x7f8c58954c70>]
+# <inductiva.resources.machines.MachineGroup at 0x7f8c58954c70>
 ```
