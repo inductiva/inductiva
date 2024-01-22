@@ -40,5 +40,6 @@ reef3d = inductiva.simulators.REEF3D()
 
 task = reef3d.run(input_dir=input_dir)
 
+task.wait()
 task.download_outputs()
 ```

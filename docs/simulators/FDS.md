@@ -31,5 +31,6 @@ task = fds.run(input_dir=input_dir,
                post_processing_filename="mccaffrey.ssf",
                n_cores=1)
 
+task.wait()
 task.download_outputs()
 ```
