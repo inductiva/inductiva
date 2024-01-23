@@ -1,1 +1,0 @@
-Inductiva Research Labs, 2023
