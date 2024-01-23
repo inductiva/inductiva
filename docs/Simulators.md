@@ -37,10 +37,10 @@ swash = inductiva.simulators.SWASH()
 task = swash.run(input_dir=input_dir, 
                  sim_config_filename="input.sws")
 
-task.get_output()
+task.download_outputs()
 ```
 
-And that's it! Your simulation is now running in the cloud, and you have a `task` object that allows you to manage it. You can check its status with `task.get_status()`, wait for it to finish with `task.wait()`, and download the results with `task.get_output()`.
+And that's it! Your simulation is now running in the cloud, and you have a `task` object that allows you to manage it. You can check its status with `task.get_status()`, wait for it to finish with `task.wait()`, and download the results with `task.download_outputs()`.
 
 With Inductiva API you don't have immediate access to visualization tools of these simulators. However, you can download the results and use the visualization tools of your choice. 
 
@@ -68,14 +68,12 @@ my_machine_group.start()
 # Download the configuration files into a folder
 input_dir = inductiva.utils.files.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "dualsph-flow-cylinder.zip"
+    "reef3d-input-example.zip"
 )
-
 # Initialize the Simulator
-simulator = inductiva.simulators.DualSPHysics()
-
+simulator = inductiva.simulators.REEF3D()
 # Run simulation with config files in the input directory
-task = simulator.run(input_dir=input_dir, machine_group=my_machine_group)
+task = simulator.run(input_dir=input_dir, on=my_machine_group)
 
 # Wait for the simulation to finish
 task.wait()
