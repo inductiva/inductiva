@@ -9,6 +9,7 @@ from inductiva import constants
 logger = logging.getLogger("websocket")
 logger.setLevel(logging.INFO)
 
+
 class TaskLogsStream:
     """Logs the streams of a running task through a websocket."""
 
