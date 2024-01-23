@@ -6,7 +6,6 @@ Note that a `MachineGroup` is literally a group of individual machines that do n
 
 ### Examples
 
-
 #### Running a simulation in a specific machine type
 
 Prepare a simulation, for example with Reef3D, and run it in a dedicated machine group:
@@ -17,7 +16,7 @@ import inductiva
 
 # Create a MachineGroup object with a single machine of the desired type
 mg = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-4",
+    machine_type="c2-standard-16",
     num_machines=1,
     disk_size_gb=60,
 )
@@ -52,7 +51,7 @@ Otherwise, you can use the CLI to terminate it whenever you want:
 inductiva machines terminate <machine_group_name>
 ```
 
-#### Launch hundreds of simulations to run in parallel in a group of machines
+#### Launch many simulations to run in parallel in a group of machines
 
 
 ```python
@@ -61,7 +60,7 @@ import inductiva
 
 # Create and start a MachineGroup with 5 machines
 mg = inductiva.resources.MachineGroup(
-    machine_type="c2d-standard-8",
+    machine_type="c2d-standard-16",
     num_machines=5)
 mg.start()
 

@@ -4,14 +4,14 @@ Inductiva API has available several open-source simulators ready to use. Users w
 No installation or management of the simulators is required, no need to worry about hardware or software dependencies. Inductiva API takes care of all of that for you.
 
 The simulators currently available are all open-source and have their dedicated documentation:
-- [SPlisHSPlasH](https://github.com/InteractiveComputerGraphics/SPlisHSPlasH)
-- [DualSPHysics](https://dual.sphysics.org/)
-- [OpenFOAM](https://www.openfoam.com/)
-- [SWASH](https://swash.sourceforge.io/)
-- [XBeach](https://oss.deltares.nl/web/xbeach/)
-- [Reef3D](https://reef3d.wordpress.com/)
-- [GROMACS](https://www.gromacs.org/)
-- [FDS](https://pages.nist.gov/fds-smv/)
+- [SPlisHSPlasH](https://github.com/inductiva/inductiva/blob/main/docs/simulators/SPlisHSPlasH.md)
+- [DualSPHysics](https://github.com/inductiva/inductiva/blob/main/docs/simulators/DualSPHysics.md)
+- [OpenFOAM](https://github.com/inductiva/inductiva/blob/main/docs/simulators/OpenFOAM.md)
+- [SWASH](https://github.com/inductiva/inductiva/blob/main/docs/simulators/SWASH.md)
+- [XBeach](https://github.com/inductiva/inductiva/blob/main/docs/simulators/XBeach.md)
+- [Reef3D](https://github.com/inductiva/inductiva/blob/main/docs/simulators/Reef3D.md)
+- [GROMACS](https://github.com/inductiva/inductiva/blob/main/docs/simulators/GROMACS.md)
+- [FDS](https://github.com/inductiva/inductiva/blob/main/docs/simulators/FDS.md)
 
 Check the documentation of each simulator to learn more on how to configure them. Here, we highlight how to use your preferred simulator via Inductiva API and how to scale your simulations with simplicity. There is a general structure that all simulators follow, and then there are some specificities for each simulator.
 
@@ -75,7 +75,6 @@ input_dir = inductiva.utils.download_from_url(
 simulator = inductiva.simulators.REEF3D()
 
 # Run simulation with config files in the input directory
-task = simulator.run(input_dir=input_dir, on=my_machine_group)
 task = simulator.run(input_dir=input_dir, on=my_machine_group)
 
 # Wait for the simulation to finish
