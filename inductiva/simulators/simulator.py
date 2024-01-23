@@ -3,7 +3,7 @@ from typing import Optional
 from abc import ABC
 
 from inductiva import types, tasks, resources
-from inductiva import commands as cmds
+from inductiva import commands
 from inductiva.utils import files
 
 
@@ -55,14 +55,11 @@ class Simulator(ABC):
                 f"The provided path (\"{input_dir}\") is not a directory.")
         return input_dir
 
-    def _commands_to_json(self, commands):
-
-        def to_cmd_json(x):
-            if isinstance(x, cmds.Command):
-                return x.to_json()
-            return cmds.Command(x).to_json()
-
-        return [to_cmd_json(cmd) for cmd in commands]
+    def _commands_to_json(self, cmds):
+        return [
+            cmd.to_dict() if isinstance(cmd, commands.Command) else
+            commands.Command(cmd).to_dict() for cmd in cmds
+        ]
 
     def run(
         self,
