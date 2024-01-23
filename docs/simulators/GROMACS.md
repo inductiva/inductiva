@@ -30,5 +30,6 @@ gromacs = inductiva.simulators.GROMACS()
 task = gromacs.run(input_dir=input_dir,
                    commands=commands)
 
-task.get_output()
+task.wait()
+task.download_outputs()
 ```
