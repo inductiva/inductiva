@@ -1,6 +1,6 @@
 """GROMACS module of the API"""
 
-from typing import Optional, List, Union
+from typing import Optional, Union
 
 from inductiva import types, tasks, simulators
 
