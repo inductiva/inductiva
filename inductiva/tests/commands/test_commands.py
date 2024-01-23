@@ -18,7 +18,7 @@ def test_to_dict__without_prompts():
     assert cmd.to_dict() == {"cmd": "command without prompts", "prompts": []}
 
 
-@pytest.mark.parametrize("cmd,prompts,expected_message", [
+@mark.parametrize("cmd,prompts,expected_message", [
     ("fails on prompts", ["y", 42], "Prompts must be all strings."),
     (0, ["fails on cmd"], "cmd argument must be a string."),
 ])
