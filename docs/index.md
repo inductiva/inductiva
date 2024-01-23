@@ -5,7 +5,7 @@
 ```{toctree}
 ---
 caption: Getting Started
-maxdepth: 2
+maxdepth: 3
 hidden: false
 ---
 Install
@@ -15,7 +15,7 @@ API-access-tokens
 ```{toctree}
 ---
 caption: Running Simulations
-maxdepth: 2
+maxdepth: 3
 hidden: true
 ---
 Start-simualting
@@ -27,7 +27,7 @@ Running-multiple-simulations-in-parallel
 ```{toctree}
 ---
 caption: Computational Resources
-maxdepth: 2
+maxdepth: 3
 hidden: true
 ---
 Machines
