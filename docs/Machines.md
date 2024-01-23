@@ -59,5 +59,5 @@ inductiva.resources.machine_groups.list()
 mg_list = inductiva.resources.machine_groups.get()
 mg_list
 #[<inductiva.resources.machines.MachineGroup at 0x7f8cde53d2a0>,
-# <inductiva.resources.machines.MachineGroup at 0x7f8c58954c70>
+# <inductiva.resources.machines.MachineGroup at 0x7f8c58954c70>]
 ```
