@@ -20,12 +20,12 @@ The commands passed to the simulator follow the structure of OpenFOAM, that is, 
 import inductiva
 
 # Set simulation input directory
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "openfoam-input-example.zip", unzip=True)
 
 # Set the simulation commands
-commands = parallel_commands = [
+commands = [
     {"cmd": "runApplication surfaceFeatures", "prompts": []},
     {"cmd": "runApplication blockMesh", "prompts":[]},
     {"cmd": "runApplication decomposePar -copyZero", "prompts":[]},
@@ -42,5 +42,6 @@ openfoam = inductiva.simulators.OpenFOAM(version="foundation")
 # Run simulation with config files in the input directory
 task = openfoam.run(input_dir=input_dir, commands=commands)
 
-task.get_output()
+task.wait()
+task.download_outputs()
 ````

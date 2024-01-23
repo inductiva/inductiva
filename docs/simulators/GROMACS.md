@@ -11,7 +11,7 @@ This example runs a simple case of the molecular dynamics of water molecules ins
 ```python
 import inductiva
 
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "gromacs-input-example.zip", unzip=True)
 
@@ -30,5 +30,6 @@ gromacs = inductiva.simulators.GROMACS()
 task = gromacs.run(input_dir=input_dir,
                    commands=commands)
 
-task.get_output()
+task.wait()
+task.download_outputs()
 ```

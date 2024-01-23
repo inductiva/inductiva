@@ -17,7 +17,7 @@ In this example, we run a classical CFD case of a flow over a cylinder.
 import inductiva
 
 # Download the configuration files into a folder
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "dualsphysics-input-example.zip", unzip=True
 )
@@ -33,6 +33,7 @@ dualsphysics = inductiva.simulators.DualSPHysics()
 task = dualsphysics.run(input_dir=input_dir,
                      commands=commands)
 
-task.get_output()
+task.wait()
+task.download_outputs()
 
 ```

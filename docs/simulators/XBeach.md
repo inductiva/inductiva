@@ -10,7 +10,7 @@ We advise to always set the `mpiboundary` argument in the `params.txt` file, sin
 import inductiva
 
 # Set simulation input directory
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "xbeach-input-example.zip", unzip=True)
 
@@ -21,5 +21,6 @@ xbeach = inductiva.simulators.XBeach()
 task = xbeach.run(input_dir=input_dir,
                   sim_config_filename="params.txt")
 
-task.get_output()
+task.wait()
+task.download_outputs()
 ```

@@ -8,7 +8,7 @@ SWASH is a simulator that solves shallow water equations and is used to simulate
 import inductiva
 
 # Set simulation input directory
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "swash-input-example.zip", unzip=True)
 
@@ -19,5 +19,6 @@ swash = inductiva.simulators.SWASH()
 task = swash.run(input_dir=input_dir, 
                  sim_config_filename="input.sws")
 
-task.get_output()
+task.wait()
+task.download_outputs()
 ```

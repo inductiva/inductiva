@@ -20,7 +20,7 @@ Since FDS requires the setting of separate meshes that are attributed to the pro
 ```python
 import inductiva
 
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "fds-input-example.zip", unzip=True)
 
@@ -31,5 +31,6 @@ task = fds.run(input_dir=input_dir,
                post_processing_filename="mccaffrey.ssf",
                n_cores=1)
 
-task.get_output()
+task.wait()
+task.download_outputs()
 ```
