@@ -6,6 +6,7 @@ Note that a `MachineGroup` is literally a group of individual machines that do n
 
 ### Examples
 
+
 #### Running a simulation in a specific machine type
 
 Prepare a simulation, for example with Reef3D, and run it in a dedicated machine group:

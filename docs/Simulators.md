@@ -42,6 +42,7 @@ task.download_outputs()
 ```
 
 And that's it! Your simulation is now running in the cloud, and you have a `task` object that allows you to manage it. You can check its status with `task.get_status()`, wait for it to finish with `task.wait()`, and download the results with `task.download_outputs()`.
+And that's it! Your simulation is now running in the cloud, and you have a `task` object that allows you to manage it. You can check its status with `task.get_status()`, wait for it to finish with `task.wait()`, and download the results with `task.download_outputs()`.
 
 With Inductiva API you don't have immediate access to visualization tools of these simulators. However, you can download the results and use the visualization tools of your choice. 
 
@@ -74,6 +75,7 @@ input_dir = inductiva.utils.download_from_url(
 simulator = inductiva.simulators.REEF3D()
 
 # Run simulation with config files in the input directory
+task = simulator.run(input_dir=input_dir, on=my_machine_group)
 task = simulator.run(input_dir=input_dir, on=my_machine_group)
 
 # Wait for the simulation to finish
