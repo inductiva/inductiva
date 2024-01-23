@@ -31,7 +31,7 @@ dualsphysics = inductiva.simulators.DualSPHysics()
 
 # Run simulation with config files in the input directory
 task = dualsphysics.run(input_dir=input_dir,
-                     commands=commands)
+                        commands=commands)
 
 task.wait()
 task.download_outputs()

@@ -38,6 +38,30 @@ To learn how to use these simulators with Inductiva API, check the example below
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
+
+## Installation
+
+Inductiva package is simple to install, just run on your terminal:
+
+```
+pip install --upgrade inductiva
+```
+
+This will provide the core functionalities of the API, which allows you to submit jobs, control machines and run simulations. 
+
+If you have issues with the installation, check the [Installation troubleshooting](#installation-troubleshooting) for more information.
+
+## API access tokens
+
+Please [request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform) and set your
+API key as an environment variable in your terminal as follows:
+
+```bash
+export INDUCTIVA_API_KEY="YOUR_API_KEY"
+```
+
+And you are good to go! You can start exploring Inductiva API with the example below.
+
 ### Example
 
 Example of how to use the simulators:
@@ -64,29 +88,6 @@ task.download_outputs()
 
 The user must specify the input directory containing the files to run the simulation. In the above example, a directory with the configuration of a simulation is downloaded, and passed as argument to the simulator call.
 
-
-## Installation
-
-Inductiva package is simple to install, just run on your terminal:
-
-```
-pip install --upgrade inductiva
-```
-
-This will provide the core functionalities of the API, which allows you to submit jobs, control machines and run simulations. 
-
-If you have issues with the installation, check the [Installation troubleshooting](#installation-troubleshooting) for more information.
-
-## API access tokens
-
-Please [request API token](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform) and set your
-API key as an environment variable in your terminal as follows:
-
-```bash
-export INDUCTIVA_API_KEY="YOUR_API_KEY"
-```
-
-And you are good to go! You can start exploring Inductiva API with the examples below.
 
 ## More info:
 
