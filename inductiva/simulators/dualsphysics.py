@@ -3,7 +3,6 @@
 from typing import Optional, List, Union
 
 from inductiva import types, tasks, simulators
-from inductiva import commands as cmds
 
 
 class DualSPHysics(simulators.Simulator):
@@ -16,7 +15,7 @@ class DualSPHysics(simulators.Simulator):
     def run(
         self,
         input_dir: types.Path,
-        commands: List[Union[str, cmds.Command]],
+        commands: types.Commands,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,

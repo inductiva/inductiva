@@ -110,7 +110,6 @@ sequential_commands = [
     "runApplication snappyHexMesh",
     "runParallel potentialFoam",
     "runApplication simpleFoam"
-    "runApplication potentialFoam"
 ]
 
 parallel_commands = [
@@ -227,7 +226,7 @@ commands = [
     "gmx grompp -f positions_decorrelation.mdp -o decorr.tpr -pp decorr.top -po decorr.mdp -c min.gro",
     "gmx mdrun -s decorr.tpr -o decorr.trr -x  -c decorr.gro -e decorr.edr -g decorr.log",
     "gmx grompp -f simulation.mdp -o eql.tpr -pp eql.top -po eql.mdp -c decorr.gro",
-   "gmx mdrun -s eql.tpr -o eql.trr -x eql.xtc -c eql.gro -e eql.edr -g eql.log"
+    "gmx mdrun -s eql.tpr -o eql.trr -x eql.xtc -c eql.gro -e eql.edr -g eql.log"
 ]
 
 # Initialize the Simulator

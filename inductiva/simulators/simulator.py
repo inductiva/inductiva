@@ -60,9 +60,6 @@ class Simulator(ABC):
         def to_cmd_json(x):
             if isinstance(x, cmds.Command):
                 return x.to_json()
-            elif not isinstance(x, str):
-                raise ValueError("Command should be of type: 'str' "
-                                 "or 'inductiva.commands.Command'.")
             return cmds.Command(x).to_json()
 
         return [to_cmd_json(cmd) for cmd in commands]
