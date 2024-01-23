@@ -2,8 +2,6 @@
 import json
 from typing import Dict, List, Optional, Union, Sequence
 
-import pandas as pd
-
 import inductiva
 from inductiva import api
 from inductiva.client import ApiClient, ApiException
@@ -51,51 +49,6 @@ def _fetch_tasks_from_api(
             raise e
 
 
-def _dataframe_of_tasks(tasks: Sequence["inductiva.tasks.Task"]) -> str:
-    columns = [
-        "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
-        "Resource Type"
-    ]
-    rows = []
-
-    for task in tasks:
-        info = task.get_info()
-        simulator = task.get_simulator_name()
-        status = task.get_status()
-
-        computation_end_time = info.get("computation_end_time", None)
-
-        execution_time = task.get_computation_time(fail_if_running=False)
-        if execution_time is not None:
-            if computation_end_time is None:
-                if status in ["started", "submitted"]:
-                    execution_time = f"*{execution_time}"
-                else:
-                    execution_time = "n/a"
-
-        executer = info["executer"]
-        if executer is None:
-            resource_type = None
-        else:
-            resource_type = executer["vm_type"]
-            if executer["n_mpi_hosts"] > 1:
-                resource_type += f" x{executer['n_mpi_hosts']}"
-
-        row = [
-            task.id,
-            simulator,
-            status,
-            format_utils.datetime_formatter(info.get("input_submit_time",
-                                                     None)),
-            format_utils.datetime_formatter(info.get("start_time", None)),
-            execution_time,
-            resource_type,
-        ]
-        rows.append(row)
-
-    return pd.DataFrame(rows, columns=columns)
-
-
 # pylint: disable=redefined-builtin
 def list(last_n: int = 5,
          status: Optional[Union[str, models.TaskStatusCode]] = None) -> None:
@@ -133,9 +86,8 @@ def list(last_n: int = 5,
     # pylint: enable=line-too-long
     status = models.TaskStatusCode(status) if status is not None else None
     tasks = get(last_n, status=status)
-    tasks_df = _dataframe_of_tasks(tasks)
 
-    return tasks_df
+    return tasks
 
 
 def get(

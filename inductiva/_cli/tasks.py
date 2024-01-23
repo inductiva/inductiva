@@ -14,9 +14,9 @@ def list_tasks(args):
         "Resource Type": 20
     }
     print(
-        utils.format_utils.get_dataframe_str(
-            tasks.list(last_n=args.last_n),
-            override_col_space=override_col_space))
+        utils.format_utils.get_tasks_str(
+            tasks.list(last_n=args.last_n))
+            )
 
 
 def register_tasks_cli(parser):

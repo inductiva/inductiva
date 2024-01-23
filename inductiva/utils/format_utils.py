@@ -3,8 +3,7 @@ from distutils.util import strtobool
 import datetime
 import os
 
-import pandas as pd
-import numpy as np
+from tabulate import tabulate
 
 
 def getenv_bool(varname, default):
@@ -40,55 +39,57 @@ def seconds_formatter(secs: float) -> str:
     return str(datetime.timedelta(seconds=round(secs)))
 
 
+#clean this function
+def apply_formatters(rows, columns, formatters):
+    data = {}
+
+    for index, column_name in enumerate(columns):
+        data[column_name] = [row[index] for row in rows]
+    
+    for column_name,formatter in formatters.items():
+        if column_name in data:
+            data[column_name] = [formatter(x) for x in data[column_name]]
+
+    return data
+
+
 def get_tabular_str(
     rows,
     columns,
-    default_col_space=15,
-    override_col_space=None,
     formatters=None,
 ) -> str:
     """Converts a list of lists to a string table.
 
-    Temporary solution to display tables. `pandas` dependency to print tables
-    is overkill, but since we have `pandas` anyway for now, we can use it.
     """
-    df = pd.DataFrame(rows, columns=columns)
+    
     formatters = formatters or {}
 
-    col_space = {col: default_col_space for col in columns}
-    col_space.update(override_col_space or {})
-
-    # replace None with np.nan so that pandas can format them as "n/a"
-    # by passing na_rep="n/a" to to_string()
-    df.fillna(np.nan, inplace=True)
-
-    return df.to_string(
-        index=False,
-        na_rep="n/a",
-        formatters=formatters,
-        col_space=col_space,
-    )
+    data = apply_formatters(rows, columns, formatters)
+    data_tabulated = tabulate(data, headers=columns, missingval="n/a")
+    
+    return data_tabulated
 
 
-def get_dataframe_str(dataframe,
-                      default_col_space=15,
-                      override_col_space=None,
+def get_tasks_str(tasks,
                       formatters=None):
-    """Converts a dataframe to a string table.
+    """Converts a list of tasks to a list of ids.
 
-    Temporary solution to display tables. `pandas` dependency to print tables
-    is overkill, but since we have `pandas` anyway for now, we can use it.
     """
+    #TODOPbarbosa: what do we show here?
     formatters = formatters or {}
 
-    col_space = {col: default_col_space for col in dataframe.columns}
-    col_space.update(override_col_space or {})
+    columns = [column for column in tasks[0]._info.keys()]
+    rows = [[value for value in task._info.values()] for task in tasks]
+
+    data = apply_formatters(rows, columns, formatters)
+
+    data_tabulated = tabulate(data, headers=columns, missingval="n/a")
+
+    print(data_tabulated)
+
 
     # replace None with np.nan so that pandas can format them as "n/a"
     # by passing na_rep="n/a" to to_string()
-    dataframe.fillna(np.nan, inplace=True)
+    
 
-    return dataframe.to_string(index=False,
-                               na_rep="n/a",
-                               formatters=formatters,
-                               col_space=col_space)
+    return "ola mundo"
