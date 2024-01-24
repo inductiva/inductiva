@@ -3,6 +3,7 @@ from typing import Optional
 from abc import ABC
 
 from inductiva import types, tasks, resources
+from inductiva import commands
 from inductiva.utils import files
 
 
@@ -79,6 +80,10 @@ class Simulator(ABC):
         input_dir = self._setup_input_dir(input_dir)
 
         self.validate_computational_resources(on)
+
+        if "commands" in kwargs:
+            kwargs["commands"] = commands.Command.commands_to_dicts(
+                kwargs["commands"])
 
         return tasks.run_simulation(
             self.api_method_name,
