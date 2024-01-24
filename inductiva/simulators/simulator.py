@@ -55,21 +55,6 @@ class Simulator(ABC):
                 f"The provided path (\"{input_dir}\") is not a directory.")
         return input_dir
 
-    def commands_to_dict(self, cmds: types.Commands):
-        """Converts the commands to a dictionary.
-
-        Example:
-        >>> commands = [Command("run", "y"), "terminate"]
-        >>> simulator.commands_to_dict(commands)
-        >>> [{"cmd": "run", "prompts": ["y"]},
-        ...  {"cmd": "terminate", "prompts": []}]
-
-        """
-        return [
-            cmd.to_dict() if isinstance(cmd, commands.Command) else
-            commands.Command(cmd).to_dict() for cmd in cmds
-        ]
-
     def run(
         self,
         input_dir: types.Path,
@@ -97,7 +82,8 @@ class Simulator(ABC):
         self.validate_computational_resources(on)
 
         if "commands" in kwargs:
-            kwargs["commands"] = self.commands_to_dict(kwargs["commands"])
+            kwargs["commands"] = commands.Command.commands_to_dicts(
+                kwargs["commands"])
 
         return tasks.run_simulation(
             self.api_method_name,

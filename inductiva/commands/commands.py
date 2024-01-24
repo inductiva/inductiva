@@ -1,4 +1,5 @@
 """Wrapper class for simulator commands."""
+from inductiva import types
 
 
 class Command:
@@ -33,3 +34,20 @@ class Command:
         >>> {"cmd": "gmx pdb2gmx -f protein.pdb", prompts: ["y", "y"]}
         """
         return self.__dict__.copy()
+
+    @staticmethod
+    def commands_to_dicts(commands: types.Commands):
+        """
+        Converts the commands to a dictionary.
+
+        Example:
+        >>> commands = [Command("run", "y"), "terminate"]
+        >>> simulator.commands_to_dict(commands)
+        >>> [{"cmd": "run", "prompts": ["y"]},
+        ...  {"cmd": "terminate", "prompts": []}]
+        """
+        return [
+            cmd.to_dict()
+            if isinstance(cmd, Command) else Command(cmd).to_dict()
+            for cmd in commands
+        ]
