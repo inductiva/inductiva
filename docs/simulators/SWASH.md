@@ -1,6 +1,11 @@
 ## SWASH simulator
 
-SWASH is a simulator that solves shallow water equations and is used to simulate waves and currents in coastal waters and harbors, long waves in coastal regions and tidal inlets, and rapidly varied flows around coastal structures. The simulator is configured using a single file with the `.sws` extension, and additional files containing information about the domain and the ocean floor, such as a bathymetry file with a `.bot` extension, are necessary for the simulation to run.
+SWASH is a simulator that solves shallow water equations and is used to simulate 
+waves and currents in coastal waters and harbors, long waves in coastal regions 
+and tidal inlets, and rapidly varied flows around coastal structures. The simulator 
+is configured using a single file with the `.sws` extension, and additional files 
+containing information about the domain and the ocean floor, such as a bathymetry 
+file with a `.bot` extension, are necessary for the simulation to run.
 
 ### Example
 
@@ -8,7 +13,7 @@ SWASH is a simulator that solves shallow water equations and is used to simulate
 import inductiva
 
 # Set simulation input directory
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "swash-input-example.zip", unzip=True)
 
