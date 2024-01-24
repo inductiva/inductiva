@@ -85,9 +85,10 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     """
 
     inputs_size = os.path.getsize(original_params["sim_dir"])
-    logging.info("Preparing local input directory %s with size %s "
-                 "for remote execution", original_params["sim_dir"], 
-                 format_utils.bytes_formatter(inputs_size))
+    logging.info(
+        "Preparing local input directory %s with size %s "
+        "for remote execution", original_params["sim_dir"],
+        format_utils.bytes_formatter(inputs_size))
     input_zip_path = pack_input(
         params=original_params,
         type_annotations=type_annotations,
@@ -271,20 +272,16 @@ def log_task_info(task_id, method_name, params, resource_pool):
         mpi_tag = None
         if isinstance(resource_pool, inductiva.resources.MPICluster):
             mpi_tag = f" x{resource_pool.num_machines}"
-        logging.info("  >> Resource type: %s%s",
-                     resource_pool.machine_type, mpi_tag)
+        logging.info("  >> Resource type: %s%s", resource_pool.machine_type,
+                     mpi_tag)
     else:
         logging.info("  >> Submmiting to the default queue.")
         logging.info("  >> Machine type: %s",
                      constants.DEFAULT_QUEUE_MACHINE_TYPE)
 
 
-def submit_task(api_instance, method_name,
-                              request_params,
-                              resource_pool,
-                              storage_path_prefix,
-                              params,
-                              type_annotations):
+def submit_task(api_instance, method_name, request_params, resource_pool,
+                storage_path_prefix, params, type_annotations):
     """Submit a task and send input files to the API."""
 
     resource_pool_id = None

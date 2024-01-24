@@ -47,9 +47,8 @@ def run_simulation(
     )
 
     if computational_resources is not None:
-        logging.info(
-            "Task %s submitted to the queue of the %s.",
-            task_id, computational_resources)
+        logging.info("Task %s submitted to the queue of the %s.", task_id,
+                     computational_resources)
     else:
         logging.info(
             "Task %s submitted to the default queue. It will be picked for"
@@ -77,9 +76,9 @@ def run_simulation(
 
         with _metadata_lock:
             task_metadata_file = _save_metadata(metadata,
-                           mode="w",
-                           path=pathlib.Path(input_dir) /
-                           TASK_METADATA_FILENAME_UPLOAD)
+                                                mode="w",
+                                                path=pathlib.Path(input_dir) /
+                                                TASK_METADATA_FILENAME_UPLOAD)
 
         with _metadata_lock:
             global_metadata_file = _save_metadata({
@@ -89,10 +88,11 @@ def run_simulation(
                 },
                 **metadata
             })
-        logging.info("Task configuration metadata is saved in a file in "
-                     "the local input directory %s and added to the general "
-                     "tasks metadata file in %s.", task_metadata_file,
-                     global_metadata_file)
+        logging.info(
+            "Task configuration metadata is saved in a file in "
+            "the local input directory %s and added to the general "
+            "tasks metadata file in %s.", task_metadata_file,
+            global_metadata_file)
 
     logging.info("Consider tracking the status of the task via cli:"
                  " $inductiva tasks list")

@@ -325,7 +325,7 @@ class Task:
             end_time = datetime.datetime.fromisoformat(info["end_time"])
 
         total_seconds = (end_time - submitted_time).total_seconds()
-        return format_utils.seconds_formatter(total_seconds)     
+        return format_utils.seconds_formatter(total_seconds)
 
     def get_machine_type(self) -> Optional[str]:
         """Get the machine type used in the task.
