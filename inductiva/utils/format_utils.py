@@ -43,8 +43,9 @@ def apply_formatters(table_data: dict, formatters: dict):
     """Apply formatters to a list of lists of data (rows).
 
     Args:
-        table_data (dict): A dictionary of column names and lists of data.
-        formatters (dict): A dictionary of column names and functions to apply to that column's data.
+        table_data (dict): Dictionary of column names and lists of data.
+        formatters (dict): Dictionary of column names and functions to
+            apply to that column's data.
     """
     for column_name, formatter in formatters.items():
         if column_name in table_data:
