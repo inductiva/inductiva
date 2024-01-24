@@ -85,10 +85,9 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     """
 
     inputs_size = os.path.getsize(original_params["sim_dir"])
-    logging.info(
-        "Preparing local input directory %s (%s) for upload",
-        original_params["sim_dir"],
-        format_utils.bytes_formatter(inputs_size))
+    logging.info("Preparing local input directory %s (%s) for upload",
+                 original_params["sim_dir"],
+                 format_utils.bytes_formatter(inputs_size))
     input_zip_path = pack_input(
         params=original_params,
         type_annotations=type_annotations,
