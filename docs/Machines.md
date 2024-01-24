@@ -1,4 +1,4 @@
-# Manage Computational Resources
+# Computational Resources
 
 By default, simulation requests are processed by a shared pool of machines serving 
 multiple users. These machines are equipped with 4 cores each, and the pool is 
