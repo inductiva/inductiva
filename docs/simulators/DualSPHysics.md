@@ -1,13 +1,22 @@
 # DualSPHysics simulator
 
-DualSPHysics is a Smoothed-Particle Hydrodynamics (SPH) simulator. The simulator is usually configured by a single file with the extension `.xml`. This file contains all the information about the simulation, including the geometry, the physical properties of the fluids, the boundary conditions, the numerical parameters, and the output files. Sometimes the configuration can also use extra geometry files. 
+DualSPHysics is a Smoothed-Particle Hydrodynamics (SPH) simulator. The simulator 
+is usually configured by a single file with the extension `.xml`. This file contains 
+all the information about the simulation, including the geometry, the physical 
+properties of the fluids, the boundary conditions, the numerical parameters, and 
+the output files. Sometimes the configuration can also use extra geometry files. 
 
-To run a DualSPHysics simulation you will need to set the commands. In general, there are two main commands that are required to run a simulation: `gencase` and `dualsphysics`. The `gencase` command is used to generate the case files that will be used by the `dualsphysics` command to run the simulation. Thereafter, there are other commands that allow you to post-process the results. Examples of this are:
+To run a DualSPHysics simulation you will need to set the commands. In general, 
+there are two main commands that are required to run a simulation: `gencase` and 
+`dualsphysics`. The `gencase` command is used to generate the case files that will 
+be used by the `dualsphysics` command to run the simulation. Thereafter, there are 
+other commands that allow you to post-process the results. Examples of this are:
 - `partvtk`: to generate VTK files with the particle trajectories;
 - `isosurface`: to generate VTK files with the isosurfaces of the fluid;
 - `measuretool`: to generate CSV files with measurements of the fluid properties.
 
-For an extensive list of commands please check the DualSPHysics [documentation](https://dual.sphysics.org/). For the API, you can passed them in lower case and we will handle the rest for you!
+For an extensive list of commands please check the DualSPHysics [documentation](https://dual.sphysics.org/). 
+For the API, you can passed them in lower case and we will handle the rest for you!
 
 ## Example
 

@@ -1,15 +1,22 @@
 # Tasks
 
-The **Inductiva API** client provides the ability to run complex simulations and contains easy-to-use tools to manage them. Each simulation was submitted - with `simulator.run()` - runs asynchronously and returns a `Task` object that contains methods to manage the simulation.
+The **Inductiva API** client provides the ability to run complex simulations and
+contains easy-to-use tools to manage them. Each simulation was submitted - with
+`simulator.run()` - runs asynchronously and returns a `Task` object that contains
+methods to manage the simulation.
 
 Here, you'll learn:
 
-- [Managing tasks](#managing-tasks): the methods you can use to interact with a specific task.
-- [Retrieving tasks from previous sessions](#retrieving-tasks-from-previous-sessions): getting information from previously run tasks.
+- [Managing tasks](#managing-tasks): the methods you can use to interact with a 
+specific task.
+- [Retrieving tasks from previous sessions](#retrieving-tasks-from-previous-sessions): 
+getting information from previously run tasks.
 
 ## Managing tasks
 
-The `Task` class provides methods for managing a specific task submitted to the **Inductiva API**. You get an instance of `Task` every time you create a simulation. Moreover, you can [retrieve previously created tasks](#retrieving-tasks-from-previous-sessions).
+The `Task` class provides methods for managing a specific task submitted to 
+the **Inductiva API**. You get an instance of `Task` everytime you create a 
+simulation. Moreover, you can [retrieve previously created tasks](#retrieving-tasks-from-previous-sessions).
 With a `Task` object, you can:
  * Get its status;
  * Get the machine type where it ran/is running;
@@ -96,9 +103,14 @@ output_dir = task.download_outputs(uncompress=False)
 ## Retrieving tasks from previous sessions
 
 A fundamental aspect of the API is that all tasks run asynchronously.
-To retrieve previously created tasks and reconstruct the `Task` objects use the `inductiva.tasks.get()` function.
-It requires an argument named `last_n`, which specifies the number of most recent tasks submitted to the API to retrieve. It returns a list of `Task` objects so that you can resume manipulating the task and its results.
-Additionally, you can filter tasks by their current status, which allows you to get, for instance, only tasks that failed or only
+To retrieve previously created tasks and reconstruct the `Task` objects - the 
+object you get from `scenario.simulate()` -  use the `inductiva.tasks.get()` 
+function.
+It requires an argument named `last_n`, which specifies the number of most recent 
+tasks submitted to the API to retrieve. It returns a list of `Task` objects so 
+that you can resume manipulating the task and its results.
+Additionally, you can filter tasks by their current status, which allows you to 
+get, for instance, only tasks that failed or only
 tasks that are submitted and not yet started.
 
 ### Examples:
@@ -122,7 +134,8 @@ for task in successful_tasks:
     task.download_outputs()
 ```
 
-Another function named `list`, which shares the same arguments as `get`, can be used to print information about the
+Another function named `list`, which shares the same arguments as `get`, can be 
+used to print information about the
 tasks in tabular format to the console:
 
 ```python
