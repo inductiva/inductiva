@@ -1,5 +1,5 @@
 """OpenFOAM module of the API for fluid dynamics."""
-from typing import Optional, List
+from typing import Optional
 
 from inductiva import types, tasks, simulators
 
@@ -26,7 +26,7 @@ class OpenFOAM(simulators.Simulator):
     def run(
         self,
         input_dir: types.Path,
-        commands: List[dict],
+        commands: types.Commands,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
