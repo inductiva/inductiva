@@ -143,9 +143,11 @@ class Task:
                 if status == models.TaskStatusCode.PENDINGINPUT:
                     pass
                 elif status == models.TaskStatusCode.SUBMITTED:
-                    logging.info("Waiting for resources...")
+                    logging.info(
+                        "Task %s is waiting in the queue to be picked-up...",
+                        self.id)
                 elif status == models.TaskStatusCode.STARTED:
-                    logging.info("The task is being executed remotely.")
+                    logging.info("Task %s is running remotely...", self.id)
                 elif status == models.TaskStatusCode.SUCCESS:
                     logging.info("Task completed successfully.\n")
                 elif status == models.TaskStatusCode.FAILED:
@@ -323,7 +325,7 @@ class Task:
             end_time = datetime.datetime.fromisoformat(info["end_time"])
 
         total_seconds = (end_time - submitted_time).total_seconds()
-        return format_utils.seconds_formatter(total_seconds)
+        return format_utils.seconds_formatter(total_seconds)     
 
     def get_machine_type(self) -> Optional[str]:
         """Get the machine type used in the task.

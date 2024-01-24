@@ -10,7 +10,6 @@ import time
 from urllib3.exceptions import MaxRetryError, NewConnectionError
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
-from uuid import UUID
 
 from absl import logging
 
@@ -20,10 +19,11 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
                                      TaskStatus)
-from inductiva.types import Path
+from inductiva.types import Path, ComputationalResources
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
 from inductiva.utils import format_utils
+from inductiva import constants
 
 
 def validate_api_key(api_key: Optional[str]) -> Configuration:
@@ -83,16 +83,17 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         original_params: Params of the request passed by the user.
         type_annotations: Annotations of the params' types.
     """
-    logging.info("Packing input archive into a zip file.")
+
+    inputs_size = os.path.getsize(original_params["sim_dir"])
+    logging.info("Preparing local input directory %s with size %s"
+                 "for remote execution", original_params["sim_dir"], 
+                 format_utils.bytes_formatter(inputs_size))
     input_zip_path = pack_input(
         params=original_params,
         type_annotations=type_annotations,
         zip_name=task_id,
     )
 
-    file_size = os.path.getsize(input_zip_path)
-    logging.info("Uploading input archive with size %s.",
-                 format_utils.bytes_formatter(file_size))
     try:
         with open(input_zip_path, "rb") as zip_fp:
             _ = api_instance.upload_task_input(
@@ -104,7 +105,8 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
             "Exception when calling TasksApi->upload_task_inputs: %s", e)
         raise e
 
-    logging.info("Input archive uploaded.")
+    logging.info("Local input directory uploaded sucessfully and ready for"
+                 "remote execution.")
 
     os.remove(input_zip_path)
 
@@ -256,16 +258,50 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def submit_task(api_instance, task_request, params, type_annotations):
+def log_task_info(task_id, method_name, params, resource_pool):
+    """Logging the main components of a task submission."""
+
+    logging.info("Task Information: ")
+    logging.info("> ID: %s", task_id)
+    logging.info("> Method: %s", method_name)
+    logging.info("> Local input directory: %s", params["sim_dir"])
+    logging.info("> Computational resources:")
+    if resource_pool is not None:
+        logging.info("  >> Submmiting to the %s", resource_pool)
+        mpi_tag = None
+        if isinstance(resource_pool, inductiva.resources.MPICluster):
+            mpi_tag = f" x{resource_pool.num_machines}"
+        logging.info("  >> Resource type: %s%s",
+                     resource_pool.machine_type, mpi_tag)
+    else:
+        logging.info("  >> Submmiting to the default queue.")
+        logging.info("  >> Machine type: %s",
+                     constants.DEFAULT_QUEUE_MACHINE_TYPE)
+
+
+def submit_task(api_instance, method_name,
+                              request_params,
+                              resource_pool,
+                              storage_path_prefix,
+                              params,
+                              type_annotations):
     """Submit a task and send input files to the API."""
 
+    resource_pool_id = None
+    if resource_pool is not None:
+        resource_pool_id = resource_pool.id
+
+    task_request = TaskRequest(method=method_name,
+                               params=request_params,
+                               resource_pool=resource_pool_id,
+                               storage_path_prefix=storage_path_prefix)
     task = submit_request(
         api_instance=api_instance,
         request=task_request,
     )
 
     task_id = task["id"]
-    logging.info("Task ID: %s", task_id)
+    log_task_info(task_id, method_name, params, resource_pool)
 
     with blocking_task_context(api_instance, task_id):
         if task["status"] == "pending-input":
@@ -283,7 +319,7 @@ def submit_task(api_instance, task_request, params, type_annotations):
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
-                     resource_pool_id: Optional[UUID] = None,
+                     resource_pool: Optional[ComputationalResources] = None,
                      storage_path_prefix: Optional[str] = "") -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
@@ -316,16 +352,14 @@ def invoke_async_api(method_name: str,
         type_annotations=type_annotations,
     )
 
-    task_request = TaskRequest(method=method_name,
-                               params=request_params,
-                               resource_pool=resource_pool_id,
-                               storage_path_prefix=storage_path_prefix)
-
     with ApiClient(api_config) as client:
         api_instance = TasksApi(client)
 
         task_id = submit_task(api_instance=api_instance,
-                              task_request=task_request,
+                              method_name=method_name,
+                              request_params=request_params,
+                              resource_pool=resource_pool,
+                              storage_path_prefix=storage_path_prefix,
                               params=params,
                               type_annotations=type_annotations)
 

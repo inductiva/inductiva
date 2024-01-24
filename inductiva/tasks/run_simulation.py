@@ -35,20 +35,44 @@ def run_simulation(
         "sim_dir": pathlib.Path,
     }
 
-    resource_pool_id = None
-    if computational_resources is not None:
-        resource_pool_id = computational_resources.id
-
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
 
+    task_id = api_invoker(
+        api_method_name,
+        params,
+        type_annotations,
+        resource_pool=computational_resources,
+        storage_path_prefix=storage_dir,
+    )
+
+    if computational_resources is not None:
+        logging.info(
+            "Task %s submitted to the queue of the %s.",
+            task_id, computational_resources)
+    else:
+        logging.info(
+            "Task %s submitted to the default queue. It will be picked for"
+            "execution whenever a computational resource is available.",
+            task_id)
+
+    task = tasks.Task(task_id)
+    if not isinstance(task_id, str):
+        raise RuntimeError(
+            f"Expected result to be a string with task_id, got {type(task_id)}")
+
     if not format_utils.getenv_bool("DISABLE_TASK_METADATA_LOGGING", False):
+        machine_group_id = None
+        if computational_resources is not None:
+            machine_group_id = computational_resources.id
+
         metadata = {
             "api_method_name": api_method_name.split(".")[1],
-            "machine_group_id": resource_pool_id,
+            "machine_group_id": machine_group_id,
             "storage_dir": str(storage_dir),
             **kwargs,
         }
+
         if extra_metadata is not None:
             metadata = {**metadata, **extra_metadata}
 
@@ -58,27 +82,6 @@ def run_simulation(
                            path=pathlib.Path(input_dir) /
                            TASK_METADATA_FILENAME_UPLOAD)
 
-    task_id = api_invoker(
-        api_method_name,
-        params,
-        type_annotations,
-        resource_pool_id=resource_pool_id,
-        storage_path_prefix=storage_dir,
-    )
-
-    if computational_resources is not None:
-        logging.info("Task submitted to machine group %s.",
-                     computational_resources.name)
-    else:
-        logging.info("Task submitted to the default resource pool.")
-
-    task = tasks.Task(task_id)
-    if not isinstance(task_id, str):
-        raise RuntimeError(
-            f"Expected result to be a string with task_id, got {type(task_id)}")
-
-    if not format_utils.getenv_bool("DISABLE_TASK_METADATA_LOGGING", False):
-        with _metadata_lock:
             _save_metadata({
                 **{
                     "task_id": task_id,

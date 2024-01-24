@@ -58,6 +58,9 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_group.register = False
         return machine_group
 
+    def __repr__(self):
+        return f"Machine Group: {self.name}"
+
     def start(self):
         """Starts all machines of the machine group."""
         return super().start(num_vms=self.num_machines,
@@ -163,6 +166,9 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         machine_group.min_machines = int(resp["min_vms"])
         machine_group.num_active_machines = int(resp["num_vms"])
         return machine_group
+
+    def __repr__(self):
+        return f"Elastic Machine Group: {self.name}"
 
     def start(self):
         """Starts minimum number of machines."""
