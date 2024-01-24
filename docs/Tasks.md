@@ -51,7 +51,7 @@ if status == "submitted" or status == "started":
 # is interrupted. 
 task.wait()
 
-# Or, turn the simulation into a blocking call. Users kill
+# Or turn the simulation into a blocking call. Users kill
 # the remote process if the local process is killed.
 with task.sync_context():
     task.wait()
@@ -68,6 +68,8 @@ files = outputs_info.contents # List of individual files available.
 
 # Pretty print information on the output archive.
 print(outputs_info)
+```
+```bash
 # Archive size: 1.64 GiB
 # Contents:
 #  Size         Compressed   Name
@@ -76,20 +78,19 @@ print(outputs_info)
 # ...
 #  3.80 MiB     3.61 MiB     important_file1.txt
 #  1.27 MiB     1.21 MiB     important_file2.txt
+```
 
-
+```python
 # Download all the generated files.
 output_dir = task.download_outputs()
 
 # Download only those you are interested in:
 output_dir = task.download_outputs(
     filenames=["stdout.txt", "stderr.txt"])
-# 100%|██████████| 0.82M/0.82M [00:00<00:00, 53MiB/s]
 
 # Or all the generated files for archival, without extracting the
 # downloaded zip.
 output_dir = task.download_outputs(uncompress=False)
-# 100%|██████████| 1.64G/1.64G [00:32<00:00, 55.1MiB/s]
 ```
 
 ## Retrieving tasks from previous sessions
@@ -129,7 +130,7 @@ import inductiva
 
 # list the last 5 tasks
 print(inductiva.tasks.list(5))
-#                       ID           Simulator     Status          Submitted          Picked-Up Computation Time  Total Duration            VM Type
+#                       ID           Simulator     Status          Submitted          Started Computation Time  Total Duration            VM Type
 #on61z6u9c17uatqnbios7zjo3 openfoam_foundation    success   12 Jan, 10:27:19   12 Jan, 10:27:42        0h 2m 20s       0h 2m 50s   c2d-standard-112
 #u43sobjkk906566xzmm1x8x8t openfoam_foundation     killed   12 Jan, 10:21:51   12 Jan, 10:22:39        0h 1m 42s        0h 2m 8s   c2d-standard-112
 #k56bidnib55bkiv5jpmo0cp3z openfoam_foundation    started   12 Jan, 10:20:14   12 Jan, 10:22:39       *0h 7m 58s      *0h 7m 58s   c2d-standard-112

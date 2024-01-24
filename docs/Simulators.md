@@ -4,14 +4,14 @@ Inductiva API has available several open-source simulators ready to use. Users w
 No installation or management of the simulators is required, no need to worry about hardware or software dependencies. Inductiva API takes care of all of that for you.
 
 The simulators currently available are all open-source and have their dedicated documentation:
-- [SPlisHSPlasH](https://github.com/inductiva/inductiva/blob/main/docs/simulators/SPlisHSPlasH.md)
-- [DualSPHysics](https://github.com/inductiva/inductiva/blob/main/docs/simulators/DualSPHysics.md)
-- [OpenFOAM](https://github.com/inductiva/inductiva/blob/main/docs/simulators/OpenFOAM.md)
-- [SWASH](https://github.com/inductiva/inductiva/blob/main/docs/simulators/SWASH.md)
-- [XBeach](https://github.com/inductiva/inductiva/blob/main/docs/simulators/XBeach.md)
-- [Reef3D](https://github.com/inductiva/inductiva/blob/main/docs/simulators/Reef3D.md)
-- [GROMACS](https://github.com/inductiva/inductiva/blob/main/docs/simulators/GROMACS.md)
-- [FDS](https://github.com/inductiva/inductiva/blob/main/docs/simulators/FDS.md)
+- [SPlisHSPlasH](/docs/simulators/SPlisHSPlasH.md)
+- [DualSPHysics](/docs/simulators/DualSPHysics.md)
+- [OpenFOAM](/docs/simulators/OpenFOAM.md)
+- [SWASH](/docs/simulators/SWASH.md)
+- [XBeach](/docs/simulators/XBeach.md)
+- [Reef3D](/docs/simulators/Reef3D.md)
+- [GROMACS](/docs/simulators/GROMACS.md)
+- [FDS](/docs/simulators/FDS.md)
 
 Check the documentation of each simulator to learn more on how to configure them. Here, we highlight how to use your preferred simulator via Inductiva API and how to scale your simulations with simplicity. There is a general structure that all simulators follow, and then there are some specificities for each simulator.
 

@@ -26,14 +26,14 @@ input_dir = inductiva.utils.download_from_url(
 
 # Set the simulation commands
 commands = [
-    {"cmd": "runApplication surfaceFeatures", "prompts": []},
-    {"cmd": "runApplication blockMesh", "prompts":[]},
-    {"cmd": "runApplication decomposePar -copyZero", "prompts":[]},
-    {"cmd": "runParallel snappyHexMesh -overwrite", "prompts":[]},
-    {"cmd": "runParallel potentialFoam", "prompts":[]},
-    {"cmd": "runParallel simpleFoam", "prompts":[]},
-    {"cmd": "runApplication reconstructParMesh -constant", "prompts":[]},
-    {"cmd": "runApplication reconstructPar -latestTime", "prompts": []}
+    "runApplication surfaceFeatures"
+    "runApplication blockMesh"
+    "runApplication decomposePar -copyZero"
+    "runParallel snappyHexMesh -overwrite"
+    "runParallel potentialFoam"
+    "runParallel simpleFoam"
+    "runApplication reconstructParMesh -constant",
+    "runApplication reconstructPar -latestTime"
 ]
 
 # Initialize the Simulator
