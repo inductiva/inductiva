@@ -9,3 +9,10 @@ AVAILABLE_MACHINES = {
     "n2d-standard-": [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224],
     "n1-standard-": [1, 2, 4, 8, 16, 32, 64, 96],
 }
+
+
+def list_available_machines():
+    """Lists the types of available machines."""
+    return (machine_type + str(vcpu)
+            for machine_type, vcpus in AVAILABLE_MACHINES.items()
+            for vcpu in vcpus)
