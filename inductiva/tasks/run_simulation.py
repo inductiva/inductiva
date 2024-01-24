@@ -72,23 +72,30 @@ def run_simulation(
             "storage_dir": str(storage_dir),
             **kwargs,
         }
-
         if extra_metadata is not None:
             metadata = {**metadata, **extra_metadata}
 
         with _metadata_lock:
-            _save_metadata(metadata,
+            task_metadata_file = _save_metadata(metadata,
                            mode="w",
                            path=pathlib.Path(input_dir) /
                            TASK_METADATA_FILENAME_UPLOAD)
 
-            _save_metadata({
+        with _metadata_lock:
+            global_metadata_file = _save_metadata({
                 **{
                     "task_id": task_id,
                     "input_dir": str(input_dir)
                 },
                 **metadata
             })
+        logging.info("Task configuration metadata is saved in a file in "
+                     "the local input directory %s and added to the general "
+                     "tasks metadata file in %s.", task_metadata_file,
+                     global_metadata_file)
+
+    logging.info("Consider tracking the status of the task via cli:"
+                 " $inductiva tasks list")
 
     return task
 
@@ -102,4 +109,5 @@ def _save_metadata(metadata, mode="a", path=None):
     with open(file_path, mode, encoding="utf-8") as f:
         json.dump(metadata, f)
         f.write("\n")
-    logging.info("Simulation metadata logged to: %s", file_path)
+
+    return file_path
