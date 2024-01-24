@@ -5,14 +5,14 @@ from inductiva.utils import format_utils
 from typing import Sequence
 
 
-def _data_of_tasks(tasks: Sequence["inductiva.tasks.Task"]) -> str:
+def _data_of_tasks(list_of_tasks: Sequence["inductiva.tasks.Task"]) -> str:
     columns = [
         "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
         "Resource Type"
     ]
     rows = []
 
-    for task in tasks:
+    for task in list_of_tasks:
         info = task.get_info()
         simulator = task.get_simulator_name()
         status = task.get_status()
