@@ -25,6 +25,8 @@ class Command:
 
     def to_dict(self):
         """
+        Convert this command to a dictionary representation.
+        
         Returns:
         A dictionary with {"cmd": self.cmd, "prompts": self.prompts}
 
@@ -38,7 +40,7 @@ class Command:
     @staticmethod
     def commands_to_dicts(commands: types.Commands):
         """
-        Converts the commands to a dictionary.
+        Convert the given commands to a list of dictionaries.
 
         Example:
         >>> commands = [Command("run", "y"), "terminate"]
