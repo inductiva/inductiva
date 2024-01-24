@@ -39,7 +39,6 @@ def seconds_formatter(secs: float) -> str:
     return str(datetime.timedelta(seconds=round(secs)))
 
 
-#clean this function
 def apply_formatters(rows: list[list], columns: list, formatters: dict):
     """Apply formatters to a list of lists of data (rows)."""
     data = {}
