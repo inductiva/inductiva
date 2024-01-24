@@ -15,6 +15,7 @@ Inductiva API offers distinct advantages:
 - 💽 Automatically optimizes hardware configurations for each type of simulation (e.g., CPU vs. GPU, appropriate number of CPU cores, RAM, etc.).
 - 🐍 With Inductiva API, you are not limited to a pre-defined GUI or intricate configuration languages and scripts. Instead, you write small python programs that seamlessly integrate with your existing codebase and ML framework.
 
+Follow our [documentation](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/) to learn more about Inductiva API and how to use it.
 
 ## Simulators
 
@@ -25,16 +26,17 @@ advantage of performant hardware to speed up their simulation and exploration.
 
 Check the following pages for additional details on how to use them with
 **Inductiva API**:
-- [SPlisHSPlasH](https://github.com/inductiva/inductiva/blob/main/docs/simulators/SPlisHSPlasH.md)
-- [DualSPHysics](https://github.com/inductiva/inductiva/blob/main/docs/simulators/DualSPHysics.md)
-- [OpenFOAM](https://github.com/inductiva/inductiva/blob/main/docs/simulators/OpenFOAM.md)
-- [SWASH](https://github.com/inductiva/inductiva/blob/main/docs/simulators/SWASH.md)
-- [XBeach](https://github.com/inductiva/inductiva/blob/main/docs/simulators/XBeach.md)
-- [Reef3D](https://github.com/inductiva/inductiva/blob/main/docs/simulators/Reef3D.md)
-- [GROMACS](https://github.com/inductiva/inductiva/blob/main/docs/simulators/GROMACS.md)
-- [FDS](https://github.com/inductiva/inductiva/blob/main/docs/simulators/FDS.md)
+- [SPlisHSPlasH](/docs/simulators/SPlisHSPlasH.md)
+- [DualSPHysics](/docs/simulators/DualSPHysics.md)
+- [OpenFOAM](/docs/simulators/OpenFOAM.md)
+- [SWASH](/docs/simulators/SWASH.md)
+- [XBeach](/docs/simulators/XBeach.md)
+- [Reef3D](/docs/simulators/Reef3D.md)
+- [GROMACS](/docs/simulators/GROMACS.md)
+- [FDS](/docs/simulators/FDS.md)
 
-To learn how to use these simulators with Inductiva API, check the example below and the [Simulators section](https://github.com/inductiva/inductiva/blob/main/docs/simulators/).
+To learn how to use these simulators with Inductiva API, check the example below
+and the [Simulators section](/docs/simulators/).
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 

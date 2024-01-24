@@ -143,9 +143,13 @@ class Task:
                 if status == models.TaskStatusCode.PENDINGINPUT:
                     pass
                 elif status == models.TaskStatusCode.SUBMITTED:
-                    logging.info("Waiting for resources...")
+                    logging.info(
+                        "Task %s successfully queued and waiting to "
+                        "picked-up for execution...", self.id)
                 elif status == models.TaskStatusCode.STARTED:
-                    logging.info("The task is being executed remotely.")
+                    logging.info(
+                        "Task %s has started and is now running "
+                        "remotely.", self.id)
                 elif status == models.TaskStatusCode.SUCCESS:
                     logging.info("Task completed successfully.\n")
                 elif status == models.TaskStatusCode.FAILED:
