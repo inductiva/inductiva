@@ -29,8 +29,8 @@ class TaskStreamConsumer:
 
     def __init__(self,
                  task_id: str,
-                 fout: IO=sys.stdout,
-                 ferr: IO=sys.stderr):
+                 fout: IO = sys.stdout,
+                 ferr: IO = sys.stderr):
         """Initialize websocket connection to the task STDOUT & STDERR streams.
 
         Args:
