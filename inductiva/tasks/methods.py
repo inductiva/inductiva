@@ -1,13 +1,12 @@
 """Methods to interact with the tasks submitted to the API."""
 import json
-from typing import Dict, List, Optional, Union, Sequence
+from typing import Dict, List, Optional, Union
 
 import inductiva
 from inductiva import api
 from inductiva.client import ApiClient, ApiException
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
-from inductiva.utils import format_utils
 
 
 def _fetch_tasks_from_api(

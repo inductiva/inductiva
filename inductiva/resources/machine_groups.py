@@ -70,7 +70,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         ])
 
     formatters = {"Started at (UTC)": format_utils.datetime_formatter}
-    
+
     return format_utils.get_tabular_str(
         rows,
         columns,

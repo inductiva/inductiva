@@ -45,8 +45,8 @@ def apply_formatters(rows, columns, formatters):
 
     for index, column_name in enumerate(columns):
         data[column_name] = [row[index] for row in rows]
-    
-    for column_name,formatter in formatters.items():
+
+    for column_name, formatter in formatters.items():
         if column_name in data:
             data[column_name] = [formatter(x) for x in data[column_name]]
 
@@ -61,35 +61,27 @@ def get_tabular_str(
     """Converts a list of lists to a string table.
 
     """
-    
+
     formatters = formatters or {}
 
     data = apply_formatters(rows, columns, formatters)
     data_tabulated = tabulate(data, headers=columns, missingval="n/a")
-    
+
     return data_tabulated
 
 
-def get_tasks_str(tasks,
-                      formatters=None):
+def get_tasks_str(columns, rows, formatters=None):
     """Converts a list of tasks to a list of ids.
 
     """
-    #TODOPbarbosa: what do we show here?
-    formatters = formatters or {}
 
-    columns = [column for column in tasks[0]._info.keys()]
-    rows = [[value for value in task._info.values()] for task in tasks]
+    formatters = formatters or {}
 
     data = apply_formatters(rows, columns, formatters)
 
     data_tabulated = tabulate(data, headers=columns, missingval="n/a")
 
-    print(data_tabulated)
-
-
     # replace None with np.nan so that pandas can format them as "n/a"
     # by passing na_rep="n/a" to to_string()
-    
 
-    return "ola mundo"
+    return data_tabulated

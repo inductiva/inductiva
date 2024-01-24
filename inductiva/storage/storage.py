@@ -76,7 +76,7 @@ def _print_contents_table(contents):
             content["content_name"], content["size"], content["creation_time"]
         ]
         rows.append(row)
-    
+
     formatters = {
         "Creation Time": format_utils.datetime_formatter,
         "Size": format_utils.bytes_formatter
