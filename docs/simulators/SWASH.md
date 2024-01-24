@@ -13,7 +13,7 @@ file with a `.bot` extension, are necessary for the simulation to run.
 import inductiva
 
 # Set simulation input directory
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "swash-input-example.zip", unzip=True)
 

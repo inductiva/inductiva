@@ -8,16 +8,16 @@ No installation or management of the simulators is required, no need to worry
 about hardware or software dependencies. Inductiva API takes care of all of that 
 for you.
 
-The simulators currently available are all open-source and have their dedicated 
+The simulators currently available are all open-source and have their dedicated
 documentation:
-- [SPlisHSPlasH](https://github.com/InteractiveComputerGraphics/SPlisHSPlasH)
-- [DualSPHysics](https://dual.sphysics.org/)
-- [OpenFOAM](https://www.openfoam.com/)
-- [SWASH](https://swash.sourceforge.io/)
-- [XBeach](https://oss.deltares.nl/web/xbeach/)
-- [Reef3D](https://reef3d.wordpress.com/)
-- [GROMACS](https://www.gromacs.org/)
-- [FDS](https://pages.nist.gov/fds-smv/)
+- [SPlisHSPlasH](./simulators/SPlisHSPlasH.md)
+- [DualSPHysics](./simulators/DualSPHysics.md)
+- [OpenFOAM](./simulators/OpenFOAM.md)
+- [SWASH](./simulators/SWASH.md)
+- [XBeach](./simulators/XBeach.md)
+- [Reef3D](./simulators/Reef3D.md)
+- [GROMACS](./simulators/GROMACS.md)
+- [FDS](./simulators/FDS.md)
 
 Check the documentation of each simulator to learn more on how to configure them. 
 Here, we highlight how to use your preferred simulator via Inductiva API and how 
@@ -37,9 +37,9 @@ For a first simulation, we run a coastal dynamics simulation with SWASH.
 ```python
 import inductiva
 
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "swash-input-example.zip")
+    "swash-input-example.zip", unzip=True)
 
 # Initialize the Simulator
 swash = inductiva.simulators.SWASH()
@@ -48,6 +48,7 @@ swash = inductiva.simulators.SWASH()
 task = swash.run(input_dir=input_dir, 
                  sim_config_filename="input.sws")
 
+task.wait()
 task.download_outputs()
 ```
 
@@ -68,10 +69,9 @@ most performant and are mostly useful for demo and testing purposes. To run
 large-scale simulations you have the option to choose your own dedicated machine 
 group, where only your simulations will run.
 
-For instance, let's use DualSPHysics as an example again. Let's launch a machine 
-with 15 CPU physical cores and 120 GB of RAM and run our simulation there. 
-Learn further on how to manage the computational resources of Inductiva 
-API [here](https://github.com/inductiva/inductiva/blob/main/inductiva/resources/README.md).
+For instance, let's use Reef3D as an example again. Let's launch a machine with
+30 virtual CPU and run our simulation there. Learn further on how to manage the
+computational resources of Inductiva API [here](https://github.com/inductiva/inductiva/blob/main/inductiva/resources/README.md).
 
 ### Example
 
@@ -80,21 +80,21 @@ import inductiva
 
 # Initialize your machines
 my_machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2d-standard-30,
+    machine_type="c2-standard-30",
     num_machines=1,
-    disk_size_gb=50
 )
 
 # Start the machines
 my_machine_group.start()
 
 # Download the configuration files into a folder
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-input-example.zip"
-)
+    "reef3d-input-example.zip", unzip=True)
+
 # Initialize the Simulator
 simulator = inductiva.simulators.REEF3D()
+
 # Run simulation with config files in the input directory
 task = simulator.run(input_dir=input_dir, on=my_machine_group)
 

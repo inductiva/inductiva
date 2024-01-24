@@ -46,20 +46,20 @@ using the prefix `runApplication` the command will execute sequentially and with
 import inductiva
 
 # Set simulation input directory
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "openfoam-input-example.zip", unzip=True)
 
 # Set the simulation commands
-commands = parallel_commands = [
-    {"cmd": "runApplication surfaceFeatures", "prompts": []},
-    {"cmd": "runApplication blockMesh", "prompts":[]},
-    {"cmd": "runApplication decomposePar -copyZero", "prompts":[]},
-    {"cmd": "runParallel snappyHexMesh -overwrite", "prompts":[]},
-    {"cmd": "runParallel potentialFoam", "prompts":[]},
-    {"cmd": "runParallel simpleFoam", "prompts":[]},
-    {"cmd": "runApplication reconstructParMesh -constant", "prompts":[]},
-    {"cmd": "runApplication reconstructPar -latestTime", "prompts": []}
+commands = [
+    "runApplication surfaceFeatures"
+    "runApplication blockMesh"
+    "runApplication decomposePar -copyZero"
+    "runParallel snappyHexMesh -overwrite"
+    "runParallel potentialFoam"
+    "runParallel simpleFoam"
+    "runApplication reconstructParMesh -constant",
+    "runApplication reconstructPar -latestTime"
 ]
 
 # Initialize the Simulator

@@ -25,40 +25,18 @@ advantage of performant hardware to speed up their simulation and exploration.
 
 Check the following pages for additional details on how to use them with
 **Inductiva API**:
-- [SPlisHSPlasH](https://github.com/inductiva/inductiva/wiki/SPlisHSPlasH)
-- [DualSPHysics](https://github.com/inductiva/inductiva/wiki/DualSPHysics)
-- [OpenFOAM](https://github.com/inductiva/inductiva/wiki/OpenFOAM)
-- [SWASH](https://github.com/inductiva/inductiva/wiki/SWASH)
-- [XBeach](https://github.com/inductiva/inductiva/wiki/XBeach)
-- [Reef3D](https://github.com/inductiva/inductiva/wiki/Reef3D)
-- [GROMACS](https://github.com/inductiva/inductiva/wiki/GROMACS)
-- [FDS](https://github.com/inductiva/inductiva/wiki/FDS)
+- [SPlisHSPlasH](https://github.com/inductiva/inductiva/blob/main/docs/simulators/SPlisHSPlasH.md)
+- [DualSPHysics](https://github.com/inductiva/inductiva/blob/main/docs/simulators/DualSPHysics.md)
+- [OpenFOAM](https://github.com/inductiva/inductiva/blob/main/docs/simulators/OpenFOAM.md)
+- [SWASH](https://github.com/inductiva/inductiva/blob/main/docs/simulators/SWASH.md)
+- [XBeach](https://github.com/inductiva/inductiva/blob/main/docs/simulators/XBeach.md)
+- [Reef3D](https://github.com/inductiva/inductiva/blob/main/docs/simulators/Reef3D.md)
+- [GROMACS](https://github.com/inductiva/inductiva/blob/main/docs/simulators/GROMACS.md)
+- [FDS](https://github.com/inductiva/inductiva/blob/main/docs/simulators/FDS.md)
 
-To learn how to use these simulators with Inductiva API, check the example below and the [Simulators section](https://github.com/inductiva/inductiva/wiki/Simulators).
+To learn how to use these simulators with Inductiva API, check the example below and the [Simulators section](https://github.com/inductiva/inductiva/blob/main/docs/simulators/).
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
-
-### Example
-
-Example of how to use the simulators:
-
-```python
-import inductiva
-
-# Download the configuration files
-input_dir = inductiva.utils.files.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-input-example.zip", unzip=True
-)
-
-# Initialize the Simulator
-simulator = inductiva.simulators.REEF3D()
-
-# Run the simulation
-task = simulator.run(input_dir=input_dir)
-```
-
-The user must specify the input directory containing the files to run the simulation. In the above example, a directory with the configuration of a simulation is downloaded, and passed as argument to the simulator call.
 
 
 ## Installation
@@ -82,7 +60,34 @@ API key as an environment variable in your terminal as follows:
 export INDUCTIVA_API_KEY="YOUR_API_KEY"
 ```
 
-And you are good to go! You can start exploring Inductiva API with the examples below.
+And you are good to go! You can start exploring Inductiva API with the example below.
+
+### Example
+
+Example of how to use the simulators:
+
+```python
+import inductiva
+
+# Download the configuration files
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "reef3d-input-example.zip", unzip=True
+)
+
+# Initialize the Simulator
+simulator = inductiva.simulators.REEF3D()
+
+# Run the simulation
+task = simulator.run(input_dir=input_dir)
+
+# Wait for the simulation to finish and download the outputs
+task.wait()
+task.download_outputs()
+```
+
+The user must specify the input directory containing the files to run the simulation. In the above example, a directory with the configuration of a simulation is downloaded, and passed as argument to the simulator call.
+
 
 ## More info:
 

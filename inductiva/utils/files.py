@@ -125,6 +125,8 @@ def download_from_url(url: str, unzip: bool = False) -> str:
 
     try:
         downloaded_to, _ = urllib.request.urlretrieve(url, filename=local_path)
+        logging.info("Downloading from url %s to the local path: %s", url,
+                     local_path)
     except urllib.error.URLError as url_error:
         logging.error("Could not download file from %s", url)
         raise url_error

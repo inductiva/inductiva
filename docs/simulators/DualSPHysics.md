@@ -26,21 +26,22 @@ In this example, we run a classical CFD case of a flow over a cylinder.
 import inductiva
 
 # Download the configuration files into a folder
-input_dir = inductiva.utils.files.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "dualsphysics-input-example.zip", unzip=True
 )
 
-commands = [{"cmd": "gencase config flow_cylinder -save:all", "prompts": []},
-{"cmd": "dualsphysics flow_cylinder flow_cylinder -dirdataout data -svres", "prompts": []},
-{"cmd": "partvtk -dirin flow_cylinder/data -savevtk flow_cylinder/PartFluid -onlytype:-all,+fluid", "prompts": []}]
+commands = [
+    "gencase config flow_cylinder -save:all",
+    "dualsphysics flow_cylinder flow_cylinder -dirdataout data -svres",
+    "partvtk -dirin flow_cylinder/data -savevtk flow_cylinder/PartFluid -onlytype:-all,+fluid"]
 
 # Initialize the Simulator
 dualsphysics = inductiva.simulators.DualSPHysics()
 
 # Run simulation with config files in the input directory
 task = dualsphysics.run(input_dir=input_dir,
-                     commands=commands)
+                        commands=commands)
 
 task.wait()
 task.download_outputs()
