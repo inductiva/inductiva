@@ -40,7 +40,8 @@ def seconds_formatter(secs: float) -> str:
 
 
 #clean this function
-def apply_formatters(rows, columns, formatters):
+def apply_formatters(rows: list[list], columns: list, formatters: dict):
+    """Apply formatters to a list of lists of data (rows)."""
     data = {}
 
     for index, column_name in enumerate(columns):
