@@ -43,7 +43,7 @@ def get_task_generic_info(list_of_tasks: list) -> Mapping[str, List[Any]]:
     return table
 
 
-def list_command(args):
+def list_tasks(args):
     """
     List tasks based on the flags used.
     It can print the last N tasks or a single task with a specific ID
