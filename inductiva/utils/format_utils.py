@@ -1,4 +1,5 @@
 """Util functions for formatting data for printing to console."""
+from typing import Any, Iterable, Mapping, Union
 from distutils.util import strtobool
 import datetime
 import os
@@ -56,12 +57,17 @@ def apply_formatters(table_data: dict, formatters: dict):
     return table_data
 
 
-def get_tabular_str(rows: list, columns: list, formatters: dict = None) -> str:
+def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
+                                        Iterable[Iterable[Any]]],
+                    headers: list = (),
+                    formatters: dict = None) -> str:
     """Converts the list rows to a string table.
 
     Args:
-        rows (list): A list of data to be printed.
-        columns (list): A list of column names.
+        rows (list): can be a list-of-lists (or another iterable of iterables),
+            a list of named tuples, a dictionary of iterables, an iterable of
+            dictionaries, an iterable of dataclasses (Python 3.7+)
+        columns (list): A list of column names. Only needed if tabular_data is not a Mapping.
         formatters (dict): A dictionary of column names and functions to apply
             to the data in that column. The function should take a single
             argument and return a string. The function will be applied to the
@@ -71,12 +77,20 @@ def get_tabular_str(rows: list, columns: list, formatters: dict = None) -> str:
 
     formatters = formatters or {}
 
-    data = {}
+    if not isinstance(tabular_data, Mapping):
+        data = {}
 
-    for index, column_name in enumerate(columns):
-        data[column_name] = [row[index] for row in rows]
+        for index, column_name in enumerate(headers):
+            data[column_name] = [row[index] for row in tabular_data]
+        #if we have no headers data will be empty. So, we want our original tabular_data
+        if headers != ():
+            tabular_data = data
+    else:
+        headers = tabular_data.keys()
 
-    data = apply_formatters(data, formatters)
-    data_tabulated_str = tabulate(data, headers=columns, missingval="n/a")
+    tabular_data_formatted = apply_formatters(tabular_data, formatters)
+    tabular_data_str = tabulate(tabular_data_formatted,
+                                headers=headers,
+                                missingval="n/a")
 
-    return data_tabulated_str
+    return tabular_data_str

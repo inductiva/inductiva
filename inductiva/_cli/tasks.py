@@ -3,14 +3,13 @@ from inductiva import tasks, utils
 from inductiva import _cli
 from inductiva.utils import format_utils
 from typing import Tuple
+from collections import defaultdict
+from tabulate import tabulate
 
 
 def get_task_generic_info(list_of_tasks: list) -> Tuple[list, list]:
-    columns = [
-        "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
-        "Resource Type"
-    ]
-    rows = []
+
+    table = defaultdict(list)
 
     for task in list_of_tasks:
         info = task.get_info()
@@ -33,62 +32,41 @@ def get_task_generic_info(list_of_tasks: list) -> Tuple[list, list]:
             resource_type = executer["vm_type"]
             if executer["n_mpi_hosts"] > 1:
                 resource_type += f" x{executer['n_mpi_hosts']}"
+        table["ID"].append(task.id)
+        table["Simulator"].append(task.get_simulator_name())
+        table["Status"].append(status)
+        table["Submitted"].append(info.get("input_submit_time", None))
+        table["Started"].append(info.get("start_time", None))
+        table["Computation Time"].append(execution_time)
+        table["Resource Type"].append(resource_type)
 
-        row = [
-            task.id,
-            task.get_simulator_name(),
-            task.get_status(),
-            info.get("input_submit_time", None),
-            info.get("start_time", None),
-            execution_time,
-            resource_type,
-        ]
-        rows.append(row)
-
-    return rows, columns
+    return table
 
 
-def print_tasks_generic_info(rows: list, columns: list):
+def list_command(args):
+    """
+    List tasks based on the flags used.
+    It can print the last N tasks or a single task with a specific ID
+    """
+    if args.task_id is not None:
+        task_list = [tasks.Task(args.task_id)]
+
+    else:
+        last_n = 5 if args.last_n is None else args.last_n
+
+        task_list = tasks.list(last_n=last_n)
+
+    table = get_task_generic_info(task_list)
+
     formatters = {
         "Submitted": format_utils.datetime_formatter,
         "Started": format_utils.datetime_formatter
     }
 
-    print(
-        utils.format_utils.get_tabular_str(
-            rows,
-            columns,
-            formatters=formatters,
-        ))
-
-
-def list_tasks(args):
-    """List tasks."""
-
-    list_of_tasks = tasks.list(last_n=args.last_n)
-
-    rows, columns = get_task_generic_info(list_of_tasks)
-
-    print_tasks_generic_info(rows, columns)
-
-
-def list_task_by_id(args):
-    """List a task with a specific ID."""
-    t = tasks.Task(args.task_id)
-
-    rows, columns = get_task_generic_info([t])
-
-    print_tasks_generic_info(rows, columns)
-
-
-def list_command(args):
-
-    if args.task_id is not None:
-        list_task_by_id(args)
-    else:
-        number_of_tasks = 5 if args.last_n is None else args.last_n
-        args.last_n = number_of_tasks
-        list_tasks(args)
+    print(utils.format_utils.get_tabular_str(
+        table,
+        formatters=formatters,
+    ))
 
 
 def register_tasks_cli(parser):
@@ -105,7 +83,7 @@ def register_tasks_cli(parser):
                        type=int,
                        help="List last N tasks. Default: 5.")
 
-    group.add_argument("-tid",
+    group.add_argument("-id",
                        "--task-id",
                        type=str,
                        help="List a task with a specific ID.")
