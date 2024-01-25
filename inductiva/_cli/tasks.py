@@ -53,7 +53,6 @@ def list_tasks(args):
 
     else:
         last_n = 5 if args.last_n is None else args.last_n
-
         task_list = tasks.list(last_n=last_n)
 
     table = get_task_generic_info(task_list)
