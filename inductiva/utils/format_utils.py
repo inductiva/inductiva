@@ -92,8 +92,8 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
         headers = tabular_data.keys()
 
     tabular_data_formatted = apply_formatters(tabular_data, formatters)
-    tabular_data_str = tabulate(tabular_data_formatted,
-                                headers=headers,
-                                missingval="n/a")
+    return tabulate(tabular_data_formatted,
+                    headers=headers,
+                    missingval="n/a")
 
     return tabular_data_str
