@@ -42,10 +42,13 @@ def run_simulation(
         params,
         type_annotations,
         resource_pool=computational_resources,
+        resource_pool=computational_resources,
         storage_path_prefix=storage_dir,
     )
 
     if computational_resources is not None:
+        logging.info("Task %s submitted to the queue of the %s.", task_id,
+                     computational_resources)
         logging.info("Task %s submitted to the queue of the %s.", task_id,
                      computational_resources)
     else:
@@ -73,7 +76,7 @@ def run_simulation(
             metadata = {**metadata, **extra_metadata}
 
         with _metadata_lock:
-            _save_metadata({
+            global_metadata_file = _save_metadata({
                 **{
                     "task_id": task_id,
                     "input_dir": str(input_dir)
@@ -98,3 +101,4 @@ def _save_metadata(metadata, mode="a"):
     with open(file_path, mode, encoding="utf-8") as f:
         json.dump(metadata, f)
         f.write("\n")
+    logging.info("Simulation metadata logged to: %s", file_path)

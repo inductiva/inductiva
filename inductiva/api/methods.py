@@ -23,6 +23,7 @@ from inductiva import types, constants
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
 from inductiva.utils import format_utils
+from inductiva import constants
 
 
 def validate_api_key(api_key: Optional[str]) -> Configuration:
