@@ -1,6 +1,17 @@
-# Installing Inductiva
+# Getting Started
+some text here to intoduce this section
 
-Inductiva package is simple to install, just run on your terminal:
+## Prerequisites
+You will need [Python](https://www.python.org/) 3.8 or higher installed. If you do not have [Python](https://www.python.org/) installed already, here are the instructions to [download Python](https://www.python.org/downloads/) and install it.
+
+> **Tip:** New versions of Python are released annually in October, and it can take a few months for the scientific Python ecosystem to catch up. If you have trouble installing plasmapy on the most recent Python version between October and March, then try installing it on the second most recent version.
+
+
+
+## Installation
+
+To install the latest Inductiva package release on PyPI with pip, just open your 
+terminal and run:
 
 ```
 pip install --upgrade inductiva
@@ -8,6 +19,9 @@ pip install --upgrade inductiva
 
 This will provide the core functionalities of the API, which allows you to submit 
 jobs, control machines, and run simulations.
+
+**You're all set!** Visit the [example gallery]() to get inspired on the many ways you can use Inductiva. It 
+takes about 10 minutes to browse.
 
 For any issues with the installation, see [Troubleshooting](#troubleshooting).
 
@@ -48,3 +62,5 @@ below:
 ```
 pip install --upgrade inductiva
 ```
+
+## Frequently Asked Questions
