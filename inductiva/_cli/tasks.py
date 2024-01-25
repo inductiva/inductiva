@@ -4,11 +4,7 @@ from inductiva import _cli
 from inductiva.utils import format_utils
 
 
-def list_tasks(args):
-    """List tasks."""
-
-    list_of_tasks = tasks.list(last_n=args.last_n)
-
+def get_task_generic_info(list_of_tasks: list) -> tuple[list, list]:
     columns = [
         "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
         "Resource Type"
@@ -48,6 +44,10 @@ def list_tasks(args):
         ]
         rows.append(row)
 
+    return rows, columns
+
+
+def print_tasks_generic_info(rows: list, columns: list):
     formatters = {
         "Submitted": format_utils.datetime_formatter,
         "Started": format_utils.datetime_formatter
@@ -61,18 +61,52 @@ def list_tasks(args):
         ))
 
 
+def list_tasks(args):
+    """List tasks."""
+
+    list_of_tasks = tasks.list(last_n=args.last_n)
+
+    rows, columns = get_task_generic_info(list_of_tasks)
+
+    print_tasks_generic_info(rows, columns)
+
+
+def list_task_by_id(args):
+    """List a task with a specific ID."""
+    t = tasks.Task(args.task_id)
+
+    rows, columns = get_task_generic_info([t])
+
+    print_tasks_generic_info(rows, columns)
+
+
+def list_command(args):
+
+    if args.task_id is not None:
+        list_task_by_id(args)
+    else:
+        number_of_tasks = 5 if args.last_n is None else args.last_n
+        args.last_n = number_of_tasks
+        list_tasks(args)
+
+
 def register_tasks_cli(parser):
     _cli.utils.show_help_msg(parser)
 
     subparsers = parser.add_subparsers()
 
     list_subparser = subparsers.add_parser("list", help="List tasks")
-    list_subparser.add_argument(
-        "-n",
-        "--last-n",
-        type=int,
-        default=5,
-        help="List last N tasks. Default: %(default)s",
-    )
-    # Register function to call when this subcommand is used
-    list_subparser.set_defaults(func=list_tasks)
+
+    group = list_subparser.add_mutually_exclusive_group()
+
+    group.add_argument("-n",
+                       "--last-n",
+                       type=int,
+                       help="List last N tasks. Default: 5.")
+
+    group.add_argument("-tid",
+                       "--task-id",
+                       type=str,
+                       help="List a task with a specific ID.")
+
+    list_subparser.set_defaults(func=list_command)
