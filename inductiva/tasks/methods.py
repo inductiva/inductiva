@@ -1,7 +1,7 @@
 """Methods to interact with the tasks submitted to the API."""
 from collections import defaultdict
 import json
-from typing import Any, Dict,List, Mapping, Optional, Union
+from typing import Any, Dict, List, Mapping, Optional, Union
 
 import inductiva
 from inductiva import api
@@ -87,7 +87,7 @@ def _fetch_tasks_from_api(
 def get(
     last_n: int = 5,
     status: Optional[Union[str, models.TaskStatusCode]] = None
-) -> list["inductiva.tasks.Task"]:
+) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
 
     This function fetches info about the last N tasks (with respect to
