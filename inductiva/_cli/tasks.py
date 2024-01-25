@@ -7,7 +7,8 @@ from inductiva.utils import format_utils
 def list_tasks(args):
     """
     List tasks based on the flags (task_id, last_n).
-    It can print the last N tasks (default value is 5) or a single task with a specific ID
+    It can print the last N tasks (default value is 5)
+    or a single task with a specific ID
     """
     if args.task_id is not None:
         task_list = [tasks.Task(args.task_id)]
