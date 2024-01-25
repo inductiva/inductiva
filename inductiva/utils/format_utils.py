@@ -59,7 +59,7 @@ def apply_formatters(table_data: dict, formatters: dict):
 
 def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
                                         Iterable[Iterable[Any]]],
-                    headers: list = (),
+                    headers: Optional[Iterable[Any]] = None,
                     formatters: Optional[Dict[str, typing.Callable]] = None) -> str:
     """Converts the list rows to a string table.
 
