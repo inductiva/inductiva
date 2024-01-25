@@ -1,5 +1,5 @@
 """Util functions for formatting data for printing to console."""
-from typing import Any, Callable, Iterable, Mapping, Optional, Union
+from typing import Any, Callable, Dict, Iterable, Mapping, Optional, Union
 from distutils.util import strtobool
 import datetime
 import os
@@ -60,7 +60,7 @@ def apply_formatters(table_data: dict, formatters: dict):
 def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
                                         Iterable[Iterable[Any]]],
                     headers: Optional[Iterable[Any]] = None,
-                    formatters: Optional[dict[str, Callable]] = None) -> str:
+                    formatters: Optional[Dict[str, Callable]] = None) -> str:
     """Converts a table of data (Mapping or any Iterable) to a string table.
 
     Args:

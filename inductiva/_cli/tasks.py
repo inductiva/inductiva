@@ -16,7 +16,7 @@ def list_tasks(args):
         last_n = 5 if args.last_n is None else args.last_n
         task_list = tasks.get(last_n=last_n)
 
-    table = tasks.get_tasks_info(task_list)
+    table_dict = tasks.to_dict(task_list)
 
     formatters = {
         "Submitted": format_utils.datetime_formatter,
@@ -24,7 +24,7 @@ def list_tasks(args):
     }
 
     print(utils.format_utils.get_tabular_str(
-        table,
+        table_dict,
         formatters=formatters,
     ))
 

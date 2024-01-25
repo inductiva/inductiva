@@ -1,7 +1,7 @@
 """Methods to interact with the tasks submitted to the API."""
 from collections import defaultdict
 import json
-from typing import Any, Dict, Mapping, Optional, Union
+from typing import Any, Dict,List, Mapping, Optional, Union
 
 import inductiva
 from inductiva import api
@@ -10,9 +10,9 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
 
 
-def to_dict(list_of_tasks: list) -> Mapping[str, list[Any]]:
+def to_dict(list_of_tasks: List) -> Mapping[str, List[Any]]:
 
-    table = defaultdict(list)
+    table = defaultdict(List)
 
     for task in list_of_tasks:
         info = task.get_info()
@@ -49,7 +49,7 @@ def _fetch_tasks_from_api(
     status: Optional[Union[str, models.TaskStatusCode]] = None,
     page=1,
     per_page=10,
-) -> list[Dict]:
+) -> List[Dict]:
     """Get information about a user's tasks on the API.
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
