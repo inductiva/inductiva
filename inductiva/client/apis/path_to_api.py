@@ -1,6 +1,7 @@
 import typing_extensions
 
 from inductiva.client.paths import PathValues
+from inductiva.client.apis.paths.tasks_auth import TasksAuth
 from inductiva.client.apis.paths.tasks_submit import TasksSubmit
 from inductiva.client.apis.paths.tasks_task_id_input import TasksTaskIdInput
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
@@ -30,6 +31,7 @@ from inductiva.client.apis.paths.version_check import VersionCheck
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
+        PathValues.TASKS_AUTH: TasksAuth,
         PathValues.TASKS_SUBMIT: TasksSubmit,
         PathValues.TASKS_TASK_ID_INPUT: TasksTaskIdInput,
         PathValues.TASKS_TASK_ID: TasksTaskId,
@@ -59,6 +61,7 @@ PathToApi = typing_extensions.TypedDict(
     })
 
 path_to_api = PathToApi({
+    PathValues.TASKS_AUTH: TasksAuth,
     PathValues.TASKS_SUBMIT: TasksSubmit,
     PathValues.TASKS_TASK_ID_INPUT: TasksTaskIdInput,
     PathValues.TASKS_TASK_ID: TasksTaskId,
