@@ -29,7 +29,7 @@ def get_task_generic_info(list_of_tasks: list) -> Tuple[list, list]:
             resource_type = None
         else:
             resource_type = executer["vm_type"]
-            n_mpi_hosts = executer["vm_type"]
+            n_mpi_hosts = executer["n_mpi_hosts"]
             if n_mpi_hosts > 1:
                 resource_type += f" x{n_mpi_hosts}"
         table["ID"].append(task.id)
