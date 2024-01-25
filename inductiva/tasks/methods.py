@@ -1,18 +1,19 @@
 """Methods to interact with the tasks submitted to the API."""
 from collections import defaultdict
 import json
-from typing import Any, Dict, List, Mapping, Optional, Union
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Union
 
 import inductiva
 from inductiva import api
 from inductiva.client import ApiClient, ApiException
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
+from inductiva.tasks.task import Task
 
 
 def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
 
-    table = defaultdict(List)
+    table = defaultdict(list)
 
     for task in list_of_tasks:
         info = task.get_info()

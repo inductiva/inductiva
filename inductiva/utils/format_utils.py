@@ -80,10 +80,10 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     formatters = formatters or {}
 
     if not isinstance(tabular_data, Mapping):
-        data = {}
-
-        for index, column_name in enumerate(headers):
-            data[column_name] = [row[index] for row in tabular_data]
+        data = {
+            header: [row[index] for row in tabular_data]
+            for index, header in enumerate(headers)
+        }
         #if we have no headers data will be empty.
         #So, we want our original tabular_data
         if not headers:
