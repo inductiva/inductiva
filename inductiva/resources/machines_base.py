@@ -85,7 +85,7 @@ class BaseMachineGroup():
         except (exceptions.ApiValueError, exceptions.ApiException) as e:
             logging.info("Error registering the machine group."\
                          "\nFailed with exception:\n %s", e)
-            sys.exit()
+            sys.exit(1)
 
         self._id = resp.body["id"]
         self._name = resp.body["name"]
@@ -151,7 +151,7 @@ class BaseMachineGroup():
         except inductiva.client.ApiException as e:
             logging.info(f"An exception occurred when starting the"\
                           "machine group:\n %s", e)
-            sys.exit()
+            sys.exit(1)
 
     def terminate(self, **kwargs):
         """Terminates a machine group."""
