@@ -148,8 +148,8 @@ class BaseMachineGroup():
                          creation_time)
 
         except inductiva.client.ApiException as e:
-            logging.info(f"An exception occurred when starting the"\
-                          "machine group:\n %s", e)
+            logging.info("An exception occurred when starting the"\
+                         "machine group:\n %s", e)
             sys.exit(1)
 
     def terminate(self, **kwargs):
