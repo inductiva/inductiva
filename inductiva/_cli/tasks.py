@@ -4,7 +4,6 @@ from inductiva import _cli
 from inductiva.utils import format_utils
 from typing import Tuple
 from collections import defaultdict
-from tabulate import tabulate
 
 
 def get_task_generic_info(list_of_tasks: list) -> Tuple[list, list]:
