@@ -6,7 +6,7 @@ from typing import Tuple
 from collections import defaultdict
 
 
-def get_task_generic_info(list_of_tasks: list) -> Tuple[list, list]:
+def get_task_generic_info(list_of_tasks: list) -> Mapping[str, List[Any]]:
 
     table = defaultdict(list)
 
