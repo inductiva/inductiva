@@ -1,5 +1,5 @@
 """Util functions for formatting data for printing to console."""
-from typing import Any, Iterable, Mapping, Union
+from typing import Any, Callable, Iterable, Mapping, Optional, Union
 from distutils.util import strtobool
 import datetime
 import os
@@ -41,7 +41,7 @@ def seconds_formatter(secs: float) -> str:
 
 
 def apply_formatters(table_data: dict, formatters: dict):
-    """Apply formatters to a list of lists of data (rows).
+    """Applies a dict of formatters to dict of data.
 
     Args:
         table_data : Dictionary of column names and lists of data.
@@ -60,8 +60,8 @@ def apply_formatters(table_data: dict, formatters: dict):
 def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
                                         Iterable[Iterable[Any]]],
                     headers: Optional[Iterable[Any]] = None,
-                    formatters: Optional[Dict[str, typing.Callable]] = None) -> str:
-    """Converts the list rows to a string table.
+                    formatters: Optional[dict[str, Callable]] = None) -> str:
+    """Converts a table of data (Mapping or any Iterable) to a string table.
 
     Args:
         tabular_data: can be a list-of-lists (or another iterable of 
@@ -92,8 +92,5 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
         headers = tabular_data.keys()
 
     tabular_data_formatted = apply_formatters(tabular_data, formatters)
-    return tabulate(tabular_data_formatted,
-                    headers=headers,
-                    missingval="n/a")
 
-    return tabular_data_str
+    return tabulate(tabular_data_formatted, headers=headers, missingval="n/a")

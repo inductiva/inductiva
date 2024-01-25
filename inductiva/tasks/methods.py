@@ -1,6 +1,7 @@
 """Methods to interact with the tasks submitted to the API."""
+from collections import defaultdict
 import json
-from typing import Dict, List, Optional, Union
+from typing import Any, Dict, Mapping, Optional, Union
 
 import inductiva
 from inductiva import api
@@ -9,11 +10,46 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
 
 
+def to_dict(list_of_tasks: list) -> Mapping[str, list[Any]]:
+
+    table = defaultdict(list)
+
+    for task in list_of_tasks:
+        info = task.get_info()
+        status = task.get_status()
+        computation_end_time = info.get("computation_end_time", None)
+        execution_time = task.get_computation_time(fail_if_running=False)
+
+        if execution_time is not None:
+            if computation_end_time is None:
+                if status in ["started", "submitted"]:
+                    execution_time = f"*{execution_time}"
+                else:
+                    execution_time = "n/a"
+
+        executer = info["executer"]
+        if executer is None:
+            resource_type = None
+        else:
+            resource_type = executer["vm_type"]
+            n_mpi_hosts = executer["n_mpi_hosts"]
+            if n_mpi_hosts > 1:
+                resource_type += f" x{n_mpi_hosts}"
+        table["ID"].append(task.id)
+        table["Simulator"].append(task.get_simulator_name())
+        table["Status"].append(status)
+        table["Submitted"].append(info.get("input_submit_time", None))
+        table["Started"].append(info.get("start_time", None))
+        table["Computation Time"].append(execution_time)
+        table["Resource Type"].append(resource_type)
+    return table
+
+
 def _fetch_tasks_from_api(
     status: Optional[Union[str, models.TaskStatusCode]] = None,
     page=1,
     per_page=10,
-) -> List[Dict]:
+) -> list[Dict]:
     """Get information about a user's tasks on the API.
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
@@ -48,51 +84,10 @@ def _fetch_tasks_from_api(
             raise e
 
 
-# pylint: disable=redefined-builtin
-def list(last_n: int = 5,
-         status: Optional[Union[str, models.TaskStatusCode]] = None) -> None:
-    # pylint: disable=line-too-long
-    """List the last N tasks of a user.
-
-    This function returns a dataframe with information about the last N tasks
-    (with respect to submission time) of a user, sorted by submission time with
-    the most recent first.
-    A status can be specified to filter to get only tasks with that status, in
-    which case the last N tasks with that status will be listed.
-    The number of tasks can be less than N if the aren't enough tasks that
-    match the specified criteria.
-
-    Example usage:
-        # list the last 5 tasks that were successful
-        listing = inductiva.tasks.list(5)
-        # listing is a dataframe with 5 rows
-        print(listing)
-                           ID           Simulator         Status          Submitted            Started Computation Time        Resource Type
-    i5bnjw9gznqom857o4ohos661 openfoam_foundation        started   15 Jan, 15:02:07   15 Jan, 15:02:26         *03m 18s     c2d-standard-112
-    tdbs1viqiu0g83icnp048dtjj              reef3d        started   15 Jan, 14:41:16   15 Jan, 14:41:51         *23m 53s       c2-standard-60
-    ca370nk18dz2enzvp64y8a1r8 openfoam_foundation         failed   15 Jan, 14:40:48   15 Jan, 14:43:16          03m 23s  c2d-standard-56 x 4
-    rorv72bagv8s03qqoih5t9tba openfoam_foundation      submitted   15 Jan, 14:39:02                n/a              n/a                  n/a
-    4yv6mcbyo8x6eewv2xdy2x8ws openfoam_foundation      submitted   15 Jan, 14:38:05                n/a              n/a                  n/a
-    Args:
-        last_n: The number of most recent tasks with respect to submission
-            time to list. If filtering criteria (currently status is available)
-            is specified, most recent N tasks that match that criteria will be
-            listed. The actual number of tasks may be less if there
-            aren't enough tasks available.
-        status: The status of the tasks to list. If None, tasks with any status
-            will be listed.
-    """
-    # pylint: enable=line-too-long
-    status = models.TaskStatusCode(status) if status is not None else None
-    tasks = get(last_n, status=status)
-
-    return tasks
-
-
 def get(
     last_n: int = 5,
     status: Optional[Union[str, models.TaskStatusCode]] = None
-) -> List["inductiva.tasks.Task"]:
+) -> list["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
 
     This function fetches info about the last N tasks (with respect to
