@@ -29,8 +29,9 @@ def get_task_generic_info(list_of_tasks: list) -> Tuple[list, list]:
             resource_type = None
         else:
             resource_type = executer["vm_type"]
-            if executer["n_mpi_hosts"] > 1:
-                resource_type += f" x{executer['n_mpi_hosts']}"
+            n_mpi_hosts = executer["vm_type"]
+            if n_mpi_hosts > 1:
+                resource_type += f" x{n_mpi_hosts}"
         table["ID"].append(task.id)
         table["Simulator"].append(task.get_simulator_name())
         table["Status"].append(status)
