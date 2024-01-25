@@ -144,27 +144,27 @@ class Task:
                     pass
                 elif status == models.TaskStatusCode.SUBMITTED:
                     logging.info(
-                        "Task %s successfully queued and waiting to "
+                        "Task %s successfully queued and waiting to be "
                         "picked-up for execution...", self.id)
                 elif status == models.TaskStatusCode.STARTED:
                     logging.info(
                         "Task %s has started and is now running "
                         "remotely.", self.id)
                 elif status == models.TaskStatusCode.SUCCESS:
-                    logging.info("Task completed successfully.\n")
+                    logging.info("Task completed successfully.")
                 elif status == models.TaskStatusCode.FAILED:
                     logging.info("Task failed.")
                     logging.info("Download the 'stdout.txt' and 'stderr.txt' "
                                  "files with `task.download_outputs()` for "
-                                 "more detail. \n")
+                                 "more detail.")
                 elif status == models.TaskStatusCode.KILLED:
-                    logging.info("Task killed.\n")
+                    logging.info("Task killed.")
                 elif status == models.TaskStatusCode.ZOMBIE:
                     logging.info("The machine was terminated while the task "
                                  "was pending.")
                 else:
                     logging.info("An internal error occurred while "
-                                 "performing the task.\n")
+                                 "performing the task.")
             prev_status = status
 
             if status in _TASK_TERMINAL_STATUSES:
@@ -361,7 +361,7 @@ class Task:
 
         if self.get_status() in (models.TaskStatusCode.PENDINGINPUT,
                                  models.TaskStatusCode.SUBMITTED):
-            logging.info("Task did not start yet.")
+            logging.info("Task has not started yet.")
             return
 
         api_response = self._api.get_stdout_tail(

@@ -52,12 +52,12 @@ input_dir = inductiva.utils.download_from_url(
 
 # Set the simulation commands
 commands = [
-    "runApplication surfaceFeatures"
-    "runApplication blockMesh"
-    "runApplication decomposePar -copyZero"
-    "runParallel snappyHexMesh -overwrite"
-    "runParallel potentialFoam"
-    "runParallel simpleFoam"
+    "runApplication surfaceFeatures",
+    "runApplication blockMesh",
+    "runApplication decomposePar -copyZero",
+    "runParallel snappyHexMesh -overwrite",
+    "runParallel potentialFoam",
+    "runParallel simpleFoam",
     "runApplication reconstructParMesh -constant",
     "runApplication reconstructPar -latestTime"
 ]

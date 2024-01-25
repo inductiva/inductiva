@@ -124,9 +124,8 @@ def download_from_url(url: str, unzip: bool = False) -> str:
     local_path = resolve_path(local_path)
 
     try:
+        logging.info("Downloading from URL to the local path: %s", local_path)
         downloaded_to, _ = urllib.request.urlretrieve(url, filename=local_path)
-        logging.info("Downloading from url %s to the local path: %s", url,
-                     local_path)
     except urllib.error.URLError as url_error:
         logging.error("Could not download file from %s", url)
         raise url_error
@@ -134,6 +133,7 @@ def download_from_url(url: str, unzip: bool = False) -> str:
     # Unzip all files as they were zipped.
     if unzip and zipfile.is_zipfile(downloaded_to):
         local_path = local_path.with_suffix("")
+        logging.info("Uncompressing the downloaded file to: %s", local_path)
         _unzip(downloaded_to)
 
     return str(local_path.absolute())
