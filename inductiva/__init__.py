@@ -30,7 +30,7 @@ __version__ = "0.4.0"
 
 def _check_for_available_package_update():
     # pylint: disable=import-outside-toplevel
-    from .localization import translator as t
+    from .localization import translator as __
     import urllib3
     import json
     import sys
@@ -46,11 +46,11 @@ def _check_for_available_package_update():
         new_version = json_response["info"]["version"]
 
     except Exception as ex:  # pylint: disable=broad-exception-caught
-        logging.warning(t["failed-update-check"], ex)
+        logging.warning(__("failed-update-check", ex), exc_info=True)
 
     if new_version != __version__:
-        msg = t["upgrade-available"].format(new_version, __version__)
-        sys.stderr.write(msg + "\n")
+        msg = __("upgrade-available", new_version, __version__)
+        print(msg, file=sys.stderr)
 
 
 _check_for_available_package_update()
