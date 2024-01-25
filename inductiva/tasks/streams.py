@@ -1,10 +1,12 @@
 """Module for consuming the streams of a task through a websocket."""
 from typing import IO
 import logging
+import json
 import sys
 
 import websocket
 
+import inductiva
 from inductiva import constants
 
 logger = logging.getLogger("websocket")
@@ -39,8 +41,8 @@ class TaskStreamConsumer:
             fout (IO): I/O streams, such as returned by open(), for the STDOUT.
             ferr (IO): I/O streams, such as returned by open(), for the STDERR.
         """
-
-        self.websocket_url = f"{constants.LOGS_WEBSOCKET_URL}/{task_id}"
+        query = f'?query={{task_id="{task_id}"}}'
+        self.websocket_url = f"{constants.LOGS_WEBSOCKET_URL}" + query
         self.task_id = task_id
         self.fout = fout
         self.ferr = ferr
@@ -51,13 +53,17 @@ class TaskStreamConsumer:
     def __setup_websocket(self):
         """Initialize the websocket app, with the callbacks within the class."""
         return websocket.WebSocketApp(self.websocket_url,
+                                      header={"X-API-Key": inductiva.api_key},
                                       on_open=self.__on_open,
                                       on_error=self.__on_error,
                                       on_close=self.__on_close,
                                       on_message=self.__on_message)
 
     def __on_message(self, unused_ws, message):
-        print(message, file=self.fout)
+        data = json.loads(message)
+        streams = data.get("streams")
+        for stream in streams:
+            print(stream["values"][0][1], file=self.fout)
 
     def __on_error(self, unused_ws, error):
         if not isinstance(error, KeyboardInterrupt):
