@@ -187,7 +187,7 @@ class Task:
 
         start_time = time.time()
 
-        while (task_status == models.TaskStatusCode.PENDINGKILL):
+        while task_status == models.TaskStatusCode.PENDINGKILL:
 
             time.sleep(1)
             task_status = self.get_status()
