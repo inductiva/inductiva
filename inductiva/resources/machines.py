@@ -59,8 +59,12 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_group.register = False
         return machine_group
 
+    def __repr__(self):
+        class_name = type(self).__name__
+        return f"{class_name}(name=\"{self.name}\")"
+
     def __str__(self):
-        return f"Machine Group: {self.name}"
+        return f"Machine Group {self.name} with {self.machine_type} machines"
 
     def start(self):
         """Starts all machines of the machine group."""
@@ -77,7 +81,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
         logging.info("> Number of machines: %s", self.num_machines)
-        logging.info("> Spot: %s", self.spot)
+        logging.info("> Spot:               %s", self.spot)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
@@ -169,8 +173,13 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         machine_group.num_active_machines = int(resp["num_vms"])
         return machine_group
 
+    def __repr__(self):
+        class_name = type(self).__name__
+        return f"{class_name}(name=\"{self.name}\")"
+
     def __str__(self):
-        return f"Elastic Machine Group: {self.name}"
+        return f"Elastic Machine Group {self.name} with {self.machine_type} " \
+             "machines"
 
     def start(self):
         """Starts minimum number of machines."""

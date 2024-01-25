@@ -56,8 +56,13 @@ class MPICluster(machines_base.BaseMachineGroup):
         machine_group.register = False
         return machine_group
 
+    def __repr__(self):
+        class_name = type(self).__name__
+        return f"{class_name}(name=\"{self.name}\")"
+
     def __str__(self):
-        return f"MPI Cluster: {self.name}"
+        return f"MPI Cluster {self.name} with {self.machine_type} " \
+               f"x{self.num_machines} machines"
 
     def start(self):
         """Start the MPI Cluster."""
