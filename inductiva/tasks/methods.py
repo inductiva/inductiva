@@ -12,6 +12,16 @@ from inductiva.tasks.task import Task
 
 
 def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
+    """
+    Converts an Iterable of tasks to a dictionary with all the
+    relevant information for all the tasks.
+        Args:
+            list_of_tasks: An Iterable of tasks.
+        Returns:
+            A dictionary with all the relevant information for
+            all the tasks. Example: { "ID": [1, 2, 3], 
+            "Simulator": ["reef3d", "reef3d", "reef3d"], ... }
+    """
 
     table = defaultdict(list)
 
