@@ -86,7 +86,7 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
             data[column_name] = [row[index] for row in tabular_data]
         #if we have no headers data will be empty.
         #So, we want our original tabular_data
-        if headers != ():
+        if not headers:
             tabular_data = data
     else:
         headers = tabular_data.keys()
