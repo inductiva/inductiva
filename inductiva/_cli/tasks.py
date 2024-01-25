@@ -2,9 +2,10 @@
 from inductiva import tasks, utils
 from inductiva import _cli
 from inductiva.utils import format_utils
+from typing import Tuple
 
 
-def get_task_generic_info(list_of_tasks: list) -> tuple[list, list]:
+def get_task_generic_info(list_of_tasks: list) -> Tuple[list, list]:
     columns = [
         "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
         "Resource Type"
