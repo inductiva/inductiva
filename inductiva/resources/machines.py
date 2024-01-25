@@ -46,6 +46,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         self.__is_elastic = False
 
         if register:
+            logging.info("Registering MachineGroup configurations:")
             self._register_machine_group(num_vms=self.num_machines,
                                          spot=self.spot,
                                          is_elastic=self.__is_elastic)
@@ -152,6 +153,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self.spot = spot
 
         if self.register:
+            logging.info("Registering ElasticMachineGroup configurations:")
             self._register_machine_group(min_vms=self.min_machines,
                                          max_vms=self.max_machines,
                                          is_elastic=self.__is_elastic,

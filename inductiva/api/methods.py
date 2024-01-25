@@ -261,7 +261,7 @@ def log_task_info(task_id, method_name, params, resource_pool):
 
     logging.info("Task Information:")
     logging.info("> ID: %s", task_id)
-    logging.info("> Method: %s", method_name)
+    logging.info("> Method: %s", method_name.split(".")[-1])
     logging.info("> Local input directory: %s", params["sim_dir"])
     logging.info("> Computational resources:")
     if resource_pool is not None:

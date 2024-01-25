@@ -43,6 +43,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         self.__spot = False
 
         if register:
+            logging.info("Registering MPICluster configurations:")
             self._register_machine_group(num_vms=self.num_machines,
                                          is_elastic=self.__is_elastic,
                                          spot=self.__spot,

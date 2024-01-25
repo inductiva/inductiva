@@ -76,7 +76,6 @@ class BaseMachineGroup():
             disk_size_gb=self.disk_size_gb,
             **kwargs,
         )
-        logging.info("Registering machine group configurations:")
         resp = self._api.register_vm_group(body=instance_group_config)
         self._id = resp.body["id"]
         self._name = resp.body["name"]

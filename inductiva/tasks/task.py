@@ -151,14 +151,16 @@ class Task:
                         "Task %s has started and is now running "
                         "remotely.", self.id)
                 elif status == models.TaskStatusCode.SUCCESS:
-                    logging.info("Task completed successfully.")
+                    logging.info("Task %s completed successfully.", self.id)
                 elif status == models.TaskStatusCode.FAILED:
-                    logging.info("Task failed.")
+                    logging.info("Task %s failed.". self.id)
                     logging.info("Download the 'stdout.txt' and 'stderr.txt' "
                                  "files with `task.download_outputs()` for "
                                  "more detail.")
+                elif status == models.TaskStatusCode.PENDINGKILLED:
+                    logging.info("Task %s is being killed.", self.id)
                 elif status == models.TaskStatusCode.KILLED:
-                    logging.info("Task killed.")
+                    logging.info("Task %s killed.", self.id)
                 elif status == models.TaskStatusCode.ZOMBIE:
                     logging.info("The machine was terminated while the task "
                                  "was pending.")
