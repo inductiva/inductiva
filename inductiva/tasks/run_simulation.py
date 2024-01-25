@@ -42,7 +42,6 @@ def run_simulation(
         params,
         type_annotations,
         resource_pool=computational_resources,
-        resource_pool=computational_resources,
         storage_path_prefix=storage_dir,
     )
 
@@ -52,9 +51,7 @@ def run_simulation(
         logging.info("Task %s submitted to the queue of the %s.", task_id,
                      computational_resources)
     else:
-        logging.info(
-            "Task %s submitted to the default queue.",
-            task_id)
+        logging.info("Task %s submitted to the default queue.", task_id)
 
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
@@ -85,11 +82,12 @@ def run_simulation(
             })
         logging.info(
             "Task %s configurations metadata saved to the tasks metadata file "
-            "%s in the current working directory.",
-            task_id, TASK_METADATA_FILENAME)
+            "%s in the current working directory.", task_id,
+            TASK_METADATA_FILENAME)
 
-    logging.info("Consider tracking the status of the task via CLI:"
-                 "\n`inductiva tasks list --task-id %s`", task_id)
+    logging.info(
+        "Consider tracking the status of the task via CLI:"
+        "\n`inductiva tasks list --task-id %s`", task_id)
 
     return task
 

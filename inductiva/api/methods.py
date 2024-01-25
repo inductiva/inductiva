@@ -23,7 +23,6 @@ from inductiva import types, constants
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
 from inductiva.utils import format_utils
-from inductiva import constants
 
 
 def validate_api_key(api_key: Optional[str]) -> Configuration:
@@ -127,8 +126,8 @@ def download_output(
     if output_dir is None:
         output_dir = os.path.join(inductiva.output_dir, task_id)
 
-    logging.info("Downloading the task %s outputs to %s...",
-                 task_id, output_dir)
+    logging.info("Downloading the task %s outputs to %s...", task_id,
+                 output_dir)
     try:
         api_response = api_instance.download_task_output(
             path_params={"task_id": task_id},
@@ -140,8 +139,8 @@ def download_output(
     logging.debug("Downloaded output to %s", api_response.body.name)
 
     result_list = extract_output(api_response.body.name, output_dir)
-    logging.info("Task %s output successfully downloaded to %s.",
-                 task_id, output_dir)
+    logging.info("Task %s output successfully downloaded to %s.", task_id,
+                 output_dir)
 
     return result_list, pathlib.Path(output_dir)
 
@@ -309,7 +308,8 @@ def submit_task(api_instance, method_name, request_params, resource_pool,
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
-                     resource_pool: Optional[types.ComputationalResources] = None,
+                     resource_pool: Optional[
+                         types.ComputationalResources] = None,
                      storage_path_prefix: Optional[str] = "") -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 

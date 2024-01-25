@@ -140,8 +140,7 @@ class BaseMachineGroup:
                                                            start_time)
             self._started = True
 
-            logging.info("%s successfully started in %s.",
-                         self, creation_time)
+            logging.info("%s successfully started in %s.", self, creation_time)
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
@@ -169,8 +168,8 @@ class BaseMachineGroup:
             self._api.delete_vm_group(body=request_body)
             termination_time = format_utils.seconds_formatter(time.time() -
                                                               start_time)
-            logging.info("%s successfully terminated in %s.",
-                         self, termination_time)
+            logging.info("%s successfully terminated in %s.", self,
+                         termination_time)
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
