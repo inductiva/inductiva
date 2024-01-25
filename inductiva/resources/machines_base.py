@@ -9,6 +9,9 @@ import inductiva.client.models
 from inductiva import api
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
+from inductiva.client import exceptions
+
+import sys
 
 
 class ResourceType(enum.Enum):
@@ -77,7 +80,13 @@ class BaseMachineGroup():
             **kwargs,
         )
         logging.info("Registering machine group configurations:")
-        resp = self._api.register_vm_group(body=instance_group_config)
+        try:
+            resp = self._api.register_vm_group(body=instance_group_config)
+        except (exceptions.ApiValueError, exceptions.ApiException) as e:
+            logging.info("Error registering the machine group."\
+                         "\nFailed with exception:\n %s", e)
+            sys.exit()
+
         self._id = resp.body["id"]
         self._name = resp.body["name"]
         self.register = False
@@ -139,8 +148,10 @@ class BaseMachineGroup():
             logging.info("Machine group successfully started in %s.",
                          creation_time)
 
-        except inductiva.client.ApiException as api_exception:
-            raise api_exception
+        except inductiva.client.ApiException as e:
+            logging.info(f"An exception occurred when starting the"\
+                          "machine group:\n %s", e)
+            sys.exit()
 
     def terminate(self, **kwargs):
         """Terminates a machine group."""

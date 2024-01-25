@@ -99,6 +99,8 @@ def _fetch_machine_groups_from_api():
         return response.body
 
     except inductiva.client.ApiException as api_exception:
+        logging.info(f"Something went wrong fetching machine groups"\
+                     " from the API:\n %s", api_exception)
         raise api_exception
 
 
