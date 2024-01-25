@@ -1,4 +1,5 @@
 """Base class for machine groups."""
+import sys
 import time
 import enum
 
@@ -10,8 +11,6 @@ from inductiva import api
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
 from inductiva.client import exceptions
-
-import sys
 
 
 class ResourceType(enum.Enum):
