@@ -44,8 +44,8 @@ def apply_formatters(table_data: dict, formatters: dict):
     """Apply formatters to a list of lists of data (rows).
 
     Args:
-        table_data (dict): Dictionary of column names and lists of data.
-        formatters (dict): Dictionary of column names and functions to
+        table_data : Dictionary of column names and lists of data.
+        formatters : Dictionary of column names and functions to
             apply to that column's data.
     """
     for column_name, formatter in formatters.items():
@@ -64,12 +64,13 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     """Converts the list rows to a string table.
 
     Args:
-        rows (list): can be a list-of-lists (or another iterable of iterables),
-            a list of named tuples, a dictionary of iterables, an iterable of
-            dictionaries, an iterable of dataclasses (Python 3.7+)
-        columns (list): A list of column names.
+        tabular_data: can be a list-of-lists (or another iterable of 
+            iterables), a list of named tuples, a dictionary of
+            iterables, an iterable of dictionaries, an iterable of
+            dataclasses (Python 3.7+)
+        headers: A list of column names.
             Only needed if tabular_data is not a Mapping.
-        formatters (dict): A dictionary of column names and functions to apply
+        formatters: A dictionary of column names and functions to apply
             to the data in that column. The function should take a single
             argument and return a string. The function will be applied to the
             data in the column before printing. Defaults to None.
