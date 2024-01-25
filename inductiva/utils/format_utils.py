@@ -67,7 +67,8 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
         rows (list): can be a list-of-lists (or another iterable of iterables),
             a list of named tuples, a dictionary of iterables, an iterable of
             dictionaries, an iterable of dataclasses (Python 3.7+)
-        columns (list): A list of column names. Only needed if tabular_data is not a Mapping.
+        columns (list): A list of column names.
+            Only needed if tabular_data is not a Mapping.
         formatters (dict): A dictionary of column names and functions to apply
             to the data in that column. The function should take a single
             argument and return a string. The function will be applied to the
@@ -82,7 +83,8 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
 
         for index, column_name in enumerate(headers):
             data[column_name] = [row[index] for row in tabular_data]
-        #if we have no headers data will be empty. So, we want our original tabular_data
+        #if we have no headers data will be empty.
+        #So, we want our original tabular_data
         if headers != ():
             tabular_data = data
     else:
