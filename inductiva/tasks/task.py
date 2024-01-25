@@ -14,6 +14,7 @@ from inductiva.client import models
 from inductiva import api, types
 from inductiva.client.apis.tags import tasks_api
 from inductiva.utils import files, format_utils, data, output_contents
+from inductiva import constants
 
 import warnings
 
@@ -175,10 +176,34 @@ class Task:
     def kill(self) -> None:
         """Kill the task.
 
-        This method issues a request to the API to kill the task. It doesn't
-        block waiting for confirmation if the task was killed.
+        This method issues a request to the API to kill the task.
+        Then waits for 5s (checking every second) to see if the task was killed.
+        If the task is still running (or has a status different from killed)
+        after 5s, it issues a warning.
         """
         self._api.kill_task(path_params=self._get_path_params())
+
+        task_status = self.get_status()
+
+        start_time = time.time()
+
+        while (task_status == models.TaskStatusCode.PENDINGKILL):
+
+            time.sleep(1)
+            task_status = self.get_status()
+            if time.time() - start_time > constants.MAX_TIME_WAITING_FOR_TASK:
+                logging.warning(
+                    "Task may not have been killed successfully. Task status: "
+                    "%s", task_status)
+                return
+
+        if task_status == models.TaskStatusCode.KILLED:
+            logging.info("Task killed successfully. Task status: %s",
+                         task_status)
+        else:
+            logging.warning(
+                "Task may not have been killed successfully. Task status: %s",
+                task_status)
 
     def get_simulator_name(self) -> str:
         # e.g. retrieve openfoam from fvm.openfoam.run_simulation
