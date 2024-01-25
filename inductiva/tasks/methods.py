@@ -10,7 +10,7 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
 
 
-def to_dict(list_of_tasks: List) -> Mapping[str, List[Any]]:
+def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
 
     table = defaultdict(List)
 
