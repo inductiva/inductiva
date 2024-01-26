@@ -73,7 +73,7 @@ def run_simulation(
             metadata = {**metadata, **extra_metadata}
 
         with _metadata_lock:
-            global_metadata_file = _save_metadata({
+            _save_metadata({
                 **{
                     "task_id": task_id,
                     "input_dir": str(input_dir)
