@@ -11,7 +11,6 @@ from inductiva.api import methods
 from inductiva.utils import format_utils, files
 
 TASK_METADATA_FILENAME = "task_metadata.json"
-TASK_METADATA_FILENAME_UPLOAD = "uploaded_metadata.json"
 
 _metadata_lock = threading.RLock()
 
@@ -49,11 +48,10 @@ def run_simulation(
     if computational_resources is not None:
         logging.info("Task %s submitted to the queue of the %s.", task_id,
                      computational_resources)
+        logging.info("Task %s submitted to the queue of the %s.", task_id,
+                     computational_resources)
     else:
-        logging.info(
-            "Task %s submitted to the default queue. It will be picked for"
-            "execution whenever a computational resource is available.",
-            task_id)
+        logging.info("Task %s submitted to the default queue.", task_id)
 
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
@@ -75,13 +73,7 @@ def run_simulation(
             metadata = {**metadata, **extra_metadata}
 
         with _metadata_lock:
-            task_metadata_file = _save_metadata(metadata,
-                                                mode="w",
-                                                path=pathlib.Path(input_dir) /
-                                                TASK_METADATA_FILENAME_UPLOAD)
-
-        with _metadata_lock:
-            global_metadata_file = _save_metadata({
+            _save_metadata({
                 **{
                     "task_id": task_id,
                     "input_dir": str(input_dir)
@@ -89,25 +81,22 @@ def run_simulation(
                 **metadata
             })
         logging.info(
-            "Task configuration metadata is saved in a file in "
-            "the local input directory %s and added to the general "
-            "tasks metadata file in %s.", task_metadata_file,
-            global_metadata_file)
+            "Task %s configurations metadata saved to the tasks metadata file "
+            "%s in the current working directory.", task_id,
+            TASK_METADATA_FILENAME)
 
-    logging.info("Consider tracking the status of the task via cli:"
-                 " $inductiva tasks list")
+    logging.info(
+        "Consider tracking the status of the task via CLI:"
+        "\n`inductiva tasks list --task-id %s`", task_id)
 
     return task
 
 
-def _save_metadata(metadata, mode="a", path=None):
+def _save_metadata(metadata, mode="a"):
     """Appends metadata to the TASK_METADATA_FILENAME in the cwd."""
-    if path is None:
-        file_path = files.resolve_path(TASK_METADATA_FILENAME)
-    else:
-        file_path = files.resolve_path(path)
+
+    file_path = files.resolve_path(TASK_METADATA_FILENAME)
     with open(file_path, mode, encoding="utf-8") as f:
         json.dump(metadata, f)
         f.write("\n")
-
-    return file_path
+    logging.info("Simulation metadata logged to: %s", file_path)

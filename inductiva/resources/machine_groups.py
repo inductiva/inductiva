@@ -164,7 +164,7 @@ def get_cheapest_machine_type(num_cpus: int,
     logging.info("Machine type: %s", response.body["machine_type"])
     logging.info("CPUs: %s", response.body["num_cpus"])
     logging.info("RAM in GB: %s", response.body["ram_gb"])
-    logging.info("Estimated cost per hour: %s$", round(response.body["price"],
-                                                       5))
+    logging.info("Estimated cost per hour: %s $/h",
+                 round(response.body["price"], 5))
 
     return response.body["machine_type"]
