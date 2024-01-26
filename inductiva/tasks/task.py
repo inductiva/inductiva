@@ -176,9 +176,8 @@ class Task:
              wait: bool = False,
              timeout: float = 5,
              maxretries: int = 5) -> bool:
-        """
-        Tries to kill a task.
-        If wait is False (default value)the function sends the
+        """Tries to kill a task.
+        If wait is False (default value) the function sends the
         kill command and returns. If wait is True the function
         checks for confirmation that the kill command was successfull.
         Args:
@@ -217,17 +216,18 @@ class Task:
             status = self.get_status()
             if (time.time() - start) >= timeout:
                 success = False
-                logging.error("Kill command timed out.")
                 break
 
             time.sleep(1)
 
         if status != models.TaskStatusCode.KILLED:
             success = False
-            logging.error("Kill command failed. Task Status: %s", status)
+            logging.error(
+                "Failed to kill %s task after %d seconds." /
+                "The status of the task is %s", self.id, timeout, status)
 
         if success:
-            logging.info("Kill command finished successfully.")
+            logging.info("Successfully killed task %s.", self.id)
 
         return success
 
