@@ -21,7 +21,7 @@ no coding.
 configuration languages and scripts. Instead, you write small Python programs that
 seamlessly integrate with your existing codebase and ML framework.
 
-Follow our [documentation](Home.html)
+Follow our [documentation](./docs/simulators/Home.md)
 to learn more about Inductiva API and how to use it.
 
 ## Simulators
@@ -34,17 +34,17 @@ advantage of performant hardware to speed up their simulation and exploration.
 Check the following pages for additional details on how to use them with
 **Inductiva API**:
 
-- [SPlisHSPlasH](./simulators/SPlisHSPlasH.md)
-- [DualSPHysics](./simulators/DualSPHysics.md)
-- [OpenFOAM](./simulators/OpenFOAM.md)
-- [SWASH](./simulators/SWASH.md)
-- [XBeach](./simulators/XBeach.md)
-- [Reef3D](./simulators/Reef3D.md)
-- [GROMACS](./simulators/GROMACS.md)
-- [FDS](./simulators/FDS.md)
+- [SPlisHSPlasH](./docs/simulators/SPlisHSPlasH.md)
+- [DualSPHysics](./docs/simulators/DualSPHysics.md)
+- [OpenFOAM](./docs/simulators/OpenFOAM.md)
+- [SWASH](./docs/simulators/SWASH.md)
+- [XBeach](./docs/simulators/XBeach.md)
+- [Reef3D](./docs/simulators/Reef3D.md)
+- [GROMACS](./docs/simulators/GROMACS.md)
+- [FDS](./docs/simulators/FDS.md)
 
 To learn how to use these simulators with Inductiva API, check the example below
-and the [Simulators section](./simulators/).
+and the [Simulators section](./docs/simulators/Simulators.md).
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
@@ -105,8 +105,8 @@ and passed as argument to the simulator call.
 
 ## More info:
 
-- [Managing submitted tasks](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks#tasks)
-- [Managing computation resources](https://github.com/inductiva/inductiva/tree/main/inductiva/resources#manage-computational-resources)
+- [Managing submitted tasks](./docs/Tasks.md)
+- [Managing computation resources](./docs/Machines.md)
 
 ## Installation troubleshooting
 
