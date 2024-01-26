@@ -86,7 +86,6 @@ class BaseMachineGroup():
             logs.log_and_exit(logging.getLogger(), logging.ERROR,
                               "Registering machine group failed"\
                               " with exception %s", e)
-        # resp = self._api.register_vm_group(body=instance_group_config)
         self._id = resp.body["id"]
         self._name = resp.body["name"]
         self.register = False
