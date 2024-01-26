@@ -177,10 +177,10 @@ class Task:
              timeout: float = 5,
              maxretries: int = 5) -> bool:
         """
-        Tries to kill a task. If wait is True (default is False)
-        the function sends the kill command and returns.
-        If wait is False the function checks for confirmation that
-        the kill command was successfull.
+        Tries to kill a task.
+        If wait is False (default value)the function sends the
+        kill command and returns. If wait is True the function
+        checks for confirmation that the kill command was successfull.
         Args:
             wait: Determines if we wait for the kill command to
                 finish.
@@ -198,13 +198,13 @@ class Task:
                 logging.error("Error while sending the kill command: %s", e)
                 if maxretries == 0:
                     logging.error(
-                        "Something went wrong while senting the kill"\
+                        "Something went wrong while sending the kill"\
                             "command. Max retries reached."
                     )
                     return False
                 logging.error(
-                    "Something went wrong while senting the kill command."\
-                        "Trying again..."
+                    "Something went wrong while sending the kill command."\
+                        "Retrying..."
                 )
 
         if not wait:
@@ -215,13 +215,13 @@ class Task:
         status = self.get_status()
 
         while status == models.TaskStatusCode.PENDINGKILL:
+            status = self.get_status()
             if (time.time() - start) >= timeout:
                 success = False
                 logging.error("Kill command timed out.")
                 break
 
             time.sleep(1)
-            status = self.get_status()
 
         if status != models.TaskStatusCode.KILLED:
             success = False
