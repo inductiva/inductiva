@@ -49,17 +49,13 @@ simulator = inductiva.simulators.REEF3D()
 # Run the simulation and wait for it to finish
 task = simulator.run(input_dir=input_dir, on=mg)
 task.wait()
-```
 
-Don't forget to always terminate your machine groups when you don't need them
-anymore. If you want it to be terminated automatically after the simulation
-completes, add at the end of the above code snippet:
-
-```python
 mg.terminate()
 ```
 
-Otherwise, you can use the CLI to terminate it whenever you want:
+Don't forget to always terminate your machine groups when you don't need them
+anymore with the last command. Moreover, you can also use the CLI to terminate
+them whenever you want:
 
 ```bash
 inductiva machines terminate <machine_group_name>

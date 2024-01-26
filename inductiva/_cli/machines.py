@@ -3,13 +3,13 @@ import inductiva
 
 
 def list_machine_groups(args):
-    """List machine groups."""
+    """List Resources."""
     del args  # unused
     inductiva.resources.machine_groups.list()
 
 
 def start_machine_group(args):
-    """Start a machine group."""
+    """Start a resource."""
     machine_type = args.machine_type
     num_machines = args.num_machines
     disk_size_gb = args.disk_size
@@ -21,12 +21,11 @@ def start_machine_group(args):
                                                spot=spot)
 
     machine.start()
-
-    print(f"Machine group started.\nName: {machine.name}")
+    print("%s started.", repr(machine))
 
 
 def list_machine_types_available(args):
-    """List all available machines"""
+    """List all available machines types."""
     del args  # unused
 
     print("Available machine types\n")
@@ -54,13 +53,13 @@ def terminate_machine_group(args):
     """Terminate a machine group from a given name."""
     machine_name = args.name
 
-    print("Terminating machine group... If exists.")
+    print("Terminating MachineGroup... If exists.")
     machines_list = inductiva.resources.machine_groups.get()
 
     for machine in machines_list:
         if machine.name == machine_name:
             machine.terminate()
-            print(f"Terminated machine group: {machine_name}")
+            print(f"Terminated MachineGroup: {machine_name}")
             return
 
-    print(f"Machine {machine_name} not found.")
+    print(f"MachineGroup {machine_name} not found.")
