@@ -127,8 +127,8 @@ class Translator:
             *args: Positional substitutions for the Template constructor.
             **kwargs: Keyword substitutions for the Template constructor.
         """
-        transtation = self[key]
-        return Template(transtation, *args, **kwargs)
+        translation = self[key]
+        return Template(translation, *args, **kwargs)
 
     def __getitem__(self, key: str) -> str:
         """Get the translation for the given key in the active language.
@@ -147,5 +147,5 @@ class Translator:
 
 
 # pseudo-singleton object that is already initialized to the system's locale
-# or the pakcage's default language if the system's locale is not available.
+# or the package's default language if the system's locale is not available.
 translator = Translator()
