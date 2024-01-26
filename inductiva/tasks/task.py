@@ -194,8 +194,7 @@ class Task:
             try:
                 self._api.kill_task(path_params=self._get_path_params())
                 break
-            except exceptions.ApiException as e:
-                logging.error("Error while sending the kill command: %s", e)
+            except exceptions.ApiException:
                 if maxretries == 0:
                     logging.error(
                         "Something went wrong while sending the kill"\
