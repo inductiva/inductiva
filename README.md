@@ -21,7 +21,7 @@ no coding.
 configuration languages and scripts. Instead, you write small Python programs that
 seamlessly integrate with your existing codebase and ML framework.
 
-Follow our [documentation](./docs/simulators/Home.md)
+Follow our [documentation](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/)
 to learn more about Inductiva API and how to use it.
 
 ## Simulators

@@ -57,7 +57,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         return machine_group
 
     def __repr__(self):
-        class_name = type(self).__name__
+        class_name = self.__class__.__name__
         return f"{class_name}(name=\"{self.name}\")"
 
     def __str__(self):
