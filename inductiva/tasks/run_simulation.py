@@ -48,8 +48,6 @@ def run_simulation(
     if computational_resources is not None:
         logging.info("Task %s submitted to the queue of the %s.", task_id,
                      computational_resources)
-        logging.info("Task %s submitted to the queue of the %s.", task_id,
-                     computational_resources)
     else:
         logging.info("Task %s submitted to the default queue.", task_id)
 
@@ -87,7 +85,9 @@ def run_simulation(
 
     logging.info(
         "Consider tracking the status of the task via CLI:"
-        "\n`inductiva tasks list --task-id %s`", task_id)
+        "\n\tinductiva tasks list --task-id %s", task_id)
+    logging.info("Or, tracking the logs of the task via CLI:"
+                 "\n\tinductiva logs %s", task_id)
 
     return task
 
