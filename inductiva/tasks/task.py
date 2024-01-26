@@ -193,6 +193,13 @@ class Task:
         while maxretries > 0:
             maxretries -= 1
             try:
+                task_status = self.get_status()
+                if task_status in _TASK_TERMINAL_STATUSES:
+                    logging.info(
+                        "Task %s is already in terminal status %s. "
+                        "No need to kill it.", self.id, task_status)
+                    return False  # Return False because our current kill command
+                    # failed (even though the task status could be killed)
                 self._api.kill_task(path_params=self._get_path_params())
                 break
             except exceptions.ApiException:
