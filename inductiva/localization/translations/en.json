@@ -1,0 +1,11 @@
+{
+    "upgrade-available": [
+        "Version {0} of the 'inductiva' package is available (the currently installed version is {1}).",
+        "Consider upgrading to the newer version using:",
+        "  pip install --upgrade inductiva"
+    ],
+    "failed-update-check": [
+        "Unable to check for available updates for the 'inductiva' package.",
+        "The following error occurred:\n  {0}"
+    ]
+}

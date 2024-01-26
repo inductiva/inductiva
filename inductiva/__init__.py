@@ -26,3 +26,31 @@ urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
 __version__ = "0.4.0"
+
+
+def _check_for_available_package_update():
+    # pylint: disable=import-outside-toplevel
+    from .localization import translator as __
+    import urllib3
+    import json
+    import sys
+
+    new_version = __version__
+
+    try:
+        http = urllib3.PoolManager()
+        resp = http.request("GET",
+                            "https://pypi.org/pypi/inductiva/json",
+                            headers={"Accept": "application/json"})
+        json_response = json.loads(resp.data)
+        new_version = json_response["info"]["version"]
+
+    except Exception as ex:  # pylint: disable=broad-exception-caught
+        logging.warning(__("failed-update-check", ex), exc_info=True)
+
+    if new_version != __version__:
+        msg = __("upgrade-available", new_version, __version__)
+        print(msg, file=sys.stderr)
+
+
+_check_for_available_package_update()
