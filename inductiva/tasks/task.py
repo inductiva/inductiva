@@ -10,11 +10,10 @@ import datetime
 from dateutil import parser
 
 import inductiva
-from inductiva.client import models
+from inductiva.client import exceptions, models
 from inductiva import api, types
 from inductiva.client.apis.tags import tasks_api
 from inductiva.utils import files, format_utils, data, output_contents
-from inductiva import constants
 
 import warnings
 
@@ -173,37 +172,65 @@ class Task:
 
             time.sleep(polling_period)
 
-    def kill(self) -> None:
-        """Kill the task.
-
-        This method issues a request to the API to kill the task.
-        Then waits for 5s (checking every second) to see if the task was killed.
-        If the task is still running (or has a status different from killed)
-        after 5s, it issues a warning.
+    def kill(self,
+             wait: bool = False,
+             timeout: float = 5,
+             maxretries: int = 5) -> bool:
         """
-        self._api.kill_task(path_params=self._get_path_params())
+        Tries to kill a task. If wait is True (default is False)
+        the function sends the kill command and returns.
+        If wait is False the function checks for confirmation that
+        the kill command was successfull.
+        Args:
+            wait: Determines if we wait for the kill command to
+                finish.
+            timeout: Time in seconds to wait for the kill command.
+            maxretries: Number of times to retry the kill command.
+        Returns:
+            True if the kill command was successfull, False otherwise.
+        """
+        while maxretries > 0:
+            maxretries -= 1
+            try:
+                self._api.kill_task(path_params=self._get_path_params())
+                break
+            except exceptions.ApiException as e:
+                logging.error("Error while sending the kill command: %s", e)
+                if maxretries == 0:
+                    logging.error(
+                        "Something went wrong while senting the kill"\
+                            "command. Max retries reached."
+                    )
+                    return False
+                logging.error(
+                    "Something went wrong while senting the kill command."\
+                        "Trying again..."
+                )
 
-        task_status = self.get_status()
+        if not wait:
+            return True
 
-        start_time = time.time()
+        success = True
+        start = time.time()
+        status = self.get_status()
 
-        while task_status == models.TaskStatusCode.PENDINGKILL:
+        while status == models.TaskStatusCode.PENDINGKILL:
+            if (time.time() - start) >= timeout:
+                success = False
+                logging.error("Kill command timed out.")
+                break
 
             time.sleep(1)
-            task_status = self.get_status()
-            if time.time() - start_time > constants.MAX_TIME_WAITING_FOR_TASK:
-                logging.warning(
-                    "Task may not have been killed successfully. Task status: "
-                    "%s", task_status)
-                return
+            status = self.get_status()
 
-        if task_status == models.TaskStatusCode.KILLED:
-            logging.info("Task killed successfully. Task status: %s",
-                         task_status)
-        else:
-            logging.warning(
-                "Task may not have been killed successfully. Task status: %s",
-                task_status)
+        if status != models.TaskStatusCode.KILLED:
+            success = False
+            logging.error("Kill command failed. Task Status: %s", status)
+
+        if success:
+            logging.info("Kill command finished successfully.")
+
+        return success
 
     def get_simulator_name(self) -> str:
         # e.g. retrieve openfoam from fvm.openfoam.run_simulation
