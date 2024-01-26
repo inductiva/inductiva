@@ -200,7 +200,8 @@ class Task:
                         "No need to kill it.", self.id, task_status)
                     return False  # Return False because our current kill command
                     # failed (even though the task status could be killed)
-                self._api.kill_task(path_params=self._get_path_params())
+                path_params = self._get_path_params()
+                self._api.kill_task(path_params=path_params)
                 break
             except exceptions.ApiException:
                 if maxretries == 0:
