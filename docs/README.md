@@ -21,7 +21,7 @@ no coding.
 configuration languages and scripts. Instead, you write small Python programs that
 seamlessly integrate with your existing codebase and ML framework.
 
-Follow our [documentation](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/)
+Follow our [documentation](Home.html)
 to learn more about Inductiva API and how to use it.
 
 ## Simulators
@@ -34,17 +34,17 @@ advantage of performant hardware to speed up their simulation and exploration.
 Check the following pages for additional details on how to use them with
 **Inductiva API**:
 
-- [SPlisHSPlasH](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/simulators/SPlisHSPlasH.html)
-- [DualSPHysics](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/simulators/DualSPHysics.html)
-- [OpenFOAM](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/simulators/OpenFOAM.html)
-- [SWASH](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/simulators/SWASH.html)
-- [XBeach](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/simulators/XBeach.html)
-- [Reef3D](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/simulators/Reef3D.html)
-- [GROMACS](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/simulators/GROMACS.html)
-- [FDS](https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/simulators/FDS.html)
+- [SPlisHSPlasH](./simulators/SPlisHSPlasH.html)
+- [DualSPHysics](./simulators/DualSPHysics.html)
+- [OpenFOAM](./simulators/OpenFOAM.html)
+- [SWASH](./simulators/SWASH.html)
+- [XBeach](./simulators/XBeach.html)
+- [Reef3D](./simulators/Reef3D.html)
+- [GROMACS](./simulators/GROMACS.html)
+- [FDS](./simulators/FDS.html)
 
 To learn how to use these simulators with Inductiva API, check the example below
-and the [Simulators section](/docs/simulators/).
+and the [Simulators section](./simulators/).
 
 If you would like other simulators to be added, contact us at [simulations@inductiva.ai](mailto:simulations@inductiva.ai).
 
