@@ -153,7 +153,7 @@ class Task:
                 elif status == models.TaskStatusCode.SUCCESS:
                     logging.info("Task %s completed successfully.", self.id)
                 elif status == models.TaskStatusCode.FAILED:
-                    logging.info("Task %s failed.".self.id)
+                    logging.info("Task %s failed.", self.id)
                     logging.info("Download the 'stdout.txt' and 'stderr.txt' "
                                  "files with `task.download_outputs()` for "
                                  "more detail.")
