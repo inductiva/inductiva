@@ -146,9 +146,10 @@ class BaseMachineGroup:
         try:
             self._api.start_vm_group(body=request_body)
         except inductiva.client.ApiException as e:
-            logs.log_and_exit(logging.getLogger(), logging.ERROR,
-                              "Starting machine group failed" 
-                              " with exception %s", e)
+            logs.log_and_exit(
+                logging.getLogger(), logging.ERROR,
+                "Starting machine group failed"
+                " with exception %s", e)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         logging.info("%s successfully started in %s.", self, creation_time)
