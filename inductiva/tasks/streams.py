@@ -42,7 +42,8 @@ class TaskStreamConsumer:
             ferr (IO): I/O streams, such as returned by open(), for the STDERR.
         """
         query = f'?query={{task_id="{task_id}"}}'
-        self.websocket_url = f"{constants.LOGS_WEBSOCKET_URL}" + query
+        websocket_url = f"{constants.LOGS_WEBSOCKET_URL}/loki/api/v1/tail"
+        self.websocket_url = websocket_url + query
         self.task_id = task_id
         self.fout = fout
         self.ferr = ferr
