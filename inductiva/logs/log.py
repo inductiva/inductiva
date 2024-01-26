@@ -22,7 +22,8 @@ def handle_uncaught_exception(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, KeyboardInterrupt):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
-    root_logger.error("Unhandled exception",
+    root_logger.error("System encountered the following unhandled exception:\n"
+                      "%s\n  Exiting with code 1.", exc_value,
                       exc_info=(exc_type, exc_value, exc_traceback))
 
 
@@ -39,7 +40,7 @@ def setup(level=logging.INFO):
     handlers = [
         logging.handlers.RotatingFileHandler("rotated.log",
                                              encoding="utf8",
-                                             maxBytes=10_000,
+                                             maxBytes=1e6,
                                              backupCount=10),
         logging.StreamHandler()
     ]
