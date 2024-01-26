@@ -3,13 +3,16 @@ import time
 import enum
 from abc import abstractmethod
 
-from absl import logging
+import logging
 
 import inductiva
 import inductiva.client.models
 from inductiva import api
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
+from inductiva.client import exceptions
+
+from inductiva import logs
 
 
 class ResourceType(enum.Enum):
@@ -77,7 +80,13 @@ class BaseMachineGroup:
             disk_size_gb=self.disk_size_gb,
             **kwargs,
         )
-        resp = self._api.register_vm_group(body=instance_group_config)
+        logging.info("Registering machine group configurations:")
+        try:
+            resp = self._api.register_vm_group(body=instance_group_config)
+        except (exceptions.ApiValueError, exceptions.ApiException) as e:
+            logs.log_and_exit(logging.getLogger(), logging.ERROR,
+                              "Registering machine group failed"\
+                              " with exception %s", e)
         self._id = resp.body["id"]
         self._name = resp.body["name"]
         self.register = False
@@ -128,22 +137,22 @@ class BaseMachineGroup:
                 disk_size_gb=self.disk_size_gb,
                 **kwargs,
             )
+        logging.info("Starting machine group. "
+                     "This may take a few minutes.")
+        logging.info("Note that stopping this local process will not "
+                     "interrupt the creation of the machine group. "
+                     "Please wait...")
+        start_time = time.time()
         try:
-            logging.info("Starting %s. "
-                         "This may take a few minutes.", repr(self))
-            logging.info("Note that stopping this local process will not "
-                         "interrupt the creation of the machine group. "
-                         "Please wait...")
-            start_time = time.time()
             self._api.start_vm_group(body=request_body)
-            creation_time = format_utils.seconds_formatter(time.time() -
-                                                           start_time)
-            self._started = True
+        except inductiva.client.ApiException as e:
+            logs.log_and_exit(logging.getLogger(), logging.ERROR,
+                              "Starting machine group failed"\
+                              " with exception %s", e)
+        creation_time = format_utils.seconds_formatter(time.time() - start_time)
+        self._started = True
 
-            logging.info("%s successfully started in %s.", self, creation_time)
-
-        except inductiva.client.ApiException as api_exception:
-            raise api_exception
+        logging.info("Machine group successfully started in %s.", creation_time)
 
     def terminate(self, **kwargs):
         """Terminates a machine group."""
