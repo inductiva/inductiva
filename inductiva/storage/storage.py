@@ -76,11 +76,7 @@ def _print_contents_table(contents):
             content["content_name"], content["size"], content["creation_time"]
         ]
         rows.append(row)
-    override_col_space = {
-        "Name": 22,
-        "Size": 20,
-        "Creation Time": 20,
-    }
+
     formatters = {
         "Creation Time": format_utils.datetime_formatter,
         "Size": format_utils.bytes_formatter
@@ -89,8 +85,6 @@ def _print_contents_table(contents):
     return format_utils.get_tabular_str(
         rows,
         columns,
-        default_col_space=15,
-        override_col_space=override_col_space,
         formatters=formatters,
     )
 
