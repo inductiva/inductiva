@@ -34,14 +34,14 @@ advantage of performant hardware to speed up their simulation and exploration.
 Check the following pages for additional details on how to use them with
 **Inductiva API**:
 
-- [SPlisHSPlasH](./simulators/SPlisHSPlasH.html)
-- [DualSPHysics](./simulators/DualSPHysics.html)
-- [OpenFOAM](./simulators/OpenFOAM.html)
-- [SWASH](./simulators/SWASH.html)
-- [XBeach](./simulators/XBeach.html)
-- [Reef3D](./simulators/Reef3D.html)
-- [GROMACS](./simulators/GROMACS.html)
-- [FDS](./simulators/FDS.html)
+- [SPlisHSPlasH](./simulators/SPlisHSPlasH.md)
+- [DualSPHysics](./simulators/DualSPHysics.md)
+- [OpenFOAM](./simulators/OpenFOAM.md)
+- [SWASH](./simulators/SWASH.md)
+- [XBeach](./simulators/XBeach.md)
+- [Reef3D](./simulators/Reef3D.md)
+- [GROMACS](./simulators/GROMACS.md)
+- [FDS](./simulators/FDS.md)
 
 To learn how to use these simulators with Inductiva API, check the example below
 and the [Simulators section](./simulators/).
