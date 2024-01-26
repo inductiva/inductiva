@@ -22,9 +22,11 @@ def handle_uncaught_exception(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, KeyboardInterrupt):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
-    root_logger.error("System encountered the following unhandled exception:\n"
-                      "%s\n  Exiting with code 1.", exc_value,
-                      exc_info=(exc_type, exc_value, exc_traceback))
+    root_logger.error(
+        "System encountered the following unhandled exception:\n"
+        "%s\n  Exiting with code 1.",
+        exc_value,
+        exc_info=(exc_type, exc_value, exc_traceback))
 
 
 def setup(level=logging.INFO):
