@@ -70,19 +70,10 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         ])
 
     formatters = {"Started at (UTC)": format_utils.datetime_formatter}
-    override_col_space = {
-        "Machine Type": 18,
-        "# machines": 12,
-        "Spot": 10,
-        "Type": 10,
-        "Elastic": 10,
-    }
 
     return format_utils.get_tabular_str(
         rows,
         columns,
-        default_col_space=18,
-        override_col_space=override_col_space,
         formatters=formatters,
     )
 
@@ -173,7 +164,7 @@ def get_cheapest_machine_type(num_cpus: int,
     logging.info("Machine type: %s", response.body["machine_type"])
     logging.info("CPUs: %s", response.body["num_cpus"])
     logging.info("RAM in GB: %s", response.body["ram_gb"])
-    logging.info("Estimated cost per hour: %s$", round(response.body["price"],
-                                                       5))
+    logging.info("Estimated cost per hour: %s $/h",
+                 round(response.body["price"], 5))
 
     return response.body["machine_type"]

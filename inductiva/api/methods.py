@@ -19,11 +19,10 @@ from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
                                      TaskStatus)
-from inductiva.types import Path, ComputationalResources
+from inductiva import types, constants
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
 from inductiva.utils import format_utils
-from inductiva import constants
 
 
 def validate_api_key(api_key: Optional[str]) -> Configuration:
@@ -85,7 +84,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     """
 
     inputs_size = os.path.getsize(original_params["sim_dir"])
-    logging.info("Preparing local input directory %s (%s) for upload",
+    logging.info("Preparing upload of the local input directory %s (%s).",
                  original_params["sim_dir"],
                  format_utils.bytes_formatter(inputs_size))
     input_zip_path = pack_input(
@@ -105,7 +104,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
             "Exception when calling TasksApi->upload_task_inputs: %s", e)
         raise e
 
-    logging.info("Local input directory sucessfully uploaded.")
+    logging.info("Local input directory successfully uploaded.")
 
     os.remove(input_zip_path)
 
@@ -113,7 +112,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
 def download_output(
         api_instance: TasksApi,
         task_id,
-        output_dir: Optional[Path] = None) -> Tuple[List, pathlib.Path]:
+        output_dir: Optional[types.Path] = None) -> Tuple[List, pathlib.Path]:
     """Downloads the output of a given task from the API.
 
     Args:
@@ -123,24 +122,25 @@ def download_output(
     Return:
         Downloads and extracts the data to the client.
     """
-    logging.info("Downloading output...")
+
+    if output_dir is None:
+        output_dir = os.path.join(inductiva.output_dir, task_id)
+
+    logging.info("Downloading the task %s outputs to %s...", task_id,
+                 output_dir)
     try:
         api_response = api_instance.download_task_output(
             path_params={"task_id": task_id},
             stream=True,
         )
-        logging.info("Output downloaded.")
     except ApiException as e:
         raise e
 
     logging.debug("Downloaded output to %s", api_response.body.name)
 
-    if output_dir is None:
-        output_dir = os.path.join(inductiva.output_dir, task_id)
-
-    logging.info("Extracting output ZIP file to \"%s\"...", output_dir)
     result_list = extract_output(api_response.body.name, output_dir)
-    logging.info("Output extracted.")
+    logging.info("Task %s output successfully downloaded to %s.", task_id,
+                 output_dir)
 
     return result_list, pathlib.Path(output_dir)
 
@@ -260,21 +260,15 @@ def blocking_task_context(api_instance: TasksApi, task_id):
 def log_task_info(task_id, method_name, params, resource_pool):
     """Logging the main components of a task submission."""
 
-    logging.info("Task Information: ")
-    logging.info("> ID: %s", task_id)
-    logging.info("> Method: %s", method_name)
+    logging.info("Task Information:")
+    logging.info("> ID:                    %s", task_id)
+    logging.info("> Method:                %s", method_name.split(".")[1])
     logging.info("> Local input directory: %s", params["sim_dir"])
-    logging.info("> Computational resources:")
+    logging.info("> Submitting to the following computational resources:")
     if resource_pool is not None:
-        logging.info("  >> Submmiting to the %s", resource_pool)
-        mpi_tag = None
-        if isinstance(resource_pool, inductiva.resources.MPICluster):
-            mpi_tag = f" x{resource_pool.num_machines}"
-        logging.info("  >> Resource type: %s%s", resource_pool.machine_type,
-                     mpi_tag)
+        logging.info(" >> %s", resource_pool)
     else:
-        logging.info("  >> Submmiting to the default queue.")
-        logging.info("  >> Machine type: %s",
+        logging.info(" >> Default queue with %s machines.",
                      constants.DEFAULT_QUEUE_MACHINE_TYPE)
 
 
@@ -314,7 +308,8 @@ def submit_task(api_instance, method_name, request_params, resource_pool,
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
-                     resource_pool: Optional[ComputationalResources] = None,
+                     resource_pool: Optional[
+                         types.ComputationalResources] = None,
                      storage_path_prefix: Optional[str] = "") -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
