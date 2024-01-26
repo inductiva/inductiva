@@ -64,14 +64,16 @@ class TaskStreamConsumer:
         data = json.loads(message)
         streams = data.get("streams")
         for stream in streams:
-            print(stream["values"][0][1], file=self.fout)
+            msg = stream["values"][0][1]
+            print(msg, file=self.fout)
 
     def __on_error(self, unused_ws, error):
         if not isinstance(error, KeyboardInterrupt):
             print(error, file=self.ferr)
 
-    def __on_close(self, unused_ws, status_code, message):
-        print(f"Closed stream with {status_code}: {message}.", file=self.fout)
+    def __on_close(self, unused_ws, close_status_code, close_message):
+        print(f"Closed stream with {close_status_code}: {close_message}.",
+              file=self.fout)
 
     def __on_open(self, unused_ws):
         print(f"Opening socket connection to logs of task {self.task_id} ...",
