@@ -188,6 +188,8 @@ class Task:
         Returns:
             True if the kill command was successfull, False otherwise.
         """
+        if maxretries < 1:
+            raise ValueError("maxretries must be greater than 0.")
         while maxretries > 0:
             maxretries -= 1
             try:
@@ -195,15 +197,12 @@ class Task:
                 break
             except exceptions.ApiException:
                 if maxretries == 0:
-                    logging.error(
-                        "Something went wrong while sending the kill"\
-                            "command. Max retries reached."
-                    )
+                    logging.error("Something went wrong while sending the kill"
+                                  "command. Max retries reached.")
                     return False
                 logging.error(
-                    "Something went wrong while sending the kill command."\
-                        "Retrying..."
-                )
+                    "Something went wrong while sending the kill command."
+                    "Retrying...")
 
         if not wait:
             return True
@@ -223,7 +222,7 @@ class Task:
         if status != models.TaskStatusCode.KILLED:
             success = False
             logging.error(
-                "Failed to kill %s task after %d seconds." /
+                "Failed to kill %s task after %d seconds."
                 "The status of the task is %s", self.id, timeout, status)
 
         if success:
