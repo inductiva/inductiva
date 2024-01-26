@@ -43,10 +43,15 @@ class MPICluster(machines_base.BaseMachineGroup):
         self.__spot = False
 
         if register:
-            self._register_machine_group(num_vms=self.num_machines,
-                                         is_elastic=self.__is_elastic,
-                                         spot=self.__spot,
-                                         type=self.__type)
+            self._register_machine_group(
+                num_vms=self.num_machines,
+                is_elastic=self.__is_elastic,
+                spot=self.__spot,
+                type=self.__type,
+                vcpus_per_core=getattr(self, "_vcpus_per_core", 2),
+                use_placement_group=getattr(self, "_use_compact_placement",
+                                            False),
+                base_image=getattr(self, "_base_image", None))
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -63,7 +68,11 @@ class MPICluster(machines_base.BaseMachineGroup):
         return super().start(num_vms=self.num_machines,
                              is_elastic=self.__is_elastic,
                              spot=self.__spot,
-                             type=self.__type)
+                             type=self.__type,
+                             vcpus_per_core=getattr(self, "_vcpus_per_core", 2),
+                             use_placement_group=getattr(
+                                 self, "_use_compact_placement", False),
+                             base_image=getattr(self, "_base_image", None))
 
     def terminate(self):
         """Terminates the MPI Cluster."""
