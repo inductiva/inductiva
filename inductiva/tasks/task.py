@@ -4,7 +4,7 @@ import contextlib
 import time
 import json
 from absl import logging
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 from typing_extensions import TypedDict
 import datetime
 from dateutil import parser
@@ -173,8 +173,10 @@ class Task:
 
             time.sleep(polling_period)
 
-    def kill(self,
-             wait_timeout: Optional[(float | int)] = None) -> (bool | None):
+    def kill(
+            self,
+            wait_timeout: Optional[Union[float,
+                                         int]] = None) -> Union[bool, None]:
         """Tries to kill a task.
         If wait_timeout is None, the function will send the kill
         request, and return none. If wait_timeout is a positive number,
