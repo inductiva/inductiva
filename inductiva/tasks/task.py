@@ -170,7 +170,7 @@ class Task:
                                  "performing the task.")
             prev_status = status
 
-            if self._is_terminal_status:
+            if self._is_terminal_status():
                 return status
 
             time.sleep(polling_period)
