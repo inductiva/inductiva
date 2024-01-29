@@ -10,6 +10,7 @@ import datetime
 from dateutil import parser
 
 import inductiva
+from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api, types
 from inductiva.client.apis.tags import tasks_api
@@ -173,46 +174,47 @@ class Task:
             time.sleep(polling_period)
 
     def kill(self,
-             wait: bool = False,
-             timeout: float = 5,
-             maxretries: int = 5) -> bool:
+             wait_timeout: Optional[(float | int)] = None) -> (bool | None):
         """Tries to kill a task.
-        If wait is False (default value) the function sends the
-        kill command and returns. If wait is True the function
-        checks for confirmation that the kill command was successfull.
+        If wait_timeout is None, the function will send the kill
+        request, and return none. If wait_timeout is a positive number,
+        the function will send the kill request and wait (wait_timeout
+        seconds) for the task to be killed. We return True if the task
+        was successfully killed, and False otherwise.
         Args:
-            wait: Determines if we wait for the kill command to
-                finish.
-            timeout: Time in seconds to wait for the kill command.
-            maxretries: Number of times to retry the kill command.
+            wait_timeout: number of seconds to wait for the kill command
+            or none if we don't want to wait.
         Returns:
-            True if the kill command was successfull, False otherwise.
+            None if we don't wait, True if the kill command was successful,
+            False if it was not.
+
         """
-        if maxretries < 1:
-            raise ValueError("maxretries must be greater than 0.")
+        if not isinstance(wait_timeout, (float, int, type(None))) or (
+                wait_timeout is not None and wait_timeout <= 0.0):
+            raise ValueError("Wait timeout must be a positive number or None.")
+
+        maxretries = constants.MAX_API_RETRIES
+
         while maxretries > 0:
             maxretries -= 1
             try:
                 task_status = self.get_status()
+
                 if task_status in _TASK_TERMINAL_STATUSES:
-                    logging.info(
-                        "Task %s is already in terminal status %s. "
-                        "No need to kill it.", self.id, task_status)
-                    return False
+                    break
+
                 path_params = self._get_path_params()
                 self._api.kill_task(path_params=path_params)
                 break
-            except exceptions.ApiException:
+            except exceptions.ApiException as exc:
                 if maxretries == 0:
-                    logging.error("Something went wrong while sending the kill"
-                                  "command. Max retries reached.")
-                    return False
-                logging.error(
-                    "Something went wrong while sending the kill command."
-                    "Retrying...")
+                    raise RuntimeError(
+                        "Something went wrong while sending"
+                        "the kill command. Try again Later") from exc
+                time.sleep(1)
 
-        if not wait:
-            return True
+        if wait_timeout is None:
+            return None
 
         success = True
         start = time.time()
@@ -220,7 +222,7 @@ class Task:
 
         while status == models.TaskStatusCode.PENDINGKILL:
             status = self.get_status()
-            if (time.time() - start) >= timeout:
+            if (time.time() - start) >= wait_timeout:
                 success = False
                 break
 
@@ -229,8 +231,8 @@ class Task:
         if status != models.TaskStatusCode.KILLED:
             success = False
             logging.error(
-                "Failed to kill %s task after %d seconds."
-                "The status of the task is %s", self.id, timeout, status)
+                "Failed to kill %s task after %f seconds."
+                "The status of the task is %s", self.id, wait_timeout, status)
 
         if success:
             logging.info("Successfully killed task %s.", self.id)
