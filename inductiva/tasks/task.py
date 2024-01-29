@@ -235,7 +235,6 @@ class Task:
 
         success = True
         start = time.time()
-        status = self.get_status()
 
         while (status :=
                self.get_status()) == models.TaskStatusCode.PENDINGKILL:
