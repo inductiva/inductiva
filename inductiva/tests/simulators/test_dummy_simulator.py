@@ -1,10 +1,9 @@
 """Tests on a dummy simulator for testing purposes."""
-from typing import Optional, List
 import tempfile
 import json
 import os
 
-from inductiva import simulators, tasks, types
+from inductiva.simulators.dummy_simulator import DummySimulator
 
 INPUT_DIR = os.path.join(os.path.dirname(__file__), "test_input_dir")
 BACKEND_ARGS_FILE = "test_arguments.json"
@@ -13,7 +12,8 @@ TEMP_DIR = tempfile.TemporaryDirectory()
 
 def validate_args_from_backend(test_args, output_dir):
     """Validate that the arguments are sent and validated correctly."""
-    with open(os.path.join(output_dir, BACKEND_ARGS_FILE), "r") as f:
+    backend_args_file = os.path.join(output_dir, BACKEND_ARGS_FILE)
+    with open(backend_args_file, "r", encoding="utf-8") as f:
         backend_args = json.load(f)
 
     assert test_args["input_filename"] == backend_args["input_filename"]
@@ -33,7 +33,7 @@ def test_dummy_simulator__send_args__validate_args():
         "sleep_time": 1
     }
 
-    dummy = simulators.DummySimulator()
+    dummy = DummySimulator()
 
     task = dummy.run(input_dir=INPUT_DIR,
                      input_filename=test_args["input_filename"],
@@ -62,7 +62,7 @@ def test_dummy_simulator__with_commands():
     }
 
     # Initialize the Simulator
-    dummy = simulators.DummySimulator()
+    dummy = DummySimulator()
 
     task = dummy.run(input_dir=INPUT_DIR,
                      input_filename=test_args["input_filename"],
