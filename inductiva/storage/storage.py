@@ -119,8 +119,9 @@ def rmdir(path: str, /, confirm: bool = False):
     if not confirm:
         if path == "/":
             path = "all contents"
-        raise RuntimeError("Please set `confirm=True` to confirm you want to"
-            "delete %s from the user's storage.", path)
+        raise RuntimeError(
+            "Please set `confirm=True` to confirm you want to"
+            f"delete {path} from the user's storage.")
 
     if path == "/":
         logging.info("Removing everything from user storage.")
