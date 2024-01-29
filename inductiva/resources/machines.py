@@ -46,6 +46,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         self.__is_elastic = False
 
         if register:
+            logging.info("Registering MachineGroup configurations:")
             self._register_machine_group(num_vms=self.num_machines,
                                          spot=self.spot,
                                          is_elastic=self.__is_elastic)
@@ -59,7 +60,11 @@ class MachineGroup(machines_base.BaseMachineGroup):
         return machine_group
 
     def __repr__(self):
-        return f"Machine Group: {self.name}"
+        class_name = self.__class__.__name__
+        return f"{class_name}(name=\"{self.name}\")"
+
+    def __str__(self):
+        return f"Machine Group {self.name} with {self.machine_type} machines"
 
     def start(self):
         """Starts all machines of the machine group."""
@@ -76,7 +81,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
         logging.info("> Number of machines: %s", self.num_machines)
-        logging.info("> Spot: %s", self.spot)
+        logging.info("> Spot:               %s", self.spot)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
@@ -90,7 +95,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
               dollars ($/h)."""
         cost_per_machine = super()._get_estimated_cost(self.spot)
         estimated_cost = cost_per_machine * self.num_machines
-        logging.info("Estimated cloud cost for all machines : %.3f $/h",
+        logging.info("> Estimated cloud cost of machine group: %.3f $/h",
                      estimated_cost)
         return estimated_cost
 
@@ -152,6 +157,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self.spot = spot
 
         if self.register:
+            logging.info("Registering ElasticMachineGroup configurations:")
             self._register_machine_group(min_vms=self.min_machines,
                                          max_vms=self.max_machines,
                                          is_elastic=self.__is_elastic,
@@ -168,7 +174,12 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return machine_group
 
     def __repr__(self):
-        return f"Elastic Machine Group: {self.name}"
+        class_name = self.__class__.__name__
+        return f"{class_name}(name=\"{self.name}\")"
+
+    def __str__(self):
+        return f"Elastic Machine Group {self.name} with {self.machine_type} " \
+             "machines"
 
     def start(self):
         """Starts minimum number of machines."""
@@ -204,7 +215,9 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             "Note: these are the estimated costs of having minimum and the "
             "maximum number of machines up in the cloud. The final cost will "
             "vary depending on the total usage of the machines.")
-        logging.info("Minimum estimated cloud cost: %.3f $/h.",
-                     cost_per_machine * self.min_machines)
-        logging.info("Maximum estimated cloud cost: %.3f $/h.",
-                     cost_per_machine * self.max_machines)
+        logging.info(
+            "> Minimum estimated cloud cost of elastic machine group: "
+            "%.3f $/h.", cost_per_machine * self.min_machines)
+        logging.info(
+            "> Maximum estimated cloud cost  of elastic machine group:"
+            " %.3f $/h.", cost_per_machine * self.max_machines)

@@ -70,19 +70,10 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         ])
 
     formatters = {"Started at (UTC)": format_utils.datetime_formatter}
-    override_col_space = {
-        "Machine Type": 18,
-        "# machines": 12,
-        "Spot": 10,
-        "Type": 10,
-        "Elastic": 10,
-    }
 
     return format_utils.get_tabular_str(
         rows,
         columns,
-        default_col_space=18,
-        override_col_space=override_col_space,
         formatters=formatters,
     )
 
@@ -105,31 +96,29 @@ def _fetch_machine_groups_from_api():
 # pylint: disable=redefined-builtin
 def list():
     # pylint: disable=line-too-long
-    """Lists all active machine groups info.
+    """Lists all active resources info.
 
-    This method queries Google Cloud for active machine groups
+    This method queries Google Cloud for active resources
     that belong to the user. It outputs all the information relative to
-    each machine group as folllows:
+    each resource as folllows:
 
-    Active machine groups:
+    Active Resources:
                                         Name         VM Type    Elastic   # machines    Disk Size in GB       Spot   Started at (UTC)
     api-6359c03d-c4f9-479f-8b11-ba1f8f55a58c   e2-standard-4      False            3                 40      False   10 Oct, 13:40:50
     api-db2046cf-a6fc-4124-926c-1a24329da5ea   e2-standard-4       True          2/4                 40      False   10 Oct, 12:43:03
-
-    The name of the machine group can be used to retrieve a MachineGroup object
-    with the 'get' function."""
+    """
     # pylint: enable=line-too-long
 
     machine_group_list = get()
     if len(machine_group_list) != 0:
-        print("Active machine groups:")
+        print("Active Resources:")
         print(_machine_group_list_to_str(machine_group_list))
 
 
 def get():
-    """Returns a list of 'MachineGroup' objects."""
+    """Returns a list of 'Resource' objects."""
 
-    # Retrive the active machine group names
+    # Retrive the active resource names
     machine_groups = _fetch_machine_groups_from_api()
     machine_group_list = []
 
@@ -141,7 +130,7 @@ def get():
         elif mg["type"] == "mpi":
             mg_class = resources.MPICluster
         else:
-            raise ValueError("Unknown machine group configuration.")
+            raise ValueError("Unknown resource configuration.")
         machine_group_list.append(mg_class.from_api_response(mg))
 
     return machine_group_list
@@ -173,7 +162,7 @@ def get_cheapest_machine_type(num_cpus: int,
     logging.info("Machine type: %s", response.body["machine_type"])
     logging.info("CPUs: %s", response.body["num_cpus"])
     logging.info("RAM in GB: %s", response.body["ram_gb"])
-    logging.info("Estimated cost per hour: %s$", round(response.body["price"],
-                                                       5))
+    logging.info("Estimated cost per hour: %s $/h",
+                 round(response.body["price"], 5))
 
     return response.body["machine_type"]
