@@ -31,22 +31,22 @@ def test_get_timestamp_path(tmp_path: pathlib.Path):
 
 
 def test_resolve_path():
-    inductiva.working_dir = None
+    inductiva.set_working_dir(None)
     resolved_path = files.resolve_path("protein.pdb")
     assert resolved_path == pathlib.Path.cwd().joinpath("protein.pdb")
 
-    inductiva.working_dir = None
+    inductiva.set_working_dir(None)
     resolved_path = files.resolve_path(None)
     assert resolved_path == pathlib.Path.cwd()
 
-    inductiva.working_dir = "/tmp"
+    inductiva.set_working_dir("/tmp")
     resolved_path = files.resolve_path("protein.pdb")
     assert resolved_path == pathlib.Path("/tmp/protein.pdb")
 
-    inductiva.working_dir = "/tmp"
+    inductiva.set_working_dir("/tmp")
     resolved_path = files.resolve_path("/protein.pdb")
     assert resolved_path == pathlib.Path("/protein.pdb")
 
-    inductiva.working_dir = "tmp"
+    inductiva.set_working_dir("tmp")
     resolved_path = files.resolve_path("protein.pdb")
     assert resolved_path == pathlib.Path("tmp/protein.pdb")

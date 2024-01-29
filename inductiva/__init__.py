@@ -16,12 +16,12 @@ from . import logs
 logs.setup()
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
-# output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
-output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR")
-output_dir.set(os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output"))
+_output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR")
+_output_dir.set(os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output"))
 api_key = os.environ.get("INDUCTIVA_API_KEY")
 
-working_dir = None
+_working_dir = contextvars.ContextVar("INDUCTIVA_WORKING_DIR")
+_working_dir.set(None)
 
 absl.logging.set_verbosity(absl.logging.INFO)
 
@@ -31,6 +31,22 @@ urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
 __version__ = "0.4.1"
+
+
+def set_output_dir(new_output_dir):
+    _output_dir.set(new_output_dir)
+
+
+def get_output_dir():
+    return _output_dir.get()
+
+
+def set_working_dir(new_working_dir):
+    _working_dir.set(new_working_dir)
+
+
+def get_working_dir():
+    return _working_dir.get()
 
 
 def _check_for_available_package_update():

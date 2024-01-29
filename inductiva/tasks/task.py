@@ -231,7 +231,7 @@ class Task:
                 files are downloaded.
             output_dir: Directory where to download the files. If None, the
                 files are downloaded to the default directory. The default is
-                {inductiva.working_dir}/{inductiva.output_dir}/{task_id}.
+                {inductiva._working_dir}/{inductiva._output_dir}/{task_id}.
             uncompress: Whether to uncompress the archive after downloading it.
             rm_downloaded_zip_archive: Whether to remove the archive after
             uncompressing it. If uncompress is False, this argument is ignored.
@@ -251,7 +251,7 @@ class Task:
 
         if output_dir is None:
             output_dir = files.resolve_path(
-                inductiva.output_dir.get()).joinpath(self.id)
+                inductiva.get_output_dir()).joinpath(self.id)
         output_dir = files.resolve_path(output_dir)
 
         if output_dir.exists():

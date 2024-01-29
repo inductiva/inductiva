@@ -34,7 +34,7 @@ def resolve_path(path: Optional[types.Path]) -> pathlib.Path:
     """Resolve a path relative to the Inductiva package working directory.
 
     This takes in a path and returns it resolved relative to the
-    "inductiva.working_dir" setting.
+    "inductiva._working_dir" setting.
     Note:
     If the working directory is not set, the current working directory of
     the script is used.
@@ -49,8 +49,8 @@ def resolve_path(path: Optional[types.Path]) -> pathlib.Path:
     """
     resolved_path = pathlib.Path.cwd()
 
-    if inductiva.working_dir:
-        resolved_path = pathlib.Path(inductiva.working_dir)
+    if inductiva.get_working_dir():
+        resolved_path = pathlib.Path(inductiva.get_working_dir())
 
     if path is not None:
         resolved_path = pathlib.Path(resolved_path, path)

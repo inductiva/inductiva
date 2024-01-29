@@ -124,7 +124,7 @@ def download_output(
     """
 
     if output_dir is None:
-        output_dir = os.path.join(inductiva.output_dir, task_id)
+        output_dir = os.path.join(inductiva.get_output_dir, task_id)
     print(output_dir.get())
 
     logging.info("Downloading the task %s outputs to %s...", task_id,
