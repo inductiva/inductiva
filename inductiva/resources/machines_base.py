@@ -207,7 +207,7 @@ class BaseMachineGroup:
         if self.name is None:
             logging.info(
                 "Attempting to get the status of an unregistered machine group."
-                )
+            )
             return
 
         response = self._api.get_group_status({"name": self.name})
