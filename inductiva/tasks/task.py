@@ -8,14 +8,12 @@ from typing import Dict, Any, List, Optional
 from typing_extensions import TypedDict
 import datetime
 from dateutil import parser
+
 import inductiva
 from inductiva.client import models
-from inductiva import api
+from inductiva import api, types
 from inductiva.client.apis.tags import tasks_api
-from inductiva.utils import files
-from inductiva.utils import data
-from inductiva.utils import output_contents
-from inductiva import types
+from inductiva.utils import files, format_utils, data, output_contents
 
 import warnings
 
@@ -145,24 +143,30 @@ class Task:
                 if status == models.TaskStatusCode.PENDINGINPUT:
                     pass
                 elif status == models.TaskStatusCode.SUBMITTED:
-                    logging.info("Waiting for resources...")
+                    logging.info(
+                        "Task %s successfully queued and waiting to be "
+                        "picked-up for execution...", self.id)
                 elif status == models.TaskStatusCode.STARTED:
-                    logging.info("The task is being executed remotely.")
+                    logging.info(
+                        "Task %s has started and is now running "
+                        "remotely.", self.id)
                 elif status == models.TaskStatusCode.SUCCESS:
-                    logging.info("Task completed successfully.\n")
+                    logging.info("Task %s completed successfully.", self.id)
                 elif status == models.TaskStatusCode.FAILED:
-                    logging.info("Task failed.")
+                    logging.info("Task %s failed.", self.id)
                     logging.info("Download the 'stdout.txt' and 'stderr.txt' "
-                                 "files with `task.get_output()` for "
-                                 "more detail. \n")
+                                 "files with `task.download_outputs()` for "
+                                 "more detail.")
+                elif status == models.TaskStatusCode.PENDINGKILLED:
+                    logging.info("Task %s is being killed.", self.id)
                 elif status == models.TaskStatusCode.KILLED:
-                    logging.info("Task killed.\n")
+                    logging.info("Task %s killed.", self.id)
                 elif status == models.TaskStatusCode.ZOMBIE:
                     logging.info("The machine was terminated while the task "
                                  "was pending.")
                 else:
                     logging.info("An internal error occurred while "
-                                 "performing the task.\n")
+                                 "performing the task.")
             prev_status = status
 
             if status in _TASK_TERMINAL_STATUSES:
@@ -274,29 +278,58 @@ class Task:
         """Get dictionary with the URL path parameters for API calls."""
         return {"task_id": self.id}
 
-    def get_execution_time(self,
-                           fail_if_running: bool = True) -> Optional[float]:
-        """Get the time the task took to complete.
+    def get_computation_time(self,
+                             fail_if_running: bool = True) -> Optional[float]:
+        """Get the time the computation of the task took to complete.
 
         Returns:
-            The time in seconds or None if the task hasn't completed yet.
+            The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
         if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
             return None
         # start_time may be None if the task was killed before it started
-        if info["start_time"] is None:
+        if info["computation_start_time"] is None:
             return None
 
         # Format the time to datetime type
-        start_time = datetime.datetime.fromisoformat(info["start_time"])
+        start_time = datetime.datetime.fromisoformat(
+            info["computation_start_time"])
+        end_time = info.get("computation_end_time")
+        if end_time is None:
+            end_time = datetime.datetime.now(datetime.timezone.utc)
+        else:
+            end_time = datetime.datetime.fromisoformat(
+                info["computation_end_time"])
+
+        total_seconds = (end_time - start_time).total_seconds()
+        return format_utils.seconds_formatter(total_seconds)
+
+    def get_total_time(self, fail_if_running: bool = True) -> Optional[float]:
+        """Get the total time the task workflow took to complete.
+
+        Returns:
+            The time in hh mm ss or None if the task hasn't completed yet.
+        """
+        info = self.get_info()
+        if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
+            return None
+        # start_time may be None if the task was killed before it started
+        if info["input_submit_time"] is None:
+            return None
+
+        # Format the time to datetime type
+        submitted_time = datetime.datetime.fromisoformat(
+            info["input_submit_time"])
         end_time = info.get("end_time")
+
         if end_time is None:
             end_time = datetime.datetime.now(datetime.timezone.utc)
         else:
             end_time = datetime.datetime.fromisoformat(info["end_time"])
 
-        return (end_time - start_time).total_seconds()
+        total_seconds = (end_time - submitted_time).total_seconds()
+        return format_utils.seconds_formatter(total_seconds)
 
     def get_machine_type(self) -> Optional[str]:
         """Get the machine type used in the task.
@@ -330,7 +363,7 @@ class Task:
 
         if self.get_status() in (models.TaskStatusCode.PENDINGINPUT,
                                  models.TaskStatusCode.SUBMITTED):
-            logging.info("Task did not start yet.")
+            logging.info("Task has not started yet.")
             return
 
         api_response = self._api.get_stdout_tail(

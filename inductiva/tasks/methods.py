@@ -1,13 +1,59 @@
 """Methods to interact with the tasks submitted to the API."""
+from collections import defaultdict
 import json
-from typing import Dict, List, Optional, Union, Sequence
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Union
 
 import inductiva
 from inductiva import api
 from inductiva.client import ApiClient, ApiException
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
-from inductiva.utils import format_utils
+from inductiva.tasks.task import Task
+
+
+def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
+    """
+    Converts an Iterable of tasks to a dictionary with all the
+    relevant information for all the tasks.
+        Args:
+            list_of_tasks: An Iterable of tasks.
+        Returns:
+            A dictionary with all the relevant information for
+            all the tasks. Example: { "ID": [1, 2, 3], 
+            "Simulator": ["reef3d", "reef3d", "reef3d"], ... }
+    """
+
+    table = defaultdict(list)
+
+    for task in list_of_tasks:
+        info = task.get_info()
+        status = task.get_status()
+        computation_end_time = info.get("computation_end_time", None)
+        execution_time = task.get_computation_time(fail_if_running=False)
+
+        if execution_time is not None:
+            if computation_end_time is None:
+                if status in ["started", "submitted"]:
+                    execution_time = f"*{execution_time}"
+                else:
+                    execution_time = "n/a"
+
+        executer = info["executer"]
+        if executer is None:
+            resource_type = None
+        else:
+            resource_type = executer["vm_type"]
+            n_mpi_hosts = executer["n_mpi_hosts"]
+            if n_mpi_hosts > 1:
+                resource_type += f" x{n_mpi_hosts}"
+        table["ID"].append(task.id)
+        table["Simulator"].append(task.get_simulator_name())
+        table["Status"].append(status)
+        table["Submitted"].append(info.get("input_submit_time", None))
+        table["Started"].append(info.get("start_time", None))
+        table["Computation Time"].append(execution_time)
+        table["Resource Type"].append(resource_type)
+    return table
 
 
 def _fetch_tasks_from_api(
@@ -47,97 +93,6 @@ def _fetch_tasks_from_api(
 
         except ApiException as e:
             raise e
-
-
-def _list_of_tasks_to_str(tasks: Sequence["inductiva.tasks.Task"]) -> str:
-    columns = [
-        "ID", "Simulator", "Status", "Submitted", "Started", "Duration",
-        "VM Type"
-    ]
-    rows = []
-
-    for task in tasks:
-        info = task.get_info()
-        # e.g., get "openfoam" from "fvm.openfoam.run_simulation"
-        simulator = task.get_simulator_name()
-
-        end_time = info.get("end_time", None)
-        execution_time = task.get_execution_time(fail_if_running=False)
-
-        if execution_time is not None:
-            execution_time = format_utils.seconds_formatter(execution_time)
-            if end_time is None:
-                execution_time = f"*{execution_time}"
-
-        row = [
-            task.id,
-            simulator,
-            task.get_status(),
-            info.get("input_submit_time", None),
-            info.get("start_time", None),
-            execution_time,
-            task.get_machine_type(),
-        ]
-        rows.append(row)
-    formatters = {
-        "Submitted": format_utils.datetime_formatter,
-        "Started": format_utils.datetime_formatter,
-    }
-
-    override_col_space = {
-        "Submitted": 20,
-        "Started": 20,
-        "Status": 20,
-        "VM Type": 18,
-    }
-
-    return format_utils.get_tabular_str(
-        rows,
-        columns,
-        default_col_space=15,
-        override_col_space=override_col_space,
-        formatters=formatters,
-    )
-
-
-# pylint: disable=redefined-builtin
-def list(last_n: int = 5,
-         status: Optional[Union[str, models.TaskStatusCode]] = None) -> None:
-    # pylint: disable=line-too-long
-    """List the last N tasks of a user.
-
-    This function lists info about the last N tasks (with respect to submission
-    time) of a user to stdout, sorted by submission time with the
-    most recent first.
-    A status can be specified to filter to get only tasks with that status, in
-    which case the last N tasks with that status will be listed.
-    The number of tasks can be less than N if the aren't enough tasks that
-    match the specified criteria.
-
-    Example usage:
-        # list the last 5 tasks that were successful
-        inductiva.tasks.list(5, status="success")
-                         ID               Scenario       Simulator               Status            Submitted              Started        Duration            VM Type
-        1695309310050950437                    n/a    dualsphysics              started     21 Sep, 16:15:10     21 Sep, 16:15:10       *0h 2m 5s      c2-standard-4
-        1695307352995292367      protein solvation         gromacs              started     21 Sep, 15:42:33     21 Sep, 15:42:35     *0h 34m 41s      c2-standard-4
-        1695306097851999678      protein solvation         gromacs              success     21 Sep, 15:21:38     21 Sep, 15:21:40      0h 15m 43s      c2-standard-4
-        1695294928922012701            wind tunnel        openfoam              success     20 Sep, 12:15:31     20 Sep, 12:15:33       0h 0m 50s      c2-standard-4
-        1695294363618736570            wind tunnel        openfoam              success     20 Sep, 12:06:06     20 Sep, 12:06:06       0h 0m 50s      c2-standard-4
-
-    Args:
-        last_n: The number of most recent tasks with respect to submission
-            time to list. If filtering criteria (currently status is available)
-            is specified, most recent N tasks that match that criteria will be
-            listed. The actual number of tasks may be less if there
-            aren't enough tasks available.
-        status: The status of the tasks to list. If None, tasks with any status
-            will be listed.
-    """
-    # pylint: enable=line-too-long
-    status = models.TaskStatusCode(status) if status is not None else None
-    tasks = get(last_n, status=status)
-    tasks_str = _list_of_tasks_to_str(tasks)
-    print(tasks_str)
 
 
 def get(

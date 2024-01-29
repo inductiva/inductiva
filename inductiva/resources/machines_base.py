@@ -1,13 +1,18 @@
 """Base class for machine groups."""
 import time
 import enum
+from abc import abstractmethod
 
-from absl import logging
+import logging
 
 import inductiva
 import inductiva.client.models
 from inductiva import api
+from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
+from inductiva.client import exceptions
+
+from inductiva import logs
 
 
 class ResourceType(enum.Enum):
@@ -17,7 +22,7 @@ class ResourceType(enum.Enum):
     MPI = "mpi"
 
 
-class BaseMachineGroup():
+class BaseMachineGroup:
     """Base class to manage Google Cloud resources."""
 
     def __init__(self,
@@ -40,6 +45,9 @@ class BaseMachineGroup():
                 example, when retrieving with the `machines_groups.get` method.
                 Users should not set this argument in anyway.
         """
+        if machine_type not in inductiva.resources.list_available_machines():
+            raise ValueError("Machine type not supported")
+
         self.machine_type = machine_type
         self.disk_size_gb = disk_size_gb
         self._id = None
@@ -72,12 +80,22 @@ class BaseMachineGroup():
             disk_size_gb=self.disk_size_gb,
             **kwargs,
         )
-        logging.info("Registering machine group configurations:")
-        resp = self._api.register_vm_group(body=instance_group_config)
+
+        try:
+            resp = self._api.register_vm_group(body=instance_group_config)
+        except (exceptions.ApiValueError, exceptions.ApiException) as e:
+            logs.log_and_exit(logging.getLogger(), logging.ERROR,
+                              "Resource registering failed with exception %s",
+                              e)
+
         self._id = resp.body["id"]
         self._name = resp.body["name"]
         self.register = False
         self._log_machine_group_info()
+
+    @abstractmethod
+    def __repr__(self):
+        pass
 
     @classmethod
     def from_api_response(cls, resp: dict):
@@ -120,22 +138,20 @@ class BaseMachineGroup():
                 disk_size_gb=self.disk_size_gb,
                 **kwargs,
             )
+        logging.info("Starting %s. "
+                     "This may take a few minutes.", repr(self))
+        logging.info("Note that stopping this local process will not interrupt "
+                     "the creation of the machine group. Please wait...")
+        start_time = time.time()
         try:
-            logging.info("Starting machine group. "
-                         "This may take a few minutes.")
-            logging.info("Note that stopping this local process will not "
-                         "interrupt the creation of the machine group. "
-                         "Please wait...")
-            start_time = time.time()
             self._api.start_vm_group(body=request_body)
-            creation_time_mins = (time.time() - start_time) / 60
-            self._started = True
-
-            logging.info("Machine group successfully started in %.2f mins.\n",
-                         creation_time_mins)
-
-        except inductiva.client.ApiException as api_exception:
-            raise api_exception
+        except inductiva.client.ApiException as e:
+            logs.log_and_exit(logging.getLogger(), logging.ERROR,
+                              "Starting machine group failed" 
+                              " with exception %s", e)
+        creation_time = format_utils.seconds_formatter(time.time() - start_time)
+        self._started = True
+        logging.info("%s successfully started in %s.", self, creation_time)
 
     def terminate(self, **kwargs):
         """Terminates a machine group."""
@@ -144,8 +160,8 @@ class BaseMachineGroup():
             return
 
         try:
-            logging.info("Terminating machine group. "
-                         "This may take a few minutes.")
+            logging.info("Terminating %s This may take a few minutes.",
+                         repr(self))
             start_time = time.time()
 
             request_body = \
@@ -158,10 +174,10 @@ class BaseMachineGroup():
                 )
 
             self._api.delete_vm_group(body=request_body)
-            termination_time_mins = (time.time() - start_time) / 60
-            logging.info(
-                "Machine group '%s' successfully "
-                "terminated in %.2f mins.\n", self.name, termination_time_mins)
+            termination_time = format_utils.seconds_formatter(time.time() -
+                                                              start_time)
+            logging.info("%s successfully terminated in %s.", self,
+                         termination_time)
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
@@ -189,8 +205,8 @@ class BaseMachineGroup():
         Otherwise returns None"""
         if self.name is None:
             logging.info(
-                "Attempting to get the status of an unregistered machine "
-                "group.")
+                "Attempting to get the status of an unregistered machine group."
+                )
             return
 
         response = self._api.get_group_status({"name": self.name})
@@ -201,6 +217,6 @@ class BaseMachineGroup():
     def _log_machine_group_info(self):
         """Logs the machine group info."""
 
-        logging.info("> Name: %s", self.name)
-        logging.info("Machine Type: %s", self.machine_type)
-        logging.info("> Disk size: %s GB", self.disk_size_gb)
+        logging.info("> Name:         %s", self.name)
+        logging.info("> Machine Type: %s", self.machine_type)
+        logging.info("> Disk size:    %s GB", self.disk_size_gb)

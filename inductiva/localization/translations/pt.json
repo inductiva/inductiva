@@ -1,0 +1,11 @@
+{
+    "upgrade-available": [
+        "A versão {0} da biblioteca 'inductiva' está disponível (a versão atualmente instalada é {1}).",
+        "Considere atualizar para a versão mais recente usando:",
+        "  pip install --upgrade inductiva"
+    ],
+    "failed-update-check": [
+        "Não foi possível verificar se há atualizações para a biblioteca 'inductiva'.",
+        "O seguinte erro ocorreu:\n  {0}"
+    ]
+}

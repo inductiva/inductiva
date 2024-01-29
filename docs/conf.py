@@ -18,8 +18,8 @@ sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Project'
-copyright = '2022, Inductiva Research Labs'
+project = 'Inductiva API Python client'
+copyright = '2024, Inductiva Research Labs'
 author = 'Inductiva Research Labs'
 
 # -- General configuration ---------------------------------------------------
