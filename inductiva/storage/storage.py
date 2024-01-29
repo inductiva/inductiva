@@ -91,7 +91,7 @@ def _print_contents_table(contents):
     )
 
 
-def rmdir(path: str):
+def rmdir(path: str, /, confirm: bool = False):
     """Deletes the paths inside the user's storage in Inductiva API.
 
     This function can be used to remove a single path within the user's storage,
@@ -99,14 +99,31 @@ def rmdir(path: str):
     or, users can remove all of the contents in their storage by setting
     `path="/"`. Note, this doesn't allow to remove specific files within 
     any directory.
+
+    E.g.:
+        Works:
+        >>> inductiva.storage.rmdir("task_id", confirm=True)
+        >>> inductiva.storage.rmdir("/", confirm=True)
+
+        Fails:
+        >>> inductiva.storage.rmdir("task_id")
     
     Args:
         path (str): Path relative to the root of the bucket to delete.
             If path="/" then all the contents in the user's storage will be
             removed.
+        confirm (bool): To perform the remove operation, the user must confirm
+             the operation by setting `confirm=True`. This is to avoid 
+             accidental removal of contents in the user's storage.
     """
+    if not confirm:
+        if path == "/":
+            path = "all contents"
+        raise RuntimeError("Please set `confirm=True` to confirm you want to"
+            "delete %s from the user's storage.", path)
+
     if path == "/":
-        logging.info("Removing everything from personal user storage.")
+        logging.info("Removing everything from user storage.")
     else:
         logging.info("Removing %s in the user storage.", path)
 
