@@ -83,10 +83,12 @@ class BaseMachineGroup:
         try:
             resp = self._api.register_vm_group(body=instance_group_config)
         except (exceptions.ApiValueError, exceptions.ApiException) as e:
-            logs.log_and_exit(logging.getLogger(), logging.ERROR,
-                              "Registering machine group failed"\
-                              " with exception %s", e,
-                              exc_info=e)
+            logs.log_and_exit(
+                logging.getLogger(),
+                logging.ERROR,
+                "Registering machine group failed with exception %s",
+                e,
+                exc_info=e)
 
         self._id = resp.body["id"]
         self._name = resp.body["name"]
@@ -147,8 +149,8 @@ class BaseMachineGroup:
             self._api.start_vm_group(body=request_body)
         except inductiva.client.ApiException as e:
             logs.log_and_exit(logging.getLogger(),
-                              logging.ERROR, "Starting machine group failed"
-                              " with exception %s",
+                              logging.ERROR,
+                              "Starting machine group failed with exception %s",
                               e,
                               exc_info=e)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
