@@ -1,5 +1,5 @@
 """Util functions for formatting data for printing to console."""
-from typing import Any, Callable, Dict, Iterable, Mapping, Optional, Union
+from typing import Any, Callable, Dict, Iterable, Mapping, Optional, Tuple, Union
 from distutils.util import strtobool
 import datetime
 import os
@@ -57,6 +57,30 @@ def apply_formatters(table_data: dict, formatters: dict):
     return table_data
 
 
+def get_tabular_data(
+        tabular_data: Union[Mapping[str, Iterable[Any]],
+                            Iterable[Iterable[Any]]],
+        headers: Optional[Iterable[Any]] = None,
+        formatters: Optional[Dict[str, Callable]] = None) -> Tuple[dict, list]:
+    formatters = formatters or {}
+    headers = headers or []
+
+    if not isinstance(tabular_data, Mapping):
+
+        #if we have no headers data will be empty.
+        #So, we want our original tabular_data
+        if headers:
+            tabular_data = {
+                header: [row[index] for row in tabular_data]
+                for index, header in enumerate(headers)
+            }
+    else:
+        headers = list(tabular_data.keys())
+
+    tabular_data_formatted = apply_formatters(tabular_data, formatters)
+    return tabular_data_formatted, headers
+
+
 def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
                                         Iterable[Iterable[Any]]],
                     headers: Optional[Iterable[Any]] = None,
@@ -77,21 +101,5 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
 
     """
 
-    formatters = formatters or {}
-    headers = headers or []
-
-    if not isinstance(tabular_data, Mapping):
-
-        #if we have no headers data will be empty.
-        #So, we want our original tabular_data
-        if headers:
-            tabular_data = {
-                header: [row[index] for row in tabular_data]
-                for index, header in enumerate(headers)
-            }
-    else:
-        headers = tabular_data.keys()
-
-    tabular_data_formatted = apply_formatters(tabular_data, formatters)
-
-    return tabulate(tabular_data_formatted, headers=headers, missingval="n/a")
+    data, headers = get_tabular_data(tabular_data, headers, formatters)
+    return tabulate(data, headers=headers, missingval="n/a")

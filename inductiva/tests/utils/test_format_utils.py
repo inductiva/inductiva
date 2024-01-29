@@ -17,49 +17,104 @@ def test_seconds_formatter__valid_time__formatted_time(time_input,
     assert format_utils.seconds_formatter(time_input) == expected_time
 
 
-@mark.parametrize("input_dict, expected_str", [
-    ({
-        "Name": ["Ana", "Bob"],
-        "Age": [25, 32],
-        "Country": ["Portugal", "Spain"]
-    }, "Name      Age  Country\n"
-     "------  -----  ---------\n"
-     "Ana        25  Portugal\n"
-     "Bob        32  Spain"),
-    ({
-        "Name": ["Ana"],
-        "Age": [25, 32],
-        "Country": ["Portugal", "Spain"]
-    }, "Name      Age  Country\n"
-     "------  -----  ---------\n"
-     "Ana        25  Portugal\n"
-     "Bob        32  Spain"),
-    ({
-        "Name": [],
-        "Age": [],
-        "Country": []
-    }, "Name    Age    Country"
-     "------  -----  ---------"),
-])
-def test_get_tabular_str_test_dict(input_dict, expected_str):
-    """Check if get_tabular_str function returns
-    the correct string when passed a dictionary."""
-    assert format_utils.get_tabular_str(input_dict) == expected_str
+tabular_dict = {"A": ["aa", "aaa"], "B": [1, 11], "C": ["cc", "ccc"]}
+
+tabular_rows = [["aa", 1, "cc"], ["aaa", 11, "ccc"]]
+
+tabular_headers = ["Aa", "Bb", "Cc"]
+
+tabular_formatters = {"A": lambda x: x.upper(), "Z": lambda x: x.lower()}
 
 
-@mark.parametrize("input_list_rows", "input_list_headers", "expected_str",
-                  [(
-                        [["Ana", 25, "Portugal"], ["Bob", 32, "Spain"]],
-                        ["Name", "Age", "Country"],
-                        "Name      Age  Country\n"
-                        "------  -----  ---------\n"
-                        "Ana        25  Portugal\n"
-                        "Bob        32  Spain"
-                    )
-                    ])
-def test_get_tabular_str_test_lists(input_list_rows, input_list_headers,
-                                    expected_str):
-    """Check if get_tabular_str function returns
-    the correct string when passed a list of lists."""
-    assert format_utils.get_tabular_str(input_list_rows,
-                                        input_list_headers) == expected_str
+def test_get_tabular_data__input_dict_no_headers_no_formatters__returns_dict():
+    """Check if get_tabular_data function returns the correct dictionary
+    when passed a dictionary and no headers or formatters."""
+    assert format_utils.get_tabular_data(tabular_dict) == (
+        tabular_dict, list(tabular_dict.keys()))
+
+
+def test_get_tabular_data__input_dict_no_formatters__returns_dict():
+    """Check if get_tabular_data function returns the correct dictionary
+    when passed a dictionary, headers and no formatters."""
+    assert format_utils.get_tabular_data(
+        tabular_dict,
+        tabular_headers) == (tabular_dict, list(tabular_dict.keys()))
+
+
+def test_get_tabular_data__input_dict__returns_dict():
+    """Check if get_tabular_data function returns the correct dictionary
+    when passed a dictionary, headers and formatters."""
+    tabular_dict_result = {
+        "A": [
+            tabular_formatters["A"](element) for element in tabular_dict["A"]
+        ],
+        "B": tabular_dict["B"],
+        "C": tabular_dict["C"]
+    }
+    assert format_utils.get_tabular_data(
+        tabular_dict, tabular_headers,
+        formatters=tabular_formatters) == (tabular_dict_result,
+                                           list(tabular_dict.keys()))
+
+
+def test_get_tabular_data__input_dict_no_headers__returns_dict():
+    """Check if get_tabular_data function returns the correct dictionary
+    when passed a dictionary, formatters and no headers."""
+    tabular_dict_result = {
+        "A": [
+            tabular_formatters["A"](element) for element in tabular_dict["A"]
+        ],
+        "B": tabular_dict["B"],
+        "C": tabular_dict["C"]
+    }
+    assert format_utils.get_tabular_data(
+        tabular_dict,
+        formatters=tabular_formatters) == (tabular_dict_result,
+                                           list(tabular_dict.keys()))
+
+
+def test_get_tabular_data__input_list_no_headers_no_formatters__returns_dict():
+    """Check if get_tabular_data function returns the correct dictionary
+    when passed a list and no headers or formatters."""
+    assert format_utils.get_tabular_data(tabular_rows) == (tabular_rows, [])
+
+
+def test_get_tabular_data__input_list_no_formatters__returns_dict():
+    """Check if get_tabular_data function returns the correct dictionary
+    when passed a list, headers and no formatters."""
+    tabular_dict_result = {
+        tabular_headers[0]: [element[0] for element in tabular_rows],
+        tabular_headers[1]: [element[1] for element in tabular_rows],
+        tabular_headers[2]: [element[2] for element in tabular_rows],
+    }
+    assert format_utils.get_tabular_data(
+        tabular_rows, tabular_headers) == (tabular_dict_result, tabular_headers)
+
+
+def test_get_tabular_data__input_list__returns_dict():
+    """Check if get_tabular_data function returns the correct dictionary
+    when passed a list, headers and formatters."""
+    tabular_dict_result = {
+        tabular_headers[0]: [
+            tabular_formatters[tabular_headers[0]](element[0])
+            for element in tabular_rows
+        ],
+        tabular_headers[1]: [
+            tabular_formatters[tabular_headers[1]](element[1])
+            for element in tabular_rows
+        ],
+        tabular_headers[2]: [
+            tabular_formatters[tabular_headers[2]](element[2])
+            for element in tabular_rows
+        ],
+    }
+    assert format_utils.get_tabular_data(
+        tabular_rows, tabular_headers,
+        formatters=tabular_formatters) == (tabular_dict_result, tabular_headers)
+
+
+def test_get_tabular_data__input_list_no_headers__returns_dict():
+    """Check if get_tabular_data function returns the correct dictionary
+    when passed a list, formatters and no headers."""
+    assert format_utils.get_tabular_data(
+        tabular_rows, formatters=tabular_formatters) == (tabular_rows, [])
