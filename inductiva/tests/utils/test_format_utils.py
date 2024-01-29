@@ -21,7 +21,7 @@ tabular_dict = {"A": ["aa", "aaa"], "B": [1, 11], "C": ["cc", "ccc"]}
 
 tabular_rows = [["aa", 1, "cc"], ["aaa", 11, "ccc"]]
 
-tabular_headers = ["Aa", "Bb", "Cc"]
+tabular_headers = ["A", "Bb", "Cc"]
 
 tabular_formatters = {"A": lambda x: x.upper(), "Z": lambda x: x.lower()}
 
@@ -99,14 +99,8 @@ def test_get_tabular_data__input_list__returns_dict():
             tabular_formatters[tabular_headers[0]](element[0])
             for element in tabular_rows
         ],
-        tabular_headers[1]: [
-            tabular_formatters[tabular_headers[1]](element[1])
-            for element in tabular_rows
-        ],
-        tabular_headers[2]: [
-            tabular_formatters[tabular_headers[2]](element[2])
-            for element in tabular_rows
-        ],
+        tabular_headers[1]: [element[1] for element in tabular_rows],
+        tabular_headers[2]: [element[2] for element in tabular_rows],
     }
     assert format_utils.get_tabular_data(
         tabular_rows, tabular_headers,
