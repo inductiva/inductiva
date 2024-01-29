@@ -1,9 +1,29 @@
 """Custom logging functions"""
+import os
+
 import logging.handlers
 import logging
 import sys
 
+import pathlib
+import platform
+
 root_logger = logging.getLogger()
+
+system = platform.system()
+logs_name = "inductiva.log"
+
+if system == "Windows":
+    logs_dir = pathlib.Path.home() / "AppData" / "inductiva"
+    LOGS_FILE = logs_dir / logs_name
+elif system in ["Linux", "Darwin"]:
+    logs_dir = pathlib.Path.home() / ".inductiva"
+    LOGS_FILE = logs_dir / logs_name
+else:
+    raise RuntimeError(f"Current operating system {system} not supported.")
+
+if not os.path.exists(logs_dir):
+    os.mkdir(logs_dir)
 
 
 class NoExceptionFormatter(logging.Formatter):
@@ -40,7 +60,7 @@ def setup(level=logging.INFO):
     ]
 
     handlers = [
-        logging.handlers.RotatingFileHandler("rotated.log",
+        logging.handlers.RotatingFileHandler(LOGS_FILE,
                                              encoding="utf8",
                                              maxBytes=1e6,
                                              backupCount=10),
