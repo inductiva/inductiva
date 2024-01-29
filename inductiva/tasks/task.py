@@ -94,7 +94,7 @@ class Task:
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
-        if self._status is not None and self._status in _TASK_TERMINAL_STATUSES:
+        if self._status is not None and self._is_terminal_status():
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
@@ -112,7 +112,7 @@ class Task:
         """
         # If the task is in a terminal status and we already have the info,
         # return it without refreshing it from the API.
-        if self._info is not None and self._status in _TASK_TERMINAL_STATUSES:
+        if self._info is not None and self._is_terminal_status():
             return self._info
 
         params = self._get_path_params()
@@ -170,41 +170,54 @@ class Task:
                                  "performing the task.")
             prev_status = status
 
-            if status in _TASK_TERMINAL_STATUSES:
+            if self._is_terminal_status:
                 return status
 
             time.sleep(polling_period)
+
+    def _is_terminal_status(self) -> bool:
+        """Check if the task is in a terminal status.
+
+        This method issues a request to the API.
+        """
+        status = self.get_status()
+        return status in _TASK_TERMINAL_STATUSES
 
     def kill(
             self,
             wait_timeout: Optional[Union[float,
                                          int]] = None) -> Union[bool, None]:
-        """Tries to kill a task.
-        If wait_timeout is None, the function will send the kill
-        request, and return none. If wait_timeout is a positive number,
-        the function will send the kill request and wait (wait_timeout
-        seconds) for the task to be killed. We return True if the task
-        was successfully killed, and False otherwise.
+        """Request a task to be killed.
+        
+        This method requests that the current task is remotely killed.
+        If `wait_timeout` is None (default), the kill request is sent to the
+        backend and the method returns. However, if `wait_timeout` is 
+        a positive number, the method waits up to `wait_timeout` seconds
+        to ensure that the task transitions to the KILLED state.
         Args:
-            wait_timeout: number of seconds to wait for the kill command
-            or none if we don't want to wait.
+            wait_timeout (int, float): Optional - number of seconds to wait for the
+            kill command or None if only the request is to be sent.
         Returns:
-            None if we don't wait, True if the kill command was successful,
-            False if it was not.
+            - None if `wait_timeout` is None and the kill request was
+              successfully sent;
+            - True if `wait_timeout`> 0 and the task successfully transitioned
+              to the `KILLED` state within `wait_timeout` seconds;
+            - False if `wait_timeout` > 0 but the task didn't transition
+              to the `KILLED` state within `wait_timeout` seconds;
 
         """
-        if not isinstance(wait_timeout, (float, int, type(None))) or (
-                wait_timeout is not None and wait_timeout <= 0.0):
-            raise ValueError("Wait timeout must be a positive number or None.")
+        if wait_timeout is not None:
+            if not isinstance(wait_timeout, (float, int)):
+                raise TypeError("Wait timeout must be a number.")
+            if wait_timeout <= 0.0:
+                raise ValueError("Wait timeout must be a positive number.")
 
-        maxretries = constants.MAX_API_RETRIES
+        maxretries = constants.TASK_KILL_MAX_API_REQUESTS
 
         while maxretries > 0:
             maxretries -= 1
             try:
-                task_status = self.get_status()
-
-                if task_status in _TASK_TERMINAL_STATUSES:
+                if self._is_terminal_status():
                     break
 
                 path_params = self._get_path_params()
@@ -214,8 +227,8 @@ class Task:
                 if maxretries == 0:
                     raise RuntimeError(
                         "Something went wrong while sending"
-                        "the kill command. Try again Later") from exc
-                time.sleep(1)
+                        " the kill command. Please try again later.") from exc
+                time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
 
         if wait_timeout is None:
             return None
@@ -224,18 +237,19 @@ class Task:
         start = time.time()
         status = self.get_status()
 
-        while status == models.TaskStatusCode.PENDINGKILL:
-            status = self.get_status()
-            if (time.time() - start) >= wait_timeout:
+        while (status :=
+               self.get_status()) == models.TaskStatusCode.PENDINGKILL:
+            if (time.time() - start) > wait_timeout:
                 success = False
                 break
 
-            time.sleep(1)
+            time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
 
         if status != models.TaskStatusCode.KILLED:
             success = False
             logging.error(
-                "Failed to kill %s task after %f seconds."
+                "Unable to ensure that task %s transitioned"
+                " to the KILLED state after %f seconds. "
                 "The status of the task is %s", self.id, wait_timeout, status)
 
         if success:
@@ -347,7 +361,7 @@ class Task:
             The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
-        if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
+        if fail_if_running and not self._is_terminal_status():
             return None
         # start_time may be None if the task was killed before it started
         if info["computation_start_time"] is None:
@@ -373,7 +387,7 @@ class Task:
             The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
-        if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
+        if fail_if_running and not self._is_terminal_status():
             return None
         # start_time may be None if the task was killed before it started
         if info["input_submit_time"] is None:
