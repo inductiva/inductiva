@@ -93,9 +93,17 @@ def _print_contents_table(contents):
 
 def rmdir(path: str):
     """Deletes the paths inside the user's storage in Inductiva API.
+
+    This function can be used to remove a single path within the user's storage,
+    for example, if `path=task_id` one can remove the path of a specific task; 
+    or, users can remove all of the contents in their storage by setting
+    `path="/"`. Note, this doesn't allow to remove specific files within 
+    any directory.
     
     Args:
         path (str): Path relative to the root of the bucket to delete.
+            If path="/" then all the contents in the user's storage will be
+            removed.
     """
     if path == "/":
         logging.info("Removing everything from personal user storage.")
