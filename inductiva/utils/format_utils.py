@@ -78,6 +78,7 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     """
 
     formatters = formatters or {}
+    headers = headers or []
 
     if not isinstance(tabular_data, Mapping):
 

@@ -15,3 +15,50 @@ def test_seconds_formatter__valid_time__formatted_time(time_input,
                                                        expected_time):
     """Check that the seconds formatter returns the correct string."""
     assert format_utils.seconds_formatter(time_input) == expected_time
+
+
+@mark.parametrize("input_dict, expected_str", [
+    ({
+        "Name": ["Ana", "Bob"],
+        "Age": [25, 32],
+        "Country": ["Portugal", "Spain"]
+    }, "Name      Age  Country\n"
+     "------  -----  ---------\n"
+     "Ana        25  Portugal\n"
+     "Bob        32  Spain"),
+    ({
+        "Name": ["Ana"],
+        "Age": [25, 32],
+        "Country": ["Portugal", "Spain"]
+    }, "Name      Age  Country\n"
+     "------  -----  ---------\n"
+     "Ana        25  Portugal\n"
+     "Bob        32  Spain"),
+    ({
+        "Name": [],
+        "Age": [],
+        "Country": []
+    }, "Name    Age    Country"
+     "------  -----  ---------"),
+])
+def test_get_tabular_str_test_dict(input_dict, expected_str):
+    """Check that the get_tabular_str function returns the correct string when passed a dictionary."""
+    assert format_utils.get_tabular_str(input_dict) == expected_str
+
+
+@mark.parametrize("input_list_rows", "input_list_headers", "expected_str",
+                  [([["Ana", 25, "Portugal"], ["Bob", 32, "Spain"]
+                    ], ["Name", "Age", "Country"], "Name      Age  Country\n"
+                    "------  -----  ---------\n"
+                    "Ana        25  Portugal\n"
+                    "Bob        32  Spain"),
+                   ([["Ana", 25, "Portugal"], ["Bob", 32, "Spain"]
+                    ], None, "---  --  --------\n"
+                    "Ana  25  Portugal\n"
+                    "Bob  32  Spain\n"
+                    "---  --  --------")])
+def test_get_tabular_str_test_lists(input_list_rows, input_list_headers,
+                                    expected_str):
+    """Check that the get_tabular_str function returns the correct string when passed a list of lists."""
+    assert format_utils.get_tabular_str(input_list_rows,
+                                        input_list_headers) == expected_str
