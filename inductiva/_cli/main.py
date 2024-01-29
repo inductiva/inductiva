@@ -1,8 +1,10 @@
 """Main CLI entrypoint."""
 import argparse
+import os
 
 import inductiva
 from inductiva import _cli
+from . import loader
 
 
 def main():
@@ -29,7 +31,7 @@ def main():
     _cli.utils.show_help_msg(parser)
 
     # Create subcommands
-    subparsers = parser.add_subparsers()
+    subparsers = parser.add_subparsers(title='subcommands')
     tasks_subparser = subparsers.add_parser(
         "tasks",
         help="View tasks information",
@@ -47,6 +49,12 @@ def main():
     _cli.register_tasks_cli(tasks_subparser)
     _cli.register_machines_cli(machines_subparser)
     _cli.register_logs_cli(logs_subparser)
+
+    # Load all modules starting with "cmd_" as subcommands.
+    loader.load_commands(subparsers,
+                         os.path.dirname(__file__),
+                         'inductiva._cli',
+                         'cmd_')
 
     args = parser.parse_args()
     if args.api_key:
