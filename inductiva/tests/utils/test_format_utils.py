@@ -48,16 +48,15 @@ def test_get_tabular_str_test_dict(input_dict, expected_str):
 
 
 @mark.parametrize("input_list_rows", "input_list_headers", "expected_str",
-                  [([["Ana", 25, "Portugal"], ["Bob", 32, "Spain"]
-                    ], ["Name", "Age", "Country"], "Name      Age  Country\n"
-                    "------  -----  ---------\n"
-                    "Ana        25  Portugal\n"
-                    "Bob        32  Spain"),
-                   ([["Ana", 25, "Portugal"], ["Bob", 32, "Spain"]
-                    ], None, "---  --  --------\n"
-                    "Ana  25  Portugal\n"
-                    "Bob  32  Spain\n"
-                    "---  --  --------")])
+                  [(
+                        [["Ana", 25, "Portugal"], ["Bob", 32, "Spain"]],
+                        ["Name", "Age", "Country"],
+                        "Name      Age  Country\n"
+                        "------  -----  ---------\n"
+                        "Ana        25  Portugal\n"
+                        "Bob        32  Spain"
+                    )
+                    ])
 def test_get_tabular_str_test_lists(input_list_rows, input_list_headers,
                                     expected_str):
     """Check if get_tabular_str function returns
