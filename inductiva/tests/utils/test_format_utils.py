@@ -42,7 +42,8 @@ def test_seconds_formatter__valid_time__formatted_time(time_input,
      "------  -----  ---------"),
 ])
 def test_get_tabular_str_test_dict(input_dict, expected_str):
-    """Check that the get_tabular_str function returns the correct string when passed a dictionary."""
+    """Check if get_tabular_str function returns
+    the correct string when passed a dictionary."""
     assert format_utils.get_tabular_str(input_dict) == expected_str
 
 
@@ -59,6 +60,7 @@ def test_get_tabular_str_test_dict(input_dict, expected_str):
                     "---  --  --------")])
 def test_get_tabular_str_test_lists(input_list_rows, input_list_headers,
                                     expected_str):
-    """Check that the get_tabular_str function returns the correct string when passed a list of lists."""
+    """Check if get_tabular_str function returns
+    the correct string when passed a list of lists."""
     assert format_utils.get_tabular_str(input_list_rows,
                                         input_list_headers) == expected_str
