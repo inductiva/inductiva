@@ -4,7 +4,7 @@ import contextlib
 import time
 import json
 from absl import logging
-from typing import Dict, Any, List, Optional, Union
+from typing import Dict, Any, List, Optional, Tuple, Union
 from typing_extensions import TypedDict
 import datetime
 from dateutil import parser
@@ -183,6 +183,55 @@ class Task:
         status = self.get_status()
         return status in _TASK_TERMINAL_STATUSES
 
+    def _send_kill_request(self, max_api_requests: int) -> None:
+        """Send a kill request to the API.
+        If the api request fails, it will retry until
+        max_api_requests is 0 raising a RuntimeError.
+        Args:
+            max_api_requests (int): maximum number of api requests to send
+        """
+        while max_api_requests > 0:
+            max_api_requests -= 1
+            try:
+                if self._is_terminal_status():
+                    break
+
+                path_params = self._get_path_params()
+                self._api.kill_task(path_params=path_params)
+                break
+            except exceptions.ApiException as exc:
+                if max_api_requests == 0:
+                    raise RuntimeError(
+                        "Something went wrong while sending"
+                        " the kill command. Please try again later.") from exc
+                time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
+
+    def _check_if_pending_kill(
+            self,
+            wait_timeout: Union[float,
+                                int]) -> Tuple[bool, models.TaskStatusCode]:
+        """Check if the task is in the PENDINGKILL state.
+        This method keeps checking the status of the task until it is no longer
+        in the PENDINGKILL state or until the timeout is reached.
+        Args:
+            wait_timeout (int, float): number of seconds to wait for the
+            state to leave PENDINGKILL.
+        Returns:
+            A tuple with a boolean indicating whether the timeout was reached
+            and the status of the task.
+        """
+        success = True
+        start = time.time()
+
+        while (status :=
+               self.get_status()) == models.TaskStatusCode.PENDINGKILL:
+            if (time.time() - start) > wait_timeout:
+                success = False
+                break
+
+            time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
+        return success, status
+
     def kill(
             self,
             wait_timeout: Optional[Union[float,
@@ -212,37 +261,12 @@ class Task:
             if wait_timeout <= 0.0:
                 raise ValueError("Wait timeout must be a positive number.")
 
-        maxretries = constants.TASK_KILL_MAX_API_REQUESTS
-
-        while maxretries > 0:
-            maxretries -= 1
-            try:
-                if self._is_terminal_status():
-                    break
-
-                path_params = self._get_path_params()
-                self._api.kill_task(path_params=path_params)
-                break
-            except exceptions.ApiException as exc:
-                if maxretries == 0:
-                    raise RuntimeError(
-                        "Something went wrong while sending"
-                        " the kill command. Please try again later.") from exc
-                time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
+        self._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
 
         if wait_timeout is None:
             return None
 
-        success = True
-        start = time.time()
-
-        while (status :=
-               self.get_status()) == models.TaskStatusCode.PENDINGKILL:
-            if (time.time() - start) > wait_timeout:
-                success = False
-                break
-
-            time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
+        success, status = self._check_if_pending_kill(wait_timeout)
 
         if status != models.TaskStatusCode.KILLED:
             success = False
