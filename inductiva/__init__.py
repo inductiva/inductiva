@@ -1,6 +1,7 @@
 """Client for Inductiva's web API."""
 import os
 import logging
+import contextvars
 
 import absl
 
@@ -15,7 +16,9 @@ from . import logs
 logs.setup()
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
-output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
+# output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
+output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR")
+output_dir.set(os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output"))
 api_key = os.environ.get("INDUCTIVA_API_KEY")
 
 working_dir = None

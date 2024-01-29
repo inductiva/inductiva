@@ -250,8 +250,8 @@ class Task:
         response = api_response.response
 
         if output_dir is None:
-            output_dir = files.resolve_path(inductiva.output_dir).joinpath(
-                self.id)
+            output_dir = files.resolve_path(
+                inductiva.output_dir.get()).joinpath(self.id)
         output_dir = files.resolve_path(output_dir)
 
         if output_dir.exists():
