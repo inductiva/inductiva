@@ -97,33 +97,33 @@ def rmdir(path: str, /, confirm: bool = False):
     This function can be used to remove a single path within the user's storage,
     for example, if `path=task_id` one can remove the path of a specific task; 
     or, users can remove all of the contents in their storage by setting
-    `path="/"`. Note, this doesn't allow to remove specific files within 
+    `path="*"`. Note, this doesn't allow to remove specific files within 
     any directory.
 
     E.g.:
         Works:
         >>> inductiva.storage.rmdir("task_id", confirm=True)
-        >>> inductiva.storage.rmdir("/", confirm=True)
+        >>> inductiva.storage.rmdir("*", confirm=True)
 
         Fails:
         >>> inductiva.storage.rmdir("task_id")
     
     Args:
         path (str): Path relative to the root of the bucket to delete.
-            If path="/" then all the contents in the user's storage will be
+            If path="*" then all the contents in the user's storage will be
             removed.
         confirm (bool): To perform the remove operation, the user must confirm
              the operation by setting `confirm=True`. This is to avoid 
              accidental removal of contents in the user's storage.
     """
     if not confirm:
-        if path == "/":
+        if path == "*":
             path = "all contents"
         raise RuntimeError(
             "Please set `confirm=True` to confirm you want to"
             f"delete {path} from the user's storage.")
 
-    if path == "/":
+    if path == "*":
         logging.info("Removing everything from user storage.")
     else:
         logging.info("Removing %s in the user storage.", path)
