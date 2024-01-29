@@ -140,7 +140,7 @@ class BaseMachineGroup:
             )
         logging.info("Starting %s. "
                      "This may take a few minutes.", repr(self))
-        logging.info("Note that stopping this local process will not interrupt"
+        logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
         try:
@@ -161,8 +161,8 @@ class BaseMachineGroup:
             return
 
         try:
-            logging.info("Terminating %s "
-                         "This may take a few minutes.", repr(self))
+            logging.info("Terminating %s This may take a few minutes.",
+                         repr(self))
             start_time = time.time()
 
             request_body = \
@@ -206,8 +206,8 @@ class BaseMachineGroup:
         Otherwise returns None"""
         if self.name is None:
             logging.info(
-                "Attempting to get the status of an unregistered machine "
-                "group.")
+                "Attempting to get the status of an unregistered machine group."
+                )
             return
 
         response = self._api.get_group_status({"name": self.name})

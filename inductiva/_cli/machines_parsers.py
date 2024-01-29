@@ -5,7 +5,7 @@ from inductiva import _cli
 def add_start_machines_subparser(parser):
     """Subparser for start command."""
 
-    subparser = parser.add_parser("start", help="Start a machine group")
+    subparser = parser.add_parser("start", help="Start computational resources")
 
     subparser.add_argument("machine_type",
                            type=str,
@@ -59,10 +59,10 @@ def add_cost_subparser(parser):
 
 def add_terminate_subparser(parser):
     """Subparser for terminate command."""
-    subparser = parser.add_parser("terminate", help="Terminate a machine-group")
+    subparser = parser.add_parser("terminate", help="Terminate a resource.")
     subparser.add_argument("name",
                            type=str,
-                           help="Name of the machine group to terminate")
+                           help="Name of the resource to terminate")
     subparser.set_defaults(func=_cli.machines.terminate_machine_group)
 
 
