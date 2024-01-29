@@ -1,4 +1,6 @@
 """Methods to interact with the user storage resources."""
+from absl import logging
+
 import inductiva
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
@@ -103,10 +105,11 @@ def rmdir(path: str):
     try:
         api = storage_api.StorageApi(inductiva.api.get_client())
         api.delete_path({"path": path})
-        logging.info(f"The path %s was successfully removed.", path)
+        logging.info("The path %s was successfully removed.", path)
     except inductiva.client.ApiException as api_exception:
         if api_exception.status == 404:
-            raise ValueError("Path %s does not exist.", path)
+            raise api_exception.ValueError(f"Path {path} does not exist.")
         elif api_exception.status == 500:
-            raise RuntimeError("Path %s was failed to be removed.", path)
+            raise api_exception.RuntimeError(
+                f"Path {path} was failed to be removed.")
         raise api_exception
