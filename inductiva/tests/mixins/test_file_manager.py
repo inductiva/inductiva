@@ -2,6 +2,7 @@
 import pathlib
 import io
 import os
+import tempfile
 
 import pytest
 from pytest import mark
@@ -118,10 +119,13 @@ def test_get_root_dir__root_is_none__create_default_dir():
     not raise errors during the workflow. 
     """
     file_manager = mixins.FileManager()
-    root_dir = file_manager.get_root_dir()
-
-    assert os.path.isdir(root_dir)
-    assert root_dir.name == file_manager.DEFAULT_ROOT_DIR
+    original_dir = os.getcwd()
+    with tempfile.TemporaryDirectory() as temp_dir:
+        os.chdir(temp_dir)
+        root_dir = file_manager.get_root_dir()
+        assert os.path.isdir(root_dir)
+        assert root_dir.name == file_manager.DEFAULT_ROOT_DIR
+        os.chdir(original_dir)
 
 
 @mark.parametrize("source_file, target_file",

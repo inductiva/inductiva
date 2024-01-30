@@ -61,7 +61,7 @@ class FileManager:
 
         logging.info("Setting root folder to %s.", root_dir)
         os.makedirs(root_dir)
-        self.__root_dir = pathlib.Path(root_dir)
+        self.__root_dir = pathlib.Path(root_dir).resolve()
 
     def get_root_dir(self):
         """Get the active root directory for the file manager."""
