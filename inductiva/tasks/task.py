@@ -248,7 +248,10 @@ class Task:
         # the size of the file, etc.)
         response = api_response.response
 
-        output_dir = files.resolve_output_path(output_dir).joinpath(self.id)
+        if output_dir is None:
+            output_dir = files.resolve_output_path(self.id)
+        else:
+            output_dir = files.resolve_output_path(output_dir)
 
         if output_dir.exists():
             warnings.warn("Path already exists, files may be overwritten.")
