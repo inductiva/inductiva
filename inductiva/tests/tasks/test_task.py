@@ -84,7 +84,8 @@ def test_task_kill__positive_timeout__success(pending_kill_success,
 
 @pytest.mark.parametrize("get_status_response", [
     (TaskStatusCode.PENDINGKILL),
-    (TaskStatusCode.KILLED)(TaskStatusCode.ZOMBIE),
+    (TaskStatusCode.KILLED),
+    (TaskStatusCode.ZOMBIE),
     (TaskStatusCode.PENDINGINPUT),
     (TaskStatusCode.FAILED),
 ])
