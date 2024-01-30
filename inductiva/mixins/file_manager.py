@@ -49,7 +49,6 @@ class FileManager:
         if root_dir is None:
             raise ValueError("Given root directory cannot be None")
 
-        root_dir = files.resolve_path(root_dir)
         if os.path.isdir(root_dir):
             if format_utils.getenv_bool(
                     "INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX", False):

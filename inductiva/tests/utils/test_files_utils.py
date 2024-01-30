@@ -30,23 +30,18 @@ def test_get_timestamp_path(tmp_path: pathlib.Path):
     assert len(glob.glob(str(path.parent / "output-*"))) == n
 
 
-def test_resolve_path():
-    inductiva.set_working_dir(None)
-    resolved_path = files.resolve_path("protein.pdb")
+def test_resolve_output_path():
+    inductiva.set_output_dir(None)
+    resolved_path = files.resolve_output_path("protein.pdb")
     assert resolved_path == pathlib.Path.cwd().joinpath("protein.pdb")
 
-    inductiva.set_working_dir(None)
-    resolved_path = files.resolve_path(None)
+    resolved_path = files.resolve_output_path(None)
     assert resolved_path == pathlib.Path.cwd()
 
-    inductiva.set_working_dir("/tmp")
-    resolved_path = files.resolve_path("protein.pdb")
-    assert resolved_path == pathlib.Path("/tmp/protein.pdb")
-
-    inductiva.set_working_dir("/tmp")
-    resolved_path = files.resolve_path("/protein.pdb")
+    inductiva.set_output_dir("/tmp")
+    resolved_path = files.resolve_output_path("/protein.pdb")
     assert resolved_path == pathlib.Path("/protein.pdb")
 
-    inductiva.set_working_dir("tmp")
-    resolved_path = files.resolve_path("protein.pdb")
-    assert resolved_path == pathlib.Path("tmp/protein.pdb")
+    inductiva.set_output_dir("/tmp")
+    resolved_path = files.resolve_output_path("protein.pdb")
+    assert resolved_path == pathlib.Path("/tmp/protein.pdb")

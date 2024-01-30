@@ -2,9 +2,10 @@
 from typing import Optional
 from abc import ABC
 
+import pathlib
+
 from inductiva import types, tasks, resources
 from inductiva import commands
-from inductiva.utils import files
 
 
 def mpi_enabled(cls):
@@ -49,7 +50,7 @@ class Simulator(ABC):
 
     def _setup_input_dir(self, input_dir: types.Path):
         """Setup the simulator input directory."""
-        input_dir = files.resolve_path(input_dir)
+        input_dir = pathlib.Path(input_dir)
         if not input_dir.is_dir():
             raise ValueError(
                 f"The provided path (\"{input_dir}\") is not a directory.")

@@ -30,27 +30,16 @@ def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     return path.with_name(name + path.suffix)
 
 
-def resolve_path(path: Optional[types.Path]) -> pathlib.Path:
-    """Resolve a path relative to the Inductiva package working directory.
-
-    This takes in a path and returns it resolved relative to the
-    "inductiva._working_dir" setting.
-    Note:
-    If the working directory is not set, the current working directory of
-    the script is used.
-    If the path is absolute, it will override the working directory and be
-    returned as is.
-    If the path is None, the working directory will be returned.
-    Check the tests in "test_files_utils.py" for examples.
-
+def resolve_output_path(path: Optional[types.Path]) -> pathlib.Path:
+    """Resolve a path relative to the output_dir
 
     Args:
         path: Path to a file or directory.
     """
     resolved_path = pathlib.Path.cwd()
 
-    if inductiva.get_working_dir():
-        resolved_path = pathlib.Path(inductiva.get_working_dir())
+    if inductiva.get_output_dir():
+        resolved_path = pathlib.Path(inductiva.get_output_dir())
 
     if path is not None:
         resolved_path = pathlib.Path(resolved_path, path)
@@ -121,7 +110,7 @@ def download_from_url(url: str, unzip: bool = False) -> str:
     """
     # Get archive name from url passed
     local_path = url.split("/")[-1]
-    local_path = resolve_path(local_path)
+    local_path = pathlib.Path(local_path)
 
     try:
         logging.info("Downloading from URL to the local path: %s", local_path)

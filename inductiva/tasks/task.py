@@ -9,7 +9,6 @@ from typing_extensions import TypedDict
 import datetime
 from dateutil import parser
 
-import inductiva
 from inductiva.client import models
 from inductiva import api, types
 from inductiva.client.apis.tags import tasks_api
@@ -231,7 +230,7 @@ class Task:
                 files are downloaded.
             output_dir: Directory where to download the files. If None, the
                 files are downloaded to the default directory. The default is
-                {inductiva._working_dir}/{inductiva._output_dir}/{task_id}.
+                {inductiva.get_output_dir()}/{output_dir}/{task_id}.
             uncompress: Whether to uncompress the archive after downloading it.
             rm_downloaded_zip_archive: Whether to remove the archive after
             uncompressing it. If uncompress is False, this argument is ignored.
@@ -249,10 +248,7 @@ class Task:
         # the size of the file, etc.)
         response = api_response.response
 
-        if output_dir is None:
-            output_dir = files.resolve_path(
-                inductiva.get_output_dir()).joinpath(self.id)
-        output_dir = files.resolve_path(output_dir)
+        output_dir = files.resolve_output_path(output_dir).joinpath(self.id)
 
         if output_dir.exists():
             warnings.warn("Path already exists, files may be overwritten.")
