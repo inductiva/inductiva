@@ -264,6 +264,7 @@ class Task:
         self._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
 
         if wait_timeout is None:
+            logging.info(__("kill-request-sent", self.id))
             return None
 
         success, status = self._check_if_pending_kill(wait_timeout)
