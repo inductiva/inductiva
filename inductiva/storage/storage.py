@@ -1,4 +1,6 @@
 """Methods to interact with the user storage resources."""
+from absl import logging
+
 import inductiva
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
@@ -89,18 +91,56 @@ def _print_contents_table(contents):
     )
 
 
-def rmdir(path: str):
-    """Deletes a directory inside the user's storage in Inductiva API.
-    Currently, directories are named by the task id of the task that
-    created them, so this function can be used to delete the directory
-    of a task.
+def rmdir(path: str, /, confirm: bool = False):
+    """Delete paths inside the user's remote storage in the Inductiva platform.
+
+    This function removes the given `path` from the user's remote storage
+    in the Inductiva platform. The given path can either be the storage name of
+    a task to remove all content pertaining to that task, or `*` to remove all
+    content. The function requires an explicit `confirm=True` keyword argument
+    to confirm that the path is, indeed, to be removed.
+
+    E.g.:
+        #Works - remote path "task_id" exists and user is explicitly
+        # sets confirm=True:
+        >>> inductiva.storage.rmdir("task_id", confirm=True)
+        
+        #Works - The user explicitly sets confirm=True, confirming that
+        # all contents in his remote storage space are to be removed:
+        >>> inductiva.storage.rmdir("*", confirm=True)
+        # Fails -  remote path "task_id" exists but the user fails to
+        # confirm his intent. The call will fail win a runtime exception:
+        >>> inductiva.storage.rmdir("task_id")
+
     Args:
-        path (str): The path to the directory to delete.
+        path (str): Path relative to the root of the bucket to delete.
+            If path="*" then all the contents in the user's remote storage space
+            will be removed.
+        confirm (bool): Confirmation flag to explicitly ensure the intent
+            to remove the given path. The call will fail with a RuntimeException
+            if the user does not set `confirm=True`.
     """
+    if not confirm:
+        if path == "*":
+            path = "all contents"
+        raise RuntimeError(
+            "Please set `confirm=True` to confirm you want to "
+            f"delete {path} from the user's remote storage.")
+
+    if path == "*":
+        logging.info("Removing everything from user's remote storage.")
+    else:
+        logging.info("Removing %s in the user's remote storage.", path)
+
     try:
         api = storage_api.StorageApi(inductiva.api.get_client())
-        api.delete_directory({"dir_name": path})
-        stripped_path = path.rstrip("/")
-        print(f"Directory deleted: {stripped_path}")
+        api.delete_path({"path": path})
+        logging.info("Successfully removed remote path '%s'.", path)
     except inductiva.client.ApiException as api_exception:
+        if api_exception.status == 404:
+            raise api_exception.ValueError(f"Uable to remove path '{path}'. "
+                                            "Path does not exist in user's remote storage.")
+        elif api_exception.status == 500:
+            raise api_exception.RuntimeError(
+                f"Failed to remove remote path '{path}'.")
         raise api_exception
