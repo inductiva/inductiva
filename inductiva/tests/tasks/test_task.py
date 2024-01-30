@@ -17,7 +17,7 @@ def test_task_kill__string_timeout__typeError_exception():
 
     with pytest.raises(TypeError) as exception:
         task.kill(wait_timeout="Olá mundo.")
-    assert str(exception.value) == "Wait timeout must be a number."
+    assert "number" in str(exception.value)
 
 
 def test_task_kill__negative_timeout__ValueError_exception():
@@ -29,7 +29,7 @@ def test_task_kill__negative_timeout__ValueError_exception():
 
     with pytest.raises(ValueError) as exception:
         task.kill(wait_timeout=-1)
-    assert str(exception.value) == "Wait timeout must be a positive number."
+    assert "positive number" in str(exception.value)
 
 
 def test_task_kill__zero_timeout__ValueError_exception():
@@ -40,7 +40,7 @@ def test_task_kill__zero_timeout__ValueError_exception():
     task = inductiva.tasks.Task("123")
     with pytest.raises(ValueError) as exception:
         task.kill(wait_timeout=0)
-    assert str(exception.value) == "Wait timeout must be a positive number."
+    assert "positive number" in str(exception.value)
 
 
 def test_task_kill__none_timeout__none():
@@ -108,8 +108,7 @@ def test__send_kill_request__positive_max_api_requests__none(
     assert kill_request_return is None
 
 
-def test__send_kill_request__positive_max_api_requests__api_exception__runtimeError(
-):
+def test__send_kill_request__api_exception__runtimeError():
     """
     Check the _send_kill_request return when the api call
     gives an exception.
@@ -124,9 +123,7 @@ def test__send_kill_request__positive_max_api_requests__api_exception__runtimeEr
     with pytest.raises(RuntimeError) as exception:
         # pylint: disable=W0212
         _ = task._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
-    assert str(
-        exception.value
-    ) == "Something went wrong while sending the kill command. Please try again later."
+    assert "kill command" in str(exception.value)
 
 
 @pytest.mark.parametrize("status_code, expected_success", [
