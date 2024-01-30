@@ -2,6 +2,7 @@
 from absl import logging
 
 import inductiva
+from inductiva.client import exceptions
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
 from typing import Literal
@@ -135,12 +136,12 @@ def rmdir(path: str, /, confirm: bool = False):
         api = storage_api.StorageApi(inductiva.api.get_client())
         api.delete_path({"path": path})
         logging.info("Successfully removed remote path '%s'.", path)
-    except inductiva.client.ApiException as api_exception:
+    except exceptions.ApiException as api_exception:
         if api_exception.status == 404:
-            raise api_exception.ValueError(
+            raise ValueError(
                 f"Unable to remove path '{path}'. Path does not exist in "
                 "user's remote storage.")
         elif api_exception.status == 500:
-            raise api_exception.RuntimeError(
+            raise RuntimeError(
                 f"Failed to remove remote path '{path}'.")
         raise api_exception
