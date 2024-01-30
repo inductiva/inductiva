@@ -48,12 +48,12 @@ simulations on the Cloud or On-Premise.
 
 This API offers a range of benefits for diverse simulation needs:
 
-|                                   	|                                                                                                                                                                                                                                                                                                            	|
-|-----------------------------------	|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
-| **Unified Platform**              	| _It unifies standard open-source simulation packages on a single platform, <br>covering various multi-physics aspects. This integration allows for a streamlined, <br>user-friendly access point, eliminating the need to manage separate software for <br>each type of simulation._                       	|
-| **Hassle-Free Setup**             	| _It eliminates the need for installing and managing complex simulation software <br>and corresponding dependencies_                                                                                                                                                                                        	|
-| **Python-Powered Flexibility**    	| _It empowers you to write simple Python scripts that blend seamlessly with your <br>existing codebase and machine learning frameworks_                                                                                                                                                                     	|
-| **Smart Hardware Optimization**   	| _It automatically tunes hardware configurations – whether you need CPU or GPU, <br>decides the right number of cores, RAM, etc., specific to each simulation type._                                                                                                                                        	|
+|  	|  	|
+|---	|---	|
+| **Unified Platform** 	| _It unifies standard open-source simulation packages on a single platform, <br>covering various multi-physics aspects. This integration allows for a streamlined, <br>user-friendly access point, eliminating the need to manage separate software for <br>each type of simulation._ 	|
+| **Hassle-Free Setup** 	| _It eliminates the need for installing and managing complex simulation software <br>and corresponding dependencies_ 	|
+| **Python-Powered Flexibility** 	| _It empowers you to write simple Python scripts that blend seamlessly with your <br>existing codebase and machine learning frameworks_ 	|
+| **Smart Hardware Optimization** 	| _It automatically tunes hardware configurations – whether you need CPU or GPU, <br>decides the right number of cores, RAM, etc., specific to each simulation type._ 	|
 | **Efficient Simulation at Scale** 	| _It simplifies orchestrating and managing simulations, from auto-scaling to automatic <br>termination, without complex coding from your end. It offers essential features like <br>MPI cluster setup and cost visibility, making it easy to run extensive simulations <br>while controlling expenses._<br> 	|
  
 ## What can you do with Inductiva API?
