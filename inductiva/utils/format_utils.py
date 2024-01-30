@@ -3,6 +3,7 @@ from typing import Any, Callable, Dict, Iterable, Mapping, Optional, Tuple, Unio
 from distutils.util import strtobool
 import datetime
 import os
+import copy
 
 from tabulate import tabulate
 
@@ -48,13 +49,15 @@ def apply_formatters(table_data: dict, formatters: dict):
         formatters : Dictionary of column names and functions to
             apply to that column's data.
     """
+    output_table_data = copy.deepcopy(table_data)
     for column_name, formatter in formatters.items():
-        if column_name in table_data:
-            table_data[column_name] = [
-                formatter(x) for x in table_data[column_name]
+        if column_name in output_table_data:
+            output_table_data[column_name] = [
+                formatter(x) for x in output_table_data[column_name]
             ]
 
-    return table_data
+    return output_table_data
+
 
 
 def get_tabular_data(
