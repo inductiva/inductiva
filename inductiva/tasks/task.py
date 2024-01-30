@@ -8,6 +8,7 @@ from typing import Dict, Any, List, Optional, Tuple, Union
 from typing_extensions import TypedDict
 import datetime
 from dateutil import parser
+from ..localization import translator as __
 
 import inductiva
 from inductiva import constants
