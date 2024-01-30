@@ -32,29 +32,11 @@ def main():
 
     # Create subcommands
     subparsers = parser.add_subparsers(title='subcommands')
-    tasks_subparser = subparsers.add_parser(
-        "tasks",
-        help="View tasks information",
-    )
-    machines_subparser = subparsers.add_parser(
-        "machines",
-        help="View machines information",
-    )
-    logs_subparser = subparsers.add_parser(
-        "logs",
-        help="View logs of Task ID",
-    )
-
-    # Register subcommands (e.g. list) for each subcommand (e.g. tasks)
-    _cli.register_tasks_cli(tasks_subparser)
-    _cli.register_machines_cli(machines_subparser)
-    _cli.register_logs_cli(logs_subparser)
 
     # Load all modules starting with "cmd_" as subcommands.
     loader.load_commands(subparsers,
                          os.path.dirname(__file__),
-                         'inductiva._cli',
-                         'cmd_')
+                         "inductiva._cli")
 
     args = parser.parse_args()
     if args.api_key:

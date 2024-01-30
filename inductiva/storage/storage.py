@@ -19,7 +19,7 @@ def get_space_used():
 
 def listdir(path="/",
             max_results: int = 10,
-            order_by: Literal["size", "creation_time"] = "size",
+            order_by: Literal["size", "creation_time"] = "creation_time",
             sort_order: Literal["asc", "desc"] = "desc"):
     """List and display the contents of the user's storage.
     Args:

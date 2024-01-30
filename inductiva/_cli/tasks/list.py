@@ -1,12 +1,12 @@
-"""Tasks CLI subcommands."""
+"""List the tasks information via CLI."""
+
 from inductiva import tasks, utils
-from inductiva import _cli
-from inductiva.utils import format_utils
 
 
 def list_tasks(args):
-    """
-    List tasks based on the flags (task_id, last_n).
+    """ List the last user's tasks. 
+
+    Lists based on the flags (task_id, last_n).
     It can print the last N tasks (default value is 5)
     or a single task with a specific ID
     """
@@ -20,8 +20,8 @@ def list_tasks(args):
     table_dict = tasks.to_dict(task_list)
 
     formatters = {
-        "Submitted": format_utils.datetime_formatter,
-        "Started": format_utils.datetime_formatter
+        "Submitted": utils.format_utils.datetime_formatter,
+        "Started": utils.format_utils.datetime_formatter
     }
 
     print(utils.format_utils.get_tabular_str(
@@ -30,23 +30,18 @@ def list_tasks(args):
     ))
 
 
-def register_tasks_cli(parser):
-    _cli.utils.show_help_msg(parser)
+def register(parser):
+    """Register the list user's tasks command."""
 
-    subparsers = parser.add_subparsers()
-
-    list_subparser = subparsers.add_parser("list", help="List tasks")
-
-    group = list_subparser.add_mutually_exclusive_group()
-
+    subparser = parser.add_parser("list", help="List tasks.")
+    group = subparser.add_mutually_exclusive_group()
     group.add_argument("-n",
                        "--last-n",
                        type=int,
                        help="List last N tasks. Default: 5.")
-
     group.add_argument("-id",
                        "--task-id",
                        type=str,
                        help="List a task with a specific ID.")
 
-    list_subparser.set_defaults(func=list_tasks)
+    subparser.set_defaults(func=list_tasks)

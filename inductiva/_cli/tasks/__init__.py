@@ -1,11 +1,13 @@
+"""Register CLI commands for storage."""
 import os
 
 from inductiva._cli import loader, utils
 
+
 def register(root_parser):
 
-    parser = root_parser.add_parser('storage',
-                help='storage management commands')
+    parser = root_parser.add_parser("tasks",
+                help="Manage your tasks.")
     utils.show_help_msg(parser)
 
     subparsers = parser.add_subparsers()
