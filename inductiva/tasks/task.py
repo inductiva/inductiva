@@ -244,8 +244,8 @@ class Task:
         a positive number, the method waits up to `wait_timeout` seconds
         to ensure that the task transitions to the KILLED state.
         Args:
-            wait_timeout (int, float): Optional - number of seconds to wait for the
-            kill command or None if only the request is to be sent.
+            wait_timeout (int, float): Optional - number of seconds to wait
+            for the kill command or None if only the request is to be sent.
         Returns:
             - None if `wait_timeout` is None and the kill request was
               successfully sent;
