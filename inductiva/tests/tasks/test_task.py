@@ -49,6 +49,7 @@ def test_task_kill__none_timeout__none():
     timeout is none.
     """
     task = inductiva.tasks.Task("123")
+    # pylint: disable=W0212
     task._send_kill_request = Mock(return_value=None)
     kill_return = task.kill()
 
@@ -71,7 +72,9 @@ def test_task_kill__positive_timeout__success(pending_kill_success,
     _check_if_pending_kill.
     """
     task = inductiva.tasks.Task("123")
+    # pylint: disable=W0212
     task._send_kill_request = Mock(return_value=ApiResponseFor200)
+    # pylint: disable=W0212
     task._check_if_pending_kill = Mock(return_value=(pending_kill_success,
                                                      pending_kill_status))
     success = task.kill(wait_timeout=1)
@@ -93,9 +96,11 @@ def test__send_kill_request__positive_max_api_requests__none(
     """
     task = inductiva.tasks.Task("123")
 
+    # pylint: disable=W0212
     task._api.kill_task = Mock(return_value=ApiResponseFor200)
     task.get_status = Mock(return_value=get_status_response)
 
+    # pylint: disable=W0212
     kill_request_return = task._send_kill_request(
         constants.TASK_KILL_MAX_API_REQUESTS)
 
@@ -110,11 +115,13 @@ def test__send_kill_request__positive_max_api_requests__api_exception__runtimeEr
     """
     task = inductiva.tasks.Task("123")
 
+    # pylint: disable=W0212
     task._api.kill_task = Mock(
         side_effect=exceptions.ApiException(400, "Bad Request"))
     task.get_status = Mock(return_value=TaskStatusCode.PENDINGKILL)
 
     with pytest.raises(RuntimeError) as exception:
+        # pylint: disable=W0212
         _ = task._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
     assert str(
         exception.value
@@ -135,6 +142,7 @@ def test__check_if_pending_kill__wait_timeout_positive__success_status(
     """
     task = inductiva.tasks.Task("123")
     task.get_status = Mock(return_value=status_code)
+    # pylint: disable=W0212
     success, status = task._check_if_pending_kill(2)
 
     assert success == expected_success and status == status_code
