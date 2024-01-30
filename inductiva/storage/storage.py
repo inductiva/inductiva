@@ -123,9 +123,8 @@ def rmdir(path: str, /, confirm: bool = False):
     if not confirm:
         if path == "*":
             path = "all contents"
-        raise RuntimeError(
-            "Please set `confirm=True` to confirm you want to "
-            f"delete {path} from the user's remote storage.")
+        raise RuntimeError("Please set `confirm=True` to confirm you want to "
+                           f"delete {path} from the user's remote storage.")
 
     if path == "*":
         logging.info("Removing everything from user's remote storage.")
@@ -138,8 +137,9 @@ def rmdir(path: str, /, confirm: bool = False):
         logging.info("Successfully removed remote path '%s'.", path)
     except inductiva.client.ApiException as api_exception:
         if api_exception.status == 404:
-            raise api_exception.ValueError(f"Uable to remove path '{path}'. "
-                                            "Path does not exist in user's remote storage.")
+            raise api_exception.ValueError(
+                f"Unable to remove path '{path}'. Path does not exist in "
+                "user's remote storage.")
         elif api_exception.status == 500:
             raise api_exception.RuntimeError(
                 f"Failed to remove remote path '{path}'.")
