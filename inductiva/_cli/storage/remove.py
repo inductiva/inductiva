@@ -2,6 +2,7 @@
 
 from inductiva import storage
 
+
 def remove(args):
     """Remove user's remote storage contents."""
     path = args.path
@@ -15,12 +16,14 @@ def remove(args):
         print("Removing %s in the remote storage", path)
         storage.rmdir(path)
 
+
 def register(parser):
-    subparser = parser.add_parser("remove", aliases=["rm"],
-        help="Remove remote storage entries.")
+    subparser = parser.add_parser("remove",
+                                  aliases=["rm"],
+                                  help="Remove remote storage entries.")
     subparser.add_argument("path", default="/")
-    subparser.add_argument("-y", action="store_true",
-                           dest="confirm", default=False)
+    subparser.add_argument("-y",
+                           action="store_true",
+                           dest="confirm",
+                           default=False)
     subparser.set_defaults(func=remove)
-
-

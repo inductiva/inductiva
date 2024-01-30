@@ -2,6 +2,7 @@
 
 from inductiva import resources
 
+
 def start_machine_group(args):
     """Start a resource."""
     machine_type = args.machine_type

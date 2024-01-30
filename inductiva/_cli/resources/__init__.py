@@ -7,7 +7,7 @@ from inductiva._cli import loader, utils
 def register(root_parser):
 
     parser = root_parser.add_parser("resources",
-                help="Manage your computational resources.")
+                                    help="Manage your computational resources.")
     utils.show_help_msg(parser)
 
     subparsers = parser.add_subparsers()
