@@ -72,6 +72,10 @@ class TaskStatusCode(
         return cls("executer-terminated")
     
     @schemas.classproperty
+    def EXECUTERTERMINATEDBYUSER(cls):
+        return cls("executer-terminated-by-user")
+    
+    @schemas.classproperty
     def EXECUTERFAILED(cls):
         return cls("executer-failed")
     
