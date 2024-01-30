@@ -62,6 +62,14 @@ def get_tabular_data(
                             Iterable[Iterable[Any]]],
         headers: Optional[Iterable[Any]] = None,
         formatters: Optional[Dict[str, Callable]] = None) -> Tuple[dict, list]:
+    """Converts a table of data (Mapping or any Iterable) to
+    dict and a list of headers.
+
+    Args:
+        Gets the same arguments as get_tabular_str.
+    Returns:
+        A dict of column names and iterable of data, and a list of headers.
+    """
     formatters = formatters or {}
     headers = headers or []
 
@@ -98,7 +106,8 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
             to the data in that column. The function should take a single
             argument and return a string. The function will be applied to the
             data in the column before printing. Defaults to None.
-
+    Returns:
+        A string table with the contents of tabular_data and headers.
     """
 
     data, headers = get_tabular_data(tabular_data, headers, formatters)
