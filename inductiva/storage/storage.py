@@ -138,10 +138,10 @@ def rmdir(path: str, /, confirm: bool = False):
         logging.info("Successfully removed remote path '%s'.", path)
     except exceptions.ApiException as api_exception:
         if api_exception.status == 404:
-            raise ValueError(
+            raise exceptions.ApiValueError(
                 f"Unable to remove path '{path}'. Path does not exist in "
                 "user's remote storage.")
         elif api_exception.status == 500:
-            raise RuntimeError(
+            raise exceptions.ApiRuntimeError(
                 f"Failed to remove remote path '{path}'.")
         raise api_exception
