@@ -164,7 +164,7 @@ class BaseMachineGroup:
             return
 
         try:
-            logging.info("Terminating %s This may take a few minutes.",
+            logging.info("Terminating %s. This may take a few minutes.",
                          repr(self))
             start_time = time.time()
 

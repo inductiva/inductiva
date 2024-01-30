@@ -4,26 +4,51 @@ from inductiva import resources
 
 
 def terminate_machine_group(args):
-    """Terminate a machine group from a given name."""
-    machine_name = args.name
+    """Terminate one or all computational resoruces."""
+    active_machines = resources.machine_groups.get()
+    counter = 0
 
-    print("Terminating MachineGroup... If exists.")
-    machines_list = resources.machine_groups.get()
+    if active_machines is None:
+        print("No active computational resources found.")
+        return
 
-    for machine in machines_list:
-        if machine.name == machine_name:
-            machine.terminate()
-            print(f"Terminated MachineGroup: {machine_name}")
+    # Doesn't run in case --all is not passed.
+    # Confirm the termination of all machines.
+    if args.terminate_all:
+        prompt = input("Confirm the termination of all active machines? (y/n)")
+        confirm = prompt.lower() in ["y", "ye", "yes"]
+        if confirm:
+            print("Terminating all active computational resources.")
+        else:
+            print("Aborting the termination of resources.")
             return
 
-    print(f"MachineGroup {machine_name} not found.")
+    for machine in active_machines:
+        if args.terminate_all:
+            machine.terminate()
+        elif machine.name == args.name:
+            machine.terminate()
+            break
+        else:
+            counter += 1
+
+    if counter == len(active_machines):
+        print("No active computational resources found with the "
+              f"name {args.name}.")
 
 
 def register(parser):
     """Register the terminate command for the resources."""
 
     subparser = parser.add_parser("terminate", help="Terminate a resource.")
-    subparser.add_argument("name",
-                           type=str,
-                           help="Name of the resource to terminate")
+
+    group = subparser.add_mutually_exclusive_group(required=True)
+    group.add_argument("-n", "--name",
+                       type=str,
+                       help="Name of the resource to terminate.")
+    group.add_argument("--all",
+                       action="store_true",
+                       dest="terminate_all",
+                       help="Terminate all machines.")
+
     subparser.set_defaults(func=terminate_machine_group)
