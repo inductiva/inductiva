@@ -1,3 +1,4 @@
+"""Test file for Tasks class."""
 import inductiva
 import pytest
 from unittest.mock import Mock
@@ -8,7 +9,7 @@ from inductiva.client.model.task_status_code import TaskStatusCode
 from inductiva.client.paths.tasks_task_id_input.post import ApiResponseFor200
 
 
-def test_task_kill__string_timeout__typeError_exception():
+def test_task_kill__string_timeout__typeerror_exception():
     """ 
     Check if task.kill returns TypeError when calling
     kill with timeout as a string.
@@ -20,7 +21,7 @@ def test_task_kill__string_timeout__typeError_exception():
     assert "number" in str(exception.value)
 
 
-def test_task_kill__negative_timeout__ValueError_exception():
+def test_task_kill__negative_timeout__valueerror_exception():
     """ 
     Check if task.kill returns ValueError when calling
     kill with timeout as a negative number.
@@ -32,7 +33,7 @@ def test_task_kill__negative_timeout__ValueError_exception():
     assert "positive number" in str(exception.value)
 
 
-def test_task_kill__zero_timeout__ValueError_exception():
+def test_task_kill__zero_timeout__valueerror_exception():
     """
     Check if task.kill returns ValueError when calling
     kill with timeout as zero.
@@ -108,7 +109,7 @@ def test__send_kill_request__positive_max_api_requests__none(
     assert kill_request_return is None
 
 
-def test__send_kill_request__api_exception__runtimeError():
+def test__send_kill_request__api_exception__runtimeerror():
     """
     Check the _send_kill_request return when the api call
     gives an exception.
