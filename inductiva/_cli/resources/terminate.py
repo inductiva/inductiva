@@ -43,7 +43,8 @@ def register(parser):
     subparser = parser.add_parser("terminate", help="Terminate a resource.")
 
     group = subparser.add_mutually_exclusive_group(required=True)
-    group.add_argument("-n", "--name",
+    group.add_argument("-n",
+                       "--name",
                        type=str,
                        help="Name of the resource to terminate.")
     group.add_argument("--all",
