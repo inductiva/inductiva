@@ -1,3 +1,4 @@
+"""Tests thread safety"""
 import os
 from concurrent.futures import ThreadPoolExecutor
 
