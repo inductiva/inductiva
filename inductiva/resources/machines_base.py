@@ -11,7 +11,6 @@ from inductiva import api
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
 from inductiva.client import exceptions
-
 from inductiva import logs
 
 
@@ -84,9 +83,12 @@ class BaseMachineGroup:
         try:
             resp = self._api.register_vm_group(body=instance_group_config)
         except (exceptions.ApiValueError, exceptions.ApiException) as e:
-            logs.log_and_exit(logging.getLogger(), logging.ERROR,
-                              "Resource registering failed with exception %s",
-                              e)
+            logs.log_and_exit(
+                logging.getLogger(),
+                logging.ERROR,
+                "Registering machine group failed with exception %s",
+                e,
+                exc_info=e)
 
         self._id = resp.body["id"]
         self._name = resp.body["name"]
