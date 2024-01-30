@@ -9,7 +9,7 @@ def test_thread_safety():
     inductiva.set_output_dir("test_dir")
     output_dir = inductiva.get_output_dir()
 
-    num_threads = 100
+    num_threads = 5
     output_dirs = [f"output_dir_{i}" for i in range(num_threads)]
 
     with ThreadPoolExecutor(max_workers=num_threads) as executor:

@@ -14,7 +14,7 @@ import re
 from absl import logging
 import jinja2
 
-from inductiva.utils import files, format_utils
+from inductiva.utils import format_utils
 
 TEMPLATE_EXTENSION = ".jinja"
 SUFFIX_SEPARATOR = "__"
