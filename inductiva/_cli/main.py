@@ -31,7 +31,7 @@ def main():
     _cli.utils.show_help_msg(parser)
 
     # Create subcommands
-    subparsers = parser.add_subparsers(title='subcommands')
+    subparsers = parser.add_subparsers(title="subcommands")
 
     # Load all modules starting with "cmd_" as subcommands.
     loader.load_commands(subparsers, os.path.dirname(__file__),
