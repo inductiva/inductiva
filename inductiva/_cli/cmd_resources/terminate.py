@@ -8,7 +8,7 @@ def terminate_machine_group(args):
     active_machines = resources.machine_groups.get()
     counter = 0
 
-    if active_machines is None:
+    if len(active_machines) == 0:
         print("No active computational resources found.")
         return
 
