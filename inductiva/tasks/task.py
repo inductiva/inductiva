@@ -23,6 +23,7 @@ _TASK_TERMINAL_STATUSES = {
     models.TaskStatusCode.SUCCESS, models.TaskStatusCode.FAILED,
     models.TaskStatusCode.KILLED, models.TaskStatusCode.EXECUTERFAILED,
     models.TaskStatusCode.EXECUTERTERMINATED,
+    models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
     models.TaskStatusCode.SPOTINSTANCEPREEMPTED, models.TaskStatusCode.ZOMBIE
 }
 
@@ -95,7 +96,7 @@ class Task:
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
-        if self._status is not None and self._is_terminal_status():
+        if self._status is not None and self._status in _TASK_TERMINAL_STATUSES:
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
@@ -167,8 +168,9 @@ class Task:
                     logging.info("The machine was terminated while the task "
                                  "was pending.")
                 else:
-                    logging.info("An internal error occurred while "
-                                 "performing the task.")
+                    logging.info(
+                        "An internal error occurred with status %s "
+                        "while performing the task.", status)
             prev_status = status
 
             if self._is_terminal_status():
