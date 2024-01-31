@@ -4,13 +4,15 @@ import contextlib
 import time
 import json
 from absl import logging
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Tuple, Union
 from typing_extensions import TypedDict
 import datetime
 from dateutil import parser
+from ..localization import translator as __
 
 import inductiva
-from inductiva.client import models
+from inductiva import constants
+from inductiva.client import exceptions, models
 from inductiva import api, types
 from inductiva.client.apis.tags import tasks_api
 from inductiva.utils import files, format_utils, data, output_contents
@@ -94,7 +96,7 @@ class Task:
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
-        if self._status is not None and self._status in _TASK_TERMINAL_STATUSES:
+        if self._status is not None and self._is_terminal_status():
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
@@ -112,7 +114,7 @@ class Task:
         """
         # If the task is in a terminal status and we already have the info,
         # return it without refreshing it from the API.
-        if self._info is not None and self._status in _TASK_TERMINAL_STATUSES:
+        if self._info is not None and self._is_terminal_status():
             return self._info
 
         params = self._get_path_params()
@@ -171,18 +173,116 @@ class Task:
                         "while performing the task.", status)
             prev_status = status
 
-            if status in _TASK_TERMINAL_STATUSES:
+            if self._is_terminal_status():
                 return status
 
             time.sleep(polling_period)
 
-    def kill(self) -> None:
-        """Kill the task.
+    def _is_terminal_status(self) -> bool:
+        """Check if the task is in a terminal status.
 
-        This method issues a request to the API to kill the task. It doesn't
-        block waiting for confirmation if the task was killed.
+        This method issues a request to the API.
         """
-        self._api.kill_task(path_params=self._get_path_params())
+        status = self.get_status()
+        return status in _TASK_TERMINAL_STATUSES
+
+    def _send_kill_request(self, max_api_requests: int) -> None:
+        """Send a kill request to the API.
+        If the api request fails, it will retry until
+        max_api_requests is 0 raising a RuntimeError.
+        Args:
+            max_api_requests (int): maximum number of api requests to send
+        """
+        while max_api_requests > 0:
+            max_api_requests -= 1
+            try:
+                if self._is_terminal_status():
+                    break
+
+                path_params = self._get_path_params()
+                self._api.kill_task(path_params=path_params)
+                break
+            except exceptions.ApiException as exc:
+                if max_api_requests == 0:
+                    raise RuntimeError(
+                        "Something went wrong while sending"
+                        " the kill command. Please try again later.") from exc
+                time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
+
+    def _check_if_pending_kill(
+            self,
+            wait_timeout: Union[float,
+                                int]) -> Tuple[bool, models.TaskStatusCode]:
+        """Check if the task is in the PENDINGKILL state.
+        This method keeps checking the status of the task until it is no longer
+        in the PENDINGKILL state or until the timeout is reached.
+        Args:
+            wait_timeout (int, float): number of seconds to wait for the
+            state to leave PENDINGKILL.
+        Returns:
+            A tuple with a boolean indicating whether the timeout was reached
+            and the status of the task.
+        """
+        success = True
+        start = time.time()
+
+        while (status :=
+               self.get_status()) == models.TaskStatusCode.PENDINGKILL:
+            if (time.time() - start) > wait_timeout:
+                success = False
+                break
+
+            time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
+        return success, status
+
+    def kill(
+            self,
+            wait_timeout: Optional[Union[float,
+                                         int]] = None) -> Union[bool, None]:
+        """Request a task to be killed.
+        
+        This method requests that the current task is remotely killed.
+        If `wait_timeout` is None (default), the kill request is sent to the
+        backend and the method returns. However, if `wait_timeout` is 
+        a positive number, the method waits up to `wait_timeout` seconds
+        to ensure that the task transitions to the KILLED state.
+        Args:
+            wait_timeout (int, float): Optional - number of seconds to wait
+            for the kill command or None if only the request is to be sent.
+        Returns:
+            - None if `wait_timeout` is None and the kill request was
+              successfully sent;
+            - True if `wait_timeout`> 0 and the task successfully transitioned
+              to the `KILLED` state within `wait_timeout` seconds;
+            - False if `wait_timeout` > 0 but the task didn't transition
+              to the `KILLED` state within `wait_timeout` seconds;
+
+        """
+        if wait_timeout is not None:
+            if not isinstance(wait_timeout, (float, int)):
+                raise TypeError("Wait timeout must be a number.")
+            if wait_timeout <= 0.0:
+                raise ValueError("Wait timeout must be a positive number.")
+
+        self._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
+
+        if wait_timeout is None:
+            logging.info(__("kill-request-sent", self.id))
+            return None
+
+        success, status = self._check_if_pending_kill(wait_timeout)
+
+        if status != models.TaskStatusCode.KILLED:
+            success = False
+            logging.error(
+                "Unable to ensure that task %s transitioned"
+                " to the KILLED state after %f seconds. "
+                "The status of the task is %s", self.id, wait_timeout, status)
+
+        if success:
+            logging.info("Successfully killed task %s.", self.id)
+
+        return success
 
     def get_simulator_name(self) -> str:
         # e.g. retrieve openfoam from fvm.openfoam.run_simulation
@@ -288,7 +388,7 @@ class Task:
             The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
-        if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
+        if fail_if_running and not self._is_terminal_status():
             return None
         # start_time may be None if the task was killed before it started
         if info["computation_start_time"] is None:
@@ -314,7 +414,7 @@ class Task:
             The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
-        if fail_if_running and self._status not in _TASK_TERMINAL_STATUSES:
+        if fail_if_running and not self._is_terminal_status():
             return None
         # start_time may be None if the task was killed before it started
         if info["input_submit_time"] is None:
