@@ -9,26 +9,14 @@ you in resolving them efficiently.
 
 ### Steps We'll Cover:
 
-1. [Request Your API Access Token]()
-2. [Install the Inductiva API]()
+1. [Install the Inductiva API]()
+2. [Request Your API Access Token]()
 3. [Verify the Installation with a Test Run]()
 4. [Examine Project Example]()
 5. [Explore what to read next]()
 
-## Request Your API Access Token
-First, to access Inductiva's demos and resources, you should have a valid API access 
-token to securely run your simulations. To do that, [fill this form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform) and request 
-your own personal API key.
-
-Once you receive your API token, you can then set the `INDUCTIVA_API_KEY` as an 
-environment variable in your terminal:
-```
-export INDUCTIVA_API_KEY="YOUR_API_KEY"
-```
-
-
 ## Install the Inductiva API with pip
-Now that you've set up the API access token, you're ready to install the 
+If you've set up the API access token, you're ready to install the 
 latest Inductiva package release on PyPI with pip. 
 
 Simply open your terminal and run:
@@ -40,6 +28,16 @@ pip install --upgrade inductiva
 
 Encountering issues? Don’t worry. Head over to our [troubleshooting guide]() to 
 work it out.
+
+## Request Your API Access Token
+If you don't have a valid API access token, [fill this form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform) and request 
+your own personal API key.
+
+Once you receive your API token, you can then set the `INDUCTIVA_API_KEY` as an 
+environment variable in your terminal:
+```
+export INDUCTIVA_API_KEY="YOUR_API_KEY"
+```
 
 ## Verify the Installation with a Test Run
 Next, make sure everything is set up correctly with a quick test run.
