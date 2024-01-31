@@ -41,9 +41,32 @@ export INDUCTIVA_API_KEY="YOUR_API_KEY"
 
 ## Verify the Installation with a Test Run
 Next, make sure everything is set up correctly with a quick test run.
-## Project Example
+
+### Running your first example simulation
 Finally, check out this Project Example to demonstrate how you can run simulations 
 through the Inductiva API.
+
+For the first example, you will run a classical dam break simulation with the
+REEF3D simulator. 
+
+```python
+import inductiva
+
+# Download the configuration files for a REEF3D simulation
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "reef3d-dambreak-dir.zip", unzip=True)
+
+# Initialize the REEF3D simulator object
+simulator = inductiva.simulators.REEF3D()
+
+# Launch the simulation with the downloaded configuration files
+task = simulator.run(input_dir=input_dir)
+
+# Wait for the simulation to finish and download the outputs
+task.wait()
+task.download_outputs()
+```
 
 ## What to read next
 
