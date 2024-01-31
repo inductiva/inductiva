@@ -1,19 +1,18 @@
-"""CLI for logs."""
-from inductiva import _cli
+"""Consume the stream of logs of a task."""
+
 from inductiva.tasks import streams
 
 
-def get_task_logs(args):
+def stream_task_logs(args):
     """Consume the stream logs of a certain task."""
     consumer = streams.TaskStreamConsumer(args.task_id)
     consumer.run_forever()
 
 
-def register_logs_cli(parser):
-    _cli.utils.show_help_msg(parser)
-
+def register(parser):
+    """Register the logs commands to stream the logs of a user's tasks."""
     parser.add_argument("task_id",
                         type=str,
                         help="ID of the task for which to consume the stream.")
-    # Register function to call when this subcommand is used
-    parser.set_defaults(func=get_task_logs)
+
+    parser.set_defaults(func=stream_task_logs)

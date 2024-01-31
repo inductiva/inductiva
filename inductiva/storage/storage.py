@@ -14,7 +14,7 @@ def get_space_used():
         api = storage_api.StorageApi(inductiva.api.get_client())
         response = api.get_storage_size()
         storage_used = round(float(response.body), 3)
-        print(f"Total storage used: {storage_used} GB")
+        print(f"Total user's remote storage in use: {storage_used} GB")
         return storage_used
     except inductiva.client.ApiException as api_exception:
         raise api_exception
@@ -22,7 +22,7 @@ def get_space_used():
 
 def listdir(path="/",
             max_results: int = 10,
-            order_by: Literal["size", "creation_time"] = "size",
+            order_by: Literal["size", "creation_time"] = "creation_time",
             sort_order: Literal["asc", "desc"] = "desc"):
     """List and display the contents of the user's storage.
     Args:
@@ -50,7 +50,7 @@ def listdir(path="/",
     try:
         api = storage_api.StorageApi(inductiva.api.get_client())
         contents = api.list_storage_contents({
-            "dir_name": path,
+            "path": path,
             "max_results": max_results,
             "sort_by": order_by,
             "order": sort_order
