@@ -1,6 +1,7 @@
 """Client for Inductiva's web API."""
 import os
 import logging
+import contextvars
 
 import absl
 
@@ -15,10 +16,9 @@ from . import logs
 logs.setup()
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
-output_dir = os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output")
+_output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR")
+_output_dir.set(os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output"))
 api_key = os.environ.get("INDUCTIVA_API_KEY")
-
-working_dir = None
 
 absl.logging.set_verbosity(absl.logging.INFO)
 
@@ -27,7 +27,17 @@ absl.logging.set_verbosity(absl.logging.INFO)
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
+
+
+def set_output_dir(new_output_dir):
+    """Sets the value of `inductiva._output_dir` to `new_output_dir`"""
+    _output_dir.set(new_output_dir)
+
+
+def get_output_dir():
+    """Returns the value of inductiva._output_dir"""
+    return _output_dir.get()
 
 
 def _check_for_available_package_update():

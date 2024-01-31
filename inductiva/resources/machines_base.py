@@ -11,7 +11,6 @@ from inductiva import api
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
 from inductiva.client import exceptions
-
 from inductiva import logs
 
 
@@ -80,13 +79,17 @@ class BaseMachineGroup:
             disk_size_gb=self.disk_size_gb,
             **kwargs,
         )
-        logging.info("Registering machine group configurations:")
+
         try:
             resp = self._api.register_vm_group(body=instance_group_config)
         except (exceptions.ApiValueError, exceptions.ApiException) as e:
-            logs.log_and_exit(logging.getLogger(), logging.ERROR,
-                              "Registering machine group failed"\
-                              " with exception %s", e)
+            logs.log_and_exit(
+                logging.getLogger(),
+                logging.ERROR,
+                "Registering machine group failed with exception %s",
+                e,
+                exc_info=e)
+
         self._id = resp.body["id"]
         self._name = resp.body["name"]
         self.register = False
@@ -137,22 +140,22 @@ class BaseMachineGroup:
                 disk_size_gb=self.disk_size_gb,
                 **kwargs,
             )
-        logging.info("Starting machine group. "
-                     "This may take a few minutes.")
-        logging.info("Note that stopping this local process will not "
-                     "interrupt the creation of the machine group. "
-                     "Please wait...")
+        logging.info("Starting %s. "
+                     "This may take a few minutes.", repr(self))
+        logging.info("Note that stopping this local process will not interrupt "
+                     "the creation of the machine group. Please wait...")
         start_time = time.time()
         try:
             self._api.start_vm_group(body=request_body)
         except inductiva.client.ApiException as e:
-            logs.log_and_exit(logging.getLogger(), logging.ERROR,
-                              "Starting machine group failed"\
-                              " with exception %s", e)
+            logs.log_and_exit(logging.getLogger(),
+                              logging.ERROR,
+                              "Starting machine group failed with exception %s",
+                              e,
+                              exc_info=e)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
-
-        logging.info("Machine group successfully started in %s.", creation_time)
+        logging.info("%s successfully started in %s.", self, creation_time)
 
     def terminate(self, **kwargs):
         """Terminates a machine group."""
@@ -161,8 +164,8 @@ class BaseMachineGroup:
             return
 
         try:
-            logging.info("Terminating %s "
-                         "This may take a few minutes.", repr(self))
+            logging.info("Terminating %s. This may take a few minutes.",
+                         repr(self))
             start_time = time.time()
 
             request_body = \
@@ -206,8 +209,8 @@ class BaseMachineGroup:
         Otherwise returns None"""
         if self.name is None:
             logging.info(
-                "Attempting to get the status of an unregistered machine "
-                "group.")
+                "Attempting to get the status of an unregistered machine group."
+            )
             return
 
         response = self._api.get_group_status({"name": self.name})
