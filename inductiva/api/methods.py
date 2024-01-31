@@ -28,10 +28,8 @@ from inductiva.utils import format_utils
 def validate_api_key(api_key: Optional[str]) -> Configuration:
     """Validates the API key and returns API configuration"""
     if inductiva.api_key is None:
-        raise ValueError(
-            "No API Key specified. "
-            "Set it in the code with \"inductiva.api_key = <YOUR_SECRET_KEY>\""
-            " or set the INDUCTIVA_API_KEY environment variable.")
+        raise ValueError("No API Key specified. "
+                         "Set the INDUCTIVA_API_KEY environment variable.")
 
     # Perform version check only on first invocation
     if not hasattr(validate_api_key, "version_checked"):
