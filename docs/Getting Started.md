@@ -28,11 +28,10 @@ export INDUCTIVA_API_KEY="YOUR_API_KEY"
 
 
 ## Install the Inductiva API with pip
-Now that you've set up the API access token, you're ready to install the the 
+Now that you've set up the API access token, you're ready to install the 
 latest Inductiva package release on PyPI with pip. 
 
-Simply open your 
-terminal and run:
+Simply open your terminal and run:
 
 ```
 pip install --upgrade inductiva
