@@ -35,7 +35,7 @@ def main():
 
     # Load all modules starting with "cmd_" as subcommands.
     loader.load_commands(subparsers, os.path.dirname(__file__),
-                         "inductiva._cli")
+                         "inductiva._cli", prefix="cmd_")
 
     args = parser.parse_args()
     if args.api_key:

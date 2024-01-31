@@ -16,7 +16,7 @@ def start_machine_group(args):
                                      spot=spot)
 
     machine.start()
-    print("%s started.", repr(machine))
+    print(f"{repr(machine)} started.")
 
 
 def register(parser):
