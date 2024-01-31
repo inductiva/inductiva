@@ -1,6 +1,7 @@
 import typing_extensions
 
 from inductiva.client.paths import PathValues
+from inductiva.client.apis.paths.tasks_auth import TasksAuth
 from inductiva.client.apis.paths.tasks_submit import TasksSubmit
 from inductiva.client.apis.paths.tasks_task_id_input import TasksTaskIdInput
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
@@ -24,12 +25,12 @@ from inductiva.client.apis.paths.compute_groups import ComputeGroups
 from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_contents import StorageContents
-from inductiva.client.apis.paths.storage_dir_name import StorageDirName
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
+        PathValues.TASKS_AUTH: TasksAuth,
         PathValues.TASKS_SUBMIT: TasksSubmit,
         PathValues.TASKS_TASK_ID_INPUT: TasksTaskIdInput,
         PathValues.TASKS_TASK_ID: TasksTaskId,
@@ -53,12 +54,12 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
         PathValues.STORAGE_SIZE: StorageSize,
         PathValues.STORAGE_CONTENTS: StorageContents,
-        PathValues.STORAGE_DIR_NAME: StorageDirName,
         PathValues.VERSION: Version,
         PathValues.VERSIONCHECK: VersionCheck,
     })
 
 path_to_api = PathToApi({
+    PathValues.TASKS_AUTH: TasksAuth,
     PathValues.TASKS_SUBMIT: TasksSubmit,
     PathValues.TASKS_TASK_ID_INPUT: TasksTaskIdInput,
     PathValues.TASKS_TASK_ID: TasksTaskId,
@@ -82,7 +83,6 @@ path_to_api = PathToApi({
     PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
     PathValues.STORAGE_SIZE: StorageSize,
     PathValues.STORAGE_CONTENTS: StorageContents,
-    PathValues.STORAGE_DIR_NAME: StorageDirName,
     PathValues.VERSION: Version,
     PathValues.VERSIONCHECK: VersionCheck,
 })
