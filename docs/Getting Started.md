@@ -106,8 +106,9 @@ inductiva_output/example_simulation
 |- stdout.txt
 ```
 
-In case you want to analyze the results of the simulation, we suggest to use
-[Paraview software](https://www.paraview.org/).
+While using the Inductiva API, keep in mind that it does not provide built-in
+visualization tools. For such complex 3D visualizations, we recommend open-source 
+tools like ParaView or VTK.
 
 ## What to read next
 
