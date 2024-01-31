@@ -1,8 +1,9 @@
 """Util functions for formatting data for printing to console."""
-from typing import Any, Callable, Dict, Iterable, Mapping, Optional, Union
+from typing import Any, Callable, Dict, Iterable, Mapping, Optional, Tuple, Union
 from distutils.util import strtobool
 import datetime
 import os
+import copy
 
 from tabulate import tabulate
 
@@ -48,13 +49,46 @@ def apply_formatters(table_data: dict, formatters: dict):
         formatters : Dictionary of column names and functions to
             apply to that column's data.
     """
+    output_table_data = copy.deepcopy(table_data)
     for column_name, formatter in formatters.items():
-        if column_name in table_data:
-            table_data[column_name] = [
-                formatter(x) for x in table_data[column_name]
+        if column_name in output_table_data:
+            output_table_data[column_name] = [
+                formatter(x) for x in output_table_data[column_name]
             ]
 
-    return table_data
+    return output_table_data
+
+
+def get_tabular_data(
+        tabular_data: Union[Mapping[str, Iterable[Any]],
+                            Iterable[Iterable[Any]]],
+        headers: Optional[Iterable[Any]] = None,
+        formatters: Optional[Dict[str, Callable]] = None) -> Tuple[dict, list]:
+    """Converts a table of data (Mapping or any Iterable) to
+    dict and a list of headers.
+
+    Args:
+        Gets the same arguments as get_tabular_str.
+    Returns:
+        A dict of column names and iterable of data, and a list of headers.
+    """
+    formatters = formatters or {}
+    headers = headers or []
+
+    if not isinstance(tabular_data, Mapping):
+
+        #if we have no headers data will be empty.
+        #So, we want our original tabular_data
+        if headers:
+            tabular_data = {
+                header: [row[index] for row in tabular_data]
+                for index, header in enumerate(headers)
+            }
+    else:
+        headers = list(tabular_data.keys())
+
+    tabular_data_formatted = apply_formatters(tabular_data, formatters)
+    return tabular_data_formatted, headers
 
 
 def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
@@ -74,23 +108,9 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
             to the data in that column. The function should take a single
             argument and return a string. The function will be applied to the
             data in the column before printing. Defaults to None.
-
+    Returns:
+        A string table with the contents of tabular_data and headers.
     """
 
-    formatters = formatters or {}
-
-    if not isinstance(tabular_data, Mapping):
-        data = {
-            header: [row[index] for row in tabular_data]
-            for index, header in enumerate(headers)
-        }
-        #if we have no headers data will be empty.
-        #So, we want our original tabular_data
-        if not headers:
-            tabular_data = data
-    else:
-        headers = tabular_data.keys()
-
-    tabular_data_formatted = apply_formatters(tabular_data, formatters)
-
-    return tabulate(tabular_data_formatted, headers=headers, missingval="n/a")
+    data, headers = get_tabular_data(tabular_data, headers, formatters)
+    return tabulate(data, headers=headers, missingval="n/a")
