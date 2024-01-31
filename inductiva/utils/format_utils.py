@@ -13,6 +13,16 @@ def getenv_bool(varname, default):
     return bool(strtobool(os.getenv(varname, str(default))))
 
 
+def red_formatter(string_to_format):
+    """Encapsulates the given string in red"""
+    return f"\033[31m{string_to_format}\033[0m"
+
+
+def green_formatter(string_to_format):
+    """Encapsulates the given string in green"""
+    return f"\033[92m{string_to_format}\033[0m"
+
+
 def bytes_formatter(n_bytes: int) -> str:
     """Convert bytes to human readable string."""
     res = float(n_bytes)
@@ -113,4 +123,8 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     """
 
     data, headers = get_tabular_data(tabular_data, headers, formatters)
-    return tabulate(data, headers=headers, missingval="n/a")
+    return tabulate(data,
+                    headers=headers,
+                    missingval="n/a",
+                    showindex="always",
+                    tablefmt="simple_grid")

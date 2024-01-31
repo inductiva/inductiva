@@ -19,9 +19,17 @@ def list_tasks(args):
 
     table_dict = tasks.to_dict(task_list)
 
+    def color_formater(status):
+        if status == "success":
+            return utils.format_utils.green_formatter(status)
+        elif status in ["failed", "killed", "executer-failed", "zombie"]:
+            return utils.format_utils.red_formatter(status)
+        return status
+
     formatters = {
         "Submitted": utils.format_utils.datetime_formatter,
-        "Started": utils.format_utils.datetime_formatter
+        "Started": utils.format_utils.datetime_formatter,
+        "Status": color_formater
     }
 
     print(utils.format_utils.get_tabular_str(
