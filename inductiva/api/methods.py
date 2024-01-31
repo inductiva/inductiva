@@ -28,8 +28,14 @@ from inductiva.utils import format_utils
 def validate_api_key(api_key: Optional[str]) -> Configuration:
     """Validates the API key and returns API configuration"""
     if inductiva.api_key is None:
-        raise ValueError("No API Key specified. "
-                         "Set the INDUCTIVA_API_KEY environment variable.")
+        # pylint: disable=line-too-long
+        raise ValueError(
+            "No API Key specified. "
+            "Please set the INDUCTIVA_API_KEY environment variable.\n"
+            "More infomation at:"
+            "https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/API-access-tokens.html"
+        )
+    # pylint: enable=line-too-long
 
     # Perform version check only on first invocation
     if not hasattr(validate_api_key, "version_checked"):
