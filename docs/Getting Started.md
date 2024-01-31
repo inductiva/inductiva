@@ -44,36 +44,70 @@ Next, make sure everything is set up correctly with a quick test run.
 
 ## Run your First Simulation Example: The Dam Break with Reef3D
 
-In this example, you wish to evaluate the potential impact of a dam break scenario. 
-Your goal is to simulate the dam break using the open-source hydrodynamics [Reef3d simulator](https://github.com/REEF3D) to understand the dynamics of the water flow, predict the areas 
-that would be affected, and propose effective mitigation strategies.
+In this example, you will use the open-source hydrodynamics REEF3D simulator to simulate a [dam break scenario](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/9_1%202D%20Dam%20Break).
 
-Running this simulation requires substantial computational resources and precise 
-configuration, challenges that have previously slowed down your project.
+With this first example, you learn that running simulations via Inductiva API is
+not much different from running them in your local machine. That's the magic
+of it all! 
 
-With Inductiva, you have the opportunity to run the dam break simulation with 
-your existing configuration files.
+Running a simulation with API involves preparing a Python script with the following
+steps:
+1. Preparing all the configuration files for the simulation in a single input folder;
+2. Instantiate a simulator object that identifies the simulator you want to use.
+In this case, we are going to instantiate the REEF3D simulator object;
+3. Launch the simulation with the `run` method of the simulator object and pass
+a reference to the input folder. This folder will be uploaded to a user's
+remote storage and used in the worker machine that will run the simulation;
+4. Wait for the simulation to finish and download the results to your local machine.
+
+To make it simpler, in this example we will download the input folder with all
+the configuration files necessary to run the dam break simulation.
 
 Here's how:
 
 ```python
 import inductiva
 
-# Download the configuration files for a REEF3D simulation
+# 1 - Download the configuration files for a REEF3D simulation. This folder
+# contains the control.txt and ctrl.txt files that configure the parameters of
+# the mesh and the simulation, respectively.
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "reef3d-dambreak-dir.zip", unzip=True)
 
-# Initialize the REEF3D simulator object
+# 2 - Initialize the REEF3D simulator object
 simulator = inductiva.simulators.REEF3D()
 
-# Launch the simulation with the downloaded configuration files
+# 3 - Launch the simulation with the downloaded input folder. This will return
+# a task object that can be used to monitor the task and download the outputs.
 task = simulator.run(input_dir=input_dir)
 
-# Wait for the simulation to finish and download the outputs
+# 4 - Wait for the simulation to finish and download the outputs to a default
+# folder in your local machine named `example_simulation`.
 task.wait()
-task.download_outputs()
+task.download_outputs(output_dir="example_simulation")
 ```
+
+As the simulation runs information, you will receive information about its progress. When it finishes, you should see the following folder on your local machine:
+
+```bash
+inductiva_output/example_simulation
+|
+|- DIVEMesh_Decomp
+|- DIVEMesh_Log
+|- DIVEMesh_Paraview 
+|- REEF3D_CFD_VTU
+|- REEF3D_Log
+|- control.txt
+|- ctrl.txt
+|- grid-000001.dat
+|- grid-000002.dat
+|- stderr.txt
+|- stdout.txt
+```
+
+In case you want to analyze the results of the simulation, you can use the
+Paraview software.
 
 ## What to read next
 
