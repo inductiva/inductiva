@@ -59,7 +59,6 @@ def apply_formatters(table_data: dict, formatters: dict):
     return output_table_data
 
 
-
 def get_tabular_data(
         tabular_data: Union[Mapping[str, Iterable[Any]],
                             Iterable[Iterable[Any]]],
