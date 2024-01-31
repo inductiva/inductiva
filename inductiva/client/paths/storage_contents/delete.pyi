@@ -29,47 +29,15 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
 PathSchema = schemas.StrSchema
-MaxResultsSchema = schemas.IntSchema
-
-
-class SortBySchema(
-    schemas.EnumBase,
-    schemas.StrSchema
-):
-    
-    @schemas.classproperty
-    def SIZE(cls):
-        return cls("size")
-    
-    @schemas.classproperty
-    def CREATION_TIME(cls):
-        return cls("creation_time")
-
-
-class OrderSchema(
-    schemas.EnumBase,
-    schemas.StrSchema
-):
-    
-    @schemas.classproperty
-    def ASC(cls):
-        return cls("asc")
-    
-    @schemas.classproperty
-    def DESC(cls):
-        return cls("desc")
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
+        'path': typing.Union[PathSchema, str, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'path': typing.Union[PathSchema, str, ],
-        'max_results': typing.Union[MaxResultsSchema, decimal.Decimal, int, ],
-        'sort_by': typing.Union[SortBySchema, str, ],
-        'order': typing.Union[OrderSchema, str, ],
     },
     total=False
 )
@@ -83,24 +51,7 @@ request_query_path = api_client.QueryParameter(
     name="path",
     style=api_client.ParameterStyle.FORM,
     schema=PathSchema,
-    explode=True,
-)
-request_query_max_results = api_client.QueryParameter(
-    name="max_results",
-    style=api_client.ParameterStyle.FORM,
-    schema=MaxResultsSchema,
-    explode=True,
-)
-request_query_sort_by = api_client.QueryParameter(
-    name="sort_by",
-    style=api_client.ParameterStyle.FORM,
-    schema=SortBySchema,
-    explode=True,
-)
-request_query_order = api_client.QueryParameter(
-    name="order",
-    style=api_client.ParameterStyle.FORM,
-    schema=OrderSchema,
+    required=True,
     explode=True,
 )
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
@@ -148,7 +99,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _delete_path_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -160,7 +111,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _delete_path_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -170,7 +121,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _list_storage_contents_oapg(
+    def _delete_path_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -182,7 +133,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _list_storage_contents_oapg(
+    def _delete_path_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -191,7 +142,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        List Storage Contents
+        Delete Path
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -202,9 +153,6 @@ class BaseApi(api_client.Api):
         prefix_separator_iterator = None
         for parameter in (
             request_query_path,
-            request_query_max_results,
-            request_query_sort_by,
-            request_query_order,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
@@ -223,7 +171,7 @@ class BaseApi(api_client.Api):
 
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='get'.upper(),
+            method='delete'.upper(),
             headers=_headers,
             auth_settings=_auth,
             stream=stream,
@@ -249,11 +197,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class ListStorageContents(BaseApi):
+class DeletePath(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def list_storage_contents(
+    def delete_path(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -265,7 +213,7 @@ class ListStorageContents(BaseApi):
     ]: ...
 
     @typing.overload
-    def list_storage_contents(
+    def delete_path(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -275,7 +223,7 @@ class ListStorageContents(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def list_storage_contents(
+    def delete_path(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -287,7 +235,7 @@ class ListStorageContents(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def list_storage_contents(
+    def delete_path(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -295,7 +243,7 @@ class ListStorageContents(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._list_storage_contents_oapg(
+        return self._delete_path_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
@@ -304,11 +252,11 @@ class ListStorageContents(BaseApi):
         )
 
 
-class ApiForget(BaseApi):
+class ApiFordelete(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def get(
+    def delete(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -320,7 +268,7 @@ class ApiForget(BaseApi):
     ]: ...
 
     @typing.overload
-    def get(
+    def delete(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -330,7 +278,7 @@ class ApiForget(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get(
+    def delete(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -342,7 +290,7 @@ class ApiForget(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get(
+    def delete(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -350,7 +298,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._list_storage_contents_oapg(
+        return self._delete_path_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
