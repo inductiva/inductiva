@@ -14,7 +14,7 @@ def get_space_used():
         api = storage_api.StorageApi(inductiva.api.get_client())
         response = api.get_storage_size()
         storage_used = round(float(response.body), 3)
-        print(f"Total storage used: {storage_used} GB")
+        print(f"Total user's remote storage in use: {storage_used} GB")
         return storage_used
     except inductiva.client.ApiException as api_exception:
         raise api_exception

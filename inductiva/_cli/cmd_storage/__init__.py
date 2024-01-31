@@ -7,7 +7,7 @@ from inductiva._cli import loader, utils
 def register(root_parser):
 
     parser = root_parser.add_parser("storage",
-                                    help="Manage your remote storage contents.")
+                                    help="Remote storage management utilities.")
     utils.show_help_msg(parser)
 
     subparsers = parser.add_subparsers()
