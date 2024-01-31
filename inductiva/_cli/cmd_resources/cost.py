@@ -27,7 +27,7 @@ def register(parser):
                            help="Type of machine to launch")
     subparser.add_argument("--spot",
                            default=False,
-                           type=bool,
+                           action='store_true',
                            help="Type of machine to launch")
 
     subparser.set_defaults(func=estimate_machine_cost)

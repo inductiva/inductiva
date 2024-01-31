@@ -39,7 +39,7 @@ def register(parser):
     subparser.add_argument("-s",
                            "--spot",
                            default=False,
-                           type=bool,
+                           action='store_true',
                            help="Whether to use spot instances")
 
     subparser.set_defaults(func=start_machine_group)
