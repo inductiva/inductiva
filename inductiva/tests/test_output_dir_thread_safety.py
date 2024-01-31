@@ -1,7 +1,21 @@
 """Tests thread safety"""
+import time
 from concurrent.futures import ThreadPoolExecutor
 
 import inductiva
+
+
+def thread_1():
+    inductiva.set_output_dir("thread_1")
+    time.sleep(5)
+    inductiva.set_output_dir("thread_1")
+    return inductiva.get_output_dir()
+
+
+def thread_2():
+    time.sleep(1)
+    inductiva.set_output_dir("thread_2")
+    return inductiva.get_output_dir()
 
 
 def test_thread_safety():
@@ -9,17 +23,12 @@ def test_thread_safety():
     inductiva.set_output_dir("test_dir")
     output_dir = inductiva.get_output_dir()
 
-    num_threads = 5
-    output_dirs = [f"output_dir_{i}" for i in range(num_threads)]
+    with ThreadPoolExecutor(max_workers=2) as executer:
+        future_1 = executer.submit(thread_1)
+        future_2 = executer.submit(thread_2)
 
-    with ThreadPoolExecutor(max_workers=num_threads) as executor:
-        futures = [
-            executor.submit(inductiva.set_output_dir, output_dirs[i])
-            for i in range(num_threads)
-        ]
-
-        for future in futures:
-            future.result()
-
-    # Test that the output_dir remained unchanged.
+        result_1 = future_1.result()
+        result_2 = future_2.result()
     assert inductiva.get_output_dir() == output_dir
+    assert result_1 == "thread_1"
+    assert result_2 == "thread_2"

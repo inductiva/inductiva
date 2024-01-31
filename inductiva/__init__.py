@@ -31,10 +31,12 @@ __version__ = "0.4.1"
 
 
 def set_output_dir(new_output_dir):
+    """Sets the value of `inductiva._output_dir` to `new_output_dir`"""
     _output_dir.set(new_output_dir)
 
 
 def get_output_dir():
+    """Returns the value of inductiva._output_dir"""
     return _output_dir.get()
 
 
