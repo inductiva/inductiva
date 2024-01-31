@@ -13,12 +13,12 @@ This introduction provides you with an overview on Inductiva API,
 you will get to know:
 
 * [What is the Inductiva API?]()
-* [What are Inductiva API's core functionalities?]()
+* [What are the Inductiva API's core functionalities?]()
 * [What can you do?]()
 
 ## What is the Inductiva API?
 
-Inductiva API is a Python package that enhances the usability and scalability of 
+Inductiva is a Python package that enhances the usability and scalability of 
 [free and open-source physical simulation software packages](). These software 
 packages, while powerful, often 
 present significant challenges in terms of installation, operation, and particularly 
@@ -26,14 +26,16 @@ scaling to large computational infrastructures, such as the Cloud or On-Premise
 clusters. This complexity can restrict the potential 
 of engineers and scientists to fully exploit these tools.
 
-Inductiva facilitates this process by acting as an intermediary between users and high-performance computational resources. It simplifies the task of scaling, eliminating the need for specialized systems engineering or an in-house high-performance computing (HPC) team. 
+The Inductiva API facilitates this process by acting as an intermediary between 
+users and high-performance computational resources. It simplifies the task of scaling, eliminating the need for specialized systems engineering or an in-house 
+high-performance computing (HPC) team. 
 
 In essence, **Inductiva's focus lies in simplifying the underlying computational infrastructure**, 
 allowing users to focus on their simulations without worrying about the complexities 
-of computational resources, opening up new possibilities in the field of simulation-based 
-research and analysis.
+of computational resources, opening up new possibilities in the field of 
+simulation-based research and analysis.
 
-## What are Inductiva API's core funtionalities?
+## What are the Inductiva API's core funtionalities?
 Inductiva designed the core funtionalities of its API tool to facilitate 
 various tasks in a computational environment with minimal coding effort. It will 
 allow you to:
@@ -48,17 +50,17 @@ simulations on the Cloud or On-Premise.
 
 This API offers a range of benefits for diverse simulation needs:
 
-|  	|  	|
+|API Benefits 	| What it does 	|
 |---	|---	|
-| **Unified Platform** 	| _It unifies standard open-source simulation packages <br>on a single platform, covering various multi-physics aspects.<br> This integration allows for a streamlined, user-friendly access<br> point, eliminating the need to manage separate software for <br>each type of simulation._ 	|
-| **Hassle-Free Setup** 	| _It eliminates the need for installing and managing complex<br> simulation software and corresponding dependencies_ 	|
-| **Python-Powered Flexibility** 	| _It empowers you to write simple Python scripts that blend <br>seamlessly with your existing codebase and machine learning<br> frameworks_ 	|
-| **Smart Hardware Optimization** 	| _It automatically tunes hardware configurations – whether <br>you need CPU or GPU, decides the right number of cores, <br>RAM, etc., specific to each simulation type._ 	|
-| **Efficient Simulation at Scale** 	| _It simplifies orchestrating and managing simulations, from <br>auto-scaling to automatic termination, without complex <br>coding from your end. It offers essential features like <br>MPI cluster setup and cost visibility, making it easy to run <br>extensive simulations while controlling expenses._<br> 	|
+| Unified Platform 	| _It unifies standard open-source simulation packages <br>on a single platform, covering various multi-physics aspects.<br> This integration allows for a streamlined, user-friendly access<br> point, eliminating the need to manage separate software for <br>each type of simulation._ 	|
+| Hassle-Free Setup 	| _It eliminates the need for installing and managing complex<br> simulation software and corresponding dependencies_ 	|
+| Python-Powered Flexibility 	| _It empowers you to write simple Python scripts that blend <br>seamlessly with your existing codebase and machine learning<br> frameworks_ 	|
+| Smart Hardware Optimization 	| _It automatically tunes hardware configurations – whether <br>you need CPU or GPU, decides the right number of cores, <br>RAM, etc., specific to each simulation type._ 	|
+| Efficient Simulation at Scale 	| _It simplifies orchestrating and managing simulations, from <br>auto-scaling to automatic termination, without complex <br>coding from your end. It offers essential features like <br>MPI cluster setup and cost visibility, making it easy to run <br>extensive simulations while controlling expenses._<br> 	|
  
-## What can you do with Inductiva API?
+## What can you do with Inductiva?
 
-Inductiva's API offers you two distinct options for computational resources:
+The Inductiva API offers you two distinct options for computational resources:
 
 * [Standard Machines](): Start simulations on open-source simulators quickly using 
 our provided machines with your existing configuration files. These machines handle 
