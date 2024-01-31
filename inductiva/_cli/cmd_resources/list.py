@@ -3,9 +3,8 @@
 from inductiva import resources
 
 
-def list_machine_types_available(args):
+def list_machine_types_available(unused_args):
     """List all available machines types."""
-    del args  # unused
 
     print("Available machine types\n")
     print("machine-type: [cores-available]")
@@ -17,9 +16,8 @@ def list_machine_types_available(args):
     print("\n E.g. of machine-type: c2-standard-8\n")
 
 
-def list_machine_groups(args):
+def list_machine_groups(unused_args):
     """List Resources."""
-    del args  # unused
     resources.machine_groups.list()
 
 

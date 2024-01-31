@@ -3,9 +3,8 @@
 from inductiva import storage
 
 
-def storage_used(args):
+def storage_used(unused_args):
     """List the user's remote storage contents."""
-    del args
     storage.get_space_used()
 
 

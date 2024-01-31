@@ -36,11 +36,6 @@ def register(parser):
                            default=70,
                            type=int,
                            help="Disk size in GB")
-    subparser.add_argument("-z",
-                           "--zone",
-                           default="europe-west1-b",
-                           type=str,
-                           help="Zone to start the machines")
     subparser.add_argument("-s",
                            "--spot",
                            default=False,

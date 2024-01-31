@@ -14,7 +14,7 @@ def remove(args):
 
     if confirm:
         print("Removing %s in the remote storage", path)
-        storage.rmdir(path)
+        storage.rmdir(path, confirm=confirm)
 
 
 def register(parser):

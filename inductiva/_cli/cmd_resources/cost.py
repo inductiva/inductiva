@@ -25,11 +25,6 @@ def register(parser):
     subparser.add_argument("machine_type",
                            type=str,
                            help="Type of machine to launch")
-    subparser.add_argument("-z",
-                           "--zone",
-                           default="europe-west1-b",
-                           type=str,
-                           help="Type of machine to launch")
     subparser.add_argument("--spot",
                            default=False,
                            type=bool,
