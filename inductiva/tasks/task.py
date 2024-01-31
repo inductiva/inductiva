@@ -21,6 +21,7 @@ _TASK_TERMINAL_STATUSES = {
     models.TaskStatusCode.SUCCESS, models.TaskStatusCode.FAILED,
     models.TaskStatusCode.KILLED, models.TaskStatusCode.EXECUTERFAILED,
     models.TaskStatusCode.EXECUTERTERMINATED,
+    models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
     models.TaskStatusCode.SPOTINSTANCEPREEMPTED, models.TaskStatusCode.ZOMBIE
 }
 
@@ -165,8 +166,8 @@ class Task:
                     logging.info("The machine was terminated while the task "
                                  "was pending.")
                 else:
-                    logging.info("An internal error occurred while "
-                                 "performing the task.")
+                    logging.info("An internal error occurred with status %s "
+                                 "while performing the task.", status)
             prev_status = status
 
             if status in _TASK_TERMINAL_STATUSES:
