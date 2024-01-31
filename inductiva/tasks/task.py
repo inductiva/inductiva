@@ -166,8 +166,9 @@ class Task:
                     logging.info("The machine was terminated while the task "
                                  "was pending.")
                 else:
-                    logging.info("An internal error occurred with status %s "
-                                 "while performing the task.", status)
+                    logging.info(
+                        "An internal error occurred with status %s "
+                        "while performing the task.", status)
             prev_status = status
 
             if status in _TASK_TERMINAL_STATUSES:
