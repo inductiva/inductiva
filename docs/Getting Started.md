@@ -106,8 +106,8 @@ inductiva_output/example_simulation
 |- stdout.txt
 ```
 
-In case you want to analyze the results of the simulation, you can use the
-Paraview software.
+In case you want to analyze the results of the simulation, we suggest to use
+[Paraview software](https://www.paraview.org/).
 
 ## What to read next
 
