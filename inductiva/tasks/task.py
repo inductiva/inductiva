@@ -10,8 +10,6 @@ import datetime
 from dateutil import parser
 from ..localization import translator as __
 
-
-import inductiva
 from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api, types
