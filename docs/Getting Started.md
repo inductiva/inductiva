@@ -12,7 +12,7 @@ you in resolving them efficiently.
 1. [Install the Inductiva API]()
 2. [Request Your API Access Token]()
 3. [Verify the Installation with a Test Run]()
-4. [Examine Project Example]()
+4. [Run your First Simulation Example]()
 5. [Explore what to read next]()
 
 ## Install the Inductiva API with pip
@@ -42,12 +42,19 @@ export INDUCTIVA_API_KEY="YOUR_API_KEY"
 ## Verify the Installation with a Test Run
 Next, make sure everything is set up correctly with a quick test run.
 
-### Running your first example simulation
-Finally, check out this Project Example to demonstrate how you can run simulations 
-through the Inductiva API.
+## Run your First Simulation Example: The Dam Break with Reef3D
 
-For the first example, you will run a classical dam break simulation with the
-REEF3D simulator. 
+In this example, you wish to evaluate the potential impact of a dam break scenario. 
+Your goal is to simulate the dam break using the open-source hydrodynamics [Reef3d simulator](https://github.com/REEF3D) to understand the dynamics of the water flow, predict the areas 
+that would be affected, and propose effective mitigation strategies.
+
+Running this simulation requires substantial computational resources and precise 
+configuration, challenges that have previously slowed down your project.
+
+With Inductiva, you have the opportunity to run the dam break simulation with 
+your existing configuration files.
+
+Here's how:
 
 ```python
 import inductiva
