@@ -84,7 +84,7 @@ def _fetch_machine_groups_from_api():
         api = compute_api.ComputeApi(inductiva.api.get_client())
         response = api.list_active_user_instance_groups()
         if len(response.body) == 0:
-            print("No active machine groups found.")
+            print("No active computational resources found.")
             return response.body
 
         return response.body
