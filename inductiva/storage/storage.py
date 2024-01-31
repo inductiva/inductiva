@@ -50,7 +50,7 @@ def listdir(path="/",
     try:
         api = storage_api.StorageApi(inductiva.api.get_client())
         contents = api.list_storage_contents({
-            "dir_name": path,
+            "path": path,
             "max_results": max_results,
             "sort_by": order_by,
             "order": sort_order
