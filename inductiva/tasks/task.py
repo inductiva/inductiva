@@ -95,7 +95,7 @@ class Task:
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
-        if self._status is not None and self._is_terminal_status():
+        if self._status is not None and self._status in _TASK_TERMINAL_STATUSES:
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
