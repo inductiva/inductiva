@@ -40,7 +40,24 @@ export INDUCTIVA_API_KEY="YOUR_API_KEY"
 ```
 
 ## Verify the Installation with a Test Run
+
 Next, make sure everything is set up correctly with a quick test run.
+You have two options to test the installation:
+1. through the command line interface (CLI) tool that gets installed
+   automatically when the `pip` command runs;
+2. programmatically via direct import of the `inductiva` package in a python
+   command.
+
+Both options are shown below and both output the same version:
+
+```console
+# using the CLI tool ($ is the shell prompt):
+$ inductiva --version
+inductiva 0.4.2
+# programmatically through direct python invocation:
+$ python -c 'import inductiva; print(inductiva.__version__)'
+0.4.2
+```
 
 ## Run your First Simulation Example: The Dam Break with Reef3D
 
