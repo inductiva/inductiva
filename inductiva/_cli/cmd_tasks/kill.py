@@ -11,6 +11,7 @@ def kill_task(args):
         confirm = prompt.lower() in ["y", "ye", "yes"]
         if not confirm:
             print("Aborted.")
+            return
 
     for task_id in args.id:
         inductiva.tasks.Task(task_id).kill(wait_timeout=args.wait_timeout)
@@ -28,7 +29,9 @@ def register(parser):
                            "--wait-timeout",
                            type=float,
                            default=None,
-                           help="Timeout to wait for the kill to complete.")
+                           help="Number of seconds to wait for the kill "
+                           "command. If not provided, the system sends "
+                           "the request without waiting a response.")
     subparser.add_argument("-y",
                            "--yes",
                            action="store_true",
