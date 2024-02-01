@@ -5,16 +5,28 @@ from inductiva import storage
 
 def remove(args):
     """Remove user's remote storage contents."""
-    path = args.path
+    paths = args.path
     confirm = args.confirm
+    number_paths = len(paths)
+    all_paths = args.all
+
+    print(paths)
 
     if not confirm:
-        prompt = input(f"Are you sure you want to remove {path}? (y/n)")
+        if all_paths:
+            prompt = input("Are you sure you want to remove everything "
+                           "from your storage(y/[N])")
+        else:
+            prompt = input(f"Are you sure you want to remove {len(paths)}"
+                           " path(s)? (y/[N])")
         confirm = prompt.lower() in ["y", "ye", "yes"]
 
     if confirm:
-        print("Removing %s in the remote storage", path)
-        storage.rmdir(path, confirm=confirm)
+        if all_paths:
+            storage.rmdir("*", confirm=confirm)
+        for path in paths:
+            print(path)
+            storage.rmdir(path, confirm=confirm)
 
 
 def register(parser):
@@ -23,10 +35,17 @@ def register(parser):
                                   help="Remove remote storage entries.")
     subparser.add_argument("path",
                            type=str,
-                           help="Path to be removed from remote storage. "
+                           nargs="+",
+                           help="Path(s) to be removed from remote storage. "
                            "To remove all contents, use \"*\".")
     subparser.add_argument("-y",
                            action="store_true",
                            dest="confirm",
-                           default=False)
+                           default=False,
+                           help="Skip confirmation prompt.")
+    subparser.add_argument("--all",
+                           action="store_true",
+                           default=False,
+                            help="Remove all contents from remote storage.")
+    
     subparser.set_defaults(func=remove)
