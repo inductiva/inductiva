@@ -1,5 +1,6 @@
 """Client for Inductiva's web API."""
 import os
+import sys
 import logging
 import contextvars
 
@@ -45,7 +46,6 @@ def _check_for_available_package_update():
     from .localization import translator as __
     import urllib3
     import json
-    import sys
 
     new_version = __version__
 
@@ -66,3 +66,33 @@ def _check_for_available_package_update():
 
 
 _check_for_available_package_update()
+
+
+def _supports_ansi():
+    """Checks if we support ansi formatting for colors and bolds"""
+    user_disable_ansi = utils.format_utils.getenv_bool("INDUCTIVA_DISABLE_ANSI",
+                                                       False)
+    if sys.platform.startswith("win"):
+        return "TERM" in os.environ and os.environ[
+            "TERM"] == "xterm" and not user_disable_ansi
+    return hasattr(sys.stdout,
+                   "isatty") and sys.stdout.isatty() and not user_disable_ansi
+
+
+def no_formatter(x, *_):
+    """Indentity formatter, i.e, applies no formatting"""
+    return x
+
+
+def get_ansi_formatter():
+    """Fetches the formatter used for ANSI formatting.
+
+    Either `no_formatter` when ansi formatting is disabble or the
+    `inductiva.utils.format_utils.emphasis_formatter`
+    
+    """
+    if not _supports_ansi():
+        return no_formatter
+    # pylint: disable=import-outside-toplevel
+    import inductiva
+    return inductiva.utils.format_utils.emphasis_formatter

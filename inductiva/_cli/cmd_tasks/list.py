@@ -1,6 +1,8 @@
 """List the tasks information via CLI."""
 
+import inductiva
 from inductiva import tasks, utils
+from inductiva.client import models
 
 
 def list_tasks(args):
@@ -19,33 +21,32 @@ def list_tasks(args):
 
     table_dict = tasks.to_dict(task_list)
 
+    emph_formatter = inductiva.get_ansi_formatter()
+
     def color_formater(status):
-        if status == "success":
-            return utils.format_utils.emphasis_formater(status, "green")
-        elif status in ["failed", "killed", "executer-failed", "zombie"]:
-            return utils.format_utils.emphasis_formater(status, "red")
+        if status == models.TaskStatusCode.SUCCESS:
+            return emph_formatter(status, utils.format_utils.Emphasis.GREEN)
+        elif status in [
+                models.TaskStatusCode.FAILED, models.TaskStatusCode.KILLED,
+                models.TaskStatusCode.EXECUTERFAILED,
+                models.TaskStatusCode.EXECUTERTERMINATED,
+                models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
+                models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
+                models.TaskStatusCode.ZOMBIE
+        ]:
+            return emph_formatter(status, utils.format_utils.Emphasis.RED)
         return status
 
     formatters = {
-        "Submitted": [
-            utils.format_utils.datetime_formatter,
-            utils.format_utils.spacing_formater
-        ],
-        "Started": [
-            utils.format_utils.datetime_formatter,
-            utils.format_utils.spacing_formater
-        ],
-        "Status": [utils.format_utils.spacing_formater],
-        "ID": [utils.format_utils.spacing_formater],
-        "Simulator": [utils.format_utils.spacing_formater],
-        "Computation Time": [utils.format_utils.spacing_formater],
+        "Submitted": [utils.format_utils.datetime_formatter,],
+        "Started": [utils.format_utils.datetime_formatter,],
+        "Status": [color_formater]
     }
 
-    header_formatters = [lambda x: x.upper()]
-    if not utils.format_utils.getenv_bool("DISABLE_TERMINAL_EMPHASIS", False):
-        formatters["Status"].insert(0, color_formater)
-        header_formatters.append(
-            lambda x: utils.format_utils.emphasis_formater(x, "bold"))
+    header_formatters = [
+        lambda x: x.upper(),
+        lambda x: emph_formatter(x, utils.format_utils.Emphasis.BOLD)
+    ]
 
     print(
         utils.format_utils.get_tabular_str(table_dict,

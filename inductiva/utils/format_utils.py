@@ -1,6 +1,7 @@
 """Util functions for formatting data for printing to console."""
 from typing import (Any, Callable, Dict, Iterable, Mapping, Optional, Tuple,
                     Union, List)
+from enum import Enum
 from distutils.util import strtobool
 import datetime
 import os
@@ -8,14 +9,13 @@ import sys
 import copy
 
 import tabulate
+from tabulate import TableFormat, DataRow
 
-tabulate.PRESERVE_WHITESPACE = True
 
-EMPHASIS = {
-    "red": ("\033[31m", "\033[0m"),
-    "green": ("\033[92m", "\033[0m"),
-    "bold": ("\u001b[1m", "\u001b[0m")
-}
+class Emphasis(Enum):
+    RED = "\033[31m"
+    GREEN = "\033[92m"
+    BOLD = "\033[1m"
 
 
 def getenv_bool(varname, default):
@@ -38,24 +38,19 @@ def bytes_formatter(n_bytes: int) -> str:
     return f"{bytes_formatter:.2f} PB"
 
 
-def _supports_ansi():
-    if sys.platform.startswith("win"):
-        return "TERM" in os.environ and os.environ["TERM"] == "xterm"
-    return hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
+def emphasis_formatter(string_to_emphasize: str, *emphasis: Emphasis):
+    """Adds ansi emphasis, i.e, colors or bold to strings.
 
+    Args:
+      string_to_emphasize: String, the string to emphasize.
+      emphasis: Elements of Emphasis class.
 
-def emphasis_formater(string_to_emphasize, emphasis):
-    if not emphasis in ["red", "green", "bold"]:
+    """
+    if any(emph not in Emphasis for emph in emphasis):
         raise ValueError("Desired emphasis is not supported. "
-                         "Select either `red`, `green` or `bold`")
-    if not _supports_ansi():
-        return string_to_emphasize
-    emph = EMPHASIS[emphasis]
-    return f"{emph[0]}{string_to_emphasize}{emph[1]}"
-
-
-def spacing_formater(x, num_spaces=6):
-    return f"{x}" + num_spaces * " "
+                         "Select either `GREEN`, `RED` or `BOLD`")
+    emphs = map(lambda x: x.value, emphasis)
+    return "".join(emphs) + f"{string_to_emphasize}\033[0m"
 
 
 def datetime_formatter(dt: str) -> str:
@@ -124,8 +119,8 @@ def get_tabular_data(
 
 def _table_indenter(table_string, num_spaces):
     "Adds spaces to the beggining of each table line."
-    indentenation = " " * num_spaces
-    return ("\n" + indentenation).join(table_string.split("\n"))
+    indentation = " " * num_spaces
+    return indentation + ("\n" + indentation).join(table_string.split("\n"))
 
 
 def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
@@ -154,15 +149,25 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     data, headers = get_tabular_data(tabular_data, headers, formatters)
 
     header_formatters = header_formatters or []
+
     for formatter in header_formatters:
         headers = [formatter(header) for header in headers]
-    if indentation_level is not None:
-        headers = [" " * indentation_level + header for header in headers]
 
+    # pylint: disable=protected-access
+    tabulate._table_formats["inductiva"] = TableFormat(
+        lineabove=None,
+        linebelowheader=None,
+        linebetweenrows=None,
+        linebelow=None,
+        headerrow=DataRow("", " ", ""),
+        datarow=DataRow("", " ", ""),
+        padding=3,
+        with_header_hide=None,
+    )
     table = tabulate.tabulate(data,
                               headers=headers,
                               missingval="n/a",
-                              tablefmt="plain")
+                              tablefmt="inductiva")
     if indentation_level is not None:
         table = _table_indenter(table, indentation_level)
 

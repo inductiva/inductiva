@@ -71,18 +71,13 @@ def _machine_group_list_to_str(machine_group_list) -> str:
 
     formatters = {
         "Started at (UTC)": [format_utils.datetime_formatter],
-        "Name": [format_utils.spacing_formater],
-        "Machine Type": [format_utils.spacing_formater],
-        "Elastic": [format_utils.spacing_formater],
-        "Type": [format_utils.spacing_formater],
-        "# machines": [format_utils.spacing_formater],
-        "Disk Size in GB": [format_utils.spacing_formater],
-        "Spot": [format_utils.spacing_formater],
     }
-    header_formatters = [lambda x: x.upper()]
-    if not format_utils.getenv_bool("DISABLE_TERMINAL_EMPHASIS", False):
-        header_formatters.append(
-            lambda x: format_utils.emphasis_formater(x, "bold"))
+
+    emph_formatter = inductiva.get_ansi_formatter()
+    header_formatters = [
+        lambda x: x.upper(),
+        lambda x: emph_formatter(x, format_utils.Emphasis.BOLD)
+    ]
 
     return format_utils.get_tabular_str(rows,
                                         columns,
