@@ -17,8 +17,8 @@ def estimate_machine_cost(args):
     if num_machines == 1:
         print(f"Estimated cost of machine: {cost} $/h.")
     else:
-        print(f"Estimated total cost (per machine)"
-              ": {cost*num_machines} ({cost}) $/h.")
+        print("Estimated total cost (per machine)"
+              f": {cost*num_machines} ({cost}) $/h.")
 
 
 def register(parser):
