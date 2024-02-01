@@ -62,7 +62,18 @@ You can check what is actually happening when you invoke a simulator via the API
 If you look at the logs produced at you will be able to see a message like this 
 right in the beginning of the process execution:
 
->@ivan: some log traces here.
+```bash
+Task Information:
+> ID:                    tc7cwuer45kfzuw8t93r6dxa8
+> Method:                swash
+> Local input directory: swash-resources-example
+> Submitting to the following computational resources:
+ >> Default queue with c2-standard-4 machines.
+Preparing upload of the local input directory swash-resources-example (160 B).
+Local input directory successfully uploaded.
+Task tc7cwuer45kfzuw8t93r6dxa8 submitted to the default queue.
+Simulation metadata logged to: inductiva_output/task_metadata.json
+```
 
 Once the zip file gets to the Inductiva server, it is immediately transferred to 
 your Personal Remote Storage area, under a folder whose name is the id for the 
@@ -71,8 +82,31 @@ Storage programmatically via the API or by using the CLI. Next, we show how you
 would be able to check the uploaded zip file using the CLI.
 
 >@ivan can you add a few CLI examples of how to check the personal area
+To check your personal storage area, you can do a general listing of the contents with:
+```bash
+$ inductiva storage ls
+Name                        Size      Creation Time
+--------------------------  --------  ----------------
+tc7cwuer45kfzuw8t93r6dxa8/  1.53 MB   01 Feb, 23:52:43
+hzgk5ngzk28a39qa7mesv0snk/  1.53 MB   01 Feb, 23:45:17
+mjnb8c7i8bfppgmu2y1zd1o7f/  11.52 MB  01 Feb, 23:24:17
+57mr4kas99jxb9titkeackano/  11.52 MB  01 Feb, 23:07:17
+ox8718m0pwfi02zczui3qky4w/  11.52 MB  01 Feb, 23:07:16
+mak1ji62s7axf7mespkc36g7e/  11.52 MB  01 Feb, 23:07:14
+ijyu8bkvme7vg9k0kj6v23gxa/  11.52 MB  01 Feb, 23:07:13
+g5qq5c9mk2nr5wqhzef38sdm4/  11.52 MB  01 Feb, 23:07:11
+fxobdn63z9xtb7q3thhpwn7c7/  11.52 MB  01 Feb, 22:53:10
+jyc8b91mj556w9u61f8qrhf4b/  11.29 MB  01 Feb, 20:29:17
+```
 
-—--
+The simulation we have just invoked has the task ID `hzgk5ngzk28a39qa7mesv0snk` and we can check that its contents were correctly submitted to the server by listing the specific contents of the task folder with:
+```bash
+$ inductiva storage ls tc7cwuer45kfzuw8t93r6dxa8
+Name       Size     Creation Time
+---------  -------  ----------------
+input.zip  1.53 MB  01 Feb, 23:52:44
+           0 B      01 Feb, 23:52:43
+```
 
 
 >Luis will explain the rest when this first part is already on readthedocs. 
