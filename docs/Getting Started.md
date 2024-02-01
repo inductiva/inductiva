@@ -44,7 +44,8 @@ Next, make sure everything is set up correctly with a quick test run.
 
 ## Run your First Simulation Example: The Dam Break with Reef3D
 
-In this example, you will use the open-source hydrodynamics REEF3D simulator to simulate a [dam break scenario](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/9_1%202D%20Dam%20Break).
+In this example, you will use the open-source hydrodynamics REEF3D simulator to
+simulate a [dam break scenario](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/9_1%202D%20Dam%20Break).
 
 With this first example, you learn that running simulations via Inductiva API is
 not much different from running them in your local machine. That's the magic
@@ -60,7 +61,7 @@ a reference to the input folder. This folder will be uploaded to a user's
 remote storage and used in the worker machine that will run the simulation;
 4. Wait for the simulation to finish and download the results to your local machine.
 
-To make it simpler, in this example we will download the input folder with all
+To make it simpler, in this example, we will download the input folder with all
 the configuration files necessary to run the dam break simulation.
 
 Here's how:
@@ -88,7 +89,8 @@ task.wait()
 task.download_outputs(output_dir="example_simulation")
 ```
 
-As the simulation runs information, you will receive information about its progress. When it finishes, you should see the following folder on your local machine:
+As the simulation runs information, you will receive information about its progress.
+When it finishes, you should see the following folder on your local machine:
 
 ```bash
 inductiva_output/example_simulation
@@ -106,9 +108,9 @@ inductiva_output/example_simulation
 |- stdout.txt
 ```
 
-While using the Inductiva API, keep in mind that it does not provide built-in
-visualization tools. For such complex 3D visualizations, we recommend open-source 
-tools like ParaView or VTK.
+With the data produced by the simulation on your local machine, you can now post-process
+it as you would normally do. For example, you can visualize the contents of the files
+in `REEF3D_CFD_VTU` using standard visualization tools such as Paraview.
 
 ## What to read next
 
@@ -116,13 +118,14 @@ Learn how to [run one of your own simulation projects]() for the first time thro
 the Inductiva API, on the simulator of your choice.
 
 Learn how to [customize the hardware setup]() you use for running your simulations 
-through the Inductiva API, and explore the available hardware options to enhance your project's performance.
+through the Inductiva API, and explore the available hardware options to enhance
+your project's performance.
 
 If you're looking for inspiration, learn how a group of coastal engineering researchers 
 at the University of Porto's Faculty of Engineering have [used the Inductiva API to simulate the most optimal breakwater](https://inductiva.ai/blog/article/scaling-coastal-engineering-projects-inductiva-api) 
 to protect some of Portugal's most endangered coastlines.
 
 Troubleshoot installation problems that you might encounter with Inductiva 
-API by checking our [troubleshooting guide](#troubleshootingguide), [FAQs](), or [getting in touch]() 
-with our support team directly.
+API by checking our [troubleshooting guide](#troubleshootingguide), [FAQs](), or
+[getting in touch]() with our support team directly.
 

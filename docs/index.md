@@ -8,8 +8,7 @@ caption: Getting Started
 maxdepth: 2
 hidden: false
 ---
-Install
-API-access-tokens
+Getting-Started
 ```
 
 ```{toctree}
