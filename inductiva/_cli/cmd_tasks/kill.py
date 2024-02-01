@@ -12,7 +12,7 @@ def register(parser):
     """Register the kill task command."""
 
     subparser = parser.add_parser("kill", help="Kill a running task.")
-    subparser.add_argument("id", type=str, help="Id of the task to kill.")
+    subparser.add_argument("id", type=str, help="ID(s) of the task to kill.", nargs='+')
     subparser.add_argument("-w",
                            "--wait-timeout",
                            type=float,
