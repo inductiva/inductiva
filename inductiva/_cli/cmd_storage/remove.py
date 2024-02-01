@@ -22,7 +22,7 @@ def remove(args):
                            "from your storage(y/[N])")
         else:
             prompt = input(f"Are you sure you want to remove {len(paths)}"
-                           " path(s)? (y/[N])")
+                           " path(s)? (y/[N]) ")
         confirm = prompt.lower() in ["y", "ye", "yes"]
 
     if confirm:
