@@ -27,9 +27,9 @@ def remove(args):
 
     if confirm:
         if all_paths:
-            storage.rmdir("*", confirm=confirm)
+            storage.rmdir("*", confirm=True)
         for path in paths:
-            storage.rmdir(path, confirm=confirm)
+            storage.rmdir(path, confirm=True)
 
 
 def register(parser):
