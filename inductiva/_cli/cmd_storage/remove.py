@@ -41,11 +41,14 @@ def register(parser):
                            nargs="*",
                            help="Path(s) to be removed from remote storage. "
                            "To remove all contents, use \"*\".")
-    subparser.add_argument("-y",
-                           action="store_true",
-                           dest="confirm",
-                           default=False,
-                           help="Sets any confirmation values to \"yes\" automatically. Users will not be asked for confirmation to remove path(s) from remote storage.")
+    subparser.add_argument(
+        "-y",
+        action="store_true",
+        dest="confirm",
+        default=False,
+        help="Sets any confirmation values to \"yes\" "
+        "automatically. Users will not be asked for "
+        "confirmation to remove path(s) from remote storage.")
     subparser.add_argument("--all",
                            action="store_true",
                            default=False,
