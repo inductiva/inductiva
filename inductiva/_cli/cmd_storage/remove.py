@@ -45,7 +45,7 @@ def register(parser):
                            action="store_true",
                            dest="confirm",
                            default=False,
-                           help="Skip confirmation prompt.")
+                           help="Skip remove confirmation.")
     subparser.add_argument("--all",
                            action="store_true",
                            default=False,
