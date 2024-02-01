@@ -1,7 +1,7 @@
 """List the tasks information via CLI."""
 
 import inductiva
-from inductiva import tasks, utils
+from inductiva import tasks, utils, constants
 from inductiva.client import models
 
 
@@ -26,7 +26,7 @@ def list_tasks(args):
     def color_formater(status):
         if status == models.TaskStatusCode.SUCCESS:
             return emph_formatter(status, utils.format_utils.Emphasis.GREEN)
-        elif status in constants.TASKS_FAILED_STATUSES:
+        elif status in constants.TASK_FAILED_STATUSES:
             return emph_formatter(status, utils.format_utils.Emphasis.RED)
         return status
 
@@ -37,8 +37,7 @@ def list_tasks(args):
     }
 
     header_formatters = [
-        lambda x: x.upper(),
-        lambda x: emph_formatter(x, utils.format_utils.Emphasis.BOLD)
+        lambda x: emph_formatter(x.upper(), utils.format_utils.Emphasis.BOLD)
     ]
 
     print(

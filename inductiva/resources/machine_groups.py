@@ -75,8 +75,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
 
     emph_formatter = inductiva.get_ansi_formatter()
     header_formatters = [
-        lambda x: x.upper(),
-        lambda x: emph_formatter(x, format_utils.Emphasis.BOLD)
+        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
     ]
 
     return format_utils.get_tabular_str(rows,

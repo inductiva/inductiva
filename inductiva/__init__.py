@@ -79,9 +79,7 @@ def _supports_ansi():
                    "isatty") and sys.stdout.isatty() and not user_disable_ansi
 
 
-def no_formatter(x, *_):
-    """Identity formatter, i.e, applies no formatting"""
-    return x
+_ansi_enabled = _supports_ansi
 
 
 def get_ansi_formatter():
@@ -91,8 +89,8 @@ def get_ansi_formatter():
     `inductiva.utils.format_utils.emphasis_formatter`
     
     """
-    if not _supports_ansi():
-        return no_formatter
-    # pylint: disable=import-outside-toplevel
     import inductiva
+    if not _ansi_enabled:
+        return inductiva.utils.format_utils.no_formatter
+    # pylint: disable=import-outside-toplevel
     return inductiva.utils.format_utils.emphasis_formatter

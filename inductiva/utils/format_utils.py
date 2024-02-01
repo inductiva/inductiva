@@ -11,7 +11,8 @@ import copy
 import tabulate
 from tabulate import TableFormat, DataRow
 
-TABLE_FORMAT = TableFormat(
+# pylint: disable=protected-access
+tabulate._table_formats["inductiva"] = TableFormat(
     lineabove=None,
     linebelowheader=None,
     linebetweenrows=None,
@@ -27,11 +28,17 @@ class Emphasis(Enum):
     RED = "\033[31m"
     GREEN = "\033[92m"
     BOLD = "\033[1m"
+    RESET = "\033[0m"
 
 
 def getenv_bool(varname, default):
     """Get boolean value from environment variable."""
     return bool(strtobool(os.getenv(varname, str(default))))
+
+
+def no_formatter(x, *_):
+    """Identity formatter, i.e, applies no formatting"""
+    return x
 
 
 def bytes_formatter(n_bytes: int) -> str:
@@ -57,11 +64,12 @@ def emphasis_formatter(string_to_emphasize: str, *emphasis: Emphasis):
       emphasis: Elements of Emphasis class.
 
     """
-    if any(emph not in Emphasis for emph in emphasis):
+    if any(emph not in [Emphasis.RED, Emphasis.GREEN, Emphasis.BOLD]
+           for emph in emphasis):
         raise ValueError("Desired emphasis is not supported. "
                          "Select either `GREEN`, `RED` or `BOLD`")
     emphs = map(lambda x: x.value, emphasis)
-    return "".join(emphs) + f"{string_to_emphasize}\033[0m"
+    return "".join(emphs) + f"{string_to_emphasize}{Emphasis.RESET.value}"
 
 
 def datetime_formatter(dt: str) -> str:
@@ -86,9 +94,9 @@ def apply_formatters(table_data: dict, formatters: dict):
             apply to that column's data.
     """
     output_table_data = copy.deepcopy(table_data)
-    for column_name, forms in formatters.items():
+    for column_name, formatters_for_column in formatters.items():
         if column_name in output_table_data:
-            for formatter in forms:
+            for formatter in formatters_for_column:
                 output_table_data[column_name] = [
                     formatter(x) for x in output_table_data[column_name]
                 ]
@@ -164,8 +172,6 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     for formatter in header_formatters:
         headers = [formatter(header) for header in headers]
 
-    # pylint: disable=protected-access
-    tabulate._table_formats["inductiva"] = TABLE_FORMAT
     table = tabulate.tabulate(data,
                               headers=headers,
                               missingval="n/a",
