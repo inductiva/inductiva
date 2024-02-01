@@ -1,7 +1,7 @@
 """Register CLI commands for storage."""
-from inductiva import constants
 import os
 
+from inductiva import constants
 from inductiva._cli import loader, utils
 
 
