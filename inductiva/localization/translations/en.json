@@ -9,6 +9,7 @@
         "The following error occurred:\n  {0}"
     ],
     "kill-request-sent":["Successfully sent kill request for task {0}.",
-        "> Consider tracking the task status by calling task.get_status()."
+        "> Consider tracking the task status by calling task.get_status().",
+        "> Or via the CLI by calling inductiva tasks -id <task id>."
     ]
 }
