@@ -1,8 +1,7 @@
 """Register CLI commands for logs."""
-from ast import Constant
 import os
-from inductiva import constants
 
+from inductiva import constants
 from inductiva._cli import loader, utils
 
 

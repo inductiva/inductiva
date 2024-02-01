@@ -38,7 +38,7 @@ def main():
     loader.load_commands(subparsers,
                          os.path.dirname(__file__),
                          "inductiva._cli",
-                         prefix=constants.LOADER_LOAD_PREFIX)
+                         prefix=constants.LOADER_COMMAND_PREFIX)
 
     args = parser.parse_args()
     if args.api_key:
