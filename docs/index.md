@@ -8,7 +8,7 @@ caption: Getting Started
 maxdepth: 2
 hidden: false
 ---
-Getting-Started
+Getting Started
 ```
 
 ```{toctree}
