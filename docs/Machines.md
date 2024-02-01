@@ -118,11 +118,11 @@ inductiva.resources.machine_groups.list()
 and provide the following information:
 
 ```bash
-Name       Machine Type    Elastic       Type   # machines    Disk Size in GB       Spot   Started at (UTC)
-api-369qthz2285cdg6f9exgyom31    c2d-highmem-112      False        mpi            2                200      False   22 Jan, 16:39:12
-api-6g1eix70k2ixxsjtroyhuymgp    c2d-highmem-112      False   standard            1                200      False   22 Jan, 16:38:45
-api-m141gzk927xd74szrw3mwim5f      c2-standard-4      False   standard            1                 60      False   23 Jan, 10:20:59
-api-mdam59yq17m9vsaktk8b98bdr      c2-standard-4      False   standard            1                 60      False   23 Jan, 10:22:43
+Active Resources:
+
+       NAME                                MACHINE TYPE         ELASTIC         TYPE             # MACHINES         DISK SIZE IN GB       SPOT         STARTED AT (UTC)
+       api-9jrhnc65xctdnov5jd5kxpppk       c2-standard-16       False           standard                  1                      70       False        01 Feb, 16:41:31
+       api-jdeq2jwun8j28a4g17j8tbghz       c2-standard-4        False           standard                  1                      70       False        01 Feb, 16:40:11
 ```
 
 Moreover, the active machines can be retrieved and used via Python, as follows:

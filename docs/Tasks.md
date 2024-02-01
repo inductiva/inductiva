@@ -134,19 +134,3 @@ for task in successful_tasks:
     task.download_outputs()
 ```
 
-Another function named `list`, which shares the same arguments as `get`, can be 
-used to print information about the
-tasks in tabular format to the console:
-
-```python
-import inductiva
-
-# list the last 5 tasks
-print(inductiva.tasks.list(5))
-#                       ID           Simulator     Status          Submitted          Started Computation Time  Total Duration            VM Type
-#on61z6u9c17uatqnbios7zjo3 openfoam_foundation    success   12 Jan, 10:27:19   12 Jan, 10:27:42        0h 2m 20s       0h 2m 50s   c2d-standard-112
-#u43sobjkk906566xzmm1x8x8t openfoam_foundation     killed   12 Jan, 10:21:51   12 Jan, 10:22:39        0h 1m 42s        0h 2m 8s   c2d-standard-112
-#k56bidnib55bkiv5jpmo0cp3z openfoam_foundation    started   12 Jan, 10:20:14   12 Jan, 10:22:39       *0h 7m 58s      *0h 7m 58s   c2d-standard-112
-#kgrc1ejk3q80fsh1k2hdgkxjg openfoam_foundation    success   12 Jan, 10:09:25   12 Jan, 10:09:50         0h 7m 8s       0h 7m 38s     c2-standard-30
-#asi7pn43977wzitcu8j848vbq openfoam_foundation    success   12 Jan, 09:44:30   12 Jan, 09:44:54        0h 8m 59s       0h 9m 32s     c2-standard-16
-```
