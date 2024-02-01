@@ -1,13 +1,21 @@
 """Kills a tasks by id via CLI."""
 
 import inductiva
+from inductiva import constants
 
 
 def kill_task(args):
     """Kills a task by id."""
     if not args.yes:
-        prompt = input("Do you confirm you want to "
-                       f"kill {len(args.id)} tasks (y/[N])?")
+        if len(args.id) > constants.MAX_CONFIRMATION_LINES:
+            prompt = input(f"You are about to kill {len(args.id)} tasks.\n"
+                           "Are you sure you want to proceed (y/[N])? ")
+        else:
+            print("You are about to kill the following tasks: ")
+            for task_id in args.id:
+                print(f"  - {task_id}")
+            prompt = input("Are you sure you want to proceed (y/[N])? ")
+
         confirm = prompt.lower() in ["y", "ye", "yes"]
         if not confirm:
             print("Aborted.")

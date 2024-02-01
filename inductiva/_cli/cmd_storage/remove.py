@@ -2,7 +2,7 @@
 
 import sys
 
-from inductiva import storage
+from inductiva import constants, storage
 
 
 def remove(args):
@@ -23,8 +23,16 @@ def remove(args):
             prompt = input("Are you sure you want to remove everything "
                            "from your remote storage space (y/[N])? ")
         else:
-            prompt = input(f"Are you sure you want to remove {len(paths)}"
-                           " path(s)? (y/[N]) ")
+            if len(paths) > constants.MAX_CONFIRMATION_LINES:
+                prompt = input(f"You are about to remove the {len(paths)} "
+                               "paths from your remote storage space.\n"
+                               "Are you sure you want to proceed (y/[N])? ")
+            else:
+                print("You are about to remove the following paths from "
+                      "your remote storage space: ")
+                for path in paths:
+                    print(f"  - {path}")
+                prompt = input("Are you sure you want to proceed (y/[N])? ")
         confirm = prompt.lower() in ["y", "ye", "yes"]
 
     if confirm:
