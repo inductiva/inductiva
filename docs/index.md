@@ -5,10 +5,20 @@
 ```{toctree}
 ---
 caption: Getting Started
-maxdepth: 2
+maxdepth: 1
 hidden: false
 ---
 Getting Started
+```
+
+```{toctree}
+---
+caption: Data Flow and Storage Management
+maxdepth: 2
+hidden: true
+---
+Storage Levels and Data Flow
+Managing Storage with the Inductiva API
 ```
 
 ```{toctree}
@@ -23,9 +33,19 @@ Tasks
 
 ```{toctree}
 ---
-caption: Computational Resources
+caption: Resource Features
 maxdepth: 2
 hidden: true
 ---
-Machines
+Default Machines
+Machine Groups
+```
+
+```{toctree}
+---
+caption: Developer Documentation
+maxdepth: 2
+hidden: true
+---
+API
 ```
