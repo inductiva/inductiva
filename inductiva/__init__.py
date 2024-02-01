@@ -19,6 +19,7 @@ api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
 _output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR")
 _output_dir.set(os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output"))
 api_key = os.environ.get("INDUCTIVA_API_KEY")
+_checked_key = False
 
 absl.logging.set_verbosity(absl.logging.INFO)
 
@@ -65,4 +66,14 @@ def _check_for_available_package_update():
         print(msg, file=sys.stderr)
 
 
+def _check_key():
+    global _checked_key
+
+    if not _checked_key and utils.format_utils.getenv_bool(
+            "GITHUB_ACTIONS", False) is not True:
+        api.methods.validate_api_key(api_key)
+        _checked_key = True
+
+
 _check_for_available_package_update()
+_check_key()
