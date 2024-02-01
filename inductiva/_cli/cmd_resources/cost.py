@@ -14,11 +14,13 @@ def estimate_machine_cost(args):
         spot=spot,
     )
 
+    total_cost = cost * num_machines
+
     if num_machines == 1:
-        print(f"Estimated cost of machine: {cost} $/h.")
+        print(f"Estimated cost of machine: {cost:.3f} $/h.")
     else:
         print("Estimated total cost (per machine)"
-              f": {cost*num_machines} ({cost}) $/h.")
+              f": {total_cost:.3f} ({cost:.3f}) $/h.")
 
 
 def register(parser):

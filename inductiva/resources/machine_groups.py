@@ -31,7 +31,7 @@ def estimate_machine_cost(machine_type: str, spot: bool = False):
     else:
         estimated_cost = instance_price.body["on_demand_price"]
 
-    return round(float(estimated_cost), 3)
+    return float(estimated_cost)
 
 
 def _machine_group_list_to_str(machine_group_list) -> str:
