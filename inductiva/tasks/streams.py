@@ -10,7 +10,7 @@ import inductiva
 from inductiva import constants
 
 logger = logging.getLogger("websocket")
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 
 class TaskStreamConsumer:
@@ -82,6 +82,13 @@ class TaskStreamConsumer:
     def run_forever(self):
         """Stream the STDOUT & STDERR of a task through the websocket."""
 
-        self.ws.run_forever(reconnect=self.RECONNECT_DELAY_SEC,
-                            ping_interval=self.PING_INTERVAL_SEC,
-                            ping_timeout=self.PING_TIMEOUT_SEC)
+        if inductiva.tasks.Task(self.task_id).is_running():
+            self.ws.run_forever(reconnect=self.RECONNECT_DELAY_SEC,
+                                ping_interval=self.PING_INTERVAL_SEC,
+                                ping_timeout=self.PING_TIMEOUT_SEC)
+        else:
+            raise RuntimeError(
+                f"Task {self.task_id} has terminated running and the simulation"
+                " logs are no longer available for streaming. \n Check the "
+                "task status with \n\t inductiva tasks list --task-id "
+                f"{self.task_id}")
