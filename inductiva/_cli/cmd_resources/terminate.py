@@ -8,7 +8,7 @@ def terminate_machine_group(args):
     active_machines = resources.machine_groups.get()
     counter = 0
 
-    if len(active_machines) == 0:
+    if not active_machines:
         return
 
     # Doesn't run in case --all is not passed.
