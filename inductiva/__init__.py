@@ -5,6 +5,8 @@ import contextvars
 
 import absl
 
+from inductiva.api.methods import validate_api_key
+
 from . import api
 from . import simulators
 from . import resources
@@ -19,6 +21,7 @@ api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
 _output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR")
 _output_dir.set(os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output"))
 api_key = os.environ.get("INDUCTIVA_API_KEY")
+_checked_key = False
 
 absl.logging.set_verbosity(absl.logging.INFO)
 
@@ -65,14 +68,12 @@ def _check_for_available_package_update():
         print(msg, file=sys.stderr)
 
 
-def _check_for_api_key():
-    if api_key is None:
-        raise ValueError(
-            "Please set the INDUCTIVA_API_KEY environment variable.\n"
-            "More infomation at:"
-            "https://inductiva-research-labs-inductiva.readthedocs-hosted"
-            ".com/en/latest/API-access-tokens.html")
+def _check_key():
+    global _checked_key
+    if not _checked_key:
+        validate_api_key(api_key)
+        _checked_key = True
 
 
 _check_for_available_package_update()
-_check_for_api_key()
+_check_key()
