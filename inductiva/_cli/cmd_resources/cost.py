@@ -7,12 +7,19 @@ def estimate_machine_cost(args):
     """Estimate the cost of a certain machine type."""
     machine_type = args.machine_type
     spot = args.spot
+    num_machines = args.num_machines
 
     cost = resources.estimate_machine_cost(
         machine_type=machine_type,
         spot=spot,
     )
-    print(f"Estimated cost of machine: {cost} $/h.")
+
+    if num_machines == 1:
+        print(f"Estimated cost of machine: {cost} $/h.")
+    else:
+        print(
+            f"Estimated total cost (per machine): {cost*num_machines} ({cost}) $/h."
+        )
 
 
 def register(parser):
@@ -29,5 +36,11 @@ def register(parser):
                            default=False,
                            action="store_true",
                            help="Type of machine to launch")
+
+    subparser.add_argument("-n",
+                           "--num_machines",
+                           default=1,
+                           type=int,
+                           help="Number of machines to launch")
 
     subparser.set_defaults(func=estimate_machine_cost)
