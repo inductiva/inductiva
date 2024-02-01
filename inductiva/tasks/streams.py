@@ -89,6 +89,6 @@ class TaskStreamConsumer:
         else:
             raise RuntimeError(
                 f"Task {self.task_id} has terminated running and the simulation"
-                 " logs are no longer available for streaming. \n Check the "
-                 "task status with \n\t inductiva tasks list --task-id "
+                " logs are no longer available for streaming. \n Check the "
+                "task status with \n\t inductiva tasks list --task-id "
                 f"{self.task_id}")
