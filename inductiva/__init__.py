@@ -65,4 +65,14 @@ def _check_for_available_package_update():
         print(msg, file=sys.stderr)
 
 
+def _check_for_api_key():
+    if api_key is None:
+        raise ValueError(
+            "Please set the INDUCTIVA_API_KEY environment variable.\n"
+            "More infomation at:"
+            "https://inductiva-research-labs-inductiva.readthedocs-hosted"
+            ".com/en/latest/API-access-tokens.html")
+
+
 _check_for_available_package_update()
+_check_for_api_key()
