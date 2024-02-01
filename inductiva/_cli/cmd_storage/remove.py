@@ -19,7 +19,7 @@ def remove(args):
     if not confirm:
         if all_paths:
             prompt = input("Are you sure you want to remove everything "
-                           "from your storage(y/[N])")
+                           "from your remote storage space (y/[N])? ")
         else:
             prompt = input(f"Are you sure you want to remove {len(paths)}"
                            " path(s)? (y/[N]) ")
