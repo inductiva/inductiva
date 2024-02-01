@@ -80,9 +80,9 @@ def apply_formatters(table_data: dict, formatters: dict):
             apply to that column's data.
     """
     output_table_data = copy.deepcopy(table_data)
-    for column_name, formatters in formatters.items():
+    for column_name, forms in formatters.items():
         if column_name in output_table_data:
-            for formatter in formatters:
+            for formatter in forms:
                 output_table_data[column_name] = [
                     formatter(x) for x in output_table_data[column_name]
                 ]
