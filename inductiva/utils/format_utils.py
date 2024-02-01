@@ -45,11 +45,11 @@ def _supports_ansi():
 
 
 def emphasis_formater(string_to_emphasize, emphasis):
-    if not _supports_ansi():
-        return string_to_emphasize
     if not emphasis in ["red", "green", "bold"]:
         raise ValueError("Desired emphasis is not supported. "
                          "Select either `red`, `green` or `bold`")
+    if not _supports_ansi():
+        return string_to_emphasize
     emph = EMPHASIS[emphasis]
     return f"{emph[0]}{string_to_emphasize}{emph[1]}"
 
