@@ -45,7 +45,7 @@ def register(parser):
                            action="store_true",
                            dest="confirm",
                            default=False,
-                           help="Skip remove confirmation.")
+                           help="Sets any confirmation values to \"yes\" automatically. Users will not be asked for confirmation to remove path(s) from remote storage.")
     subparser.add_argument("--all",
                            action="store_true",
                            default=False,
