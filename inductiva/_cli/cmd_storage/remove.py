@@ -12,8 +12,10 @@ def remove(args):
     all_paths = args.all
 
     if paths and all_paths:
-        print("inductiva storage remove: error: "
-              "argument path not allowed with argument --all")
+        print(
+            "inductiva storage remove: error: "
+            "argument path not allowed with argument --all",
+            file=sys.stderr)
         sys.exit(1)
 
     if not confirm:
