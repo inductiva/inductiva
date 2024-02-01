@@ -134,3 +134,15 @@ for task in successful_tasks:
     task.download_outputs()
 ```
 
+You can also get the tasks using command line prompts. For example, in
+you terminal, using `inductiva tasks list -n 3` should give you:
+
+```bash
+
+       ID                              SIMULATOR          STATUS         SUBMITTED              STARTED                COMPUTATION TIME         RESOURCE TYPE
+       n7pbtxunxqzuca6nwe9v0gn75       splishsplash       success        01 Feb, 17:16:17       01 Feb, 17:16:30       0:00:10                  c2-standard-16
+       bgnu9i6st2qk9ocghu6w81v5t       reef3d             success        31 Jan, 16:49:14       31 Jan, 16:50:04       0:00:16                  c2d-standard-16
+       3m3u1z7rypt0o302ci6x49f46       reef3d             success        31 Jan, 16:49:13       31 Jan, 16:50:04       0:00:15                  c2d-standard-16
+
+
+```

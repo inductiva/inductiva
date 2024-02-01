@@ -26,14 +26,7 @@ def list_tasks(args):
     def color_formater(status):
         if status == models.TaskStatusCode.SUCCESS:
             return emph_formatter(status, utils.format_utils.Emphasis.GREEN)
-        elif status in [
-                models.TaskStatusCode.FAILED, models.TaskStatusCode.KILLED,
-                models.TaskStatusCode.EXECUTERFAILED,
-                models.TaskStatusCode.EXECUTERTERMINATED,
-                models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
-                models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
-                models.TaskStatusCode.ZOMBIE
-        ]:
+        elif status in constants.TASKS_FAILED_STATUSES:
             return emph_formatter(status, utils.format_utils.Emphasis.RED)
         return status
 

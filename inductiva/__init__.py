@@ -80,14 +80,14 @@ def _supports_ansi():
 
 
 def no_formatter(x, *_):
-    """Indentity formatter, i.e, applies no formatting"""
+    """Identity formatter, i.e, applies no formatting"""
     return x
 
 
 def get_ansi_formatter():
     """Fetches the formatter used for ANSI formatting.
 
-    Either `no_formatter` when ansi formatting is disabble or the
+    Either `no_formatter` when ansi formatting is disable or the
     `inductiva.utils.format_utils.emphasis_formatter`
     
     """

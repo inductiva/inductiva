@@ -11,6 +11,17 @@ import copy
 import tabulate
 from tabulate import TableFormat, DataRow
 
+TABLE_FORMAT = TableFormat(
+    lineabove=None,
+    linebelowheader=None,
+    linebetweenrows=None,
+    linebelow=None,
+    headerrow=DataRow("", " ", ""),
+    datarow=DataRow("", " ", ""),
+    padding=3,
+    with_header_hide=None,
+)
+
 
 class Emphasis(Enum):
     RED = "\033[31m"
@@ -154,16 +165,7 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
         headers = [formatter(header) for header in headers]
 
     # pylint: disable=protected-access
-    tabulate._table_formats["inductiva"] = TableFormat(
-        lineabove=None,
-        linebelowheader=None,
-        linebetweenrows=None,
-        linebelow=None,
-        headerrow=DataRow("", " ", ""),
-        datarow=DataRow("", " ", ""),
-        padding=3,
-        with_header_hide=None,
-    )
+    tabulate._table_formats["inductiva"] = TABLE_FORMAT
     table = tabulate.tabulate(data,
                               headers=headers,
                               missingval="n/a",
