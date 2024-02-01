@@ -1,8 +1,9 @@
 """Register CLI commands for logs."""
 import os
-from inductiva import constants
+import os
 
 from inductiva._cli import loader, utils
+from inductiva import constants
 
 
 def register(root_parser):
