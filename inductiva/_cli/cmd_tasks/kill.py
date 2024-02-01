@@ -5,7 +5,7 @@ import inductiva
 
 def kill_task(args):
     """Kills a task by id."""
-    inductiva.tasks.Task(args.id).kill(wait_timeout=args.wait)
+    inductiva.tasks.Task(args.id).kill(wait_timeout=args.wait_timeout)
 
 
 def register(parser):
