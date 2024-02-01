@@ -27,7 +27,7 @@ def register(parser):
     subparser.add_argument("id",
                            type=str,
                            help="ID(s) of the task to kill.",
-                           nargs='+')
+                           nargs="+")
     subparser.add_argument("-w",
                            "--wait-timeout",
                            type=float,
@@ -35,7 +35,7 @@ def register(parser):
                            help="Timeout to wait for the kill to complete.")
     subparser.add_argument("-y",
                            "--yes",
-                           action='store_true',
+                           action="store_true",
                            help="Skip kill confirmation.")
 
     subparser.set_defaults(func=kill_task)
