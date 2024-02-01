@@ -1,26 +1,26 @@
 """Util functions for formatting data for printing to console."""
-from typing import Any, Callable, Dict, Iterable, Mapping, Optional, Tuple, Union
+from typing import (Any, Callable, Dict, Iterable, Mapping, Optional, Tuple,
+                    Union, List)
 from distutils.util import strtobool
 import datetime
 import os
+import sys
 import copy
 
-from tabulate import tabulate
+import tabulate
+
+tabulate.PRESERVE_WHITESPACE = True
+
+EMPHASIS = {
+    "red": ("\033[31m", "\033[0m"),
+    "green": ("\033[92m", "\033[0m"),
+    "bold": ("\u001b[1m", "\u001b[0m")
+}
 
 
 def getenv_bool(varname, default):
     """Get boolean value from environment variable."""
     return bool(strtobool(os.getenv(varname, str(default))))
-
-
-def red_formatter(string_to_format):
-    """Encapsulates the given string in red"""
-    return f"\033[31m{string_to_format}\033[0m"
-
-
-def green_formatter(string_to_format):
-    """Encapsulates the given string in green"""
-    return f"\033[92m{string_to_format}\033[0m"
 
 
 def bytes_formatter(n_bytes: int) -> str:
@@ -36,6 +36,26 @@ def bytes_formatter(n_bytes: int) -> str:
         res /= 1000
 
     return f"{bytes_formatter:.2f} PB"
+
+
+def _supports_ansi():
+    if sys.platform.startswith("win"):
+        return "TERM" in os.environ and os.environ["TERM"] == "xterm"
+    return hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
+
+
+def emphasis_formater(string_to_emphasize, emphasis):
+    if not _supports_ansi():
+        return string_to_emphasize
+    if not emphasis in ["red", "green", "bold"]:
+        raise ValueError("Desired emphasis is not supported. "
+                         "Select either `red`, `green` or `bold`")
+    emph = EMPHASIS[emphasis]
+    return f"{emph[0]}{string_to_emphasize}{emph[1]}"
+
+
+def spacing_formater(x, num_spaces=6):
+    return f"{x}" + num_spaces * " "
 
 
 def datetime_formatter(dt: str) -> str:
@@ -60,20 +80,21 @@ def apply_formatters(table_data: dict, formatters: dict):
             apply to that column's data.
     """
     output_table_data = copy.deepcopy(table_data)
-    for column_name, formatter in formatters.items():
+    for column_name, formatters in formatters.items():
         if column_name in output_table_data:
-            output_table_data[column_name] = [
-                formatter(x) for x in output_table_data[column_name]
-            ]
+            for formatter in formatters:
+                output_table_data[column_name] = [
+                    formatter(x) for x in output_table_data[column_name]
+                ]
 
     return output_table_data
 
 
 def get_tabular_data(
-        tabular_data: Union[Mapping[str, Iterable[Any]],
-                            Iterable[Iterable[Any]]],
-        headers: Optional[Iterable[Any]] = None,
-        formatters: Optional[Dict[str, Callable]] = None) -> Tuple[dict, list]:
+    tabular_data: Union[Mapping[str, Iterable[Any]], Iterable[Iterable[Any]]],
+    headers: Optional[Iterable[Any]] = None,
+    formatters: Optional[Dict[str,
+                              List[Callable]]] = None) -> Tuple[dict, list]:
     """Converts a table of data (Mapping or any Iterable) to
     dict and a list of headers.
 
@@ -101,10 +122,18 @@ def get_tabular_data(
     return tabular_data_formatted, headers
 
 
+def _table_indenter(table_string, num_spaces):
+    "Adds spaces to the beggining of each table line."
+    indentenation = " " * num_spaces
+    return ("\n" + indentenation).join(table_string.split("\n"))
+
+
 def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
                                         Iterable[Iterable[Any]]],
                     headers: Optional[Iterable[Any]] = None,
-                    formatters: Optional[Dict[str, Callable]] = None) -> str:
+                    formatters: Optional[Dict[str, Callable]] = None,
+                    header_formatters: Optional[List[Callable]] = None,
+                    indentation_level: Optional[int] = 4) -> str:
     """Converts a table of data (Mapping or any Iterable) to a string table.
 
     Args:
@@ -123,8 +152,17 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     """
 
     data, headers = get_tabular_data(tabular_data, headers, formatters)
-    return tabulate(data,
-                    headers=headers,
-                    missingval="n/a",
-                    showindex="always",
-                    tablefmt="simple_grid")
+
+    for formatter in header_formatters:
+        headers = [formatter(header) for header in headers]
+    if indentation_level is not None:
+        headers = [" " * indentation_level + header for header in headers]
+
+    table = tabulate.tabulate(data,
+                              headers=headers,
+                              missingval="n/a",
+                              tablefmt="plain")
+    if indentation_level is not None:
+        table = _table_indenter(table, indentation_level)
+
+    return f"\n{table}\n"

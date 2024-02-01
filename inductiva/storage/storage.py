@@ -81,14 +81,23 @@ def _print_contents_table(contents):
         rows.append(row)
 
     formatters = {
-        "Creation Time": format_utils.datetime_formatter,
-        "Size": format_utils.bytes_formatter
+        "Name": [format_utils.spacing_formater],
+        "Creation Time": [
+            format_utils.datetime_formatter, format_utils.spacing_formater
+        ],
+        "Size": [format_utils.bytes_formatter, format_utils.spacing_formater],
     }
+
+    header_formatters = [lambda x: x.upper()]
+    if not format_utils.getenv_bool("DISABLE_TERMINAL_EMPHASIS", False):
+        header_formatters.append(
+            lambda x: format_utils.emphasis_formater(x, "bold"))
 
     return format_utils.get_tabular_str(
         rows,
         columns,
         formatters=formatters,
+        header_formatters=header_formatters,
     )
 
 

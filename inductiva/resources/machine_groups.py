@@ -69,13 +69,25 @@ def _machine_group_list_to_str(machine_group_list) -> str:
             spot, machine_group.create_time
         ])
 
-    formatters = {"Started at (UTC)": format_utils.datetime_formatter}
+    formatters = {
+        "Started at (UTC)": [format_utils.datetime_formatter],
+        "Name": [format_utils.spacing_formater],
+        "Machine Type": [format_utils.spacing_formater],
+        "Elastic": [format_utils.spacing_formater],
+        "Type": [format_utils.spacing_formater],
+        "# machines": [format_utils.spacing_formater],
+        "Disk Size in GB": [format_utils.spacing_formater],
+        "Spot": [format_utils.spacing_formater],
+    }
+    header_formatters = [lambda x: x.upper()]
+    if not format_utils.getenv_bool("DISABLE_TERMINAL_EMPHASIS", False):
+        header_formatters.append(
+            lambda x: format_utils.emphasis_formater(x, "bold"))
 
-    return format_utils.get_tabular_str(
-        rows,
-        columns,
-        formatters=formatters,
-    )
+    return format_utils.get_tabular_str(rows,
+                                        columns,
+                                        formatters=formatters,
+                                        header_formatters=header_formatters)
 
 
 def _fetch_machine_groups_from_api():

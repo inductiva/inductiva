@@ -21,21 +21,36 @@ def list_tasks(args):
 
     def color_formater(status):
         if status == "success":
-            return utils.format_utils.green_formatter(status)
+            return utils.format_utils.emphasis_formater(status, "green")
         elif status in ["failed", "killed", "executer-failed", "zombie"]:
-            return utils.format_utils.red_formatter(status)
+            return utils.format_utils.emphasis_formater(status, "red")
         return status
 
     formatters = {
-        "Submitted": utils.format_utils.datetime_formatter,
-        "Started": utils.format_utils.datetime_formatter,
-        "Status": color_formater
+        "Submitted": [
+            utils.format_utils.datetime_formatter,
+            utils.format_utils.spacing_formater
+        ],
+        "Started": [
+            utils.format_utils.datetime_formatter,
+            utils.format_utils.spacing_formater
+        ],
+        "Status": [utils.format_utils.spacing_formater],
+        "ID": [utils.format_utils.spacing_formater],
+        "Simulator": [utils.format_utils.spacing_formater],
+        "Computation Time": [utils.format_utils.spacing_formater],
     }
 
-    print(utils.format_utils.get_tabular_str(
-        table_dict,
-        formatters=formatters,
-    ))
+    header_formatters = [lambda x: x.upper()]
+    if not utils.format_utils.getenv_bool("DISABLE_TERMINAL_EMPHASIS", False):
+        formatters["Status"].insert(0, color_formater)
+        header_formatters.append(
+            lambda x: utils.format_utils.emphasis_formater(x, "bold"))
+
+    print(
+        utils.format_utils.get_tabular_str(table_dict,
+                                           formatters=formatters,
+                                           header_formatters=header_formatters))
 
 
 def register(parser):
