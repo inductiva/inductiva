@@ -1,4 +1,5 @@
 """Register CLI commands for storage."""
+from inductiva import constants
 import os
 
 from inductiva._cli import loader, utils
@@ -13,4 +14,5 @@ def register(root_parser):
     subparsers = parser.add_subparsers()
     loader.load_commands(subparsers,
                          os.path.dirname(__file__),
-                         package=__name__)
+                         package=__name__,
+                         ignores_prefix=constants.LOADER_IGNORE_PREFIX)
