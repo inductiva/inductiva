@@ -153,6 +153,7 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
 
     data, headers = get_tabular_data(tabular_data, headers, formatters)
 
+    header_formatters = header_formatters or []
     for formatter in header_formatters:
         headers = [formatter(header) for header in headers]
     if indentation_level is not None:
