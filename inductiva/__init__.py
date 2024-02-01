@@ -5,8 +5,6 @@ import contextvars
 
 import absl
 
-from inductiva.api.methods import validate_api_key
-
 from . import api
 from . import simulators
 from . import resources
