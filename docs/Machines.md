@@ -36,67 +36,38 @@ For example, the code below will start a SWASH simulation that will be
 automatically picked up by the shared pool of workers.
 
 **WARNING:** For the sake of demonstrating performance differences, the following
-simulation takes around 20 mins to complete.
-For example, the code below will start a SWASH simulation that will be 
-automatically picked up by the shared pool of workers.
+simulation takes around 20 minutes to complete.
 
-**WARNING:** For the sake of demonstrating performance differences, the following
-simulation takes around 20 mins to complete.
-
-```python
 ```python
 import inductiva
-
-# Download the input files for the SWASH simulation
 
 # Download the input files for the SWASH simulation
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "swash-resources-example.zip", unzip=True)
-    "swash-resources-example.zip", unzip=True)
 
 # Initialize the SWASH simulator and run the simulation
 # in the default shared pool of workers
 swash = inductiva.simulators.SWASH()
 task = swash.run(input_dir=input_dir,
                  sim_config_filename="input.sws")
-# Initialize the SWASH simulator and run the simulation
-# in the default shared pool of workers
-swash = inductiva.simulators.SWASH()
-task = swash.run(input_dir=input_dir,
-                 sim_config_filename="input.sws")
 
-# Wait until the task finishes running.
 # Wait until the task finishes running.
 task.wait()
 ```
-```
 
 Observe that at no point we explicitly defined the target VMs where this simulation
 would be executed, or even just their specs. Instead, the task will get automatically
 sent to the shared pool of workers that we prepared for all users. 
 This is very simple, and a great way for doing quick experimentation.  
-Observe that at no point we explicitly defined the target VMs where this simulation
-would be executed, or even just their specs. Instead, the task will get automatically
-sent to the shared pool of workers that we prepared for all users. 
-This is very simple, and a great way for doing quick experimentation.  
 
-However, despite the convenience and simplicity, the above simulation took 25 mins 37s
+However, despite the convenience and simplicity, the above simulation took 25m37s
 to complete. The shared pool of resources 
 has a limited predefined capacity and doesn't possess powerful VMs. Therefore, since
 it is shared by all users, it is not appropriate for executing larger tasks,
 since waiting times can be extremely large. So, if you need to run a larger number
 of simulation tasks, and you need more powerful VMs to run it, you will need to
 reserve that capacity for your exclusive use.
-
-However, despite the convenience and simplicity, the above simulation took 25 mins 37s
-to complete. The shared pool of resources 
-has a limited predefined capacity and doesn't possess powerful VMs. Therefore, since
-it is shared by all users, it is not appropriate for executing larger tasks,
-since waiting times can be extremely large. So, if you need to run a larger number
-of simulation tasks, and you need more powerful VMs to run it, you will need to
-reserve that capacity for your exclusive use.
-
 
 ### Custom Hardware Setup for Enhanced Simulation Performance
 
@@ -109,7 +80,6 @@ can define programmatically and terminate on demand via the API. This will give
 you full control of the type of VM you use to run your simulations, and will ensure 
 a certain amount of compute power that we reserve exclusively for you. 
 
-Note that a Machine Group is literally a group of individual VMs that do not 
 Note that a Machine Group is literally a group of individual VMs that do not 
 communicate with each other. In other words, a MachineGroup is not a cluster, 
 such as an MPI Cluster, where the load of each simulation is divided over all 
@@ -133,8 +103,7 @@ Currently, this is the [list of available machine types available via the API]()
 - the `num_machines` sets the number of machines available in the computational
 resource. While the computational resource is active, these machines will be reserved
 for the user.
-- the `disk_size_gb` allows the selection of the size of the disk in GB that will
-be attached to each machine.
+- the `data_size_gb` allows the selection of the size of the disk attached to each machine that is reserved for the simulation data in GB.
 - the `spot` argument determines if the machines will be preemptible or standard.
 Preemptible machines can be stopped at any time and for that reason are only
 advised for fault-tolerant workloads. If simulations are running when they are
@@ -149,47 +118,7 @@ import inductiva
 machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-16",
     num_machines=2,
-    disk_size_gb=100,
-    spot=False)
-```
-
-The instantiation of one of these objects registers the configuration on the API,
-but no resources are active yet. These can be launched with `machine_group.start()`.
-Within a few minutes, the machines will be ready to use and thereafter you can launch
-your simulations there. At any moment, you can check an estimate of the price per
-hour of the machine group with `machine_group.estimate_cloud_cost()`.
-When you are done with the machines, you can terminate them with `machine_group.terminate()`.
-Running simulations will be killed. From this point, the `machine_group` cannot be
-re-used. But as you have seen it is simple to just instantiate a new one.
-To instantiate a `MachineGroup` object the following parameters can be configured:
-- the `machine_type` defines the type of CPU used for each machine. This parameter
-follows the naming convention set by [Google Cloud](https://cloud.google.com/compute/docs/machine-types),
-e.g., `c2-standard-16`. This convention is composed of a prefix that defines the
-CPU series, a suffix that sets the number of [virtual CPUs (vCPU)](https://cloud.google.com/compute/docs/cpu-platforms)
-per machine and the middle word refers to the level of RAM per vCPU. In the example,
-`c2` refers to an Intel Xeon Scalable processor of 2nd generation, `standard`
-means 4 GB of RAM per vCPU and will contain `16` vCPUs.
-Currently, this is the [list of available machine types available via the API]().
-- the `num_machines` sets the number of machines available in the computational
-resource. While the computational resource is active, these machines will be reserved
-for the user.
-- the `disk_size_gb` allows the selection of the size of the disk in GB that will
-be attached to each machine.
-- the `spot` argument determines if the machines will be preemptible or standard.
-Preemptible machines can be stopped at any time and for that reason are only
-advised for fault-tolerant workloads. If simulations are running when they are
-stopped, the simulation is resubmitted to the queue of the machine group again.
-
-For example, the following code creates a MachineGroup with 2 machines of type
-`c2-standard-16` with 100 GB of disk space each:
-
-```python
-import inductiva
-
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-16",
-    num_machines=2,
-    disk_size_gb=100,
+    data_size_gb=100,
     spot=False)
 ```
 
@@ -246,42 +175,7 @@ machine_group.terminate()
 ```
 
 Running the same simulation on a dedicated machine group with a `c2-standard-30`
-machine took 9mins 37s, which is 2.68 times less than on the shared pool. Notice
-that, the simulation is picked almost immediately - no waiting time required - and
-selecting a more powerful machine greatly reduced the execution time.
-
-Let's now run the above simulation in our own dedicated resource.
-
-```python
-import inductiva
-
-# Download the input files for the SWASH simulation
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "swash-resources-example.zip", unzip=True)
-
-# Instantiate a MachineGroup object with 1 preemptible machine of type
-# c2-standard-30 and start it immediately
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-30", spot=True)
-machine_group.start()
-
-# Initialize the SWASH simulator and run the simulation
-# in your just launched dedicated MachineGroup
-swash = inductiva.simulators.SWASH()
-task = swash.run(input_dir=input_dir,
-                 sim_config_filename="input.sws",
-                 on=machine_group)
-
-# Wait for the task to finish and download the outputs
-task.wait()
-
-# Terminate your dedicated MachineGroup at then end of the simulation.
-machine_group.terminate()
-```
-
-Running the same simulation on a dedicated machine group with a `c2-standard-30`
-machine took 9mins 37s, which is 2.68 times less than on the shared pool. Notice
+machine took 9m37s, which is 2.68 times less than on the shared pool. Notice
 that, the simulation is picked almost immediately - no waiting time required - and
 selecting a more powerful machine greatly reduced the execution time.
 
@@ -353,7 +247,7 @@ g5qq5c9mk2nr5wqhzef38sdm4  swash        started   01 Feb, 09:07:12  01 Feb, 009:
 
 This is a great way to speed up the execution of multiple simulations, since the
 time to run all 5 simulations will be approximately the same as running just one,
-that is the above 5 simulations took 9mins 55s to complete, which is the time of
+that is the above 5 simulations took 9m55s to complete, which is the time of
 the slowest simulation.
 
 Now, that all the simulations have finished running, we end this tutorial with an

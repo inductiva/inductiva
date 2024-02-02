@@ -62,8 +62,7 @@ $ python -c 'import inductiva; print(inductiva.__version__)'
 ## Run your First Simulation Example: The Dam Break with Reef3D
 
 In this example, you will use the open-source hydrodynamics REEF3D simulator to
-simulate a **2D dam break scenario** where a block of fluid is let to flow under
-the effect of gravity as follows:
+simulate a **2D dam break scenario** where a block of fluid is let to flow under the effect of gravity as follows:
 
 <div align="center">
    <img src="./assets/reef3d-dambreak.gif" alt="REEF3D 2D dambreak simulation" width=500>
