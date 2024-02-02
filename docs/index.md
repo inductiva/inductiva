@@ -11,19 +11,21 @@ hidden: false
 Getting Started
 ```
 
-
 ```{toctree}
 ---
-caption: Allocation of Computational Resources
+caption: Computational Resource Allocation and Processing
 maxdepth: 2
 hidden: false
 ---
 Ivan_Computational_Resources
+Shared VM Pool Integration
+Machine Groups
+Setting up an MPI
 ```
 
 ```{toctree}
 ---
-caption: Tasks
+caption: Task Management
 maxdepth: 2
 hidden: false
 ---
@@ -32,10 +34,11 @@ Tasks
 
 ```{toctree}
 ---
-caption: Storage management
+caption: Data Flow and Storage Management
 maxdepth: 2
 hidden: false
 ---
+Data Flow
 Storage
 ```
 
@@ -48,52 +51,14 @@ hidden: false
 Templating
 ```
 
-```{toctree}
----
-caption: Command line interface
-maxdepth: 2
-hidden: false
----
-CLI
-```
-
-
-
-
-
-
-
-
-
-
-
-```{toctree}
----
-caption: Data Flow and Storage Management
-maxdepth: 2
-hidden: true
----
-Storage Levels and Data Flow
-Managing Storage with the Inductiva API
-```
 
 ```{toctree}
 ---
 caption: Running Simulations
 maxdepth: 2
-hidden: true
+hidden: false
 ---
 Simulators
-```
-
-```{toctree}
----
-caption: Computational Resource Allocation and Processing
-maxdepth: 2
-hidden: true
----
-Shared VM Pool Integration
-Machine Groups
 ```
 
 ```{toctree}
@@ -103,7 +68,6 @@ maxdepth: 2
 hidden: true
 ---
 Overview of the CLI
-Setting up an MPI
 ```
 
 ```{toctree}
