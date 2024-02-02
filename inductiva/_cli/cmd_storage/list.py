@@ -13,6 +13,7 @@ def register(parser):
 
     subparser = parser.add_parser("list",
                                   aliases=["ls"],
+                                  description="List remote storage contents",
                                   help="List remote storage contents.")
     subparser.add_argument("path", default="/", type=str, nargs="?")
     subparser.add_argument("-m", "--max-results", default=10, type=int)

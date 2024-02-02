@@ -39,7 +39,9 @@ def terminate_machine_group(args):
 def register(parser):
     """Register the terminate command for the resources."""
 
-    subparser = parser.add_parser("terminate", help="Terminate a resource.")
+    subparser = parser.add_parser("terminate",
+                                  description="Terminate resources.",
+                                  help="Terminate resources.")
 
     group = subparser.add_mutually_exclusive_group(required=True)
     group.add_argument("-n",

@@ -22,7 +22,9 @@ def start_machine_group(args):
 def register(parser):
     """Register the launch of resources commands."""
 
-    subparser = parser.add_parser("start", help="Start computational resources")
+    subparser = parser.add_parser("start",
+                                  help="Start computational resources",
+                                  description="Start computational resources")
     subparser.add_argument("machine_type",
                            type=str,
                            help="Machine type to start")

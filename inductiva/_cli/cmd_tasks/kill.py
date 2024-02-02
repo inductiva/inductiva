@@ -20,7 +20,9 @@ def kill_task(args):
 def register(parser):
     """Register the kill task command."""
 
-    subparser = parser.add_parser("kill", help="Kill running tasks.")
+    subparser = parser.add_parser("kill",
+                                  description="Kill running tasks.",
+                                  help="Kill running tasks.")
     subparser.add_argument("id",
                            type=str,
                            help="ID(s) of the task(s) to kill.",

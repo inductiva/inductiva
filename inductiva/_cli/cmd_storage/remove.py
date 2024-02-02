@@ -20,13 +20,16 @@ def remove(args):
 def register(parser):
     subparser = parser.add_parser("remove",
                                   aliases=["rm"],
+                                  description="Remove remote storage entries.",
                                   help="Remove remote storage entries.")
     subparser.add_argument("path",
                            type=str,
                            help="Path to be removed from remote storage. "
                            "To remove all contents, use \"*\".")
     subparser.add_argument("-y",
+                           "--yes",
                            action="store_true",
                            dest="confirm",
+                           help="Skip remove confirmation.",
                            default=False)
     subparser.set_defaults(func=remove)

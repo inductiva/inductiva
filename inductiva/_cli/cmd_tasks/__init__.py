@@ -7,10 +7,12 @@ from inductiva._cli import loader, utils
 
 def register(root_parser):
 
-    parser = root_parser.add_parser("tasks", help="Task management utilities.")
+    parser = root_parser.add_parser("tasks",
+                                    description="Task management utilities",
+                                    help="Task management utilities.")
     utils.show_help_msg(parser)
 
-    subparsers = parser.add_subparsers()
+    subparsers = parser.add_subparsers(title="available subcomands")
     loader.load_commands(subparsers,
                          os.path.dirname(__file__),
                          package=__name__,

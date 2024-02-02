@@ -25,10 +25,12 @@ def register(parser):
     """Register the list resources commands."""
 
     subparser = parser.add_parser("available",
+                                  description="List available machine types",
                                   help="List available machine types")
     subparser.set_defaults(func=list_machine_types_available)
 
     subparser = parser.add_parser("list",
                                   aliases=["ls"],
+                                  description="List currently active resources",
                                   help="List currently active resources")
     subparser.set_defaults(func=list_machine_groups)

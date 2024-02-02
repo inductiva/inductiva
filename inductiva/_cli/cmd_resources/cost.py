@@ -28,6 +28,7 @@ def register(parser):
 
     subparser = parser.add_parser(
         "cost",
+        description="Estimate cost of a machine in the cloud",
         help="Estimate cost of a machine in the cloud",
     )
     subparser.add_argument("machine_type",

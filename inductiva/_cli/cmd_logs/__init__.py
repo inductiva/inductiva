@@ -7,8 +7,10 @@ from inductiva import constants
 
 def register(root_parser):
 
-    parser = root_parser.add_parser("logs",
-                                    help="Stream the logs of a running task.")
+    parser = root_parser.add_parser(
+        "logs",
+        description="Stream the logs of a running task.",
+        help="Stream the logs of a running task.")
     utils.show_help_msg(parser)
 
     loader.load_commands(parser,

@@ -33,7 +33,9 @@ def list_tasks(args):
 def register(parser):
     """Register the list user's tasks command."""
 
-    subparser = parser.add_parser("list", help="List tasks.")
+    subparser = parser.add_parser("list",
+                                  description="List tasks.",
+                                  help="List tasks.")
     group = subparser.add_mutually_exclusive_group()
     group.add_argument("-n",
                        "--last-n",
