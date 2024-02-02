@@ -11,6 +11,62 @@ hidden: false
 Getting Started
 ```
 
+
+```{toctree}
+---
+caption: Allocation of Computational Resources
+maxdepth: 2
+hidden: false
+---
+Ivan_Computational_Resources
+```
+
+```{toctree}
+---
+caption: Tasks
+maxdepth: 2
+hidden: false
+---
+Tasks
+```
+
+```{toctree}
+---
+caption: Storage management
+maxdepth: 2
+hidden: false
+---
+Storage
+```
+
+```{toctree}
+---
+caption: Templating
+maxdepth: 2
+hidden: false
+---
+Templating
+```
+
+```{toctree}
+---
+caption: Command line interface
+maxdepth: 2
+hidden: false
+---
+CLI
+```
+
+
+
+
+
+
+
+
+
+
+
 ```{toctree}
 ---
 caption: Data Flow and Storage Management
@@ -28,7 +84,6 @@ maxdepth: 2
 hidden: true
 ---
 Simulators
-Tasks
 ```
 
 ```{toctree}
