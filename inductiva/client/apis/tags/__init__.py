@@ -6,9 +6,7 @@ import enum
 
 
 class TagValues(str, enum.Enum):
-    ADMIN = "admin"
     COMPUTE = "compute"
-    EXECUTERTRACKERS = "executer-trackers"
     STORAGE = "storage"
     TASKS = "tasks"
     VERSION = "version"
