@@ -105,19 +105,7 @@ The machines you have running can be listed via the CLI:
 
 ```bash
 inductiva machines list
-```
 
-or via Python
-
-```python
-import inductiva
-
-inductiva.resources.machine_groups.list()
-```
-
-and provide the following information:
-
-```bash
 Active Resources:
 
        NAME                                MACHINE TYPE         ELASTIC         TYPE             # MACHINES         DISK SIZE IN GB       SPOT         STARTED AT (UTC)
