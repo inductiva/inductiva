@@ -82,8 +82,10 @@ class TaskStreamConsumer:
         self.ws = self.__setup_websocket()
 
         # Check if the file handles are interactive and if ANSI is enabled.
-        self._fout_isatty = ANSI_ENABLED and self.fout.isatty()
+        # Note that there is no point in using ANSI if ferr is not interactive
         self._ferr_isatty = ANSI_ENABLED and self.ferr.isatty()
+        self._fout_isatty = ANSI_ENABLED and self.fout.isatty()
+        self._fout_isatty &= self._ferr_isatty
         self._message_formatter = self._get_message_formatter()
         self._status_formatter = self._get_status_formatter()
 
