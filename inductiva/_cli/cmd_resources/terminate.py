@@ -17,7 +17,7 @@ def terminate_machine_group(args):
             "inductiva resources terminate: error: "
             "argument name not allowed with argument --all",
             file=sys.stderr)
-        sys.exit(1)
+        return 1
 
     active_machines = resources.machine_groups.get()
 
@@ -35,7 +35,7 @@ def terminate_machine_group(args):
         for name in invalid_names:
             print(f"Resource {name} does not exist.")
         print("Aborting.")
-        sys.exit(1)
+        return 1
 
     confirm = confirm or input_functions.user_confirmation_prompt(
         names, __("user-prompt-terminate-all"),

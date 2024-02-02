@@ -18,7 +18,7 @@ def remove(args):
             "inductiva storage remove: error: "
             "argument path not allowed with argument --all",
             file=sys.stderr)
-        sys.exit(1)
+        return 1
 
     if not confirm:
         confirm = user_confirmation_prompt(
@@ -31,6 +31,7 @@ def remove(args):
             storage.rmdir("*", confirm=True)
         for path in paths:
             storage.rmdir(path, confirm=True)
+    return 0
 
 
 def register(parser):

@@ -14,6 +14,7 @@ def kill_task(args):
     if confirm:
         for task_id in args.id:
             inductiva.tasks.Task(task_id).kill(wait_timeout=args.wait_timeout)
+    return 0
 
 
 def register(parser):
