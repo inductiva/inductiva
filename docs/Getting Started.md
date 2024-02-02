@@ -25,7 +25,6 @@ Simply open your terminal and run:
 pip install --upgrade inductiva
 ```
 
-
 Encountering issues? Don’t worry. Head over to our [troubleshooting guide]() to 
 work it out.
 
