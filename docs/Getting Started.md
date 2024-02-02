@@ -62,10 +62,8 @@ $ python -c 'import inductiva; print(inductiva.__version__)'
 
 In this example, you will use the open-source hydrodynamics REEF3D simulator to
 simulate a **2D dam break scenario** where a block of fluid is let to flow under the effect of gravity as follows:
-
-.. raw:: html
 <div align="center">
-   <img src="./_static/reef3d-dambreak.gif" alt="REEF3D 2D dambreak simulation" width=500>
+   <img src="./_static/reef3d-dambreak.gif" alt="REEF3D 2D dambreak simulation">
 </div>
 
 With this first example, you learn that running simulations via Inductiva API is
