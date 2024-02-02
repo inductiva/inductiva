@@ -143,3 +143,30 @@ def get(
     ]
 
     return tasks
+
+
+def get_all(
+    status: Optional[Union[str, models.TaskStatusCode]] = None
+) -> List["inductiva.tasks.Task"]:
+    """Get all tasks of a user.
+
+    This function fetches all tasks of a user, sorted by submission time with the
+    most recent first. If status is specified, only tasks with that status will be fetched.
+    Args:
+        status: The status of the tasks to get. If None, tasks with any status
+            will be returned.
+    Returns:
+        List of Task objects.
+    """
+    status = models.TaskStatusCode(status) if status is not None else None
+
+    total_tasks = []
+    page_counter = 1
+
+    while tasks_fetched := _fetch_tasks_from_api(status,
+                                                 page=page_counter,
+                                                 per_page=50):
+        list_of_task_ids = [task["task_id"] for task in tasks_fetched]
+        total_tasks = total_tasks + list_of_task_ids
+        page_counter += 1
+    return total_tasks

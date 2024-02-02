@@ -1,18 +1,43 @@
 """Kills a tasks by id via CLI."""
+import sys
+
 import inductiva
+from inductiva import constants
+from inductiva.tasks.methods import get_all
 from inductiva.utils.input_functions import user_confirmation_prompt
 from ...localization import translator as __
+
+#             "pending-input": "PENDINGINPUT",
+#             "submitted": "SUBMITTED",
+#             "started": "STARTED",
+#             "pending-kill": "PENDINGKILL",
+#             "zombie": "ZOMBIE",
 
 
 def kill_task(args):
     """Kills a task by id."""
+    kill_all = args.all
+    ids = args.id
+
+    if ids and kill_all:
+        print(
+            "inductiva tasks kill: error: "
+            "argument id not allowed with argument --all",
+            file=sys.stderr)
+        return 1
+
+    if kill_all:
+        all_ids = []
+        for status in constants.TASK_RUNNING_STATUSES:
+            all_ids = all_ids + get_all(status=status)
+        ids = all_ids
+
     confirm = args.yes or user_confirmation_prompt(
-        args.id, __("user-prompt-kill-all"),
-        __("user-prompt-kill-big", len(args.id)), __("user-prompt-kill-small"),
-        False)
+        ids, __("user-prompt-kill-all"), __("user-prompt-kill-big", len(ids)),
+        __("user-prompt-kill-small"), True)
 
     if confirm:
-        for task_id in args.id:
+        for task_id in ids:
             inductiva.tasks.Task(task_id).kill(wait_timeout=args.wait_timeout)
     return 0
 
@@ -24,7 +49,7 @@ def register(parser):
     subparser.add_argument("id",
                            type=str,
                            help="ID(s) of the task(s) to kill.",
-                           nargs="+")
+                           nargs="*")
     subparser.add_argument("-w",
                            "--wait-timeout",
                            type=float,
@@ -36,5 +61,8 @@ def register(parser):
                            "--yes",
                            action="store_true",
                            help="Skip kill confirmation.")
+    subparser.add_argument("--all",
+                           action="store_true",
+                           help="Kill all running tasks.")
 
     subparser.set_defaults(func=kill_task)

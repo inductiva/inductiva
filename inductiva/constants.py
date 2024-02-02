@@ -24,6 +24,11 @@ TASK_FAILED_STATUSES = {
 TASK_TERMINAL_STATUSES = {models.TaskStatusCode.SUCCESS
                          }.union(TASK_FAILED_STATUSES)
 
+TASK_RUNNING_STATUSES = {
+    models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.SUBMITTED,
+    models.TaskStatusCode.STARTED
+}
+
 LOADER_COMMAND_PREFIX = "cmd_"
 
 LOADER_IGNORE_PREFIX = "_"
