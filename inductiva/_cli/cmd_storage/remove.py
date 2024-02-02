@@ -4,6 +4,7 @@ import sys
 
 from inductiva import storage
 from inductiva.utils.input_functions import user_confirmation_prompt
+from ...localization import translator as __
 
 
 def remove(args):
@@ -21,10 +22,9 @@ def remove(args):
 
     if not confirm:
         confirm = user_confirmation_prompt(
-            all_paths, paths,
-            "remove EVERYTHING from your remote storage space",
-            f"remove {len(paths)} paths from your remote storage space",
-            "remove the following paths from your remote storage space")
+            all_paths, paths, __("user-prompt-remove-all"),
+            __("user-prompt-remove-big", len(paths)),
+            __("user-prompt-remove-small"))
 
     if confirm:
         if all_paths:

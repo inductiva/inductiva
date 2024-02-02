@@ -1,15 +1,17 @@
 """Kills a tasks by id via CLI."""
 import inductiva
 from inductiva.utils.input_functions import user_confirmation_prompt
+from ...localization import translator as __
 
 
 def kill_task(args):
     """Kills a task by id."""
     confirm = args.yes
     if not confirm:
-        confirm = user_confirmation_prompt(False, args.id, "",
-                                           f"kill {len(args.id)} tasks",
-                                           "kill the following tasks")
+        confirm = user_confirmation_prompt(
+            False, args.id, __("user-prompt-kill-all"),
+            __("user-prompt-kill-big", len(args.id)),
+            __("user-prompt-kill-small"))
     if confirm:
         for task_id in args.id:
             inductiva.tasks.Task(task_id).kill(wait_timeout=args.wait_timeout)

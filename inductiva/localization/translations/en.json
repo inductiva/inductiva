@@ -11,5 +11,47 @@
     "kill-request-sent":["Successfully sent kill request for task {0}.",
         "> Consider tracking the task status by calling task.get_status()",
         "> or via the CLI using 'inductiva tasks -id {0}'."
+    ],
+    "user-prompt-prefix": [
+        "You are about to"
+    ],
+    "user-prompt-confirmation": [
+        "Are you sure you want to proceed (y/[N])? "
+    ],
+    "user-prompt-terminate-all":
+    [
+        "terminate EVERY active resource"
+    ],
+    "user-prompt-remove-all":
+    [
+        "remove EVERYTHING from your remote storage space"
+    ],
+    "user-prompt-kill-all":
+    [
+        ""
+    ],
+    "user-prompt-terminate-big":
+    [
+        "terminate {0} resources"
+    ],
+    "user-prompt-remove-big":
+    [
+        "remove {0} paths from your remote storage space"
+    ],
+    "user-prompt-kill-big":
+    [
+        "kill {0} tasks"
+    ],
+    "user-prompt-terminate-small":
+    [
+        "terminate the following resources"
+    ],
+    "user-prompt-remove-small":
+    [
+        "remove the following paths from your remote storage space"
+    ],
+    "user-prompt-kill-small":
+    [
+        "kill the following tasks"
     ]
 }

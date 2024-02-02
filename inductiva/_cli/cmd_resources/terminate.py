@@ -3,6 +3,7 @@ import sys
 
 from inductiva import resources
 from inductiva.utils import input_functions
+from ...localization import translator as __
 
 
 def terminate_machine_group(args):
@@ -33,9 +34,9 @@ def terminate_machine_group(args):
 
     if not confirm:
         confirm = input_functions.user_confirmation_prompt(
-            all_names, names, "terminate EVERY active resource",
-            f"terminate {len(names)} resources",
-            "terminate the following resources")
+            all_names, names, __("user-prompt-terminate-all"),
+            __("user-prompt-terminate-big", len(names)),
+            __("user-prompt-terminate-small"))
     if confirm:
         for machine in active_machines:
             if all_names:
