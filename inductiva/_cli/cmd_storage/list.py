@@ -13,7 +13,7 @@ def register(parser):
 
     subparser = parser.add_parser("list",
                                   aliases=["ls"],
-                                  description="List remote storage contents",
+                                  description="List remote storage contents.",
                                   help="List remote storage contents.")
     subparser.add_argument("path", default="/", type=str, nargs="?")
     subparser.add_argument("-m", "--max-results", default=10, type=int)
@@ -21,11 +21,13 @@ def register(parser):
                            "--order-by",
                            default="creation_time",
                            type=str,
-                           choices=["creation_time", "size"])
+                           choices=["creation_time", "size"],
+                           help="Order by creation_time or size.")
     subparser.add_argument("-s",
                            "--sort-order",
                            default="desc",
                            type=str,
-                           choices=["desc", "asc"])
+                           choices=["desc", "asc"],
+                           help="Sorting order (desc or asc).")
 
     subparser.set_defaults(func=listdir)

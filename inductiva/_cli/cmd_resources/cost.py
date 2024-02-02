@@ -28,21 +28,21 @@ def register(parser):
 
     subparser = parser.add_parser(
         "cost",
-        description="Estimate cost of a machine in the cloud",
-        help="Estimate cost of a machine in the cloud",
+        description="Estimate cost of a machine in the cloud.",
+        help="Estimate cost of a machine in the cloud.",
     )
     subparser.add_argument("machine_type",
                            type=str,
-                           help="Type of machine to launch")
+                           help="Type of machine to launch.")
     subparser.add_argument("--spot",
                            default=False,
                            action="store_true",
-                           help="Type of machine to launch")
+                           help="Type of machine to launch.")
 
     subparser.add_argument("-n",
                            "--num_machines",
                            default=1,
                            type=int,
-                           help="Number of machines to launch")
+                           help="Number of machines to launch.")
 
     subparser.set_defaults(func=estimate_machine_cost)

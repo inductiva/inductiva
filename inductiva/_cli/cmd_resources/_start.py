@@ -23,25 +23,25 @@ def register(parser):
     """Register the launch of resources commands."""
 
     subparser = parser.add_parser("start",
-                                  help="Start computational resources",
-                                  description="Start computational resources")
+                                  help="Start computational resources.",
+                                  description="Start computational resources.")
     subparser.add_argument("machine_type",
                            type=str,
-                           help="Machine type to start")
+                           help="Machine type to start.")
     subparser.add_argument("-n",
                            "--num_machines",
                            default=1,
                            type=int,
-                           help="Number of machines to start")
+                           help="Number of machines to start.")
     subparser.add_argument("-d",
                            "--disk_size_gb",
                            default=70,
                            type=int,
-                           help="Disk size in GB")
+                           help="Disk size in GB.")
     subparser.add_argument("-s",
                            "--spot",
                            default=False,
                            action="store_true",
-                           help="Whether to use spot instances")
+                           help="Whether to use spot instances.")
 
     subparser.set_defaults(func=start_machine_group)

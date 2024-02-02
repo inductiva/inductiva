@@ -9,8 +9,8 @@ def register(root_parser):
 
     parser = root_parser.add_parser(
         "resources",
-        description="Computational resource management utilities",
-        help="Computational resource management utilities")
+        description="Computational resource management utilities.",
+        help="Computational resource management utilities.")
     utils.show_help_msg(parser)
 
     subparsers = parser.add_subparsers(title="available subcomands")

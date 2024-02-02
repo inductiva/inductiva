@@ -9,7 +9,7 @@ def register(root_parser):
 
     parser = root_parser.add_parser(
         "storage",
-        description="Remote storage management utilities",
+        description="Remote storage management utilities.",
         help="Remote storage management utilities.")
     utils.show_help_msg(parser)
 

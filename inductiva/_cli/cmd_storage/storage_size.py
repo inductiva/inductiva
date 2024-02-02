@@ -13,7 +13,7 @@ def register(parser):
 
     subparser = parser.add_parser(
         "size",
-        description="Get the occupied remote storage size",
+        description="Get the occupied remote storage size.",
         help="Get the occupied remote storage size.")
 
     subparser.set_defaults(func=storage_used)

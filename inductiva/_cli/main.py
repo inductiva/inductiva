@@ -11,7 +11,7 @@ from . import loader
 def main():
     parser = argparse.ArgumentParser(
         prog="inductiva",
-        description="CLI tool for Inductiva API",
+        description="CLI tool for Inductiva API.",
     )
 
     parser.add_argument(
@@ -25,7 +25,7 @@ def main():
         "--api-key",
         type=str,
         help=("API key to use. If not provided, it "
-              "will be read from the INDUCTIVA_API_KEY environment variable"),
+              "will be read from the INDUCTIVA_API_KEY environment variable."),
     )
 
     # If no subcommand is provided, print help
