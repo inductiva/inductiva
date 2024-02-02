@@ -45,7 +45,8 @@ def terminate_machine_group(args):
     if not confirm:
         return 0
 
-    machines_to_kill = active_machine_names if all_names else target_machine_names
+    machines_to_kill = active_machine_names if (all_names) else (
+        target_machine_names)
 
     for name in machines_to_kill:
         name_to_machine[name].terminate()
