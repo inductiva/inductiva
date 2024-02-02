@@ -4,42 +4,39 @@ from inductiva import constants
 from ..localization import translator as __
 
 
-def user_confirmation_prompt(all_thins: bool, list_of_things: list,
-                             all_custom_message: str,
-                             big_list_custom_message: str,
-                             list_costum_message: str) -> bool:
+def user_confirmation_prompt(items: list, all_msg: str, unlisted_msg: str,
+                             listed_msg: str, is_all: bool) -> bool:
     """Prompt the user for confirmation to proceed with an action.
 
     Args:
-        all_thins (bool): Whether the action will affect all things.
-        list_of_things (list): List of things that will be affected by
+        is_all (bool): Whether the action will affect all things.
+        items (list): List of things that will be affected by
             the action.
-        all_custom_message (str): Custom message when we select all things.
-            Example: with all_things and all_custom_message="kill all tasks"
+        all_msg (str): Custom message when we select all things.
+            Example: with all_things and all_msg="kill all tasks"
             we will print: "You are about to kill all tasks."
-        big_list_custom_message (str): Custom message when the list of
+        unlisted_msg (str): Custom message when the list of
             things is too big.
-            Example: with list_of_things with 100 elements and
-            big_list_custom_message="kill 100 tasks" we will print:
+            Example: with items with 100 elements and
+            unlisted_msg="kill 100 tasks" we will print:
             "You are about to kill 100 tasks."
-        list_costum_message (str): Custom message when the list of things
+        listed_msg (str): Custom message when the list of things
             is small and we are about to list them all.
-            Example: with list_of_things with 3 elements and
-            list_costum_message="kill the following tasks" we will print:
+            Example: with items with 3 elements and
+            listed_msg="kill the following tasks" we will print:
             "You are about to kill the following tasks:"
     Returns:
         bool: Whether the user has confirmed the action.
     """
-    if all_thins:
-        print(str(__("user-prompt-prefix")) + f" {all_custom_message}.")
+    if is_all:
+        print(all_msg)
     else:
-        if len(list_of_things) > constants.MAX_CONFIRMATION_LINES:
-            print(
-                str(__("user-prompt-prefix")) + f" {big_list_custom_message}.")
+        if len(items) > constants.MAX_CONFIRMATION_LINES:
+            print(unlisted_msg)
         else:
-            print(str(__("user-prompt-prefix")) + f" {list_costum_message}:")
-            for thing in list_of_things:
+            print(listed_msg)
+            for thing in items:
                 print(f"  - {thing}")
-    prompt = input("Are you sure you want to proceed (y/[N])? ")
+    prompt = input(__("user-prompt-confirmation"))
     confirm = prompt.lower() in ["y", "ye", "yes"]
     return confirm

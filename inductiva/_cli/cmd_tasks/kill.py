@@ -6,12 +6,11 @@ from ...localization import translator as __
 
 def kill_task(args):
     """Kills a task by id."""
-    confirm = args.yes
-    if not confirm:
-        confirm = user_confirmation_prompt(
-            False, args.id, __("user-prompt-kill-all"),
-            __("user-prompt-kill-big", len(args.id)),
-            __("user-prompt-kill-small"))
+    confirm = args.yes or user_confirmation_prompt(
+        args.id, __("user-prompt-kill-all"),
+        __("user-prompt-kill-big", len(args.id)), __("user-prompt-kill-small"),
+        False)
+
     if confirm:
         for task_id in args.id:
             inductiva.tasks.Task(task_id).kill(wait_timeout=args.wait_timeout)

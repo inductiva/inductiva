@@ -22,9 +22,9 @@ def remove(args):
 
     if not confirm:
         confirm = user_confirmation_prompt(
-            all_paths, paths, __("user-prompt-remove-all"),
+            paths, __("user-prompt-remove-all"),
             __("user-prompt-remove-big", len(paths)),
-            __("user-prompt-remove-small"))
+            __("user-prompt-remove-small"), all_paths)
 
     if confirm:
         if all_paths:

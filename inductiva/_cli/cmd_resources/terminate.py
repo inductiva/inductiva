@@ -22,27 +22,35 @@ def terminate_machine_group(args):
     active_machines = resources.machine_groups.get()
 
     if not active_machines:
-        return -1
+        return 0
 
-    active_machine_names = [machine.name for machine in active_machines]
+    # dict to map from name to machine
+    name_to_machine = {machine.name: machine for machine in active_machines}
+    active_machine_names = name_to_machine.keys()
+    target_machine_names = set(
+        names)  # the user can give the same name multiple times!!
+    invalid_names = target_machine_names.difference(active_machine_names)
 
-    if not all_names and not (all(item in active_machine_names
-                                  for item in names)):
-        print("One or more resource(s) name(s) does not exist.",
-              file=sys.stderr)
+    if invalid_names:
+        for name in invalid_names:
+            print(f"Resource {name} does not exist.")
+        print("Aborting.")
         sys.exit(1)
 
+    confirm = confirm or input_functions.user_confirmation_prompt(
+        names, __("user-prompt-terminate-all"),
+        __("user-prompt-terminate-big", len(names)),
+        __("user-prompt-terminate-small"), all_names)
+
     if not confirm:
-        confirm = input_functions.user_confirmation_prompt(
-            all_names, names, __("user-prompt-terminate-all"),
-            __("user-prompt-terminate-big", len(names)),
-            __("user-prompt-terminate-small"))
-    if confirm:
-        for machine in active_machines:
-            if all_names:
-                machine.terminate()
-            elif machine.name in names:
-                machine.terminate()
+        return 0
+
+    machines_to_kill = active_machine_names if all_names else target_machine_names
+
+    for name in machines_to_kill:
+        name_to_machine[name].terminate()
+
+    return 0
 
 
 def register(parser):
