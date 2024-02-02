@@ -17,7 +17,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_type: str,
         num_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 70,
+        disk_size_gb: int = 0,
         register: bool = True,
     ) -> None:
         """Create a MachineGroup object.
@@ -36,7 +36,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
               information about machine types.
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
+            disk_size_gb: The size of the disk in GB.
         """
         super().__init__(machine_type=machine_type,
                          disk_size_gb=disk_size_gb,
@@ -119,7 +119,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         min_machines: int = 1,
         max_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 70,
+        disk_size_gb: int = 0,
         register: bool = True,
     ) -> None:
         """Create an ElasticMachineGroup object.
@@ -142,7 +142,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             max_machines: The maximum number of machines a machine group
               can scale up to.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
+            disk_size_gb: The size of the disk in GB.
         """
         if max_machines < min_machines:
             raise ValueError("`max_machines` should be greater "

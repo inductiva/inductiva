@@ -15,7 +15,7 @@ class MPICluster(machines_base.BaseMachineGroup):
     def __init__(self,
                  machine_type: str,
                  num_machines: int = 2,
-                 disk_size_gb: int = 70,
+                 disk_size_gb: int = 0,
                  register: bool = True) -> None:
         """Create a MPICluster object.
 
@@ -32,7 +32,7 @@ class MPICluster(machines_base.BaseMachineGroup):
               Check https://cloud.google.com/compute/docs/machine-resource for
               information about machine types.
             num_machines: The number of virtual machines to launch.
-            disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
+            disk_size_gb: The size of the disk in GB.
         """
         super().__init__(machine_type=machine_type,
                          disk_size_gb=disk_size_gb,
