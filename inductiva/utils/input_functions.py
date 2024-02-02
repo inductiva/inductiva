@@ -13,6 +13,19 @@ def user_confirmation_prompt(all_thins: bool, list_of_things: list,
         all_thins (bool): Whether the action will affect all things.
         list_of_things (list): List of things that will be affected by
             the action.
+        all_custom_message (str): Custom message when we select all things.
+            Example: with all_things and all_custom_message="kill all tasks" we will
+            print: "You are about to kill all tasks."
+        big_list_custom_message (str): Custom message when the list of
+            things is too big.
+            Example: with list_of_things with 100 elements and
+            big_list_custom_message="kill 100 tasks" we will print:
+            "You are about to kill 100 tasks."
+        list_costum_message (str): Custom message when the list of things
+            is small and we are about to list them all.
+            Example: with list_of_things with 3 elements and
+            list_costum_message="kill the following tasks" we will print:
+            "You are about to kill the following tasks:"
     Returns:
         bool: Whether the user has confirmed the action.
     """
