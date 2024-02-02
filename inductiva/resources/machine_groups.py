@@ -31,7 +31,7 @@ def estimate_machine_cost(machine_type: str, spot: bool = False):
     else:
         estimated_cost = instance_price.body["on_demand_price"]
 
-    return round(float(estimated_cost), 5)
+    return float(estimated_cost)
 
 
 def _machine_group_list_to_str(machine_group_list) -> str:
@@ -69,13 +69,19 @@ def _machine_group_list_to_str(machine_group_list) -> str:
             spot, machine_group.create_time
         ])
 
-    formatters = {"Started at (UTC)": format_utils.datetime_formatter}
+    formatters = {
+        "Started at (UTC)": [format_utils.datetime_formatter],
+    }
 
-    return format_utils.get_tabular_str(
-        rows,
-        columns,
-        formatters=formatters,
-    )
+    emph_formatter = format_utils.get_ansi_formatter()
+    header_formatters = [
+        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
+    ]
+
+    return format_utils.get_tabular_str(rows,
+                                        columns,
+                                        formatters=formatters,
+                                        header_formatters=header_formatters)
 
 
 def _fetch_machine_groups_from_api():

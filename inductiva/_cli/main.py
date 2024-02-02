@@ -4,6 +4,7 @@ import os
 
 import inductiva
 from inductiva import _cli
+from inductiva import constants
 from . import loader
 
 
@@ -37,7 +38,7 @@ def main():
     loader.load_commands(subparsers,
                          os.path.dirname(__file__),
                          "inductiva._cli",
-                         prefix="cmd_")
+                         prefix=constants.LOADER_COMMAND_PREFIX)
 
     args = parser.parse_args()
     if args.api_key:

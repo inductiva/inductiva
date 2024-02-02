@@ -23,7 +23,7 @@ tabular_rows = [["aa", 1, "cc"], ["aaa", 11, "ccc"]]
 
 tabular_headers = ["A", "Bb", "Cc"]
 
-tabular_formatters = {"A": lambda x: x.upper(), "Z": lambda x: x.lower()}
+tabular_formatters = {"A": [lambda x: x.upper()], "Z": [lambda x: x.lower()]}
 
 
 def test_get_tabular_data__input_dict_no_headers_no_formatters__returns_dict():
@@ -46,7 +46,7 @@ def test_get_tabular_data__input_dict__returns_dict():
     when passed a dictionary, headers and formatters."""
     tabular_dict_result = {
         "A": [
-            tabular_formatters["A"](element) for element in tabular_dict["A"]
+            tabular_formatters["A"][0](element) for element in tabular_dict["A"]
         ],
         "B": tabular_dict["B"],
         "C": tabular_dict["C"]
@@ -62,7 +62,7 @@ def test_get_tabular_data__input_dict_no_headers__returns_dict():
     when passed a dictionary, formatters and no headers."""
     tabular_dict_result = {
         "A": [
-            tabular_formatters["A"](element) for element in tabular_dict["A"]
+            tabular_formatters["A"][0](element) for element in tabular_dict["A"]
         ],
         "B": tabular_dict["B"],
         "C": tabular_dict["C"]
@@ -96,7 +96,7 @@ def test_get_tabular_data__input_list__returns_dict():
     when passed a list, headers and formatters."""
     tabular_dict_result = {
         tabular_headers[0]: [
-            tabular_formatters[tabular_headers[0]](element[0])
+            tabular_formatters[tabular_headers[0]][0](element[0])
             for element in tabular_rows
         ],
         tabular_headers[1]: [element[1] for element in tabular_rows],

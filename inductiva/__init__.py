@@ -1,5 +1,6 @@
 """Client for Inductiva's web API."""
 import os
+import sys
 import logging
 import contextvars
 
@@ -19,6 +20,7 @@ api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
 _output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR")
 _output_dir.set(os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output"))
 api_key = os.environ.get("INDUCTIVA_API_KEY")
+_checked_key = False
 
 absl.logging.set_verbosity(absl.logging.INFO)
 
@@ -45,7 +47,6 @@ def _check_for_available_package_update():
     from .localization import translator as __
     import urllib3
     import json
-    import sys
 
     new_version = __version__
 
@@ -65,4 +66,29 @@ def _check_for_available_package_update():
         print(msg, file=sys.stderr)
 
 
+def _check_key():
+    global _checked_key
+
+    if not _checked_key and utils.format_utils.getenv_bool(
+            "GITHUB_ACTIONS", False) is not True:
+        api.methods.validate_api_key(api_key)
+        _checked_key = True
+
+
 _check_for_available_package_update()
+
+
+def _supports_ansi():
+    """Checks if we support ansi formatting for colors and bolds"""
+    user_disable_ansi = utils.format_utils.getenv_bool("INDUCTIVA_DISABLE_ANSI",
+                                                       False)
+    if sys.platform.startswith("win"):
+        return "TERM" in os.environ and os.environ[
+            "TERM"] == "xterm" and not user_disable_ansi
+    return hasattr(sys.stdout,
+                   "isatty") and sys.stdout.isatty() and not user_disable_ansi
+
+
+_ansi_enabled = _supports_ansi()
+
+_check_key()

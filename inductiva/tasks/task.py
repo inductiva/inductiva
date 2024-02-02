@@ -18,14 +18,6 @@ from inductiva.utils import files, format_utils, data, output_contents
 
 import warnings
 
-_TASK_TERMINAL_STATUSES = {
-    models.TaskStatusCode.SUCCESS, models.TaskStatusCode.FAILED,
-    models.TaskStatusCode.KILLED, models.TaskStatusCode.EXECUTERFAILED,
-    models.TaskStatusCode.EXECUTERTERMINATED,
-    models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
-    models.TaskStatusCode.SPOTINSTANCEPREEMPTED, models.TaskStatusCode.ZOMBIE
-}
-
 
 class Task:
     """Represents a running/completed task on the Inductiva API.
@@ -95,7 +87,8 @@ class Task:
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
-        if self._status is not None and self._status in _TASK_TERMINAL_STATUSES:
+        if (self._status is not None and
+                self._status in constants.TASK_TERMINAL_STATUSES):
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
@@ -177,13 +170,18 @@ class Task:
 
             time.sleep(polling_period)
 
+    def is_running(self) -> bool:
+        """Validate if the task is running."""
+
+        return self.get_status() == models.TaskStatusCode.STARTED
+
     def _is_terminal_status(self) -> bool:
         """Check if the task is in a terminal status.
 
         This method issues a request to the API.
         """
         status = self.get_status()
-        return status in _TASK_TERMINAL_STATUSES
+        return status in constants.TASK_TERMINAL_STATUSES
 
     def _send_kill_request(self, max_api_requests: int) -> None:
         """Send a kill request to the API.
