@@ -31,12 +31,13 @@ def user_confirmation_prompt(all_thins: bool, list_of_things: list,
         bool: Whether the user has confirmed the action.
     """
     if all_thins:
-        print(f"{__("user-prompt-prefix")} {all_custom_message}.")
+        print(str(__("user-prompt-prefix")) + f" {all_custom_message}.")
     else:
         if len(list_of_things) > constants.MAX_CONFIRMATION_LINES:
-            print(f"{__("user-prompt-prefix")} {big_list_custom_message}.")
+            print(
+                str(__("user-prompt-prefix")) + f" {big_list_custom_message}.")
         else:
-            print(f"{__("user-prompt-prefix")} {list_costum_message}:")
+            print(str(__("user-prompt-prefix")) + f" {list_costum_message}:")
             for thing in list_of_things:
                 print(f"  - {thing}")
     prompt = input("Are you sure you want to proceed (y/[N])? ")
