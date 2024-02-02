@@ -34,7 +34,7 @@ For example, the code below will start a SWASH simulation that will be
 automatically picked up by the shared pool of workers.
 
 **WARNING:** For the sake of demonstrating performance differences, the following
-simulation takes around 20 mins to complete.
+simulation takes around 20 minutes to complete.
 
 ```python
 import inductiva
@@ -59,14 +59,13 @@ would be executed, or even just their specs. Instead, the task will get automati
 sent to the shared pool of workers that we prepared for all users. 
 This is very simple, and a great way for doing quick experimentation.  
 
-However, despite the convenience and simplicity, the above simulation took 25 mins 37s
+However, despite the convenience and simplicity, the above simulation took 25m37s
 to complete. The shared pool of resources 
 has a limited predefined capacity and doesn't possess powerful VMs. Therefore, since
 it is shared by all users, it is not appropriate for executing larger tasks,
 since waiting times can be extremely large. So, if you need to run a larger number
 of simulation tasks, and you need more powerful VMs to run it, you will need to
 reserve that capacity for your exclusive use.
-
 
 ### Custom Hardware Setup for Enhanced Simulation Performance
 
@@ -102,8 +101,7 @@ Currently, this is the [list of available machine types available via the API]()
 - the `num_machines` sets the number of machines available in the computational
 resource. While the computational resource is active, these machines will be reserved
 for the user.
-- the `disk_size_gb` allows the selection of the size of the disk in GB that will
-be attached to each machine.
+- the `data_size_gb` allows the selection of the size of the disk attached to each machine that is reserved for the simulation data in GB.
 - the `spot` argument determines if the machines will be preemptible or standard.
 Preemptible machines can be stopped at any time and for that reason are only
 advised for fault-tolerant workloads. If simulations are running when they are
@@ -118,7 +116,7 @@ import inductiva
 machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-16",
     num_machines=2,
-    disk_size_gb=100,
+    data_size_gb=100,
     spot=False)
 ```
 
@@ -175,7 +173,7 @@ machine_group.terminate()
 ```
 
 Running the same simulation on a dedicated machine group with a `c2-standard-30`
-machine took 9mins 37s, which is 2.68 times less than on the shared pool. Notice
+machine took 9m37s, which is 2.68 times less than on the shared pool. Notice
 that, the simulation is picked almost immediately - no waiting time required - and
 selecting a more powerful machine greatly reduced the execution time.
 
@@ -247,7 +245,7 @@ g5qq5c9mk2nr5wqhzef38sdm4  swash        started   01 Feb, 09:07:12  01 Feb, 009:
 
 This is a great way to speed up the execution of multiple simulations, since the
 time to run all 5 simulations will be approximately the same as running just one,
-that is the above 5 simulations took 9mins 55s to complete, which is the time of
+that is the above 5 simulations took 9m55s to complete, which is the time of
 the slowest simulation.
 
 Now, that all the simulations have finished running, we end this tutorial with an
