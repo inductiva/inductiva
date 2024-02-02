@@ -104,6 +104,28 @@ https://github.com/inductiva/inductiva/blob/development/docs/Machines.md#example
 
 #### Example
 
+```bash
+inductiva machines list
+
+Active Resources:
+
+       NAME                                MACHINE TYPE         ELASTIC         TYPE             # MACHINES         DISK SIZE IN GB       SPOT         STARTED AT (UTC)
+       api-9jrhnc65xctdnov5jd5kxpppk       c2-standard-16       False           standard                  1                      70       False        01 Feb, 16:41:31
+       api-jdeq2jwun8j28a4g17j8tbghz       c2-standard-4        False           standard                  1                      70       False        01 Feb, 16:40:11
+```
+
+Moreover, the active machines can be retrieved and used via Python, as follows:
+```python
+# Get a list of all the MachineGroup objects (for example, if you want to terminate them all at once)
+mg_list = inductiva.resources.machine_groups.get()
+mg_list
+#[<inductiva.resources.machines.MachineGroup at 0x7f8cde53d2a0>,
+# <inductiva.resources.machines.MachineGroup at 0x7f8c58954c70>]
+
+# Terminate the first machine of the list
+mg_list[0].terminate()
+```
+
 ### Setting up a MachineGroup for running simulations in parallel
 >@ivan: show a “for loop.”
 
