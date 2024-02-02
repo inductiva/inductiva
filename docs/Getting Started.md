@@ -65,7 +65,7 @@ simulate a **2D dam break scenario** where a block of fluid is let to flow under
 
 .. raw:: html
 <div align="center">
-   <img src="./assets/reef3d-dambreak.gif" alt="REEF3D 2D dambreak simulation" width=500>
+   <img src="./_static/reef3d-dambreak.gif" alt="REEF3D 2D dambreak simulation" width=500>
 </div>
 
 With this first example, you learn that running simulations via Inductiva API is
