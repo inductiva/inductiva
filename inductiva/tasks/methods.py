@@ -150,8 +150,9 @@ def get_all(
 ) -> List["inductiva.tasks.Task"]:
     """Get all tasks of a user.
 
-    This function fetches all tasks of a user, sorted by submission time with the
-    most recent first. If status is specified, only tasks with that status will be fetched.
+    This function fetches all tasks of a user, sorted by submission
+    time with the most recent first. If status is specified, only
+    tasks with that status will be fetched.
     Args:
         status: The status of the tasks to get. If None, tasks with any status
             will be returned.
