@@ -39,6 +39,7 @@ hidden: true
 ---
 Shared VM Pool Integration
 Machine Groups
+MPI Cluster
 ```
 
 ```{toctree}
@@ -48,7 +49,6 @@ maxdepth: 2
 hidden: true
 ---
 Overview of the CLI
-Setting up an MPI
 ```
 
 ```{toctree}

@@ -62,7 +62,11 @@ $ python -c 'import inductiva; print(inductiva.__version__)'
 ## Run your First Simulation Example: The Dam Break with Reef3D
 
 In this example, you will use the open-source hydrodynamics REEF3D simulator to
-simulate a [dam break scenario](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/9_1%202D%20Dam%20Break).
+simulate a **2D dam break scenario** where a block of fluid is let to flow under the effect of gravity as follows:
+
+<div align="center">
+   <img src="assets/reef3d-dambreak.gif" alt="REEF3D 2D dambreak simulation" width=500>
+</div>
 
 With this first example, you learn that running simulations via Inductiva API is
 not much different from running them in your local machine. That's the magic
@@ -79,7 +83,8 @@ remote storage and used in the worker machine that will run the simulation;
 4. Wait for the simulation to finish and download the results to your local machine.
 
 To make it simpler, in this example, we will download the input folder with all
-the configuration files necessary to run the dam break simulation.
+the configuration files necessary to run the dam break simulation. These files 
+were inspired by the REEF3D tutorials available on their [GitHub repository](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/9_1%202D%20Dam%20Break).
 
 Here's how:
 
@@ -91,7 +96,7 @@ import inductiva
 # the mesh and the simulation, respectively.
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-dambreak-dir.zip", unzip=True)
+    "reef3d-dambreak-example.zip", unzip=True)
 
 # 2 - Initialize the REEF3D simulator object
 simulator = inductiva.simulators.REEF3D()

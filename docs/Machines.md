@@ -188,15 +188,13 @@ simulations running in parallel and distributed by the various machines constitu
 the group. This is useful when you want to run multiple simulations in parallel,
 but you don't want to wait for the first one to finish before starting the second one. 
 
-To exemplify, we will launch the same simulation 5 times to be run in parallel:
+To exemplify, we will use the [templating mechanism]() built-in the Inductiva API
+to automatically change the water level of the simulation in the input files and
+run 5 different simulations in parallel. 
 
 ```python
 import inductiva
-
-# Download the input files for the SWASH simulation
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "swash-resources-example.zip", unzip=True)
+from inductiva import mixins
 
 # Instantiate a MachineGroup object with 1 preemptible machine of type
 # c2-standard-30 and start it immediately
@@ -204,16 +202,35 @@ machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-30", num_machines=5, spot=True)
 machine_group.start()
 
+# Download the input files for the SWASH simulation
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "swash-template-example.zip", unzip=True)
+
+# Initialize the template file manager
+file_manager = mixins.FileManager()
+
 # Initialize the SWASH simulator
 swash = inductiva.simulators.SWASH()
 
-# Launch the same simulation 5 times to be run in parallel
-for _ in range(5):
-    task = swash.run(input_dir=input_dir,
+# Explore the simulation for different water levels
+water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
+
+# Launch multiple simulations
+for water_level in water_levels_list:
+    # Set the root directory and render the template files into it.
+    file_manager.set_root_dir("swash-input-example")
+    file_manager.add_dir(input_dir, water_level=water_level)
+
+    # Run the simulation on the dedicated MachineGroup
+    task = swash.run(input_dir=file_manager.get_root_dir(),
                     sim_config_filename="input.sws",
                     on=machine_group)
 ```
 
+The template mechanism will allow you to explore 5 different variations of the
+simulation, each with a different water level. The simulations will be submitted
+to our dedicated machine group and will run in parallel.
 We can check that all simulations are running via the CLI and that it took only
 1min for the moment they are submitted until they start running:
 
