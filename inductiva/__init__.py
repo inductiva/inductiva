@@ -79,7 +79,7 @@ def _supports_ansi():
                    "isatty") and sys.stdout.isatty() and not user_disable_ansi
 
 
-_ansi_enabled = _supports_ansi
+_ansi_enabled = _supports_ansi()
 
 
 def get_ansi_formatter():
