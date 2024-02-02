@@ -2,27 +2,19 @@
 
 import inductiva
 from inductiva import constants
+from inductiva.utils.input_functions import user_confirmation_prompt
 
 
 def kill_task(args):
     """Kills a task by id."""
-    if not args.yes:
-        if len(args.id) > constants.MAX_CONFIRMATION_LINES:
-            prompt = input(f"You are about to kill {len(args.id)} tasks.\n"
-                           "Are you sure you want to proceed (y/[N])? ")
-        else:
-            print("You are about to kill the following tasks: ")
-            for task_id in args.id:
-                print(f"  - {task_id}")
-            prompt = input("Are you sure you want to proceed (y/[N])? ")
-
-        confirm = prompt.lower() in ["y", "ye", "yes"]
-        if not confirm:
-            print("Aborted.")
-            return
-
-    for task_id in args.id:
-        inductiva.tasks.Task(task_id).kill(wait_timeout=args.wait_timeout)
+    confirm = args.yes
+    if not confirm:
+        confirm = user_confirmation_prompt(False, args.id, "",
+                                           f"kill {len(args.id)} tasks",
+                                           "kill the following tasks")
+    if confirm:
+        for task_id in args.id:
+            inductiva.tasks.Task(task_id).kill(wait_timeout=args.wait_timeout)
 
 
 def register(parser):

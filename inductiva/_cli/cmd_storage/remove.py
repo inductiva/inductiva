@@ -3,6 +3,7 @@
 import sys
 
 from inductiva import constants, storage
+from inductiva.utils.input_functions import user_confirmation_prompt
 
 
 def remove(args):
@@ -19,22 +20,11 @@ def remove(args):
         sys.exit(1)
 
     if not confirm:
-        if all_paths:
-            prompt = input("You are about to remove EVERYTHING from your"
-                           " remote storage space.\n"
-                           "Are you sure you want to proceed (y/[N])? ")
-        else:
-            if len(paths) > constants.MAX_CONFIRMATION_LINES:
-                prompt = input(f"You are about to remove {len(paths)} "
-                               "paths from your remote storage space.\n"
-                               "Are you sure you want to proceed (y/[N])? ")
-            else:
-                print("You are about to remove the following paths from "
-                      "your remote storage space: ")
-                for path in paths:
-                    print(f"  - {path}")
-                prompt = input("Are you sure you want to proceed (y/[N])? ")
-        confirm = prompt.lower() in ["y", "ye", "yes"]
+        confirm = user_confirmation_prompt(
+            all_paths, paths,
+            "remove EVERYTHING from your remote storage space",
+            f"remove {len(paths)} paths from your remote storage space",
+            "remove the following paths from your remote storage space")
 
     if confirm:
         if all_paths:
