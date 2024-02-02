@@ -80,17 +80,3 @@ def _supports_ansi():
 
 
 _ansi_enabled = _supports_ansi()
-
-
-def get_ansi_formatter():
-    """Fetches the formatter used for ANSI formatting.
-
-    Either `no_formatter` when ansi formatting is disable or the
-    `inductiva.utils.format_utils.emphasis_formatter`
-    
-    """
-    import inductiva
-    if not _ansi_enabled:
-        return inductiva.utils.format_utils.no_formatter
-    # pylint: disable=import-outside-toplevel
-    return inductiva.utils.format_utils.emphasis_formatter

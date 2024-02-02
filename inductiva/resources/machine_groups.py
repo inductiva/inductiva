@@ -73,7 +73,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         "Started at (UTC)": [format_utils.datetime_formatter],
     }
 
-    emph_formatter = inductiva.get_ansi_formatter()
+    emph_formatter = format_utils.get_ansi_formatter()
     header_formatters = [
         lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
     ]

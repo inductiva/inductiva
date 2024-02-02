@@ -5,11 +5,12 @@ from enum import Enum
 from distutils.util import strtobool
 import datetime
 import os
-import sys
 import copy
 
 import tabulate
 from tabulate import TableFormat, DataRow
+
+import inductiva
 
 # pylint: disable=protected-access
 tabulate._table_formats["inductiva"] = TableFormat(
@@ -70,6 +71,18 @@ def emphasis_formatter(string_to_emphasize: str, *emphasis: Emphasis):
                          "Select either `GREEN`, `RED` or `BOLD`")
     emphs = map(lambda x: x.value, emphasis)
     return "".join(emphs) + f"{string_to_emphasize}{Emphasis.RESET.value}"
+
+
+def get_ansi_formatter():
+    """Fetches the formatter used for ANSI formatting.
+
+    Either `no_formatter` when ansi formatting is disable or the
+    `inductiva.utils.format_utils.emphasis_formatter`
+    
+    """
+    if not inductiva._ansi_enabled:
+        return no_formatter
+    return emphasis_formatter
 
 
 def datetime_formatter(dt: str) -> str:

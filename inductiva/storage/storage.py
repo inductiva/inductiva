@@ -85,7 +85,7 @@ def _print_contents_table(contents):
         "Size": [format_utils.bytes_formatter],
     }
 
-    emph_formatter = inductiva.get_ansi_formatter()
+    emph_formatter = format_utils.get_ansi_formatter()
     header_formatters = [
         lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
     ]
