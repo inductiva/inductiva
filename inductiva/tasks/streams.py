@@ -29,17 +29,17 @@ logger = logging.getLogger("websocket")
 logger.setLevel(logging.ERROR)
 
 SPACING = 1
-ESC = '\u001B['
-RESET = f'{ESC}0m'
-EMPHASIS = f'{ESC}2m'
-FAILURE = f'{ESC}31m'
-SUCCESS = f'{ESC}32m'
-PENDING = f'{ESC}33m'
-CLEAR_LINE = f'{ESC}0K'
-UP = f'{ESC}{SPACING}A'
-DOWN = f'{ESC}{SPACING}B'
+ESC = "\u001B["
+RESET = f"{ESC}0m"
+EMPHASIS = f"{ESC}2m"
+FAILURE = f"{ESC}31m"
+SUCCESS = f"{ESC}32m"
+PENDING = f"{ESC}33m"
+CLEAR_LINE = f"{ESC}0K"
+UP = f"{ESC}{SPACING}A"
+DOWN = f"{ESC}{SPACING}B"
 
-ANSI_ENABLED = os.getenv('ANSI_ENABLED', '1') == '1'
+ANSI_ENABLED = os.getenv("ANSI_ENABLED", "1") == "1"
 
 
 class TaskStreamConsumer:
@@ -84,6 +84,8 @@ class TaskStreamConsumer:
         # Check if the file handles are interactive and if ANSI is enabled.
         self._fout_isatty = ANSI_ENABLED and self.fout.isatty()
         self._ferr_isatty = ANSI_ENABLED and self.ferr.isatty()
+        self._message_formatter = self._get_message_formatter()
+        self._status_formatter = self._get_status_formatter()
 
         # housekeeping variables
         self._conn_start_time = None
@@ -109,22 +111,86 @@ class TaskStreamConsumer:
             msg = stream["values"][0][1]
             self._write_message(msg)
 
-    def _write_message(self, msg):
+    def _get_message_formatter(self):
+        """Get the message formatter based on the output file
+        handle interactivity.
+        """
         if self._fout_isatty:
-            # 1. move up SPACING lines
-            # 2. move to beginning of line and clear line
-            # 3. write message
-            # 4. add new line
-            # 5. move down SPACING lines
-            # 6. move to beginning of line and clear line
-            # 7. add new blank line
-            s = f'{UP}\r{CLEAR_LINE}{msg}\n{DOWN}\r{CLEAR_LINE}\n'
-        else:
-            s = msg + '\n'
+            return self._ansi_message_formatter
+        return self._plain_message_formatter
 
+    def _get_status_formatter(self):
+        """Get the message formatter based on the error file
+        handle interactivity.
+        """
+        if self._ferr_isatty:
+            return self._ansi_status_formatter
+        return self._plain_status_formatter
+
+    def _ansi_message_formatter(self, msg):
+        """Fancy message formatter for formatted message output using
+        ANSI escape codes.
+        """
+        # 1. move up SPACING lines
+        # 2. move to beginning of line and clear line
+        # 3. write message
+        # 4. add new line
+        # 5. move down SPACING lines
+        # 6. move to beginning of line and clear line
+        # 7. add new blank line
+        return f"{UP}\r{CLEAR_LINE}{msg}\n{DOWN}\r{CLEAR_LINE}\n"
+
+    def _plain_message_formatter(self, msg):
+        """Simple message formatter for plain message output."""
+        return msg + "\n"
+
+    def _ansi_status_formatter(self, msg, status):
+        """Fancy message formatter for formatted status message output using
+        ANSI escape codes.
+        """
+        if self._conn_start_time is None:
+            elapsed = ""
+        else:
+            alive = timedelta(seconds=int(self._conn_alive_sec))
+            elapsed = f"{str(alive)} "
+
+        # 1. go to beginning of line
+        # 2. clear line
+        # 3. set color for bullet
+        #   3.1 write bullet icon
+        #   3.2 reset color
+        # 4. set emphasis formatter
+        #   4.1. write timer message (if any)
+        #   4.2. write status message
+        # 5. reset everything
+        s = f"\r{CLEAR_LINE}{status} ● {RESET}{EMPHASIS}{elapsed}{msg}{RESET}"
+        return s
+
+    def _plain_status_formatter(self, msg, _):
+        """Simple message formatter for plain status message output."""
+        return msg + "\n"
+
+    def _write_message(self, msg):
+        """Write the message to the output file handle
+
+        Args:
+            msg (str): message to be written to output.
+        """
+        s = self._message_formatter(msg)
         self.fout.write(s)
         self.fout.flush()
         self._redraw_status()
+
+    def _write_status(self, msg, status):
+        """Write the status message to the error file handle
+
+        Args:
+            msg (str): Status message.
+            status (str): Status formatting code.
+        """
+        s = self._status_formatter(msg, status)
+        self.ferr.write(s)
+        self.ferr.flush()
 
     def _update_status(self, msg, status):
         """Update the connection status message.
@@ -142,38 +208,6 @@ class TaskStreamConsumer:
         if self._prev_status and self._ferr_isatty:
             self._update_status(*self._prev_status)
 
-    def _write_status(self, msg, status):
-        """Write the status message to the error file handle
-
-        Args:
-            msg (str): Status message.
-            status (str): Status formatting code.
-        """
-
-        if self._ferr_isatty:
-            # elapsed time from connection start message
-            if self._conn_start_time is None:
-                elapsed = ''
-            else:
-                dt = timedelta(seconds=int(self._conn_alive_sec))
-                elapsed = f'{str(dt)} '
-
-            # 1. go to beginning of line
-            # 2. clear line
-            # 3. set color for bullet
-            #   3.1 write bullet icon
-            #   3.2 reset color
-            # 4. set emphasis formatter
-            #   4.1. write timer message (if any)
-            #   4.2. write status message
-            # 5. reset everything
-            msg = f'\r{CLEAR_LINE}{status} ● {RESET}{EMPHASIS}{elapsed}{msg}{RESET}'
-        else:
-            msg = msg + '\n'
-
-        self.ferr.write(msg)
-        self.ferr.flush()
-
     def __on_error(self, unused_ws, error):
         """Callback for websocket error event."""
         if not isinstance(error, KeyboardInterrupt):
@@ -183,15 +217,15 @@ class TaskStreamConsumer:
         """Callback for websocket close event."""
 
         if close_status_code or close_message:
-            close_msg = f' (code: {close_status_code}, msg: {close_message})'
+            close_msg = f" (code: {close_status_code}, msg: {close_message})"
         else:
-            close_msg = ''
+            close_msg = ""
 
         if self._conn_opened:
-            msg = f'Disconnected from task {self.task_id}{close_msg}.'
+            msg = f"Disconnected from task {self.task_id}{close_msg}."
             status = SUCCESS
         else:
-            msg = f'Failed to connect to task {self.task_id}{close_msg}.'
+            msg = f"Failed to connect to task {self.task_id}{close_msg}."
             status = FAILURE
 
         self._update_status(msg, status)
@@ -204,29 +238,28 @@ class TaskStreamConsumer:
         self._conn_opened = True
         self._conn_count += 1
 
-        msg = f'Streaming output from task {self.task_id}'
+        msg = f"Streaming output from task {self.task_id}"
         if ANSI_ENABLED and not self._fout_isatty:
-            msg += ' (redirected)'
+            msg += " (redirected)"
 
         self._update_status(msg, SUCCESS)
 
         # if the connection was re-established, warn the user about
         # the possiblity of some log lines being missing
         if self._conn_count > 1:
-            self._write_message(
-                " --- Connection re-established: some log lines might be missing --- "
-            )
+            self._write_message(" --- Connection re-established: "
+                                "some log lines might be missing --- ")
 
     def __init_status(self):
         """Allocate sufficient lines for the status message."""
         if self._ferr_isatty:
-            self.ferr.write(SPACING * '\n')
+            self.ferr.write(SPACING * "\n")
             self.ferr.flush()
 
     def run_forever(self):
         """Stream the STDOUT & STDERR of a task through the websocket."""
 
-        msg = f'Opening connection to task {self.task_id}...'
+        msg = f"Opening connection to task {self.task_id}..."
         self.__init_status()
         self._update_status(msg, PENDING)
         time.sleep(2)
@@ -242,7 +275,7 @@ class TaskStreamConsumer:
 
     def _get_ontick_scheduler(self):
         """Get a scheduler for the connection alive ticker.
-        
+
         Gets a scheduler that runs every second to update the time elapsed
         since the connection was opened.
         """
@@ -255,7 +288,7 @@ class TaskStreamConsumer:
 
     def _ontick(self, scheduler):
         """Update the connection alive time every second.
-        
+
         Updates the time elapsed since the connection was opened, redraws
         the status message and schedules the next update.
         """
