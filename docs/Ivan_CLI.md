@@ -237,4 +237,7 @@ Removing hodbisrxjxhdbkknv60xmy6ti/ in the remote storage.
 Successfully removed remote path 'hodbisrxjxhdbkknv60xmy6ti/'.
 ```
 
-These are the main functionalities of the CLI at the moment. In case you would like to have more accessible via the CLI contact us at [contact].
+These are the main functionalities of the CLI at the moment. In case you would like to have more access via the CLI contact us at [contact].
+
+## What to read next
+* []()
