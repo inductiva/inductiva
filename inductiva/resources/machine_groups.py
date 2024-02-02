@@ -31,7 +31,7 @@ def estimate_machine_cost(machine_type: str, spot: bool = False):
     else:
         estimated_cost = instance_price.body["on_demand_price"]
 
-    return round(float(estimated_cost), 5)
+    return float(estimated_cost)
 
 
 def _machine_group_list_to_str(machine_group_list) -> str:
@@ -90,7 +90,7 @@ def _fetch_machine_groups_from_api():
         api = compute_api.ComputeApi(inductiva.api.get_client())
         response = api.list_active_user_instance_groups()
         if len(response.body) == 0:
-            print("No active machine groups found.")
+            print("No active computational resources found.")
             return response.body
 
         return response.body

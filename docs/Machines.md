@@ -1,107 +1,108 @@
-# Computational Resources
+# Simulation Processing and Computational Resource Allocation
+In this guide, we will explain some of the main features of the Inductiva API when 
+it comes to managing and utilizing computational resources.
 
-By default, simulation requests are processed by a shared pool of machines serving 
-multiple users. These machines are equipped with 4 cores each, and the pool is 
-limited to a predefined capacity. If you require dedicated resources with custom 
-configurations, the **Inductiva API** allows you to easily set up virtual machines 
-reserved solely for your simulations. These are managed via machine groups, *i.e.*, 
-groups of homogeneous machines with specific requested properties that can be 
-started and terminated on demand. With the `MachineGroup` class, you can configure, 
-start, and terminate machines. Creating a `MachineGroup` requires specifying the 
-type of Virtual Machine to use and the number of such VMs that will compose the 
-group. Currently, the available options for the `machine_type` are the ones 
-available in the [Google Cloud Platform](https://cloud.google.com/compute/docs/machine-types). 
-Once a `MachineGroup` is created, simply pass it as argument to your simulations, 
-which will then be scheduled to run on those machines. 
-
-Note that a `MachineGroup` is literally a group of individual machines that do 
-not communicate with each other. In other words, a `MachineGroup` is not a 
-computational cluster where the load of each simulation is divided over all 
-machines of the cluster.
-
-### Examples
+### What We'll Cover
+* [Overview]()
+* [How can you set up computational resources with Inductiva?]()
+    * [Task Queue and Shared VM Pool Integration]()
+    * [Custom Hardware Setup for Enhanced Simulation Performance]()
+* [MachineGroup Class]()
+    * Setting up a MachineGroup for selecting specific VM type
+    * Setting up a MachineGroup for running simulations in parallel
+* [What to read next]()
 
 
-Prepare a simulation, for example with Reef3D, and run it in a dedicated machine group:
+## Overview
+>*we need something here, I'll think it through - Maya*
 
-```python
+## How can you set up computational resources with Inductiva?
 
+>*an intro to the two options - Maya*
+### Task Queue and Shared VM Pool Integration
+
+Simulation tasks you create and submit via the Inductiva will be sent to a Task 
+queue, and will eventually be picked up by a pool of workers running on Virtual 
+Machines (VMs) available from a Cloud provider
+
+By default, simulation tasks will be sent to a shared pool of workers serving 
+multiple users. These workers live on VNs that we decided to set aside to make it 
+easier for any user to test the API, and run also to relatively light tasks with 
+the simplest possible setup. 
+
+For example, the code below, will start a SplishSplash simulation that will be 
+automatically picked up by the shared pool of workers:
+
+``````
 import inductiva
-
-# Create a MachineGroup object with a single machine of the desired type
-mg = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-16",
-    num_machines=1,
-    disk_size_gb=60,
-)
-
-# Start the machine group
-mg.start()
-
-# Download the configuration files for Reef3D
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-input-example.zip", unzip=True)
+    "splishsplash-input-example.zip", unzip=True)
 
-# Initialize the Reef3D simulator
-simulator = inductiva.simulators.REEF3D()
 
-# Run the simulation and wait for it to finish
-task = simulator.run(input_dir=input_dir, on=mg)
+splishsplash = inductiva.simulators.SplishSplash()
+task = splishsplash.run(input_dir=input_dir,
+                     sim_config_filename="config.json")
 task.wait()
+task.download_outputs()
 
-mg.terminate()
-```
+``````
 
-Don't forget to always terminate your machine groups when you don't need them
-anymore with the last command. Moreover, you can also use the CLI to terminate
-them whenever you want:
+>TODO @ivan
 
-```bash
-inductiva machines terminate <machine_group_name>
-```
+>*Observe that at no point we had to explicitly define the target VMs where this 
+simulation would be executed, or even just their specs. Instead, the task will get 
+automatically sent to the shared pool of workers that we prepared for all users. 
+This is very simple, and a great way for doing quick experimentation.*
 
-#### Launch many simulations to run in parallel in a group of machines
+However, despite being very convenient and simple to use, this pool of resources 
+has a limited predefined capacity, and because it is shared by all users, it is 
+not appropriate for executing larger tasks, since waiting times can be extremely 
+large. So, if you need to run a larger number of simulation tasks, and you need 
+more powerful VMs to run it, you will need to reserve that capacity for your 
+exclusive use.
 
+### Custom Hardware Setup for Enhanced Simulation Performance
 
-```python
+Inductiva provides a way of creating pools of VMs resources that are exclusively 
+available for you, and not shared with any other user. We call these Machine Groups, 
+and, as we will explain later, they come in two flavors. 
 
-import inductiva
+A Machine Group are groups of homogeneous cloud VMs with specific specs that you 
+can define programmatically and terminate on demand via the API. This will give 
+you full control of the type of VM you use to run your simulations, and will ensure 
+a certain amount of compute power that we reserve exclusively for you. 
 
-# Create and start a MachineGroup with 5 machines
-mg = inductiva.resources.MachineGroup(
-    machine_type="c2d-standard-16",
-    num_machines=5)
-mg.start()
+Note that a Machine Groups is literally a group of individual VMs that do not 
+communicate with each other. In other words, a MachineGroup is not a cluster, 
+such as an MPI Cluster, where the load of each simulation is divided over all 
+machines of the cluster. To set up an MPI Cluster, see here (point to the MPI 
+documents). 
 
-# Download the configuration files for Reef3D
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-input-example.zip", unzip=True)
+But for now, let’s dig deeper in the MachineGroup class that implements this 
+notion of a group of independent machines of the same type. 
+ 
+## `MachineGroup` Class
 
-# Initialize the Reef3D simulator
-simulator = inductiva.simulators.REEF3D()
+>*@Ivan please explain here the class, each field of the constructor and the main 
+methods etc. Below we will be providing some examples, so here we can be pretty 
+focused on the MachineGroup class.*
 
-tasks = []
+Now that we explained what this class is about, let’s see how to use it for two 
+different purposes. First, we will create a MachineGroup with 1 machine only. 
+The goal is to use this functionality to select specific types of VM available on 
+Google Cloud for running our simulation. We will show the impact on performance 
+(and potential cost) of running the simulation on different types of VMs.
 
-# Submit 5 simulations at the same time to the same machine group.
-# Each simulation will be picked up by a different machine of the group and all
-# will run in parallel.
-for _ in range(5):
-    task = simulator.run(input_dir=input_dir, on=mg)
-    tasks.append(task)
+Then, we will create a MachineGroup with 5 instances and show how to run 5 
+variations of the same simulation in parallel. 
 
-# Block until all tasks complete
-for task in tasks:
-    task.wait()
+### Setting up a Machine Group for selecting specific VM type
+>@ivan can we expand the existing example and run it on two different machines.
 
-# Once you don't need them anymore, terminate the machines
-mg.terminate()
-```
+https://github.com/inductiva/inductiva/blob/development/docs/Machines.md#examples
 
-#### List active machines
-
-The machines you have running can be listed via the CLI:
+#### Example
 
 ```bash
 inductiva machines list
@@ -124,3 +125,12 @@ mg_list
 # Terminate the first machine of the list
 mg_list[0].terminate()
 ```
+
+### Setting up a MachineGroup for running simulations in parallel
+>@ivan: show a “for loop.”
+
+#### Example
+
+## What to read next
+* [Set up an MPI]()
+* [Get an overview of the CLI]()
