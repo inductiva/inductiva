@@ -1,7 +1,6 @@
 """CLI commands to terminate computational resources."""
 import sys
 
-from inductiva import constants, resources
 from inductiva.utils import input_functions
 
 

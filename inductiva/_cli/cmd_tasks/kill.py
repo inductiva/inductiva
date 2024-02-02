@@ -1,7 +1,5 @@
 """Kills a tasks by id via CLI."""
-
 import inductiva
-from inductiva import constants
 from inductiva.utils.input_functions import user_confirmation_prompt
 
 

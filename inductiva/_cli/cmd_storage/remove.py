@@ -2,7 +2,7 @@
 
 import sys
 
-from inductiva import constants, storage
+from inductiva import storage
 from inductiva.utils.input_functions import user_confirmation_prompt
 
 
