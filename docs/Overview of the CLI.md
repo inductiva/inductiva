@@ -239,5 +239,5 @@ Successfully removed remote path 'hodbisrxjxhdbkknv60xmy6ti/'.
 
 These are the main functionalities of the CLI at the moment. In case you would like to have more access via the CLI contact us at [contact].
 
-## What to read next
+#### What to read next
 * []()
