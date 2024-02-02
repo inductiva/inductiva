@@ -53,7 +53,8 @@ class BaseMachineGroup:
 
         self.machine_type = machine_type
         self.disk_size_gb = disk_size_gb
-        self._true_disk_size_gb = disk_size_gb + inductiva.constants.BASE_MACHINE_DISK_SIZE
+        self._true_disk_size_gb =\
+            disk_size_gb + inductiva.constants.BASE_MACHINE_DISK_SIZE
         self._id = None
         self._name = None
         self.create_time = None
