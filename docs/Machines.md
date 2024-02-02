@@ -28,6 +28,8 @@ Machines (VMs) available from a Cloud provider
 By default, simulation tasks will be sent to a shared pool of workers serving 
 multiple users. These workers live on VMs that we decided to set aside to make it 
 easier for any user to test the API, and run also relatively light tasks with 
+multiple users. These workers live on VMs that we decided to set aside to make it 
+easier for any user to test the API, and run also relatively light tasks with 
 the simplest possible setup. 
 
 For example, the code below will start a SWASH simulation that will be 
