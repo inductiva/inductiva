@@ -20,11 +20,12 @@ def remove(args):
 
     if not confirm:
         if all_paths:
-            prompt = input("Are you sure you want to remove everything "
-                           "from your remote storage space (y/[N])? ")
+            prompt = input("You are about to remove EVERYTHING from your"
+                           " remote storage space.\n"
+                           "Are you sure you want to proceed (y/[N])? ")
         else:
             if len(paths) > constants.MAX_CONFIRMATION_LINES:
-                prompt = input(f"You are about to remove the {len(paths)} "
+                prompt = input(f"You are about to remove {len(paths)} "
                                "paths from your remote storage space.\n"
                                "Are you sure you want to proceed (y/[N])? ")
             else:
