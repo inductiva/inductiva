@@ -32,14 +32,14 @@ def register(parser):
                            type=int,
                            help="Number of machines to start")
     subparser.add_argument("-d",
-                           "--disk_size",
+                           "--disk_size_gb",
                            default=70,
                            type=int,
                            help="Disk size in GB")
     subparser.add_argument("-s",
                            "--spot",
                            default=False,
-                           type=bool,
+                           action="store_true",
                            help="Whether to use spot instances")
 
     subparser.set_defaults(func=start_machine_group)

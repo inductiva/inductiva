@@ -170,6 +170,11 @@ class Task:
 
             time.sleep(polling_period)
 
+    def is_running(self) -> bool:
+        """Validate if the task is running."""
+
+        return self.get_status() == models.TaskStatusCode.STARTED
+
     def _is_terminal_status(self) -> bool:
         """Check if the task is in a terminal status.
 
