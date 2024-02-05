@@ -56,6 +56,7 @@ cli
 caption: Simulators
 maxdepth: 2
 hidden: false
+glob: true
 ---
 simulators/*
 ```
