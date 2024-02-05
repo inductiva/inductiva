@@ -161,13 +161,13 @@ def get_all(
     """
     status = models.TaskStatusCode(status) if status is not None else None
 
-    total_tasks = []
+    all_tasks = []
     page_counter = 1
 
     while tasks_fetched := _fetch_tasks_from_api(status,
                                                  page=page_counter,
                                                  per_page=50):
         list_of_task_ids = [task["task_id"] for task in tasks_fetched]
-        total_tasks = total_tasks + list_of_task_ids
+        all_tasks.extend(list_of_task_ids)
         page_counter += 1
-    return total_tasks
+    return all_tasks

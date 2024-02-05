@@ -29,12 +29,12 @@ def kill_task(args):
     if kill_all:
         all_ids = []
         for status in constants.TASK_RUNNING_STATUSES:
-            all_ids = all_ids + get_all(status=status)
+            all_ids.extend(get_all(status=status))
         ids = all_ids
 
     confirm = args.yes or user_confirmation_prompt(
-        ids, __("user-prompt-kill-all"), __("user-prompt-kill-big", len(ids)),
-        __("user-prompt-kill-small"), True)
+        ids, __("task-prompt-kill-all"), __("task-prompt-kill-big", len(ids)),
+        __("task-prompt-kill-small"), kill_all)
 
     if confirm:
         for task_id in ids:

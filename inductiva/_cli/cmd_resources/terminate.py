@@ -38,9 +38,9 @@ def terminate_machine_group(args):
         return 1
 
     confirm = confirm or input_functions.user_confirmation_prompt(
-        names, __("user-prompt-terminate-all"),
-        __("user-prompt-terminate-big", len(names)),
-        __("user-prompt-terminate-small"), all_names)
+        names, __("resources-prompt-terminate-all"),
+        __("resources-prompt-terminate-big", len(names)),
+        __("resources-prompt-terminate-small"), all_names)
 
     if not confirm:
         return 0
