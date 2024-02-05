@@ -7,12 +7,6 @@ from inductiva.tasks.methods import get_all
 from inductiva.utils.input_functions import user_confirmation_prompt
 from ...localization import translator as __
 
-#             "pending-input": "PENDINGINPUT",
-#             "submitted": "SUBMITTED",
-#             "started": "STARTED",
-#             "pending-kill": "PENDINGKILL",
-#             "zombie": "ZOMBIE",
-
 
 def kill_task(args):
     """Kills a task by id."""
@@ -26,23 +20,31 @@ def kill_task(args):
             file=sys.stderr)
         return 1
 
-    if kill_all:
-        all_ids = []
-        for status in constants.TASK_RUNNING_STATUSES:
-            all_ids.extend(get_all(status=status))
-        ids = all_ids
+    if ids:
+        tasks = [inductiva.tasks.Task(_id) for _id in ids]
+    else:
+        tasks = []
+        for status in inductiva.tasks.Task.RUNNING_STATUSES:
+            tasks.extend(get_all(status=status))
 
-    confirm = args.yes or user_confirmation_prompt(
-        ids, __("task-prompt-kill-all"), __("task-prompt-kill-big", len(ids)),
-        __("task-prompt-kill-small"), kill_all)
+    ids = [task["task_id"] for task in tasks]
 
-    if confirm:
-        for task_id in ids:
-            try:
-                inductiva.tasks.Task(task_id).kill(
-                    wait_timeout=args.wait_timeout)
-            except RuntimeError as exc:
-                print(f"Error for task {task_id}:", exc)
+    confirm = args.yes or \
+        user_confirmation_prompt(ids,
+                                __("task-prompt-kill-all"),
+                                __("task-prompt-kill-big", len(ids)),
+                                __("task-prompt-kill-small"), kill_all
+                                )
+
+    if not confirm:
+        return 1
+
+    for task_id in ids:
+        try:
+            inductiva.tasks.Task(task_id).kill(wait_timeout=args.wait_timeout)
+        except RuntimeError as exc:
+            print(f"Error for task {task_id}:", exc)
+
     return 0
 
 

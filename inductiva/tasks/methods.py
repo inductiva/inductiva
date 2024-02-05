@@ -167,7 +167,6 @@ def get_all(
     while tasks_fetched := _fetch_tasks_from_api(status,
                                                  page=page_counter,
                                                  per_page=50):
-        list_of_task_ids = [task["task_id"] for task in tasks_fetched]
-        all_tasks.extend(list_of_task_ids)
+        all_tasks.extend(tasks_fetched)
         page_counter += 1
     return all_tasks

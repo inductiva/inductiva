@@ -27,8 +27,8 @@ def terminate_machine_group(args):
     # dict to map from name to machine
     name_to_machine = {machine.name: machine for machine in active_machines}
     active_machine_names = name_to_machine.keys()
-    target_machine_names = set(
-        names)  # the user can give the same name multiple times!!
+    # the user can give the same name multiple times!!
+    target_machine_names = set(names)
     invalid_names = target_machine_names.difference(active_machine_names)
 
     if invalid_names:

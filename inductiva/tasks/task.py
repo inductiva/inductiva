@@ -35,12 +35,49 @@ class Task:
         _api: Instance of TasksApi (from the generated API client).
     """
 
+    FAILED_STATUSES = {
+        models.TaskStatusCode.FAILED, models.TaskStatusCode.KILLED,
+        models.TaskStatusCode.EXECUTERFAILED,
+        models.TaskStatusCode.EXECUTERTERMINATED,
+        models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
+        models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
+        models.TaskStatusCode.ZOMBIE
+    }
+
+    TERMINAL_STATUSES = {models.TaskStatusCode.SUCCESS}.union(FAILED_STATUSES)
+
+    RUNNING_STATUSES = {
+        models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.SUBMITTED,
+        models.TaskStatusCode.STARTED
+    }
+
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
         self.id = task_id
         self._api = tasks_api.TasksApi(api.get_client())
         self._info = None
         self._status = None
+
+    def is_running(self) -> bool:
+        """Validate if the task is running.
+
+        This method issues a request to the API.
+        """
+        return self.get_status() in self.RUNNING_STATUSES
+
+    def is_failed(self) -> bool:
+        """Validate if the task has failed.
+        
+        This method issues a request to the API.
+        """
+        return self.get_status() in self.FAILED_STATUSES
+
+    def is_terminal(self) -> bool:
+        """Check if the task is in a terminal status.
+
+        This method issues a request to the API.
+        """
+        return self.get_status() in self.TERMINAL_STATUSES
 
     @classmethod
     def from_api_info(cls, info: Dict[str, Any]) -> "Task":
@@ -87,8 +124,9 @@ class Task:
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
+        # Can't call is_terminal because it calls get status (infinite loop)
         if (self._status is not None and
-                self._status in constants.TASK_TERMINAL_STATUSES):
+                self._status in self.TERMINAL_STATUSES):
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
@@ -106,7 +144,7 @@ class Task:
         """
         # If the task is in a terminal status and we already have the info,
         # return it without refreshing it from the API.
-        if self._info is not None and self._is_terminal_status():
+        if self._info is not None and self.is_terminal():
             return self._info
 
         params = self._get_path_params()
@@ -165,23 +203,10 @@ class Task:
                         "while performing the task.", status)
             prev_status = status
 
-            if self._is_terminal_status():
+            if self.is_terminal():
                 return status
 
             time.sleep(polling_period)
-
-    def is_running(self) -> bool:
-        """Validate if the task is running."""
-
-        return self.get_status() == models.TaskStatusCode.STARTED
-
-    def _is_terminal_status(self) -> bool:
-        """Check if the task is in a terminal status.
-
-        This method issues a request to the API.
-        """
-        status = self.get_status()
-        return status in constants.TASK_TERMINAL_STATUSES
 
     def _send_kill_request(self, max_api_requests: int) -> None:
         """Send a kill request to the API.
@@ -193,7 +218,7 @@ class Task:
         while max_api_requests > 0:
             max_api_requests -= 1
             try:
-                if self._is_terminal_status():
+                if self.is_terminal():
                     break
 
                 path_params = self._get_path_params()
@@ -385,7 +410,7 @@ class Task:
             The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
-        if fail_if_running and not self._is_terminal_status():
+        if fail_if_running and not self.is_terminal():
             return None
         # start_time may be None if the task was killed before it started
         if info["computation_start_time"] is None:
@@ -411,7 +436,7 @@ class Task:
             The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
-        if fail_if_running and not self._is_terminal_status():
+        if fail_if_running and not self.is_terminal():
             return None
         # start_time may be None if the task was killed before it started
         if info["input_submit_time"] is None:
