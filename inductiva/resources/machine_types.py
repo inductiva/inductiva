@@ -2,7 +2,18 @@
 
 
 def list_available_machines():
-    """Lists the available machines from the descriptive dict."""
+    """Lists the available machines from the descriptive dict.
+    
+    Each machine type is a key in the dict with respective possible values are:
+    - vcpus: list of integers with the available vcpu possibilities.
+    - memory: list of string with the available memory types. Default is
+        ["highmem", "standard", "highcpu"].
+    - extra_configs: tuple with two lists of strings and integers. The first
+        list is extra memory types that are the only ones containing the
+        possible vcpus in the second list.
+    - lssd: boolean indicating if the machine type has the local SSD
+        option. Default is False.
+    """
 
     available_machines = []
 
