@@ -52,7 +52,7 @@ means 4 GB of RAM per vCPU and will contain `16` vCPUs.
 Currently, this is the [list of available machine types available via the API]().
 - the `num_machines` sets the number of machines available in the cluster. While the computational resource is active, these machines will be reserved
 for the user.
-- the `data_size_gb` allows the selection of the size of the disk attached to
+- the `data_disk_gb` allows the selection of the size of the disk attached to
 each machine that is reserved for the simulation data in GB.
 
 For example, the following code creates an MPICluster with 2 machines of type
@@ -64,7 +64,7 @@ import inductiva
 mpi_cluster = inductiva.resources.MPICluster(
    machine_type="c2-standard-30",
    num_machines=2,
-   data_size_gb=100)
+   data_disk_gb=100)
 ```
 
 When initializing an MPI cluster he is registered on the API, but the computational

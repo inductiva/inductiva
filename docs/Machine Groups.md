@@ -103,7 +103,7 @@ Currently, this is the [list of available machine types available via the API]()
 - the `num_machines` sets the number of machines available in the computational
 resource. While the computational resource is active, these machines will be reserved
 for the user.
-- the `data_size_gb` allows the selection of the size of the disk attached to each machine that is reserved for the simulation data in GB.
+- the `data_disk_gb` allows the selection of the size of the disk attached to each machine that is reserved for the simulation data in GB.
 - the `spot` argument determines if the machines will be preemptible or standard.
 Preemptible machines can be stopped at any time and for that reason are only
 advised for fault-tolerant workloads. If simulations are running when they are
@@ -118,7 +118,7 @@ import inductiva
 machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-16",
     num_machines=2,
-    data_size_gb=100,
+    data_disk_gb=100,
     spot=False)
 ```
 
