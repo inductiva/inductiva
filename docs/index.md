@@ -44,20 +44,12 @@ computational_resources_howto
 ```{toctree}
 ---
 caption: User Reference
-maxdepth: 2
+maxdepth: 3
 hidden: false
 ---
 machinegroup_class
 elasticgroup_class
 mpicluster_class
 cli
-```{toctree}
----
-caption: Simulators
-maxdepth: 2
-hidden: false
-glob: true
----
-simulators/*
-```
+simulators
 ```
