@@ -64,6 +64,4 @@ html_theme = 'sphinx_book_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_theme_options = {
-    "show_toc_level": 2,
-}
+html_theme_options = {"show_navbar_depth": 2}
