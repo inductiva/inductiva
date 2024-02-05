@@ -3,6 +3,7 @@
 import sys
 
 from inductiva import storage
+from inductiva.client import exceptions
 from inductiva.utils.input_functions import user_confirmation_prompt
 from ...localization import translator as __
 
@@ -30,7 +31,11 @@ def remove(args):
         if all_paths:
             storage.rmdir("*", confirm=True)
         for path in paths:
-            storage.rmdir(path, confirm=True)
+            try:
+                storage.rmdir(path, confirm=True)
+            except exceptions.ApiValueError as rmdir_exception:
+                print(rmdir_exception)
+
     return 0
 
 

@@ -3,6 +3,7 @@ import sys
 
 import inductiva
 from inductiva import constants
+from inductiva.client import exceptions
 from inductiva.tasks.methods import get_all
 from inductiva.utils.input_functions import user_confirmation_prompt
 from ...localization import translator as __
@@ -38,7 +39,11 @@ def kill_task(args):
 
     if confirm:
         for task_id in ids:
-            inductiva.tasks.Task(task_id).kill(wait_timeout=args.wait_timeout)
+            try:
+                inductiva.tasks.Task(task_id).kill(
+                    wait_timeout=args.wait_timeout)
+            except RuntimeError as exc:
+                print(f"Error for task {task_id}:", exc)
     return 0
 
 
