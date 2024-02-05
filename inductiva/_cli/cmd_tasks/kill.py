@@ -3,7 +3,6 @@ import sys
 
 import inductiva
 from inductiva import constants
-from inductiva.client import exceptions
 from inductiva.tasks.methods import get_all
 from inductiva.utils.input_functions import user_confirmation_prompt
 from ...localization import translator as __
