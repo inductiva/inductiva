@@ -5,13 +5,22 @@ With the Inductiva storage module, you can easily navigate your storage, evaluat
 You have the ability to organize your storage by specifying the directory where your simulation outputs should be saved. The directory containing these outputs is automatically named after the task ID. Check [tasks](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks) for more information about this.
 Let's illustrate this with some examples:
 
-### Determining the amount of storage in use
+## Determining the amount of storage in use
 
+As you start running simulations, your remote personal storage will get filled up.
+Hence, at times it will be useful to monitor the amount of storage space being utilized.
+This can be achieved as follows:
+
+#### Python
 ```python
 import inductiva
 space_used = inductiva.storage.get_space_used()
 ```
-The above code snippet will return the total amount of storage space currently being utilized in your storage.
+```
+Total user's remote storage in use: 0.0 GB
+0.0
+```
+
 
 ### Viewing storage contents
 After determining the total storage space used, you may want to identify which directories are consuming the most storage. This can be achieved using the `inductiva.storage.listdir` function:
