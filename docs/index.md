@@ -44,7 +44,7 @@ computational_resources_howto
 ```{toctree}
 ---
 caption: User Reference
-maxdepth: 3
+maxdepth: 2
 hidden: false
 ---
 machinegroup_class
