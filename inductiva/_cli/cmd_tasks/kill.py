@@ -26,12 +26,12 @@ def register(parser):
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
-        "The `inductiva tasks kill` command terminates specified tasks on the"
-        " platform.\n"
+        "The `inductiva tasks kill` command terminates specified tasks "
+        "on the platform.\n"
         "You can terminate multiple tasks by passive multiple ids.\n"
-        "To confirm termination without prompt, use the '-y' or '--yes' option.\n"
-        "If you provide '-w' or '--wait-timeout', the system does not confirm if "
-        "the kill command was successful\n")
+        "To confirm termination without prompt, use the '-y' or '--yes' "
+        "option.\nIf you provide '-w' or '--wait-timeout', the system "
+        "does not confirm if the kill command was successful\n")
 
     subparser.add_argument("id",
                            type=str,

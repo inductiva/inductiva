@@ -19,8 +19,10 @@ def register(parser):
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
-        "The `inductiva storage list` command provides an overview of your data on the platform.\n"
-        "It lists all items in a specified path, allowing you to control the maximum number of results,\n"
+        "The `inductiva storage list` command provides an overview"
+        " of your data on the platform.\n"
+        "It lists all items in a specified path, allowing you to "
+        "control the maximum number of results,\n"
         "the ordering criteria, and the sorting order.\n")
     subparser.add_argument("path", default="/", type=str, nargs="?")
     subparser.add_argument("-m", "--max-results", default=10, type=int)

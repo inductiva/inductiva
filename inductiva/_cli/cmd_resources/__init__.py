@@ -15,9 +15,10 @@ def register(root_parser):
     parser.description = (
         "Computational resource management utilities.\n\n"
         "The `inductiva resources` command provides utilities "
-        "for managing computational resources.\nIt allows you to show estimated costs of resources, "
-        "show available machine types, list current resources\n being used, and terminate resources.\n"
-    )
+        "for managing computational resources.\nIt allows you "
+        "to show estimated costs of resources, "
+        "show available machine types, list current resources\n"
+        " being used, and terminate resources.\n")
 
     utils.show_help_msg(parser)
 

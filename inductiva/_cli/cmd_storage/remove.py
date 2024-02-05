@@ -24,10 +24,12 @@ def register(parser):
                                   help="Remove remote storage entries.",
                                   formatter_class=argparse.RawTextHelpFormatter)
     subparser.description = (
-        "The `inductiva storage remove` command deletes specified data from the platform.\n"
-        "It targets a specific path for removal. Use with caution as this action is irreversible.\n\n"
-        "Use `inductiva storage remove \"*\"` to remove all folders in your storage."
-    )
+        "The `inductiva storage remove` command deletes specified data"
+        " from the platform.\n"
+        "It targets a specific path for removal. Use with caution as "
+        "this action is irreversible.\n\n"
+        "Use `inductiva storage remove \"*\"` to remove all folders in"
+        " your storage.")
     subparser.add_argument("path",
                            type=str,
                            help="Path to be removed from remote storage. "

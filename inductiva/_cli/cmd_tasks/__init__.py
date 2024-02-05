@@ -15,7 +15,8 @@ def register(root_parser):
 
     parser.description = (
         "Task management utilities.\n\n"
-        "The `inductiva tasks` command allows you to manage your tasks on the platform.\n"
+        "The `inductiva tasks` command allows you to "
+        "manage your tasks on the platform.\n"
         "It provides utilities for monitoring and terminating tasks.\n")
 
     utils.show_help_msg(parser)
