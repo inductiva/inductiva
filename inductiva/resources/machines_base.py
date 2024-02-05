@@ -111,7 +111,8 @@ class BaseMachineGroup:
 
         machine_group = cls(
             machine_type=resp["machine_type"],
-            data_disk_gb=self.data_disk_gb,
+            data_disk_gb=resp["disk_size_gb"] -
+            inductiva.constants.BASE_MACHINE_DISK_SIZE_GB,
             register=False,
         )
         machine_group._id = resp["id"]
