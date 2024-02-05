@@ -13,14 +13,22 @@ Getting Started
 
 ```{toctree}
 ---
+caption: Running Simulations
+maxdepth: 2
+hidden: false
+---
+Simulators
+```
+
+```{toctree}
+---
 caption: Computational Resource Allocation and Processing
 maxdepth: 2
 hidden: false
 ---
-Ivan_Computational_Resources
-Shared VM Pool Integration
 Machine Groups
-Setting up an MPI
+MPI Cluster
+Computational Resources
 ```
 
 ```{toctree}
@@ -49,16 +57,6 @@ maxdepth: 2
 hidden: false
 ---
 Templating
-```
-
-
-```{toctree}
----
-caption: Running Simulations
-maxdepth: 2
-hidden: false
----
-Simulators
 ```
 
 ```{toctree}
