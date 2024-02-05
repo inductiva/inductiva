@@ -1,11 +1,10 @@
-# Managing Storage with the Inductiva API
+# Manage Storage with the Inductiva API
 
 The Inductiva API provides you with tools to manage your remote storage effectively. 
 With the Inductiva storage module, you can easily navigate your storage, evaluate the space used, and delete specific directories as needed.
 You have the ability to organize your storage by specifying the directory where your simulation outputs should be saved. The directory containing these outputs is automatically named after the task ID. Check [tasks](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks) for more information about this.
 Let's illustrate this with some examples:
 
-## Usage example
 ### Determining the amount of storage in use
 
 ```python
