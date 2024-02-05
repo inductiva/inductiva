@@ -1,21 +1,42 @@
 """Remove the user's remote storage contents via CLI."""
-
 import argparse
+import sys
+
 from inductiva import storage
+from inductiva.client import exceptions
+from inductiva.utils.input_functions import user_confirmation_prompt
+from ...localization import translator as __
 
 
 def remove(args):
     """Remove user's remote storage contents."""
-    path = args.path
+    paths = args.path
     confirm = args.confirm
+    all_paths = args.all
+
+    if paths and all_paths:
+        print(
+            "inductiva storage remove: error: "
+            "argument path not allowed with argument --all",
+            file=sys.stderr)
+        return 1
 
     if not confirm:
-        prompt = input(f"Are you sure you want to remove {path}? (y/n)")
-        confirm = prompt.lower() in ["y", "ye", "yes"]
+        confirm = user_confirmation_prompt(
+            paths, __("storage-prompt-remove-all"),
+            __("storage-prompt-remove-big", len(paths)),
+            __("storage-prompt-remove-small"), all_paths)
 
     if confirm:
-        print("Removing %s in the remote storage", path)
-        storage.rmdir(path, confirm=confirm)
+        if all_paths:
+            storage.rmdir("*", confirm=True)
+        for path in paths:
+            try:
+                storage.rmdir(path, confirm=True)
+            except exceptions.ApiValueError as rmdir_exception:
+                print(rmdir_exception)
+
+    return 0
 
 
 def register(parser):
@@ -32,12 +53,21 @@ def register(parser):
         " your storage.")
     subparser.add_argument("path",
                            type=str,
-                           help="Path to be removed from remote storage. "
+                           nargs="*",
+                           help="Path(s) to be removed from remote storage. "
                            "To remove all contents, use \"*\".")
-    subparser.add_argument("-y",
-                           "--yes",
+
+    subparser.add_argument(
+        "-y",
+        action="store_true",
+        dest="confirm",
+        default=False,
+        help="Sets any confirmation values to \"yes\" "
+        "automatically. Users will not be asked for "
+        "confirmation to remove path(s) from remote storage.")
+    subparser.add_argument("--all",
                            action="store_true",
-                           dest="confirm",
-                           help="Skip remove confirmation.",
-                           default=False)
+                           default=False,
+                           help="Remove all contents from remote storage.")
+
     subparser.set_defaults(func=remove)
