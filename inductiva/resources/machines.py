@@ -17,7 +17,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_type: str,
         num_machines: int = 1,
         spot: bool = False,
-        data_disk_gb: int = 0,
+        data_disk_gb: int = 10,
         register: bool = True,
     ) -> None:
         """Create a MachineGroup object.
@@ -119,7 +119,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         min_machines: int = 1,
         max_machines: int = 1,
         spot: bool = False,
-        data_disk_gb: int = 0,
+        data_disk_gb: int = 10,
         register: bool = True,
     ) -> None:
         """Create an ElasticMachineGroup object.

@@ -26,7 +26,7 @@ class BaseMachineGroup:
 
     def __init__(self,
                  machine_type: str,
-                 data_disk_gb: int = 0,
+                 data_disk_gb: int = 10,
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
 

@@ -15,7 +15,7 @@ class MPICluster(machines_base.BaseMachineGroup):
     def __init__(self,
                  machine_type: str,
                  num_machines: int = 2,
-                 data_disk_gb: int = 0,
+                 data_disk_gb: int = 10,
                  register: bool = True) -> None:
         """Create a MPICluster object.
 
