@@ -2,7 +2,6 @@
 import sys
 
 import inductiva
-from inductiva import constants
 from inductiva.tasks.methods import get_all
 from inductiva.utils.input_functions import user_confirmation_prompt
 from ...localization import translator as __
@@ -21,7 +20,7 @@ def kill_task(args):
         return 1
 
     if ids:
-        tasks = [inductiva.tasks.Task(_id) for _id in ids]
+        tasks = [inductiva.tasks.Task(id) for id in ids]
     else:
         tasks = []
         for status in inductiva.tasks.Task.RUNNING_STATUSES:

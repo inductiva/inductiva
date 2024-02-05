@@ -1,5 +1,5 @@
 """List the tasks information via CLI."""
-from inductiva import tasks, utils, constants
+from inductiva import tasks, utils
 from inductiva.client import models
 
 
