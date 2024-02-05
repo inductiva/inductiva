@@ -1,19 +1,45 @@
 """Available machine types and their number of cores."""
-AVAILABLE_MACHINES = {
-    "c2-standard-": [4, 8, 16, 30, 60],
-    "c3-standard-": [4, 8, 22, 44, 88, 176],
-    "c2d-standard-": [2, 4, 8, 16, 32, 56, 112],
-    "c2d-highcpu-": [2, 4, 8, 16, 32, 56, 112],
-    "e2-standard-": [2, 4, 8, 16, 32],
-    "n2-standard-": [2, 4, 8, 16, 32, 48, 64, 80, 96, 128],
-    "n2d-standard-": [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224],
-    "n1-standard-": [1, 2, 4, 8, 16, 32, 64, 96],
-    "e2-highcpu-": [2, 4, 8, 16, 32],
-}
 
 
 def list_available_machines():
-    """Lists the types of available machines."""
-    return (machine_type + str(vcpu)
-            for machine_type, vcpus in AVAILABLE_MACHINES.items()
-            for vcpu in vcpus)
+    """Lists the available machines from the descriptive dict."""
+
+    available_machines = []
+
+    for machine_type in AVAILABLE_MACHINES.keys():
+        vcpu_list = AVAILABLE_MACHINES[machine_type]["vcpus"]
+        memory_list = AVAILABLE_MACHINES[machine_type].get(
+            "memory", ["highmem", "standard", "highcpu"]) 
+        lssd = AVAILABLE_MACHINES[machine_type].get("lssd", False)
+        extra_configs = AVAILABLE_MACHINES[machine_type].get(
+            "extra_configs", None)
+
+        for memory in memory_list:
+            for vcpu in vcpu_list:
+                available_machines.append(
+                    machine_type + "-" + memory + "-" + str(vcpu))
+                
+        if extra_configs:
+            for memory in extra_configs[0]:
+                for vcpu in extra_configs[1]:
+                    available_machines.append(
+                        machine_type + "-" + memory + "-" + str(vcpu))
+        if lssd:
+            for vcpu in vcpu_list[1:]:
+                available_machines.append(
+                    machine_type + "-standard-" + str(vcpu) + "-lssd")
+                
+    return available_machines
+
+
+AVAILABLE_MACHINES = {
+ "c2": {"vcpus": [4, 8, 16, 30, 60], "memory": ["standard"]},
+ "c3": {"vcpus": [4, 8, 22, 44, 88, 176], "lssd": True}, 
+ "c2d": {"vcpus": [2, 4, 8, 16, 32, 56, 112]},
+ "c3d": {"vcpus":[4, 8, 16, 30, 60, 90, 180, 360], "lssd": True},
+ "e2": {"vcpus": [2, 4, 8, 16], "extra_configs": (["standard", "highcpu"], [32])},
+ "n2": {"vcpus": [2, 4, 8, 16, 32, 48, 64, 80, 96],
+        "extra_configs": (["standard", "highmem"], [128])},
+ "n2d": {"vcpus": [2, 4, 8, 16, 32, 48, 64, 80, 96],
+         "extra_configs": (["standard", "highcpu"], [128, 224])},
+ "n1": {"vcpus": [1, 2, 4, 8, 16, 32, 64, 96]}}
