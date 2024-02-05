@@ -51,5 +51,5 @@ machinegroup_class
 elasticgroup_class
 mpicluster_class
 cli
-simulators
+simulators/index
 ```
