@@ -47,9 +47,11 @@ class Task:
     TERMINAL_STATUSES = {models.TaskStatusCode.SUCCESS}.union(FAILED_STATUSES)
 
     RUNNING_STATUSES = {
-        models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.SUBMITTED,
-        models.TaskStatusCode.STARTED
+        models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED
     }
+
+    KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
+                        }.union(RUNNING_STATUSES)
 
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
@@ -63,7 +65,7 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() in self.RUNNING_STATUSES
+        return self.get_status() == models.TaskStatusCode.STARTED
 
     def is_failed(self) -> bool:
         """Validate if the task has failed.
@@ -289,7 +291,7 @@ class Task:
         self._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
 
         if wait_timeout is None:
-            logging.info(__("kill-request-sent", self.id))
+            logging.info(__("task-kill-request-sent", self.id))
             return None
 
         success, status = self._check_if_pending_kill(wait_timeout)
