@@ -40,7 +40,7 @@ you are using.
 
 Here is an example. Let us assume you are developing a coastal dynamics study 
 using Reef3D, and you have all the required input files and assets stored in the 
-subdirectory “my_input_data_dir” located inside your project folder on your local 
+subdirectory `my_input_data_dir`` located inside your project folder on your local 
 machine. The following piece of code illustrates this situation:
 ``````
 code
@@ -62,7 +62,18 @@ You can check what is actually happening when you invoke a simulator via the API
 If you look at the logs produced at you will be able to see a message like this 
 right in the beginning of the process execution:
 
->@ivan: some log traces here.
+```bash
+Task Information:
+> ID:                    tc7cwuer45kfzuw8t93r6dxa8
+> Method:                swash
+> Local input directory: swash-resources-example
+> Submitting to the following computational resources:
+ >> Default queue with c2-standard-4 machines.
+Preparing upload of the local input directory swash-resources-example (160 B).
+Local input directory successfully uploaded.
+Task tc7cwuer45kfzuw8t93r6dxa8 submitted to the default queue.
+Simulation metadata logged to: inductiva_output/task_metadata.json
+```
 
 Once the zip file gets to the Inductiva server, it is immediately transferred to 
 your Personal Remote Storage area, under a folder whose name is the id for the 
@@ -70,9 +81,94 @@ simulation task you invoked. You can check the contents of your  Personal Remote
 Storage programmatically via the API or by using the CLI. Next, we show how you 
 would be able to check the uploaded zip file using the CLI.
 
->@ivan can you add a few CLI examples of how to check the personal area
+To check your personal storage area, you can do a general listing of the contents with:
+```bash
+$ inductiva storage ls
+Name                        Size      Creation Time
+--------------------------  --------  ----------------
+tc7cwuer45kfzuw8t93r6dxa8/  1.53 MB   01 Feb, 23:52:43
+hzgk5ngzk28a39qa7mesv0snk/  1.53 MB   01 Feb, 23:45:17
+mjnb8c7i8bfppgmu2y1zd1o7f/  11.52 MB  01 Feb, 23:24:17
+57mr4kas99jxb9titkeackano/  11.52 MB  01 Feb, 23:07:17
+ox8718m0pwfi02zczui3qky4w/  11.52 MB  01 Feb, 23:07:16
+mak1ji62s7axf7mespkc36g7e/  11.52 MB  01 Feb, 23:07:14
+ijyu8bkvme7vg9k0kj6v23gxa/  11.52 MB  01 Feb, 23:07:13
+g5qq5c9mk2nr5wqhzef38sdm4/  11.52 MB  01 Feb, 23:07:11
+fxobdn63z9xtb7q3thhpwn7c7/  11.52 MB  01 Feb, 22:53:10
+jyc8b91mj556w9u61f8qrhf4b/  11.29 MB  01 Feb, 20:29:17
+```
 
-—--
+The simulation we have just invoked has the task ID `hzgk5ngzk28a39qa7mesv0snk` and we can check that its contents were correctly submitted to the server by listing the specific contents of the task folder with:
+```bash
+$ inductiva storage ls tc7cwuer45kfzuw8t93r6dxa8
+Name       Size     Creation Time
+---------  -------  ----------------
+input.zip  1.53 MB  01 Feb, 23:52:44
+           0 B      01 Feb, 23:52:43
+```
+
+Once your simulation task gets picked up by a Worker, its input files need to be downloaded 
+from your Personal Remote Storage to the corresponding VM. Typically, this VM lives in the 
+same region of the Google Cloud storage, and so moving data is pretty fast.
+
+Of course, the receiving VM needs to have enough storage space to execute your simulation. 
+Typically, the input data for a simulation is relatively small. In the example above, the 
+files required to run the simulation only have `1.53` MB. What may be truly challenging is 
+the size of the output of the simulation, which can easily get to dozens of GB, so VMs need 
+to have large enough storage space installed.
+
+Now, VM storage space turns out to be pretty expensive, so we allow users to explicitly 
+define the amount of VM storage dedicated to storing the results of the simulation, taking 
+into account what they believe is the reasonable amount effectively and realistically 
+needed. Depending on the type of computational resource that you are using this may involve 
+setting one parameter (for MachineGroups) or two parameters (for MPIClusters). 
+
+## Machine Groups
+You can control the amount of VM storage dedicated to storing the results of your 
+simulation using the parameter `data_size_gb` of the MachineGroup class. You set
+this parameter when you instantiate the MachineGroup object, and this becomes fixed
+for the corresponding VMs since it is not possible to change storage allocation
+after instantiation. Below is an example of how you would reserve 20GB of storage
+in each machine when starting a MachineGroup with 5 machines:
+
+@ivan please had some code with the instantiation of a MachineGroup object
+```python
+import inductiva
+
+machine = inductiva.resources.MachineGroup(
+    "c2-standard-16", num_machines=5, data_size_gb=20)
+```
 
 
->Luis will explain the rest when this first part is already on readthedocs. 
+## MPI Clusters
+
+For MPI Clusters, there is one additional parameter that needs to be set because machines 
+in a cluster share an NFS partition where simulators typically write their final results. 
+So, in this case, you need to set both the XXX parameter, which controls the storage size 
+that each node in the cluster has available for simulation data of *locally*, and a ZZZ 
+parameter, which controls the size of the shared NFS partition to which all nodes in the 
+cluster can write to. Here is an example where we set and MPI Cluster with 8 machines, 
+where each machine has been given 10Gb of local storage, and the NFS storage shared by all 
+clusters is set to 20GB:
+
+```python
+import inductiva
+
+mpi_cluster = inductiva.resources.MPICluster(
+    "c2-standard-16", num_machines=8, data_size_gb=10)
+```
+
+(@ivan and @sergio : this may not be ready yet but I think what I described above is the right thing to build. Please coordinate with Luis’ team to make sure this maps to how the MPICluster actually is implemented in the backend).
+
+
+## What about machines in the Common Pool?
+
+Machines in the Common Pool have a storage space of X that you can’t control. This means 
+that if you are submitting to the Common Pool simulations that produce more that X GB, they 
+will fail, and your Task will fail. There is no way for you to request more storage space 
+for VMs in the Common Pool. Common Pool machines are intended for running short 
+simulations, mostly with the goal of testing your scripts. If you wish to run simulations 
+that produce a large amount of data, then you really need to spin up your own Machine 
+Groups or MPI Clusters.
+
+(Luis to continue with final parts: storing outputs and downloading data).

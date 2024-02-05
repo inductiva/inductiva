@@ -16,7 +16,7 @@ import inductiva
 
 # Configure a computational resources
 machines = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-16", num_machines=5, data_disk_gb=20)
+    machine_type="c2-standard-16", num_machines=5, data_size_gb=60)
 
 # Launch the computational resource to be available to run simulations
 machines.start()

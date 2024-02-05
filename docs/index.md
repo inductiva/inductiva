@@ -13,32 +13,50 @@ Getting Started
 
 ```{toctree}
 ---
-caption: Data Flow and Storage Management
-maxdepth: 2
-hidden: true
----
-Storage Levels and Data Flow
-Managing Storage with the Inductiva API
-```
-
-```{toctree}
----
 caption: Running Simulations
 maxdepth: 2
-hidden: true
+hidden: false
 ---
 Simulators
-Tasks
 ```
 
 ```{toctree}
 ---
 caption: Computational Resource Allocation and Processing
 maxdepth: 2
-hidden: true
+hidden: false
 ---
-Shared VM Pool Integration
 Machine Groups
+MPI Cluster
+Computational Resources
+```
+
+```{toctree}
+---
+caption: Task Management
+maxdepth: 2
+hidden: false
+---
+Tasks
+```
+
+```{toctree}
+---
+caption: Data Flow and Storage Management
+maxdepth: 2
+hidden: false
+---
+Data Flow
+Storage
+```
+
+```{toctree}
+---
+caption: Templating
+maxdepth: 2
+hidden: false
+---
+Templating
 ```
 
 ```{toctree}
@@ -48,7 +66,6 @@ maxdepth: 2
 hidden: true
 ---
 Overview of the CLI
-Setting up an MPI
 ```
 
 ```{toctree}
