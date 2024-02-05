@@ -65,5 +65,5 @@ html_theme = 'sphinx_book_theme'
 html_static_path = ['_static']
 
 html_theme_options = {
-    "collapse_navigation" : False
+    "show_toc_level": 2,
 }
