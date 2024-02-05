@@ -45,7 +45,6 @@ computational_resources_howto
 ---
 caption: User Reference
 maxdepth: 2
-hidden: false
 ---
 machinegroup_class
 elasticgroup_class

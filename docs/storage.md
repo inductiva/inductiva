@@ -3,7 +3,7 @@
 The Inductiva API provides you with tools to manage your remote storage effectively. 
 With the Inductiva storage module, you can easily navigate your storage, evaluate the space used, and delete specific directories as needed.
 You have the ability to organize your storage by specifying the directory where your simulation outputs should be saved. The directory containing these outputs is automatically named after the task ID. Check [tasks](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks) for more information about this.
-Let's illustrate this with some examples:
+Let's illustrate this with some examples.
 
 ## Determining the amount of storage in use
 
@@ -16,21 +16,37 @@ This can be achieved as follows:
 import inductiva
 space_used = inductiva.storage.get_space_used()
 ```
-```
-Total user's remote storage in use: 0.0 GB
-0.0
+#### CLI
+```bash
+$ inductiva storage size
 ```
 
+In both cases, we receive the following message:
 
-### Viewing storage contents
-After determining the total storage space used, you may want to identify which directories are consuming the most storage. This can be achieved using the `inductiva.storage.listdir` function:
+```
+Total user's remote storage in use: 32.4 GB
+```
+
+## Viewing storage contents
+
+After determining the total storage space used, you may want to identify which directories are consuming the most storage. To be more specific, you may list
+the contents of your directory and sort them by size or creation date as follows:
+
+#### Python
 
 ```python
 import inductiva
 inductiva.storage.listdir(max_results=10, order_by="size", sort_order="desc")
 ```
-This will enumerate the contents of the root directory and produce a table showcasing the storage directories: 
 
+#### CLI
+
+```bash
+inductiva storage ls --max-results 10 --order-by size --sort-order desc
+```
+
+In this way, we obtain a listing of the 10 largest directories within our user's
+remote storage.
 ```bash
 
        NAME                       SIZE            CREATION TIME
@@ -45,22 +61,80 @@ This will enumerate the contents of the root directory and produce a table showc
        1698751109500351563/       685.33 MB       31 Oct, 11:18:29
        1699461560029476871/       673.81 MB       08 Nov, 16:39:20
 ```
-To examine the contents of a specific folder, execute: 
+
+In case, you want to be more specific and examine the contents of a specific folder,
+you can pass a path to the `listdir` method and/or the CLI subcommand as follows:
+
+#### Python
 
 ```python
 import inductiva
 inductiva.storage.listdir(path = "1234", max_results=10, order_by="size", sort_order="desc")
 ```
 
-The `order_by` argument allows you to sort the table by size or creation date, while the `sort_order` argument determines whether the list is displayed in ascending or descending order. 
+#### CLI
 
-### Removing directories
+```bash
+inductiva storage ls 1699461562982775346/ --max-results 10 --order-by size --sort-order desc
+```
 
-The table provides valuable information that can guide your decision to remove certain directories. This can be accomplished using the `inductiva.storage.rmdir` function. 
+Add HERE COMMAND
+
+## Saving simulation outputs
+
+When running a simulation, users can specify the name of the directory where the simulation outputs will be saved on the user's remote storage. This is as simple
+as setting the argument `storage_dir` in the `run` method of the simulator. 
+
+This allows users to organize their data on their bucket as they wish.
+
+Let's see an example with the REEF3D simulator.
 
 ```python
 import inductiva
-inductiva.storage.rmdir(path="1234")
+
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "reef3d-dambreak-example.zip", unzip=True)
+
+simulator = inductiva.simulators.REEF3D()
+
+# Launch the simulation and point the results to the directory "reef3d_simulation"
+task = simulator.run(input_dir=input_dir, storage_dir="reef3d_simulation")
+
+task.wait()
+task.storage.listdir(order_by="creation_time")
 ```
-Running the above code will permanently delete the directory named "1234" from your remote storage. Please note, this action is irreversible and the deleted directory cannot be restored.
+
+```bash
+RESULTS
+```
+
+
+### Removing directories
+
+Whenever space needs to be freed up, or in general, when you want to remove a directory
+from your remote storage, you can use a simple interface to remove it. In particular,
+in case you want to remove everything that is also possible.
+
+The table above provides valuable information that can guide your decision to remove certain directories. 
+
+#### Python
+
+```python
+import inductiva
+inductiva.storage.rmdir(path="1699461562982775346")
+```
+
+#### CLI
+
+```bash
+inductiva storage rm 1699461562982775346
+```
+
+To remove everything, use the flag `--all`.
+
+
+The above examples remove the directory `1699461562982775346` permantenly from the user's remote storage. So be careful when using this command.
+
+
 

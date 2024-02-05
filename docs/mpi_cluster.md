@@ -2,13 +2,6 @@
 In this guide, we extend the computational resources to empower the user ability
 to run large scaling simulations on a dedicated MPI Cluster.
 
-### What We'll Cover
-* [Overview]()
-* [Why will you need an MPICluster?]()
-* [MPICluster Class]()
-* [Running a simulati]
-* [What to read next]()
-
 ## Overview
 >*we need something here, I'll think it through - Maya*
 
