@@ -26,7 +26,7 @@ def kill_task(args):
         for status in inductiva.tasks.Task.KILLABLE_STATUSES:
             tasks.extend(get_all(status=status))
 
-    ids = [task["task_id"] for task in tasks]
+    ids = [task.id for task in tasks]
 
     confirm = args.yes or \
         user_confirmation_prompt(ids,
