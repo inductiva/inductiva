@@ -1,12 +1,16 @@
 # `ElasticMachineGroup` Class
 
-An Elastic machine group is a pool of homogeneous machines that work individually and do
-not communicate with each other in any way. Hence, launching a machine group
-allows the creation of a private queue that only receives the tasks you specifically
-send to them. Then, the machines can pick simulations from the queue, which allows
-to run multiple simulations in parallel and speeds up the exploration of a design space.
+An Elastic machine group is similar to the [Machine group]() with the extra property
+that scales up and down the number of active machines based on the number of simulations
+in queue. It is composed of a pool of homogeneous machines that work individually and do
+not communicate with each other in any way. 
 
-To instantiate a `MachineGroup` object the following parameters can be configured:
+Hence, an elastic machine group creates a private queue for which workers scale
+based on the number of tasks in it. This allows running multiple simulations at the
+same time, with the slight overhead of machines starting, with a more cost
+effective strategy since machines won't stay idle for long.
+
+To instantiate an `ElasticMachineGroup` object the following parameters can be configured:
 - the `machine_type` defines the type of CPU used for each machine. This parameter
 follows the naming convention set by [Google Cloud](https://cloud.google.com/compute/docs/machine-types),
 e.g., `c2-standard-16`. This convention is composed of a prefix that defines the
@@ -15,9 +19,11 @@ per machine and the middle word refers to the level of RAM per vCPU. In the exam
 `c2` refers to an Intel Xeon Scalable processor of 2nd generation, `standard`
 means 4 GB of RAM per vCPU and will contain `16` vCPUs.
 Currently, this is the [list of available machine types available via the API]().
-- the `num_machines` sets the number of machines available in the computational
-resource. While the computational resource is active, these machines will be reserved
-for the user.
+- the `min_machines`, `max_machines` sets the number of minimum and maximum machines 
+available in the computational resource. That is, the number of active machines will
+never go lower than the minimum and never above the maximum. During runtime, there
+might be a different number of active machines in between. Moreover, the `min_machines``
+is the number of machines that the group is started.
 - the `data_disk_gb` allows the selection of the size of the disk attached to each machine that is reserved for the simulation data in GB.
 - the `spot` argument determines if the machines will be preemptible or standard.
 Preemptible machines can be stopped at any time and for that reason are only
@@ -30,39 +36,34 @@ For example, the following code creates a MachineGroup with 2 machines of type
 ```python
 import inductiva
 
-machine_group = inductiva.resources.MachineGroup(
+elastic_machine_group = inductiva.resources.ElasticMachineGroup(
     machine_type="c2-standard-16",
-    num_machines=2,
+    min_machines=2,
+    max_machines=10,
     data_disk_gb=100,
     spot=False)
 ```
 
-Creating an instance of `MachineGroup` does not start the machines. This only registers
-the configuration on the API which can now be used to manage it further.
+Creating an instance of `ElasticMachineGroup` does not start the machines. This only 
+registers the configuration on the API which can now be used to manage it further.
 
-### Managing the MachineGroup
+### Managing the ElasticMachineGroup
 
-With your `machine_group` object ready, starting all of the machines at the same
-time is as simple as calling `machine_group.start()`.
+With your `elastic_machine_group` object ready, you can launch the elastic machine
+group with the minimum number of machines active with `elastic_machine_group.start()`.
 
-Within a few minutes, the machines will be set up and ready to pick several
-simulations simultaneously. At any moment, you can check an estimate of the price per
-hour of the group with `machine_group.estimate_cloud_cost()` and when you have finished
-you can terminate it with `machine_group.terminate()`. Running simulations will be killed and from this point, the `machine_group` object cannot be re-used.
+Within a few minutes, the machines will be set up and ready to pick up several
+simulations simultaneously. As simulations get into the queue, the number of active
+machines increases.
 
-To simplify the workflow, the last two functions can also be performed via the CLI.
+At any moment, you can check an estimate of the price per hour of the group as follows:
 
-First, you can check the cost of the group by selecting the machine type and the number of machines you wish to use:
-
-```bash
-$ inductiva resources cost c2-standard-4 -n 4
-Estimated total cost (per machine): 0.919 (0.230) $/h.
+```
+elastic_machine_group.estimate_cloud_cost()
 ```
 
-When you don't need the Machine group anymore, you can easily kill it with the name:
+When you have finished you can terminate it with `elastic_machine_group.terminate()` or via the CLI with `$ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc`.
 
-```bash
-$ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc
-```
+Running simulations will be killed and from this point, the `elastic_machine_group` object cannot be re-used.
 
-Machine Group on demand without any hassle.
+Elastic Machine Group on demand without any hassle.
