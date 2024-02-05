@@ -49,7 +49,7 @@ class BaseMachineGroup:
 
         if data_disk_gb < 0 or data_disk_gb > 100:
             raise ValueError(
-                "Disk size must be a positive value smaller than 100 GB")
+                "`data_disk_gb` must be a positive value smaller than 100 GB")
 
         self.machine_type = machine_type
         self.data_disk_gb = data_disk_gb
