@@ -1,7 +1,8 @@
 """List the tasks information via CLI."""
-
 import argparse
-from inductiva import tasks, utils
+
+from inductiva import tasks, utils, constants
+from inductiva.client import models
 
 
 def list_tasks(args):
@@ -20,15 +21,29 @@ def list_tasks(args):
 
     table_dict = tasks.to_dict(task_list)
 
+    emph_formatter = utils.format_utils.get_ansi_formatter()
+
+    def color_formater(status):
+        if status == models.TaskStatusCode.SUCCESS:
+            return emph_formatter(status, utils.format_utils.Emphasis.GREEN)
+        elif status in constants.TASK_FAILED_STATUSES:
+            return emph_formatter(status, utils.format_utils.Emphasis.RED)
+        return status
+
     formatters = {
-        "Submitted": utils.format_utils.datetime_formatter,
-        "Started": utils.format_utils.datetime_formatter
+        "Submitted": [utils.format_utils.datetime_formatter,],
+        "Started": [utils.format_utils.datetime_formatter,],
+        "Status": [color_formater]
     }
 
-    print(utils.format_utils.get_tabular_str(
-        table_dict,
-        formatters=formatters,
-    ))
+    header_formatters = [
+        lambda x: emph_formatter(x.upper(), utils.format_utils.Emphasis.BOLD)
+    ]
+
+    print(
+        utils.format_utils.get_tabular_str(table_dict,
+                                           formatters=formatters,
+                                           header_formatters=header_formatters))
 
 
 def register(parser):

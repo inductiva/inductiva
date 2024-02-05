@@ -1,5 +1,6 @@
 """Client for Inductiva's web API."""
 import os
+import sys
 import logging
 import contextvars
 
@@ -46,7 +47,6 @@ def _check_for_available_package_update():
     from .localization import translator as __
     import urllib3
     import json
-    import sys
 
     new_version = __version__
 
@@ -76,4 +76,19 @@ def _check_key():
 
 
 _check_for_available_package_update()
+
+
+def _supports_ansi():
+    """Checks if we support ansi formatting for colors and bolds"""
+    user_disable_ansi = utils.format_utils.getenv_bool("INDUCTIVA_DISABLE_ANSI",
+                                                       False)
+    if sys.platform.startswith("win"):
+        return "TERM" in os.environ and os.environ[
+            "TERM"] == "xterm" and not user_disable_ansi
+    return hasattr(sys.stdout,
+                   "isatty") and sys.stdout.isatty() and not user_disable_ansi
+
+
+_ansi_enabled = _supports_ansi()
+
 _check_key()
