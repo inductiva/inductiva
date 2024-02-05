@@ -1,5 +1,6 @@
 """Remove the user's remote storage contents via CLI."""
 
+import argparse
 from inductiva import storage
 
 
@@ -20,8 +21,13 @@ def remove(args):
 def register(parser):
     subparser = parser.add_parser("remove",
                                   aliases=["rm"],
-                                  description="Remove remote storage entries.",
-                                  help="Remove remote storage entries.")
+                                  help="Remove remote storage entries.",
+                                  formatter_class=argparse.RawTextHelpFormatter)
+    subparser.description = (
+        "The `inductiva storage remove` command deletes specified data from the platform.\n"
+        "It targets a specific path for removal. Use with caution as this action is irreversible.\n\n"
+        "Use `inductiva storage remove \"*\"` to remove all folders in your storage."
+    )
     subparser.add_argument("path",
                            type=str,
                            help="Path to be removed from remote storage. "

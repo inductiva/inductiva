@@ -1,5 +1,6 @@
 """Kills a tasks by id via CLI."""
 
+import argparse
 import inductiva
 
 
@@ -21,8 +22,17 @@ def register(parser):
     """Register the kill task command."""
 
     subparser = parser.add_parser("kill",
-                                  description="Kill running tasks.",
-                                  help="Kill running tasks.")
+                                  help="Kill running tasks.",
+                                  formatter_class=argparse.RawTextHelpFormatter)
+
+    subparser.description = (
+        "The `inductiva tasks kill` command terminates specified tasks on the"
+        " platform.\n"
+        "You can terminate multiple tasks by passive multiple ids.\n"
+        "To confirm termination without prompt, use the '-y' or '--yes' option.\n"
+        "If you provide '-w' or '--wait-timeout', the system does not confirm if "
+        "the kill command was successful\n")
+
     subparser.add_argument("id",
                            type=str,
                            help="ID(s) of the task(s) to kill.",

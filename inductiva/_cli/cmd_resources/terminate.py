@@ -1,5 +1,7 @@
 """CLI commands to terminate computational resources."""
 
+import argparse
+
 from inductiva import resources
 
 
@@ -40,8 +42,14 @@ def register(parser):
     """Register the terminate command for the resources."""
 
     subparser = parser.add_parser("terminate",
-                                  description="Terminate resources.",
-                                  help="Terminate resources.")
+                                  help="Terminate resources.",
+                                  formatter_class=argparse.RawTextHelpFormatter)
+
+    subparser.description = (
+        "The `inductiva resources terminate` command provides a utility for terminating\n"
+        "active computational resources. It allows you to specify the names of the resources\n"
+        "to terminate, or terminate all active resources. Multiple resources can be terminated\n"
+        "at once by providing their names.\n\n")
 
     group = subparser.add_mutually_exclusive_group(required=True)
     group.add_argument("-n",

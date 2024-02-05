@@ -1,4 +1,5 @@
 """Register CLI commands for storage."""
+import argparse
 import os
 
 from inductiva import constants
@@ -7,9 +8,16 @@ from inductiva._cli import loader, utils
 
 def register(root_parser):
 
-    parser = root_parser.add_parser("tasks",
-                                    description="Task management utilities.",
-                                    help="Task management utilities.")
+    parser = root_parser.add_parser(
+        "tasks",
+        help="Task management utilities.",
+        formatter_class=argparse.RawTextHelpFormatter)
+
+    parser.description = (
+        "Task management utilities.\n\n"
+        "The `inductiva tasks` command allows you to manage your tasks on the platform.\n"
+        "It provides utilities for monitoring and terminating tasks.\n")
+
     utils.show_help_msg(parser)
 
     subparsers = parser.add_subparsers(title="available subcomands")
