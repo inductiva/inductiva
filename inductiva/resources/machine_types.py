@@ -40,7 +40,7 @@ def list_available_machines():
                 available_machines.append(
                     machine_type + "-standard-" + str(vcpu) + "-lssd")
                 
-    return available_machines
+    return tuple(available_machines)
 
 
 AVAILABLE_MACHINES = {
