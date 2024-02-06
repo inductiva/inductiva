@@ -6,9 +6,10 @@
 ---
 caption: Getting Started
 maxdepth: 1
-hidden: false
+hidden: true
 ---
-getting_started/index
+getting_started/installation
+getting_start/first_example
 ```
 
 ```{toctree}
