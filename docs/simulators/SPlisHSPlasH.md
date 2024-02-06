@@ -1,4 +1,4 @@
-## SPlisHSPlasH simulator
+## SPlisHSPlasH
 
 SPlisHSPlasH is a Smoothed-Particle Hydrodynamics (SPH) simulator that covers a 
 wide range of applications. The simulator is usually configured by a single file 
@@ -20,7 +20,7 @@ input_dir = inductiva.utils.download_from_url(
 splishsplash = inductiva.simulators.SplishSplash()
 
 task = splishsplash.run(input_dir=input_dir,
-                     sim_config_filename="config.json")
+                        sim_config_filename="config.json")
 
 task.wait()
 task.download_outputs()

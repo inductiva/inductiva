@@ -6,51 +6,48 @@
 ---
 caption: Getting Started
 maxdepth: 1
-hidden: false
+hidden: true
 ---
-getting_started
+installation
+first_example
 ```
-
-
 
 ```{toctree}
 ---
 caption: Overview
-maxdepth: 2
-hidden: false
+maxdepth: 1
 ---
-data_flow
-computational_resources_overview
-tasks_overview
-simulators_overview
-overview_computational_resources
-infrastructure
+introduction/index
+introduction/simulators
+introduction/tasks
+introduction/computational_resources_overview
+introduction/overview_computational_resources
+introduction/data_flow
+introduction/infrastructure
 ```
-
-
 
 ```{toctree}
 ---
 caption: How To
-maxdepth: 2
-hidden: false
+maxdepth: 1
 ---
-storage
-mpi_cluster
-computational_resources_howto
+how_to/mpi_cluster
+how_to/storage
+how_to/templating
 ```
-
 
 ```{toctree}
 ---
-caption: User Reference
-maxdepth: 2
-hidden: false
+maxdepth: 1
 ---
-machinegroup_class
-elasticgroup_class
-mpicluster_class
-cli
-
 simulators/index
+```
+
+```{toctree}
+---
+caption: API Client Reference
+maxdepth: 1
+---
+computational_resources/index
+cli
 ```

@@ -1,8 +1,6 @@
 # Storage and Data Flow
->some text here- Maya
 
-## Overview
-When talking about concepts like storage at Inductive, there are 3 levels you 
+When talking about concepts like storage at Inductiva, there are 3 levels you 
 need to consider:
 
 **Local Storage:** this is the storage of your local machine, from where you are 
@@ -26,6 +24,8 @@ communication to your Local Storage needs to be done via your Personal Remote St
 So, what is the typical flow of that when you invoke a remote simulator using the 
 Inductiva API? 
 
+## Local Storage
+
 Let’s start by assuming that somewhere in your local storage, typically in a 
 folder dedicated to your project, you have several files that are required for 
 running the simulation. Usually this data includes one or more files describing 
@@ -40,23 +40,20 @@ you are using.
 
 Here is an example. Let us assume you are developing a coastal dynamics study 
 using Reef3D, and you have all the required input files and assets stored in the 
-subdirectory `my_input_data_dir`` located inside your project folder on your local 
+subdirectory `my_input_data_dir` located inside your project folder on your local 
 machine. The following piece of code illustrates this situation:
-``````
-code
-``````
+```python
+import inductiva
 
 # Initialize the simulator object
 simulator = inductiva.simulators.REEF3D()
 
 # Invoke the run() method of the simulator object. 
-
 # This will trigger the packing and uploading the data
-task = simulator.run(input_dir=my_input_data_dir)
-…
+task = simulator.run(input_dir="my_input_data_dir")
+```
 
-The moment you invoke run() you start the uploading process. The folder my_input_data_dir 
-is zipped and the corresponding zip file is uploaded to Inductiva servers.
+The moment you invoke `run()` you start the uploading process. The folder `my_input_data_dir` is zipped and the corresponding zip file is uploaded to Inductiva servers.
  
 You can check what is actually happening when you invoke a simulator via the API. 
 If you look at the logs produced at you will be able to see a message like this 
@@ -74,6 +71,8 @@ Local input directory successfully uploaded.
 Task tc7cwuer45kfzuw8t93r6dxa8 submitted to the default queue.
 Simulation metadata logged to: inductiva_output/task_metadata.json
 ```
+
+## Personal Remote Storage
 
 Once the zip file gets to the Inductiva server, it is immediately transferred to 
 your Personal Remote Storage area, under a folder whose name is the id for the 
@@ -111,6 +110,8 @@ Once your simulation task gets picked up by a Worker, its input files need to be
 from your Personal Remote Storage to the corresponding VM. Typically, this VM lives in the 
 same region of the Google Cloud storage, and so moving data is pretty fast.
 
+## Worker Storage
+
 Of course, the receiving VM needs to have enough storage space to execute your simulation. 
 Typically, the input data for a simulation is relatively small. In the example above, the 
 files required to run the simulation only have `1.53` MB. What may be truly challenging is 
@@ -123,7 +124,7 @@ into account what they believe is the reasonable amount effectively and realisti
 needed. Depending on the type of computational resource that you are using this may involve 
 setting one parameter (for MachineGroups) or two parameters (for MPIClusters). 
 
-## Machine Groups
+### Machine Groups
 You can control the amount of VM storage dedicated to storing the results of your 
 simulation using the parameter `data_disk_gb` of the MachineGroup class. You set
 this parameter when you instantiate the MachineGroup object, and this becomes fixed
@@ -138,7 +139,7 @@ machine = inductiva.resources.MachineGroup(
     "c2-standard-16", num_machines=5, data_disk_gb=20)
 ```
 
-## MPI Clusters
+### MPI Clusters
 
 For MPI Clusters, the machines in the cluster share an NFS partition where simulators 
 typically write their final results. So, in this case, the storage parameter `data_disk_gb`
@@ -152,81 +153,16 @@ mpi_cluster = inductiva.resources.MPICluster(
     "c2-standard-16", num_machines=8, data_disk_gb=50)
 ```
 
-## What about machines in the Common Pool?
+### What about machines in the Common Pool?
 
 Machines in the Common Pool have a storage space of 30 GB that you can’t control. This 
-means that if you are submitting to the Common Pool simulations that produce more that 
+means that if you are submitting to the Common Pool simulations that produce more than 
 30 GB, they will fail, and your Task will fail. There is no way for you to request more 
 storage space for VMs in the Common Pool. Common Pool machines are intended for running 
 short simulations, mostly with the goal of testing your scripts. If you wish to run 
 simulations that produce a large amount of data, then you really need to spin up your own 
 Machine Groups or MPI Clusters.
 
-## Manage your simulation data
-
-Once your simulations are finished in the Worker machine, the corresponding folder containing the resulting files is compressed and sent to your Personal Remote Storage. Then, it can be downloaded from there to your local machine by using the method `task.download_outputs()`. This is what it would like in your Python script:
-
-```python
-import inductiva
-
-TASK_ID = "ADD_HERE_TASK_ID"
-
-# Instantiate a task
-task = inductiva.tasks.Task(TASK_ID)
-
-# 
-task.download_outputs()
-```
-
-When running such a script end-to-end you would be able to see the following track:
-
-```bash
-Downloading simulation outputs to inductiva_output/k910nts9kf2ko212e4io46yeb/output.zip.
-100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 157M/157M [00:42<00:00, 3.73MB/s]
-Uncompressing the outputs to inductiva_output/k910nts9kf2ko212e4io46yeb.
-```
-
-As you can see, you have access to a progress bar that shows you the status of the download. Now, you need to be aware that the amount of data produce by your simulation run can be massive. Therefore, you may wish not to download all of it to your local machine, either because you don’t have enough disk space or because it would simply take to long to download all the data. To help with that, the API will let you download specific files that you can name. Here is an example:
-
-```python
-# Retrieve the outputs of a SWASH simulation
-task.download_outputs(filenames=[
-    "av_map_grd.mat", "stdout.txt","stderr.txt", "ts_map_grd.mat"])
-```
-
-Please note that the data you download can optionally be deleted from the Personal Remote Storage, otherwise, it will be kept for later analysis. You can always use the CLI to inspect your Personal Remote Storage.
-
-```bash
-$ inductiva storage ls
-
-       NAME                             SIZE            CREATION TIME
-       k910nts9kf2ko212e4io46yeb/       158.79 MB       05 Feb, 09:17:29
-       15r9bsz0h0vz90uv0wg7evan9/       87.55 MB        05 Feb, 08:58:20
-       os30etytfe0uaok7x1hmoewph/       6.62 MB         03 Feb, 09:34:15
-       s3muv69667ea65dhx2rk2fr2a/       6.62 MB         03 Feb, 09:33:11
-       68ugc7073rbdynxxn8tiz0x2k/       123.17 MB       02 Feb, 17:39:01
-       s68kodoieier3xi1mu8wpkbnn/       12.35 MB        02 Feb, 17:20:09
-       f7w8b6pp13g3pkkiw81rrqao3/       21.67 MB        02 Feb, 15:51:25
-       fiu65xcx67u5v17ddfgmwhgw8/       21.67 MB        02 Feb, 15:31:26
-       hpftfadu2w7tvy9h4ywt7rhmn/       21.67 MB        02 Feb, 15:24:45
-       oozzpcfcaup8f6j3pm9ekgj2k/       21.66 MB        02 Feb, 15:08:02
-```
-
-You can manually delete the content of a specific folder by calling the CLI with the remove command, which prompts you for confirmation:
-
-```bash
-$ inductiva storage rm k910nts9kf2ko212e4io46yeb/
-Are you sure you want to remove k910nts9kf2ko212e4io46yeb/? (y/n)y
-Removing k910nts9kf2ko212e4io46yeb/ in the user's remote storage.
-Successfully removed remote path 'k910nts9kf2ko212e4io46yeb/'.
-```
-
-You can also delete the contents of your entire Personal Remote Storage by doing:
-
-```bash
-$ inductiva storage rm --all
-ADD HERE NEW LOGS
-```
 
 ### What to Read Next
 

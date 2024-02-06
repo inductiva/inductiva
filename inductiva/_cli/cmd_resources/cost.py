@@ -1,5 +1,7 @@
 """CLI commands to get costs of computational resources."""
 
+import argparse
+
 from inductiva import resources
 
 
@@ -28,20 +30,28 @@ def register(parser):
 
     subparser = parser.add_parser(
         "cost",
-        help="Estimate cost of a machine in the cloud",
-    )
+        help="Estimate cost of a machine in the cloud.",
+        formatter_class=argparse.RawTextHelpFormatter)
+
+    subparser.description = (
+        "The `inductiva cost` command provides a utility"
+        " for estimating the cost\n"
+        "of a machine in the cloud. It allows you to specify"
+        " the type of machine\n"
+        "and the number of machines, and it can calculate the"
+        " cost for spot instances.\n\n")
     subparser.add_argument("machine_type",
                            type=str,
-                           help="Type of machine to launch")
+                           help="Type of machine to launch.")
     subparser.add_argument("--spot",
                            default=False,
                            action="store_true",
-                           help="Type of machine to launch")
+                           help="Type of machine to launch.")
 
     subparser.add_argument("-n",
                            "--num_machines",
                            default=1,
                            type=int,
-                           help="Number of machines to launch")
+                           help="Number of machines to launch.")
 
     subparser.set_defaults(func=estimate_machine_cost)

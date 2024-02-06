@@ -1,4 +1,3 @@
-![Inductiva_Logo_noBG(259 x 76 px)](https://github.com/inductiva/inductiva/assets/102880975/c67e31eb-2775-4ee5-ac64-027f4591c0cc)
 # Inductiva: a Python package for scaling simulations on the Cloud or On-Premise
 
 Inductiva is an API that empowers scientists and engineers to maximize the 
@@ -58,17 +57,6 @@ This API offers a range of benefits for diverse simulation needs:
 | Smart Hardware Optimization 	| _It automatically tunes hardware configurations – whether <br>you need CPU or GPU, decides the right number of cores, <br>RAM, etc., specific to each simulation type._ 	|
 | Efficient Simulation at Scale 	| _It simplifies orchestrating and managing simulations, from <br>auto-scaling to automatic termination, without complex <br>coding from your end. It offers essential features like <br>MPI cluster setup and cost visibility, making it easy to run <br>extensive simulations while controlling expenses._<br> 	|
  
-## What can you do with Inductiva?
-
-The Inductiva API offers you two distinct options for computational resources:
-
-* [Standard Machines](): Start simulations on open-source simulators quickly using 
-our provided machines with your existing configuration files. These machines handle 
-basic tasks well but aren't suited for high-demand simulations.
-
-* [MachineGroup](): For larger projects needing more power, you can set up a ['MachineGroup'](). 
-This lets you customize a set of virtual machines for heavy-duty simulations, giving 
-you the control and capacity for complex tasks.
 
 ----
 

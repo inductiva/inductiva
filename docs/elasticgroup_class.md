@@ -1,1 +1,0 @@
-# ElasticGroup Class

@@ -1,5 +1,11 @@
 # `MachineGroup` Class
 
+A Machine group is a pool of homogeneous machines that work individually and do
+not communicate with each other in any way. Hence, launching a machine group
+allows the creation of a private queue that only receives the tasks you specifically
+send to them. Then, the machines can pick simulations from the queue, which allows
+to run multiple simulations in parallel and speeds up the exploration of a design space.
+
 To instantiate a `MachineGroup` object the following parameters can be configured:
 - the `machine_type` defines the type of CPU used for each machine. This parameter
 follows the naming convention set by [Google Cloud](https://cloud.google.com/compute/docs/machine-types),
@@ -31,11 +37,32 @@ machine_group = inductiva.resources.MachineGroup(
     spot=False)
 ```
 
-The instantiation of one of these objects registers the configuration on the API,
-but no resources are active yet. These can be launched with `machine_group.start()`.
-Within a few minutes, the machines will be ready to use and thereafter you can launch
-your simulations there. At any moment, you can check an estimate of the price per
-hour of the machine group with `machine_group.estimate_cloud_cost()`.
-When you are done with the machines, you can terminate them with `machine_group.terminate()`.
-Running simulations will be killed. From this point, the `machine_group` cannot be
-re-used. But as you have seen it is simple to just instantiate a new one.
+Creating an instance of `MachineGroup` does not start the machines. This only registers
+the configuration on the API which can now be used to manage it further.
+
+### Managing the MachineGroup
+
+With your `machine_group` object ready, starting all of the machines at the same
+time is as simple as calling `machine_group.start()`.
+
+Within a few minutes, the machines will be set up and ready to pick several
+simulations simultaneously. At any moment, you can check an estimate of the price per
+hour of the group with `machine_group.estimate_cloud_cost()` and when you have finished
+you can terminate it with `machine_group.terminate()`. Running simulations will be killed and from this point, the `machine_group` object cannot be re-used.
+
+To simplify the workflow, the last two functions can also be performed via the CLI.
+
+First, you can check the cost of the group by selecting the machine type and the number of machines you wish to use:
+
+```bash
+$ inductiva resources cost c2-standard-4 -n 4
+Estimated total cost (per machine): 0.919 (0.230) $/h.
+```
+
+When you don't need the Machine group anymore, you can easily kill it with the name:
+
+```bash
+$ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc
+```
+
+Machine Group on demand without any hassle.
