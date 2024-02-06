@@ -44,7 +44,7 @@ computational_resources_howto
 ```{toctree}
 ---
 caption: User Reference
-maxdepth: 2
+maxdepth: 1
 ---
 machinegroup_class
 elasticgroup_class
