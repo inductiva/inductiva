@@ -7,14 +7,6 @@ before running your first simulation project. Should you encounter any errors or
 issues along the way, our [troubleshooting guide]() is readily available to assist 
 you in resolving them efficiently.
 
-### Steps We'll Cover:
-
-1. [Install the Inductiva API]()
-2. [Request Your API Access Token]()
-3. [Verify the Installation with a Test Run]()
-4. [Run your First Simulation Example]()
-5. [Explore what to read next]()
-
 ## Install the Inductiva API with pip
 If you've set up the API access token, you're ready to install the 
 latest Inductiva package release on PyPI with pip. 

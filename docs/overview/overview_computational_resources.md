@@ -25,7 +25,7 @@ machines.start()
 # resource
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-dambreak-dir.zip", unzip=True)
+    "reef3d-dambreak-example.zip", unzip=True)
 
 simulator = inductiva.simulators.REEF3D()
 

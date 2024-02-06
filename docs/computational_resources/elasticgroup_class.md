@@ -1,16 +1,17 @@
 # `ElasticMachineGroup` Class
 
 An Elastic machine group is similar to the [Machine group]() with the extra property
-that scales up and down the number of active machines based on the number of simulations
-in queue. It is composed of a pool of homogeneous machines that work individually and do
-not communicate with each other in any way. 
+that scales up and down the number of active machines based on the number of 
+simulations in queue. It is composed of a pool of homogeneous machines that work 
+individually and do not communicate with each other in any way. 
 
 Hence, an elastic machine group creates a private queue for which workers scale
 based on the number of tasks in it. This allows running multiple simulations at the
-same time, with the slight overhead of machines starting, with a more cost
-effective strategy since machines won't stay idle for long.
+same time, with the slight overhead of machines starting, with a more 
+cost-effective strategy since machines won't stay idle for long.
 
-To instantiate an `ElasticMachineGroup` object the following parameters can be configured:
+### Instantiating an `ElasticMachineGroup` object
+To create an elastic machine group the following properties can be configured:
 - the `machine_type` defines the type of CPU used for each machine. This parameter
 follows the naming convention set by [Google Cloud](https://cloud.google.com/compute/docs/machine-types),
 e.g., `c2-standard-16`. This convention is composed of a prefix that defines the
