@@ -64,7 +64,7 @@ Inductiva API.
 
 We will use the [SWASH simulation]() as our example to demonstrate these differences.
 
-### SWASH Simulation on Shared Resources
+### On Shared Resources
 
 First, we'll run the simulation using the shared pool of workers, a convenient 
 option for those getting started or running less resource-intensive tasks. 
