@@ -53,6 +53,8 @@ class Task:
     KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
                         }.union(RUNNING_STATUSES)
 
+    TASK_KILL_VERBOSITY_LEVELS = [0, 1]
+
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
         self.id = task_id
@@ -259,10 +261,9 @@ class Task:
             time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
         return success, status
 
-    def kill(
-            self,
-            wait_timeout: Optional[Union[float,
-                                         int]] = None) -> Union[bool, None]:
+    def kill(self,
+             wait_timeout: Optional[Union[float, int]] = None,
+             verbosity_level: int = 1) -> Union[bool, None]:
         """Request a task to be killed.
         
         This method requests that the current task is remotely killed.
@@ -288,10 +289,15 @@ class Task:
             if wait_timeout <= 0.0:
                 raise ValueError("Wait timeout must be a positive number.")
 
+        if verbosity_level not in self.TASK_KILL_VERBOSITY_LEVELS:
+            raise ValueError(f"Verbosity {verbosity_level} level not allowed. "
+                             f"Choose from {self.TASK_KILL_VERBOSITY_LEVELS}")
+
         self._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
 
         if wait_timeout is None:
-            logging.info(__("task-kill-request-sent", self.id))
+            logging.info(
+                __("task-kill-request-sent" + f"-{verbosity_level}", self.id))
             return None
 
         success, status = self._check_if_pending_kill(wait_timeout)
