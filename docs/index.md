@@ -24,7 +24,7 @@ overview/index
 ```{toctree}
 ---
 caption: How To
-maxdepth: 2
+maxdepth: 1
 hidden: false
 ---
 how_to/index
