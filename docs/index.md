@@ -16,9 +16,14 @@ first_example
 ---
 caption: Overview
 maxdepth: 1
-glob: true
 ---
-introduction/*
+introduction/index
+introduction/simulators
+introduction/tasks
+introduction/computational_resources_overview
+introduction/overview_computational_resources
+introduction/data_flow
+introduction/infrastructure
 ```
 
 ```{toctree}
@@ -26,7 +31,7 @@ introduction/*
 caption: How To
 maxdepth: 1
 ---
-how_to/index
+how_to/comp
 ```
 
 ```{toctree}
