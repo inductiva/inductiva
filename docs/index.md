@@ -8,73 +8,49 @@ caption: Getting Started
 maxdepth: 1
 hidden: false
 ---
-Getting Started
+getting_started
 ```
+
+
 
 ```{toctree}
 ---
-caption: Computational Resource Allocation and Processing
+caption: Overview
 maxdepth: 2
 hidden: false
 ---
-Ivan_Computational_Resources
-Shared VM Pool Integration
-Machine Groups
-Setting up an MPI
+data_flow
+computational_resources_overview
+tasks_overview
+simulators_overview
+overview_computational_resources
+infrastructure
 ```
+
+
 
 ```{toctree}
 ---
-caption: Task Management
+caption: How To
 maxdepth: 2
 hidden: false
 ---
-Tasks
+storage
+mpi_cluster
+computational_resources_howto
 ```
+
 
 ```{toctree}
 ---
-caption: Data Flow and Storage Management
+caption: User Reference
 maxdepth: 2
 hidden: false
 ---
-Data Flow
-Storage
-```
+machinegroup_class
+elasticgroup_class
+mpicluster_class
+cli
 
-```{toctree}
----
-caption: Templating
-maxdepth: 2
-hidden: false
----
-Templating
-```
-
-
-```{toctree}
----
-caption: Running Simulations
-maxdepth: 2
-hidden: false
----
-Simulators
-```
-
-```{toctree}
----
-caption: Inductiva Interface Control
-maxdepth: 2
-hidden: true
----
-Overview of the CLI
-```
-
-```{toctree}
----
-caption: Developer Documentation
-maxdepth: 2
-hidden: true
----
-API
+simulators/index
 ```

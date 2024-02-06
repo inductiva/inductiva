@@ -16,7 +16,7 @@ import inductiva
 
 # Configure a computational resources
 machines = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-16", num_machines=5, data_size_gb=60)
+    machine_type="c2-standard-16", num_machines=5, data_disk_gb=60)
 
 # Launch the computational resource to be available to run simulations
 machines.start()
@@ -92,7 +92,7 @@ of machines available in the computational resource. The former is used by the
 Machine group and the MPI Cluster resources. The latter ones set the minimum number
 of machines that are always available and the maximum number of machines that can
 be available at any time, respectively. 
-- `data_size_gb` allows the selection of the size of the disk attached to each machine that is reserved for the simulation data in GB.
+- `data_disk_gb` allows the selection of the size of the disk attached to each machine that is reserved for the simulation data in GB.
 - `spot` allows to differ between standard resources or preemptible ones. The latter
 resources are way cheaper but only serve for fault-tolerant workloads since they
 can be stopped at any time. The former are fully dedicated to the user's usage.
@@ -139,7 +139,7 @@ import inductiva
 machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-8",
     num_machines=2,
-    data_size_gb=60,
+    data_disk_gb=60,
     spot=True
 )
 
@@ -179,7 +179,7 @@ elastic_machine_group = inductiva.resources.ElasticMachineGroup(
     machine_type="c2-standard-4",
     min_machines=1,
     max_machines=5,
-    data_size_gb=70,
+    data_disk_gb=70,
     spot=False
 )
 
@@ -211,7 +211,7 @@ import inductiva
 # AMD EPYC Milan 3rd gen processor with 16 vCPUs  Intel Xeon Scalable processor of 
 # 2nd gen with 16 vCPUs and 8 GB of RAM per vCPU.
 mpi_cluster = inductiva.resources.MPICluster(
-    machine_type="c2d-highmem-16", num_machines=3, data_size_gb=70)
+    machine_type="c2d-highmem-16", num_machines=3, data_disk_gb=70)
 
 # Launch the MPI cluster to make it available to run simulations:
 mpi_cluster.start()

@@ -1,4 +1,4 @@
-# Getting Started with Inductiva
+# Getting Started
 Welcome to Inductiva, a Python API package that enables running popular [open-source physical system simulation packages]() 
 in the Cloud. 
 

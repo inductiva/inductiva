@@ -1,4 +1,4 @@
-# Understanding Storage Levels and Data Flow through the Inductiva API
+# Storage and Data Flow
 >some text here- Maya
 
 ## Overview
@@ -113,9 +113,9 @@ same region of the Google Cloud storage, and so moving data is pretty fast.
 
 Of course, the receiving VM needs to have enough storage space to execute your simulation. 
 Typically, the input data for a simulation is relatively small. In the example above, the 
-files required to run the simulation only have XXX Mb. What may be truly challenging is the 
-size of the output of the simulation, which can easily get to dozens of GB, so VMs need to 
-have large enough storage space installed.
+files required to run the simulation only have `1.53` MB. What may be truly challenging is 
+the size of the output of the simulation, which can easily get to dozens of GB, so VMs need 
+to have large enough storage space installed.
 
 Now, VM storage space turns out to be pretty expensive, so we allow users to explicitly 
 define the amount of VM storage dedicated to storing the results of the simulation, taking 
@@ -125,39 +125,110 @@ setting one parameter (for MachineGroups) or two parameters (for MPIClusters).
 
 ## Machine Groups
 You can control the amount of VM storage dedicated to storing the results of your 
-simulation using the parameter XXX of the MachineGroup class. You set this parameter when 
-you instantiate the MachineGroup object, and this becomes fixed for the corresponding VMs 
-since it is not possible to change storage allocation after instantiation. Below is an 
-example of how you would reserve 20GB of storage in each machine when starting a 
-MachineGroup with 5 machines:
+simulation using the parameter `data_disk_gb` of the MachineGroup class. You set
+this parameter when you instantiate the MachineGroup object, and this becomes fixed
+for the corresponding VMs since it is not possible to change storage allocation
+after instantiation. Below is an example of how you would reserve 20GB of storage
+in each machine when starting a MachineGroup with 5 machines:
 
-@ivan please had some code with the instantiation of a MachineGroup object
+```python
+import inductiva
 
-
-(hide from now the parameter that has to do with the image size. That should not show up in the examples. It is not a user feature and it just adds complexity).
+machine = inductiva.resources.MachineGroup(
+    "c2-standard-16", num_machines=5, data_disk_gb=20)
+```
 
 ## MPI Clusters
-For MPI Clusters, there is one additional parameter that needs to be set because machines 
-in a cluster share a NFS partition where simulators typically write their final results. 
-So, in this case, you need to set both the XXX parameter, which controls the storage size 
-that each node the cluster has available for simulation data of *locally*,  and a ZZZ 
-parameter, that controls the size of the shared NFS partition to which all nodes in the 
-cluster can write to. Here is an example where we set and MPI Cluster with 8 machines, 
-where each machine has been given 10Gb of local storage, and the NFS storage shared by all 
-clusters is set to 20GB:
 
+For MPI Clusters, the machines in the cluster share an NFS partition where simulators 
+typically write their final results. So, in this case, the storage parameter `data_disk_gb`
+sets the storage size for the NFS partition. Here is an example where we set an MPI 
+Cluster with 8 machines, where each machine has been given 50Gb of NFS storage:
 
-(@ivan and @sergio : this may not be ready yet but I think what I described above is the right thing to build. Please coordinate with Luis’ team to make sure this maps to how the MPICluster actually is implemented in the backend).
+```python
+import inductiva
 
+mpi_cluster = inductiva.resources.MPICluster(
+    "c2-standard-16", num_machines=8, data_disk_gb=50)
+```
 
 ## What about machines in the Common Pool?
 
-Machines in the Common Pool have a storage space of X that you can’t control. This means 
-that if you are submitting to the Common Pool simulations that produce more that X GB, they 
-will fail, and your Task will fail. There is no way for you to request more storage space 
-for VMs in the Common Pool. Common Pool machines are intended for running short 
-simulations, mostly with the goal of testing your scripts. If you wish to run simulations 
-that produce a large amount of data, then you really need to spin up your own Machine 
-Groups or MPI Clusters.
+Machines in the Common Pool have a storage space of 30 GB that you can’t control. This 
+means that if you are submitting to the Common Pool simulations that produce more that 
+30 GB, they will fail, and your Task will fail. There is no way for you to request more 
+storage space for VMs in the Common Pool. Common Pool machines are intended for running 
+short simulations, mostly with the goal of testing your scripts. If you wish to run 
+simulations that produce a large amount of data, then you really need to spin up your own 
+Machine Groups or MPI Clusters.
 
-(Luis to continue with final parts: storing outputs and downloading data).
+## Manage your simulation data
+
+Once your simulations are finished in the Worker machine, the corresponding folder containing the resulting files is compressed and sent to your Personal Remote Storage. Then, it can be downloaded from there to your local machine by using the method `task.download_outputs()`. This is what it would like in your Python script:
+
+```python
+import inductiva
+
+TASK_ID = "ADD_HERE_TASK_ID"
+
+# Instantiate a task
+task = inductiva.tasks.Task(TASK_ID)
+
+# 
+task.download_outputs()
+```
+
+When running such a script end-to-end you would be able to see the following track:
+
+```bash
+Downloading simulation outputs to inductiva_output/k910nts9kf2ko212e4io46yeb/output.zip.
+100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 157M/157M [00:42<00:00, 3.73MB/s]
+Uncompressing the outputs to inductiva_output/k910nts9kf2ko212e4io46yeb.
+```
+
+As you can see, you have access to a progress bar that shows you the status of the download. Now, you need to be aware that the amount of data produce by your simulation run can be massive. Therefore, you may wish not to download all of it to your local machine, either because you don’t have enough disk space or because it would simply take to long to download all the data. To help with that, the API will let you download specific files that you can name. Here is an example:
+
+```python
+# Retrieve the outputs of a SWASH simulation
+task.download_outputs(filenames=[
+    "av_map_grd.mat", "stdout.txt","stderr.txt", "ts_map_grd.mat"])
+```
+
+Please note that the data you download can optionally be deleted from the Personal Remote Storage, otherwise, it will be kept for later analysis. You can always use the CLI to inspect your Personal Remote Storage.
+
+```bash
+$ inductiva storage ls
+
+       NAME                             SIZE            CREATION TIME
+       k910nts9kf2ko212e4io46yeb/       158.79 MB       05 Feb, 09:17:29
+       15r9bsz0h0vz90uv0wg7evan9/       87.55 MB        05 Feb, 08:58:20
+       os30etytfe0uaok7x1hmoewph/       6.62 MB         03 Feb, 09:34:15
+       s3muv69667ea65dhx2rk2fr2a/       6.62 MB         03 Feb, 09:33:11
+       68ugc7073rbdynxxn8tiz0x2k/       123.17 MB       02 Feb, 17:39:01
+       s68kodoieier3xi1mu8wpkbnn/       12.35 MB        02 Feb, 17:20:09
+       f7w8b6pp13g3pkkiw81rrqao3/       21.67 MB        02 Feb, 15:51:25
+       fiu65xcx67u5v17ddfgmwhgw8/       21.67 MB        02 Feb, 15:31:26
+       hpftfadu2w7tvy9h4ywt7rhmn/       21.67 MB        02 Feb, 15:24:45
+       oozzpcfcaup8f6j3pm9ekgj2k/       21.66 MB        02 Feb, 15:08:02
+```
+
+You can manually delete the content of a specific folder by calling the CLI with the remove command, which prompts you for confirmation:
+
+```bash
+$ inductiva storage rm k910nts9kf2ko212e4io46yeb/
+Are you sure you want to remove k910nts9kf2ko212e4io46yeb/? (y/n)y
+Removing k910nts9kf2ko212e4io46yeb/ in the user's remote storage.
+Successfully removed remote path 'k910nts9kf2ko212e4io46yeb/'.
+```
+
+You can also delete the contents of your entire Personal Remote Storage by doing:
+
+```bash
+$ inductiva storage rm --all
+ADD HERE NEW LOGS
+```
+
+### What to Read Next
+
+- [Understanding Tasks]
+- [Managing Resources]
