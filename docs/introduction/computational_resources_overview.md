@@ -62,12 +62,12 @@ Inductiva.
 
 We will use a [SWASH simulation]() as our example to demonstrate these differences.
 
-### SWASH Simulation on Shared Resources
+### On Shared Resources
 
 First, we'll run the simulation using the shared pool of workers, a convenient 
 option for those getting started or running less resource-intensive tasks. 
 
-> **_NOTE:_** the simulation is designed to complete in **approximately 20 minutes** 
+**NOTE:** the simulation is designed to complete in **approximately 20 minutes** 
 to showcase its performance on the shared infrastructure.
 
 ```python
@@ -88,7 +88,7 @@ task = swash.run(input_dir=input_dir,
 task.wait()
 ```
 
-### SWASH Simulation on Dedicated Resources
+### On Dedicated Resources
 
 Let's now run the same simulation on dedicated resources, specifically set 
 up for this task:
@@ -122,23 +122,14 @@ machine_group.terminate()
 ```
 
 Notice that, the simulation is picked almost immediately - no waiting time required - and
-selecting a more powerful machine greatly reduced the execution time.
+selecting a more powerful machine greatly reduced the execution time. This simulation took 9m37s to complete.
 
 
 ### Conclusion
 By contrasting these two approaches, we can see how running the same simulation 
-on a [dedicated machine group]() with a `c2-standard-30`machine took 9m37s, which is 
-2.68 times less than on the [shared pool](). 
+on a [dedicated machine group]() with a `c2-standard-30` reduces the execution time by 2.68 times. 
 
 Whether your priority is cost-saving with shared resources or time-saving with 
 dedicated power, you can optimize your simulation projects easily with the Inductiva API
-
-
-
-
-
-
-
-
 
 
