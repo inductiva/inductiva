@@ -16,6 +16,7 @@ first_example
 ---
 caption: Overview
 maxdepth: 1
+glob: true
 ---
 introduction/*
 ```
