@@ -1,14 +1,5 @@
 # Overview
 
-```{toctree}
-simulators
-tasks
-computational_resources_overview
-overview_computational_resources
-data_flow
-infrastructure
-```
-
 At a very high-level, the functionalities of the API are quite simple. Using simple python scripting from your laptop, the API allows you:
 
 1. start remote VMs (and shut them down, etc), either working independently or as a single large MPICluster, with your favorite simulation software already pre-installed;
@@ -25,3 +16,14 @@ More specifically, we will introduce you to (Maya: what follows is basically wha
 - Infrastructure. Under the hood, there is an infrastructure that provides computational power for executing your tasks. We currently use Google Cloud Platform, and very soon we will have other options available.
 
 
+```{toctree}
+---
+hidden: true
+---
+simulators
+tasks
+computational_resources_overview
+overview_computational_resources
+data_flow
+infrastructure
+```
