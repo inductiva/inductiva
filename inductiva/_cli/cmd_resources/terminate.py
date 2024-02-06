@@ -1,6 +1,8 @@
 """CLI commands to terminate computational resources."""
 import sys
 
+import argparse
+
 from inductiva import resources
 from inductiva.utils import input_functions
 from ...localization import translator as __
@@ -24,6 +26,11 @@ def terminate_machine_group(args):
     if not active_machines:
         return 0
 
+    if not all_names and not names:
+        print("No resource(s) specified.\n"
+              "> Use `inductiva resources terminate -h` for help.")
+        return 1
+
     # dict to map from name to machine
     name_to_machine = {machine.name: machine for machine in active_machines}
     active_machine_names = name_to_machine.keys()
@@ -38,7 +45,7 @@ def terminate_machine_group(args):
         return 1
 
     confirm = confirm or input_functions.user_confirmation_prompt(
-        names, __("resources-prompt-terminate-all"),
+        target_machine_names, __("resources-prompt-terminate-all"),
         __("resources-prompt-terminate-big", len(names)),
         __("resources-prompt-terminate-small"), all_names)
 
@@ -57,7 +64,17 @@ def terminate_machine_group(args):
 def register(parser):
     """Register the terminate command for the resources."""
 
-    subparser = parser.add_parser("terminate", help="Terminate a resource.")
+    subparser = parser.add_parser("terminate",
+                                  help="Terminate resources.",
+                                  formatter_class=argparse.RawTextHelpFormatter)
+
+    subparser.description = ("The `inductiva resources terminate` command "
+                             "provides a utility for terminating\n"
+                             "active computational resources. It allows you"
+                             " to specify the names of the resources\n"
+                             "to terminate, or terminate all active resources."
+                             " Multiple resources can be terminated\n"
+                             "at once by providing their names.\n\n")
 
     subparser.add_argument("name",
                            type=str,

@@ -1,6 +1,7 @@
 """Kills a tasks by id via CLI."""
 import sys
 
+import argparse
 import inductiva
 from inductiva.tasks.methods import get_all
 from inductiva.utils.input_functions import user_confirmation_prompt
@@ -12,15 +13,20 @@ def kill_task(args):
     kill_all = args.all
     ids = args.id
 
+    if not kill_all and not ids:
+        print("No id(s) specified.\n"
+              "> Use `inductiva tasks kill -h` for help.")
+        return 1
+
     if ids and kill_all:
         print(
             "inductiva tasks kill: error: "
             "argument id not allowed with argument --all",
             file=sys.stderr)
         return 1
-
+    ids = set(ids)
     if ids:
-        tasks = [inductiva.tasks.Task(id) for id in ids]
+        tasks = [{"task_id": id} for id in ids]
     else:
         tasks = []
         for status in inductiva.tasks.Task.KILLABLE_STATUSES:
@@ -50,7 +56,18 @@ def kill_task(args):
 def register(parser):
     """Register the kill task command."""
 
-    subparser = parser.add_parser("kill", help="Kill running tasks.")
+    subparser = parser.add_parser("kill",
+                                  help="Kill running tasks.",
+                                  formatter_class=argparse.RawTextHelpFormatter)
+
+    subparser.description = (
+        "The `inductiva tasks kill` command terminates specified tasks "
+        "on the platform.\n"
+        "You can terminate multiple tasks by passive multiple ids.\n"
+        "To confirm termination without prompt, use the '-y' or '--yes' "
+        "option.\nIf you provide '-w' or '--wait-timeout', the system "
+        "does not confirm if the kill command was successful\n")
+
     subparser.add_argument("id",
                            type=str,
                            help="ID(s) of the task(s) to kill.",

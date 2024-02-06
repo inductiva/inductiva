@@ -1,4 +1,6 @@
 """List the tasks information via CLI."""
+import argparse
+
 from inductiva import tasks, utils
 from inductiva.client import models
 
@@ -47,7 +49,17 @@ def list_tasks(args):
 def register(parser):
     """Register the list user's tasks command."""
 
-    subparser = parser.add_parser("list", help="List tasks.")
+    subparser = parser.add_parser("list",
+                                  help="List tasks.",
+                                  formatter_class=argparse.RawTextHelpFormatter)
+
+    subparser.description = ("The `inductiva tasks list` command provides "
+                             "an overview of your tasks on the platform.\n"
+                             "It lists the most recent tasks or a specific "
+                             "task by ID.\n"
+                             "You can control the number of tasks listed with "
+                             "the '-n' or '--last-n' option.\n")
+
     group = subparser.add_mutually_exclusive_group()
     group.add_argument("-n",
                        "--last-n",

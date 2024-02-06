@@ -1,5 +1,5 @@
 """Remove the user's remote storage contents via CLI."""
-
+import argparse
 import sys
 
 from inductiva import storage
@@ -14,13 +14,18 @@ def remove(args):
     confirm = args.confirm
     all_paths = args.all
 
+    if not all_paths and not paths:
+        print("No path(s) specified.\n"
+              "> Use `inductiva storage remove -h` for help.")
+        return 1
+
     if paths and all_paths:
         print(
             "inductiva storage remove: error: "
             "argument path not allowed with argument --all",
             file=sys.stderr)
         return 1
-
+    paths = set(paths)
     if not confirm:
         confirm = user_confirmation_prompt(
             paths, __("storage-prompt-remove-all"),
@@ -42,14 +47,24 @@ def remove(args):
 def register(parser):
     subparser = parser.add_parser("remove",
                                   aliases=["rm"],
-                                  help="Remove remote storage entries.")
+                                  help="Remove remote storage entries.",
+                                  formatter_class=argparse.RawTextHelpFormatter)
+    subparser.description = (
+        "The `inductiva storage remove` command deletes specified data"
+        " from the platform.\n"
+        "It targets a specific path for removal. Use with caution as "
+        "this action is irreversible.\n\n"
+        "Use `inductiva storage remove \"*\"` to remove all folders in"
+        " your storage.")
     subparser.add_argument("path",
                            type=str,
                            nargs="*",
                            help="Path(s) to be removed from remote storage. "
                            "To remove all contents, use \"*\".")
+
     subparser.add_argument(
         "-y",
+        "--yes",
         action="store_true",
         dest="confirm",
         default=False,
