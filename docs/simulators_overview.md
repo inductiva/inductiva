@@ -1,13 +1,38 @@
 # Simulators
 
-Open-source simulation software lies at the heart of the Indutiva API. From its inception, the main goal of the API has been to empower scientists and engineers to take full advantage of state-of-the-art open-source simulation packages, in a way that minimizes installation issues and leverages the vast computational power that is currently available in the Cloud. 
+Open-source simulation software lies at the heart of the Indutiva API. From its
+inception, the main goal of the API has been to empower scientists and engineers
+to take full advantage of state-of-the-art open-source simulation packages, in a
+way that minimizes installation issues and leverages the vast computational power
+that is currently available in the Cloud. 
 
-At a high level, a significant amount of what we do at Inductiva is to wrap existing open-source software packages around a few layers that enable them to execute on a wide range of virtual machines available on the cloud, and allow simple configuration via Python scripting. We wrap such simulation packages in a way that allows us to treat them as more abstract computational loads, that have inputs and produce outputs, and our job is “merely” just that of passing data around (See [Storage and Data Flow]()) and assigning the simulation tasks to the appropriate computational resource (See [Shared and Dedicated Resources]()).
+At a high level, a significant amount of what we do at Inductiva is to wrap existing 
+open-source software packages around a few layers that enable them to execute on
+a wide range of virtual machines available on the cloud, and allow simple configuration 
+via Python scripting. We wrap such simulation packages in a way that allows us to treat 
+them as more abstract computational loads, that have inputs and produce outputs, and 
+our job is “merely” just that of passing data around (See [Storage and Data Flow]()) 
+and assigning the simulation tasks to the appropriate computational resource (See 
+[Shared and Dedicated Resources]()).
 
-Obviously, there is a lot more happening under the hood. For starters, how do we deal with the fact that not all simulation software packages work in the same way and, therefore, having a fully general formulation for a simulation task is not trivial? For example, some simulation packages offer a single binary that takes as input a single file containing the full description of the simulation to be run. This is the simplest case because all the API needs to do is send that simulation configuration file to a remote VM, and then invoke the simulation binary on that VM, wait for the simulation to run, and then forward the results back to the user's remote storage, where they can later be retrieved. Of course, installing the simulation package itself may be complicated because it may require fulfilling many dependencies, and we deal with all of that, such that users don’t have to worry about it. But, from the perspective of the orchestration of the simulation, this is quite straightforward.
+Obviously, there is a lot more happening under the hood. For starters, how do we deal 
+with the fact that not all simulation software packages work in the same way and, 
+therefore, having a fully general formulation for a simulation task is not trivial? For 
+example, some simulation packages offer a single binary that takes as input a single 
+file containing the full description of the simulation to be run. This is the simplest 
+case because all the API needs to do is send that simulation configuration file to a 
+remote VM, and then invoke the simulation binary on that VM, wait for the simulation to 
+run, and then forward the results back to the user's remote storage, where they can 
+later be retrieved. Of course, installing the simulation package itself may be 
+complicated because it may require fulfilling many dependencies, and we deal with all 
+of that, such that users don’t have to worry about it. But, from the perspective of the 
+orchestration of the simulation, this is quite straightforward.
 
-Our API deals with these cases in a very simple way. In fact, no matter how many files are required as input for the simulation, we assume that they are all stored in a folder in the user’s local machine. The entire contents of the folder will be sent via the API to some remote computational resource. For some simulators that is all that
-is needed, e.g., REEF3D. 
+Our API deals with these cases in a very simple way. In fact, no matter how many
+files are required as input for the simulation, we assume that they are all stored
+in a folder in the user’s local machine. The entire contents of the folder will be
+sent via the API to some remote computational resource. For some simulators that is
+all that is needed, e.g., REEF3D. 
 
 ```python
 # Example of how to run the REEF3D simulator
@@ -21,7 +46,9 @@ reef3d_simulator = inductiva.simulators.REEF3D()
 task = reef3d_simulator.run(input_dir="reef3d-example")
 ```
 
-For others, a specific binary of the simulator expects a “main” simulation configuration file, from which all other required files (e.g., a 3D model, a bathymetry, etc) are referred. Below we present two simulators that follow this pattern:
+For others, a specific binary of the simulator expects a “main” simulation configuration
+file, from which all other required files (e.g., a 3D model, a bathymetry, etc) are
+referred. Below we present two simulators that follow this pattern:
 
 ```python
 # Example of how to run the SWASH simulator
@@ -79,7 +106,6 @@ commands = [
 # configuration files.
 task = openfoam.run(input_dir=input_dir, commands=commands)
 ```
-
 
 Inductiva API has available several open-source simulators ready to use. Users 
 who are familiar with the simulators can easily start running simulations with 
