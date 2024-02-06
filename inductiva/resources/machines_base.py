@@ -26,7 +26,7 @@ class BaseMachineGroup:
 
     def __init__(self,
                  machine_type: str,
-                 disk_size_gb: int = 70,
+                 data_disk_gb: int = 10,
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
 
@@ -35,7 +35,7 @@ class BaseMachineGroup:
               Check https://cloud.google.com/compute/docs/machine-resource for
               more information about machine types.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
+            data_disk_gb: The size of the disk for user data (in GB).
             register: Bool that indicates if a machine group should be register
                 or if it was already registered. If set to False by users on
                 initialization, then, the machine group will not be able to be
@@ -47,8 +47,14 @@ class BaseMachineGroup:
         if machine_type not in inductiva.resources.list_available_machines():
             raise ValueError("Machine type not supported")
 
+        if data_disk_gb < 0 or data_disk_gb > 100:
+            raise ValueError(
+                "`data_disk_gb` must be a positive value smaller than 100 GB")
+
         self.machine_type = machine_type
-        self.disk_size_gb = disk_size_gb
+        self.data_disk_gb = data_disk_gb
+        self._true_disk_size_gb =\
+            data_disk_gb + inductiva.constants.BASE_MACHINE_DISK_SIZE_GB
         self._id = None
         self._name = None
         self.create_time = None
@@ -76,7 +82,7 @@ class BaseMachineGroup:
 
         instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
-            disk_size_gb=self.disk_size_gb,
+            disk_size_gb=self._true_disk_size_gb,
             **kwargs,
         )
 
@@ -105,7 +111,8 @@ class BaseMachineGroup:
 
         machine_group = cls(
             machine_type=resp["machine_type"],
-            disk_size_gb=resp["disk_size_gb"],
+            data_disk_gb=resp["disk_size_gb"] -
+            inductiva.constants.BASE_MACHINE_DISK_SIZE_GB,
             register=False,
         )
         machine_group._id = resp["id"]
@@ -137,7 +144,7 @@ class BaseMachineGroup:
                 id=self.id,
                 name=self.name,
                 machine_type=self.machine_type,
-                disk_size_gb=self.disk_size_gb,
+                disk_size_gb=self._true_disk_size_gb,
                 **kwargs,
             )
         logging.info("Starting %s. "
@@ -173,7 +180,7 @@ class BaseMachineGroup:
                     id=self.id,
                     name=self.name,
                     machine_type=self.machine_type,
-                    disk_size_gb=self.disk_size_gb,
+                    disk_size_gb=self._true_disk_size_gb,
                     **kwargs,
                 )
 
@@ -223,4 +230,4 @@ class BaseMachineGroup:
 
         logging.info("> Name:         %s", self.name)
         logging.info("> Machine Type: %s", self.machine_type)
-        logging.info("> Disk size:    %s GB", self.disk_size_gb)
+        logging.info("> Data disk size:    %s GB", self.data_disk_gb)

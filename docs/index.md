@@ -46,6 +46,7 @@ computational_resources_howto
 caption: User Reference
 maxdepth: 1
 ---
+computational_resources/index
 machinegroup_class
 elasticgroup_class
 mpicluster_class
