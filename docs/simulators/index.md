@@ -1,9 +1,4 @@
 ```{toctree}
----
-caption: Simulators
-maxdepth: 2
-hidden: false
----
 DualSPHysics
 FDS
 GROMACS
