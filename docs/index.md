@@ -14,10 +14,10 @@ first_example
 
 ```{toctree}
 ---
-caption: Introduction
+caption: Overview
 maxdepth: 1
 ---
-overview/index
+introduction/*
 ```
 
 ```{toctree}
