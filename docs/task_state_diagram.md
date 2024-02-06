@@ -1,5 +1,5 @@
 
-```mermaid
+```{mermaid}
 ---
 title: Task state diagram
 ---
