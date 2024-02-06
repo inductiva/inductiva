@@ -14,6 +14,11 @@ def remove(args):
     confirm = args.confirm
     all_paths = args.all
 
+    if not all_paths and not paths:
+        print("No path(s) specified.\n"
+              "> Use `inductiva storage remove -h` for help.")
+        return 1
+
     if paths and all_paths:
         print(
             "inductiva storage remove: error: "
@@ -59,6 +64,7 @@ def register(parser):
 
     subparser.add_argument(
         "-y",
+        "--yes",
         action="store_true",
         dest="confirm",
         default=False,

@@ -25,9 +25,9 @@ def terminate_machine_group(args):
 
     if not active_machines:
         return 0
-    
+
     if not all_names and not names:
-        print("No resources specified."
+        print("No resource(s) specified.\n"
               "> Use `inductiva resources terminate -h` for help.")
         return 1
 
@@ -45,7 +45,7 @@ def terminate_machine_group(args):
         return 1
 
     confirm = confirm or input_functions.user_confirmation_prompt(
-        names, __("resources-prompt-terminate-all"),
+        target_machine_names, __("resources-prompt-terminate-all"),
         __("resources-prompt-terminate-big", len(names)),
         __("resources-prompt-terminate-small"), all_names)
 

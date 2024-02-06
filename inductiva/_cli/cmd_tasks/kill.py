@@ -13,6 +13,11 @@ def kill_task(args):
     kill_all = args.all
     ids = args.id
 
+    if not kill_all and not ids:
+        print("No id(s) specified.\n"
+              "> Use `inductiva tasks kill -h` for help.")
+        return 1
+
     if ids and kill_all:
         print(
             "inductiva tasks kill: error: "
