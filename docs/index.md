@@ -38,9 +38,11 @@ how_to/templating
 
 ```{toctree}
 ---
+caption: Available Simulators
 maxdepth: 1
+glob: *
 ---
-simulators/index
+simulators/*
 ```
 
 ```{toctree}
