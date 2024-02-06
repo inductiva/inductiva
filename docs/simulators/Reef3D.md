@@ -1,4 +1,4 @@
-# Reef3D Simulator 
+# Reef3D
 
 REEF3D is an open-source hydrodynamics framework with a focus on coastal, marine 
 and hydraulic engineering flows. Tailor-made multiphysics solvers are available 

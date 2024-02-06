@@ -16,18 +16,10 @@ getting_started
 ```{toctree}
 ---
 caption: Overview
-maxdepth: 2
-hidden: false
+maxdepth: 1
 ---
-data_flow
-computational_resources_overview
-tasks_overview
-simulators_overview
-overview_computational_resources
-infrastructure
+overview/index
 ```
-
-
 
 ```{toctree}
 ---
@@ -35,11 +27,8 @@ caption: How To
 maxdepth: 2
 hidden: false
 ---
-storage
-mpi_cluster
-computational_resources_howto
+how_to/index
 ```
-
 
 ```{toctree}
 ---
@@ -47,9 +36,6 @@ caption: User Reference
 maxdepth: 1
 ---
 computational_resources/index
-machinegroup_class
-elasticgroup_class
-mpicluster_class
 cli
 simulators/index
 ```

@@ -1,4 +1,4 @@
-## XBeach simulator
+## XBeach
 
 XBeach is a simulator with a two-dimensional model for wave propagation, sediment 
 transport and morphological changes in the nearshore area. The simulator is configured 
