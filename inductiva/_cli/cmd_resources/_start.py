@@ -8,12 +8,12 @@ def start_machine_group(args):
     """Start a resource."""
     machine_type = args.machine_type
     num_machines = args.num_machines
-    disk_size_gb = args.disk_size
+    data_disk_gb = args.disk_size
     spot = args.spot
 
     machine = resources.MachineGroup(machine_type=machine_type,
                                      num_machines=num_machines,
-                                     disk_size_gb=disk_size_gb,
+                                     data_disk_gb=data_disk_gb,
                                      spot=spot)
 
     machine.start()
@@ -46,7 +46,7 @@ def register(parser):
                            type=int,
                            help="Number of machines to start.")
     subparser.add_argument("-d",
-                           "--disk_size_gb",
+                           "--data_disk_gb",
                            default=70,
                            type=int,
                            help="Disk size in GB.")

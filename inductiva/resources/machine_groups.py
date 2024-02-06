@@ -42,7 +42,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         "Elastic",
         "Type",
         "# machines",
-        "Disk Size in GB",
+        "Data Size in GB",
         "Spot",
         "Started at (UTC)",
     ]
@@ -65,7 +65,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
 
         rows.append([
             machine_group.name, machine_group.machine_type, is_elastic,
-            resource_type, num_active_machines, machine_group.disk_size_gb,
+            resource_type, num_active_machines, machine_group.data_disk_gb,
             spot, machine_group.create_time
         ])
 
