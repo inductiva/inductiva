@@ -1,4 +1,4 @@
-# Run your first example
+# Run your first simulation
 
 In this example, you will use the open-source hydrodynamics REEF3D simulator to
 simulate a **2D dam break scenario** where a block of fluid is let to flow under the effect of gravity as follows:
