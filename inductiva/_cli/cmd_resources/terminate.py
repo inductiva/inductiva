@@ -25,6 +25,11 @@ def terminate_machine_group(args):
 
     if not active_machines:
         return 0
+    
+    if not all_names and not names:
+        print("No resources specified."
+              "> Use `inductiva resources terminate -h` for help.")
+        return 1
 
     # dict to map from name to machine
     name_to_machine = {machine.name: machine for machine in active_machines}
