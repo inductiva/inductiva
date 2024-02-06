@@ -42,7 +42,7 @@ how_to/templating
 ---
 caption: Available Simulators
 maxdepth: 1
-glob: *
+glob: true
 ---
 simulators/*
 ```
