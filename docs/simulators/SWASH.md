@@ -1,4 +1,4 @@
-## SWASH simulator
+## SWASH
 
 SWASH is a simulator that solves shallow water equations and is used to simulate 
 waves and currents in coastal waters and harbors, long waves in coastal regions 

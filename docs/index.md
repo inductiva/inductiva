@@ -5,28 +5,37 @@
 ```{toctree}
 ---
 caption: Getting Started
-maxdepth: 2
+maxdepth: 1
 hidden: false
 ---
-Install
-API-access-tokens
+getting_started
+```
+
+
+
+```{toctree}
+---
+caption: Overview
+maxdepth: 1
+---
+overview/index
 ```
 
 ```{toctree}
 ---
-caption: Running Simulations
-maxdepth: 2
-hidden: true
+caption: How To
+maxdepth: 1
+hidden: false
 ---
-Simulators
-Tasks
+how_to/index
 ```
 
 ```{toctree}
 ---
-caption: Computational Resources
-maxdepth: 2
-hidden: true
+caption: User Reference
+maxdepth: 1
 ---
-Machines
+computational_resources/index
+cli
+simulators/index
 ```

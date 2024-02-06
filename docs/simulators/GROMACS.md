@@ -1,4 +1,4 @@
-# GROMACS simulator
+# GROMACS
 
 GROMACS is a versatile simulator to perform molecular dynamics simulations. It 
 is primarily designed for biochemical molecules like proteins, lipids and nucleic 

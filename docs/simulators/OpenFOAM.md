@@ -1,4 +1,4 @@
-## OpenFOAM simulator
+## OpenFOAM
 
 OpenFOAM is a Finite Volume method for CFD simulations with a wide range of 
 applications across several areas of engineering and science. OpenFOAM has an 

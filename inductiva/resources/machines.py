@@ -17,7 +17,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_type: str,
         num_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 70,
+        data_disk_gb: int = 10,
         register: bool = True,
     ) -> None:
         """Create a MachineGroup object.
@@ -36,10 +36,10 @@ class MachineGroup(machines_base.BaseMachineGroup):
               information about machine types.
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
+            data_disk_gb: The size of the disk for user data (in GB).
         """
         super().__init__(machine_type=machine_type,
-                         disk_size_gb=disk_size_gb,
+                         data_disk_gb=data_disk_gb,
                          register=register)
         self.num_machines = num_machines
         self.spot = spot
@@ -119,7 +119,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         min_machines: int = 1,
         max_machines: int = 1,
         spot: bool = False,
-        disk_size_gb: int = 70,
+        data_disk_gb: int = 10,
         register: bool = True,
     ) -> None:
         """Create an ElasticMachineGroup object.
@@ -142,13 +142,13 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             max_machines: The maximum number of machines a machine group
               can scale up to.
             spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
+            data_disk_gb: The size of the disk for user data (in GB).
         """
         if max_machines < min_machines:
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
         super().__init__(machine_type=machine_type,
-                         disk_size_gb=disk_size_gb,
+                         data_disk_gb=data_disk_gb,
                          register=register)
         self.min_machines = min_machines
         self.max_machines = max_machines

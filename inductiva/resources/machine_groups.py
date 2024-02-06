@@ -31,7 +31,7 @@ def estimate_machine_cost(machine_type: str, spot: bool = False):
     else:
         estimated_cost = instance_price.body["on_demand_price"]
 
-    return round(float(estimated_cost), 5)
+    return float(estimated_cost)
 
 
 def _machine_group_list_to_str(machine_group_list) -> str:
@@ -42,7 +42,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         "Elastic",
         "Type",
         "# machines",
-        "Disk Size in GB",
+        "Data Size in GB",
         "Spot",
         "Started at (UTC)",
     ]
@@ -65,17 +65,23 @@ def _machine_group_list_to_str(machine_group_list) -> str:
 
         rows.append([
             machine_group.name, machine_group.machine_type, is_elastic,
-            resource_type, num_active_machines, machine_group.disk_size_gb,
+            resource_type, num_active_machines, machine_group.data_disk_gb,
             spot, machine_group.create_time
         ])
 
-    formatters = {"Started at (UTC)": format_utils.datetime_formatter}
+    formatters = {
+        "Started at (UTC)": [format_utils.datetime_formatter],
+    }
 
-    return format_utils.get_tabular_str(
-        rows,
-        columns,
-        formatters=formatters,
-    )
+    emph_formatter = format_utils.get_ansi_formatter()
+    header_formatters = [
+        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
+    ]
+
+    return format_utils.get_tabular_str(rows,
+                                        columns,
+                                        formatters=formatters,
+                                        header_formatters=header_formatters)
 
 
 def _fetch_machine_groups_from_api():
@@ -84,7 +90,7 @@ def _fetch_machine_groups_from_api():
         api = compute_api.ComputeApi(inductiva.api.get_client())
         response = api.list_active_user_instance_groups()
         if len(response.body) == 0:
-            print("No active machine groups found.")
+            print("No active computational resources found.")
             return response.body
 
         return response.body

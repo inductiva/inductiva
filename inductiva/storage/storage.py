@@ -81,14 +81,20 @@ def _print_contents_table(contents):
         rows.append(row)
 
     formatters = {
-        "Creation Time": format_utils.datetime_formatter,
-        "Size": format_utils.bytes_formatter
+        "Creation Time": [format_utils.datetime_formatter],
+        "Size": [format_utils.bytes_formatter],
     }
+
+    emph_formatter = format_utils.get_ansi_formatter()
+    header_formatters = [
+        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
+    ]
 
     return format_utils.get_tabular_str(
         rows,
         columns,
         formatters=formatters,
+        header_formatters=header_formatters,
     )
 
 

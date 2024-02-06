@@ -1,16 +1,33 @@
 # Troubleshooting Guide
-In this troubleshooting section, we aim to guide you through resolving issues related to incorrect or incomplete [installation of the Inductiva package]() or its dependencies.
+In this troubleshooting section, we aim to guide you through resolving issues related to incorrect or incomplete [installation of the Inductiva package]() or its dependencies. This guide assumes you’ve read all steps in our [Getting Started]() section.
+
+If you find bugs, need help, or want to talk to the developers, reach out to us on
+support@inductiva.ai
+
+If you find any security issues, please report to security@inductiva.ai
+
 ### What We'll Cover:
 
 * [Installation Failures]()
 * [Frequently Asked Questions (FAQs)]()
+* [Recommended Tools]()
 * [Useful Terminology]()
 
 ## Installation Failures
+If you encounter issues installing the Inductiva API package, there are several 
+steps you can take:
+
+### Ensure you have a working pip
+```
+pip install --upgrade pip
+```
+### Use virtualenv or venv to isolate dependencies
 
 If installing the package fails, you can retry it on a new Python virtual environment. 
 A [virtual environment](https://docs.python.org/3/library/venv.html) allows you to 
-have a fresh Python environment with isolated dependencies. In your shell, run:
+have a fresh Python environment with isolated dependencies. 
+
+In your shell, run:
 
 ```
 python -m venv <venv>
@@ -67,6 +84,7 @@ pip install --upgrade inductiva
 **How can I optimize the performance of my simulations?**
 Performance optimization involves adjusting simulation parameters. Our documentation includes tips for efficiently utilizing [Inductiva's computational resources]().
 
+## Recommended Tools
 
 ## Useful Terminology
 This documentation uses the following terms:
