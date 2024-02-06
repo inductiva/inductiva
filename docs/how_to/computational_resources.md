@@ -1,63 +1,11 @@
+# Running simulations in parallel
 
-> TO BE BROKEN INTO PIECES
+Machine groups can be used to run multiple simulations in 
+parallel, by having each of the machines in the group run a separate simulation. This is a powerful mechanism to reduce waiting times when you need to run a large number of simulations, such as when you are exploring different parameter values or running a large number of simulations for a sensitivity analysis. 
 
-# Computational Resources
+To exemplify, we will use the [templating mechanism]() ths is built in the Inductiva API to explore variations of a base simulation scenario. More specifically, we will consider a coastal dynamic simulation using the SWASH simulator, where we want to explore the effect of different water levels on the simulation results. 
 
-Besides running and managing simulations, Inductiva API enhances the computational 
-infrastructure of any user by providing a simple interface to run simulations in
-your own dedicated computational resources.
-
-In this tutorial, we learn the API capabilities to launch and manage 
-computational resources in the cloud and guide the scaling of your 
-computational infrastructure to run simulations faster and more efficiently.
-
-Before getting into the details, we highlight that launching a computational 
-resource and running a simulation in it is as simple as follows:
-
-```python
-import inductiva
-
-# Configure a computational resources
-machines = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-16", num_machines=5, data_disk_gb=60)
-
-# Launch the computational resource to be available to run simulations
-machines.start()
-
-# Run the Getting Started example simulation in our own dedicated computational
-# resource
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-dambreak-dir.zip", unzip=True)
-
-simulator = inductiva.simulators.REEF3D()
-
-# Select the computational resource to run the simulation on the `run` method
-task = simulator.run(input_dir=input_dir, on=machines)
-
-task.wait()
-
-# Terminate the computational resource when you don't need it anymore
-machines.terminate()
-```
-
-This code snippet launches a computational resource with 5 machines of type
-`c2-standard-16` that are available to now deploy your own simulations. In the
-following sections, we will dive deep into the details of the computational resources
-available via the API and how to use them.
-
-## Running simulations in parallel
-
-#### Example
-
-The second use case of launching a `MachineGroup` is that of setting multiple
-simulations running in parallel and distributed by the various machines constituting
-the group. This is useful when you want to run multiple simulations in parallel,
-but you don't want to wait for the first one to finish before starting the second one. 
-
-To exemplify, we will use the [templating mechanism]() built-in the Inductiva API
-to automatically change the water level of the simulation in the input files and
-run 5 different simulations in parallel. 
+As an example, let's run 5 different simulations in parallel. 
 
 ```python
 import inductiva
@@ -119,33 +67,5 @@ the slowest simulation.
 
 Now, that all the simulations have finished running, we end this tutorial with an
 extra lesson to help reduce the amount of time machines are left unused:
+
 > Don't forget to terminate your computational resources with `inductiva resources terminate --all`.
-
-#### Configuration parameters
-
-The above computational resources are configured with a few common parameters. Let's
-start by introducing them:
-
-- `machine_type` defines the type of CPU used for each machine. This parameter
-follows the naming convention set by [Google Cloud](https://cloud.google.com/compute/docs/machine-types).
-Each machine type, e.g. `c2-standard-60`, is composed of a prefix defining the
-CPU series, a suffix that sets the number of [virtual CPUs (vCPU)](https://cloud.google.com/compute/docs/cpu-platforms)
-per machine and the middle word refers to the level of RAM per vCPU. In the example,
-`c2` refers to an Intel Xeon Scalable processor of 2nd generation, `standard`
-means 4 GB of RAM per vCPU and will contain `60` vCPUs. Below, we introduce the
-machine types available via the API. 
-- the parameters `num_machines`, `min_machines`, `max_machines` control the number
-of machines available in the computational resource. The former is used by the
-Machine group and the MPI Cluster resources. The latter ones set the minimum number
-of machines that are always available and the maximum number of machines that can
-be available at any time, respectively. 
-- `data_disk_gb` allows the selection of the size of the disk attached to each machine that is reserved for the simulation data in GB.
-- `spot` allows to differ between standard resources or preemptible ones. The latter
-resources are way cheaper but only serve for fault-tolerant workloads since they
-can be stopped at any time. The former are fully dedicated to the user's usage.
-In case of failure of a simulation with a preemptible machine, the simulation is
-resubmitted to the queue of the computational resource. Currently, this is only
-available for the Machine Group and Elastic Machine Group.
-
-
-
