@@ -26,7 +26,7 @@ def kill_task(args):
         return 1
 
     if ids:
-        tasks = [inductiva.tasks.Task(id) for id in ids]
+        tasks = [{"task_id":id} for id in ids]
     else:
         tasks = []
         for status in inductiva.tasks.Task.KILLABLE_STATUSES:
