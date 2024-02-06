@@ -8,8 +8,8 @@ caption: Getting Started
 maxdepth: 1
 hidden: true
 ---
-getting_started/installation
-getting_started/first_example
+installation
+first_example
 ```
 
 ```{toctree}
