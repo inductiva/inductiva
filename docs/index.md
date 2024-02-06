@@ -31,7 +31,9 @@ introduction/infrastructure
 caption: How To
 maxdepth: 1
 ---
-how_to/comp
+how_to/mpi_cluster
+how_to/storage
+how_to/templating
 ```
 
 ```{toctree}
