@@ -1,4 +1,4 @@
-# FDS Simulator
+# FDS
 
 Fire Dynamics Simulator (FDS), is a computational fluid dynamics (CFD) model of 
 fire-driven fluid flow. FDS solves numerically a form of the Navier-Stokes equations

@@ -1,4 +1,4 @@
-# DualSPHysics simulator
+# DualSPHysics
 
 DualSPHysics is a Smoothed-Particle Hydrodynamics (SPH) simulator. The simulator 
 is usually configured by a single file with the extension `.xml`. This file contains 

@@ -1,3 +1,5 @@
+# Simulators
+
 ```{toctree}
 DualSPHysics
 FDS

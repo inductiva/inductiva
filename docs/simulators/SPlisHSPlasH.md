@@ -1,4 +1,4 @@
-## SPlisHSPlasH simulator
+## SPlisHSPlasH
 
 SPlisHSPlasH is a Smoothed-Particle Hydrodynamics (SPH) simulator that covers a 
 wide range of applications. The simulator is usually configured by a single file 
