@@ -44,7 +44,7 @@ def kill_task(args):
     if not confirm:
         return 1
 
-    verbosity_level = 0 if len(ids) > 1 else 1
+    verbosity_level = 1 if kill_all else 2
 
     for task_id in ids:
         try:
