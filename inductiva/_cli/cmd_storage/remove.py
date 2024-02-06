@@ -25,7 +25,7 @@ def remove(args):
             "argument path not allowed with argument --all",
             file=sys.stderr)
         return 1
-
+    paths = set(paths)
     if not confirm:
         confirm = user_confirmation_prompt(
             paths, __("storage-prompt-remove-all"),

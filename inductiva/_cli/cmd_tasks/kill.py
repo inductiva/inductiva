@@ -24,7 +24,7 @@ def kill_task(args):
             "argument id not allowed with argument --all",
             file=sys.stderr)
         return 1
-
+    ids = set(ids)
     if ids:
         tasks = [{"task_id": id} for id in ids]
     else:
