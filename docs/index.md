@@ -9,7 +9,7 @@ maxdepth: 1
 hidden: true
 ---
 getting_started/installation
-getting_start/first_example
+getting_started/first_example
 ```
 
 ```{toctree}
@@ -22,6 +22,7 @@ overview/index
 
 ```{toctree}
 ---
+caption: How To
 maxdepth: 1
 ---
 how_to/index
