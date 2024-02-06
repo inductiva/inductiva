@@ -47,9 +47,9 @@ class BaseMachineGroup:
         if machine_type not in inductiva.resources.list_available_machines():
             raise ValueError("Machine type not supported")
 
-        if data_disk_gb < 0 or data_disk_gb > 20:
+        if data_disk_gb < 0 or data_disk_gb > 1940:
             raise ValueError(
-                "`data_disk_gb` must be a positive value smaller than 20 GB")
+                "`data_disk_gb` must be a positive value smaller than 1940 GB")
 
         self.machine_type = machine_type
         self.data_disk_gb = data_disk_gb
