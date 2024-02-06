@@ -46,8 +46,8 @@ def main():
 
     # Call the function associated with the subcommand
     try:
-        status = args.func(args)
+        exit_code = args.func(args)
     except Exception as e:  # pylint: disable=broad-except
+        exit_code = 1
         print(e)
-        status = 1
-    return status
+    return exit_code

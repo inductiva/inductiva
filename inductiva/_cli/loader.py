@@ -10,8 +10,8 @@ def load_commands(parser, module_dir, package, prefix="", ignores_prefix=None):
     """Load all commands within the module_dir and package."""
     modules = pkgutil.iter_modules([module_dir])
     for _, name, _ in modules:
-        if not name.startswith(prefix) or (ignores_prefix is not None and
-                                           name.startswith(ignores_prefix)):
+        if not name.startswith(prefix) or \
+            (ignores_prefix is not None and name.startswith(ignores_prefix)):
             continue
 
         modname = f".{name}"
