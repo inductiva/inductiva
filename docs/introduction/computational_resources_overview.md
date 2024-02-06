@@ -1,37 +1,26 @@
 # Overview
 
 In this guide, we will explain some of the main features of the Inductiva API when 
-it comes to making informed decisions about resource allocation, ensuring you get 
-the most out of the Inductiva API for your simulation needs.
-
-Here, you will learn about running your simulation tasks on a shared pool of Virtual
-Machines (WMs), ideal for simple tasks and quick tests. Then, you will examine the 
-options for dedicated resources, including Machine Groups for individual processing, 
-Elastic Machine Groups with dynamic scaling, and MPI Clusters for complex simulations 
-requiring multiple CPUs. Lastly, we present a comparison using a SWASH simulation 
-to demonstrate the performance differences between shared and dedicated resources, 
-providing practical insights into optimizing your simulations with the Inductiva API.
+it comes to making informed decisions about resource allocation. Here, you will 
+learn the two options available for running your simulations; shared and dedicated
+resources through the Inductiva API. Lastly, we 
+demonstrate the performance differences between shared and dedicated resources 
+using a SWASH simulation.
 
 ## Shared Resources
 
 As a standard practice, when you submit simulation tasks through the Inductiva API, 
-they get initially sent to a shared pool of workers on designated Virtual Machines (VMs)
-serving multiple users. These VMs are specifically allocated to facilitate easy 
+they enter a [task queue]() and are sent to a shared pool of workers on designated Virtual Machines (VMs)
+serving multiple users from either the [Google Cloud Provider (GCP)](https://cloud.google.com/compute/docs/machine-resource) or Inductiva's own 
+computational platform (ICE). These VMs are specifically allocated to facilitate easy 
 API testing and to handle light tasks efficiently with a minimal setup, ideal for 
 quick experimentation.
 
-Tasks enter a [task queue]() and are allocated to workers from either the [Google Cloud Provider (GCP)](https://cloud.google.com/compute/docs/machine-resource) or Inductiva's own 
-computational platform (ICE), ensuring a streamlined start for for doing quick 
-experimentation with the Inductiva API.
-
 However, this shared resource pool has its limitations, including slower completion 
-times for simulations due to its finite capacity and less powerful VMs. This setup, 
-while user-friendly for initial tests and small-scale simulations, may not suffice 
-for more demanding tasks, which require more robust computational power and shorter 
-waiting times.
+times for simulations due to its finite capacity and less powerful VMs. 
 
 For running a larger volume of simulations that require more powerful VMs, the 
-Inductiva API provides you with the option to set up your own [dedicated resources]() 
+Inductiva API provides you with the option to set up your own [dedicated resources](). 
 to ensure you can access the necessary computational power for your simulations 
 without the constraints of a shared environment. 
 
@@ -39,7 +28,9 @@ without the constraints of a shared environment.
 
 Inductiva provides the capability to create dedicated pools of VM resources, 
 termed [Machine Groups](), exclusively reserved for your use and not shared with 
-others. Users can launch three types of computational resources for their simulations:
+others. 
+
+In this option, users can launch three types of computational resources for their simulations:
 
 - [**Machine Group**](#launch-a-machine-group): This consists of homogeneous machines 
 designed to operate individually, enabling the distribution of multiple simulations 
@@ -57,18 +48,15 @@ that exceed the capabilities of a single machine.
 ## Comparison Example: SWASH Simulation
 
 In this comparison, we aim to illustrate the performance differences between 
-running simulations on a shared pool of resources and on dedicated resources through 
-Inductiva. 
+running simulations on a shared pool of resources and on dedicated resources using the 
+Inductiva API. 
 
-We will use a [SWASH simulation]() as our example to demonstrate these differences.
+We will use the [SWASH simulation]() as our example to demonstrate these differences.
 
 ### SWASH Simulation on Shared Resources
 
 First, we'll run the simulation using the shared pool of workers, a convenient 
 option for those getting started or running less resource-intensive tasks. 
-
-> **_NOTE:_** the simulation is designed to complete in **approximately 20 minutes** 
-to showcase its performance on the shared infrastructure.
 
 ```python
 import inductiva
@@ -87,11 +75,13 @@ task = swash.run(input_dir=input_dir,
 # Wait until the task finishes running.
 task.wait()
 ```
+In this option, it takes **approximately 20 minutes** 
+to run this simulation on the shared pool of resources.
 
 ### SWASH Simulation on Dedicated Resources
 
 Let's now run the same simulation on dedicated resources, specifically set 
-up for this task:
+up for this task.
 
 ```python
 import inductiva
@@ -120,19 +110,14 @@ task.wait()
 # Terminate your dedicated MachineGroup at then end of the simulation.
 machine_group.terminate()
 ```
+Notice that, the simulation is picked almost immediately - no waiting time required, and by contrasting the two resource options above, running the simulation on a [dedicated machine group]() with a `c2-standard-30` machine took **9 minutes and 37s** to complete, which is 
+**2.68 times less** than on the [shared pool](). 
 
-Notice that, the simulation is picked almost immediately - no waiting time required - and
-selecting a more powerful machine greatly reduced the execution time.
+## What to read next
 
+Learn how to [run multiple simulations in parallel]() 
 
-### Conclusion
-By contrasting these two approaches, we can see how running the same simulation 
-on a [dedicated machine group]() with a `c2-standard-30`machine took 9m37s, which is 
-2.68 times less than on the [shared pool](). 
-
-Whether your priority is cost-saving with shared resources or time-saving with 
-dedicated power, you can optimize your simulation projects easily with the Inductiva API
-
+Learn how to [set up an API cluster]()
 
 
 
