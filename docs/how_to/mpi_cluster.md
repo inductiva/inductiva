@@ -6,6 +6,7 @@ to run large scaling simulations on a dedicated MPI Cluster.
 
 TODO: Sergio
 
+Setting up an MPI cluster is simple, you will use the [`MPICluster` class](computationaL_resources/mpicluster_class.md) to create a dedicated MPI cluster.
 
 
 

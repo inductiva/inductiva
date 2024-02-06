@@ -1,4 +1,4 @@
-# Computational Resources
+# Class Description
 
 ```{toctree}
 machinegroup_class

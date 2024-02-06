@@ -21,7 +21,6 @@ introduction/index
 introduction/simulators
 introduction/tasks
 introduction/computational_resources_overview
-introduction/overview_computational_resources
 introduction/data_flow
 introduction/infrastructure
 ```
@@ -31,6 +30,9 @@ introduction/infrastructure
 caption: How To
 maxdepth: 1
 ---
+how_to/computational_resources
+how_to/manage_computational_resources
+how_to/elastic_machine_group
 how_to/mpi_cluster
 how_to/storage
 how_to/templating
@@ -38,9 +40,11 @@ how_to/templating
 
 ```{toctree}
 ---
+caption: Available Simulators
 maxdepth: 1
+glob: true
 ---
-simulators/index
+simulators/*
 ```
 
 ```{toctree}
