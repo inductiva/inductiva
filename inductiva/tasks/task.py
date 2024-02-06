@@ -53,7 +53,7 @@ class Task:
     KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
                         }.union(RUNNING_STATUSES)
 
-    TASK_KILL_VERBOSITY_LEVELS = [0, 1, 2]
+    KILL_VERBOSITY_LEVELS = [0, 1, 2]
 
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
@@ -275,7 +275,9 @@ class Task:
             wait_timeout (int, float): Optional - number of seconds to wait
             for the kill command or None if only the request is to be sent.
             verbosity_level (int): Optional. the verbosity of the logs when the
-            task signal is sent and when the task is killed.
+            task signal is sent and when the task is killed. Verbosity 0
+            produces no outputs, 1 produces minimal outputs, and 2 (Default)
+            produces extensive outputs.
         Returns:
             - None if `wait_timeout` is None and the kill request was
               successfully sent;
@@ -291,9 +293,9 @@ class Task:
             if wait_timeout <= 0.0:
                 raise ValueError("Wait timeout must be a positive number.")
 
-        if verbosity_level not in self.TASK_KILL_VERBOSITY_LEVELS:
+        if verbosity_level not in self.KILL_VERBOSITY_LEVELS:
             raise ValueError(f"Verbosity {verbosity_level} level not allowed. "
-                             f"Choose from {self.TASK_KILL_VERBOSITY_LEVELS}")
+                             f"Choose from {self.KILL_VERBOSITY_LEVELS}")
 
         self._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
 
