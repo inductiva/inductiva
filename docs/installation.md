@@ -1,11 +1,4 @@
-# Getting Started
-
-```{toctree}
----
-hidden: true
----
-first_example.md
-```
+# Installation
 
 Welcome to Inductiva, a Python API package that enables running popular
 [open-source physical system simulation packages]() in the Cloud. 

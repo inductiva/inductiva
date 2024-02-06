@@ -6,32 +6,48 @@
 ---
 caption: Getting Started
 maxdepth: 1
-hidden: false
+hidden: true
 ---
-getting_started/index
+installation
+first_example
 ```
 
 ```{toctree}
 ---
-caption: Introduction
+caption: Overview
 maxdepth: 1
 ---
-overview/index
+introduction/index
+introduction/simulators
+introduction/tasks
+introduction/computational_resources_overview
+introduction/overview_computational_resources
+introduction/data_flow
+introduction/infrastructure
+```
+
+```{toctree}
+---
+caption: How To
+maxdepth: 1
+---
+how_to/mpi_cluster
+how_to/storage
+how_to/templating
 ```
 
 ```{toctree}
 ---
 maxdepth: 1
 ---
-how_to/index
+simulators/index
 ```
 
 ```{toctree}
 ---
-caption: User Reference
+caption: API Client Reference
 maxdepth: 1
 ---
 computational_resources/index
 cli
-simulators/index
 ```
