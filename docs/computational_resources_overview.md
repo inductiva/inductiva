@@ -1,42 +1,74 @@
-# Shared and Dedicated Resources
+# Overview
+
 In this guide, we will explain some of the main features of the Inductiva API when 
-it comes to managing and utilizing computational resources.
+it comes to making informed decisions about resource allocation, ensuring you get 
+the most out of the Inductiva API for your simulation needs.
 
-### What We'll Cover
-* [Overview]()
-* [How can you set up computational resources with Inductiva?]()
-    * [Task Queue and Shared VM Pool Integration]()
-    * [Custom Hardware Setup for Enhanced Simulation Performance]()
-* [MachineGroup Class]()
-    * Setting up a MachineGroup for selecting specific VM type
-    * Setting up a MachineGroup for running simulations in parallel
-* [What to read next]()
+Here, you will learn about running your simulation tasks on a shared pool of Virtual
+Machines (WMs), ideal for simple tasks and quick tests. Then, you will examine the 
+options for dedicated resources, including Machine Groups for individual processing, 
+Elastic Machine Groups with dynamic scaling, and MPI Clusters for complex simulations 
+requiring multiple CPUs. Lastly, we present a comparison using a SWASH simulation 
+to demonstrate the performance differences between shared and dedicated resources, 
+providing practical insights into optimizing your simulations with the Inductiva API.
+
+## Shared Resources
+
+As a standard practice, when you submit simulation tasks through the Inductiva API, 
+they get initially sent to a shared pool of workers on designated Virtual Machines (VMs)
+serving multiple users. These VMs are specifically allocated to facilitate easy 
+API testing and to handle light tasks efficiently with a minimal setup, ideal for 
+quick experimentation.
+
+Tasks enter a [task queue]() and are allocated to workers from either the [Google Cloud Provider (GCP)](https://cloud.google.com/compute/docs/machine-resource) or Inductiva's own 
+computational platform (ICE), ensuring a streamlined start for for doing quick 
+experimentation with the Inductiva API.
+
+However, this shared resource pool has its limitations, including slower completion 
+times for simulations due to its finite capacity and less powerful VMs. This setup, 
+while user-friendly for initial tests and small-scale simulations, may not suffice 
+for more demanding tasks, which require more robust computational power and shorter 
+waiting times.
+
+For running a larger volume of simulations that require more powerful VMs, the 
+Inductiva API provides you with the option to set up your own [dedicated resources]() 
+to ensure you can access the necessary computational power for your simulations 
+without the constraints of a shared environment. 
+
+## Dedicated Resources
+
+Inductiva provides the capability to create dedicated pools of VM resources, 
+termed [Machine Groups](), exclusively reserved for your use and not shared with 
+others. Users can launch three types of computational resources for their simulations:
+
+- [**Machine Group**](#launch-a-machine-group): This consists of homogeneous machines 
+designed to operate individually, enabling the distribution of multiple simulations 
+across different machines for parallel processing.
+- [**Elastic Machine Group**](#set-up-an-elastic-machine-group): Similar to Machine 
+Group, these also consist of individual machines. The key advantage here is the 
+elastic scaling feature, which dynamically adjusts the number of machines based 
+on simulation demands, ensuring efficient resource utilization.
+- [**MPI Cluster**](#start-a-mpi-cluster-in-the-cloud) This setup involves a network 
+of machines configured to work in tandem on a single simulation task, distributing 
+the workload across multiple CPUs. This is particularly useful for complex simulations 
+that exceed the capabilities of a single machine.
 
 
-## Overview
->*we need something here, I'll think it through - Maya*
+## Comparison Example: SWASH Simulation
 
-## How can you set up computational resources with Inductiva?
+In this comparison, we aim to illustrate the performance differences between 
+running simulations on a shared pool of resources and on dedicated resources through 
+Inductiva. 
 
->*an intro to the two options - Maya*
-### Task Queue and Shared VM Pool Integration
+We will use a [SWASH simulation]() as our example to demonstrate these differences.
 
-Simulation tasks you create and submit via the Inductiva will be sent to a Task 
-queue, and will eventually be picked up by a pool of workers running on Virtual 
-Machines (VMs) available from a Cloud provider
+### SWASH Simulation on Shared Resources
 
-By default, simulation tasks will be sent to a shared pool of workers serving 
-multiple users. These workers live on VMs that we decided to set aside to make it 
-easier for any user to test the API, and run also relatively light tasks with 
-multiple users. These workers live on VMs that we decided to set aside to make it 
-easier for any user to test the API, and run also relatively light tasks with 
-the simplest possible setup. 
+First, we'll run the simulation using the shared pool of workers, a convenient 
+option for those getting started or running less resource-intensive tasks. 
 
-For example, the code below will start a SWASH simulation that will be 
-automatically picked up by the shared pool of workers.
-
-**WARNING:** For the sake of demonstrating performance differences, the following
-simulation takes around 20 minutes to complete.
+> **_NOTE:_** the simulation is designed to complete in **approximately 20 minutes** 
+to showcase its performance on the shared infrastructure.
 
 ```python
 import inductiva
@@ -56,55 +88,10 @@ task = swash.run(input_dir=input_dir,
 task.wait()
 ```
 
-Observe that at no point we explicitly defined the target VMs where this simulation
-would be executed, or even just their specs. Instead, the task will get automatically
-sent to the shared pool of workers that we prepared for all users. 
-This is very simple, and a great way for doing quick experimentation.  
+### SWASH Simulation on Dedicated Resources
 
-However, despite the convenience and simplicity, the above simulation took 25m37s
-to complete. The shared pool of resources 
-has a limited predefined capacity and doesn't possess powerful VMs. Therefore, since
-it is shared by all users, it is not appropriate for executing larger tasks,
-since waiting times can be extremely large. So, if you need to run a larger number
-of simulation tasks, and you need more powerful VMs to run it, you will need to
-reserve that capacity for your exclusive use.
-
-### Custom Hardware Setup for Enhanced Simulation Performance
-
-Inductiva provides a way of creating pools of VMs resources that are exclusively 
-available for you, and not shared with any other user. We call these Machine Groups, 
-and, as we will explain later, they come in two flavors. 
-
-A Machine Group are groups of homogeneous cloud VMs with specific specs that you 
-can define programmatically and terminate on demand via the API. This will give 
-you full control of the type of VM you use to run your simulations, and will ensure 
-a certain amount of compute power that we reserve exclusively for you. 
-
-Note that a Machine Group is literally a group of individual VMs that do not 
-communicate with each other. In other words, a MachineGroup is not a cluster, 
-such as an MPI Cluster, where the load of each simulation is divided over all 
-machines of the cluster. To set up an MPI Cluster, see here (point to the MPI 
-documents). 
-
-But for now, let’s dig deeper in the MachineGroup class that implements this 
-notion of a group of independent machines of the same type. 
- 
-> TODO LUIS
-
-Now that we explained what this class is about, let’s see how to use it for two 
-different purposes. First, we will create a MachineGroup with 1 machine only. 
-The goal is to use this functionality to select specific types of VM available on 
-Google Cloud for running our simulation. We will show the impact on performance 
-(and potential cost) of running the simulation on different types of VMs.
-
-Then, we will create a MachineGroup with 5 instances and show how to run 5 
-variations of the same simulation in parallel. 
-
-### Setting up a Machine Group for selecting specific VM type
-
-#### Example
-
-Let's now run the above simulation in our own dedicated resource.
+Let's now run the same simulation on dedicated resources, specifically set 
+up for this task:
 
 ```python
 import inductiva
@@ -134,87 +121,24 @@ task.wait()
 machine_group.terminate()
 ```
 
-Running the same simulation on a dedicated machine group with a `c2-standard-30`
-machine took 9m37s, which is 2.68 times less than on the shared pool. Notice
-that, the simulation is picked almost immediately - no waiting time required - and
+Notice that, the simulation is picked almost immediately - no waiting time required - and
 selecting a more powerful machine greatly reduced the execution time.
 
-### Setting up a MachineGroup for running simulations in parallel
 
-#### Example
+### Conclusion
+By contrasting these two approaches, we can see how running the same simulation 
+on a [dedicated machine group]() with a `c2-standard-30`machine took 9m37s, which is 
+2.68 times less than on the [shared pool](). 
 
-The second use case of launching a `MachineGroup` is that of setting multiple
-simulations running in parallel and distributed by the various machines constituting
-the group. This is useful when you want to run multiple simulations in parallel,
-but you don't want to wait for the first one to finish before starting the second one. 
-
-To exemplify, we will use the [templating mechanism]() built-in the Inductiva API
-to automatically change the water level of the simulation in the input files and
-run 5 different simulations in parallel. 
-
-```python
-import inductiva
-from inductiva import mixins
-
-# Instantiate a MachineGroup object with 1 preemptible machine of type
-# c2-standard-30 and start it immediately
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-30", num_machines=5, spot=True)
-machine_group.start()
-
-# Download the input files for the SWASH simulation
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "swash-template-example.zip", unzip=True)
-
-# Initialize the template file manager
-file_manager = mixins.FileManager()
-
-# Initialize the SWASH simulator
-swash = inductiva.simulators.SWASH()
-
-# Explore the simulation for different water levels
-water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
-
-# Launch multiple simulations
-for water_level in water_levels_list:
-    # Set the root directory and render the template files into it.
-    file_manager.set_root_dir("swash-input-example")
-    file_manager.add_dir(input_dir, water_level=water_level)
-
-    # Run the simulation on the dedicated MachineGroup
-    task = swash.run(input_dir=file_manager.get_root_dir(),
-                    sim_config_filename="input.sws",
-                    on=machine_group)
-```
-
-The template mechanism will allow you to explore 5 different variations of the
-simulation, each with a different water level. The simulations will be submitted
-to our dedicated machine group and will run in parallel.
-We can check that all simulations are running via the CLI and that it took only
-1min for the moment they are submitted until they start running:
-
-```bash
-$ inductiva tasks list
-ID                         Simulator    Status    Submitted         Started           Computation Time    Resource Type
--------------------------  -----------  --------  ----------------  ----------------  ------------------  ---------------
-57mr4kas99jxb9titkeackano  swash        started   01 Feb, 09:07:19  01 Feb, 09:08:03  *0:03:12            c2-standard-30
-ox8718m0pwfi02zczui3qky4w  swash        started   01 Feb, 09:07:17  01 Feb, 09:08:02  *0:03:14            c2-standard-30
-mak1ji62s7axf7mespkc36g7e  swash        started   01 Feb, 09:07:15  01 Feb, 09:08:03  *0:03:14            c2-standard-30
-ijyu8bkvme7vg9k0kj6v23gxa  swash        started   01 Feb, 09:07:14  01 Feb, 09:08:02  *0:03:16            c2-standard-30
-g5qq5c9mk2nr5wqhzef38sdm4  swash        started   01 Feb, 09:07:12  01 Feb, 009:08:01  *0:03:17            c2-standard-30
-```
-
-This is a great way to speed up the execution of multiple simulations, since the
-time to run all 5 simulations will be approximately the same as running just one,
-that is the above 5 simulations took 9m55s to complete, which is the time of
-the slowest simulation.
-
-Now, that all the simulations have finished running, we end this tutorial with an
-extra lesson to help reduce the amount of time machines are left unused:
-> Don't forget to terminate your computational resources with `inductiva resources terminate --all`.
+Whether your priority is cost-saving with shared resources or time-saving with 
+dedicated power, you can optimize your simulation projects easily with the Inductiva API
 
 
-## What to read next
-* [Set up an MPI]()
-* [Get an overview of the CLI]()
+
+
+
+
+
+
+
+

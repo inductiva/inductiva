@@ -47,35 +47,87 @@ following sections, we will dive deep into the details of the computational reso
 available via the API and how to use them.
 
 ### Steps we will cover:
-1. [Available Computational Resources]()
-2. [Launching a Machine Group]()
-3. [Setting up an Elastic Machine Group]()
+1. [Set up a MachineGroup for running simulations in parallel]()
+2. [Launch a Machine Group]()
+2. [Set up an Elastic Machine Group]()
 4. [Start a MPI Cluster in the Cloud]()
 5. [Manage the computational resources]()
 
-## Available Computational Resources
 
-Currently, Inductiva API allows users to start computational resources on Inductiva 
-Cloud, which is powered by Google Cloud Platform. Any resources launched, will be
-dedicated to your own simulations and will not be shared with other users. In this
-way, users have full control of the type of resources in use and how to use them.
-This simplicity empowers users to scale their computational infrastructure only
-on demand and in just a few minutes.
+## Set up a MachineGroup for running simulations in parallel
 
-Users will be able to launch three types of computational resources:
-- [**Machine group**](#launching-a-machine-group) is composed of a group of homogeneous
-machines that work individually, which empowers spreading multiple simulations over
-the machines.
-- [**Elastic machine group**](#setting-up-an-elastic-machine-group) are similar
-to the machine group, i.e., it is a group of machines that work individually but
-with the advantage that the number of available machines to run the simulations
-is scaled up and down based on the demand. 
-- [**MPI Cluster**](#start-a-mpi-cluster-in-the-cloud) is a group of machines
-that work together to run a single simulation at a time, which allows the distribution
-of a single simulation over multiple CPUs when a single machine is not sufficient.
+#### Example
 
-In case users don't select any specific computational resource, Inductiva API will
-submit the simulation to the queue of a shared pool of machines.
+The second use case of launching a `MachineGroup` is that of setting multiple
+simulations running in parallel and distributed by the various machines constituting
+the group. This is useful when you want to run multiple simulations in parallel,
+but you don't want to wait for the first one to finish before starting the second one. 
+
+To exemplify, we will use the [templating mechanism]() built-in the Inductiva API
+to automatically change the water level of the simulation in the input files and
+run 5 different simulations in parallel. 
+
+```python
+import inductiva
+from inductiva import mixins
+
+# Instantiate a MachineGroup object with 1 preemptible machine of type
+# c2-standard-30 and start it immediately
+machine_group = inductiva.resources.MachineGroup(
+    machine_type="c2-standard-30", num_machines=5, spot=True)
+machine_group.start()
+
+# Download the input files for the SWASH simulation
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "swash-template-example.zip", unzip=True)
+
+# Initialize the template file manager
+file_manager = mixins.FileManager()
+
+# Initialize the SWASH simulator
+swash = inductiva.simulators.SWASH()
+
+# Explore the simulation for different water levels
+water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
+
+# Launch multiple simulations
+for water_level in water_levels_list:
+    # Set the root directory and render the template files into it.
+    file_manager.set_root_dir("swash-input-example")
+    file_manager.add_dir(input_dir, water_level=water_level)
+
+    # Run the simulation on the dedicated MachineGroup
+    task = swash.run(input_dir=file_manager.get_root_dir(),
+                    sim_config_filename="input.sws",
+                    on=machine_group)
+```
+
+The template mechanism will allow you to explore 5 different variations of the
+simulation, each with a different water level. The simulations will be submitted
+to our dedicated machine group and will run in parallel.
+We can check that all simulations are running via the CLI and that it took only
+1min for the moment they are submitted until they start running:
+
+```bash
+$ inductiva tasks list
+ID                         Simulator    Status    Submitted         Started           Computation Time    Resource Type
+-------------------------  -----------  --------  ----------------  ----------------  ------------------  ---------------
+57mr4kas99jxb9titkeackano  swash        started   01 Feb, 09:07:19  01 Feb, 09:08:03  *0:03:12            c2-standard-30
+ox8718m0pwfi02zczui3qky4w  swash        started   01 Feb, 09:07:17  01 Feb, 09:08:02  *0:03:14            c2-standard-30
+mak1ji62s7axf7mespkc36g7e  swash        started   01 Feb, 09:07:15  01 Feb, 09:08:03  *0:03:14            c2-standard-30
+ijyu8bkvme7vg9k0kj6v23gxa  swash        started   01 Feb, 09:07:14  01 Feb, 09:08:02  *0:03:16            c2-standard-30
+g5qq5c9mk2nr5wqhzef38sdm4  swash        started   01 Feb, 09:07:12  01 Feb, 009:08:01  *0:03:17            c2-standard-30
+```
+
+This is a great way to speed up the execution of multiple simulations, since the
+time to run all 5 simulations will be approximately the same as running just one,
+that is the above 5 simulations took 9m55s to complete, which is the time of
+the slowest simulation.
+
+Now, that all the simulations have finished running, we end this tutorial with an
+extra lesson to help reduce the amount of time machines are left unused:
+> Don't forget to terminate your computational resources with `inductiva resources terminate --all`.
 
 #### Configuration parameters
 
@@ -104,7 +156,7 @@ resubmitted to the queue of the computational resource. Currently, this is only
 available for the Machine Group and Elastic Machine Group.
 
 
-## Launching a Machine Group
+## Launch a Machine Group
 
 The first computational resource we introduce is the `MachineGroup`, which are a
 group of homogeneous machines that do not communicate with each other and work
@@ -136,7 +188,7 @@ Once a `MachineGroup` is created, simply pass it as an argument on the simulator
 `run` method, and it will be added to the queue of the computational resource.
 
 
-## Setting up an Elastic Machine Group
+## Set up an Elastic Machine Group
 
 The `ElasticMachineGroup`, similarly to the standard `MachineGroup`, is composed of 
 a group of homogeneous machines that work individually to run multiple simulations. 
