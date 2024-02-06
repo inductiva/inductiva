@@ -146,8 +146,8 @@ def get(
 
 
 def get_all(
-    status: Optional[Union[str, models.TaskStatusCode]] = None
-) -> List["inductiva.tasks.Task"]:
+        status: Optional[Union[str,
+                               models.TaskStatusCode]] = None) -> List[Dict]:
     """Get all tasks of a user.
 
     This function fetches all tasks of a user, sorted by submission
@@ -157,7 +157,7 @@ def get_all(
         status: The status of the tasks to get. If None, tasks with any status
             will be returned.
     Returns:
-        List of Task objects.
+        List of dictionaries with information about the tasks.
     """
     status = models.TaskStatusCode(status) if status is not None else None
 
