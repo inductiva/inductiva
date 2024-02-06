@@ -69,7 +69,7 @@ task = splishsplash_simulator.run(input_dir="splishsplash-example",
                                   sim_config_filename="config.json")
 ```
 
-## A slightly more complex case: Binary composition
+## A slightly more complex case
 
 Some simulators require running more than one command, but they are
 always the same set of commands in sequence. In these cases, we automatically run both 

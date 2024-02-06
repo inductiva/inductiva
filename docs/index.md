@@ -4,19 +4,16 @@
 
 ```{toctree}
 ---
-caption: Topic Areas
+caption: Getting Started
 maxdepth: 1
 hidden: false
 ---
-getting_started
-
+getting_started/index
 ```
-
-
 
 ```{toctree}
 ---
-caption: Overview
+caption: Introduction
 maxdepth: 1
 ---
 overview/index
