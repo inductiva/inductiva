@@ -38,10 +38,16 @@ how_to/templating
 
 ```{toctree}
 ---
-caption: User Reference
+maxdepth: 1
+---
+simulators/index
+```
+
+```{toctree}
+---
+caption: API Client Reference
 maxdepth: 1
 ---
 computational_resources/index
 cli
-simulators/index
 ```

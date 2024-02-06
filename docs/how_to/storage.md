@@ -1,4 +1,4 @@
-# Manage Storage with the Inductiva API
+# Manage Storage
 
 The Inductiva API provides you with tools to manage your remote storage effectively. 
 With the Inductiva storage module, you can easily navigate your storage, evaluate the space used, and delete specific directories as needed.

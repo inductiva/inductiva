@@ -1,4 +1,4 @@
-# Simulators
+# Available Simulators
 
 ```{toctree}
 DualSPHysics
