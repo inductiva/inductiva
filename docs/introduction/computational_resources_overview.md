@@ -39,7 +39,9 @@ without the constraints of a shared environment.
 
 Inductiva provides the capability to create dedicated pools of VM resources, 
 termed [Machine Groups](), exclusively reserved for your use and not shared with 
-others. Users can launch three types of computational resources for their simulations:
+others. 
+
+In this option, users can launch three types of computational resources for their simulations:
 
 - [**Machine Group**](#launch-a-machine-group): This consists of homogeneous machines 
 designed to operate individually, enabling the distribution of multiple simulations 
@@ -57,18 +59,15 @@ that exceed the capabilities of a single machine.
 ## Comparison Example: SWASH Simulation
 
 In this comparison, we aim to illustrate the performance differences between 
-running simulations on a shared pool of resources and on dedicated resources through 
-Inductiva. 
+running simulations on a shared pool of resources and on dedicated resources using the 
+Inductiva API. 
 
-We will use a [SWASH simulation]() as our example to demonstrate these differences.
+We will use the [SWASH simulation]() as our example to demonstrate these differences.
 
 ### On Shared Resources
 
 First, we'll run the simulation using the shared pool of workers, a convenient 
 option for those getting started or running less resource-intensive tasks. 
-
-**NOTE:** the simulation is designed to complete in **approximately 20 minutes** 
-to showcase its performance on the shared infrastructure.
 
 ```python
 import inductiva
@@ -87,6 +86,8 @@ task = swash.run(input_dir=input_dir,
 # Wait until the task finishes running.
 task.wait()
 ```
+In this option, it takes **approximately 20 minutes** 
+to run this simulation on the shared pool of resources.
 
 ### On Dedicated Resources
 
@@ -120,16 +121,20 @@ task.wait()
 # Terminate your dedicated MachineGroup at then end of the simulation.
 machine_group.terminate()
 ```
+Notice that, the simulation is picked almost immediately - no waiting time required, and by contrasting the two resource options above, running the simulation on a [dedicated machine group]() with a `c2-standard-30` machine took **9 minutes and 37s** to complete, which is 
+**2.68 times less** than on the [shared pool](). 
 
-Notice that, the simulation is picked almost immediately - no waiting time required - and
-selecting a more powerful machine greatly reduced the execution time. This simulation took 9m37s to complete.
+## What to read next
+
+Learn how to [run multiple simulations in parallel]() 
+
+Learn how to [set up an API cluster]()
 
 
-### Conclusion
-By contrasting these two approaches, we can see how running the same simulation 
-on a [dedicated machine group]() with a `c2-standard-30` reduces the execution time by 2.68 times. 
 
-Whether your priority is cost-saving with shared resources or time-saving with 
-dedicated power, you can optimize your simulation projects easily with the Inductiva API
+
+
+
+
 
 
