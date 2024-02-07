@@ -5,12 +5,12 @@ up any resources that are not being used. The focus of this janitor is to make
 sure that no computational resources are being wasted or left idle, for example,
 when a user forgets to terminate their machines.
 
-Still, the janitor is mindful of the user work and will not terminate any
+Still, the janitor is mindful of the user's work and will not terminate any
 computational resource right away. Instead, it will wait for a certain time
 before terminating the resource.
 
 The janitor will also terminate any computational resource that is running for
-a certain time, for safe guards.
+a certain time, for safeguards.
 
 Moreover, to avoid cluttering the shared pool of resources, which is mostly meant for
 testing purposes, the janitor will terminate any task that is running also for a

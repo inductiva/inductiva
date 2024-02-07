@@ -3,14 +3,38 @@
 Currently, users can launch several computational resources up to a certain limit,
 which must satisfy the following quotas:
 
-+ **maximum allowed machines**: 10 machines
-+ **maximum allowed vCPUs per resource**: 80 vCPUs
-+ **maximum allowed data disk**: 80 GB
 + **maximum allowed price**: 2 USD per hour ($/h)
++ **maximum allowed machines**: 20 machines
++ **maximum allowed vCPUs per resource**: 120 vCPUs
++ **maximum allowed data disk**: 80 GB
 
 These quotas are in place over all of the computational resources launched by the user.
 That is, you can have two computational resources up at the same time, but, for example, the total number of machines can not exceed 10. Note that for the elastic machine
-groups the quotas are applied with the maximum number of machines that can be active at a certain point.
+group the quotas are applied with the maximum number of machines that can be active at a certain point.
+
+**Maximum allowed price:**
+
+This quota while it seems restrictive, it allows users to go up to 1500 $ per month
+of computational credits, that is, if they are simulating on dedicated resources
+24/7. 
+
+The quota limit excess is achieved for example a single machine of type `c2d-standard-56`:
+```python
+import inductiva
+
+mg = inductiva.resources.MachineGroup("c2d-standard-56")
+```
+```bash
+Error 
+```
+
+However, users can take advantage of the computational resource feature that
+enable them to select preemptible machines and they may be able to get a
+high-performant machine, like a `c2d-highcpu-112`, which fulfils all quotas:
+```python
+# Cost: 0.870 $/h
+mg = inductiva.resources.MachineGroup("c2d-highcpu-112", spot=True)
+```
 
 **Maximum allowed machines:** 
 
@@ -72,16 +96,20 @@ HTTP response headers: HTTPHeaderDict({'content-type': 'application/json', 'X-Cl
 HTTP response body: b'{"detail":"Maximum allowed cores is exceeded. Maximum allowed: 80. Requested: 88."}'
 ```
 
+**Maximum allowed data disk:**
 
-This script will fail when launching the second machine group as 10
-instances have already been launched.
+The last quota sets the maximum data disk that users can set for their computational
+resources. Here, the quota works per machine, which means you can have a machine group
+with four machines all with `100` GB of disk storage dedicated to simulation data.
+Only when exceeding this value per machine an error is raised:
 
-**Max Allowed Price** refers to the price per hour of all machine
-  groups. In this case, a value of 2 USD/h means that resources that
-  cost more than 2 USD/h per hour cannot be requested. This
-  accumulates over resources, that is, if a machine group that costs 2
-  USD/h is already up and running no more resources can be requested.
+```python3
+import inductiva
 
-**Max Allowed Disk Size**: As the name suggests this refers to the
-  size of the disks **per machine**. Unlike all the other quotas, this
-  does not accumulate over the machines launched.
+mg = inductiva.resources.MachineGroup("c2-standard-4", data_disk_gb=120)
+```
+
+
+If any of these quotas establish a limit for what you can achieve with Inductiva API,
+please [reach out to us](support@inductiva.ai) and we can better understand your
+needs.
