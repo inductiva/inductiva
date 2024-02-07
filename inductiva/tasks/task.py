@@ -10,6 +10,7 @@ import datetime
 from dateutil import parser
 from ..localization import translator as __
 
+from inductiva import tasks
 from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api, types
@@ -308,10 +309,17 @@ class Task:
 
         if status != models.TaskStatusCode.KILLED:
             success = False
-            logging.error(
-                "Unable to ensure that task %s transitioned"
-                " to the KILLED state. "
-                "The status of the task is %s", self.id, status)
+            if status == models.TaskStatusCode.PENDINGKILL:
+                logging.error(
+                    "Unable to ensure that task %s transitioned"
+                    " to the KILLED state after %f seconds. "
+                    "The status of the task is %s", self.id, wait_timeout,
+                    status)
+            else:
+                logging.error(
+                    "Task is already in a terminal state"
+                    " and cannot be killed. Current task "
+                    "status is %s", status)
 
         if success:
             if verbosity_level == 2:
