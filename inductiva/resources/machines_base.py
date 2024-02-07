@@ -34,7 +34,6 @@ class BaseMachineGroup:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
               more information about machine types.
-            spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
             register: Bool that indicates if a machine group should be register
                 or if it was already registered. If set to False by users on
