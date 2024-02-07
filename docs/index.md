@@ -23,6 +23,7 @@ introduction/tasks
 introduction/computational_resources_overview
 introduction/data_flow
 introduction/infrastructure
+introduction/user_quotas
 ```
 
 ```{toctree}
