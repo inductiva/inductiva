@@ -4,4 +4,5 @@
 machinegroup_class
 elasticgroup_class
 mpicluster_class
+compute_control
 ```
