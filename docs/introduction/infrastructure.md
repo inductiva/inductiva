@@ -16,7 +16,7 @@ on-premise hardware (for those who invested in owning their own compute solution
 
 Inductiva will function as a uniformizing layer on top of these heterogeneous resources from different providers, allowing users to access computational solutions with different levels of scale, price, performance and flexibility, just by running simple python scripts from their laptop.
 
-## Available Compute Options
+## Available Computational Options
 As of version 0.4, Inductiva is able to send computational loads to Google Cloud Platform (GCP). Therefore, the simulations you start using the API will run on one VM or several VMs (if you start an MPICluster) that live on GCP. We make available VMs of the following families:
 
 **Compute Optimized:**
@@ -74,7 +74,7 @@ e2-highcpu-: [2, 4, 8, 16, 32]
 
 Of course, each of these machines has a different price, and it is easy to incur in very high costs if a great number of VM are started. To protect users from accidentally spinning up too many resources, the API imposes certain limitations on how many machines and what type of machines they can launch. Please refer to the section [User Quotas]() to know the quotas put in place by the current version of API.
 
-## Other Compute Options
+## Other Computational Options
 In future versions of the API, we will be making available other compute options that can be selected via the API. Here is a brief description of what is on the roadmap:
 
 - **Inductiva Compute Engine (ICE)**. Inductiva is working on its infrastructure and will make available cpu-based VMs as well as high-performance GPU-based VMs that certain simulator packages can take advantage of.
