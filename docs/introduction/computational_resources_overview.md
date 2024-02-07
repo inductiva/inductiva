@@ -8,27 +8,28 @@ the two resources using a SWASH simulation.
 
 ## Shared Resources
 
-As a standard practice, when you submit simulation tasks through the Inductiva API, 
-they enter a [task queue]() and are sent to a shared pool of workers on designated Virtual Machines (VMs)
-serving multiple users from either the [Google Cloud Provider (GCP)](https://cloud.google.com/compute/docs/machine-resource) or Inductiva's own 
-computational platform (ICE). These VMs are specifically allocated to facilitate easy 
-API testing and to handle light tasks efficiently with a minimal setup, ideal for 
-quick experimentation.
+Currently, when you submit simulation tasks via the Inductiva API, they are queued 
+and dispatched to a shared pool of workers on designated Virtual Machines (VMs) 
+serving multiple users, primarily utilizing resources from the [Google Cloud Provider (GCP)](https://cloud.google.com/compute/docs/machine-resource). Looking ahead, future versions will also support Inductiva's 
+own computational platform.
+
+These VMs are specifically allocated to facilitate easy API testing and to handle light 
+tasks efficiently with a minimal setup, ideal for quick experimentation.
 
 However, this shared resource pool has its limitations, including slower completion 
 times for simulations due to its finite capacity and less powerful VMs. For running 
 a larger volume of simulations, the Inductiva API provides you with the option to 
-set up your own [dedicated resources](). 
+set up your own dedicated resources. 
 
 ## Dedicated Resources
 
 To ensure you can access the necessary computational power for your simulations 
 without the constraints of a shared environment, Inductiva provides the option 
-to create dedicated pools of VM resources, termed [Machine Groups](), exclusively 
+to create dedicated pools of Virtual Machine (VM) resources, exclusively 
 reserved for your use and not shared with others. 
 
-In this option, you can launch three types of computational resources for your 
-simulations:
+In this option, there are three types of dedicated computational resources you can
+launch for your simulations:
 
 - [**Machine Group**](#launch-a-machine-group): This consists of homogeneous machines 
 designed to operate individually, enabling the distribution of multiple simulations 
@@ -43,13 +44,13 @@ the workload across multiple CPUs. This is particularly useful for complex simul
 that exceed the capabilities of a single machine.
 
 
-## Comparison Example: SWASH Simulation
+## Comparison Example: SWASH
 
 To illustrate the performance differences between running simulations on a shared 
 pool of resources and on dedicated resources using the Inductiva API, we will run 
-the [SWASH simulation]() as an example.
+[SWASH](#docs/simulators/SWASH) as an example.
 
-### SWASH Simulation on Shared Resources
+### SWASH on Shared Resources
 
 First, we'll run the simulation using the shared pool of workers, a convenient 
 option for those getting started or running less resource-intensive tasks. 
@@ -74,7 +75,7 @@ task.wait()
 In this option, it takes **approximately 20 minutes** 
 to complete this simulation.
 
-### SWASH Simulation on Dedicated Resources
+### SWASH on Dedicated Resources
 
 Let's now run the same simulation on dedicated resources, specifically set 
 up for this task.
@@ -106,8 +107,8 @@ task.wait()
 # Terminate your dedicated MachineGroup at then end of the simulation.
 machine_group.terminate()
 ```
-Notice that, the simulation is picked almost immediately - no waiting time required, and by contrasting the two resource options above, running the simulation on a [dedicated machine group]() with a `c2-standard-30` machine took **9 minutes and 37s** to complete, which is 
-**2.68 times less** than on the [shared pool](). 
+Notice that, the simulation is picked almost immediately - no waiting time required, and by contrasting the two resource options above, running the simulation on a [dedicated machine group](#dedicated-resources) with a `c2-standard-30` machine took **9 minutes and 37s** to complete, which is 
+**2.68 times less** than on the [shared pool](#shared-resources). 
 
 ## What to read next
 
