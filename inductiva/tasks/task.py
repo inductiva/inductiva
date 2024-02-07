@@ -310,8 +310,8 @@ class Task:
             success = False
             logging.error(
                 "Unable to ensure that task %s transitioned"
-                " to the KILLED state after %f seconds. "
-                "The status of the task is %s", self.id, wait_timeout, status)
+                " to the KILLED state. "
+                "The status of the task is %s", self.id, status)
 
         if success:
             if verbosity_level == 2:
