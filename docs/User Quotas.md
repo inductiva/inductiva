@@ -4,7 +4,7 @@ The `inductiva` package comes with the following quotas for
 computational resources:
 
 + **Max Allowed Instances**: 10 machines
-+ **Max Allowed Price**: 2 USD
++ **Max Allowed Price**: 2 USD per hour (USD/h).
 + **Max Allowed Cores**: 80 cores
 + **Max Allowed Disk Size**: 80 GB
 
@@ -41,10 +41,10 @@ This script will fail when launching the second machine group as 10
 instances have already been launched.
 
 **Max Allowed Price** refers to the price per hour of all machine
-  groups. In this case, a value of 2 USD means that resources that
-  cost more than 2 USD per hour cannot be requested. This accumulates
-  over resources, that is, if a machine group that costs 2 USD is
-  already up and running no more resources can be requested.
+  groups. In this case, a value of 2 USD/h means that resources that
+  cost more than 2 USD/h per hour cannot be requested. This
+  accumulates over resources, that is, if a machine group that costs 2
+  USD/h is already up and running no more resources can be requested.
 
 **Max Allowed cores** works similarly to **Max Allowed
   Instances**. That is, the total number of cores in all active
