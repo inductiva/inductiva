@@ -49,6 +49,14 @@ simulators/*
 
 ```{toctree}
 ---
+caption: Command Line Interface (CLI)
+maxdepth: 1
+---
+cli/index
+```
+
+```{toctree}
+---
 caption: API Client Reference
 maxdepth: 1
 ---

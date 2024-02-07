@@ -133,46 +133,4 @@ inductiva storage rm 1699461562982775346
 
 To remove everything, use the flag `--all`.
 
-The above examples remove the directory `1699461562982775346` permantenly from the user's remote storage. So be careful when using this command.
-
-
-### Machine Groups
-You can control the amount of VM storage dedicated to storing the results of your 
-simulation using the parameter `data_disk_gb` of the MachineGroup class. You set
-this parameter when you instantiate the MachineGroup object, and this becomes fixed
-for the corresponding VMs since it is not possible to change storage allocation
-after instantiation. Below is an example of how you would reserve 20GB of storage
-in each machine when starting a MachineGroup with 5 machines:
-
-```python
-import inductiva
-
-machine = inductiva.resources.MachineGroup(
-    "c2-standard-16", num_machines=5, data_disk_gb=20)
-```
-
-### MPI Clusters
-
-For MPI Clusters, the machines in the cluster share an NFS partition where simulators 
-typically write their final results. So, in this case, the storage parameter `data_disk_gb`
-sets the storage size for the NFS partition. Here is an example where we set an MPI 
-Cluster with 8 machines, where each machine has been given 50Gb of NFS storage:
-
-```python
-import inductiva
-
-mpi_cluster = inductiva.resources.MPICluster(
-    "c2-standard-16", num_machines=8, data_disk_gb=50)
-```
-
-### What about machines in the Common Pool?
-
-Machines in the Common Pool have a storage space of 30 GB that you can’t control. This 
-means that if you are submitting to the Common Pool simulations that produce more than 
-30 GB, they will fail, and your Task will fail. There is no way for you to request more 
-storage space for VMs in the Common Pool. Common Pool machines are intended for running 
-short simulations, mostly with the goal of testing your scripts. If you wish to run 
-simulations that produce a large amount of data, then you really need to spin up your own 
-Machine Groups or MPI Clusters.
-
-
+The above examples remove the directory `1699461562982775346` permanently from the user's remote storage. So be careful when using this command.

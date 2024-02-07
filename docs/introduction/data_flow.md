@@ -119,18 +119,23 @@ is pretty fast.
 Of course, the receiving VM needs to have enough storage space to execute your simulation. 
 Typically, the input data for a simulation is relatively small. In the example above, the 
 files required to run the simulation only have `1.53` MB. The 
-challenge is the size of the outputs produced by running the simulation, which can easily get to dozens of GB, so VMs need 
-to have large enough disk space installed.
+challenge is the size of the outputs produced by running the simulation, which can easily 
+get to dozens of GB, so VMs need to have large enough disk space installed.
 
-Now, VM storage space can turn out to be pretty expensive, so 
-we allow users to explicitly define the amount of VM storage dedicated 
-to storing the results of the simulation, taking into account what they 
-believe is the reasonable effective and realistic amount needed.
-The size of the storage in the computational resources is selected in the initialization with the parameter `data_disk_gb`.
+Now, VM storage space can turn out to be pretty expensive, so we allow users to 
+explicitly define the amount of VM storage dedicated to storing the results of the 
+simulation, taking into account what they believe is the reasonable effective and
+realistic amount needed. The size of the storage in the computational resources
+is selected in the initialization with the parameter `data_disk_gb`. Note that when
+running simulations on the shared pool of resources it is not possible to configure
+the disk storage, therefore, simulations that may occupy more than the available,
+30 GB, will fail.
 
 When the simulation finishes running, the output files are uploaded to the respective
 task folder in the user's remote storage and they become available to be downloaded
-by the user whenever required. 
+by the user whenever required. When this process finishes the corresponding data 
+in the worker is freed. Therefore, the worker storage only needs to account for a
+simulation at a time.
 
 
 ### What to Read Next
