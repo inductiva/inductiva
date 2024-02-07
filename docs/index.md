@@ -4,7 +4,7 @@
 
 ```{toctree}
 ---
-caption: Getting Started
+caption: Get Started
 maxdepth: 1
 hidden: true
 ---
@@ -14,7 +14,7 @@ first_example
 
 ```{toctree}
 ---
-caption: Overview
+caption: API Functionalities
 maxdepth: 1
 ---
 introduction/index
