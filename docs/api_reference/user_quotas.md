@@ -14,10 +14,6 @@ group the quotas are applied with the maximum number of machines that can be act
 
 **Maximum allowed price:**
 
-This quota while it seems restrictive, it allows users to go up to 1500 $ per month
-of computational credits, that is, if they are simulating on dedicated resources
-24/7. 
-
 The quota limit excess is achieved for example a single machine of type `c2d-standard-56`:
 ```python
 import inductiva
