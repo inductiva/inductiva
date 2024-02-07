@@ -7,7 +7,6 @@ from absl import logging
 from typing import Dict, Any, List, Optional, Tuple, Union
 from typing_extensions import TypedDict
 import datetime
-from dateutil import parser
 from ..localization import translator as __
 
 from inductiva import constants
