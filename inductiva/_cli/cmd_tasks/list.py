@@ -19,6 +19,10 @@ def list_tasks(args):
         last_n = 5 if args.last_n is None else args.last_n
         task_list = tasks.get(last_n=last_n)
 
+    if not task_list:
+        print("No tasks found.")
+        return 1
+
     table_dict = tasks.to_dict(task_list)
 
     emph_formatter = utils.format_utils.get_ansi_formatter()
@@ -44,6 +48,7 @@ def list_tasks(args):
         utils.format_utils.get_tabular_str(table_dict,
                                            formatters=formatters,
                                            header_formatters=header_formatters))
+    return 0
 
 
 def register(parser):
