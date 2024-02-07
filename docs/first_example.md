@@ -2,12 +2,14 @@
 
 In this example, you will use the open-source [hydrodynamics REEF3D simulator](https://github.com/REEF3D/REEF3D) to
 simulate a **2D dam break scenario**. This involves a block of fluid released to 
-flow under the influence of gravity, as shown in the video below. After the simulation 
-completes, you'll find that running simulations through the Inductiva API is not 
+flow under the influence of gravity, as shown in the video below. As the simulation
+progresses, you'll find that running simulations through the Inductiva API is not 
 much different from running them in your local machine.
+
 <div align="center">
    <img src="./_static/reef3d-dambreak-fullscreen.gif" alt="REEF3D 2D dambreak simulation">
 </div>
+
 
 To run a simulation via the API, you first need to prepare a Python script with 
 the following steps:
