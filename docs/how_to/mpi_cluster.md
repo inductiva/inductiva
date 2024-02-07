@@ -1,19 +1,19 @@
 # Set up MPI Cluster
-In this guide, we extend the computational resources to empower the user ability
-to run large scaling simulations on a dedicated MPI Cluster.
 
-## How it works?
+The `MPICluster` is composed by a group of homogeneous machines that are enabled
+to communicate with each other and work together to run a single simulation.
+With several machines working together, users can launch simulations that require
+a higher level of parallelization that a single machine cannot offer.
 
-TODO: Sergio
+Setting up an MPI cluster is simple with the [`MPICluster` class](computational_resources/mpicluster_class). Users can configure the type and number of machines they want
+to compose the cluster and the size of the disk storage shared between all machines.
 
-Setting up an MPI cluster is simple, you will use the [`MPICluster` class](computationaL_resources/mpicluster_class.md) to create a dedicated MPI cluster.
+That is all that is required to launch the cluster. Inductiva API uses this
+configuration to initialize the cluster, making sure that all machines can communicate
+with each other and can read/write to the shared disk storage.
 
-
-
-### Example
-
-Now that we explained what this class is about, let’s see how to use it to run
-a SWASH simulation and understand the gains of using an `MPICluster`.
+In the following example, we run a SWASH simulation in an MPICluster. Recall, that
+the same simulation took 9m37s to complete in a [single machine of `c2-standard-30`](introduction/computation_resources_overview):
 
 ```python
 import inductiva
@@ -24,7 +24,7 @@ input_dir = inductiva.utils.download_from_url(
    "swash-resources-example.zip", unzip=True)
 
 # Instantiate a MPICluster object with 4 machine of type c2-standard-30 and start it
-# immediately. This accounts for 120 vCPUs
+# immediately. This accounts for 120 vCPUs.
 mpi_cluster = inductiva.resources.MPICluster(
    machine_type="c2-standard-30", num_machines=4)
 mpi_cluster.start()
@@ -45,8 +45,9 @@ mpi_cluster.terminate()
 
 With the MPI cluster using 120 vCPUs, the simulation took 3m25s to finish, which
 is a 2.75 times reduction compared to using a single machine with 30 vCPUs.
+
 Notice that the time reduction is not linear with the number of vCPUs, but it
-is still a significant improvement. These speed-up are significant when running
+is still a significant improvement. This speed-up can be significant when running
 longer simulations and using a readily available MPI cluster can reduce the
 time to obtain results from one day to a few hours.
 

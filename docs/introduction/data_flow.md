@@ -74,11 +74,11 @@ Simulation metadata logged to: inductiva_output/task_metadata.json
 
 ## Personal Remote Storage
 
-Once the zip file gets to the Inductiva server, it is immediately transferred to 
-your Personal Remote Storage area, under a folder whose name is the id for the 
-simulation task you invoked. You can check the contents of your  Personal Remote 
-Storage programmatically via the API or by using the CLI. Next, we show how you 
-would be able to check the uploaded zip file using the CLI.
+Once the zip file gets to the Inductiva server, it is immediately 
+transferred to your Personal Remote Storage area, under a folder whose 
+name is, by default, the ID for the simulation task you invoked. You can 
+check the contents of your  Personal Remote Storage programmatically via 
+the API or by using the CLI. Next, we show how you would be able to check the uploaded zip file using the CLI.
 
 To check your personal storage area, you can do a general listing of the contents with:
 ```bash
@@ -97,7 +97,10 @@ fxobdn63z9xtb7q3thhpwn7c7/  11.52 MB  01 Feb, 22:53:10
 jyc8b91mj556w9u61f8qrhf4b/  11.29 MB  01 Feb, 20:29:17
 ```
 
-The simulation we have just invoked has the task ID `hzgk5ngzk28a39qa7mesv0snk` and we can check that its contents were correctly submitted to the server by listing the specific contents of the task folder with:
+The simulation we have just invoked has the task ID `hzgk5ngzk28a39qa7mesv0snk`
+and we can check that its contents were correctly submitted to the server by listing
+the specific contents of the task folder with:
+
 ```bash
 $ inductiva storage ls tc7cwuer45kfzuw8t93r6dxa8
 Name       Size     Creation Time
@@ -106,62 +109,28 @@ input.zip  1.53 MB  01 Feb, 23:52:44
            0 B      01 Feb, 23:52:43
 ```
 
-Once your simulation task gets picked up by a Worker, its input files need to be downloaded 
-from your Personal Remote Storage to the corresponding VM. Typically, this VM lives in the 
-same region of the Google Cloud storage, and so moving data is pretty fast.
+Once your simulation task gets picked up by a Worker, its input files need to be
+downloaded from your Personal Remote Storage to the corresponding VM. Typically,
+this VM lives in the same region of the Google Cloud storage, and so moving data
+is pretty fast.
 
 ## Worker Storage
 
 Of course, the receiving VM needs to have enough storage space to execute your simulation. 
 Typically, the input data for a simulation is relatively small. In the example above, the 
-files required to run the simulation only have `1.53` MB. What may be truly challenging is 
-the size of the output of the simulation, which can easily get to dozens of GB, so VMs need 
-to have large enough storage space installed.
+files required to run the simulation only have `1.53` MB. The 
+challenge is the size of the outputs produced by running the simulation, which can easily get to dozens of GB, so VMs need 
+to have large enough disk space installed.
 
-Now, VM storage space turns out to be pretty expensive, so we allow users to explicitly 
-define the amount of VM storage dedicated to storing the results of the simulation, taking 
-into account what they believe is the reasonable amount effectively and realistically 
-needed. Depending on the type of computational resource that you are using this may involve 
-setting one parameter (for MachineGroups) or two parameters (for MPIClusters). 
+Now, VM storage space can turn out to be pretty expensive, so 
+we allow users to explicitly define the amount of VM storage dedicated 
+to storing the results of the simulation, taking into account what they 
+believe is the reasonable effective and realistic amount needed.
+The size of the storage in the computational resources is selected in the initialization with the parameter `data_disk_gb`.
 
-### Machine Groups
-You can control the amount of VM storage dedicated to storing the results of your 
-simulation using the parameter `data_disk_gb` of the MachineGroup class. You set
-this parameter when you instantiate the MachineGroup object, and this becomes fixed
-for the corresponding VMs since it is not possible to change storage allocation
-after instantiation. Below is an example of how you would reserve 20GB of storage
-in each machine when starting a MachineGroup with 5 machines:
-
-```python
-import inductiva
-
-machine = inductiva.resources.MachineGroup(
-    "c2-standard-16", num_machines=5, data_disk_gb=20)
-```
-
-### MPI Clusters
-
-For MPI Clusters, the machines in the cluster share an NFS partition where simulators 
-typically write their final results. So, in this case, the storage parameter `data_disk_gb`
-sets the storage size for the NFS partition. Here is an example where we set an MPI 
-Cluster with 8 machines, where each machine has been given 50Gb of NFS storage:
-
-```python
-import inductiva
-
-mpi_cluster = inductiva.resources.MPICluster(
-    "c2-standard-16", num_machines=8, data_disk_gb=50)
-```
-
-### What about machines in the Common Pool?
-
-Machines in the Common Pool have a storage space of 30 GB that you can’t control. This 
-means that if you are submitting to the Common Pool simulations that produce more than 
-30 GB, they will fail, and your Task will fail. There is no way for you to request more 
-storage space for VMs in the Common Pool. Common Pool machines are intended for running 
-short simulations, mostly with the goal of testing your scripts. If you wish to run 
-simulations that produce a large amount of data, then you really need to spin up your own 
-Machine Groups or MPI Clusters.
+When the simulation finishes running, the output files are uploaded to the respective
+task folder in the user's remote storage and they become available to be downloaded
+by the user whenever required. 
 
 
 ### What to Read Next

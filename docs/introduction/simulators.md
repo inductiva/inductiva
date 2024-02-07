@@ -130,13 +130,13 @@ who are familiar with the simulators can easily start running simulations with
 their previously prepared simulation configuration files. 
 
 The simulators currently available are:
-- [SPlisHSPlasH](./simulators/SPlisHSPlasH.md)
-- [DualSPHysics](./simulators/DualSPHysics.md)
-- [OpenFOAM](./simulators/OpenFOAM.md)
-- [SWASH](./simulators/SWASH.md)
-- [XBeach](./simulators/XBeach.md)
-- [Reef3D](./simulators/Reef3D.md)
-- [GROMACS](./simulators/GROMACS.md)
-- [FDS](./simulators/FDS.md)
+- [SPlisHSPlasH](./simulators/SPlisHSPlasH)
+- [DualSPHysics](./simulators/DualSPHysics)
+- [OpenFOAM](./simulators/OpenFOAM)
+- [SWASH](./simulators/SWASH)
+- [XBeach](./simulators/XBeach)
+- [Reef3D](./simulators/Reef3D)
+- [GROMACS](./simulators/GROMACS)
+- [FDS](./simulators/FDS)
 
 Check the documentation of each simulator to learn more on how to configure them. 
