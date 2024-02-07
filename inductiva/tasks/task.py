@@ -310,15 +310,13 @@ class Task:
             success = False
             if status == models.TaskStatusCode.PENDINGKILL:
                 logging.error(
-                    "Unable to ensure that task %s transitioned"
-                    " to the KILLED state after %f seconds. "
-                    "The status of the task is %s", self.id, wait_timeout,
-                    status)
+                    "Unable to ensure that task %s transitioned to the KILLED "
+                    "state after %f seconds. The status of the task is %s",
+                    self.id, wait_timeout, status)
             else:
                 logging.error(
-                    "Task is already in a terminal state"
-                    " and cannot be killed. Current task "
-                    "status is %s", status)
+                    "Task is already in a terminal state and cannot be killed. "
+                    "Current task status is %s", status)
 
         if success:
             if verbosity_level == 2:
