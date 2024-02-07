@@ -23,12 +23,3 @@ Here, we highlight and go deeper into the four main functionalities of the CLI:
 
 Whenever you need help on a specific command, you can always use the `--help` or
 `-h` flag to further understand its usage.
-
-```{toctree}
----
-hidden: true
----
-resources
-tasks
-storage
-```

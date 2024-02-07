@@ -53,7 +53,10 @@ simulators/*
 caption: Command Line Interface (CLI)
 maxdepth: 1
 ---
-cli/index
+cli/overview
+cli/resources
+cli/tasks
+cli/storage
 ```
 
 ```{toctree}

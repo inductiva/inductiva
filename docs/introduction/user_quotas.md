@@ -1,4 +1,4 @@
-# User Resource Quotas
+# User Quotas
 
 The `inductiva` package comes with the following quotas for
 computational resources:
