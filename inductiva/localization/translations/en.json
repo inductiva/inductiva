@@ -8,8 +8,39 @@
         "Unable to check for available updates for the 'inductiva' package.",
         "The following error occurred:\n  {0}"
     ],
-    "kill-request-sent":["Successfully sent kill request for task {0}.",
+    "task-kill-request-sent-2":["Successfully sent kill request for task {0}.",
         "> Consider tracking the task status by calling task.get_status()",
         "> or via the CLI using 'inductiva tasks -id {0}'."
-    ]
+    ],
+    "task-kill-request-sent-1":["Successfully sent kill request for {0}."],
+    "task-kill-request-sent-0":[""],
+    "user-prompt-confirmation": 
+        "Are you sure you want to proceed (y/[N])? "
+    ,
+    "resources-prompt-terminate-all":
+        "You are about to terminate ALL resources."
+    ,
+    "storage-prompt-remove-all":
+        "You are about to remove EVERYTHING from your remote storage space."
+    ,
+    "task-prompt-kill-all":
+        "You are about to kill ALL tasks."
+    ,
+    "resources-prompt-terminate-big":
+        "You are about to terminate {0} resource(s)."
+    ,
+    "storage-prompt-remove-big":
+        "You are about to remove {0} path(s) from your remote storage space."
+    ,
+    "task-prompt-kill-big":
+        "You are about to kill {0} task(s)."
+    ,
+    "resources-prompt-terminate-small":
+        "You are about to terminate the following resources:"
+    ,
+    "storage-prompt-remove-small":
+        "You are about to remove the following paths from your remote storage space:"
+    ,
+    "task-prompt-kill-small":
+        "You are about to kill the following tasks:"
 }

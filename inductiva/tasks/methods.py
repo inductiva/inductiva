@@ -22,8 +22,11 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
             all the tasks. Example: { "ID": [1, 2, 3], 
             "Simulator": ["reef3d", "reef3d", "reef3d"], ... }
     """
-
-    table = defaultdict(list)
+    column_names = [
+        "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
+        "Resource Type"
+    ]
+    table = defaultdict(list, {key: [] for key in column_names})
 
     for task in list_of_tasks:
         info = task.get_info()
@@ -143,3 +146,30 @@ def get(
     ]
 
     return tasks
+
+
+def get_all(
+        status: Optional[Union[str,
+                               models.TaskStatusCode]] = None) -> List[Dict]:
+    """Get all tasks of a user.
+
+    This function fetches all tasks of a user, sorted by submission
+    time with the most recent first. If status is specified, only
+    tasks with that status will be fetched.
+    Args:
+        status: The status of the tasks to get. If None, tasks with any status
+            will be returned.
+    Returns:
+        List of dictionaries with information about the tasks.
+    """
+    status = models.TaskStatusCode(status) if status is not None else None
+
+    all_tasks = []
+    page_counter = 1
+
+    while tasks_fetched := _fetch_tasks_from_api(status,
+                                                 page=page_counter,
+                                                 per_page=50):
+        all_tasks.extend(tasks_fetched)
+        page_counter += 1
+    return all_tasks

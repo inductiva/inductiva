@@ -132,6 +132,45 @@ class GCPVMGroup(
                     )
             
             
+            class idle_seconds(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    any_of_0 = schemas.IntSchema
+                    any_of_1 = schemas.NoneSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'idle_seconds':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
             class creation_timestamp(
                 schemas.DateTimeBase,
                 schemas.ComposedSchema,
@@ -322,6 +361,7 @@ class GCPVMGroup(
                 "is_elastic": is_elastic,
                 "id": id,
                 "name": name,
+                "idle_seconds": idle_seconds,
                 "creation_timestamp": creation_timestamp,
                 "deletion_timestamp": deletion_timestamp,
                 "type": type,
@@ -358,6 +398,9 @@ class GCPVMGroup(
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["idle_seconds"]) -> MetaOapg.properties.idle_seconds: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["creation_timestamp"]) -> MetaOapg.properties.creation_timestamp: ...
     
     @typing.overload
@@ -378,7 +421,7 @@ class GCPVMGroup(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "creation_timestamp", "deletion_timestamp", "type", "min_vms", "max_vms", "provider", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "min_vms", "max_vms", "provider", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -405,6 +448,9 @@ class GCPVMGroup(
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["idle_seconds"]) -> typing.Union[MetaOapg.properties.idle_seconds, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["creation_timestamp"]) -> typing.Union[MetaOapg.properties.creation_timestamp, schemas.Unset]: ...
     
     @typing.overload
@@ -425,7 +471,7 @@ class GCPVMGroup(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "creation_timestamp", "deletion_timestamp", "type", "min_vms", "max_vms", "provider", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "min_vms", "max_vms", "provider", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -439,6 +485,7 @@ class GCPVMGroup(
         disk_size_gb: typing.Union[MetaOapg.properties.disk_size_gb, decimal.Decimal, int, ],
         id: typing.Union[MetaOapg.properties.id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         name: typing.Union[MetaOapg.properties.name, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        idle_seconds: typing.Union[MetaOapg.properties.idle_seconds, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         creation_timestamp: typing.Union[MetaOapg.properties.creation_timestamp, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         deletion_timestamp: typing.Union[MetaOapg.properties.deletion_timestamp, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         type: typing.Union[MetaOapg.properties.type, str, schemas.Unset] = schemas.unset,
@@ -458,6 +505,7 @@ class GCPVMGroup(
             disk_size_gb=disk_size_gb,
             id=id,
             name=name,
+            idle_seconds=idle_seconds,
             creation_timestamp=creation_timestamp,
             deletion_timestamp=deletion_timestamp,
             type=type,

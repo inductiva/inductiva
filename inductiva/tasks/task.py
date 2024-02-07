@@ -7,7 +7,6 @@ from absl import logging
 from typing import Dict, Any, List, Optional, Tuple, Union
 from typing_extensions import TypedDict
 import datetime
-from dateutil import parser
 from ..localization import translator as __
 
 from inductiva import constants
@@ -35,12 +34,53 @@ class Task:
         _api: Instance of TasksApi (from the generated API client).
     """
 
+    FAILED_STATUSES = {
+        models.TaskStatusCode.FAILED, models.TaskStatusCode.KILLED,
+        models.TaskStatusCode.EXECUTERFAILED,
+        models.TaskStatusCode.EXECUTERTERMINATED,
+        models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
+        models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
+        models.TaskStatusCode.ZOMBIE
+    }
+
+    TERMINAL_STATUSES = {models.TaskStatusCode.SUCCESS}.union(FAILED_STATUSES)
+
+    RUNNING_STATUSES = {
+        models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED
+    }
+
+    KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
+                        }.union(RUNNING_STATUSES)
+
+    KILL_VERBOSITY_LEVELS = [0, 1, 2]
+
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
         self.id = task_id
         self._api = tasks_api.TasksApi(api.get_client())
         self._info = None
         self._status = None
+
+    def is_running(self) -> bool:
+        """Validate if the task is running.
+
+        This method issues a request to the API.
+        """
+        return self.get_status() == models.TaskStatusCode.STARTED
+
+    def is_failed(self) -> bool:
+        """Validate if the task has failed.
+        
+        This method issues a request to the API.
+        """
+        return self.get_status() in self.FAILED_STATUSES
+
+    def is_terminal(self) -> bool:
+        """Check if the task is in a terminal status.
+
+        This method issues a request to the API.
+        """
+        return self.get_status() in self.TERMINAL_STATUSES
 
     @classmethod
     def from_api_info(cls, info: Dict[str, Any]) -> "Task":
@@ -87,8 +127,9 @@ class Task:
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
+        # Can't call is_terminal because it calls get status (infinite loop)
         if (self._status is not None and
-                self._status in constants.TASK_TERMINAL_STATUSES):
+                self._status in self.TERMINAL_STATUSES):
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
@@ -106,7 +147,7 @@ class Task:
         """
         # If the task is in a terminal status and we already have the info,
         # return it without refreshing it from the API.
-        if self._info is not None and self._is_terminal_status():
+        if self._info is not None and self.is_terminal():
             return self._info
 
         params = self._get_path_params()
@@ -165,23 +206,10 @@ class Task:
                         "while performing the task.", status)
             prev_status = status
 
-            if self._is_terminal_status():
+            if self.is_terminal():
                 return status
 
             time.sleep(polling_period)
-
-    def is_running(self) -> bool:
-        """Validate if the task is running."""
-
-        return self.get_status() == models.TaskStatusCode.STARTED
-
-    def _is_terminal_status(self) -> bool:
-        """Check if the task is in a terminal status.
-
-        This method issues a request to the API.
-        """
-        status = self.get_status()
-        return status in constants.TASK_TERMINAL_STATUSES
 
     def _send_kill_request(self, max_api_requests: int) -> None:
         """Send a kill request to the API.
@@ -193,7 +221,7 @@ class Task:
         while max_api_requests > 0:
             max_api_requests -= 1
             try:
-                if self._is_terminal_status():
+                if self.is_terminal():
                     break
 
                 path_params = self._get_path_params()
@@ -232,10 +260,9 @@ class Task:
             time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
         return success, status
 
-    def kill(
-            self,
-            wait_timeout: Optional[Union[float,
-                                         int]] = None) -> Union[bool, None]:
+    def kill(self,
+             wait_timeout: Optional[Union[float, int]] = None,
+             verbosity_level: int = 2) -> Union[bool, None]:
         """Request a task to be killed.
         
         This method requests that the current task is remotely killed.
@@ -246,6 +273,10 @@ class Task:
         Args:
             wait_timeout (int, float): Optional - number of seconds to wait
             for the kill command or None if only the request is to be sent.
+            verbosity_level (int): Optional. the verbosity of the logs when the
+            task signal is sent and when the task is killed. Verbosity 0
+            produces no outputs, 1 produces minimal outputs, and 2 (Default)
+            produces extensive outputs.
         Returns:
             - None if `wait_timeout` is None and the kill request was
               successfully sent;
@@ -261,10 +292,15 @@ class Task:
             if wait_timeout <= 0.0:
                 raise ValueError("Wait timeout must be a positive number.")
 
+        if verbosity_level not in self.KILL_VERBOSITY_LEVELS:
+            raise ValueError(f"Verbosity {verbosity_level} level not allowed. "
+                             f"Choose from {self.KILL_VERBOSITY_LEVELS}")
+
         self._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
 
         if wait_timeout is None:
-            logging.info(__("kill-request-sent", self.id))
+            logging.info(
+                __("task-kill-request-sent" + f"-{verbosity_level}", self.id))
             return None
 
         success, status = self._check_if_pending_kill(wait_timeout)
@@ -277,7 +313,10 @@ class Task:
                 "The status of the task is %s", self.id, wait_timeout, status)
 
         if success:
-            logging.info("Successfully killed task %s.", self.id)
+            if verbosity_level == 2:
+                logging.info("Successfully killed task %s.", self.id)
+            elif verbosity_level == 1:
+                logging.info("%s killed.")
 
         return success
 
@@ -385,7 +424,7 @@ class Task:
             The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
-        if fail_if_running and not self._is_terminal_status():
+        if fail_if_running and not self.is_terminal():
             return None
         # start_time may be None if the task was killed before it started
         if info["computation_start_time"] is None:
@@ -411,7 +450,7 @@ class Task:
             The time in hh mm ss or None if the task hasn't completed yet.
         """
         info = self.get_info()
-        if fail_if_running and not self._is_terminal_status():
+        if fail_if_running and not self.is_terminal():
             return None
         # start_time may be None if the task was killed before it started
         if info["input_submit_time"] is None:
@@ -450,77 +489,3 @@ class Task:
         machine_type = machine_info["vm_type"].split("/")[-1]
 
         return machine_type
-
-    def get_stdout(self, n_lines: int = 10, verbose: bool = True):
-        """Returns tail of stdout.txt file for current task
-
-        Args:
-            n_lines: Number of lines to return from the end of the file.
-            verbose: Whether to print the contents.
-        Returns:
-            A list of strings, each string being a line from the stdout."""
-
-        if self.get_status() in (models.TaskStatusCode.PENDINGINPUT,
-                                 models.TaskStatusCode.SUBMITTED):
-            logging.info("Task has not started yet.")
-            return
-
-        api_response = self._api.get_stdout_tail(
-            path_params=self._get_path_params(),
-            query_params={
-                "n_lines": n_lines,
-            },
-            stream=False,
-            skip_deserialization=False,
-        )
-
-        if verbose:
-            logging.info("Simulation stdout:")
-            print("\n")
-            for line in api_response.body:
-                print(line)
-
-        return api_response.body
-
-    def get_resources_usage(self, n_lines: int = 10, verbose: bool = True):
-        """Returns tail of resources_usage.txt file for current task
-
-        Calls the get_resources_tail function. This file is a .csv file
-        with each line corresponding to: register_time / memory_usage_percent /
-        cpu_usage_percent. The function returns the last n_lines in a list of
-        lines.
-        Args:
-            n_lines: Number of lines to return from the end of the file.
-            verbose: Whether to print the contents.
-        Returns:
-            A list of strings, each string being a line from the stdout."""
-        if self.get_status() in (models.TaskStatusCode.PENDINGINPUT,
-                                 models.TaskStatusCode.SUBMITTED):
-            logging.info("Task did not start yet.")
-            return
-
-        api_response = self._api.get_resources_tail(
-            path_params=self._get_path_params(),
-            query_params={
-                "n_lines": n_lines,
-            },
-            stream=False,
-            skip_deserialization=False,
-        )
-
-        if verbose:
-            logging.info("Current resource usage:")
-            print("\n")
-            print("Timestamp \t   Memory usage  CPU usage")
-
-            for line in api_response.body:
-                date, memory, cpu = line.split(",")
-
-                #Remove the miliseconds from the date
-                datetime_date = parser.parse(date)
-                truncated_datetime = datetime_date.strftime("%Y-%m-%d %H:%M:%S")
-
-                print(f"{truncated_datetime} \t {float(memory):.3f}\
-                       \t {float(cpu):.3f}")
-
-        return api_response.body

@@ -10,12 +10,11 @@ from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
 from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
 from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
-from inductiva.client.apis.paths.tasks_task_id_stdout_tail import TasksTaskIdStdoutTail
-from inductiva.client.apis.paths.tasks_task_id_resources_tail import TasksTaskIdResourcesTail
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
 from inductiva.client.apis.paths.admin_groups import AdminGroups
+from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_type import ComputeType
@@ -39,12 +38,11 @@ PathToApi = typing_extensions.TypedDict(
         PathValues.TASKS_TASK_ID_OUTPUT_LIST: TasksTaskIdOutputList,
         PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
         PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
-        PathValues.TASKS_TASK_ID_STDOUT_TAIL: TasksTaskIdStdoutTail,
-        PathValues.TASKS_TASK_ID_RESOURCES_TAIL: TasksTaskIdResourcesTail,
         PathValues.ADMIN_USERS: AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_API_KEY: AdminUsersEmailApiKey,
         PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
         PathValues.ADMIN_GROUPS: AdminGroups,
+        PathValues.ADMIN_ACTIVE_TASKS: AdminActiveTasks,
         PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
         PathValues.COMPUTE_GROUP: ComputeGroup,
         PathValues.COMPUTE_TYPE: ComputeType,
@@ -68,12 +66,11 @@ path_to_api = PathToApi({
     PathValues.TASKS_TASK_ID_OUTPUT_LIST: TasksTaskIdOutputList,
     PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
     PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
-    PathValues.TASKS_TASK_ID_STDOUT_TAIL: TasksTaskIdStdoutTail,
-    PathValues.TASKS_TASK_ID_RESOURCES_TAIL: TasksTaskIdResourcesTail,
     PathValues.ADMIN_USERS: AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_API_KEY: AdminUsersEmailApiKey,
     PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
     PathValues.ADMIN_GROUPS: AdminGroups,
+    PathValues.ADMIN_ACTIVE_TASKS: AdminActiveTasks,
     PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
     PathValues.COMPUTE_GROUP: ComputeGroup,
     PathValues.COMPUTE_TYPE: ComputeType,
