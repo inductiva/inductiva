@@ -63,6 +63,15 @@ mg2 = inductiva.resources.MachineGroup(
 )
 ```
 
+When trying to register the second group the following error is raised:
+```bash
+Registering MachineGroup configurations:
+Registering machine group failed with exception (403)
+Reason: Forbidden
+HTTP response headers: HTTPHeaderDict({'content-type': 'application/json', 'X-Cloud-Trace-Context': 'a7e5789c7404b9bd53ef27f98542b2a5', 'Date': 'Wed, 07 Feb 2024 14:45:17 GMT', 'Server': 'Google Frontend', 'Content-Length': '83'})
+HTTP response body: b'{"detail":"Maximum allowed cores is exceeded. Maximum allowed: 80. Requested: 88."}'
+```
+
 
 This script will fail when launching the second machine group as 10
 instances have already been launched.
