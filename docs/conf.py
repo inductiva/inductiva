@@ -33,6 +33,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'myst_parser',
     'sphinxcontrib.mermaid',
+    'sphinx_copybutton',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
