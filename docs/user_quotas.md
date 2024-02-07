@@ -14,8 +14,8 @@ snippets will both raise an error:
 
 ```python
 mg = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-8",
-    num_machines=11,
+    machine_type="c2-standard-16",
+    num_machines=4,
 )
 mg.start()
 ```

@@ -3,7 +3,7 @@
 Machine groups can be used to run multiple simulations in 
 parallel, by having each of the machines in the group run a separate simulation. This is a powerful mechanism to reduce waiting times when you need to run a large number of simulations, such as when you are exploring different parameter values or running a large number of simulations for a sensitivity analysis. 
 
-To exemplify, we will use the [templating mechanism]() ths is built in the Inductiva API to explore variations of a base simulation scenario. More specifically, we will consider a coastal dynamic simulation using the SWASH simulator, where we want to explore the effect of different water levels on the simulation results. 
+To exemplify, we will use the [templating mechanism]() that is built in the Inductiva API to explore variations of a base simulation scenario. More specifically, we will consider a coastal dynamic simulation using the SWASH simulator, where we want to explore the effect of different water levels on the simulation results. 
 
 As an example, let's run 5 different simulations in parallel. 
 

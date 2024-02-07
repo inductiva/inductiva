@@ -219,5 +219,5 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             "> Minimum estimated cloud cost of elastic machine group: "
             "%.3f $/h.", cost_per_machine * self.min_machines)
         logging.info(
-            "> Maximum estimated cloud cost  of elastic machine group:"
+            "> Maximum estimated cloud cost of elastic machine group:"
             " %.3f $/h.", cost_per_machine * self.max_machines)

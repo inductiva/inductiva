@@ -1,4 +1,4 @@
-# Remote Storage overview
+# Remote Storage
 
 Finally, when the simulation finishes the results are saved in the user's remote bucket. 
 

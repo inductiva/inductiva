@@ -1,4 +1,4 @@
-# Resource Management in the CLI
+# Resources
 
 As you might know by now, Inductiva API provides a simple way to [launch
 dedicated resources]() where you can run your simulations. Before launching any

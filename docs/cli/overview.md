@@ -1,11 +1,9 @@
-# Command Line Interface (CLI)
+# Overview
 
 Walking side by side with the Python client, the Inductiva CLI provides 
 a quick and simple interface to interact and perform the most common tasks from
 the terminal. The CLI allows users to quickly manage their tasks, resources and/or
 storage, while their simulations are still running remotely.
-
-## Overview of the CLI
 
 The CLI beauty is that its functionalities are a terminal command distance away.
 By doing,

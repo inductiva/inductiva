@@ -1,5 +1,5 @@
 
-### Task Management
+### Tasks
 
 The power of Inductiva API lies on the ability to launch multiple simulations remotely.
 As an easy to track them, the CLI provides a `list` subcommand that provides information
