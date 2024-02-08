@@ -48,8 +48,7 @@ class BaseMachineGroup:
             raise ValueError("Machine type not supported")
 
         if data_disk_gb <= 0:
-            raise ValueError(
-                "`data_disk_gb` must be positive.")
+            raise ValueError("`data_disk_gb` must be positive.")
 
         self.machine_type = machine_type
         self.data_disk_gb = data_disk_gb
