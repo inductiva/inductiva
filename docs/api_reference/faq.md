@@ -1,4 +1,4 @@
-# Frequently Asked Questions (FAQs)
+# FAQ
 
 **What should I do if Inductiva does not support the simulation package I need?**
 
