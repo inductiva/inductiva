@@ -273,7 +273,7 @@ The following diagram shows the lifecycle of a task:
 
 
 <div align="center">
-   <img src="./_static/task_state.svg" alt="Task state diagram">
+   <img src="../_static/task_state.svg" alt="Task state diagram">
 </div>
 
 

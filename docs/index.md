@@ -16,6 +16,7 @@ first_example
 ---
 caption: Overview
 maxdepth: 1
+hidden: true
 ---
 introduction/index
 introduction/simulators
@@ -23,6 +24,7 @@ introduction/tasks
 introduction/computational_resources_overview
 introduction/data_flow
 introduction/infrastructure
+introduction/templating
 
 ```
 
@@ -30,19 +32,20 @@ introduction/infrastructure
 ---
 caption: How To
 maxdepth: 1
+hidden: true
 ---
 how_to/computational_resources
 how_to/manage_computational_resources
 how_to/elastic_machine_group
 how_to/mpi_cluster
 how_to/storage
-how_to/templating
 ```
 
 ```{toctree}
 ---
 caption: Available Simulators
 maxdepth: 1
+hidden: true
 glob: true
 ---
 simulators/*
@@ -52,6 +55,7 @@ simulators/*
 ---
 caption: Command Line Interface (CLI)
 maxdepth: 1
+hidden: true
 ---
 cli/overview
 cli/resources
@@ -63,7 +67,9 @@ cli/storage
 ---
 caption: API Client Reference
 maxdepth: 1
+hidden: true
 ---
 computational_resources/index
-user_quotas
+api_reference/user_quotas
+api_reference/troubleshooting
 ```
