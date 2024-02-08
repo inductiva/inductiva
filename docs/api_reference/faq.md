@@ -20,11 +20,3 @@
 
 **How can I optimize the performance of my simulations?**
 Performance optimization involves adjusting simulation parameters. Our documentation includes tips for efficiently utilizing [Inductiva's computational resources]().
-
-## Recommended Tools
-
-
-## Useful Terminology
-This documentation uses the following terms:
-
-https://packaging.python.org/en/latest/glossary/ 
