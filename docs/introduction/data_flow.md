@@ -42,6 +42,7 @@ Here is an example. Let us assume you are developing a coastal dynamics study
 using Reef3D, and you have all the required input files and assets stored in the 
 subdirectory `my_input_data_dir` located inside your project folder on your local 
 machine. The following piece of code illustrates this situation:
+
 ```python
 import inductiva
 
@@ -53,9 +54,10 @@ simulator = inductiva.simulators.REEF3D()
 task = simulator.run(input_dir="my_input_data_dir")
 ```
 
-The moment you invoke `run()` you start the uploading process. The folder `my_input_data_dir` is zipped and the corresponding zip file is uploaded to Inductiva servers.
+The moment you invoke `run()` you start the uploading process. The folder `my_input_data_dir`
+is zipped and the corresponding zip file is uploaded to Inductiva servers.
  
-You can check what is actually happening when you invoke a simulator via the API. 
+You can check what is happening when you invoke a simulator via the API. 
 If you look at the logs produced at you will be able to see a message like this 
 right in the beginning of the process execution:
 
@@ -83,18 +85,20 @@ the API or by using the CLI. Next, we show how you would be able to check the up
 To check your personal storage area, you can do a general listing of the contents with:
 ```bash
 $ inductiva storage ls
-Name                        Size      Creation Time
---------------------------  --------  ----------------
-tc7cwuer45kfzuw8t93r6dxa8/  1.53 MB   01 Feb, 23:52:43
-hzgk5ngzk28a39qa7mesv0snk/  1.53 MB   01 Feb, 23:45:17
-mjnb8c7i8bfppgmu2y1zd1o7f/  11.52 MB  01 Feb, 23:24:17
-57mr4kas99jxb9titkeackano/  11.52 MB  01 Feb, 23:07:17
-ox8718m0pwfi02zczui3qky4w/  11.52 MB  01 Feb, 23:07:16
-mak1ji62s7axf7mespkc36g7e/  11.52 MB  01 Feb, 23:07:14
-ijyu8bkvme7vg9k0kj6v23gxa/  11.52 MB  01 Feb, 23:07:13
-g5qq5c9mk2nr5wqhzef38sdm4/  11.52 MB  01 Feb, 23:07:11
-fxobdn63z9xtb7q3thhpwn7c7/  11.52 MB  01 Feb, 22:53:10
-jyc8b91mj556w9u61f8qrhf4b/  11.29 MB  01 Feb, 20:29:17
+
+       NAME                             SIZE          CREATION TIME
+       tc7cwuer45kfzuw8t93r6dxa8/       1.53 MB       08 Feb, 14:08:44
+       qetbcydbymfg9r3eqri7jbekh/       7.36 MB       08 Feb, 14:07:34
+       sk9zbcdkfo0124tw0jvro8if0/       7.36 MB       08 Feb, 14:07:33
+       osd7r4onvetxmrxggpohc4wdc/       7.26 MB       08 Feb, 14:07:33
+       gpawvd4qbnq36vhy3z0kddj7u/       7.28 MB       08 Feb, 14:07:32
+       qtjs7n5xnaixfuhu8jm03xv38/       7.36 MB       08 Feb, 14:07:32
+       9e3bgdgwqahrwaxvrk06q5mhn/       7.36 MB       08 Feb, 14:07:31
+       5ry5h8q26o0fxqs8mymsy0d7r/       7.27 MB       08 Feb, 14:07:30
+       jbxo7dc9pypqxzm53mw0jjk5p/       7.29 MB       08 Feb, 14:07:30
+       9uhbxuzy2bqnjyyt4arxheqwc/       7.36 MB       08 Feb, 14:07:29
+       i2ge334hdy4kinwvmau5dtwxx/       7.36 MB       08 Feb, 14:07:29
+
 ```
 
 The simulation we have just invoked has the task ID `hzgk5ngzk28a39qa7mesv0snk`
@@ -103,10 +107,10 @@ the specific contents of the task folder with:
 
 ```bash
 $ inductiva storage ls tc7cwuer45kfzuw8t93r6dxa8
-Name       Size     Creation Time
----------  -------  ----------------
-input.zip  1.53 MB  01 Feb, 23:52:44
-           0 B      01 Feb, 23:52:43
+
+       NAME             SIZE          CREATION TIME
+       input.zip        1.06 KB       08 Feb, 14:08:44
+                        0 B           08 Feb, 14:08:44
 ```
 
 Once your simulation task gets picked up by a Worker, its input files need to be
@@ -140,5 +144,5 @@ simulation at a time.
 
 ### What to Read Next
 
-- [Understanding Tasks]
-- [Managing Resources]
+- [Understanding Tasks](./tasks)
+- [Managing Resources](./resources)

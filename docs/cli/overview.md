@@ -14,10 +14,10 @@ inductiva
 you will obtain an overview of the available commands and their descriptions.
 
 Here, we highlight and go deeper into the four main functionalities of the CLI:
-- [`resources`](./resources) give management capabilities over the resources;
-- [`tasks`](./tasks) empower the quick management of the simulations;
-- [`logs`](./logs) allow users to stream the logs of their running tasks;
-- [`storage`](./storage) provides an overview of the user's remote storage.
+- [`resources`](./resources.md) give management capabilities over the resources;
+- [`tasks`](./tasks.md) empower the quick management of the simulations;
+- [`logs`](./logs.md) allow users to stream the logs of their running tasks;
+- [`storage`](./storage.md) provides an overview of the user's remote storage.
 
 Whenever you need help on a specific command, you can always use the `--help` or
 `-h` flag to further understand its usage.

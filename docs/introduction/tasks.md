@@ -5,13 +5,6 @@ contains easy-to-use tools to manage them. Each simulation was submitted - with
 `simulator.run()` - runs asynchronously and returns a `Task` object that contains
 methods to manage the simulation.
 
-Here, you'll learn:
-
-- [Managing tasks](#managing-tasks): the methods you can use to interact with a 
-specific task.
-- [Retrieving tasks from previous sessions](#retrieving-tasks-from-previous-sessions): 
-getting information from previously run tasks.
-
 ## Managing tasks
 
 The `Task` class provides methods for managing a specific task submitted to 

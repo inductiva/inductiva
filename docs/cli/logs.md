@@ -1,9 +1,13 @@
 # Streaming Logs of a Task
 
-While a task is running, one of the main concerns for scientists and engineers is to understand if the simulation is progressing as expected and/or if there are any errors.
+While a task is running, one of the main concerns for scientists and engineers is
+to understand if the simulation is progressing as expected and/or if there are any errors.
 
-To help with this, the CLI provides a `logs` subcommand that allows users to stream the logs of a running task in real time. In this way, running a simulation in a powerful remote machine will
-feel exactly like running in your local computer. Example:
+To help with this, the CLI provides a `logs` subcommand that allows users to stream
+the logs of a running task in real time. In this way, running a simulation in a
+powerful remote machine will feel exactly like running in your local computer.
+
+Example:
 
 ```bash
 $ inductiva logs f0bnqgf4fcr4asgi4e21tcsqa

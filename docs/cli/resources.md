@@ -1,7 +1,7 @@
 # Resources
 
-As you might know by now, Inductiva API provides a simple way to [launch
-dedicated resources]() where you can run your simulations. Before launching any
+As you might know by now, Inductiva API provides a simple way to [launch dedicated resources](../how_to/computational_resources.md)
+where you can run your simulations. Before launching any
 resources, users can use the CLI to gather more information about the right
 resources to launch with the `available` and `cost` subcommands.
 
