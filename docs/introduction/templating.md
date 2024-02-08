@@ -10,13 +10,58 @@ But, if each simulation is configured using a set of files, how do we programmat
 
 This is where Inductiva’s templating mechanism comes into play. Templating allows you to start with a specific simulation file – your “base case” – containing fixed values for the parameters you wish to explore, and transform those fixed values into variables that you can now change programmatically from your Python code before you submit the simulation for remote execution. Let's illustrate the power of templating in a simple simulation case, from which you will be able to generalize to your own cases.
 
-A simple example: Experimenting fluids with different properties
+A simple example: **Experimenting fluids with different properties**
 
-Suppose you want to study how fluids with different properties fall inside a container with a cubic shape. More specifically, you want to study the effect of fluid density and kinematic viscosity in the splashing on the walls of the cubic container. For that, you wish to experiment with 4 values of fluid density, and 4 values of kinematic viscosity. Overall, you will need to run 16 simulations. 
+Suppose you want to study how fluids with different properties fall inside a container with a cubic shape. More specifically, you want to study the effect of fluid density and kinematic viscosity in the splashing on the walls of the cubic container. For that, you wish to experiment with 4 values of fluid density and 4 values of kinematic viscosity. Overall, you will need to run 16 simulations. 
 
-For the simulation of this scenation, you choose the SplishSplash simulator, and you start by coding your base case, where you assume the fluid is water. The corresponding simulation configuration file is the following:
+For the simulation of this scenario, you choose the SplishSplash simulator, and you start by coding your base case with a water fluid. The corresponding simulation configuration file is the following:
 
-@ivan 
+```json
+{
+    "Configuration": {
+        "stopAt": 1,
+        "timeStepSize": 0.01,
+        "particleRadius": 0.05,
+        "simulationMethod": 4,
+        "boundaryHandlingMethod": 0,
+        "kernel": 1,
+        "cflMethod": 1,
+        "cflFactor": 0.5,
+        "cflMinTimeStepSize": 0.0001,
+        "cflMaxTimeStepSize": 0.005,
+        "gravitation": [0, 0, -9.81],
+        "gradKernel": 1,
+        "enableVTKExport": true,
+        "dataExportFPS": 60,
+        "particleAttributes": "velocity;density"
+    },
+    "RigidBodies": [
+        {
+            "geometryFile": "unit_box.obj",
+            "translation": [0, 0, 0],
+            "scale": [1, 1, 1],
+            "isDynamic": false
+        }
+    ],
+    "Materials": [
+        {
+            "id": "Fluid",
+            "density0": 1000,
+            "viscosity": 1e-6,
+            "viscosityMethod": 6
+        }
+    ],
+    "FluidModels": [
+        {
+            "id": "Fluid",
+            "particleFile": "unit_box.obj",
+            "translation": [0, 0, 0],
+            "scale": [0.5, 0.5, 0.5],
+            "initialVelocity": [0, 0, 0]
+        }
+    ]
+}
+```
 
 Using the API, one would run the simulation on a XXX VM with this code:
 
