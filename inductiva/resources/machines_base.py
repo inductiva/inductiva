@@ -104,6 +104,10 @@ class BaseMachineGroup:
     def __repr__(self):
         pass
 
+    @abstractmethod
+    def current_machines_to_str(self):
+        pass
+
     @classmethod
     def from_api_response(cls, resp: dict):
         """Creates a MachineGroup object from an API response."""

@@ -38,6 +38,7 @@ class MPICluster(machines_base.BaseMachineGroup):
                          data_disk_gb=data_disk_gb,
                          register=register)
         self.num_machines = num_machines
+        self._current_machines = 0
         self.__type = machines_base.ResourceType.MPI.value
         self.__is_elastic = False
         self.__spot = False
@@ -49,10 +50,23 @@ class MPICluster(machines_base.BaseMachineGroup):
                                          spot=self.__spot,
                                          type=self.__type)
 
+    def set_current_machines(self, num_machines: int):
+        """Set the number of machines currently running in the MPI cluster.
+
+        Args:
+            num_machines: The number of machines currently running."""
+        self._current_machines = num_machines
+
+    def current_machines_to_str(self) -> str:
+        """Return the number of machines currently running in the MPI cluster.
+        """
+        return f"{self._current_machines}/{self.num_machines}"
+
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
-        machine_group.num_machines = int(resp["num_vms"])
+        machine_group.num_machines = int(resp["max_vms"])
+        machine_group.set_current_machines(int(resp["num_vms"]))
         machine_group.register = False
         return machine_group
 
@@ -79,7 +93,8 @@ class MPICluster(machines_base.BaseMachineGroup):
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
-        logging.info("> Number of machines: %s", self.num_machines)
+        logging.info("> Number of machines: %s of %s", self._current_machines,
+                     self.num_machines)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
