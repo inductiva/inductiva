@@ -228,11 +228,52 @@ stdout.txt
 
 ### Synchronous tasks
 
-TO BE DONE
+Tasks are asynchronous by default. This means that the user can continue to
+interact with the API while the task is running or queued up for execution.
+This behavior allows the user to submit batches of tasks in a single session
+knowing that the API will take care of the parallel execution of the tasks
+
+However, the user can turn a task into a blocking call by using the `wait` method.
+This method will block the call until the task comes to a terminal status, but
+without interrupting the remote simulation if the local session is interrupted
+(ex. the script is abruptly terminated). This is useful when the user wants to
+wait for the completion of a task before proceeding with some other operation
+(ex. downloading the output files).
+
+```python
+# Block the call until the simulation completes
+task.wait()  # <- The remote simulation WILL NOT DIE if the local session is
+             #    interrupted while waiting for the wait() call to return
+```
+
+Alternatively, the user can turn the simulation into a blocking call by using
+the `sync_context`context manager. This context manager ensures that the remote
+simulation is indeed killed if the local session is interrupted while waiting
+for the `wait` call to return.
+
+```python
+# Block the call until the simulation completes
+with task.sync_context():
+    task.wait()  # <-- The remote simulation WILL DIE if the local session is
+                 #     interrupted while waiting for the wait() call to return
+                 #     Ex. the user presses Ctrl+C while waiting for the call to
+                 #     return
+```
 
 
 ### Task Lifecycle
 
 
-TO BE DONE
+The status of a task changes as it progresses through its lifecycle. Each task
+is created by the user when a simulation is submitted to the API but it then
+undergoes various state transitions that reflect the progress of the user's
+request through the API.
+
+The following diagram shows the lifecycle of a task:
+
+
+<div align="center">
+   <img src="./_static/task_state.svg" alt="Task state diagram">
+</div>
+
 
