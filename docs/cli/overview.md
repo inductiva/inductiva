@@ -15,8 +15,8 @@ you will obtain an overview of the available commands and their descriptions.
 
 Here, we highlight and go deeper into the four main functionalities of the CLI:
 - [`resources`](./resources) give management capabilities over the resources;
-- [`tasks`](./tasks#task-management) empower the quick management of the simulations;
-- [`logs`](./tasks#streaming-logs-of-a-task) allow users to stream the logs of their running tasks;
+- [`tasks`](./tasks) empower the quick management of the simulations;
+- [`logs`](./logs) allow users to stream the logs of their running tasks;
 - [`storage`](./storage) provides an overview of the user's remote storage.
 
 Whenever you need help on a specific command, you can always use the `--help` or

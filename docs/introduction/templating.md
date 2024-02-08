@@ -208,14 +208,15 @@ splishsplash = inductiva.simulators.SplishSplash()
 
 # Initialize the templating engine
 file_manager = mixins.FileManager()
-file_manager.set_root_dir("splishsplash-scenario")
 
 # Set list of possible values for density and kinematic viscosity
-density_list = [800, 1000, 1200, 1400, 1600]
-kinematic_viscosity_list = [1e-3, 1e-4, 1e-5, 1e-6, 1e-7]
+density_list = [400, 1000, 2500, 5000]
+kinematic_viscosity_list = [1e-1, 1e-3, 1e-6, 1e-8]
 
 for density in density_list:
     for kinematic_viscosity in kinematic_viscosity_list:
+        # Set a new root directory and render the template directory
+        file_manager.set_root_dir("splishsplash-scenario")
         file_manager.add_dir(input_dir,
                              density=density,
                              kinematic_viscosity=kinematic_viscosity)
@@ -232,3 +233,34 @@ an iteration number, that serves to not override the previous folders.
 Overall, the exploration of these 16 possibilities took 57s (the time of the slowest simulation), 
 approximately the same time needed to run only one simulation. And this was all done
 with minor changes to the simulation script that described the base case.
+
+To finish, let's visualize all of the 16 simulations we just ran. The kinematic
+viscosity increases from left to right and the density from top to bottom.
+
+<div align=center class="row">
+  <div class="column"  text="400">
+    <img src="../_static/template_gifs/400_1e-08.gif" width=150>
+    <img src="../_static/template_gifs/400_1e-06.gif" width=150>
+    <img src="../_static/template_gifs/400_0.001.gif" width=150>
+    <img src="../_static/template_gifs/400_0.1.gif" width=150>
+  </div>
+  <div class="column">
+    <img src="../_static/template_gifs/1000_1e-08.gif" width=150>
+    <img src="../_static/template_gifs/1000_1e-06.gif" width=150>
+    <img src="../_static/template_gifs/1000_0.001.gif" width=150>
+    <img src="../_static/template_gifs/1000_0.1.gif" width=150>
+  </div>
+  <div class="column">
+    <img src="../_static/template_gifs/2500_1e-08.gif" width=150>
+    <img src="../_static/template_gifs/2500_1e-06.gif" width=150>
+    <img src="../_static/template_gifs/2500_0.001.gif" width=150>
+    <img src="../_static/template_gifs/2500_0.1.gif" width=150>
+  </div>
+  <div class="column">
+    <img src="../_static/template_gifs/5000_1e-08.gif" width=150>
+    <img src="../_static/template_gifs/5000_1e-06.gif" width=150>
+    <img src="../_static/template_gifs/5000_0.001.gif" width=150>
+    <img src="../_static/template_gifs/5000_0.1.gif" width=150>
+  </div>
+
+</div>
