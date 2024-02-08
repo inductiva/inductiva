@@ -6,6 +6,7 @@ import yaml
 MACHINE_TYPES_FILE = os.path.join(os.path.dirname(__file__),
                                   "machine_types.yaml")
 
+
 def get_available():
     """Gets the available machine types.
     
@@ -33,8 +34,8 @@ def list_available_machines():
             # Fetch the available RAM types and vCPUs info
             for ram_type, type_info in series_info["types"].items():
                 vcpus = type_info["vcpus"]
-                machine_types.extend([
-                    f"{cpu_series}-{ram_type}-{vcpu}" for vcpu in vcpus])
+                machine_types.extend(
+                    [f"{cpu_series}-{ram_type}-{vcpu}" for vcpu in vcpus])
                 if type_info["lssd"]:
                     for vcpu in vcpus:
                         machine_types.append(
