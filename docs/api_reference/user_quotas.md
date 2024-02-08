@@ -1,6 +1,6 @@
 # User Quotas
 
-Currently, users can launch several computational resources up to a certain limit,
+In the current version of the API (0.4) users can launch several computational resources up to a certain limit,
 which must satisfy the following quotas:
 
 + **maximum allowed price**: 2 USD per hour ($/h)
