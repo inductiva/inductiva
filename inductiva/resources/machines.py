@@ -178,7 +178,8 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return machine_group
 
     def current_machines_to_str(self) -> str:
-        """Returns a string representation of the number of machines currently running.
+        """Returns a string representation of the 
+        number of machines currently running.
         """
         return f"{self.num_active_machines}/{self.max_machines}"
 
