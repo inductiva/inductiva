@@ -53,8 +53,6 @@ class BaseMachineGroup:
 
         self.machine_type = machine_type
         self.data_disk_gb = data_disk_gb
-        self._true_disk_size_gb =\
-            data_disk_gb + inductiva.constants.BASE_MACHINE_DISK_SIZE_GB
         self._id = None
         self._name = None
         self.create_time = None
@@ -82,7 +80,7 @@ class BaseMachineGroup:
 
         instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
-            disk_size_gb=self._true_disk_size_gb,
+            disk_size_gb=self.data_disk_gb,
             **kwargs,
         )
 
@@ -111,8 +109,7 @@ class BaseMachineGroup:
 
         machine_group = cls(
             machine_type=resp["machine_type"],
-            data_disk_gb=resp["disk_size_gb"] -
-            inductiva.constants.BASE_MACHINE_DISK_SIZE_GB,
+            data_disk_gb=resp["disk_size_gb"],
             register=False,
         )
         machine_group._id = resp["id"]
@@ -144,7 +141,7 @@ class BaseMachineGroup:
                 id=self.id,
                 name=self.name,
                 machine_type=self.machine_type,
-                disk_size_gb=self._true_disk_size_gb,
+                disk_size_gb=self.data_disk_gb,
                 **kwargs,
             )
         logging.info("Starting %s. "
@@ -180,7 +177,7 @@ class BaseMachineGroup:
                     id=self.id,
                     name=self.name,
                     machine_type=self.machine_type,
-                    disk_size_gb=self._true_disk_size_gb,
+                    disk_size_gb=self.data_disk_gb,
                     **kwargs,
                 )
 
