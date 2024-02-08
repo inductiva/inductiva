@@ -6,7 +6,7 @@ which must satisfy the following quotas:
 + **maximum allowed price**: 2 USD per hour ($/h)
 + **maximum allowed machines**: 20 machines
 + **maximum allowed vCPUs per resource**: 120 vCPUs
-+ **maximum allowed data disk**: 80 GB
++ **maximum allowed data disk**: 100 GB
 
 These quotas are in place over all of the computational resources launched by the user.
 That is, you can have two computational resources up at the same time, but, for
