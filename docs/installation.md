@@ -1,12 +1,12 @@
 # Installation
 
 Welcome to Inductiva, a Python API package that enables running popular
-[open-source physical system simulation packages]() in the Cloud. 
+[open-source physical system simulation packages](./introduction/simulators.md) in the Cloud. 
 
 This is a step-by-step guide to help you get started with Inductiva 
 before running your first simulation project. Should you encounter any errors or 
-issues along the way, our [troubleshooting guide]() is readily available to assist 
-you in resolving them efficiently.
+issues along the way, our [troubleshooting guide](./api_reference/troubleshooting.md) is
+readily available to assist you in resolving them efficiently.
 
 ## Install the Inductiva API with pip
 If you've set up the API access token, you're ready to install the 
@@ -18,8 +18,8 @@ Simply open your terminal and run:
 pip install --upgrade inductiva
 ```
 
-Encountering issues? Don’t worry. Head over to our [troubleshooting guide]() to 
-work it out.
+Encountering issues? Don’t worry. Head over to our [troubleshooting guide](./api_reference/troubleshooting.md)
+to work it out.
 
 ## Request Your API Access Token
 If you don't have a valid API access token, [fill this form](https://docs.google.com/forms/d/e/1FAIpQLSflytIIwzaBE_ZzoRloVm3uTo1OQCH6Cqhw3bhFVnC61s7Wmw/viewform) and request 
@@ -53,6 +53,6 @@ $ python -c 'import inductiva; print(inductiva.__version__)'
 
 
 Troubleshoot installation problems that you might encounter with Inductiva 
-API by checking our [troubleshooting guide](#troubleshootingguide), [FAQs](), or
-[getting in touch]() with our support team directly.
-
+API by checking our [troubleshooting guide](./api_reference/troubleshooting.md),
+[FAQs](./api_reference/faq.md), or [getting in touch](support@inductiva.ai)
+with our support team directly.

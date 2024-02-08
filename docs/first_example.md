@@ -17,7 +17,8 @@ the following steps:
 1. **Prepare and gather all the necessary configuration files for the simulation 
 into one input folder**. To simplify our example, we will provide you with an input folder 
 containing all the necessary configuration files for the dam break simulation, 
-slightly modified from the original REEF3D tutorials found on their [GitHub repository](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/9_1%202D%20Dam%20Break) to reduce the simulation run time;
+slightly modified from the original REEF3D tutorials found on their [GitHub repository](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/9_1%202D%20Dam%20Break) to reduce
+the simulation run time;
 
 2. **Instantiate a simulator object that identifies the simulator you want to use**, 
 here exemplified by instantiating a REEF3D simulator object;
@@ -78,7 +79,7 @@ such as [Paraview](https://www.paraview.org/download/).
 
 ## What to read next
 
-Learn about the [shared and dedicated resources](#computational_resources_overview) 
+Learn about the [shared and dedicated resources](./introduction/computational_resources_overview.md) 
 you can use for running your simulations through the Inductiva API, and explore 
 the available hardware options to enhance
 your project's performance.
