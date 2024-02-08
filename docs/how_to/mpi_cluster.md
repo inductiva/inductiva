@@ -5,7 +5,7 @@ to communicate with each other and work together to run a single simulation.
 With several machines working together, users can launch simulations that require
 a higher level of parallelization that a single machine cannot offer.
 
-Setting up an MPI cluster is simple with the [`MPICluster` class](computational_resources/mpicluster_class). Users can configure the type and number of machines they want
+Setting up an MPI cluster is simple with the [`MPICluster` class](../computational_resources/mpicluster_class.md). Users can configure the type and number of machines they want
 to compose the cluster and the size of the disk storage shared between all machines.
 
 That is all that is required to launch the cluster. Inductiva API uses this
@@ -13,7 +13,7 @@ configuration to initialize the cluster, making sure that all machines can commu
 with each other and can read/write to the shared disk storage.
 
 In the following example, we run a SWASH simulation in an MPICluster. Recall, that
-the same simulation took 9m37s to complete in a [single machine of `c2-standard-30`](introduction/computation_resources_overview):
+the same simulation took 9m37s to complete in a [single machine of `c2-standard-30`](../introduction/infrastructure.md):
 
 ```python
 import inductiva
@@ -53,5 +53,4 @@ time to obtain results from one day to a few hours.
 
 
 ## What to read next
-* [Set up an MPI]()
 * [Get an overview of the CLI]()

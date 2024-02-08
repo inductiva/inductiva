@@ -65,11 +65,12 @@ cli/storage
 
 ```{toctree}
 ---
-caption: API Client Reference
+caption: User Reference
 maxdepth: 1
 hidden: true
 ---
 computational_resources/index
 api_reference/user_quotas
 api_reference/troubleshooting
+api_reference/faq
 ```

@@ -9,8 +9,10 @@ which must satisfy the following quotas:
 + **maximum allowed data disk**: 80 GB
 
 These quotas are in place over all of the computational resources launched by the user.
-That is, you can have two computational resources up at the same time, but, for example, the total number of machines can not exceed 10. Note that for the elastic machine
-group the quotas are applied with the maximum number of machines that can be active at a certain point.
+That is, you can have two computational resources up at the same time, but, for
+example, the total number of machines can not exceed 10. Note that for the elastic
+machine group the quotas are applied with the maximum number of machines that can
+be active at a certain point.
 
 **Maximum allowed price:**
 

@@ -11,9 +11,9 @@ open-source software packages around a few layers that enable them to execute on
 a wide range of virtual machines available on the cloud, and allow simple configuration 
 via Python scripting. We wrap such simulation packages in a way that allows us to treat 
 them as more abstract computational loads, that have inputs and produce outputs, and 
-our job is “merely” just that of passing data around (See [Storage and Data Flow]()) 
+our job is “merely” just that of passing data around (See [Storage and Data Flow](./data_flow.md)) 
 and assigning the simulation tasks to the appropriate computational resource (See 
-[Shared and Dedicated Resources]()).
+[Shared and Dedicated Resources](./computational_resources_overview.md)).
 
 Obviously, there is a lot more happening under the hood. For starters, how do we deal 
 with the fact that not all simulation software packages work in the same way and, 
@@ -73,7 +73,8 @@ task = splishsplash_simulator.run(input_dir="splishsplash-example",
 
 Some simulators require running more than one command, but they are
 always the same set of commands in sequence. In these cases, we automatically run both 
-commands giving the appearance that what is being run is a single command. An example of this is the REEF3D simulator where the meshing and the simulation step
+commands giving the appearance that what is being run is a single command. An example
+of this is the REEF3D simulator where the meshing and the simulation step
 are run in sequence as a response to a single API command. Below is the
 call to the REEF3D simulator that only requires passing the input directory
 with the configuration files for both commands.
@@ -130,13 +131,13 @@ who are familiar with the simulators can easily start running simulations with
 their previously prepared simulation configuration files. 
 
 The simulators currently available are:
-- [SPlisHSPlasH](../simulators/SPlisHSPlasH)
-- [DualSPHysics](../simulators/DualSPHysics)
-- [OpenFOAM](../simulators/OpenFOAM)
-- [SWASH](../simulators/SWASH)
-- [XBeach](../simulators/XBeach)
-- [Reef3D](../simulators/Reef3D)
-- [GROMACS](../simulators/GROMACS)
-- [FDS](../simulators/FDS)
+- [SPlisHSPlasH](../simulators/SPlisHSPlasH.md)
+- [DualSPHysics](../simulators/DualSPHysics.md)
+- [OpenFOAM](../simulators/OpenFOAM.md)
+- [SWASH](../simulators/SWASH.md)
+- [XBeach](../simulators/XBeach.md)
+- [Reef3D](../simulators/Reef3D.md)
+- [GROMACS](../simulators/GROMACS.md)
+- [FDS](../simulators/FDS.md)
 
 Check the documentation of each simulator to learn more on how to configure them. 
