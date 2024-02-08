@@ -1,75 +1,43 @@
 """Available machine types and their number of cores."""
 
+import os
+import yaml
+
+MACHINE_TYPES_FILE = os.path.join(os.path.dirname(__file__),
+                                  "machine_types.yaml")
+
+def get_available():
+    """Gets the available machine types.
+    
+    Currently, this fetches the available machine types from a yaml file
+    into a dictionary that can now be used to parse the information where
+    needed."""
+
+    with open(MACHINE_TYPES_FILE, "r", encoding="utf-8") as file:
+        machine_types = yaml.safe_load(file)
+
+    return machine_types
+
 
 def list_available_machines():
-    """Lists the available machines from the descriptive dict.
-    
-    Each machine type is a key in the dict with respective possible values are:
-    - vcpus: list of integers with the available vcpu possibilities.
-    - memory: list of string with the available memory types. Default is
-        ["highmem", "standard", "highcpu"].
-    - extra_configs: tuple with two lists of strings and integers. The first
-        list is extra memory types that are the only ones containing the
-        possible vcpus in the second list.
-    - lssd: boolean indicating if the machine type has the local SSD
-        option. Default is False.
-    """
+    """List all available machines types."""
 
-    available_machines = []
+    resources_available = get_available()
 
-    for machine_type, configs in AVAILABLE_MACHINES.items():
-        vcpu_list = configs["vcpus"]
-        memory_list = configs.get("memory", ["highmem", "standard", "highcpu"])
-        lssd = configs.get("lssd", False)
-        extra_configs = configs.get("extra_configs", None)
+    machine_types = []
 
-        for memory in memory_list:
-            for vcpu in vcpu_list:
-                available_machines.append(machine_type + "-" + memory + "-" +
-                                          str(vcpu))
+    # Fetch the provider information
+    for _, provider_resources in resources_available.items():
+        # Fetch the available machine CPU series
+        for cpu_series, series_info in provider_resources["cpu-series"].items():
+            # Fetch the available RAM types and vCPUs info
+            for ram_type, type_info in series_info["types"].items():
+                vcpus = type_info["vcpus"]
+                machine_types.extend([
+                    f"{cpu_series}-{ram_type}-{vcpu}" for vcpu in vcpus])
+                if type_info["lssd"]:
+                    for vcpu in vcpus:
+                        machine_types.append(
+                            f"{cpu_series}-{ram_type}-{vcpu}-lssd")
 
-        if extra_configs:
-            for memory in extra_configs[0]:
-                for vcpu in extra_configs[1]:
-                    available_machines.append(machine_type + "-" + memory +
-                                              "-" + str(vcpu))
-        if lssd:
-            for vcpu in vcpu_list[1:]:
-                available_machines.append(machine_type + "-standard-" +
-                                          str(vcpu) + "-lssd")
-
-    return tuple(available_machines)
-
-
-AVAILABLE_MACHINES = {
-    "c2": {
-        "vcpus": [4, 8, 16, 30, 60],
-        "memory": ["standard"]
-    },
-    "c3": {
-        "vcpus": [4, 8, 22, 44, 88, 176],
-        "lssd": True
-    },
-    "c2d": {
-        "vcpus": [2, 4, 8, 16, 32, 56, 112]
-    },
-    "c3d": {
-        "vcpus": [4, 8, 16, 30, 60, 90, 180, 360],
-        "lssd": True
-    },
-    "e2": {
-        "vcpus": [2, 4, 8, 16],
-        "extra_configs": (["standard", "highcpu"], [32])
-    },
-    "n2": {
-        "vcpus": [2, 4, 8, 16, 32, 48, 64, 80, 96],
-        "extra_configs": (["standard", "highmem"], [128])
-    },
-    "n2d": {
-        "vcpus": [2, 4, 8, 16, 32, 48, 64, 80, 96],
-        "extra_configs": (["standard", "highcpu"], [128, 224])
-    },
-    "n1": {
-        "vcpus": [1, 2, 4, 8, 16, 32, 64, 96]
-    }
-}
+    return tuple(machine_types)
