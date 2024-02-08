@@ -39,6 +39,7 @@ how_to/manage_computational_resources
 how_to/elastic_machine_group
 how_to/mpi_cluster
 how_to/storage
+how_to/manage_tasks
 ```
 
 ```{toctree}
