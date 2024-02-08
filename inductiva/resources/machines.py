@@ -52,23 +52,11 @@ class MachineGroup(machines_base.BaseMachineGroup):
                                          spot=self.spot,
                                          is_elastic=self.__is_elastic)
 
-    def current_machines_to_str(self) -> str:
-        """Returns a string representation of the number of machines currently running.
-        """
-        return f"{self._current_machines}/{self.num_machines}"
-
-    def set_current_machines(self, num_machines: int):
-        """Set the number of machines currently running in the machine group.
-
-        Args:
-            num_machines: The number of machines currently running."""
-        self._current_machines = num_machines
-
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["max_vms"])
-        machine_group.set_current_machines(int(resp["num_vms"]))
+        machine_group.__dict__["_current_machines"] = int(resp["num_vms"])
         machine_group.spot = bool(resp["spot"])
         machine_group.register = False
         return machine_group
@@ -170,6 +158,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self.num_active_machines = min_machines
         self.__is_elastic = True
         self.spot = spot
+        self.num_machines = max_machines
 
         if self.register:
             logging.info("Registering ElasticMachineGroup configurations:")

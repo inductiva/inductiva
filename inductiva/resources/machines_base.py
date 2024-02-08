@@ -59,6 +59,8 @@ class BaseMachineGroup:
         self.create_time = None
         self._started = False
         self.register = register
+        self._current_machines = 0
+        self.num_machines = 0
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -104,9 +106,10 @@ class BaseMachineGroup:
     def __repr__(self):
         pass
 
-    @abstractmethod
-    def current_machines_to_str(self):
-        pass
+    def current_machines_to_str(self) -> str:
+        """Return the number of machines currently running in the MPI cluster.
+        """
+        return f"{self._current_machines}/{self.num_machines}"
 
     @classmethod
     def from_api_response(cls, resp: dict):
