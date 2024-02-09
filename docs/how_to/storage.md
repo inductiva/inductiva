@@ -1,8 +1,8 @@
 # Manage Remote Storage
 
 The Inductiva API provides you with tools to manage your remote storage effectively. 
-With the Inductiva storage module, you can easily navigate your storage, evaluate the space used, and delete specific directories as needed.
-You have the ability to organize your storage by specifying the directory where your simulation outputs should be saved. The directory containing these outputs is automatically named after the task ID. Check [tasks](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks) for more information about this.
+With the Inductiva storage module, you can easily navigate your storage, evaluate
+the space used, and delete specific directories as needed.
 Let's illustrate this with some examples.
 
 ## Determining the amount of storage in use
@@ -85,41 +85,6 @@ Outputs the following::
        input.zip        3.74 MB        06 Feb, 11:32:32
                         0 B            06 Feb, 11:32:29
 ```
-
-
-## Saving simulation outputs
-
-When running a simulation, users can specify the name of the directory where the simulation outputs will be saved on the user's remote storage. This is as simple
-as setting the argument `storage_dir` in the `run` method of the simulator. 
-
-This allows users to organize their data on their bucket as they wish.
-
-Let's see an example with the REEF3D simulator.
-
-```python
-import inductiva
-
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-dambreak-example.zip", unzip=True)
-
-simulator = inductiva.simulators.REEF3D()
-
-# Launch the simulation and point the results to the directory "reef3d_simulation"
-task = simulator.run(input_dir=input_dir, storage_dir="reef3d_simulation")
-
-task.wait()
-```
-
-Listing the latest directories in the user's remote storage, we can see the new directory `reef3d_simulation` containing the simulation outputs.
-```bash
-$ inductiva storage ls --max-results 2 --order-by creation_time --sort-order desc
-
-       NAME                             SIZE           CREATION TIME
-       reef3d_simulation/               21.67 MB       07 Feb, 14:57:11
-       6a2h1wnxywpea8jfoxiikdjf7/       1.53 MB        07 Feb, 13:47:03
-```
-
 
 ### Removing directories
 
