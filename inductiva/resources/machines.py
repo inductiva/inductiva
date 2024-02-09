@@ -41,6 +41,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)
+        # Num_machines is the number of requested machines
         self.num_machines = num_machines
         #Number of active machines at the time of
         #the request machine_groups.get()
@@ -84,7 +85,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
-        logging.info("> Number of machines: %s", self._active_machines)
+        logging.info("> Number of machines: %s", self.num_machines)
         logging.info("> Spot:               %s", self.spot)
         self.estimate_cloud_cost()
 

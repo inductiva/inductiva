@@ -84,7 +84,7 @@ class MPICluster(machines_base.BaseMachineGroup):
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
-        logging.info("> Number of machines: %s", self._active_machines)
+        logging.info("> Number of machines: %s", self.num_machines)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
