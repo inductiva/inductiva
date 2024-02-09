@@ -175,7 +175,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         machine_group.spot = bool(resp["spot"])
         machine_group.max_machines = int(resp["max_vms"])
         machine_group.min_machines = int(resp["min_vms"])
-        machine_group._active_machines = int(resp["num_vms"])
+        machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
         return machine_group
 
     def active_machines_to_str(self) -> str:
