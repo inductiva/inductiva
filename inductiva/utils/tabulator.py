@@ -36,7 +36,7 @@ class F:
 
         f = F("person name and age",
               "age",
-              value_formatter=lambda x,p: f'{p.name} is {x} years old',
+              value_formatter=lambda x,p: f"{p.name} is {x} years old",
               header_formatter=str.capitalize)
 
         When applied to a Person("John", 25) instance in the context of the
@@ -49,6 +49,42 @@ class F:
     attr_default: Any = None
     value_formatter: Optional[callable] = None
     header_formatter: Optional[callable] = None
+
+    def __call__(self, item, default_formatter=None):
+        """Apply the value formatter to the item.
+
+        The method applies the value formatter to the attribute of the
+        given item with the name attr_name, and returns the formatted value.
+        If the instance"s value formatter is not defined, the given formatter
+        will be used. If the latter is not defined, the raw value will be
+        returned.
+
+        Args:
+            item: the item to be formatted.
+            default_formatter: the default formatter to be used if the
+                value_formatter is not defined.
+        """
+        value = getattr(item, self.attr_name, self.attr_default)
+        fmtr = self.value_formatter or default_formatter or self._id
+        return fmtr(value, item)
+
+    def get_formatted_header(self, default_formatter=None):
+        """Get the formatted header of the column.
+
+        The method applies the header formatter to the name of the column, and
+        returns the formatted header. If the instance"s header formatter is not
+        defined, the given formatter will be used. If the latter is not defined,
+        the raw header will be returned.
+
+        Args:
+            default_formatter: the default formatter to be used if the
+                header_formatter is not defined.
+        """
+        fmtr = self.header_formatter or default_formatter or self._id
+        return fmtr(self.name)
+
+    def _id(self, item):
+        return item
 
 
 class Tabulator(type):
@@ -63,15 +99,15 @@ class Tabulator(type):
     formatters for values (attributes of the items) and headers.
     """
 
-    def __new__(metacls, cls, bases, classdict):
-        header_fmtr = classdict.get('default_header_formatter', None)
+    def __new__(mcs, cls, bases, classdict):
+        header_fmtr = classdict.get("default_header_formatter", None)
         if header_fmtr is not None:
             classdict["default_header_formatter"] = staticmethod(header_fmtr)
         elif not bases:
             # assign an unset default_header_formatter to the base class
             classdict["default_header_formatter"] = None
 
-        value_fmtr = classdict.get('default_value_formatter', None)
+        value_fmtr = classdict.get("default_value_formatter", None)
         if value_fmtr is not None:
             classdict["default_value_formatter"] = staticmethod(value_fmtr)
         elif not bases:
@@ -79,13 +115,14 @@ class Tabulator(type):
             classdict["default_value_formatter"] = None
 
         # collect all F instances into the "formatters" attribute of the class
-        classdict["formatters"] = {cls_attr:value
-                                   for cls_attr, value in classdict.items()
-                                   if isinstance(value, F)}
+        classdict["formatters"] = {
+            cls_attr: value
+            for cls_attr, value in classdict.items()
+            if isinstance(value, F)
+        }
 
         # construct and return the class
-        return super().__new__(metacls, cls, bases, classdict)
-
+        return super().__new__(mcs, cls, bases, classdict)
 
 
 class BaseTabulator(metaclass=Tabulator):
@@ -97,45 +134,24 @@ class BaseTabulator(metaclass=Tabulator):
     representation of the items iterable using the tabulate library."""
 
     def to_dict(self, items):
-        """Generate a dictionary from a collection of items using the formatters.
+        """Generate a dictionary from a collection of items using formatters.
 
         The keys of the dictionary are the headers of the table, and the cells
         are lists of the values of the attributes of the items, formatted
         according to the formatters defined in the class.
-        If a formatter does not provide a formatting function for a given
-        attribute, the default value formatter is used. If the default value
-        formatter is not defined, the raw value is used. Similarly, if a
-        formatter does not provide a formatting function for the header, the
-        default header formatter is used. If the default header formatter is
-        not defined, the raw header is used.
 
         Args:
             items: an iterable of items to be formatted.
         """
-        table = {}
-        for _, formatter in self.formatters.items():
-            header_fmtr = formatter.header_formatter or \
-                          self.default_header_formatter
-            value_fmtr = formatter.value_formatter or \
-                         self.default_value_formatter
-            attr_default = formatter.attr_default
-            attr_name = formatter.attr_name
+        def_header_fmtr = self.default_header_formatter
+        def_value_fmtr = self.default_value_formatter
+        return {
+            fmtr.get_formatted_header(def_header_fmtr): [
+                fmtr(item, def_value_fmtr) for item in items
+            ] for fmtr in self.formatters.values()
+        }
 
-            if header_fmtr is None:
-                header = formatter.name
-            else:
-                header = header_fmtr(formatter.name)
-
-            values = (getattr(item, attr_name, attr_default) for item in items)
-            if value_fmtr:
-                table[header] = [value_fmtr(value, item)
-                                 for value, item in zip(values, items)]
-            else:
-                table[header] = list(values)
-
-        return table
-
-    def __call__(self, items, format="simple"):
+    def __call__(self, items, tablefmt="simple"):
         """Generate a table representation of the items iterable using tabulate.
 
         The method uses the to_dict method to generate a dictionary from the
@@ -145,15 +161,15 @@ class BaseTabulator(metaclass=Tabulator):
 
         Args:
             items: an iterable of items to be formatted.
-            format: the format of the table, as accepted by tabulate.
+            tablefmt: the format of the table, as accepted by tabulate.
         """
         table = self.to_dict(items)
-        return tabulate.tabulate(table, headers=table.keys(), tablefmt=format)
-
+        return tabulate.tabulate(table, headers=table.keys(), tablefmt=tablefmt)
 
 
 class TabulatedList(list):
     """A list subclass that applies a tabulator to its representation."""
+
     def __init__(self, iterable=(), formatter=None):
         """Initialize the TabulatedList instance.
 
@@ -184,7 +200,8 @@ class TabulatedList(list):
         """
         return self.formatter(self, format="html")
 
-def tabulated(tabulator: BaseTabulator=None):
+
+def tabulated(tabulator: BaseTabulator = None):
     """Decorator to apply a tabulator to the return value of a function.
 
     The decorator takes a tabulator class as an argument, and returns a
@@ -198,18 +215,21 @@ def tabulated(tabulator: BaseTabulator=None):
         tabulator: a class that inherits from BaseTabulator, and provides a
             table representation of a collection of items.
     """
+
     def decorator(func):
+
         if tabulator is None:
             return func
+
         def wrapper(*args, **kwargs):
             result = func(*args, **kwargs)
             if isinstance(result, list):
                 return TabulatedList(result, tabulator())
             return result
+
         return wrapper
+
     return decorator
-
-
 
 
 if __name__ == "__main__":
@@ -223,28 +243,31 @@ if __name__ == "__main__":
 
     class PersonTabulator(BaseTabulator):
         default_header_formatter = lambda x: f"<{x.upper()}>"
-        default_value_formatter = lambda x,_: str(x).lower()
-        column1 = F('First Name', "name",
-                    value_formatter=lambda x,i: f"{x} ({i.gender})".upper())        
-        column2 = F('Second Name', "none", attr_default='N/A',
+        default_value_formatter = lambda x, _: str(x).lower()
+        column1 = F("First Name",
+                    "name",
+                    value_formatter=lambda x, i: f"{x} ({i.gender})".upper())
+        column2 = F("Second Name",
+                    "none",
+                    attr_default="N/A",
                     header_formatter=str.lower)
-        column3 = F("Age", "age",
-                    value_formatter=lambda x,_: f'{x} years')
+        column3 = F("Age", "age", value_formatter=lambda x, _: f"{x} years")
 
     @tabulated(PersonTabulator)
     def get():
-        return [Person('John', 25, 'New York', 'M'),
-                Person('Jane', 30, 'Los Angeles', 'F'),
-                Person('Joe', 35, 'Chicago', 'M')]
+        return [
+            Person("John", 25, "New York", "M"),
+            Person("Jane", 30, "Los Angeles", "F"),
+            Person("Joe", 35, "Chicago", "M")
+        ]
 
-    items = get()
-    print(f"{isinstance(items, TabulatedList)=}")
-    print(f"{isinstance(items, list)=}")
-    print(f"{len(items)=}")
+    people = get()
+    print(f"{isinstance(people, TabulatedList)=}")
+    print(f"{isinstance(people, list)=}")
+    print(f"{len(people)=}")
 
     print("\nusing formatter:")
-    print(items)
+    print(people)
     print("\nafter unsetting formatter:")
-    items.formatter = None
-    print(items)
-
+    people.formatter = None
+    print(people)
