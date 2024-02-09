@@ -33,7 +33,8 @@ Once started, simulations can be submitted to the queue of the elastic machine g
 
 To explore our elastic machine group, we will follow the example of 
 [running multiple simulations in parallel](./computational_resources.md), based on the 
-[templating mechanism]() built in the Inductiva API, but now with a scalable infrastructure.
+[templating mechanism](../introduction/templating.md) built in the Inductiva API, but
+now with a scalable infrastructure.
 
 ```python
 from inductiva import mixins
@@ -97,7 +98,8 @@ Active Resources:
 
 **Tasks monitoring**
 ```bash
-Every 2.0s: inductiva tasks list                                                                                                                               
+Every 2.0s: inductiva tasks list                                                                                                                   
+            
        ID                              SIMULATOR         STATUS          SUBMITTED              STARTED                COMPUTATION TIME         RESOURCE TYPE
        r4kerxf4b53krgn0s3fyece3b       swash             submitted       07 Feb, 11:47:49       n/a                    n/a                      n/a
        j9qzrpiohgt7x97od3tw4wccd       swash             submitted       07 Feb, 11:47:48       n/a                    n/a                      n/a

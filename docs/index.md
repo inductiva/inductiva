@@ -39,6 +39,9 @@ how_to/manage_computational_resources
 how_to/elastic_machine_group
 how_to/mpi_cluster
 how_to/storage
+how_to/manage_tasks
+how_to/manage_and_retrieve_results
+
 ```
 
 ```{toctree}
@@ -46,9 +49,16 @@ how_to/storage
 caption: Available Simulators
 maxdepth: 1
 hidden: true
-glob: true
 ---
-simulators/*
+simulators/overview
+simulators/DualSPHysics
+simulators/SPlisHSPlasH
+simulators/OpenFOAM
+simulators/GROMACS
+simulators/SWASH
+simulators/XBeach
+simulators/Reef3D
+simulators/FDS
 ```
 
 ```{toctree}

@@ -1,56 +1,147 @@
 # User Quotas
 
-Currently, users can launch several computational resources up to a certain limit,
-which must satisfy the following quotas:
+In the current version of the API (0.4) users can launch several computational resources
+up to a certain limit, which must satisfy the quotas we present on this section.
+The quotas are in place to establish a limit over the totality of the computational
+resources launched by the user. 
 
-+ **maximum allowed price**: 2 USD per hour ($/h)
-+ **maximum allowed machines**: 20 machines
-+ **maximum allowed vCPUs per resource**: 120 vCPUs
-+ **maximum allowed data disk**: 80 GB
+Note that for the Elastic Machine Groups the quotas are applied to the maximum
+number of machines requested, not the number of machines that are currently active.
 
-These quotas are in place over all of the computational resources launched by the user.
-That is, you can have two computational resources up at the same time, but, for example, the total number of machines can not exceed 10. Note that for the elastic machine
-group the quotas are applied with the maximum number of machines that can be active at a certain point.
+## Maximum allowed price: 2 $/h
 
-**Maximum allowed price:**
-
-The quota limit excess is achieved for example a single machine of type `c2d-standard-56`:
+The quota limit can be reached even with a single machine. For example, if you select a machine of type
+`c2d-standard-56`, which has a cost of 2.799 $/h, this is what will happen:
 ```python
 import inductiva
 
 mg = inductiva.resources.MachineGroup("c2d-standard-56")
+mg.start()
 ```
 ```bash
-Error 
+Registering MachineGroup configurations:
+> Name:         api-ikg3n235fcxnkh7u97etiv93n
+> Machine Type: c2d-standard-56
+> Data disk size:    10 GB
+> Number of machines: 1
+> Spot:               False
+> Estimated cloud cost of machine group: 2.799 $/h
+
 ```
 
-However, users can take advantage of the computational resource feature that
-enable them to select preemptible machines and they may be able to get a
-high-performant machine, like a `c2d-highcpu-112`, which fulfils all quotas:
+However, users can take advantage of spot instances, that despite being preemptible
+by the cloud provider, are less expensive. For example, you can even get a higher-performance machine than the one above, if you select it to run as spot instance:
 ```python
 # Cost: 0.870 $/h
+import inductiva
+
+# Launching a c2d-highcpu-112 machine as spot instance
 mg = inductiva.resources.MachineGroup("c2d-highcpu-112", spot=True)
+mg.start()
+```
+```bash
+Registering MachineGroup configurations:
+> Name:         api-io3bspoyy13astzyih291c2m8
+> Machine Type: c2d-highcpu-112
+> Data disk size:    10 GB
+> Number of machines: 1
+> Spot:               True
+> Estimated cloud cost of machine group: 0.870 $/h
+Starting MachineGroup(name="api-ibg2s91an4po453ry7cwv8ie9"). This may take a few minutes.
+Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
+Machine Group api-ibg2s91an4po453ry7cwv8ie9 with c2d-highcpu-112 machines successfully started in 0:00:20.
 ```
 
-**Maximum allowed machines:** 
+Notice, that you should also take into account the variant you choose. For example, in the case of the CPU series `c2d`, the highmem machines (8 GB RAM per vCPU) are more expensive than standard machines (4 GB RAM per vCPU), which in turn are more expensive than highcpu machines (2 GB RAM per vCPU). The amount of RAM attached to a machine is one of the most determining aspects of its price.
 
-Launching a machine group with 11 preemptible machines of the type `c2d-highcpu-4`
-contains 44 vCPUs and costs 0.341 $/h. However, it exceeds the allowed limit and
-running the following code snippet
+## Maximum allowed machines: 20
+
+Launching a machine group with 20 preemptible machines of the type `c2d-highcpu-4` contains 44 vCPUs and costs in total 0.341 $/h. However, it exceeds the allowed limit of machines and running the following code snippet raises the following error:
 ```python
+import inductiva
+
 mg = inductiva.resources.MachineGroup(
     machine_type="c2d-highcpu-4",
-    num_machines=11,
+    num_machines=21,
     spot=True
 )
+
+mg.start()
 ```
 raises the following error
 ```bash
 Registering MachineGroup configurations:
-Registering machine group failed with exception (403)
-Reason: Forbidden
-HTTP response headers: HTTPHeaderDict({'content-type': 'application/json', 'X-Cloud-Trace-Context': '13cc564cc46afa047fd298749de7f539', 'Date': 'Wed, 07 Feb 2024 14:18:35 GMT', 'Server': 'Google Frontend', 'Content-Length': '96'})
-HTTP response body: b'{"detail":"Maximum allowed number of machines is exceeded. Maximum allowed: 10. Requested: 11."}'
+> Name:         api-aizo46wdj6eiiqostiidxwha1
+> Machine Type: c2d-highcpu-4
+> Data disk size:    10 GB
+> Number of machines: 21
+> Spot:               True
+> Estimated cloud cost of machine group: 0.652 $/h
+Starting MachineGroup(name="api-aizo46wdj6eiiqostiidxwha1"). This may take a few minutes.
+Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
+Starting machine group failed with exception (400)
+Reason: Bad Request
+HTTP response headers: HTTPHeaderDict({'content-type': 'application/json', 'X-Cloud-Trace-Context': '5f4cec0da72dc3bbfda15c43aed4393f', 'Date': 'Fri, 09 Feb 2024 12:51:51 GMT', 'Server': 'Google Frontend', 'Content-Length': '92'})
+HTTP response body: b'{"detail":"Quota exceeded: number of machines\\nRequested: 21\\nIn use: 0\\nMax allowed: 20\\n"}'
+```
+
+## Maximum allowed vCPUs: 240
+
+The quota limit of the maximum allowed vCPUs is harder to reach with a single
+machine group. In most cases, the two above quotas will be reached before this one.
+
+Still, there is an example where the limit can be reached and uses the ability
+of having several machine groups active at the same time.
+```python
+import inductiva
+
+# Sucessfull launch with cost 1.045 $/h and total 128 vCPUs
+mg1 = inductiva.resources.MachineGroup("e2-highcpu-32", num_machines=4, spot=True)
+mg1.start()
+
+# Sucessfull launch. Total cost 1.959 $/h and total 240 vCPUs 
+mg2 = inductiva.resources.MachineGroup("e2-highcpu-16", num_machines=7, spot=True)
+mg2.start()
+
+# Failed launch. Total cost 1.975 $/h, total machines 11 and total vCPUs 242.
+mg3 = inductiva.resources.MachineGroup("e2-highcpu-2", num_machines=1, spot=True)
+mg3.start()
+```
+The following error is raised on the last start:
+```bash
+Starting MachineGroup(name="api-cs82oayc9rxgmig8zzmg4mh59"). This may take a few minutes.
+Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
+Starting machine group failed with exception (400)
+Reason: Bad Request
+HTTP response headers: HTTPHeaderDict({'content-type': 'application/json', 'X-Cloud-Trace-Context': '05b4aeec3827418341021ade1e4e54a3', 'Date': 'Fri, 09 Feb 2024 13:10:03 GMT', 'Server': 'Google Frontend', 'Content-Length': '91'})
+HTTP response body: b'{"detail":"Quota exceeded: number of cores\\nRequested: 2\\nIn use: 240\\nMax allowed: 240\\n"}'
+```
+
+## Maximum allowed data disk: 20 GB
+
+The last quota sets the maximum data disk that users can set for their 
+computational resources. Here, the quota works per machine. The current limit on
+disk space is 20 GB, so the next request will hit the limit:
+
+```python3
+import inductiva
+
+mg = inductiva.resources.MachineGroup("c2-standard-4", data_disk_gb=30)
+```
+```bash
+Registering MachineGroup configurations:
+> Name:         api-0w5epve63qbirww7j80f4suqw
+> Machine Type: c2-standard-4
+> Data disk size:    30 GB
+> Number of machines: 1
+> Spot:               False
+> Estimated cloud cost of machine group: 0.230 $/h
+Starting MachineGroup(name="api-0w5epve63qbirww7j80f4suqw"). This may take a few minutes.
+Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
+Starting machine group failed with exception (400)
+Reason: Bad Request
+HTTP response headers: HTTPHeaderDict({'content-type': 'application/json', 'X-Cloud-Trace-Context': '39b0e0ed652420807dba1c2fd471801c', 'Date': 'Fri, 09 Feb 2024 12:48:37 GMT', 'Server': 'Google Frontend', 'Content-Length': '76'})
+HTTP response body: b'{"detail":"Max disk size exceeded.\\nRequested: 30 GB\\nMax allowed: 20 GB\\n"}'
 ```
 
 **Maximum allowed vCPUs:** 
