@@ -44,7 +44,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         self.num_machines = num_machines
         #Number of active machines at the time of
         #the request machine_groups.get()
-        self._requested_machines = 0
+        self._active_machines = 0
         self.spot = spot
         self.__is_elastic = False
 
@@ -57,8 +57,8 @@ class MachineGroup(machines_base.BaseMachineGroup):
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
-        machine_group.num_machines = int(resp["num_vms"])
-        machine_group.__dict__["_requested_machines"] = int(resp["max_vms"])
+        machine_group.num_machines = int(resp["max_vms"])
+        machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
         machine_group.spot = bool(resp["spot"])
         machine_group.register = False
         return machine_group
@@ -84,7 +84,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
-        logging.info("> Number of machines: %s", self._requested_machines)
+        logging.info("> Number of machines: %s", self._active_machines)
         logging.info("> Spot:               %s", self.spot)
         self.estimate_cloud_cost()
 
@@ -182,7 +182,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         """Returns a string representation of the 
         number of machines currently running.
         """
-        return f"{self.num_requested_machines}/{self.max_machines} (max)"
+        return f"{self.num_active_machines}/{self.max_machines} (max)"
 
     def __repr__(self):
         class_name = self.__class__.__name__

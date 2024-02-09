@@ -37,10 +37,11 @@ class MPICluster(machines_base.BaseMachineGroup):
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)
+        # nu_machines is the number of machines requested
         self.num_machines = num_machines
         #Number of active machines at the time of
         #the request machine_groups.get()
-        self._requested_machines = 0
+        self._active_machines = 0
         self.__type = machines_base.ResourceType.MPI.value
         self.__is_elastic = False
         self.__spot = False
@@ -56,7 +57,7 @@ class MPICluster(machines_base.BaseMachineGroup):
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["num_vms"])
-        machine_group.__dict__["_requested_machines"] = int(resp["max_vms"])
+        machine_group.__dict__["_active_machines"] = int(resp["max_vms"])
         machine_group.register = False
         return machine_group
 
@@ -83,7 +84,7 @@ class MPICluster(machines_base.BaseMachineGroup):
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
-        logging.info("> Number of machines: %s", self._requested_machines)
+        logging.info("> Number of machines: %s", self._active_machines)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
