@@ -56,6 +56,10 @@ class BaseMachineGroup:
         self.create_time = None
         self._started = False
         self.register = register
+        #Number of active machines at the time of
+        #the request machine_groups.get()
+        self._active_machines = 0
+        self.num_machines = 0
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -100,6 +104,11 @@ class BaseMachineGroup:
     @abstractmethod
     def __repr__(self):
         pass
+
+    def active_machines_to_str(self) -> str:
+        """Return the number of machines currently running.
+        """
+        return f"{self._active_machines}/{self.num_machines}"
 
     @classmethod
     def from_api_response(cls, resp: dict):
