@@ -23,8 +23,8 @@ input_dir = inductiva.utils.download_from_url(
    "https://storage.googleapis.com/inductiva-api-demo-files/"
    "swash-resources-example.zip", unzip=True)
 
-# Instantiate a MPICluster object with 4 machine of type c2-standard-30 and start it
-# immediately. This accounts for 120 vCPUs.
+# Instantiate a MPICluster object with 4 machine of type c2-standard-30 and 
+# start it immediately. This accounts for 120 vCPUs.
 mpi_cluster = inductiva.resources.MPICluster(
    machine_type="c2-standard-30", num_machines=4)
 mpi_cluster.start()

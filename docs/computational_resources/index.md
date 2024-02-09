@@ -4,5 +4,5 @@
 machinegroup_class
 elasticgroup_class
 mpicluster_class
-compute_control
+compute_janitor
 ```
