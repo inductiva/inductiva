@@ -40,6 +40,8 @@ how_to/elastic_machine_group
 how_to/mpi_cluster
 how_to/storage
 how_to/manage_tasks
+how_to/manage_and_retrieve_results
+
 ```
 
 ```{toctree}
