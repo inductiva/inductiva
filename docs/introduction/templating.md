@@ -283,9 +283,28 @@ viscosity increases from left to right and the density from top to bottom.
 
 <div align=center class="row">
   <div class="column"  text="400">
-    <img src="../_static/template_gifs/400_1e-08.gif" width=150>
     <img src="../_static/template_gifs/400_1e-06.gif" width=150>
-    <img src="../_static/template_gifs/400_0.001.gif" width=150>
+    <img src="../_static/template_gifs/400_0.0001.gif" width=150>
+    <img src="../_static/template_gifs/400_0.01.gif" width=150>
     <img src="../_static/template_gifs/400_0.1.gif" width=150>
   </div>
+  <div class="column"  text="400">
+    <img src="../_static/template_gifs/1000_1e-06.gif" width=150>
+    <img src="../_static/template_gifs/1000_0.0001.gif" width=150>
+    <img src="../_static/template_gifs/1000_0.01.gif" width=150>
+    <img src="../_static/template_gifs/1000_0.1.gif" width=150>
+  </div>
+  <div class="column"  text="400">
+    <img src="../_static/template_gifs/2500_1e-06.gif" width=150>
+    <img src="../_static/template_gifs/2500_0.0001.gif" width=150>
+    <img src="../_static/template_gifs/2500_0.01.gif" width=150>
+    <img src="../_static/template_gifs/2500_0.1.gif" width=150>
+  </div>
+  <div class="column"  text="400">
+    <img src="../_static/template_gifs/5000_1e-06.gif" width=150>
+    <img src="../_static/template_gifs/5000_0.0001.gif" width=150>
+    <img src="../_static/template_gifs/5000_0.01.gif" width=150>
+    <img src="../_static/template_gifs/5000_0.1.gif" width=150>
+  </div>
+  
 </div>
