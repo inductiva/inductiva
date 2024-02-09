@@ -37,7 +37,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)
-        # nu_machines is the number of machines requested
+        # num_machines is the number of machines requested
         self.num_machines = num_machines
         #Number of active machines at the time of
         #the request machine_groups.get()
