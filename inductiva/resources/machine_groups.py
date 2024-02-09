@@ -54,13 +54,11 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         spot = machine_group.spot if hasattr(machine_group, "spot") else False
 
         if isinstance(machine_group, resources.ElasticMachineGroup):
-            num_active_machines = machine_group.current_machines_to_str()
             is_elastic = True
         else:
-            num_active_machines = machine_group.current_machines_to_str()
             if isinstance(machine_group, resources.MPICluster):
                 resource_type = machines_base.ResourceType.MPI.value
-
+        num_active_machines = machine_group.active_machines_to_str()
         rows.append([
             machine_group.name, machine_group.machine_type, is_elastic,
             resource_type, num_active_machines, machine_group.data_disk_gb,
