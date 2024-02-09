@@ -1,22 +1,13 @@
 # User Quotas
 
-In the current version of the API (0.4) users can launch several computational resources up to a certain limit,
-which must satisfy the following quotas:
+In the current version of the API (0.4) users can launch several computational resources up to a certain limit, which must satisfy the quotas we present on this section. These quotas are in place to establish a limit over the totality of the computational resources launched by the user. 
 
-+ **maximum allowed price**: 2 USD per hour ($/h)
-+ **maximum allowed machines**: 20 machines
-+ **maximum allowed vCPUs per resource**: 120 vCPUs
-+ **maximum allowed data disk**: 100 GB
+Note that for the Elastic Machine Groups the quotas are applied to the maximum
+number of machines requested, not the number of machines that are currently active.
 
-These quotas are in place over all of the computational resources launched by the user.
-That is, you can have two computational resources up at the same time, but, for
-example, the total number of machines can not exceed 10. Note that for the elastic
-machine group the quotas are applied with the maximum number of machines that can
-be active at a certain point.
+## Maximum allowed price: 2 $/h
 
-**Maximum allowed price:**
-
-The quota limit excess is achieved for example a single machine of type `c2d-standard-56`:
+The quota limit can be reached even with a single machine. For example, if you select a machine of type `c2d-standard-56`, which has a cost of , this is the :
 ```python
 import inductiva
 
@@ -33,6 +24,24 @@ high-performant machine, like a `c2d-highcpu-112`, which fulfils all quotas:
 # Cost: 0.870 $/h
 mg = inductiva.resources.MachineGroup("c2d-highcpu-112", spot=True)
 ```
+
+## Maximum allowed machines: 20
+
+## Maximum allowed vCPUs: 240
+
+## Maximum allowed data disk: 20 GB
+
++ **maximum allowed price**: 2 USD per hour ($/h)
++ **maximum allowed machines**: 20 machines
++ **maximum allowed vCPUs per resource**: 120 vCPUs
++ **maximum allowed data disk**: 100 GB
+
+These quotas are in place over all of the computational resources launched by the user.
+
+
+**Maximum allowed price:**
+
+
 
 **Maximum allowed machines:** 
 

@@ -9,7 +9,7 @@ As describe in the [Simulators overview section](../introduction/simulators.md) 
 - [Pre-defined executables running in sequence;](../introduction/simulators.md#a-slightly-more-complex-case)
 - [Choose the executables as wished to run in sequence.](../introduction/simulators.md#running-long-simulation-pipelines)
 
-The simulators currently available are:
+The simulators available in the current version of the API (0.4) are:
 - [DualSPHysics](../simulators/DualSPHysics.md)
 - [SPlisHSPlasH](../simulators/SPlisHSPlasH.md)
 - [OpenFOAM](../simulators/OpenFOAM.md)
@@ -25,16 +25,3 @@ If you have any questions or suggestions about other open-source simulation pack
 that you would like to see available via Inductiva API, please open an issue on
 our [GitHub repository](https://github.com/inductiva/inductiva/issues), or contact us via [support@inductiva.ai](mailto:support@inductiva.ai).
     
-```{toctree}
----
-hidden: true
----
-DualSPHysics
-SPlisHSPlasH
-OpenFOAM
-GROMACS
-SWASH
-XBeach
-Reef3D
-FDS
-```

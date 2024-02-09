@@ -50,7 +50,15 @@ caption: Available Simulators
 maxdepth: 1
 hidden: true
 ---
-simulators/index
+simulators/overview
+simulators/DualSPHysics
+simulators/SPlisHSPlasH
+simulators/OpenFOAM
+simulators/GROMACS
+simulators/SWASH
+simulators/XBeach
+simulators/Reef3D
+simulators/FDS
 ```
 
 ```{toctree}
