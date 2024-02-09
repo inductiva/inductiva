@@ -12,15 +12,15 @@ gcp:
       description: Intel Xeon Sapphire Rapids (4th Gen) processor.
       types:
         highcpu:
-            vcpus: [4, 8, 22, 44, 88, 176]
+            vcpus: &c3_vcpus [4, 8, 22, 44, 88, 176]
             lssd: False
             description: 2 GB of memory per vCPU.
         standard:
-            vcpus: [4, 8, 22, 44, 88, 176]
+            vcpus: *c3_vcpus
             lssd: True
             description: 4 GB of memory per vCPU and possible local ssd integration.
         highmem:
-            vcpus: [4, 8, 22, 44, 88, 176]
+            vcpus: *c3_vcpus
             lssd: False
             description: 8 GB of RAM memory per vCPU.
     h3:
@@ -36,30 +36,30 @@ gcp:
       description: AMD EPYC Milan (3rd Gen) processor.
       types:
         highcpu:
-          vcpus: [2, 4, 8, 16, 32, 56, 112]
+          vcpus: &c2d_vcpus [2, 4, 8, 16, 32, 56, 112]
           lssd: False
           description: 4 GB of memory per vCPU.
         standard:
-          vcpus: [2, 4, 8, 16, 32, 56, 112]
+          vcpus: *c2d_vcpus
           lssd: False
           description: 4 GB of memory per vCPU.
         highmem:
-          vcpus: [2, 4, 8, 16, 32, 56, 112]
+          vcpus: *c2d_vcpus
           lssd: False
           description: 4 GB of memory per vCPU.
     c3d:
       description: AMD EPYC Genoa (4th Gen) processor.
       types:
         highcpu:
-          vcpus: [4, 8, 16, 30, 60, 90, 180, 360]
+          vcpus: &c3d_vcpus [4, 8, 16, 30, 60, 90, 180, 360]
           lssd: False
           description: 2 GB of memory per vCPU.
         standard:
-          vcpus: [4, 8, 16, 30, 60, 90, 180, 360]
+          vcpus: *c3d_vcpus
           lssd: True
           description: 4 GB of memory per vCPU and possible local ssd integration.
         highmem:
-          vcpus: [4, 8, 16, 30, 60, 90, 180, 360]
+          vcpus: *c3d_vcpus
           lssd: False
           description: >
             4 GB of memory per vCPU.
@@ -69,11 +69,11 @@ gcp:
         Automatically selected based on availability.
       types:
         highcpu:
-          vcpus: [2, 4, 8, 16, 32]
+          vcpus: &e2d_vcpus [2, 4, 8, 16, 32]
           lssd: False
           description: 1 GB of memory per vCPU.
         standard:
-          vcpus: [2, 4, 8, 16, 32]
+          vcpus: *e2d_vcpus
           lssd: False
           description: 4 GB of memory per vCPU.
         highmem:
@@ -90,22 +90,22 @@ gcp:
           lssd: False
           description: 1 GB of memory per vCPU.
         standard:
-          vcpus: [2, 4, 8, 16, 32, 48, 64, 80, 96, 128]
+          vcpus: &n2_vcpus [2, 4, 8, 16, 32, 48, 64, 80, 96, 128]
           lssd: False
           description: 4 GB of memory per vCPU.
         highmem:
-          vcpus: [2, 4, 8, 16, 32, 48, 64, 80, 96, 128]
+          vcpus: *n2_vcpus
           lssd: False
           description: 8 GB of memory per vCPU.
     n2d:
       description: AMD EPYC Milan or ROME processors (3rd and 2nd Gen).
       types:
         highcpu:
-          vcpus: [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224]
+          vcpus: &n2d_vcpus [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224]
           lssd: False
           description: 1 GB of memory per vCPU.
         standard:
-          vcpus: [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224]
+          vcpus: *n2d_vcpus
           lssd: False
           description: 4 GB of memory per vCPU.
         highmem:
@@ -118,15 +118,15 @@ gcp:
         Automatically selected based on availability.
       types:
         highcpu:
-          vcpus: [1, 2, 4, 8, 16, 32, 64, 96]
+          vcpus: &n1_vcpus [1, 2, 4, 8, 16, 32, 64, 96]
           lssd: False
           description: 0.9 GB of memory per vCPU.
         standard:
-          vcpus: [1, 2, 4, 8, 16, 32, 64, 96]
+          vcpus: *n1_vcpus
           lssd: False
           description: 3.75 GB of memory per vCPU.
         highmem:
-          vcpus: [1, 2, 4, 8, 16, 32, 64, 96]
+          vcpus: *n1_vcpus
           lssd: False
           description: 6.5 GB of memory per vCPU.
     
