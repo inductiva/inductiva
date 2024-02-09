@@ -47,9 +47,8 @@ how_to/manage_tasks
 caption: Available Simulators
 maxdepth: 1
 hidden: true
-glob: true
 ---
-simulators/*
+simulators/index
 ```
 
 ```{toctree}

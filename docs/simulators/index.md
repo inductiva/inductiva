@@ -1,4 +1,4 @@
-# Introduction
+# Overview
 
 Inductiva API has available several open-source simulators ready to use. Users 
 who are familiar with the simulators can easily start running simulations with 
