@@ -1,14 +1,16 @@
 # Templating engine
 
+## Introduction
+
 The Inductiva API is all about enabling you to simulate at scale. As we have shown,
 with a few lines of Python code, you can send your simulations to MPI Clusters assembled
 from last-generation cloud hardware, letting you run much larger simulations than
-you would be able to using your local resources. Or you can spin up a large Machine
+you would be able to use your local resources. Or you can spin up a large Machine
 Group, with dozens or hundreds of machines, and send a large number of simulations
-to be run on those machines in parallel. And such massive parallelism is precisely
-what you need when you are developing projects that require simulating a large number
-of variations of a certain base scenario. 
+to be run on those machines in parallel. Such massive parallelism is precisely
+what you need when you want to find the optimal solution for a problem, and the only way to test each candidate's solution is by simulating it. In some cases, a typical starting point is a number of previously known good-enough solutions, and you want to test, via simulation, as many variations of those solutions as possible to find the one that best fits the problem at hand. In others, even lower assumptions are made, and the goal is to explore the largest possible area of the solution space.
 
+## Building Walls
 For example, suppose that for protecting a certain area on the coast, you are trying
 to find the best location and orientation for building a simple seawall, which can
 still have a number of possible variations. Suppose that you have 10 possible variations
@@ -31,17 +33,19 @@ to assume it is a reasonable amount of time).
 
 But, if each simulation is configured using a set of files, how do we programmatically
 change those simulation configuration files so that we can run 50000 *different*
-simulations, each one being a slight variation of the other. 
+simulations, each one being a slight variation of the other?
+
+## Templating
 
 This is where Inductiva’s templating mechanism comes into play. Templating allows
 you to start with a specific simulation file – your “base case” – containing fixed
 values for the parameters you wish to explore and transform those fixed values into
 variables that you can now change programmatically from your Python code before you
 submit the simulation for remote execution. Let's illustrate the power of templating
-in a simple simulation case, from which you will be able to generalize to your own
-cases.
+in a simple simulation case, from which you will be able to generalize to your 
+own cases.
 
-## A simple example: Experimenting fluids with different properties
+## Experimenting fluids with different properties
 
 Suppose you want to study how fluids with different properties fall inside a container
 with a cubic shape. More specifically, you want to study the effect of fluid density
@@ -101,7 +105,8 @@ _json_ file (we designate by `config.json`):
 }
 ```
 
-Using the API, one can run the simulation in a `c2-standard-30` VM with this code:
+For now, let's not worry too much about the contents of this configuration file. 
+Let's just run it using SplishSplash in a `c2-standard-30` VM with the following code:
 
 ```python
 import inductiva
@@ -111,7 +116,7 @@ input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "splishsplash-dambreak-example.zip", unzip=True)
 
-# Launch a machine group with a c2-standard-30
+# Launch a machine group with a single c2-standard-30
 machine_group = inductiva.resources.MachineGroup(machine_type="c2-standard-30")
 machine_group.start()
 
@@ -134,6 +139,8 @@ This simulation takes about 26s to run and the final result looks like this
    <img src="../_static/splishsplash-dambreak.gif" alt="SplishSplash dambreak simulation">
 </div>
 
+
+### Preparing the Template for generalizing the base case
 
 Observe that the in configuration file, the properties of the fluid (in this case water)
 are specified in the following section:
@@ -218,6 +225,8 @@ The rendering is specifically done in the code line:
 file_manager.add_dir(input_dir, density=honey_density, kinematic_viscosity=honey_kinematic_viscosity)
 ```
 
+### Exploring the entire design space
+
 The last step for generating the results we need for the study is to submit the 16
 simulations from a single script by iterating over the set of admissible values for
 both parameters. Additionally, we can save time by issuing these 16 simulations in
@@ -227,7 +236,7 @@ parallel. For that, we first need to create a machine group with 16 VMs:
 import inductiva
 from inductiva import mixins
 
-# Launch a machine group with a c2-standard-30
+# Launch a machine group with 16 VMs of type c2-standard-30
 machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-4",
     num_machines=16)
