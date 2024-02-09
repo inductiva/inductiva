@@ -26,7 +26,12 @@ Registering MachineGroup configurations:
 > Number of machines: 1
 > Spot:               False
 > Estimated cloud cost of machine group: 2.799 $/h
-
+Starting MachineGroup(name="api-bbncoqy189emgs1768qxbucaf"). This may take a few minutes.
+Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
+Starting machine group failed with exception (400)
+Reason: Bad Request
+HTTP response headers: HTTPHeaderDict({'content-type': 'application/json', 'X-Cloud-Trace-Context': 'e38080d4b070af7fb9efab64f25f9c87', 'Date': 'Fri, 09 Feb 2024 13:28:54 GMT', 'Server': 'Google Frontend', 'Content-Length': '90'})
+HTTP response body: b'{"detail":"Quota exceeded: cost ($/h)\\nRequested: 2.79927\\nIn use: 0.0\\nMax allowed: 2\\n"}'
 ```
 
 However, users can take advantage of spot instances, that despite being preemptible
