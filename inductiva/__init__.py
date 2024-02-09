@@ -29,7 +29,7 @@ absl.logging.set_verbosity(absl.logging.INFO)
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.4.3"
+__version__ = "0.4.4"
 
 
 def set_output_dir(new_output_dir):
