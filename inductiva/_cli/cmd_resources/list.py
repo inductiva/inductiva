@@ -24,7 +24,7 @@ def list_machine_types_available(args):
     """List available machine types information per provider and CPU series."""
 
     provider = args.provider
-    verbose = args.verbose
+    description = args.description
     cpu_series = args.series
 
     resources_available = resources.machine_types.get_available()
@@ -33,11 +33,11 @@ def list_machine_types_available(args):
 
     if cpu_series is not None:
         cpu_series_info = provider_resources["cpu-series"][cpu_series]
-        print_cpu_series_info(cpu_series, cpu_series_info, verbose)
+        print_cpu_series_info(cpu_series, cpu_series_info, description)
     else:
         # Print all available machine CPU series information
         for cpu_series, series_info in provider_resources["cpu-series"].items():
-            print_cpu_series_info(cpu_series, series_info, verbose)
+            print_cpu_series_info(cpu_series, series_info, description)
 
 
 def list_machine_groups(unused_args):
@@ -63,10 +63,10 @@ def register(parser):
                            default=None,
                            type=str,
                            help="Filter the available types by CPU series.")
-    subparser.add_argument("-v",
-                           "--verbose",
+    subparser.add_argument("-d",
+                           "--description",
                            action="store_true",
-                           help="Show verbose descriptions of machine types.")
+                           help="Show a description of the machine types.")
 
     subparser.description = (
         "The `inductiva available` command provides a utility for listing the\n"
