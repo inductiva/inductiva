@@ -157,17 +157,16 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
                          register=register)
         self.min_machines = min_machines
         self.max_machines = max_machines
-        self.num_active_machines = min_machines
+        self._active_machines = min_machines
         self.__is_elastic = True
         self.spot = spot
-        self.num_machines = max_machines
 
         if self.register:
             logging.info("Registering ElasticMachineGroup configurations:")
             self._register_machine_group(min_vms=self.min_machines,
                                          max_vms=self.max_machines,
                                          is_elastic=self.__is_elastic,
-                                         num_vms=self.num_active_machines,
+                                         num_vms=self._active_machines,
                                          spot=self.spot)
 
     @classmethod
@@ -176,14 +175,14 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         machine_group.spot = bool(resp["spot"])
         machine_group.max_machines = int(resp["max_vms"])
         machine_group.min_machines = int(resp["min_vms"])
-        machine_group.num_active_machines = int(resp["num_vms"])
+        machine_group._active_machines = int(resp["num_vms"])
         return machine_group
 
     def active_machines_to_str(self) -> str:
         """Returns a string representation of the 
         number of machines currently running.
         """
-        return f"{self.num_active_machines}/{self.max_machines} (max)"
+        return f"{self._active_machines}/{self.max_machines} (max)"
 
     def __repr__(self):
         class_name = self.__class__.__name__

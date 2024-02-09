@@ -111,7 +111,7 @@ class BaseMachineGroup:
     def active_machines_to_str(self) -> str:
         """Return the number of machines currently running.
         """
-        return f"{self.num_machines}/{self._active_machines}"
+        return f"{self._active_machines}/{self.num_machines}"
 
     @classmethod
     def from_api_response(cls, resp: dict):
