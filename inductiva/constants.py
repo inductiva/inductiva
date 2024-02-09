@@ -1,5 +1,6 @@
 """Constants that can be set for the Inductiva client."""
 import os
+import pathlib
 
 LOGS_WEBSOCKET_URL = os.environ.get("INDUCTIVA_TASK_LOGS_URL",
                                     "wss://logs.inductiva.ai")
@@ -17,3 +18,5 @@ LOADER_COMMAND_PREFIX = "cmd_"
 LOADER_IGNORE_PREFIX = "_"
 
 BASE_MACHINE_DISK_SIZE_GB = 60
+
+LOCAL_LOGGING_DIR = pathlib.Path.home() / ".inductiva"

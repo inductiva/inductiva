@@ -8,6 +8,8 @@ import sys
 import pathlib
 import platform
 
+from inductiva import constants
+
 root_logger = logging.getLogger()
 
 
@@ -18,7 +20,7 @@ def get_logs_file_path():
         logs_file_path = pathlib.Path.home(
         ) / "AppData" / "inductiva" / logs_name
     elif system.lower() in ["linux", "darwin"]:
-        logs_file_path = pathlib.Path.home() / ".inductiva" / logs_name
+        logs_file_path = constants.LOCAL_LOGGING_DIR / logs_name
     else:
         raise RuntimeError(f"Current operating system {system} not supported.")
     return logs_file_path

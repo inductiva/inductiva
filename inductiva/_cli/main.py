@@ -2,17 +2,22 @@
 import argparse
 import os
 
+import shtab
+
 import inductiva
 from inductiva import _cli
 from inductiva import constants
+from inductiva.utils.autocompletion import setup_zsh_autocompletion
+from inductiva.utils.input_functions import user_autocompletion_install_prompt
 from . import loader
 
 
-def main():
+def get_main_parser():
     parser = argparse.ArgumentParser(
         prog="inductiva",
         description="CLI tool for Inductiva API.",
     )
+    shtab.add_argument_to(parser, ["-s", "--print-completion"])
 
     parser.add_argument(
         "-V",
@@ -39,8 +44,19 @@ def main():
                          os.path.dirname(__file__),
                          "inductiva._cli",
                          prefix=constants.LOADER_COMMAND_PREFIX)
+    return parser
 
+
+def main():
+    parser = get_main_parser()
     args = parser.parse_args()
+
+    if _cli.utils.check_running_for_first_time():
+        answer = user_autocompletion_install_prompt()
+        print(answer)
+        if answer:
+            setup_zsh_autocompletion()
+
     if args.api_key:
         inductiva.api_key = args.api_key
 
