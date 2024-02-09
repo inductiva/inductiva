@@ -1,16 +1,17 @@
 # `ElasticMachineGroup` Class
 
-An Elastic machine group is similar to the [Machine group]() with the extra property
-that scales up and down the number of active machines based on the number of simulations
-in queue. It is composed of a pool of homogeneous machines that work individually and do
-not communicate with each other in any way. 
+An Elastic machine group is similar to the [Machine group](./machinegroup_class.md)
+with the extra property that scales up and down the number of active machines based
+on the number of simulations in queue. It is composed of a pool of homogeneous machines
+that work individually and do not communicate with each other in any way. 
 
 Hence, an elastic machine group creates a private queue for which workers scale
 based on the number of tasks in it. This allows running multiple simulations at the
-same time, with the slight overhead of machines starting, with a more cost
-effective strategy since machines won't stay idle for long.
+same time, with the slight overhead of machines starting, with a more 
+cost-effective strategy since machines won't stay idle for long.
 
-To instantiate an `ElasticMachineGroup` object the following parameters can be configured:
+### Instantiating an `ElasticMachineGroup` object
+To create an elastic machine group the following properties can be configured:
 - the `machine_type` defines the type of CPU used for each machine. This parameter
 follows the naming convention set by [Google Cloud](https://cloud.google.com/compute/docs/machine-types),
 e.g., `c2-standard-16`. This convention is composed of a prefix that defines the
@@ -18,13 +19,14 @@ CPU series, a suffix that sets the number of [virtual CPUs (vCPU)](https://cloud
 per machine and the middle word refers to the level of RAM per vCPU. In the example,
 `c2` refers to an Intel Xeon Scalable processor of 2nd generation, `standard`
 means 4 GB of RAM per vCPU and will contain `16` vCPUs.
-Currently, this is the [list of available machine types available via the API]().
+Currently, this is the [list of available machine types available via the API](../introduction/infrastructure.md).
 - the `min_machines`, `max_machines` sets the number of minimum and maximum machines 
 available in the computational resource. That is, the number of active machines will
 never go lower than the minimum and never above the maximum. During runtime, there
 might be a different number of active machines in between. Moreover, the `min_machines``
 is the number of machines that the group is started.
-- the `data_disk_gb` allows the selection of the size of the disk attached to each machine that is reserved for the simulation data in GB.
+- the `data_disk_gb` allows the selection of the size of the disk attached to each
+machine that is reserved for the simulation data in GB.
 - the `spot` argument determines if the machines will be preemptible or standard.
 Preemptible machines can be stopped at any time and for that reason are only
 advised for fault-tolerant workloads. If simulations are running when they are

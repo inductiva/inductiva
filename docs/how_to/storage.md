@@ -1,8 +1,8 @@
-# Manage Storage with the Inductiva API
+# Manage Remote Storage
 
 The Inductiva API provides you with tools to manage your remote storage effectively. 
-With the Inductiva storage module, you can easily navigate your storage, evaluate the space used, and delete specific directories as needed.
-You have the ability to organize your storage by specifying the directory where your simulation outputs should be saved. The directory containing these outputs is automatically named after the task ID. Check [tasks](https://github.com/inductiva/inductiva/tree/main/inductiva/tasks) for more information about this.
+With the Inductiva storage module, you can easily navigate your storage, evaluate
+the space used, and delete specific directories as needed.
 Let's illustrate this with some examples.
 
 ## Determining the amount of storage in use
@@ -32,83 +32,59 @@ Total user's remote storage in use: 32.4 GB
 After determining the total storage space used, you may want to identify which directories are consuming the most storage. To be more specific, you may list
 the contents of your directory and sort them by size or creation date as follows:
 
-#### Python
+**Python**
 
 ```python
 import inductiva
 inductiva.storage.listdir(max_results=10, order_by="size", sort_order="desc")
 ```
 
-#### CLI
+**CLI**
 
 ```bash
-inductiva storage ls --max-results 10 --order-by size --sort-order desc
+$ inductiva storage ls --max-results 10 --order-by size --sort-order desc
 ```
 
 In this way, we obtain a listing of the 10 largest directories within our user's
 remote storage.
 ```bash
 
-       NAME                       SIZE            CREATION TIME
-       1699461562982775346/       711.82 MB       08 Nov, 16:39:23
-       1699461561456065056/       706.74 MB       08 Nov, 16:39:21
-       1698772828190838710/       706.44 MB       31 Oct, 17:20:28
-       1698772827312137069/       706.18 MB       31 Oct, 17:20:27
-       1699461562181988760/       699.30 MB       08 Nov, 16:39:22
-       1698772829464378916/       698.80 MB       31 Oct, 17:20:29
-       1699461560739645733/       693.81 MB       08 Nov, 16:39:20
-       1698772828793721336/       688.82 MB       31 Oct, 17:20:28
-       1698751109500351563/       685.33 MB       31 Oct, 11:18:29
-       1699461560029476871/       673.81 MB       08 Nov, 16:39:20
+       NAME                             SIZE           CREATION TIME
+       0bet8jrpp2gz974n42nsd9n2p/       56.11 MB       06 Feb, 11:32:29
+       f8joznwc9xf9a4nypcaei6v2s/       12.79 MB       07 Feb, 09:16:55
+       r4kerxf4b53krgn0s3fyece3b/       11.92 MB       07 Feb, 11:47:48
+       j9qzrpiohgt7x97od3tw4wccd/       11.74 MB       07 Feb, 11:47:46
+       iqi71gonoacfj7fknox3rvnq2/       11.52 MB       07 Feb, 11:47:45
+       dxmnxdrfrv84pfbzbvm9v0dat/       11.43 MB       07 Feb, 11:47:43
+       bgtwgnnyq5qa5hecegzdx6okr/       11.36 MB       07 Feb, 11:47:40
+       6a2h1wnxywpea8jfoxiikdjf7/       1.53 MB        07 Feb, 13:47:03
+       hkrr6qtiuu8uatwgrydc1e6q5/       1.53 MB        07 Feb, 09:26:10
+       97ujsu1uc48oc3xi1572dj1uh/       1.53 MB        07 Feb, 11:31:30
 ```
 
 In case, you want to be more specific and examine the contents of a specific folder,
 you can pass a path to the `listdir` method and/or the CLI subcommand as follows:
 
-#### Python
+**Python**
 
 ```python
 import inductiva
-inductiva.storage.listdir(path = "1234", max_results=10, order_by="size", sort_order="desc")
+inductiva.storage.listdir(path = "0bet8jrpp2gz974n42nsd9n2p")
 ```
 
-#### CLI
+**CLI**
 
 ```bash
-inductiva storage ls 1699461562982775346/ --max-results 10 --order-by size --sort-order desc
+$ inductiva storage ls 0bet8jrpp2gz974n42nsd9n2p
 ```
 
-Add HERE COMMAND
-
-## Saving simulation outputs
-
-When running a simulation, users can specify the name of the directory where the simulation outputs will be saved on the user's remote storage. This is as simple
-as setting the argument `storage_dir` in the `run` method of the simulator. 
-
-This allows users to organize their data on their bucket as they wish.
-
-Let's see an example with the REEF3D simulator.
-
-```python
-import inductiva
-
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-dambreak-example.zip", unzip=True)
-
-simulator = inductiva.simulators.REEF3D()
-
-# Launch the simulation and point the results to the directory "reef3d_simulation"
-task = simulator.run(input_dir=input_dir, storage_dir="reef3d_simulation")
-
-task.wait()
-task.storage.listdir(order_by="creation_time")
-```
-
+Outputs the following::
 ```bash
-RESULTS
+       NAME             SIZE           CREATION TIME
+       output.zip       52.37 MB       06 Feb, 11:34:26
+       input.zip        3.74 MB        06 Feb, 11:32:32
+                        0 B            06 Feb, 11:32:29
 ```
-
 
 ### Removing directories
 
@@ -118,23 +94,32 @@ in case you want to remove everything that is also possible.
 
 The table above provides valuable information that can guide your decision to remove certain directories. 
 
-#### Python
+**Python**
 
 ```python
 import inductiva
-inductiva.storage.rmdir(path="1699461562982775346")
+inductiva.storage.rmdir(path="reef3d_simulation")
 ```
 
-#### CLI
+**CLI**
 
 ```bash
-inductiva storage rm 1699461562982775346
+$ inductiva storage rm reef3d_simulation
+You are about to remove the following paths from your remote storage space:
+  - reef3d_simulation
+Are you sure you want to proceed (y/[N])? y
+Removing reef3d_simulation in the user's remote storage.
+Successfully removed remote path 'reef3d_simulation'.
 ```
 
-To remove everything, use the flag `--all`.
+Notice that you get prompted, to make sure you want to proceed with the removal.
+In case you wish to remove everything, use the flag `--all`, like `inductiva storage rm --all`.
 
+In the end, we can verify that the folder we have named `reef3d_simulation` is removed from the user's remote storage and that nothing appears in the listing.
 
-The above examples remove the directory `1699461562982775346` permantenly from the user's remote storage. So be careful when using this command.
+```bash
+$ inductiva storage ls reef3d_simulation
 
+       NAME         SIZE         CREATION TIME
 
-
+```
