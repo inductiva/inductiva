@@ -1,23 +1,27 @@
 """Utils to setup python autocompletion."""
 import os
 import pathlib
-import subprocess
+import shutil
+from importlib.resources import files
 
 import inductiva
 from inductiva import constants
 
 
 def setup_zsh_autocompletion():
-    version_dir = constants.LOCAL_LOGGING_DIR / f"v{inductiva.__version__}"
-    completion_file = version_dir / "completions" / "_inductiva"
-    os.makedirs(completion_file.parent, exist_ok=True)
-    subprocess.run(f"inductiva --print-completion zsh | tee {completion_file}",
-                   shell=True,
-                   stdout=subprocess.DEVNULL,
-                   stderr=subprocess.DEVNULL)
+    version = inductiva.__version__.replace(".", "-")
+    version_dir = constants.LOCAL_LOGGING_DIR / f"v{version}"
+    completion_dir = version_dir / "completions"
+    os.makedirs(completion_dir.parent, exist_ok=True)
+
+    dir_with_completions = files("inductiva.completions") / f"v{version}"
+    if not os.path.exists(version_dir / "completions"):
+        os.mkdir(version_dir / "completions")
+    shutil.copyfile(dir_with_completions / "_inductiva",
+                    version_dir / "completions" / "_inductiva")
 
     lines_to_append = [
-        f"fpath=({completion_file.parent} $fpath)\n",
+        f"fpath=({completion_dir} $fpath)\n",
         "autoload -Uz compinit\n",
         "compinit\n",
     ]

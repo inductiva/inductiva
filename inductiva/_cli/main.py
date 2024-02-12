@@ -2,8 +2,6 @@
 import argparse
 import os
 
-import shtab
-
 import inductiva
 from inductiva import _cli
 from inductiva import constants
@@ -17,7 +15,6 @@ def get_main_parser():
         prog="inductiva",
         description="CLI tool for Inductiva API.",
     )
-    shtab.add_argument_to(parser, ["-s", "--print-completion"])
 
     parser.add_argument(
         "-V",
