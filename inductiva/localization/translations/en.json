@@ -10,7 +10,7 @@
     ],
     "task-kill-request-sent-2":["Successfully sent kill request for task {0}.",
         "> Consider tracking the task status by calling task.get_status()",
-        "> or via the CLI using 'inductiva tasks -id {0}'."
+        "> or via the CLI using 'inductiva tasks list -id {0}'."
     ],
     "task-kill-request-sent-1":["Successfully sent kill request for {0}."],
     "task-kill-request-sent-0":[""],

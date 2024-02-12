@@ -17,6 +17,4 @@ LOADER_COMMAND_PREFIX = "cmd_"
 
 LOADER_IGNORE_PREFIX = "_"
 
-BASE_MACHINE_DISK_SIZE_GB = 60
-
 LOCAL_LOGGING_DIR = pathlib.Path.home() / ".inductiva"
