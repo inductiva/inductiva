@@ -158,11 +158,8 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
                 "`min_machines` should be a number greater than 0.")
 
         if max_machines < min_machines:
-            raise ValueError("`max_machines` should be a number greater "
+            raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
-
-        if not isinstance(spot, bool):
-            raise ValueError("`spot` should be boolean.")
 
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
