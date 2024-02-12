@@ -28,10 +28,14 @@ from inductiva.utils import format_utils
 def validate_api_key(api_key: Optional[str]) -> Configuration:
     """Validates the API key and returns API configuration"""
     if inductiva.api_key is None:
+        # pylint: disable=line-too-long
         raise ValueError(
             "No API Key specified. "
-            "Set it in the code with \"inductiva.api_key = <YOUR_SECRET_KEY>\""
-            " or set the INDUCTIVA_API_KEY environment variable.")
+            "Please set the INDUCTIVA_API_KEY environment variable.\n"
+            "More infomation at:"
+            "https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/Getting%20Started.html"
+        )
+    # pylint: enable=line-too-long
 
     # Perform version check only on first invocation
     if not hasattr(validate_api_key, "version_checked"):
@@ -124,7 +128,7 @@ def download_output(
     """
 
     if output_dir is None:
-        output_dir = os.path.join(inductiva.output_dir, task_id)
+        output_dir = os.path.join(inductiva.get_output_dir(), task_id)
 
     logging.info("Downloading the task %s outputs to %s...", task_id,
                  output_dir)

@@ -35,6 +35,7 @@ def _id_in_metadata_file(task_id):
                                                      (".id_4", False)])
 def test_run_simulation_logging(task_id, disable_logging):
     """Tests if the id of the task was added to the file."""
+    inductiva.set_output_dir(None)
     os.chdir(TEMP_DIR.name)
     dummy_dir = os.path.join(os.getcwd(), f"dummy_dir_{task_id}")
     if not os.path.exists(dummy_dir):

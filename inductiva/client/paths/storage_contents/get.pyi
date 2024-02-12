@@ -28,7 +28,7 @@ from inductiva.client import schemas  # noqa: F401
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
-DirNameSchema = schemas.StrSchema
+PathSchema = schemas.StrSchema
 MaxResultsSchema = schemas.IntSchema
 
 
@@ -66,7 +66,7 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'dir_name': typing.Union[DirNameSchema, str, ],
+        'path': typing.Union[PathSchema, str, ],
         'max_results': typing.Union[MaxResultsSchema, decimal.Decimal, int, ],
         'sort_by': typing.Union[SortBySchema, str, ],
         'order': typing.Union[OrderSchema, str, ],
@@ -79,10 +79,10 @@ class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams)
     pass
 
 
-request_query_dir_name = api_client.QueryParameter(
-    name="dir_name",
+request_query_path = api_client.QueryParameter(
+    name="path",
     style=api_client.ParameterStyle.FORM,
-    schema=DirNameSchema,
+    schema=PathSchema,
     explode=True,
 )
 request_query_max_results = api_client.QueryParameter(
@@ -201,7 +201,7 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_dir_name,
+            request_query_path,
             request_query_max_results,
             request_query_sort_by,
             request_query_order,

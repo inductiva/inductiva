@@ -11,7 +11,6 @@ from inductiva import api
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
 from inductiva.client import exceptions
-
 from inductiva import logs
 
 
@@ -27,7 +26,7 @@ class BaseMachineGroup:
 
     def __init__(self,
                  machine_type: str,
-                 disk_size_gb: int = 70,
+                 data_disk_gb: int = 10,
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
 
@@ -35,8 +34,7 @@ class BaseMachineGroup:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
               more information about machine types.
-            spot: Whether to use spot machines.
-            disk_size_gb: The size of the disk in GB, recommended min. is 60 GB.
+            data_disk_gb: The size of the disk for user data (in GB).
             register: Bool that indicates if a machine group should be register
                 or if it was already registered. If set to False by users on
                 initialization, then, the machine group will not be able to be
@@ -48,13 +46,20 @@ class BaseMachineGroup:
         if machine_type not in inductiva.resources.list_available_machines():
             raise ValueError("Machine type not supported")
 
+        if data_disk_gb <= 0:
+            raise ValueError("`data_disk_gb` must be positive.")
+
         self.machine_type = machine_type
-        self.disk_size_gb = disk_size_gb
+        self.data_disk_gb = data_disk_gb
         self._id = None
         self._name = None
         self.create_time = None
         self._started = False
         self.register = register
+        #Number of active machines at the time of
+        #the request machine_groups.get()
+        self._active_machines = 0
+        self.num_machines = 0
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -77,16 +82,19 @@ class BaseMachineGroup:
 
         instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
-            disk_size_gb=self.disk_size_gb,
+            disk_size_gb=self.data_disk_gb,
             **kwargs,
         )
 
         try:
             resp = self._api.register_vm_group(body=instance_group_config)
         except (exceptions.ApiValueError, exceptions.ApiException) as e:
-            logs.log_and_exit(logging.getLogger(), logging.ERROR,
-                              "Resource registering failed with exception %s",
-                              e)
+            logs.log_and_exit(
+                logging.getLogger(),
+                logging.ERROR,
+                "Registering machine group failed with exception %s",
+                e,
+                exc_info=e)
 
         self._id = resp.body["id"]
         self._name = resp.body["name"]
@@ -97,13 +105,18 @@ class BaseMachineGroup:
     def __repr__(self):
         pass
 
+    def active_machines_to_str(self) -> str:
+        """Return the number of machines currently running.
+        """
+        return f"{self._active_machines}/{self.num_machines}"
+
     @classmethod
     def from_api_response(cls, resp: dict):
         """Creates a MachineGroup object from an API response."""
 
         machine_group = cls(
             machine_type=resp["machine_type"],
-            disk_size_gb=resp["disk_size_gb"],
+            data_disk_gb=resp["disk_size_gb"],
             register=False,
         )
         machine_group._id = resp["id"]
@@ -135,7 +148,7 @@ class BaseMachineGroup:
                 id=self.id,
                 name=self.name,
                 machine_type=self.machine_type,
-                disk_size_gb=self.disk_size_gb,
+                disk_size_gb=self.data_disk_gb,
                 **kwargs,
             )
         logging.info("Starting %s. "
@@ -146,9 +159,11 @@ class BaseMachineGroup:
         try:
             self._api.start_vm_group(body=request_body)
         except inductiva.client.ApiException as e:
-            logs.log_and_exit(logging.getLogger(), logging.ERROR,
-                              "Starting machine group failed" 
-                              " with exception %s", e)
+            logs.log_and_exit(logging.getLogger(),
+                              logging.ERROR,
+                              "Starting machine group failed with exception %s",
+                              e,
+                              exc_info=e)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         logging.info("%s successfully started in %s.", self, creation_time)
@@ -160,7 +175,7 @@ class BaseMachineGroup:
             return
 
         try:
-            logging.info("Terminating %s This may take a few minutes.",
+            logging.info("Terminating %s. This may take a few minutes.",
                          repr(self))
             start_time = time.time()
 
@@ -169,7 +184,7 @@ class BaseMachineGroup:
                     id=self.id,
                     name=self.name,
                     machine_type=self.machine_type,
-                    disk_size_gb=self.disk_size_gb,
+                    disk_size_gb=self.data_disk_gb,
                     **kwargs,
                 )
 
@@ -206,7 +221,7 @@ class BaseMachineGroup:
         if self.name is None:
             logging.info(
                 "Attempting to get the status of an unregistered machine group."
-                )
+            )
             return
 
         response = self._api.get_group_status({"name": self.name})
@@ -219,4 +234,4 @@ class BaseMachineGroup:
 
         logging.info("> Name:         %s", self.name)
         logging.info("> Machine Type: %s", self.machine_type)
-        logging.info("> Disk size:    %s GB", self.disk_size_gb)
+        logging.info("> Data disk size:    %s GB", self.data_disk_gb)

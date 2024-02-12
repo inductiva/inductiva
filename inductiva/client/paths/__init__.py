@@ -6,6 +6,7 @@ import enum
 
 
 class PathValues(str, enum.Enum):
+    TASKS_AUTH = "/tasks/auth"
     TASKS_SUBMIT = "/tasks/submit"
     TASKS_TASK_ID_INPUT = "/tasks/{task_id}/input"
     TASKS_TASK_ID = "/tasks/{task_id}"
@@ -14,12 +15,11 @@ class PathValues(str, enum.Enum):
     TASKS_TASK_ID_OUTPUT_LIST = "/tasks/{task_id}/output/list"
     TASKS_TASK_ID_OUTPUT = "/tasks/{task_id}/output"
     TASKS_TASK_ID_KILL = "/tasks/{task_id}/kill"
-    TASKS_TASK_ID_STDOUT_TAIL = "/tasks/{task_id}/stdout_tail"
-    TASKS_TASK_ID_RESOURCES_TAIL = "/tasks/{task_id}/resources_tail"
     ADMIN_USERS = "/admin/users"
     ADMIN_USERS_EMAIL_API_KEY = "/admin/users/{email}/api_key"
     ADMIN_USERS_USERNAME_TASKS = "/admin/users/{username}/tasks"
     ADMIN_GROUPS = "/admin/groups"
+    ADMIN_ACTIVE_TASKS = "/admin/active_tasks"
     EXECUTERTRACKER_REGISTER = "/executer-tracker/register"
     COMPUTE_GROUP = "/compute/group"
     COMPUTE_TYPE = "/compute/type"
@@ -29,6 +29,5 @@ class PathValues(str, enum.Enum):
     COMPUTE_GROUP_STATUS = "/compute/group_status"
     STORAGE_SIZE = "/storage/size"
     STORAGE_CONTENTS = "/storage/contents"
-    STORAGE_DIR_NAME = "/storage/{dir_name}"
     VERSION = "/version"
     VERSIONCHECK = "/version-check"

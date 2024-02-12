@@ -1,4 +1,6 @@
 """Functions for running simulations via Inductiva Web API."""
+import os
+
 import pathlib
 from typing import Any, Optional
 import json
@@ -86,8 +88,9 @@ def run_simulation(
     logging.info(
         "Consider tracking the status of the task via CLI:"
         "\n\tinductiva tasks list --task-id %s", task_id)
-    logging.info("Or, tracking the logs of the task via CLI:"
-                 "\n\tinductiva logs %s", task_id)
+    logging.info(
+        "Or, tracking the logs of the task via CLI:"
+        "\n\tinductiva logs %s", task_id)
 
     return task
 
@@ -95,7 +98,9 @@ def run_simulation(
 def _save_metadata(metadata, mode="a"):
     """Appends metadata to the TASK_METADATA_FILENAME in the cwd."""
 
-    file_path = files.resolve_path(TASK_METADATA_FILENAME)
+    file_path = files.resolve_output_path(TASK_METADATA_FILENAME)
+    if not os.path.exists(file_path.parent):
+        os.mkdir(file_path.parent)
     with open(file_path, mode, encoding="utf-8") as f:
         json.dump(metadata, f)
         f.write("\n")
