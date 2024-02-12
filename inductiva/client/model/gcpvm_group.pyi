@@ -132,6 +132,20 @@ class GCPVMGroup(
                     )
             
             
+            class vcpus_per_core(
+                schemas.EnumBase,
+                schemas.IntSchema
+            ):
+                
+                @schemas.classproperty
+                def POSITIVE_1(cls):
+                    return cls(1)
+                
+                @schemas.classproperty
+                def POSITIVE_2(cls):
+                    return cls(2)
+            
+            
             class idle_seconds(
                 schemas.ComposedSchema,
             ):
@@ -353,6 +367,46 @@ class GCPVMGroup(
                 @schemas.classproperty
                 def GCP(cls):
                     return cls("GCP")
+            
+            
+            class base_image(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'base_image':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            use_placement_group = schemas.BoolSchema
             __annotations__ = {
                 "machine_type": machine_type,
                 "disk_size_gb": disk_size_gb,
@@ -361,6 +415,7 @@ class GCPVMGroup(
                 "is_elastic": is_elastic,
                 "id": id,
                 "name": name,
+                "vcpus_per_core": vcpus_per_core,
                 "idle_seconds": idle_seconds,
                 "creation_timestamp": creation_timestamp,
                 "deletion_timestamp": deletion_timestamp,
@@ -368,6 +423,8 @@ class GCPVMGroup(
                 "min_vms": min_vms,
                 "max_vms": max_vms,
                 "provider": provider,
+                "base_image": base_image,
+                "use_placement_group": use_placement_group,
             }
     
     machine_type: MetaOapg.properties.machine_type
@@ -398,6 +455,9 @@ class GCPVMGroup(
     def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["vcpus_per_core"]) -> MetaOapg.properties.vcpus_per_core: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["idle_seconds"]) -> MetaOapg.properties.idle_seconds: ...
     
     @typing.overload
@@ -419,9 +479,15 @@ class GCPVMGroup(
     def __getitem__(self, name: typing_extensions.Literal["provider"]) -> MetaOapg.properties.provider: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["base_image"]) -> MetaOapg.properties.base_image: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["use_placement_group"]) -> MetaOapg.properties.use_placement_group: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "min_vms", "max_vms", "provider", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "vcpus_per_core", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "min_vms", "max_vms", "provider", "base_image", "use_placement_group", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -448,6 +514,9 @@ class GCPVMGroup(
     def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> typing.Union[MetaOapg.properties.name, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["vcpus_per_core"]) -> typing.Union[MetaOapg.properties.vcpus_per_core, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["idle_seconds"]) -> typing.Union[MetaOapg.properties.idle_seconds, schemas.Unset]: ...
     
     @typing.overload
@@ -469,9 +538,15 @@ class GCPVMGroup(
     def get_item_oapg(self, name: typing_extensions.Literal["provider"]) -> typing.Union[MetaOapg.properties.provider, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["base_image"]) -> typing.Union[MetaOapg.properties.base_image, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["use_placement_group"]) -> typing.Union[MetaOapg.properties.use_placement_group, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "min_vms", "max_vms", "provider", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["machine_type", "disk_size_gb", "num_vms", "spot", "is_elastic", "id", "name", "vcpus_per_core", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "min_vms", "max_vms", "provider", "base_image", "use_placement_group", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -485,6 +560,7 @@ class GCPVMGroup(
         disk_size_gb: typing.Union[MetaOapg.properties.disk_size_gb, decimal.Decimal, int, ],
         id: typing.Union[MetaOapg.properties.id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         name: typing.Union[MetaOapg.properties.name, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        vcpus_per_core: typing.Union[MetaOapg.properties.vcpus_per_core, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         idle_seconds: typing.Union[MetaOapg.properties.idle_seconds, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         creation_timestamp: typing.Union[MetaOapg.properties.creation_timestamp, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         deletion_timestamp: typing.Union[MetaOapg.properties.deletion_timestamp, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -492,6 +568,8 @@ class GCPVMGroup(
         min_vms: typing.Union[MetaOapg.properties.min_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         max_vms: typing.Union[MetaOapg.properties.max_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         provider: typing.Union[MetaOapg.properties.provider, str, schemas.Unset] = schemas.unset,
+        base_image: typing.Union[MetaOapg.properties.base_image, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        use_placement_group: typing.Union[MetaOapg.properties.use_placement_group, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'GCPVMGroup':
@@ -505,6 +583,7 @@ class GCPVMGroup(
             disk_size_gb=disk_size_gb,
             id=id,
             name=name,
+            vcpus_per_core=vcpus_per_core,
             idle_seconds=idle_seconds,
             creation_timestamp=creation_timestamp,
             deletion_timestamp=deletion_timestamp,
@@ -512,6 +591,8 @@ class GCPVMGroup(
             min_vms=min_vms,
             max_vms=max_vms,
             provider=provider,
+            base_image=base_image,
+            use_placement_group=use_placement_group,
             _configuration=_configuration,
             **kwargs,
         )
