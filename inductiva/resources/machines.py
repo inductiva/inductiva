@@ -1,11 +1,9 @@
 """Classes to manage different Google Cloud machine group types."""
 from absl import logging
-from typeguard import typechecked
 
 from inductiva.resources import machines_base
 
 
-@typechecked
 class MachineGroup(machines_base.BaseMachineGroup):
     """Class to launch and manage a group of machines in Google Cloud.
 
