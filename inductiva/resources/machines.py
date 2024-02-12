@@ -1,9 +1,11 @@
 """Classes to manage different Google Cloud machine group types."""
 from absl import logging
+from typeguard import typechecked
 
 from inductiva.resources import machines_base
 
 
+@typechecked
 class MachineGroup(machines_base.BaseMachineGroup):
     """Class to launch and manage a group of machines in Google Cloud.
 
@@ -38,6 +40,10 @@ class MachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
+        if num_machines < 1:
+            raise ValueError(
+                "`num_machines` should be a number greater than 0.")
+
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)
@@ -149,9 +155,22 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
-        if max_machines < min_machines:
-            raise ValueError("`max_machines` should be greater "
+        min_machines_is_int = isinstance(min_machines, int)
+        max_machines_is_int = isinstance(max_machines, int)
+
+        if (min_machines_is_int and
+                min_machines < 1) or not min_machines_is_int:
+            raise ValueError(
+                "`min_machines` should be a number greater than 0.")
+
+        if (max_machines_is_int and
+                max_machines < min_machines) or not max_machines_is_int:
+            raise ValueError("`max_machines` should be a number greater "
                              "than `min_machines`.")
+
+        if not isinstance(spot, bool):
+            raise ValueError("`spot` should be boolean.")
+
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)

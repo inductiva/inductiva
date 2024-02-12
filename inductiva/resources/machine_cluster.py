@@ -34,6 +34,10 @@ class MPICluster(machines_base.BaseMachineGroup):
             num_machines: The number of virtual machines to launch.
             data_disk_gb: The size of the disk for user data (in GB).
         """
+        if num_machines < 1:
+            raise ValueError(
+                "`num_machines` should be a number greater than 0.")
+
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)
