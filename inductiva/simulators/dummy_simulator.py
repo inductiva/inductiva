@@ -4,7 +4,7 @@ This simulator acts as an echo of the arguments passed and can be used to
 test the commands passed to the simulator.
 """
 
-from typing import Optional, List
+from typing import Optional
 
 from inductiva import types, tasks, simulators
 
