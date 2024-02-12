@@ -153,16 +153,11 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
-        min_machines_is_int = isinstance(min_machines, int)
-        max_machines_is_int = isinstance(max_machines, int)
-
-        if (min_machines_is_int and
-                min_machines < 1) or not min_machines_is_int:
+        if min_machines < 1:
             raise ValueError(
                 "`min_machines` should be a number greater than 0.")
 
-        if (max_machines_is_int and
-                max_machines < min_machines) or not max_machines_is_int:
+        if max_machines < min_machines:
             raise ValueError("`max_machines` should be a number greater "
                              "than `min_machines`.")
 
