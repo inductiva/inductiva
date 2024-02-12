@@ -53,7 +53,6 @@ def main():
 
     if _cli.utils.check_running_for_first_time():
         answer = user_autocompletion_install_prompt()
-        print(answer)
         if answer:
             setup_zsh_autocompletion()
 
