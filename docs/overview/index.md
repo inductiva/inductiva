@@ -7,4 +7,5 @@ tasks
 simulators
 overview_computational_resources
 infrastructure
+uninstall_inductiva
 ```
