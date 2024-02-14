@@ -1,4 +1,5 @@
 """Utils to setup python autocompletion."""
+from typing import List, Union
 import os
 import pathlib
 import shutil
@@ -24,21 +25,18 @@ def setup_zsh_autocompletion():
     """
     version = inductiva.__version__.replace(".", "-")
     version_dir = constants.LOCAL_LOGGING_DIR / f"v{version}"
-    completion_dir = version_dir / "completions"
+    completions_dir = version_dir / "completions"
 
-    if not os.path.exists(version_dir):
-        os.makedirs(version_dir)
-
-    if not os.path.exists(completions_dir):
-        os.mkdir(completions_dir)
+    os.makedirs(version_dir, exist_ok=True)
+    os.makedirs(completions_dir, exist_ok=True)
 
     completion_file = files(
         "inductiva.completions") / f"v{version}" / "_inductiva"
 
-    shutil.copyfile(completion_file, completion_dir "_inductiva")
+    shutil.copyfile(completion_file, completions_dir / "_inductiva")
 
     lines_to_append = [
-        f"fpath=({completion_dir} $fpath)\n",
+        f"fpath=({completions_dir} $fpath)\n",
         "autoload -Uz compinit\n",
         "compinit\n",
     ]
@@ -67,6 +65,6 @@ def _append_lines_to_file(lines: List[str], file_path: Union[str,
     Returns:
     - None
     """
-    with open(file_path, "a") as f:
+    with open(file_path, "a", encoding="utf-8") as f:
         for line in lines:
             f.write(line)

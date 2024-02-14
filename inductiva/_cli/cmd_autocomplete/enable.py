@@ -1,7 +1,6 @@
-import subprocess
+"""Enables autocompletion for the CLI via CLI."""
 import argparse
 
-from inductiva import constants
 from inductiva.utils.autocompletion import setup_zsh_autocompletion
 
 
@@ -18,11 +17,10 @@ def enable_auto_complete(args):
 def register(parser):
     """Register the list user's tasks command."""
 
-    help_message = "Enables sutocomplete for shell commands."
-    subparser = parser.add_parser(
-        "enable",
-        help="Enables sutocomplete for shell commands.",
-        formatter_class=argparse.RawTextHelpFormatter)
+    help_message = "Enables autocomplete for shell commands."
+    subparser = parser.add_parser("enable",
+                                  help=help_message,
+                                  formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = help_message
 
