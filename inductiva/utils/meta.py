@@ -1,5 +1,6 @@
 """Utils related to metaprogramming."""
 import inspect
+import warnings
 
 # pylint: disable=protected-access
 
@@ -59,3 +60,32 @@ def get_method_name(function_ptr) -> str:
     module_name = ".".join(module_name_useful_segments)
 
     return f"{module_name}.{function_ptr.__name__}"
+
+
+# pylint: disable=unused-argument
+def custom_format_warning(msg, *args, **kwargs):
+    """Custom format for warnings."""
+    return str(msg) + "\n"
+
+
+def deprecated_arg(**kwargs_decorator):
+
+    def wrapper(func):
+
+        def inner_wrapper(*args, **kwargs):
+            decorator_keys = kwargs_decorator.keys()
+            function_keys = kwargs.keys()
+
+            warnings.formatwarning = custom_format_warning
+
+            for decorator_key in decorator_keys:
+                if decorator_key in function_keys:
+                    warnings.warn(f"{decorator_key} is deprecated, use "
+                                  f"{kwargs_decorator[decorator_key]} instead.")
+                    kwargs[
+                        kwargs_decorator[decorator_key]] = kwargs[decorator_key]
+            return func(*args, **kwargs)
+
+        return inner_wrapper
+
+    return wrapper

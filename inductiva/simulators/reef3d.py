@@ -3,6 +3,7 @@
 from typing import Optional
 
 from inductiva import simulators, types, tasks
+from inductiva.utils import meta
 
 
 @simulators.simulator.mpi_enabled
@@ -13,17 +14,19 @@ class REEF3D(simulators.Simulator):
         super().__init__()
         self.api_method_name = "reef3d.reef3d.run_simulation"
 
-    def run(
-        self,
-        input_dir: types.Path,
-        on: Optional[types.ComputationalResources] = None,
-        storage_dir: Optional[types.Path] = "",
-        extra_metadata: Optional[dict] = None,
-    ) -> tasks.Task:
+    @meta.deprecated_arg(n_cores="n_vcpus")
+    def run(self,
+            input_dir: types.Path,
+            n_vcpus: Optional[int] = None,
+            on: Optional[types.ComputationalResources] = None,
+            storage_dir: Optional[types.Path] = "",
+            extra_metadata: Optional[dict] = None,
+            **kwargs) -> tasks.Task:
         """Run the simulation.
 
         Args:
             input_dir: Path to the directory of the simulation input files.
+            n_vcpus: Number of vCPUs (all by default) to use for the simulation.
             sim_config_filename: Name of the simulation configuration file.
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
@@ -32,4 +35,5 @@ class REEF3D(simulators.Simulator):
         return super().run(input_dir,
                            on=on,
                            storage_dir=storage_dir,
+                           n_vcpus=n_vcpus,
                            extra_metadata=extra_metadata)
