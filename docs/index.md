@@ -4,7 +4,7 @@
 
 ```{toctree}
 ---
-caption: Getting Started
+caption: Get Started
 maxdepth: 1
 hidden: true
 ---
@@ -14,14 +14,14 @@ first_example
 
 ```{toctree}
 ---
-caption: Overview
+caption: Explore the API
 maxdepth: 1
 hidden: true
 ---
 introduction/index
 introduction/simulators
 introduction/tasks
-introduction/computational_resources_overview
+introduction/shared_dedicated_resources
 introduction/data_flow
 introduction/infrastructure
 introduction/templating
@@ -30,11 +30,11 @@ introduction/templating
 
 ```{toctree}
 ---
-caption: How To
+caption: How-To Guides
 maxdepth: 1
 hidden: true
 ---
-how_to/computational_resources
+how_to/parallel_simulations
 how_to/manage_computational_resources
 how_to/elastic_machine_group
 how_to/mpi_cluster
@@ -83,4 +83,5 @@ computational_resources/index
 api_reference/user_quotas
 api_reference/troubleshooting
 api_reference/faq
+api_reference/glossary
 ```

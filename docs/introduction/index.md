@@ -1,23 +1,42 @@
-# Introduction
+# How it works
 
-At a very high-level, the functionalities of the API are quite simple. Using simple
-python scripting from your laptop, the API allows you:
+At a very high-level, the functionalities of the API are quite simple. Using simple 
+python scripts from your laptop, you can streamline your overall simulation workflow.
 
-1. start remote VMs (and shut them down, etc), either working independently or as a
-single large MPICluster, with your favorite simulation software already pre-installed;
-2. send your simulation scripts from your laptop to one or more remote machines,
-and start the simulators;
-3. download the results of the simulation, either every data file produced or just
-some specific files.
+In essence, the API enables you to:
 
-That’s it! Of course, there are many details and possible variations, but this is
-the basic flow of usage of the API. So, this section will give you an overview of
-how the API works, going into a bit more detail into how the API operates under the
-hood. 
+<div align="center">
+   <img src="./_static/infographic-apifunctionality-fullscreen.svg" alt="Inductiva API Usage Flow">
+</div>
 
-More specifically, we will introduce you to:
 
-- [Tasks](./tasks). This is the core computational object of the platform. Your simulation requests are Tasks to be executed remotely on the computational infrastructure we make available
-- [Shared and Dedicated Resources](./computational_resources_overview). Tasks get executed on computational resources, which can be Shared by all users, or which can be Dedicated to singe users
-- [Storage and Data Flow](./data_flow). The platforms move a lot of data around. Your input files need to be sent to remote computational resources and the output of the simulations needs to be made available to you. 
-- [Infrastructure](./infrastructure). Under the hood, there is an infrastructure that provides computational power for executing your tasks. We currently use Google Cloud Platform, and very soon we will have other options available.
+1. Start and manage remote Virtual Machines (VMs), operating either independently 
+or collectively as an MPICluster, that are equipped with the pre-installed simulation 
+software of your choice.
+
+2. Send your simulation scripts from your laptop to one or more remote machines, 
+and start the simulators.
+
+3. Download simulation results, selecting either all data files generated or 
+specific ones of interest.
+
+That’s it! While this outlines the basic flow of usage of the API, there are
+nuances and additional options available, which we'll explore in detail throughout
+this section. More specifically, you'll become familiarized with how the API works 
+as we introduce you to:
+
+- [Tasks](./tasks): The core computational object of the platform, representing your 
+simulation requests to be processed remotely on the computational infrastructure 
+we make available.
+
+- [Shared and Dedicated Resources](./shared_dedicated_resources): Understanding how tasks get executed on 
+computational resources that are either **shared** among all users or **dedicated** 
+to individual users.
+
+- [Storage and Data Flow](./data_flow): Understanding the flow of data across platforms, from 
+sending your input files to remote computational resources to accessing the 
+simulation outputs.
+
+- [Infrastructure](./infrastructure): A further look under the hood, representing the underlying 
+infrastructure powering your simulations, currently leveraging the Google Cloud Platform, with more options on the horizon.
+

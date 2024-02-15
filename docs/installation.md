@@ -1,9 +1,9 @@
-# Installation
+# Quickstart Tutorial
 
 Welcome to Inductiva, a Python API package that enables running popular
 [open-source physical system simulation packages](./introduction/simulators.md) in the Cloud. 
 
-This is a step-by-step guide to help you get started with Inductiva 
+This is a step-by-step tutorial to help you get started with Inductiva 
 before running your first simulation project. Should you encounter any errors or 
 issues along the way, our [troubleshooting guide](./api_reference/troubleshooting.md) is
 readily available to assist you in resolving them efficiently.
