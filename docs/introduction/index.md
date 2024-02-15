@@ -29,14 +29,15 @@ as we introduce you to:
 simulation requests to be processed remotely on the computational infrastructure 
 we make available.
 
-- [Shared and Dedicated Resources](./shared_dedicated_resources): Understanding how tasks get executed on 
-computational resources that are either **shared** among all users or **dedicated** 
-to individual users.
+- [Shared and Dedicated Resources](./shared_dedicated_resources): Understanding 
+how tasks get executed on computational resources that are either **shared** among 
+all users or **dedicated** to individual users.
 
 - [Storage and Data Flow](./data_flow): Understanding the flow of data across platforms, from 
 sending your input files to remote computational resources to accessing the 
 simulation outputs.
 
-- [Infrastructure](./infrastructure): A further look under the hood, representing the underlying 
-infrastructure powering your simulations, currently leveraging the Google Cloud Platform, with more options on the horizon.
+- [Infrastructure](./infrastructure): A further look under the hood, representing 
+the underlying infrastructure powering your simulations, currently leveraging the 
+Google Cloud Platform, with more options on the horizon.
 
