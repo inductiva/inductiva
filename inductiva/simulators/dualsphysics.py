@@ -3,6 +3,7 @@
 from typing import Optional
 
 from inductiva import types, tasks, simulators
+from inductiva.utils.inspector import precondition
 
 
 class DualSPHysics(simulators.Simulator):
@@ -12,6 +13,7 @@ class DualSPHysics(simulators.Simulator):
         super().__init__()
         self.api_method_name = "sph.dualsphysics.run_simulation"
 
+    @precondition()
     def run(
         self,
         input_dir: types.Path,
