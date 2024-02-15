@@ -13,6 +13,12 @@ on:
     tags:
       - v*
 
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Client branch to checkout"
+        required: true
+        default: "development"
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
