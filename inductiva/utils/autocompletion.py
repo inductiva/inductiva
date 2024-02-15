@@ -3,7 +3,6 @@ from typing import List, Union, Optional
 import os
 import pathlib
 import shutil
-from importlib.resources import files
 
 import inductiva
 from inductiva import constants
@@ -26,15 +25,15 @@ def setup_zsh_autocompletion():
     autocompletion script to the `fpath` of the user.
 
     """
-    version = inductiva.__version__.replace(".", "-")
+    version = inductiva.__version__
     version_dir = constants.LOCAL_LOGGING_DIR / f"v{version}"
     completions_dir = version_dir / "completions"
 
     os.makedirs(version_dir, exist_ok=True)
     os.makedirs(completions_dir, exist_ok=True)
 
-    completion_file = files(
-        "inductiva.completions") / f"v{version}" / "_inductiva"
+    completion_file = pathlib.Path(
+        inductiva.__path__[0]) / "assets" / "completions" / "zsh" / "_inductiva"
 
     shutil.copyfile(completion_file, completions_dir / "_inductiva")
 
@@ -77,19 +76,20 @@ def _append_lines_to_file(lines: List[str],
     else:
         file_content = []
 
-    if remove_between_begin_line is not None and remove_between_end_line is not None:
+    if (remove_between_begin_line is not None and
+            remove_between_end_line is not None):
         try:
             file_content = _modify_content(file_content,
                                            remove_between_begin_line,
                                            remove_between_end_line)
-        except EOFError:
+        except EOFError as e:
             raise EOFError(
                 f"Reached end of file while reading {file_path}\n"
                 f"Maybe you removed the inductiva marker lines in {file_path}\n"
                 f"Please check to see if the lines:\n"
                 f"  {BEGIN_MARKER_LINE}\n"
                 f"  {END_MARKER_LINE}\n"
-                "Exist in your file.")
+                "Exist in your file.") from e
 
     file_content += lines
 
@@ -116,13 +116,13 @@ def _modify_content(file_content: List[str], remove_between_begin_line: str,
     is_inside = False
 
     for line in file_content:
-        if line.startswith(BEGIN_MARKER_LINE):
+        if line.startswith(remove_between_begin_line):
             is_inside = True
 
         if not is_inside:
             modified_content.append(line)
 
-        if line.startswith(END_MARKER_LINE):
+        if line.startswith(remove_between_end_line):
             is_inside = False
 
     if is_inside:

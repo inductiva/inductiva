@@ -6,7 +6,7 @@ from inductiva import constants
 
 
 def check_running_for_first_time():
-    version = inductiva.__version__.replace(".", "-")
+    version = inductiva.__version__
     dir_name = constants.LOCAL_LOGGING_DIR / f"v{version}"
     if not os.path.exists(dir_name):
         os.mkdir(dir_name)
