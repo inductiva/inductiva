@@ -28,3 +28,6 @@ task = swash.run(
 task.wait()
 task.download_outputs()
 ```
+
+Check the [official documentation](https://swanmodel.sourceforge.io/) of SWAN to know 
+more about the configuration details specific of the simulator.
