@@ -29,11 +29,19 @@ jobs:
         run: |
           python -m pip install build
 
+      - name: Generate Autocompletion File (zsh)
+        run: |
+          pip install shtab
+          mkdir -p inductiva/assets/completions/zsh/v{{  steps.get_version.outputs.version }}
+          shtab --shell=zsh -u inductiva._cli.main.get_main_parser > inductiva/assets/completions/zsh/v{{  steps.get_version.outputs.version }}/_inductiva
+
       - name: Build package
         run: |
           python -m build
+          python -c "from importlib.resources import files; import os; print(os.listdir(files('inductiva.assets')))"
 
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      # - name: Publish to PyPI
+      #   uses: pypa/gh-action-pypi-publish@release/v1
+      #   with:
+      #     password: ${{ secrets.PYPI_API_TOKEN }}
