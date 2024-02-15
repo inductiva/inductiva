@@ -13,7 +13,10 @@ def register(root_parser):
         formatter_class=argparse.RawTextHelpFormatter)
 
     parser.description = (
-        "Controls the autocomplete behavior for the inductiva package.")
+        "Controls the autocomplete behavior for the inductiva package.\n"
+        "The `inductiva autocomplete` command allows you to setup "
+        "autocompletion for the cli.\n"
+        "At the moment we only provide support for zsh.")
 
     utils.show_help_msg(parser)
 

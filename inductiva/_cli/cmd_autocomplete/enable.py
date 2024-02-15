@@ -15,7 +15,7 @@ def enable_auto_complete(args):
 
 
 def register(parser):
-    """Register the list user's tasks command."""
+    """Enable autocompletion for the cli."""
 
     help_message = "Enables autocomplete for shell commands."
     subparser = parser.add_parser("enable",

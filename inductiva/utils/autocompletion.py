@@ -1,4 +1,4 @@
-"""Utils to setup python autocompletion."""
+"""Utils to setup cli autocompletion."""
 from typing import List, Union, Optional
 import os
 import pathlib
@@ -14,11 +14,17 @@ END_MARKER_LINE = "# INDUCTIVA END:"
 def setup_zsh_autocompletion():
     """Sets up shell auto-completion for zsh.
 
-    It does this adding to the users .zshrc:
+    It does this by:
 
-        # BEGIN: LINES ADDED BY INDUCTIVA PACKAGE
+    1. Adding the file with completions to:
+      `$HOME/.inductiva/v{version}/completions/_inductiva`
+    This file already comes with the `inductiva` package.
+
+    2. Adding to the users .zshrc:
+
+        # INDUCTIVA BEGIN:
         source {setup_file_path}
-        # END: LINES ADDED BY THE INDUCTIVA PACKAGE
+        # INDUCTIVA END:
 
     That points to a file:
     /.inductiva/v{version}/inductiva-setup.sh. This file than adds the
@@ -79,9 +85,9 @@ def _append_lines_to_file(lines: List[str],
     if (remove_between_begin_line is not None and
             remove_between_end_line is not None):
         try:
-            file_content = _modify_content(file_content,
-                                           remove_between_begin_line,
-                                           remove_between_end_line)
+            file_content = _remove_lines_between_markers(
+                file_content, remove_between_begin_line,
+                remove_between_end_line)
         except EOFError as e:
             raise EOFError(
                 f"Reached end of file while reading {file_path}\n"
@@ -98,8 +104,9 @@ def _append_lines_to_file(lines: List[str],
             f.write(line)
 
 
-def _modify_content(file_content: List[str], remove_between_begin_line: str,
-                    remove_between_end_line: str) -> List[str]:
+def _remove_lines_between_markers(file_content: List[str],
+                                  remove_between_begin_line: str,
+                                  remove_between_end_line: str) -> List[str]:
     """Modify the content of a list of lines by removing lines
     between specified begin and end lines.
 
