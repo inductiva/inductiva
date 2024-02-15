@@ -68,22 +68,25 @@ def custom_format_warning(msg, *args, **kwargs):
     return str(msg) + "\n"
 
 
-def deprecated_arg(**kwargs_decorator):
+def deprecated_arg(**deprecated):
+    """Decorator to warn users about deprecated arguments.
+    Used like this: @deprecated_arg(deprecated_argument="valid_argument")
+    """
 
     def wrapper(func):
 
         def inner_wrapper(*args, **kwargs):
-            decorator_keys = kwargs_decorator.keys()
-            function_keys = kwargs.keys()
 
             warnings.formatwarning = custom_format_warning
 
-            for decorator_key in decorator_keys:
-                if decorator_key in function_keys:
-                    warnings.warn(f"{decorator_key} is deprecated, use "
-                                  f"{kwargs_decorator[decorator_key]} instead.")
-                    kwargs[
-                        kwargs_decorator[decorator_key]] = kwargs[decorator_key]
+            for key in set(deprecated) & set(kwargs):
+                new_key = deprecated[key]
+                value = kwargs.pop(key)
+                kwargs[new_key] = value
+
+                warnings.warn(f"{key} is deprecated, use "
+                              f"{new_key} instead.")
+
             return func(*args, **kwargs)
 
         return inner_wrapper

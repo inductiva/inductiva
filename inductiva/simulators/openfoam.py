@@ -38,7 +38,8 @@ class OpenFOAM(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             commands: List of commands to run using the OpenFOAM simulator.
-            n_vcpus: Number of vCPUs (all by default) to use for the simulation.
+            n_vcpus: Number of vCPUs to use in the simulation. If not provided
+            (default), all vCPUs will be used.
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             other arguments: See the documentation of the base class.
