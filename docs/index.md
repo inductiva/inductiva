@@ -83,4 +83,5 @@ computational_resources/index
 api_reference/user_quotas
 api_reference/troubleshooting
 api_reference/faq
+uninstall_inductiva
 ```
