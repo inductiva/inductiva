@@ -58,6 +58,7 @@ simulators/GROMACS
 simulators/SWASH
 simulators/XBeach
 simulators/Reef3D
+simulators/SWAN
 simulators/FDS
 ```
 
@@ -84,4 +85,5 @@ api_reference/user_quotas
 api_reference/troubleshooting
 api_reference/faq
 api_reference/glossary
+uninstall_inductiva
 ```
