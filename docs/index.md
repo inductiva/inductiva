@@ -58,6 +58,7 @@ simulators/GROMACS
 simulators/SWASH
 simulators/XBeach
 simulators/Reef3D
+simulators/SWAN
 simulators/FDS
 ```
 
