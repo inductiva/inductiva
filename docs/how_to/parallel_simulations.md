@@ -1,4 +1,4 @@
-# Running simulations in parallel
+# Run Simulations in Parallel
 
 Machine groups can be used to run multiple simulations in 
 parallel, by having each of the machines in the group run a separate simulation.

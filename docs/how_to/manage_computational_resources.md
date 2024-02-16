@@ -1,4 +1,4 @@
-# Manage computational resources
+# Manage Computational Resources
 
 Once you have launched your computational resources, there are a few API methods
 that help manage them and see their status. Let's go over them one by one.
