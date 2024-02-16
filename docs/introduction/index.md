@@ -11,8 +11,8 @@ In essence, the API enables you to:
 
 
 1. Start and manage remote Virtual Machines (VMs), operating either independently 
-or collectively as an MPICluster, that are equipped with the pre-installed simulation 
-software of your choice.
+or collectively as an MPICluster, that are equipped with pre-installed simulation 
+software.
 
 2. Send your simulation scripts from your laptop to one or more remote machines, 
 and start the simulators.
