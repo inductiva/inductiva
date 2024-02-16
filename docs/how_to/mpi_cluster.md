@@ -1,4 +1,4 @@
-# Set up MPI Cluster
+# Set up an MPI Cluster
 
 The `MPICluster` is composed by a group of homogeneous machines that are enabled
 to communicate with each other and work together to run a single simulation.
