@@ -4,6 +4,9 @@ import os
 LOGS_WEBSOCKET_URL = os.environ.get("INDUCTIVA_TASK_LOGS_URL",
                                     "wss://logs.inductiva.ai")
 
+CONSOLE_URL = os.environ.get("INDUCTIVA_CONSOLE_URL",
+                             "https://console.inductiva.ai")
+
 DEFAULT_QUEUE_MACHINE_TYPE = "c2-standard-4"
 
 TASK_KILL_MAX_API_REQUESTS = 5
