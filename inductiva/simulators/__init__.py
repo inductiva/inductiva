@@ -11,3 +11,4 @@ from .fenicsx import FEniCSx
 from .fds import FDS
 from .reef3d import REEF3D
 from .swan import SWAN
+from .schism import SCHISM
