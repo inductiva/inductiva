@@ -15,16 +15,16 @@ first_example
 ```{toctree}
 ---
 caption: Explore the API
-maxdepth: 1
+maxdepth: 2
 hidden: true
 ---
-introduction/index
-introduction/simulators
-introduction/tasks
-introduction/shared_dedicated_resources
-introduction/data_flow
-introduction/infrastructure
-introduction/templating
+explore_api/how_it_works
+explore_api/how_it_works/tasks
+explore_api/how_it_works/shared_dedicated_resources
+explore_api/how_it_works/data_flow
+explore_api/how_it_works/infrastructure
+explore_api/templating
+explore_api/simulators
 
 ```
 
