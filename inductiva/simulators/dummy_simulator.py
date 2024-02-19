@@ -20,8 +20,10 @@ class DummySimulator(simulators.Simulator):
             input_dir: types.Path,
             input_filename: str,
             sleep_time: Optional[float] = 1,
+            on: Optional[types.ComputationalResources] = None,
+            storage_dir: Optional[types.Path] = "",
             extra_metadata: Optional[dict] = None) -> tasks.Task:
-        """Run a dummy simulation.
+        """Run a dummy simulation that echo's to a file.
         
         Args: 
             input_dir: Path to directory with simulation input files.
@@ -31,6 +33,8 @@ class DummySimulator(simulators.Simulator):
         """
 
         return super().run(input_dir,
+                           on=on,
                            input_filename=input_filename,
                            sleep_time=sleep_time,
+                           storage_dir=storage_dir,
                            extra_metadata=extra_metadata)
