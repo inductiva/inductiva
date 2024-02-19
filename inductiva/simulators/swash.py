@@ -2,7 +2,6 @@
 from typing import Optional
 
 from inductiva import types, tasks, simulators
-from inductiva.utils import meta
 
 
 @simulators.simulator.mpi_enabled
@@ -13,11 +12,11 @@ class SWASH(simulators.Simulator):
         super().__init__()
         self.api_method_name = "sw.swash.run_simulation"
 
-    @meta.deprecated_arg(n_cores="n_vcpus")
     def run(self,
             input_dir: types.Path,
             sim_config_filename: str,
             n_vcpus: Optional[int] = None,
+            use_hwthread: bool = True,
             on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[types.Path] = "",
             extra_metadata: Optional[dict] = None,
@@ -29,6 +28,9 @@ class SWASH(simulators.Simulator):
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
             (default), all vCPUs will be used.
+            use_hwthread: If specified Open MPI will attempt to discover the
+            number of hardware threads on the node, and use that as the
+            number of slots available.
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             storage_dir: Directory for storing simulation results.
@@ -38,4 +40,5 @@ class SWASH(simulators.Simulator):
                            input_filename=sim_config_filename,
                            storage_dir=storage_dir,
                            n_vcpus=n_vcpus,
+                           use_hwthread=use_hwthread,
                            extra_metadata=extra_metadata)

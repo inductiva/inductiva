@@ -62,12 +62,6 @@ def get_method_name(function_ptr) -> str:
     return f"{module_name}.{function_ptr.__name__}"
 
 
-# pylint: disable=unused-argument
-def custom_format_warning(msg, *args, **kwargs):
-    """Custom format for warnings."""
-    return str(msg) + "\n"
-
-
 def deprecated_arg(**deprecated):
     """Decorator to warn users about deprecated arguments.
     Used like this: @deprecated_arg(deprecated_argument="valid_argument")
@@ -77,15 +71,15 @@ def deprecated_arg(**deprecated):
 
         def inner_wrapper(*args, **kwargs):
 
-            warnings.formatwarning = custom_format_warning
-
             for key in set(deprecated) & set(kwargs):
                 new_key = deprecated[key]
                 value = kwargs.pop(key)
                 kwargs[new_key] = value
 
-                warnings.warn(f"{key} is deprecated, use "
-                              f"{new_key} instead.")
+                warnings.warn(
+                    f"The {key} argument was deprecated, "
+                    f"and substituted with {new_key}.",
+                    stacklevel=2)
 
             return func(*args, **kwargs)
 
