@@ -24,6 +24,9 @@ class SCHISM(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             num_scribes: The num_scribes as per the simulator documentation.
+            # pylint: disable=line-too-long
+            https://schism-dev.github.io/schism/master/getting-started/running-model.html
+            # pylint: enable=line-too-long
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             storage_dir: Directory for storing simulation results.
