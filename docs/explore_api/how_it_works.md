@@ -6,7 +6,9 @@ python scripts from your laptop, you can streamline your overall simulation work
 In essence, the API enables you to:
 
 <div align="center">
-   <img src="./_static/infographic-apifunctionality-fullscreen.svg" alt="Inductiva API Usage Flow">
+   <img src="../_static/infographic-apifunctionality-fullscreen.svg" alt="Inductiva API Usage Flow">
+      <figcaption align = "center"><b>Inductiva API Usage Flow</b></figcaption>
+
 </div>
 
 
