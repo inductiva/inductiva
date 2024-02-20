@@ -12,14 +12,13 @@ class SCHISM(simulators.Simulator):
         super().__init__()
         self.api_method_name = "schism.schism.run_simulation"
 
-    def run(
-        self,
-        input_dir: types.Path,
-        num_scribes: int = 1,
-        on: Optional[types.ComputationalResources] = None,
-        storage_dir: Optional[types.Path] = "",
-        extra_metadata: Optional[dict] = None,
-    ) -> tasks.Task:
+    def run(self,
+            input_dir: types.Path,
+            num_scribes: int = 1,
+            on: Optional[types.ComputationalResources] = None,
+            storage_dir: Optional[types.Path] = "",
+            extra_metadata: Optional[dict] = None,
+            n_vcpus: int = None) -> tasks.Task:
         """Run the simulation.
         Args:
             input_dir: Path to the directory of the simulation input files.
@@ -32,4 +31,5 @@ class SCHISM(simulators.Simulator):
                            on=on,
                            num_scribes=num_scribes,
                            storage_dir=storage_dir,
+                           n_vcpus=n_vcpus,
                            extra_metadata=extra_metadata)
