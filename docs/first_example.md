@@ -1,6 +1,6 @@
-# Run your first simulation
+# Run your First Simulation
 
-In this example, you will use the open-source [hydrodynamics REEF3D simulator](https://github.com/REEF3D/REEF3D) to
+In this first example, you will use the open-source [hydrodynamics REEF3D simulator](https://github.com/REEF3D/REEF3D) to
 simulate a **2D dam break scenario**. This involves a block of fluid released to 
 flow under the influence of gravity, as shown in the video below. As the simulation
 progresses, you'll find that running simulations through the Inductiva API is not 

@@ -1,4 +1,4 @@
-# Templating engine
+# Templating Engine
 
 ## Introduction
 
