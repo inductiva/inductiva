@@ -26,6 +26,7 @@ class SCHISM(simulators.Simulator):
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             storage_dir: Directory for storing simulation results.
+            n_vcpus: Number of virtual cpus
         """
         return super().run(input_dir,
                            on=on,
