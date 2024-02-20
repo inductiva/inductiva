@@ -17,6 +17,7 @@ class SCHISM(simulators.Simulator):
             num_scribes: int = 1,
             on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[types.Path] = "",
+            use_hwthread: bool = True,
             extra_metadata: Optional[dict] = None,
             n_vcpus: int = None) -> tasks.Task:
         """Run the simulation.
@@ -26,6 +27,9 @@ class SCHISM(simulators.Simulator):
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             storage_dir: Directory for storing simulation results.
+            use_hwthread: If specified Open MPI will attempt to discover the
+            number of hardware threads on the node, and use that as the
+            number of slots available.
             n_vcpus: Number of virtual cpus
         """
         return super().run(input_dir,
