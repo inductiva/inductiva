@@ -1,23 +1,40 @@
 # Overview
 
-Walking side by side with the Python client, the Inductiva CLI provides 
-a quick and simple interface to interact and perform the most common tasks from
-the terminal. The CLI allows users to quickly manage their tasks, resources and/or
-storage, while their simulations are still running remotely.
+The Inductiva Command Line Interface (CLI) offers a streamlined and efficient way 
+to interact with our platform directly from your terminal. Designed for ease of use, 
+the CLI enables you to manage simulations, resources, and data in real-time, even 
+while your simulations run in the cloud.
 
-The CLI beauty is that its functionalities are a terminal command distance away.
-By doing,
+The power of the Inductiva CLI lies in its simplicity —just a command away: 
 ```bash
 inductiva
 ```
+Now, you can choose from a list of available commands to run via the Inductiva (CLI) to manage your projects and interact with our API:
 
-you will obtain an overview of the available commands and their descriptions.
+````{eval-rst}
+.. tabs::
 
-Here, we highlight and go deeper into the four main functionalities of the CLI:
-- [`resources`](./resources.md) give management capabilities over the resources;
-- [`tasks`](./tasks.md) empower the quick management of the simulations;
-- [`logs`](./logs.md) allow users to stream the logs of their running tasks;
-- [`storage`](./storage.md) provides an overview of the user's remote storage.
+   .. tab:: `resources`
 
-Whenever you need help on a specific command, you can always use the `--help` or
-`-h` flag to further understand its usage.
+      List and manage your computational resources.
+
+   .. tab:: `tasks`
+
+      Create and manage your simulation tasks.
+
+   .. tab:: `logs`
+
+      Access real-time logs for ongoing tasks.
+
+   .. tab:: `storage`
+
+      Get an overview of your remote storage.
+
+````
+
+For detailed information on any command, you can always use the `--help` or `-h` flag 
+to further understand its usage:
+
+```bash
+inductiva --help
+```
