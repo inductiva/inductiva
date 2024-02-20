@@ -30,7 +30,17 @@ introduction/templating
 
 ```{toctree}
 ---
-caption: How-To Guides
+caption: Command Line Interface (CLI)
+maxdepth: 1
+hidden: true
+---
+cli/overview
+cli/using-cli
+```
+
+```{toctree}
+---
+caption: Guides
 maxdepth: 1
 hidden: true
 ---
@@ -64,18 +74,6 @@ simulators/FDS
 
 ```{toctree}
 ---
-caption: Command Line Interface (CLI)
-maxdepth: 1
-hidden: true
----
-cli/overview
-cli/resources
-cli/tasks
-cli/storage
-```
-
-```{toctree}
----
 caption: User Reference
 maxdepth: 1
 hidden: true
@@ -85,5 +83,7 @@ api_reference/user_quotas
 api_reference/troubleshooting
 api_reference/faq
 api_reference/glossary
+api_reference/best-practices
+api_reference/change-log
 uninstall_inductiva
 ```

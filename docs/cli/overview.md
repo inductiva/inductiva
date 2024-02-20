@@ -1,4 +1,4 @@
-# Overview
+# How it works
 
 Walking side by side with the Python client, the Inductiva CLI provides 
 a quick and simple interface to interact and perform the most common tasks from
