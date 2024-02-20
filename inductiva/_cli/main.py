@@ -5,8 +5,6 @@ import os
 import inductiva
 from inductiva import _cli
 from inductiva import constants
-from inductiva.utils.autocompletion import setup_zsh_autocompletion
-from inductiva.utils.input_functions import user_autocompletion_install_prompt
 from . import loader
 
 
@@ -49,9 +47,9 @@ def main():
     args = parser.parse_args()
 
     if _cli.utils.check_running_for_first_time():
-        answer = user_autocompletion_install_prompt()
+        answer = _cli.utils.user_autocompletion_install_prompt()
         if answer:
-            setup_zsh_autocompletion()
+            _cli.utils.setup_zsh_autocompletion()
 
     if args.api_key:
         inductiva.api_key = args.api_key

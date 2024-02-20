@@ -40,10 +40,3 @@ def user_confirmation_prompt(items: list, all_msg: str, unlisted_msg: str,
     prompt = input(__("user-prompt-confirmation"))
     confirm = prompt.lower() in ["y", "ye", "yes"]
     return confirm
-
-
-def user_autocompletion_install_prompt():
-    prompt = input("This is the first time running the inductiva cli. "
-                   "Would you like to enable autocompletion? (y/[N])?\n"
-                   "At the moment only zsh is supported.")
-    return prompt.lower() in ["y", "ye", "yes"]

@@ -1,7 +1,7 @@
 """Enables autocompletion for the CLI via CLI."""
 import argparse
 
-from inductiva.utils.autocompletion import setup_zsh_autocompletion
+from inductiva import _cli
 
 
 def enable_auto_complete(args):
@@ -10,7 +10,7 @@ def enable_auto_complete(args):
     if shell != "zsh":
         raise ValueError("At the moment inductiva supports only autocompletion "
                          "for zsh shells.")
-    setup_zsh_autocompletion()
+    _cli.utils.setup_zsh_autocompletion()
     return 0
 
 
@@ -25,6 +25,9 @@ def register(parser):
     subparser.description = help_message
 
     group = subparser.add_mutually_exclusive_group()
-    group.add_argument("--shell", type=str, help="The shell used. Must be zsh")
+    group.add_argument("--shell",
+                       type=str,
+                       choices=["zsh"],
+                       help="The shell used. Must be zsh")
 
     subparser.set_defaults(func=enable_auto_complete)

@@ -17,4 +17,4 @@ LOADER_COMMAND_PREFIX = "cmd_"
 
 LOADER_IGNORE_PREFIX = "_"
 
-LOCAL_LOGGING_DIR = pathlib.Path.home() / ".inductiva"
+HOME_DIR = pathlib.Path.home() / ".inductiva"
