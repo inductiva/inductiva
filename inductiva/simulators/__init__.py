@@ -11,3 +11,4 @@ from .fenicsx import FEniCSx
 from .fds import FDS
 from .reef3d import REEF3D
 from .dummy_simulator import DummySimulator
+from .swan import SWAN
