@@ -20,9 +20,9 @@ schism = inductiva.simulators.SCHISM()
 
 # Run simulation with config files in the input directory
 task = schism.run(input_dir=input_dir,
-                  on=computational_resource,
                   n_vcpus=3,
                   num_scribes=2)
 
-helpers.check_task_status(task)
+task.wait()
+task.download_outputs()
 ```
