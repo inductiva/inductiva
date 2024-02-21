@@ -83,7 +83,5 @@ api_reference/user_quotas
 api_reference/troubleshooting
 api_reference/faq
 api_reference/glossary
-api_reference/best-practices
-api_reference/change-log
 uninstall_inductiva
 ```
