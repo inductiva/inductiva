@@ -1,4 +1,4 @@
-# Using the CLI
+# CLI Usage Guide
 
 While a task is running, one of the main concerns for scientists and engineers is
 to understand if the simulation is progressing as expected and/or if there are any errors.
