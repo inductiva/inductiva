@@ -1,17 +1,19 @@
-# Overview
+# CLI Overview and Functionalities
 
 The Inductiva Command Line Interface (CLI) offers a streamlined and efficient way 
 to interact with our platform directly from your terminal. Designed for ease of use, 
 the CLI enables you to manage simulations, resources and data in real-time, even 
 while your simulations are running remotely.
 
-The power of the Inductiva CLI lies in its simplicity with just a command away 
-on your terminal:
+## CLI Installation
+
+The power of the Inductiva CLI lies in its simplicity, it's just a command away. 
+Simply run on your terminal:
 
 ```bash
 inductiva
 ```
-Now, you can choose from a list of available commands to run via the Inductiva (CLI) 
+Now, you can choose from a list of available subcommands to run via the Inductiva (CLI) 
 to manage your projects and interact with our API:
 
 ````{eval-rst}
@@ -23,7 +25,7 @@ to manage your projects and interact with our API:
 
    .. tab:: `tasks`
 
-      Create and manage your simulation tasks.
+      Create and track your simulation tasks.
 
    .. tab:: `logs`
 
@@ -35,7 +37,7 @@ to manage your projects and interact with our API:
 
 ````
 
-For detailed information on any command, you can always run the `--help` or `-h` flag 
+For detailed information on any subcommand, you can always run the `--help` or `-h` flag 
 on your terminal to further understand its usage:
 
 ```bash

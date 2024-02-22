@@ -28,9 +28,13 @@ author = 'Inductiva Research Labs'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinx.ext.napoleon',
-    'myst_parser', 'sphinxcontrib.mermaid', 'sphinx_copybutton',
-    'sphinx_tabs.tabs'
+    'sphinx.ext.autodoc',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.napoleon',
+    'myst_parser',
+    'sphinxcontrib.mermaid',
+    'sphinx_copybutton',
+    'sphinx-togglebutton';
 ]
 
 # Add any paths that contain templates here, relative to this directory.
