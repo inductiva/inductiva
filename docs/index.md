@@ -69,9 +69,7 @@ maxdepth: 1
 hidden: true
 ---
 cli/overview
-cli/resources
-cli/tasks
-cli/storage
+cli/using-cli
 ```
 
 ```{toctree}
