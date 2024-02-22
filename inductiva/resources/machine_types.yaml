@@ -5,7 +5,7 @@ gcp:
       description: Intel Xeon Cascade Lake (2nd Gen) processor.
       types:
         standard:
-          vcpus: [2, 4, 8, 16, 30, 60]
+          vcpus: [4, 8, 16, 30, 60]
           lssd: False
           description: 4 GB of memory per vCPU.
     c3:
