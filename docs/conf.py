@@ -38,7 +38,7 @@ extensions = [
     'sphinx_togglebutton'
     
 ]
-
+sphinx_tabs_valid_builders = ['readthedocs']
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

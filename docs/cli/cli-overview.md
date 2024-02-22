@@ -14,20 +14,20 @@ Simply run on your terminal:
 $ inductiva
 ```
 
-# CLI Usage Guide
+## CLI Usage Guide
 
 The Inductiva CLI streamlines the management of computational resources, enabling 
 you to efficiently prepare and launch the necessary environments for your simulations. 
 
-After installing you can choose from a list of available subcommands to run via the Inductiva (CLI) 
-to manage your projects and interact with our API:
+After installing you can choose from a list of available subcommands to run via 
+the Inductiva (CLI) to manage your projects and interact with our API:
 
 ````{eval-rst}
 .. tabs::
 
    .. tab:: `resources`
 
-      List and manage your computational resources.
+      [List and manage your computational resources.]()
 
    .. tab:: `tasks`
 
