@@ -27,7 +27,7 @@ the Inductiva (CLI) to manage your projects and interact with our API:
 
    .. tab:: `resources`
 
-      `List and manage your computational resources. <./managing-resources.md>`_
+      `List and manage your computational resources. <./managing-resources.html>`_
 
    .. tab:: `tasks`
 
