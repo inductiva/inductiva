@@ -6,17 +6,9 @@ easy to monitor and manage all tasks you generated with the `list` subcommand th
 tasks you launched. You can also track a specific task using its unique`--id`.
 
 ````{eval-rst}
-:::{seealso}
-Learn more about Tasks.
-:::
+.. seealso::
+   Learn more about how `tasks <introduction/tasks.html>`_ are generated through the Inductiva API.
 ````
-````{eval-rst}
-.. DANGER::
-   Beware killer rabbits!
-````
-.. DANGER::
-   Beware killer rabbits!
-   
 Here's an example of how you can use these features:
 
 ```bash
@@ -66,8 +58,6 @@ $ inductiva tasks list -id cmvsc9qhz5iy86f6pef8uyxqt
        cmvsc9qhz5iy86f6pef8uyxqt       splishsplash       killed         08 Feb, 13:41:06       n/a             n/a                      n/a
 ```
 
-..  tip::
-
 If you want to wait for confirmation when you send the request to `kill` the task,
 you can use the `--wait-timeout` flag with the `kill` subcommand specifying the number 
 of seconds to wait for confirmation:
@@ -76,4 +66,3 @@ of seconds to wait for confirmation:
 # Request to kill a task with a timeout for confirmation
 $ inductiva tasks kill cmvsc9qhz5iy86f6pef8uyxqt --wait-timeout 10
 ```
-:::
