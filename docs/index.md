@@ -68,8 +68,11 @@ caption: Command Line Interface (CLI)
 maxdepth: 1
 hidden: true
 ---
-cli/overview
-cli/using-cli
+cli/cli-overview
+cli/managing-resources
+cli/tracking-tasks
+cli/streaming-logs
+cli/access-storage
 ```
 
 ```{toctree}
