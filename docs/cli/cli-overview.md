@@ -27,7 +27,7 @@ the Inductiva (CLI) to manage your projects and interact with our API:
 
    .. tab:: `resources`
 
-      [List and manage your computational resources.]()
+      `Python home page <https://www.python.org>`_
 
    .. tab:: `tasks`
 
