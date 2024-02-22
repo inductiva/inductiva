@@ -296,15 +296,14 @@ def submit_task(api_instance, method_name, request_params, resource_pool,
     task_id = task["id"]
     log_task_info(task_id, method_name, params, resource_pool)
 
-    with blocking_task_context(api_instance, task_id):
-        if task["status"] == "pending-input":
+    if task["status"] == "pending-input":
 
-            upload_input(
-                api_instance=api_instance,
-                original_params=params,
-                task_id=task_id,
-                type_annotations=type_annotations,
-            )
+        upload_input(
+            api_instance=api_instance,
+            original_params=params,
+            task_id=task_id,
+            type_annotations=type_annotations,
+        )
 
     return task_id
 
@@ -363,17 +362,17 @@ def invoke_async_api(method_name: str,
 def compare_client_and_backend_versions(client_version: str):
     """ Compares the provided client version 7with the backend API version.
 
-    Sends a GET request to the backend API's version comparison endpoint 
-    with the client version as a parameter. Evaluates the response to 
-    determine if the client version is compatible with the backend version. 
+    Sends a GET request to the backend API's version comparison endpoint
+    with the client version as a parameter. Evaluates the response to
+    determine if the client version is compatible with the backend version.
     Raises exceptions for communication issues or incompatibility.
 
     Parameters:
-    - client_version (str): The version of the client to be compared with the 
+    - client_version (str): The version of the client to be compared with the
                             backend version.
 
     Raises:
-    - RuntimeError: If the API cannot be reached, or if the client version is 
+    - RuntimeError: If the API cannot be reached, or if the client version is
       incompatible with the backend version, or for other general failures.
     """
     api_config = Configuration(host=inductiva.api_url)
