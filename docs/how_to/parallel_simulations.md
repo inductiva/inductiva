@@ -1,4 +1,4 @@
-# Running simulations in parallel
+# Run Simulations in Parallel
 
 Machine groups can be used to run multiple simulations in 
 parallel, by having each of the machines in the group run a separate simulation.
@@ -18,7 +18,8 @@ As an example, let's run 5 different simulations in parallel.
 import inductiva
 from inductiva import mixins
 
-# Instantiate a MachineGroup object with 1 preemptible machine of type
+
+# Instantiate a MachineGroup object with 5 preemptible machine of type
 # c2-standard-30 and start it immediately
 machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-30", num_machines=5, spot=True)

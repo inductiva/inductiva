@@ -66,7 +66,7 @@ commands = [
 openfoam = inductiva.simulators.OpenFOAM(version="foundation")
 
 # Run simulation with config files in the input directory
-task = openfoam.run(input_dir=input_dir, commands=commands)
+task = openfoam.run(input_dir=input_dir, commands=commands, n_vcpus=4)
 
 task.wait()
 task.download_outputs()

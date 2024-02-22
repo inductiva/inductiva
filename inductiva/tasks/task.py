@@ -193,7 +193,7 @@ class Task:
                     logging.info("Download the 'stdout.txt' and 'stderr.txt' "
                                  "files with `task.download_outputs()` for "
                                  "more detail.")
-                elif status == models.TaskStatusCode.PENDINGKILLED:
+                elif status == models.TaskStatusCode.PENDINGKILL:
                     logging.info("Task %s is being killed.", self.id)
                 elif status == models.TaskStatusCode.KILLED:
                     logging.info("Task %s killed.", self.id)

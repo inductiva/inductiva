@@ -1,5 +1,6 @@
 """Utils related to metaprogramming."""
 import inspect
+import warnings
 
 # pylint: disable=protected-access
 
@@ -59,3 +60,29 @@ def get_method_name(function_ptr) -> str:
     module_name = ".".join(module_name_useful_segments)
 
     return f"{module_name}.{function_ptr.__name__}"
+
+
+def deprecated_arg(**deprecated):
+    """Decorator to warn users about deprecated arguments.
+    Used like this: @deprecated_arg(deprecated_argument="valid_argument")
+    """
+
+    def wrapper(func):
+
+        def inner_wrapper(*args, **kwargs):
+
+            for key in set(deprecated) & set(kwargs):
+                new_key = deprecated[key]
+                value = kwargs.pop(key)
+                kwargs[new_key] = value
+
+                warnings.warn(
+                    f"The {key} argument was deprecated, "
+                    f"and substituted with {new_key}.",
+                    stacklevel=2)
+
+            return func(*args, **kwargs)
+
+        return inner_wrapper
+
+    return wrapper

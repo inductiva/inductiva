@@ -73,7 +73,7 @@ $ inductiva resources available
 Machine types provided in Google Cloud
 
 c2: Intel Xeon Cascade Lake (2nd Gen) processor.
-  > c2-standard-  [2, 4, 8, 16, 32, 60]                         
+  > c2-standard-  [2, 4, 8, 16, 30, 60]                         
 
 c3: Intel Xeon Sapphire Rapids (4th Gen) processor.
   > c3-highcpu-   [4, 8, 22, 44, 88, 176]                       

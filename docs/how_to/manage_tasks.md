@@ -1,4 +1,4 @@
-# Managing a task
+# Manage Tasks
 
 An important step in the user's workflow is monitoring/managing tasks. Whether
 the user is simply trying to follow the progress of a simulation, retrieve results,

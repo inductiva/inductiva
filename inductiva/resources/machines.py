@@ -38,6 +38,10 @@ class MachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
+        if num_machines < 1:
+            raise ValueError(
+                "`num_machines` should be a number greater than 0.")
+
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)
@@ -149,9 +153,14 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
+        if min_machines < 1:
+            raise ValueError(
+                "`min_machines` should be a number greater than 0.")
+
         if max_machines < min_machines:
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
+
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)
