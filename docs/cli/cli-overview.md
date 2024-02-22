@@ -19,8 +19,8 @@ $ inductiva
 The Inductiva CLI streamlines the management of computational resources, enabling 
 you to efficiently prepare and launch the necessary environments for your simulations. 
 
-After installing you can choose from a list of available subcommands to run via 
-the Inductiva (CLI) to manage your projects and interact with our API:
+After installing you can choose from the below list of available subcommands to 
+run via the Inductiva (CLI) to manage your projects and interact with our API:
 
 ````{eval-rst}
 .. tabs::
@@ -31,15 +31,15 @@ the Inductiva (CLI) to manage your projects and interact with our API:
 
    .. tab:: `tasks`
 
-      Create and track your simulation tasks.
+      `Create and track your simulation tasks. <./tracking-tasks.html>`_
 
    .. tab:: `logs`
 
-      Access real-time logs for ongoing tasks.
+      `Access real-time logs for ongoing tasks. <./streaming-logs.html>`_
 
    .. tab:: `storage`
 
-      Get an overview of your remote storage.
+      `Get an overview of your remote storage. <./access-storage.html>`_
 
 ````
 

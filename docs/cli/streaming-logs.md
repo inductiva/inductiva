@@ -1,4 +1,4 @@
-# Streaming Logs of a Task
+# Stream Logs of a Task
 
 While a task is running, one of the main concerns for scientists and engineers is
 making sure the simulation is progressing as expected or identifying any potential 
