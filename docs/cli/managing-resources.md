@@ -1,11 +1,11 @@
-# Managing your Computational Resources
+# Manage your Computational Resources
 
 The Inductiva API provides a simple way to [launch dedicated resources](../how_to/computational_resources.md) for running your simulations. With the CLI, you 
 can effectively manage these computational resources, from selection and launch to 
 termination, directly from your terminal. For further details on each command and 
 additional options, refer to the CLI's built-in help system using the `--help` flag.
 
-## Discovering Available Resources
+## Discover Available Resources
 
 Before launching any resources, you can use the CLI to go through the variety 
 of machine types available and their associated costs using the `available` and 
@@ -76,7 +76,7 @@ c3d: AMD EPYC Genoa (4th Gen) processor.
   > c3d-standard- [4, 8, 16, 30, 60, 90, 180, 360]              -> 4 GB of memory per vCPU and possible local ssd integration.
   > c3d-highmem-  [4, 8, 16, 30, 60, 90, 180, 360]              -> 4 GB of memory per vCPU.
 ```
-## Estimating Costs
+## Estimate Costs
 
 You can estimate the costs of the computational resources you plan to use per hour. 
 The CLI provides a cost estimation tool that considers the machine type, usage duration, 
@@ -89,7 +89,7 @@ $ inductiva resources cost c2-standard-8 --spot -n 4
 Estimated total cost (per machine): 0.445 (0.111) $/h.
 ```
 
-## Listing Active Resources
+## List Active Resources
 
 Once you've decided and launched your resources, you can use the `list` subcommand 
 to get an overview of your active computational resources:
@@ -103,7 +103,7 @@ Active Resources:
        api-rdqprn82417bsd7id1qnac4c6       c2-standard-4        False           standard       16                 10                      False        08 Feb, 12:58:28
 ```
 
-## Terminating Resources
+## Terminate Resources
 
 Finally, you can terminate computational resources that are no longer needed through 
 the CLI with the `terminate` subcommand. You can either choose a specific resource 

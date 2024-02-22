@@ -1,11 +1,11 @@
-# Accessing your Remote Storage
+# Access your Remote Storage
 
 After your simulations finish, the results are securely stored in your **remote 
 storage bucket**. The Inductiva CLI connects you to your remote bucket, and
 provides you with various commands to effectively manage all the data of your 
 simulation outputs.
 
-## Checking Storage Usage
+## Check Storage Usage
 
 You can check how much storage space your simulations are currently occupying:
 
@@ -13,7 +13,7 @@ You can check how much storage space your simulations are currently occupying:
 $ inductiva storage size
 Total user's remote storage in use: 2.79 GB
 ```
-## Listing Storage Contents
+## List Storage Contents
 
 You can have a detailed view of what's in your storage, including sorting options 
 for easier navigation:
@@ -34,7 +34,7 @@ $ inductiva storage list --max-results 10 --order-by size --sort-order desc
        bgtwgnnyq5qa5hecegzdx6okr/       11.36 MB       07 Feb, 11:47:40
 ```
 
-## Cleaning Up Storage
+## Clean Up Storage
 Once you've backed up your data locally or need to free up space, you can delete 
 data from your remote storage. You can delete several paths within your
 storage, or even delete everything with the `remove` command.

@@ -1,4 +1,4 @@
-# Tracking your Tasks
+# Track your Tasks
 
 The Inductiva API allows you to run multiple simulations remotely, and for every
 simulation you submit to the API, you generate a `task`. The Inductiva CLI makes it
