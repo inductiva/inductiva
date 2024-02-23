@@ -43,7 +43,7 @@ fds = inductiva.simulators.FDS()
 task = fds.run(input_dir=input_dir,
                sim_config_filename="mccaffrey.fds",
                post_processing_filename="mccaffrey.ssf",
-               n_cores=1)
+               n_vcpus=1)
 
 task.wait()
 task.download_outputs()

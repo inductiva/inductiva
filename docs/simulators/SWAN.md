@@ -21,7 +21,7 @@ input_dir = inductiva.utils.files.download_from_url(
 swan = inductiva.simulators.SWAN()
 
 # Run simulation with config files in the input directory
-task = swash.run(
+task = swan.run(
     input_dir=input_dir, sim_config_filename="a11refr.swn")
 
 # Wait for the simulation to finish and download the results
