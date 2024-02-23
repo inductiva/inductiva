@@ -35,17 +35,17 @@ Google Cloud Platform (GCP):
 
    .. tab:: Compute-optimized Machines
 
-       `C2 <https://cloud.google.com/compute/docs/compute-optimized-machines#c2_machine_types>`_
-       `C2D <https://cloud.google.com/compute/docs/compute-optimized-machines#c2d_series>`_
-       `H3 <https://cloud.google.com/compute/docs/compute-optimized-machines#h3_series>`_
+       - `C2 <https://cloud.google.com/compute/docs/compute-optimized-machines#c2_machine_types>`_
+       - `C2D <https://cloud.google.com/compute/docs/compute-optimized-machines#c2d_series>`_
+       - `H3 <https://cloud.google.com/compute/docs/compute-optimized-machines#h3_series>`_
 
    .. tab:: General-purpose Machines
 
-        `N1 <https://cloud.google.com/compute/docs/general-purpose-machines#n1_machines>`_
-        `N2 <https://cloud.google.com/compute/docs/general-purpose-machines#n2_series>`_
-        `N2D <https://cloud.google.com/compute/docs/general-purpose-machines#n2d_machines>`_
-        `C3 <https://cloud.google.com/compute/docs/general-purpose-machines#c3_series>`_ 
-        `C3D <https://cloud.google.com/compute/docs/general-purpose-machines#c3d_series>`_
+       - `N1 <https://cloud.google.com/compute/docs/general-purpose-machines#n1_machines>`_
+       - `N2 <https://cloud.google.com/compute/docs/general-purpose-machines#n2_series>`_
+       - `N2D <https://cloud.google.com/compute/docs/general-purpose-machines#n2d_machines>`_
+       - `C3 <https://cloud.google.com/compute/docs/general-purpose-machines#c3_series>`_ 
+       - `C3D <https://cloud.google.com/compute/docs/general-purpose-machines#c3d_series>`_
 
 ````
 
@@ -80,7 +80,7 @@ on these limitations, please consult the [User Quotas](../api_reference/user_quo
 
 ````{eval-rst}
 .. seealso::
-Learn how to manage your computational resources through `Inductiva's Command Line Interface <./cli/cli-overview.html>`_
+   Learn how to manage your computational resources through Inductiva's Command Line Interface
 ````  
 
 ## Upcoming Computational Resources
