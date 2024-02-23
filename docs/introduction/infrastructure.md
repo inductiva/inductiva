@@ -24,29 +24,28 @@ returns the results back to you.
 ## Available Computational Resources
 
 In the current release, version 0.4, Inductiva supports dispatching computational 
-workloads to the Google Cloud Platform (GCP). This means that the simulations initiated through our API are executed on one or more virtual machines (VMs) hosted on GCP. 
+workloads to the Google Cloud Platform (GCP). This means that the simulations 
+initiated through our API are executed on one or more virtual machines (VMs) hosted on GCP. 
 
-The VM families made available by Inductiva on Google Cloud
-Platform (GCP) include:
-`Python home page <https://www.python.org>`_
+There are two families of Virtual Machines (VMs) made available by Inductiva on 
+Google Cloud Platform (GCP):
 
 ````{eval-rst}
 .. tabs::
 
    .. tab:: Compute-optimized Machines
 
-      - `C2 <https://cloud.google.com/compute/docs/
-      compute-optimized-machines#c2_machine_types>`_
-      - `C2D <https://cloud.google.com/compute/docs/compute-optimized-machines#c2d_series>`_
-      - `H3 <https://cloud.google.com/compute/docs/compute-optimized-machines#h3_series>`_
+       `C2 <https://cloud.google.com/compute/docs/compute-optimized-machines#c2_machine_types>`_
+       `C2D <https://cloud.google.com/compute/docs/compute-optimized-machines#c2d_series>`_
+       `H3 <https://cloud.google.com/compute/docs/compute-optimized-machines#h3_series>`_
 
    .. tab:: General-purpose Machines
 
-       - `N1 <https://cloud.google.com/compute/docs/general-purpose-machines#n1_machines>`_
-       - `N2 <https://cloud.google.com/compute/docs/general-purpose-machines#n2_series>`_
-       - `N2D <https://cloud.google.com/compute/docs/general-purpose-machines#n2d_machines>`_
-       - `C3 <https://cloud.google.com/compute/docs/general-purpose-machines#c3_series>`_ 
-       - 'C3D <https://cloud.google.com/compute/docs/general-purpose-machines#c3d_series>`_
+        `N1 <https://cloud.google.com/compute/docs/general-purpose-machines#n1_machines>`_
+        `N2 <https://cloud.google.com/compute/docs/general-purpose-machines#n2_series>`_
+        `N2D <https://cloud.google.com/compute/docs/general-purpose-machines#n2d_machines>`_
+        `C3 <https://cloud.google.com/compute/docs/general-purpose-machines#c3_series>`_ 
+        `C3D <https://cloud.google.com/compute/docs/general-purpose-machines#c3d_series>`_
 
 ````
 
@@ -81,8 +80,8 @@ on these limitations, please consult the [User Quotas](../api_reference/user_quo
 
 ````{eval-rst}
 .. See Also::
-   Learn how to manage your computational resources through `Inductiva's Command Line Interface <./cli/cli-overview.html>`_
- ````  
+Learn how to manage your computational resources through `Inductiva's Command Line Interface <./cli/cli-overview.html>`_
+````  
 
 ## Upcoming Computational Resources
 
