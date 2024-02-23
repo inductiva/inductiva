@@ -152,15 +152,15 @@ lead to a state transition:
       whereas any failure due to executor problems moves the task to `EXECUTOR FAILED`. 
       You can send a request to kill the task, moving it to `PENDING KILLED`.
 
-```` 
-
-````{eval-rst}
-.. tabs::
-
    .. tab:: `PENDING KILLED`
 
       Your request to terminate a running task has been received by the API and 
       is awaiting execution.
+
+```` 
+
+````{eval-rst}
+.. tabs::
 
    .. tab:: `KILLED`
 
@@ -178,7 +178,13 @@ lead to a state transition:
       requeued or `SUBMITTED` until new resources with the same original machine 
       group become available.
 
+   .. tab:: `FAILED` 
+
+      Simulator errors prevent completion, usually due to incorrect input configurations 
+      or an internal error within the simulator itself.
+
 ```` 
+
 ````{eval-rst}
 .. tabs::
 
@@ -190,11 +196,6 @@ lead to a state transition:
    .. tab:: `EXECUTOR TERMINATED BY USER`
 
       Similar to `KILLED`, the task's executor was terminated either by you or by system-enforced limits (generally when quota limits are reached).
-
-   .. tab:: `FAILED` 
-
-      Simulator errors prevent completion, usually due to incorrect input configurations 
-      or an internal error within the simulator itself.
 
    .. tab:: `EXECUTOR FAILED` 
 
