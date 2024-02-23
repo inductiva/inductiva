@@ -1,21 +1,23 @@
-# Remote Storage
+# Access your Remote Storage
 
-Finally, when the simulation finishes the results are saved in the user's remote bucket. 
+After your simulations finish, the results are securely stored in your **remote 
+storage bucket**. The Inductiva CLI connects you to your remote bucket, and
+provides you with various commands to effectively manage all the data of your 
+simulation outputs.
 
-Hence, the CLI allows users to connect to their remote bucket where all the data of simulations live and manage it as they wish.
+## Check Storage Usage
 
-**Explore size:**
-
-To start, they can explore the storage use at any time with:
+You can check how much storage space your simulations are currently occupying:
 
 ```bash
 $ inductiva storage size
 Total user's remote storage in use: 2.79 GB
 ```
+## List Storage Contents
 
-**List contents:**
+You can have a detailed view of what's in your storage, including sorting options 
+for easier navigation:
 
-Thereafter, the contents of the storage can be listed as follows:
 ```bash
 $ inductiva storage list --max-results 10 --order-by size --sort-order desc
 
@@ -32,27 +34,26 @@ $ inductiva storage list --max-results 10 --order-by size --sort-order desc
        bgtwgnnyq5qa5hecegzdx6okr/       11.36 MB       07 Feb, 11:47:40
 ```
 
-**Remove contents:**
+## Clean Up Storage
+Once you've backed up your data locally or need to free up space, you can delete 
+data from your remote storage. You can delete several paths within your
+storage, or even delete everything with the `remove` command.
 
-When having downloaded the data to their local machines, or simply avoiding
-having too much clutter on the remote storage, users can quickly delete several
-paths within their storage or, if they wish, remove everything. Tread carefully
-with the following command, but in any case, you will be asked for confirmation:
+Here's an example where you remove a path within your storage. Use this command with caution as it permanently deletes data from your remote 
+storage: 
 
-```
+```bash
 $ inductiva storage remove hodbisrxjxhdbkknv60xmy6ti/
+# The CLI always prompts for confirmation to prevent accidental data loss
 You are about to remove the following paths from your remote storage space:
   - 0bet8jrpp2gz974n42nsd9n2p/
 Are you sure you want to proceed (y/[N])? y
 Removing 0bet8jrpp2gz974n42nsd9n2p/ in the user's remote storage.
 Successfully removed remote path '0bet8jrpp2gz974n42nsd9n2p/'.
 ```
-
-Notice that the `remove` command can take multiple paths as arguments, and even
-remove everything with the `--all` flag.
+You can alternatively clear all storage by adding the `--all` flag to the `remove` command.
+Such commands will always be followed with a confirmation prompt to ensure user intention
+and prevent irreversible loss.
 
 These are the main functionalities of the CLI for storage at the moment. In case
 you would like to have more functionalities via the CLI [contact us](support@inductiva.ai).
-
-#### What to read next
-* []()

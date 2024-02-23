@@ -1,14 +1,21 @@
-# Resources
+# Manage your Computational Resources
 
-As you might know by now, Inductiva API provides a simple way to [launch dedicated resources](../how_to/computational_resources.md)
-where you can run your simulations. Before launching any
-resources, users can use the CLI to gather more information about the right
-resources to launch with the `available` and `cost` subcommands.
+The Inductiva API provides a simple way to [launch dedicated resources](../how_to/computational_resources.md) for running your simulations. With the CLI, you 
+can effectively manage these computational resources, from selection and launch to 
+termination, directly from your terminal. For further details on each command and 
+additional options, refer to the CLI's built-in help system using the `--help` flag.
 
-With them, user can list all the available machine types together with details,
-```
+## Discover Available Resources
+
+Before launching any resources, you can use the CLI to go through the variety 
+of machine types available and their associated costs using the `available` and 
+`cost` subcommands:
+
+```bash
 $ inductiva resources available
 Machine types provided in Google Cloud
+
+# You would get an output listing all available machines:
 
 c2: Intel Xeon Cascade Lake (2nd Gen) processor.
   > c2-standard-  [2, 4, 8, 16, 32, 60]                         
@@ -56,26 +63,37 @@ Automatically selected based on availability.
   > n1-highmem-   [1, 2, 4, 8, 16, 32, 64, 96]  
 ```
 
-In case, you want to be more specific you can use the `-v` flag to get more details, and the `-s` flag to focus on a specific series:
-```
-inductiva resources available -s c3d -v
-Machine types provided in Google Cloud
+If you want more detailed information you can use the `-v` flag, and you can focus
+on a specific series by using the `-s` flag. 
 
+For example:
+
+```bash
+$ inductiva resources available -s c3d -v
+Machine types provided in Google Cloud
 c3d: AMD EPYC Genoa (4th Gen) processor.
   > c3d-highcpu-  [4, 8, 16, 30, 60, 90, 180, 360]              -> 2 GB of memory per vCPU.
   > c3d-standard- [4, 8, 16, 30, 60, 90, 180, 360]              -> 4 GB of memory per vCPU and possible local ssd integration.
   > c3d-highmem-  [4, 8, 16, 30, 60, 90, 180, 360]              -> 4 GB of memory per vCPU.
 ```
+## Estimate Costs
 
-Thereafter, use one of the machine types to get an estimate of the cost
-per hour to use it:
+You can estimate the costs of the computational resources you plan to use per hour. 
+The CLI provides a cost estimation tool that considers the machine type, usage duration, 
+and number of machines.
+
+Consider the following example, where you wish to estimate the cost of four **c2-standard-8** machines:
+
 ```bash
 $ inductiva resources cost c2-standard-8 --spot -n 4
 Estimated total cost (per machine): 0.445 (0.111) $/h.
 ```
 
-When you have already decided and launch a few computational resources, you can
-use the list subcommand to get an overview of the resources you have running:
+## List Active Resources
+
+Once you've decided and launched your resources, you can use the `list` subcommand 
+to get an overview of your active computational resources:
+
 ```bash
 $ inductiva resources list
 Active Resources:
@@ -85,14 +103,18 @@ Active Resources:
        api-rdqprn82417bsd7id1qnac4c6       c2-standard-4        False           standard       16                 10                      False        08 Feb, 12:58:28
 ```
 
-Finally, the CLI also allows the termination of resources that are no longer required with
-the `terminate` subcommand. Users can either choose a specific resource by
-providing its name or terminate all the resources with the `--all` flag. Any of the steps
-require confirmation from the user before proceeding. Here, we choose to terminate
-all the resources:
+## Terminate Resources
+
+Finally, you can terminate computational resources that are no longer needed through 
+the CLI with the `terminate` subcommand. You can either choose a specific resource 
+by providing its name or terminate all the resources with the `--all` flag. 
+**Any of the steps require user confirmation before proceeding.** 
+
+For example, you can choose to terminate all the resources:
 
 ```bash
 $ inductiva resources terminate --all
+# The CLI always prompts for confirmation before terminating resources
 You are about to terminate ALL resources.
 Are you sure you want to proceed (y/[N])? y
 Terminating MPICluster(name="api-p3kun5wyta1hacstu4xk38ujr"). This may take a few minutes.

@@ -1,15 +1,19 @@
-# Streaming Logs of a Task
+# Stream Logs of a Task
 
 While a task is running, one of the main concerns for scientists and engineers is
-to understand if the simulation is progressing as expected and/or if there are any errors.
+making sure the simulation is progressing as expected or identifying any potential 
+errors. To help with this, the Inductiva CLI provides a `logs` subcommand that enables
+you to stream the logs of a running task in **real time**.
 
-To help with this, the CLI provides a `logs` subcommand that allows users to stream
-the logs of a running task in real time. In this way, running a simulation in a
-powerful remote machine will feel exactly like running in your local computer.
+In this way, running a simulation on a powerful remote machine will feel exactly 
+like running it on your local computer!
 
-Example:
+Here's an example of how you can use the `logs` subcommand to stay updated on your simulation's 
+progress. This command connects you directly to the ongoing logs of the specified task, displaying updates such as computation steps, residuals, and execution times as 
+if you were running the simulation on your own machine:
 
 ```bash
+# Stream logs in real time for a specific task
 $ inductiva logs f0bnqgf4fcr4asgi4e21tcsqa
 Websocket connected
 Opening socket connection to logs of task f0bnqgf4fcr4asgi4e21tcsqa ...
@@ -75,7 +79,10 @@ total time: 7.64189   average time: 0.00878
 timer per step: 0.00873
 ------------------------------------
 ```
+Combining both subcommand `log` and `kill` will allow you to quickly adjust or 
+terminate simulations to achieve the desired simulation configurations.
 
-This combined with the kill method, allows a quick iteration to stabilize the simulation and achieve the desired configuration.
+At the end of the simulation, the log stream will pause without new messages. In 
+this case, you can exit the log stream by simply using `Ctrl+C`, which stops the 
+log monitoring without affecting the simulation or its outputs.
 
-At the end of the simulation, the logs will be hanging with no messages being logged. In this case, the user can stop the logs by pressing `Ctrl+C`.

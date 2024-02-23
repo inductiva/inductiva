@@ -1,14 +1,19 @@
+# Track your Tasks
 
-### Tasks
+The Inductiva API allows you to run multiple simulations remotely, and for every
+simulation you submit to the API, you generate a `task`. The Inductiva CLI makes it
+easy to monitor and manage all tasks you generated with the `list` subcommand that displays details about the most recent 
+tasks you launched. You can also track a specific task using its unique`--id`.
 
-The power of Inductiva API lies on the ability to launch multiple simulations remotely.
-As an easy to track them, the CLI provides a `list` subcommand that provides information
-about the last tasks launched by the user. If you wish, you can also just track
-a specific task via its `--id`. Examples of usage:
+````{eval-rst}
+.. seealso::
+   Learn more about how `tasks </explore_api/tasks.html>`_ are generated through the Inductiva API.
+````
+Here's an example of how you can use these features:
 
 ```bash
+# List the last four tasks with their details
 $ inductiva tasks list -n 4
-
        ID                              SIMULATOR          STATUS         SUBMITTED              STARTED                COMPUTATION TIME         RESOURCE TYPE
        jxwt0rm8s8xspdfcegtgkkana       splishsplash       started        08 Feb, 13:25:49       08 Feb, 13:26:04       *0:00:05                 c2-standard-4
        n0zcac8rmw7xydbis3m407kb4       splishsplash       started        08 Feb, 13:25:48       08 Feb, 13:26:03       *0:00:07                 c2-standard-4
@@ -16,9 +21,13 @@ $ inductiva tasks list -n 4
        so6i93pi74b89rndircubp3v2       splishsplash       started        08 Feb, 13:25:47       08 Feb, 13:26:02       *0:00:10                 c2-standard-4
 ```
 
-One cool tip is to use a [watch method](https://www.geeksforgeeks.org/watch-command-in-linux-with-examples/) to recurrently monitor the task information.
-For example in Linux or Mac, one can monitor the task information every 10 seconds with:
+To continuously monitor task progress, you can employ a [watch method](https://www.geeksforgeeks.org/watch-command-in-linux-with-examples/) on Linux or Mac, refreshing task information 
+at set intervals.
+
+In this example, we refreshed task information every 10 seconds:
+
 ```bash
+# Monitor task status updates every 10 seconds
 $ watch -n 10 inductiva tasks list -id jxwt0rm8s8xspdfcegtgkkana
 Every 10.0s: inductiva tasks list -id jxwt0rm8s8xspdfcegtgkkana                                                                                 
 
@@ -26,28 +35,34 @@ Every 10.0s: inductiva tasks list -id jxwt0rm8s8xspdfcegtgkkana
        ID                              SIMULATOR          STATUS         SUBMITTED              STARTED                COMPUTATION TIME         RESOURCE TYPE
        jxwt0rm8s8xspdfcegtgkkana       splishsplash       success        08 Feb, 13:25:49       08 Feb, 13:26:04       0:00:35                  c2-standard-4
 ```
-
-In case, you have just a simulation and are not satisfied or you have found a mistake,
-you can always `kill` it and free up the computational resources for other tasks. E.g.:
+If you identify an error in your simulation or simply wish to stop it, the 
+`kill` subcommand allows you to terminate it, thus freeing up the computational 
+resources for other tasks:
 
 ```bash
-$ inductiva tasks kill cmvsc9qhz5iy86f6pef8uyxqt 
+# Terminate a specific task
+$ inductiva tasks kill cmvsc9qhz5iy86f6pef8uyxqt
 You are about to kill the following tasks:
   - cmvsc9qhz5iy86f6pef8uyxqt 
 Are you sure you want to proceed (y/[N])? y
 Successfully sent kill request for task cmvsc9qhz5iy86f6pef8uyxqt.
-> Consider tracking the task status by calling task.get_status()
-> or via the CLI using 'inductiva tasks -id cmvsc9qhz5iy86f6pef8uyxqt'.
 ```
+Following the termination, you can track the task status by calling task.get_status(),
+or via the Inductiva CLI:
 
-Following, the instruction we confirm with:
 ```bash
+# Check the status of the terminated task
 $ inductiva tasks list -id cmvsc9qhz5iy86f6pef8uyxqt
 
       ID                              SIMULATOR          STATUS         SUBMITTED              STARTED         COMPUTATION TIME         RESOURCE TYPE
        cmvsc9qhz5iy86f6pef8uyxqt       splishsplash       killed         08 Feb, 13:41:06       n/a             n/a                      n/a
 ```
 
-If we wanted to wait for confirmation when we sent the request to kill the task,
-we can add the flag `--wait-timeout 10` in the `kill` subcommand with the number of
-seconds we want to wait for confirmation.
+If you want to wait for confirmation when you send the request to `kill` the task,
+you can use the `--wait-timeout` flag with the `kill` subcommand specifying the number 
+of seconds to wait for confirmation:
+
+```bash
+# Request to kill a task with a timeout for confirmation
+$ inductiva tasks kill cmvsc9qhz5iy86f6pef8uyxqt --wait-timeout 10
+```

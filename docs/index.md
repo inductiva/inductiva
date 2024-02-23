@@ -30,7 +30,20 @@ introduction/templating
 
 ```{toctree}
 ---
-caption: How-To Guides
+caption: Command Line Interface (CLI)
+maxdepth: 1
+hidden: true
+---
+cli/cli-overview
+cli/managing-resources
+cli/tracking-tasks
+cli/streaming-logs
+cli/access-storage
+```
+
+```{toctree}
+---
+caption: Guides
 maxdepth: 1
 hidden: true
 ---
@@ -61,18 +74,6 @@ simulators/Reef3D
 simulators/SWAN
 simulators/FDS
 simulators/SCHISM
-```
-
-```{toctree}
----
-caption: Command Line Interface (CLI)
-maxdepth: 1
-hidden: true
----
-cli/overview
-cli/resources
-cli/tasks
-cli/storage
 ```
 
 ```{toctree}
