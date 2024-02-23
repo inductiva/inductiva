@@ -79,7 +79,7 @@ limitations on the quantity and types of machines that you can launch. For detai
 on these limitations, please consult the [User Quotas](../api_reference/user_quotas.md) section, to go over the quotas we put in place through the current version of the API.
 
 ````{eval-rst}
-.. See Also::
+.. seealso::
 Learn how to manage your computational resources through `Inductiva's Command Line Interface <./cli/cli-overview.html>`_
 ````  
 
