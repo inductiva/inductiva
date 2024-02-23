@@ -34,7 +34,6 @@ extensions = [
     'myst_parser',
     'sphinxcontrib.mermaid',
     'sphinx_copybutton',
-    'sphinx_tabs.tabs',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
