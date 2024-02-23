@@ -1,25 +1,24 @@
 # Computational Infrastructure
 
-One way to understand the Inductiva API is to see it as an intermediary between 
-users and the complex landscape of computational resources. In this reference, you 
-will learn how the Inductiva API manages your computational workload, and then you'll
-explore the various computational options currently available to you, and additional resources set to be introduced in future updates.
+The Inductiva API serves as a direct intermediary, bridging the gap between users 
+and the complex landscape of computational resources. It streamlines the process 
+of managing and allocating computational workloads and simulation tasks, by facilitating 
+access to an expansive selection of computing options. 
+
+This guide will detail how the API simplifies the orchestration of your simulations 
+and introduce you to the various computational options currently available to you, 
+as well as preview exciting additions planned for future releases!
 
 ## Computational Resource Management
 
 The Inductiva API acts as an abstraction layer that enables you to access a wide 
-array of computational resources across different providers through a unified 
-interface called the [Command Line Interface (CLI)](). The API's key role is to 
-assist you in identifying the resources best suited to your needs, whether you're prioritizing cost-efficiency or performance.
-
-These resources could be from cloud providers, bare-metal hardware rentals, standard 
-high-performance computing (HPC) solutions commonly used in academia, or even on-premise 
-hardware for those with their own computing infrastructure. The API serves as a unifying interface atop all these varied resources, allowing you to tap into computational solutions of varying scales, prices, and performance levels through straightforward Python 
-scripting from your laptop.
+array of computational resources provided by a number of different players through 
+a unified Python code. These resources could be from cloud providers, bare-metal hardware rentals, standard high-performance computing (HPC) solutions commonly used in academia, or even on-premise hardware for those with their own computing infrastructure. The API serves as a unifying interface atop all these varied resources, facilitating access to computational solutions of varying scales, prices, and performance levels and helping you select the 
+optimal resource for your needs, all through straightforward Python scripting from your laptop.
 
 From the server side, Inductiva manages your computational workload — be it one 
 or several simulations. It allocates this workload to the appropriate computational 
-resource available to you, handles the orchestration of the simulation, and then 
+resource dedicated to you, handles the orchestration of the simulation, and then 
 returns the results back to you.
 
 ## Available Computational Resources
@@ -29,24 +28,25 @@ workloads to the Google Cloud Platform (GCP). This means that the simulations in
 
 The VM families made available by Inductiva on Google Cloud
 Platform (GCP) include:
-
+`Python home page <https://www.python.org>`_
 
 ````{eval-rst}
 .. tabs::
 
    .. tab:: Compute-optimized Machines
 
-      - [C2](https://cloud.google.com/compute/docs/compute-optimized-machines#c2_machine_types)
-      - [C2D](https://cloud.google.com/compute/docs/compute-optimized-machines#c2d_series)
-      - [H3](https://cloud.google.com/compute/docs/compute-optimized-machines#h3_series)
+      - `C2 <https://cloud.google.com/compute/docs/
+      compute-optimized-machines#c2_machine_types>`_
+      - `C2D <https://cloud.google.com/compute/docs/compute-optimized-machines#c2d_series>`_
+      - `H3 <https://cloud.google.com/compute/docs/compute-optimized-machines#h3_series>`_
 
    .. tab:: General-purpose Machines
 
-       - [N1]( https://cloud.google.com/compute/docs/general-purpose-machines#n1_machines)
-       - [N2](https://cloud.google.com/compute/docs/general-purpose-machines#n2_series)
-       - [N2D](https://cloud.google.com/compute/docs/general-purpose-machines#n2d_machines)
-       - [C3](https://cloud.google.com/compute/docs/general-purpose-machines#c3_series)  
-       - [C3D](https://cloud.google.com/compute/docs/general-purpose-machines#c3d_series)
+       - `N1 <https://cloud.google.com/compute/docs/general-purpose-machines#n1_machines>`_
+       - `N2 <https://cloud.google.com/compute/docs/general-purpose-machines#n2_series>`_
+       - `N2D <https://cloud.google.com/compute/docs/general-purpose-machines#n2d_machines>`_
+       - `C3 <https://cloud.google.com/compute/docs/general-purpose-machines#c3_series>`_ 
+       - 'C3D <https://cloud.google.com/compute/docs/general-purpose-machines#c3d_series>`_
 
 ````
 
@@ -79,6 +79,11 @@ you from inadvertently spinning up too many resources, the API imposes certain
 limitations on the quantity and types of machines that you can launch. For details 
 on these limitations, please consult the [User Quotas](../api_reference/user_quotas.md) section, to go over the quotas we put in place through the current version of the API.
 
+````{eval-rst}
+.. See Also::
+   Learn how to manage your computational resources through `Inductiva's Command Line Interface <./cli/cli-overview.html>`_
+ ````  
+
 ## Upcoming Computational Resources
 
 In future versions of the API, we plan to expand the range of computational resources 
@@ -99,7 +104,3 @@ access.
 
 Stay tuned for these updates, which will be rolled out in the upcoming releases!
 
-
-## What to read next
-
-- [User Quotas](../api_reference/user_quotas.md)
