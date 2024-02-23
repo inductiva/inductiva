@@ -1,7 +1,7 @@
 # How it works
 
 At a very high-level, the functionalities of the API are quite simple. Using simple 
-python scripts from your laptop, you can streamline your overall simulation workflow.
+python scripts from your laptop, you can streamline your entire simulation workflow.
 
 In essence, the API enables you to:
 

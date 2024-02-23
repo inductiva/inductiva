@@ -3,10 +3,8 @@
 Central to the API's functionality is the concept of a `Task`, which is an 
 abstraction that encapsulates all the information about the
 computational workload you defined as the user. Once you submit a simulation to the 
-API, a `Task` is generated and remains there until you explicitly delete it. This 
-allows for real-time updates on simulation status, including monitoring 
-its progress, retrieving its outputs, and adjusting parameters or re-running simulations 
-with modified inputs.
+API, a `Task` is generated. This allows for real-time updates on simulation status, 
+including monitoring its progress and retrieving its outputs.
 
 In this reference, you will learn about the entire lifecycle of a `Task`, 
 including its creation, various operational states, and termination. This information 
@@ -40,14 +38,14 @@ print(task.id)
 # Example output: i4ir3kvv62odsfrhko4y8w2an
 ```
 
-Note that a subsequent call to splishsplash_simulator.run() with the same
+Note that a subsequent call to `splishsplash_simulator.run()` with the same
 input arguments would create a new, distinct task:
 
 ```python
 task2 = splishsplash_simulator.run(input_dir="splishsplash-example",
                                   sim_config_filename="config.json")
- print (task2.id)  
- # Example output: k9muu1vq1fc6m2oyxm0n3n8y0
+print (task2.id)  
+# Example output: k9muu1vq1fc6m2oyxm0n3n8y0
 ```
 
 Each `Task` is identified by a unique alphanumeric identifier. While you can 
@@ -57,20 +55,32 @@ task. This mechanism is useful when you want to recreate a `Task` object to
 retrieve information about tasks you created in previous sessions:
 
 ```python
+>>> import inductiva
+>>>
 >>> task1 = inductiva.tasks.Task("i4ir3kvv62odsfrhko4y8w2an")
 >>> task2 = inductiva.tasks.Task("i4ir3kvv62odsfrhko4y8w2an")
->>> print(task1.id, task2.id)  # Outputs the same task ID
+>>> print(id(task1))
+4410160112
+>>> print(id(task2))
+4389863104
+>>> print(task1.id)
+i4ir3kvv62odsfrhko4y8w2an
+>>> print(task2.id)
+i4ir3kvv62odsfrhko4y8w2an # Outputs the same task ID as task1.id
 ```
 
 ## Task Execution
 
-Tasks run **asynchronously** by default, allowing batch submissions in a single 
-session without waiting for each to complete. The API distributes them across 
-the available computational resources so that they can run in parallel. You 
-can manage a task's completion by either using the `wait` method or 
+Tasks run **asynchronously** by default, enabling you to continue interacting with
+the API without interrupting your code in the background, even as tasks run or are 
+queued for execution. This asynchronous model also allows for batch submissions within 
+a single session without waiting for each to complete, with the API efficiently 
+distributing them across available computational resources for parallel processing. 
+
+You can configure how to wait for the task to end by either using the `wait` method or 
 the `sync_context` manager. 
 
-### `wait`
+**`wait`**
 
 You can turn a task into a blocking call by using the `wait` method.
 This method will block the call, allowing your script to wait until the task comes 
@@ -86,7 +96,7 @@ task.wait()  # <- The remote simulation WILL NOT DIE if the local session is
              #    interrupted while waiting for the wait() call to return
 ```
 
-### `sync_context` 
+**`sync_context`**
 
 Alternatively, you can use the `sync_context` manager to ensure the remote simulation 
 terminates if your local session is interrupted while waiting for the `wait` call 
@@ -98,18 +108,11 @@ with task.sync_context():
     task.wait()  # <- The remote simulation WILL DIE if the local session is
                  #     interrupted while waiting for the wait() call to return
 ```
-
-This setup provides flexibility in managing simulations, whether you prefer to 
-proceed with other tasks while simulations run or need to ensure completion before 
-moving forward. 
-
 ## Task Lifecycle
 
-The status of a task changes as it progresses through its lifecycle, transitioning 
-through a myriad of intermediate states between creation to completion or termination.
-Thus, tasks are characterized by their state. Understanding these states is crucial 
-if you want to track a task's progress through the API and manage your simulations 
-effectively. 
+The status of a task changes as it progresses through its lifecycle. Understanding 
+these states is crucial if you want to track a task's progress through the API and 
+manage your simulations effectively. 
 
 The following diagram shows the path a task may take through the API, and identifies 
 the relevant states and possible state transitions:
@@ -118,36 +121,42 @@ the relevant states and possible state transitions:
 <div align="center">
    <img src="../_static/task_state.svg" alt="Task state diagram">
    <figcaption align = "center"><b>State diagram of a Task</b></figcaption>
-
 </div>
 
 
 Below a succinct description of each state, including the actions that
 lead to a state transition:
 
-<details> <summary> 
+.. tabs::
 
-`PENDING INPUT`</summary>
-After you make your initial simulation request, the newly
-created task remains in this pending state, awaiting all necessary input 
-files. You can cancel the task, moving it to `KILLED`, or it may become `ZOMBIE` 
-if its assigned machine group is terminated. Once you've uploaded all the input files, 
-the task progresses to `SUBMITTED`.
-</details>
+   .. tab:: `PENDING INPUT`
 
-<details> <summary> 
+      After you make your initial simulation request, the newly created task 
+      remains in this pending state, awaiting all necessary input files. 
+      You can terminate or kill the task, moving it to `KILLED`, or it may become 
+      `ZOMBIE` if its assigned machine group is terminated. Once you've uploaded 
+      all the input files, the task progresses to `SUBMITTED`.
 
-`SUBMITTED`</summary>
-The task is queued and ready to be picked up by an executor.
-You can cancel the task, moving it to `KILLED`, or it can become a `ZOMBIE` 
-under the same conditions as in `PENDING INPUT`. When an executor picks it up, 
-the task moves to `STARTED`.
- </details>
+   .. tab:: `SUBMITTED`
 
-<details> <summary> 
+      The task is queued and ready to be picked up by an executor. You can cancel 
+      the task, moving it to `KILLED`, or it can become a `ZOMBIE` under the same 
+      conditions as in `PENDING INPUT`. When an executor picks it up, the task moves 
+      to `STARTED`.
+
+   .. tab:: `STARTED`
+
+      Simulation has started. Upon successful completion, the task transitions to 
+      `SUCCESS`. If it fails due to simulation issues, the task transitions to `FAILED`,
+      whereas any failure due to executor problems moves the task to `EXECUTOR FAILED`. 
+      You can send a request to kill the task, moving it to `PENDING KILLED`.
+
+      
+
+
 
 `STARTED` </summary>
-Execution is underway. Upon successful completion, the task transitions 
+Simulation has started. Upon successful completion, the task transitions 
 to `SUCCESS`. If it fails due to simulation issues, the task transitions to `FAILED`,
 whereas any failure due to executor problems moves the task to
 `EXECUTOR FAILED`. You can send a request to kill the task, moving it to `PENDING KILLED`.
@@ -192,7 +201,7 @@ to `SPOT PREEMPTED`, the task is requeued or `SUBMITTED` for execution.
 <details> <summary> 
 
 `EXECUTOR TERMINATED BY USER`</summary>
-similar to `KILLED`, the task's executor was terminated either by you or by 
+Similar to `KILLED`, the task's executor was terminated either by you or by 
 system-enforced limits (generally when quota limits are reached).
 </details>
 
