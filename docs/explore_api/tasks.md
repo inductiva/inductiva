@@ -127,6 +127,7 @@ the relevant states and possible state transitions:
 Below a succinct description of each state, including the actions that
 lead to a state transition:
 
+````{eval-rst}
 .. tabs::
 
    .. tab:: `PENDING INPUT`
@@ -151,69 +152,44 @@ lead to a state transition:
       whereas any failure due to executor problems moves the task to `EXECUTOR FAILED`. 
       You can send a request to kill the task, moving it to `PENDING KILLED`.
 
-      
+   .. tab:: `PENDING KILLED`
 
+      Your request to terminate a running task has been received by the API and 
+      is awaiting execution.
 
+   .. tab:: `KILLED`
 
-`STARTED` </summary>
-Simulation has started. Upon successful completion, the task transitions 
-to `SUCCESS`. If it fails due to simulation issues, the task transitions to `FAILED`,
-whereas any failure due to executor problems moves the task to
-`EXECUTOR FAILED`. You can send a request to kill the task, moving it to `PENDING KILLED`.
- </details>
-
-<details> <summary>
-
-`PENDING KILLED` </summary>
-Your request to terminate a running task has been received by 
-the API and is awaiting execution.
-</details>
-
-<details> <summary>
-
-`KILLED` </summary>
-The task has been successfully terminated upon your request.
-</details>
-
-<details> <summary>
-
-`ZOMBIE` </summary>
-The progression of the non-started task abruptly stops due to the shutdown
-of the computational resources where the task was running, typically when a 
-machine group is user-terminated.
-</details>
-
-<details> <summary> 
-
-`SPOT PREEMPTED` </summary>
-Spot instances running the task were terminated.
-In this case, the task is requeued or `SUBMITTED` until new resources
-with the same original machine group become available.
-</details>
-
-<details> <summary> 
-
-`EXECUTOR TERMINATED` </summary>
-The executor was terminated due to internal reasons. Similar
-to `SPOT PREEMPTED`, the task is requeued or `SUBMITTED` for execution.
-</details>
-
-<details> <summary> 
-
-`EXECUTOR TERMINATED BY USER`</summary>
-Similar to `KILLED`, the task's executor was terminated either by you or by 
-system-enforced limits (generally when quota limits are reached).
-</details>
-
-<details> <summary> 
-
-`FAILED` </summary>
-Simulator errors prevent completion, usually due to incorrect input configurations 
-or an internal error within the simulator itself.
-</details>
+      The task has been successfully terminated upon your request.
     
-<details> <summary> 
+   .. tab:: `ZOMBIE`
 
-`EXECUTOR FAILED` </summary>
-Executor errors prevent completion, such as low disk space.
-</details>
+      The progression of the non-started task abruptly stops due to the shutdown
+      of the computational resources where the task was running, typically when a 
+      machine group is user-terminated.
+
+   .. tab:: `SPOT PREEMPTED`
+
+      Spot instances running the task were terminated. In this case, the task is 
+      requeued or `SUBMITTED` until new resources with the same original machine 
+      group become available.
+
+   .. tab:: `EXECUTOR TERMINATED`
+
+      The executor was terminated due to internal reasons. Similar to `SPOT PREEMPTED`, 
+      the task is requeued or `SUBMITTED` for execution.
+
+   .. tab:: `EXECUTOR TERMINATED BY USER`
+
+      Similar to `KILLED`, the task's executor was terminated either by you or by system-enforced limits (generally when quota limits are reached).
+
+   .. tab:: `FAILED` 
+
+      Simulator errors prevent completion, usually due to incorrect input configurations 
+      or an internal error within the simulator itself.
+
+   .. tab:: `EXECUTOR FAILED` 
+
+      Executor errors prevent completion, such as low disk space.
+
+````     
+
