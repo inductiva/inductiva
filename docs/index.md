@@ -18,13 +18,13 @@ caption: Explore the API
 maxdepth: 1
 hidden: true
 ---
-introduction/index
-introduction/simulators
-introduction/tasks
-introduction/shared_dedicated_resources
-introduction/data_flow
-introduction/infrastructure
-introduction/templating
+explore_api/how_it_works
+explore_api/tasks
+explore_api/shared_dedicated_resources
+explore_api/data_flow
+explore_api/infrastructure
+explore_api/templating
+explore_api/simulators
 
 ```
 

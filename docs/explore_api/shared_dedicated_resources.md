@@ -8,7 +8,7 @@ the two resources using a SWASH simulation.
 
 ## Shared Resources
 
-Currently, when you submit simulation tasks via the Inductiva API, they are queued 
+By default, when you submit simulation tasks via the Inductiva API, they are queued 
 and dispatched to a shared pool of workers on designated Virtual Machines (VMs) 
 serving multiple users, primarily utilizing resources from the [Google Cloud Provider (GCP)](https://cloud.google.com/compute/docs/machine-resource). 
 Looking ahead, future versions will also support Inductiva's own computational platform.
@@ -35,7 +35,7 @@ launch for your simulations:
 designed to operate individually, enabling the distribution of multiple simulations 
 across different machines for parallel processing.
 - [**Elastic Machine Group**](../computational_resources/elasticgroup_class.md): Similar to Machine 
-Group, these also consist of individual machines. The key advantage here is the 
+Group, these also consist of individual machines. The key difference here is the 
 elastic scaling feature, which dynamically adjusts the number of machines based 
 on simulation demands, ensuring efficient resource utilization.
 - [**MPI Cluster**](../computational_resources/mpicluster_class.md) This setup involves a network 
