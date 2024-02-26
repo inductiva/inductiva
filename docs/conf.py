@@ -35,11 +35,12 @@ extensions = [
     'sphinxcontrib.mermaid',
     'sphinx_copybutton',
     'sphinx_tabs.tabs',
-    'sphinx_togglebutton'
+    'sphinx_togglebutton',
 ]
-sphinx_tabs_valid_builders = ['html']
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
+sphinx_tabs_valid_builders = ['html']
 
 # The suffix(es) of source filenames.
 # Note: important to list ipynb before md here: we have both md and ipynb
