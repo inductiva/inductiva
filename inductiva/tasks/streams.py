@@ -58,6 +58,7 @@ class TaskStreamConsumer:
     PING_INTERVAL_SEC = 15.
     PING_TIMEOUT_SEC = 5.
     TICK_INTERVAL_SEC = 1.
+    END_OF_STREAM = "<<end_of_stream>>"
 
     def __init__(self,
                  task_id: str,
@@ -111,6 +112,9 @@ class TaskStreamConsumer:
         streams = data.get("streams")
         for stream in streams:
             msg = stream["values"][0][1]
+            if msg == self.END_OF_STREAM:
+                self.ws.close()
+                return
             self._write_message(msg)
 
     def _get_message_formatter(self):
