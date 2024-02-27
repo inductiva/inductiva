@@ -18,9 +18,9 @@ tabulate._table_formats["inductiva"] = TableFormat(
     linebelowheader=None,
     linebetweenrows=None,
     linebelow=None,
-    headerrow=DataRow("", " ", ""),
-    datarow=DataRow("", " ", ""),
-    padding=3,
+    headerrow=DataRow("", "   ", ""),
+    datarow=DataRow("", "   ", ""),
+    padding=0,
     with_header_hide=None,
 )
 
