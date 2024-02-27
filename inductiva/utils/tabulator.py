@@ -69,7 +69,8 @@ class Col:
             default_formatter: the default formatter to be used if the
                 value_formatter is not defined.
         """
-        value = getattr(item, self.attr_name, self.attr_default)
+        attr = getattr(item, self.attr_name, self.attr_default)
+        value = attr() if callable(attr) else attr
         # fallback to the identity method when no valid formatter is available
         fmtr = self.value_formatter or default_formatter or self._id
         return fmtr(value, item)
@@ -90,7 +91,7 @@ class Col:
         fmtr = self.header_formatter or default_formatter or self._id
         return fmtr(self.name)
 
-    def _id(self, item: Any) -> Any:
+    def _id(self, item: Any, *args) -> Any:
         return item
 
 
@@ -121,12 +122,17 @@ class Tabulator(type):
             # assign an unset default_value_formatter to the base class
             classdict["default_value_formatter"] = None
 
-        # collect all F instances into the "formatters" attribute of the class
-        classdict["columns"] = {
-            cls_attr: value
-            for cls_attr, value in classdict.items()
-            if isinstance(value, Col)
-        }
+        # collect all 'Col' instances into the "columns" attribute of the class,
+        # making sure to include all the columns from the base classes.
+        columns = {}
+        for base in bases:
+            if isinstance(base, Tabulator):
+                columns.update(base.columns)
+        columns.update({cls_attr: value
+                        for cls_attr, value in classdict.items()
+                        if isinstance(value, Col)})
+
+        classdict["columns"] = columns
 
         # construct and return the class
         return super().__new__(mcs, cls, bases, classdict)
@@ -154,6 +160,10 @@ class BaseTabulator(metaclass=Tabulator):
         Args:
             items: an iterable of items to be formatted.
         """
+        if (pre_tabulate:= getattr(self, "on_pre_tabulate", None)):
+            for item in items:
+                pre_tabulate(item)
+
         def_header_fmtr = self.default_header_formatter
         def_value_fmtr = self.default_value_formatter
         if not self.columns:
@@ -215,9 +225,11 @@ class TabulatedList(list):
         """Return an HTML representation of the TabulatedList instance.
 
         The method is used by Jupyter to display the object in a notebook using
-        HTML markdown.
+        HTML markup.
         """
-        return self.tabulator(self, format="unsafehtml")
+        if self.tabulator:
+            return self.tabulator(self, format="unsafehtml")
+        return super().__repr__()
 
 
 def tabulated(tabulator: BaseTabulator = None):
@@ -252,44 +264,3 @@ def tabulated(tabulator: BaseTabulator = None):
         return wrapper
 
     return decorator
-
-
-if __name__ == "__main__":
-
-    @dataclass
-    class Person:
-        name: str
-        age: int
-        birthplace: str
-        gender: str
-
-    class PersonTabulator(BaseTabulator):
-        default_header_formatter = lambda x: f"<{x.upper()}>"
-        default_value_formatter = lambda x, _: str(x).lower()
-        column1 = Col("First Name",
-                      "name",
-                      value_formatter=lambda x, i: f"{x} ({i.gender})".upper())
-        column2 = Col("Second Name",
-                      "none",
-                      attr_default="N/A",
-                      header_formatter=str.lower)
-        column3 = Col("Age", "age", value_formatter=lambda x, _: f"{x} years")
-
-    @tabulated(PersonTabulator("grid"))
-    def get():
-        return [
-            Person("John", 25, "New York", "M"),
-            Person("Jane", 30, "Los Angeles", "F"),
-            Person("Joe", 35, "Chicago", "M")
-        ]
-
-    people = get()
-    print(f"{isinstance(people, TabulatedList)=}")
-    print(f"{isinstance(people, list)=}")
-    print(f"{len(people)=}")
-
-    print("\nusing formatter:")
-    print(people)
-    print("\nafter unsetting formatter:")
-    people.formatter = None
-    print(people)
