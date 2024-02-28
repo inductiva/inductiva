@@ -116,7 +116,9 @@ class TaskStreamConsumer:
         for stream in streams:
             msg = stream["values"][0][1]
             with self._lock_last_message:
-                self._last_message_timestamp = stream["values"][0][0]
+                #increase the timestamp to avoid getting the same message
+                #when reconnecting
+                self._last_message_timestamp = int(stream["values"][0][0]) + 1
             if msg == self.END_OF_STREAM:
                 with self._lock_exit:
                     self._exit = True
@@ -261,9 +263,6 @@ class TaskStreamConsumer:
 
         self._update_status(msg, SUCCESS)
 
-        if self._conn_count > 1:
-            self.ws.close()
-
     def __init_status(self):
         """Allocate sufficient lines for the status message."""
         if self._ferr_isatty:
@@ -286,11 +285,6 @@ class TaskStreamConsumer:
         start_query = ""
 
         while True:
-            with self._lock_exit:
-                leave = self._exit
-            if leave:
-                break
-
             websocket_url = (
                 f"{constants.LOGS_WEBSOCKET_URL}/loki/api/v1/tail?{start_query}"
                 f'query={{task_id="{self.task_id}"}}')
@@ -298,12 +292,18 @@ class TaskStreamConsumer:
             # Setup the websocket application to connect to the logs socket.
             self.ws = self.__setup_websocket()
 
-            self.ws.run_forever(reconnect=self.RECONNECT_DELAY_SEC,
+            self.ws.run_forever(reconnect=0,
                                 ping_interval=self.PING_INTERVAL_SEC,
                                 ping_timeout=self.PING_TIMEOUT_SEC)
+
+            with self._lock_exit:
+                leave = self._exit
+            if leave:
+                break
             with self._lock_last_message:
                 timestamp = self._last_message_timestamp
-                start_query = f"start={timestamp}&limit=100000&"
+                start_query = f"start={timestamp}&limit=10000&"
+            time.sleep(self.RECONNECT_DELAY_SEC)
 
     def _get_ontick_scheduler(self):
         """Get a scheduler for the connection alive ticker.
