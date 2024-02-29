@@ -47,7 +47,7 @@ caption: How-To Guides
 maxdepth: 1
 hidden: true
 ---
-how_to/run-simulations-in-parallel
+how_to/run-parallel_simulations
 how_to/manage_computational_resources
 how_to/set-up-elastic-machine-group
 how_to/set-up-mpi-cluster
