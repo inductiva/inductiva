@@ -209,9 +209,6 @@ request_query_provider = api_client.QueryParameter(
     schema=ProviderSchema,
     explode=True,
 )
-_auth = [
-    'APIKeyHeader',
-]
 SchemaFor200ResponseBodyApplicationJson = MachineTypeResponse
 
 
@@ -344,7 +341,6 @@ class BaseApi(api_client.Api):
             resource_path=used_path,
             method='get'.upper(),
             headers=_headers,
-            auth_settings=_auth,
             stream=stream,
             timeout=timeout,
         )
