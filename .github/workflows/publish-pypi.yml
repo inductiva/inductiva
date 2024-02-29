@@ -12,6 +12,12 @@ on:
   push:
     tags:
       - v*
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch from where to deploy"
+        required: true
+        default: "main"
 
 jobs:
   build-and-publish:
@@ -29,9 +35,22 @@ jobs:
         run: |
           python -m pip install build
 
+      - name: Generate Autocompletion File (zsh)
+        run: |
+          pip install shtab
+          pip install .
+          mkdir -p inductiva/assets/completions/zsh
+          shtab --shell=zsh -u inductiva._cli.main.get_main_parser > inductiva/assets/completions/zsh/_inductiva
+
       - name: Build package
         run: |
           python -m build
+
+      - name: Save artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: dist/*
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
