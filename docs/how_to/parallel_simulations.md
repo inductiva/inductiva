@@ -1,61 +1,74 @@
-# Run Simulations in Parallel
+# Run Multiple Simulations in Parallel
 
-Machine groups can be used to run multiple simulations in 
-parallel, by having each of the machines in the group run a separate simulation.
-This is a powerful mechanism to reduce waiting times when you need to run a large
-number of simulations, such as when you are exploring different parameter values
-or running a large number of simulations for a sensitivity analysis. 
+Running multiple simulations in parallel can significantly reduce waiting times, 
+especially useful when exploring various parameter values or running a large number 
+of simulations for a sensitivity analysis. This how-to guide will walk you through 
+using Machine Groups to run several simulations in parallel, using the 
+[templating mechanism](../explore_api/templating.md) integrated within the Inductiva API. 
+This approach makes it easy to explore variations of a base simulation scenario. 
+As a practical example, we will use a coastal dynamics simulation with 
+the [SWASH simulator](../simulators/SWASH.md).
 
-To exemplify, we will use the [templating mechanism](../introduction/templating.md)
-that is built in the Inductiva API to explore variations of a base simulation scenario.
-More specifically, we will consider a coastal dynamic simulation using the SWASH
-simulator, where we want to explore the effect of different water levels on the
-simulation results. 
+## 1. Setting Up Your Machine Group
 
-As an example, let's run 5 different simulations in parallel. 
+First, create a MachineGroup to run your simulations in parallel:
 
 ```python
 import inductiva
 from inductiva import mixins
 
-
-# Instantiate a MachineGroup object with 5 preemptible machine of type
+# Instantiate a MachineGroup object with 5 preemptible machines of type
 # c2-standard-30 and start it immediately
 machine_group = inductiva.resources.MachineGroup(
     machine_type="c2-standard-30", num_machines=5, spot=True)
 machine_group.start()
+```
 
-# Download the input files for the SWASH simulation
+## 2. Preparing Simulation Inputs
+
+Download and prepare the input files for your simulations:
+
+```python
+# Download input files for the SWASH simulation
 input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "swash-template-example.zip", unzip=True)
+    "https://storage.googleapis.com/inductiva-api-demo-files/swash-template-example.zip", unzip=True)
 
-# Initialize the template file manager
+# Initialize template file manager
 file_manager = mixins.FileManager()
+```
+## 3. Running the Simulations
 
+Define the variations for your simulation - _here, different water levels_ — and 
+launch the simulations:
+
+```python
 # Initialize the SWASH simulator
 swash = inductiva.simulators.SWASH()
 
-# Explore the simulation for different water levels
+# Define different water levels to explore
 water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
 
-# Launch multiple simulations
+# Launch multiple simulations for each water level
 for water_level in water_levels_list:
     # Set the root directory and render the template files into it.
     file_manager.set_root_dir("swash-input-example")
     file_manager.add_dir(input_dir, water_level=water_level)
-
-    # Run the simulation on the dedicated MachineGroup
+    
+    # Run simulation with the configured input directory on the dedicated MachineGroup
     task = swash.run(input_dir=file_manager.get_root_dir(),
-                    sim_config_filename="input.sws",
-                    on=machine_group)
+                     sim_config_filename="input.sws",
+                     on=machine_group)
 ```
+
+## 4. Monitoring Simulations
 
 The template mechanism will allow you to explore 5 different variations of the
 simulation, each with a different water level. The simulations will be submitted
 to our dedicated machine group and will run in parallel.
-We can check that all simulations are running via the CLI and that it took only
-1min for the moment they are submitted until they start running:
+
+You can check the status of these simulations through the
+[Inductiva CLI](../cli/streaming-logs.md), and you'll see that it took only **1 minute** 
+from the moment they were submitted until they start running:
 
 ```bash
 $ inductiva tasks list
@@ -69,12 +82,18 @@ $ inductiva tasks list
     g5qq5c9mk2nr5wqhzef38sdm4  swash        started   01 Feb, 09:07:12  01 Feb, 009:08:01  *0:03:17            c2-standard-30
 ```
 
-This is a great way to speed up the execution of multiple simulations, since the
-time to run all 5 simulations will be approximately the same as running just one,
-that is the above 5 simulations took 9m55s to complete, which is the time of
-the slowest simulation.
+Running simulations in parallel significantly optimizes the use of computational 
+resources. In our example, all five simulations start in parallel and complete in 
+**9 minutes and 55 seconds**, roughly the time it would take to run one single 
+simulation!
 
-Now, that all the simulations have finished running, we end this tutorial with an
-extra lesson to help reduce the amount of time machines are left unused:
+````{eval-rst}
+.. important::
+   After completing the simulations, remember to release your computational resources 
+   to avoid unnecessary charges!
+````
+```bash
+# Terminate all computational resources
+$ inductiva resources terminate --all
+```
 
-> Don't forget to terminate your computational resources with `inductiva resources terminate --all`.
