@@ -48,4 +48,5 @@ jobs:
     - name: Test docs with pytest pytest-markdown-docs
       if: ${{ always() }}
       run: |
+        echo "API_KEY=${{ secrets.API_TEST_KEY }}" >> $GITHUB_ENV
         pytest --confcutdir=docs/ --markdown-docs docs/
