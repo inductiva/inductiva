@@ -3,9 +3,11 @@
 Running multiple simulations in parallel can significantly reduce waiting times, 
 especially useful when exploring various parameter values or running a large number 
 of simulations for a sensitivity analysis. This how-to guide will walk you through 
-using Machine Groups to run several simulations in parallel, using the [templating mechanism](../explore_api/templating.md) integrated within the Inductiva API. This approach makes 
-it easy to explore variations of a base simulation scenario. As a practical example, 
-we will use a coastal dynamics simulation with the [SWASH simulator](../simulators/SWASH.md).
+using Machine Groups to run several simulations in parallel, using the 
+[templating mechanism](../explore_api/templating.md) integrated within the Inductiva API. 
+This approach makes it easy to explore variations of a base simulation scenario. 
+As a practical example, we will use a coastal dynamics simulation with 
+the [SWASH simulator](../simulators/SWASH.md).
 
 ## 1. Setting Up Your Machine Group
 
@@ -36,7 +38,8 @@ file_manager = mixins.FileManager()
 ```
 ## 3. Running the Simulations
 
-Define the variations for your simulation - _here, different water levels_ — and launch the simulations:
+Define the variations for your simulation - _here, different water levels_ — and 
+launch the simulations:
 
 ```python
 # Initialize the SWASH simulator
@@ -63,7 +66,9 @@ The template mechanism will allow you to explore 5 different variations of the
 simulation, each with a different water level. The simulations will be submitted
 to our dedicated machine group and will run in parallel.
 
-You can check the status of these simulations through the [Inductiva CLI](../cli/streaming-logs.md), and you'll see that it took only **1 minute** from the moment they were submitted until they start running:
+You can check the status of these simulations through the
+[Inductiva CLI](../cli/streaming-logs.md), and you'll see that it took only **1 minute** 
+from the moment they were submitted until they start running:
 
 ```bash
 $ inductiva tasks list
