@@ -50,3 +50,8 @@ jobs:
       run: |
         export INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}
         pytest --confcutdir=docs/ --markdown-docs docs/markdown_sample.md
+    - name: Link Checker
+      uses: lycheeverse/lychee-action@v1.9.0
+      with:
+        fail: true
+        args: --base . --verbose --no-progress './**/*.md'

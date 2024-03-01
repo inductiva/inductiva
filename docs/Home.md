@@ -11,7 +11,7 @@ on state-of-the-art hardware. This allows scientists and engineers to focus thei
 time and energy on what matters: running simulations that solve real problems.
 
 This documentation includes:
-- A [Getting started](./installation.md) guide that will help you set up the Inductiva
+- A [Getting started](./instalasdqdwlation.md) guide that will help you set up the Inductiva
 API client, and run your first simulation within only a few minutes;
 - An [Understanding the API section](./introduction/index.md) where we will give
 you a comprehensive overview of how the API works, explaining key concepts and how
