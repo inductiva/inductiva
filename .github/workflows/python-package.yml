@@ -54,4 +54,4 @@ jobs:
       uses: lycheeverse/lychee-action@v1.9.0
       with:
         fail: true
-        args: --base . --verbose --no-progress './**/*.md'
+        args: --base . --no-progress './**/*.md'
