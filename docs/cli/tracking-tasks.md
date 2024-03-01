@@ -7,7 +7,7 @@ tasks you launched. You can also track a specific task using its unique`--id`.
 
 ````{eval-rst}
 .. seealso::
-   Learn more about how `tasks </explore_api/tasks.html>`_ are generated through the Inductiva API.
+   Learn more about how `tasks <https://inductiva-research-labs-inductiva--1143.com.readthedocs.build/en/1143/explore_api/tasks.html>`_ are generated through the Inductiva API.
 ````
 Here's an example of how you can use these features:
 

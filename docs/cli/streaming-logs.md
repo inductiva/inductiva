@@ -9,7 +9,8 @@ In this way, running a simulation on a powerful remote machine will feel exactly
 like running it on your local computer!
 
 Here's an example of how you can use the `logs` subcommand to stay updated on your simulation's 
-progress. This command connects you directly to the ongoing logs of the specified task, displaying updates such as computation steps, residuals, and execution times as 
+progress. This command connects you directly to the ongoing logs of the specified 
+task, displaying updates such as computation steps, residuals, and execution times as 
 if you were running the simulation on your own machine:
 
 ```bash

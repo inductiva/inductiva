@@ -22,9 +22,9 @@ explore_api/how_it_works
 explore_api/tasks
 explore_api/shared_dedicated_resources
 explore_api/data_flow
-explore_api/infrastructure
+explore_api/computational-infrastructure
 explore_api/templating
-explore_api/simulators
+explore_api/configuring-simulators
 
 ```
 

@@ -7,7 +7,7 @@ progresses, you'll find that running simulations through the Inductiva API is no
 much different from running them in your local machine.
 
 <div align="center">
-   <img src="./_static/reef3d-dambreak-fullscreen.gif" alt="REEF3D 2D dambreak simulation">
+   <img src="../_static/reef3d-dambreak-fullscreen.gif" alt="REEF3D 2D dambreak simulation">
 </div>
 
 
@@ -79,7 +79,7 @@ such as [Paraview](https://www.paraview.org/download/).
 
 ## What to read next
 
-Learn about the [shared and dedicated resources](./introduction/computational_resources_overview.md) 
+Learn about the [shared and dedicated resources](../explore_api/shared_dedicated_resources.md) 
 you can use for running your simulations through the Inductiva API, and explore 
 the available hardware options to enhance
 your project's performance.

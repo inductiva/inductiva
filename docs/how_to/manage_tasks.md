@@ -17,7 +17,7 @@ In this section, we will cover the following topics:
 The `Task` class provides mechanisms to track and manage the status of a task.
 With a `Task` object at hand, the user can:
  * Get the status, i.e., whether the task is started, succeeded, failed, etc
- (see the section about [task lifecycle](../introduction/tasks#task-lifecycle)
+ (see the section about [task lifecycle](../explore_api/tasks#task-lifecycle.md)
  for more details);
  * Get the machine type where it ran/is running;
  * Get the execution time.
