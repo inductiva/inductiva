@@ -48,5 +48,5 @@ jobs:
     - name: Test docs with pytest pytest-markdown-docs
       if: ${{ always() }}
       run: |
-        export INDUCTIVA_API_KEY=${{ secrets.API_DEV_TEST_KEY }}
+        export INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}
         pytest --confcutdir=docs/ --markdown-docs docs/markdown_sample.md
