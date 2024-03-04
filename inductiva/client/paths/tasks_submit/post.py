@@ -40,9 +40,6 @@ request_body_task_request = api_client.RequestBody(
     },
     required=True,
 )
-_auth = [
-    'APIKeyHeader',
-]
 SchemaFor202ResponseBodyApplicationJson = TaskStatus
 
 
@@ -199,7 +196,6 @@ class BaseApi(api_client.Api):
             headers=_headers,
             fields=_fields,
             body=_body,
-            auth_settings=_auth,
             stream=stream,
             timeout=timeout,
         )
