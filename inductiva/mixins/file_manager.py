@@ -3,34 +3,34 @@
 Provides utility classes and functions for managing files and directories
 and rendering template files for generation of simulation inputs.
 """
-from typing import Union
+from typing import Iterable
+import logging
 import pathlib
 import shutil
 import glob
-import io
 import os
 import re
 
-from absl import logging
-import jinja2
-
 from inductiva.utils import format_utils
 
-TEMPLATE_EXTENSION = ".jinja"
 SUFFIX_SEPARATOR = "__"
+
+_logger = logging.getLogger(__name__)
 
 
 class FileManager:
     """Class for file management."""
-    DEFAULT_ROOT_DIR = "input_dir"
-    __root_dir = None  #pylint: disable=invalid-name
 
-    def __check_root_dir(self):
+    DEFAULT_ROOT_DIR = "input_dir"
+    __root_dir = None
+
+    def __check_root_dir(self) -> pathlib.Path:
         """Set default root folder if unset."""
         if self.__root_dir is None:
             self.set_root_dir(self.DEFAULT_ROOT_DIR)
+        return self.__root_dir
 
-    def set_root_dir(self, root_dir=None):
+    def set_root_dir(self, root_dir: PathOrStr):
         """Set a root directory for the file manager.
         
         All files managed through the manager will be
@@ -48,29 +48,29 @@ class FileManager:
 
         if root_dir is None:
             raise ValueError("Given root directory cannot be None")
+        root_dir = pathlib.Path(root_dir).resolve()
 
-        if os.path.isdir(root_dir):
+        if root_dir.is_dir():
             if format_utils.getenv_bool(
                     "INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX", False):
                 raise FileExistsError(f"Directory {root_dir} already exists.")
             generated_root_dir = _gen_unique_name(str(root_dir))
-            logging.info(
+            _logger.info(
                 "Directory %s already exists."
                 " Setting root folder to %s.", root_dir, generated_root_dir)
-            root_dir = generated_root_dir
+            root_dir = pathlib.Path(generated_root_dir).resolve()
 
-        logging.info("Setting root folder to %s.", root_dir)
-        os.makedirs(root_dir)
-        self.__root_dir = pathlib.Path(root_dir).resolve()
+        _logger.info("Setting root folder to %s.", root_dir)
+        root_dir.mkdir(parents=True, exist_ok=True)
+        self.__root_dir = root_dir
 
     def get_root_dir(self):
         """Get the active root directory for the file manager."""
 
-        self.__check_root_dir()
+        return self.__check_root_dir()
 
-        return self.__root_dir
-
-    def add_file(self, source_file, target_file=None, **render_args):
+    def add_file(self, source_file: PathOrStr,
+                 target_file: OptionalPathOrStr = None):
         """Add a file to the root_dir and render in case it is a template file. 
 
         This method copies the contents of the `source_file` to a `target_file`
@@ -111,7 +111,7 @@ class FileManager:
             >>> file_manager.add_file("input_file.txt.jinja", value=2)
         """
 
-        self.__check_root_dir()
+        root_dir = self.__check_root_dir()
 
         if target_file is None:
             new_target_file = pathlib.Path(source_file).name
@@ -119,23 +119,12 @@ class FileManager:
             new_target_file = target_file
 
         new_target_file = os.path.join(self.__root_dir, new_target_file)
-        if source_file.endswith(TEMPLATE_EXTENSION):
-            if target_file is None:
-                new_target_file, _ = os.path.splitext(new_target_file)
-
-            render_file(template_file=source_file,
-                        target_file=new_target_file,
-                        **render_args)
-        else:
-            if render_args:
-                logging.debug(
-                    f"Ignoring render_args since %s"
-                    f"isn't a {TEMPLATE_EXTENSION} file", source_file)
-            shutil.copy(source_file, new_target_file)
+        shutil.copy(source_file, new_target_file)
 
         return new_target_file
 
-    def add_dir(self, source_dir, target_dir=None, **render_args):
+    def add_dir(self, source_dir: PathOrStr,
+                target_dir: OptionalPathOrStr = None) -> Path:
         """Add a directory to the root_dir and render all template files.
 
         This method copies the contents of the `source_dir` to a `target_dir`
@@ -179,64 +168,16 @@ class FileManager:
         if target_dir is None:
             target_dir = "."
 
-        target_dir = os.path.join(self.__root_dir, target_dir)
+        target_dir = self.__root_dir / target_dir
         shutil.copytree(source_dir,
                         target_dir,
                         dirs_exist_ok=True,
                         symlinks=True)
 
-        if render_args:
-            template_files = get_template_files(target_dir)
-
-            for template_file in template_files:
-                template_path = os.path.join(target_dir, template_file)
-                target_path = template_path.split(TEMPLATE_EXTENSION)[0]
-
-                render_file(template_file=template_path,
-                            target_file=target_path,
-                            **render_args)
-                os.remove(template_path)
-
         return target_dir
 
 
-def render_file(template_file, target_file: Union[str, io.StringIO],
-                **render_args):
-    """Render a file from a template.
-
-    Args:
-        template_file: Path to the source file.
-        target_file: Path to the target file.
-        render_args: Arguments to render the template file.
-    """
-
-    source_path = pathlib.Path(template_file)
-
-    source_dir = source_path.parent
-    source_file = source_path.name
-
-    environment = jinja2.Environment(loader=jinja2.FileSystemLoader(source_dir))
-    template = environment.get_template(source_file)
-    stream = template.stream(**render_args)
-    stream.dump(target_file)
-
-
-def get_template_files(src_dir):
-    """Get all template files in a directory."""
-
-    template_paths = glob.glob(os.path.join(src_dir, "**",
-                                            "*" + TEMPLATE_EXTENSION),
-                               recursive=True)
-
-    template_files = [
-        os.path.relpath(file_path, start=src_dir)
-        for file_path in template_paths
-    ]
-
-    return template_files
-
-
-def _gen_unique_suffix(name, filenames):
+def _gen_unique_suffix(name: str, filenames: Iterable[str] -> str):
     """Generate a suffix for a filename, based on a list of files.
     
     Args:
@@ -262,7 +203,7 @@ def _gen_unique_suffix(name, filenames):
     return suffix
 
 
-def _gen_unique_name(name):
+def _gen_unique_name(name: str) -> str:
     """Generates an unique folder name.
 
     Generates an unique folder name derived from the given name and
