@@ -2,7 +2,7 @@
 import os
 import pathlib
 import shutil
-import regex as re
+import re
 
 import inductiva
 from inductiva import constants
@@ -89,4 +89,3 @@ def setup_zsh_autocompletion():
         lines_as_string = "".join(lines_to_append)
         content += f"\n{lines_as_string}\n"
         f.write(content)
-        zshrc_path = pathlib.Path.home() / ".zshrc"
