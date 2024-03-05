@@ -21,8 +21,10 @@ class FEniCSx(simulators.Simulator):
         global_refinement_meshing_factor: float = 1.0,
         local_refinement_meshing_factor: float = 1.0,
         smoothing_meshing_parameter: float = 10.0,
-        mesh_element_family: str = "CG",
-        mesh_element_order: int = 1,
+        mesh_element_family: str = "S",
+        mesh_element_order: int = 2,
+        mesh_quadrature_rule: str = "gauss_jacobi",
+        mesh_quadrature_degree: int = 2,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
@@ -54,6 +56,8 @@ class FEniCSx(simulators.Simulator):
             mesh_element_family (str): The type of mesh element family.
             mesh_element_order (int): The (polynomial) order of the mesh
               element.
+            mesh_quadrature_rule (str): The mesh quadrature rule.
+            mesh_quadrature_degree (int): The mesh quadrature degree.
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             storage_dir: Parent directory for storing simulation results.
@@ -71,6 +75,8 @@ class FEniCSx(simulators.Simulator):
             smoothing_meshing_parameter=smoothing_meshing_parameter,
             mesh_element_family=mesh_element_family,
             mesh_element_order=mesh_element_order,
+            mesh_quadrature_rule=mesh_quadrature_rule,
+            mesh_quadrature_degree=mesh_quadrature_degree,
             storage_dir=storage_dir,
             extra_metadata=extra_metadata,
         )
