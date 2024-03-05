@@ -53,9 +53,6 @@ request_query_path = api_client.QueryParameter(
     required=True,
     explode=True,
 )
-_auth = [
-    'APIKeyHeader',
-]
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
@@ -183,7 +180,6 @@ class BaseApi(api_client.Api):
             resource_path=used_path,
             method='delete'.upper(),
             headers=_headers,
-            auth_settings=_auth,
             stream=stream,
             timeout=timeout,
         )
