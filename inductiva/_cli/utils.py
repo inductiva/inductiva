@@ -6,9 +6,25 @@ import re
 
 import inductiva
 from inductiva import constants
+from . import ansi_pager
 
 BEGIN_TAG = "# >>> INDUCTIVA BEGIN:"
 END_TAG = "# >>> INDUCTIVA END:"
+
+
+def watch(args, method):
+    if getattr(args, "watchable", False):
+        header = f"> every {args.watch}s: inductiva {method}"
+        every = args.watch
+        action = ansi_pager.wrap_action(args.func)
+
+        with ansi_pager.PagedOutput(header, "Press 'q' to close.") as fout:
+            scheduler = ansi_pager.StoppableScheduler(every, action,
+                                                      args=(args, fout))
+            scheduler.start()
+            fout.run()
+            scheduler.stop()
+            scheduler.join()
 
 
 def check_running_for_first_time():

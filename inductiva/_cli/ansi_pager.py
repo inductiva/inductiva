@@ -18,6 +18,7 @@ import tty
 import sys
 import re
 import io
+import os
 
 strip_escaped = partial(re.compile(r"\x1b\[[;\d]*[A-Za-z]").sub, "")
 strip_escaped.__doc__ = "Return the string with all ANSI escape codes removed."
@@ -261,7 +262,6 @@ class PagedOutput(io.TextIOBase):
                 buf = sys.stdin.read(1)
                 if buf == "q":
                     break
-
                 if action := scroll.get(buf):
                     action()
                 elif buf == "\033":
@@ -318,6 +318,7 @@ class PagedOutput(io.TextIOBase):
         self._resizer.stop()
         self._resizer.join()
         self._exit_alt_screen()
+        os.system("stty sane") # Required to return terminal to normal.
 
     def __enter__(self) -> "PagedOutput":
         return self
@@ -426,6 +427,7 @@ class StoppableScheduler(threading.Thread):
     def run(self) -> None:
         """Run the scheduler until the stop method is called."""
         every = self.every
+
         while not self._event.is_set():
             now = time.time()
             self._count += 1
@@ -433,10 +435,30 @@ class StoppableScheduler(threading.Thread):
             elapsed = time.time() - now
 
             # take into account the time the action takes to complete
-            # if elapsed < self.every:
-            #     self._event.wait(self.every - elapsed)
+            #if elapsed < self.every:
+            #    self._event.wait(self.every - elapsed)
             self._event.wait(every - elapsed % every)
 
     def stop(self) -> None:
         """Stop the scheduler."""
         self._event.set()
+
+
+def wrap_action(action: Callable[..., None]) -> Callable[..., None]:
+    """Wrap the action to be executed by the scheduler.
+
+    The wrapper function is used to catch any exceptions that may be raised
+    by the action and print them to the terminal. The wrapper also ensures
+    that the terminal is reset to its previous state when the action is
+    completed.
+    """
+
+    def wrapped_action(*args, **kwargs) -> None:
+        try:
+            if args:
+                args[1].clear()
+            action(*args, **kwargs)
+        except RuntimeError as e:
+            print(f"Error: {e}", file=sys.stderr)
+
+    return wrapped_action

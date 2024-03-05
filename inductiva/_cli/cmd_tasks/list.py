@@ -1,11 +1,12 @@
 """List the tasks information via CLI."""
 import argparse
+import sys
+import io
 
 from inductiva import tasks, utils
 from inductiva.client import models
 
-
-def list_tasks(args):
+def list_tasks(args, fout: io.IOBase = sys.stdout):
     """ List the last user's tasks. 
 
     Lists based on the flags (task_id, last_n).
@@ -14,13 +15,12 @@ def list_tasks(args):
     """
     if args.task_id is not None:
         task_list = [tasks.Task(args.task_id)]
-
     else:
         last_n = 5 if args.last_n is None else args.last_n
         task_list = tasks.get(last_n=last_n)
 
     if not task_list:
-        print("No tasks found.")
+        print("No tasks found.", file=fout)
         return 1
 
     table_dict = tasks.to_dict(task_list)
@@ -47,7 +47,9 @@ def list_tasks(args):
     print(
         utils.format_utils.get_tabular_str(table_dict,
                                            formatters=formatters,
-                                           header_formatters=header_formatters))
+                                           header_formatters=header_formatters),
+        file=fout)
+
     return 0
 
 
@@ -74,5 +76,12 @@ def register(parser):
                        "--task-id",
                        type=str,
                        help="List a task with a specific ID.")
+    subparser.add_argument("-w",
+                           "--watch",
+                           nargs="?",
+                           const=2.0,
+                           type=float,
+                           help="List the tasks every N seconds.")
 
-    subparser.set_defaults(func=list_tasks)
+    subparser.set_defaults(func=list_tasks, watchable=True)
+

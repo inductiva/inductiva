@@ -1,6 +1,9 @@
 """Functions to manage or retrieve user resources."""
 from typing import Optional
 from absl import logging
+import sys
+import io
+
 import inductiva
 import inductiva.client
 from inductiva.client.apis.tags import compute_api
@@ -85,9 +88,6 @@ def _fetch_machine_groups_from_api():
     try:
         api = compute_api.ComputeApi(inductiva.api.get_client())
         response = api.list_active_user_instance_groups()
-        if len(response.body) == 0:
-            print("No active computational resources found.")
-            return response.body
 
         return response.body
 
@@ -96,7 +96,7 @@ def _fetch_machine_groups_from_api():
 
 
 # pylint: disable=redefined-builtin
-def list():
+def list(fout: io.IOBase = sys.stdout):
     # pylint: disable=line-too-long
     """Lists all active resources info.
 
@@ -113,8 +113,10 @@ def list():
 
     machine_group_list = get()
     if len(machine_group_list) != 0:
-        print("Active Resources:")
-        print(_machine_group_list_to_str(machine_group_list))
+        print("Active Resources:", file=fout)
+        print(_machine_group_list_to_str(machine_group_list), file=fout)
+    else:
+        print("No active computational resources found.", file=fout)
 
 
 def get():

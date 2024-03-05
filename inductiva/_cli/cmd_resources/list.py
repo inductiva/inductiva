@@ -1,6 +1,8 @@
 """CLI commands for listing both the active and available machine groups."""
 
 import argparse
+import sys
+import io
 
 from inductiva import resources
 
@@ -40,9 +42,9 @@ def list_machine_types_available(args):
             print_cpu_series_info(cpu_series, series_info, description)
 
 
-def list_machine_groups(unused_args):
+def list_machine_groups(unused_args, fout: io.IOBase = sys.stdout):
     """List Resources."""
-    resources.machine_groups.list()
+    resources.machine_groups.list(fout=fout)
 
 
 def register(parser):
@@ -81,9 +83,16 @@ def register(parser):
                                   help="List currently active resources.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
+    subparser.add_argument("-w",
+                           "--watch",
+                           nargs="?",
+                           const=2.0,
+                           type=float,
+                           help="List the tasks every N seconds.")
+
     subparser.description = (
         "The `inductiva resources list` command provides a snapshot "
         "of your active computational resources.\nFrom machine type "
         "to start time, it gives you a comprehensive overview of "
         "your resources in one place.")
-    subparser.set_defaults(func=list_machine_groups)
+    subparser.set_defaults(func=list_machine_groups, watchable=True)

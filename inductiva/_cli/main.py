@@ -1,5 +1,6 @@
 """Main CLI entrypoint."""
 import argparse
+import sys
 import os
 
 import inductiva
@@ -54,9 +55,14 @@ def main():
     if args.api_key:
         inductiva.api_key = args.api_key
 
+    exit_code = 0
     # Call the function associated with the subcommand
     try:
-        exit_code = args.func(args)
+        if args.watch is None:
+            exit_code = args.func(args)
+        else:
+            method = " ".join(sys.argv[3:])
+            _cli.utils.watch(args, method)
     except Exception as e:  # pylint: disable=broad-except
         exit_code = 1
         print(e)
