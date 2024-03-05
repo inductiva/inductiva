@@ -318,7 +318,7 @@ class PagedOutput(io.TextIOBase):
         self._resizer.stop()
         self._resizer.join()
         self._exit_alt_screen()
-        os.system("stty sane") # Required to return terminal to normal.
+        os.system("stty sane")  # Required to return terminal to normal.
 
     def __enter__(self) -> "PagedOutput":
         return self

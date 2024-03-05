@@ -6,6 +6,7 @@ import io
 from inductiva import tasks, utils
 from inductiva.client import models
 
+
 def list_tasks(args, fout: io.IOBase = sys.stdout):
     """ List the last user's tasks. 
 
@@ -44,11 +45,9 @@ def list_tasks(args, fout: io.IOBase = sys.stdout):
         lambda x: emph_formatter(x.upper(), utils.format_utils.Emphasis.BOLD)
     ]
 
-    print(
-        utils.format_utils.get_tabular_str(table_dict,
-                                           formatters=formatters,
-                                           header_formatters=header_formatters),
-        file=fout)
+    print(utils.format_utils.get_tabular_str(
+        table_dict, formatters=formatters, header_formatters=header_formatters),
+          file=fout)
 
     return 0
 
@@ -84,4 +83,3 @@ def register(parser):
                            help="List the tasks every N seconds.")
 
     subparser.set_defaults(func=list_tasks, watchable=True)
-

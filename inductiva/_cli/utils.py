@@ -19,7 +19,8 @@ def watch(args, method):
         action = ansi_pager.wrap_action(args.func)
 
         with ansi_pager.PagedOutput(header, "Press 'q' to close.") as fout:
-            scheduler = ansi_pager.StoppableScheduler(every, action,
+            scheduler = ansi_pager.StoppableScheduler(every,
+                                                      action,
                                                       args=(args, fout))
             scheduler.start()
             fout.run()
