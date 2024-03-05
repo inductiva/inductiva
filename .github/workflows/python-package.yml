@@ -50,6 +50,9 @@ jobs:
       run: |
         export INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}
         pytest --confcutdir=docs/ --markdown-docs docs/markdown_sample.md
+    - name: Install system dependencies
+      run: |
+        apt-get update && apt-get install -y --no-install-recommends ca-certificates
     - name: Link Checker
       uses: lycheeverse/lychee-action@v1.9.0
       with:
