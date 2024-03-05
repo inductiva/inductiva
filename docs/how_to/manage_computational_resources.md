@@ -1,4 +1,4 @@
-# Manage computational resources
+# Manage Computational Resources
 
 Once you have launched your computational resources, there are a few API methods
 that help manage them and see their status. Let's go over them one by one.
@@ -23,11 +23,12 @@ instance via the `get` method as follows:
 When you just want to check the active resources you can quickly list the
 information of each one either via Python or via the CLI.
 
-Via Python
+**Python**
 ```python
 inductiva.resources.machine_groups.list()
 ```
-or via CLI:
+
+**CLI**
 ```bash
 $ inductiva resources list
 ```
@@ -35,13 +36,12 @@ $ inductiva resources list
 One obtains for example the following information:
 ```
 Active Resources:
-Name                           Machine Type    Elastic    Type        # machines    Disk Size in GB  Spot    Started at (UTC)
------------------------------  --------------  ---------  --------  ------------  -----------------  ------  ------------------
-api-23zssj6oq77xxsot3o0nhax3d  c2d-highmem-16  False      mpi                  3                 70  False   01 Feb, 12:30:06
-api-45fetsr58okcs0x6j9m0vsi2z  c2-standard-4   True       standard           1/5                 70  False   01 Feb, 12:25:54
-api-4kken08fnoxuu5zjjak6ak2xe  c2-standard-8  False      standard              2                 60  True    01 Feb, 12:26:37
-```
 
+       NAME                                MACHINE TYPE         ELASTIC         TYPE           # MACHINES         DATA SIZE IN GB         SPOT         STARTED AT (UTC)
+       api-23zssj6oq77xxsot3o0nhax3d       c2d-highmem-16       False           mpi            3                  70                      False        01 Feb, 12:30:06
+       api-45fetsr58okcs0x6j9m0vsi2z       c2-standard-4        True            standard       1/5                70                      False        01 Feb, 12:25:54
+       api-4kken08fnoxuu5zjjak6ak2xe       c2-standard-8        False           standard       2                  60                      True         01 Feb, 12:26:37
+```
 
 #### Terminate the active computational resources
 

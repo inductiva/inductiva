@@ -1,19 +1,44 @@
 """Available machine types and their number of cores."""
-AVAILABLE_MACHINES = {
-    "c2-standard-": [4, 8, 16, 30, 60],
-    "c3-standard-": [4, 8, 22, 44, 88, 176],
-    "c2d-standard-": [2, 4, 8, 16, 32, 56, 112],
-    "c2d-highcpu-": [2, 4, 8, 16, 32, 56, 112],
-    "e2-standard-": [2, 4, 8, 16, 32],
-    "n2-standard-": [2, 4, 8, 16, 32, 48, 64, 80, 96, 128],
-    "n2d-standard-": [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224],
-    "n1-standard-": [1, 2, 4, 8, 16, 32, 64, 96],
-    "e2-highcpu-": [2, 4, 8, 16, 32],
-}
+
+import os
+import yaml
+
+MACHINE_TYPES_FILE = os.path.join(os.path.dirname(__file__),
+                                  "machine_types.yaml")
+
+
+def get_available():
+    """Gets the available machine types.
+    
+    Currently, this fetches the available machine types from a yaml file
+    into a dictionary that can now be used to parse the information where
+    needed."""
+
+    with open(MACHINE_TYPES_FILE, "r", encoding="utf-8") as file:
+        machine_types = yaml.safe_load(file)
+
+    return machine_types
 
 
 def list_available_machines():
-    """Lists the types of available machines."""
-    return (machine_type + str(vcpu)
-            for machine_type, vcpus in AVAILABLE_MACHINES.items()
-            for vcpu in vcpus)
+    """List all available machines types."""
+
+    resources_available = get_available()
+
+    machine_types = []
+
+    # Fetch the provider information
+    for _, provider_resources in resources_available.items():
+        # Fetch the available machine CPU series
+        for cpu_series, series_info in provider_resources["cpu-series"].items():
+            # Fetch the available RAM types and vCPUs info
+            for ram_type, type_info in series_info["types"].items():
+                vcpus = type_info["vcpus"]
+                machine_types.extend(
+                    [f"{cpu_series}-{ram_type}-{vcpu}" for vcpu in vcpus])
+                if type_info["lssd"]:
+                    for vcpu in vcpus:
+                        machine_types.append(
+                            f"{cpu_series}-{ram_type}-{vcpu}-lssd")
+
+    return tuple(machine_types)

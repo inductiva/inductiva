@@ -34,7 +34,6 @@ class BaseMachineGroup:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
               more information about machine types.
-            spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
             register: Bool that indicates if a machine group should be register
                 or if it was already registered. If set to False by users on
@@ -47,19 +46,20 @@ class BaseMachineGroup:
         if machine_type not in inductiva.resources.list_available_machines():
             raise ValueError("Machine type not supported")
 
-        if data_disk_gb < 0 or data_disk_gb > 100:
-            raise ValueError(
-                "`data_disk_gb` must be a positive value smaller than 100 GB")
+        if data_disk_gb <= 0:
+            raise ValueError("`data_disk_gb` must be positive.")
 
         self.machine_type = machine_type
         self.data_disk_gb = data_disk_gb
-        self._true_disk_size_gb =\
-            data_disk_gb + inductiva.constants.BASE_MACHINE_DISK_SIZE_GB
         self._id = None
         self._name = None
         self.create_time = None
         self._started = False
         self.register = register
+        #Number of active machines at the time of
+        #the request machine_groups.get()
+        self._active_machines = 0
+        self.num_machines = 0
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -82,7 +82,7 @@ class BaseMachineGroup:
 
         instance_group_config = inductiva.client.models.GCPVMGroup(
             machine_type=self.machine_type,
-            disk_size_gb=self._true_disk_size_gb,
+            disk_size_gb=self.data_disk_gb,
             **kwargs,
         )
 
@@ -105,14 +105,18 @@ class BaseMachineGroup:
     def __repr__(self):
         pass
 
+    def active_machines_to_str(self) -> str:
+        """Return the number of machines currently running.
+        """
+        return f"{self._active_machines}/{self.num_machines}"
+
     @classmethod
     def from_api_response(cls, resp: dict):
         """Creates a MachineGroup object from an API response."""
 
         machine_group = cls(
             machine_type=resp["machine_type"],
-            data_disk_gb=resp["disk_size_gb"] -
-            inductiva.constants.BASE_MACHINE_DISK_SIZE_GB,
+            data_disk_gb=resp["disk_size_gb"],
             register=False,
         )
         machine_group._id = resp["id"]
@@ -144,7 +148,7 @@ class BaseMachineGroup:
                 id=self.id,
                 name=self.name,
                 machine_type=self.machine_type,
-                disk_size_gb=self._true_disk_size_gb,
+                disk_size_gb=self.data_disk_gb,
                 **kwargs,
             )
         logging.info("Starting %s. "
@@ -180,7 +184,7 @@ class BaseMachineGroup:
                     id=self.id,
                     name=self.name,
                     machine_type=self.machine_type,
-                    disk_size_gb=self._true_disk_size_gb,
+                    disk_size_gb=self.data_disk_gb,
                     **kwargs,
                 )
 

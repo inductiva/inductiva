@@ -22,8 +22,11 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
             all the tasks. Example: { "ID": [1, 2, 3], 
             "Simulator": ["reef3d", "reef3d", "reef3d"], ... }
     """
-
-    table = defaultdict(list)
+    column_names = [
+        "ID", "Simulator", "Status", "Submitted", "Started", "Computation Time",
+        "Resource Type"
+    ]
+    table = defaultdict(list, {key: [] for key in column_names})
 
     for task in list_of_tasks:
         info = task.get_info()

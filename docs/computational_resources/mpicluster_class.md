@@ -16,7 +16,7 @@ CPU series, a suffix that sets the number of [virtual CPUs (vCPU)](https://cloud
 per machine and the middle word refers to the level of RAM per vCPU. In the example,
 `c2` refers to an Intel Xeon Scalable processor of 2nd generation, `standard`
 means 4 GB of RAM per vCPU and will contain `16` vCPUs.
-Currently, this is the [list of available machine types available via the API]().
+Currently, this is the [list of available machine types available via the API](../introduction/infrastructure.md).
 - the `num_machines` sets the number of machines available in the cluster. While the computational resource is active, these machines will be reserved
 for the user.
 - the `data_disk_gb` defines the size of the NFS partition that is mounted on

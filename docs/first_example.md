@@ -1,31 +1,36 @@
-# Run your first simulation
+# Run your First Simulation
 
-In this example, you will use the open-source hydrodynamics REEF3D simulator to
-simulate a **2D dam break scenario** where a block of fluid is let to flow under the effect of gravity as follows:
+In this first example, you will use the open-source [hydrodynamics REEF3D simulator](https://github.com/REEF3D/REEF3D) to
+simulate a **2D dam break scenario**. This involves a block of fluid released to 
+flow under the influence of gravity, as shown in the video below. As the simulation
+progresses, you'll find that running simulations through the Inductiva API is not 
+much different from running them in your local machine.
+
 <div align="center">
-   <img src="./_static/reef3d-dambreak.gif" alt="REEF3D 2D dambreak simulation">
+   <img src="./_static/reef3d-dambreak-fullscreen.gif" alt="REEF3D 2D dambreak simulation">
 </div>
 
-With this first example, you learn that running simulations via Inductiva API is
-not much different from running them in your local machine. That's the magic
-of it all! 
 
-Running a simulation with API involves preparing a Python script with the following
-steps:
-1. Preparing all the configuration files for the simulation in a single input folder;
-2. Instantiate a simulator object that identifies the simulator you want to use.
-In this case, we are going to instantiate the REEF3D simulator object;
-3. Launch the simulation with the `run` method of the simulator object and pass
-a reference to the input folder. This folder will be uploaded to a user's
-remote storage and used in the worker machine that will run the simulation;
-4. Wait for the simulation to finish and download the results to your local machine.
+To run a simulation via the API, you first need to prepare a Python script with 
+the following steps:
 
-To make it simpler, in this example, we will download the input folder with all
-the configuration files necessary to run the dam break simulation. These files 
-were obtained from the REEF3D tutorials available on their
-[GitHub repository](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/9_1%202D%20Dam%20Break). We
-have altered them slightly to reduce the time the simulation takes to run.
-Here's how:
+1. **Prepare and gather all the necessary configuration files for the simulation 
+into one input folder**. To simplify our example, we will provide you with an input folder 
+containing all the necessary configuration files for the dam break simulation, 
+slightly modified from the original REEF3D tutorials found on their [GitHub repository](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/9_1%202D%20Dam%20Break) to reduce
+the simulation run time;
+
+2. **Instantiate a simulator object that identifies the simulator you want to use**, 
+here exemplified by instantiating a REEF3D simulator object;
+
+3. **Launch the simulation using the `run` method of the simulator object, passing
+a reference to the input folder**. This folder gets uploaded to your remote storage 
+and accessed by the worker machine executing the simulation;
+
+4. After the simulation completes, **download the results back to your local machine.**
+
+Following the steps outlined above, here is the Python script you'll use to run 
+the dam break simulation via the Inductiva API. Give it a go:
 
 ```python
 import inductiva
@@ -49,9 +54,8 @@ task = simulator.run(input_dir=input_dir)
 task.wait()
 task.download_outputs(output_dir="example_simulation")
 ```
-
-As the simulation runs information, you will receive information about its progress.
-When it finishes, you should see the following folder on your local machine:
+As the simulation progresses, you'll receive updates on its status. When it finishes, 
+you should find the following folder on your local machine:
 
 ```bash
 inductiva_output/example_simulation
@@ -68,18 +72,16 @@ inductiva_output/example_simulation
 |- stderr.txt
 |- stdout.txt
 ```
-
-With the data produced by the simulation on your local machine, you can now post-process
-it as you would normally do. For example, you can visualize the contents of the files
-in `REEF3D_CFD_VTU` using standard visualization tools such as Paraview.
+Once the simulation data is on your local machine, you're ready to proceed with 
+post-processing just as you normally would. For example, you can visualize the 
+contents of the files in `REEF3D_CFD_VTU` using open-source visualization tools 
+such as [Paraview](https://www.paraview.org/download/).
 
 ## What to read next
 
-Learn how to [run one of your own simulation projects]() for the first time through 
-the Inductiva API, on the simulator of your choice.
-
-Learn how to [customize the hardware setup]() you use for running your simulations 
-through the Inductiva API, and explore the available hardware options to enhance
+Learn about the [shared and dedicated resources](./introduction/computational_resources_overview.md) 
+you can use for running your simulations through the Inductiva API, and explore 
+the available hardware options to enhance
 your project's performance.
 
 If you're looking for inspiration, learn how a group of coastal engineering researchers 

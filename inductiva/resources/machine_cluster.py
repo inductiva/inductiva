@@ -34,10 +34,18 @@ class MPICluster(machines_base.BaseMachineGroup):
             num_machines: The number of virtual machines to launch.
             data_disk_gb: The size of the disk for user data (in GB).
         """
+        if num_machines < 1:
+            raise ValueError(
+                "`num_machines` should be a number greater than 0.")
+
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)
+        # num_machines is the number of machines requested
         self.num_machines = num_machines
+        #Number of active machines at the time of
+        #the request machine_groups.get()
+        self._active_machines = 0
         self.__type = machines_base.ResourceType.MPI.value
         self.__is_elastic = False
         self.__spot = False
@@ -52,7 +60,8 @@ class MPICluster(machines_base.BaseMachineGroup):
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
-        machine_group.num_machines = int(resp["num_vms"])
+        machine_group.num_machines = int(resp["max_vms"])
+        machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
         machine_group.register = False
         return machine_group
 

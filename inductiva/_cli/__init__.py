@@ -4,4 +4,4 @@
 subparsers for several subcommands (e.g. `tasks` and `machines`).
 """
 from . import utils
-from .main import main
+from .main import main, get_main_parser

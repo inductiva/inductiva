@@ -38,10 +38,18 @@ class MachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
+        if num_machines < 1:
+            raise ValueError(
+                "`num_machines` should be a number greater than 0.")
+
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)
+        # Num_machines is the number of requested machines
         self.num_machines = num_machines
+        #Number of active machines at the time of
+        #the request machine_groups.get()
+        self._active_machines = 0
         self.spot = spot
         self.__is_elastic = False
 
@@ -54,7 +62,8 @@ class MachineGroup(machines_base.BaseMachineGroup):
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
-        machine_group.num_machines = int(resp["num_vms"])
+        machine_group.num_machines = int(resp["max_vms"])
+        machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
         machine_group.spot = bool(resp["spot"])
         machine_group.register = False
         return machine_group
@@ -144,15 +153,20 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
+        if min_machines < 1:
+            raise ValueError(
+                "`min_machines` should be a number greater than 0.")
+
         if max_machines < min_machines:
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
+
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
                          register=register)
         self.min_machines = min_machines
         self.max_machines = max_machines
-        self.num_active_machines = min_machines
+        self._active_machines = min_machines
         self.__is_elastic = True
         self.spot = spot
 
@@ -161,7 +175,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             self._register_machine_group(min_vms=self.min_machines,
                                          max_vms=self.max_machines,
                                          is_elastic=self.__is_elastic,
-                                         num_vms=self.num_active_machines,
+                                         num_vms=self._active_machines,
                                          spot=self.spot)
 
     @classmethod
@@ -170,8 +184,14 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         machine_group.spot = bool(resp["spot"])
         machine_group.max_machines = int(resp["max_vms"])
         machine_group.min_machines = int(resp["min_vms"])
-        machine_group.num_active_machines = int(resp["num_vms"])
+        machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
         return machine_group
+
+    def active_machines_to_str(self) -> str:
+        """Returns a string representation of the 
+        number of machines currently running.
+        """
+        return f"{self._active_machines}/{self.max_machines} (max)"
 
     def __repr__(self):
         class_name = self.__class__.__name__
@@ -219,5 +239,5 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             "> Minimum estimated cloud cost of elastic machine group: "
             "%.3f $/h.", cost_per_machine * self.min_machines)
         logging.info(
-            "> Maximum estimated cloud cost  of elastic machine group:"
+            "> Maximum estimated cloud cost of elastic machine group:"
             " %.3f $/h.", cost_per_machine * self.max_machines)

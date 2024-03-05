@@ -8,7 +8,7 @@ from inductiva import constants
 from . import loader
 
 
-def main():
+def get_main_parser():
     parser = argparse.ArgumentParser(
         prog="inductiva",
         description="CLI tool for Inductiva API.",
@@ -39,8 +39,18 @@ def main():
                          os.path.dirname(__file__),
                          "inductiva._cli",
                          prefix=constants.LOADER_COMMAND_PREFIX)
+    return parser
 
+
+def main():
+    parser = get_main_parser()
     args = parser.parse_args()
+
+    if _cli.utils.check_running_for_first_time():
+        answer = _cli.utils.user_autocompletion_install_prompt()
+        if answer:
+            _cli.utils.setup_zsh_autocompletion()
+
     if args.api_key:
         inductiva.api_key = args.api_key
 
