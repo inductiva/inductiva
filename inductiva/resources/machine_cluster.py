@@ -2,6 +2,7 @@
 from absl import logging
 
 from inductiva.resources import machines_base
+from inductiva.utils.inspector import precondition
 
 
 class MPICluster(machines_base.BaseMachineGroup):
@@ -12,6 +13,9 @@ class MPICluster(machines_base.BaseMachineGroup):
     Note: The cluster will be available only after calling 'start' method.
     The billing will start only after the machines are started."""
 
+    @precondition(
+        num_machines=lambda num_machines: num_machines > 0
+    )
     def __init__(self,
                  machine_type: str,
                  num_machines: int = 2,
