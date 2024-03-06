@@ -156,7 +156,3 @@ such that certain simulation loads can be redirected to large HPC clusters to wh
 you have access.
 
 These options will be incrementally available to you, over the next releases.
-
-## What to read next
-
-- [User Quotas](../api_reference/user_quotas.md)

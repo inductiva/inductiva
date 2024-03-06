@@ -39,7 +39,8 @@ Once you've backed up your data locally or need to free up space, you can delete
 data from your remote storage. You can delete several paths within your
 storage, or even delete everything with the `remove` command.
 
-Here's an example where you remove a path within your storage. Use this command with caution as it permanently deletes data from your remote 
+Here's an example where you remove a path within your storage. Use this command 
+with caution as it permanently deletes data from your remote 
 storage: 
 
 ```bash

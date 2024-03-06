@@ -31,24 +31,23 @@ reserved for your use and not shared with others.
 In this option, there are three types of dedicated computational resources you can
 launch for your simulations:
 
-- [**Machine Group**](../computational_resources/machinegroup_class.md): This consists of homogeneous machines 
-designed to operate individually, enabling the distribution of multiple simulations 
-across different machines for parallel processing.
-- [**Elastic Machine Group**](../computational_resources/elasticgroup_class.md): Similar to Machine 
-Group, these also consist of individual machines. The key difference here is the 
+- [**Machine Group**](../api_reference/computational_resources/machinegroup_class.md): 
+This consists of homogeneous machines designed to operate individually, enabling 
+the distribution of multiple simulations across different machines for parallel processing.
+- [**Elastic Machine Group**](../api_reference/computational_resources/elasticgroup_class.md): 
+Similar to Machine Group, these also consist of individual machines. The key difference here is the 
 elastic scaling feature, which dynamically adjusts the number of machines based 
 on simulation demands, ensuring efficient resource utilization.
-- [**MPI Cluster**](../computational_resources/mpicluster_class.md) This setup involves a network 
-of machines configured to work in tandem on a single simulation task, distributing 
-the workload across multiple CPUs. This is particularly useful for complex simulations 
-that exceed the capabilities of a single machine.
-
+- [**MPI Cluster**](../api_reference/computational_resources/mpicluster_class.md) 
+This setup involves a network of machines configured to work in tandem on a single 
+simulation task, distributing the workload across multiple CPUs. This is particularly 
+useful for complex simulations that exceed the capabilities of a single machine.
 
 ## Comparison Example: SWASH
 
 To illustrate the performance differences between running simulations on a shared 
 pool of resources and on dedicated resources using the Inductiva API, we will run 
-[SWASH](../simulators/SWASH) as an example.
+[SWASH](../simulators/SWASH.md) as an example.
 
 ### SWASH on Shared Resources
 
@@ -72,7 +71,6 @@ task = swash.run(input_dir=input_dir,
 # Wait until the task finishes running.
 task.wait()
 ```
-
 In this option, it takes **approximately 20 minutes** to complete this simulation.
 
 ### SWASH on Dedicated Resources
@@ -112,12 +110,6 @@ and by contrasting the two resource options above, running the simulation on a
 [dedicated machine group](#dedicated-resources) with a `c2-standard-30` machine
 took **9 minutes and 37s** to complete, which is **2.68 times less** than on the 
 [shared pool](#shared-resources). 
-
-## What to read next
-
-Learn how to [run multiple simulations in parallel](../how_to/computational_resources). 
-
-Learn how to [set up an MPI cluster](../how_to/mpi_cluster.md).
 
 
 
