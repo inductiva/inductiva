@@ -14,6 +14,11 @@ from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
 from inductiva.client.apis.paths.admin_groups import AdminGroups
+from inductiva.client.apis.paths.admin_groups_active import AdminGroupsActive
+from inductiva.client.apis.paths.admin_groups_default import AdminGroupsDefault
+from inductiva.client.apis.paths.admin_groups_default_machine_group_id import AdminGroupsDefaultMachineGroupId
+from inductiva.client.apis.paths.admin_providers import AdminProviders
+from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvidersProviderId
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.compute_group import ComputeGroup
@@ -29,57 +34,127 @@ from inductiva.client.apis.paths.version_check import VersionCheck
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
-        PathValues.TASKS_AUTH: TasksAuth,
-        PathValues.TASKS_SUBMIT: TasksSubmit,
-        PathValues.TASKS_TASK_ID_INPUT: TasksTaskIdInput,
-        PathValues.TASKS_TASK_ID: TasksTaskId,
-        PathValues.TASKS: Tasks,
-        PathValues.TASKS_TASK_ID_STATUS: TasksTaskIdStatus,
-        PathValues.TASKS_TASK_ID_OUTPUT_LIST: TasksTaskIdOutputList,
-        PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
-        PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
-        PathValues.ADMIN_USERS: AdminUsers,
-        PathValues.ADMIN_USERS_EMAIL_API_KEY: AdminUsersEmailApiKey,
-        PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
-        PathValues.ADMIN_GROUPS: AdminGroups,
-        PathValues.ADMIN_ACTIVE_TASKS: AdminActiveTasks,
-        PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
-        PathValues.COMPUTE_GROUP: ComputeGroup,
-        PathValues.COMPUTE_TYPE: ComputeType,
-        PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
-        PathValues.COMPUTE_PRICE: ComputePrice,
-        PathValues.COMPUTE_GROUPS: ComputeGroups,
-        PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
-        PathValues.STORAGE_SIZE: StorageSize,
-        PathValues.STORAGE_CONTENTS: StorageContents,
-        PathValues.VERSION: Version,
-        PathValues.VERSIONCHECK: VersionCheck,
+        PathValues.TASKS_AUTH:
+            TasksAuth,
+        PathValues.TASKS_SUBMIT:
+            TasksSubmit,
+        PathValues.TASKS_TASK_ID_INPUT:
+            TasksTaskIdInput,
+        PathValues.TASKS_TASK_ID:
+            TasksTaskId,
+        PathValues.TASKS:
+            Tasks,
+        PathValues.TASKS_TASK_ID_STATUS:
+            TasksTaskIdStatus,
+        PathValues.TASKS_TASK_ID_OUTPUT_LIST:
+            TasksTaskIdOutputList,
+        PathValues.TASKS_TASK_ID_OUTPUT:
+            TasksTaskIdOutput,
+        PathValues.TASKS_TASK_ID_KILL:
+            TasksTaskIdKill,
+        PathValues.ADMIN_USERS:
+            AdminUsers,
+        PathValues.ADMIN_USERS_EMAIL_API_KEY:
+            AdminUsersEmailApiKey,
+        PathValues.ADMIN_USERS_USERNAME_TASKS:
+            AdminUsersUsernameTasks,
+        PathValues.ADMIN_GROUPS:
+            AdminGroups,
+        PathValues.ADMIN_GROUPS_ACTIVE:
+            AdminGroupsActive,
+        PathValues.ADMIN_GROUPS_DEFAULT:
+            AdminGroupsDefault,
+        PathValues.ADMIN_GROUPS_DEFAULT_MACHINE_GROUP_ID:
+            AdminGroupsDefaultMachineGroupId,
+        PathValues.ADMIN_PROVIDERS:
+            AdminProviders,
+        PathValues.ADMIN_PROVIDERS_PROVIDER_ID:
+            AdminProvidersProviderId,
+        PathValues.ADMIN_ACTIVE_TASKS:
+            AdminActiveTasks,
+        PathValues.EXECUTERTRACKER_REGISTER:
+            ExecuterTrackerRegister,
+        PathValues.COMPUTE_GROUP:
+            ComputeGroup,
+        PathValues.COMPUTE_TYPE:
+            ComputeType,
+        PathValues.COMPUTE_GROUP_START:
+            ComputeGroupStart,
+        PathValues.COMPUTE_PRICE:
+            ComputePrice,
+        PathValues.COMPUTE_GROUPS:
+            ComputeGroups,
+        PathValues.COMPUTE_GROUP_STATUS:
+            ComputeGroupStatus,
+        PathValues.STORAGE_SIZE:
+            StorageSize,
+        PathValues.STORAGE_CONTENTS:
+            StorageContents,
+        PathValues.VERSION:
+            Version,
+        PathValues.VERSIONCHECK:
+            VersionCheck,
     })
 
 path_to_api = PathToApi({
-    PathValues.TASKS_AUTH: TasksAuth,
-    PathValues.TASKS_SUBMIT: TasksSubmit,
-    PathValues.TASKS_TASK_ID_INPUT: TasksTaskIdInput,
-    PathValues.TASKS_TASK_ID: TasksTaskId,
-    PathValues.TASKS: Tasks,
-    PathValues.TASKS_TASK_ID_STATUS: TasksTaskIdStatus,
-    PathValues.TASKS_TASK_ID_OUTPUT_LIST: TasksTaskIdOutputList,
-    PathValues.TASKS_TASK_ID_OUTPUT: TasksTaskIdOutput,
-    PathValues.TASKS_TASK_ID_KILL: TasksTaskIdKill,
-    PathValues.ADMIN_USERS: AdminUsers,
-    PathValues.ADMIN_USERS_EMAIL_API_KEY: AdminUsersEmailApiKey,
-    PathValues.ADMIN_USERS_USERNAME_TASKS: AdminUsersUsernameTasks,
-    PathValues.ADMIN_GROUPS: AdminGroups,
-    PathValues.ADMIN_ACTIVE_TASKS: AdminActiveTasks,
-    PathValues.EXECUTERTRACKER_REGISTER: ExecuterTrackerRegister,
-    PathValues.COMPUTE_GROUP: ComputeGroup,
-    PathValues.COMPUTE_TYPE: ComputeType,
-    PathValues.COMPUTE_GROUP_START: ComputeGroupStart,
-    PathValues.COMPUTE_PRICE: ComputePrice,
-    PathValues.COMPUTE_GROUPS: ComputeGroups,
-    PathValues.COMPUTE_GROUP_STATUS: ComputeGroupStatus,
-    PathValues.STORAGE_SIZE: StorageSize,
-    PathValues.STORAGE_CONTENTS: StorageContents,
-    PathValues.VERSION: Version,
-    PathValues.VERSIONCHECK: VersionCheck,
+    PathValues.TASKS_AUTH:
+        TasksAuth,
+    PathValues.TASKS_SUBMIT:
+        TasksSubmit,
+    PathValues.TASKS_TASK_ID_INPUT:
+        TasksTaskIdInput,
+    PathValues.TASKS_TASK_ID:
+        TasksTaskId,
+    PathValues.TASKS:
+        Tasks,
+    PathValues.TASKS_TASK_ID_STATUS:
+        TasksTaskIdStatus,
+    PathValues.TASKS_TASK_ID_OUTPUT_LIST:
+        TasksTaskIdOutputList,
+    PathValues.TASKS_TASK_ID_OUTPUT:
+        TasksTaskIdOutput,
+    PathValues.TASKS_TASK_ID_KILL:
+        TasksTaskIdKill,
+    PathValues.ADMIN_USERS:
+        AdminUsers,
+    PathValues.ADMIN_USERS_EMAIL_API_KEY:
+        AdminUsersEmailApiKey,
+    PathValues.ADMIN_USERS_USERNAME_TASKS:
+        AdminUsersUsernameTasks,
+    PathValues.ADMIN_GROUPS:
+        AdminGroups,
+    PathValues.ADMIN_GROUPS_ACTIVE:
+        AdminGroupsActive,
+    PathValues.ADMIN_GROUPS_DEFAULT:
+        AdminGroupsDefault,
+    PathValues.ADMIN_GROUPS_DEFAULT_MACHINE_GROUP_ID:
+        AdminGroupsDefaultMachineGroupId,
+    PathValues.ADMIN_PROVIDERS:
+        AdminProviders,
+    PathValues.ADMIN_PROVIDERS_PROVIDER_ID:
+        AdminProvidersProviderId,
+    PathValues.ADMIN_ACTIVE_TASKS:
+        AdminActiveTasks,
+    PathValues.EXECUTERTRACKER_REGISTER:
+        ExecuterTrackerRegister,
+    PathValues.COMPUTE_GROUP:
+        ComputeGroup,
+    PathValues.COMPUTE_TYPE:
+        ComputeType,
+    PathValues.COMPUTE_GROUP_START:
+        ComputeGroupStart,
+    PathValues.COMPUTE_PRICE:
+        ComputePrice,
+    PathValues.COMPUTE_GROUPS:
+        ComputeGroups,
+    PathValues.COMPUTE_GROUP_STATUS:
+        ComputeGroupStatus,
+    PathValues.STORAGE_SIZE:
+        StorageSize,
+    PathValues.STORAGE_CONTENTS:
+        StorageContents,
+    PathValues.VERSION:
+        Version,
+    PathValues.VERSIONCHECK:
+        VersionCheck,
 })
