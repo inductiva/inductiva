@@ -1,8 +1,7 @@
 """Functions to manage or retrieve user resources."""
-from typing import Optional
+from typing import Optional, TextIO
 from absl import logging
 import sys
-import io
 
 import inductiva
 import inductiva.client
@@ -96,7 +95,7 @@ def _fetch_machine_groups_from_api():
 
 
 # pylint: disable=redefined-builtin
-def list(fout: io.IOBase = sys.stdout):
+def list(fout: TextIO = sys.stdout):
     # pylint: disable=line-too-long
     """Lists all active resources info.
 

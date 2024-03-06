@@ -1,13 +1,14 @@
 """List the tasks information via CLI."""
+from typing import TextIO
 import argparse
 import sys
-import io
 
-from inductiva import tasks, utils
+from inductiva import tasks, _cli
+from inductiva.utils import format_utils
 from inductiva.client import models
 
 
-def list_tasks(args, fout: io.IOBase = sys.stdout):
+def list_tasks(args, fout: TextIO = sys.stdout):
     """ List the last user's tasks. 
 
     Lists based on the flags (task_id, last_n).
@@ -26,27 +27,28 @@ def list_tasks(args, fout: io.IOBase = sys.stdout):
 
     table_dict = tasks.to_dict(task_list)
 
-    emph_formatter = utils.format_utils.get_ansi_formatter()
+    emph_formatter = format_utils.get_ansi_formatter()
 
     def color_formater(status):
         if status == models.TaskStatusCode.SUCCESS:
-            return emph_formatter(status, utils.format_utils.Emphasis.GREEN)
+            return emph_formatter(status, format_utils.Emphasis.GREEN)
         elif status in tasks.Task.FAILED_STATUSES:
-            return emph_formatter(status, utils.format_utils.Emphasis.RED)
+            return emph_formatter(status, format_utils.Emphasis.RED)
         return status
 
     formatters = {
-        "Submitted": [utils.format_utils.datetime_formatter,],
-        "Started": [utils.format_utils.datetime_formatter,],
+        "Submitted": [format_utils.datetime_formatter,],
+        "Started": [format_utils.datetime_formatter,],
         "Status": [color_formater]
     }
 
     header_formatters = [
-        lambda x: emph_formatter(x.upper(), utils.format_utils.Emphasis.BOLD)
+        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
     ]
 
-    print(utils.format_utils.get_tabular_str(
-        table_dict, formatters=formatters, header_formatters=header_formatters),
+    print(format_utils.get_tabular_str(table_dict,
+                                       formatters=formatters,
+                                       header_formatters=header_formatters),
           file=fout)
 
     return 0
@@ -66,6 +68,8 @@ def register(parser):
                              "You can control the number of tasks listed with "
                              "the '-n' or '--last-n' option.\n")
 
+    _cli.utils.add_watch_argument(subparser)
+
     group = subparser.add_mutually_exclusive_group()
     group.add_argument("-n",
                        "--last-n",
@@ -75,11 +79,5 @@ def register(parser):
                        "--task-id",
                        type=str,
                        help="List a task with a specific ID.")
-    subparser.add_argument("-w",
-                           "--watch",
-                           nargs="?",
-                           const=2.0,
-                           type=float,
-                           help="List the tasks every N seconds.")
 
-    subparser.set_defaults(func=list_tasks, watchable=True)
+    subparser.set_defaults(func=list_tasks)

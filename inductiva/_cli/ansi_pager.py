@@ -5,7 +5,7 @@ terminal. The text is displayed in a paged manner, allowing the user to scroll
 up and down, and to quit the display.
 The pager requires the terminal to support ANSI escape codes.
 """
-from typing import Optional, Type, Iterator, AnyStr, Iterable, Callable, Union
+from typing import Optional, Type, Iterator, AnyStr, Iterable
 from collections import namedtuple
 from types import TracebackType
 from functools import partial
@@ -13,12 +13,13 @@ import threading
 import termios
 import typing
 import shutil
-import time
 import tty
 import sys
 import re
 import io
 import os
+
+from inductiva.utils import scheduler
 
 strip_escaped = partial(re.compile(r"\x1b\[[;\d]*[A-Za-z]").sub, "")
 strip_escaped.__doc__ = "Return the string with all ANSI escape codes removed."
@@ -103,7 +104,7 @@ class PagedOutput(io.TextIOBase):
         self.set_header(header)
         self.set_footer(footer)
 
-        self._resizer = StoppableScheduler(0.5, self._check_resize)
+        self._resizer = scheduler.StoppableScheduler(0.5, self._check_resize)
         self._resizer.start()
 
     def _check_resize(self) -> None:
@@ -384,81 +385,3 @@ class PagedOutput(io.TextIOBase):
 
     def __iter__(self) -> Iterator[AnyStr]:
         raise TypeError("File-like object is not iterable")
-
-
-class StoppableScheduler(threading.Thread):
-    """A stoppable scheduler for running a function at regular intervals.
-    
-    The scheduler runs a given function at regular intervals until the stop
-    method is called. If the call to the action takes longer than the
-    interval, the scheduler will wait for the remaining time before calling
-    the action at the next interval.
-    """
-
-    def __init__(self,
-                 every: Union[int, float],
-                 action: Callable[..., None],
-                 args=(),
-                 kwargs=None):
-        """Initialize the scheduler.
-
-        Args:
-            every (float): The interval at which the action should be executed.
-            action (callable): The function to be executed.
-            args (tuple, optional): The positional arguments to be passed to the
-                action. Defaults to ().
-            kwargs (dict, optional): The keyword arguments to be passed to the
-                action. Defaults to None.
-        """
-        super().__init__()
-        self.every = every
-        self.action = action
-        self.args = args
-        self.kwargs = kwargs or {}
-
-        self._event = threading.Event()
-        self._count = 0
-
-    @property
-    def count(self) -> int:
-        """Return the number of times the action has been executed."""
-        return self._count
-
-    def run(self) -> None:
-        """Run the scheduler until the stop method is called."""
-        every = self.every
-
-        while not self._event.is_set():
-            now = time.time()
-            self._count += 1
-            self.action(*self.args, **self.kwargs)
-            elapsed = time.time() - now
-
-            # take into account the time the action takes to complete
-            #if elapsed < self.every:
-            #    self._event.wait(self.every - elapsed)
-            self._event.wait(every - elapsed % every)
-
-    def stop(self) -> None:
-        """Stop the scheduler."""
-        self._event.set()
-
-
-def wrap_action(action: Callable[..., None]) -> Callable[..., None]:
-    """Wrap the action to be executed by the scheduler.
-
-    The wrapper function is used to catch any exceptions that may be raised
-    by the action and print them to the terminal. The wrapper also ensures
-    that the terminal is reset to its previous state when the action is
-    completed.
-    """
-
-    def wrapped_action(*args, **kwargs) -> None:
-        try:
-            if args:
-                args[1].clear()
-            action(*args, **kwargs)
-        except RuntimeError as e:
-            print(f"Error: {e}", file=sys.stderr)
-
-    return wrapped_action

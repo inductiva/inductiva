@@ -1,31 +1,44 @@
 """CLI utils."""
-import os
+import argparse
 import pathlib
 import shutil
+import os
 import re
 
 import inductiva
 from inductiva import constants
-from . import ansi_pager
 
 BEGIN_TAG = "# >>> INDUCTIVA BEGIN:"
 END_TAG = "# >>> INDUCTIVA END:"
 
 
-def watch(args, method):
-    if getattr(args, "watchable", False):
-        header = f"> every {args.watch}s: inductiva {method}"
-        every = args.watch
-        action = ansi_pager.wrap_action(args.func)
+def positive_float(value):
+    try:
+        value = float(value)
+    except TypeError as _:
+        raise argparse.ArgumentTypeError(f"{value} is an invalid type.")
+    if value <= 0:
+        raise argparse.ArgumentTypeError(f"{value} must be a positive number.")
+    return value
 
-        with ansi_pager.PagedOutput(header, "Press 'q' to close.") as fout:
-            scheduler = ansi_pager.StoppableScheduler(every,
-                                                      action,
-                                                      args=(args, fout))
-            scheduler.start()
-            fout.run()
-            scheduler.stop()
-            scheduler.join()
+
+def add_watch_argument(subparser):
+    """Add watch flag to the subparser that prompts the commands every Nsecs."""
+    subparser.set_defaults(watchable=True)
+    subparser.add_argument("-w",
+                           "--watch",
+                           nargs="?",
+                           const=2.0,
+                           type=positive_float,
+                           help="Prompt the command every N seconds.")
+
+
+def remove_flags(string, flags):
+    """Remove flags from a string."""
+    for flag in flags:
+        pattern = r"(\s*-{1,2}" + flag + r"\s*\S*)"
+        string = re.sub(pattern, "", string)
+    return string
 
 
 def check_running_for_first_time():
