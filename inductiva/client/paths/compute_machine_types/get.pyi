@@ -25,57 +25,34 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
-NameSchema = schemas.StrSchema
 
 
 class ProviderSchema(
-    schemas.ComposedSchema,
+    schemas.EnumBase,
+    schemas.StrSchema
 ):
-
-
-    class MetaOapg:
-        
-        @classmethod
-        @functools.lru_cache()
-        def all_of(cls):
-            # we need this here to make our import statements work
-            # we must store _composed_schemas in here so the code is only run
-            # when we invoke this method. If we kept this at the class
-            # level we would get an error because the class level
-            # code would be run when this module is imported, and these composed
-            # classes don't exist yet because their module has not finished
-            # loading
-            return [
-                Providers,
-            ]
-
-
-    def __new__(
-        cls,
-        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        _configuration: typing.Optional[schemas.Configuration] = None,
-        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-    ) -> 'ProviderSchema':
-        return super().__new__(
-            cls,
-            *_args,
-            _configuration=_configuration,
-            **kwargs,
-        )
+    
+    @schemas.classproperty
+    def GCP(cls):
+        return cls("GCP")
+    
+    @schemas.classproperty
+    def LOCAL(cls):
+        return cls("local")
+MachineFamilySchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
-        'name': typing.Union[NameSchema, str, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'provider': typing.Union[ProviderSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        'provider': typing.Union[ProviderSchema, str, ],
+        'machine_family': typing.Union[MachineFamilySchema, str, ],
     },
     total=False
 )
@@ -85,17 +62,16 @@ class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams)
     pass
 
 
-request_query_name = api_client.QueryParameter(
-    name="name",
-    style=api_client.ParameterStyle.FORM,
-    schema=NameSchema,
-    required=True,
-    explode=True,
-)
 request_query_provider = api_client.QueryParameter(
     name="provider",
     style=api_client.ParameterStyle.FORM,
     schema=ProviderSchema,
+    explode=True,
+)
+request_query_machine_family = api_client.QueryParameter(
+    name="machine_family",
+    style=api_client.ParameterStyle.FORM,
+    schema=MachineFamilySchema,
     explode=True,
 )
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
@@ -143,7 +119,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _get_group_status_oapg(
+    def _list_available_machine_types_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -155,7 +131,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _get_group_status_oapg(
+    def _list_available_machine_types_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -165,7 +141,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _get_group_status_oapg(
+    def _list_available_machine_types_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -177,7 +153,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _get_group_status_oapg(
+    def _list_available_machine_types_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -186,7 +162,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Get Group Status
+        List Available Machine Types
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -196,8 +172,8 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_name,
             request_query_provider,
+            request_query_machine_family,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
@@ -242,11 +218,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetGroupStatus(BaseApi):
+class ListAvailableMachineTypes(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_group_status(
+    def list_available_machine_types(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -258,7 +234,7 @@ class GetGroupStatus(BaseApi):
     ]: ...
 
     @typing.overload
-    def get_group_status(
+    def list_available_machine_types(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -268,7 +244,7 @@ class GetGroupStatus(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get_group_status(
+    def list_available_machine_types(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -280,7 +256,7 @@ class GetGroupStatus(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get_group_status(
+    def list_available_machine_types(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -288,7 +264,7 @@ class GetGroupStatus(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_group_status_oapg(
+        return self._list_available_machine_types_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
@@ -343,7 +319,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_group_status_oapg(
+        return self._list_available_machine_types_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
