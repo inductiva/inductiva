@@ -26,23 +26,30 @@ nuances and additional options available, which we'll explore in detail througho
 this section. More specifically, you'll become familiarized with how the API 
 works:
 
-- [Tasks](./tasks): The core computational object of the platform, representing your 
-simulation requests to be processed remotely on the computational infrastructure 
-we make available.
+- [Tasks](./tasks): Get to know the API's core computational object which gets created
+when you submit your simulation request, enabling you to track its progress and 
+access outputs in real-time.
 
-- [Shared and Dedicated Resources](./shared_dedicated_resources.md): Understanding 
-how tasks get executed on computational resources that are either **shared** among 
-all users or **dedicated** to individual users.
+- [Shared and Dedicated Resources](./shared_dedicated_resources.md): Discover how
+the API allocates and runs your simulation tasks on computational resources that 
+are either **shared** among you and other users, or **dedicated** only to your use.
 
-- [Storage and Data Flow](./data_flow.md): Understanding the flow of data across platforms, from 
-sending your input files to remote computational resources to accessing the 
-simulation outputs.
+- [Storage and Data Flow](./data_flow.md): Get to know the typical flow of data 
+when you invoke a remote simulator using the Inductiva API, from sending your input
+files to remote computational resources to accessing the simulation outputs.
 
-- [Infrastructure](./computational-infrastructure.md): A further look under the hood, representing 
-the underlying infrastructure powering your simulations, currently leveraging the 
-Google Cloud Platform, with more options on the horizon.
+- [Computational Infrastructure](./computational-infrastructure.md): Take a further 
+look under the hood to learn the underlying infrastructure powering your simulations, 
+especially how the API enables you to access a variety of computational resources, 
+manages your computational workload, and allocates it to the appropriate computational 
+resource through a unified Python code.
 
-- Templating Engine:
+- [Templating Engine](./templating.md): Explore how the API enables you to transform 
+fixed parameter values in your "base case" simulation configuration files into 
+programmable variables you can adjust for running large variations of your simulation.
 
-- Configuring Simulations:
+- [Configuring Simulations](./configuring-simulators.md): Explore how the API 
+wraps existing open-source software packages within layers that facilitate their 
+execution across various cloud-based virtual machines and providers, transforming 
+them into abstract computational tasks.
 
