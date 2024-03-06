@@ -1,9 +1,10 @@
 """Type definitions."""
 import os
+import pathlib
 from typing import Union, List
 from typing_extensions import TypeAlias
 
-Path: TypeAlias = Union[os.PathLike, str]
+Path: TypeAlias = Union[os.PathLike, pathlib.Path, str]
 
 ComputationalResources: TypeAlias = Union["resources.MachineGroup",
                                           "resources.ElasticMachineGroup",
