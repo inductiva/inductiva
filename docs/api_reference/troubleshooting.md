@@ -1,5 +1,9 @@
 # Troubleshooting Guide
-In this troubleshooting section, we aim to guide you through resolving issues related to incorrect or incomplete [installation of the Inductiva package](../installation.md) or its dependencies. This guide assumes you’ve read all steps in our [Getting Started](../installation.md) section.
+In this troubleshooting section, we aim to guide you through resolving issues 
+related to incorrect or incomplete installation of the Inductiva package
+or its dependencies. This guide assumes you’ve gone through all steps we've shared 
+in the [installation tutorial](../get_started/installation.md), and have faced
+some issues.
 
 If you find bugs, need help, or want to talk to the developers, reach out to us on
 support@inductiva.ai
