@@ -82,3 +82,11 @@ class TaskStatusCode(
     @schemas.classproperty
     def ZOMBIE(cls):
         return cls("zombie")
+    
+    @schemas.classproperty
+    def COMPUTATIONSTARTED(cls):
+        return cls("computation-started")
+    
+    @schemas.classproperty
+    def COMPUTATIONENDED(cls):
+        return cls("computation-ended")
