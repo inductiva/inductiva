@@ -121,9 +121,6 @@ request_query_order = api_client.QueryParameter(
     schema=OrderSchema,
     explode=True,
 )
-_auth = [
-    'APIKeyHeader',
-]
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
@@ -256,7 +253,6 @@ class BaseApi(api_client.Api):
             resource_path=used_path,
             method='get'.upper(),
             headers=_headers,
-            auth_settings=_auth,
             stream=stream,
             timeout=timeout,
         )
