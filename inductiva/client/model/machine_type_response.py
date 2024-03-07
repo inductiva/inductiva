@@ -48,11 +48,16 @@ class MachineTypeResponse(schemas.DictSchema):
                 class MetaOapg:
                     enum_value_to_name = {
                         "GCP": "GCP",
+                        "ICE": "ICE",
                     }
 
                 @schemas.classproperty
                 def GCP(cls):
                     return cls("GCP")
+
+                @schemas.classproperty
+                def ICE(cls):
+                    return cls("ICE")
 
             __annotations__ = {
                 "machine_type": machine_type,
