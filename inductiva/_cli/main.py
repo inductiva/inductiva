@@ -4,6 +4,7 @@ import argparse
 import sys
 import os
 import re
+import io
 
 import inductiva
 from inductiva import _cli
@@ -52,16 +53,19 @@ def watch(func, every, args, cmd):
 
     def action(fout: TextIO = sys.stdout):
         fout.clear()
-        func(args, fout=fout)
+        buffer = io.StringIO()
+        func(args, fout=buffer)
+        fout.write(buffer.getvalue())
 
     with ansi_pager.PagedOutput(header) as pager:
         scheduler = utils.scheduler.StoppableScheduler(every,
                                                        action,
                                                        args=(pager,))
+        scheduler.daemon = True
         scheduler.start()
         pager.run()
         scheduler.stop()
-        scheduler.join()
+        scheduler.join(0.5)
 
 
 def main():

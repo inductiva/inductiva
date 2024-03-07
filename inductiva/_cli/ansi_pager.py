@@ -105,6 +105,7 @@ class PagedOutput(io.TextIOBase):
         self.set_footer(footer)
 
         self._resizer = scheduler.StoppableScheduler(0.5, self._check_resize)
+        self._resizer.daemon = True
         self._resizer.start()
 
     def _check_resize(self) -> None:
