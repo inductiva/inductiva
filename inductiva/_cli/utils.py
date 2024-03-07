@@ -1,5 +1,4 @@
 """CLI utils."""
-from typing import List
 import argparse
 import pathlib
 import shutil
