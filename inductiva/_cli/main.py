@@ -46,7 +46,7 @@ def get_main_parser():
 
 def watch(func, every, args, cmd):
     """Run the function at regular intervals and display results in a pager."""
-    cmd = _cli.utils.remove_flags(cmd, ["watch", "w"])
+    cmd = _cli.utils.remove_flags(cmd, ["-watch", "-w"])
     header = f"> every {every}s: inductiva {cmd}"
 
     def action(fout: TextIO = sys.stdout):
