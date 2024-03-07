@@ -19,7 +19,7 @@ CPU series, a suffix that sets the number of [virtual CPUs (vCPU)](https://cloud
 per machine and the middle word refers to the level of RAM per vCPU. In the example,
 `c2` refers to an Intel Xeon Scalable processor of 2nd generation, `standard`
 means 4 GB of RAM per vCPU and will contain `16` vCPUs.
-Currently, this is the [list of available machine types available via the API](.../explore_api/computational-infrastructure.md).
+Currently, this is the [list of available machine types available via the API.](../../explore_api/computational-infrastructure.md)
 - the `min_machines`, `max_machines` sets the number of minimum and maximum machines 
 available in the computational resource. That is, the number of active machines will
 never go lower than the minimum and never above the maximum. During runtime, there
