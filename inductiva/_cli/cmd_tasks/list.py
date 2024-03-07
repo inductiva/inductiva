@@ -49,7 +49,8 @@ def list_tasks(args, fout: TextIO = sys.stdout):
     print(format_utils.get_tabular_str(table_dict,
                                        formatters=formatters,
                                        header_formatters=header_formatters),
-          file=fout)
+          file=fout,
+          end="")
 
     return 0
 

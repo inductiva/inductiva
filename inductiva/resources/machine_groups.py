@@ -113,9 +113,9 @@ def list(fout: TextIO = sys.stdout):
     machine_group_list = get()
     if len(machine_group_list) != 0:
         print("Active Resources:", file=fout)
-        print(_machine_group_list_to_str(machine_group_list), file=fout)
+        print(_machine_group_list_to_str(machine_group_list), file=fout, end="")
     else:
-        print("No active computational resources found.", file=fout)
+        print("No active computational resources found.", file=fout, end="")
 
 
 def get():

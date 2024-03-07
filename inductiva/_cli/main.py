@@ -53,7 +53,7 @@ def watch(func, every, args, cmd):
         fout.clear()
         func(args, fout=fout)
 
-    with ansi_pager.PagedOutput(header, "Press 'q' to close.") as pager:
+    with ansi_pager.PagedOutput(header) as pager:
         scheduler = utils.scheduler.StoppableScheduler(every,
                                                        action,
                                                        args=(pager,))

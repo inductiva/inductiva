@@ -1,4 +1,5 @@
 """CLI utils."""
+from typing import List
 import argparse
 import pathlib
 import shutil
@@ -33,12 +34,18 @@ def add_watch_argument(subparser):
                            help="Prompt the command every N seconds.")
 
 
-def remove_flags(string, flags):
+def remove_flags(string: str, flags: List[str]):
     """Remove flags from a string."""
+
     for flag in flags:
-        pattern = r"(\s*-{1,2}" + flag + r"\s*\S*)"
-        string = re.sub(pattern, "", string)
-    return string
+        cmd, suffix = string.split(flag)
+        next_token = suffix.split()[0]
+
+        pattern = r"\d+(\.\d+)?"
+        next_token = re.sub(pattern, "", next_token)
+        string = [cmd.strip(), next_token, " ".join(suffix.split()[1:])]
+
+    return " ".join(string)
 
 
 def check_running_for_first_time():

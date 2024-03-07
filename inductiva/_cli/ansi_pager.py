@@ -85,13 +85,13 @@ class PagedOutput(io.TextIOBase):
     capable of displaying a header and a footer, both of which can be configured
     by the user to display custom content.
     """
-    DEFAULT_FOOTER = "type q to quit, ← ↑ → ↓ to navigate"
+    DEFAULT_FOOTER = "Type q to quit, ← ↑ → ↓ to navigate."
 
     SCROLL_DOWN = 1
     SCROLL_HOME = 0
     SCROLL_UP = -1
 
-    def __init__(self, header: str = None, footer: str = None):
+    def __init__(self, header: str = None, footer: str = DEFAULT_FOOTER):
         self._lock = threading.RLock()
         self._display = Display()
         self._scrolled_to = 0
