@@ -3,6 +3,7 @@ from typing import TextIO
 import argparse
 import sys
 import os
+import re
 
 import inductiva
 from inductiva import _cli
@@ -46,7 +47,7 @@ def get_main_parser():
 
 def watch(func, every, args, cmd):
     """Run the function at regular intervals and display results in a pager."""
-    cmd = _cli.utils.remove_flags(cmd, ["-watch", "-w"])
+    cmd = re.sub(r"(-w|--watch)\s*([+-]?([0-9]*[.])?[0-9]+)?\s*", "", cmd, 1)
     header = f"> every {every}s: inductiva {cmd}"
 
     def action(fout: TextIO = sys.stdout):

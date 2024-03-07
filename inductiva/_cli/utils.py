@@ -14,6 +14,7 @@ END_TAG = "# >>> INDUCTIVA END:"
 
 
 def positive_float(value):
+    """Check if the given value is a positive float."""
     try:
         value = float(value)
     except TypeError as _:
@@ -32,20 +33,6 @@ def add_watch_argument(subparser):
                            const=2.0,
                            type=positive_float,
                            help="Prompt the command every N seconds.")
-
-
-def remove_flags(string: str, flags: List[str]):
-    """Remove flags from a string."""
-
-    for flag in flags:
-        cmd, suffix = string.split(flag)
-        next_token = suffix.split()[0]
-
-        pattern = r"\d+(\.\d+)?"
-        next_token = re.sub(pattern, "", next_token)
-        string = [cmd.strip(), next_token, " ".join(suffix.split()[1:])]
-
-    return " ".join(string)
 
 
 def check_running_for_first_time():
