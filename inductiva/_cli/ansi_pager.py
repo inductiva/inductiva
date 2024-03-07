@@ -226,7 +226,8 @@ class PagedOutput(io.TextIOBase):
         of the text pad. The line is clamped to the range [0, line_count-1].
         """
         with self._lock:
-            self._scrolled_to = min(len(self._buffer) - 1, max(0, line))
+            scrolled_to = min(len(self._buffer) - 1, max(0, line))
+            self._scrolled_to = max(0, scrolled_to)
             self._render_body(self._scrolled_to)
             self._render_footer()
 
@@ -238,6 +239,7 @@ class PagedOutput(io.TextIOBase):
         with self._lock:
             self._scrolled_to = 0
             self._buffer.clear()
+            self._moveto(self._display.body)
             self._clear_screen()
             self._render_footer()
 
