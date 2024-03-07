@@ -26,9 +26,9 @@ nuances and additional options available, which we'll explore in detail througho
 this section. More specifically, you'll become familiarized with how the API 
 works:
 
-- [Tasks](./tasks): Get to know the API's core computational object which gets created
-when you submit your simulation request, enabling you to track its progress and 
-access outputs in real-time.
+- [Tasks](./tasks): Learn about tasks, the API's core computational object, which 
+gets created when you submit your simulation request, enabling you to track its 
+progress and access its outputs in real-time.
 
 - [Shared and Dedicated Resources](./shared_dedicated_resources.md): Discover how
 the API allocates and runs your simulation tasks on computational resources that 
@@ -48,7 +48,7 @@ resource through a unified Python code.
 fixed parameter values in your "base case" simulation configuration files into 
 programmable variables you can adjust for running large variations of your simulation.
 
-- [Configuring Simulations](./configuring-simulators.md): Explore how the API 
+- [Configuring Simulators](./configuring-simulators.md): Explore how the API 
 wraps existing open-source software packages within layers that facilitate their 
 execution across various cloud-based virtual machines and providers, transforming 
 them into abstract computational tasks.
