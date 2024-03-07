@@ -1,11 +1,14 @@
 """Main CLI entrypoint."""
+from typing import TextIO
 import argparse
+import sys
 import os
+import re
 
 import inductiva
 from inductiva import _cli
-from inductiva import constants
-from . import loader
+from inductiva import constants, utils
+from . import loader, ansi_pager
 
 
 def get_main_parser():
@@ -42,6 +45,25 @@ def get_main_parser():
     return parser
 
 
+def watch(func, every, args, cmd):
+    """Run the function at regular intervals and display results in a pager."""
+    cmd = re.sub(r"(-w|--watch)\s*([+-]?([0-9]*[.])?[0-9]+)?\s*", "", cmd, 1)
+    header = f"> every {every}s: inductiva {cmd}"
+
+    def action(fout: TextIO = sys.stdout):
+        fout.clear()
+        func(args, fout=fout)
+
+    with ansi_pager.PagedOutput(header) as pager:
+        scheduler = utils.scheduler.StoppableScheduler(every,
+                                                       action,
+                                                       args=(pager,))
+        scheduler.start()
+        pager.run()
+        scheduler.stop()
+        scheduler.join()
+
+
 def main():
     parser = get_main_parser()
     args = parser.parse_args()
@@ -54,9 +76,14 @@ def main():
     if args.api_key:
         inductiva.api_key = args.api_key
 
+    exit_code = 0
     # Call the function associated with the subcommand
     try:
-        exit_code = args.func(args)
+        if getattr(args, "watchable", False) and args.watch is not None:
+            cmd = " ".join(sys.argv[1:])
+            watch(args.func, args.watch, args, cmd)
+        else:
+            exit_code = args.func(args)
     except Exception as e:  # pylint: disable=broad-except
         exit_code = 1
         print(e)
