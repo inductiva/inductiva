@@ -18,7 +18,7 @@ class TemplateEngine(file_manager.FileManager):
 
     def __init__(self,
                  template_dir: types.Path,
-                 base_dir: types.Path = "rendered_dir",
+                 root_dir: types.Path = "rendered_dir",
                  renderer: renderers.BaseRenderer = renderers.JinjaRenderer):
         """Initialize the template engine.
         
@@ -28,8 +28,8 @@ class TemplateEngine(file_manager.FileManager):
             renderer (renderers.BaseRenderer): Template Renderer object.
         """
 
-        self.set_root_dir(base_dir)
-        self.__base_dir = self.get_root_dir()
+        self.set_root_dir(root_dir)
+        self.__root_dir = self.get_root_dir()
         self.__template_dir = pathlib.Path(template_dir)
         self.renderer = renderer
 
@@ -40,7 +40,7 @@ class TemplateEngine(file_manager.FileManager):
                     **render_args):
         """Render a file from the template_dir to the root_dir. 
 
-        Render a source_file from the base template dir to the root dir. The
+        Render a source_file from the root template dir to the root dir. The
         target_file is optional, and if not given, it is named as the source
         file without the rendered extension.
 
@@ -63,7 +63,7 @@ class TemplateEngine(file_manager.FileManager):
             target_file = pathlib.Path(source_file).name
 
         target_file = self.renderer.strip_extension(target_file)
-        target_file = self.__base_dir / target_file
+        target_file = self.__root_dir / target_file
 
         if not overwrite and target_file.exists():
             raise FileExistsError(f"{target_file} already exists.")
@@ -86,7 +86,7 @@ class TemplateEngine(file_manager.FileManager):
         `target_dir` inside the root directory from the given `render_args`.
         It keeps the structure from the source directory. 
         
-        If `source_dir` is None, the base template_dir is used. If `target_dir`
+        If `source_dir` is None, the root template_dir is used. If `target_dir`
         is None, the source_dir is rendered into the root directory. All
         template files will have the template suffix stripped from their name
         upon copying.
@@ -108,7 +108,7 @@ class TemplateEngine(file_manager.FileManager):
         if target_dir is None:
             target_dir = "."
 
-        target_dir = self.__base_dir / target_dir
+        target_dir = self.__root_dir / target_dir
 
         if not overwrite:
             try:
