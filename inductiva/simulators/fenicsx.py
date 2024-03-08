@@ -18,12 +18,16 @@ class FEniCSx(simulators.Simulator):
         geometry_filename: str,
         bcs_filename: str,
         material_filename: str,
-        mesh_filename: Optional[str] = None,
-        mesh_info_filename: Optional[str] = None,
+        global_refinement_meshing_factor: float = 1.0,
+        local_refinement_meshing_factor: float = 1.0,
+        smoothing_meshing_parameter: float = 10.0,
+        mesh_element_family: str = "S",
+        mesh_element_order: int = 2,
+        mesh_quadrature_rule: str = "gauss_jacobi",
+        mesh_quadrature_degree: int = 2,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
-        **kwargs
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -31,21 +35,32 @@ class FEniCSx(simulators.Simulator):
             geometry_filename: Geometry filename.
             bcs_filename: Boundary conditions filename.
             material_filename: Material filename.
-            mesh_filename: Mesh filename.
-            mesh_info_filename: Mesh information filename.
+            global_refinement_meshing_factor (float): The refinement factor for
+              global refinement of the mesh. A higher value results in a finer
+              mesh overall, increasing the number of elements in the entire
+              mesh, and leading to a more detailed representation of the
+              geometry. Use this factor when you want to globally refine the
+              mesh uniformly, without specific local focus.
+            local_refinement_meshing_factor (float): The refinement factor for
+              local refinement of the mesh. This factor controls the local
+              refinement level of the mesh and is typically used for refining
+              specific regions or features of the mesh. A higher value for this
+              factor indicates a finer mesh in the regions of interest,
+              providing more detailed resolution around certain features. Use
+              this factor when you want to focus on refining specific areas
+              while keeping the rest of the mesh less refined.
+            smoothing_parameter (float): The smoothing parameter for mesh
+              generation. It controls the amount of mesh smoothing applied to
+              the generated mesh. Adjust this parameter for improved mesh
+              quality.
+            mesh_element_family (str): The type of mesh element family.
+            mesh_element_order (int): The (polynomial) order of the mesh
+              element.
+            mesh_quadrature_rule (str): The mesh quadrature rule.
+            mesh_quadrature_degree (int): The mesh quadrature degree.
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             storage_dir: Parent directory for storing simulation results.
-            **kwargs: Arbitrary keyword arguments, including:
-                - global_refinement_meshing_factor (float): Factor for global
-                  mesh refinement.
-                - local_refinement_meshing_factor (float): Factor for local mesh
-                  refinement.
-                - smoothing_parameter (float): Mesh smoothing parameter.
-                - mesh_element_family (str): Mesh element family.
-                - mesh_element_order (int): Order of the mesh element.
-                - mesh_quadrature_rule (str): Mesh quadrature rule.
-                - mesh_quadrature_degree (int): Mesh quadrature degree.
             other arguments: See the documentation of the base class.
         """
 
@@ -55,9 +70,13 @@ class FEniCSx(simulators.Simulator):
             geometry_filename=geometry_filename,
             bcs_filename=bcs_filename,
             material_filename=material_filename,
-            mesh_filename=mesh_filename,
-            mesh_info_filename=mesh_info_filename,
+            global_refinement_meshing_factor=global_refinement_meshing_factor,
+            local_refinement_meshing_factor=local_refinement_meshing_factor,
+            smoothing_meshing_parameter=smoothing_meshing_parameter,
+            mesh_element_family=mesh_element_family,
+            mesh_element_order=mesh_element_order,
+            mesh_quadrature_rule=mesh_quadrature_rule,
+            mesh_quadrature_degree=mesh_quadrature_degree,
             storage_dir=storage_dir,
             extra_metadata=extra_metadata,
-            **kwargs
         )
