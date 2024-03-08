@@ -52,9 +52,9 @@ def watch(func, every, args, cmd):
     header = f"> every {every}s: inductiva {cmd}"
 
     def action(fout: TextIO = sys.stdout):
-        fout.clear()
         buffer = io.StringIO()
         func(args, fout=buffer)
+        fout.clear()
         fout.write(buffer.getvalue())
 
     with ansi_pager.PagedOutput(header) as pager:
