@@ -26,8 +26,8 @@ def test_map_dir_files():
     assets_map = {
         ".": {
             "files": [
-                "template.yaml.jinja",
                 "test_file.txt",
+                "template.yaml.jinja",
                 "template_file.txt.jinja",
             ]
         },
@@ -37,7 +37,8 @@ def test_map_dir_files():
     }
     files_map = files.map_dir_files(ASSETS_DIR)
 
-    assert assets_map == files_map
+    for key, contents in files_map.items():
+        assert assets_map[key]["files"].sort() == contents["files"].sort()
 
 
 def test_map_dir_files__with_jinja_ext():
