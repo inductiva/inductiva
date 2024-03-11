@@ -15,7 +15,6 @@ First, create a MachineGroup to run your simulations in parallel:
 
 ```python
 import inductiva
-from inductiva import mixins
 
 # Instantiate a MachineGroup object with 5 preemptible machines of type
 # c2-standard-30 and start it immediately
