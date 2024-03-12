@@ -1,7 +1,9 @@
 # Markdown Test File
 
+## pytest-markdown-docs
+
 ### Not python example
-This first example wont run because its not a python snippet.
+This first example won't run because it is not a python snippet.
 
 ```c
 #include <stdio.h>
@@ -13,14 +15,16 @@ int main() {
 ```
 
 ### No run example
-This snippet is python but we define it not to run using 
+This snippet is python but we define that it should not be tested using the
+`notest` tag 
 
 ```python notest
 task_1.download_outputs()
 ```
 
 ### Normal example
-This is the first example that will run. This snippet is just the normal case where there are no dependencies or ficture vars.
+This is the first example that will run. This snippet is just the normal case
+where there are no dependencies or fixture variables.
 
 ```python
 import inductiva
@@ -38,14 +42,16 @@ task = fds.run(input_dir=input_dir,
 ```
 
 ### Dependency test
-This snipper is dependant on the last snippet.
+This snippet is dependent on the last snippet.
 
 ```python continuation
-print("fds task",task.get_status())
+print("fds task", task.get_status())
 ```
 
 ### Fixture test
-This snippet is not dependant on any other snippet. But, we need to provide it with some fixtures (variables or functions that are not defined inside the snippet).
+This snippet is not dependent on any other snippet. However, for it to be tested
+we need to provide it with some fixtures (variables or functions that are not 
+defined inside the snippet):
 
 ```python fixture:simulator fixture:input_dir
 
@@ -56,3 +62,8 @@ task = simulator.run(input_dir=input_dir,
                post_processing_filename="mccaffrey.ssf",
                n_vcpus=1)
 ```
+
+## Link checker
+
+Internet link [Inductiva](https://inductiva.ai)
+Relative link [Home](./Home.md)
