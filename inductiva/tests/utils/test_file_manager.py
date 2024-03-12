@@ -49,8 +49,8 @@ def test_set_root_dir__valid_input__creates_folder():
 
     root_dir = "test_root_dir"
     manager = file_manager.FileManager()
-
     manager.set_root_dir(root_dir)
+
     created_root_dir = manager.get_root_dir()
     assert os.path.isdir(created_root_dir)
     assert root_dir in created_root_dir.name

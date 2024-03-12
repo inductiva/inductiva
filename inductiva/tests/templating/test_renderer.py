@@ -19,10 +19,9 @@ ASSETS_DIR = pathlib.Path(__file__).parent / "assets"
      ("folder/nested_non_template.txt", "this is a non-template file")])
 def test_jinja_renderer_render(template_name, expected):
     # Determine if template and non-template files are correctly rendered.
-    template_name = ASSETS_DIR / template_name
-    renderer = JinjaRenderer()
+    renderer = JinjaRenderer(ASSETS_DIR)
     fout = StringIO()
-    renderer.render_file(template_name, fout, text="world")
+    renderer.render(template_name, fout, text="world")
     print(fout.getvalue())
     assert fout.getvalue() == expected
 
@@ -30,7 +29,9 @@ def test_jinja_renderer_render(template_name, expected):
 @mark.parametrize("filename, is_template",
                   [("template.txt", False), ("template.txt.jinja", True),
                    ("folder/nested_template.txt", False),
-                   ("folder/nested_template.txt.jinja", True)])
+                   ("folder/nested_template.txt.jinja", True),
+                   (pathlib.Path("folder/nested_template.txt.jinja"), True),
+                   (pathlib.Path("folder/nested_template.txt"), False)])
 def test_jinja_renderer__is_template(filename, is_template):
     # Determine if the renderer correctly identifies template files.
     assert JinjaRenderer.is_template(filename) == is_template
@@ -44,22 +45,23 @@ def test_jinja_renderer__is_template(filename, is_template):
 def test_jinja_renderer__strip_extension(filename, expected):
     # Determine if the renderer correctly strips the extension
     # from a template filename.
-    assert JinjaRenderer.strip_extension(filename) == expected
+    file_dir = pathlib.Path(filename).parent
+    assert JinjaRenderer(file_dir).strip_extension(filename) == expected
 
 
 def test_jinja_adapter__missing_parameter__raises_exception():
     # Determine if an exception is raised when a template is rendered but not
     # all required parameters are given.
-    file = ASSETS_DIR / "template.txt.jinja"
-    renderer = JinjaRenderer()
+    file = "template.txt.jinja"
+    renderer = JinjaRenderer(ASSETS_DIR)
     with pytest.raises(exceptions.UndefinedError):
-        renderer.render_file(file, StringIO())
+        renderer.render(file, StringIO())
 
 
 def test_jinja_renderer__invalid_template__raises_exception():
     # Determine if an exception is raised when a non-existing template is
     # rendered.
 
-    renderer = JinjaRenderer()
+    renderer = JinjaRenderer("something")
     with pytest.raises(exceptions.TemplateNotFound):
-        renderer.render_file("non_existing_template", StringIO())
+        renderer.render("non_existing_template", StringIO())

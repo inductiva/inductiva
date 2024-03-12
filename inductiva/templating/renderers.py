@@ -1,8 +1,7 @@
 """Base and specific renderers packages to manage template files."""
-from abc import abstractmethod
 from typing import Iterable, Union, IO
+from abc import abstractmethod
 import pathlib
-import shutil
 import os
 
 import jinja2
@@ -10,32 +9,31 @@ import jinja2
 from inductiva import types, utils
 
 
-class BaseRenderer:
+class RendererAdapter:
     """Abstract base class for template renderers."""
 
     TEMPLATE_EXTENSION = None
 
     @abstractmethod
-    def render_dir(self, target_dir: types.Path, source_dir: types.Path,
-                   **render_args):
-        """Render a template to a file."""
+    def set_template_dir(self, template_dir: types.PathOrStr) -> None:
+        """Set the directory where the templates are located."""
         pass
 
     @abstractmethod
-    def render_file(self, target_file: types.Path,
-                    source_file: Union[types.Path, IO], **render_args):
+    def render(self, source_file: Union[types.PathOrStr, IO],
+               target_file: types.PathOrStr, **render_args) -> pathlib.Path:
         """Render a file."""
         pass
 
     @classmethod
-    def is_template(cls, file: types.Path) -> bool:
+    def is_template(cls, file: types.PathOrStr) -> bool:
         """Check if the given file is of template type."""
         if isinstance(file, pathlib.Path):
             return file.suffix == cls.TEMPLATE_EXTENSION
         return file.endswith(cls.TEMPLATE_EXTENSION)
 
     @classmethod
-    def strip_extension(cls, file: types.Path) -> str:
+    def strip_extension(cls, file: types.PathOrStr) -> str:
         """Strip the template extension if the given file is a template."""
         if not cls.is_template(file):
             return file
@@ -43,77 +41,64 @@ class BaseRenderer:
             return file.with_suffix("")
         return os.path.splitext(file)[0]
 
-    @classmethod
-    def get_template_files(cls, source_dir: types.Path) -> Iterable[types.Path]:
+    @abstractmethod
+    def get_template_files(self) -> Iterable[types.PathOrStr]:
         """Return a list of template files in the given source directory."""
+        pass
 
-        return utils.files.map_dir_files(source_dir, cls.TEMPLATE_EXTENSION)
 
-
-class JinjaRenderer(BaseRenderer):
+class JinjaRenderer(RendererAdapter):
     """Jinja2 renderer for .jinja templates."""
 
     TEMPLATE_EXTENSION = ".jinja"
 
-    @classmethod
-    def render_dir(cls, source_dir: types.Path, target_dir: types.Path,
-                   **render_args):
-        """Render a directory from a template directory.
+    def __init__(self, template_dir: types.PathOrStr):
+        """Create a renderer adapter for the Jinja2 template engine.
+        
+        Attributes:
+            TEMPLATE_EXTENSION (str): Extension for the template files used by
+                Jinja2 templates.
+            template_dir (types.PathOrStr): Path to the template directory."""
 
-        Render the jinja template files within a given source_dir into a 
-        target_dir. These files are rendered with the given render_args and
-        the rendered files keep the same name without the .jinja extension.
+        self.set_template_dir(template_dir)
 
-        Note, all non-template files are also copied to the target directory.
+    def set_template_dir(self, template_dir: types.PathOrStr) -> None:
+        """Set the directory where the templates are located.
+
+        Sets the directory where the templates are located and initializes the
+        Jinja2 environment and loader.
 
         Args:
-            source_dir (types.Path): Path to the source directory.
-            target_dir (types.Path): Path to the target directory.
-            render_args: Arguments to render the template files.
+            template_dir (PathOrStr): The directory where the templates are
+                located.
         """
-        target_dir = pathlib.Path(target_dir)
+        self.template_dir = pathlib.Path(template_dir)
 
-        shutil.copytree(source_dir,
-                        target_dir,
-                        dirs_exist_ok=True,
-                        symlinks=True)
+        loader = jinja2.FileSystemLoader(self.template_dir)
+        self.environment = jinja2.Environment(loader=loader,
+                                              undefined=jinja2.StrictUndefined)
 
-        template_dir_struct = cls.get_template_files(target_dir)
+    def get_template_files(self) -> Iterable[types.PathOrStr]:
+        """Return a list of template files in the given source directory."""
 
-        # Render the template files from within the target directory.
-        environment = jinja2.Environment(
-            loader=jinja2.FileSystemLoader(target_dir),
-            undefined=jinja2.StrictUndefined)
+        return utils.files.map_dir_files(self.template_dir,
+                                         self.TEMPLATE_EXTENSION)
 
-        for subdir, contents in template_dir_struct.items():
-            for file in contents[cls.TEMPLATE_EXTENSION]:
-                target_rel_path = pathlib.Path(subdir) / file
-                target_abs_path = target_dir / target_rel_path
-
-                template = environment.get_template(str(target_rel_path))
-                stream = template.stream(**render_args)
-                stream.dump(str(cls.strip_extension(target_abs_path)))
-                target_abs_path.unlink()
-
-    @classmethod
-    def render_file(cls, source_file: types.Path,
-                    target_file: Union[types.Path, IO], **render_args):
+    def render(self, source_file: types.PathOrStr,
+               target_file: Union[types.PathOrStr, IO], **render_args):
         """Render a file given a template file and specific render args.
         
         Args:
-            target_file (types.Path): Path to the target file.
-            source_file (types.Path): Path to the source file.
+            target_file (types.PathOrStr): Path to the target file.
+            source_file (types.PathOrStr): Path to the source file relative to
+                the template_dir.
             render_args: Arguments to render the template file.
         """
 
-        source_path = pathlib.Path(source_file)
-
-        environment = jinja2.Environment(loader=jinja2.FileSystemLoader(
-            source_path.parent),
-                                         undefined=jinja2.StrictUndefined)
-        template = environment.get_template(source_path.name)
-
+        source_path = pathlib.Path(source_file).as_posix()
+        template = self.environment.get_template(source_path)
         stream = template.stream(**render_args)
+
         if isinstance(target_file, pathlib.Path):
             stream.dump(str(target_file))
         else:

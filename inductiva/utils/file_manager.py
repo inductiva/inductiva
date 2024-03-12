@@ -30,7 +30,7 @@ class FileManager:
             self.set_root_dir(self.DEFAULT_ROOT_DIR)
         return self.__root_dir
 
-    def set_root_dir(self, root_dir: types.Path):
+    def set_root_dir(self, root_dir: types.PathOrStr):
         """Set a root directory for the file manager.
         
         All files managed through the manager will be
@@ -42,7 +42,7 @@ class FileManager:
         where N is determined by the directory with the largest N.
 
         Args:
-            root_dir (types.Path): Path to the root directory.
+            root_dir (types.PathOrStr): Path to the root directory.
                 If None, an error is raised.
         """
 
@@ -70,8 +70,8 @@ class FileManager:
         return self.__check_root_dir()
 
     def copy_file(self,
-                  source_file: types.Path,
-                  target_file: Optional[types.Path] = None,
+                  source_file: types.PathOrStr,
+                  target_file: Optional[types.PathOrStr] = None,
                   overwrite: bool = False) -> pathlib.Path:
         """Copy a file to the root_dir. 
 
@@ -84,29 +84,29 @@ class FileManager:
         the flag `overwrite` to True.
 
         Args:
-            source_file (types.Path): Path to the source file.
-            target_file (types.Path - Optional): Path to the target file.
+            source_file (types.PathOrStr): Path to the source file.
+            target_file (types.PathOrStr - Optional): Path to the target file.
             overwrite (bool): Overwrite the target file if it already exists.
         """
 
-        self.__check_root_dir()
+        root_dir = self.__check_root_dir()
 
         if target_file is None:
             target_file = pathlib.Path(source_file).name
+        target_file = root_dir / target_file
 
-        target_file = self.__root_dir / target_file
         if not overwrite and target_file.exists():
             raise FileExistsError(f"{target_file} already exists.")
 
-        (target_file.parent).mkdir(parents=True, exist_ok=True)
+        target_file.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(source_file, target_file)
 
         return target_file
 
     def copy_dir(self,
-                 source_dir: types.Path,
-                 target_dir: Optional[types.Path] = None,
-                 overwrite: bool = False) -> types.Path:
+                 source_dir: types.PathOrStr,
+                 target_dir: Optional[types.PathOrStr] = None,
+                 overwrite: bool = False) -> types.PathOrStr:
         """Copy a directory to the root_dir.
 
         This method copies the contents of the `source_dir` to a `target_dir`
@@ -120,16 +120,17 @@ class FileManager:
         `overwrite` to True.
 
         Args:
-            source_dir (types.Path): Path to the source directory.
-            target_dir (types.Path - Optional): Path to the target directory.
+            source_dir (types.PathOrStr): Path to the source directory.
+            target_dir (types.PathOrStr - Optional): Path to the target
+                directory.
             overwrite (bool): Overwrite the target directory if  already exists.
         """
-        self.__check_root_dir()
+        root_dir = self.__check_root_dir()
 
         if target_dir is None:
             target_dir = "."
 
-        target_dir = self.__root_dir / target_dir
+        target_dir = root_dir / target_dir
         if not overwrite:
             try:
                 self._validate_destination(source_dir, target_dir)
