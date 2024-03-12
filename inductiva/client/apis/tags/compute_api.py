@@ -12,7 +12,9 @@ from inductiva.client.paths.compute_group.delete import DeleteVmGroup
 from inductiva.client.paths.compute_group_status.get import GetGroupStatus
 from inductiva.client.paths.compute_price.get import GetInstancePrice
 from inductiva.client.paths.compute_type.get import GetMachineType
+from inductiva.client.paths.compute_group_name.get import GetVmGroupByName
 from inductiva.client.paths.compute_groups.get import ListActiveUserInstanceGroups
+from inductiva.client.paths.compute_machine_types.get import ListAvailableMachineTypes
 from inductiva.client.paths.compute_group.post import RegisterVmGroup
 from inductiva.client.paths.compute_group_start.post import StartVmGroup
 
@@ -22,7 +24,9 @@ class ComputeApi(
         GetGroupStatus,
         GetInstancePrice,
         GetMachineType,
+        GetVmGroupByName,
         ListActiveUserInstanceGroups,
+        ListAvailableMachineTypes,
         RegisterVmGroup,
         StartVmGroup,
 ):
