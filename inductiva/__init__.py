@@ -66,15 +66,6 @@ def _check_for_available_package_update():
         print(msg, file=sys.stderr)
 
 
-def _check_key():
-    global _checked_key
-
-    if not _checked_key and utils.format_utils.getenv_bool(
-            "GITHUB_ACTIONS", False) is not True:
-        api.methods.validate_api_key(api_key)
-        _checked_key = True
-
-
 _check_for_available_package_update()
 
 
@@ -90,5 +81,3 @@ def _supports_ansi():
 
 
 _ansi_enabled = _supports_ansi()
-
-_check_key()
