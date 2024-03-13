@@ -24,21 +24,28 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
 
 # Query params
+ProviderSchema = Providers
 PathSchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {
+        'provider': typing.Union[
+            ProviderSchema,
+        ],
+    })
+RequestOptionalQueryParams = typing_extensions.TypedDict(
+    'RequestOptionalQueryParams', {
         'path': typing.Union[
             PathSchema,
             str,
         ],
-    })
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {}, total=False)
+    },
+    total=False)
 
 
 class RequestQueryParams(RequestRequiredQueryParams,
@@ -46,11 +53,17 @@ class RequestQueryParams(RequestRequiredQueryParams,
     pass
 
 
+request_query_provider = api_client.QueryParameter(
+    name="provider",
+    style=api_client.ParameterStyle.FORM,
+    schema=ProviderSchema,
+    required=True,
+    explode=True,
+)
 request_query_path = api_client.QueryParameter(
     name="path",
     style=api_client.ParameterStyle.FORM,
     schema=PathSchema,
-    required=True,
     explode=True,
 )
 _auth = [
@@ -161,7 +174,10 @@ class BaseApi(api_client.Api):
         used_path = path.value
 
         prefix_separator_iterator = None
-        for parameter in (request_query_path,):
+        for parameter in (
+                request_query_provider,
+                request_query_path,
+        ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
