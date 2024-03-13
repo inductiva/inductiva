@@ -84,37 +84,40 @@ Combining both subcommand `log` and `kill` will allow you to quickly adjust or
 terminate simulations to achieve the desired simulation configurations.
 
 At the end of the simulation, the log stream will automatically close, indicating
-that there are no new messages. This automatic closure of the stream does not 
+that there are no new messages. The automatic shutdown of the stream consumer does not 
 affect the simulation or its outputs, and no further action is required from the
 user.
 
-In addition to the automatic closure of the log stream, the `inductiva logs`
-command supports several modes for redirecting output:
+Both the content of the log stream, as well as the status of the stream consumer itself
+can be saved for latter inspection using file redirection:
 
-- **Redirect stdout to a file**: You can redirect stdout to a file using the 
-`1>` operator. For example:
+- **Redirect stdout to a file**: You can redirect stdout (file descriptor 1) to a file using the 
+redirection operator (`>`). This will redirect the entire content of the stream to a file. Example:
 
 ```bash
 $ inductiva logs TASK_ID 1>out.txt
 ```
 
-- **Redirect stderr to a file**: You can redirect stderr to a file using the 
-`2>` operator. For example:
+- **Redirect stderr to a file**: The status of the stream consumer is
+written to stderr (file descriptor 2). Redirect of stderr to a file can be
+accomplished as follows:
 
 ```bash
 $ inductiva logs TASK_ID 2>err.txt
 ```
 
-- **Redirect stdout and stderr to separate files**: You can redirect stdout and 
-stderr to separate files using the 1> and 2> operators. For example:
+- **Redirect stdout and stderr to separate files**: both stdout and 
+stderr can be simultaneously redirected to separate files using:
 
 ```bash
 $ inductiva logs TASK_ID 1>out.txt 2>err.txt
 ```
 
-- **Disable ANSI globally**: You can disable ANSI globally by setting the 
-ANSI_ENABLED environment variable to 0. For example:
+- **Disable ANSI globally**: To disable the use of ANSI escape codes
+that support the status bar located at the bottom of the log stream, either
+export or set locally the `ANSI_ENABLED` environment variable:
 
 ```bash
-$ ANSI_ENABLED=0 inductiva logs TASK_ID
+$ export ANSI_ENABLED=0 # valid for the entire shell session
+$ ANSI_ENABLED=0 inductiva logs TASK_ID. # only valid for the command 
 ```
