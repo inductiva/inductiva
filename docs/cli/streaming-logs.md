@@ -83,7 +83,38 @@ timer per step: 0.00873
 Combining both subcommand `log` and `kill` will allow you to quickly adjust or 
 terminate simulations to achieve the desired simulation configurations.
 
-At the end of the simulation, the log stream will pause without new messages. In 
-this case, you can exit the log stream by simply using `Ctrl+C`, which stops the 
-log monitoring without affecting the simulation or its outputs.
+At the end of the simulation, the log stream will automatically close, indicating
+that there are no new messages. This automatic closure of the stream does not 
+affect the simulation or its outputs, and no further action is required from the
+user.
 
+In addition to the automatic closure of the log stream, the `inductiva logs`
+command supports several modes for redirecting output:
+
+- **Redirect stdout to a file**: You can redirect stdout to a file using the 
+`1>` operator. For example:
+
+```bash
+$ inductiva logs TASK_ID 1>out.txt
+```
+
+- **Redirect stderr to a file**: You can redirect stderr to a file using the 
+`2>` operator. For example:
+
+```bash
+$ inductiva logs TASK_ID 2>err.txt
+```
+
+- **Redirect stdout and stderr to separate files**: You can redirect stdout and 
+stderr to separate files using the 1> and 2> operators. For example:
+
+```bash
+$ inductiva logs TASK_ID 1>out.txt 2>err.txt
+```
+
+- **Disable ANSI globally**: You can disable ANSI globally by setting the 
+ANSI_ENABLED environment variable to 0. For example:
+
+```bash
+$ ANSI_ENABLED=0 inductiva logs TASK_ID
+```
