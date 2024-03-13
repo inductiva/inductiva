@@ -56,6 +56,10 @@ class MachineTypeResponse(
                 @schemas.classproperty
                 def GCP(cls):
                     return cls("GCP")
+                
+                @schemas.classproperty
+                def ICE(cls):
+                    return cls("ICE")
             __annotations__ = {
                 "machine_type": machine_type,
                 "num_cpus": num_cpus,
