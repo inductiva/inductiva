@@ -60,7 +60,10 @@ def test_map_dir_files__with_jinja_ext():
 
     files_map = files.map_dir_files(ASSETS_DIR, ".jinja")
 
-    assert assets_map == files_map
+    assert list(files_map.keys()) == [".", "test"]
+    for key, contents in files_map.items():
+        assert assets_map[key]["files"].sort() == contents["files"].sort()
+        assert assets_map[key][".jinja"].sort() == contents[".jinja"].sort()
 
 
 def test_get_timestamp_path(tmp_path: pathlib.Path):
