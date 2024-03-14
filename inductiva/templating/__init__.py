@@ -1,2 +1,2 @@
 # pylint: disable=missing-module-docstring
-from .engine import TemplateManager
+from .manager import TemplateManager

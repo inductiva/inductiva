@@ -1,4 +1,4 @@
-"""Inductiva template engine class to manipulate files and render templates."""
+"""Inductiva template manager class to manipulate files and render templates."""
 
 from typing import Optional, Type
 import pathlib
