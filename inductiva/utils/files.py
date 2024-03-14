@@ -30,32 +30,6 @@ def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     return path.with_name(name + path.suffix)
 
 
-def map_dir_files(source_dir: pathlib.Path, extension: str = None):
-    """Map the files in a directory based on relative paths to given dir.
-    
-    Args:
-        source_dir (pathlib.Path): Path to the source directory.
-        extension (str - Optional): File extension to map. If provided, the
-            files with the given extension will be mapped separately.
-    """
-
-    file_map = {}
-
-    for root, _, files in os.walk(source_dir, topdown=True):
-        current_map = {"files": []}
-        if extension:
-            current_map[extension] = []
-
-        for f in files:
-            if extension and f.endswith(extension):
-                current_map[extension].append(f)
-            else:
-                current_map["files"].append(f)
-        file_map[os.path.relpath(root, start=source_dir)] = current_map
-
-    return file_map
-
-
 def resolve_output_path(path: Optional[types.Path]) -> pathlib.Path:
     """Resolve a path relative to the output_dir
 

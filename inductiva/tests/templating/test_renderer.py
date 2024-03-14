@@ -6,7 +6,7 @@ from jinja2 import exceptions
 from pytest import mark
 import pytest
 
-from inductiva.templating.renderers import JinjaRenderer
+from inductiva.templating.renderers import JinjaRendererAdapter
 
 ASSETS_DIR = pathlib.Path(__file__).parent / "assets"
 
@@ -19,7 +19,7 @@ ASSETS_DIR = pathlib.Path(__file__).parent / "assets"
      ("folder/nested_non_template.txt", "this is a non-template file")])
 def test_jinja_renderer_render(template_name, expected):
     # Determine if template and non-template files are correctly rendered.
-    renderer = JinjaRenderer(ASSETS_DIR)
+    renderer = JinjaRendererAdapter(ASSETS_DIR)
     fout = StringIO()
     renderer.render(template_name, fout, text="world")
     print(fout.getvalue())
@@ -34,7 +34,7 @@ def test_jinja_renderer_render(template_name, expected):
                    (pathlib.Path("folder/nested_template.txt"), False)])
 def test_jinja_renderer__is_template(filename, is_template):
     # Determine if the renderer correctly identifies template files.
-    assert JinjaRenderer.is_template(filename) == is_template
+    assert JinjaRendererAdapter.is_template(filename) == is_template
 
 
 @mark.parametrize("filename, expected",
@@ -46,14 +46,14 @@ def test_jinja_renderer__strip_extension(filename, expected):
     # Determine if the renderer correctly strips the extension
     # from a template filename.
     file_dir = pathlib.Path(filename).parent
-    assert JinjaRenderer(file_dir).strip_extension(filename) == expected
+    assert JinjaRendererAdapter(file_dir).strip_extension(filename) == expected
 
 
 def test_jinja_adapter__missing_parameter__raises_exception():
     # Determine if an exception is raised when a template is rendered but not
     # all required parameters are given.
     file = "template.txt.jinja"
-    renderer = JinjaRenderer(ASSETS_DIR)
+    renderer = JinjaRendererAdapter(ASSETS_DIR)
     with pytest.raises(exceptions.UndefinedError):
         renderer.render(file, StringIO())
 
@@ -62,6 +62,6 @@ def test_jinja_renderer__invalid_template__raises_exception():
     # Determine if an exception is raised when a non-existing template is
     # rendered.
 
-    renderer = JinjaRenderer("something")
+    renderer = JinjaRendererAdapter("something")
     with pytest.raises(exceptions.TemplateNotFound):
         renderer.render("non_existing_template", StringIO())

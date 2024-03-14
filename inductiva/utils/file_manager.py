@@ -9,9 +9,10 @@ import pathlib
 import shutil
 import glob
 import re
+import os
 
 from inductiva import types
-from inductiva.utils import format_utils, files
+from inductiva.utils import format_utils
 
 SUFFIX_SEPARATOR = "__"
 
@@ -32,7 +33,7 @@ class FileManager:
 
     def set_root_dir(self, root_dir: types.PathOrStr):
         """Set a root directory for the file manager.
-        
+
         All files managed through the manager will be
         placed inside a newly created folder with the given
         name. If a folder with the same name already exists,
@@ -73,7 +74,7 @@ class FileManager:
                   source_file: types.PathOrStr,
                   target_file: Optional[types.PathOrStr] = None,
                   overwrite: bool = False) -> pathlib.Path:
-        """Copy a file to the root_dir. 
+        """Copy a file to the root_dir.
 
         This method copies the contents of the `source_file` to a `target_file`
         inside the root directory. If `target_file` is None, the copied file is
@@ -112,7 +113,7 @@ class FileManager:
         This method copies the contents of the `source_dir` to a `target_dir`
         inside the root directory, keeping the structure as the source
         directory. If `target_dir` is None, the source directory is copied to
-        the root directory. 
+        the root directory.
 
         If any file in the target directory has the same name as the ones
         about to be copied, the default behavior of this method is to raise a
@@ -133,7 +134,7 @@ class FileManager:
         target_dir = root_dir / target_dir
         if not overwrite:
             try:
-                self._validate_destination(source_dir, target_dir)
+                self._check_precopy_dir(source_dir, target_dir)
             except FileExistsError as e:
                 msg = f"{e}; set `overwrite=True` to overwrite existing files."
                 raise FileExistsError(msg) from e
@@ -145,9 +146,9 @@ class FileManager:
 
         return target_dir
 
-    def _validate_destination(self, source_dir: pathlib.Path,
-                              target_dir: pathlib.Path):
-        """Validate if the files in source_dir match any file on target_dir.
+    def _check_precopy_dir(self, source_dir: pathlib.Path,
+                           target_dir: pathlib.Path):
+        """Check if any file in source_dir exists in target_dir.
 
         Check if the target filenames exist and raise a FileExistsError if
         any of them already exists.
@@ -156,12 +157,11 @@ class FileManager:
             source_dir (pathlib.Path): The source directory.
             target_dir (pathlib.Path): The target directory.
         """
-        source_files = files.map_dir_files(source_dir)
         target_dir = pathlib.Path(target_dir)
 
-        for subdir, contents in source_files.items():
-            target_subdir = target_dir / subdir
-            for file in contents["files"]:
+        for dirpath, _, files in os.walk(source_dir, topdown=True):
+            target_subdir = target_dir / os.path.relpath(dirpath, source_dir)
+            for file in files:
                 if (target_subdir / file).exists():
                     raise FileExistsError(
                         f"File {file} already exists in {target_subdir}")
@@ -169,7 +169,7 @@ class FileManager:
 
 def _gen_unique_suffix(name: str, filenames: Iterable[str]) -> str:
     """Generate a suffix for a filename, based on a list of files.
-    
+
     Args:
         name: Name of the file.
         filenames: List of filenames.
@@ -200,7 +200,7 @@ def _gen_unique_name(name: str) -> str:
     based on the names of the existing folders in the current working directory.
     If no folder exists with the same name as the given name,
     the input name will be returned; otherwise, a suffix is appended
-    to the input name to make it unique. 
+    to the input name to make it unique.
 
     See `_gen_unique_suffix` for more details.
     """

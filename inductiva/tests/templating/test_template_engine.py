@@ -1,11 +1,11 @@
-"""Test the TemplateEngine mixin."""
+"""Test the TemplateManager class."""
 import os
 import pathlib
 import tempfile
 
 import pytest
 
-from inductiva import TemplateEngine
+from inductiva import TemplateManager
 
 ASSETS_DIR = pathlib.Path(__file__).parent / "assets"
 
@@ -14,7 +14,12 @@ ASSETS_DIR = pathlib.Path(__file__).parent / "assets"
 def fixture_templatr():
     with tempfile.TemporaryDirectory() as tmpdirname:
         os.chdir(tmpdirname)
-        yield TemplateEngine(ASSETS_DIR)
+        yield TemplateManager(ASSETS_DIR)
+
+
+def test_ctor__invalid_output_dir__raises_exception():
+    with pytest.raises(ValueError):
+        TemplateManager(ASSETS_DIR, None)
 
 
 def test_render_file__missing_parameters__raises_exception(templatr):
@@ -23,7 +28,7 @@ def test_render_file__missing_parameters__raises_exception(templatr):
 
 
 def test_render_file__default_name__uses_template_name(templatr):
-    # Determine if the template file is rendered to the local directory
+    # Determine if the template file is rendered to the default directory
     # with the same name as the template file, but with the template
     # extension stripped.
     templatr.render_file("template.txt.jinja", text="world")
@@ -47,7 +52,7 @@ def test_render_file__target_file_exists_overwrites__renders_correctly(
 
 
 def test_render_file__nested_template__uses_template_name(templatr):
-    # Determine if the nested template file is rendered to the local directory
+    # Determine if the nested template file is rendered to the default directory
     # with the same file name as the template file, but with the template
     # extension stripped.
     templatr.render_file("folder/nested_template.txt.jinja", text="world")
@@ -116,3 +121,17 @@ def test_render_dir__target_dir_exists__raises_exception(templatr):
     templatr.render_dir(target_dir="rendered", text="world")
     with pytest.raises(FileExistsError):
         templatr.render_dir(target_dir="rendered", text="world")
+
+
+def test_render_file_copy_dir(templatr):
+    # Determine if the template file is rendered to the "output" directory
+    # with the same name as the template file, but with the template
+    # extension stripped. It also tests that a full directory is correctly
+    # copied to the specified subdir inside the "output" directory.
+
+    templatr.set_root_dir("output")
+    templatr.render_file("template.txt.jinja", text="world")
+    assert os.path.isfile("output/template.txt")
+
+    templatr.copy_dir(ASSETS_DIR, "tmp")
+    assert os.path.isdir("output/tmp")

@@ -20,52 +20,6 @@ def test_get_timestamped_path_with_ext(tmp_path: pathlib.Path):
     assert timestamped_path.name.endswith(".txt")
 
 
-def test_map_dir_files():
-    """Check if the files are correctly mapped to subdirs."""
-
-    assets_map = {
-        ".": {
-            "files": [
-                "test_file.txt",
-                "template.yaml.jinja",
-                "template_file.txt.jinja",
-            ]
-        },
-        "test": {
-            "files": ["file"]
-        }
-    }
-    files_map = files.map_dir_files(ASSETS_DIR)
-
-    for key, contents in files_map.items():
-        assert assets_map[key]["files"].sort() == contents["files"].sort()
-
-
-def test_map_dir_files__with_jinja_ext():
-    """Check if the files are correctly mapped to subdirs with extension tag."""
-
-    assets_map = {
-        ".": {
-            "files": ["test_file.txt",],
-            ".jinja": [
-                "template.yaml.jinja",
-                "template_file.txt.jinja",
-            ]
-        },
-        "test": {
-            "files": ["file"],
-            ".jinja": []
-        }
-    }
-
-    files_map = files.map_dir_files(ASSETS_DIR, ".jinja")
-
-    assert list(files_map.keys()) == [".", "test"]
-    for key, contents in files_map.items():
-        assert assets_map[key]["files"].sort() == contents["files"].sort()
-        assert assets_map[key][".jinja"].sort() == contents[".jinja"].sort()
-
-
 def test_get_timestamp_path(tmp_path: pathlib.Path):
     """Check if multiple dirs are created with different names."""
     n = 10

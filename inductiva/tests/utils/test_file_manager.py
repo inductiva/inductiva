@@ -161,7 +161,7 @@ def test_validate_destination__raise_error__on_file_existence():
     manager.copy_file(target_file)
 
     with pytest.raises(FileExistsError) as excinfo:
-        manager._validate_destination(ASSETS_DIR, "root_dir")  # pylint: disable=protected-access
+        manager._check_precopy_dir(ASSETS_DIR, "root_dir")  # pylint: disable=protected-access
 
     assert "already exists" in str(excinfo.value)
 
@@ -180,6 +180,6 @@ def test_validate_destination__raise_error__on_dir_existence():
     manager.copy_dir(ASSETS_DIR)
 
     with pytest.raises(FileExistsError) as excinfo:
-        manager._validate_destination(ASSETS_DIR, "root_dir")  # pylint: disable=protected-access
+        manager._check_precopy_dir(ASSETS_DIR, "root_dir")  # pylint: disable=protected-access
 
     assert "already exists" in str(excinfo.value)
