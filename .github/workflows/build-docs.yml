@@ -26,7 +26,7 @@ jobs:
       - uses: ammaraskar/sphinx-action@master
         with:
           docs-folder: "docs/"
-          build-comand: "sphinx-build . ../build"
+          build-command: "sphinx-build . ../build"
 
       - name: Commit and push changes to gh-pages
         working-directory: build
