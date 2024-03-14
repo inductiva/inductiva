@@ -25,7 +25,7 @@ jobs:
 
       - uses: ammaraskar/sphinx-action@master
         with:
-          docs-folder: "docs/"
+          docs-folder: "source/docs/"
           build-command: "sphinx-build . ../build"
 
       - name: disable jekyll
