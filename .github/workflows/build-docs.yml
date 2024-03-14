@@ -28,6 +28,10 @@ jobs:
           docs-folder: "docs/"
           build-command: "sphinx-build . ../build"
 
+      - name: disable jekyll
+        working-directory: build
+        run: touch .nojekyll
+
       - name: Commit and push changes to gh-pages
         working-directory: build
         run: |
