@@ -1,0 +1,539 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-188572165-1');
+    </script>
+    
+    <title>Run Simulations in Parallel &#8212; Inductiva API Python client  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'how_to/parallel_simulations';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Manage Computational Resources" href="manage_computational_resources.html" />
+    <link rel="prev" title="Templating Engine" href="../introduction/templating.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Inductiva API Python client  documentation - Home"/>
+    <script>document.write(`<img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark" alt="Inductiva API Python client  documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Quickstart Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../first_example.html">Run your First Simulation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Explore the API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/simulators.html">Configuring Simulations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/shared_dedicated_resources.html">Shared and Dedicated Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/data_flow.html">Storage and Data Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/infrastructure.html">Computational Infrastructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/templating.html">Templating Engine</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How-To Guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Run Simulations in Parallel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manage_computational_resources.html">Manage Computational Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="elastic_machine_group.html">Set up an Elastic Machine Group</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mpi_cluster.html">Set up an MPI Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="storage.html">Manage Remote Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manage_tasks.html">Manage Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manage_and_retrieve_results.html">Manage and Retrieve Results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Available Simulators</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../simulators/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/DualSPHysics.html">DualSPHysics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/SPlisHSPlasH.html">SPlisHSPlasH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/OpenFOAM.html">OpenFOAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/GROMACS.html">GROMACS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/SWASH.html">SWASH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/XBeach.html">XBeach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/Reef3D.html">Reef3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/SWAN.html">SWAN</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/FDS.html">FDS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/SCHISM.html">SCHISM</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cli/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/resources.html">Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/storage.html">Remote Storage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../computational_resources/index.html">Class Description</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../computational_resources/machinegroup_class.html"><code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computational_resources/elasticgroup_class.html"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computational_resources/mpicluster_class.html"><code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../computational_resources/compute_janitor.html">Computational Resources Janitor</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/user_quotas.html">User Quotas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../uninstall_inductiva.html">Uninstall the <code class="docutils literal notranslate"><span class="pre">inductiva</span></code> package</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/how_to/parallel_simulations.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Run Simulations in Parallel</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="run-simulations-in-parallel">
+<h1>Run Simulations in Parallel<a class="headerlink" href="#run-simulations-in-parallel" title="Link to this heading">#</a></h1>
+<p>Machine groups can be used to run multiple simulations in
+parallel, by having each of the machines in the group run a separate simulation.
+This is a powerful mechanism to reduce waiting times when you need to run a large
+number of simulations, such as when you are exploring different parameter values
+or running a large number of simulations for a sensitivity analysis.</p>
+<p>To exemplify, we will use the <a class="reference internal" href="../introduction/templating.html"><span class="std std-doc">templating mechanism</span></a>
+that is built in the Inductiva API to explore variations of a base simulation scenario.
+More specifically, we will consider a coastal dynamic simulation using the SWASH
+simulator, where we want to explore the effect of different water levels on the
+simulation results.</p>
+<p>As an example, let’s run 5 different simulations in parallel.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+<span class="kn">from</span> <span class="nn">inductiva</span> <span class="kn">import</span> <span class="n">mixins</span>
+
+
+<span class="c1"># Instantiate a MachineGroup object with 5 preemptible machine of type</span>
+<span class="c1"># c2-standard-30 and start it immediately</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-30&quot;</span><span class="p">,</span> <span class="n">num_machines</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Download the input files for the SWASH simulation</span>
+<span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
+    <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
+    <span class="s2">&quot;swash-template-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Initialize the template file manager</span>
+<span class="n">file_manager</span> <span class="o">=</span> <span class="n">mixins</span><span class="o">.</span><span class="n">FileManager</span><span class="p">()</span>
+
+<span class="c1"># Initialize the SWASH simulator</span>
+<span class="n">swash</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SWASH</span><span class="p">()</span>
+
+<span class="c1"># Explore the simulation for different water levels</span>
+<span class="n">water_levels_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">3.75</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">]</span>
+
+<span class="c1"># Launch multiple simulations</span>
+<span class="k">for</span> <span class="n">water_level</span> <span class="ow">in</span> <span class="n">water_levels_list</span><span class="p">:</span>
+    <span class="c1"># Set the root directory and render the template files into it.</span>
+    <span class="n">file_manager</span><span class="o">.</span><span class="n">set_root_dir</span><span class="p">(</span><span class="s2">&quot;swash-input-example&quot;</span><span class="p">)</span>
+    <span class="n">file_manager</span><span class="o">.</span><span class="n">add_dir</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">water_level</span><span class="o">=</span><span class="n">water_level</span><span class="p">)</span>
+
+    <span class="c1"># Run the simulation on the dedicated MachineGroup</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">swash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">file_manager</span><span class="o">.</span><span class="n">get_root_dir</span><span class="p">(),</span>
+                    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;input.sws&quot;</span><span class="p">,</span>
+                    <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The template mechanism will allow you to explore 5 different variations of the
+simulation, each with a different water level. The simulations will be submitted
+to our dedicated machine group and will run in parallel.
+We can check that all simulations are running via the CLI and that it took only
+1min for the moment they are submitted until they start running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>list
+
+<span class="w">    </span>ID<span class="w">                         </span>Simulator<span class="w">    </span>Status<span class="w">    </span>Submitted<span class="w">         </span>Started<span class="w">           </span>Computation<span class="w"> </span>Time<span class="w">    </span>Resource<span class="w"> </span>Type
+
+<span class="w">    </span>57mr4kas99jxb9titkeackano<span class="w">  </span>swash<span class="w">        </span>started<span class="w">   </span><span class="m">01</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">09</span>:07:19<span class="w">  </span><span class="m">01</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">09</span>:08:03<span class="w">  </span>*0:03:12<span class="w">            </span>c2-standard-30
+<span class="w">    </span>ox8718m0pwfi02zczui3qky4w<span class="w">  </span>swash<span class="w">        </span>started<span class="w">   </span><span class="m">01</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">09</span>:07:17<span class="w">  </span><span class="m">01</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">09</span>:08:02<span class="w">  </span>*0:03:14<span class="w">            </span>c2-standard-30
+<span class="w">    </span>mak1ji62s7axf7mespkc36g7e<span class="w">  </span>swash<span class="w">        </span>started<span class="w">   </span><span class="m">01</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">09</span>:07:15<span class="w">  </span><span class="m">01</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">09</span>:08:03<span class="w">  </span>*0:03:14<span class="w">            </span>c2-standard-30
+<span class="w">    </span>ijyu8bkvme7vg9k0kj6v23gxa<span class="w">  </span>swash<span class="w">        </span>started<span class="w">   </span><span class="m">01</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">09</span>:07:14<span class="w">  </span><span class="m">01</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">09</span>:08:02<span class="w">  </span>*0:03:16<span class="w">            </span>c2-standard-30
+<span class="w">    </span>g5qq5c9mk2nr5wqhzef38sdm4<span class="w">  </span>swash<span class="w">        </span>started<span class="w">   </span><span class="m">01</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">09</span>:07:12<span class="w">  </span><span class="m">01</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">009</span>:08:01<span class="w">  </span>*0:03:17<span class="w">            </span>c2-standard-30
+</pre></div>
+</div>
+<p>This is a great way to speed up the execution of multiple simulations, since the
+time to run all 5 simulations will be approximately the same as running just one,
+that is the above 5 simulations took 9m55s to complete, which is the time of
+the slowest simulation.</p>
+<p>Now, that all the simulations have finished running, we end this tutorial with an
+extra lesson to help reduce the amount of time machines are left unused:</p>
+<blockquote>
+<div><p>Don’t forget to terminate your computational resources with <code class="docutils literal notranslate"><span class="pre">inductiva</span> <span class="pre">resources</span> <span class="pre">terminate</span> <span class="pre">--all</span></code>.</p>
+</div></blockquote>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../introduction/templating.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Templating Engine</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="manage_computational_resources.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Manage Computational Resources</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
