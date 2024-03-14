@@ -3,6 +3,8 @@
 
 ![linkedin_header](https://user-images.githubusercontent.com/104431973/231184851-0ce34289-593e-4832-aaa2-9aae652113f5.jpg)
 
+[![Python version](https://img.shields.io/pypi/pyversions/inductiva.svg)](https://www.python.org/downloads/)
+
 # Inductiva: a Python package for scaling simulations on the Cloud
 
 Welcome to the official Python library for the Inductiva API version **0.4.4**. 
