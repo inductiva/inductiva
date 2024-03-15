@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
@@ -37,21 +37,21 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'introduction/simulators';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -387,7 +387,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="configuring-simulations">
-<h1>Configuring Simulations<a class="headerlink" href="#configuring-simulations" title="Link to this heading">#</a></h1>
+<h1>Configuring Simulations<a class="headerlink" href="#configuring-simulations" title="Permalink to this heading">#</a></h1>
 <p>Open-source simulation software lies at the heart of the Indutiva API. From its
 inception, the main goal of the API has been to empower scientists and engineers
 to take full advantage of state-of-the-art open-source simulation packages, in a
@@ -405,7 +405,7 @@ and assigning the simulation tasks to the appropriate computational resource (Se
 with the fact that not all simulation software packages work in the same way and,
 therefore, having a fully general formulation for a simulation task is not trivial?</p>
 <section id="the-simple-cases">
-<h2>The simple cases<a class="headerlink" href="#the-simple-cases" title="Link to this heading">#</a></h2>
+<h2>The simple cases<a class="headerlink" href="#the-simple-cases" title="Permalink to this heading">#</a></h2>
 <p>Some simulation packages offer a single executable that takes as input a single
 file containing the full description of the simulation to be run. This is the simplest
 case because all the API needs to do is send that simulation configuration file to a
@@ -452,7 +452,7 @@ the <code class="docutils literal notranslate"><span class="pre">run()</span></c
 file that the simulator executable expects and for which there is no standard name is expected.</p>
 </section>
 <section id="a-slightly-more-complex-case">
-<h2>A slightly more complex case<a class="headerlink" href="#a-slightly-more-complex-case" title="Link to this heading">#</a></h2>
+<h2>A slightly more complex case<a class="headerlink" href="#a-slightly-more-complex-case" title="Permalink to this heading">#</a></h2>
 <p>Some simulators require running more than one executable to perform a simulation,
 but they are always the same and applied in sequence. In these cases, we
 automatically run both executables together giving the appearance that what is
@@ -478,7 +478,7 @@ no requirement to pass the <code class="docutils literal notranslate"><span clas
 pointer to the folder containing all the assets required for the simulation.</p>
 </section>
 <section id="running-long-simulation-pipelines">
-<h2>Running long simulation pipelines<a class="headerlink" href="#running-long-simulation-pipelines" title="Link to this heading">#</a></h2>
+<h2>Running long simulation pipelines<a class="headerlink" href="#running-long-simulation-pipelines" title="Permalink to this heading">#</a></h2>
 <p>In other simulation packages, a single simulation is more configurable and different
 executables can be used to run it. For these cases, users will be able to select<br />
 and configure the executables they wish to run by setting <em>a priori</em> a list of
@@ -518,7 +518,7 @@ by each command are set in the input directory. To run the simulation, all
 <code class="docutils literal notranslate"><span class="pre">OpenFOAM</span></code> needs is a pointer to the input directory and the commands.</p>
 </section>
 <section id="what-to-read-next">
-<h2>What to read next:<a class="headerlink" href="#what-to-read-next" title="Link to this heading">#</a></h2>
+<h2>What to read next:<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="#./simulators/index.md"><span class="xref myst">Available simulators</span></a></p></li>
 </ul>

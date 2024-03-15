@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
@@ -37,21 +37,21 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'how_to/manage_computational_resources';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -386,11 +386,11 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="manage-computational-resources">
-<h1>Manage Computational Resources<a class="headerlink" href="#manage-computational-resources" title="Link to this heading">#</a></h1>
+<h1>Manage Computational Resources<a class="headerlink" href="#manage-computational-resources" title="Permalink to this heading">#</a></h1>
 <p>Once you have launched your computational resources, there are a few API methods
 that help manage them and see their status. Let’s go over them one by one.</p>
 <section id="get-your-active-computational-resources">
-<h2>Get your active computational resources<a class="headerlink" href="#get-your-active-computational-resources" title="Link to this heading">#</a></h2>
+<h2>Get your active computational resources<a class="headerlink" href="#get-your-active-computational-resources" title="Permalink to this heading">#</a></h2>
 <p>In case computational resources have been launched in another Python session and
 want to manage or re-use them in another script, users can fetch the respective
 instance via the <code class="docutils literal notranslate"><span class="pre">get</span></code> method as follows:</p>
@@ -404,7 +404,7 @@ instance via the <code class="docutils literal notranslate"><span class="pre">ge
 </div>
 </section>
 <section id="list-your-active-computational-resources">
-<h2>List your active computational resources<a class="headerlink" href="#list-your-active-computational-resources" title="Link to this heading">#</a></h2>
+<h2>List your active computational resources<a class="headerlink" href="#list-your-active-computational-resources" title="Permalink to this heading">#</a></h2>
 <p>When you just want to check the active resources you can quickly list the
 information of each one either via Python or via the CLI.</p>
 <p><strong>Python</strong></p>
@@ -426,7 +426,7 @@ information of each one either via Python or via the CLI.</p>
 </div>
 </section>
 <section id="terminate-the-active-computational-resources">
-<h2>Terminate the active computational resources<a class="headerlink" href="#terminate-the-active-computational-resources" title="Link to this heading">#</a></h2>
+<h2>Terminate the active computational resources<a class="headerlink" href="#terminate-the-active-computational-resources" title="Permalink to this heading">#</a></h2>
 <p>When you have finished using your computational resources, don’t forget to terminate
 them. An advantage of Inductiva API is to control your computational
 resources and avoid them being idle.</p>

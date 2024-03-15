@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="./" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
@@ -37,21 +37,21 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="_static/copybutton.js?v=f281be69"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cli';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -393,13 +393,13 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="command-line-interface-cli">
-<h1>Command Line Interface (CLI)<a class="headerlink" href="#command-line-interface-cli" title="Link to this heading">#</a></h1>
+<h1>Command Line Interface (CLI)<a class="headerlink" href="#command-line-interface-cli" title="Permalink to this heading">#</a></h1>
 <p>Walking side by side with the Python client, the Inductiva CLI provides
 a quick and simple interface to interact and perform the most common tasks from
 the terminal. The CLI allows users to quickly manage their tasks, resources and/or
 storage, while their simulations are still running remotely.</p>
 <section id="overview-of-the-cli">
-<h2>Overview of the CLI<a class="headerlink" href="#overview-of-the-cli" title="Link to this heading">#</a></h2>
+<h2>Overview of the CLI<a class="headerlink" href="#overview-of-the-cli" title="Permalink to this heading">#</a></h2>
 <p>The CLI beauty is that its functionalities are a terminal command distance away.
 By doing,</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>inductiva
@@ -416,7 +416,7 @@ By doing,</p>
 <p>Whenever you need help on a specific command, you can always use the <code class="docutils literal notranslate"><span class="pre">--help</span></code> or
 <code class="docutils literal notranslate"><span class="pre">-h</span></code> flag to further understand its usage.</p>
 <section id="resource-management-in-the-cli">
-<h3>Resource Management in the CLI<a class="headerlink" href="#resource-management-in-the-cli" title="Link to this heading">#</a></h3>
+<h3>Resource Management in the CLI<a class="headerlink" href="#resource-management-in-the-cli" title="Permalink to this heading">#</a></h3>
 <p>As you might know by now, Inductiva API provides a simple way to <a class="reference internal" href="#"><span class="xref myst">launch
 dedicated resources</span></a> where you can run your simulations. Before launching any
 resources, users can use the CLI to gather more information about the right
@@ -471,7 +471,7 @@ Machine<span class="w"> </span>Group<span class="w"> </span>api-mym74u9i9xppi9ng
 </section>
 </section>
 <section id="task-management">
-<h2>Task Management<a class="headerlink" href="#task-management" title="Link to this heading">#</a></h2>
+<h2>Task Management<a class="headerlink" href="#task-management" title="Permalink to this heading">#</a></h2>
 <p>The power of Inductiva API lies on the ability to launch multiple simulations remotely.
 As an easy to track them, the CLI provides a <code class="docutils literal notranslate"><span class="pre">list</span></code> subcommand that provides information
 about the last tasks launched by the user. If you wish, you can also just track
@@ -506,7 +506,7 @@ Successfully<span class="w"> </span>sent<span class="w"> </span><span class="nb"
 </div>
 </section>
 <section id="streaming-logs-of-a-task">
-<h2>Streaming Logs of a Task<a class="headerlink" href="#streaming-logs-of-a-task" title="Link to this heading">#</a></h2>
+<h2>Streaming Logs of a Task<a class="headerlink" href="#streaming-logs-of-a-task" title="Permalink to this heading">#</a></h2>
 <p>While a task is running, one of the main concerns for scientists and engineers is to understand if the simulation is progressing as expected and/or if there are any errors.</p>
 <p>To help with this, the CLI provides a <code class="docutils literal notranslate"><span class="pre">logs</span></code> subcommand that allows users to stream the logs of a running task in real time. In this way, running a simulation in a powerful remote machine will
 feel exactly like running in your local computer. Example:</p>
@@ -579,12 +579,12 @@ timer<span class="w"> </span>per<span class="w"> </span>step:<span class="w"> </
 <p>This combined with the kill method, allows a quick iteration to stabilize the simulation and achieve the desired configuration.</p>
 </section>
 <section id="remote-storage-overview">
-<h2>Remote Storage overview<a class="headerlink" href="#remote-storage-overview" title="Link to this heading">#</a></h2>
+<h2>Remote Storage overview<a class="headerlink" href="#remote-storage-overview" title="Permalink to this heading">#</a></h2>
 <p>Finally, when the simulation finishes the results are saved in the user’s remote bucket.</p>
 <p>Hence, the CLI allows users to connect to their remote bucket where all the data of simulations live and manage it as they wish.</p>
 <p>To start, they can explore the storage use at any time with:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>storage<span class="w"> </span>size
-Total<span class="w"> </span>user<span class="err">&#39;</span>s<span class="w"> </span>remote<span class="w"> </span>storage<span class="w"> </span><span class="k">in</span><span class="w"> </span>use:<span class="w"> </span><span class="m">0</span>.46<span class="w"> </span>GB
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ inductiva storage size
+Total user&#39;s remote storage in use: 0.46 GB
 </pre></div>
 </div>
 <p>Thereafter, the contents of the storage can be listed as follows:</p>
@@ -612,7 +612,7 @@ Successfully removed remote path &#39;hodbisrxjxhdbkknv60xmy6ti/&#39;.
 </div>
 <p>These are the main functionalities of the CLI at the moment. In case you would like to have more access via the CLI contact us at [contact].</p>
 <section id="what-to-read-next">
-<h3>What to read next<a class="headerlink" href="#what-to-read-next" title="Link to this heading">#</a></h3>
+<h3>What to read next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="#"><code class="xref myst docutils literal notranslate"></code></a></p></li>
 </ul>

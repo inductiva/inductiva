@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
@@ -37,21 +37,21 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'introduction/tasks';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -388,7 +388,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="tasks">
-<h1>Tasks<a class="headerlink" href="#tasks" title="Link to this heading">#</a></h1>
+<h1>Tasks<a class="headerlink" href="#tasks" title="Permalink to this heading">#</a></h1>
 <p>At the heart of the API lies the concept of a <code class="docutils literal notranslate"><span class="pre">Task</span></code>.
 A task is an abstraction that encapsulates all the information about the
 computational workload defined by the user. A task is generated when a
@@ -403,7 +403,7 @@ download its output files, and more.</p>
 <li><p>using the task to retrieve the results of a simulation.</p></li>
 </ul>
 <section id="task-creation">
-<h2>Task Creation<a class="headerlink" href="#task-creation" title="Link to this heading">#</a></h2>
+<h2>Task Creation<a class="headerlink" href="#task-creation" title="Permalink to this heading">#</a></h2>
 <p>A task is created when a simulation is submitted to the API through a call to the
 <code class="docutils literal notranslate"><span class="pre">run</span></code> method of a simulator object. <em>N</em> calls to that method using the same
 arguments will produce <em>N</em> tasks, all referring to distinct executions of the
@@ -455,7 +455,7 @@ object to retrieve information about tasks created in previous sessions.</p>
 </pre></div>
 </div>
 <section id="synchronous-tasks">
-<h3>Synchronous tasks<a class="headerlink" href="#synchronous-tasks" title="Link to this heading">#</a></h3>
+<h3>Synchronous tasks<a class="headerlink" href="#synchronous-tasks" title="Permalink to this heading">#</a></h3>
 <p>Tasks are asynchronous by default. This means that the user can continue to
 interact with the API while the task is running or queued up for execution.
 This behavior allows the user to submit batches of tasks in a single session
@@ -491,7 +491,7 @@ is terminated while waiting for a <code class="docutils literal notranslate"><sp
 <code class="docutils literal notranslate"><span class="pre">sync_context()</span></code> call.</p>
 </section>
 <section id="task-lifecycle">
-<h3>Task Lifecycle<a class="headerlink" href="#task-lifecycle" title="Link to this heading">#</a></h3>
+<h3>Task Lifecycle<a class="headerlink" href="#task-lifecycle" title="Permalink to this heading">#</a></h3>
 <p>The status of a task changes as it progresses through its lifecycle.
 So far, we have given an overview of task creation and, to some extent,
 task killing but yet, a myriad of intermediate states exist, which are

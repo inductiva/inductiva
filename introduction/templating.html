@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
@@ -37,21 +37,21 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'introduction/templating';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -391,9 +391,9 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="templating-engine">
-<h1>Templating Engine<a class="headerlink" href="#templating-engine" title="Link to this heading">#</a></h1>
+<h1>Templating Engine<a class="headerlink" href="#templating-engine" title="Permalink to this heading">#</a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>The Inductiva API is all about enabling you to simulate at scale. As we have shown,
 with a few lines of Python code, you can send your simulations to MPI Clusters assembled
 from last-generation cloud hardware, letting you run much larger simulations than
@@ -403,7 +403,7 @@ to be run on those machines in parallel. Such massive parallelism is precisely
 what you need when you want to find the optimal solution for a problem, and the only way to test each candidate’s solution is by simulating it. In some cases, a typical starting point is a number of previously known good-enough solutions, and you want to test, via simulation, as many variations of those solutions as possible to find the one that best fits the problem at hand. In others, even lower assumptions are made, and the goal is to explore the largest possible area of the solution space.</p>
 </section>
 <section id="building-walls">
-<h2>Building Walls<a class="headerlink" href="#building-walls" title="Link to this heading">#</a></h2>
+<h2>Building Walls<a class="headerlink" href="#building-walls" title="Permalink to this heading">#</a></h2>
 <p>For example, suppose that for protecting a certain area on the coast, you are trying
 to find the best location and orientation for building a simple seawall, which can
 still have a number of possible variations. Suppose that you have 10 possible variations
@@ -427,7 +427,7 @@ change those simulation configuration files so that we can run 50000 <em>differe
 simulations, each one being a slight variation of the other?</p>
 </section>
 <section id="templating">
-<h2>Templating<a class="headerlink" href="#templating" title="Link to this heading">#</a></h2>
+<h2>Templating<a class="headerlink" href="#templating" title="Permalink to this heading">#</a></h2>
 <p>This is where Inductiva’s templating mechanism comes into play. Templating allows
 you to start with a specific simulation file – your “base case” – containing fixed
 values for the parameters you wish to explore and transform those fixed values into
@@ -437,7 +437,7 @@ in a simple simulation case, from which you will be able to generalize to your
 own cases.</p>
 </section>
 <section id="experimenting-fluids-with-different-properties">
-<h2>Experimenting fluids with different properties<a class="headerlink" href="#experimenting-fluids-with-different-properties" title="Link to this heading">#</a></h2>
+<h2>Experimenting fluids with different properties<a class="headerlink" href="#experimenting-fluids-with-different-properties" title="Permalink to this heading">#</a></h2>
 <p>Suppose you want to study how fluids with different properties fall inside a container
 with a cubic shape. More specifically, you want to study the effect of fluid density
 and kinematic viscosity in the splashing on the walls of the cubic container. For that,
@@ -524,7 +524,7 @@ Let’s just run it using SplishSplash in a <code class="docutils literal notran
    <img src="../_static/splishsplash-dambreak.gif" alt="SplishSplash dambreak simulation">
 </div>
 <section id="preparing-the-template-for-generalizing-the-base-case">
-<h3>Preparing the Template for generalizing the base case<a class="headerlink" href="#preparing-the-template-for-generalizing-the-base-case" title="Link to this heading">#</a></h3>
+<h3>Preparing the Template for generalizing the base case<a class="headerlink" href="#preparing-the-template-for-generalizing-the-base-case" title="Permalink to this heading">#</a></h3>
 <p>Observe that the in configuration file, the properties of the fluid (in this case water)
 are specified in the following section:</p>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">&quot;Materials&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
@@ -602,7 +602,7 @@ When templating, the <code class="docutils literal notranslate"><span class="pre
 </div>
 </section>
 <section id="exploring-the-entire-design-space">
-<h3>Exploring the entire design space<a class="headerlink" href="#exploring-the-entire-design-space" title="Link to this heading">#</a></h3>
+<h3>Exploring the entire design space<a class="headerlink" href="#exploring-the-entire-design-space" title="Permalink to this heading">#</a></h3>
 <p>The last step for generating the results we need for the study is to submit the 16
 simulations from a single script by iterating over the set of admissible values for
 both parameters. Additionally, we can save time by issuing these 16 simulations in

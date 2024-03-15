@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
@@ -37,21 +37,21 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'how_to/storage';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -392,25 +392,25 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="manage-remote-storage">
-<h1>Manage Remote Storage<a class="headerlink" href="#manage-remote-storage" title="Link to this heading">#</a></h1>
+<h1>Manage Remote Storage<a class="headerlink" href="#manage-remote-storage" title="Permalink to this heading">#</a></h1>
 <p>The Inductiva API provides you with tools to manage your remote storage effectively.
 With the Inductiva storage module, you can easily navigate your storage, evaluate
 the space used, and delete specific directories as needed.
 Let’s illustrate this with some examples.</p>
 <section id="determining-the-amount-of-storage-in-use">
-<h2>Determining the amount of storage in use<a class="headerlink" href="#determining-the-amount-of-storage-in-use" title="Link to this heading">#</a></h2>
+<h2>Determining the amount of storage in use<a class="headerlink" href="#determining-the-amount-of-storage-in-use" title="Permalink to this heading">#</a></h2>
 <p>As you start running simulations, your remote personal storage will get filled up.
 Hence, at times it will be useful to monitor the amount of storage space being utilized.
 This can be achieved as follows:</p>
 <section id="python">
-<h3>Python<a class="headerlink" href="#python" title="Link to this heading">#</a></h3>
+<h3>Python<a class="headerlink" href="#python" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 <span class="n">space_used</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">get_space_used</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
 <section id="cli">
-<h3>CLI<a class="headerlink" href="#cli" title="Link to this heading">#</a></h3>
+<h3>CLI<a class="headerlink" href="#cli" title="Permalink to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>storage<span class="w"> </span>size
 </pre></div>
 </div>
@@ -421,7 +421,7 @@ This can be achieved as follows:</p>
 </section>
 </section>
 <section id="viewing-storage-contents">
-<h2>Viewing storage contents<a class="headerlink" href="#viewing-storage-contents" title="Link to this heading">#</a></h2>
+<h2>Viewing storage contents<a class="headerlink" href="#viewing-storage-contents" title="Permalink to this heading">#</a></h2>
 <p>After determining the total storage space used, you may want to identify which directories are consuming the most storage. To be more specific, you may list
 the contents of your directory and sort them by size or creation date as follows:</p>
 <p><strong>Python</strong></p>
@@ -467,7 +467,7 @@ you can pass a path to the <code class="docutils literal notranslate"><span clas
 </pre></div>
 </div>
 <section id="removing-directories">
-<h3>Removing directories<a class="headerlink" href="#removing-directories" title="Link to this heading">#</a></h3>
+<h3>Removing directories<a class="headerlink" href="#removing-directories" title="Permalink to this heading">#</a></h3>
 <p>Whenever space needs to be freed up, or in general, when you want to remove a directory
 from your remote storage, you can use a simple interface to remove it. In particular,
 in case you want to remove everything that is also possible.</p>
@@ -478,12 +478,12 @@ in case you want to remove everything that is also possible.</p>
 </pre></div>
 </div>
 <p><strong>CLI</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>storage<span class="w"> </span>rm<span class="w"> </span>reef3d_simulation
-You<span class="w"> </span>are<span class="w"> </span>about<span class="w"> </span>to<span class="w"> </span>remove<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>paths<span class="w"> </span>from<span class="w"> </span>your<span class="w"> </span>remote<span class="w"> </span>storage<span class="w"> </span>space:
-<span class="w">  </span>-<span class="w"> </span>reef3d_simulation
-Are<span class="w"> </span>you<span class="w"> </span>sure<span class="w"> </span>you<span class="w"> </span>want<span class="w"> </span>to<span class="w"> </span>proceed<span class="w"> </span><span class="o">(</span>y/<span class="o">[</span>N<span class="o">])</span>?<span class="w"> </span>y
-Removing<span class="w"> </span>reef3d_simulation<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>user<span class="s1">&#39;s remote storage.</span>
-<span class="s1">Successfully removed remote path &#39;</span>reef3d_simulation<span class="err">&#39;</span>.
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ inductiva storage rm reef3d_simulation
+You are about to remove the following paths from your remote storage space:
+  - reef3d_simulation
+Are you sure you want to proceed (y/[N])? y
+Removing reef3d_simulation in the user&#39;s remote storage.
+Successfully removed remote path &#39;reef3d_simulation&#39;.
 </pre></div>
 </div>
 <p>Notice that you get prompted, to make sure you want to proceed with the removal.

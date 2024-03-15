@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
@@ -37,21 +37,21 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'introduction/data_flow';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -389,7 +389,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="storage-and-data-flow">
-<h1>Storage and Data Flow<a class="headerlink" href="#storage-and-data-flow" title="Link to this heading">#</a></h1>
+<h1>Storage and Data Flow<a class="headerlink" href="#storage-and-data-flow" title="Permalink to this heading">#</a></h1>
 <p>When talking about concepts like storage at Inductiva, there are 3 levels you
 need to consider:</p>
 <p><strong>Local Storage:</strong> this is the storage of your local machine, from where you are
@@ -410,7 +410,7 @@ communication to your Local Storage needs to be done via your Personal Remote St
 <p>So, what is the typical flow of that when you invoke a remote simulator using the
 Inductiva API?</p>
 <section id="local-storage">
-<h2>Local Storage<a class="headerlink" href="#local-storage" title="Link to this heading">#</a></h2>
+<h2>Local Storage<a class="headerlink" href="#local-storage" title="Permalink to this heading">#</a></h2>
 <p>Let’s start by assuming that somewhere in your local storage, typically in a
 folder dedicated to your project, you have several files that are required for
 running the simulation. Usually this data includes one or more files describing
@@ -455,7 +455,7 @@ Simulation<span class="w"> </span>metadata<span class="w"> </span>logged<span cl
 </div>
 </section>
 <section id="personal-remote-storage">
-<h2>Personal Remote Storage<a class="headerlink" href="#personal-remote-storage" title="Link to this heading">#</a></h2>
+<h2>Personal Remote Storage<a class="headerlink" href="#personal-remote-storage" title="Permalink to this heading">#</a></h2>
 <p>Once the zip file gets to the Inductiva server, it is immediately
 transferred to your Personal Remote Storage area, under a folder whose
 name is, by default, the ID for the simulation task you invoked. You can
@@ -494,7 +494,7 @@ this VM lives in the same region of the Google Cloud storage, and so moving data
 is pretty fast.</p>
 </section>
 <section id="worker-storage">
-<h2>Worker Storage<a class="headerlink" href="#worker-storage" title="Link to this heading">#</a></h2>
+<h2>Worker Storage<a class="headerlink" href="#worker-storage" title="Permalink to this heading">#</a></h2>
 <p>Of course, the receiving VM needs to have enough storage space to execute your simulation.
 Typically, the input data for a simulation is relatively small. In the example above, the
 files required to run the simulation only have <code class="docutils literal notranslate"><span class="pre">1.53</span></code> MB. The
@@ -514,7 +514,7 @@ by the user whenever required. When this process finishes the corresponding data
 in the worker is freed. Therefore, the worker storage only needs to account for a
 simulation at a time.</p>
 <section id="what-to-read-next">
-<h3>What to Read Next<a class="headerlink" href="#what-to-read-next" title="Link to this heading">#</a></h3>
+<h3>What to Read Next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h3>
 <ul class="simple">
 <li><p><a class="reference internal" href="tasks.html"><span class="doc std std-doc">Understanding Tasks</span></a></p></li>
 <li><p><a class="reference internal" href="#./resources"><span class="xref myst">Managing Resources</span></a></p></li>

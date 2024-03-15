@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" >
+<html lang="en" data-content_root="" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-188572165-1"></script>
@@ -37,21 +37,21 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
-    <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'introduction/shared_dedicated_resources';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -391,14 +391,14 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="shared-and-dedicated-resources">
-<h1>Shared and Dedicated Resources<a class="headerlink" href="#shared-and-dedicated-resources" title="Link to this heading">#</a></h1>
+<h1>Shared and Dedicated Resources<a class="headerlink" href="#shared-and-dedicated-resources" title="Permalink to this heading">#</a></h1>
 <p>In this guide, we will explain some of the main features of the Inductiva API when
 it comes to making informed decisions about resource allocation. Here, you will
 learn the two options available for running your simulations; shared and dedicated
 resources. Additionally, we will demonstrate the performance differences between
 the two resources using a SWASH simulation.</p>
 <section id="shared-resources">
-<h2>Shared Resources<a class="headerlink" href="#shared-resources" title="Link to this heading">#</a></h2>
+<h2>Shared Resources<a class="headerlink" href="#shared-resources" title="Permalink to this heading">#</a></h2>
 <p>Currently, when you submit simulation tasks via the Inductiva API, they are queued
 and dispatched to a shared pool of workers on designated Virtual Machines (VMs)
 serving multiple users, primarily utilizing resources from the <a class="reference external" href="https://cloud.google.com/compute/docs/machine-resource">Google Cloud Provider (GCP)</a>.
@@ -411,7 +411,7 @@ a larger volume of simulations, the Inductiva API provides you with the option t
 set up your own dedicated resources.</p>
 </section>
 <section id="dedicated-resources">
-<h2>Dedicated Resources<a class="headerlink" href="#dedicated-resources" title="Link to this heading">#</a></h2>
+<h2>Dedicated Resources<a class="headerlink" href="#dedicated-resources" title="Permalink to this heading">#</a></h2>
 <p>To ensure you can access the necessary computational power for your simulations
 without the constraints of a shared environment, Inductiva provides the option
 to create dedicated pools of Virtual Machine (VM) resources, exclusively
@@ -433,12 +433,12 @@ that exceed the capabilities of a single machine.</p></li>
 </ul>
 </section>
 <section id="comparison-example-swash">
-<h2>Comparison Example: SWASH<a class="headerlink" href="#comparison-example-swash" title="Link to this heading">#</a></h2>
+<h2>Comparison Example: SWASH<a class="headerlink" href="#comparison-example-swash" title="Permalink to this heading">#</a></h2>
 <p>To illustrate the performance differences between running simulations on a shared
 pool of resources and on dedicated resources using the Inductiva API, we will run
 <a class="reference internal" href="../simulators/SWASH.html"><span class="doc std std-doc">SWASH</span></a> as an example.</p>
 <section id="swash-on-shared-resources">
-<h3>SWASH on Shared Resources<a class="headerlink" href="#swash-on-shared-resources" title="Link to this heading">#</a></h3>
+<h3>SWASH on Shared Resources<a class="headerlink" href="#swash-on-shared-resources" title="Permalink to this heading">#</a></h3>
 <p>First, we’ll run the simulation using the shared pool of workers, a convenient
 option for those getting started or running less resource-intensive tasks.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
@@ -461,7 +461,7 @@ option for those getting started or running less resource-intensive tasks.</p>
 <p>In this option, it takes <strong>approximately 20 minutes</strong> to complete this simulation.</p>
 </section>
 <section id="swash-on-dedicated-resources">
-<h3>SWASH on Dedicated Resources<a class="headerlink" href="#swash-on-dedicated-resources" title="Link to this heading">#</a></h3>
+<h3>SWASH on Dedicated Resources<a class="headerlink" href="#swash-on-dedicated-resources" title="Permalink to this heading">#</a></h3>
 <p>Let’s now run the same simulation on dedicated resources, specifically set
 up for this task.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
@@ -499,7 +499,7 @@ took <strong>9 minutes and 37s</strong> to complete, which is <strong>2.68 times
 </section>
 </section>
 <section id="what-to-read-next">
-<h2>What to read next<a class="headerlink" href="#what-to-read-next" title="Link to this heading">#</a></h2>
+<h2>What to read next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
 <p>Learn how to <a class="reference internal" href="#../how_to/computational_resources"><span class="xref myst">run multiple simulations in parallel</span></a>.</p>
 <p>Learn how to <a class="reference internal" href="../how_to/mpi_cluster.html"><span class="std std-doc">set up an MPI cluster</span></a>.</p>
 </section>
