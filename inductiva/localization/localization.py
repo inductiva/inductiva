@@ -141,7 +141,7 @@ class Translator:
             key (str): Key for the translation to get.
         """
         translations = self._translations.get(self._lang)
-        if key not in translations:
+        if translations is None or key not in translations:
             translations = self._translations.get(_INDUCTIVA_DEFAULT_LANG)
         return translations.get(key, key)
 
