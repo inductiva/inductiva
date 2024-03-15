@@ -23,7 +23,7 @@ jobs:
           ref: gh-pages
           path: build
 
-      - uses: ammaraskar/sphinx-action@master
+      - uses: nicholasphair/sphinx-action@7.0.0
         with:
           docs-folder: "source/docs/"
           build-command: "sphinx-build . ../../build"
