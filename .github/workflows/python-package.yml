@@ -6,7 +6,7 @@ name: Python package
 
 on:
   push:
-    branches: [main]
+    branches: [1191-more-badges-on-the-readme]
   pull_request:
 
 jobs:
@@ -31,7 +31,7 @@ jobs:
         sudo apt-get install -y libglu1-mesa ca-certificates
         git config --global url."https://${{ secrets.BOT_REPO_ACCESS }}@github.com/inductiva/".insteadOf https://github.com/inductiva/
         python -m pip install --upgrade pip setuptools wheel
-        python -m pip install yapf pylint pytest pytest-custom_exit_code toml pytest-markdown-docs
+        python -m pip install yapf coverage coverage-badge pylint pytest pytest-custom_exit_code toml pytest-markdown-docs
         if [[ -f requirements.txt ]]; then python -m pip install -r requirements.txt; fi
     - name: Check formatting with yapf
       if: ${{ always() }}
@@ -55,3 +55,18 @@ jobs:
       with:
         fail: true
         args: --base . --no-progress './**/*_sample.md'
+    - name: Coverage report
+      if: ${{ always() }}
+      run: | # conftest crashes with coverage due to markdown-docs
+        coverage run --source=./inductiva -m pytest --noconftest 
+        coverage report -m
+    - name: Generate and push badge
+      if: ${{ always() }}
+      run: |
+        coverage-badge -f -o ./badges/cov.svg
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        git add ./badges/cov.svg
+        git commit -m "Update coverage badge for commit ${GITHUB_SHA}"
+        git push origin main
+
