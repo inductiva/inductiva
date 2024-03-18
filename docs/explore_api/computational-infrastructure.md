@@ -83,7 +83,7 @@ we put in place through the current version of the API.
 
 ````{eval-rst}
 .. seealso::
-   Learn how to manage your computational resources through `Inductiva's Command Line Interface <https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/development/cli/cli-overview.html>`_
+   Learn how to manage your computational resources through `Inductiva's Command Line Interface <../cli/cli-overview.html>`_
 ````  
 
 ## Upcoming Computational Resources
