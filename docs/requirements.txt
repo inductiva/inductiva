@@ -1,7 +1,0 @@
-sphinx
-sphinx_rtd_theme
-sphinx-book-theme
-sphinxcontrib-mermaid
-myst-parser
-sphinx-copybutton
-sphinxcontrib-googleanalytics
