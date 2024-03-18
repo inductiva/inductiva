@@ -30,6 +30,35 @@ def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     return path.with_name(name + path.suffix)
 
 
+def get_path_size(path: types.Path) -> float:
+    """Return the size of a path in bytes.
+    
+    Args:
+        path: Path to a file or directory.
+    
+    Returns:
+        The size of the path in bytes.
+    """
+
+    path = pathlib.Path(path)
+
+    if not path.exists():
+        raise FileNotFoundError(f"Path '{path}' does not exist.")
+
+    if path.is_file():
+        return path.stat().st_size
+
+    size = 0
+
+    for root, _, files in os.walk(path):
+        root = pathlib.Path(root)
+        size += root.stat().st_size
+        for file in files:
+            fp = root / file
+            size += fp.stat().st_size
+    return size
+
+
 def resolve_output_path(path: Optional[types.Path]) -> pathlib.Path:
     """Resolve a path relative to the output_dir
 
