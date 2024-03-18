@@ -6,7 +6,7 @@ name: Python package
 
 on:
   push:
-    branches: [1191-more-badges-on-the-readme]
+    branches: [main]
   pull_request:
 
 jobs:
@@ -20,6 +20,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+      with:
+        ref: Inductiva-badges
+        path: badges-folder
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -29,7 +33,6 @@ jobs:
         BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
       run: |
         sudo apt-get install -y libglu1-mesa ca-certificates
-        git config --global url."https://${{ secrets.BOT_REPO_ACCESS }}@github.com/inductiva/".insteadOf https://github.com/inductiva/
         python -m pip install --upgrade pip setuptools wheel
         python -m pip install yapf coverage coverage-badge pylint pytest pytest-custom_exit_code toml pytest-markdown-docs
         if [[ -f requirements.txt ]]; then python -m pip install -r requirements.txt; fi
@@ -60,13 +63,18 @@ jobs:
       run: | # conftest crashes with coverage due to markdown-docs
         coverage run --source=./inductiva -m pytest --noconftest 
         coverage report -m
-    - name: Generate and push badge
+    - name: Generate badge
       if: ${{ always() }}
       run: |
-        coverage-badge -f -o ./badges/cov.svg
+        coverage-badge -f -o ./badges-folder/badges/cov.svg
+    - name: Push badge
+      if: ${{ always() }}
+      working-directory: badges-folder
+      run: |
         git config user.name "${GITHUB_ACTOR}"
         git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-        git add ./badges/cov.svg
-        git commit -m "Update coverage badge for commit ${GITHUB_SHA}"
-        git push origin 1191-more-badges-on-the-readme
+        git diff --quiet || ( \
+          git add ./badges/cov.svg && \
+          git commit -m "Update coverage badge for commit ${GITHUB_SHA}")
+        git push origin Inductiva-badges
 
