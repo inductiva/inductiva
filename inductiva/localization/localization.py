@@ -77,19 +77,21 @@ class Translator:
             if lang in self._translations:
                 return
 
-            self._load(lang)
-            self._lang = lang
+            if self._load(lang):
+                self._lang = lang
 
-    def _load(self, lang: str) -> None:
+    def _load(self, lang: str) -> bool:
         """Load the translation file for the given language.
 
+        Returns True if the language file was successfully
+        loaded, False otherwise.
         NOTE: This method is not thread-safe.
 
         Args:
             lang (str): Name of the language to load.
         """
         if not lang:
-            return
+            return False
 
         lang = lang.lower()
         pathname = self.TRANSLATIONS_DIR / f"{lang}.json"
@@ -101,7 +103,7 @@ class Translator:
                 "Translation file not available for language '%s'. "
                 "Will use '%s' as default language.", lang,
                 _INDUCTIVA_DEFAULT_LANG)
-            return
+            return False
 
         with open(pathname, "r", encoding="utf-8") as f:
             translations = json.load(f)
@@ -111,6 +113,7 @@ class Translator:
                 translations[key] = "\n".join(translation)
 
         self._translations[lang] = translations
+        return True
 
     def __call__(self, key, *args, **kwargs) -> Template:
         """Return a Template object with the translation for the given key as
