@@ -24,15 +24,15 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.gcpvm_group import GCPVMGroup
+from inductiva.client.model.vm_group_config import VMGroupConfig
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
 
 # body param
-SchemaForRequestBodyApplicationJson = GCPVMGroup
+SchemaForRequestBodyApplicationJson = VMGroupConfig
 
-request_body_gcpvm_group = api_client.RequestBody(
+request_body_vm_group_config = api_client.RequestBody(
     content={
         'application/json':
             api_client.MediaType(schema=SchemaForRequestBodyApplicationJson),
@@ -185,7 +185,8 @@ class BaseApi(api_client.Api):
             )
         _fields = None
         _body = None
-        serialized_data = request_body_gcpvm_group.serialize(body, content_type)
+        serialized_data = request_body_vm_group_config.serialize(
+            body, content_type)
         _headers.add('Content-Type', content_type)
         if 'fields' in serialized_data:
             _fields = serialized_data['fields']

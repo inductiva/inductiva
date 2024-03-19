@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.gcpvm_group import GCPVMGroup
+from inductiva.client.model.vm_group_config import VMGroupConfig
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Path params
@@ -54,7 +54,7 @@ request_path_name = api_client.PathParameter(
     schema=NameSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = GCPVMGroup
+SchemaFor200ResponseBodyApplicationJson = VMGroupConfig
 
 
 @dataclass

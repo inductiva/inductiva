@@ -28,7 +28,7 @@ class BaseVMGroup(schemas.DictSchema):
 
     Do not edit the class manually.
 
-    Base schema for creating a machine groups.
+    Machine group base schema.
     """
 
     class MetaOapg:
