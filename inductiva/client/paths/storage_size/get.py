@@ -30,15 +30,16 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 from . import path
 
 # Query params
-ProviderSchema = Providers
+ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams', {
-        'provider': typing.Union[
-            ProviderSchema,
-        ],
-    })
+    'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {}, total=False)
+    'RequestOptionalQueryParams', {
+        'provider_id': typing.Union[
+            ProviderIdSchema,
+        ],
+    },
+    total=False)
 
 
 class RequestQueryParams(RequestRequiredQueryParams,
@@ -46,11 +47,10 @@ class RequestQueryParams(RequestRequiredQueryParams,
     pass
 
 
-request_query_provider = api_client.QueryParameter(
-    name="provider",
+request_query_provider_id = api_client.QueryParameter(
+    name="provider_id",
     style=api_client.ParameterStyle.FORM,
-    schema=ProviderSchema,
-    required=True,
+    schema=ProviderIdSchema,
     explode=True,
 )
 _auth = [
@@ -161,7 +161,7 @@ class BaseApi(api_client.Api):
         used_path = path.value
 
         prefix_separator_iterator = None
-        for parameter in (request_query_provider,):
+        for parameter in (request_query_provider_id,):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
