@@ -8,6 +8,8 @@ you to stream the logs of a running task in **real time**.
 In this way, running a simulation on a powerful remote machine will feel exactly 
 like running it on your local computer!
 
+### Check the Log Stream
+
 Here's an example of how you can use the `logs` subcommand to stay updated on your simulation's 
 progress. This command connects you directly to the ongoing logs of the specified 
 task, displaying updates such as computation steps, residuals, and execution times as 
@@ -83,7 +85,39 @@ timer per step: 0.00873
 Combining both subcommand `log` and `kill` will allow you to quickly adjust or 
 terminate simulations to achieve the desired simulation configurations.
 
-At the end of the simulation, the log stream will pause without new messages. In 
-this case, you can exit the log stream by simply using `Ctrl+C`, which stops the 
-log monitoring without affecting the simulation or its outputs.
+### Save the Log Stream
 
+When the simulation ends, the log stream will automatically close, indicating
+that there are no new messages. The stream consumer's shutdown doesn't impact the 
+simulation or its outputs, and you don't need to take any further action.
+
+You can save the log stream content and the stream consumer's status for later 
+inspection by redirecting them to a file:
+
+- **Redirect stdout to a file**: You can redirect stdout (file descriptor 1) to 
+a file with the redirection operator (`>`) to save the entire log stream content. 
+For example:
+
+    ```bash
+    $ inductiva logs TASK_ID 1>out.txt
+    ```
+- **Redirect stderr to a file**: You can redirect the status of the stream consumer, 
+outputted to stderr (file descriptor 2), to a file like this:
+
+    ```bash
+    $ inductiva logs TASK_ID 2>err.txt
+    ```
+- **Redirect stdout and stderr to separate files**: You can redirect both stdout 
+and stderr simultaneously to separate files using:
+
+    ```bash
+    $ inductiva logs TASK_ID 1>out.txt 2>err.txt
+    ```
+- **Disable ANSI globally**: If you need to disable ANSI escape codes, which are 
+used to support the status bar at the bottom of the log stream, either export the 
+`ANSI_ENABLED` environment variable or set it locally:
+
+    ```bash
+    $ export ANSI_ENABLED=0 # Applies to the entire shell session
+    $ ANSI_ENABLED=0 inductiva logs TASK_ID. # Applies only to this command
+    ```
