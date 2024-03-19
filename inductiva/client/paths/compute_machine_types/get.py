@@ -24,42 +24,25 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.machine_type import MachineType
 
 from . import path
 
 # Query params
-
-
-class ProviderSchema(schemas.EnumBase, schemas.StrSchema):
-
-    class MetaOapg:
-        enum_value_to_name = {
-            "GCP": "GCP",
-            "local": "LOCAL",
-        }
-
-    @schemas.classproperty
-    def GCP(cls):
-        return cls("GCP")
-
-    @schemas.classproperty
-    def LOCAL(cls):
-        return cls("local")
-
-
 MachineFamilySchema = schemas.StrSchema
+ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
-        'provider': typing.Union[
-            ProviderSchema,
-            str,
-        ],
         'machine_family': typing.Union[
             MachineFamilySchema,
             str,
+        ],
+        'provider_id': typing.Union[
+            ProviderIdSchema,
         ],
     },
     total=False)
@@ -70,22 +53,45 @@ class RequestQueryParams(RequestRequiredQueryParams,
     pass
 
 
-request_query_provider = api_client.QueryParameter(
-    name="provider",
-    style=api_client.ParameterStyle.FORM,
-    schema=ProviderSchema,
-    explode=True,
-)
 request_query_machine_family = api_client.QueryParameter(
     name="machine_family",
     style=api_client.ParameterStyle.FORM,
     schema=MachineFamilySchema,
     explode=True,
 )
+request_query_provider_id = api_client.QueryParameter(
+    name="provider_id",
+    style=api_client.ParameterStyle.FORM,
+    schema=ProviderIdSchema,
+    explode=True,
+)
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+
+
+class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
+
+    class MetaOapg:
+
+        @staticmethod
+        def items() -> typing.Type['MachineType']:
+            return MachineType
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple['MachineType'],
+                           typing.List['MachineType']],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'SchemaFor200ResponseBodyApplicationJson':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> 'MachineType':
+        return super().__getitem__(i)
 
 
 @dataclass
@@ -191,8 +197,8 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-                request_query_provider,
                 request_query_machine_family,
+                request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:

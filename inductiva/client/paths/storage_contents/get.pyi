@@ -58,12 +58,11 @@ class OrderSchema(
     @schemas.classproperty
     def DESC(cls):
         return cls("desc")
-ProviderSchema = Providers
 PathSchema = schemas.StrSchema
+ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
-        'provider': typing.Union[ProviderSchema, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
@@ -73,6 +72,7 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
         'sort_by': typing.Union[SortBySchema, str, ],
         'order': typing.Union[OrderSchema, str, ],
         'path': typing.Union[PathSchema, str, ],
+        'provider_id': typing.Union[ProviderIdSchema, ],
     },
     total=False
 )
@@ -100,17 +100,16 @@ request_query_order = api_client.QueryParameter(
     schema=OrderSchema,
     explode=True,
 )
-request_query_provider = api_client.QueryParameter(
-    name="provider",
-    style=api_client.ParameterStyle.FORM,
-    schema=ProviderSchema,
-    required=True,
-    explode=True,
-)
 request_query_path = api_client.QueryParameter(
     name="path",
     style=api_client.ParameterStyle.FORM,
     schema=PathSchema,
+    explode=True,
+)
+request_query_provider_id = api_client.QueryParameter(
+    name="provider_id",
+    style=api_client.ParameterStyle.FORM,
+    schema=ProviderIdSchema,
     explode=True,
 )
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
@@ -214,8 +213,8 @@ class BaseApi(api_client.Api):
             request_query_max_results,
             request_query_sort_by,
             request_query_order,
-            request_query_provider,
             request_query_path,
+            request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:

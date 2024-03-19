@@ -29,16 +29,16 @@ from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
-ProviderSchema = Providers
+ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
-        'provider': typing.Union[ProviderSchema, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
+        'provider_id': typing.Union[ProviderIdSchema, ],
     },
     total=False
 )
@@ -48,11 +48,10 @@ class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams)
     pass
 
 
-request_query_provider = api_client.QueryParameter(
-    name="provider",
+request_query_provider_id = api_client.QueryParameter(
+    name="provider_id",
     style=api_client.ParameterStyle.FORM,
-    schema=ProviderSchema,
-    required=True,
+    schema=ProviderIdSchema,
     explode=True,
 )
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
@@ -153,7 +152,7 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_provider,
+            request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
