@@ -25,10 +25,10 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
-PathSchema = schemas.StrSchema
 MaxResultsSchema = schemas.IntSchema
 
 
@@ -58,18 +58,21 @@ class OrderSchema(
     @schemas.classproperty
     def DESC(cls):
         return cls("desc")
+ProviderSchema = Providers
+PathSchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
+        'provider': typing.Union[ProviderSchema, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'path': typing.Union[PathSchema, str, ],
         'max_results': typing.Union[MaxResultsSchema, decimal.Decimal, int, ],
         'sort_by': typing.Union[SortBySchema, str, ],
         'order': typing.Union[OrderSchema, str, ],
+        'path': typing.Union[PathSchema, str, ],
     },
     total=False
 )
@@ -79,12 +82,6 @@ class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams)
     pass
 
 
-request_query_path = api_client.QueryParameter(
-    name="path",
-    style=api_client.ParameterStyle.FORM,
-    schema=PathSchema,
-    explode=True,
-)
 request_query_max_results = api_client.QueryParameter(
     name="max_results",
     style=api_client.ParameterStyle.FORM,
@@ -101,6 +98,19 @@ request_query_order = api_client.QueryParameter(
     name="order",
     style=api_client.ParameterStyle.FORM,
     schema=OrderSchema,
+    explode=True,
+)
+request_query_provider = api_client.QueryParameter(
+    name="provider",
+    style=api_client.ParameterStyle.FORM,
+    schema=ProviderSchema,
+    required=True,
+    explode=True,
+)
+request_query_path = api_client.QueryParameter(
+    name="path",
+    style=api_client.ParameterStyle.FORM,
+    schema=PathSchema,
     explode=True,
 )
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
@@ -201,10 +211,11 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_path,
             request_query_max_results,
             request_query_sort_by,
             request_query_order,
+            request_query_provider,
+            request_query_path,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:

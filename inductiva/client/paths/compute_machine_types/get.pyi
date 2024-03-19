@@ -25,22 +25,34 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
-ProviderSchema = Providers
-PathSchema = schemas.StrSchema
+
+
+class ProviderSchema(
+    schemas.EnumBase,
+    schemas.StrSchema
+):
+    
+    @schemas.classproperty
+    def GCP(cls):
+        return cls("GCP")
+    
+    @schemas.classproperty
+    def LOCAL(cls):
+        return cls("local")
+MachineFamilySchema = schemas.StrSchema
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
-        'provider': typing.Union[ProviderSchema, ],
     }
 )
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'path': typing.Union[PathSchema, str, ],
+        'provider': typing.Union[ProviderSchema, str, ],
+        'machine_family': typing.Union[MachineFamilySchema, str, ],
     },
     total=False
 )
@@ -54,13 +66,12 @@ request_query_provider = api_client.QueryParameter(
     name="provider",
     style=api_client.ParameterStyle.FORM,
     schema=ProviderSchema,
-    required=True,
     explode=True,
 )
-request_query_path = api_client.QueryParameter(
-    name="path",
+request_query_machine_family = api_client.QueryParameter(
+    name="machine_family",
     style=api_client.ParameterStyle.FORM,
-    schema=PathSchema,
+    schema=MachineFamilySchema,
     explode=True,
 )
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
@@ -108,7 +119,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _delete_path_oapg(
+    def _list_available_machine_types_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -120,7 +131,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _delete_path_oapg(
+    def _list_available_machine_types_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -130,7 +141,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _delete_path_oapg(
+    def _list_available_machine_types_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -142,7 +153,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _delete_path_oapg(
+    def _list_available_machine_types_oapg(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -151,7 +162,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Delete Path
+        List Available Machine Types
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -162,7 +173,7 @@ class BaseApi(api_client.Api):
         prefix_separator_iterator = None
         for parameter in (
             request_query_provider,
-            request_query_path,
+            request_query_machine_family,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
@@ -181,7 +192,7 @@ class BaseApi(api_client.Api):
 
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='delete'.upper(),
+            method='get'.upper(),
             headers=_headers,
             auth_settings=_auth,
             stream=stream,
@@ -207,11 +218,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class DeletePath(BaseApi):
+class ListAvailableMachineTypes(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def delete_path(
+    def list_available_machine_types(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -223,7 +234,7 @@ class DeletePath(BaseApi):
     ]: ...
 
     @typing.overload
-    def delete_path(
+    def list_available_machine_types(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -233,7 +244,7 @@ class DeletePath(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def delete_path(
+    def list_available_machine_types(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -245,7 +256,7 @@ class DeletePath(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def delete_path(
+    def list_available_machine_types(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -253,7 +264,7 @@ class DeletePath(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_path_oapg(
+        return self._list_available_machine_types_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
@@ -262,11 +273,11 @@ class DeletePath(BaseApi):
         )
 
 
-class ApiFordelete(BaseApi):
+class ApiForget(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def delete(
+    def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -278,7 +289,7 @@ class ApiFordelete(BaseApi):
     ]: ...
 
     @typing.overload
-    def delete(
+    def get(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         query_params: RequestQueryParams = frozendict.frozendict(),
@@ -288,7 +299,7 @@ class ApiFordelete(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def delete(
+    def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -300,7 +311,7 @@ class ApiFordelete(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def delete(
+    def get(
         self,
         query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -308,7 +319,7 @@ class ApiFordelete(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_path_oapg(
+        return self._list_available_machine_types_oapg(
             query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
