@@ -25,5 +25,5 @@ on queue and reset if any arrive: 30 min
 
 Please note that at the moment, the janitor is clumsy and doesn't know how to handle
 the data of running simulations. So please be mindful of the time your simulations
-may take to run, and if this doesn't suffice for your needs, please [contact us](support@inductiva.ai).
+may take to run, and if this doesn't suffice for your needs, please [contact us](mailto:support@inductiva.ai).
 
