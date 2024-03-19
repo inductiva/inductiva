@@ -52,7 +52,7 @@ Notice that the `remove` command can take multiple paths as arguments, and even
 remove everything with the `--all` flag.
 
 These are the main functionalities of the CLI for storage at the moment. In case
-you would like to have more functionalities via the CLI [contact us](support@inductiva.ai).
+you would like to have more functionalities via the CLI [contact us](mailto:support@inductiva.ai).
 
 #### What to read next
 * []()
