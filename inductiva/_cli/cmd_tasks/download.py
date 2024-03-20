@@ -11,6 +11,9 @@ def download_outputs(args):
     filenames = args.filenames
     output_dir = args.output_dir
 
+    if output_dir is not None:
+        inductiva.set_output_dir(output_dir)
+
     if not task_ids:
         print("No ID(s) specified.\n"
               "> Use `inductiva tasks download -h` for help.")
@@ -19,14 +22,9 @@ def download_outputs(args):
     task_ids = set(task_ids)
 
     for task_id in task_ids:
-        if output_dir is not None:
-            output_dir_task = pathlib.Path(output_dir) / task_id
-        else:
-            output_dir_task = None
         try:
             task = inductiva.tasks.Task(task_id)
-            task.download_outputs(filenames=filenames,
-                                  output_dir=output_dir_task)
+            task.download_outputs(filenames=filenames)
         except inductiva.client.exceptions.ApiException as exc:
             print(f"Error for task {task_id}:", exc)
     return 0
