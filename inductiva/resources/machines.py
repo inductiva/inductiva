@@ -4,6 +4,7 @@ from absl import logging
 from typing import Literal
 from inductiva.resources import machines_base
 
+
 def _check_ice_args(num_machines: int, spot: bool):
 
     if num_machines > 1:
