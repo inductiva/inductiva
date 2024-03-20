@@ -118,6 +118,14 @@ def list(fout: TextIO = sys.stdout):
         print("No active computational resources found.", file=fout, end="")
 
 
+def get_by_name(machine_name: str):
+    """Returns the machine group corresponding to `machine_name`."""
+    machine_groups = _fetch_machine_groups_from_api()
+    machine_group = next(
+        (mg for mg in machine_groups if mg["name"] == machine_name), None)
+    return machine_group
+
+
 def get():
     """Returns a list of 'Resource' objects."""
 
