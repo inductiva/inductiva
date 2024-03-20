@@ -51,7 +51,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
-        provider = machines_base.ProviderType(provider)
 
         if num_machines < 1:
             raise ValueError(
