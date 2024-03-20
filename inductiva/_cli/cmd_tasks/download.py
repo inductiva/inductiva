@@ -13,6 +13,10 @@ def download_outputs(args):
     if output_dir is not None:
         inductiva.set_output_dir(output_dir)
 
+    if output_dir == "":
+        print("`ouput_dir` must not be an empty string.")
+        return 1
+
     if not task_ids:
         print("No ID(s) specified.\n"
               "> Use `inductiva tasks download -h` for help.")
