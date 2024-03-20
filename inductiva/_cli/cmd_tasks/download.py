@@ -24,8 +24,9 @@ def download_outputs(args):
         else:
             output_dir_task = None
         try:
-            inductiva.tasks.Task(task_id).download_outputs(
-                filenames=filenames, output_dir=output_dir_task)
+            task = inductiva.tasks.Task(task_id)
+            task.download_outputs(filenames=filenames,
+                                  output_dir=output_dir_task)
         except inductiva.client.exceptions.ApiException as exc:
             print(f"Error for task {task_id}:", exc)
     return 0
@@ -39,10 +40,13 @@ def register(parser):
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
-        "The `inductiva tasks download` command allows to download the outputs"
-        " of specified tasks "
-        "on the platform.\n"
-        "You can download multiple tasks by passing multiple ids.\n")
+        "Download the output files produced in the context of the tasks with "
+        "the given ID(s).\nAll files are downloaded unless the --filenames"
+        " list is given, in which case only\n the indicated files for each task"
+        " are downloaded.\n"
+        "The name of the output folder can be configured "
+        "through the --output_dir option.\nFiles are downloaded to a "
+        "subdirectory named after the ID of the corresponding task.")
 
     subparser.add_argument("id",
                            type=str,
