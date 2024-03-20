@@ -41,13 +41,13 @@ def register(parser):
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
-        "Download the output files produced in the context of the tasks with "
-        "the given ID(s).\nAll files are downloaded unless the --filenames"
-        " list is given, in which case only\n the indicated files for each task"
+        "Download the output files produced in the context of the tasks with\n"
+        "the given ID(s). All files are downloaded unless the --filenames\n"
+        "list is given, in which case only the indicated files for each task\n"
         " are downloaded.\n"
-        "The name of the output folder can be configured "
-        "through the --output_dir option.\nFiles are downloaded to a "
-        "subdirectory named after the ID of the corresponding task.")
+        "The name of the output folder can be configured through the\n"
+        "--output_dir option. Files are downloaded to a subdirectory\n"
+        "named after the ID of the corresponding task.")
 
     subparser.add_argument("id",
                            type=str,
