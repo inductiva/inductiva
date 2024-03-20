@@ -76,6 +76,8 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+html_favicon = 'favicon.ico'
+
 # Google Analytics
 googleanalytics_id = "UA-188572165-1"
 googleanalytics_enabled = "true"
