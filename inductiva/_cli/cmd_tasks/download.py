@@ -1,5 +1,4 @@
 """Download the outputs of a task by ID via CLI."""
-import pathlib
 import argparse
 
 import inductiva
