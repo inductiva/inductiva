@@ -1,7 +1,7 @@
 """Classes to manage different Google Cloud machine group types."""
 from absl import logging
 
-from typing import Literal
+from typing import Union
 from inductiva.resources import machines_base
 
 
@@ -27,7 +27,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __init__(
         self,
         machine_type: str,
-        provider: Literal["GCP", "ICE"] = "GCP",
+        provider: Union[str, machines_base.ProviderType] = "GCP",
         num_machines: int = 1,
         spot: bool = False,
         data_disk_gb: int = 10,
@@ -51,6 +51,8 @@ class MachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
+        provider = machines_base.ProviderType(provider)
+
         if num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
