@@ -123,7 +123,23 @@ def get_by_name(machine_name: str):
     machine_groups = _fetch_machine_groups_from_api()
     machine_group = next(
         (mg for mg in machine_groups if mg["name"] == machine_name), None)
-    return machine_group
+    if machine_group is not None:
+        mg_class = _get_machine_group_class_from_api_response(machine_group)
+        return mg_class.from_api_response(machine_group)
+    return None
+
+
+def _get_machine_group_class_from_api_response(mg: dict):
+    """Returns the class of the machine group"""
+    if mg["is_elastic"]:
+        mg_class = resources.ElasticMachineGroup
+    elif mg["type"] == "standard":
+        mg_class = resources.MachineGroup
+    elif mg["type"] == "mpi":
+        mg_class = resources.MPICluster
+    else:
+        raise ValueError("Unknown resource configuration.")
+    return mg_class
 
 
 def get():
@@ -134,14 +150,7 @@ def get():
     machine_group_list = []
 
     for mg in machine_groups:
-        if mg["is_elastic"]:
-            mg_class = resources.ElasticMachineGroup
-        elif mg["type"] == "standard":
-            mg_class = resources.MachineGroup
-        elif mg["type"] == "mpi":
-            mg_class = resources.MPICluster
-        else:
-            raise ValueError("Unknown resource configuration.")
+        mg_class = _get_machine_group_class_from_api_response(mg)
         machine_group_list.append(mg_class.from_api_response(mg))
 
     return machine_group_list
