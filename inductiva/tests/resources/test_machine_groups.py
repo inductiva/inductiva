@@ -14,7 +14,6 @@ BASE_RESPONSE = {
     "num_vms": 2,
     "min_vms": 1,
     "provider_id": "GCP",
-    "provider": "GCP",
 }
 
 RESPONSE_1 = {**BASE_RESPONSE, **{"type": "standard", "is_elastic": False}}
@@ -31,12 +30,20 @@ EXPECTED_RESULTS = [
 
 @pytest.mark.parametrize("response, expected_result",
                          zip(RESPONSES, EXPECTED_RESULTS))
-@mock.patch("inductiva.client.apis.tags.compute_api.ComputeApi")
-def test_get_by_name(mock_compute_api, response, expected_result):
-    mock_response = mock.MagicMock()
-    mock_response.body = response
-    (mock_compute_api.return_value.get_vm_group_by_name.return_value
-    ) = mock_response
-    result = inductiva.resources.machine_groups.get_by_name("mock_machine_name")
+def test_get_by_name(response, expected_result):
+    with mock.patch(
+            "inductiva.resources.machine_groups.compute_api.ComputeApi"
+    ) as mock_compute_api, mock.patch(
+            "inductiva.resources.machines_base.list_available_machines"
+    ) as mock_list_available_machines:
+        mock_response = mock.MagicMock()
+        mock_response.body = response
+
+        mock_list_available_machines.return_value = ["c2-standard-4"]
+
+        mock_get_vm_group_by_name = mock.MagicMock(return_value=mock_response)
+        mock_compute_api.return_value.get_vm_group_by_name = mock_get_vm_group_by_name
+
+        result = inductiva.resources.machine_groups.get_by_name("dummy_name")
 
     assert isinstance(result, expected_result)
