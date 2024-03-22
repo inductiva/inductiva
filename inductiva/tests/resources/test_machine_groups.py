@@ -13,9 +13,17 @@ BASE_RESPONSE = {
     "max_vms": 2,
     "num_vms": 2,
     "min_vms": 1,
+    "provider_id": "GCP",
 }
 
-RESPONSE_1 = {**BASE_RESPONSE, **{"type": "standard", "is_elastic": False}}
+RESPONSE_1 = {
+    **BASE_RESPONSE,
+    **{
+        "type": "standard",
+        "is_elastic": False,
+        "provider": "GCP",
+    }
+}
 RESPONSE_2 = {**BASE_RESPONSE, **{"type": "mpi", "is_elastic": False}}
 RESPONSE_3 = {**BASE_RESPONSE, **{"type": "standard", "is_elastic": True}}
 
