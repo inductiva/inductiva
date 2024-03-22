@@ -143,9 +143,9 @@ class BaseMachineGroup:
 
         return machine_group
 
-    def _update_termination_timers(self,
-                                   max_idle_time: float = None,
-                                   auto_terminate: Union[str, float] = None):
+    def update_termination_timers(self,
+                                  max_idle_time: float = None,
+                                  auto_terminate: Union[str, float] = None):
         """Helper function to update the termination timers of a machine group.
 
         At the moment, this serves as an helper function, but it could also be
@@ -155,7 +155,7 @@ class BaseMachineGroup:
             max_idle_time (float): Time in minutes that the machine can remain
                 idle.
             auto_terminate (float, str): Time to automatically terminate the
-                machines independently of any simulations being running there.
+                machines independently of any simulations running there.
                 The time can be a float, indicating the number of hours the
                 machine up until the machine can be up, or an actual timestamp
                 with the format '2024-12-31T00:00:00+00'.
@@ -227,7 +227,7 @@ class BaseMachineGroup:
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
 
-        self._update_termination_timers(max_idle_time, auto_terminate)
+        self.update_termination_timers(max_idle_time, auto_terminate)
 
         try:
 
