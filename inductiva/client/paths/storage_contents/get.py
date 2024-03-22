@@ -25,6 +25,7 @@ import frozendict  # noqa: F401
 from inductiva.client import schemas  # noqa: F401
 
 from inductiva.client.model.providers import Providers
+from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
@@ -135,7 +136,42 @@ request_query_provider_id = api_client.QueryParameter(
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
+
+
+class SchemaFor200ResponseBodyApplicationJson(schemas.DictSchema):
+
+    class MetaOapg:
+
+        @staticmethod
+        def additional_properties() -> typing.Type['StorageFileInfo']:
+            return StorageFileInfo
+
+    def __getitem__(self, name: typing.Union[
+        str,
+    ]) -> 'StorageFileInfo':
+        # dict_instance[name] accessor
+        return super().__getitem__(name)
+
+    def get_item_oapg(self, name: typing.Union[
+        str,
+    ]) -> 'StorageFileInfo':
+        return super().get_item_oapg(name)
+
+    def __new__(
+        cls,
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+        ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+        **kwargs: 'StorageFileInfo',
+    ) -> 'SchemaFor200ResponseBodyApplicationJson':
+        return super().__new__(
+            cls,
+            *_args,
+            _configuration=_configuration,
+            **kwargs,
+        )
 
 
 @dataclass
