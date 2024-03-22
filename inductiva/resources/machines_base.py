@@ -133,10 +133,10 @@ class BaseMachineGroup:
         machine_group = cls(
             machine_type=resp["machine_type"],
             data_disk_gb=resp["disk_size_gb"],
-            provider=resp["provider_id"],
             register=False,
         )
         machine_group._id = resp["id"]
+        machine_group.provider = resp["provider_id"]
         machine_group._name = resp["name"]
         machine_group.create_time = resp["creation_timestamp"]
         machine_group._started = True
