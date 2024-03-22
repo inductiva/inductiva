@@ -1,3 +1,20 @@
+ice: 
+  description: Machine types provided in ICE cloud.
+  cpu-series:
+    c2:
+      description: Intel Core (12th Gen) i9 processor.
+      types:
+        highmem:
+          vcpus: [4, 8]
+          lssd: False
+          description: 8 GB of memory per vCPU.
+    g2:
+      description: Nvidia 4090 GPU combined with Intel Core (12th Gen) i9 processor.
+      types: 
+        standard:
+          vcpus: [4]
+          lssd: False
+          description: 4 GB of memory per vCPU.
 gcp: 
   description: Machine types provided in Google Cloud
   cpu-series:
@@ -12,17 +29,17 @@ gcp:
       description: Intel Xeon Sapphire Rapids (4th Gen) processor.
       types:
         highcpu:
-            vcpus: &c3_vcpus [4, 8, 22, 44, 88, 176]
-            lssd: False
-            description: 2 GB of memory per vCPU.
+          vcpus: &c3_vcpus [4, 8, 22, 44, 88, 176]
+          lssd: False
+          description: 2 GB of memory per vCPU.
         standard:
-            vcpus: *c3_vcpus
-            lssd: True
-            description: 4 GB of memory per vCPU and possible local ssd integration.
+          vcpus: *c3_vcpus
+          lssd: True
+          description: 4 GB of memory per vCPU and possible local ssd integration.
         highmem:
-            vcpus: *c3_vcpus
-            lssd: False
-            description: 8 GB of RAM memory per vCPU.
+          vcpus: *c3_vcpus
+          lssd: False
+          description: 8 GB of RAM memory per vCPU.
     h3:
       description: |-
         (Available Soon) Intel Xeon Sapphire Rapids (4th Gen) processor.

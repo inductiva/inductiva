@@ -1,7 +1,19 @@
 """Classes to manage different Google Cloud machine group types."""
 from absl import logging
 
+from typing import Union
 from inductiva.resources import machines_base
+
+
+def _check_ice_args(num_machines: int, spot: bool):
+
+    if num_machines > 1:
+        raise ValueError(
+            "ICE provider only supports launching one machine at a time.")
+
+    if spot:
+        raise ValueError(
+            "ICE provider only supports persistent machine launch.")
 
 
 class MachineGroup(machines_base.BaseMachineGroup):
@@ -15,6 +27,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __init__(
         self,
         machine_type: str,
+        provider: Union[str, machines_base.ProviderType] = "GCP",
         num_machines: int = 1,
         spot: bool = False,
         data_disk_gb: int = 10,
@@ -38,13 +51,19 @@ class MachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
+
         if num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
 
+        if provider == "ICE":
+            _check_ice_args(num_machines, spot)
+
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
+                         provider=provider,
                          register=register)
+
         # Num_machines is the number of requested machines
         self.num_machines = num_machines
         #Number of active machines at the time of
@@ -63,6 +82,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["max_vms"])
+        machine_group.provider = resp["provider"]
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
         machine_group.spot = bool(resp["spot"])
         machine_group.register = False

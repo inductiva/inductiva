@@ -1,6 +1,7 @@
 """Base class for machine groups."""
 import time
 import enum
+from typing import Union
 from abc import abstractmethod
 
 import logging
@@ -13,6 +14,8 @@ from inductiva.client.apis.tags import compute_api
 from inductiva.client import exceptions
 from inductiva import logs
 
+from .machine_types import list_available_machines
+
 
 class ResourceType(enum.Enum):
     """Enum to represent the type of machine to be launched."""
@@ -21,11 +24,18 @@ class ResourceType(enum.Enum):
     MPI = "mpi"
 
 
+class ProviderType(enum.Enum):
+    """Enum to represent the provider of the machine to be launched."""
+    GCP = "GCP"
+    ICE = "ICE"
+
+
 class BaseMachineGroup:
     """Base class to manage Google Cloud resources."""
 
     def __init__(self,
                  machine_type: str,
+                 provider: Union[ProviderType, str] = "GCP",
                  data_disk_gb: int = 10,
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
@@ -43,13 +53,17 @@ class BaseMachineGroup:
                 example, when retrieving with the `machines_groups.get` method.
                 Users should not set this argument in anyway.
         """
-        if machine_type not in inductiva.resources.list_available_machines():
-            raise ValueError("Machine type not supported")
+
+        provider = ProviderType(provider)
+
+        if machine_type not in list_available_machines(provider.value.lower()):
+            raise ValueError(f"Machine type not supported in {provider}")
 
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
 
         self.machine_type = machine_type
+        self.provider = provider.value
         self.data_disk_gb = data_disk_gb
         self._id = None
         self._name = None
@@ -80,8 +94,9 @@ class BaseMachineGroup:
         Returns:
             The unique ID and name identifying the machine on the API."""
 
-        instance_group_config = inductiva.client.models.GCPVMGroup(
+        instance_group_config = inductiva.client.models.VMGroupConfig(
             machine_type=self.machine_type,
+            provider_id=self.provider,
             disk_size_gb=self.data_disk_gb,
             **kwargs,
         )
@@ -117,6 +132,7 @@ class BaseMachineGroup:
         machine_group = cls(
             machine_type=resp["machine_type"],
             data_disk_gb=resp["disk_size_gb"],
+            provider=resp["provider_id"],
             register=False,
         )
         machine_group._id = resp["id"]
@@ -144,10 +160,11 @@ class BaseMachineGroup:
             return
 
         request_body = \
-            inductiva.client.models.GCPVMGroup(
+            inductiva.client.models.VMGroupConfig(
                 id=self.id,
                 name=self.name,
                 machine_type=self.machine_type,
+                provider_id=self.provider,
                 disk_size_gb=self.data_disk_gb,
                 **kwargs,
             )
@@ -180,10 +197,11 @@ class BaseMachineGroup:
             start_time = time.time()
 
             request_body = \
-                inductiva.client.models.GCPVMGroup(
+                inductiva.client.models.VMGroupConfig(
                     id=self.id,
                     name=self.name,
                     machine_type=self.machine_type,
+                    provider_id=self.provider,
                     disk_size_gb=self.data_disk_gb,
                     **kwargs,
                 )
@@ -204,6 +222,9 @@ class BaseMachineGroup:
         it verifies if the cost has already been estimated and returns
         it immediately if it has.
         """
+        if self.provider == "ICE":
+            return 0
+
         if self._estimated_cost is not None:
             return self._estimated_cost
 
