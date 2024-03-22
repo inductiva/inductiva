@@ -56,15 +56,15 @@ class BaseMachineGroup:
         """
 
         provider = ProviderType(provider.upper())
+        self.provider = provider.value
 
-        if machine_type not in list_available_machines(provider.value.lower()):
-            raise ValueError(f"Machine type not supported in {provider}")
+        if machine_type not in list_available_machines(self.provider.lower()):
+            raise ValueError(f"Machine type not supported in {self.provider}")
 
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
 
         self.machine_type = machine_type
-        self.provider = provider.value
         self.data_disk_gb = data_disk_gb
         self._id = None
         self._name = None
@@ -174,17 +174,18 @@ class BaseMachineGroup:
         update_body = inductiva.client.models.VMGroupLifecycleConfig(
             max_idle_time=max_idle_time, auto_terminate_ts=auto_terminate)
 
-        try:
-            self._api.update_vm_group_config(path_params={"mg_id": self._id},
-                                             body=update_body)
-        except inductiva.client.ApiException as e:
-            logs.log_and_exit(
-                logging.getLogger(),
-                logging.ERROR,
-                "Setting termination timers for machine group failed " \
-                "with exception %s.",
-                e,
-                exc_info=e)
+        if max_idle_time is not None or auto_terminate is not None:
+            try:
+                self._api.update_vm_group_config(
+                    path_params={"mg_id": self._id}, body=update_body)
+            except inductiva.client.ApiException as e:
+                logs.log_and_exit(
+                    logging.getLogger(),
+                    logging.ERROR,
+                    "Setting termination timers for machine group failed " \
+                    "with exception %s.",
+                    e,
+                    exc_info=e)
 
     def start(self,
               max_idle_time: float = None,
