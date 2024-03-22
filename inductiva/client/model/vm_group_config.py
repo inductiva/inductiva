@@ -775,6 +775,22 @@ class VMGroupConfig(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class autoscale_policy(schemas.EnumBase, schemas.StrSchema):
+
+                class MetaOapg:
+                    enum_value_to_name = {
+                        "cpu": "CPU",
+                        "task_in_queue": "TASK_IN_QUEUE",
+                    }
+
+                @schemas.classproperty
+                def CPU(cls):
+                    return cls("cpu")
+
+                @schemas.classproperty
+                def TASK_IN_QUEUE(cls):
+                    return cls("task_in_queue")
+
             __annotations__ = {
                 "spot": spot,
                 "is_elastic": is_elastic,
@@ -792,6 +808,7 @@ class VMGroupConfig(schemas.DictSchema):
                 "provider_id": provider_id,
                 "min_vms": min_vms,
                 "max_vms": max_vms,
+                "autoscale_policy": autoscale_policy,
             }
 
     spot: MetaOapg.properties.spot
@@ -894,6 +911,12 @@ class VMGroupConfig(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["autoscale_policy"]
+    ) -> MetaOapg.properties.autoscale_policy:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -914,6 +937,7 @@ class VMGroupConfig(schemas.DictSchema):
         "provider_id",
         "min_vms",
         "max_vms",
+        "autoscale_policy",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -1016,6 +1040,12 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["autoscale_policy"]
+    ) -> typing.Union[MetaOapg.properties.autoscale_policy, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -1037,6 +1067,7 @@ class VMGroupConfig(schemas.DictSchema):
         "provider_id",
         "min_vms",
         "max_vms",
+        "autoscale_policy",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -1128,6 +1159,8 @@ class VMGroupConfig(schemas.DictSchema):
                               uuid.UUID, int, float, decimal.Decimal, bool,
                               None, list, tuple, bytes, io.FileIO,
                               io.BufferedReader, schemas.Unset] = schemas.unset,
+        autoscale_policy: typing.Union[MetaOapg.properties.autoscale_policy,
+                                       str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -1153,6 +1186,7 @@ class VMGroupConfig(schemas.DictSchema):
             provider_id=provider_id,
             min_vms=min_vms,
             max_vms=max_vms,
+            autoscale_policy=autoscale_policy,
             _configuration=_configuration,
             **kwargs,
         )
