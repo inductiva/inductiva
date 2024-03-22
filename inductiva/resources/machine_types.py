@@ -15,7 +15,7 @@ def list_available_machines(provider: str):
     resources_available = get_available_machine_types(provider)
     machine_types = []
 
-    for machine in enumerate(resources_available):
+    for machine in resources_available:
         machine_types.append(machine["machine_type"])
 
     return tuple(machine_types)

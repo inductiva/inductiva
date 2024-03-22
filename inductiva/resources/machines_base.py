@@ -3,6 +3,7 @@ import time
 import enum
 from typing import Union
 from abc import abstractmethod
+import datetime
 
 import logging
 
@@ -142,10 +143,61 @@ class BaseMachineGroup:
 
         return machine_group
 
-    def start(self, **kwargs):
+    def _update_termination_timers(self,
+                                   max_idle_time: float = None,
+                                   auto_terminate: Union[str, float] = None):
+        """Helper function to update the termination timers of a machine group.
+
+        At the moment, this serves as an helper function, but it could also be
+        provided to the users on demand.
+
+        Args:
+            max_idle_time (float): Time in minutes that the machine can remain
+                idle.
+            auto_terminate (float, str): Time to automatically terminate the
+                machines independently of any simulations being running there.
+                The time can be a float, indicating the number of hours the
+                machine up until the machine can be up, or an actual timestamp
+                with the format '2024-12-31T00:00:00+00'.
+        """
+
+        # Convert max_idle_time from minutes to seconds
+        if max_idle_time is not None:
+            max_idle_time = max_idle_time * 60
+
+        # Convert float auto_terminate_ts to ISO format
+        if isinstance(auto_terminate, float):
+            auto_terminate = datetime.datetime.now(datetime.timezone.utc) + \
+                datetime.timedelta(hours=auto_terminate)
+            auto_terminate = auto_terminate.isoformat()
+
+        update_body = inductiva.client.models.VMGroupLifecycleConfig(
+            max_idle_time=max_idle_time, auto_terminate_ts=auto_terminate)
+
+        try:
+            self._api.update_vm_group_config(path_params={"mg_id": self._id},
+                                             body=update_body)
+        except inductiva.client.ApiException as e:
+            logs.log_and_exit(
+                logging.getLogger(),
+                logging.ERROR,
+                "Setting termination timers for machine group failed " \
+                "with exception %s.",
+                e,
+                exc_info=e)
+
+    def start(self,
+              max_idle_time: float = None,
+              auto_terminate: Union[str, float] = None,
+              **kwargs):
         """Starts a machine group.
 
         Args:
+            max_idle_time: The maximum amount of time a machine group can
+              remain idle before it is automatically terminated (in minutes).
+            auto_terminate_ts: The timestamp at which the machine group will
+                be automatically terminated. The timestamp should be in the
+                format "YYYY-MM-DDTHH:MM:SS+00".
             **kwargs: Depending on the type of machine group to be started,
               this can be num_machines, max_machines, min_machines,
               and is_elastic."""
@@ -168,12 +220,17 @@ class BaseMachineGroup:
                 disk_size_gb=self.data_disk_gb,
                 **kwargs,
             )
+
         logging.info("Starting %s. "
                      "This may take a few minutes.", repr(self))
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
+
+        self._update_termination_timers(max_idle_time, auto_terminate)
+
         try:
+
             self._api.start_vm_group(body=request_body)
         except inductiva.client.ApiException as e:
             logs.log_and_exit(logging.getLogger(),
