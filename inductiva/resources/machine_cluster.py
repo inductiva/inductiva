@@ -75,7 +75,7 @@ class MPICluster(machines_base.BaseMachineGroup):
                f"x{self.num_machines} machines"
 
     def start(self,
-              max_idle_time: float = 0.,
+              max_idle_time: float = None,
               auto_terminate: Union[str, float] = None):
         """Start the MPI Cluster.
         
