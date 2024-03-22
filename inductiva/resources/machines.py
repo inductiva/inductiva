@@ -93,7 +93,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["max_vms"])
-        machine_group.provider = resp["provider"]
+        machine_group.provider = resp["provider_id"]
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
         machine_group.spot = bool(resp["spot"])
         machine_group.register = False
@@ -106,11 +106,26 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __str__(self):
         return f"Machine Group {self.name} with {self.machine_type} machines"
 
-    def start(self):
-        """Starts all machines of the machine group."""
+    def start(self,
+              max_idle_time: float = None,
+              auto_terminate: Union[str, float] = None):
+        """Starts all machines of the machine group.
+        
+        Args:
+            max_idle_time (float): Time in minutes that the machine can remain
+                idle.
+            auto_terminate (float, str): Time to automatically terminate the
+                machines independently of any simulations being running there.
+                The time can be a float, indicating the number of hours the
+                machine up until the machine can be up, or an actual timestamp
+                with the format '2024-12-31T00:00:00+00'.
+        """
+
         return super().start(num_vms=self.num_machines,
                              is_elastic=self.__is_elastic,
-                             spot=self.spot)
+                             spot=self.spot,
+                             max_idle_time=max_idle_time,
+                             auto_terminate=auto_terminate)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
@@ -232,13 +247,28 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return f"Elastic Machine Group {self.name} with {self.machine_type} " \
              "machines"
 
-    def start(self):
-        """Starts minimum number of machines."""
+    def start(self,
+              max_idle_time: float = None,
+              auto_terminate: Union[float, str] = None):
+        """Starts minimum number of machines.
+
+        Args:
+            max_idle_time (float): Time in minutes that the machine can remain
+                idle.
+            auto_terminate (float, str): Time to automatically terminate the
+                machines independently of any simulations being running there.
+                The time can be a float, indicating the number of hours the
+                machine up until the machine can be up, or an actual timestamp
+                with the format '2024-12-31T00:00:00+00'.
+        """
+
         return super().start(num_vms=self.min_machines,
                              min_vms=self.min_machines,
                              max_vms=self.max_machines,
                              is_elastic=self.__is_elastic,
-                             spot=self.spot)
+                             spot=self.spot,
+                             max_idle_time=max_idle_time,
+                             auto_terminate=auto_terminate)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
