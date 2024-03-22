@@ -120,22 +120,24 @@ def list(fout: TextIO = sys.stdout):
 
 def get_by_name(machine_name: str):
     """Returns the machine group corresponding to `machine_name`."""
-    machine_groups = _fetch_machine_groups_from_api()
-    machine_group = next(
-        (mg for mg in machine_groups if mg["name"] == machine_name), None)
-    if machine_group is not None:
-        mg_class = _get_machine_group_class_from_api_response(machine_group)
-        return mg_class.from_api_response(machine_group)
-    return None
+    try:
+        api = compute_api.ComputeApi(inductiva.api.get_client())
+        response = api.get_vm_group_by_name({"name": machine_name})
+        mg_class = _get_machine_group_class_from_api_response(
+            response["type"], response["is_elastic"])
+        return response.body
+    except inductiva.client.ApiException as api_exception:
+        raise api_exception
 
 
-def _get_machine_group_class_from_api_response(mg: dict):
+def _get_machine_group_class_from_api_response(machine_type: str,
+                                               is_elastic: bool):
     """Returns the class of the machine group"""
-    if mg["is_elastic"]:
+    if is_elastic:
         mg_class = resources.ElasticMachineGroup
-    elif mg["type"] == "standard":
+    elif machine_type == "standard":
         mg_class = resources.MachineGroup
-    elif mg["type"] == "mpi":
+    elif machine_type == "mpi":
         mg_class = resources.MPICluster
     else:
         raise ValueError("Unknown resource configuration.")
@@ -150,7 +152,8 @@ def get():
     machine_group_list = []
 
     for mg in machine_groups:
-        mg_class = _get_machine_group_class_from_api_response(mg)
+        mg_class = _get_machine_group_class_from_api_response(
+            mg["type"], mg["is_elastic"])
         machine_group_list.append(mg_class.from_api_response(mg))
 
     return machine_group_list
