@@ -126,7 +126,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self,
         machine_type: str,
         min_machines: int = 1,
-        max_machines: int = 1,
+        max_machines: int = 2,
         spot: bool = False,
         data_disk_gb: int = 10,
         register: bool = True,
@@ -157,7 +157,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             raise ValueError(
                 "`min_machines` should be a number greater than 0.")
 
-        if max_machines < min_machines:
+        if min_machines >= max_machines:
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
 
