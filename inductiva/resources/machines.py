@@ -104,7 +104,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
             max_idle_time (float): Time in minutes that the machine can remain
                 idle.
             auto_terminate (float, str): Time to automatically terminate the
-                machines independently of any simulations being running there.
+                machines independently of any simulations running there.
                 The time can be a float, indicating the number of hours the
                 machine up until the machine can be up, or an actual timestamp
                 with the format '2024-12-31T00:00:00+00'.
@@ -245,7 +245,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             max_idle_time (float): Time in minutes that the machine can remain
                 idle.
             auto_terminate (float, str): Time to automatically terminate the
-                machines independently of any simulations being running there.
+                machines independently of any simulations running there.
                 The time can be a float, indicating the number of hours the
                 machine up until the machine can be up, or an actual timestamp
                 with the format '2024-12-31T00:00:00+00'.
