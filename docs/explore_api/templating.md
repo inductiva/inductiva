@@ -1,4 +1,4 @@
-# Templating Engine
+# Templating Manager
 
 ## Introduction
 
@@ -42,7 +42,7 @@ you to start with a specific simulation file – your “base case” – contai
 values for the parameters you wish to explore and transform those fixed values into
 variables that you can now change programmatically from your Python code before you
 submit the simulation for remote execution. Let's illustrate the power of templating
-in a simple simulation case, from which you will be able to generalize to your 
+in a simple simulation case, from which you will be able to generalize to your
 own cases.
 
 ## Experimenting fluids with different properties
@@ -153,6 +153,7 @@ are specified in the following section:
             "viscosity": 1e-6,
             "viscosityMethod": 6
         }
+    ]
 ```
 
 The first step in label the variables we want to iterate over. This is done by substituting
@@ -167,19 +168,19 @@ density and viscosity, we can substitute the values with the labels `{{ density 
             "viscosity": {{ kinematic_viscosity }},
             "viscosityMethod": 6
         }
+    ]
 
 We shall save this new file as `config.json.jinja`, and that’s it: we have a template. 
 The labels we just assigned will now be treated as names of variables whose values
 we can programmatically modify using Python. 
 
-Saving our template file and the `unit_box.obj` file in a new folder named `splishsplash-template``
+Saving our template file and the `unit_box.obj` file in a new folder named `splishsplash-template`
 we can now run the same simulation with different properties we set programmatically.
 
-This is how we would do it for the honey:
+This is how we would do it for a viscous fluid:
 
 ```python
 import inductiva
-from inductiva import mixins
 
 # Launch a machine group with a c2-standard-30
 machine_group = inductiva.resources.MachineGroup(machine_type="c2-standard-30")
@@ -190,39 +191,41 @@ input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "splishsplash-template-example.zip", unzip=True)
 
-# Set the honey properties at room temperature
-honey_density = 1500 # kg/m^3
-honey_kinematic_viscosity = 0.0075 # m^2/s
+# Set the new fluid properties at room temperature
+density = 1500 # kg/m^3
+kinematic_viscosity = 1 # m^2/s
 
 # Initialize the simulator and run the simulation
 splishsplash = inductiva.simulators.SplishSplash()
 
-# Initialize the templating engine
-file_manager = mixins.FileManager()
-file_manager.set_root_dir("splishsplash-honey")
-file_manager.add_dir(input_dir,
-                     density=honey_density,
-                     kinematic_viscosity=honey_kinematic_viscosity)
+# Initialize the templating manager
+template_manager = inductiva.TemplateManager(template_dir=input_dir,
+                                    root_dir="splishsplash-viscous")
+
+# Render the full template dir with the density and kinematic viscosity parameters
+template_manager.render_dir(density=density,
+                            kinematic_viscosity=kinematic_viscosity)
 
 task = splishsplash.run(
-    input_dir=file_manager.get_root_dir(),
+    input_dir=template_manager.get_root_dir(),
     sim_config_filename="config.json",
     on=machine_group)
 
-# Wait for the simulation to finish and Download all generated output files
+# Wait for the simulation to finish and download all generated output files
 task.wait()
 task.download_outputs()
 ```
 
-In this case, we start from the template files just configured and start the templating engine
-by creating a `FileManager` object. This object is responsible for managing the files and
-directories that can be used in the simulation. In particular, it renders the configuration
-files for the simulation from the template files and the programmatic values we set.
-When templating, the `FileManager` removes the `.jinja` extension and keeps the file name.
+In this case, we start from the template files just configured and start the
+templating manager by creating a `TemplateManager` object. This object is responsible
+for managing the files and directories that can be used in the simulation. In particular, 
+it renders the configuration files for the simulation from the template files and the 
+programmatic values we set. When templating, the `TemplateManager` removes the
+`.jinja` extension and keeps the same file name.
 
 The rendering is specifically done in the code line:
 ```python
-file_manager.add_dir(input_dir, density=honey_density, kinematic_viscosity=honey_kinematic_viscosity)
+template_manager.add_dir(density=density, kinematic_viscosity=kinematic_viscosity)
 ```
 
 ### Exploring the entire design space
@@ -234,7 +237,6 @@ parallel. For that, we first need to create a machine group with 16 VMs:
 
 ```python
 import inductiva
-from inductiva import mixins
 
 # Launch a machine group with 16 VMs of type c2-standard-30
 machine_group = inductiva.resources.MachineGroup(
@@ -250,9 +252,6 @@ input_dir = inductiva.utils.download_from_url(
 # Initialize the simulator and run the simulation
 splishsplash = inductiva.simulators.SplishSplash()
 
-# Initialize the templating engine
-file_manager = mixins.FileManager()
-
 # Set list of possible values for density and kinematic viscosity
 density_list = [400, 1000, 2500, 5000]
 kinematic_viscosity_list = [1e-1, 1e-3, 1e-6, 1e-8]
@@ -260,13 +259,13 @@ kinematic_viscosity_list = [1e-1, 1e-3, 1e-6, 1e-8]
 for density in density_list:
     for kinematic_viscosity in kinematic_viscosity_list:
         # Set a new root directory and render the template directory
-        file_manager.set_root_dir("splishsplash-scenario")
-        file_manager.add_dir(input_dir,
-                             density=density,
-                             kinematic_viscosity=kinematic_viscosity)
+        template_manager = inductiva.TemplateManager(input_dir,
+                                                     "splishsplash-scenario")
+        template_manager.add_dir(density=density,
+                                 kinematic_viscosity=kinematic_viscosity)
 
         task = splishsplash.run(
-            input_dir=file_manager.get_root_dir(),
+            input_dir=template_manager.get_root_dir(),
             sim_config_filename="config.json",
             on=machine_group)
 ```
