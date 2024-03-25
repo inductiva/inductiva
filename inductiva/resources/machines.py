@@ -3,7 +3,6 @@ from absl import logging
 from typing import Union
 import datetime
 
-
 from inductiva.resources import machine_types, machines_base
 
 

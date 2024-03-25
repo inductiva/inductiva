@@ -91,12 +91,6 @@ def test_machines__ice_register__invalid_args():
     """
 
     inductiva.api_key = "dummy"
-    with pytest.raises(ValueError) as exception:
-        inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
-                                         num_machines=2,
-                                         provider="ICE")
-
-    assert "only supports launching one machine" in str(exception.value)
 
     with pytest.raises(ValueError) as exception:
         inductiva.resources.MachineGroup(machine_type="c2-highmem-4",

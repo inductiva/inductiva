@@ -26,9 +26,8 @@ def list_available_machines(provider: Union[str, ProviderType]):
     return tuple(machine_types)
 
 
-def get_available_machine_types(
-    provider: Union[str, ProviderType],
-    machine_family: str = None):
+def get_available_machine_types(provider: Union[str, ProviderType],
+                                machine_family: str = None):
     """Get all available machine types for a given provider.
     
     Args:
