@@ -7,39 +7,60 @@ import sys
 from inductiva import resources, _cli
 
 
-def print_cpu_series_info(cpu_series: str,
-                          cpu_series_info: dict,
-                          verbose: bool = False):
-    """Format and print the information for given CPU series."""
+def pretty_print_machines_info(machines_dict):
+    """Format and print the information for given machine dict."""
 
-    cpu_series_description = cpu_series_info["description"]
-    print(f"{cpu_series}: {cpu_series_description}")
-    for ram_type, type_info in cpu_series_info["types"].items():
-        description = ("-> " + type_info["description"]) if verbose else ""
-        vcpus = str(type_info["vcpus"])
-        cpu_type = f"{cpu_series}-{ram_type}-"
-        print(f"  > {cpu_type:13} {vcpus:45} {description}")
     print()
+
+    for family, memory_types in machines_dict.items():
+        print(f"CPU family: {family}")
+        for memory, details in memory_types.items():
+            vcpus = sorted([int(k) for k in details["vcpus"]], key=int)
+            lssd = "(-lssd)" if details["lssd"] else ""
+            print(f"   > {family}-{memory}- {(vcpus)} {lssd}")
+        print()
 
 
 def list_machine_types_available(args):
     """List available machine types information per provider and CPU series."""
 
     provider = args.provider
-    description = args.description
-    cpu_series = args.series
+    machine_family = args.family
 
-    resources_available = resources.machine_types.get_available()
-    provider_resources = resources_available[provider]
-    print(provider_resources["description"] + "\n")
+    machines_dict = {}
 
-    if cpu_series is not None:
-        cpu_series_info = provider_resources["cpu-series"][cpu_series]
-        print_cpu_series_info(cpu_series, cpu_series_info, description)
-    else:
-        # Print all available machine CPU series information
-        for cpu_series, series_info in provider_resources["cpu-series"].items():
-            print_cpu_series_info(cpu_series, series_info, description)
+    resources_available = resources.machine_types.get_available_machine_types(
+        provider, machine_family)
+
+    for machine in resources_available:
+        # Avoid the duplication of adding machine types with spot instances.
+        if machine["spot"]:
+            continue
+
+        machine_type = machine["machine_type"]
+        machine_info = machine_type.split("-")
+        machine_family = machine_info[0]
+        memory_type = machine_info[1]
+        vcpus = machine_info[2] if len(machine_info) > 2 else None
+        lssd = True if len(machine_info) > 3 else None
+
+        if machine_family not in machines_dict:
+            machines_dict[machine_family] = {}
+
+        if memory_type not in machines_dict[machine_family]:
+            machines_dict[machine_family][memory_type] = {
+                "vcpus": [],
+                "lssd": False
+            }
+
+        if vcpus is not None and vcpus not in machines_dict[machine_family][
+                memory_type]["vcpus"]:
+            machines_dict[machine_family][memory_type]["vcpus"].append(vcpus)
+
+        if lssd is not None:
+            machines_dict[machine_family][memory_type]["lssd"] = True
+
+    pretty_print_machines_info(machines_dict)
 
 
 def list_machine_groups(unused_args, fout: TextIO = sys.stdout):
@@ -60,15 +81,11 @@ def register(parser):
                            default="gcp",
                            choices=["ice", "gcp"],
                            help="Filter the available types by provider.")
-    subparser.add_argument("-s",
-                           "--series",
+    subparser.add_argument("-f",
+                           "--family",
                            default=None,
                            type=str,
                            help="Filter the available types by CPU series.")
-    subparser.add_argument("-d",
-                           "--description",
-                           action="store_true",
-                           help="Show a description of the machine types.")
 
     subparser.description = (
         "The `inductiva available` command provides a utility for listing the\n"
