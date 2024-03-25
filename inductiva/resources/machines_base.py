@@ -141,16 +141,14 @@ class BaseMachineGroup:
     def update_termination_timers(self,
                                   max_idle_time: datetime.timedelta = None,
                                   auto_terminate_ts: datetime.datetime = None):
-        """Helper function to update the termination timers of a machine group.
-
-        At the moment, this serves as an helper function, but it could also be
-        provided to the users on demand.
+        """Update the termination timers of a machine group.
 
         Args:
-            max_idle_time (timedelta): Timedelta referencing the time a machine
-                can be idle without running any tasks.
-            auto_terminate_ts (datetime): Timestamp to automatically terminate
-                the machine group at a future time.
+            max_idle_time (timedelta): Max idle time, i.e. time without
+                executing any task, after which the resource will be terminated.
+            auto_terminate_ts (datetime): Moment in which the resource will
+                be automatically terminated, irrespectively of the existence of
+                tasks yet to be executed by the resource.
         """
 
         # Convert max_idle_time from minutes to seconds
@@ -179,17 +177,17 @@ class BaseMachineGroup:
                     exc_info=e)
 
     def start(self,
-              max_idle_time: float = None,
-              auto_terminate_ts: Union[str, float] = None,
+              max_idle_time: datetime.timedelta = None,
+              auto_terminate_ts: datetime.datetime = None,
               **kwargs):
         """Starts a machine group.
 
         Args:
-            max_idle_time: The maximum amount of time a machine group can
-              remain idle before it is automatically terminated (in minutes).
-            auto_terminate_ts: The timestamp at which the machine group will
-                be automatically terminated. The timestamp should be in the
-                format "YYYY-MM-DDTHH:MM:SS+00".
+            max_idle_time (timedelta): Max idle time, i.e. time without
+                executing any task, after which the resource will be terminated.
+            auto_terminate_ts (datetime): Moment in which the resource will
+                be automatically terminated, irrespectively of the existence of
+                tasks yet to be executed by the resource.
             **kwargs: Depending on the type of machine group to be started,
               this can be num_machines, max_machines, min_machines,
               and is_elastic."""
