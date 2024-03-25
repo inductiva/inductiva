@@ -6,11 +6,7 @@ import datetime
 from inductiva.resources import machine_types, machines_base
 
 
-def _check_ice_args(num_machines: int, spot: bool):
-
-    if num_machines > 1:
-        raise ValueError(
-            "ICE provider only supports launching one machine at a time.")
+def _check_ice_args(spot: bool):
 
     if spot:
         raise ValueError(
