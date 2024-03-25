@@ -24,7 +24,7 @@ class ResourceType(enum.Enum):
     MPI = "mpi"
 
 
-class ProviderType(enum.Enum):
+class ProviderType(format_utils.CaseInsensitiveEnum):
     """Enum to represent the provider of the machine to be launched."""
     GCP = "GCP"
     ICE = "ICE"
