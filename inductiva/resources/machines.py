@@ -13,13 +13,6 @@ def _check_ice_args(spot: bool):
             "ICE provider only supports persistent machine launch.")
 
 
-def _check_ice_args(spot: bool):
-
-    if spot:
-        raise ValueError(
-            "ICE provider only supports persistent machine launch.")
-
-
 class MachineGroup(machines_base.BaseMachineGroup):
     """Class to launch and manage a group of machines in Google Cloud.
 
