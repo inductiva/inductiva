@@ -180,7 +180,7 @@ class BaseMachineGroup:
 
     def start(self,
               max_idle_time: float = None,
-              auto_terminate: Union[str, float] = None,
+              auto_terminate_ts: Union[str, float] = None,
               **kwargs):
         """Starts a machine group.
 
@@ -219,7 +219,7 @@ class BaseMachineGroup:
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
 
-        self.update_termination_timers(max_idle_time, auto_terminate)
+        self.update_termination_timers(max_idle_time, auto_terminate_ts)
 
         try:
 
