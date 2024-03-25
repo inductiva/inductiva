@@ -7,11 +7,7 @@ import datetime
 from inductiva.resources import machine_types, machines_base
 
 
-def _check_ice_args(num_machines: int, spot: bool):
-
-    if num_machines > 1:
-        raise ValueError(
-            "ICE provider only supports launching one machine at a time.")
+def _check_ice_args(spot: bool):
 
     if spot:
         raise ValueError(
@@ -59,7 +55,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
                 "`num_machines` should be a number greater than 0.")
 
         if provider == "ICE":
-            _check_ice_args(num_machines, spot)
+            _check_ice_args(spot)
 
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
@@ -160,7 +156,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self,
         machine_type: str,
         min_machines: int = 1,
-        max_machines: int = 1,
+        max_machines: int = 2,
         spot: bool = False,
         data_disk_gb: int = 10,
         register: bool = True,
@@ -191,7 +187,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             raise ValueError(
                 "`min_machines` should be a number greater than 0.")
 
-        if max_machines < min_machines:
+        if min_machines >= max_machines:
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
 

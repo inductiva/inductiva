@@ -60,6 +60,7 @@ class BaseMachineGroup:
             raise ValueError("`data_disk_gb` must be positive.")
 
         self.machine_type = machine_type
+        self.provider = provider.value
         self.data_disk_gb = data_disk_gb
         self._id = None
         self._name = None
@@ -128,6 +129,7 @@ class BaseMachineGroup:
         machine_group = cls(
             machine_type=resp["machine_type"],
             data_disk_gb=resp["disk_size_gb"],
+            provider=resp["provider_id"],
             register=False,
         )
         machine_group._id = resp["id"]
