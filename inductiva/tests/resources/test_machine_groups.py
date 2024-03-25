@@ -34,7 +34,7 @@ def test_get_by_name(response, expected_result):
     with mock.patch(
             "inductiva.resources.machine_groups.compute_api.ComputeApi"
     ) as mock_compute_api, mock.patch(
-            "inductiva.resources.machines_base.list_available_machines"
+            "inductiva.resources.machines_base.machine_types.list_available_machines"
     ) as mock_list_available_machines:
         mock_response = mock.MagicMock()
         mock_response.body = response
