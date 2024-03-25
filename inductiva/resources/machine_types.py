@@ -9,14 +9,36 @@ from inductiva.client.apis.tags import compute_api
 from inductiva.resources import machines_base
 
 
+def get_available():
+    """Gets the available machine types.
+    
+    Currently, this fetches the available machine types from a yaml file
+    into a dictionary that can now be used to parse the information where
+    needed."""
+
+    with open(MACHINE_TYPES_FILE, "r", encoding="utf-8") as file:
+        machine_types = yaml.safe_load(file)
+
+    return machine_types
+
+
 def list_available_machines(provider: str):
     """List all available machines types."""
 
-    resources_available = get_available_machine_types(provider)
+    resources_available = get_available()
+    provider_resources = resources_available[provider]
     machine_types = []
 
-    for machine in resources_available:
-        machine_types.append(machine["machine_type"])
+    # Fetch the available CPU series for the given provider
+    for cpu_series, series_info in provider_resources["cpu-series"].items():
+        # Fetch the available RAM types and vCPUs info
+        for ram_type, type_info in series_info["types"].items():
+            vcpus = type_info["vcpus"]
+            machine_types.extend(
+                [f"{cpu_series}-{ram_type}-{vcpu}" for vcpu in vcpus])
+            if type_info["lssd"]:
+                for vcpu in vcpus:
+                    machine_types.append(f"{cpu_series}-{ram_type}-{vcpu}-lssd")
 
     return tuple(machine_types)
 

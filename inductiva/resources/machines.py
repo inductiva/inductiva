@@ -1,8 +1,19 @@
 """Classes to manage different Google Cloud machine group types."""
 from absl import logging
 
-from typing import Union
+from typing import Literal
 from inductiva.resources import machines_base
+
+
+def _check_ice_args(num_machines: int, spot: bool):
+
+    if num_machines > 1:
+        raise ValueError(
+            "ICE provider only supports launching one machine at a time.")
+
+    if spot:
+        raise ValueError(
+            "ICE provider only supports persistent machine launch.")
 
 
 def _check_ice_args(num_machines: int, spot: bool):
@@ -27,7 +38,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __init__(
         self,
         machine_type: str,
-        provider: Union[str, machines_base.ProviderType] = "GCP",
+        provider: Literal["GCP", "ICE"] = "GCP",
         num_machines: int = 1,
         spot: bool = False,
         data_disk_gb: int = 10,
