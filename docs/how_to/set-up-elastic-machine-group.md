@@ -37,15 +37,12 @@ To explore our elastic machine group, we will follow the example of
 now with a scalable infrastructure.
 
 ```python
-from inductiva import mixins
+import inductiva
 
 # Download the input files for the SWASH simulation
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "swash-template-example.zip", unzip=True)
-
-# Initialize the template file manager
-file_manager = mixins.FileManager()
 
 # Initialize the SWASH simulator
 swash = inductiva.simulators.SWASH()
@@ -56,11 +53,11 @@ water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
 # Launch multiple simulations
 for water_level in water_levels_list:
     # Set the root directory and render the template files into it.
-    file_manager.set_root_dir("swash-input-example")
-    file_manager.add_dir(input_dir, water_level=water_level)
+    template_engine = inductiva.TemplateEngine(input_dir, "swash-input-example")
+    template_engine.add_dir(input_dir, water_level=water_level)
 
     # Run the simulation on the dedicated MachineGroup
-    task = swash.run(input_dir=file_manager.get_root_dir(),
+    task = swash.run(input_dir=template_engine.get_root_dir(),
                     sim_config_filename="input.sws",
                     on=elastic_machine_group)
 ```

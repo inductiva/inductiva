@@ -1,15 +1,20 @@
 """Available machine types and their number of cores."""
-
+from typing import Union
 import json
 
 import inductiva
+from inductiva.utils import format_utils
 from inductiva.client import ApiException
 from inductiva.client.apis.tags import compute_api
 
-from inductiva.resources import machines_base
+
+class ProviderType(format_utils.CaseInsensitiveEnum):
+    """Enum to represent the provider of the machine to be launched."""
+    GCP = "GCP"
+    ICE = "ICE"
 
 
-def list_available_machines(provider: str):
+def list_available_machines(provider: Union[str, ProviderType]):
     """List all available machines types."""
 
     resources_available = get_available_machine_types(provider)
@@ -21,7 +26,8 @@ def list_available_machines(provider: str):
     return tuple(machine_types)
 
 
-def get_available_machine_types(provider: str, machine_family: str = None):
+def get_available_machine_types(provider: Union[str, ProviderType],
+                                machine_family: str = None):
     """Get all available machine types for a given provider.
     
     Args:
@@ -29,7 +35,7 @@ def get_available_machine_types(provider: str, machine_family: str = None):
         machine_family (str): The machine family to filter the specific
             available machine types."""
 
-    provider = machines_base.ProviderType(provider.upper())
+    provider = ProviderType(provider)
 
     api_client = compute_api.ComputeApi(inductiva.api.get_client())
 

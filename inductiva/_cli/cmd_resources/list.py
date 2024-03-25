@@ -5,6 +5,7 @@ import argparse
 import sys
 
 from inductiva import resources, _cli
+from inductiva.resources.machine_types import ProviderType
 
 
 def pretty_print_machines_info(machines_dict):
@@ -79,7 +80,7 @@ def register(parser):
                            "--provider",
                            type=str,
                            default="gcp",
-                           choices=["ice", "gcp"],
+                           choices=[t.value for t in ProviderType],
                            help="Filter the available types by provider.")
     subparser.add_argument("-f",
                            "--family",

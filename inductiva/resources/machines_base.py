@@ -15,7 +15,7 @@ from inductiva.client.apis.tags import compute_api
 from inductiva.client import exceptions
 from inductiva import logs
 
-from .machine_types import list_available_machines
+from inductiva.resources import machine_types
 
 
 class ResourceType(enum.Enum):
@@ -25,18 +25,12 @@ class ResourceType(enum.Enum):
     MPI = "mpi"
 
 
-class ProviderType(enum.Enum):
-    """Enum to represent the provider of the machine to be launched."""
-    GCP = "GCP"
-    ICE = "ICE"
-
-
 class BaseMachineGroup:
     """Base class to manage Google Cloud resources."""
 
     def __init__(self,
                  machine_type: str,
-                 provider: Union[ProviderType, str] = "GCP",
+                 provider: Union[machine_types.ProviderType, str] = "GCP",
                  data_disk_gb: int = 10,
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
@@ -55,16 +49,18 @@ class BaseMachineGroup:
                 Users should not set this argument in anyway.
         """
 
-        provider = ProviderType(provider.upper())
+        provider = machine_types.ProviderType(provider)
         self.provider = provider.value
 
-        if machine_type not in list_available_machines(self.provider.lower()):
+        if machine_type not in machine_types.list_available_machines(
+                self.provider):
             raise ValueError(f"Machine type not supported in {self.provider}")
 
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
 
         self.machine_type = machine_type
+        self.provider = provider.value
         self.data_disk_gb = data_disk_gb
         self._id = None
         self._name = None
@@ -133,6 +129,7 @@ class BaseMachineGroup:
         machine_group = cls(
             machine_type=resp["machine_type"],
             data_disk_gb=resp["disk_size_gb"],
+            provider=resp["provider_id"],
             register=False,
         )
         machine_group._id = resp["id"]
@@ -144,37 +141,32 @@ class BaseMachineGroup:
         return machine_group
 
     def update_termination_timers(self,
-                                  max_idle_time: float = None,
-                                  auto_terminate: Union[str, float] = None):
-        """Helper function to update the termination timers of a machine group.
-
-        At the moment, this serves as an helper function, but it could also be
-        provided to the users on demand.
+                                  max_idle_time: datetime.timedelta = None,
+                                  auto_terminate_ts: datetime.datetime = None):
+        """Update the termination timers of a machine group.
 
         Args:
-            max_idle_time (float): Time in minutes that the machine can remain
-                idle.
-            auto_terminate (float, str): Time to automatically terminate the
-                machines independently of any simulations running there.
-                The time can be a float, indicating the number of hours the
-                machine up until the machine can be up, or an actual timestamp
-                with the format '2024-12-31T00:00:00+00'.
+            max_idle_time (timedelta): Max idle time, i.e. time without
+                executing any task, after which the resource will be terminated.
+            auto_terminate_ts (datetime): Moment in which the resource will
+                be automatically terminated, irrespectively of the existence of
+                tasks yet to be executed by the resource.
         """
 
         # Convert max_idle_time from minutes to seconds
-        if max_idle_time is not None:
-            max_idle_time = max_idle_time * 60
+        max_idle_time = max_idle_time.total_seconds() if max_idle_time else None
 
-        # Convert float auto_terminate_ts to ISO format
-        if isinstance(auto_terminate, float):
-            auto_terminate = datetime.datetime.now(datetime.timezone.utc) + \
-                datetime.timedelta(hours=auto_terminate)
-            auto_terminate = auto_terminate.isoformat()
+        # Convert auto_terminate_ts to ISO format
+        if auto_terminate_ts is not None:
+            now_ts = datetime.datetime.now(auto_terminate_ts.tzinfo)
+            if auto_terminate_ts < now_ts:
+                raise ValueError("auto_terminate_ts must be in the future.")
+            auto_terminate_ts = auto_terminate_ts.isoformat()
 
         update_body = inductiva.client.models.VMGroupLifecycleConfig(
-            max_idle_time=max_idle_time, auto_terminate_ts=auto_terminate)
+            max_idle_time=max_idle_time, auto_terminate_ts=auto_terminate_ts)
 
-        if max_idle_time is not None or auto_terminate is not None:
+        if max_idle_time is not None or auto_terminate_ts is not None:
             try:
                 self._api.update_vm_group_config(
                     path_params={"mg_id": self._id}, body=update_body)
@@ -188,17 +180,17 @@ class BaseMachineGroup:
                     exc_info=e)
 
     def start(self,
-              max_idle_time: float = None,
-              auto_terminate: Union[str, float] = None,
+              max_idle_time: datetime.timedelta = None,
+              auto_terminate_ts: datetime.datetime = None,
               **kwargs):
         """Starts a machine group.
 
         Args:
-            max_idle_time: The maximum amount of time a machine group can
-              remain idle before it is automatically terminated (in minutes).
-            auto_terminate_ts: The timestamp at which the machine group will
-                be automatically terminated. The timestamp should be in the
-                format "YYYY-MM-DDTHH:MM:SS+00".
+            max_idle_time (timedelta): Max idle time, i.e. time without
+                executing any task, after which the resource will be terminated.
+            auto_terminate_ts (datetime): Moment in which the resource will
+                be automatically terminated, irrespectively of the existence of
+                tasks yet to be executed by the resource.
             **kwargs: Depending on the type of machine group to be started,
               this can be num_machines, max_machines, min_machines,
               and is_elastic."""
@@ -228,7 +220,7 @@ class BaseMachineGroup:
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
 
-        self.update_termination_timers(max_idle_time, auto_terminate)
+        self.update_termination_timers(max_idle_time, auto_terminate_ts)
 
         try:
 
