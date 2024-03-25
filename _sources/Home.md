@@ -28,5 +28,5 @@ computational resources and checking the status of tasks;
 information about some key classes available in the API Client, a troubleshooting guide,
 information about quotas and an FAQ.
 
-If you have any questions or suggestions about the API please [open an issue on the inductiva’s API Client GitHub repo](https://github.com/inductiva/inductiva/issues), or contact us via [mailto:support@inductiva.ai](mailto:support@inductiva.ai).
+If you have any questions or suggestions about the API please [open an issue on the inductiva’s API Client GitHub repo](https://github.com/inductiva/inductiva/issues), or contact us via [support@inductiva.ai](mailto:support@inductiva.ai).
 
