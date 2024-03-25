@@ -158,7 +158,8 @@ class BaseMachineGroup:
 
         # Convert auto_terminate_ts to ISO format
         if auto_terminate_ts is not None:
-            if auto_terminate_ts < datetime.datetime.now():
+            now_ts = datetime.datetime.now(auto_terminate_ts.tzinfo)
+            if auto_terminate_ts < now_ts:
                 raise ValueError("auto_terminate_ts must be in the future.")
             auto_terminate_ts = auto_terminate_ts.isoformat()
 
