@@ -80,10 +80,11 @@ class MPICluster(machines_base.BaseMachineGroup):
         """Start the MPI Cluster.
         
         Args:
-            max_idle_time (timedelta): Timedelta referencing the time a machine
-                can be idle without running any tasks.
-            auto_terminate_ts (datetime): Timestamp to automatically terminate
-                the machine group at a future time.
+            max_idle_time (timedelta): Max idle time, i.e. time without
+                executing any task, after which the resource will be terminated.
+            auto_terminate_ts (datetime): Moment in which the resource will
+                be automatically terminated, irrespectively of the existence of
+                tasks yet to be executed by the resource.
         """
         return super().start(num_vms=self.num_machines,
                              is_elastic=self.__is_elastic,
