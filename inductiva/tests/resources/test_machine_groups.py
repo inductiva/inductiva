@@ -31,11 +31,12 @@ EXPECTED_RESULTS = [
 @pytest.mark.parametrize("response, expected_result",
                          zip(RESPONSES, EXPECTED_RESULTS))
 def test_get_by_name(response, expected_result):
-    with mock.patch(
-            "inductiva.resources.machine_groups.compute_api.ComputeApi"
-    ) as mock_compute_api, mock.patch(
-            "inductiva.resources.machines_base.machine_types.list_available_machines"
-    ) as mock_list_available_machines:
+    mock_compute_api_path =\
+        "inductiva.resources.machine_groups.compute_api.ComputeApi"
+    mock_list_available_machines_path =\
+        "inductiva.resources.machines_base.machine_types.list_available_machines"
+    with mock.patch(mock_compute_api_path) as mock_compute_api, mock.patch(
+            mock_list_available_machines_path) as mock_list_available_machines:
         mock_response = mock.MagicMock()
         mock_response.body = response
 
