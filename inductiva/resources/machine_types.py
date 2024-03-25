@@ -1,7 +1,6 @@
 """Available machine types and their number of cores."""
 from typing import Union
 import json
-import enum
 
 import inductiva
 from inductiva.utils import format_utils
