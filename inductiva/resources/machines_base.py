@@ -54,7 +54,7 @@ class BaseMachineGroup:
                 Users should not set this argument in anyway.
         """
 
-        provider = ProviderType(provider.upper())
+        provider = ProviderType(provider)
 
         if machine_type not in list_available_machines(provider.value.lower()):
             raise ValueError(f"Machine type not supported in {provider}")

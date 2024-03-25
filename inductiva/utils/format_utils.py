@@ -33,11 +33,13 @@ class Emphasis(Enum):
 
 
 class CaseInsensitiveEnum(str, Enum):
+    """Case insensitive Enum class."""
+
     @classmethod
     def _missing_(cls, value):
         value = value.lower()
         for member in cls:
-            if member.upper() == value:
+            if member.lower() == value:
                 return member
 
 
