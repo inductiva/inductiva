@@ -1,7 +1,7 @@
 """Base class for machine groups."""
 import time
 import enum
-from typing import Literal
+from typing import Union
 from abc import abstractmethod
 
 import logging
@@ -35,7 +35,7 @@ class BaseMachineGroup:
 
     def __init__(self,
                  machine_type: str,
-                 provider: Literal["GCP", "ICE"] = "GCP",
+                 provider: Union[ProviderType, str] = "GCP",
                  data_disk_gb: int = 10,
                  register: bool = True) -> None:
         """Create a BaseMachineGroup object.
@@ -53,15 +53,17 @@ class BaseMachineGroup:
                 example, when retrieving with the `machines_groups.get` method.
                 Users should not set this argument in anyway.
         """
-        if machine_type not in inductiva.resources.list_available_machines(
-                provider.lower()):
+
+        provider = ProviderType(provider)
+
+        if machine_type not in list_available_machines(provider.value.lower()):
             raise ValueError(f"Machine type not supported in {provider}")
 
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
 
         self.machine_type = machine_type
-        self.provider = provider
+        self.provider = provider.value
         self.data_disk_gb = data_disk_gb
         self._id = None
         self._name = None
