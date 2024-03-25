@@ -17,11 +17,7 @@ def _check_ice_args(num_machines: int, spot: bool):
             "ICE provider only supports persistent machine launch.")
 
 
-def _check_ice_args(num_machines: int, spot: bool):
-
-    if num_machines > 1:
-        raise ValueError(
-            "ICE provider only supports launching one machine at a time.")
+def _check_ice_args(spot: bool):
 
     if spot:
         raise ValueError(
@@ -69,7 +65,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
                 "`num_machines` should be a number greater than 0.")
 
         if provider == "ICE":
-            _check_ice_args(num_machines, spot)
+            _check_ice_args(spot)
 
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,

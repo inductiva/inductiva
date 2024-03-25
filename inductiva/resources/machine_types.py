@@ -4,11 +4,12 @@ import json
 import enum
 
 import inductiva
+from inductiva.utils import format_utils
 from inductiva.client import ApiException
 from inductiva.client.apis.tags import compute_api
 
 
-class ProviderType(enum.Enum):
+class ProviderType(format_utils.CaseInsensitiveEnum):
     """Enum to represent the provider of the machine to be launched."""
     GCP = "GCP"
     ICE = "ICE"
