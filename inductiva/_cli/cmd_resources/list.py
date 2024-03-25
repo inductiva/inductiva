@@ -79,7 +79,7 @@ def register(parser):
                            "--provider",
                            type=str,
                            default="gcp",
-                           choices=["ice", "gcp"],
+                           choices=["ICE", "GCP"],
                            help="Filter the available types by provider.")
     subparser.add_argument("-f",
                            "--family",
