@@ -129,7 +129,6 @@ class BaseMachineGroup:
         machine_group = cls(
             machine_type=resp["machine_type"],
             data_disk_gb=resp["disk_size_gb"],
-            provider=resp["provider_id"],
             register=False,
         )
         machine_group._id = resp["id"]
