@@ -16,8 +16,8 @@ jobs:
       uses: trendyminds/github-actions-rsync@master
       with:
         RSYNC_OPTIONS: -avzr --delete --exclude node_modules --exclude '.git*'
-        RSYNC_TARGET: "/var/www/${{ secrets.STAGING_SERVER }}/docs/"
-        RSYNC_SOURCE: "."
+        RSYNC_TARGET: /var/www/${{ secrets.STAGING_SERVER }}/docs/
+        RSYNC_SOURCE: .
       env:
         SSH_PRIVATE_KEY: ${{secrets.STAGING_WEB_SSH_KEY}}
         SSH_USERNAME: inductiva-bot
