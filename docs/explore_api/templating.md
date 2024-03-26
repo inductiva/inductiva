@@ -3,307 +3,384 @@
 ## Introduction
 
 The Inductiva API is all about enabling you to simulate at scale. As we have shown,
-with a few lines of Python code, you can send your simulations to MPI Clusters assembled
-from last-generation cloud hardware, letting you run much larger simulations than
-you would be able to use your local resources. Or you can spin up a large Machine
+with a few lines of Python code, you can send your simulations to MPI Clusters
+assembled from last-generation cloud hardware, letting you run much larger simulations
+than you would be able to use your local resources. Or you can spin up a large Machine
 Group, with dozens or hundreds of machines, and send a large number of simulations
 to be run on those machines in parallel. Such massive parallelism is precisely
-what you need when you want to find the optimal solution for a problem, and the only way to test each candidate's solution is by simulating it. In some cases, a typical starting point is a number of previously known good-enough solutions, and you want to test, via simulation, as many variations of those solutions as possible to find the one that best fits the problem at hand. In others, even lower assumptions are made, and the goal is to explore the largest possible area of the solution space.
+what you need when you want to find the optimal solution for a problem, and the
+only way to test each candidate's solution is by simulating it. To do so, one needs
+to configure multiple simulations, each with a slightly different set of parameters.
+Generally speaking, the goal is to explore the largest possible volume of the
+solution space.
 
-## Building Walls
-For example, suppose that for protecting a certain area on the coast, you are trying
-to find the best location and orientation for building a simple seawall, which can
-still have a number of possible variations. Suppose that you have 10 possible variations
-on the shape of the seawall, and you are considering 20 possible locations where you
-could build the wall. Also, you can direct the wall in 10 possible orientations.
-This design space includes a total of 2000 variations. For each configuration, you
-want to simulate the effectiveness of the wall under 25 different sea and wind conditions,
-which represent the extreme cases the wall is supposed to protect against. To completely
-explore the space of design and test it under all selected conditions, we would need to
-run 50000 simulations. 
+In this context, the Inductiva API provides a powerful tool for exploring the solution
+space of a problem: the *templating manager*. The templating manager allows you to
+quickly generate a large number of simulation configurations by starting from a
+base case and replacing some of its fixed values with variables that you can programmatically
+change. In the following section, we will show you how to use the templating manager to
+explore the solution space of a problem. We will start with a simple example and
+then show you how to generalize it to your cases.
 
-This is quite a large number, and this is why Python scripting is great for this
-kind of challenge: you can build a set of “for loops'' that transverse all possible
-values for each parameter (shape, location, orientation, sea and wind conditions)
-and issue the corresponding simulation. Since the Inductiva API allows you to build
-large Machine Groups (e.g. 1000 machines) then you could potentially run 1000 of
-these variations in parallel and execute the 50000 simulations approximately in
-the time it would take to run 50 simulations in one machine (which we are going
-to assume it is a reasonable amount of time).
+## The `TemplateManager` class
 
-But, if each simulation is configured using a set of files, how do we programmatically
-change those simulation configuration files so that we can run 50000 *different*
-simulations, each one being a slight variation of the other?
+The `TemplateManager` class is a utility class that allows you to manage templating
+files and specify how to render each template into a concrete configuration file.
+In the following sections, we'll provide a basic introduction to rendering concepts
+and explain how to use the `TemplateManager` class to render different variations
+of template files to a destination folder. In the end, we will discuss some safety
+features that the `TemplateManager` class provides to prevent accidental overwriting
+of files and ensure the uniqueness of the destination directory.
 
-## Templating
+### Rendering basics
 
-This is where Inductiva’s templating mechanism comes into play. Templating allows
-you to start with a specific simulation file – your “base case” – containing fixed
-values for the parameters you wish to explore and transform those fixed values into
-variables that you can now change programmatically from your Python code before you
-submit the simulation for remote execution. Let's illustrate the power of templating
-in a simple simulation case, from which you will be able to generalize to your
-own cases.
+To start, a template file is a file that contains labels that will be replaced
+with specific values during a rendering process. These labels are enclosed in
+double curly brackets, optionally specifying default values that those labels
+might take when not explicitly set during the rendering process.
 
-## Experimenting fluids with different properties
+In the following example, the content of the file defines a configuration
+parameter named `config_parameter`:
 
-Suppose you want to study how fluids with different properties fall inside a container
-with a cubic shape. More specifically, you want to study the effect of fluid density
-and kinematic viscosity in the splashing on the walls of the cubic container. For that,
-you wish to experiment with 4 values of fluid density and 4 values of kinematic
-viscosity. Overall, you will need to run 16 simulations. 
-
-For the simulation of this scenario, you choose the SplishSplash simulator, and you
-start by configuring your base case with a water fluid. The corresponding simulation files
-are a `unit_box.obj` that defines the domain and the fluid block and the following
-_json_ file (we designate by `config.json`):
-
-```json
-{
-    "Configuration": {
-        "stopAt": 1,
-        "timeStepSize": 0.01,
-        "particleRadius": 0.01,
-        "simulationMethod": 4,
-        "boundaryHandlingMethod": 0,
-        "kernel": 1,
-        "cflMethod": 1,
-        "cflFactor": 0.5,
-        "cflMinTimeStepSize": 0.0001,
-        "cflMaxTimeStepSize": 0.005,
-        "gravitation": [0, 0, -9.81],
-        "gradKernel": 1,
-        "enableVTKExport": true,
-        "dataExportFPS": 60,
-        "particleAttributes": "velocity;density"
-    },
-    "RigidBodies": [
-        {
-            "geometryFile": "unit_box.obj",
-            "translation": [0, 0, 0],
-            "scale": [1, 1, 1],
-            "isDynamic": false
-        }
-    ],
-    "Materials": [
-        {
-            "id": "Fluid",
-            "density0": 1000,
-            "viscosity": 1e-6,
-            "viscosityMethod": 6
-        }
-    ],
-    "FluidModels": [
-        {
-            "id": "Fluid",
-            "particleFile": "unit_box.obj",
-            "translation": [0, 0, 0],
-            "scale": [0.5, 0.5, 0.5],
-            "initialVelocity": [0, 0, 0]
-        }
-    ]
-}
+```jinja
+config_parameter = {{ parameter_value }}
 ```
 
-For now, let's not worry too much about the contents of this configuration file. 
-Let's just run it using SplishSplash in a `c2-standard-30` VM with the following code:
+When this file is rendered with `10` for the label `parameter_value`,
+the resulting file will read:
+
+```txt
+config_parameter = 10
+```
+
+If the template file were to be defined with a default value for `parameter_value`,
+
+```jinja
+config_parameter = {{ parameter_value | default(20) }}
+```
+
+and **rendered without providing a value for it**, the resulting file would read:
+
+```txt
+config_parameter = 20
+```
+
+### Rendering with the `TemplateManager` class
+
+The `TemplateManager` class is initialized with the path to the directory containing
+the template files and the name of the directory where the rendered files will be
+stored. The latter is optional and defaults to a directory named `rendered_dir`
+inside the current working directory. If the output directory does not exist,
+it will be created.
+The manager identifies template files by looking for the `.jinja` extension in
+the file name. Upon rendering, the extension is removed from the file name inside
+the destination directory.
+
+The `TemplateManager` class exposes two rendering methods: `render_dir` and
+`render_file`. The former renders all files inside the template directory,
+while the latter only renders a single file. Both methods take a set of keyword
+arguments that specify the values that the variables in the template files will
+take.
+
+Let's now look into details on how to use these two methods:
+
+### Rendering a directory
+
+For the sake of illustration, let's consider a directory containing three template
+files with the following structure:
+
+```console
+$ tree my_templates
+my_templates
+├── config.yaml.jinja
+├── readme.txt
+└── objects
+    ├── obj1.def.jinja
+    └── obj2.def.jinja
+```
+
+The contents of each file are as follows:
+
+```console
+$ cat my_templates/config.yaml.jinja
+density: {{ density }}
+viscosity: {{ viscosity }}
+position: {{ position | default([0, 0, 0]) }}
+
+$ cat my_templates/readme.txt
+I am a non-template file. I will be copied as is.
+
+$ cat my_templates/objects/obj1.def.jinja
+type: sphere
+radius: {{ sphere_radius }}
+
+$ cat my_templates/objects/obj2.def.jinja
+type: cube
+side: {{ cube_side | default(1) }}
+```
+
+To render all files in the `my_templates` directory, you can use the `render_dir`:
 
 ```python
 import inductiva
 
-# Download the input files mentioned above
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "splishsplash-dambreak-example.zip", unzip=True)
+# instantiate the TemplateManager, specifying the template directory
+# and the name of the destination directory
+template_manager = inductiva.TemplateManager(template_dir="my_templates",
+                                             root_dir="my_rendered_files")
 
-# Launch a machine group with a single c2-standard-30
-machine_group = inductiva.resources.MachineGroup(machine_type="c2-standard-30")
-machine_group.start()
-
-# Initialize the simulator and run the simulation
-splishsplash = inductiva.simulators.SplishSplash()
-task = splishsplash.run(
-    input_dir=input_dir,
-    sim_config_filename="config.json",
-    on=machine_group)
-
-# Wait for the simulation to finish and Download all generated output files
-task.wait()
-task.download_outputs()
+# render all files in the template directory specifying the values of
+# the variables in the template files. Note that we are
+# deliberately not providing a value for the `cube_side` variable,
+# thus enforcing the default value of 1 to be used.
+template_manager.render_dir(density=1000, viscosity=1e-6,
+                            position=[0, 0, 0], radius=0.5)
 ```
 
-This simulation takes about 26s to run and the final result looks like this
-(visualization produced with `pyvista`):
+After running the code above, the `my_rendered_files` directory will contain the
+following files:
 
-<div align="center">
-   <img src="../_static/splishsplash-dambreak.gif" alt="SplishSplash dambreak simulation">
-</div>
+```console
+$ tree my_rendered_files
+my_rendered_files
+├── config.yaml
+├── readme.txt
+└── objects
+    ├── obj1.def
+    └── obj2.def
 
+$ cat my_rendered_files/config.yaml
+density: 1000
+viscosity: 1e-6
+position: [0, 0, 0]
 
-### Preparing the Template for generalizing the base case
+$ cat my_templates/readme.txt
+I am a non-template file. I will be copied as is.
 
-Observe that the in configuration file, the properties of the fluid (in this case water)
-are specified in the following section:
+$ cat my_rendered_files/objects/obj1.def
+type: sphere
+radius: 0.5
 
-```json
-    "Materials": [
-        {
-            "id": "Fluid",
-            "density0": 1000,
-            "viscosity": 1e-6,
-            "viscosityMethod": 6
-        }
-    ]
+$ cat my_rendered_files/objects/obj2.def
+type: cube
+side: 1
 ```
 
-The first step in label the variables we want to iterate over. This is done by substituting
-the values of the variables with a descriptive label inside double curly brackets. For the
-density and viscosity, we can substitute the values with the labels `{{ density }}` and
-`{{ kinematic_viscosity }}`, respectively. The resulting file will look like this:
-
-    "Materials": [
-        {
-            "id": "Fluid",
-            "density0": {{ density }},
-            "viscosity": {{ kinematic_viscosity }},
-            "viscosityMethod": 6
-        }
-    ]
-
-We shall save this new file as `config.json.jinja`, and that’s it: we have a template. 
-The labels we just assigned will now be treated as names of variables whose values
-we can programmatically modify using Python. 
-
-Saving our template file and the `unit_box.obj` file in a new folder named `splishsplash-template`
-we can now run the same simulation with different properties we set programmatically.
-
-This is how we would do it for a viscous fluid:
+One can optionally request the rendering of a subdirectory inside the template
+directory by providing the name of the source subdirectory as an argument to the
+`render_dir` method. At the same time, one can specify the name of the destination
+folder inside the root output directory.
+This mechanism is useful when the template directory contains template files
+for different simulation scenarios/stages but you want to keep the flexibility
+of selecting which scenario/stage to render. For example, in the following code
+snippet, we only render the `objects` subdirectory to `my_rendered_files/only_objects`:
 
 ```python
-import inductiva
-
-# Launch a machine group with a c2-standard-30
-machine_group = inductiva.resources.MachineGroup(machine_type="c2-standard-30")
-machine_group.start()
-
-# Download the input files mentioned above
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "splishsplash-template-example.zip", unzip=True)
-
-# Set the new fluid properties at room temperature
-density = 1500 # kg/m^3
-kinematic_viscosity = 1 # m^2/s
-
-# Initialize the simulator and run the simulation
-splishsplash = inductiva.simulators.SplishSplash()
-
-# Initialize the templating manager
-template_manager = inductiva.TemplateManager(template_dir=input_dir,
-                                    root_dir="splishsplash-viscous")
-
-# Render the full template dir with the density and kinematic viscosity parameters
-template_manager.render_dir(density=density,
-                            kinematic_viscosity=kinematic_viscosity)
-
-task = splishsplash.run(
-    input_dir=template_manager.get_root_dir(),
-    sim_config_filename="config.json",
-    on=machine_group)
-
-# Wait for the simulation to finish and download all generated output files
-task.wait()
-task.download_outputs()
+template_manager = ...
+template_manager.render_dir('objects', # subdirectory to render
+                            'only_objects', # destination subdirectory
+                            radius=0.5, side=2)
 ```
 
-In this case, we start from the template files just configured and start the
-templating manager by creating a `TemplateManager` object. This object is responsible
-for managing the files and directories that can be used in the simulation. In particular, 
-it renders the configuration files for the simulation from the template files and the 
-programmatic values we set. When templating, the `TemplateManager` removes the
-`.jinja` extension and keeps the same file name.
-
-The rendering is specifically done in the code line:
-```python
-template_manager.add_dir(density=density, kinematic_viscosity=kinematic_viscosity)
+```console
+$ tree my_rendered_files
+my_rendered_files
+└── only_objects
+    ├── obj1.def
+    └── obj2.def
 ```
 
-### Exploring the entire design space
+### Rendering a single file
 
-The last step for generating the results we need for the study is to submit the 16
-simulations from a single script by iterating over the set of admissible values for
-both parameters. Additionally, we can save time by issuing these 16 simulations in
-parallel. For that, we first need to create a machine group with 16 VMs:
+Sometimes, you may just want to render a single file from the template directory.
+In this case, you can use the `render_file` method. This method takes the name of
+the file to render as an argument, as well as the values of the variables that
+will replace the labels in the template file.
+
+Using the same template files as before, let's render the `obj1.def.jinja` file.
+By default, the rendered file will be saved to the root output directory:
 
 ```python
-import inductiva
-
-# Launch a machine group with 16 VMs of type c2-standard-30
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-4",
-    num_machines=16)
-machine_group.start()
-
-# Download the input files mentioned above
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "splishsplash-template-example.zip", unzip=True)
-
-# Initialize the simulator and run the simulation
-splishsplash = inductiva.simulators.SplishSplash()
-
-# Set list of possible values for density and kinematic viscosity
-density_list = [400, 1000, 2500, 5000]
-kinematic_viscosity_list = [1e-1, 1e-3, 1e-6, 1e-8]
-
-for density in density_list:
-    for kinematic_viscosity in kinematic_viscosity_list:
-        # Set a new root directory and render the template directory
-        template_manager = inductiva.TemplateManager(input_dir,
-                                                     "splishsplash-scenario")
-        template_manager.add_dir(density=density,
-                                 kinematic_viscosity=kinematic_viscosity)
-
-        task = splishsplash.run(
-            input_dir=template_manager.get_root_dir(),
-            sim_config_filename="config.json",
-            on=machine_group)
+template_manager = ...
+template_manager.render_file('objects/obj1.def.jinja',
+                            radius=10)
 ```
 
-For each possibility, an input folder is created with the base name `splishsplash-scenario` and
-an iteration number, that serves to not override the previous folders.
+```console
+$ tree my_rendered_files
+└── obj1.def.yaml
+```
 
-Overall, the exploration of these 16 possibilities took 57s (the time of the slowest simulation), 
-approximately the same time needed to run only one simulation. And this was all done
-with minor changes to the simulation script that described the base case.
+Similarly to the `render_dir` method, you can specify the destination name
+of the rendered file by providing the `target_file` argument:
 
-To finish, let's visualize all of the 16 simulations we just ran. The kinematic
-viscosity increases from left to right and the density from top to bottom.
+```python
+template_manager = ...
+template_manager.render_file('objects/obj1.def.jinja',
+                             target_file='my_objects/sphere.def',
+                             radius=10)
+```
 
-<div align=center class="row">
-  <div class="column"  text="400">
-    <img src="../_static/template_gifs/400_1e-06.gif" width=150>
-    <img src="../_static/template_gifs/400_0.0001.gif" width=150>
-    <img src="../_static/template_gifs/400_0.01.gif" width=150>
-    <img src="../_static/template_gifs/400_0.1.gif" width=150>
-  </div>
-  <div class="column"  text="400">
-    <img src="../_static/template_gifs/1000_1e-06.gif" width=150>
-    <img src="../_static/template_gifs/1000_0.0001.gif" width=150>
-    <img src="../_static/template_gifs/1000_0.01.gif" width=150>
-    <img src="../_static/template_gifs/1000_0.1.gif" width=150>
-  </div>
-  <div class="column"  text="400">
-    <img src="../_static/template_gifs/2500_1e-06.gif" width=150>
-    <img src="../_static/template_gifs/2500_0.0001.gif" width=150>
-    <img src="../_static/template_gifs/2500_0.01.gif" width=150>
-    <img src="../_static/template_gifs/2500_0.1.gif" width=150>
-  </div>
-  <div class="column"  text="400">
-    <img src="../_static/template_gifs/5000_1e-06.gif" width=150>
-    <img src="../_static/template_gifs/5000_0.0001.gif" width=150>
-    <img src="../_static/template_gifs/5000_0.01.gif" width=150>
-    <img src="../_static/template_gifs/5000_0.1.gif" width=150>
-  </div>
-  
-</div>
+```console
+$ tree my_rendered_files
+my_rendered_files
+└── my_objects
+    └── sphere.def
+```
+
+### Adding external resources
+
+In addition to rendering template files, the `TemplateManager` class also provides
+mechanisms to add external files to the destination directory. This method is useful
+when you need to copy files that are not part of the template directory but are
+required for the simulation. The `copy_dir` and `copy_file` methods allow you to
+copy entire directories or individual files to the destination directory, respectively.
+
+In the following examples, we add external resources to the destination directory,
+first by adding an entire directory and then by adding a single file:
+
+
+```python
+template_manager = ...
+template_manager.copy_dir('/path/to/external_resources')
+template_manager.copy_file('./external_file.txt')
+```
+
+```console
+$ tree my_rendered_files
+my_rendered_files
+├── external_file.txt
+└── external_resources
+    ├── ...
+```
+
+Similarly to the `render_dir` and `render_file` methods, you can specify the
+destination name of the copied directory or file:
+
+
+```python
+template_manager = ...
+template_manager.copy_dir('/path/to/external_resources',
+                          'resources/copied_resources')
+template_manager.copy_file('./external_file.txt',
+                           'copied_file.txt')
+```
+
+```console
+$ tree my_rendered_files
+my_rendered_files
+├── copied_file.txt
+└── resources
+    └── copied_resources
+        ├── ...
+```
+
+
+The `TemplateManager` class also provides a method to add external files to the
+
+
+### Safety
+
+By default, the `TemplateManager` *will not overwrite* any existing files in the
+destination directory. Calls to the `render_*` or `copy_*` methods will fail if
+any of the destination files already exist. Rendering and coping actions are
+transactional, meaning that the entire action will fail if any destination file
+exists. For example, consecutive calls to the same method will fail in the second
+call. This behavior is intended to prevent accidental overwriting of
+files that may have been generated in a previous run.
+
+To enforce the overwriting of existing files, you can set the `overwrite` argument
+to `True` when calling the `render_*` or `copy_*` methods.
+
+
+```python
+template_manager = ...
+
+# ✔ this call will succeed because the destination directory is empty
+template_manager.render_dir(density=1000, viscosity=1e-6,
+                            position=[0, 0, 0], radius=0.5)
+
+# ✖ the second call will fail with an FileExistsError because at least
+# one of the rendered files would overwrite the equivalent file
+# generated in the first call
+template_manager.render_dir(density=1000, viscosity=1e-6,
+                            position=[0, 0, 0], radius=0.5)
+                        
+# ✔ to ensure the call succeeds, set the `overwrite` argument to `True`
+template_manager.render_dir(overwrite=True,
+                            density=1000, viscosity=1e-6,
+                            position=[0, 0, 0], radius=0.5)
+```
+
+### Uniqueness of the destination directory
+
+The `TemplateManager` class ensures that the destination directory is unique for
+each instance. This means that if you instantiate two `TemplateManager` objects
+with the same destination directory, the second object will point to a slightly
+different destination directory.
+
+
+```python
+>>> manager1 = inductiva.TemplateManager(..., root_dir="my_rendered_files")
+>>> manager2 = inductiva.TemplateManager(..., root_dir="my_rendered_files")
+>>> print(manager1.get_root_dir())
+my_rendered_files
+>>> print(manager2.get_root_dir())
+my_rendered_files__2
+```
+
+This way, the `TemplateManager` guarantees that the destination directory is unique
+and that no files are accidentally overwritten. This behavior can be changed by
+setting the `INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX` environment variable to
+`True` before instantiating the `TemplateManager` object. In this case, if the
+destination directory already exists, an `FileExistsError` exception will be thrown
+when instantiating the `TemplateManager` object.
+
+```python
+>>> os.setenv('INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX', 'True')
+>>> manager1 = inductiva.TemplateManager(..., root_dir="my_rendered_files")
+>>> manager2 = inductiva.TemplateManager(..., root_dir="my_rendered_files")
+---------------------------------------------------------------------------
+FileExistsError                           Traceback (most recent call last)
+line 1
+----> 1 raise FileExistsError(f"Directory {root_dir} already exists.")
+
+FileExistsError: Directory my_rendered_files already exists.
+```
+
+
+When using the templating manager inside a loop, it is important to ensure that
+the destination directory is unique for each iteration. This can be achieved by
+setting the `root_dir` argument to a unique value for each iteration or by relying
+on the above mechanism to ensure uniqueness across different iterations.
+
+
+```python
+template_manager = inductiva.TemplateManager(..., root_dir=)
+
+# explicitly set an unique root directory for each iteration
+for iteration in range(...):
+    template_manager.set_root_dir(f"my_rendered_files_iter{iteration}")
+    print(template_manager.get_root_dir())
+
+# would print:
+# my_rendered_files_iter0
+# my_rendered_files_iter1
+# my_rendered_files_iter2
+# ....
+
+# or let the manager define an unique root directory each iteration
+# (assuming the INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX environment
+# variable is either undefined or set to false)
+for iteration in range(...):
+    template_manager.set_root_dir("my_rendered_files")
+    print(template_manager.get_root_dir())
+
+# would print:
+# my_rendered_files
+# my_rendered_files__2
+# my_rendered_files__3
+# ....
+
+```
+
