@@ -35,6 +35,7 @@ extensions = [
     'sphinxcontrib.mermaid',
     'sphinx_copybutton',
     'sphinxcontrib.googleanalytics',
+    'sphinxext.opengraph',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -81,3 +82,8 @@ html_favicon = 'favicon.ico'
 # Google Analytics
 googleanalytics_id = "UA-188572165-1"
 googleanalytics_enabled = "true"
+
+# OpenGraph protocol
+ogp_site_name = "Inductiva.ai Docs"
+ogp_site_url = "https://docs.inductiva.ai"
+ogp_image = "https://docs.inductiva.ai/_static/inductiva-social-banner.jpg"
