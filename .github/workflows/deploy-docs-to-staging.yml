@@ -12,12 +12,13 @@ jobs:
       with:
         ref: 'gh-pages' # Make sure this is the branch with your site's code
 
-    - name: Copy files via SCP
-      uses: appleboy/scp-action@master
+    - name: Deploy to staging webserver via rsync
+      uses: trendyminds/github-actions-rsync@master
       with:
-        host: ${{ secrets.STAGING_SERVER }}
-        username: inductiva-bot
-        password: ${{ secrets.STAGING_WEB_PASSWD }}
-        port: 22
-        source: "." # Or specify a subdirectory like 'dist/'
-        target: "/var/www/${{ secrets.STAGING_SERVER }}/docs/"
+        RSYNC_OPTIONS: -avzr --delete --exclude node_modules --exclude '.git*'
+        RSYNC_TARGET: "/var/www/${{ secrets.STAGING_SERVER }}/docs/"
+        RSYNC_SOURCE: "."
+      env:
+        SSH_PRIVATE_KEY: ${{secrets.STAGING_WEB_SSH_KEY}}
+        SSH_USERNAME: inductiva-bot
+        SSH_HOSTNAME: ${{secrets.STAGING_SERVER}}
