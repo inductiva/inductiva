@@ -18,14 +18,16 @@ In this context, the Inductiva API provides a powerful tool for exploring the so
 space of a problem: the *templating manager*. The templating manager allows you to
 quickly generate a large number of simulation configurations by starting from a
 base case and replacing some of its fixed values with variables that you can programmatically
-change. In the following section, we will show you how to use the templating manager to
-explore the solution space of a problem. We will start with a simple example and
-then show you how to generalize it to your cases.
+change.
 
 ## The `TemplateManager` class
 
 The `TemplateManager` class is a utility class that allows you to manage templating
 files and specify how to render each template into a concrete configuration file.
+It abstracts the rendering process, allowing the user to focus solely on defining
+the source of the template files, the destination directory of the rendered files,
+and the values of the variables to be used in the rendering process.
+
 In the following sections, we'll provide a basic introduction to rendering concepts
 and explain how to use the `TemplateManager` class to render different variations
 of template files to a destination folder. In the end, we will discuss some safety
@@ -35,25 +37,25 @@ of files and ensure the uniqueness of the destination directory.
 ### Rendering basics
 
 To start, a template file is a file that contains labels that will be replaced
-with specific values during a rendering process. These labels are enclosed in
-double curly brackets, optionally specifying default values that those labels
+with specific values during a rendering process. These labels -- variables --
+are enclosed in double curly brackets, optionally specifying default values they
 might take when not explicitly set during the rendering process.
 
-In the following example, the content of the file defines a configuration
+In the following example, the content of a template file defines a configuration
 parameter named `config_parameter`:
 
 ```jinja
 config_parameter = {{ parameter_value }}
 ```
 
-When this file is rendered with `10` for the label `parameter_value`,
+When this file is rendered with `10` for the variable `parameter_value`,
 the resulting file will read:
 
 ```txt
 config_parameter = 10
 ```
 
-If the template file were to be defined with a default value for `parameter_value`,
+If the template file were to be defined with a default value for `parameter_value`:
 
 ```jinja
 config_parameter = {{ parameter_value | default(20) }}
@@ -68,26 +70,41 @@ config_parameter = 20
 ### Rendering with the `TemplateManager` class
 
 The `TemplateManager` class is initialized with the path to the directory containing
-the template files and the name of the directory where the rendered files will be
-stored. The latter is optional and defaults to a directory named `rendered_dir`
-inside the current working directory. If the output directory does not exist,
-it will be created.
-The manager identifies template files by looking for the `.jinja` extension in
-the file name. Upon rendering, the extension is removed from the file name inside
-the destination directory.
+the template files (the *template_dir*) and the name of the directory where the
+rendered files will be stored (the *root_dir*). The latter is optional and defaults
+to a directory named `rendered_dir` inside the current working directory.
+If the output directory does not exist, it will be created.
+
+```python
+import inductiva
+
+# New instance of the TemplateManager class specifying the name 
+# of the template directory. All rendered files will be stored
+# inside ./rendered_dir (the default root directory of the manager).
+template_manager = inductiva.TemplateManager(template_dir="my_templates")
+
+# new instance of the TemplateManager class specifying both the name 
+# of the template directory and the name of the destination directory
+# of the rendered files. In this case, all rendered files will be stored
+# inside ./my_rendered_files.
+template_manager = inductiva.TemplateManager(template_dir="my_templates",
+                                             root_dir="my_rendered_files")
+```
 
 The `TemplateManager` class exposes two rendering methods: `render_dir` and
 `render_file`. The former renders all files inside the template directory,
 while the latter only renders a single file. Both methods take a set of keyword
 arguments that specify the values that the variables in the template files will
-take.
+take. The manager identifies template files by looking for the `.jinja` extension
+in the file name. Upon rendering, the extension is removed from the file name inside
+the destination directory.
 
 Let's now look into details on how to use these two methods:
 
 ### Rendering a directory
 
-For the sake of illustration, let's consider a directory containing three template
-files with the following structure:
+For the sake of illustration, let's consider a directory, containing three template
+files and a regular (non-template) file, with the following structure:
 
 ```console
 $ tree my_templates
@@ -130,11 +147,11 @@ template_manager = inductiva.TemplateManager(template_dir="my_templates",
                                              root_dir="my_rendered_files")
 
 # render all files in the template directory specifying the values of
-# the variables in the template files. Note that we are
-# deliberately not providing a value for the `cube_side` variable,
-# thus enforcing the default value of 1 to be used.
-template_manager.render_dir(density=1000, viscosity=1e-6,
-                            position=[0, 0, 0], radius=0.5)
+# the variables in the template files. Note that we are deliberately not
+# providing values for the `position` or `cube_side` variables in the
+# config.yaml.jinja and obj2.def.jinja files, respectively. This
+# will enfore the default values to be used.
+template_manager.render_dir(density=1000, viscosity=1e-6, radius=0.5)
 ```
 
 After running the code above, the `my_rendered_files` directory will contain the
@@ -172,8 +189,8 @@ directory by providing the name of the source subdirectory as an argument to the
 folder inside the root output directory.
 This mechanism is useful when the template directory contains template files
 for different simulation scenarios/stages but you want to keep the flexibility
-of selecting which scenario/stage to render. For example, in the following code
-snippet, we only render the `objects` subdirectory to `my_rendered_files/only_objects`:
+of selecting which scenario/stage to render. For example, in the following snippet,
+we only render the `objects` subdirectory to `my_rendered_files/only_objects`:
 
 ```python
 template_manager = ...
@@ -194,8 +211,8 @@ my_rendered_files
 
 Sometimes, you may just want to render a single file from the template directory.
 In this case, you can use the `render_file` method. This method takes the name of
-the file to render as an argument, as well as the values of the variables that
-will replace the labels in the template file.
+the file to render as an argument along with the values for the variables in the
+template file.
 
 Using the same template files as before, let's render the `obj1.def.jinja` file.
 By default, the rendered file will be saved to the root output directory:
@@ -239,7 +256,6 @@ copy entire directories or individual files to the destination directory, respec
 In the following examples, we add external resources to the destination directory,
 first by adding an entire directory and then by adding a single file:
 
-
 ```python
 template_manager = ...
 template_manager.copy_dir('/path/to/external_resources')
@@ -256,7 +272,6 @@ my_rendered_files
 
 Similarly to the `render_dir` and `render_file` methods, you can specify the
 destination name of the copied directory or file:
-
 
 ```python
 template_manager = ...
@@ -275,11 +290,7 @@ my_rendered_files
         ├── ...
 ```
 
-
-The `TemplateManager` class also provides a method to add external files to the
-
-
-### Safety
+### Overwrite safety
 
 By default, the `TemplateManager` *will not overwrite* any existing files in the
 destination directory. Calls to the `render_*` or `copy_*` methods will fail if
@@ -291,7 +302,6 @@ files that may have been generated in a previous run.
 
 To enforce the overwriting of existing files, you can set the `overwrite` argument
 to `True` when calling the `render_*` or `copy_*` methods.
-
 
 ```python
 template_manager = ...
@@ -319,7 +329,6 @@ each instance. This means that if you instantiate two `TemplateManager` objects
 with the same destination directory, the second object will point to a slightly
 different destination directory.
 
-
 ```python
 >>> manager1 = inductiva.TemplateManager(..., root_dir="my_rendered_files")
 >>> manager2 = inductiva.TemplateManager(..., root_dir="my_rendered_files")
@@ -333,7 +342,7 @@ This way, the `TemplateManager` guarantees that the destination directory is uni
 and that no files are accidentally overwritten. This behavior can be changed by
 setting the `INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX` environment variable to
 `True` before instantiating the `TemplateManager` object. In this case, if the
-destination directory already exists, an `FileExistsError` exception will be thrown
+destination directory already exists, a `FileExistsError` exception will be thrown
 when instantiating the `TemplateManager` object.
 
 ```python
@@ -348,12 +357,10 @@ line 1
 FileExistsError: Directory my_rendered_files already exists.
 ```
 
-
 When using the templating manager inside a loop, it is important to ensure that
 the destination directory is unique for each iteration. This can be achieved by
 setting the `root_dir` argument to a unique value for each iteration or by relying
 on the above mechanism to ensure uniqueness across different iterations.
-
 
 ```python
 template_manager = inductiva.TemplateManager(..., root_dir=)
@@ -383,4 +390,3 @@ for iteration in range(...):
 # ....
 
 ```
-
