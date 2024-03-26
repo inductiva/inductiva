@@ -11,14 +11,13 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: 'gh-pages' # Make sure this is the branch with your site's code
-
+        
     - name: Deploy to staging webserver via rsync
-      uses: trendyminds/github-actions-rsync@master
+      uses: burnett01/rsync-deployments@7.0.0
       with:
-        RSYNC_OPTIONS: -avzr --delete --exclude node_modules --exclude '.git*'
-        RSYNC_TARGET: /var/www/${{ secrets.STAGING_SERVER }}/docs/
-        RSYNC_SOURCE: .
-      env:
-        SSH_PRIVATE_KEY: ${{secrets.STAGING_WEB_SSH_KEY}}
-        SSH_USERNAME: inductiva-bot
-        SSH_HOSTNAME: ${{secrets.STAGING_SERVER}}
+        switches: -avzr --delete
+        path: .
+        remote_path: /var/www/${{ secrets.STAGING_SERVER }}/docs/
+        remote_host: ${{secrets.STAGING_SERVER}}
+        remote_user: inductiva-bot
+        remote_key: ${{secrets.STAGING_WEB_SSH_KEY}}
