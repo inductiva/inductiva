@@ -8,16 +8,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: 'gh-pages' # Make sure this is the branch with your site's code
-
-    - name: Copy files via SCP
-      uses: appleboy/scp-action@master
+        
+    - name: Deploy to staging webserver via rsync
+      uses: burnett01/rsync-deployments@7.0.0
       with:
-        host: ${{ secrets.STAGING_SERVER }}
-        username: inductiva-bot
-        password: ${{ secrets.STAGING_WEB_PASSWD }}
-        port: 22
-        source: "." # Or specify a subdirectory like 'dist/'
-        target: "/var/www/${{ secrets.STAGING_SERVER }}/docs/"
+        switches: -avzr --delete
+        path: .
+        remote_path: /var/www/${{ secrets.STAGING_SERVER }}/docs/
+        remote_host: ${{secrets.STAGING_SERVER}}
+        remote_user: inductiva-bot
+        remote_key: ${{secrets.STAGING_WEB_SSH_KEY}}
