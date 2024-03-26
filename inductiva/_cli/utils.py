@@ -6,7 +6,7 @@ import os
 import re
 
 import inductiva
-from inductiva import constants
+from inductiva import logs
 
 BEGIN_TAG = "# >>> INDUCTIVA BEGIN:"
 END_TAG = "# >>> INDUCTIVA END:"
@@ -45,7 +45,7 @@ def check_running_for_first_time():
 
     """
     version = inductiva.__version__
-    dir_name = constants.HOME_DIR / f"v{version}"
+    dir_name = logs.log.get_logs_file_path().parent / f"v{version}"
     if not os.path.exists(dir_name):
         os.mkdir(dir_name)
         return True
@@ -87,7 +87,7 @@ def setup_zsh_autocompletion():
 
     """
     version = inductiva.__version__
-    version_dir = constants.HOME_DIR / f"v{version}"
+    version_dir = logs.log.get_logs_file_path().parent / f"v{version}"
     assets_dir = pathlib.Path(inductiva.__path__[0]) / "assets"
     shutil.copytree(assets_dir, version_dir, dirs_exist_ok=True)
 

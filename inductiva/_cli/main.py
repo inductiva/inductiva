@@ -9,7 +9,11 @@ import io
 import inductiva
 from inductiva import _cli
 from inductiva import constants, utils
-from . import loader, ansi_pager
+from . import loader
+try:
+    from . import ansi_pager
+except:
+    ansi_pager = None
 
 
 def get_main_parser():
@@ -84,8 +88,11 @@ def main():
     # Call the function associated with the subcommand
     try:
         if getattr(args, "watchable", False) and args.watch is not None:
-            cmd = " ".join(sys.argv[1:])
-            watch(args.func, args.watch, args, cmd)
+            if ansi_pager is None:
+                raise ImportError("watch module is not available.")
+            else:
+                cmd = " ".join(sys.argv[1:])
+                watch(args.func, args.watch, args, cmd)
         else:
             exit_code = args.func(args)
     except Exception as e:  # pylint: disable=broad-except
