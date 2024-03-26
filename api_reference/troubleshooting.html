@@ -48,6 +48,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -59,12 +61,17 @@
     <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api_reference/troubleshooting';</script>
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Frequently Asked Questions" href="faq.html" />
+    <link rel="next" title="FAQs" href="faq.html" />
     <link rel="prev" title="User Quotas" href="user_quotas.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,30 +181,38 @@
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../installation.html">Quickstart Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../first_example.html">Run your First Simulation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/installation.html">Quickstart Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started/first_example.html">Run your First Simulation</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Explore the API</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../introduction/index.html">How it works</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introduction/simulators.html">Configuring Simulations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introduction/tasks.html">Tasks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introduction/shared_dedicated_resources.html">Shared and Dedicated Resources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introduction/data_flow.html">Storage and Data Flow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introduction/infrastructure.html">Computational Infrastructure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../introduction/templating.html">Templating Engine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explore_api/how_it_works.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explore_api/tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explore_api/shared_dedicated_resources.html">Shared and Dedicated Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explore_api/data_flow.html">Storage and Data Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explore_api/computational-infrastructure.html">Computational Infrastructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explore_api/templating.html">Templating Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explore_api/configuring-simulators.html">Configuring Simulators</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cli/cli-overview.html">CLI Overview and Functionalities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/managing-resources.html">Manage your Computational Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/tracking-tasks.html">Track your Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/streaming-logs.html">Stream Logs of a Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/access-storage.html">Access your Remote Storage</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">How-To Guides</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../how_to/parallel_simulations.html">Run Simulations in Parallel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/run-parallel_simulations.html">Run Multiple Simulations in Parallel</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to/manage_computational_resources.html">Manage Computational Resources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how_to/elastic_machine_group.html">Set up an Elastic Machine Group</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how_to/mpi_cluster.html">Set up an MPI Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../how_to/storage.html">Manage Remote Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/set-up-elastic-machine-group.html">Set up an Elastic Machine Group</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/set-up-mpi-cluster.html">Set up an MPI Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/manage-remote-storage.html">Manage Remote Storage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to/manage_tasks.html">Manage Tasks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../how_to/manage_and_retrieve_results.html">Manage and Retrieve Results</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Available Simulators</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Built-in Simulators</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../simulators/overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/DualSPHysics.html">DualSPHysics</a></li>
@@ -211,27 +226,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../simulators/FDS.html">FDS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/SCHISM.html">SCHISM</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../cli/overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/resources.html">Resources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/tasks.html">Tasks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../cli/storage.html">Remote Storage</a></li>
-</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User Reference</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../computational_resources/index.html">Class Description</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../computational_resources/machinegroup_class.html"><code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../computational_resources/elasticgroup_class.html"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup</span></code> Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../computational_resources/mpicluster_class.html"><code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../computational_resources/compute_janitor.html">Computational Resources Janitor</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="computational_resources/index.html">Class Description</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="computational_resources/machinegroup_class.html"><code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="computational_resources/elasticgroup_class.html"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="computational_resources/mpicluster_class.html"><code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="computational_resources/compute_janitor.html">Computational Resources Janitor</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="user_quotas.html">User Quotas</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Troubleshooting Guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../uninstall_inductiva.html">Uninstall the <code class="docutils literal notranslate"><span class="pre">inductiva</span></code> package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="uninstall_inductiva.html">Uninstall the <code class="docutils literal notranslate"><span class="pre">inductiva</span></code> package</a></li>
 </ul>
 
     </div>
@@ -398,7 +406,11 @@ document.write(`
                   
   <section id="troubleshooting-guide">
 <h1>Troubleshooting Guide<a class="headerlink" href="#troubleshooting-guide" title="Permalink to this heading">#</a></h1>
-<p>In this troubleshooting section, we aim to guide you through resolving issues related to incorrect or incomplete <a class="reference internal" href="../installation.html"><span class="std std-doc">installation of the Inductiva package</span></a> or its dependencies. This guide assumes you’ve read all steps in our <a class="reference internal" href="../installation.html"><span class="std std-doc">Getting Started</span></a> section.</p>
+<p>In this troubleshooting section, we aim to guide you through resolving issues
+related to incorrect or incomplete installation of the Inductiva package
+or its dependencies. This guide assumes you’ve gone through all steps we’ve shared
+in the <a class="reference internal" href="../get_started/installation.html"><span class="std std-doc">installation tutorial</span></a>, and have faced
+some issues.</p>
 <p>If you find bugs, need help, or want to talk to the developers, reach out to us on
 support&#64;inductiva.ai</p>
 <p>If you find any security issues, please report to security&#64;inductiva.ai</p>
@@ -470,7 +482,7 @@ below:</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Frequently Asked Questions</p>
+        <p class="prev-next-title">FAQs</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
