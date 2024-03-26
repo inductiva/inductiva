@@ -25,7 +25,8 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.machine_type_response import MachineTypeResponse
+from inductiva.client.model.base_machine_type import BaseMachineType
+from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
@@ -96,16 +97,7 @@ class SpotSchema(
             **kwargs,
         )
 RamGbSchema = schemas.IntSchema
-
-
-class ProviderSchema(
-    schemas.EnumBase,
-    schemas.StrSchema
-):
-    
-    @schemas.classproperty
-    def GCP(cls):
-        return cls("GCP")
+ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
     {
@@ -117,7 +109,7 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
         'ram_gb': typing.Union[RamGbSchema, decimal.Decimal, int, ],
-        'provider': typing.Union[ProviderSchema, str, ],
+        'provider_id': typing.Union[ProviderIdSchema, ],
     },
     total=False
 )
@@ -147,13 +139,13 @@ request_query_ram_gb = api_client.QueryParameter(
     schema=RamGbSchema,
     explode=True,
 )
-request_query_provider = api_client.QueryParameter(
-    name="provider",
+request_query_provider_id = api_client.QueryParameter(
+    name="provider_id",
     style=api_client.ParameterStyle.FORM,
-    schema=ProviderSchema,
+    schema=ProviderIdSchema,
     explode=True,
 )
-SchemaFor200ResponseBodyApplicationJson = MachineTypeResponse
+SchemaFor200ResponseBodyApplicationJson = BaseMachineType
 
 
 @dataclass
@@ -254,7 +246,7 @@ class BaseApi(api_client.Api):
             request_query_num_cpus,
             request_query_spot,
             request_query_ram_gb,
-            request_query_provider,
+            request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:

@@ -1,7 +1,16 @@
 """Classes to manage different Google Cloud machine group types."""
 from absl import logging
+from typing import Union
+import datetime
 
-from inductiva.resources import machines_base
+from inductiva.resources import machine_types, machines_base
+
+
+def _check_ice_args(spot: bool):
+
+    if spot:
+        raise ValueError(
+            "ICE provider only supports persistent machine launch.")
 
 
 class MachineGroup(machines_base.BaseMachineGroup):
@@ -15,6 +24,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __init__(
         self,
         machine_type: str,
+        provider: Union[str, machine_types.ProviderType] = "GCP",
         num_machines: int = 1,
         spot: bool = False,
         data_disk_gb: int = 10,
@@ -42,9 +52,14 @@ class MachineGroup(machines_base.BaseMachineGroup):
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
 
+        if provider == "ICE":
+            _check_ice_args(spot)
+
         super().__init__(machine_type=machine_type,
                          data_disk_gb=data_disk_gb,
+                         provider=provider,
                          register=register)
+
         # Num_machines is the number of requested machines
         self.num_machines = num_machines
         #Number of active machines at the time of
@@ -63,6 +78,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["max_vms"])
+        machine_group.provider = resp["provider_id"]
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
         machine_group.spot = bool(resp["spot"])
         machine_group.register = False
@@ -75,11 +91,24 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __str__(self):
         return f"Machine Group {self.name} with {self.machine_type} machines"
 
-    def start(self):
-        """Starts all machines of the machine group."""
+    def start(self,
+              max_idle_time: datetime.timedelta = None,
+              auto_terminate_ts: datetime.datetime = None):
+        """Start the MachineGroup.
+        
+        Args:
+            max_idle_time (timedelta): Max idle time, i.e. time without
+                executing any task, after which the resource will be terminated.
+            auto_terminate_ts (datetime): Moment in which the resource will
+                be automatically terminated, irrespectively of the existence of
+                tasks yet to be executed by the resource.
+        """
+
         return super().start(num_vms=self.num_machines,
                              is_elastic=self.__is_elastic,
-                             spot=self.spot)
+                             spot=self.spot,
+                             max_idle_time=max_idle_time,
+                             auto_terminate_ts=auto_terminate_ts)
 
     def terminate(self):
         """Terminates all machines of the machine group."""
@@ -126,7 +155,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self,
         machine_type: str,
         min_machines: int = 1,
-        max_machines: int = 1,
+        max_machines: int = 2,
         spot: bool = False,
         data_disk_gb: int = 10,
         register: bool = True,
@@ -157,7 +186,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             raise ValueError(
                 "`min_machines` should be a number greater than 0.")
 
-        if max_machines < min_machines:
+        if min_machines >= max_machines:
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
 
@@ -201,13 +230,26 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return f"Elastic Machine Group {self.name} with {self.machine_type} " \
              "machines"
 
-    def start(self):
-        """Starts minimum number of machines."""
+    def start(self,
+              max_idle_time: datetime.timedelta = None,
+              auto_terminate_ts: datetime.datetime = None):
+        """Start the MachineGroup.
+        
+        Args:
+            max_idle_time (timedelta): Max idle time, i.e. time without
+                executing any task, after which the resource will be terminated.
+            auto_terminate_ts (datetime): Moment in which the resource will
+                be automatically terminated, irrespectively of the existence of
+                tasks yet to be executed by the resource.
+        """
+
         return super().start(num_vms=self.min_machines,
                              min_vms=self.min_machines,
                              max_vms=self.max_machines,
                              is_elastic=self.__is_elastic,
-                             spot=self.spot)
+                             spot=self.spot,
+                             max_idle_time=max_idle_time,
+                             auto_terminate_ts=auto_terminate_ts)
 
     def terminate(self):
         """Terminates all machines of the machine group."""

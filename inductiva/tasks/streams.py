@@ -11,6 +11,7 @@ $ induction logs <task_id>
  ● 0:00:02 Streaming output from task <task_id>     connection status footer
 """
 from threading import Thread, RLock
+from urllib.parse import urlencode
 from datetime import timedelta
 from typing import IO
 import logging
@@ -26,7 +27,7 @@ import inductiva
 from inductiva import constants
 
 logger = logging.getLogger("websocket")
-logger.setLevel(logging.ERROR)
+logger.setLevel(logging.CRITICAL)
 
 SPACING = 1
 ESC = "\u001B["
@@ -58,6 +59,7 @@ class TaskStreamConsumer:
     PING_INTERVAL_SEC = 15.
     PING_TIMEOUT_SEC = 5.
     TICK_INTERVAL_SEC = 1.
+    END_OF_STREAM = "<<end_of_stream>>"
 
     def __init__(self,
                  task_id: str,
@@ -71,15 +73,9 @@ class TaskStreamConsumer:
             fout (IO): I/O streams, such as returned by open(), for the STDOUT.
             ferr (IO): I/O streams, such as returned by open(), for the STDERR.
         """
-        query = f'?query={{task_id="{task_id}"}}'
-        websocket_url = f"{constants.LOGS_WEBSOCKET_URL}/loki/api/v1/tail"
-        self.websocket_url = websocket_url + query
         self.task_id = task_id
         self.fout = fout
         self.ferr = ferr
-
-        # Setup the websocket application to connect to the logs socket.
-        self.ws = self.__setup_websocket()
 
         # Check if the file handles are interactive and if ANSI is enabled.
         # Note that there is no point in using ANSI if ferr is not interactive
@@ -97,20 +93,20 @@ class TaskStreamConsumer:
         self._conn_count = 0
         self._lock = RLock()
 
-    def __setup_websocket(self):
-        """Initialize the websocket app, with the callbacks within the class."""
-        return websocket.WebSocketApp(self.websocket_url,
-                                      header={"X-API-Key": inductiva.api_key},
-                                      on_open=self.__on_open,
-                                      on_error=self.__on_error,
-                                      on_close=self.__on_close,
-                                      on_message=self.__on_message)
+        self._last_message_timestamp = None
+        self._keyboard_interrupt = False
+        self._end_of_stream = False
 
-    def __on_message(self, unused_ws, message):
+    def __on_message(self, ws: websocket.WebSocketApp, message: str):
         data = json.loads(message)
         streams = data.get("streams")
         for stream in streams:
-            msg = stream["values"][0][1]
+            self._last_message_timestamp, msg = stream["values"][0]
+
+            if msg == self.END_OF_STREAM:
+                self._end_of_stream = True
+                ws.close()
+                return
             self._write_message(msg)
 
     def _get_message_formatter(self):
@@ -140,7 +136,7 @@ class TaskStreamConsumer:
         # 5. move down SPACING lines
         # 6. move to beginning of line and clear line
         # 7. add new blank line
-        return f"{UP}\r{CLEAR_LINE}{msg}\n{DOWN}\r{CLEAR_LINE}\n"
+        return f"{UP}\r{CLEAR_LINE}{msg}{DOWN}\r{CLEAR_LINE}\n"
 
     def _plain_message_formatter(self, msg):
         """Simple message formatter for plain message output."""
@@ -210,10 +206,14 @@ class TaskStreamConsumer:
         if self._prev_status and self._ferr_isatty:
             self._update_status(*self._prev_status)
 
-    def __on_error(self, unused_ws, error):
+    def __on_error(self, ws: websocket.WebSocketApp, error: Exception):
         """Callback for websocket error event."""
-        if not isinstance(error, KeyboardInterrupt):
+        if isinstance(error, KeyboardInterrupt):
+            self._keyboard_interrupt = True
+            ws.close()
+        else:
             self._update_status(str(error), FAILURE)
+            time.sleep(2)
 
     def __on_close(self, unused_ws, close_status_code, close_message):
         """Callback for websocket close event."""
@@ -224,15 +224,18 @@ class TaskStreamConsumer:
             close_msg = ""
 
         if self._conn_opened:
-            msg = f"Disconnected from task {self.task_id}{close_msg}."
-            status = SUCCESS
+            if self._end_of_stream:
+                msg = f"Received end of stream from task {self.task_id}"
+                status = SUCCESS
+            else:
+                msg = f"Disconnected from task {self.task_id}"
+                status = SUCCESS if self._keyboard_interrupt else FAILURE
+            msg = f"{msg}{close_msg}."
         else:
             msg = f"Failed to connect to task {self.task_id}{close_msg}."
             status = FAILURE
 
         self._update_status(msg, status)
-        self._conn_start_time = None
-        self._conn_opened = False
 
     def __on_open(self, unused_ws):
         """Callback for websocket open event."""
@@ -246,17 +249,42 @@ class TaskStreamConsumer:
 
         self._update_status(msg, SUCCESS)
 
-        # if the connection was re-established, warn the user about
-        # the possiblity of some log lines being missing
-        if self._conn_count > 1:
-            self._write_message(" --- Connection re-established: "
-                                "some log lines might be missing --- ")
-
     def __init_status(self):
         """Allocate sufficient lines for the status message."""
         if self._ferr_isatty:
             self.ferr.write(SPACING * "\n")
             self.ferr.flush()
+
+    def _run_websocket(self):
+        """Run the websocket application.
+        If connection is lost, reconnect after a delay
+        and update the start query to get the logs from the last
+        received timestamp."""
+
+        endpoint = constants.LOGS_WEBSOCKET_URL + "/loki/api/v1/tail?"
+        params = {"query": f'{{task_id="{self.task_id}"}}', "limit": 500}
+
+        while True:
+            url = endpoint + urlencode(params, safe='{="}')
+            ws = websocket.WebSocketApp(url,
+                                        header={"X-API-Key": inductiva.api_key},
+                                        on_open=self.__on_open,
+                                        on_error=self.__on_error,
+                                        on_close=self.__on_close,
+                                        on_message=self.__on_message)
+
+            ws.run_forever(reconnect=0,
+                           ping_interval=self.PING_INTERVAL_SEC,
+                           ping_timeout=self.PING_TIMEOUT_SEC)
+
+            if self._end_of_stream or self._keyboard_interrupt:
+                break
+
+            if self._last_message_timestamp is not None:
+                params["start"] = int(self._last_message_timestamp) + 1
+                params["limit"] = 10000
+
+            time.sleep(self.RECONNECT_DELAY_SEC)
 
     def run_forever(self):
         """Stream the STDOUT & STDERR of a task through the websocket."""
@@ -271,9 +299,7 @@ class TaskStreamConsumer:
             thread.daemon = True
             thread.start()
 
-        self.ws.run_forever(reconnect=self.RECONNECT_DELAY_SEC,
-                            ping_interval=self.PING_INTERVAL_SEC,
-                            ping_timeout=self.PING_TIMEOUT_SEC)
+        self._run_websocket()
 
     def _get_ontick_scheduler(self):
         """Get a scheduler for the connection alive ticker.

@@ -1,8 +1,11 @@
 """Tests thread safety"""
+import os
 import time
 from concurrent.futures import ThreadPoolExecutor
 
 import inductiva
+
+CURRENT_DIR = os.getcwd()
 
 
 def thread_1():
@@ -32,3 +35,5 @@ def test_thread_safety():
     assert inductiva.get_output_dir() == output_dir
     assert result_1 == "thread_1"
     assert result_2 == "thread_2"
+
+    os.chdir(CURRENT_DIR)

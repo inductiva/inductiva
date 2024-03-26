@@ -24,26 +24,14 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
 
 # Query params
 NameSchema = schemas.StrSchema
-
-
-class ProviderSchema(schemas.EnumBase, schemas.StrSchema):
-
-    class MetaOapg:
-        enum_value_to_name = {
-            "GCP": "GCP",
-        }
-
-    @schemas.classproperty
-    def GCP(cls):
-        return cls("GCP")
-
-
+ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams', {
         'name': typing.Union[
@@ -53,9 +41,8 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
     })
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams', {
-        'provider': typing.Union[
-            ProviderSchema,
-            str,
+        'provider_id': typing.Union[
+            ProviderIdSchema,
         ],
     },
     total=False)
@@ -73,10 +60,10 @@ request_query_name = api_client.QueryParameter(
     required=True,
     explode=True,
 )
-request_query_provider = api_client.QueryParameter(
-    name="provider",
+request_query_provider_id = api_client.QueryParameter(
+    name="provider_id",
     style=api_client.ParameterStyle.FORM,
-    schema=ProviderSchema,
+    schema=ProviderIdSchema,
     explode=True,
 )
 _auth = [
@@ -189,7 +176,7 @@ class BaseApi(api_client.Api):
         prefix_separator_iterator = None
         for parameter in (
                 request_query_name,
-                request_query_provider,
+                request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:

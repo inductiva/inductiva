@@ -4,5 +4,7 @@ sphinx-book-theme
 sphinxcontrib-mermaid
 myst-parser
 sphinx-copybutton
+sphinx-tabs
+sphinx-togglebutton
 sphinxcontrib-googleanalytics
 sphinxext.opengraph

@@ -45,6 +45,8 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
             "executer-terminated-by-user": "EXECUTERTERMINATEDBYUSER",
             "executer-failed": "EXECUTERFAILED",
             "zombie": "ZOMBIE",
+            "computation-started": "COMPUTATIONSTARTED",
+            "computation-ended": "COMPUTATIONENDED",
         }
 
     @schemas.classproperty
@@ -94,3 +96,11 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
     @schemas.classproperty
     def ZOMBIE(cls):
         return cls("zombie")
+
+    @schemas.classproperty
+    def COMPUTATIONSTARTED(cls):
+        return cls("computation-started")
+
+    @schemas.classproperty
+    def COMPUTATIONENDED(cls):
+        return cls("computation-ended")

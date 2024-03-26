@@ -1,4 +1,4 @@
-# Frequently Asked Questions
+# FAQs
 
 **What should I do if Inductiva does not support the simulation package I need?**
 
@@ -25,4 +25,4 @@ to support@inductiva.ai.*
 
 **How can I optimize the performance of my simulations?**
 Performance optimization involves adjusting simulation parameters. Our documentation 
-includes tips for efficiently utilizing [Inductiva's computational resources](../introduction/infrastructure.md).
+includes tips for efficiently utilizing [Inductiva's computational resources](../explore_api/computational-infrastructure.md)

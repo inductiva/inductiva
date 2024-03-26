@@ -4,10 +4,10 @@ Inductiva API has available several open-source simulators ready to use. Users
 who are familiar with the simulators can easily start running simulations with 
 their previously prepared simulation configuration files. 
 
-As describe in the [Simulators overview section](../introduction/simulators.md) typical usage patterns involve:
-- [Single executable simulator;](../introduction/simulators.md#the-simple-cases)
-- [Pre-defined executables running in sequence;](../introduction/simulators.md#a-slightly-more-complex-case)
-- [Choose the executables as wished to run in sequence.](../introduction/simulators.md#running-long-simulation-pipelines)
+As described in the [configuring simulators section](../explore_api/configuring-simulators.md) typical usage patterns involve:
+- [Single executable simulator;](../explore_api/configuring-simulators#the-simple-cases.md)
+- [Pre-defined executables running in sequence;](../explore_api/configuring-simulators#a-slightly-more-complex-case.md)
+- [Choose the executables as wished to run in sequence.](../explore_api/configuring-simulators#running-long-simulation-pipelines.md)
 
 The simulators available in the current version of the API (0.4) are:
 - [DualSPHysics](../simulators/DualSPHysics.md)

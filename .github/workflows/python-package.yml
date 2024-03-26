@@ -20,6 +20,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+      with:
+        ref: Inductiva-badges
+        path: badges-folder
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -28,10 +32,9 @@ jobs:
       env:
         BOT_REPO_ACCESS: ${{ secrets.BOT_REPO_ACCESS }}
       run: |
-        sudo apt-get install -y libglu1-mesa
-        git config --global url."https://${{ secrets.BOT_REPO_ACCESS }}@github.com/inductiva/".insteadOf https://github.com/inductiva/
+        sudo apt-get install -y libglu1-mesa ca-certificates
         python -m pip install --upgrade pip setuptools wheel
-        python -m pip install yapf pylint pytest pytest-custom_exit_code toml
+        python -m pip install mypy yapf coverage coverage-badge pylint pytest pytest-custom_exit_code toml pytest-markdown-docs
         if [[ -f requirements.txt ]]; then python -m pip install -r requirements.txt; fi
     - name: Check formatting with yapf
       if: ${{ always() }}
@@ -45,3 +48,52 @@ jobs:
       if: ${{ always() }}
       run: |
         pytest --suppress-no-test-exit-code
+    - name: Test docs with pytest pytest-markdown-docs
+      if: ${{ always() }}
+      run: |
+        export INDUCTIVA_API_KEY=${{ secrets.API_TEST_KEY }}
+        pytest --confcutdir=docs/ --markdown-docs docs/markdown_sample.md
+    - name: Link Checker
+      uses: lycheeverse/lychee-action@v1.9.0
+      with:
+        fail: true
+        args: --base . --no-progress './**/*_sample.md'
+    - name: Coverage report
+      if: ${{ always() }}
+      run: | # conftest crashes with coverage due to markdown-docs
+        coverage run --source=./inductiva -m pytest --noconftest 
+        coverage report -m
+    - name: Generate badge
+      if: ${{ always() }}
+      run: |
+        coverage-badge -f -o ./badges-folder/badges/cov.svg
+    - name: Push badge
+      if: ${{ always() }}
+      working-directory: badges-folder
+      run: |
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        git diff --quiet || ( \
+          git add ./badges/cov.svg && \
+          git commit -m "Update coverage badge for commit ${GITHUB_SHA}")
+        git push origin Inductiva-badges
+    - name: Mypy type checking
+      continue-on-error: true
+      if: ${{ always() }}
+      run: |
+        mypy . | nl > mypy_output.txt
+        
+        cat mypy_output.txt
+        echo "###############"
+        
+        : # Argument passed to a function has the wrong type
+        echo "--- Errors arg-type ---"
+        grep arg-type mypy_output.txt
+        grep arg-type mypy_output.txt | wc -l
+        echo "###############"
+        
+        : # function defenitions without types or missing types
+        echo "--- Errors no-untyped-def ---"
+        grep no-untyped-def mypy_output.txt
+        grep no-untyped-def mypy_output.txt | wc -l
+        echo "###############"

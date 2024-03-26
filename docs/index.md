@@ -8,8 +8,8 @@ caption: Get Started
 maxdepth: 1
 hidden: true
 ---
-installation
-first_example
+get_started/installation
+get_started/first_example
 ```
 
 ```{toctree}
@@ -18,14 +18,27 @@ caption: Explore the API
 maxdepth: 1
 hidden: true
 ---
-introduction/index
-introduction/simulators
-introduction/tasks
-introduction/shared_dedicated_resources
-introduction/data_flow
-introduction/infrastructure
-introduction/templating
+explore_api/how_it_works
+explore_api/tasks
+explore_api/shared_dedicated_resources
+explore_api/data_flow
+explore_api/computational-infrastructure
+explore_api/templating
+explore_api/configuring-simulators
 
+```
+
+```{toctree}
+---
+caption: Command Line Interface (CLI)
+maxdepth: 1
+hidden: true
+---
+cli/cli-overview
+cli/managing-resources
+cli/tracking-tasks
+cli/streaming-logs
+cli/access-storage
 ```
 
 ```{toctree}
@@ -34,11 +47,11 @@ caption: How-To Guides
 maxdepth: 1
 hidden: true
 ---
-how_to/parallel_simulations
+how_to/run-parallel_simulations
 how_to/manage_computational_resources
-how_to/elastic_machine_group
-how_to/mpi_cluster
-how_to/storage
+how_to/set-up-elastic-machine-group
+how_to/set-up-mpi-cluster
+how_to/manage-remote-storage
 how_to/manage_tasks
 how_to/manage_and_retrieve_results
 
@@ -46,7 +59,7 @@ how_to/manage_and_retrieve_results
 
 ```{toctree}
 ---
-caption: Available Simulators
+caption: Built-in Simulators
 maxdepth: 1
 hidden: true
 ---
@@ -65,26 +78,14 @@ simulators/SCHISM
 
 ```{toctree}
 ---
-caption: Command Line Interface (CLI)
-maxdepth: 1
-hidden: true
----
-cli/overview
-cli/resources
-cli/tasks
-cli/storage
-```
-
-```{toctree}
----
 caption: User Reference
-maxdepth: 1
+maxdepth: 2
 hidden: true
 ---
-computational_resources/index
+api_reference/computational_resources/index
 api_reference/user_quotas
 api_reference/troubleshooting
 api_reference/faq
 api_reference/glossary
-uninstall_inductiva
+api_reference/uninstall_inductiva
 ```

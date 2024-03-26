@@ -22,7 +22,7 @@ from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
 from inductiva import types, constants
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
-from inductiva.utils import format_utils
+from inductiva.utils import format_utils, files
 
 
 def validate_api_key(api_key: Optional[str]) -> Configuration:
@@ -87,7 +87,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         type_annotations: Annotations of the params' types.
     """
 
-    inputs_size = os.path.getsize(original_params["sim_dir"])
+    inputs_size = files.get_path_size(original_params["sim_dir"])
     logging.info("Preparing upload of the local input directory %s (%s).",
                  original_params["sim_dir"],
                  format_utils.bytes_formatter(inputs_size))

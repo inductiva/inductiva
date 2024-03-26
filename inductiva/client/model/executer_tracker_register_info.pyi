@@ -37,12 +37,12 @@ class ExecuterTrackerRegisterInfo(
 
     class MetaOapg:
         required = {
+            "vm_id",
             "memory",
             "create_time",
             "cpu_count_logical",
             "cpu_count_physical",
-            "git_commit_hash",
-            "host_info",
+            "vm_name",
             "supported_executer_types",
         }
         
@@ -74,19 +74,24 @@ class ExecuterTrackerRegisterInfo(
             cpu_count_logical = schemas.IntSchema
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
-            git_commit_hash = schemas.StrSchema
+            vm_name = schemas.StrSchema
+            vm_id = schemas.StrSchema
             
             
-            class host_info(
+            class machine_group_id(
+                schemas.UUIDBase,
                 schemas.ComposedSchema,
             ):
             
             
                 class MetaOapg:
+                    format = 'uuid'
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
                     
                     @classmethod
                     @functools.lru_cache()
-                    def one_of(cls):
+                    def any_of(cls):
                         # we need this here to make our import statements work
                         # we must store _composed_schemas in here so the code is only run
                         # when we invoke this method. If we kept this at the class
@@ -95,8 +100,8 @@ class ExecuterTrackerRegisterInfo(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            GCloudHostInfo,
-                            InductivaHostInfo,
+                            cls.any_of_0,
+                            cls.any_of_1,
                         ]
             
             
@@ -105,35 +110,32 @@ class ExecuterTrackerRegisterInfo(
                     *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'host_info':
+                ) -> 'machine_group_id':
                     return super().__new__(
                         cls,
                         *_args,
                         _configuration=_configuration,
                         **kwargs,
                     )
-            machine_group_id = schemas.UUIDSchema
             mpi_cluster = schemas.BoolSchema
-            num_mpi_hosts = schemas.IntSchema
             __annotations__ = {
                 "create_time": create_time,
                 "supported_executer_types": supported_executer_types,
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
-                "git_commit_hash": git_commit_hash,
-                "host_info": host_info,
+                "vm_name": vm_name,
+                "vm_id": vm_id,
                 "machine_group_id": machine_group_id,
                 "mpi_cluster": mpi_cluster,
-                "num_mpi_hosts": num_mpi_hosts,
             }
     
+    vm_id: MetaOapg.properties.vm_id
     memory: MetaOapg.properties.memory
     create_time: MetaOapg.properties.create_time
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
-    git_commit_hash: MetaOapg.properties.git_commit_hash
-    host_info: MetaOapg.properties.host_info
+    vm_name: MetaOapg.properties.vm_name
     supported_executer_types: MetaOapg.properties.supported_executer_types
     
     @typing.overload
@@ -152,10 +154,10 @@ class ExecuterTrackerRegisterInfo(
     def __getitem__(self, name: typing_extensions.Literal["memory"]) -> MetaOapg.properties.memory: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["git_commit_hash"]) -> MetaOapg.properties.git_commit_hash: ...
+    def __getitem__(self, name: typing_extensions.Literal["vm_name"]) -> MetaOapg.properties.vm_name: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["host_info"]) -> MetaOapg.properties.host_info: ...
+    def __getitem__(self, name: typing_extensions.Literal["vm_id"]) -> MetaOapg.properties.vm_id: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["machine_group_id"]) -> MetaOapg.properties.machine_group_id: ...
@@ -164,12 +166,9 @@ class ExecuterTrackerRegisterInfo(
     def __getitem__(self, name: typing_extensions.Literal["mpi_cluster"]) -> MetaOapg.properties.mpi_cluster: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["num_mpi_hosts"]) -> MetaOapg.properties.num_mpi_hosts: ...
-    
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "git_commit_hash", "host_info", "machine_group_id", "mpi_cluster", "num_mpi_hosts", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "vm_name", "vm_id", "machine_group_id", "mpi_cluster", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -190,10 +189,10 @@ class ExecuterTrackerRegisterInfo(
     def get_item_oapg(self, name: typing_extensions.Literal["memory"]) -> MetaOapg.properties.memory: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["git_commit_hash"]) -> MetaOapg.properties.git_commit_hash: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["vm_name"]) -> MetaOapg.properties.vm_name: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["host_info"]) -> MetaOapg.properties.host_info: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["vm_id"]) -> MetaOapg.properties.vm_id: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["machine_group_id"]) -> typing.Union[MetaOapg.properties.machine_group_id, schemas.Unset]: ...
@@ -202,47 +201,39 @@ class ExecuterTrackerRegisterInfo(
     def get_item_oapg(self, name: typing_extensions.Literal["mpi_cluster"]) -> typing.Union[MetaOapg.properties.mpi_cluster, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["num_mpi_hosts"]) -> typing.Union[MetaOapg.properties.num_mpi_hosts, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "git_commit_hash", "host_info", "machine_group_id", "mpi_cluster", "num_mpi_hosts", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "vm_name", "vm_id", "machine_group_id", "mpi_cluster", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
+        vm_id: typing.Union[MetaOapg.properties.vm_id, str, ],
         memory: typing.Union[MetaOapg.properties.memory, decimal.Decimal, int, ],
         create_time: typing.Union[MetaOapg.properties.create_time, str, datetime, ],
         cpu_count_logical: typing.Union[MetaOapg.properties.cpu_count_logical, decimal.Decimal, int, ],
         cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical, decimal.Decimal, int, ],
-        git_commit_hash: typing.Union[MetaOapg.properties.git_commit_hash, str, ],
-        host_info: typing.Union[MetaOapg.properties.host_info, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        vm_name: typing.Union[MetaOapg.properties.vm_name, str, ],
         supported_executer_types: typing.Union[MetaOapg.properties.supported_executer_types, list, tuple, ],
-        machine_group_id: typing.Union[MetaOapg.properties.machine_group_id, str, uuid.UUID, schemas.Unset] = schemas.unset,
+        machine_group_id: typing.Union[MetaOapg.properties.machine_group_id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         mpi_cluster: typing.Union[MetaOapg.properties.mpi_cluster, bool, schemas.Unset] = schemas.unset,
-        num_mpi_hosts: typing.Union[MetaOapg.properties.num_mpi_hosts, decimal.Decimal, int, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ExecuterTrackerRegisterInfo':
         return super().__new__(
             cls,
             *_args,
+            vm_id=vm_id,
             memory=memory,
             create_time=create_time,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
-            git_commit_hash=git_commit_hash,
-            host_info=host_info,
+            vm_name=vm_name,
             supported_executer_types=supported_executer_types,
             machine_group_id=machine_group_id,
             mpi_cluster=mpi_cluster,
-            num_mpi_hosts=num_mpi_hosts,
             _configuration=_configuration,
             **kwargs,
         )
-
-from inductiva.client.model.g_cloud_host_info import GCloudHostInfo
-from inductiva.client.model.inductiva_host_info import InductivaHostInfo
