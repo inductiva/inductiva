@@ -1,0 +1,23 @@
+name: Deploy to Staging Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref: 'gh-pages' # Make sure this is the branch with your site's code
+
+    - name: Copy files via SCP
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.STAGING_SERVER }}
+        username: inductiva-bot
+        password: ${{ secrets.STAGING_WEB_PASSWD }}
+        port: 22
+        source: "." # Or specify a subdirectory like 'dist/'
+        target: "/var/www/${{ secrets.STAGING_SERVER }}/docs/"
