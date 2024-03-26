@@ -12,7 +12,7 @@ from inductiva import constants, utils
 from . import loader
 try:
     from . import ansi_pager
-except:
+except ImportError:
     ansi_pager = None
 
 
