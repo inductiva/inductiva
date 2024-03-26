@@ -53,6 +53,6 @@ $ python -c 'import inductiva; print(inductiva.__version__)'
 
 
 Troubleshoot installation problems that you might encounter with Inductiva 
-API by checking our [troubleshooting guide](../api_reference/troubleshooting.md),
-[FAQs](../api_reference/faq.md), or [getting in touch](support@inductiva.ai)
+API by checking our [troubleshooting guide](./api_reference/troubleshooting.md),
+[FAQs](./api_reference/faq.md), or [getting in touch](mailto:support@inductiva.ai)
 with our support team directly.

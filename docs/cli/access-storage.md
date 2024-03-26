@@ -57,4 +57,4 @@ Such commands will always be followed with a confirmation prompt to ensure user 
 and prevent irreversible loss.
 
 These are the main functionalities of the CLI for storage at the moment. In case
-you would like to have more functionalities via the CLI [contact us](support@inductiva.ai).
+you would like to have more functionalities via the CLI [contact us](mailto:support@inductiva.ai).
