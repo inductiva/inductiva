@@ -157,7 +157,7 @@ commands = [
 ]
 
 # Run the simulation with the given input directory and commands
-task = openfoam.run(input_dir=input_dir, commands=commands)
+task = openfoam_simulator.run(input_dir=input_dir, commands=commands)
 ```
 
 For this case, the `commands` follow the usual approach used by OpenFOAM with the 

@@ -18,13 +18,13 @@ Machine types provided in Google Cloud
 
 # You would get an output listing all available machines:
 
-c2: Intel Xeon Cascade Lake (2nd Gen) processor.
-  > c2-standard-  [2, 4, 8, 16, 32, 60]                         
+CPU family: c2
+   > c2-standard- [4, 8, 16, 30, 60]                       
 
-c3: Intel Xeon Sapphire Rapids (4th Gen) processor.
-  > c3-highcpu-   [4, 8, 22, 44, 88, 176]                       
-  > c3-standard-  [4, 8, 22, 44, 88, 176]                       
-  > c3-highmem-   [4, 8, 22, 44, 88, 176]                       
+CPU family: c3
+   > c3-highcpu- [4, 8, 22, 44, 88, 176] 
+   > c3-highmem- [4, 8, 22, 44, 88, 176] 
+   > c3-standard- [4, 8, 22, 44, 88, 176] (-lssd)                   
 
 ...
 

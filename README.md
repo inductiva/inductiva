@@ -1,5 +1,5 @@
 
-[![Python package](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml/badge.svg)](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml) [![Python version](https://img.shields.io/pypi/pyversions/inductiva.svg)](https://www.python.org/downloads/) [![Documentation](https://img.shields.io/badge/Documentation-blue.svg)](http://docs.inductiva.ai/en/latest/) [![Benchmarks](https://img.shields.io/badge/Benchmarks-blue.svg)](https://benchmarks.inductiva.ai) <a href="https://pypi.org/project/inductiva/"><img src="https://img.shields.io/pypi/v/inductiva" alt="pypi version"></a> ![coverage badge](https://raw.githubusercontent.com/inductiva/inductiva/Inductiva-badges/badges/cov.svg)
+[![Python package](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml/badge.svg)](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml) [![Python version](https://img.shields.io/pypi/pyversions/inductiva.svg)](https://www.python.org/downloads/) [![Documentation](https://img.shields.io/badge/Documentation-blue.svg)](https://docs.inductiva.ai/en/latest/) [![Benchmarks](https://img.shields.io/badge/Benchmarks-blue.svg)](https://benchmarks.inductiva.ai) <a href="https://pypi.org/project/inductiva/"><img src="https://img.shields.io/pypi/v/inductiva" alt="pypi version"></a> ![coverage badge](https://raw.githubusercontent.com/inductiva/inductiva/Inductiva-badges/badges/cov.svg)
 
 ![linkedin_header](https://user-images.githubusercontent.com/104431973/231184851-0ce34289-593e-4832-aaa2-9aae652113f5.jpg)
 
@@ -15,7 +15,7 @@ configuration, offering a straightforward Python interface for running simulatio
 on state-of-the-art hardware. This allows scientists and engineers to focus their
 time and energy on what matters: running simulations that solve real problems.
 
-To find out more, check our [documentation](http://docs.inductiva.ai/en/latest/).
+To find out more, check our [documentation](https://docs.inductiva.ai/).
 
 
 If you have any questions or suggestions about the API please
