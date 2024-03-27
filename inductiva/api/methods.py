@@ -33,8 +33,7 @@ def validate_api_key(api_key: Optional[str]) -> Configuration:
             "No API Key specified. "
             "Please set the INDUCTIVA_API_KEY environment variable.\n"
             "More infomation at:"
-            "https://inductiva-research-labs-inductiva.readthedocs-hosted.com/en/latest/Getting%20Started.html"
-        )
+            "https://docs.inductiva.ai/")
     # pylint: enable=line-too-long
 
     # Perform version check only on first invocation
