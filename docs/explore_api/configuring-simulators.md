@@ -45,13 +45,17 @@ referred. Below we present the case of two simulators that follow this pattern:
 # Example of how to run the SWASH simulator
 import inductiva
 
+# Set simulation input directory
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "swash-input-example.zip", unzip=True)
+
 # Instantiate the simulator
 swash_simulator = inductiva.simulators.SWASH()
 
 # Input directory contains the .sws config file, a bathymetry file and other files.
-task = swash_simulator.run(input_dir="swash-example",
+task = swash_simulator.run(input_dir=input_dir,
                            sim_config_filename="input.sws")
-
 ```
 
 **SPlisHSPlasH:** The main configuration file is a `.json` file.
@@ -59,11 +63,16 @@ task = swash_simulator.run(input_dir="swash-example",
 # Example of how to run the SplishSplash simulator
 import inductiva
 
+# Set simulation input directory
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "splishsplash-input-example.zip", unzip=True)
+
 # Instantiate the simulator
 splishsplash_simulator = inductiva.simulators.SplishSplash()
 
 # Input directory contains the .json config file and a .obj file for the domain.
-task = splishsplash_simulator.run(input_dir="splishsplash-example",
+task = splishsplash_simulator.run(input_dir=input_dir,
                                   sim_config_filename="config.json")
 ```
 
@@ -89,11 +98,17 @@ with the configuration files for both commands.
 # Example of how to run the REEF3D simulator
 import inductiva
 
+# Set simulation input directory
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "reef3d-input-example.zip", unzip=True
+)
+
 # Instantiate the simulator
 reef3d_simulator = inductiva.simulators.REEF3D()
 
 # The files for the simulation are in the input directory.
-task = reef3d_simulator.run(input_dir="reef3d-example")
+task = reef3d_simulator.run(input_dir=input_dir)
 ```
 
 In this specific case, REEF3D uses a pre-defined standard for the naming of the
@@ -120,6 +135,11 @@ Below, an example with OpenFOAM is given.
 ```python
 # Example of how to run the OpenFOAM simulator
 import inductiva
+
+# Set simulation input directory
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "openfoam-input-example.zip", unzip=True)
 
 # Instantiate the simulator
 openfoam_simulator = inductiva.simulators.OpenFOAM()
