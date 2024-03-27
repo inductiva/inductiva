@@ -522,34 +522,34 @@ lead to a state transition:</p>
 <td><p>After you make your initial simulation request, the newly created task remains in this pending state, awaiting all necessary input files. You can terminate or kill the task, moving it to <code class="docutils literal notranslate"><span class="pre">KILLED</span></code>, or it may become <code class="docutils literal notranslate"><span class="pre">ZOMBIE</span></code> if its assigned machine group is terminated. Once you’ve uploaded all the input files, the task progresses to <code class="docutils literal notranslate"><span class="pre">SUBMITTED</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">SUBMITTED</span></code></p></td>
-<td><p><em>The task is queued and ready to be picked up by an executor. You can cancel the task, moving it to <code class="docutils literal notranslate"><span class="pre">KILLED</span></code>, or it can become a <code class="docutils literal notranslate"><span class="pre">ZOMBIE</span></code> under the same conditions as in <code class="docutils literal notranslate"><span class="pre">PENDING</span> <span class="pre">INPUT</span></code>. When an executor picks it up, the task moves to <code class="docutils literal notranslate"><span class="pre">STARTED</span></code>.</em></p></td>
+<td><p>The task is queued and ready to be picked up by an executor. You can cancel the task, moving it to <code class="docutils literal notranslate"><span class="pre">KILLED</span></code>, or it can become a <code class="docutils literal notranslate"><span class="pre">ZOMBIE</span></code> under the same conditions as in <code class="docutils literal notranslate"><span class="pre">PENDING</span> <span class="pre">INPUT</span></code>. When an executor picks it up, the task moves to <code class="docutils literal notranslate"><span class="pre">STARTED</span></code>.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">STARTED</span></code></p></td>
-<td><p><em>Simulation has started. Upon successful completion, the task transitions to <code class="docutils literal notranslate"><span class="pre">SUCCESS</span></code>. If it fails due to simulation issues, the task transitions to <code class="docutils literal notranslate"><span class="pre">FAILED</span></code>,whereas any failure due to executor problems moves the task to <code class="docutils literal notranslate"><span class="pre">EXECUTOR</span> <span class="pre">FAILED</span></code>. You can send a request to kill the task, moving it to <code class="docutils literal notranslate"><span class="pre">PENDING</span> <span class="pre">KILLED</span></code>.</em></p></td>
+<td><p>Simulation has started. Upon successful completion, the task transitions to <code class="docutils literal notranslate"><span class="pre">SUCCESS</span></code>. If it fails due to simulation issues, the task transitions to <code class="docutils literal notranslate"><span class="pre">FAILED</span></code>,whereas any failure due to executor problems moves the task to <code class="docutils literal notranslate"><span class="pre">EXECUTOR</span> <span class="pre">FAILED</span></code>. You can send a request to kill the task, moving it to <code class="docutils literal notranslate"><span class="pre">PENDING</span> <span class="pre">KILLED</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">PENDING</span> <span class="pre">KILLED</span></code></p></td>
-<td><p><em>Your request to terminate a running task has been received by the API and is awaiting execution.</em></p></td>
+<td><p>Your request to terminate a running task has been received by the API and is awaiting execution.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">KILLED</span></code></p></td>
-<td><p><em>The task has been successfully terminated upon your request.</em></p></td>
+<td><p>The task has been successfully terminated upon your request.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ZOMBIE</span></code></p></td>
-<td><p><em>The progression of the non-started task abruptly stops due to the shutdown of the computational resources where the task was running, typically when a machine group is user-terminated.</em></p></td>
+<td><p>The progression of the non-started task abruptly stops due to the shutdown of the computational resources where the task was running, typically when a machine group is user-terminated.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SPOT</span> <span class="pre">PREEMPTED</span></code></p></td>
-<td><p><em>Spot instances running the task were terminated. In this case, the task is re-queued or <code class="docutils literal notranslate"><span class="pre">SUBMITTED</span></code> until new resources with the same original machine group become available.</em></p></td>
+<td><p>Spot instances running the task were terminated. In this case, the task is re-queued or <code class="docutils literal notranslate"><span class="pre">SUBMITTED</span></code> until new resources with the same original machine group become available.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">FAILED</span></code></p></td>
-<td><p><em>Simulator errors prevent completion, usually due to incorrect input configurations or an internal error within the simulator itself.</em></p></td>
+<td><p>Simulator errors prevent completion, usually due to incorrect input configurations or an internal error within the simulator itself.</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EXECUTOR</span> <span class="pre">TERMINATED</span></code></p></td>
-<td><p><em>The executor was terminated due to internal reasons. Similar to <code class="docutils literal notranslate"><span class="pre">SPOT</span> <span class="pre">PREEMPTED</span></code>, the task is requeued or <code class="docutils literal notranslate"><span class="pre">SUBMITTED</span></code> for execution.</em></p></td>
+<td><p>The executor was terminated due to internal reasons. Similar to <code class="docutils literal notranslate"><span class="pre">SPOT</span> <span class="pre">PREEMPTED</span></code>, the task is requeued or <code class="docutils literal notranslate"><span class="pre">SUBMITTED</span></code> for execution.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">EXECUTOR</span> <span class="pre">TERMINATED</span> <span class="pre">BY</span> <span class="pre">USER</span></code></p></td>
-<td><p><em>Similar to <code class="docutils literal notranslate"><span class="pre">KILLED</span></code>, the task’s executor was terminated either by you or by system-enforced limits (generally when quota limits are reached).</em></p></td>
+<td><p>Similar to <code class="docutils literal notranslate"><span class="pre">KILLED</span></code>, the task’s executor was terminated either by you or by system-enforced limits (generally when quota limits are reached).</p></td>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">EXECUTOR</span> <span class="pre">FAILED</span></code></p></td>
-<td><p><em>Executor errors prevent completion, such as low disk space.</em></p></td>
+<td><p>Executor errors prevent completion, such as low disk space.</p></td>
 </tr>
 </tbody>
 </table>

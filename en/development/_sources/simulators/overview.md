@@ -5,18 +5,19 @@ who are familiar with the simulators can easily start running simulations with
 their previously prepared simulation configuration files. 
 
 As described in the [configuring simulators section](../explore_api/configuring-simulators.md) typical usage patterns involve:
-- [Single executable simulator;](../explore_api/configuring-simulators#the-simple-cases.md)
-- [Pre-defined executables running in sequence;](../explore_api/configuring-simulators#a-slightly-more-complex-case.md)
-- [Choose the executables as wished to run in sequence.](../explore_api/configuring-simulators#running-long-simulation-pipelines.md)
+- [Single executable simulator;](../explore_api/configuring-simulators.md#the-simple-cases)
+- [Pre-defined executables running in sequence;](../explore_api/configuring-simulators.md#a-slightly-more-complex-case)
+- [Choose the executables as wished to run in sequence.](../explore_api/configuring-simulators.md#running-long-simulation-pipelines)
 
-The simulators available in the current version of the API (0.4) are:
+The simulators available in the current version of the API (0.5) are:
 - [DualSPHysics](../simulators/DualSPHysics.md)
 - [SPlisHSPlasH](../simulators/SPlisHSPlasH.md)
 - [OpenFOAM](../simulators/OpenFOAM.md)
 - [GROMACS](../simulators/GROMACS.md)
-- [SWASH](../simulators/SWASH.md)
+- [SCHISM] (../simulators/SCHISM.md)
 - [XBeach](../simulators/XBeach.md)
 - [Reef3D](../simulators/Reef3D.md)
+- [SWASH](../simulators/SWASH.md)
 - [SWAN](../simulators/SWAN.md)
 - [FDS](../simulators/FDS.md)
 
