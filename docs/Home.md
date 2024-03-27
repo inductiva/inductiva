@@ -24,9 +24,10 @@ by [opening a GitHub issue](https://github.com/inductiva/inductiva/issues));
 - A guide on [Inductiva’s Command Line Interface (CLI)](cli/cli-overview.md), which
 allows you to perform many tasks from your terminal, including listing available
 computational resources and checking the status of tasks;
-- A User Reference section that covers a wide variety of topics of interest, including
-information about some key classes available in the API Client, a troubleshooting guide,
-information about quotas and an FAQ.
+- A [User Reference](/api_reference/computational_resources/index.md) section 
+that covers a wide variety of topics of interest, including information about
+some key classes available in the API Client, a troubleshooting guide, information
+about quotas and an FAQ.
 
 If you have any questions or suggestions about the API please [open an issue on the inductiva’s API Client GitHub repo](https://github.com/inductiva/inductiva/issues), or contact us via [support@inductiva.ai](mailto:support@inductiva.ai).
 
