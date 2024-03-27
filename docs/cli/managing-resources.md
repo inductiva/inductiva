@@ -26,56 +26,21 @@ c3: Intel Xeon Sapphire Rapids (4th Gen) processor.
   > c3-standard-  [4, 8, 22, 44, 88, 176]                       
   > c3-highmem-   [4, 8, 22, 44, 88, 176]                       
 
-h3: (Available Soon) Intel Xeon Sapphire Rapids (4th Gen) processor.
-Simultaneous multithreading disabled, i.e., vCPU represents an entire core.
-  > h3-standard-  [88]                                          
+...
 
-c2d: AMD EPYC Milan (3rd Gen) processor.
-  > c2d-highcpu-  [2, 4, 8, 16, 32, 56, 112]                    
-  > c2d-standard- [2, 4, 8, 16, 32, 56, 112]                    
-  > c2d-highmem-  [2, 4, 8, 16, 32, 56, 112]                    
-
-c3d: AMD EPYC Genoa (4th Gen) processor.
-  > c3d-highcpu-  [4, 8, 16, 30, 60, 90, 180, 360]              
-  > c3d-standard- [4, 8, 16, 30, 60, 90, 180, 360]              
-  > c3d-highmem-  [4, 8, 16, 30, 60, 90, 180, 360]              
-
-e2: Intel Xeon (up to Skylake, 1st Gen) and AMD EPYC (up to Milan, 3rd Gen) processors.
-Automatically selected based on availability.
-  > e2-highcpu-   [2, 4, 8, 16, 32]                             
-  > e2-standard-  [2, 4, 8, 16, 32]                             
-  > e2-highmem-   [2, 4, 8, 16]                                 
-
-n2: Intel Xeon Ice Lake and Cascade Lake processors (3rd and 2nd Gen).
-Cascade Lake default up to 80 vCPUs and Ice Lake for larger machines.
-  > n2-highcpu-   [2, 4, 8, 16, 32, 48, 64, 80, 96]             
-  > n2-standard-  [2, 4, 8, 16, 32, 48, 64, 80, 96, 128]        
-  > n2-highmem-   [2, 4, 8, 16, 32, 48, 64, 80, 96, 128]        
-
-n2d: AMD EPYC Milan or ROME processors (3rd and 2nd Gen).
-  > n2d-highcpu-  [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224]   
-  > n2d-standard- [2, 4, 8, 16, 32, 48, 64, 80, 96, 128, 224]   
-  > n2d-highmem-  [2, 4, 8, 16, 32, 48, 64, 80, 96]             
-
-n1: Intel Xeon (up to Skylake, 1st Gen) processor.
-Automatically selected based on availability.
-  > n1-highcpu-   [1, 2, 4, 8, 16, 32, 64, 96]                  
-  > n1-standard-  [1, 2, 4, 8, 16, 32, 64, 96]                  
-  > n1-highmem-   [1, 2, 4, 8, 16, 32, 64, 96]  
 ```
 
-If you want more detailed information you can use the `-v` flag, and you can focus
-on a specific series by using the `-s` flag. 
+You can focus on a specific series by using the `-s` flag. 
 
 For example:
 
 ```bash
-$ inductiva resources available -s c3d -v
+$ inductiva resources available -s c3d
 Machine types provided in Google Cloud
 c3d: AMD EPYC Genoa (4th Gen) processor.
-  > c3d-highcpu-  [4, 8, 16, 30, 60, 90, 180, 360]              -> 2 GB of memory per vCPU.
-  > c3d-standard- [4, 8, 16, 30, 60, 90, 180, 360]              -> 4 GB of memory per vCPU and possible local ssd integration.
-  > c3d-highmem-  [4, 8, 16, 30, 60, 90, 180, 360]              -> 4 GB of memory per vCPU.
+  > c3d-highcpu-  [4, 8, 16, 30, 60, 90, 180, 360]
+  > c3d-standard- [4, 8, 16, 30, 60, 90, 180, 360]
+  > c3d-highmem-  [4, 8, 16, 30, 60, 90, 180, 360]
 ```
 ## Estimate Costs
 
