@@ -12,7 +12,7 @@ In this section, we will cover the following topics:
  * [Downloading Outputs](#downloading-outputs): Learn how to download the
    outputs of a task.
 
-#### Task monitoring
+## Task monitoring
 
 The `Task` class provides mechanisms to track and manage the status of a task.
 With a `Task` object at hand, the user can:
@@ -62,7 +62,7 @@ Other than just retrieving information about the task, the user has the option
 to control 
 
 
-#### Killing tasks
+## Killing tasks
 
 Sometimes, a user finds out that there is a reason to not allow a task to reach
 a final state. Whether there is a mistake in the simulation input files, a
