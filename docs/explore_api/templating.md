@@ -187,7 +187,7 @@ machine_group = inductiva.resources.MachineGroup(machine_type="c2-standard-30")
 machine_group.start()
 
 # Download the input files mentioned above
-template_dir = inductiva.utils.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "splishsplash-template-example.zip", unzip=True)
 
@@ -199,7 +199,7 @@ kinematic_viscosity = 1 # m^2/s
 splishsplash = inductiva.simulators.SplishSplash()
 
 # Initialize the templating manager
-template_manager = inductiva.TemplateManager(template_dir=template_dir,
+template_manager = inductiva.TemplateManager(template_dir=input_dir,
                                     root_dir="splishsplash-viscous")
 
 # Render the full template dir with the density and kinematic viscosity parameters
@@ -245,7 +245,7 @@ machine_group = inductiva.resources.MachineGroup(
 machine_group.start()
 
 # Download the input files mentioned above
-template_dir = inductiva.utils.download_from_url(
+input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "splishsplash-template-example.zip", unzip=True)
 
@@ -259,7 +259,7 @@ kinematic_viscosity_list = [1e-1, 1e-3, 1e-6, 1e-8]
 for density in density_list:
     for kinematic_viscosity in kinematic_viscosity_list:
         # Set a new root directory and render the template directory
-        template_manager = inductiva.TemplateManager(template_dir,
+        template_manager = inductiva.TemplateManager(input_dir,
                                                      "splishsplash-scenario")
         template_manager.add_dir(density=density,
                                  kinematic_viscosity=kinematic_viscosity)
