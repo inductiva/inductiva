@@ -31,7 +31,7 @@ run via the Inductiva (CLI) to manage your projects and interact with our API:
 
    .. tab:: `tasks`
 
-      `Create and track your simulation tasks. <./tracking-tasks.html>`_
+      `Track your simulation tasks. <./tracking-tasks.html>`_
 
    .. tab:: `logs`
 
