@@ -29,7 +29,7 @@ Download and prepare the input files for your simulations:
 
 ```python
 # Download input files for the SWASH simulation
-input_dir = inductiva.utils.download_from_url(
+template_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/swash-template-example.zip", unzip=True)
 ```
 ## 3. Running the Simulations
@@ -47,11 +47,14 @@ water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
 # Launch multiple simulations for each water level
 for water_level in water_levels_list:
     # Set the root directory and render the template files into it.
-    template_engine = inductiva.TemplateManager(template_dir="swash-input-example")
-    template_engine.render_dir(water_level=water_level)
+    template_manager = inductiva.TemplateManager(
+                            template_dir=template_dir,
+                            root_dir="swash-example"
+                        )
+    template_manager.render_dir(water_level=water_level)
     
     # Run simulation with the configured input directory on the dedicated MachineGroup
-    task = swash.run(input_dir=template_engine.get_root_dir(),
+    task = swash.run(input_dir=template_manager.get_root_dir(),
                      sim_config_filename="input.sws",
                      on=machine_group)
 ```
