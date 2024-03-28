@@ -66,3 +66,14 @@ of seconds to wait for confirmation:
 # Request to kill a task with a timeout for confirmation
 $ inductiva tasks kill cmvsc9qhz5iy86f6pef8uyxqt --wait-timeout 10
 ```
+
+Finally, the Inductiva CLI allows you to download tasks using:
+
+```bash
+$ inductiva cli download task_1_id task_2_id
+```
+
+Additionally, we can specify specific files to download using
+`--filenames` and we can specify the output directory with
+`--output_dir`. When `--output_dir` is provided the tasks will be
+download under `output_dir/tasks_id`.
