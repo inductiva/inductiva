@@ -57,7 +57,10 @@ main_doc = 'index'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
+exclude_patterns = [
+    'markdown_sample.md',
+    'task_state_diagram.md',
+]
 
 # Auto generate header anchors
 myst_heading_anchors = 3
