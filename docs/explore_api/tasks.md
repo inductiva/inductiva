@@ -108,6 +108,8 @@ with task.sync_context():
     task.wait()  # <- The remote simulation WILL DIE if the local session is
                  #     interrupted while waiting for the wait() call to return
 ```
+
+(task-lifecyle)=
 ## Task Lifecycle
 
 The status of a task changes as it progresses through its lifecycle. Understanding 

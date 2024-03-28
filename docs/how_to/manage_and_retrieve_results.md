@@ -12,7 +12,7 @@ will cover the following topics:
    of a task and control where the files are downloaded to.
 
 Most of the topics that follow rely on the `Task` class. Please refer to the
-[Task documentation](../introduction/tasks.md) for more information about it.
+[Task documentation](../explore_api/tasks.md) for more information about it.
 
 ## Saving simulation outputs
 
@@ -70,7 +70,7 @@ accomplished programmatically using the `inductiva.storage.listdir` function:
 inductiva.storage.listdir(max_results=10, order_by="creation_time", sort_order="desc")
 ```
 
-Refer to the [Storage how-to documentation](storage.md) for more information
+Refer to the [Storage how-to documentation](manage-remote-storage.md) for more information
 on how to manage the user's remote storage space.
 
 

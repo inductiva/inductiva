@@ -62,6 +62,9 @@ exclude_patterns = [
     'task_state_diagram.md',
 ]
 
+# Auto generate header anchors
+myst_heading_anchors = 3
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
