@@ -1,4 +1,4 @@
-## SPlisHSPlasH
+# SPlisHSPlasH
 
 SPlisHSPlasH is a Smoothed-Particle Hydrodynamics (SPH) simulator that covers a 
 wide range of applications. The simulator is usually configured by a single file 
@@ -7,7 +7,7 @@ simulation, including the geometry, the physical properties of the fluids, the
 boundary conditions, the numerical parameters, and the output files. Sometimes the 
 configuration can also use extra geometry files.
 
-### Example
+## Example
 
 ```python
 import inductiva

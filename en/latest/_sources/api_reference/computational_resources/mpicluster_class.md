@@ -38,7 +38,7 @@ mpi_cluster = inductiva.resources.MPICluster(
 Creating an instance of `MPICluster` does not start the machines. This only registers
 the configuration on the API which can now be used to manage the cluster further.
 
-### Managing the MPI Cluster
+## Managing the MPI Cluster
 
 With your `mpi_cluster` object ready, starting the cluster is as simple as calling `mpi_cluster.start()`.
 

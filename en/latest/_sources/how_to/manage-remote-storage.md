@@ -11,12 +11,12 @@ As you start running simulations, your remote personal storage will get filled u
 Hence, at times it will be useful to monitor the amount of storage space being utilized.
 This can be achieved as follows:
 
-#### Python
+### Python
 ```python
 import inductiva
 space_used = inductiva.storage.get_space_used()
 ```
-#### CLI
+### CLI
 ```bash
 $ inductiva storage size
 ```
