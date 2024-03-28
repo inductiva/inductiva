@@ -47,8 +47,8 @@ water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
 # Launch multiple simulations for each water level
 for water_level in water_levels_list:
     # Set the root directory and render the template files into it.
-    template_engine = inductiva.TemplateEngine("swash-input-example")
-    template_engine.add_dir(input_dir, water_level=water_level)
+    template_engine = inductiva.TemplateManager(template_dir="swash-input-example")
+    template_engine.render_dir(water_level=water_level)
     
     # Run simulation with the configured input directory on the dedicated MachineGroup
     task = swash.run(input_dir=template_engine.get_root_dir(),
