@@ -225,7 +225,7 @@ programmatic values we set. When templating, the `TemplateManager` removes the
 
 The rendering is specifically done in the code line:
 ```python
-template_manager.render_dir(density=density, kinematic_viscosity=kinematic_viscosity)
+template_manager.add_dir(density=density, kinematic_viscosity=kinematic_viscosity)
 ```
 
 ### Exploring the entire design space
@@ -261,7 +261,7 @@ for density in density_list:
         # Set a new root directory and render the template directory
         template_manager = inductiva.TemplateManager(template_dir,
                                                      "splishsplash-scenario")
-        template_manager.render_dir(density=density,
+        template_manager.add_dir(density=density,
                                  kinematic_viscosity=kinematic_viscosity)
 
         task = splishsplash.run(
