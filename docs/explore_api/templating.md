@@ -11,10 +11,10 @@ to be run on those machines in parallel. Such massive parallelism is precisely
 what you need when you want to find the optimal solution for a problem, and the
 only way to test each candidate's solution is by simulating it. To do so, one needs
 to configure multiple simulations, each with a slightly different set of parameters.
-Generally speaking, the goal is to explore the largest possible volume of the
-solution space.
+Generally speaking, the goal is to explore the largest possible extent of the
+design space.
 
-In this context, the Inductiva API provides a powerful tool for exploring the solution
+In this context, the Inductiva API provides a powerful tool for exploring the design
 space of a problem: the *templating manager*. The templating manager allows you to
 quickly generate a large number of simulation configurations by starting from a
 base case and replacing some of its fixed values with variables that you can programmatically
