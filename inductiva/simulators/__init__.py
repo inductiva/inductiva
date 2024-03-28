@@ -5,6 +5,7 @@ from .xbeach import XBeach
 from .splishsplash import SplishSplash
 from .dualsphysics import DualSPHysics
 from .openfoam import OpenFOAM
+from .openfast import Openfast
 from .gromacs import GROMACS
 from .simsopt import SIMSOPT
 from .fenicsx import FEniCSx
