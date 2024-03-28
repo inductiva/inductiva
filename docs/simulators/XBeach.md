@@ -1,4 +1,4 @@
-## XBeach
+# XBeach
 
 XBeach is a simulator with a two-dimensional model for wave propagation, sediment 
 transport and morphological changes in the nearshore area. The simulator is configured 
@@ -13,7 +13,7 @@ We advise to always set the `mpiboundary` argument in the `params.txt` file,
 since we handle automatically the parallelization of the simulation, based on the 
 number of cores available in the machine.
 
-### Example
+## Example
 
 ```python
 import inductiva
