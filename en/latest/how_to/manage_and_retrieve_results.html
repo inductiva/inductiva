@@ -469,13 +469,13 @@ on how to manage the user’s remote storage space.</p>
 <p>Downloading the outputs of a task is a common operation. In the following
 snippets, we show how to download the outputs of a finished task and how to
 control which files and where those files are downloaded to.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Download all the files produced by the task
-&gt;&gt;&gt; output_dir = task.download_outputs()
-Downloading simulation outputs to inductiva_output/i4ir3kvv62odsfrhko4y8w2an/output.zip.
-100%|██████████████████████████████████████| 5.04M/5.04M [00:00&lt;00:00, 13.3MB/s]
-Uncompressing the outputs to inductiva_output/i4ir3kvv62odsfrhko4y8w2an/
-&gt;&gt;&gt; print(ouptut_dir)
-PosixPath(&#39;inductiva_output/i4ir3kvv62odsfrhko4y8w2an&#39;)
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Download<span class="w"> </span>all<span class="w"> </span>the<span class="w"> </span>files<span class="w"> </span>produced<span class="w"> </span>by<span class="w"> </span>the<span class="w"> </span>task
+<span class="go">&gt;&gt;&gt; output_dir = task.download_outputs()</span>
+<span class="go">Downloading simulation outputs to inductiva_output/i4ir3kvv62odsfrhko4y8w2an/output.zip.</span>
+<span class="go">100%|██████████████████████████████████████| 5.04M/5.04M [00:00&lt;00:00, 13.3MB/s]</span>
+<span class="go">Uncompressing the outputs to inductiva_output/i4ir3kvv62odsfrhko4y8w2an/</span>
+<span class="go">&gt;&gt;&gt; print(ouptut_dir)</span>
+<span class="go">PosixPath(&#39;inductiva_output/i4ir3kvv62odsfrhko4y8w2an&#39;)</span>
 </pre></div>
 </div>
 <p>The downloaded files can be inspected using the <code class="docutils literal notranslate"><span class="pre">ls</span></code> command:</p>
@@ -523,26 +523,26 @@ change this behavior by setting the parent directory name using the
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">download_outputs</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Task</span></code> class has the option to specify the
 name of the folder where the outputs are downloaded inside the parent directory.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># reset the parent directory name to the default
-&gt;&gt;&gt; inductiva.set_output_dir(&quot;inductiva_outputs&quot;)
-&gt;&gt;&gt; output_dir = task.download_outputs(output_dir=&quot;my_outputs&quot;)
-Downloading simulation outputs to inductiva_output/my_outputs/output.zip.
-100%|██████████████████████████████████████| 5.04M/5.04M [00:00&lt;00:00, 13.3MB/s]
-Uncompressing the outputs to inductiva_output/my_outputs/
-&gt;&gt;&gt; print(ouptut_dir)
-PosixPath(&#39;inductiva_output/my_outputs&#39;)
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>reset<span class="w"> </span>the<span class="w"> </span>parent<span class="w"> </span>directory<span class="w"> </span>name<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>default
+<span class="go">&gt;&gt;&gt; inductiva.set_output_dir(&quot;inductiva_outputs&quot;)</span>
+<span class="go">&gt;&gt;&gt; output_dir = task.download_outputs(output_dir=&quot;my_outputs&quot;)</span>
+<span class="go">Downloading simulation outputs to inductiva_output/my_outputs/output.zip.</span>
+<span class="go">100%|██████████████████████████████████████| 5.04M/5.04M [00:00&lt;00:00, 13.3MB/s]</span>
+<span class="go">Uncompressing the outputs to inductiva_output/my_outputs/</span>
+<span class="go">&gt;&gt;&gt; print(ouptut_dir)</span>
+<span class="go">PosixPath(&#39;inductiva_output/my_outputs&#39;)</span>
 </pre></div>
 </div>
 <p>In addition to controlling how downloaded files are organized, the user can also
 configure which files to download. By default, all files produced by the task are
 downloaded. However, the user can select to retrieve only a subset of those files
 by specifying the filenames of interest:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span># Download only the files of interest
-&gt;&gt;&gt; output_dir = task.download_outputs(filenames=[&quot;stdout.txt&quot;, &quot;stderr.txt&quot;]
-                                       output_dir=&quot;my_outputs&quot;)
-Downloading simulation outputs to inductiva_output/my_outputs/output.zip.
-100%|██████████████████████████████████████| 1.04k/1.04k [00:00&lt;00:00, 671kB/s]
-Uncompressing the outputs to inductiva_output/my_outputs/
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>Download<span class="w"> </span>only<span class="w"> </span>the<span class="w"> </span>files<span class="w"> </span>of<span class="w"> </span>interest
+<span class="go">&gt;&gt;&gt; output_dir = task.download_outputs(filenames=[&quot;stdout.txt&quot;, &quot;stderr.txt&quot;]</span>
+<span class="go">                                       output_dir=&quot;my_outputs&quot;)</span>
+<span class="go">Downloading simulation outputs to inductiva_output/my_outputs/output.zip.</span>
+<span class="go">100%|██████████████████████████████████████| 1.04k/1.04k [00:00&lt;00:00, 671kB/s]</span>
+<span class="go">Uncompressing the outputs to inductiva_output/my_outputs/</span>
 </pre></div>
 </div>
 <p>In this case, we can confirm that only the files <code class="docutils literal notranslate"><span class="pre">stdout.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr.txt</span></code>
