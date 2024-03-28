@@ -103,7 +103,7 @@ inductiva.storage.rmdir(path="reef3d_simulation")
 
 **CLI**
 
-```bash
+```console
 $ inductiva storage rm reef3d_simulation
 You are about to remove the following paths from your remote storage space:
   - reef3d_simulation

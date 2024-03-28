@@ -9,10 +9,11 @@ simulation outputs.
 
 You can check how much storage space your simulations are currently occupying:
 
-```bash
+```console
 $ inductiva storage size
 Total user's remote storage in use: 2.79 GB
 ```
+
 ## List Storage Contents
 
 You can have a detailed view of what's in your storage, including sorting options 
@@ -43,7 +44,7 @@ Here's an example where you remove a path within your storage. Use this command
 with caution as it permanently deletes data from your remote 
 storage: 
 
-```bash
+```console
 $ inductiva storage remove hodbisrxjxhdbkknv60xmy6ti/
 # The CLI always prompts for confirmation to prevent accidental data loss
 You are about to remove the following paths from your remote storage space:
