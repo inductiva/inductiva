@@ -80,7 +80,7 @@ Downloading the outputs of a task is a common operation. In the following
 snippets, we show how to download the outputs of a finished task and how to
 control which files and where those files are downloaded to.
 
-```python
+```console
 # Download all the files produced by the task
 >>> output_dir = task.download_outputs()
 Downloading simulation outputs to inductiva_output/i4ir3kvv62odsfrhko4y8w2an/output.zip.
@@ -140,7 +140,7 @@ PosixPath('i4ir3kvv62odsfrhko4y8w2an')
 The `download_outputs` method of the `Task` class has the option to specify the
 name of the folder where the outputs are downloaded inside the parent directory.
 
-```python
+```console
 # reset the parent directory name to the default
 >>> inductiva.set_output_dir("inductiva_outputs")
 >>> output_dir = task.download_outputs(output_dir="my_outputs")
@@ -156,7 +156,7 @@ configure which files to download. By default, all files produced by the task ar
 downloaded. However, the user can select to retrieve only a subset of those files
 by specifying the filenames of interest:
 
-```python
+```console
 # Download only the files of interest
 >>> output_dir = task.download_outputs(filenames=["stdout.txt", "stderr.txt"]
                                        output_dir="my_outputs")
