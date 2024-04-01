@@ -13,7 +13,7 @@ class Openfast(simulators.Simulator):
     def __init__(self):
 
         super().__init__()
-        self.api_method_name = "fvm.openfast.run_simulation"
+        self.api_method_name = "openfast.openfast.run_simulation"
 
     def run(self,
             input_dir: types.Path,
