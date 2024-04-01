@@ -135,7 +135,7 @@ class BaseMachineGroup:
         machine_group.provider = resp["provider_id"]
         machine_group._name = resp["name"]
         machine_group.create_time = resp["creation_timestamp"]
-        machine_group._started = True
+        machine_group._started = bool(resp["started"])
 
         return machine_group
 
