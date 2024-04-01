@@ -389,11 +389,14 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-walls">Building Walls</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#templating">Templating</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experimenting-fluids-with-different-properties">Experimenting fluids with different properties</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-the-template-for-generalizing-the-base-case">Preparing the Template for generalizing the base case</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-the-entire-design-space">Exploring the entire design space</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-templatemanager-class">The <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rendering-basics">Rendering basics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rendering-with-the-templatemanager-class">Rendering with the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rendering-a-directory">Rendering a directory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rendering-a-single-file">Rendering a single file</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-external-resources">Adding external resources</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overwrite-safety">Overwrite safety</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniqueness-of-the-destination-directory">Uniqueness of the destination directory</a></li>
 </ul>
 </li>
 </ul>
@@ -412,287 +415,349 @@ document.write(`
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
 <p>The Inductiva API is all about enabling you to simulate at scale. As we have shown,
-with a few lines of Python code, you can send your simulations to MPI Clusters assembled
-from last-generation cloud hardware, letting you run much larger simulations than
-you would be able to use your local resources. Or you can spin up a large Machine
+with a few lines of Python code, you can send your simulations to MPI Clusters
+assembled from last-generation cloud hardware, letting you run much larger simulations
+than you would be able to use your local resources. Or you can spin up a large Machine
 Group, with dozens or hundreds of machines, and send a large number of simulations
 to be run on those machines in parallel. Such massive parallelism is precisely
-what you need when you want to find the optimal solution for a problem, and the only way to test each candidate’s solution is by simulating it. In some cases, a typical starting point is a number of previously known good-enough solutions, and you want to test, via simulation, as many variations of those solutions as possible to find the one that best fits the problem at hand. In others, even lower assumptions are made, and the goal is to explore the largest possible area of the solution space.</p>
+what you need when you want to find the optimal solution for a problem, and the
+only way to test each candidate’s solution is by simulating it. To do so, one needs
+to configure multiple simulations, each with a slightly different set of parameters.
+Generally speaking, the goal is to explore the largest possible extent of the
+design space.</p>
+<p>In this context, the Inductiva API provides a powerful tool for exploring the design
+space of a problem: the <em>templating manager</em>. The templating manager allows you to
+quickly generate a large number of simulation configurations by starting from a
+base case and replacing some of its fixed values with variables that you can programmatically
+change.</p>
 </section>
-<section id="building-walls">
-<h2>Building Walls<a class="headerlink" href="#building-walls" title="Permalink to this heading">#</a></h2>
-<p>For example, suppose that for protecting a certain area on the coast, you are trying
-to find the best location and orientation for building a simple seawall, which can
-still have a number of possible variations. Suppose that you have 10 possible variations
-on the shape of the seawall, and you are considering 20 possible locations where you
-could build the wall. Also, you can direct the wall in 10 possible orientations.
-This design space includes a total of 2000 variations. For each configuration, you
-want to simulate the effectiveness of the wall under 25 different sea and wind conditions,
-which represent the extreme cases the wall is supposed to protect against. To completely
-explore the space of design and test it under all selected conditions, we would need to
-run 50000 simulations.</p>
-<p>This is quite a large number, and this is why Python scripting is great for this
-kind of challenge: you can build a set of “for loops’’ that transverse all possible
-values for each parameter (shape, location, orientation, sea and wind conditions)
-and issue the corresponding simulation. Since the Inductiva API allows you to build
-large Machine Groups (e.g. 1000 machines) then you could potentially run 1000 of
-these variations in parallel and execute the 50000 simulations approximately in
-the time it would take to run 50 simulations in one machine (which we are going
-to assume it is a reasonable amount of time).</p>
-<p>But, if each simulation is configured using a set of files, how do we programmatically
-change those simulation configuration files so that we can run 50000 <em>different</em>
-simulations, each one being a slight variation of the other?</p>
-</section>
-<section id="templating">
-<h2>Templating<a class="headerlink" href="#templating" title="Permalink to this heading">#</a></h2>
-<p>This is where Inductiva’s templating mechanism comes into play. Templating allows
-you to start with a specific simulation file – your “base case” – containing fixed
-values for the parameters you wish to explore and transform those fixed values into
-variables that you can now change programmatically from your Python code before you
-submit the simulation for remote execution. Let’s illustrate the power of templating
-in a simple simulation case, from which you will be able to generalize to your
-own cases.</p>
-</section>
-<section id="experimenting-fluids-with-different-properties">
-<h2>Experimenting fluids with different properties<a class="headerlink" href="#experimenting-fluids-with-different-properties" title="Permalink to this heading">#</a></h2>
-<p>Suppose you want to study how fluids with different properties fall inside a container
-with a cubic shape. More specifically, you want to study the effect of fluid density
-and kinematic viscosity in the splashing on the walls of the cubic container. For that,
-you wish to experiment with 4 values of fluid density and 4 values of kinematic
-viscosity. Overall, you will need to run 16 simulations.</p>
-<p>For the simulation of this scenario, you choose the SplishSplash simulator, and you
-start by configuring your base case with a water fluid. The corresponding simulation files
-are a <code class="docutils literal notranslate"><span class="pre">unit_box.obj</span></code> that defines the domain and the fluid block and the following
-<em>json</em> file (we designate by <code class="docutils literal notranslate"><span class="pre">config.json</span></code>):</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">    </span><span class="nt">&quot;Configuration&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nt">&quot;stopAt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;timeStepSize&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;particleRadius&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;simulationMethod&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;boundaryHandlingMethod&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;kernel&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;cflMethod&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;cflFactor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;cflMinTimeStepSize&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0001</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;cflMaxTimeStepSize&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.005</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;gravitation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mf">-9.81</span><span class="p">],</span>
-<span class="w">        </span><span class="nt">&quot;gradKernel&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;enableVTKExport&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;dataExportFPS&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span>
-<span class="w">        </span><span class="nt">&quot;particleAttributes&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;velocity;density&quot;</span>
-<span class="w">    </span><span class="p">},</span>
-<span class="w">    </span><span class="nt">&quot;RigidBodies&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">&quot;geometryFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;unit_box.obj&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;translation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">            </span><span class="nt">&quot;scale&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span>
-<span class="w">            </span><span class="nt">&quot;isDynamic&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;Materials&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Fluid&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;density0&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;viscosity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1e-6</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;viscosityMethod&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">],</span>
-<span class="w">    </span><span class="nt">&quot;FluidModels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Fluid&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;particleFile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;unit_box.obj&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;translation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">],</span>
-<span class="w">            </span><span class="nt">&quot;scale&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w"> </span><span class="mf">0.5</span><span class="p">],</span>
-<span class="w">            </span><span class="nt">&quot;initialVelocity&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">]</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">]</span>
-<span class="p">}</span>
+<section id="the-templatemanager-class">
+<h2>The <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class<a class="headerlink" href="#the-templatemanager-class" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class is a utility class that allows you to manage templating
+files and specify how to render each template into a concrete configuration file.
+It abstracts the rendering process, allowing the user to focus solely on defining
+the source of the template files, the destination directory of the rendered files,
+and the values of the variables to be used in the rendering process.</p>
+<p>In the following sections, we’ll provide a basic introduction to rendering concepts
+and explain how to use the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class to render different variations
+of template files to a destination folder. In the end, we will discuss some safety
+features that the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class provides to prevent accidental overwriting
+of files and ensure the uniqueness of the destination directory.</p>
+<section id="rendering-basics">
+<h3>Rendering basics<a class="headerlink" href="#rendering-basics" title="Permalink to this heading">#</a></h3>
+<p>To start, a template file is a file that contains labels that will be replaced
+with specific values during a rendering process. These labels – variables –
+are enclosed in double curly brackets, optionally specifying default values they
+might take when not explicitly set during the rendering process.</p>
+<p>In the following example, the content of a template file defines a configuration
+parameter named <code class="docutils literal notranslate"><span class="pre">config_parameter</span></code>:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x">config_parameter = </span><span class="cp">{{</span> <span class="nv">parameter_value</span> <span class="cp">}}</span>
 </pre></div>
 </div>
-<p>For now, let’s not worry too much about the contents of this configuration file.
-Let’s just run it using SplishSplash in a <code class="docutils literal notranslate"><span class="pre">c2-standard-30</span></code> VM with the following code:</p>
+<p>When this file is rendered with <code class="docutils literal notranslate"><span class="pre">10</span></code> for the variable <code class="docutils literal notranslate"><span class="pre">parameter_value</span></code>,
+the resulting file will read:</p>
+<div class="highlight-txt notranslate"><div class="highlight"><pre><span></span>config_parameter = 10
+</pre></div>
+</div>
+<p>If the template file were to be defined with a default value for <code class="docutils literal notranslate"><span class="pre">parameter_value</span></code>:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x">config_parameter = </span><span class="cp">{{</span> <span class="nv">parameter_value</span> <span class="o">|</span> <span class="nf">default</span><span class="o">(</span><span class="m">20</span><span class="o">)</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<p>and <strong>rendered without providing a value for it</strong>, the resulting file would read:</p>
+<div class="highlight-txt notranslate"><div class="highlight"><pre><span></span>config_parameter = 20
+</pre></div>
+</div>
+</section>
+<section id="rendering-with-the-templatemanager-class">
+<h3>Rendering with the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class<a class="headerlink" href="#rendering-with-the-templatemanager-class" title="Permalink to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class is initialized with the path to the directory containing
+the template files (the <em>template_dir</em>) and the name of the directory where the
+rendered files will be stored (the <em>root_dir</em>). The latter is optional and defaults
+to a directory named <code class="docutils literal notranslate"><span class="pre">rendered_dir</span></code> inside the current working directory.
+If the output directory does not exist, it will be created.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
-<span class="c1"># Download the input files mentioned above</span>
-<span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
-    <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
-    <span class="s2">&quot;splishsplash-dambreak-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># New instance of the TemplateManager class specifying the name </span>
+<span class="c1"># of the template directory. All rendered files will be stored</span>
+<span class="c1"># inside ./rendered_dir (the default root directory of the manager).</span>
+<span class="n">template_manager</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="n">template_dir</span><span class="o">=</span><span class="s2">&quot;my_templates&quot;</span><span class="p">)</span>
 
-<span class="c1"># Launch a machine group with a single c2-standard-30</span>
-<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-30&quot;</span><span class="p">)</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-<span class="c1"># Initialize the simulator and run the simulation</span>
-<span class="n">splishsplash</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SplishSplash</span><span class="p">()</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
-    <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
-
-<span class="c1"># Wait for the simulation to finish and Download all generated output files</span>
-<span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
+<span class="c1"># new instance of the TemplateManager class specifying both the name </span>
+<span class="c1"># of the template directory and the name of the destination directory</span>
+<span class="c1"># of the rendered files. In this case, all rendered files will be stored</span>
+<span class="c1"># inside ./my_rendered_files.</span>
+<span class="n">template_manager</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="n">template_dir</span><span class="o">=</span><span class="s2">&quot;my_templates&quot;</span><span class="p">,</span>
+                                             <span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;my_rendered_files&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This simulation takes about 26s to run and the final result looks like this
-(visualization produced with <code class="docutils literal notranslate"><span class="pre">pyvista</span></code>):</p>
-<div align="center">
-   <img src="../_static/splishsplash-dambreak.gif" alt="SplishSplash dambreak simulation">
-</div>
-<section id="preparing-the-template-for-generalizing-the-base-case">
-<h3>Preparing the Template for generalizing the base case<a class="headerlink" href="#preparing-the-template-for-generalizing-the-base-case" title="Permalink to this heading">#</a></h3>
-<p>Observe that the in configuration file, the properties of the fluid (in this case water)
-are specified in the following section:</p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="nt">&quot;Materials&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-<span class="w">        </span><span class="p">{</span>
-<span class="w">            </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Fluid&quot;</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;density0&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;viscosity&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1e-6</span><span class="p">,</span>
-<span class="w">            </span><span class="nt">&quot;viscosityMethod&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">    </span><span class="p">]</span>
+<p>The <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class exposes two rendering methods: <code class="docutils literal notranslate"><span class="pre">render_dir</span></code> and
+<code class="docutils literal notranslate"><span class="pre">render_file</span></code>. The former renders all files inside the template directory,
+while the latter only renders a single file. Both methods take a set of keyword
+arguments that specify the values that the variables in the template files will
+take. The manager identifies template files by looking for the <code class="docutils literal notranslate"><span class="pre">.jinja</span></code> extension
+in the file name. Upon rendering, the extension is removed from the file name inside
+the destination directory.</p>
+<p>Let’s now look into details on how to use these two methods:</p>
+</section>
+<section id="rendering-a-directory">
+<h3>Rendering a directory<a class="headerlink" href="#rendering-a-directory" title="Permalink to this heading">#</a></h3>
+<p>For the sake of illustration, let’s consider a directory, containing three template
+files and a regular (non-template) file, with the following structure:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree<span class="w"> </span>my_templates
+<span class="go">my_templates</span>
+<span class="go">├── config.yaml.jinja</span>
+<span class="go">├── readme.txt</span>
+<span class="go">└── objects</span>
+<span class="go">    ├── obj1.def.jinja</span>
+<span class="go">    └── obj2.def.jinja</span>
 </pre></div>
 </div>
-<p>The first step in label the variables we want to iterate over. This is done by substituting
-the values of the variables with a descriptive label inside double curly brackets. For the
-density and viscosity, we can substitute the values with the labels <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">density</span> <span class="pre">}}</span></code> and
-<code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">kinematic_viscosity</span> <span class="pre">}}</span></code>, respectively. The resulting file will look like this:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&quot;Materials&quot;: [
-    {
-        &quot;id&quot;: &quot;Fluid&quot;,
-        &quot;density0&quot;: {{ density }},
-        &quot;viscosity&quot;: {{ kinematic_viscosity }},
-        &quot;viscosityMethod&quot;: 6
-    }
-]
+<p>The contents of each file are as follows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>my_templates/config.yaml.jinja
+<span class="go">density: {{ density }}</span>
+<span class="go">viscosity: {{ viscosity }}</span>
+<span class="go">position: {{ position | default([0, 0, 0]) }}</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>my_templates/readme.txt
+<span class="go">I am a non-template file. I will be copied as is.</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>my_templates/objects/obj1.def.jinja
+<span class="go">type: sphere</span>
+<span class="go">radius: {{ sphere_radius }}</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>my_templates/objects/obj2.def.jinja
+<span class="go">type: cube</span>
+<span class="go">side: {{ cube_side | default(1) }}</span>
 </pre></div>
 </div>
-<p>We shall save this new file as <code class="docutils literal notranslate"><span class="pre">config.json.jinja</span></code>, and that’s it: we have a template.
-The labels we just assigned will now be treated as names of variables whose values
-we can programmatically modify using Python.</p>
-<p>Saving our template file and the <code class="docutils literal notranslate"><span class="pre">unit_box.obj</span></code> file in a new folder named <code class="docutils literal notranslate"><span class="pre">splishsplash-template</span></code>
-we can now run the same simulation with different properties we set programmatically.</p>
-<p>This is how we would do it for a viscous fluid:</p>
+<p>To render all files in the <code class="docutils literal notranslate"><span class="pre">my_templates</span></code> directory, you can use the <code class="docutils literal notranslate"><span class="pre">render_dir</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
-<span class="c1"># Launch a machine group with a c2-standard-30</span>
-<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-30&quot;</span><span class="p">)</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="c1"># instantiate the TemplateManager, specifying the template directory</span>
+<span class="c1"># and the name of the destination directory</span>
+<span class="n">template_manager</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="n">template_dir</span><span class="o">=</span><span class="s2">&quot;my_templates&quot;</span><span class="p">,</span>
+                                             <span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;my_rendered_files&quot;</span><span class="p">)</span>
 
-<span class="c1"># Download the input files mentioned above</span>
-<span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
-    <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
-    <span class="s2">&quot;splishsplash-template-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># Set the new fluid properties at room temperature</span>
-<span class="n">density</span> <span class="o">=</span> <span class="mi">1500</span> <span class="c1"># kg/m^3</span>
-<span class="n">kinematic_viscosity</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># m^2/s</span>
-
-<span class="c1"># Initialize the simulator and run the simulation</span>
-<span class="n">splishsplash</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SplishSplash</span><span class="p">()</span>
-
-<span class="c1"># Initialize the templating manager</span>
-<span class="n">template_manager</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="n">template_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-                                    <span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;splishsplash-viscous&quot;</span><span class="p">)</span>
-
-<span class="c1"># Render the full template dir with the density and kinematic viscosity parameters</span>
-<span class="n">template_manager</span><span class="o">.</span><span class="n">render_dir</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span>
-                            <span class="n">kinematic_viscosity</span><span class="o">=</span><span class="n">kinematic_viscosity</span><span class="p">)</span>
-
-<span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-    <span class="n">input_dir</span><span class="o">=</span><span class="n">template_manager</span><span class="o">.</span><span class="n">get_root_dir</span><span class="p">(),</span>
-    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
-    <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
-
-<span class="c1"># Wait for the simulation to finish and download all generated output files</span>
-<span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
+<span class="c1"># render all files in the template directory specifying the values of</span>
+<span class="c1"># the variables in the template files. Note that we are deliberately not</span>
+<span class="c1"># providing values for the `position` or `cube_side` variables in the</span>
+<span class="c1"># config.yaml.jinja and obj2.def.jinja files, respectively. This</span>
+<span class="c1"># will enfore the default values to be used.</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">render_dir</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">viscosity</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In this case, we start from the template files just configured and start the
-templating manager by creating a <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> object. This object is responsible
-for managing the files and directories that can be used in the simulation. In particular,
-it renders the configuration files for the simulation from the template files and the
-programmatic values we set. When templating, the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> removes the
-<code class="docutils literal notranslate"><span class="pre">.jinja</span></code> extension and keeps the same file name.</p>
-<p>The rendering is specifically done in the code line:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">template_manager</span><span class="o">.</span><span class="n">add_dir</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span> <span class="n">kinematic_viscosity</span><span class="o">=</span><span class="n">kinematic_viscosity</span><span class="p">)</span>
+<p>After running the code above, the <code class="docutils literal notranslate"><span class="pre">my_rendered_files</span></code> directory will contain the
+following files:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree<span class="w"> </span>my_rendered_files
+<span class="go">my_rendered_files</span>
+<span class="go">├── config.yaml</span>
+<span class="go">├── readme.txt</span>
+<span class="go">└── objects</span>
+<span class="go">    ├── obj1.def</span>
+<span class="go">    └── obj2.def</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>my_rendered_files/config.yaml
+<span class="go">density: 1000</span>
+<span class="go">viscosity: 1e-6</span>
+<span class="go">position: [0, 0, 0]</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>my_templates/readme.txt
+<span class="go">I am a non-template file. I will be copied as is.</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>my_rendered_files/objects/obj1.def
+<span class="go">type: sphere</span>
+<span class="go">radius: 0.5</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>my_rendered_files/objects/obj2.def
+<span class="go">type: cube</span>
+<span class="go">side: 1</span>
+</pre></div>
+</div>
+<p>One can optionally request the rendering of a subdirectory inside the template
+directory by providing the name of the source subdirectory as an argument to the
+<code class="docutils literal notranslate"><span class="pre">render_dir</span></code> method. At the same time, one can specify the name of the destination
+folder inside the root output directory.
+This mechanism is useful when the template directory contains template files
+for different simulation scenarios/stages but you want to keep the flexibility
+of selecting which scenario/stage to render. For example, in the following snippet,
+we only render the <code class="docutils literal notranslate"><span class="pre">objects</span></code> subdirectory to <code class="docutils literal notranslate"><span class="pre">my_rendered_files/only_objects</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">template_manager</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">render_dir</span><span class="p">(</span><span class="s1">&#39;objects&#39;</span><span class="p">,</span> <span class="c1"># subdirectory to render</span>
+                            <span class="s1">&#39;only_objects&#39;</span><span class="p">,</span> <span class="c1"># destination subdirectory</span>
+                            <span class="n">radius</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">side</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree<span class="w"> </span>my_rendered_files
+<span class="go">my_rendered_files</span>
+<span class="go">└── only_objects</span>
+<span class="go">    ├── obj1.def</span>
+<span class="go">    └── obj2.def</span>
 </pre></div>
 </div>
 </section>
-<section id="exploring-the-entire-design-space">
-<h3>Exploring the entire design space<a class="headerlink" href="#exploring-the-entire-design-space" title="Permalink to this heading">#</a></h3>
-<p>The last step for generating the results we need for the study is to submit the 16
-simulations from a single script by iterating over the set of admissible values for
-both parameters. Additionally, we can save time by issuing these 16 simulations in
-parallel. For that, we first need to create a machine group with 16 VMs:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
-
-<span class="c1"># Launch a machine group with 16 VMs of type c2-standard-30</span>
-<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
-    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">,</span>
-    <span class="n">num_machines</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
-<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-<span class="c1"># Download the input files mentioned above</span>
-<span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
-    <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
-    <span class="s2">&quot;splishsplash-template-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="c1"># Initialize the simulator and run the simulation</span>
-<span class="n">splishsplash</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SplishSplash</span><span class="p">()</span>
-
-<span class="c1"># Set list of possible values for density and kinematic viscosity</span>
-<span class="n">density_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">,</span> <span class="mi">5000</span><span class="p">]</span>
-<span class="n">kinematic_viscosity_list</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-1</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">]</span>
-
-<span class="k">for</span> <span class="n">density</span> <span class="ow">in</span> <span class="n">density_list</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">kinematic_viscosity</span> <span class="ow">in</span> <span class="n">kinematic_viscosity_list</span><span class="p">:</span>
-        <span class="c1"># Set a new root directory and render the template directory</span>
-        <span class="n">template_manager</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span>
-                                                     <span class="s2">&quot;splishsplash-scenario&quot;</span><span class="p">)</span>
-        <span class="n">template_manager</span><span class="o">.</span><span class="n">add_dir</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="n">density</span><span class="p">,</span>
-                                 <span class="n">kinematic_viscosity</span><span class="o">=</span><span class="n">kinematic_viscosity</span><span class="p">)</span>
-
-        <span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">input_dir</span><span class="o">=</span><span class="n">template_manager</span><span class="o">.</span><span class="n">get_root_dir</span><span class="p">(),</span>
-            <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
-            <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<section id="rendering-a-single-file">
+<h3>Rendering a single file<a class="headerlink" href="#rendering-a-single-file" title="Permalink to this heading">#</a></h3>
+<p>Sometimes, you may just want to render a single file from the template directory.
+In this case, you can use the <code class="docutils literal notranslate"><span class="pre">render_file</span></code> method. This method takes the name of
+the file to render as an argument along with the values for the variables in the
+template file.</p>
+<p>Using the same template files as before, let’s render the <code class="docutils literal notranslate"><span class="pre">obj1.def.jinja</span></code> file.
+By default, the rendered file will be saved to the root output directory:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">template_manager</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">render_file</span><span class="p">(</span><span class="s1">&#39;objects/obj1.def.jinja&#39;</span><span class="p">,</span>
+                            <span class="n">radius</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>For each possibility, an input folder is created with the base name <code class="docutils literal notranslate"><span class="pre">splishsplash-scenario</span></code> and
-an iteration number, that serves to not override the previous folders.</p>
-<p>Overall, the exploration of these 16 possibilities took 57s (the time of the slowest simulation),
-approximately the same time needed to run only one simulation. And this was all done
-with minor changes to the simulation script that described the base case.</p>
-<p>To finish, let’s visualize all of the 16 simulations we just ran. The kinematic
-viscosity increases from left to right and the density from top to bottom.</p>
-<div align=center class="row">
-  <div class="column"  text="400">
-    <img src="../_static/template_gifs/400_1e-06.gif" width=150>
-    <img src="../_static/template_gifs/400_0.0001.gif" width=150>
-    <img src="../_static/template_gifs/400_0.01.gif" width=150>
-    <img src="../_static/template_gifs/400_0.1.gif" width=150>
-  </div>
-  <div class="column"  text="400">
-    <img src="../_static/template_gifs/1000_1e-06.gif" width=150>
-    <img src="../_static/template_gifs/1000_0.0001.gif" width=150>
-    <img src="../_static/template_gifs/1000_0.01.gif" width=150>
-    <img src="../_static/template_gifs/1000_0.1.gif" width=150>
-  </div>
-  <div class="column"  text="400">
-    <img src="../_static/template_gifs/2500_1e-06.gif" width=150>
-    <img src="../_static/template_gifs/2500_0.0001.gif" width=150>
-    <img src="../_static/template_gifs/2500_0.01.gif" width=150>
-    <img src="../_static/template_gifs/2500_0.1.gif" width=150>
-  </div>
-  <div class="column"  text="400">
-    <img src="../_static/template_gifs/5000_1e-06.gif" width=150>
-    <img src="../_static/template_gifs/5000_0.0001.gif" width=150>
-    <img src="../_static/template_gifs/5000_0.01.gif" width=150>
-    <img src="../_static/template_gifs/5000_0.1.gif" width=150>
-  </div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree<span class="w"> </span>my_rendered_files
+<span class="go">└── obj1.def.yaml</span>
+</pre></div>
+</div>
+<p>Similarly to the <code class="docutils literal notranslate"><span class="pre">render_dir</span></code> method, you can specify the destination name
+of the rendered file by providing the <code class="docutils literal notranslate"><span class="pre">target_file</span></code> argument:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">template_manager</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">render_file</span><span class="p">(</span><span class="s1">&#39;objects/obj1.def.jinja&#39;</span><span class="p">,</span>
+                             <span class="n">target_file</span><span class="o">=</span><span class="s1">&#39;my_objects/sphere.def&#39;</span><span class="p">,</span>
+                             <span class="n">radius</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree<span class="w"> </span>my_rendered_files
+<span class="go">my_rendered_files</span>
+<span class="go">└── my_objects</span>
+<span class="go">    └── sphere.def</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-external-resources">
+<h3>Adding external resources<a class="headerlink" href="#adding-external-resources" title="Permalink to this heading">#</a></h3>
+<p>In addition to rendering template files, the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class also provides
+mechanisms to add external files to the destination directory. This method is useful
+when you need to copy files that are not part of the template directory but are
+required for the simulation. The <code class="docutils literal notranslate"><span class="pre">copy_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">copy_file</span></code> methods allow you to
+copy entire directories or individual files to the destination directory, respectively.</p>
+<p>In the following examples, we add external resources to the destination directory,
+first by adding an entire directory and then by adding a single file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">template_manager</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">copy_dir</span><span class="p">(</span><span class="s1">&#39;/path/to/external_resources&#39;</span><span class="p">)</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">copy_file</span><span class="p">(</span><span class="s1">&#39;./external_file.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree<span class="w"> </span>my_rendered_files
+<span class="go">my_rendered_files</span>
+<span class="go">├── external_file.txt</span>
+<span class="go">└── external_resources</span>
+<span class="go">    ├── ...</span>
+</pre></div>
+</div>
+<p>Similarly to the <code class="docutils literal notranslate"><span class="pre">render_dir</span></code> and <code class="docutils literal notranslate"><span class="pre">render_file</span></code> methods, you can specify the
+destination name of the copied directory or file:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">template_manager</span> <span class="o">=</span> <span class="o">...</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">copy_dir</span><span class="p">(</span><span class="s1">&#39;/path/to/external_resources&#39;</span><span class="p">,</span>
+                          <span class="s1">&#39;resources/copied_resources&#39;</span><span class="p">)</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">copy_file</span><span class="p">(</span><span class="s1">&#39;./external_file.txt&#39;</span><span class="p">,</span>
+                           <span class="s1">&#39;copied_file.txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree<span class="w"> </span>my_rendered_files
+<span class="go">my_rendered_files</span>
+<span class="go">├── copied_file.txt</span>
+<span class="go">└── resources</span>
+<span class="go">    └── copied_resources</span>
+<span class="go">        ├── ...</span>
+</pre></div>
+</div>
+</section>
+<section id="overwrite-safety">
+<h3>Overwrite safety<a class="headerlink" href="#overwrite-safety" title="Permalink to this heading">#</a></h3>
+<p>By default, the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> <em>will not overwrite</em> any existing files in the
+destination directory. Calls to the <code class="docutils literal notranslate"><span class="pre">render_*</span></code> or <code class="docutils literal notranslate"><span class="pre">copy_*</span></code> methods will fail if
+any of the destination files already exist. Rendering and coping actions are
+transactional, meaning that the entire action will fail if any destination file
+exists. For example, consecutive calls to the same method will fail in the second
+call. This behavior is intended to prevent accidental overwriting of
+files that may have been generated in a previous run.</p>
+<p>To enforce the overwriting of existing files, you can set the <code class="docutils literal notranslate"><span class="pre">overwrite</span></code> argument
+to <code class="docutils literal notranslate"><span class="pre">True</span></code> when calling the <code class="docutils literal notranslate"><span class="pre">render_*</span></code> or <code class="docutils literal notranslate"><span class="pre">copy_*</span></code> methods.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">template_manager</span> <span class="o">=</span> <span class="o">...</span>
+
+<span class="c1"># ✔ this call will succeed because the destination directory is empty</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">render_dir</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">viscosity</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                            <span class="n">position</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># ✖ the second call will fail with an FileExistsError because at least</span>
+<span class="c1"># one of the rendered files would overwrite the equivalent file</span>
+<span class="c1"># generated in the first call</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">render_dir</span><span class="p">(</span><span class="n">density</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">viscosity</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                            <span class="n">position</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+                        
+<span class="c1"># ✔ to ensure the call succeeds, set the `overwrite` argument to `True`</span>
+<span class="n">template_manager</span><span class="o">.</span><span class="n">render_dir</span><span class="p">(</span><span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                            <span class="n">density</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">viscosity</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">,</span>
+                            <span class="n">position</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="uniqueness-of-the-destination-directory">
+<h3>Uniqueness of the destination directory<a class="headerlink" href="#uniqueness-of-the-destination-directory" title="Permalink to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class ensures that the destination directory is unique for
+each instance. This means that if you instantiate two <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> objects
+with the same destination directory, the second object will point to a slightly
+different destination directory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">manager1</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;my_rendered_files&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager2</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;my_rendered_files&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">manager1</span><span class="o">.</span><span class="n">get_root_dir</span><span class="p">())</span>
+<span class="go">my_rendered_files</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">manager2</span><span class="o">.</span><span class="n">get_root_dir</span><span class="p">())</span>
+<span class="go">my_rendered_files__2</span>
+</pre></div>
+</div>
+<p>This way, the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> guarantees that the destination directory is unique
+and that no files are accidentally overwritten. This behavior can be changed by
+setting the <code class="docutils literal notranslate"><span class="pre">INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX</span></code> environment variable to
+<code class="docutils literal notranslate"><span class="pre">True</span></code> before instantiating the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> object. In this case, if the
+destination directory already exists, a <code class="docutils literal notranslate"><span class="pre">FileExistsError</span></code> exception will be thrown
+when instantiating the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">setenv</span><span class="p">(</span><span class="s1">&#39;INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX&#39;</span><span class="p">,</span> <span class="s1">&#39;True&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager1</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;my_rendered_files&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">manager2</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;my_rendered_files&quot;</span><span class="p">)</span>
+<span class="go">---------------------------------------------------------------------------</span>
+<span class="go">FileExistsError                           Traceback (most recent call last)</span>
+<span class="go">line 1</span>
+<span class="go">----&gt; 1 raise FileExistsError(f&quot;Directory {root_dir} already exists.&quot;)</span>
+
+<span class="go">FileExistsError: Directory my_rendered_files already exists.</span>
+</pre></div>
+</div>
+<p>When using the templating manager inside a loop, it is important to ensure that
+the destination directory is unique for each iteration. This can be achieved by
+setting the <code class="docutils literal notranslate"><span class="pre">root_dir</span></code> argument to a unique value for each iteration or by relying
+on the above mechanism to ensure uniqueness across different iterations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">template_manager</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">root_dir</span><span class="o">=</span><span class="p">)</span>
+
+<span class="c1"># explicitly set an unique root directory for each iteration</span>
+<span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="n">template_manager</span><span class="o">.</span><span class="n">set_root_dir</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;my_rendered_files_iter</span><span class="si">{</span><span class="n">iteration</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">template_manager</span><span class="o">.</span><span class="n">get_root_dir</span><span class="p">())</span>
+
+<span class="c1"># would print:</span>
+<span class="c1"># my_rendered_files_iter0</span>
+<span class="c1"># my_rendered_files_iter1</span>
+<span class="c1"># my_rendered_files_iter2</span>
+<span class="c1"># ....</span>
+
+<span class="c1"># or let the manager define an unique root directory each iteration</span>
+<span class="c1"># (assuming the INDUCTIVA_DISABLE_FILEMANAGER_AUTOSUFFIX environment</span>
+<span class="c1"># variable is either undefined or set to false)</span>
+<span class="k">for</span> <span class="n">iteration</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">...</span><span class="p">):</span>
+    <span class="n">template_manager</span><span class="o">.</span><span class="n">set_root_dir</span><span class="p">(</span><span class="s2">&quot;my_rendered_files&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">template_manager</span><span class="o">.</span><span class="n">get_root_dir</span><span class="p">())</span>
+
+<span class="c1"># would print:</span>
+<span class="c1"># my_rendered_files</span>
+<span class="c1"># my_rendered_files__2</span>
+<span class="c1"># my_rendered_files__3</span>
+<span class="c1"># ....</span>
+
+</pre></div>
 </div>
 </section>
 </section>
@@ -744,11 +809,14 @@ viscosity increases from left to right and the density from top to bottom.</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-walls">Building Walls</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#templating">Templating</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experimenting-fluids-with-different-properties">Experimenting fluids with different properties</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#preparing-the-template-for-generalizing-the-base-case">Preparing the Template for generalizing the base case</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exploring-the-entire-design-space">Exploring the entire design space</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-templatemanager-class">The <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rendering-basics">Rendering basics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rendering-with-the-templatemanager-class">Rendering with the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rendering-a-directory">Rendering a directory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rendering-a-single-file">Rendering a single file</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-external-resources">Adding external resources</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overwrite-safety">Overwrite safety</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#uniqueness-of-the-destination-directory">Uniqueness of the destination directory</a></li>
 </ul>
 </li>
 </ul>

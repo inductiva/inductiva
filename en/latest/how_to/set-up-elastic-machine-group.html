@@ -424,7 +424,7 @@ now with a scalable infrastructure.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="c1"># Download the input files for the SWASH simulation</span>
-<span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
+<span class="n">template_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
     <span class="s2">&quot;swash-template-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -437,11 +437,14 @@ now with a scalable infrastructure.</p>
 <span class="c1"># Launch multiple simulations</span>
 <span class="k">for</span> <span class="n">water_level</span> <span class="ow">in</span> <span class="n">water_levels_list</span><span class="p">:</span>
     <span class="c1"># Set the root directory and render the template files into it.</span>
-    <span class="n">template_engine</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateEngine</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="s2">&quot;swash-input-example&quot;</span><span class="p">)</span>
-    <span class="n">template_engine</span><span class="o">.</span><span class="n">add_dir</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">water_level</span><span class="o">=</span><span class="n">water_level</span><span class="p">)</span>
+    <span class="n">template_manager</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">TemplateManager</span><span class="p">(</span>
+                            <span class="n">template_dir</span><span class="o">=</span><span class="n">template_dir</span><span class="p">,</span>
+                            <span class="n">root_dir</span><span class="o">=</span><span class="s2">&quot;swash-example&quot;</span>
+                     <span class="p">)</span>
+    <span class="n">template_manager</span><span class="o">.</span><span class="n">render_dir</span><span class="p">(</span><span class="n">water_level</span><span class="o">=</span><span class="n">water_level</span><span class="p">)</span>
 
     <span class="c1"># Run the simulation on the dedicated MachineGroup</span>
-    <span class="n">task</span> <span class="o">=</span> <span class="n">swash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">template_engine</span><span class="o">.</span><span class="n">get_root_dir</span><span class="p">(),</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="n">swash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">template_manager</span><span class="o">.</span><span class="n">get_root_dir</span><span class="p">(),</span>
                     <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;input.sws&quot;</span><span class="p">,</span>
                     <span class="n">on</span><span class="o">=</span><span class="n">elastic_machine_group</span><span class="p">)</span>
 </pre></div>

@@ -449,6 +449,14 @@ of seconds to wait for confirmation:</p>
 $<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span><span class="nb">kill</span><span class="w"> </span>cmvsc9qhz5iy86f6pef8uyxqt<span class="w"> </span>--wait-timeout<span class="w"> </span><span class="m">10</span>
 </pre></div>
 </div>
+<p>Finally, the Inductiva CLI allows you to download tasks using:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>download<span class="w"> </span>task_1_id<span class="w"> </span>task_2_id
+</pre></div>
+</div>
+<p>Additionally, we can specify specific files to download using
+<code class="docutils literal notranslate"><span class="pre">--filenames</span></code> and we can specify the output directory with
+<code class="docutils literal notranslate"><span class="pre">--output_dir</span></code>. When <code class="docutils literal notranslate"><span class="pre">--output_dir</span></code> is provided the tasks will be
+download under <code class="docutils literal notranslate"><span class="pre">output_dir/tasks_id</span></code>.</p>
 </section>
 
 

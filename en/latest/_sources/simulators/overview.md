@@ -14,7 +14,7 @@ The simulators available in the current version of the API (0.5) are:
 - [SPlisHSPlasH](../simulators/SPlisHSPlasH.md)
 - [OpenFOAM](../simulators/OpenFOAM.md)
 - [GROMACS](../simulators/GROMACS.md)
-- [SCHISM] (../simulators/SCHISM.md)
+- [SCHISM](../simulators/SCHISM.md)
 - [XBeach](../simulators/XBeach.md)
 - [Reef3D](../simulators/Reef3D.md)
 - [SWASH](../simulators/SWASH.md)
