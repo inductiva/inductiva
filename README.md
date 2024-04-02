@@ -1,7 +1,7 @@
 
 [![Python package](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml/badge.svg)](https://github.com/inductiva/inductiva/actions/workflows/python-package.yml) [![Python version](https://img.shields.io/pypi/pyversions/inductiva.svg)](https://www.python.org/downloads/) [![Documentation](https://img.shields.io/badge/Documentation-blue.svg)](https://docs.inductiva.ai/en/latest/) [![Benchmarks](https://img.shields.io/badge/Benchmarks-blue.svg)](https://benchmarks.inductiva.ai) <a href="https://pypi.org/project/inductiva/"><img src="https://img.shields.io/pypi/v/inductiva" alt="pypi version"></a> ![coverage badge](https://raw.githubusercontent.com/inductiva/inductiva/Inductiva-badges/badges/cov.svg)
 
-![linkedin_header](https://user-images.githubusercontent.com/104431973/231184851-0ce34289-593e-4832-aaa2-9aae652113f5.jpg)
+![inductiva_banner](https://github.com/inductiva/inductiva/assets/7538022/85569dd8-3beb-4ac3-8cbe-78e300a28fde)
 
 # Inductiva: a Python package for scaling simulations on the Cloud
 
