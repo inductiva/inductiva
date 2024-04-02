@@ -62,8 +62,6 @@ exclude_patterns = [
     'task_state_diagram.md',
 ]
 
-myst_links_external_new_tab = True
-
 # Auto generate header anchors
 myst_heading_anchors = 3
 
