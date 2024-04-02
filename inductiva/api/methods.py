@@ -283,7 +283,7 @@ def submit_task(api_instance,
                 storage_path_prefix,
                 params,
                 type_annotations,
-                provider_id="GCP"):
+                provider_id: ProviderType = ProviderType.GCP):
     """Submit a task and send input files to the API."""
 
     resource_pool_id = None
@@ -294,7 +294,7 @@ def submit_task(api_instance,
                                params=request_params,
                                resource_pool=resource_pool_id,
                                storage_path_prefix=storage_path_prefix,
-                               provider_id=provider_id)
+                               provider_id=provider_id.value)
     task = submit_request(
         api_instance=api_instance,
         request=task_request,
