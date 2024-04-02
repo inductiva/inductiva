@@ -276,14 +276,9 @@ def log_task_info(task_id, method_name, params, resource_pool):
                      constants.DEFAULT_QUEUE_MACHINE_TYPE)
 
 
-def submit_task(api_instance,
-                method_name,
-                request_params,
-                resource_pool,
-                storage_path_prefix,
-                params,
-                type_annotations,
-                provider_id: ProviderType = ProviderType.GCP):
+def submit_task(api_instance, method_name, request_params, resource_pool,
+                storage_path_prefix, params, type_annotations,
+                provider_id: ProviderType):
     """Submit a task and send input files to the API."""
 
     resource_pool_id = None

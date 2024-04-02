@@ -2,7 +2,7 @@
 import os
 
 import pathlib
-from typing import Any, Optional
+from typing import Any, Optional, Union
 import json
 import threading
 
@@ -22,7 +22,7 @@ def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
     computational_resources: Optional[types.ComputationalResources] = None,
-    provider_id: ProviderType = ProviderType.GCP,
+    provider_id: Optional[Union[ProviderType, str]] = ProviderType.GCP,
     storage_dir: Optional[types.Path] = "",
     api_invoker=None,
     extra_metadata=None,
@@ -40,6 +40,9 @@ def run_simulation(
 
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
+
+    if provider_id is not None:
+        provider_id = ProviderType(provider_id)
 
     task_id = api_invoker(api_method_name,
                           params,

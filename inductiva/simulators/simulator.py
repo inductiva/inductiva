@@ -75,7 +75,6 @@ class Simulator(ABC):
                 the simulation is launched in a machine of the default pool.
             storage_dir: Parent directory for storing simulation
                                results.
-            provider_id: The provider id to use for the simulation (GCP or ICE).
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """

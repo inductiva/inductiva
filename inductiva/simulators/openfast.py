@@ -26,8 +26,6 @@ class OpenFAST(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             commands: List of commands to run using the OpenFAST simulator.
-            number of hardware threads on the node, and use that as the
-            number of slots available.
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             other arguments: See the documentation of the base class.
