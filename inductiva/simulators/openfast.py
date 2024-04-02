@@ -4,7 +4,6 @@ from typing import Optional
 from inductiva import types, tasks, simulators
 
 
-
 class Openfast(simulators.Simulator):
     """Class to invoke a generic Openfast simulation on the API.
 
@@ -21,6 +20,7 @@ class Openfast(simulators.Simulator):
             on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[types.Path] = "",
             extra_metadata: Optional[dict] = None,
+            provider_id: str = "GCP",
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -39,4 +39,5 @@ class Openfast(simulators.Simulator):
                            storage_dir=storage_dir,
                            n_vcpus=1,
                            use_hwthread=False,
+                           provider_id=provider_id,
                            extra_metadata=extra_metadata)

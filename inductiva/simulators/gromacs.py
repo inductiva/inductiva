@@ -19,6 +19,7 @@ class GROMACS(simulators.Simulator):
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
+        provider_id: str = "GCP",
     ) -> tasks.Task:
         """Run a list of GROMACS commands.
 
@@ -35,4 +36,5 @@ class GROMACS(simulators.Simulator):
                            on=on,
                            commands=commands,
                            storage_dir=storage_dir,
+                           provider_id=provider_id,
                            extra_metadata=extra_metadata)

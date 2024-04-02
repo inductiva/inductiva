@@ -63,6 +63,7 @@ class Simulator(ABC):
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
+        provider_id: str = "GCP",
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -75,6 +76,7 @@ class Simulator(ABC):
                 the simulation is launched in a machine of the default pool.
             storage_dir: Parent directory for storing simulation
                                results.
+            provider_id: The provider id to use for the simulation (GCP or ICE).
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
@@ -92,6 +94,7 @@ class Simulator(ABC):
             computational_resources=on,
             storage_dir=storage_dir,
             extra_metadata=extra_metadata,
+            provider_id=provider_id,
             **kwargs,
         )
 

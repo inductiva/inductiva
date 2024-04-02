@@ -24,6 +24,7 @@ def run_simulation(
     storage_dir: Optional[types.Path] = "",
     api_invoker=None,
     extra_metadata=None,
+    provider_id: str = "GCP",
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -39,13 +40,12 @@ def run_simulation(
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
 
-    task_id = api_invoker(
-        api_method_name,
-        params,
-        type_annotations,
-        resource_pool=computational_resources,
-        storage_path_prefix=storage_dir,
-    )
+    task_id = api_invoker(api_method_name,
+                          params,
+                          type_annotations,
+                          resource_pool=computational_resources,
+                          storage_path_prefix=storage_dir,
+                          provider_id=provider_id)
 
     if computational_resources is not None:
         logging.info("Task %s submitted to the queue of the %s.", task_id,

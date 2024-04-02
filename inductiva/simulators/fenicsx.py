@@ -22,6 +22,7 @@ class FEniCSx(simulators.Simulator):
             on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[types.Path] = "",
             extra_metadata: Optional[dict] = None,
+            provider_id: str = "GCP",
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -48,12 +49,13 @@ class FEniCSx(simulators.Simulator):
         """
 
         return super().run(input_dir,
-                           on=on,
-                           geometry_filename=geometry_filename,
-                           bcs_filename=bcs_filename,
-                           material_filename=material_filename,
-                           mesh_filename=mesh_filename,
                            mesh_info_filename=mesh_info_filename,
-                           storage_dir=storage_dir,
+                           material_filename=material_filename,
+                           geometry_filename=geometry_filename,
                            extra_metadata=extra_metadata,
+                           mesh_filename=mesh_filename,
+                           bcs_filename=bcs_filename,
+                           storage_dir=storage_dir,
+                           provider_id=provider_id,
+                           on=on,
                            **kwargs)

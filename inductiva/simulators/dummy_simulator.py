@@ -22,7 +22,8 @@ class DummySimulator(simulators.Simulator):
             sleep_time: Optional[float] = 1,
             on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[types.Path] = "",
-            extra_metadata: Optional[dict] = None) -> tasks.Task:
+            extra_metadata: Optional[dict] = None,
+            provider_id: str = "GCP") -> tasks.Task:
         """Run a dummy simulation that echo's to a file.
         
         Args: 
@@ -37,4 +38,5 @@ class DummySimulator(simulators.Simulator):
                            input_filename=input_filename,
                            sleep_time=sleep_time,
                            storage_dir=storage_dir,
+                           provider_id=provider_id,
                            extra_metadata=extra_metadata)

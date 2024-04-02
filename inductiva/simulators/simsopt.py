@@ -25,6 +25,7 @@ class SIMSOPT(simulators.Simulator):
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
+        provider_id: str = "GCP",
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -58,15 +59,16 @@ class SIMSOPT(simulators.Simulator):
         """
         return super().run(
             input_dir,
-            on=on,
+            objectives_weights_filename=objectives_weights_filename,
             coil_coefficients_filename=coil_coefficients_filename,
-            coil_currents_filename=coil_currents_filename,
             plasma_surface_filename=plasma_surface_filename,
+            coil_currents_filename=coil_currents_filename,
+            sigma_scaling_factor=sigma_scaling_factor,
             num_field_periods=num_field_periods,
             num_iterations=num_iterations,
-            num_samples=num_samples,
-            sigma_scaling_factor=sigma_scaling_factor,
-            objectives_weights_filename=objectives_weights_filename,
-            storage_dir=storage_dir,
             extra_metadata=extra_metadata,
+            num_samples=num_samples,
+            storage_dir=storage_dir,
+            provider_id=provider_id,
+            on=on,
         )
