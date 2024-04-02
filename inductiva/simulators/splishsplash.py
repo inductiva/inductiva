@@ -18,7 +18,7 @@ class SplishSplash(simulators.Simulator):
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
-        provider_id: str = "GCP",
+        **kwargs,
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
 
@@ -36,6 +36,6 @@ class SplishSplash(simulators.Simulator):
             input_filename=sim_config_filename,
             extra_metadata=extra_metadata,
             storage_dir=storage_dir,
-            provider_id=provider_id,
             on=on,
+            **kwargs,
         )

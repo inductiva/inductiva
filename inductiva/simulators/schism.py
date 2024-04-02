@@ -19,8 +19,8 @@ class SCHISM(simulators.Simulator):
             storage_dir: Optional[types.Path] = "",
             use_hwthread: bool = True,
             extra_metadata: Optional[dict] = None,
-            provider_id: str = "GCP",
-            n_vcpus: int = None) -> tasks.Task:
+            n_vcpus: int = None,
+            **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
             input_dir: Path to the directory of the simulation input files.
@@ -41,6 +41,6 @@ class SCHISM(simulators.Simulator):
                            num_scribes=num_scribes,
                            storage_dir=storage_dir,
                            n_vcpus=n_vcpus,
-                           provider_id=provider_id,
                            use_hwthread=use_hwthread,
-                           extra_metadata=extra_metadata)
+                           extra_metadata=extra_metadata,
+                           **kwargs)

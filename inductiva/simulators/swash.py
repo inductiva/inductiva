@@ -20,7 +20,6 @@ class SWASH(simulators.Simulator):
             on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[types.Path] = "",
             extra_metadata: Optional[dict] = None,
-            provider_id: str = "GCP",
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -41,6 +40,6 @@ class SWASH(simulators.Simulator):
                            input_filename=sim_config_filename,
                            storage_dir=storage_dir,
                            n_vcpus=n_vcpus,
-                           provider_id=provider_id,
                            use_hwthread=use_hwthread,
-                           extra_metadata=extra_metadata)
+                           extra_metadata=extra_metadata,
+                           **kwargs)

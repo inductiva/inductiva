@@ -20,6 +20,7 @@ from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
                                      TaskStatus)
 from inductiva import types, constants
+from inductiva.resources.machine_types import ProviderType
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
 from inductiva.utils import format_utils, files
@@ -320,7 +321,7 @@ def invoke_async_api(method_name: str,
                      resource_pool: Optional[
                          types.ComputationalResources] = None,
                      storage_path_prefix: Optional[str] = "",
-                     provider_id: str = "GCP") -> str:
+                     provider_id: ProviderType = ProviderType.GCP) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -362,7 +363,7 @@ def invoke_async_api(method_name: str,
                               resource_pool=resource_pool,
                               storage_path_prefix=storage_path_prefix,
                               params=params,
-                              provider_id=provider_id,
+                              provider_id=provider_id.value,
                               type_annotations=type_annotations)
 
     return task_id
