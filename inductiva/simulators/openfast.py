@@ -34,7 +34,5 @@ class OpenFAST(simulators.Simulator):
                            on=on,
                            commands=commands,
                            storage_dir=storage_dir,
-                           n_vcpus=1,
-                           use_hwthread=False,
                            extra_metadata=extra_metadata,
                            **kwargs)
