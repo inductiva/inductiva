@@ -363,7 +363,7 @@ def invoke_async_api(method_name: str,
                               resource_pool=resource_pool,
                               storage_path_prefix=storage_path_prefix,
                               params=params,
-                              provider_id=provider_id.value,
+                              provider_id=provider_id,
                               type_annotations=type_annotations)
 
     return task_id
