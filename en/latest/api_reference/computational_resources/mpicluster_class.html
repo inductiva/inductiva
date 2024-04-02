@@ -403,7 +403,7 @@ document.write(`
   <section id="mpicluster-class">
 <h1><code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> Class<a class="headerlink" href="#mpicluster-class" title="Permalink to this heading">#</a></h1>
 <p>An MPI cluster is a set of machines that work together to solve a problem. These
-machines are configured to communicate with each other using the <a class="reference external" href="https://en.wikipedia.org/wiki/Message_Passing_Interface">Message Passing
+machines are configured to communicate with each other using the <a class="reference external" href="https://en.wikipedia.org/wiki/Message_Passing_Interface" target="_blank">Message Passing
 Interface (MPI)</a> protocol.</p>
 <p>With the <code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> class, you can create a dedicated MPI cluster on-demand that
 is configured automatically to run your simulations in a distributed manner across
@@ -411,9 +411,9 @@ the machines.</p>
 <p>To instantiate an <code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> object the following parameters can be configured:</p>
 <ul class="simple">
 <li><p>the <code class="docutils literal notranslate"><span class="pre">machine_type</span></code> defines the type of CPU used for each machine. This parameter
-follows the naming convention set by <a class="reference external" href="https://cloud.google.com/compute/docs/machine-types">Google Cloud</a>,
+follows the naming convention set by <a class="reference external" href="https://cloud.google.com/compute/docs/machine-types" target="_blank">Google Cloud</a>,
 e.g., <code class="docutils literal notranslate"><span class="pre">c2-standard-16</span></code>. This convention is composed of a prefix that defines the
-CPU series, a suffix that sets the number of <a class="reference external" href="https://cloud.google.com/compute/docs/cpu-platforms">virtual CPUs (vCPU)</a>
+CPU series, a suffix that sets the number of <a class="reference external" href="https://cloud.google.com/compute/docs/cpu-platforms" target="_blank">virtual CPUs (vCPU)</a>
 per machine and the middle word refers to the level of RAM per vCPU. In the example,
 <code class="docutils literal notranslate"><span class="pre">c2</span></code> refers to an Intel Xeon Scalable processor of 2nd generation, <code class="docutils literal notranslate"><span class="pre">standard</span></code>
 means 4 GB of RAM per vCPU and will contain <code class="docutils literal notranslate"><span class="pre">16</span></code> vCPUs.
