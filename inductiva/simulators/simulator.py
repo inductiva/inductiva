@@ -63,7 +63,6 @@ class Simulator(ABC):
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
-        provider_id: str = "GCP",
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -94,7 +93,6 @@ class Simulator(ABC):
             computational_resources=on,
             storage_dir=storage_dir,
             extra_metadata=extra_metadata,
-            provider_id=provider_id,
             **kwargs,
         )
 

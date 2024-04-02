@@ -25,7 +25,7 @@ class SIMSOPT(simulators.Simulator):
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
-        provider_id: str = "GCP",
+        **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -69,6 +69,6 @@ class SIMSOPT(simulators.Simulator):
             extra_metadata=extra_metadata,
             num_samples=num_samples,
             storage_dir=storage_dir,
-            provider_id=provider_id,
             on=on,
+            **kwargs,
         )

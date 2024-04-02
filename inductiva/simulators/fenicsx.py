@@ -22,7 +22,6 @@ class FEniCSx(simulators.Simulator):
             on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[types.Path] = "",
             extra_metadata: Optional[dict] = None,
-            provider_id: str = "GCP",
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -56,6 +55,5 @@ class FEniCSx(simulators.Simulator):
                            mesh_filename=mesh_filename,
                            bcs_filename=bcs_filename,
                            storage_dir=storage_dir,
-                           provider_id=provider_id,
                            on=on,
                            **kwargs)

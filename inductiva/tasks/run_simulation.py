@@ -11,6 +11,7 @@ from absl import logging
 from inductiva import tasks, types
 from inductiva.api import methods
 from inductiva.utils import format_utils, files
+from inductiva.resources.machine_types import ProviderType
 
 TASK_METADATA_FILENAME = "task_metadata.json"
 
@@ -21,10 +22,10 @@ def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
     computational_resources: Optional[types.ComputationalResources] = None,
+    provider_id: ProviderType = ProviderType.GCP,
     storage_dir: Optional[types.Path] = "",
     api_invoker=None,
     extra_metadata=None,
-    provider_id: str = "GCP",
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""

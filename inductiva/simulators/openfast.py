@@ -1,11 +1,11 @@
-"""Openfast module of the API for wind turbine simulations."""
+"""OpenFAST module of the API for wind turbine simulations."""
 from typing import Optional
 
 from inductiva import types, tasks, simulators
 
 
-class Openfast(simulators.Simulator):
-    """Class to invoke a generic Openfast simulation on the API.
+class OpenFAST(simulators.Simulator):
+    """Class to invoke a generic OpenFAST simulation on the API.
 
     """
 
@@ -20,13 +20,12 @@ class Openfast(simulators.Simulator):
             on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[types.Path] = "",
             extra_metadata: Optional[dict] = None,
-            provider_id: str = "GCP",
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
         Args:
             input_dir: Path to the directory of the simulation input files.
-            commands: List of commands to run using the Openfast simulator.
+            commands: List of commands to run using the OpenFAST simulator.
             number of hardware threads on the node, and use that as the
             number of slots available.
             on: The computational resource to launch the simulation on. If None
@@ -39,5 +38,5 @@ class Openfast(simulators.Simulator):
                            storage_dir=storage_dir,
                            n_vcpus=1,
                            use_hwthread=False,
-                           provider_id=provider_id,
-                           extra_metadata=extra_metadata)
+                           extra_metadata=extra_metadata,
+                           **kwargs)
