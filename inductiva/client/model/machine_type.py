@@ -34,8 +34,6 @@ class MachineType(schemas.DictSchema):
             "machine_type",
             "num_cpus",
             "price",
-            "spot",
-            "region",
             "ram_gb",
         }
 
@@ -44,10 +42,8 @@ class MachineType(schemas.DictSchema):
             num_cpus = schemas.IntSchema
             ram_gb = schemas.IntSchema
             price = schemas.NumberSchema
-            spot = schemas.BoolSchema
-            region = schemas.StrSchema
 
-            class provider(schemas.EnumBase, schemas.StrSchema):
+            class provider_id(schemas.EnumBase, schemas.StrSchema):
 
                 class MetaOapg:
                     enum_value_to_name = {
@@ -63,21 +59,133 @@ class MachineType(schemas.DictSchema):
                 def ICE(cls):
                     return cls("ICE")
 
+            class spot(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.BoolSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'spot':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class region(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'region':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "machine_type": machine_type,
                 "num_cpus": num_cpus,
                 "ram_gb": ram_gb,
                 "price": price,
+                "provider_id": provider_id,
                 "spot": spot,
                 "region": region,
-                "provider": provider,
             }
 
     machine_type: MetaOapg.properties.machine_type
     num_cpus: MetaOapg.properties.num_cpus
     price: MetaOapg.properties.price
-    spot: MetaOapg.properties.spot
-    region: MetaOapg.properties.region
     ram_gb: MetaOapg.properties.ram_gb
 
     @typing.overload
@@ -106,6 +214,12 @@ class MachineType(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["provider_id"]
+    ) -> MetaOapg.properties.provider_id:
+        ...
+
+    @typing.overload
+    def __getitem__(
             self, name: typing_extensions.Literal["spot"]
     ) -> MetaOapg.properties.spot:
         ...
@@ -117,12 +231,6 @@ class MachineType(schemas.DictSchema):
         ...
 
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["provider"]
-    ) -> MetaOapg.properties.provider:
-        ...
-
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -131,9 +239,9 @@ class MachineType(schemas.DictSchema):
         "num_cpus",
         "ram_gb",
         "price",
+        "provider_id",
         "spot",
         "region",
-        "provider",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -164,20 +272,20 @@ class MachineType(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-            self, name: typing_extensions.Literal["spot"]
-    ) -> MetaOapg.properties.spot:
+        self, name: typing_extensions.Literal["provider_id"]
+    ) -> typing.Union[MetaOapg.properties.provider_id, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["spot"]
+    ) -> typing.Union[MetaOapg.properties.spot, schemas.Unset]:
         ...
 
     @typing.overload
     def get_item_oapg(
         self, name: typing_extensions.Literal["region"]
-    ) -> MetaOapg.properties.region:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["provider"]
-    ) -> typing.Union[MetaOapg.properties.provider, schemas.Unset]:
+    ) -> typing.Union[MetaOapg.properties.region, schemas.Unset]:
         ...
 
     @typing.overload
@@ -191,9 +299,9 @@ class MachineType(schemas.DictSchema):
         "num_cpus",
         "ram_gb",
         "price",
+        "provider_id",
         "spot",
         "region",
-        "provider",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -218,21 +326,23 @@ class MachineType(schemas.DictSchema):
             int,
             float,
         ],
-        spot: typing.Union[
-            MetaOapg.properties.spot,
-            bool,
-        ],
-        region: typing.Union[
-            MetaOapg.properties.region,
-            str,
-        ],
         ram_gb: typing.Union[
             MetaOapg.properties.ram_gb,
             decimal.Decimal,
             int,
         ],
-        provider: typing.Union[MetaOapg.properties.provider, str,
-                               schemas.Unset] = schemas.unset,
+        provider_id: typing.Union[MetaOapg.properties.provider_id, str,
+                                  schemas.Unset] = schemas.unset,
+        spot: typing.Union[MetaOapg.properties.spot, dict,
+                           frozendict.frozendict, str, date, datetime,
+                           uuid.UUID, int, float, decimal.Decimal, bool, None,
+                           list, tuple, bytes, io.FileIO, io.BufferedReader,
+                           schemas.Unset] = schemas.unset,
+        region: typing.Union[MetaOapg.properties.region, dict,
+                             frozendict.frozendict, str, date, datetime,
+                             uuid.UUID, int, float, decimal.Decimal, bool, None,
+                             list, tuple, bytes, io.FileIO, io.BufferedReader,
+                             schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -245,10 +355,10 @@ class MachineType(schemas.DictSchema):
             machine_type=machine_type,
             num_cpus=num_cpus,
             price=price,
+            ram_gb=ram_gb,
+            provider_id=provider_id,
             spot=spot,
             region=region,
-            ram_gb=ram_gb,
-            provider=provider,
             _configuration=_configuration,
             **kwargs,
         )
