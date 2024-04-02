@@ -16,7 +16,7 @@ API client, and run your first simulation within only a few minutes;
 - An [Explore the API section](/explore_api/how_it_works.md) where we will give
 you a comprehensive overview of how the API works, explaining key concepts and how
 different components play together;
-- A [How-To section](/how_to/run-parallel_simulations.md) where we will guide you through several common tasks, and which
+- A [How-To section](/how_to/index.md) where we will guide you through several common tasks, and which
 provides practical examples for you to try;
 - A [list of the various open-source simulation packages](simulators/overview.md) that you can invoke via the
 API (if you have suggestions for adding more simulation packages, please let us know
