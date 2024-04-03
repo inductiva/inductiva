@@ -13,6 +13,7 @@ The simulators available in the current version of the API (0.5) are:
 - [DualSPHysics](../simulators/DualSPHysics.md)
 - [SPlisHSPlasH](../simulators/SPlisHSPlasH.md)
 - [OpenFOAM](../simulators/OpenFOAM.md)
+- [OpenFAST](../simulators/OpenFAST.md)
 - [GROMACS](../simulators/GROMACS.md)
 - [SCHISM](../simulators/SCHISM.md)
 - [XBeach](../simulators/XBeach.md)

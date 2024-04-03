@@ -1,12 +1,15 @@
 # Simulators
 
 ```{toctree}
-DualSPHysics
-FDS
-GROMACS
-OpenFOAM
-Reef3D
 SPlisHSPlasH
-SWASH
+DualSPHysics
+OpenFOAM
+OpenFAST
+GROMACS
 XBeach
+Reef3D
+SCHISM
+SWASH
+SWAN
+FDS
 ```
