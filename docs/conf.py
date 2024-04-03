@@ -13,8 +13,29 @@
 
 import os
 import sys
+import subprocess
 
 sys.path.insert(0, os.path.abspath('..'))
+
+# -- Project helper functions ------------------------------------------------
+
+
+def get_version():
+    """
+    Returns:
+        'latest' if current branch is main
+        {BRANCH_NAME} if current branch is NOT main
+        'unknown-version' if an error occurs
+    """
+    try:
+        branch_name = subprocess.check_output(
+            ['git', 'rev-parse', '--abbrev-ref', 'HEAD'], text=True)
+        if branch_name == 'main':
+            return 'latest'
+        return branch_name
+    except subprocess.CalledProcessError:
+        return 'unknown-version'
+
 
 # -- Project information -----------------------------------------------------
 
@@ -38,6 +59,7 @@ extensions = [
     'sphinx_togglebutton',
     'sphinxcontrib.googleanalytics',
     'sphinxext.opengraph',
+    'sphinx_sitemap',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -98,3 +120,9 @@ googleanalytics_enabled = "true"
 ogp_site_name = "Inductiva.ai Docs"
 ogp_site_url = "https://docs.inductiva.ai"
 ogp_image = "https://docs.inductiva.ai/_static/inductiva-social-banner.jpg"
+
+# sitemap.xml
+# See https://sphinx-sitemap.readthedocs.io/
+language = 'en'
+version = get_version()
+html_baseurl = 'https://docs.inductiva.ai/'
