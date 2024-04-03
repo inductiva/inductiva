@@ -1,22 +1,22 @@
-"""Reef3D simulator module of the API."""
-
+"""OpenFAST module of the API for wind turbine simulations."""
 from typing import Optional
 
-from inductiva import simulators, types, tasks
+from inductiva import types, tasks, simulators
 
 
-@simulators.simulator.mpi_enabled
-class REEF3D(simulators.Simulator):
-    """Class to invoke a generic FDS simulation on the API."""
+class OpenFAST(simulators.Simulator):
+    """Class to invoke a generic OpenFAST simulation on the API.
+
+    """
 
     def __init__(self):
+
         super().__init__()
-        self.api_method_name = "reef3d.reef3d.run_simulation"
+        self.api_method_name = "openfast.openfast.run_simulation"
 
     def run(self,
             input_dir: types.Path,
-            n_vcpus: Optional[int] = None,
-            use_hwthread: bool = True,
+            commands: types.Commands,
             on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[types.Path] = "",
             extra_metadata: Optional[dict] = None,
@@ -25,20 +25,14 @@ class REEF3D(simulators.Simulator):
 
         Args:
             input_dir: Path to the directory of the simulation input files.
-            n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
-            use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
-            sim_config_filename: Name of the simulation configuration file.
+            commands: List of commands to run using the OpenFAST simulator.
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,
                            on=on,
+                           commands=commands,
                            storage_dir=storage_dir,
-                           n_vcpus=n_vcpus,
-                           use_hwthread=use_hwthread,
                            extra_metadata=extra_metadata,
                            **kwargs)
