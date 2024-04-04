@@ -9,4 +9,3 @@ sphinx-togglebutton
 sphinxcontrib-googleanalytics
 sphinxext.opengraph
 sphinx-sitemap
-python-dotenv

@@ -13,9 +13,6 @@
 
 import os
 import sys
-from dotenv import load_dotenv
-
-load_dotenv()  # take environment variables from .env.
 
 sys.path.insert(0, os.path.abspath('..'))
 
@@ -106,5 +103,5 @@ ogp_image = "https://docs.inductiva.ai/_static/inductiva-social-banner.jpg"
 # sitemap.xml
 # See https://sphinx-sitemap.readthedocs.io/
 language = 'en'
-version = os.getenv('DOCS_VERSION', 'unknown_version')
+version = 'local'
 html_baseurl = 'https://docs.inductiva.ai/'
