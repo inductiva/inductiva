@@ -13,29 +13,8 @@
 
 import os
 import sys
-import subprocess
 
 sys.path.insert(0, os.path.abspath('..'))
-
-# -- Project helper functions ------------------------------------------------
-
-
-def get_version():
-    """
-    Returns:
-        'latest' if current branch is main
-        {BRANCH_NAME} if current branch is NOT main
-        'unknown-version' if an error occurs
-    """
-    try:
-        branch_name = subprocess.check_output(
-            ['git', 'rev-parse', '--abbrev-ref', 'HEAD'], text=True)
-        if branch_name == 'main':
-            return 'latest'
-        return branch_name
-    except subprocess.CalledProcessError:
-        return 'unknown-version'
-
 
 # -- Project information -----------------------------------------------------
 
@@ -124,5 +103,5 @@ ogp_image = "https://docs.inductiva.ai/_static/inductiva-social-banner.jpg"
 # sitemap.xml
 # See https://sphinx-sitemap.readthedocs.io/
 language = 'en'
-version = get_version()
+version = 'local'
 html_baseurl = 'https://docs.inductiva.ai/'
