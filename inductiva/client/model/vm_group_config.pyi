@@ -475,6 +475,7 @@ class VMGroupConfig(
                 @schemas.classproperty
                 def ICE(cls):
                     return cls("ICE")
+            started = schemas.BoolSchema
             
             
             class min_vms(
@@ -553,6 +554,20 @@ class VMGroupConfig(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            
+            
+            class autoscale_policy(
+                schemas.EnumBase,
+                schemas.StrSchema
+            ):
+                
+                @schemas.classproperty
+                def CPU(cls):
+                    return cls("cpu")
+                
+                @schemas.classproperty
+                def TASK_IN_QUEUE(cls):
+                    return cls("task_in_queue")
             __annotations__ = {
                 "spot": spot,
                 "is_elastic": is_elastic,
@@ -568,8 +583,10 @@ class VMGroupConfig(
                 "deletion_timestamp": deletion_timestamp,
                 "type": type,
                 "provider_id": provider_id,
+                "started": started,
                 "min_vms": min_vms,
                 "max_vms": max_vms,
+                "autoscale_policy": autoscale_policy,
             }
     
     spot: MetaOapg.properties.spot
@@ -618,15 +635,21 @@ class VMGroupConfig(
     def __getitem__(self, name: typing_extensions.Literal["provider_id"]) -> MetaOapg.properties.provider_id: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["started"]) -> MetaOapg.properties.started: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["min_vms"]) -> MetaOapg.properties.min_vms: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["max_vms"]) -> MetaOapg.properties.max_vms: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["autoscale_policy"]) -> MetaOapg.properties.autoscale_policy: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "min_vms", "max_vms", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "min_vms", "max_vms", "autoscale_policy", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -674,15 +697,21 @@ class VMGroupConfig(
     def get_item_oapg(self, name: typing_extensions.Literal["provider_id"]) -> typing.Union[MetaOapg.properties.provider_id, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["started"]) -> typing.Union[MetaOapg.properties.started, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["min_vms"]) -> typing.Union[MetaOapg.properties.min_vms, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["max_vms"]) -> typing.Union[MetaOapg.properties.max_vms, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["autoscale_policy"]) -> typing.Union[MetaOapg.properties.autoscale_policy, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "min_vms", "max_vms", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "min_vms", "max_vms", "autoscale_policy", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -703,8 +732,10 @@ class VMGroupConfig(
         deletion_timestamp: typing.Union[MetaOapg.properties.deletion_timestamp, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         type: typing.Union[MetaOapg.properties.type, str, schemas.Unset] = schemas.unset,
         provider_id: typing.Union[MetaOapg.properties.provider_id, str, schemas.Unset] = schemas.unset,
+        started: typing.Union[MetaOapg.properties.started, bool, schemas.Unset] = schemas.unset,
         min_vms: typing.Union[MetaOapg.properties.min_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         max_vms: typing.Union[MetaOapg.properties.max_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        autoscale_policy: typing.Union[MetaOapg.properties.autoscale_policy, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'VMGroupConfig':
@@ -725,8 +756,10 @@ class VMGroupConfig(
             deletion_timestamp=deletion_timestamp,
             type=type,
             provider_id=provider_id,
+            started=started,
             min_vms=min_vms,
             max_vms=max_vms,
+            autoscale_policy=autoscale_policy,
             _configuration=_configuration,
             **kwargs,
         )
