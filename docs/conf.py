@@ -93,7 +93,7 @@ html_favicon = 'favicon.ico'
 
 # Google Analytics
 googleanalytics_id = "UA-188572165-1"
-googleanalytics_enabled = "true"
+googleanalytics_enabled = True
 
 # OpenGraph protocol
 ogp_site_name = "Inductiva.ai Docs"
