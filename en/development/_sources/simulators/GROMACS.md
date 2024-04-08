@@ -13,7 +13,7 @@ and post-processing. Hence, to configure a simulation of GROMACS the user may re
 several files. Moreover, GROMACS has specific commands to run certain tasks that 
 already use the files in your input directory. 
 
-### Example
+## Example
 
 This example runs a simple case of the molecular dynamics of water molecules inside 
 a small box.

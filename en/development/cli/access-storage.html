@@ -218,6 +218,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../simulators/DualSPHysics.html">DualSPHysics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/SPlisHSPlasH.html">SPlisHSPlasH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/OpenFOAM.html">OpenFOAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/OpenFAST.html">OpenFAST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/GROMACS.html">GROMACS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/SWASH.html">SWASH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/XBeach.html">XBeach</a></li>
@@ -411,8 +412,8 @@ simulation outputs.</p>
 <section id="check-storage-usage">
 <h2>Check Storage Usage<a class="headerlink" href="#check-storage-usage" title="Permalink to this heading">#</a></h2>
 <p>You can check how much storage space your simulations are currently occupying:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ inductiva storage size
-Total user&#39;s remote storage in use: 2.79 GB
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>inductiva<span class="w"> </span>storage<span class="w"> </span>size
+<span class="go">Total user&#39;s remote storage in use: 2.79 GB</span>
 </pre></div>
 </div>
 </section>
@@ -444,13 +445,13 @@ storage, or even delete everything with the <code class="docutils literal notran
 <p>Here’s an example where you remove a path within your storage. Use this command
 with caution as it permanently deletes data from your remote
 storage:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ inductiva storage remove hodbisrxjxhdbkknv60xmy6ti/
-# The CLI always prompts for confirmation to prevent accidental data loss
-You are about to remove the following paths from your remote storage space:
-  - 0bet8jrpp2gz974n42nsd9n2p/
-Are you sure you want to proceed (y/[N])? y
-Removing 0bet8jrpp2gz974n42nsd9n2p/ in the user&#39;s remote storage.
-Successfully removed remote path &#39;0bet8jrpp2gz974n42nsd9n2p/&#39;.
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>inductiva<span class="w"> </span>storage<span class="w"> </span>remove<span class="w"> </span>hodbisrxjxhdbkknv60xmy6ti/
+<span class="gp"># </span>The<span class="w"> </span>CLI<span class="w"> </span>always<span class="w"> </span>prompts<span class="w"> </span><span class="k">for</span><span class="w"> </span>confirmation<span class="w"> </span>to<span class="w"> </span>prevent<span class="w"> </span>accidental<span class="w"> </span>data<span class="w"> </span>loss
+<span class="go">You are about to remove the following paths from your remote storage space:</span>
+<span class="go">  - 0bet8jrpp2gz974n42nsd9n2p/</span>
+<span class="go">Are you sure you want to proceed (y/[N])? y</span>
+<span class="go">Removing 0bet8jrpp2gz974n42nsd9n2p/ in the user&#39;s remote storage.</span>
+<span class="go">Successfully removed remote path &#39;0bet8jrpp2gz974n42nsd9n2p/&#39;.</span>
 </pre></div>
 </div>
 <p>You can alternatively clear all storage by adding the <code class="docutils literal notranslate"><span class="pre">--all</span></code> flag to the <code class="docutils literal notranslate"><span class="pre">remove</span></code> command.

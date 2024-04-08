@@ -218,6 +218,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../simulators/DualSPHysics.html">DualSPHysics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/SPlisHSPlasH.html">SPlisHSPlasH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/OpenFOAM.html">OpenFOAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/OpenFAST.html">OpenFAST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/GROMACS.html">GROMACS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/SWASH.html">SWASH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/XBeach.html">XBeach</a></li>
@@ -408,12 +409,10 @@ the user is simply trying to follow the progress of a simulation, retrieve resul
 or even kill a task, the <code class="docutils literal notranslate"><span class="pre">Task</span></code> class provides the necessary tools to do so.
 In this section, we will cover the following topics:</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#task-monitoring"><span class="xref myst">Task monitoring</span></a>: Learn how to monitor a task, such as
+<li><p><a class="reference internal" href="#task-monitoring">Task monitoring</a>: Learn how to monitor a task, such as
 getting its status and getting information about the outputs;</p></li>
-<li><p><a class="reference internal" href="#killing-tasks"><span class="xref myst">Killing tasks</span></a>: Learn how to kill a task that hasn’t
+<li><p><a class="reference internal" href="#killing-tasks">Killing tasks</a>: Learn how to kill a task that hasn’t
 been completed yet;</p></li>
-<li><p><a class="reference internal" href="#downloading-outputs"><span class="xref myst">Downloading Outputs</span></a>: Learn how to download the
-outputs of a task.</p></li>
 </ul>
 <section id="task-monitoring">
 <h2>Task monitoring<a class="headerlink" href="#task-monitoring" title="Permalink to this heading">#</a></h2>
@@ -421,7 +420,7 @@ outputs of a task.</p></li>
 With a <code class="docutils literal notranslate"><span class="pre">Task</span></code> object at hand, the user can:</p>
 <ul class="simple">
 <li><p>Get the status, i.e., whether the task is started, succeeded, failed, etc
-(see the section about <a class="reference internal" href="#../explore_api/tasks#task-lifecycle.md"><span class="xref myst">task lifecycle</span></a>
+(see the section about <a class="reference internal" href="../explore_api/tasks.html#task-lifecycle"><span class="std std-ref">task lifecycle</span></a>
 for more details);</p></li>
 <li><p>Get the machine type where it ran/is running;</p></li>
 <li><p>Get the execution time.</p></li>
@@ -471,8 +470,8 @@ running simulation has gone rogue, or simply because there is no other reason
 to allow a task to proceed, the user can kill a task. The <code class="docutils literal notranslate"><span class="pre">Task</span></code> class provides
 a method to kill a task that hasn’t been completed yet. Tasks in the
 <code class="docutils literal notranslate"><span class="pre">PENDING</span> <span class="pre">INPUT</span></code>, <code class="docutils literal notranslate"><span class="pre">SUBMITTED</span></code> and <code class="docutils literal notranslate"><span class="pre">STARTED</span></code> states can be killed (see the section
-on <a class="reference internal" href="#../introduction/tasks#task-lifecycle"><span class="xref myst">task lifecycle</span></a>).</p>
-<p>To kill a task programmatically, one has 2 options at hand: by declaratively
+on <a class="reference internal" href="../explore_api/tasks.html#task-lifecycle"><span class="std std-ref">task lifecycle</span></a>).</p>
+<p>To kill a task programmatically, one has 2 options at hand: by declarative
 calling the <code class="docutils literal notranslate"><span class="pre">kill</span></code> method or interrupting the python session/script
 when a task is being waited in the context of a <code class="docutils literal notranslate"><span class="pre">sync_context</span></code> call:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># grab a task object and</span>

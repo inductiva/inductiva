@@ -218,6 +218,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../simulators/DualSPHysics.html">DualSPHysics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/SPlisHSPlasH.html">SPlisHSPlasH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/OpenFOAM.html">OpenFOAM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/OpenFAST.html">OpenFAST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/GROMACS.html">GROMACS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/SWASH.html">SWASH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/XBeach.html">XBeach</a></li>
@@ -422,7 +423,7 @@ and assigning the simulation tasks to the appropriate computational resource See
 with the fact that not all simulation software packages work in the same way and,
 therefore, having a fully general formulation for a simulation task is not trivial?</p>
 <section id="the-simple-cases">
-<h2>The simple cases<a class="headerlink" href="#the-simple-cases" title="Permalink to this heading">#</a></h2>
+<span id="id1"></span><h2>The simple cases<a class="headerlink" href="#the-simple-cases" title="Permalink to this heading">#</a></h2>
 <p>Some simulation packages offer a single executable that takes as input a single
 file containing the full description of the simulation to be run. This is the simplest
 case because all the API needs to do is send that simulation configuration file to a
@@ -478,7 +479,7 @@ the <code class="docutils literal notranslate"><span class="pre">run()</span></c
 file that the simulator executable expects and for which there is no standard name is expected.</p>
 </section>
 <section id="a-slightly-more-complex-case">
-<h2>A slightly more complex case<a class="headerlink" href="#a-slightly-more-complex-case" title="Permalink to this heading">#</a></h2>
+<span id="id2"></span><h2>A slightly more complex case<a class="headerlink" href="#a-slightly-more-complex-case" title="Permalink to this heading">#</a></h2>
 <p>Some simulators require running more than one executable to perform a simulation,
 but they are always the same and applied in sequence. In these cases, we
 automatically run both executables together giving the appearance that what is
@@ -510,7 +511,7 @@ no requirement to pass the <code class="docutils literal notranslate"><span clas
 pointer to the folder containing all the assets required for the simulation.</p>
 </section>
 <section id="running-long-simulation-pipelines">
-<h2>Running long simulation pipelines<a class="headerlink" href="#running-long-simulation-pipelines" title="Permalink to this heading">#</a></h2>
+<span id="id3"></span><h2>Running long simulation pipelines<a class="headerlink" href="#running-long-simulation-pipelines" title="Permalink to this heading">#</a></h2>
 <p>In other simulation packages, a single simulation is more configurable and different
 executables can be used to run it. For these cases, users will be able to select<br />
 and configure the executables they wish to run by setting <em>a priori</em> a list of
