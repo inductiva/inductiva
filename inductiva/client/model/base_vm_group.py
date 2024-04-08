@@ -655,6 +655,7 @@ class BaseVMGroup(schemas.DictSchema):
                 def ICE(cls):
                     return cls("ICE")
 
+            started = schemas.BoolSchema
             __annotations__ = {
                 "max_idle_time": max_idle_time,
                 "auto_terminate_ts": auto_terminate_ts,
@@ -668,6 +669,7 @@ class BaseVMGroup(schemas.DictSchema):
                 "deletion_timestamp": deletion_timestamp,
                 "type": type,
                 "provider_id": provider_id,
+                "started": started,
             }
 
     @typing.overload
@@ -743,6 +745,12 @@ class BaseVMGroup(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["started"]
+    ) -> MetaOapg.properties.started:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -759,6 +767,7 @@ class BaseVMGroup(schemas.DictSchema):
         "deletion_timestamp",
         "type",
         "provider_id",
+        "started",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -837,6 +846,12 @@ class BaseVMGroup(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["started"]
+    ) -> typing.Union[MetaOapg.properties.started, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -854,6 +869,7 @@ class BaseVMGroup(schemas.DictSchema):
         "deletion_timestamp",
         "type",
         "provider_id",
+        "started",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -927,6 +943,8 @@ class BaseVMGroup(schemas.DictSchema):
                            schemas.Unset] = schemas.unset,
         provider_id: typing.Union[MetaOapg.properties.provider_id, str,
                                   schemas.Unset] = schemas.unset,
+        started: typing.Union[MetaOapg.properties.started, bool,
+                              schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -948,6 +966,7 @@ class BaseVMGroup(schemas.DictSchema):
             deletion_timestamp=deletion_timestamp,
             type=type,
             provider_id=provider_id,
+            started=started,
             _configuration=_configuration,
             **kwargs,
         )
