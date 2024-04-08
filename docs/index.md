@@ -67,6 +67,7 @@ simulators/overview
 simulators/DualSPHysics
 simulators/SPlisHSPlasH
 simulators/OpenFOAM
+simulators/OpenFAST
 simulators/GROMACS
 simulators/SWASH
 simulators/XBeach
