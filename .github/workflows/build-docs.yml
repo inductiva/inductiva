@@ -33,14 +33,14 @@ jobs:
           docs-folder: "source/docs/"
           # required by #1291
           pre-build-command: "apt-get update -y && apt-get install -y git"
-          build-command: "sphinx-build . ../../build/en/latest -D version=latest"
+          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
 
       - uses: nicholasphair/sphinx-action@7.0.0
         with:
           docs-folder: "source-dev/docs/"
           # required by #1291
           pre-build-command: "apt-get update -y && apt-get install -y git"
-          build-command: "sphinx-build . ../../build/en/development -D version=development"
+          build-command: "sphinx-build . ../../build/en/development -W -D version=development"
 
       - name: disable jekyll
         working-directory: build
