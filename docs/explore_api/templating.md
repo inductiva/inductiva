@@ -51,7 +51,7 @@ config_parameter = {{ parameter_value }}
 When this file is rendered with `10` for the variable `parameter_value`,
 the resulting file will read:
 
-```txt
+```text
 config_parameter = 10
 ```
 
@@ -63,7 +63,7 @@ config_parameter = {{ parameter_value | default(20) }}
 
 and **rendered without providing a value for it**, the resulting file would read:
 
-```txt
+```text
 config_parameter = 20
 ```
 
