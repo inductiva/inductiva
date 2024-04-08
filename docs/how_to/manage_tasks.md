@@ -9,8 +9,6 @@ In this section, we will cover the following topics:
    getting its status and getting information about the outputs;
  * [Killing tasks](#killing-tasks): Learn how to kill a task that hasn't
    been completed yet;
- * [Downloading Outputs](#downloading-outputs): Learn how to download the
-   outputs of a task.
 
 ## Task monitoring
 
