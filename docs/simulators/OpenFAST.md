@@ -19,7 +19,7 @@ processing techniques enhances the efficiency and speed of simulations,
 empowering researchers and developers to tackle complex wind energy challenges
 with greater precision and accuracy.
 
-### Example
+## Example
 
 
 ```python
@@ -47,7 +47,7 @@ task.download_outputs()
 
 ```
 
-### Allowed Commands
+## Allowed Commands
 
 - `aerodyn_driver`: Utilized for aerodynamic analysis, this binary focuses on 
 airflow dynamics around wind turbine blades.
