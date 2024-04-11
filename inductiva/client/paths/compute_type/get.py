@@ -24,9 +24,9 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.base_machine_type import BaseMachineType
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.machine_type import MachineType
 
 from . import path
 
@@ -199,7 +199,7 @@ request_query_provider_id = api_client.QueryParameter(
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = BaseMachineType
+SchemaFor200ResponseBodyApplicationJson = MachineType
 
 
 @dataclass
