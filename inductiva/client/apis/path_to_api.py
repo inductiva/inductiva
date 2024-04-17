@@ -10,6 +10,7 @@ from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
 from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
 from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
+from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_email import AdminUsersEmail
@@ -38,6 +39,8 @@ from inductiva.client.apis.paths.storage_contents import StorageContents
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
+from inductiva.client.apis.paths.projects import Projects
+from inductiva.client.apis.paths.projects_name import ProjectsName
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -59,6 +62,8 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdOutput,
         PathValues.TASKS_TASK_ID_KILL:
             TasksTaskIdKill,
+        PathValues.TASKS_TASK_ID_DISABLE_LOGS:
+            TasksTaskIdDisableLogs,
         PathValues.ADMIN_USERS:
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_API_KEY:
@@ -115,6 +120,10 @@ PathToApi = typing_extensions.TypedDict(
             VersionCheck,
         PathValues.USERS_QUOTAS:
             UsersQuotas,
+        PathValues.PROJECTS:
+            Projects,
+        PathValues.PROJECTS_NAME:
+            ProjectsName,
     })
 
 path_to_api = PathToApi({
@@ -136,6 +145,8 @@ path_to_api = PathToApi({
         TasksTaskIdOutput,
     PathValues.TASKS_TASK_ID_KILL:
         TasksTaskIdKill,
+    PathValues.TASKS_TASK_ID_DISABLE_LOGS:
+        TasksTaskIdDisableLogs,
     PathValues.ADMIN_USERS:
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_API_KEY:
@@ -192,4 +203,8 @@ path_to_api = PathToApi({
         VersionCheck,
     PathValues.USERS_QUOTAS:
         UsersQuotas,
+    PathValues.PROJECTS:
+        Projects,
+    PathValues.PROJECTS_NAME:
+        ProjectsName,
 })
