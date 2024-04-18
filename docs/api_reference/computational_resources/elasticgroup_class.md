@@ -10,7 +10,7 @@ based on the number of tasks in it. This allows running multiple simulations at 
 same time, with the slight overhead of machines starting, with a more 
 cost-effective strategy since machines won't stay idle for long.
 
-### Instantiating an `ElasticMachineGroup` object
+## Instantiating an `ElasticMachineGroup` object
 To create an elastic machine group the following properties can be configured:
 - the `machine_type` defines the type of CPU used for each machine. This parameter
 follows the naming convention set by [Google Cloud](https://cloud.google.com/compute/docs/machine-types),
@@ -49,7 +49,7 @@ elastic_machine_group = inductiva.resources.ElasticMachineGroup(
 Creating an instance of `ElasticMachineGroup` does not start the machines. This only 
 registers the configuration on the API which can now be used to manage it further.
 
-### Managing the ElasticMachineGroup
+## Managing the ElasticMachineGroup
 
 With your `elastic_machine_group` object ready, you can launch the elastic machine
 group with the minimum number of machines active with `elastic_machine_group.start()`.

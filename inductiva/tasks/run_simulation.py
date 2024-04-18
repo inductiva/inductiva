@@ -2,7 +2,7 @@
 import os
 
 import pathlib
-from typing import Any, Optional
+from typing import Any, Optional, Union
 import json
 import threading
 
@@ -11,6 +11,7 @@ from absl import logging
 from inductiva import tasks, types
 from inductiva.api import methods
 from inductiva.utils import format_utils, files
+from inductiva.resources.machine_types import ProviderType
 
 TASK_METADATA_FILENAME = "task_metadata.json"
 
@@ -21,6 +22,7 @@ def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
     computational_resources: Optional[types.ComputationalResources] = None,
+    provider_id: Optional[Union[ProviderType, str]] = ProviderType.GCP,
     storage_dir: Optional[types.Path] = "",
     api_invoker=None,
     extra_metadata=None,
@@ -39,13 +41,15 @@ def run_simulation(
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
 
-    task_id = api_invoker(
-        api_method_name,
-        params,
-        type_annotations,
-        resource_pool=computational_resources,
-        storage_path_prefix=storage_dir,
-    )
+    if provider_id is not None:
+        provider_id = ProviderType(provider_id)
+
+    task_id = api_invoker(api_method_name,
+                          params,
+                          type_annotations,
+                          resource_pool=computational_resources,
+                          storage_path_prefix=storage_dir,
+                          provider_id=provider_id)
 
     if computational_resources is not None:
         logging.info("Task %s submitted to the queue of the %s.", task_id,

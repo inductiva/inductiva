@@ -11,12 +11,12 @@ As you start running simulations, your remote personal storage will get filled u
 Hence, at times it will be useful to monitor the amount of storage space being utilized.
 This can be achieved as follows:
 
-#### Python
+### Python
 ```python
 import inductiva
 space_used = inductiva.storage.get_space_used()
 ```
-#### CLI
+### CLI
 ```bash
 $ inductiva storage size
 ```
@@ -103,7 +103,7 @@ inductiva.storage.rmdir(path="reef3d_simulation")
 
 **CLI**
 
-```bash
+```console
 $ inductiva storage rm reef3d_simulation
 You are about to remove the following paths from your remote storage space:
   - reef3d_simulation

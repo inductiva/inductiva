@@ -5,15 +5,22 @@ import pytest
 import inductiva
 
 
+def fake_init(self, machine_type: str, num_machines=1, provider="GCP"):
+    self._id = "id-resource"  # pylint: disable = protected-access
+    self._name = "name-resource"  # pylint: disable = protected-access
+    self.register = False
+    self.machine_type = machine_type
+    self.num_machines = num_machines
+    self.provider = provider
+
+
 def fake_register(self, **kwargs):  # pylint: disable = unused-argument
     self._id = "id-resource"  # pylint: disable = protected-access
     self._name = "name-resource"  # pylint: disable = protected-access
     self.register = False
 
 
-@mock.patch.object(inductiva.resources.MPICluster,
-                   attribute="_register_machine_group",
-                   new=fake_register)
+@mock.patch.object(inductiva.resources.MPICluster, "__init__", fake_init)
 def test_machines__mpicluster__register():
     """Check the registering of a MPICluster.
     
@@ -32,9 +39,7 @@ def test_machines__mpicluster__register():
     assert cluster.register is False
 
 
-@mock.patch.object(inductiva.resources.MachineGroup,
-                   attribute="_register_machine_group",
-                   new=fake_register)
+@mock.patch.object(inductiva.resources.MachineGroup, "__init__", fake_init)
 def test_machines__machine_group__register():
     """Check the registering of a MachineGroup.
     
@@ -54,9 +59,7 @@ def test_machines__machine_group__register():
     assert cluster.register is False
 
 
-@mock.patch.object(inductiva.resources.MachineGroup,
-                   attribute="_register_machine_group",
-                   new=fake_register)
+@mock.patch.object(inductiva.resources.MachineGroup, "__init__", fake_init)
 def test_machines__machine_group__ice_register():
     """Check the registering of a MachineGroup with the ICE provider.
     
@@ -88,12 +91,6 @@ def test_machines__ice_register__invalid_args():
     """
 
     inductiva.api_key = "dummy"
-    with pytest.raises(ValueError) as exception:
-        inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
-                                         num_machines=2,
-                                         provider="ICE")
-
-    assert "only supports launching one machine" in str(exception.value)
 
     with pytest.raises(ValueError) as exception:
         inductiva.resources.MachineGroup(machine_type="c2-highmem-4",

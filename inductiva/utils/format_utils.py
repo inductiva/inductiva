@@ -32,6 +32,17 @@ class Emphasis(Enum):
     RESET = "\033[0m"
 
 
+class CaseInsensitiveEnum(str, Enum):
+    """Case insensitive Enum class."""
+
+    @classmethod
+    def _missing_(cls, value):
+        value = value.lower()
+        for member in cls:
+            if member.lower() == value:
+                return member
+
+
 def getenv_bool(varname, default):
     """Get boolean value from environment variable."""
     return bool(strtobool(os.getenv(varname, str(default))))
