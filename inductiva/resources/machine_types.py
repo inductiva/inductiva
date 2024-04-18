@@ -1,44 +1,54 @@
 """Available machine types and their number of cores."""
+from typing import Union
+import json
 
-import os
-import yaml
-
-MACHINE_TYPES_FILE = os.path.join(os.path.dirname(__file__),
-                                  "machine_types.yaml")
-
-
-def get_available():
-    """Gets the available machine types.
-    
-    Currently, this fetches the available machine types from a yaml file
-    into a dictionary that can now be used to parse the information where
-    needed."""
-
-    with open(MACHINE_TYPES_FILE, "r", encoding="utf-8") as file:
-        machine_types = yaml.safe_load(file)
-
-    return machine_types
+import inductiva
+from inductiva.utils import format_utils
+from inductiva.client import ApiException
+from inductiva.client.apis.tags import compute_api
 
 
-def list_available_machines():
+class ProviderType(format_utils.CaseInsensitiveEnum):
+    """Enum to represent the provider of the machine to be launched."""
+    GCP = "GCP"
+    ICE = "ICE"
+
+
+def list_available_machines(provider: Union[str, ProviderType]):
     """List all available machines types."""
 
-    resources_available = get_available()
-
+    resources_available = get_available_machine_types(provider)
     machine_types = []
 
-    # Fetch the provider information
-    for _, provider_resources in resources_available.items():
-        # Fetch the available machine CPU series
-        for cpu_series, series_info in provider_resources["cpu-series"].items():
-            # Fetch the available RAM types and vCPUs info
-            for ram_type, type_info in series_info["types"].items():
-                vcpus = type_info["vcpus"]
-                machine_types.extend(
-                    [f"{cpu_series}-{ram_type}-{vcpu}" for vcpu in vcpus])
-                if type_info["lssd"]:
-                    for vcpu in vcpus:
-                        machine_types.append(
-                            f"{cpu_series}-{ram_type}-{vcpu}-lssd")
+    for machine in resources_available:
+        machine_types.append(machine["machine_type"])
 
     return tuple(machine_types)
+
+
+def get_available_machine_types(provider: Union[str, ProviderType],
+                                machine_family: str = None):
+    """Get all available machine types for a given provider.
+    
+    Args:
+        provider (str): The provider to list the available machine types.
+        machine_family (str): The machine family to filter the specific
+            available machine types."""
+
+    provider = ProviderType(provider)
+
+    api_client = compute_api.ComputeApi(inductiva.api.get_client())
+
+    query_params = {"provider_id": provider.value}
+
+    if machine_family is not None:
+        query_params["machine_family"] = machine_family
+
+    try:
+        resp = api_client.list_available_machine_types(query_params).response
+
+        response_body = json.loads(resp.data.decode("utf-8"))
+
+        return response_body
+    except ApiException as e:
+        raise e

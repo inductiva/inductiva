@@ -9,15 +9,13 @@ In this section, we will cover the following topics:
    getting its status and getting information about the outputs;
  * [Killing tasks](#killing-tasks): Learn how to kill a task that hasn't
    been completed yet;
- * [Downloading Outputs](#downloading-outputs): Learn how to download the
-   outputs of a task.
 
-#### Task monitoring
+## Task monitoring
 
 The `Task` class provides mechanisms to track and manage the status of a task.
 With a `Task` object at hand, the user can:
  * Get the status, i.e., whether the task is started, succeeded, failed, etc
- (see the section about [task lifecycle](../explore_api/tasks#task-lifecycle.md)
+ (see the section about [task lifecycle](../explore_api/tasks.md#task-lifecycle)
  for more details);
  * Get the machine type where it ran/is running;
  * Get the execution time.
@@ -62,7 +60,7 @@ Other than just retrieving information about the task, the user has the option
 to control 
 
 
-#### Killing tasks
+## Killing tasks
 
 Sometimes, a user finds out that there is a reason to not allow a task to reach
 a final state. Whether there is a mistake in the simulation input files, a
@@ -70,9 +68,9 @@ running simulation has gone rogue, or simply because there is no other reason
 to allow a task to proceed, the user can kill a task. The `Task` class provides
 a method to kill a task that hasn't been completed yet. Tasks in the
 `PENDING INPUT`, `SUBMITTED` and `STARTED` states can be killed (see the section
-on [task lifecycle](../introduction/tasks#task-lifecycle)).
+on [task lifecycle](../explore_api/tasks.md#task-lifecycle)).
 
-To kill a task programmatically, one has 2 options at hand: by declaratively
+To kill a task programmatically, one has 2 options at hand: by declarative
 calling the `kill` method or interrupting the python session/script
 when a task is being waited in the context of a `sync_context` call:
 

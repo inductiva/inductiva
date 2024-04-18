@@ -6,7 +6,7 @@ import inductiva
 
 def download_outputs(args):
     """Download the outputs of a task by ID."""
-    task_ids = args.id
+    task_ids = args.task_id
     filenames = args.filenames
     output_dir = args.output_dir
 
@@ -44,12 +44,12 @@ def register(parser):
         "Download the output files produced in the context of the tasks with\n"
         "the given ID(s). All files are downloaded unless the --filenames\n"
         "list is given, in which case only the indicated files for each task\n"
-        " are downloaded.\n"
-        "The name of the output folder can be configured through the\n"
+        " are downloaded."
+        " The name of the output folder can be configured through the\n"
         "--output_dir option. Files are downloaded to a subdirectory\n"
         "named after the ID of the corresponding task.")
 
-    subparser.add_argument("id",
+    subparser.add_argument("task_id",
                            type=str,
                            help="ID(s) of the task(s) to download.",
                            nargs="*")
