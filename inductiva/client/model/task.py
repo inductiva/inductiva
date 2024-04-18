@@ -32,6 +32,7 @@ class Task(schemas.DictSchema):
     class MetaOapg:
         required = {
             "method_name",
+            "project",
             "task_id",
             "status",
         }
@@ -44,6 +45,7 @@ class Task(schemas.DictSchema):
                 return TaskStatusCode
 
             method_name = schemas.StrSchema
+            project = schemas.StrSchema
 
             class create_time(
                     schemas.DateTimeBase,
@@ -522,6 +524,7 @@ class Task(schemas.DictSchema):
                 "task_id": task_id,
                 "status": status,
                 "method_name": method_name,
+                "project": project,
                 "create_time": create_time,
                 "input_submit_time": input_submit_time,
                 "start_time": start_time,
@@ -533,6 +536,7 @@ class Task(schemas.DictSchema):
             }
 
     method_name: MetaOapg.properties.method_name
+    project: MetaOapg.properties.project
     task_id: MetaOapg.properties.task_id
     status: 'TaskStatusCode'
 
@@ -552,6 +556,12 @@ class Task(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["method_name"]
     ) -> MetaOapg.properties.method_name:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["project"]
+    ) -> MetaOapg.properties.project:
         ...
 
     @typing.overload
@@ -610,6 +620,7 @@ class Task(schemas.DictSchema):
         "task_id",
         "status",
         "method_name",
+        "project",
         "create_time",
         "input_submit_time",
         "start_time",
@@ -638,6 +649,12 @@ class Task(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["method_name"]
     ) -> MetaOapg.properties.method_name:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["project"]
+    ) -> MetaOapg.properties.project:
         ...
 
     @typing.overload
@@ -699,6 +716,7 @@ class Task(schemas.DictSchema):
         "task_id",
         "status",
         "method_name",
+        "project",
         "create_time",
         "input_submit_time",
         "start_time",
@@ -718,6 +736,10 @@ class Task(schemas.DictSchema):
         ],
         method_name: typing.Union[
             MetaOapg.properties.method_name,
+            str,
+        ],
+        project: typing.Union[
+            MetaOapg.properties.project,
             str,
         ],
         task_id: typing.Union[
@@ -782,6 +804,7 @@ class Task(schemas.DictSchema):
             cls,
             *_args,
             method_name=method_name,
+            project=project,
             task_id=task_id,
             status=status,
             create_time=create_time,
