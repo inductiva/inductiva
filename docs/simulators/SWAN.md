@@ -1,4 +1,4 @@
-## SWAN
+# SWAN
 
 SWAN is a simulator for obtaining realistic estimates of wave parameters in coastal
 areas, lakes and eastuaries from given wind, sea floor and current conditions.
@@ -7,7 +7,7 @@ The simulator is configured using a single file with the `.swn` extension, and
 additional files containing information about the domain and the sea floor, and
 the conditions shall be saved in an input directory that is passed to the simulator.
 
-### Example
+## Example
 
 ```python
 import inductiva

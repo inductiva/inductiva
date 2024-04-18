@@ -34,7 +34,7 @@ jobs:
       run: |
         sudo apt-get install -y libglu1-mesa ca-certificates
         python -m pip install --upgrade pip setuptools wheel
-        python -m pip install yapf coverage coverage-badge pylint pytest pytest-custom_exit_code toml pytest-markdown-docs
+        python -m pip install mypy yapf coverage coverage-badge pylint pytest pytest-custom_exit_code toml pytest-markdown-docs
         if [[ -f requirements.txt ]]; then python -m pip install -r requirements.txt; fi
     - name: Check formatting with yapf
       if: ${{ always() }}
@@ -77,4 +77,23 @@ jobs:
           git add ./badges/cov.svg && \
           git commit -m "Update coverage badge for commit ${GITHUB_SHA}")
         git push origin Inductiva-badges
-
+    - name: Mypy type checking
+      continue-on-error: true
+      if: ${{ always() }}
+      run: |
+        mypy . | nl > mypy_output.txt
+        
+        cat mypy_output.txt
+        echo "###############"
+        
+        : # Argument passed to a function has the wrong type
+        echo "--- Errors arg-type ---"
+        grep arg-type mypy_output.txt
+        grep arg-type mypy_output.txt | wc -l
+        echo "###############"
+        
+        : # function defenitions without types or missing types
+        echo "--- Errors no-untyped-def ---"
+        grep no-untyped-def mypy_output.txt
+        grep no-untyped-def mypy_output.txt | wc -l
+        echo "###############"
