@@ -639,6 +639,9 @@ class VMGroupConfig(
     def __getitem__(self, name: typing_extensions.Literal["max_vms"]) -> MetaOapg.properties.max_vms: ...
     
     @typing.overload
+    def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "min_vms", "max_vms", ], str]):
     def __getitem__(self, name: typing_extensions.Literal["autoscale_policy"]) -> MetaOapg.properties.autoscale_policy: ...
     
     @typing.overload
@@ -698,6 +701,9 @@ class VMGroupConfig(
     def get_item_oapg(self, name: typing_extensions.Literal["max_vms"]) -> typing.Union[MetaOapg.properties.max_vms, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
+    
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "min_vms", "max_vms", ], str]):
     def get_item_oapg(self, name: typing_extensions.Literal["autoscale_policy"]) -> typing.Union[MetaOapg.properties.autoscale_policy, schemas.Unset]: ...
     
     @typing.overload
