@@ -19,6 +19,7 @@ Obviously, there is a lot more happening under the hood. For starters, how do we
 with the fact that not all simulation software packages work in the same way and, 
 therefore, having a fully general formulation for a simulation task is not trivial? 
 
+(the-simple-cases)=
 ## The simple cases
 
 Some simulation packages offer a single executable that takes as input a single 
@@ -45,13 +46,17 @@ referred. Below we present the case of two simulators that follow this pattern:
 # Example of how to run the SWASH simulator
 import inductiva
 
+# Set simulation input directory
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "swash-input-example.zip", unzip=True)
+
 # Instantiate the simulator
 swash_simulator = inductiva.simulators.SWASH()
 
 # Input directory contains the .sws config file, a bathymetry file and other files.
-task = swash_simulator.run(input_dir="swash-example",
+task = swash_simulator.run(input_dir=input_dir,
                            sim_config_filename="input.sws")
-
 ```
 
 **SPlisHSPlasH:** The main configuration file is a `.json` file.
@@ -59,11 +64,16 @@ task = swash_simulator.run(input_dir="swash-example",
 # Example of how to run the SplishSplash simulator
 import inductiva
 
+# Set simulation input directory
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "splishsplash-input-example.zip", unzip=True)
+
 # Instantiate the simulator
 splishsplash_simulator = inductiva.simulators.SplishSplash()
 
 # Input directory contains the .json config file and a .obj file for the domain.
-task = splishsplash_simulator.run(input_dir="splishsplash-example",
+task = splishsplash_simulator.run(input_dir=input_dir,
                                   sim_config_filename="config.json")
 ```
 
@@ -71,6 +81,7 @@ As you can see, besides the input directory we pass one additional parameter to
 the `run()` method: `sim_config_filename`. This refers to the main configuration
 file that the simulator executable expects and for which there is no standard name is expected.
 
+(a-slightly-more-complex-case)=
 ## A slightly more complex case
 
 Some simulators require running more than one executable to perform a simulation, 
@@ -89,11 +100,17 @@ with the configuration files for both commands.
 # Example of how to run the REEF3D simulator
 import inductiva
 
+# Set simulation input directory
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "reef3d-input-example.zip", unzip=True
+)
+
 # Instantiate the simulator
 reef3d_simulator = inductiva.simulators.REEF3D()
 
 # The files for the simulation are in the input directory.
-task = reef3d_simulator.run(input_dir="reef3d-example")
+task = reef3d_simulator.run(input_dir=input_dir)
 ```
 
 In this specific case, REEF3D uses a pre-defined standard for the naming of the
@@ -101,6 +118,7 @@ configuration files used by each executable. So, as you can see above, there is
 no requirement to pass the `sim_config_filename` parameter. All REEF3D needs is a
 pointer to the folder containing all the assets required for the simulation.
 
+(running-long-simulation-pipelines)=
 ## Running long simulation pipelines
 
 In other simulation packages, a single simulation is more configurable and different
@@ -121,6 +139,11 @@ Below, an example with OpenFOAM is given.
 # Example of how to run the OpenFOAM simulator
 import inductiva
 
+# Set simulation input directory
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "openfoam-input-example.zip", unzip=True)
+
 # Instantiate the simulator
 openfoam_simulator = inductiva.simulators.OpenFOAM()
 
@@ -137,7 +160,7 @@ commands = [
 ]
 
 # Run the simulation with the given input directory and commands
-task = openfoam.run(input_dir=input_dir, commands=commands)
+task = openfoam_simulator.run(input_dir=input_dir, commands=commands)
 ```
 
 For this case, the `commands` follow the usual approach used by OpenFOAM with the 

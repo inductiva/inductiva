@@ -15,7 +15,6 @@ First, create a MachineGroup to run your simulations in parallel:
 
 ```python
 import inductiva
-from inductiva import mixins
 
 # Instantiate a MachineGroup object with 5 preemptible machines of type
 # c2-standard-30 and start it immediately
@@ -30,11 +29,8 @@ Download and prepare the input files for your simulations:
 
 ```python
 # Download input files for the SWASH simulation
-input_dir = inductiva.utils.download_from_url(
+template_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/swash-template-example.zip", unzip=True)
-
-# Initialize template file manager
-file_manager = mixins.FileManager()
 ```
 ## 3. Running the Simulations
 
@@ -51,11 +47,14 @@ water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
 # Launch multiple simulations for each water level
 for water_level in water_levels_list:
     # Set the root directory and render the template files into it.
-    file_manager.set_root_dir("swash-input-example")
-    file_manager.add_dir(input_dir, water_level=water_level)
+    template_manager = inductiva.TemplateManager(
+                            template_dir=template_dir,
+                            root_dir="swash-example"
+                        )
+    template_manager.render_dir(water_level=water_level)
     
     # Run simulation with the configured input directory on the dedicated MachineGroup
-    task = swash.run(input_dir=file_manager.get_root_dir(),
+    task = swash.run(input_dir=template_manager.get_root_dir(),
                      sim_config_filename="input.sws",
                      on=machine_group)
 ```

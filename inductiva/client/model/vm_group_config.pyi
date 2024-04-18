@@ -553,6 +553,20 @@ class VMGroupConfig(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            
+            
+            class autoscale_policy(
+                schemas.EnumBase,
+                schemas.StrSchema
+            ):
+                
+                @schemas.classproperty
+                def CPU(cls):
+                    return cls("cpu")
+                
+                @schemas.classproperty
+                def TASK_IN_QUEUE(cls):
+                    return cls("task_in_queue")
             __annotations__ = {
                 "spot": spot,
                 "is_elastic": is_elastic,
@@ -570,6 +584,7 @@ class VMGroupConfig(
                 "provider_id": provider_id,
                 "min_vms": min_vms,
                 "max_vms": max_vms,
+                "autoscale_policy": autoscale_policy,
             }
     
     spot: MetaOapg.properties.spot
@@ -627,6 +642,12 @@ class VMGroupConfig(
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
     def __getitem__(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "min_vms", "max_vms", ], str]):
+    def __getitem__(self, name: typing_extensions.Literal["autoscale_policy"]) -> MetaOapg.properties.autoscale_policy: ...
+    
+    @typing.overload
+    def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
+    
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "min_vms", "max_vms", "autoscale_policy", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -683,6 +704,12 @@ class VMGroupConfig(
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "min_vms", "max_vms", ], str]):
+    def get_item_oapg(self, name: typing_extensions.Literal["autoscale_policy"]) -> typing.Union[MetaOapg.properties.autoscale_policy, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
+    
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "min_vms", "max_vms", "autoscale_policy", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -705,6 +732,7 @@ class VMGroupConfig(
         provider_id: typing.Union[MetaOapg.properties.provider_id, str, schemas.Unset] = schemas.unset,
         min_vms: typing.Union[MetaOapg.properties.min_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         max_vms: typing.Union[MetaOapg.properties.max_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        autoscale_policy: typing.Union[MetaOapg.properties.autoscale_policy, str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'VMGroupConfig':
@@ -727,6 +755,7 @@ class VMGroupConfig(
             provider_id=provider_id,
             min_vms=min_vms,
             max_vms=max_vms,
+            autoscale_policy=autoscale_policy,
             _configuration=_configuration,
             **kwargs,
         )

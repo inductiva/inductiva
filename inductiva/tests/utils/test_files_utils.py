@@ -1,8 +1,11 @@
 """Test files module."""
+import os
 import glob
 import pathlib
 import inductiva
 from inductiva.utils import files
+
+ASSETS_DIR = os.path.join(os.path.dirname(__file__), "assets")
 
 
 def test_get_timestamped_path_with_ext(tmp_path: pathlib.Path):
