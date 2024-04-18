@@ -57,7 +57,13 @@ main_doc = 'index'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
+exclude_patterns = [
+    'markdown_sample.md',
+    'task_state_diagram.md',
+]
+
+# Auto generate header anchors
+myst_heading_anchors = 3
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -84,7 +90,7 @@ html_favicon = 'favicon.ico'
 
 # Google Analytics
 googleanalytics_id = "UA-188572165-1"
-googleanalytics_enabled = "true"
+googleanalytics_enabled = True
 
 # OpenGraph protocol
 ogp_site_name = "Inductiva.ai Docs"

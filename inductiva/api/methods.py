@@ -20,6 +20,7 @@ from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
                                      TaskStatus)
 from inductiva import types, constants
+from inductiva.resources.machine_types import ProviderType
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
 from inductiva.utils import format_utils, files
@@ -33,7 +34,7 @@ def validate_api_key(api_key: Optional[str]) -> Configuration:
             "No API Key specified. "
             "Please set the INDUCTIVA_API_KEY environment variable.\n"
             "More infomation at:"
-            "https://docs.inductiva.ai/")
+            "https://docs.inductiva.ai/en/latest/get_started/installation.html")
     # pylint: enable=line-too-long
 
     # Perform version check only on first invocation
@@ -276,7 +277,8 @@ def log_task_info(task_id, method_name, params, resource_pool):
 
 
 def submit_task(api_instance, method_name, request_params, resource_pool,
-                storage_path_prefix, params, type_annotations):
+                storage_path_prefix, params, type_annotations,
+                provider_id: ProviderType):
     """Submit a task and send input files to the API."""
 
     resource_pool_id = None
@@ -286,7 +288,8 @@ def submit_task(api_instance, method_name, request_params, resource_pool,
     task_request = TaskRequest(method=method_name,
                                params=request_params,
                                resource_pool=resource_pool_id,
-                               storage_path_prefix=storage_path_prefix)
+                               storage_path_prefix=storage_path_prefix,
+                               provider_id=provider_id.value)
     task = submit_request(
         api_instance=api_instance,
         request=task_request,
@@ -312,7 +315,8 @@ def invoke_async_api(method_name: str,
                      type_annotations: Dict[Any, Type],
                      resource_pool: Optional[
                          types.ComputationalResources] = None,
-                     storage_path_prefix: Optional[str] = "") -> str:
+                     storage_path_prefix: Optional[str] = "",
+                     provider_id: ProviderType = ProviderType.GCP) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -332,6 +336,7 @@ def invoke_async_api(method_name: str,
     Args:
         request: Request sent to the API for validation.
         input_dir: Directory containing the input files to be uploaded.
+        provider_id: The provider id to use for the simulation (GCP or ICE).
 
     Return:
         Returns the task id.
@@ -353,6 +358,7 @@ def invoke_async_api(method_name: str,
                               resource_pool=resource_pool,
                               storage_path_prefix=storage_path_prefix,
                               params=params,
+                              provider_id=provider_id,
                               type_annotations=type_annotations)
 
     return task_id

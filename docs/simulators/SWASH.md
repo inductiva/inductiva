@@ -1,4 +1,4 @@
-## SWASH
+# SWASH
 
 SWASH is a simulator that solves shallow water equations and is used to simulate 
 waves and currents in coastal waters and harbors, long waves in coastal regions 
@@ -7,7 +7,7 @@ is configured using a single file with the `.sws` extension, and additional file
 containing information about the domain and the ocean floor, such as a bathymetry 
 file with a `.bot` extension, are necessary for the simulation to run.
 
-### Example
+## Example
 
 ```python
 import inductiva

@@ -19,6 +19,7 @@ Obviously, there is a lot more happening under the hood. For starters, how do we
 with the fact that not all simulation software packages work in the same way and, 
 therefore, having a fully general formulation for a simulation task is not trivial? 
 
+(the-simple-cases)=
 ## The simple cases
 
 Some simulation packages offer a single executable that takes as input a single 
@@ -80,6 +81,7 @@ As you can see, besides the input directory we pass one additional parameter to
 the `run()` method: `sim_config_filename`. This refers to the main configuration
 file that the simulator executable expects and for which there is no standard name is expected.
 
+(a-slightly-more-complex-case)=
 ## A slightly more complex case
 
 Some simulators require running more than one executable to perform a simulation, 
@@ -116,6 +118,7 @@ configuration files used by each executable. So, as you can see above, there is
 no requirement to pass the `sim_config_filename` parameter. All REEF3D needs is a
 pointer to the folder containing all the assets required for the simulation.
 
+(running-long-simulation-pipelines)=
 ## Running long simulation pipelines
 
 In other simulation packages, a single simulation is more configurable and different
