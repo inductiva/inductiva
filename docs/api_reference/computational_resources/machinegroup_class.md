@@ -40,7 +40,7 @@ machine_group = inductiva.resources.MachineGroup(
 Creating an instance of `MachineGroup` does not start the machines. This only registers
 the configuration on the API which can now be used to manage it further.
 
-### Managing the MachineGroup
+## Managing the MachineGroup
 
 With your `machine_group` object ready, starting all of the machines at the same
 time is as simple as calling `machine_group.start()`.

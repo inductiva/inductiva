@@ -45,7 +45,7 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
         if executer is None:
             resource_type = None
         else:
-            resource_type = executer["vm_type"]
+            resource_type = executer["host_type"] + " " + executer["vm_type"]
             n_mpi_hosts = executer["n_mpi_hosts"]
             if n_mpi_hosts > 1:
                 resource_type += f" x{n_mpi_hosts}"

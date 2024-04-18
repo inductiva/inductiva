@@ -108,6 +108,8 @@ with task.sync_context():
     task.wait()  # <- The remote simulation WILL DIE if the local session is
                  #     interrupted while waiting for the wait() call to return
 ```
+
+(task-lifecyle)=
 ## Task Lifecycle
 
 The status of a task changes as it progresses through its lifecycle. Understanding 
@@ -131,13 +133,13 @@ lead to a state transition:
 |  	|  	|
 |---	|---	|
 | `PENDING INPUT` 	| After you make your initial simulation request, the newly created task remains in this pending state, awaiting all necessary input files. You can terminate or kill the task, moving it to `KILLED`, or it may become `ZOMBIE` if its assigned machine group is terminated. Once you've uploaded all the input files, the task progresses to `SUBMITTED`. 	|
-| `SUBMITTED` 	| _The task is queued and ready to be picked up by an executor. You can cancel the task, moving it to `KILLED`, or it can become a `ZOMBIE` under the same conditions as in `PENDING INPUT`. When an executor picks it up, the task moves to `STARTED`._ 	|
-| `STARTED` 	| _Simulation has started. Upon successful completion, the task transitions to `SUCCESS`. If it fails due to simulation issues, the task transitions to `FAILED`,whereas any failure due to executor problems moves the task to `EXECUTOR FAILED`. You can send a request to kill the task, moving it to `PENDING KILLED`._ 	|
-| `PENDING KILLED` 	| _Your request to terminate a running task has been received by the API and is awaiting execution._ 	|
-| `KILLED` 	| _The task has been successfully terminated upon your request._ 	|
-| `ZOMBIE` 	| _The progression of the non-started task abruptly stops due to the shutdown of the computational resources where the task was running, typically when a machine group is user-terminated._ 	|
-| `SPOT PREEMPTED` 	| _Spot instances running the task were terminated. In this case, the task is re-queued or `SUBMITTED` until new resources with the same original machine group become available._ 	|
-| `FAILED` 	| _Simulator errors prevent completion, usually due to incorrect input configurations or an internal error within the simulator itself._ 	|
-| `EXECUTOR TERMINATED` 	| _The executor was terminated due to internal reasons. Similar to `SPOT PREEMPTED`, the task is requeued or `SUBMITTED` for execution._ 	|
-| `EXECUTOR TERMINATED BY USER` 	| _Similar to `KILLED`, the task's executor was terminated either by you or by system-enforced limits (generally when quota limits are reached)._ 	|
-| `EXECUTOR FAILED` 	| _Executor errors prevent completion, such as low disk space._ 	|
+| `SUBMITTED` 	| The task is queued and ready to be picked up by an executor. You can cancel the task, moving it to `KILLED`, or it can become a `ZOMBIE` under the same conditions as in `PENDING INPUT`. When an executor picks it up, the task moves to `STARTED`. 	|
+| `STARTED` 	| Simulation has started. Upon successful completion, the task transitions to `SUCCESS`. If it fails due to simulation issues, the task transitions to `FAILED`,whereas any failure due to executor problems moves the task to `EXECUTOR FAILED`. You can send a request to kill the task, moving it to `PENDING KILLED`. 	|
+| `PENDING KILLED` 	| Your request to terminate a running task has been received by the API and is awaiting execution. 	|
+| `KILLED` 	| The task has been successfully terminated upon your request. 	|
+| `ZOMBIE` 	| The progression of the non-started task abruptly stops due to the shutdown of the computational resources where the task was running, typically when a machine group is user-terminated. 	|
+| `SPOT PREEMPTED` 	| Spot instances running the task were terminated. In this case, the task is re-queued or `SUBMITTED` until new resources with the same original machine group become available. 	|
+| `FAILED` 	| Simulator errors prevent completion, usually due to incorrect input configurations or an internal error within the simulator itself. 	|
+| `EXECUTOR TERMINATED` 	| The executor was terminated due to internal reasons. Similar to `SPOT PREEMPTED`, the task is requeued or `SUBMITTED` for execution. 	|
+| `EXECUTOR TERMINATED BY USER` 	| Similar to `KILLED`, the task's executor was terminated either by you or by system-enforced limits (generally when quota limits are reached). 	|
+| `EXECUTOR FAILED` 	| Executor errors prevent completion, such as low disk space. 	|

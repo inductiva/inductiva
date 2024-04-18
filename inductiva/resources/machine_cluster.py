@@ -1,5 +1,6 @@
 """Class to manage the MPI cluster in Google Cloud."""
 from absl import logging
+import datetime
 
 from inductiva.resources import machines_base
 
@@ -73,12 +74,24 @@ class MPICluster(machines_base.BaseMachineGroup):
         return f"MPI Cluster {self.name} with {self.machine_type} " \
                f"x{self.num_machines} machines"
 
-    def start(self):
-        """Start the MPI Cluster."""
+    def start(self,
+              max_idle_time: datetime.timedelta = None,
+              auto_terminate_ts: datetime.datetime = None):
+        """Start the MPI Cluster.
+        
+        Args:
+            max_idle_time (timedelta): Max idle time, i.e. time without
+                executing any task, after which the resource will be terminated.
+            auto_terminate_ts (datetime): Moment in which the resource will
+                be automatically terminated, irrespectively of the existence of
+                tasks yet to be executed by the resource.
+        """
         return super().start(num_vms=self.num_machines,
                              is_elastic=self.__is_elastic,
                              spot=self.__spot,
-                             type=self.__type)
+                             type=self.__type,
+                             max_idle_time=max_idle_time,
+                             auto_terminate_ts=auto_terminate_ts)
 
     def terminate(self):
         """Terminates the MPI Cluster."""
