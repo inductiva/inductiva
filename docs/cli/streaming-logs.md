@@ -8,7 +8,7 @@ you to stream the logs of a running task in **real time**.
 In this way, running a simulation on a powerful remote machine will feel exactly 
 like running it on your local computer!
 
-### Check the Log Stream
+## Check the Log Stream
 
 Here's an example of how you can use the `logs` subcommand to stay updated on your simulation's 
 progress. This command connects you directly to the ongoing logs of the specified 
@@ -85,7 +85,7 @@ timer per step: 0.00873
 Combining both subcommand `log` and `kill` will allow you to quickly adjust or 
 terminate simulations to achieve the desired simulation configurations.
 
-### Save the Log Stream
+## Save the Log Stream
 
 When the simulation ends, the log stream will automatically close, indicating
 that there are no new messages. The stream consumer's shutdown doesn't impact the 

@@ -36,6 +36,8 @@ extensions = [
     'sphinx_copybutton',
     'sphinx_tabs.tabs',
     'sphinx_togglebutton',
+    'sphinxcontrib.googleanalytics',
+    'sphinxext.opengraph',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -55,7 +57,13 @@ main_doc = 'index'
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
+exclude_patterns = [
+    'markdown_sample.md',
+    'task_state_diagram.md',
+]
+
+# Auto generate header anchors
+myst_heading_anchors = 3
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -77,3 +85,14 @@ html_theme_options = {
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+html_favicon = 'favicon.ico'
+
+# Google Analytics
+googleanalytics_id = "UA-188572165-1"
+googleanalytics_enabled = True
+
+# OpenGraph protocol
+ogp_site_name = "Inductiva.ai Docs"
+ogp_site_url = "https://docs.inductiva.ai"
+ogp_image = "https://docs.inductiva.ai/_static/inductiva-social-banner.jpg"

@@ -661,6 +661,8 @@ class VMGroupConfig(schemas.DictSchema):
                 def ICE(cls):
                     return cls("ICE")
 
+            started = schemas.BoolSchema
+
             class min_vms(
                     schemas.ComposedSchema,):
 
@@ -806,6 +808,7 @@ class VMGroupConfig(schemas.DictSchema):
                 "deletion_timestamp": deletion_timestamp,
                 "type": type,
                 "provider_id": provider_id,
+                "started": started,
                 "min_vms": min_vms,
                 "max_vms": max_vms,
                 "autoscale_policy": autoscale_policy,
@@ -900,6 +903,12 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["started"]
+    ) -> MetaOapg.properties.started:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["min_vms"]
     ) -> MetaOapg.properties.min_vms:
         ...
@@ -935,6 +944,7 @@ class VMGroupConfig(schemas.DictSchema):
         "deletion_timestamp",
         "type",
         "provider_id",
+        "started",
         "min_vms",
         "max_vms",
         "autoscale_policy",
@@ -1028,6 +1038,12 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["started"]
+    ) -> typing.Union[MetaOapg.properties.started, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["min_vms"]
     ) -> typing.Union[MetaOapg.properties.min_vms, schemas.Unset]:
         ...
@@ -1065,6 +1081,7 @@ class VMGroupConfig(schemas.DictSchema):
         "deletion_timestamp",
         "type",
         "provider_id",
+        "started",
         "min_vms",
         "max_vms",
         "autoscale_policy",
@@ -1149,6 +1166,8 @@ class VMGroupConfig(schemas.DictSchema):
                            schemas.Unset] = schemas.unset,
         provider_id: typing.Union[MetaOapg.properties.provider_id, str,
                                   schemas.Unset] = schemas.unset,
+        started: typing.Union[MetaOapg.properties.started, bool,
+                              schemas.Unset] = schemas.unset,
         min_vms: typing.Union[MetaOapg.properties.min_vms, dict,
                               frozendict.frozendict, str, date, datetime,
                               uuid.UUID, int, float, decimal.Decimal, bool,
@@ -1184,6 +1203,7 @@ class VMGroupConfig(schemas.DictSchema):
             deletion_timestamp=deletion_timestamp,
             type=type,
             provider_id=provider_id,
+            started=started,
             min_vms=min_vms,
             max_vms=max_vms,
             autoscale_policy=autoscale_policy,

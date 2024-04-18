@@ -203,5 +203,5 @@ mg = inductiva.resources.MachineGroup("c2-standard-4", data_disk_gb=120)
 
 
 If any of these quotas establish a limit for what you can achieve with Inductiva API,
-please [reach out to us](support@inductiva.ai) and we can better understand your
+please [reach out to us](mailto:support@inductiva.ai) and we can better understand your
 needs.
