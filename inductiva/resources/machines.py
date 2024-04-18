@@ -48,7 +48,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
         """
-
         if num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")

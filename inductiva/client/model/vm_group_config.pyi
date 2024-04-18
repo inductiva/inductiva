@@ -475,6 +475,7 @@ class VMGroupConfig(
                 @schemas.classproperty
                 def ICE(cls):
                     return cls("ICE")
+            started = schemas.BoolSchema
             
             
             class min_vms(
@@ -582,6 +583,7 @@ class VMGroupConfig(
                 "deletion_timestamp": deletion_timestamp,
                 "type": type,
                 "provider_id": provider_id,
+                "started": started,
                 "min_vms": min_vms,
                 "max_vms": max_vms,
                 "autoscale_policy": autoscale_policy,
@@ -631,6 +633,9 @@ class VMGroupConfig(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["provider_id"]) -> MetaOapg.properties.provider_id: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["started"]) -> MetaOapg.properties.started: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["min_vms"]) -> MetaOapg.properties.min_vms: ...
@@ -692,6 +697,9 @@ class VMGroupConfig(
     def get_item_oapg(self, name: typing_extensions.Literal["provider_id"]) -> typing.Union[MetaOapg.properties.provider_id, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["started"]) -> typing.Union[MetaOapg.properties.started, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["min_vms"]) -> typing.Union[MetaOapg.properties.min_vms, schemas.Unset]: ...
     
     @typing.overload
@@ -724,6 +732,7 @@ class VMGroupConfig(
         deletion_timestamp: typing.Union[MetaOapg.properties.deletion_timestamp, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         type: typing.Union[MetaOapg.properties.type, str, schemas.Unset] = schemas.unset,
         provider_id: typing.Union[MetaOapg.properties.provider_id, str, schemas.Unset] = schemas.unset,
+        started: typing.Union[MetaOapg.properties.started, bool, schemas.Unset] = schemas.unset,
         min_vms: typing.Union[MetaOapg.properties.min_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         max_vms: typing.Union[MetaOapg.properties.max_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         autoscale_policy: typing.Union[MetaOapg.properties.autoscale_policy, str, schemas.Unset] = schemas.unset,
@@ -747,6 +756,7 @@ class VMGroupConfig(
             deletion_timestamp=deletion_timestamp,
             type=type,
             provider_id=provider_id,
+            started=started,
             min_vms=min_vms,
             max_vms=max_vms,
             autoscale_policy=autoscale_policy,

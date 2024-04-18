@@ -1,4 +1,4 @@
-## OpenFOAM
+# OpenFOAM
 
 OpenFOAM is a Finite Volume method for CFD simulations with a wide range of 
 applications across several areas of engineering and science. OpenFOAM has an 
@@ -40,7 +40,7 @@ using the prefix `runApplication` the command will execute sequentially and with
  will be configured automatically and, at the moment, only the scotch decomposition 
  method is available.
 
-### Example 
+## Example 
 
 ````python
 import inductiva

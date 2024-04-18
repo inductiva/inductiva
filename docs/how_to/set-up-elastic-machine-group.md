@@ -1,4 +1,4 @@
-## Set up an Elastic Machine Group
+# Set up an Elastic Machine Group
 
 The `ElasticMachineGroup`, similarly to the standard `MachineGroup`, is composed of 
 a group of homogeneous machines that work individually to run multiple simulations. 
@@ -40,7 +40,7 @@ now with a scalable infrastructure.
 import inductiva
 
 # Download the input files for the SWASH simulation
-input_dir = inductiva.utils.download_from_url(
+template_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "swash-template-example.zip", unzip=True)
 
@@ -53,11 +53,14 @@ water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
 # Launch multiple simulations
 for water_level in water_levels_list:
     # Set the root directory and render the template files into it.
-    template_engine = inductiva.TemplateEngine(input_dir, "swash-input-example")
-    template_engine.add_dir(input_dir, water_level=water_level)
+    template_manager = inductiva.TemplateManager(
+                            template_dir=template_dir,
+                            root_dir="swash-example"
+                     )
+    template_manager.render_dir(water_level=water_level)
 
     # Run the simulation on the dedicated MachineGroup
-    task = swash.run(input_dir=template_engine.get_root_dir(),
+    task = swash.run(input_dir=template_manager.get_root_dir(),
                     sim_config_filename="input.sws",
                     on=elastic_machine_group)
 ```

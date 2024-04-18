@@ -21,6 +21,7 @@ class SWAN(simulators.Simulator):
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[types.Path] = "",
         extra_metadata: Optional[dict] = None,
+        **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
 
@@ -42,4 +43,5 @@ class SWAN(simulators.Simulator):
                            storage_dir=storage_dir,
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
-                           extra_metadata=extra_metadata)
+                           extra_metadata=extra_metadata,
+                           **kwargs)

@@ -26,7 +26,7 @@ nuances and additional options available, which we'll explore in detail througho
 this section. More specifically, you'll become familiarized with how the API 
 works:
 
-- [Tasks](./tasks): Learn about tasks, the API's core computational object, which 
+- [Tasks](./tasks.md): Learn about tasks, the API's core computational object, which 
 gets created when you submit your simulation request, enabling you to track its 
 progress and access its outputs in real-time.
 

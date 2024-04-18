@@ -48,12 +48,12 @@ class FEniCSx(simulators.Simulator):
         """
 
         return super().run(input_dir,
-                           on=on,
-                           geometry_filename=geometry_filename,
-                           bcs_filename=bcs_filename,
-                           material_filename=material_filename,
-                           mesh_filename=mesh_filename,
                            mesh_info_filename=mesh_info_filename,
-                           storage_dir=storage_dir,
+                           material_filename=material_filename,
+                           geometry_filename=geometry_filename,
                            extra_metadata=extra_metadata,
+                           mesh_filename=mesh_filename,
+                           bcs_filename=bcs_filename,
+                           storage_dir=storage_dir,
+                           on=on,
                            **kwargs)

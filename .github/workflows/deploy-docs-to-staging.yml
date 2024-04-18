@@ -1,0 +1,23 @@
+name: Deploy to Staging Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        ref: 'gh-pages' # Make sure this is the branch with your site's code
+        
+    - name: Deploy to staging webserver via rsync
+      uses: burnett01/rsync-deployments@7.0.0
+      with:
+        switches: -avzr --delete
+        path: .
+        remote_path: /var/www/${{ secrets.STAGING_SERVER }}/docs/
+        remote_host: ${{secrets.STAGING_SERVER}}
+        remote_user: inductiva-bot
+        remote_key: ${{secrets.STAGING_WEB_SSH_KEY}}
