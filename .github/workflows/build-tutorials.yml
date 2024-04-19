@@ -16,35 +16,37 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          ref: 1334-create-tutorials-sphinx-site
+          ref: main
           path: source
 
+      # UNCOMMENT ONCE MERGED TO MAIN
       # - uses: actions/checkout@v2
       #   with:
       #     ref: development
       #     path: source-dev
 
-      # - uses: nicholasphair/sphinx-action@7.0.0
-      #   with:
-      #     tutorials-folder: "source/tutorials/"
-      #     # required by #1291
-      #     pre-build-command: "apt-get update -y && apt-get install -y git"
-      #     build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
+      - uses: nicholasphair/sphinx-action@7.0.0
+        with:
+          docs-folder: "source/tutorials/"
+          # required by #1291
+          pre-build-command: "apt-get update -y && apt-get install -y git"
+          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
 
+      # UNCOMMENT ONCE MERGED TO MAIN
       # - uses: nicholasphair/sphinx-action@7.0.0
       #   with:
-      #     tutorials-folder: "source-dev/tutorials/"
+      #     docs-folder: "source-dev/tutorials/"
       #     # required by #1291
       #     pre-build-command: "apt-get update -y && apt-get install -y git"
       #     build-command: "sphinx-build . ../../build/en/development -W -D version=development"
 
-      # - name: configure client side redirection
-      #   working-directory: source/tutorials
-      #   run: cp redirect.html ../../build/index.html
-      #
-      - name: copy robots.txt file to root
+      - name: configure client side redirection
         working-directory: source/tutorials
-        run: mkdir -p ../../build/ ; cp robots.txt ../../build/
+        run: cp redirect.html ../../build/index.html
+
+      - name: copy robots.txt file to root
+        working-directory: source/docs
+        run: cp robots.txt ../../build/
 
       - name: Deploy to staging webserver via rsync
         uses: burnett01/rsync-deployments@7.0.0
