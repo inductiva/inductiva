@@ -1,0 +1,66 @@
+name: Tutorials GH Pages Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, development]
+    paths-ignore:
+      - README.md
+
+jobs:
+  build-deploy:
+    name: Build and deploy
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+          path: source
+
+      - uses: actions/checkout@v2
+        with:
+          ref: development
+          path: source-dev
+
+      - uses: actions/checkout@v2
+        with:
+          ref: gh-pages
+          path: build
+
+      - uses: nicholasphair/sphinx-action@7.0.0
+        with:
+          tutorials-folder: "source/tutorials/"
+          # required by #1291
+          pre-build-command: "apt-get update -y && apt-get install -y git"
+          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
+
+      - uses: nicholasphair/sphinx-action@7.0.0
+        with:
+          tutorials-folder: "source-dev/tutorials/"
+          # required by #1291
+          pre-build-command: "apt-get update -y && apt-get install -y git"
+          build-command: "sphinx-build . ../../build/en/development -W -D version=development"
+
+      - name: disable jekyll
+        working-directory: build
+        run: touch .nojekyll
+
+      - name: configure client side redirection
+        working-directory: source/tutorials
+        run: cp redirect.html ../../build/index.html
+
+      - name: copy robots.txt file to root
+        working-directory: source/tutorials
+        run: cp robots.txt ../../build/
+
+      - name: Deploy to staging webserver via rsync
+        uses: burnett01/rsync-deployments@7.0.0
+        with:
+          switches: -avzr --delete --no-perms --no-owner --no-group --omit-dir-times
+          path: build
+          remote_path: /var/www/tutorials.inductiva.ai/
+          remote_host: ${{secrets.STAGING_SERVER}}
+          remote_user: inductiva-bot
+          remote_key: ${{secrets.STAGING_WEB_SSH_KEY}}
