@@ -36,7 +36,6 @@ class Task(
     class MetaOapg:
         required = {
             "method_name",
-            "project",
             "task_id",
             "status",
         }
@@ -48,7 +47,6 @@ class Task(
             def status() -> typing.Type['TaskStatusCode']:
                 return TaskStatusCode
             method_name = schemas.StrSchema
-            project = schemas.StrSchema
             
             
             class create_time(
@@ -376,7 +374,6 @@ class Task(
                 "task_id": task_id,
                 "status": status,
                 "method_name": method_name,
-                "project": project,
                 "create_time": create_time,
                 "input_submit_time": input_submit_time,
                 "start_time": start_time,
@@ -388,7 +385,6 @@ class Task(
             }
     
     method_name: MetaOapg.properties.method_name
-    project: MetaOapg.properties.project
     task_id: MetaOapg.properties.task_id
     status: 'TaskStatusCode'
     
@@ -400,9 +396,6 @@ class Task(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["method_name"]) -> MetaOapg.properties.method_name: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["project"]) -> MetaOapg.properties.project: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["create_time"]) -> MetaOapg.properties.create_time: ...
@@ -431,7 +424,7 @@ class Task(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "project", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "executer", "storage_path", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "executer", "storage_path", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -444,9 +437,6 @@ class Task(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["method_name"]) -> MetaOapg.properties.method_name: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["project"]) -> MetaOapg.properties.project: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["create_time"]) -> typing.Union[MetaOapg.properties.create_time, schemas.Unset]: ...
@@ -475,7 +465,7 @@ class Task(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "project", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "executer", "storage_path", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "executer", "storage_path", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -483,7 +473,6 @@ class Task(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         method_name: typing.Union[MetaOapg.properties.method_name, str, ],
-        project: typing.Union[MetaOapg.properties.project, str, ],
         task_id: typing.Union[MetaOapg.properties.task_id, str, ],
         status: 'TaskStatusCode',
         create_time: typing.Union[MetaOapg.properties.create_time, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -501,7 +490,6 @@ class Task(
             cls,
             *_args,
             method_name=method_name,
-            project=project,
             task_id=task_id,
             status=status,
             create_time=create_time,
