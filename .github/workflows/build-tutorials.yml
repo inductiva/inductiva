@@ -1,4 +1,4 @@
-name: Tutorials GH Pages Deploy
+name: Tutorials Build and Deploy to Google
 
 on:
   workflow_dispatch:
@@ -40,13 +40,13 @@ jobs:
       #     pre-build-command: "apt-get update -y && apt-get install -y git"
       #     build-command: "sphinx-build . ../../build/en/development -W -D version=development"
 
-      - name: configure client side redirection
-        working-directory: source/tutorials
-        run: cp redirect.html ../../build/index.html
-
-      - name: copy robots.txt file to root
-        working-directory: source/docs
-        run: cp robots.txt ../../build/
+      # - name: configure client side redirection
+      #   working-directory: source/tutorials
+      #   run: cp redirect.html ../../build/index.html
+      #
+      # - name: copy robots.txt file to root
+      #   working-directory: source/tutorials
+      #   run: cp robots.txt ../../build/
 
       - name: Deploy to staging webserver via rsync
         uses: burnett01/rsync-deployments@7.0.0
