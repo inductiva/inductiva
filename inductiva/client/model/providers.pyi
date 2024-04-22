@@ -42,3 +42,7 @@ class Providers(
     @schemas.classproperty
     def ICE(cls):
         return cls("ICE")
+    
+    @schemas.classproperty
+    def LOCAL(cls):
+        return cls("LOCAL")

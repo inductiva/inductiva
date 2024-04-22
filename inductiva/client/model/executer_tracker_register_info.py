@@ -39,38 +39,10 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
             "cpu_count_logical",
             "cpu_count_physical",
             "vm_name",
-            "supported_executer_types",
         }
 
         class properties:
             create_time = schemas.DateTimeSchema
-
-            class supported_executer_types(schemas.ListSchema):
-
-                class MetaOapg:
-                    items = schemas.StrSchema
-
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[
-                        MetaOapg.items,
-                        str,
-                    ]], typing.List[typing.Union[
-                        MetaOapg.items,
-                        str,
-                    ]]],
-                    _configuration: typing.Optional[
-                        schemas.Configuration] = None,
-                ) -> 'supported_executer_types':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
-
             cpu_count_logical = schemas.IntSchema
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
@@ -140,7 +112,6 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
             mpi_cluster = schemas.BoolSchema
             __annotations__ = {
                 "create_time": create_time,
-                "supported_executer_types": supported_executer_types,
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
@@ -156,18 +127,11 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
     vm_name: MetaOapg.properties.vm_name
-    supported_executer_types: MetaOapg.properties.supported_executer_types
 
     @typing.overload
     def __getitem__(
         self, name: typing_extensions.Literal["create_time"]
     ) -> MetaOapg.properties.create_time:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["supported_executer_types"]
-    ) -> MetaOapg.properties.supported_executer_types:
         ...
 
     @typing.overload
@@ -218,7 +182,6 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "create_time",
-        "supported_executer_types",
         "cpu_count_logical",
         "cpu_count_physical",
         "memory",
@@ -234,12 +197,6 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["create_time"]
     ) -> MetaOapg.properties.create_time:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["supported_executer_types"]
-    ) -> MetaOapg.properties.supported_executer_types:
         ...
 
     @typing.overload
@@ -292,7 +249,6 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "create_time",
-        "supported_executer_types",
         "cpu_count_logical",
         "cpu_count_physical",
         "memory",
@@ -337,11 +293,6 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
             MetaOapg.properties.vm_name,
             str,
         ],
-        supported_executer_types: typing.Union[
-            MetaOapg.properties.supported_executer_types,
-            list,
-            tuple,
-        ],
         machine_group_id: typing.Union[MetaOapg.properties.machine_group_id,
                                        dict, frozendict.frozendict, str, date,
                                        datetime, uuid.UUID, int, float,
@@ -365,7 +316,6 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
             vm_name=vm_name,
-            supported_executer_types=supported_executer_types,
             machine_group_id=machine_group_id,
             mpi_cluster=mpi_cluster,
             _configuration=_configuration,
