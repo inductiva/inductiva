@@ -13,6 +13,7 @@ from . import storage
 from . import utils
 from . import tasks
 from . import logs
+from . import projects
 from .templating import TemplateManager
 
 logs.setup()
