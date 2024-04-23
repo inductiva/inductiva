@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 
 import inductiva
 from inductiva import api
-from inductiva.client import ApiClient, ApiException
+from inductiva.client import ApiClient
 from inductiva.client.apis.tags.users_api import UsersApi
 
 
@@ -15,15 +15,11 @@ def _fetch_quotas_from_api() -> List[Dict]:
 
     with ApiClient(api_config) as client:
         api_instance = UsersApi(client)
-        try:
-            resp = api_instance.get_user_quotas().response
 
-            response_body = json.loads(resp.data.decode("utf-8"))
+        resp = api_instance.get_user_quotas().response
+        quotas = json.loads(resp.data.decode("utf-8"))
 
-            return response_body
-
-        except ApiException as e:
-            raise e
+        return quotas
 
 
 def get_quotas() -> Dict[str, Dict[str, Any]]:
@@ -36,4 +32,6 @@ def get_quotas() -> Dict[str, Dict[str, Any]]:
     """
     quotas = _fetch_quotas_from_api()
 
-    return quotas
+    quotas_dict = {quota.pop("name"): quota for quota in quotas}
+
+    return quotas_dict
