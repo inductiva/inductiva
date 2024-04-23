@@ -25,6 +25,8 @@ import websocket
 
 import inductiva
 from inductiva import constants
+from inductiva import api
+from inductiva.client.apis.tags import tasks_api
 
 logger = logging.getLogger("websocket")
 logger.setLevel(logging.CRITICAL)
@@ -108,6 +110,10 @@ class TaskStreamConsumer:
                 ws.close()
                 return
             self._write_message(msg)
+
+    def _disable_logs(self):
+        tasks_api.TasksApi(api.get_client()).disable_task_logs(
+            {'task_id': self.task_id})
 
     def _get_message_formatter(self):
         """Get the message formatter based on the output file
@@ -236,6 +242,7 @@ class TaskStreamConsumer:
             status = FAILURE
 
         self._update_status(msg, status)
+        self._disable_logs()
 
     def __on_open(self, unused_ws):
         """Callback for websocket open event."""
