@@ -369,6 +369,9 @@ class Task:
     ) -> pathlib.Path:
         """Download output files of the task.
 
+        If the API response fails for some reason, the method will retry
+        a defined amount of times before raising a RuntimeError.
+
         Args:
             filenames: List of filenames to download. If None or empty, all
                 files are downloaded.
@@ -379,14 +382,31 @@ class Task:
             rm_downloaded_zip_archive: Whether to remove the archive after
             uncompressing it. If uncompress is False, this argument is ignored.
         """
-        api_response = self._api.download_task_output(
-            path_params=self._get_path_params(),
-            query_params={
-                "filename": filenames or [],
-            },
-            stream=True,
-            skip_deserialization=True,
-        )
+        success = False
+        failed = 0
+
+        while not success:
+            try:
+                api_response = self._api.download_task_output(
+                    path_params=self._get_path_params(),
+                    query_params={
+                        "filename": filenames or [],
+                    },
+                    stream=True,
+                    skip_deserialization=True,
+                )
+                success = True
+            except exceptions.ApiException as e:
+                failed += 1
+                if failed > constants.TASK_DOWNLOAD_MAX_API_REQUESTS:
+                    raise RuntimeError(
+                        "Something went wrong while downloading the task "
+                        "outputs. Please try again later.\n"
+                        "Keep in mind that some outputs may take some time "
+                        "to be transfered from the resource to the bucket."
+                    ) from e
+                time.sleep(1)
+
         # use raw urllib3 response instead of the generated client response, to
         # implement our own download logic (with progress bar, first checking
         # the size of the file, etc.)
