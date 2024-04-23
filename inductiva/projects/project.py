@@ -35,7 +35,7 @@ class Project:
 
     AVAILABLE_MODES = ["r", "w"]
 
-    def __init__(self, name: str, exists_ok: bool = True, mode: str = "w"):
+    def __init__(self, name: str, exists_ok: bool = False, mode: str = "w"):
         """
         Args:
           name: Name of the project

@@ -42,13 +42,12 @@ def test_open_existing_project__exists_ok__false():
 
         expected_message = "already exists"
         with pytest.raises(ValueError) as exc_info:
-            project = inductiva.projects.Project(name=project_name,
-                                                 exists_ok=False)
+            project = inductiva.projects.Project(name=project_name)
             project.start()
         assert expected_message in str(exc_info.value)
 
         with pytest.raises(ValueError) as exc_info:
-            with inductiva.projects.Project(name=project_name, exists_ok=False):
+            with inductiva.projects.Project(name=project_name):
                 pass
         assert expected_message in str(exc_info.value)
 
@@ -92,12 +91,13 @@ def test_open_existing_project__exists_ok__true():
 
         mock_projects.return_value = mock_projects_api
 
-        project = inductiva.projects.Project(name=project_name)
+        project = inductiva.projects.Project(name=project_name, exists_ok=True)
         project.start()
         assert inductiva.projects.get_current_project() == project
         project.stop()
 
-        with inductiva.projects.Project(name=project_name) as project:
+        with inductiva.projects.Project(name=project_name,
+                                        exists_ok=True) as project:
             assert inductiva.projects.get_current_project() == project
 
         assert inductiva.projects.get_current_project() is None
@@ -107,14 +107,14 @@ def test_open_project_without_closing():
     """Tests if opening two projects at the same time fails."""
     with mock.patch(MOCK_PATH_PROJECTS), mock.patch(MOCK_PATH_CLIENT):
 
-        expected_message = "Trying to start a project when another is running."
+        expected_message = "another is running."
 
         with pytest.raises(Exception) as exc_info:
             project_1 = inductiva.projects.Project(name="p1")
             project_2 = inductiva.projects.Project(name="p2")
             project_1.start()
             project_2.start()
-        assert str(exc_info.value) == expected_message
+        assert expected_message in str(exc_info.value)
         assert inductiva.projects.get_current_project() == project_1
 
         project_1.stop()
@@ -123,5 +123,5 @@ def test_open_project_without_closing():
             with inductiva.projects.Project(name="p1"):
                 with inductiva.projects.Project(name="p2"):
                     pass
-        assert str(exc_info.value) == expected_message
+        assert expected_message in str(exc_info.value)
         assert inductiva.projects.get_current_project() is None
