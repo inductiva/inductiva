@@ -1,6 +1,6 @@
 # SCHISM
 
-The [SCHISM](https://ccrm.vims.edu/schismweb/) simulator is an open
+The [SCHISM](http://ccrm.vims.edu/schismweb/) simulator is an open
 source simulator for the simulation of 3D baroclinic circulation
 across creek-lake-river-estuary-shelf-ocean scales.
 

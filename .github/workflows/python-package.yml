@@ -57,7 +57,7 @@ jobs:
       uses: lycheeverse/lychee-action@v1.9.0
       with:
         fail: true
-        args: --base . --no-progress './**/*_sample.md'
+        args: --base . --no-progress --exclude ccrm.vims.edu './**/*.md'
     - name: Coverage report
       if: ${{ always() }}
       run: | # conftest crashes with coverage due to markdown-docs
