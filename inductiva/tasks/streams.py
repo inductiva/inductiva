@@ -113,7 +113,7 @@ class TaskStreamConsumer:
 
     def _disable_logs(self):
         tasks_api.TasksApi(api.get_client()).disable_task_logs(
-            {'task_id': self.task_id})
+            {"task_id": self.task_id})
 
     def _get_message_formatter(self):
         """Get the message formatter based on the output file
