@@ -12,18 +12,18 @@ def test_open_project_and_close():
     """Tests if the open and close of the project changes the context
     variable properly."""
     with mock.patch(MOCK_PATH_PROJECTS), mock.patch(MOCK_PATH_CLIENT):
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None
 
         with inductiva.projects.Project("test_project") as project:
-            assert inductiva.projects.CURRENT_PROJECT.get() == project
+            assert inductiva.projects.get_current_project() == project
 
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None
 
         project = inductiva.projects.Project("test_project")
         project.start()
-        assert inductiva.projects.CURRENT_PROJECT.get() == project
+        assert inductiva.projects.get_current_project() == project
         project.stop()
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None
 
 
 def test_open_existing_project__exists_ok__false():
@@ -31,7 +31,7 @@ def test_open_existing_project__exists_ok__false():
     error"""
     with mock.patch(MOCK_PATH_PROJECTS) as mock_projects, mock.patch(
             MOCK_PATH_CLIENT):
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None
 
         project_name = "test_project"
         mock_response = [{"name": project_name}]
@@ -52,7 +52,7 @@ def test_open_existing_project__exists_ok__false():
                 pass
         assert str(exc_info.value) == expected_message
 
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None
 
 
 def test_open_non_existant_project_works():
@@ -60,7 +60,7 @@ def test_open_non_existant_project_works():
     with a different name."""
     with mock.patch(MOCK_PATH_PROJECTS) as mock_projects, mock.patch(
             MOCK_PATH_CLIENT):
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None
         project_name = "test_project"
         mock_response = [{"name": project_name}]
         mock_projects_api = mock.MagicMock()
@@ -68,22 +68,22 @@ def test_open_non_existant_project_works():
         mock_projects.return_value = mock_projects_api
 
         with inductiva.projects.Project(name=project_name + "_2") as project:
-            assert inductiva.projects.CURRENT_PROJECT.get() == project
+            assert inductiva.projects.get_current_project() == project
 
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None
 
         project = inductiva.projects.Project(name=project_name + "_2")
         project.start()
-        assert inductiva.projects.CURRENT_PROJECT.get() == project
+        assert inductiva.projects.get_current_project() == project
         project.stop()
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None
 
 
 def test_open_existing_project__exists_ok__true():
     """Tests if opening a project with exists_ok=True works"""
     with mock.patch(MOCK_PATH_PROJECTS) as mock_projects, mock.patch(
             MOCK_PATH_CLIENT):
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None
 
         project_name = "test_project"
         mock_response = [{"name": project_name}]
@@ -94,13 +94,13 @@ def test_open_existing_project__exists_ok__true():
 
         project = inductiva.projects.Project(name=project_name)
         project.start()
-        assert inductiva.projects.CURRENT_PROJECT.get() == project
+        assert inductiva.projects.get_current_project() == project
         project.stop()
 
         with inductiva.projects.Project(name=project_name) as project:
-            assert inductiva.projects.CURRENT_PROJECT.get() == project
+            assert inductiva.projects.get_current_project() == project
 
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None
 
 
 def test_open_project_without_closing():
@@ -115,7 +115,7 @@ def test_open_project_without_closing():
             project_1.start()
             project_2.start()
         assert str(exc_info.value) == expected_message
-        assert inductiva.projects.CURRENT_PROJECT.get() == project_1
+        assert inductiva.projects.get_current_project() == project_1
 
         project_1.stop()
 
@@ -124,4 +124,4 @@ def test_open_project_without_closing():
                 with inductiva.projects.Project(name="p2"):
                     pass
         assert str(exc_info.value) == expected_message
-        assert inductiva.projects.CURRENT_PROJECT.get() is None
+        assert inductiva.projects.get_current_project() is None

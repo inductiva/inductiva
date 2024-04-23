@@ -8,6 +8,11 @@ from inductiva.client.apis.tags import projects_api
 CURRENT_PROJECT = contextvars.ContextVar("current_project", default=None)
 
 
+def get_current_project():
+    """Gets the current project"""
+    return CURRENT_PROJECT.get()
+
+
 class Project:
     """Projects class.
 
