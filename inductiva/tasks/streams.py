@@ -20,6 +20,7 @@ import json
 import sys
 import time
 import os
+import signal
 
 import websocket
 
@@ -111,9 +112,15 @@ class TaskStreamConsumer:
                 return
             self._write_message(msg)
 
+    def _handle_termination(self, signum, _):
+        print(f"Received termination signal {signum}.")
+        self._disable_logs()
+        sys.exit()
+
     def _disable_logs(self):
-        tasks_api.TasksApi(api.get_client()).disable_task_logs(
-            {"task_id": self.task_id})
+        client = api.get_client()
+        payload = {"task_id": self.task_id}
+        tasks_api.TasksApi(client).disable_task_logs(payload)
 
     def _get_message_formatter(self):
         """Get the message formatter based on the output file
@@ -267,6 +274,9 @@ class TaskStreamConsumer:
         If connection is lost, reconnect after a delay
         and update the start query to get the logs from the last
         received timestamp."""
+
+        for sig in [signal.SIGTERM, signal.SIGINT, signal.SIGHUP]:
+            signal.signal(sig, self._handle_termination)
 
         endpoint = constants.LOGS_WEBSOCKET_URL + "/loki/api/v1/tail?"
         params = {"query": f'{{task_id="{self.task_id}"}}', "limit": 500}
