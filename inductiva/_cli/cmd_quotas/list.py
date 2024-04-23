@@ -1,4 +1,5 @@
 """List the user quotas information via CLI."""
+from collections import defaultdict
 from typing import TextIO
 import argparse
 import sys
@@ -12,18 +13,12 @@ def get_quotas(_, fout: TextIO = sys.stdout):
 
     Lists all the user's quotas and the quotas left for the user to use.
     """
-    quotas = users.get_quotas()
+    table = defaultdict(list)
 
-    name_list = list(quotas)
-    max_allowed_list = [value["max_allowed"] for value in quotas.values()]
-    in_use_list = [value["in_use"] for value in quotas.values()]
-
-    # Construct the dictionary of lists
-    quotas_dict_of_lists = {
-        "name": name_list,
-        "max_allowed": max_allowed_list,
-        "in_use": in_use_list
-    }
+    for name, quota in users.get_quotas().items():
+        table["name"].append(name)
+        table["in_use"].append(quota["in_use"])
+        table["max_allowed"].append(quota["max_allowed"])
 
     emph_formatter = format_utils.get_ansi_formatter()
 
@@ -31,7 +26,7 @@ def get_quotas(_, fout: TextIO = sys.stdout):
         lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
     ]
 
-    table = format_utils.get_tabular_str(quotas_dict_of_lists,
+    table = format_utils.get_tabular_str(table,
                                          header_formatters=header_formatters)
 
     print(table, file=fout, end="")
