@@ -11,6 +11,7 @@
 # import sys
 # sys.setrecursionlimit(n)
 
+from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.backend_version import BackendVersion
 from inductiva.client.model.base_vm_group import BaseVMGroup
 from inductiva.client.model.body_upload_task_input import BodyUploadTaskInput
@@ -20,6 +21,7 @@ from inductiva.client.model.executer_tracker_api_connection_info import Executer
 from inductiva.client.model.executer_tracker_register_info import ExecuterTrackerRegisterInfo
 from inductiva.client.model.file_info import FileInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.machine_group_type import MachineGroupType
 from inductiva.client.model.machine_type import MachineType
 from inductiva.client.model.output_archive_info import OutputArchiveInfo
 from inductiva.client.model.project import Project
