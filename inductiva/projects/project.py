@@ -67,7 +67,7 @@ class Project:
         if a project does not exists already it will be created.
 
         """
-        if CURRENT_PROJECT.get() is not None:
+        if get_current_project() is not None:
             raise RuntimeError(
                 "Trying to start a project when another is running.")
 
