@@ -74,7 +74,7 @@ class Project:
         try:
             projects = self._api.get_user_projects().body
         except ApiException as e:
-            print("Something went wrong trying to get to the projects")
+            print("Something went wrong trying to get to your projects")
             raise e
 
         if self.name in [p["name"] for p in projects]:

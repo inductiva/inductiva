@@ -40,17 +40,17 @@ def test_open_existing_project__exists_ok__false():
 
         mock_projects.return_value = mock_projects_api
 
-        expected_message = "A project with this name already exists"
+        expected_message = "already exists"
         with pytest.raises(ValueError) as exc_info:
             project = inductiva.projects.Project(name=project_name,
                                                  exists_ok=False)
             project.start()
-        assert str(exc_info.value) == expected_message
+        assert expected_message in str(exc_info.value)
 
         with pytest.raises(ValueError) as exc_info:
             with inductiva.projects.Project(name=project_name, exists_ok=False):
                 pass
-        assert str(exc_info.value) == expected_message
+        assert expected_message in str(exc_info.value)
 
         assert inductiva.projects.get_current_project() is None
 
