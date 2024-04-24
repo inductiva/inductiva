@@ -2,6 +2,7 @@
 myst:
   html_meta:
     keywords: "Inductiva API, Programming, HPC, Simulation"
+orphan: true
 ---
 
 # Benchmark Computational Resources
