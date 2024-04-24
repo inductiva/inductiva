@@ -38,11 +38,11 @@ jobs:
 
       - name: configure client side redirection
         working-directory: source/tutorials
-        run: cp redirect.html ../../build/index.html
+        run: sudo cp redirect.html ../../build/index.html
 
       - name: copy robots.txt file to root
         working-directory: source/tutorials
-        run: cp robots.txt ../../build/
+        run: sudo cp robots.txt ../../build/
 
       - name: Deploy to staging webserver via rsync
         uses: burnett01/rsync-deployments@7.0.0
