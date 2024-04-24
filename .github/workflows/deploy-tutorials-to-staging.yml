@@ -4,20 +4,52 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
+  build-deploy:
+    name: Build and deploy
+
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        ref: 'tutorials' # Make sure this is the branch with your site's code
-        
-    - name: Deploy to staging webserver via rsync
-      uses: burnett01/rsync-deployments@7.0.0
-      with:
-        switches: -avzr --delete --no-perms --no-owner --no-group --omit-dir-times
-        path: .
-        remote_path: /var/www/${{ secrets.STAGING_SERVER }}/tutorials/
-        remote_host: ${{secrets.STAGING_SERVER}}
-        remote_user: inductiva-bot
-        remote_key: ${{secrets.STAGING_WEB_SSH_KEY}}
+      - uses: actions/checkout@v2
+        with:
+          ref: main
+          path: source
+
+      # UNCOMMENT ONCE MERGED TO MAIN
+      # - uses: actions/checkout@v2
+      #   with:
+      #     ref: development
+      #     path: source-dev
+
+      - uses: nicholasphair/sphinx-action@7.0.0
+        with:
+          docs-folder: "source/tutorials/"
+          # required by #1291
+          pre-build-command: "apt-get update -y && apt-get install -y git"
+          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
+
+      # UNCOMMENT ONCE MERGED TO MAIN
+      # - uses: nicholasphair/sphinx-action@7.0.0
+      #   with:
+      #     docs-folder: "source-dev/tutorials/"
+      #     # required by #1291
+      #     pre-build-command: "apt-get update -y && apt-get install -y git"
+      #     build-command: "sphinx-build . ../../build/en/development -W -D version=development"
+
+      - name: configure client side redirection
+        working-directory: source/tutorials
+        run: cp redirect.html ../../build/index.html
+
+      - name: copy robots.txt file to root
+        working-directory: source/tutorials
+        run: cp robots.txt ../../build/
+
+      - name: Deploy to staging webserver via rsync
+        uses: burnett01/rsync-deployments@7.0.0
+        with:
+          switches: -avzr --delete --no-perms --no-owner --no-group --omit-dir-times
+          path: build
+          remote_path: /var/www/${{ secrets.STAGING_SERVER }}/tutorials/
+          remote_host: ${{secrets.STAGING_SERVER}}
+          remote_user: inductiva-bot
+          remote_key: ${{secrets.STAGING_WEB_SSH_KEY}}
