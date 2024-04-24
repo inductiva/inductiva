@@ -1,4 +1,4 @@
-name: Deploy Docs to Staging Server
+name: Deploy Tutorials to Staging Server
 
 on:
   workflow_dispatch:
@@ -10,14 +10,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        ref: 'gh-pages' # Make sure this is the branch with your site's code
+        ref: 'tutorials' # Make sure this is the branch with your site's code
         
     - name: Deploy to staging webserver via rsync
       uses: burnett01/rsync-deployments@7.0.0
       with:
-        switches: -avzr --delete
+        switches: -avzr --delete --no-perms --no-owner --no-group --omit-dir-times
         path: .
-        remote_path: /var/www/${{ secrets.STAGING_SERVER }}/docs/
+        remote_path: /var/www/${{ secrets.STAGING_SERVER }}/tutorials/
         remote_host: ${{secrets.STAGING_SERVER}}
         remote_user: inductiva-bot
         remote_key: ${{secrets.STAGING_WEB_SSH_KEY}}
