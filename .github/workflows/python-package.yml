@@ -34,7 +34,7 @@ jobs:
       run: |
         sudo apt-get install -y libglu1-mesa ca-certificates
         python -m pip install --upgrade pip setuptools wheel
-        python -m pip install mypy yapf coverage coverage-badge pylint pytest pytest-custom_exit_code toml pytest-markdown-docs
+        python -m pip install mypy yapf coverage genbadge defusedxml pylint pytest pytest-custom_exit_code toml pytest-markdown-docs
         if [[ -f requirements.txt ]]; then python -m pip install -r requirements.txt; fi
     - name: Check formatting with yapf
       if: ${{ always() }}
@@ -61,12 +61,13 @@ jobs:
     - name: Coverage report
       if: ${{ always() }}
       run: | # conftest crashes with coverage due to markdown-docs
-        coverage run --source=./inductiva -m pytest --noconftest 
+        coverage run --source=./inductiva -m pytest --noconftest
+        coverage xml
         coverage report -m
     - name: Generate badge
       if: ${{ always() }}
       run: |
-        coverage-badge -f -o ./badges-folder/badges/cov.svg
+        genbadge coverage -i ./coverage.xml -o ./badges-folder/badges/cov.svg
     - name: Push badge
       if: ${{ always() }}
       working-directory: badges-folder
