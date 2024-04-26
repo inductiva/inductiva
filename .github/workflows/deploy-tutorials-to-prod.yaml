@@ -1,7 +1,8 @@
 name: Deploy Tutorials to Production Web Server
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
   build-deploy:
@@ -12,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
+          ref: main
           path: source
 
       - uses: nicholasphair/sphinx-action@7.0.0
