@@ -324,7 +324,7 @@ class TaskRequest(schemas.DictSchema):
                         **kwargs,
                     )
 
-            class container_name(
+            class container_image(
                     schemas.ComposedSchema,):
 
                 class MetaOapg:
@@ -373,7 +373,7 @@ class TaskRequest(schemas.DictSchema):
                                            datetime, uuid.UUID, int, float,
                                            decimal.Decimal, None, list, tuple,
                                            bytes],
-                ) -> 'container_name':
+                ) -> 'container_image':
                     return super().__new__(
                         cls,
                         *_args,
@@ -390,7 +390,7 @@ class TaskRequest(schemas.DictSchema):
                 "storage_path_prefix": storage_path_prefix,
                 "provider_id": provider_id,
                 "project": project,
-                "container_name": container_name,
+                "container_image": container_image,
             }
 
     method: MetaOapg.properties.method
@@ -446,8 +446,8 @@ class TaskRequest(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["container_name"]
-    ) -> MetaOapg.properties.container_name:
+        self, name: typing_extensions.Literal["container_image"]
+    ) -> MetaOapg.properties.container_image:
         ...
 
     @typing.overload
@@ -463,7 +463,7 @@ class TaskRequest(schemas.DictSchema):
         "storage_path_prefix",
         "provider_id",
         "project",
-        "container_name",
+        "container_image",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -518,8 +518,8 @@ class TaskRequest(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["container_name"]
-    ) -> typing.Union[MetaOapg.properties.container_name, schemas.Unset]:
+        self, name: typing_extensions.Literal["container_image"]
+    ) -> typing.Union[MetaOapg.properties.container_image, schemas.Unset]:
         ...
 
     @typing.overload
@@ -537,7 +537,7 @@ class TaskRequest(schemas.DictSchema):
         "storage_path_prefix",
         "provider_id",
         "project",
-        "container_name",
+        "container_image",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -588,12 +588,12 @@ class TaskRequest(schemas.DictSchema):
                               uuid.UUID, int, float, decimal.Decimal, bool,
                               None, list, tuple, bytes, io.FileIO,
                               io.BufferedReader, schemas.Unset] = schemas.unset,
-        container_name: typing.Union[MetaOapg.properties.container_name, dict,
-                                     frozendict.frozendict, str, date, datetime,
-                                     uuid.UUID, int, float, decimal.Decimal,
-                                     bool, None, list, tuple, bytes, io.FileIO,
-                                     io.BufferedReader,
-                                     schemas.Unset] = schemas.unset,
+        container_image: typing.Union[MetaOapg.properties.container_image, dict,
+                                      frozendict.frozendict, str, date,
+                                      datetime, uuid.UUID, int, float,
+                                      decimal.Decimal, bool, None, list, tuple,
+                                      bytes, io.FileIO, io.BufferedReader,
+                                      schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -611,7 +611,7 @@ class TaskRequest(schemas.DictSchema):
             storage_path_prefix=storage_path_prefix,
             provider_id=provider_id,
             project=project,
-            container_name=container_name,
+            container_image=container_image,
             _configuration=_configuration,
             **kwargs,
         )
