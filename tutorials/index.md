@@ -2,11 +2,12 @@
 
 Welcome to Inductiva tutorials.
 
-INSERT WELCOME
+Here you will find in-depth guides explaining how to use the Inductiva API. These tutorials add to the information snippets available in the [official API documentation](https://docs.inductiva.ai/en/latest/) by providing more detailed, step-by-step instructions to achieve certain practical goals.
+
 
 ```{toctree}
 ---
-caption: Generating Synthetic Data
+caption: Synthetic Data for Physics-ML
 maxdepth: 1
 hidden: true
 ---
