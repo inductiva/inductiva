@@ -7,82 +7,29 @@ myst:
 
 # Set Up the "Base Case"
 
-In the [introduction]({% post_url 2024-03-13-api-synthetic-data-generation-1 %})
-of this tutorial, we outlined and touched on the series of steps we take towards 
-generating synthetic datasets for training Physics-ML models. In this chapter, we 
-will dive into the first step of this process: **defining a "base case"** simulation 
-model of the system we wish to study.
+In the [introduction](synthetic-data-generation-1.md) of this tutorial, we outlined a series of steps needed for generating synthetic datasets for training Physics-ML models using the Inductiva API. So, in this chapter, we will dive into the first step of this process: **defining a "base case"** simulation model of the system we wish to study.
 
-As you recall, we followed through a [study by Sanchez-Gonzalez et al.](https://arxiv.org/abs/2002.09405)
-where a Graph Neural Network (GNN) is used to learn and potentially replace classic 
-fluid dynamics simulators. The authors of that study were specifically interested in using 
-machine learning to mimic Smoothed Particle Hydrodynamics (SPH), a mesh-free fluid 
-simulation technique that models both fluids and surface constraints, like walls 
-or obstacles, as vast groups of particles that move and interact with each other 
-through time and space, according to the laws of fluid dynamics.
+The "base case" simulation is quite simple: _a 0.5m cube of water, initially at rest at one of the top corners of a sealed 1m cubic box, is dropped at the simulation onset, allowing the water to spill and splash against the walls of the closed box 
+for 4 seconds. For simulating this base case, we will be using [SPlisHSPlasH](https://docs.inductiva.ai/en/latest/simulators/SPlisHSPlasH.html), the SPH simulator used by the authors.
 
-The computational challenge of such a simulation method lies in managing 
-these interactions, especially with simulations involving millions of particles. 
-The study used Graph Neural Networks (GNNs) to model these particles 
-and their interactions as a graph, learning to update each particle's acceleration
-over time. The researchers use a straightforward simulation scenario of a fluid 
-block dropped inside a box, and then model how this fluid interacts with the box's 
-surfaces until it stabilizes. Their approach sought to enable GNNs to generalize 
-fluid behavior predictions across a range of physical conditions and properties, 
-including density, viscosity, and different initial states of position and velocity.
-
-Over this tutorial series, we want to show you how to create a synthetic dataset to train 
-this GNN model for such a simulation use case, through the Inductiva API. This all 
-begins with preparing our "base case", using one of the open-source Smoothed Particle 
-Hydrodynamics (SPH) simulations already built into our API: [SPlisHSPlasH](https://docs.inductiva.ai/en/latest/simulators/SPlisHSPlasH.html). 
-
-<div style="display: flex; justify-content:center">
-<video width=500 loop muted autoplay preload="auto">
-<source src="../_static/generating-synthetic-data/fluid_drop.mp4" type="video/mp4">
-</video>
-</div>
-
-Video 1: Dynamics of a water
-block simulated with _29791 SPH particles_. Here, the block is left to fall with
-gravity - *splash!* Simulation performed via Inductiva API.
-
-## Step 1: Setting Up Our "Base Case" 
-
-Building on the simple simulation scenario used by the researchers in their study, 
-our "base case" simulation is quite the same: _a 0.5m cube of water, initially at 
-rest at one of the top corners of a sealed 1m cubic box, is dropped at the simulation 
-onset, allowing the water to spill and splash against the walls of the closed box 
-for 4 seconds._
-
-Make sure you're equipped with the Inductiva API and have your API key 
-at hand before diving into this tutorial. If this is your first encounter with our 
+> Note: if this is your first encounter with our 
 API, we highly recommend going through our [Quickstart Tutorial](https://docs.inductiva.ai/en/latest/get_started/installation.html) to set up your environment correctly. 
 
-### Configuring the "Base Case" Parameters
+To kick things off, we've pre-configured a directory containing all the configuration files necessary to run the SPlisHSPlasH simulation. We defined relevant hyperparameters, namely the particle radius, with values that allow for relatively short simulation times, even using the default computational resources available via the API. 
 
-To kick things off, we've pre-configured an input directory containing all 
-the configuration files necessary to run the SPlisHSPlasH simulation, and defined 
-the particle radius to _0.01_ to decrease the simulation's runtime and test our API. 
-
->Let's **<a href="/assets/files/splishsplash-base-dir.zip" download="splishsplash-base-dir.zip" class="bi bi-cloud-download-fill">
-<span> download our pre-configured input folder,</span>
-      </a>** and store it in a local 
-      directory.
+>Let's **<a href="/assets/files/splishsplash-base-dir.zip">download our pre-configured input folder, </a>** and store it in a local directory.
       
 In this folder, we'll find:
 
-- An `.obj` file which is a simple data format that represents the 3D geometry of 
-the containers. For our example, it contains a detailed outline of our cubic box
-geometry.
+- An `.obj` file with the 3D geometry of 
+the fluid container, in this case a simple  cubic box.
 
-- A `JSON` file which contains the simulation parameters required for SPlisHSPlasH to run. 
-This script essentially comprises **four key blocks** that define the whole simulation; 
-Configuration, RigidBodies, Materials. and FluidModels. This cofiguration file is 
-crucial as it provides the flexibility to tweak simulation parameters, enabling 
-us to to programmatically run multiple variations of our "base case" and generate 
+- A `JSON` file containing the simulation parameters. This file essentially comprises **four key blocks** that define the whole simulation; 
+`Configuration`, `RigidBodies`, `Materials` and `FluidModels`. Understanding the contents of this cofiguration file is crucial because we will later  
+tweek it to be able to programmatically produce multiple variations of our "base case" and generate 
 a diverse enough dataset to train a machine learning (ML) model.
 
-Let's take a closer look at these parameters and what they mean:
+Let's take a closer look at these blocks:
 
 ```json
 {   
