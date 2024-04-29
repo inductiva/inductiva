@@ -17,8 +17,7 @@ import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.apis.tags.version_api import VersionApi
-from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
-                                     TaskStatus)
+from inductiva.client.models import TaskRequest, TaskStatus
 from inductiva import types, constants
 from inductiva.resources.machine_types import ProviderType
 from inductiva.utils.data import (extract_output, get_validate_request_params,
@@ -101,7 +100,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         with open(input_zip_path, "rb") as zip_fp:
             _ = api_instance.upload_task_input(
                 path_params={"task_id": task_id},
-                body=BodyUploadTaskInput(file=zip_fp),
+                body=zip_fp,
             )
     except ApiException as e:
         logging.exception(
