@@ -7,7 +7,7 @@ myst:
 
 # Introduction
 In this tutorial series we'll show you how to use the Inductiva API to generate
-synthetic data crucial for training Physics-ML models, at scale.
+synthetic data, at scale and in an economic way, for training Physics-ML models.
 
 We're going to let you in on our very own recipe for generating synthetic data at scale, giving you an overview of the whole process building on an example from a published study. Over the next steps of this tutorial series, we'll break it all down to show you how it's done. This guide is a resource for both machine learning engineers and enthusiasts alike with a thorough understanding of Physics-ML and simulation software.
 
@@ -33,7 +33,7 @@ tutorial series. But first, let's take a look at a study done by a group of
 researchers who used data generated from Smoothed Particle Hydrodynamics (SPH)
 solvers to train a Graph Neural Network (GNN) model.
 
-## Learning to Simulate Complex Physics: A Practical Study
+## Learning Complex Physics: A Practical Study
 
 Let's take a closer look at a practical application of synthetic datasets
 through this [study by Sanchez-Gonzalez et
@@ -63,17 +63,9 @@ Simulation performed via Inductiva API.
 
 The core challenge here lies in training a Physics-ML model to predict the
 velocity of each fluid particle over time while adhering to the laws of fluid
-dynamics that are not explicitly encoded within the ML model. This challenge
+dynamics that are not explicitly encoded within the ML model. This
 involves generalizing the model's predictive capabilities across various
 conditions, like different container geometries or different fluid properties
-such as viscosity.
+such as viscosity. All learned from data. But... where is the training data? 
 
-## Up Next: Setting Up our "Base Case" Simulation
-
-In the [next chapter]({% post_url 2024-03-13-api-synthetic-data-generation-2
-%}), we'll guide you through the first step in our recipe of generating
-synthetic data at scale and affordably using our Inductiva API. We will teach
-you how to create a “base case” using SPlisHSPlasH, a popular open-source SPH
-simulator integrated within our API. This is just the beginning of generating
-the large, diverse synthetic data you need for your machine learning projects by
-making the most of Inductiva's powerful tools.
+So, over the next sections we'll guide you through our recipe of generating synthetic data at scale (and affordably) using our Inductiva API to closely mimic the training data used by the authors of the paper. We will start by setting up a simulation “base case” using SPlisHSPlasH, a popular open-source SPH simulator used by the authors and that is already integrated in our API.
