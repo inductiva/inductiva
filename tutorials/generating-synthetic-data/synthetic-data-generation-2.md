@@ -18,6 +18,7 @@ for 4 seconds. For simulating this base case, we will be using [SPlisHSPlasH](ht
 API, we highly recommend going through our [Quickstart Tutorial](https://docs.inductiva.ai/en/latest/get_started/installation.html) to set up your environment correctly. 
 
 ## Preparing the Configuration Files
+
 To kick things off, we've pre-configured a directory containing all the configuration files necessary to run the SPlisHSPlasH simulation. We defined relevant hyperparameters, namely the particle radius, with values that allow for relatively short simulation times, even using the default computational resources available via the API. 
 
 >Let's **<a href="/assets/files/splishsplash-template-dir.zip" download="splishsplash-template-dir.zip" class="bi bi-cloud-download-fill">download our pre-configured input folder, </a>** and store it in a local directory.
@@ -29,7 +30,7 @@ the fluid container, in this case a simple  cubic box.
 
 - A `JSON` file containing the simulation parameters. This file essentially comprises **four key blocks** that define the whole simulation; 
 `Configuration`, `RigidBodies`, `Materials` and `FluidModels`. Understanding the contents of this cofiguration file is crucial because we will later  
-tweek it to be able to programmatically produce multiple variations of our "base case" and generate 
+tweak it to be able to programmatically produce multiple variations of our "base case" and generate 
 a diverse enough dataset to train a machine learning (ML) model.
 
 Let's take a closer look at these blocks:
