@@ -154,7 +154,7 @@ inductiva-output/i13o8djcoq70bsdut1x73zi69
 
 These `vtk` files are the seeds of our dataset.
 
-## Getting a sense for the Computaitonal Costs
+## Getting a sense for realistic computational costs
 Running the above "base case" simulation was relatively quick since there were only approximately _2,000 particles_ representing the fluid block and the container. However, in the
 [study by Sanchez-Gonzalez et al.](https://arxiv.org/abs/2002.09405) that we're
 building upon, the researchers modelling 

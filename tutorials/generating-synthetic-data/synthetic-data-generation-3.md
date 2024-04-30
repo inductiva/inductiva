@@ -5,44 +5,18 @@ myst:
     keywords: "Inductiva API, Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH"
 ---
 
-# Choose the Hardware
+# Choosing your Hardware
 
-In our [previous step](synthetic-data-generation-2), 
-we learned how to set up a "base case" simulation, building upon the study by [Sanchez-Gonzalez et al.](https://arxiv.org/abs/2002.09405) where a Graph Neural Network (GNN) is used to learn how to simulate fluid dynamics.
-Our "base case" simulated a 0.5m cube of water released from one of the top corners 
-of a sealed 1m cubic box splashing against the box's walls over a 
-4-second duration.
+## Understanding what is happening under the hood
+By default, any task submitted via the API is sent to what we call the “default queue” for execution. The default queue is a shared resource pool of virtual machines (VMs )accessible to all API users. This default queue offers an easy and affordable way for users to prototype and run small-scale simulations similar to our initial low particle count simulation, without the hassle of hacing to manage any computational resource. The goal of the default queue is to provide this feeling of magic, because things will just work out of the box with minimal configuration effort. 
 
-After our initial run of the "base case" simulation with a _0.01_ 
-particle radius and later adjusting the particle count to _0.008_ to align with 
-the research we're basing this on, we noticed a much longer runtime — specifically, 
-**30 minutes for a single run simulating 4 seconds of fluid dynamics**. This means 
-that if we want to run 10,000 or even 20,000 different variations to generate a large 
-enough dataset, we'd be facing thousands of hours in computation time, and utimately, a need for more 
-powerful hardware. This time around, we're looking at how to speed things up with 
-beefier hardware through our API, and what that means in terms of costs. Stick around 
-as we dive into choosing the right machine for the job and weigh out the price points.
+However, because of its shared nature 
+and finite capacity, any job sent to the default queue can take a long time to be picked up and executed. This is especially so for higher fidelity simulations rquiring many computation cycles, as it was evident when our enhanced simulation took 30 minutes to run.
 
-## Choosing more Powerful Hardware
+To speed up our simulation, our API provides a mechanism that allows us to **launch dedicated machines** exclusively for our projects. These dedicated machines can offer significantly more compute power compared to the standard options accessible through the default queue.
 
-When we submitted our "base case" simulation task, it was sent to what we call the “default queue”,
-a queue of tasks processed by a shared resource pool of virtual machines accessible to all 
-API users. This default queue offers an easy and affordable way for users to 
-prototype and run small-scale simulations similar to our initial low particle count 
-simulation, without the hassle of managing resources. However, its shared nature 
-and finite capacity mean that simulations, especially higher fidelity simulations, 
-can take a long time to be picked up and to execute. This was evident when our 
-enhanced simulation took 30 minutes to run on the default queue's virtual 
-machines (VMs), the slowest option available, due to their limited computational power.
-
-To speed up our simulation, our API provides a mechanism that allows us to **launch dedicated machines** 
-exclusively for our projects. These dedicated machines can offer 
-significantly more compute power compared to the standard options accessible through the 
-default queue. By instantiating a MachineGroup, we now have the flexibility to 
-choose the setup that aligns best with our simulation needs. This will make it
-easier for us to adjust our "base case" parameters, enhancing its resolution and 
-increasing the particle count to align with the more complex scenarios described 
-in the research we're building upon.
+We can choose a setup that aligns best with our simulation needs by instantiating a MachineGroup and sending out simulation task to be executed there. This will make it easier for us to adjust our "base case" parameters, allowing for a higher
+particle count that aligns with the more complex scenarios described in the paper, while still having the simulations being executed in a reasoable amount of time.
 
 ### Browsing our Available Machines
 
