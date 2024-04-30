@@ -18,13 +18,11 @@ To speed up our simulation, our API provides a mechanism that allows us to **lau
 We can choose a setup that aligns best with our simulation needs by instantiating a MachineGroup and sending out simulation task to be executed there. This will make it easier for us to adjust our "base case" parameters, allowing for a higher
 particle count that aligns with the more complex scenarios described in the paper, while still having the simulations being executed in a reasoable amount of time.
 
-### Browsing our Available Machines
+## Browsing our Available Machines
 
-Our default queue uses virtual machines from the `c2` family, specifically `c2-standard-4.` 
-These only have 4 vCPUs and will take a long time to compute complex simulations.
-To speed things up, the best way is to use our API to launch dedicated machines
-reserved for our exclusive use. Let's explore our options for machine setups by
-running a simple command through the Inductiva [Command Line Interface (CLI)](https://docs.inductiva.ai/en/latest/cli/cli-overview.html) tool:
+Our default queue uses virtual machines VMs from Google Cloud Platform, specifically `c2-standard-4.` VMs, based on Intel Xeon Cascade Lake (2nd Gen) processors. These VMs only have 4 vCPUs and, as we saw before, will require about 30 minutes to execute our simulations. The best way to speed things up is to use our API to launch more powerful user-dedicated machines, reserved for our own exclusive use. 
+
+Let's explore alternative machine setups avialable via de APi by running a simple command through the Inductiva [Command Line Interface (CLI)](https://docs.inductiva.ai/en/latest/cli/cli-overview.html):
 
 ```console
 $ inductiva resources available
@@ -76,13 +74,13 @@ Automatically selected based on availability.
   > n1-standard-  [1, 2, 4, 8, 16, 32, 64, 96]                  
   > n1-highmem-   [1, 2, 4, 8, 16, 32, 64, 96] 
 ```
-### Running our "Base Case" on Dedicated Machines
 
-We'll run our "base case" with a _particle radius of 0.008_ again, but now we'll 
-boost our computing power by scaling up the number of vCPUs in the `c2` family available 
-in the default queue. We're moving from the 4 vCPUs of the `c2-standard-4` to a 
-much heftier `c2-standard-60` setup, allowing us to significantly increase processing 
-power. This can easily be achieved with just a few extra lines of code:
+OK! This looks good. Let's choose something different from the menu.
+
+## Re-Running our "Base Case" on a better VM
+
+We'll run our "base case" with a _particle radius of 0.008_ again, but now we'll boost our computing power by scaling up the number of vCPUs in the `c2` family available in the default queue. We're moving from the 4 vCPUs of the `c2-standard-4` to a 
+much heftier `c2-standard-60` setup, which hopefully will allow us to significantly decrease the simulation time. This can easily be achieved with just a few extra lines of code:
 
 ```python
 import inductiva
@@ -108,12 +106,11 @@ task.download_outputs()
 my_machine_group.terminate()
 ```
 Notice the significant reduction in runtime for this simulation: down from 30m 
-to just **10m07s**, achieving an approximately 3-fold increase in speed!
+to just **10m07s**, achieving an approximately 3-fold increase in speed! Remember that, in practice, speed ups are not linear with the number of vCPUs, so this is alreasy quite an achievement with just a few lines of code.
 
-Of course, we can enhance the performance further with more powerful machines equipped 
-with the latest Intel Xeon CPUs, specifically the `c3` family. Configuring this 
+We can enhance the performance further by choosing even more powerful machines. For example, the `c3` family is equipped with the latest Intel Xeon CPUs, so we can try those. Again, configuring this 
 in the Inductiva API is as straightforward as modifying a single argument in  
-the machine's configuration:
+the machine's configuration to `c3-standard-88`:
 
 ```python
 # Configure a dedicated machine from the c3 family boasting 88 vCPUs
@@ -121,9 +118,10 @@ my_machine_group = inductiva.resources.MachineGroup(
     machine_type="c3-standard-88")
 ```
 This machine setup further reduces the simulation time to just **5m46s**, achieving 
-a significant 1.75x speed-up over the `c2-standard-60` setup.
+an aditionally 1.75x speed-up over the `c2-standard-60` setup. Observe that, in this case, the speed up obtained is higher than the corresponding increase in the number of vCPUs with respect to `c2`-based VMs because `c3` VMs are supported by much more recent hardware.
 
-Of course, there’s a catch: these exclusive machines have a non-negligible price per
+## Show me the money...
+Of course, there’s a catch: these exclusive machines have a certain non-negligible cost per
 hour. It's important to consider the cost of using these exclusive, more powerful 
 machines. At the time of writing, the cost per hour for the `c2-standard-60` is $3.446, 
 and for the more powerful `c3-standard-88`, it's $5.053, compared to only $0.23 
