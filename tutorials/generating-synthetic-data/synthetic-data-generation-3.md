@@ -106,7 +106,7 @@ task.download_outputs()
 my_machine_group.terminate()
 ```
 Notice the significant reduction in runtime for this simulation: down from 30m 
-to just **10m07s**, achieving an approximately 3-fold increase in speed! Remember that, in practice, speed ups are not linear with the number of vCPUs, so this is alreasy quite an achievement with just a few lines of code.
+to just **10m07s**, achieving an approximately 3-fold increase in speed! Remember that, in practice, speed ups are not linear with the number of vCPUs, so this is already quite an achievement with just a few lines of code.
 
 We can enhance the performance further by choosing even more powerful machines. For example, the `c3` family is equipped with the latest Intel Xeon CPUs, so we can try those. Again, configuring this 
 in the Inductiva API is as straightforward as modifying a single argument in  

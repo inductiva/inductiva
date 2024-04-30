@@ -98,10 +98,10 @@ of particles and total size of simulation output for each particle radius.</span
 | 0.01            | 15625                 | 166  |
 | 0.008           | 29791                 | 213  |
 | 0.006           | 73720                 | 525  |
-| 0.004           | 244584                | 1.76 |
+| 0.004           | 244584                | 1760 |
 
 For reference, the dataset produced by [Sanchez-Gonzalez et
-al.](https://arxiv.org/abs/2002.09405) was based on simulations with about 8k to 25k particles, so it seems that for creating a comparable dataset we don't need that particle radius to go below *0.008*. Also, if each simulation is producing hundreds of Mb of data, then we probably don't want to smaller particle radius anyway because we it would be challenging to store the data produced by *thousands* of simulation (let alone training the GNNs with all that data). 
+al.](https://arxiv.org/abs/2002.09405) was based on simulations with about 8k to 25k particles, so it seems that for creating a comparable dataset we don't need that particle radius to go below *0.008*. Also, if each simulation is producing hundreds of MB of data, then we probably don't want smaller particle radius anyway, because we it would be challenging to store the data produced by *thousands* of simulation (let alone training the GNNs with all that data). 
 
 ## Checking costs (again)
 
