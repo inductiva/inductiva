@@ -14,7 +14,6 @@
 from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.backend_version import BackendVersion
 from inductiva.client.model.base_vm_group import BaseVMGroup
-from inductiva.client.model.body_upload_task_input import BodyUploadTaskInput
 from inductiva.client.model.default_machine_group import DefaultMachineGroup
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
