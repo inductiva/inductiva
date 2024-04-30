@@ -135,30 +135,10 @@ hour, as performed via the Inductiva API.</span>
 | 0.004           | 1h25m04s    | 7.16           |
 
 
+Obviously, as we increase the number of particles by reducing their radius, the computation times grow very quickly. Most importantly, we seem to be hitting a wall for particle radius of 0.004 where the number of particle is so high that we may even be hitting some RAM limits for these machines. 
 
+Given these performance and cost numbers, it is reasonable to commit to choosing particle radius of 0.01 for the data generation process. 
 
-Notice that choosing more powerful hardware does not correspondingly decrease
-computational times as much as it increases costs. Upgrading the virtual CPUs
-from 8 to 88 doesn't proportionally reduce computational time 11-fold. **On average, run times typically drop by only about a factor of 3, while costs soar by 5 times.**
+The issue now becomes: which specific VM type should we use?  This is quite relevant because if we are running 10k simulations or more, we will be spending hundreds to thousands of dollars, and the different between hundreds or thousands is basically up to our choice of VM (and how long we are willing to wait). 
 
-
-
-## Up Next: Benchmarking Computational Resources
-
-In this step, we assessed how adjusting hyperparameters, particularly the `particle radius`,
-impacts the computational times and costs of our "base case" simulation. We ran
-four simulations with increasingly smaller particle radii while keeping all other
-parameters fixed. This change naturally increased the number of particles needed
-to run the simulation and the amount of data it produced, which in turn demanded
-more computing power. Following this, we looked into how these changes influenced
-the cost and duration of computing by running the simulation across different
-hardware configurations.
-
-Performing such benchmarks becomes crucial for understanding the necessary trade-offs
-in synthetic data generation, especially considering the potential to scale up to
-10,000 simulations in a manner that is both time-efficient and cost-effective.
-If we revisit the [study](https://arxiv.org/abs/2002.09405) we built upon for
-this tutorial, a higher particle count results in a larger graph, potentially
-complicating memory requirements for training graph neural networks (GNNs).
-In our next chapter, we'll dive deeper into the computational costs and runtimes
-for such large scale-ups and learn how to efficiently benchmark computational resources.
+We only actually tested machines of the `c3` family: are there other options that can do the job in reasoable time for even less money? Let's find that out in the next part of this tutorial.
