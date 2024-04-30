@@ -5,32 +5,13 @@ myst:
     keywords: "Inductiva API, Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH"
 ---
 
-# Test the Impact of Hyperparameter Changes
+# Testing the Impact of Hyperparameters
+We will now give a deeper look at one of the hyperparameters of our simulation that is important due to its influence on both the fidelity of the SPH simulation and the associated
+computational costs:  ***particle radius***. We need to find a value for this hyperparameter that leads to generating a dataset with simlar enough carachteristics to the one used by [Sanchez-Gonzalez et al.](https://arxiv.org/abs/2002.09405), while still keeping our cost under control. 
 
-In the preceding step of our tutorial, we used Inductiva's [Templating Engine](https://docs.inductiva.ai/en/latest/explore_api/templating.html).
-to generalize the physical properties and initial conditions of the fluid block
-in our "base case" simulation. By substituting certain values in our configuration
-file with placeholders, we enabled the template to incorporate assigned values,
-enabling programmable adjustments of each variable via our Python script.
+So, to be more systematic, we are going to use again Inductiva's templating mechanism to substitute the numerical value of the `particle radius` hyperparameter in the `.JSON` configuration file with templated variable.
 
-Now, we will move on to the hyperparameters of our simulation, which are important
-due to their influence on both the fidelity of the simulation and the associated
-computational requirements and costs. Among various hyperparameters, we will specifically
-focus on adjusting the ***particle radius*** value and how it affects computational
-costs and data output. To illustrate this, we will run four simulations with decreasing
-particle radii while keeping the remaining parameters fixed to understand
-these impacts better.
-
-## Generalizing the `Particle Radius`
-
-Using the same methodology from our previous step, we will substitute the categorical
-and numerical value of the `particle radius` hyperparameter in the `.JSON` configuration
-file we previously downloaded with a templated variable:
-
-_`{% raw %}{{ variable_name }}{% endraw %}`_
-
-Here's what our templated configuration file looks like, where we've kept all
-hyperparameters fixed except for the particle radius:
+Here's what our templated configuration file looks like, where we've kept all hyperparameters fixed except for the particle radius:
 
 ```text
 "Configuration": {
@@ -53,20 +34,13 @@ hyperparameters fixed except for the particle radius:
 ```
 
 Now, let's save the `.JSON` file in the local directory, within the download folder,
-to prepare for running the simulation.
-
-## Running the Templated Simulation
-
-After updating our configuration file, we're ready to run simulations with different
-particle sizes. We will invoke the below Python script to set up a group of machines
-for the simulations and initialize our templating engine to easily fill in the
-`particle size` variable values. We're testing four sizes: **0.01, 0.008, 0.006, and 0.004 meters.**
+to prepare for running four *parallel* simulation, for four different particle radius: **0.01, 0.008, 0.006, and 0.004** (meters).
 
 ```python
 
 import inductiva
 
-# Launch a machine group with a c3-standard-4
+# Launch a machine group with four c3-standard-4
 machine_group = inductiva.resources.MachineGroup("c3-standard-4")
 machine_group.start()
 
@@ -96,11 +70,10 @@ for n, radius in enumerate(particle_radii, start=1):
 ```
 
 For each particle size, our API creates a new folder, updates the settings with
-the new size, and starts the simulation. This lets us run all four simulations at
-the same time, making it faster to see how changing the particle size affects the
+the new size, and starts the simulation. This lets us run all four simulations in parallel on 4 different VMs making it faster to see how changing the particle size affects the
 results.
 
-Instead of waiting for each simulation to complete within the running script,
+While we wait for each simulation to complete,
 we can track their progress and collect the results afterwards using our [Command Line Interface (CLI)](https://docs.inductiva.ai/en/latest/cli/cli-overview.html):
 
 ```bash
@@ -112,38 +85,32 @@ $ inductiva storage list -m 4
 
 ```
 
-## Impact of Particle Radius on Simulation Volume and Data Output
+## Checking the volume of data produced
 
-The table below shows how the different particle radius values we've chosen affect
-the total number of particles and the amount of data generated. As we decrease
-the particle radius, we need more particles for the simulation, increasing the
-data volume. Specifically, halving the particle radius results in an eightfold
-increase in the number of particles and the data produced, due to the volume
-scaling with the cube of the particle radius ($$r_{particle}{^3}$$).
+The table below shows how different particle radius affect the total number of particles and the amount of data generated by the simulation (4 seconds od simulated time). As we decrease the particle radius, we need more particles to fill in the corresponding volumes in the simulation, increasing the amount of data we generate. Specifically, halving the particle radius results in an eightfold
+increase in the number of particles, as expected. 
 
 <span class="mt-0 block sm:text-left text-base"><strong>Table 1.</strong> Number
 of particles and total size of simulation output for each particle radius.</span>
 
-| Particle Radius | Total N. of Particles | Size of data produced  |
+| Particle Radius | Total N. of Particles | MB of data produced  |
 |-----------------|-----------------------|------------------------|
-| 0.01            | 15625                 | 166 MB                 |
-| 0.008           | 29791                 | 213 MB                 |
-| 0.006           | 73720                 | 525 MB                 |
-| 0.004           | 244584                | 1.76 GB                |
+| 0.01            | 15625                 | 166  |
+| 0.008           | 29791                 | 213  |
+| 0.006           | 73720                 | 525  |
+| 0.004           | 244584                | 1760 |
 
-## Performance and Cost Analysis Across Machine Configurations
+For reference, the dataset produced by [Sanchez-Gonzalez et
+al.](https://arxiv.org/abs/2002.09405) was based on simulations with about 8k to 25k particles, so it seems that for creating a comparable dataset we don't need that particle radius to go below *0.008*. Also, if each simulation is producing hundreds of MB of data, then we probably don't want smaller particle radius anyway, because we it would be challenging to store the data produced by *thousands* of simulation (let alone training the GNNs with all that data). 
 
-Reducing the particle radius naturally results in a higher number of particles
-required for the simulation to run, and this demands more computing power.
-While upgrading to more powerful machines can reduce computational times, it also
-incurs significantly higher costs. To better understand these factors, we've run
-our simulations across various machine configurations. The resulting data, shown
-in the tables below, outlines runtime and costs for our four simulations
-on three different machine types:
+## Checking costs (again)
+
+Reducing the particle radius naturally results in a higher number of particles required for the simulation to run, and this demands more computing power. We will compare two different compute options of the c3 family avaialable from Google Cloud, and that represent two ends of the spectrum  in terms of compute power and costs: 
 
 - `c3-standard-4` at **$0.23 per hour**
-- `c3-standard-8` at **$0.459 per hour**
 - `c3-standard-88` at **$5.053 per hour**
+
+The tables below show how much it takes to run a simulation and its corresponding cost on the two types of hardware for the four particle radius being considered.
 
 <span class="mt-0 block sm:text-left text-base"><strong>Table 2.</strong>
 Simulation runtimes and costs on a `c3-standard-4` machine, priced at $0.23 per
@@ -157,17 +124,6 @@ hour, as performed via the Inductiva API.</span>
 | 0.004           | 6h11m27s    | 1.42           |
 
 <span class="mt-0 block sm:text-left text-base"><strong>Table 3.</strong>
-Simulation runtimes and costs on a `c3-standard-8` machine, priced at $0.459 per
-hour, as performed via the Inductiva API.</span>
-
-| Particle Radius | Time to run | Cost in $      |
-|-----------------|-------------|----------------|
-| 0.01            |    9m38s    | 0.07           |
-| 0.008           |   15m11s    | 0.12           |
-| 0.006           |   35m34s    | 0.27           |
-| 0.004           | 3h28m31s    | 1.60           |
-
-<span class="mt-0 block sm:text-left text-base"><strong>Table 4.</strong>
 Simulation runtimes and costs on a `c3-standard-88` machine, priced at $5.053 per
 hour, as performed via the Inductiva API.</span>
 
@@ -178,26 +134,11 @@ hour, as performed via the Inductiva API.</span>
 | 0.006           |    8m20s    | 0.70           |
 | 0.004           | 1h25m04s    | 7.16           |
 
-Notice that choosing more powerful hardware does not correspondingly decrease
-computational times as much as it increases costs. Upgrading the virtual CPUs
-from 8 to 88 doesn't proportionally reduce computational time 11-fold. **On average, run times typically drop by only about a factor of 3, while costs soar by 5 times.**
 
-## Up Next: Benchmarking Computational Resources
+Obviously, as we increase the number of particles by reducing their radius, the computation times grow very quickly. Most importantly, we seem to be hitting a wall for particle radius of 0.004 where the number of particle is so high that we may even be hitting some RAM limits for these machines. 
 
-In this step, we assessed how adjusting hyperparameters, particularly the `particle radius`,
-impacts the computational times and costs of our "base case" simulation. We ran
-four simulations with increasingly smaller particle radii while keeping all other
-parameters fixed. This change naturally increased the number of particles needed
-to run the simulation and the amount of data it produced, which in turn demanded
-more computing power. Following this, we looked into how these changes influenced
-the cost and duration of computing by running the simulation across different
-hardware configurations.
+Given these performance and cost numbers, it is reasonable to commit to choosing particle radius of 0.01 for the data generation process. 
 
-Performing such benchmarks becomes crucial for understanding the necessary trade-offs
-in synthetic data generation, especially considering the potential to scale up to
-10,000 simulations in a manner that is both time-efficient and cost-effective.
-If we revisit the [study](https://arxiv.org/abs/2002.09405) we built upon for
-this tutorial, a higher particle count results in a larger graph, potentially
-complicating memory requirements for training graph neural networks (GNNs).
-In our next chapter, we'll dive deeper into the computational costs and runtimes
-for such large scale-ups and learn how to efficiently benchmark computational resources.
+The issue now becomes: which specific VM type should we use?  This is quite relevant because if we are running 10k simulations or more, we will be spending hundreds to thousands of dollars, and the different between hundreds or thousands is basically up to our choice of VM (and how long we are willing to wait). 
+
+We only actually tested machines of the `c3` family: are there other options that can do the job in reasoable time for even less money? Let's find that out in the next part of this tutorial.

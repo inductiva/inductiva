@@ -5,84 +5,34 @@ myst:
     keywords: "Inductiva API, Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH"
 ---
 
-# Set Up the "Base Case"
+# Setting Up the "Base Case"
 
-In the [introduction]({% post_url 2024-03-13-api-synthetic-data-generation-1 %})
-of this tutorial, we outlined and touched on the series of steps we take towards 
-generating synthetic datasets for training Physics-ML models. In this chapter, we 
-will dive into the first step of this process: **defining a "base case"** simulation 
-model of the system we wish to study.
+## Quick Recap
 
-As you recall, we followed through a [study by Sanchez-Gonzalez et al.](https://arxiv.org/abs/2002.09405)
-where a Graph Neural Network (GNN) is used to learn and potentially replace classic 
-fluid dynamics simulators. The authors of that study were specifically interested in using 
-machine learning to mimic Smoothed Particle Hydrodynamics (SPH), a mesh-free fluid 
-simulation technique that models both fluids and surface constraints, like walls 
-or obstacles, as vast groups of particles that move and interact with each other 
-through time and space, according to the laws of fluid dynamics.
+In the [introduction](synthetic-data-generation-1.md) of this tutorial, we outlined a series of steps needed for generating synthetic datasets for training Physics-ML models using the Inductiva API. So, in this chapter, we will dive into the first step of this process: **defining a "base case"** simulation model of the system we wish to study.
 
-The computational challenge of such a simulation method lies in managing 
-these interactions, especially with simulations involving millions of particles. 
-The study used Graph Neural Networks (GNNs) to model these particles 
-and their interactions as a graph, learning to update each particle's acceleration
-over time. The researchers use a straightforward simulation scenario of a fluid 
-block dropped inside a box, and then model how this fluid interacts with the box's 
-surfaces until it stabilizes. Their approach sought to enable GNNs to generalize 
-fluid behavior predictions across a range of physical conditions and properties, 
-including density, viscosity, and different initial states of position and velocity.
+The "base case" simulation is quite simple: _a 0.5m cube of water, initially at rest at one of the top corners of a sealed 1m cubic box, is dropped at the simulation onset, allowing the water to spill and splash against the walls of the closed box 
+for 4 seconds. For simulating this base case, we will be using [SPlisHSPlasH](https://docs.inductiva.ai/en/latest/simulators/SPlisHSPlasH.html), the SPH simulator used by the authors.
 
-Over this tutorial series, we want to show you how to create a synthetic dataset to train 
-this GNN model for such a simulation use case, through the Inductiva API. This all 
-begins with preparing our "base case", using one of the open-source Smoothed Particle 
-Hydrodynamics (SPH) simulations already built into our API: [SPlisHSPlasH](https://docs.inductiva.ai/en/latest/simulators/SPlisHSPlasH.html). 
-
-<div style="display: flex; justify-content:center">
-<video width=500 loop muted autoplay preload="auto">
-<source src="../_static/generating-synthetic-data/fluid_drop.mp4" type="video/mp4">
-</video>
-</div>
-
-Video 1: Dynamics of a water
-block simulated with _29791 SPH particles_. Here, the block is left to fall with
-gravity - *splash!* Simulation performed via Inductiva API.
-
-## Step 1: Setting Up Our "Base Case" 
-
-Building on the simple simulation scenario used by the researchers in their study, 
-our "base case" simulation is quite the same: _a 0.5m cube of water, initially at 
-rest at one of the top corners of a sealed 1m cubic box, is dropped at the simulation 
-onset, allowing the water to spill and splash against the walls of the closed box 
-for 4 seconds._
-
-Make sure you're equipped with the Inductiva API and have your API key 
-at hand before diving into this tutorial. If this is your first encounter with our 
+> Note: if this is your first encounter with our 
 API, we highly recommend going through our [Quickstart Tutorial](https://docs.inductiva.ai/en/latest/get_started/installation.html) to set up your environment correctly. 
 
-### Configuring the "Base Case" Parameters
+## Preparing the Configuration Files
+To kick things off, we've pre-configured a directory containing all the configuration files necessary to run the SPlisHSPlasH simulation. We defined relevant hyperparameters, namely the particle radius, with values that allow for relatively short simulation times, even using the default computational resources available via the API. 
 
-To kick things off, we've pre-configured an input directory containing all 
-the configuration files necessary to run the SPlisHSPlasH simulation, and defined 
-the particle radius to _0.01_ to decrease the simulation's runtime and test our API. 
-
->Let's **<a href="/assets/files/splishsplash-base-dir.zip" download="splishsplash-base-dir.zip" class="bi bi-cloud-download-fill">
-<span> download our pre-configured input folder,</span>
-      </a>** and store it in a local 
-      directory.
+>Let's **<a href="/assets/files/splishsplash-template-dir.zip" download="splishsplash-template-dir.zip" class="bi bi-cloud-download-fill">download our pre-configured input folder, </a>** and store it in a local directory.
       
 In this folder, we'll find:
 
-- An `.obj` file which is a simple data format that represents the 3D geometry of 
-the containers. For our example, it contains a detailed outline of our cubic box
-geometry.
+- An `.obj` file with the 3D geometry of 
+the fluid container, in this case a simple  cubic box.
 
-- A `JSON` file which contains the simulation parameters required for SPlisHSPlasH to run. 
-This script essentially comprises **four key blocks** that define the whole simulation; 
-Configuration, RigidBodies, Materials. and FluidModels. This cofiguration file is 
-crucial as it provides the flexibility to tweak simulation parameters, enabling 
-us to to programmatically run multiple variations of our "base case" and generate 
+- A `JSON` file containing the simulation parameters. This file essentially comprises **four key blocks** that define the whole simulation; 
+`Configuration`, `RigidBodies`, `Materials` and `FluidModels`. Understanding the contents of this cofiguration file is crucial because we will later  
+tweek it to be able to programmatically produce multiple variations of our "base case" and generate 
 a diverse enough dataset to train a machine learning (ML) model.
 
-Let's take a closer look at these parameters and what they mean:
+Let's take a closer look at these blocks:
 
 ```json
 {   
@@ -139,11 +89,9 @@ Let's take a closer look at these parameters and what they mean:
     ]
 }
 ```
-It's essential to understand that these parameters collectively 
-control the simulation's behavior. Most importantly, the **particle size plays 
-a crucial role in determining the computational requirements of the simulation.**
+It's important to understand that these parameters not only control the physics of the simulation, but have also profound impact in how computation is made. Most specficially, and as we will see later, the **particle size** plays a crucial role in determining the computational cost of the simulation.
 
-### Running our "Base Case"
+## Running our "Base Case"
 
 To run our "base case", we'll initialize the SPlisHSPlasH simulator using the API 
 with just a couple lines of code:
@@ -165,10 +113,7 @@ task = splishsplash.run(input_dir=input_dir,
 task.wait()
 task.download_outputs()
 ```
-When launching the simulation, the API will upload the input data from our local 
-directory and schedule the simulation `task` for execution. It will also provide 
-details about the `task`, including its ID and the machine group assigned for 
-computation:
+This script will upload the input data from our local directory to the API server and schedule a simulation `task` for execution. We will be able check details about the `task`, including its ID and the machine group assigned for its computation, by observing the stdout of your terminal:
 
 ```
 Task Information:
@@ -191,11 +136,7 @@ Or, tracking the logs of the task via CLI:
 Task i13o8djcoq70bsdut1x73zi69 successfully queued and waiting to be picked-up
 for execution...
 ```
-The simulation should take around **2 minutes** to complete and the resulting 
-data will be stored inside a directory within `inductiva-output/{task-id}`. This 
-includes `stderr.txt`, `stdout.txt` and `log/SPH_log.txt` log files detailing the 
-simulation process and any encountered errors, along with `vtk` files stored in 
-the `vtk` directory that contain particle data at each simulation timestep:
+The simulation should take around **2 minutes** to complete and the resulting data will be stored inside a directory within `inductiva-output/{task-id}`. This output data includes some log file, notably `stderr.txt`, `stdout.txt` and `log/SPH_log.txt` detailing the simulation process and any errors that may have occurred. More importantly, the output directory will contain a `vtk` subdirectory where several `vtk` files store data about the fluid particles at each simulation timestep:
 
 ```
 $ tree inductiva-output/i13o8djcoq70bsdut1x73zi69
@@ -211,19 +152,21 @@ inductiva-output/i13o8djcoq70bsdut1x73zi69
      ...
 ```
 
-Running the above "base case" simulation was relatively quick due to its low 
-resolution count of approximately _2,000 particles_. However, in the
+These `vtk` files are the seeds of our dataset.
+
+## Getting a sense for realistic computational costs
+Running the above "base case" simulation was relatively quick since there were only approximately _2,000 particles_ representing the fluid block and the container. However, in the
 [study by Sanchez-Gonzalez et al.](https://arxiv.org/abs/2002.09405) that we're
-building upon, the researchers employ a Graph Neural Network (GNN) to simulate 
+building upon, the researchers modelling 
 **significantly larger systems**, involving more than _20,000 particles_. 
 
-### Enhancing the "Base Case" Resolution
+> So, what happens when we increase the number of particles in our simulation to a number of that is compatible with the one used by the authors? 
 
-Let's return to our input directory to revisit the `JSON` file that contains our 
+To investigate, let's return to our input directory to revisit the `JSON` file that contains our 
 simulation's parameters. To align our simulation more closely with the particle 
 count seen in the study, we'll adjust the `particleRadius` from _0.01_ to _0.008_. 
-This change will increase the number of particles in our simulation, enhancing the 
-simulation's resolution for more detailed results.
+This change will increase the number of particles in our simulation, thus enhancing the overal 
+resolution and (hopefully) leading to more physically accurate results.
 
 ```{code-block} json
 :caption: Set the particle radius to 0.008 in "Configuration" block.
@@ -236,22 +179,10 @@ simulation's resolution for more detailed results.
 } 
 ```
 
-Following the same steps we took to [run our preconfigured "base case"](#running-our-base-case) above, 
-this simulation should take around **30 minutes** to run, generating roughly _300 MB of data_ 
-from _601 frames_. While tweaking our "base case" to increase particle count gave 
-us more detailed data, it also meant waiting 30 minutes for a single run simulating 
-4 seconds of fluid dynamics. If we're aiming to run 10,000 or even 20,000
-variations of our "base case" to have a large enough dataset, we're looking 
-at an astronomical number of computation hours! To speed this up, choosing more 
-powerful computational resources becomes an essential step.
+Following the same steps we took to[run our preconfigured "base case"] above, we will see that 
+this simulation should take around **30 minutes** to run, and generates roughly _300 MB of data_ 
+from _601 frames_. If we're aiming to run 10,000 or even 20,000 variations of our "base case" using the current hardware option, then we will have to wait for many thousands hours to achieve a large-enough dataset. 
 
-## Up Next: Choosing more Powerful Hardware
+To speed this up, we will defintely need to choose much more powerful computational resources to run the required number of simulation. Fortunatelly, this is extrmely easy to do using the Inductiva API.
 
-In this step, we've learned how to set up our "base case" simulation and configure 
-its parameters. Next, we'll dive into how we can speed things up and keep the waiting 
-to a minimum, particularly as we tweak the parameters to simulate a much higher 
-particle count. Through our API, we'll explore available resources, their cost, 
-and learn how to choose the right machine setup for our needs.
-
-See you in the [next one]({% post_url 2024-03-13-api-synthetic-data-generation-3 %})!
 
