@@ -16,6 +16,7 @@ class CaNS(simulators.Simulator):
 
     def run(self,
             input_dir: types.Path,
+            sim_config_filename: str,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
             extra_metadata: Optional[dict] = None,
@@ -41,4 +42,5 @@ class CaNS(simulators.Simulator):
                            storage_dir=storage_dir,
                            use_hwthread=use_hwthread,
                            extra_metadata=extra_metadata,
+                           input_filename=sim_config_filename,
                            **kwargs)
