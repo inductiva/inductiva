@@ -20,7 +20,6 @@ import json
 import sys
 import time
 import os
-import signal
 
 import websocket
 
