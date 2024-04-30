@@ -6,17 +6,10 @@ myst:
 ---
 
 # Testing the Impact of Hyperparameters
-We will now give a deeper look at some hyperparameters of our simulation, which are importantdue to their influence on both the fidelity of the simulation and the associated
-computational costs. Among various hyperparameters, we will specifically focus on adjusting the ***particle radius*** value and how it affects computational costs and data output. 
+We will now give a deeper look at one of the hyperparameters of our simulation that is important due to its influence on both the fidelity of the SPH simulation and the associated
+computational costs:  ***particle radius***. To be more systematic, we are going to use the templating mechanism and will substitute the numerical value of the `particle radius` hyperparameter in the `.JSON` configuration file with templated variable.
 
-Using the same methodology from our previous step, we will substitute the categorical
-and numerical value of the `particle radius` hyperparameter in the `.JSON` configuration
-file we previously downloaded with a templated variable:
-
-_`{% raw %}{{ variable_name }}{% endraw %}`_
-
-Here's what our templated configuration file looks like, where we've kept all
-hyperparameters fixed except for the particle radius:
+Here's what our templated configuration file looks like, where we've kept all hyperparameters fixed except for the particle radius:
 
 ```text
 "Configuration": {
@@ -39,14 +32,7 @@ hyperparameters fixed except for the particle radius:
 ```
 
 Now, let's save the `.JSON` file in the local directory, within the download folder,
-to prepare for running the simulation.
-
-## Running the Templated Simulation
-
-After updating our configuration file, we're ready to run simulations with different
-particle sizes. We will invoke the below Python script to set up a group of machines
-for the simulations and initialize our templating engine to easily fill in the
-`particle size` variable values. We're testing four sizes: **0.01, 0.008, 0.006, and 0.004 meters.**
+to prepare for running a few simulation, for different particle radius: **0.01, 0.008, 0.006, and 0.004** (meters).
 
 ```python
 
@@ -82,11 +68,10 @@ for n, radius in enumerate(particle_radii, start=1):
 ```
 
 For each particle size, our API creates a new folder, updates the settings with
-the new size, and starts the simulation. This lets us run all four simulations at
-the same time, making it faster to see how changing the particle size affects the
+the new size, and starts the simulation. This lets us run all four simulations in parallel on 4 different VMs making it faster to see how changing the particle size affects the
 results.
 
-Instead of waiting for each simulation to complete within the running script,
+While we wait for each simulation to complete,
 we can track their progress and collect the results afterwards using our [Command Line Interface (CLI)](https://docs.inductiva.ai/en/latest/cli/cli-overview.html):
 
 ```bash
@@ -100,12 +85,10 @@ $ inductiva storage list -m 4
 
 ## Impact of Particle Radius on Simulation Volume and Data Output
 
-The table below shows how the different particle radius values we've chosen affect
-the total number of particles and the amount of data generated. As we decrease
-the particle radius, we need more particles for the simulation, increasing the
-data volume. Specifically, halving the particle radius results in an eightfold
-increase in the number of particles and the data produced, due to the volume
-scaling with the cube of the particle radius ($$r_{particle}{^3}$$).
+The table below shows how different particle radius values affect the total number of particles and the amount of data generated. As we decrease
+the particle radius, we need more particles to fill in the volumes in the simulation, increasing the
+amount of data we generate. Specifically, halving the particle radius results in an eightfold
+increase in the number of particles, as expected. 
 
 <span class="mt-0 block sm:text-left text-base"><strong>Table 1.</strong> Number
 of particles and total size of simulation output for each particle radius.</span>
