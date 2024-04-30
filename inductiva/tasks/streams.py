@@ -112,11 +112,6 @@ class TaskStreamConsumer:
                 return
             self._write_message(msg)
 
-    def _handle_termination(self, signum, _):
-        print(f"Received termination signal {signum}.")
-        self._disable_logs()
-        sys.exit()
-
     def _disable_logs(self):
         client = api.get_client()
         payload = {"task_id": self.task_id}
@@ -275,9 +270,6 @@ class TaskStreamConsumer:
         and update the start query to get the logs from the last
         received timestamp."""
 
-        for sig in [signal.SIGTERM, signal.SIGINT, signal.SIGHUP]:
-            signal.signal(sig, self._handle_termination)
-
         endpoint = constants.LOGS_WEBSOCKET_URL + "/loki/api/v1/tail?"
         params = {"query": f'{{task_id="{self.task_id}"}}', "limit": 500}
 
@@ -295,6 +287,7 @@ class TaskStreamConsumer:
                            ping_timeout=self.PING_TIMEOUT_SEC)
 
             if self._end_of_stream or self._keyboard_interrupt:
+                self._disable_logs()
                 break
 
             if self._last_message_timestamp is not None:
