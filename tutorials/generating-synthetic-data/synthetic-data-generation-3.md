@@ -118,44 +118,25 @@ my_machine_group = inductiva.resources.MachineGroup(
     machine_type="c3-standard-88")
 ```
 This machine setup further reduces the simulation time to just **5m46s**, achieving 
-an aditionally 1.75x speed-up over the `c2-standard-60` setup. Observe that, in this case, the speed up obtained is higher than the corresponding increase in the number of vCPUs with respect to `c2`-based VMs because `c3` VMs are supported by much more recent hardware.
+an aditionally 1.75x speed-up over the `c2-standard-60` setup. Observe that, in this case, the speed up obtained is higher than the corresponding increase in the number of vCPUs with respect to `c2`-based VMs. This because `c3` VMs are supported by much more recent hardware. And, of course, access to better hardware has a cost.
 
 ## Show me the money...
-Of course, there’s a catch: these exclusive machines have a certain non-negligible cost per
-hour. It's important to consider the cost of using these exclusive, more powerful 
-machines. At the time of writing, the cost per hour for the `c2-standard-60` is $3.446, 
-and for the more powerful `c3-standard-88`, it's $5.053, compared to only $0.23 
-per hour for the `c2-standard-4` used in the default queue. While we aim for 
-efficiency and speed, we must also be mindful of the price, as it directly influences 
-the overall cost of generating our dataset.
+It's important to consider the cost of using these exclusive and more powerful machines from the Google CLoud Platfomrm. At the time of writing, the cost per hour for the `c2-standard-60` is $3.446, and for the more powerful `c3-standard-88` is $5.053. Now, compare these values to only $0.23 
+per hour for the `c2-standard-4` Vms used in the default queue. 
 
-In the following table, we can see a snapshot of how different machine configurations impact 
-both performance and cost.
+So, while we aim for speed, we must also be mindful of the price of the VMs used, as it directly influences the overall cost of generating our dataset. In the following table, we can see a snapshot of how different machine configurations impact both performance and cost. In the last common, we show the cost of running 1 simulation, that is, the total cost of utilizing a VMs for the time required to run the (same) simulation from beginning to end.
 
-| Machine Type | Time to run | Hourly rate | Total Cost |
+| Machine Type | Time to run | Hourly rate | Cost of 1 simulation |
 | --- | --- | --- | --- |
 | `c2-standard-4` | 29m27s | 0.23 \$ | 0.11 \$ |
 | `c2-standard-60` | 10m07s | 3.446 \$ | 0.58 \$ |
 | `c3-standard-88` | 5m46s | 5.053 \$ | 0.49 \$ | 
 
-While the `c2-standard-4` machine offers the lowest cost, it takes much longer 
-to compute, making it an economical choice for less demanding tasks. On the 
-other hand, the `c3` machine category stands out for its fast performance, though 
-it comes at a price approximately four times higher than that of the `c2-standard-4`. 
-This preliminary comparison offers a peak into a more detailed analysis in 
-upcoming tutorials, where we will delve further into optimizing the trade-off 
-between simulation speed and operational costs.
+While the `c2-standard-4` machine offers the lowest relative and absolute cost, making it an economical choice for less demanding tasks or if you can simply wait for long enough. On the 
+other hand, the `c3` machine category stands out for its excellent performance, though 
+this comes at an absolute cost approximately 4.5 times higher than that of the `c2-standard-4`. 
 
-## Up Next: Generalizing our Simulation Script with Inductiva’s Templating Engine
+In computation tend you to pay (disproportionately) for speed. Because cost is such an important aspect of creating a large dataset, we will dive deeper on this issue later. 
 
-In this step, we touched on the importance of choosing the right machine 
-setup and how cost considerations play a crucial role. However, this can become 
-quite challenging when we start manipulating some of the hyperparameters of the 
-simulator without manually tweaking them to find the best dataset generation method.
-
-In the [next phase]({% post_url 2024-03-24-api-synthetic-data-generation-4 %}) of
-this tutorial, we will transform our "base case" simulation configuration files into 
-a "programmable script" by using Inductiva's [Templating Engine](https://docs.inductiva.ai/en/latest/explore_api/templating.html). 
-This script will enable us to programmatically simulate all sorts of variations 
-of the base case, each with unique parameter and hyperparameter settings, all through 
-Python scripting!
+But first, we need to find a way of manipulating the (hyper)parameters of the 
+simulation programatically, so we easily generate thousands of variations of our "base case". This can be done with the templating mechanism provided by the API.
