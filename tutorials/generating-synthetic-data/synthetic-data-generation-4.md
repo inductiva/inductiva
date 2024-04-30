@@ -85,7 +85,7 @@ Here's an overview of how our templated configuration file looks like, keeping i
 }
 ```
 
-After making these changes in our configuration file, executing our simulation with different parameters becomes remarkably straightforward. We can now invoke the below script and easily fill in the variable values, enabling us to simulate a variety of fluid behaviors and transition from modeling water to simulating another viscous fluid with a significant horizontal velocity. Here's how:
+After making these changes in our configuration file, executing our simulation with different parameters becomes remarkably straightforward.All it takes for this is to use Inductiva's ``TemplateManager`` class. Look at the below script and see how we easily fill in the variables with values with the call to the ``TemplateManager.render_dir()`` method:
 
 ```python
 import inductiva
@@ -137,6 +137,6 @@ The result looks something like this:
 
 Video 2. Dynamics of a viscous fluid simulated with **26,600** particles performed using SPlisHSPlasH via the Inductiva API. 
 
-This is it! It's really as simple as it seems! This is the power of the templating mechanism provided by Inductiva API.
+This is it! Inductiva's templating mechanism enables us to simulate a variety of fluid behaviors (from modeling water to simulating another viscous fluid with horizontal velocity) using basically the same configuration file. It's really as simple as it seems!
 
 And now we are ready to go one step further to generalize the *hyperparameters* of the simulator, which directly affect the computational cost of the simulation. We will be focusing on two key hyperparamters: i) the size of the particles (which controls the number of particles used in the simulation) and ii) the iteration time step. These two hyperparameters impact significantly both the accuracy of our simulations and their associated costs.

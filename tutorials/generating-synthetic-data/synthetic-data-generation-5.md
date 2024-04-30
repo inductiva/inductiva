@@ -5,23 +5,9 @@ myst:
     keywords: "Inductiva API, Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH"
 ---
 
-# Test the Impact of Hyperparameter Changes
-
-In the preceding step of our tutorial, we used Inductiva's [Templating Engine](https://docs.inductiva.ai/en/latest/explore_api/templating.html).
-to generalize the physical properties and initial conditions of the fluid block
-in our "base case" simulation. By substituting certain values in our configuration
-file with placeholders, we enabled the template to incorporate assigned values,
-enabling programmable adjustments of each variable via our Python script.
-
-Now, we will move on to the hyperparameters of our simulation, which are important
-due to their influence on both the fidelity of the simulation and the associated
-computational requirements and costs. Among various hyperparameters, we will specifically
-focus on adjusting the ***particle radius*** value and how it affects computational
-costs and data output. To illustrate this, we will run four simulations with decreasing
-particle radii while keeping the remaining parameters fixed to understand
-these impacts better.
-
-## Generalizing the `Particle Radius`
+# Testing the Impact of Hyperparameters
+We will now give a deeper look at some hyperparameters of our simulation, which are importantdue to their influence on both the fidelity of the simulation and the associated
+computational costs. Among various hyperparameters, we will specifically focus on adjusting the ***particle radius*** value and how it affects computational costs and data output. 
 
 Using the same methodology from our previous step, we will substitute the categorical
 and numerical value of the `particle radius` hyperparameter in the `.JSON` configuration
