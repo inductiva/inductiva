@@ -9,6 +9,10 @@ import signal
 import time
 from urllib3.exceptions import MaxRetryError, NewConnectionError
 from contextlib import contextmanager
+import tqdm
+import tqdm.utils
+import urllib3
+import urllib3.request
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 from absl import logging
@@ -96,12 +100,45 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         zip_name=task_id,
     )
 
+    zip_file_size = os.path.getsize(input_zip_path)
+    logging.info("Input archive size: %s",
+                 format_utils.bytes_formatter(zip_file_size))
+
+    logging.info("Uploading input archive...")
+
     try:
-        with open(input_zip_path, "rb") as zip_fp:
-            _ = api_instance.upload_task_input(
-                path_params={"task_id": task_id},
-                body=zip_fp,
+        with open(input_zip_path, "rb") as zip_fp, tqdm.tqdm(
+                total=zip_file_size,
+                unit="B",
+                unit_scale=True,
+                unit_divisor=1000,
+        ) as progress_bar:
+            # Wrap the file object so that the progress bar is updated every
+            # time a chunk is read.
+            wrapped_file = tqdm.utils.CallbackIOWrapper(
+                progress_bar.update,
+                zip_fp,
+                "read",
             )
+
+            # Use the pool_manager from the API client to send the request
+            # instead of using the generated client. This is because the
+            # generated client implementation does not support streaming
+            # the file and does not provide a way to update the progress bar.
+            pool_manager: urllib3.PoolManager = (
+                api_instance.api_client.rest_client.pool_manager)
+
+            pool_manager.request(
+                "POST",
+                (f"{api_instance.api_client.configuration.host}"
+                 f"/tasks/{task_id}/input"),
+                body=wrapped_file,
+                headers={
+                    "X-API-Key": (api_instance.api_client.configuration.
+                                  api_key["APIKeyHeader"]),
+                },
+            )
+
     except ApiException as e:
         logging.exception(
             "Exception when calling TasksApi->upload_task_inputs: %s", e)
