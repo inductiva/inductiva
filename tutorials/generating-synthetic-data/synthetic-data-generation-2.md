@@ -5,7 +5,7 @@ myst:
     keywords: "Inductiva API, Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH"
 ---
 
-# Set Up the "Base Case"
+# Setting Up the "Base Case"
 
 ## Quick Recap
 
@@ -20,7 +20,7 @@ API, we highly recommend going through our [Quickstart Tutorial](https://docs.in
 ## Preparing the Configuration Files
 To kick things off, we've pre-configured a directory containing all the configuration files necessary to run the SPlisHSPlasH simulation. We defined relevant hyperparameters, namely the particle radius, with values that allow for relatively short simulation times, even using the default computational resources available via the API. 
 
->Let's **<a href="/assets/files/splishsplash-base-dir.zip">download our pre-configured input folder, </a>** and store it in a local directory.
+>Let's **<a href="/assets/files/splishsplash-template-dir.zip" download="splishsplash-template-dir.zip" class="bi bi-cloud-download-fill">download our pre-configured input folder, </a>** and store it in a local directory.
       
 In this folder, we'll find:
 
