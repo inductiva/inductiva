@@ -19,6 +19,7 @@ The simulators available in the current version of the API (0.5) are:
 - [XBeach](../simulators/XBeach.md)
 - [Reef3D](../simulators/Reef3D.md)
 - [SWASH](../simulators/SWASH.md)
+- [CaNS](../simulators/CaNS.md)
 - [SWAN](../simulators/SWAN.md)
 - [FDS](../simulators/FDS.md)
 
