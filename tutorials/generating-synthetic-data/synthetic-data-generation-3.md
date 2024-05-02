@@ -135,7 +135,7 @@ While the `c2-standard-4` machine offers the lowest relative and absolute cost, 
 other hand, the `c3` machine category stands out for its excellent performance, though
 this comes at an absolute cost approximately 4.5 times higher than that of the `c2-standard-4`.
 
-In computation tend you to pay (disproportionately) for speed. Because cost is such an important aspect of creating a large dataset, we will dive deeper on this issue later.
+In computation you tend to pay (disproportionately) for speed. Because cost is such an important aspect of creating a large dataset, we will dive deeper on this issue later.
 
 But first, we need to find a way of manipulating the (hyper)parameters of the
-simulation programmatically, so we easily generate thousands of variations of our "base case". This can be done with the templating mechanism provided by the API.
+simulation programmatically, so we can easily generate thousands of variations of our "base case". This can be done with the templating mechanism provided by the API.
