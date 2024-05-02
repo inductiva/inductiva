@@ -123,7 +123,7 @@ task.wait()
 task.download_outputs()
 
 # Ensure that the allocated resources are terminated
-    # This is crucial to avoid incurring unnecessary costs from lingering resources
+# This is crucial to avoid incurring unnecessary costs from lingering resources
 machine_group.terminate()
 ```
 
