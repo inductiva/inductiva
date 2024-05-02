@@ -1,8 +1,8 @@
 # pylint: disable=missing-module-docstring
+from .simulator import Simulator
 from .dummy_simulator import DummySimulator
 from .splishsplash import SplishSplash
 from .dualsphysics import DualSPHysics
-from .simulator import Simulator
 from .openfoam import OpenFOAM
 from .openfast import OpenFAST
 from .gromacs import GROMACS
