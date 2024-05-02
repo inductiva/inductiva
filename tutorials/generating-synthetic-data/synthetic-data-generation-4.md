@@ -28,7 +28,7 @@ description.
 
 The key parameters we want to transform into variables include the fluid block's ***dimensions***, ***initial position*** and ***initial velocity***. At the same time, we want to be able to change the ***density*** and ***viscosity*** of the fluid itself to create more diverse examples for our target ML task.
 
->Let's **<a href="/assets/files/splishsplash-template-dir.zip" download="splishsplash-template-dir.zip" class="bi bi-cloud-download-fill">download our pre-configured template folder,</a>** and store it in a local directory.
+>Let's **<a href="/_static/generating-synthetic-data/splishsplash-template-dir.zip" download="splishsplash-template-dir.zip" class="bi bi-cloud-download-fill">download our pre-configured template folder,</a>** and store it in a local directory.
 
 If you recall, the configuration for our simulation, including the parameters we're now
 making variable, are located in a [`JSON` file](synthetic-data-generation-2.md) and saved in the local directory as part of the download folder above.
