@@ -12,7 +12,7 @@ class CaNS(simulators.Simulator):
     def __init__(self):
 
         super().__init__()
-        self.api_method_name = "openfast.openfast.run_simulation"
+        self.api_method_name = "cans.cans.run_simulation"
 
     def run(self,
             input_dir: types.Path,
