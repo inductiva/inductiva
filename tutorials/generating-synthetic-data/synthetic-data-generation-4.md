@@ -9,16 +9,16 @@ myst:
 
 In this step, we'll expand upon our simple "base case" and **generalize the simulation script**
 to be able to programmatically set the physical parameters of the simulation.
-We will achieve this through using Inductiva's own [Templating Engine](https://docs.inductiva.ai/en/latest/explore_api/templating.html)
+We will achieve this through using Inductiva's own [Templating Engine](https://docs.inductiva.ai/en/latest/explore_api/templating.html).
 
 ## What is Templating?
 
 Templating is a powerful tool that allows you to start with a specific simulation  file – like our “base case” – containing fixed values for the parameters you wish to explore and transform those fixed values into variables that you can not change 
 programmatically from your Python code before you submit the simulation for remote execution.
 
-The power of templating happens through a simple substitution process. You replace the numeric or categorical values in your configuration file with placeholders in the following format `{% raw %}{{ variable_name }}{% endraw %}`. This ensures that each occurrence of `variable_name` expression within the file is substituted with whatever value assigned to it.
+The power of templating happens through a simple substitution process. You replace the numeric or categorical values in your configuration file with placeholders in the following format `{{ variable_name }}`. This ensures that each occurrence of `variable_name` expression within the file is substituted with whatever value assigned to it.
 
-For example, let's say you embed `{% raw %}variable = {{ value }}{% endraw %}` in your template and assign `value = 10`, when you render this template, the placeholder is replaced with the assigned value, resulting in `variable = 10` in the final configuration file. This process not only generalizes your configuration file but also allows you to adjust the values of each variable programmatically via your Python script.
+For example, let's say you embed `variable = {{ value }}` in your template and assign `value = 10`, when you render this template, the placeholder is replaced with the assigned value, resulting in `variable = 10` in the final configuration file. This process not only generalizes your configuration file but also allows you to adjust the values of each variable programmatically via your Python script.
 
 Now, let's revisit our "base case" script to identify the parameters and values
 we want to "generalize". The **first step is to generalize the parameters directly related to the physical properties** of the simulation case itself, like initial conditions, viscosity, or other physical
@@ -98,9 +98,9 @@ machine_group.start()
 template_dir = "./splishsplash-template-dir"
 
 # Specify the initial conditions for the fluid simulation and the fluid's properties
-initial_velocity = [4, 0, 0]  # Example: A high horizontal initial speed m/s in each direction 
+initial_velocity = [4, 0, 0]  # Example: A high horizontal initial speed m/s in the x direction 
 kinematic_viscosity = 2       # Represents a fluid with higher viscosity m^2/s
-density = 2500                # A denser fluid compared to water kg/m^3
+density = 2500                # A denser fluid compared to water 1000 kg/m^3
 
 
 # Initialize the templating manager, define the root directory name for the
