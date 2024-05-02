@@ -78,8 +78,8 @@ Here's an overview of how our templated configuration file looks like, keeping i
             "id": "Fluid",
             "particleFile": "unit_box.obj",
             "translation": {{ initial_position | default([0.05, 0.05, 0.45]) }},
-            "scale": { dimensions | default([0.5, 0.5, 0.5]) },
-            "initialVelocity": { initial_velocity | default([0, 0, 0]) }
+            "scale": {{ dimensions | default([0.5, 0.5, 0.5]) }},
+            "initialVelocity": {{ initial_velocity | default([0, 0, 0]) }}
         }
     ]
 }
