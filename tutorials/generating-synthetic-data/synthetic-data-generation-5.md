@@ -63,6 +63,7 @@ for n, radius in enumerate(particle_radii, start=1):
     template_manager.set_root_dir("splishsplash-hyperparameter-search_%d" % n)
     template_manager.render_dir(particle_radius=radius)
 
+    SPlisHSPlasH = inductiva.simulators.SplishSplash()
     task = SPlisHSPlasH.run(input_dir=template_manager.get_root_dir(),
                             sim_config_filename="config.json",
                             on=machine_group)
