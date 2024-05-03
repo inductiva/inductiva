@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
+      pull-requests: write
     steps:
         - name: Comment on PR
           uses: peter-evans/create-or-update-comment@v1
