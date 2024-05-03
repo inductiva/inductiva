@@ -9,16 +9,16 @@ myst:
 
 In this step, we'll expand upon our simple "base case" and **generalize the simulation script**
 to be able to programmatically set the physical parameters of the simulation.
-We will achieve this through using Inductiva's own [Templating Engine](https://docs.inductiva.ai/en/latest/explore_api/templating.html)
+We will achieve this through using Inductiva's own [Templating Engine](https://docs.inductiva.ai/en/latest/explore_api/templating.html).
 
 ## What is Templating?
 
 Templating is a powerful tool that allows you to start with a specific simulation  file – like our “base case” – containing fixed values for the parameters you wish to explore and transform those fixed values into variables that you can not change 
 programmatically from your Python code before you submit the simulation for remote execution.
 
-The power of templating happens through a simple substitution process. You replace the numeric or categorical values in your configuration file with placeholders in the following format `{% raw %}{{ variable_name }}{% endraw %}`. This ensures that each occurrence of `variable_name` expression within the file is substituted with whatever value assigned to it.
+The power of templating happens through a simple substitution process. You replace the numeric or categorical values in your configuration file with placeholders in the following format `{{ variable_name }}`. This ensures that each occurrence of `variable_name` expression within the file is substituted with whatever value assigned to it.
 
-For example, let's say you embed `{% raw %}variable = {{ value }}{% endraw %}` in your template and assign `value = 10`, when you render this template, the placeholder is replaced with the assigned value, resulting in `variable = 10` in the final configuration file. This process not only generalizes your configuration file but also allows you to adjust the values of each variable programmatically via your Python script.
+For example, let's say you embed `variable = {{ value }}` in your template and assign `value = 10`, when you render this template, the placeholder is replaced with the assigned value, resulting in `variable = 10` in the final configuration file. This process not only generalizes your configuration file but also allows you to adjust the values of each variable programmatically via your Python script.
 
 Now, let's revisit our "base case" script to identify the parameters and values
 we want to "generalize". The **first step is to generalize the parameters directly related to the physical properties** of the simulation case itself, like initial conditions, viscosity, or other physical
@@ -28,7 +28,7 @@ description.
 
 The key parameters we want to transform into variables include the fluid block's ***dimensions***, ***initial position*** and ***initial velocity***. At the same time, we want to be able to change the ***density*** and ***viscosity*** of the fluid itself to create more diverse examples for our target ML task.
 
->Let's **<a href="/assets/files/splishsplash-template-dir.zip" download="splishsplash-template-dir.zip" class="bi bi-cloud-download-fill">download our pre-configured template folder,</a>** and store it in a local directory.
+>Let's **<a href="/_static/generating-synthetic-data/splishsplash-template-dir.zip" download="splishsplash-template-dir.zip" class="bi bi-cloud-download-fill">download our pre-configured template folder,</a>** and store it in a local directory.
 
 If you recall, the configuration for our simulation, including the parameters we're now
 making variable, are located in a [`JSON` file](synthetic-data-generation-2.md) and saved in the local directory as part of the download folder above.
@@ -78,8 +78,8 @@ Here's an overview of how our templated configuration file looks like, keeping i
             "id": "Fluid",
             "particleFile": "unit_box.obj",
             "translation": {{ initial_position | default([0.05, 0.05, 0.45]) }},
-            "scale": { dimensions | default([0.5, 0.5, 0.5]) },
-            "initialVelocity": { initial_velocity | default([0, 0, 0]) }
+            "scale": {{ dimensions | default([0.5, 0.5, 0.5]) }},
+            "initialVelocity": {{ initial_velocity | default([0, 0, 0]) }}
         }
     ]
 }
@@ -98,9 +98,9 @@ machine_group.start()
 template_dir = "./splishsplash-template-dir"
 
 # Specify the initial conditions for the fluid simulation and the fluid's properties
-initial_velocity = [4, 0, 0]  # Example: A high horizontal initial speed m/s in each direction 
+initial_velocity = [4, 0, 0]  # Example: A high horizontal initial speed m/s in the x direction 
 kinematic_viscosity = 2       # Represents a fluid with higher viscosity m^2/s
-density = 2500                # A denser fluid compared to water kg/m^3
+density = 2500                # A denser fluid compared to water 1000 kg/m^3
 
 
 # Initialize the templating manager, define the root directory name for the
@@ -123,7 +123,7 @@ task.wait()
 task.download_outputs()
 
 # Ensure that the allocated resources are terminated
-    # This is crucial to avoid incurring unnecessary costs from lingering resources
+# This is crucial to avoid incurring unnecessary costs from lingering resources
 machine_group.terminate()
 ```
 
