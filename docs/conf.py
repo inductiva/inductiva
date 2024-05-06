@@ -38,6 +38,7 @@ extensions = [
     'sphinx_togglebutton',
     'sphinxcontrib.googleanalytics',
     'sphinxext.opengraph',
+    'sphinx_sitemap',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -58,9 +59,12 @@ main_doc = 'index'
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = [
+    'README.md',
     'markdown_sample.md',
     'task_state_diagram.md',
 ]
+
+myst_links_external_new_tab = True
 
 # Auto generate header anchors
 myst_heading_anchors = 3
@@ -96,3 +100,9 @@ googleanalytics_enabled = True
 ogp_site_name = "Inductiva.ai Docs"
 ogp_site_url = "https://docs.inductiva.ai"
 ogp_image = "https://docs.inductiva.ai/_static/inductiva-social-banner.jpg"
+
+# sitemap.xml
+# See https://sphinx-sitemap.readthedocs.io/
+language = 'en'
+version = 'local'
+html_baseurl = 'https://docs.inductiva.ai/'
