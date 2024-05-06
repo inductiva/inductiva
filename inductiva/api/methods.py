@@ -9,6 +9,10 @@ import signal
 import time
 from urllib3.exceptions import MaxRetryError, NewConnectionError
 from contextlib import contextmanager
+import tqdm
+import tqdm.utils
+import urllib3
+import urllib3.request
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 from absl import logging
@@ -17,9 +21,9 @@ import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.apis.tags.version_api import VersionApi
-from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
-                                     TaskStatus)
+from inductiva.client.models import TaskRequest, TaskStatus
 from inductiva import types, constants
+from inductiva.resources.machine_types import ProviderType
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
 from inductiva.utils import format_utils, files
@@ -96,12 +100,45 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         zip_name=task_id,
     )
 
+    zip_file_size = os.path.getsize(input_zip_path)
+    logging.info("Input archive size: %s",
+                 format_utils.bytes_formatter(zip_file_size))
+
+    logging.info("Uploading input archive...")
+
     try:
-        with open(input_zip_path, "rb") as zip_fp:
-            _ = api_instance.upload_task_input(
-                path_params={"task_id": task_id},
-                body=BodyUploadTaskInput(file=zip_fp),
+        with open(input_zip_path, "rb") as zip_fp, tqdm.tqdm(
+                total=zip_file_size,
+                unit="B",
+                unit_scale=True,
+                unit_divisor=1000,
+        ) as progress_bar:
+            # Wrap the file object so that the progress bar is updated every
+            # time a chunk is read.
+            wrapped_file = tqdm.utils.CallbackIOWrapper(
+                progress_bar.update,
+                zip_fp,
+                "read",
             )
+
+            # Use the pool_manager from the API client to send the request
+            # instead of using the generated client. This is because the
+            # generated client implementation does not support streaming
+            # the file and does not provide a way to update the progress bar.
+            pool_manager: urllib3.PoolManager = (
+                api_instance.api_client.rest_client.pool_manager)
+
+            pool_manager.request(
+                "POST",
+                (f"{api_instance.api_client.configuration.host}"
+                 f"/tasks/{task_id}/input"),
+                body=wrapped_file,
+                headers={
+                    "X-API-Key": (api_instance.api_client.configuration.
+                                  api_key["APIKeyHeader"]),
+                },
+            )
+
     except ApiException as e:
         logging.exception(
             "Exception when calling TasksApi->upload_task_inputs: %s", e)
@@ -276,7 +313,8 @@ def log_task_info(task_id, method_name, params, resource_pool):
 
 
 def submit_task(api_instance, method_name, request_params, resource_pool,
-                storage_path_prefix, params, type_annotations):
+                storage_path_prefix, params, type_annotations,
+                provider_id: ProviderType):
     """Submit a task and send input files to the API."""
 
     resource_pool_id = None
@@ -286,7 +324,8 @@ def submit_task(api_instance, method_name, request_params, resource_pool,
     task_request = TaskRequest(method=method_name,
                                params=request_params,
                                resource_pool=resource_pool_id,
-                               storage_path_prefix=storage_path_prefix)
+                               storage_path_prefix=storage_path_prefix,
+                               provider_id=provider_id.value)
     task = submit_request(
         api_instance=api_instance,
         request=task_request,
@@ -312,7 +351,8 @@ def invoke_async_api(method_name: str,
                      type_annotations: Dict[Any, Type],
                      resource_pool: Optional[
                          types.ComputationalResources] = None,
-                     storage_path_prefix: Optional[str] = "") -> str:
+                     storage_path_prefix: Optional[str] = "",
+                     provider_id: ProviderType = ProviderType.GCP) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -332,6 +372,7 @@ def invoke_async_api(method_name: str,
     Args:
         request: Request sent to the API for validation.
         input_dir: Directory containing the input files to be uploaded.
+        provider_id: The provider id to use for the simulation (GCP or ICE).
 
     Return:
         Returns the task id.
@@ -353,6 +394,7 @@ def invoke_async_api(method_name: str,
                               resource_pool=resource_pool,
                               storage_path_prefix=storage_path_prefix,
                               params=params,
+                              provider_id=provider_id,
                               type_annotations=type_annotations)
 
     return task_id

@@ -21,7 +21,7 @@ API, we highly recommend going through our [Quickstart Tutorial](https://docs.in
 
 To kick things off, we've pre-configured a directory containing all the configuration files necessary to run the SPlisHSPlasH simulation. We defined relevant hyperparameters, namely the particle radius, with values that allow for relatively short simulation times, even using the default computational resources available via the API. 
 
->Let's **<a href="/_static/generating-synthetic-data/splishsplash-base-dir.zip" download="splishsplash-base-dir.zip" class="bi bi-cloud-download-fill">download our pre-configured input folder, </a>** and store it in a local directory.
+>Let's **<a href="../_static/generating-synthetic-data/splishsplash-base-dir.zip" download="splishsplash-base-dir.zip" class="bi bi-cloud-download-fill">download our pre-configured input folder, </a>** and store it in a local directory.
       
 In this folder, we'll find:
 

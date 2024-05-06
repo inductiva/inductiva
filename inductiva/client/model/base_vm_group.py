@@ -618,43 +618,115 @@ class BaseVMGroup(schemas.DictSchema):
                         **kwargs,
                     )
 
-            class type(schemas.EnumBase, schemas.StrSchema):
+            class type(
+                    schemas.ComposedSchema,):
 
                 class MetaOapg:
-                    enum_value_to_name = {
-                        "standard": "STANDARD",
-                        "mpi": "MPI",
-                        "elastic": "ELASTIC",
-                    }
 
-                @schemas.classproperty
-                def STANDARD(cls):
-                    return cls("standard")
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            MachineGroupType,
+                        ]
 
-                @schemas.classproperty
-                def MPI(cls):
-                    return cls("mpi")
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'type':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
 
-                @schemas.classproperty
-                def ELASTIC(cls):
-                    return cls("elastic")
-
-            class provider_id(schemas.EnumBase, schemas.StrSchema):
+            class provider_id(
+                    schemas.ComposedSchema,):
 
                 class MetaOapg:
-                    enum_value_to_name = {
-                        "GCP": "GCP",
-                        "ICE": "ICE",
-                    }
 
-                @schemas.classproperty
-                def GCP(cls):
-                    return cls("GCP")
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            Providers,
+                        ]
 
-                @schemas.classproperty
-                def ICE(cls):
-                    return cls("ICE")
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'provider_id':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
 
+            started = schemas.BoolSchema
             __annotations__ = {
                 "max_idle_time": max_idle_time,
                 "auto_terminate_ts": auto_terminate_ts,
@@ -668,6 +740,7 @@ class BaseVMGroup(schemas.DictSchema):
                 "deletion_timestamp": deletion_timestamp,
                 "type": type,
                 "provider_id": provider_id,
+                "started": started,
             }
 
     @typing.overload
@@ -743,6 +816,12 @@ class BaseVMGroup(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["started"]
+    ) -> MetaOapg.properties.started:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -759,6 +838,7 @@ class BaseVMGroup(schemas.DictSchema):
         "deletion_timestamp",
         "type",
         "provider_id",
+        "started",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -837,6 +917,12 @@ class BaseVMGroup(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["started"]
+    ) -> typing.Union[MetaOapg.properties.started, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -854,6 +940,7 @@ class BaseVMGroup(schemas.DictSchema):
         "deletion_timestamp",
         "type",
         "provider_id",
+        "started",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -923,10 +1010,19 @@ class BaseVMGroup(schemas.DictSchema):
                                          tuple, bytes, io.FileIO,
                                          io.BufferedReader,
                                          schemas.Unset] = schemas.unset,
-        type: typing.Union[MetaOapg.properties.type, str,
+        type: typing.Union[MetaOapg.properties.type, dict,
+                           frozendict.frozendict, str, date, datetime,
+                           uuid.UUID, int, float, decimal.Decimal, bool, None,
+                           list, tuple, bytes, io.FileIO, io.BufferedReader,
                            schemas.Unset] = schemas.unset,
-        provider_id: typing.Union[MetaOapg.properties.provider_id, str,
+        provider_id: typing.Union[MetaOapg.properties.provider_id, dict,
+                                  frozendict.frozendict, str, date, datetime,
+                                  uuid.UUID, int, float, decimal.Decimal, bool,
+                                  None, list, tuple, bytes, io.FileIO,
+                                  io.BufferedReader,
                                   schemas.Unset] = schemas.unset,
+        started: typing.Union[MetaOapg.properties.started, bool,
+                              schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -948,6 +1044,11 @@ class BaseVMGroup(schemas.DictSchema):
             deletion_timestamp=deletion_timestamp,
             type=type,
             provider_id=provider_id,
+            started=started,
             _configuration=_configuration,
             **kwargs,
         )
+
+
+from inductiva.client.model.machine_group_type import MachineGroupType
+from inductiva.client.model.providers import Providers

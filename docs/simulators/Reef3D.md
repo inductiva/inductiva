@@ -48,7 +48,9 @@ For further information on handling the task of the simulation see [here](../exp
 
 ## Example
 
-Here, we follow the tutorial with [regular wave propagation](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_FNPF/8_1%20Regular%20Wave%20Propagation) from Reef3D repository.
+Here, we follow the tutorial with
+[regular wave propagation](https://github.com/REEF3D/REEF3D/tree/ed0c8d7a6110892706357f72e0404bd63034efa5/Tutorials/REEF3D_FNPF/9_1%20Regular%20Wave%20Propagation)
+from Reef3D repository.
 
 ```python
 import inductiva

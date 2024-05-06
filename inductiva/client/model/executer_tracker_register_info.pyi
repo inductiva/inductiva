@@ -43,34 +43,10 @@ class ExecuterTrackerRegisterInfo(
             "cpu_count_logical",
             "cpu_count_physical",
             "vm_name",
-            "supported_executer_types",
         }
         
         class properties:
             create_time = schemas.DateTimeSchema
-            
-            
-            class supported_executer_types(
-                schemas.ListSchema
-            ):
-            
-            
-                class MetaOapg:
-                    items = schemas.StrSchema
-            
-                def __new__(
-                    cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                ) -> 'supported_executer_types':
-                    return super().__new__(
-                        cls,
-                        _arg,
-                        _configuration=_configuration,
-                    )
-            
-                def __getitem__(self, i: int) -> MetaOapg.items:
-                    return super().__getitem__(i)
             cpu_count_logical = schemas.IntSchema
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
@@ -120,7 +96,6 @@ class ExecuterTrackerRegisterInfo(
             mpi_cluster = schemas.BoolSchema
             __annotations__ = {
                 "create_time": create_time,
-                "supported_executer_types": supported_executer_types,
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
@@ -136,13 +111,9 @@ class ExecuterTrackerRegisterInfo(
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
     vm_name: MetaOapg.properties.vm_name
-    supported_executer_types: MetaOapg.properties.supported_executer_types
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["create_time"]) -> MetaOapg.properties.create_time: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["supported_executer_types"]) -> MetaOapg.properties.supported_executer_types: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["cpu_count_logical"]) -> MetaOapg.properties.cpu_count_logical: ...
@@ -168,16 +139,13 @@ class ExecuterTrackerRegisterInfo(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "vm_name", "vm_id", "machine_group_id", "mpi_cluster", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["create_time", "cpu_count_logical", "cpu_count_physical", "memory", "vm_name", "vm_id", "machine_group_id", "mpi_cluster", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["create_time"]) -> MetaOapg.properties.create_time: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["supported_executer_types"]) -> MetaOapg.properties.supported_executer_types: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["cpu_count_logical"]) -> MetaOapg.properties.cpu_count_logical: ...
@@ -203,7 +171,7 @@ class ExecuterTrackerRegisterInfo(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "supported_executer_types", "cpu_count_logical", "cpu_count_physical", "memory", "vm_name", "vm_id", "machine_group_id", "mpi_cluster", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["create_time", "cpu_count_logical", "cpu_count_physical", "memory", "vm_name", "vm_id", "machine_group_id", "mpi_cluster", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -216,7 +184,6 @@ class ExecuterTrackerRegisterInfo(
         cpu_count_logical: typing.Union[MetaOapg.properties.cpu_count_logical, decimal.Decimal, int, ],
         cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical, decimal.Decimal, int, ],
         vm_name: typing.Union[MetaOapg.properties.vm_name, str, ],
-        supported_executer_types: typing.Union[MetaOapg.properties.supported_executer_types, list, tuple, ],
         machine_group_id: typing.Union[MetaOapg.properties.machine_group_id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         mpi_cluster: typing.Union[MetaOapg.properties.mpi_cluster, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -231,7 +198,6 @@ class ExecuterTrackerRegisterInfo(
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
             vm_name=vm_name,
-            supported_executer_types=supported_executer_types,
             machine_group_id=machine_group_id,
             mpi_cluster=mpi_cluster,
             _configuration=_configuration,

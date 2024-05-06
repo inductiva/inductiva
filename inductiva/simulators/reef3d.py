@@ -40,4 +40,5 @@ class REEF3D(simulators.Simulator):
                            storage_dir=storage_dir,
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
-                           extra_metadata=extra_metadata)
+                           extra_metadata=extra_metadata,
+                           **kwargs)

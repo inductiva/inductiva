@@ -35,6 +35,7 @@ class Providers(schemas.EnumBase, schemas.StrSchema):
         enum_value_to_name = {
             "GCP": "GCP",
             "ICE": "ICE",
+            "LOCAL": "LOCAL",
         }
 
     @schemas.classproperty
@@ -44,3 +45,7 @@ class Providers(schemas.EnumBase, schemas.StrSchema):
     @schemas.classproperty
     def ICE(cls):
         return cls("ICE")
+
+    @schemas.classproperty
+    def LOCAL(cls):
+        return cls("LOCAL")

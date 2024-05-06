@@ -12,6 +12,7 @@ from . import resources
 from . import storage
 from . import utils
 from . import tasks
+from . import users
 from . import logs
 from .templating import TemplateManager
 
