@@ -69,12 +69,14 @@ simulators/SPlisHSPlasH
 simulators/OpenFOAM
 simulators/OpenFAST
 simulators/GROMACS
-simulators/SWASH
-simulators/XBeach
+simulators/AmrWind
 simulators/Reef3D
+simulators/XBeach
+simulators/SCHISM
+simulators/SWASH
+simulators/CaNS
 simulators/SWAN
 simulators/FDS
-simulators/SCHISM
 ```
 
 ```{toctree}
