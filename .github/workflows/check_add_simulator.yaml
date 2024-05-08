@@ -1,0 +1,31 @@
+name: Check add_simulator label
+on:
+  pull_request:
+    types:
+      - labeled
+jobs:
+  add-comment:
+    if: github.event.label.name == 'add_simulator'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+        - name: Check out internal docs
+          uses: actions/checkout@v3
+          with:
+            repository: inductiva/internal-docs
+            path: internal-docs
+        - name: Get adding_a_new_simulator.md content
+          id: get-content
+          run: |
+            echo "Getting content"
+            echo "contents=$(cat internal-docs/adding_a_new_simulator.md)" >> GITHUB_OUTPUT
+        - name: Comment on PR
+          uses: peter-evans/create-or-update-comment@v1
+          with:
+            issue-number: ${{ github.event.pull_request.number }}
+            body: |
+              ${{steps.get-content.outputs.contents}}
+            token: ${{ secrets.GITHUB_TOKEN }}
+
