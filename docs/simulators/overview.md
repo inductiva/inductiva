@@ -14,6 +14,7 @@ The simulators available in the current version of the API (0.5) are:
 - [SPlisHSPlasH](../simulators/SPlisHSPlasH.md)
 - [OpenFOAM](../simulators/OpenFOAM.md)
 - [OpenFAST](../simulators/OpenFAST.md)
+- [Amr-Wind](../simulators/AmrWind.md)
 - [GROMACS](../simulators/GROMACS.md)
 - [SCHISM](../simulators/SCHISM.md)
 - [XBeach](../simulators/XBeach.md)
