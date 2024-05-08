@@ -168,8 +168,8 @@ class Project:
         return self._info
 
     def __str__(self) -> str:
-        return (f"Project '{self.name}' with "\
-                f"{self.num_tasks} tasks (id={self.id})")
+        return f"Project '{self.name}' with "\
+               f"{self.num_tasks} tasks (id={self.id})"
 
     def desc(self) -> str:
         header = str(self) + "\n"
