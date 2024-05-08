@@ -30,6 +30,7 @@ from inductiva.client.model.providers import Providers
 from inductiva.client.model.quota import Quota
 from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.task import Task
+from inductiva.client.model.task_input_upload_url import TaskInputUploadUrl
 from inductiva.client.model.task_request import TaskRequest
 from inductiva.client.model.task_status import TaskStatus
 from inductiva.client.model.task_status_code import TaskStatusCode
