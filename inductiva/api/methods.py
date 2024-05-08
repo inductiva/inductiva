@@ -107,6 +107,19 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     logging.info("Uploading input archive...")
 
     try:
+        api_response = api_instance.get_input_upload_url(
+            path_params={"task_id": task_id})
+
+        method = api_response.body["method"]
+        url = api_response.body["url"]
+        headers = {
+            "Content-Type":
+                "application/octet-stream",
+            "X-API-Key":
+                (api_instance.api_client.configuration.api_key["APIKeyHeader"])
+        }
+        logging.debug("Upload URL: %s", url)
+
         with open(input_zip_path, "rb") as zip_fp, tqdm.tqdm(
                 total=zip_file_size,
                 unit="B",
@@ -128,24 +141,26 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
             pool_manager: urllib3.PoolManager = (
                 api_instance.api_client.rest_client.pool_manager)
 
-            pool_manager.request(
-                "POST",
-                (f"{api_instance.api_client.configuration.host}"
-                 f"/tasks/{task_id}/input"),
+            resp = pool_manager.request(
+                method,
+                url,
                 body=wrapped_file,
-                headers={
-                    "X-API-Key": (api_instance.api_client.configuration.
-                                  api_key["APIKeyHeader"]),
-                },
+                headers=headers,
             )
+            if resp.status != 200:
+                raise ApiException(
+                    status=resp.status,
+                    reason=resp.reason,
+                )
 
+            api_response = api_instance.notify_input_uploaded(
+                path_params={"task_id": task_id})
     except ApiException as e:
-        logging.exception(
-            "Exception when calling TasksApi->upload_task_inputs: %s", e)
+        logging.exception("Exception while uploading local input directory: %s",
+                          e)
         raise e
 
     logging.info("Local input directory successfully uploaded.")
-
     os.remove(input_zip_path)
 
 
