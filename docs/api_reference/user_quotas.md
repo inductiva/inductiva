@@ -208,12 +208,14 @@ needs.
 
 ## Using the cli to monitor quotas
 
-Inductiva's cli provides an easy way to monitor your quota
+Inductiva's cli provides an easy way to monitor your quotas
 usage. Simply use the command `inductiva quotas list`. This will
 output a detailed list of all the quotas together with their current
 usage. For example:
 
 ```bash
+$ inductiva quotas list
+
        NAME                               IN_USE         MAX_ALLOWED
        total_num_vcpus                    0              240
        total_num_machines                 0              20
