@@ -225,7 +225,7 @@ $ inductiva quotas list
        machine_group_lifetime_hours       n/a            36
 ```
 
-Alternatively you can also programmatically get the quotas using:
+Alternatively, you can also get the quotas directly from our python client:
 
 ```python3
 import inductiva
