@@ -25,7 +25,6 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.task_status import TaskStatus
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Path params
@@ -65,7 +64,7 @@ request_body_body = api_client.RequestBody(
     },
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = TaskStatus
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass
