@@ -4,6 +4,7 @@ from typing import Optional
 from inductiva import types, tasks, simulators
 
 
+@simulators.simulator.mpi_enabled
 class AmrWind(simulators.Simulator):
     """Class to invoke a generic AmrWind simulation on the API.
     """
