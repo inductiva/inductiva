@@ -238,7 +238,7 @@ class TaskRequest(
                     )
             
             
-            class container_name(
+            class container_image(
                 schemas.ComposedSchema,
             ):
             
@@ -268,7 +268,7 @@ class TaskRequest(
                     *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'container_name':
+                ) -> 'container_image':
                     return super().__new__(
                         cls,
                         *_args,
@@ -284,7 +284,7 @@ class TaskRequest(
                 "storage_path_prefix": storage_path_prefix,
                 "provider_id": provider_id,
                 "project": project,
-                "container_name": container_name,
+                "container_image": container_image,
             }
     
     method: MetaOapg.properties.method
@@ -315,12 +315,12 @@ class TaskRequest(
     def __getitem__(self, name: typing_extensions.Literal["project"]) -> MetaOapg.properties.project: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["container_name"]) -> MetaOapg.properties.container_name: ...
+    def __getitem__(self, name: typing_extensions.Literal["container_image"]) -> MetaOapg.properties.container_image: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["method", "params", "resource_pool", "client_version", "scenario_name", "storage_path_prefix", "provider_id", "project", "container_name", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["method", "params", "resource_pool", "client_version", "scenario_name", "storage_path_prefix", "provider_id", "project", "container_image", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -350,12 +350,12 @@ class TaskRequest(
     def get_item_oapg(self, name: typing_extensions.Literal["project"]) -> typing.Union[MetaOapg.properties.project, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["container_name"]) -> typing.Union[MetaOapg.properties.container_name, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["container_image"]) -> typing.Union[MetaOapg.properties.container_image, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["method", "params", "resource_pool", "client_version", "scenario_name", "storage_path_prefix", "provider_id", "project", "container_name", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["method", "params", "resource_pool", "client_version", "scenario_name", "storage_path_prefix", "provider_id", "project", "container_image", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -370,7 +370,7 @@ class TaskRequest(
         storage_path_prefix: typing.Union[MetaOapg.properties.storage_path_prefix, str, schemas.Unset] = schemas.unset,
         provider_id: typing.Union[MetaOapg.properties.provider_id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         project: typing.Union[MetaOapg.properties.project, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        container_name: typing.Union[MetaOapg.properties.container_name, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        container_image: typing.Union[MetaOapg.properties.container_image, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'TaskRequest':
@@ -385,7 +385,7 @@ class TaskRequest(
             storage_path_prefix=storage_path_prefix,
             provider_id=provider_id,
             project=project,
-            container_name=container_name,
+            container_image=container_image,
             _configuration=_configuration,
             **kwargs,
         )

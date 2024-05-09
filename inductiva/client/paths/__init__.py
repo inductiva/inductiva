@@ -8,6 +8,8 @@ import enum
 class PathValues(str, enum.Enum):
     TASKS_AUTH = "/tasks/auth"
     TASKS_SUBMIT = "/tasks/submit"
+    TASKS_TASK_ID_INPUT_UPLOAD_URL = "/tasks/{task_id}/input_upload_url"
+    TASKS_TASK_ID_INPUT_UPLOADED = "/tasks/{task_id}/input_uploaded"
     TASKS_TASK_ID_INPUT = "/tasks/{task_id}/input"
     TASKS_TASK_ID = "/tasks/{task_id}"
     TASKS = "/tasks"

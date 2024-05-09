@@ -9,6 +9,10 @@ import signal
 import time
 from urllib3.exceptions import MaxRetryError, NewConnectionError
 from contextlib import contextmanager
+import tqdm
+import tqdm.utils
+import urllib3
+import urllib3.request
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 from absl import logging
@@ -17,8 +21,7 @@ import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.apis.tags.version_api import VersionApi
-from inductiva.client.models import (BodyUploadTaskInput, TaskRequest,
-                                     TaskStatus)
+from inductiva.client.models import TaskRequest, TaskStatus
 from inductiva import types, constants
 from inductiva.resources.machine_types import ProviderType
 from inductiva.utils.data import (extract_output, get_validate_request_params,
@@ -97,19 +100,67 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         zip_name=task_id,
     )
 
+    zip_file_size = os.path.getsize(input_zip_path)
+    logging.info("Input archive size: %s",
+                 format_utils.bytes_formatter(zip_file_size))
+
+    logging.info("Uploading input archive...")
+
     try:
-        with open(input_zip_path, "rb") as zip_fp:
-            _ = api_instance.upload_task_input(
-                path_params={"task_id": task_id},
-                body=BodyUploadTaskInput(file=zip_fp),
+        api_response = api_instance.get_input_upload_url(
+            path_params={"task_id": task_id})
+
+        method = api_response.body["method"]
+        url = api_response.body["url"]
+        headers = {
+            "Content-Type":
+                "application/octet-stream",
+            "X-API-Key":
+                (api_instance.api_client.configuration.api_key["APIKeyHeader"])
+        }
+        logging.debug("Upload URL: %s", url)
+
+        with open(input_zip_path, "rb") as zip_fp, tqdm.tqdm(
+                total=zip_file_size,
+                unit="B",
+                unit_scale=True,
+                unit_divisor=1000,
+        ) as progress_bar:
+            # Wrap the file object so that the progress bar is updated every
+            # time a chunk is read.
+            wrapped_file = tqdm.utils.CallbackIOWrapper(
+                progress_bar.update,
+                zip_fp,
+                "read",
             )
+
+            # Use the pool_manager from the API client to send the request
+            # instead of using the generated client. This is because the
+            # generated client implementation does not support streaming
+            # the file and does not provide a way to update the progress bar.
+            pool_manager: urllib3.PoolManager = (
+                api_instance.api_client.rest_client.pool_manager)
+
+            resp = pool_manager.request(
+                method,
+                url,
+                body=wrapped_file,
+                headers=headers,
+            )
+            if resp.status != 200:
+                raise ApiException(
+                    status=resp.status,
+                    reason=resp.reason,
+                )
+
+            api_response = api_instance.notify_input_uploaded(
+                path_params={"task_id": task_id})
     except ApiException as e:
-        logging.exception(
-            "Exception when calling TasksApi->upload_task_inputs: %s", e)
+        logging.exception("Exception while uploading local input directory: %s",
+                          e)
         raise e
 
     logging.info("Local input directory successfully uploaded.")
-
     os.remove(input_zip_path)
 
 

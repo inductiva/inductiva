@@ -2,7 +2,7 @@ name: GH Pages Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [main, development]
     paths-ignore:
       - README.md
 
@@ -31,20 +31,28 @@ jobs:
       - uses: nicholasphair/sphinx-action@7.0.0
         with:
           docs-folder: "source/docs/"
-          build-command: "sphinx-build . ../../build/en/latest"
+          # required by #1291
+          pre-build-command: "apt-get update -y && apt-get install -y git"
+          build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
 
       - uses: nicholasphair/sphinx-action@7.0.0
         with:
           docs-folder: "source-dev/docs/"
-          build-command: "sphinx-build . ../../build/en/development"
+          # required by #1291
+          pre-build-command: "apt-get update -y && apt-get install -y git"
+          build-command: "sphinx-build . ../../build/en/development -W -D version=development"
 
       - name: disable jekyll
         working-directory: build
         run: touch .nojekyll
 
-      - name: redirect to latest
-        working-directory: build
-        run: echo "<meta http-equiv=\"Refresh\" content=\"0; url='/en/latest/'\" />" > "index.html"
+      - name: configure client side redirection
+        working-directory: source/docs
+        run: cp redirect.html ../../build/index.html
+
+      - name: copy robots.txt file to root
+        working-directory: source/docs
+        run: cp robots.txt ../../build/
 
       - name: Commit and push changes to gh-pages
         working-directory: build

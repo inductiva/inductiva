@@ -12,6 +12,7 @@ from . import resources
 from . import storage
 from . import utils
 from . import tasks
+from . import users
 from . import logs
 from .templating import TemplateManager
 
@@ -30,7 +31,7 @@ absl.logging.set_verbosity(absl.logging.INFO)
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.5.2"
+__version__ = "0.5.3"
 
 
 def set_output_dir(new_output_dir):
