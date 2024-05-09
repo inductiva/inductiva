@@ -206,7 +206,7 @@ If any of these quotas establish a limit for what you can achieve with Inductiva
 please [reach out to us](mailto:support@inductiva.ai) and we can better understand your
 needs.
 
-## Using the cli to monitor quotas
+## How to monitor quotas
 
 Inductiva's cli provides an easy way to monitor your quotas
 usage. Simply use the command `inductiva quotas list`. This will
@@ -223,6 +223,14 @@ $ inductiva quotas list
        machine_disk_size_gb               n/a            20
        machine_group_idle_minutes         n/a            30
        machine_group_lifetime_hours       n/a            36
+```
+
+Alternatively, you can also get the quotas directly from our python client:
+
+```python3
+import inductiva
+
+inductiva.users.get_quotas()
 ```
 
 
