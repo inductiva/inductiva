@@ -3,7 +3,7 @@ from typing import Optional
 
 from inductiva import types, tasks, simulators
 
-
+@simulators.simulator.mpi_enabled
 class CaNS(simulators.Simulator):
     """Class to invoke a generic CaNS simulation on the API.
 
