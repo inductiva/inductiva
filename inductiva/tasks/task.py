@@ -161,10 +161,6 @@ class Task:
 
         return info
 
-    def disable_logs(self) -> None:
-        """Disables logs of the task."""
-        self._api.disable_task_logs({'task_id': self.id})
-
     def wait(self, polling_period: int = 5) -> models.TaskStatusCode:
         """Wait for the task to complete.
 
