@@ -396,7 +396,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-machines-20">Maximum allowed machines: 20</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-vcpus-240">Maximum allowed vCPUs: 240</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-data-disk-20-gb">Maximum allowed data disk: 20 GB</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-cli-to-monitor-quotas">Using the cli to monitor quotas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-monitor-quotas">How to monitor quotas</a></li>
 </ul>
             </nav>
         </div>
@@ -606,8 +606,8 @@ Only when exceeding this value per machine an error is raised:</p>
 please <a class="reference external" href="mailto:support&#37;&#52;&#48;inductiva&#46;ai" target="_blank">reach out to us</a> and we can better understand your
 needs.</p>
 </section>
-<section id="using-the-cli-to-monitor-quotas">
-<h2>Using the cli to monitor quotas<a class="headerlink" href="#using-the-cli-to-monitor-quotas" title="Permalink to this heading">#</a></h2>
+<section id="how-to-monitor-quotas">
+<h2>How to monitor quotas<a class="headerlink" href="#how-to-monitor-quotas" title="Permalink to this heading">#</a></h2>
 <p>Inductiva’s cli provides an easy way to monitor your quotas
 usage. Simply use the command <code class="docutils literal notranslate"><span class="pre">inductiva</span> <span class="pre">quotas</span> <span class="pre">list</span></code>. This will
 output a detailed list of all the quotas together with their current
@@ -621,6 +621,12 @@ usage. For example:</p>
 <span class="w">       </span>machine_disk_size_gb<span class="w">               </span>n/a<span class="w">            </span><span class="m">20</span>
 <span class="w">       </span>machine_group_idle_minutes<span class="w">         </span>n/a<span class="w">            </span><span class="m">30</span>
 <span class="w">       </span>machine_group_lifetime_hours<span class="w">       </span>n/a<span class="w">            </span><span class="m">36</span>
+</pre></div>
+</div>
+<p>Alternatively, you can also get the quotas directly from our python client:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+
+<span class="n">inductiva</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get_quotas</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -675,7 +681,7 @@ usage. For example:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-machines-20">Maximum allowed machines: 20</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-vcpus-240">Maximum allowed vCPUs: 240</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-data-disk-20-gb">Maximum allowed data disk: 20 GB</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-cli-to-monitor-quotas">Using the cli to monitor quotas</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-monitor-quotas">How to monitor quotas</a></li>
 </ul>
   </nav></div>
 
