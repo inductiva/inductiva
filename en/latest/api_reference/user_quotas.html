@@ -221,12 +221,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../simulators/OpenFOAM.html">OpenFOAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/OpenFAST.html">OpenFAST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/GROMACS.html">GROMACS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../simulators/SWASH.html">SWASH</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../simulators/XBeach.html">XBeach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/AmrWind.html">Amr-Wind</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/Reef3D.html">Reef3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/XBeach.html">XBeach</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/SCHISM.html">SCHISM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/SWASH.html">SWASH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulators/CaNS.html">CaNS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/SWAN.html">SWAN</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulators/FDS.html">FDS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../simulators/SCHISM.html">SCHISM</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User Reference</span></p>
 <ul class="current nav bd-sidenav">
@@ -394,6 +396,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-machines-20">Maximum allowed machines: 20</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-vcpus-240">Maximum allowed vCPUs: 240</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-data-disk-20-gb">Maximum allowed data disk: 20 GB</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-cli-to-monitor-quotas">Using the cli to monitor quotas</a></li>
 </ul>
             </nav>
         </div>
@@ -603,6 +606,24 @@ Only when exceeding this value per machine an error is raised:</p>
 please <a class="reference external" href="mailto:support&#37;&#52;&#48;inductiva&#46;ai" target="_blank">reach out to us</a> and we can better understand your
 needs.</p>
 </section>
+<section id="using-the-cli-to-monitor-quotas">
+<h2>Using the cli to monitor quotas<a class="headerlink" href="#using-the-cli-to-monitor-quotas" title="Permalink to this heading">#</a></h2>
+<p>Inductiva’s cli provides an easy way to monitor your quotas
+usage. Simply use the command <code class="docutils literal notranslate"><span class="pre">inductiva</span> <span class="pre">quotas</span> <span class="pre">list</span></code>. This will
+output a detailed list of all the quotas together with their current
+usage. For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>quotas<span class="w"> </span>list
+
+<span class="w">       </span>NAME<span class="w">                               </span>IN_USE<span class="w">         </span>MAX_ALLOWED
+<span class="w">       </span>total_num_vcpus<span class="w">                    </span><span class="m">0</span><span class="w">              </span><span class="m">240</span>
+<span class="w">       </span>total_num_machines<span class="w">                 </span><span class="m">0</span><span class="w">              </span><span class="m">20</span>
+<span class="w">       </span>cost_per_hour<span class="w">                      </span><span class="m">0</span><span class="w">              </span><span class="m">2</span>
+<span class="w">       </span>machine_disk_size_gb<span class="w">               </span>n/a<span class="w">            </span><span class="m">20</span>
+<span class="w">       </span>machine_group_idle_minutes<span class="w">         </span>n/a<span class="w">            </span><span class="m">30</span>
+<span class="w">       </span>machine_group_lifetime_hours<span class="w">       </span>n/a<span class="w">            </span><span class="m">36</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -654,6 +675,7 @@ needs.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-machines-20">Maximum allowed machines: 20</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-vcpus-240">Maximum allowed vCPUs: 240</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#maximum-allowed-data-disk-20-gb">Maximum allowed data disk: 20 GB</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-cli-to-monitor-quotas">Using the cli to monitor quotas</a></li>
 </ul>
   </nav></div>
 

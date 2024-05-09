@@ -205,3 +205,24 @@ mg = inductiva.resources.MachineGroup("c2-standard-4", data_disk_gb=120)
 If any of these quotas establish a limit for what you can achieve with Inductiva API,
 please [reach out to us](mailto:support@inductiva.ai) and we can better understand your
 needs.
+
+## Using the cli to monitor quotas
+
+Inductiva's cli provides an easy way to monitor your quotas
+usage. Simply use the command `inductiva quotas list`. This will
+output a detailed list of all the quotas together with their current
+usage. For example:
+
+```bash
+$ inductiva quotas list
+
+       NAME                               IN_USE         MAX_ALLOWED
+       total_num_vcpus                    0              240
+       total_num_machines                 0              20
+       cost_per_hour                      0              2
+       machine_disk_size_gb               n/a            20
+       machine_group_idle_minutes         n/a            30
+       machine_group_lifetime_hours       n/a            36
+```
+
+
