@@ -1,6 +1,6 @@
-from inductiva.client.paths.tasks_task_id_input.post import ApiForpost
+from inductiva.client.paths.tasks_task_id_input.put import ApiForput
 
 
 class TasksTaskIdInput(
-        ApiForpost,):
+        ApiForput,):
     pass
