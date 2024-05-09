@@ -6,11 +6,11 @@ from inductiva import constants
 from inductiva.client import exceptions
 from inductiva.client.model.task_status_code import TaskStatusCode
 
-from inductiva.client.paths.tasks_task_id_input.post import ApiResponseFor200
+from inductiva.client.paths.tasks_task_id_input.put import ApiResponseFor200
 
 
 def test_task_kill__string_timeout__typeerror_exception():
-    """ 
+    """
     Check if task.kill returns TypeError when calling
     kill with timeout as a string.
     """
@@ -22,7 +22,7 @@ def test_task_kill__string_timeout__typeerror_exception():
 
 
 def test_task_kill__negative_timeout__valueerror_exception():
-    """ 
+    """
     Check if task.kill returns ValueError when calling
     kill with timeout as a negative number.
     """
