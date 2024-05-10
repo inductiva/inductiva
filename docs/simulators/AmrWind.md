@@ -7,7 +7,7 @@ emphasizes wind-related computations. The solver harnesses the power of the
 AMReX library, which furnishes essential components such as mesh data structures,
 adaptivity features, and linear solvers crucial for tackling the governing equations.
 
-Amr-Wind has been built using OpenMPI 4.1.2We're currently operating on Amr-Wind
+Amr-Wind has been built using OpenMPI 4.1.2. We're currently operating on Amr-Wind
 version 1.4.0 for CPU, with a GPU version slated for release in the near future.
 
 ## Example
