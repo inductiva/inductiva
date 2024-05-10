@@ -1,6 +1,6 @@
 # CaNS
 
-[CaNS](https://github.com/CaNS-World/CaNS)(Canonical Navier-Stokes) is a simulator
+[CaNS](https://github.com/CaNS-World/CaNS) (Canonical Navier-Stokes) is a simulator
 for massively-parallel numerical simulations of fluid flows. It aims at solving
 any fluid flow of an incompressible, Newtonian fluid that can benefit from a
 FFT-based solver for the second-order finite-difference Poisson equation in a 3D
