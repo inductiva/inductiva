@@ -1,6 +1,7 @@
 """Project class"""
 import contextvars
 import logging
+from typing import Optional, Union
 
 import inductiva
 from inductiva.client import ApiException
@@ -14,12 +15,12 @@ _CURRENT_PROJECT = contextvars.ContextVar("current_project", default=None)
 
 
 def get_current_project():
-    """Gets the current project"""
+    """Get the current active project."""
     return _CURRENT_PROJECT.get()
 
 
 class ProjectInfo:
-    """Stores info about the project"""
+    """Stores info about the project."""
 
     def __init__(self, **attrs):
         self.task_by_status = {
@@ -29,7 +30,7 @@ class ProjectInfo:
 
 
 def get_projects():
-    """Fteches all the projects of a given user"""
+    """Gets all the user's projects."""
     try:
         _logger.debug("Trying to get remote projects")
         api = projects_api.ProjectsApi(inductiva.api.get_client())
@@ -42,9 +43,14 @@ def get_projects():
 
 
 class Project:
-    """Projects class.
+    """Projects management class.
  
-    This class manages the cuurent project being used.
+    The Project class allows tasks to be collected under the umbrella
+    of a single container object. All tasks submitted in the context
+    of an opened project will be associated with that project and can
+    be retrieved altogether using the project as a filter. A project
+    can be created and managed declaratively or using a context
+    manager.
  
     Example usage:
  
@@ -57,7 +63,7 @@ class Project:
  
     >>> with inductiva.projects.Project("test_project"):
     >>>    simulator.run(...)
- 
+
     """
 
     def __init__(self, name: str, *, append: bool = False):
@@ -68,6 +74,7 @@ class Project:
         """
         self.append = append
         self._token = None
+        self._tasks = None
 
         model = self._get_model(name)
         if model is None:
@@ -76,6 +83,13 @@ class Project:
 
     @staticmethod
     def from_api_response(model: ProjectModel) -> "Project":
+        """Builds a `Project` object from an API response.
+
+        Args:
+          model: Info about the project. This should be fetched from the
+          backend.
+
+        """
         project = Project.__new__(Project)
         project.append = False
         # pylint: disable=protected-access
@@ -84,7 +98,16 @@ class Project:
         # pylint: enable=protected-access
 
     @staticmethod
-    def _get_model(name) -> ProjectModel:
+    def _get_model(name: str) -> ProjectModel:
+        """Fetches the project info from the backend.
+
+        Args:
+          name: The name of the project
+
+        Returns:
+          Project models object with the info about the project.
+
+        """
         try:
             _logger.debug("Trying to get remote project %s", name)
             api = projects_api.ProjectsApi(inductiva.api.get_client())
@@ -101,6 +124,7 @@ class Project:
 
     @staticmethod
     def _create_model(name):
+        """Creates a project with the given name on the backend."""
         try:
             _logger.debug("Creating remote project %s", name)
             api = projects_api.ProjectsApi(inductiva.api.get_client())
@@ -113,6 +137,7 @@ class Project:
             raise RuntimeError(f"Unable to create project {name}") from ex
 
     def _update_from_api_response(self, model: ProjectModel) -> "Project":
+        """Updates itself with information fetched from the backend."""
         self._info = ProjectInfo(**model.get("task_status_overview"))
         self.created_at = model.get("created_at")
         self.num_tasks = model.get("num_tasks")
@@ -124,7 +149,15 @@ class Project:
     def open(self):
         """Opens the project.
 
-        It does this by setting the context var `_CURRENT_PROJECT`.
+        Open the project and make it the active one in the calling
+        thread. An opened project will ensure that calls to the
+        `get_current_project` function will return this project.
+        Consecutive calls to this method are idempotent.
+
+        Raises:
+            RuntimeError if another opened project exists, i.e.,
+            `get_current_project` returns something other than None.
+
         """
         _logger.debug("Opening project %s", self.name)
         current_project = get_current_project()
@@ -142,7 +175,10 @@ class Project:
     def close(self):
         """Closes the project.
 
-        It does this by reseting the context var `_CURRENT_PROJECT`.
+        Calls to the `get_current_project` will return `None` after
+        the project is closed.  Consecutive calls to this method are
+        idempotent.
+
         """
         if self._token is None:
             return
@@ -157,11 +193,22 @@ class Project:
 
     @property
     def info(self) -> ProjectInfo:
-        """Returns project info"""
+        """Returns project info.
+
+        It makes no requests to the backend. Instead it uses
+        previously stored information. Therefore it can be
+        outdated. For a method that requests the most recent data from
+        the backend use: `get_info`.
+
+        """
         return self._info
 
     def get_info(self) -> ProjectInfo:
-        """Returns and updates project info."""
+        """Returns and updates project info.
+
+        Updates itself with info from the backend.
+
+        """
         name = self.name
         model = self._get_model(name)
         self._update_from_api_response(model)
@@ -176,6 +223,14 @@ class Project:
         summary = "\n".join(
             f"  {k}: {v}" for k, v in self._info.task_by_status.items())
         return header + summary
+
+    def get_tasks(self,
+                  last_n: int = 5,
+                  status: Optional[Union[str, models.TaskStatusCode]] = None):
+        """Fetches the tasks managed by this project from the backend."""
+        return inductiva.tasks.get(last_n=last_n,
+                                   status=status,
+                                   project=self.name)
 
     def __enter__(self):
         self.open()

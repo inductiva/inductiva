@@ -59,11 +59,11 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
     return table
 
 
-def _fetch_tasks_from_api(
-    status: Optional[Union[str, models.TaskStatusCode]] = None,
-    page=1,
-    per_page=10,
-) -> List[Dict]:
+def _fetch_tasks_from_api(status: Optional[Union[str,
+                                                 models.TaskStatusCode]] = None,
+                          page=1,
+                          per_page=10,
+                          project=None) -> List[Dict]:
     """Get information about a user's tasks on the API.
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
@@ -77,6 +77,9 @@ def _fetch_tasks_from_api(
             "page": page,
             "per_page": per_page,
         }
+
+        if project is not None:
+            query_params["project"] = project
 
         if status is not None:
             query_params["status"] = models.TaskStatusCode(status)
@@ -98,10 +101,9 @@ def _fetch_tasks_from_api(
             raise e
 
 
-def get(
-    last_n: int = 5,
-    status: Optional[Union[str, models.TaskStatusCode]] = None
-) -> List["inductiva.tasks.Task"]:
+def get(last_n: int = 5,
+        status: Optional[Union[str, models.TaskStatusCode]] = None,
+        project: str = None) -> List["inductiva.tasks.Task"]:
     """Get the last N tasks of a user.
 
     This function fetches info about the last N tasks (with respect to
@@ -131,6 +133,8 @@ def get(
             aren't enough tasks available.
         status: The status of the tasks to get. If None, tasks with any status
             will be returned.
+        project: The project from which to fetch. If None, fetches from all
+            projects.
 
     Returns:
         List of Task objects.
@@ -140,7 +144,10 @@ def get(
 
     status = models.TaskStatusCode(status) if status is not None else None
 
-    raw_tasks_info = _fetch_tasks_from_api(status, page=1, per_page=last_n)
+    raw_tasks_info = _fetch_tasks_from_api(status,
+                                           page=1,
+                                           per_page=last_n,
+                                           project=project)
     tasks = [
         inductiva.tasks.Task.from_api_info(info) for info in raw_tasks_info
     ]
