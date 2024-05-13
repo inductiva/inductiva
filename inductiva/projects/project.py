@@ -222,7 +222,13 @@ class Project:
                f"{self.num_tasks} tasks (id={self.id})"
 
     def desc(self) -> str:
-        """Returns a string with the project description."""
+        """Generates a string description of the object
+
+        Returns:
+          str: A string descrption of the object. Includes project name,
+            number of tasks and a description of the tasks' status.
+
+        """
         header = str(self) + "\n"
         summary = "\n".join(
             f"  {k}: {v}" for k, v in self._info.task_by_status.items())
