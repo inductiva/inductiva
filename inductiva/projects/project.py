@@ -74,7 +74,6 @@ class Project:
         """
         self.append = append
         self._token = None
-        self._tasks = None
 
         model = self._get_model(name)
         if model is None:
@@ -223,6 +222,7 @@ class Project:
                f"{self.num_tasks} tasks (id={self.id})"
 
     def desc(self) -> str:
+        """Returns a string with the project description."""
         header = str(self) + "\n"
         summary = "\n".join(
             f"  {k}: {v}" for k, v in self._info.task_by_status.items())
