@@ -204,9 +204,13 @@ class Project:
         return self._info
 
     def get_info(self) -> ProjectInfo:
-        """Returns and updates project info.
+        """Get project information.
 
-        Updates itself with info from the backend.
+        Get updated information on the project. This method executes a
+        call to the backend to retrieve the most recent information
+        about this project and stores in internally so that it becomes
+        available through the `Project.info` property.  This method is
+        suitable when up-to-date information is required.
 
         """
         name = self.name
@@ -227,7 +231,18 @@ class Project:
     def get_tasks(self,
                   last_n: int = 5,
                   status: Optional[Union[str, models.TaskStatusCode]] = None):
-        """Fetches the tasks managed by this project from the backend."""
+        """Get the last N submitted tasks to this project.
+
+        Get the last N submitted tasks that belong to this project,
+        eventually filtered by status. By default, only the last 5
+        submitted tasks are returned, irrespectively of their status.
+
+        Args:
+            last_n (int): The number of tasks with repect to the submission
+                time to fectch.
+            status: Status of the tasks to get. If `None`, tasks with any
+                status will be returned.
+        """
         return inductiva.tasks.get(last_n=last_n,
                                    status=status,
                                    project=self.name)
