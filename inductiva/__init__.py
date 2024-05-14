@@ -14,6 +14,7 @@ from . import utils
 from . import tasks
 from . import users
 from . import logs
+from . import projects
 from .templating import TemplateManager
 
 logs.setup()
