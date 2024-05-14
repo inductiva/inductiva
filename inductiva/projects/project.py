@@ -89,8 +89,8 @@ class Project:
             model = self._create_model(name)
         self._update_from_api_response(model)
 
-    @staticmethod
-    def from_api_response(model: ProjectModel) -> "Project":
+    @classmethod
+    def from_api_response(cls, model: ProjectModel) -> "Project":
         """Builds a `Project` object from an API response.
 
         Args:
@@ -98,12 +98,10 @@ class Project:
           backend.
 
         """
-        project = Project.__new__(Project)
+        project = cls.__new__(Project)
         project.append = False
-        # pylint: disable=protected-access
         project._token = None
         return project._update_from_api_response(model)
-        # pylint: enable=protected-access
 
     @staticmethod
     def _get_model(name: str) -> ProjectModel:
