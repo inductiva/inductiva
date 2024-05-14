@@ -30,7 +30,9 @@ def kill_task(args):
     else:
         tasks = []
         for status in inductiva.tasks.Task.KILLABLE_STATUSES:
-            tasks.extend(get_all(status=status))
+            tasks.extend([{
+                "task_id": task.id
+            } for task in get_all(status=status)])
 
     ids = [task["task_id"] for task in tasks]
 
