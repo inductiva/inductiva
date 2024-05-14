@@ -336,11 +336,22 @@ def submit_task(api_instance, method_name, request_params, resource_pool,
     if resource_pool is not None:
         resource_pool_id = resource_pool.id
 
-    task_request = TaskRequest(method=method_name,
-                               params=request_params,
-                               resource_pool=resource_pool_id,
-                               storage_path_prefix=storage_path_prefix,
-                               provider_id=provider_id.value)
+    current_project = inductiva.projects.get_current_project()
+    if current_project is not None:
+        if not current_project.append:
+            raise PermissionError(
+                "Trying to log task to project with `append=False`.")
+        current_project = current_project.name
+
+    task_request = TaskRequest(
+        method=method_name,
+        params=request_params,
+        resource_pool=resource_pool_id,
+        storage_path_prefix=storage_path_prefix,
+        provider_id=provider_id.value,
+        project=current_project,
+    )
+
     task = submit_request(
         api_instance=api_instance,
         request=task_request,
