@@ -15,7 +15,11 @@ _CURRENT_PROJECT = contextvars.ContextVar("current_project", default=None)
 
 
 def get_current_project():
-    """Get the current active project."""
+    """Get the current active project.
+    
+    Returns the currently active project in the calling thread.
+    If no project has been defined, the default project (`None`) will be returned.
+    """
     return _CURRENT_PROJECT.get()
 
 
@@ -67,10 +71,13 @@ class Project:
     """
 
     def __init__(self, name: str, *, append: bool = False):
-        """
+        """Initialize the Project instance.
+        
         Args:
-          name: Name of the project
-          append: If we allow or not new tasks to be logged to the project.
+          name (str): The name of the project.
+          append (bool): A flag indicating that new tasks can be appended to
+              the project. If set to False (default), task submission will fail, even
+              though the project might be opened.
         """
         self.append = append
         self._token = None
@@ -146,7 +153,7 @@ class Project:
         return self
 
     def open(self):
-        """Opens the project.
+        """Open the project.
 
         Open the project and make it the active one in the calling
         thread. An opened project will ensure that calls to the
@@ -172,7 +179,7 @@ class Project:
         self._token = _CURRENT_PROJECT.set(self)
 
     def close(self):
-        """Closes the project.
+        """Close the project.
 
         Calls to the `get_current_project` will return `None` after
         the project is closed.  Consecutive calls to this method are
@@ -207,7 +214,7 @@ class Project:
 
         Get updated information on the project. This method executes a
         call to the backend to retrieve the most recent information
-        about this project and stores in internally so that it becomes
+        about this project and stores it internally so that it becomes
         available through the `Project.info` property.  This method is
         suitable when up-to-date information is required.
 
