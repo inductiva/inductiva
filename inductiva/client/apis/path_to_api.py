@@ -10,7 +10,6 @@ from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
 from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
-from inductiva.client.apis.paths.tasks_task_id_download_output_url import TasksTaskIdDownloadOutputUrl
 from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
@@ -27,6 +26,11 @@ from inductiva.client.apis.paths.admin_providers import AdminProviders
 from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvidersProviderId
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
+from inductiva.client.apis.paths.executer_tracker_id_task import ExecuterTrackerIdTask
+from inductiva.client.apis.paths.executer_tracker_id_task_task_id_ack import ExecuterTrackerIdTaskTaskIdAck
+from inductiva.client.apis.paths.executer_tracker_id_task_task_id_message import ExecuterTrackerIdTaskTaskIdMessage
+from inductiva.client.apis.paths.executer_tracker_id_task_task_id_message_unblock import ExecuterTrackerIdTaskTaskIdMessageUnblock
+from inductiva.client.apis.paths.executer_tracker_id_event import ExecuterTrackerIdEvent
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
@@ -65,8 +69,6 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdStatus,
         PathValues.TASKS_TASK_ID_OUTPUT_LIST:
             TasksTaskIdOutputList,
-        PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
-            TasksTaskIdDownloadOutputUrl,
         PathValues.TASKS_TASK_ID_OUTPUT:
             TasksTaskIdOutput,
         PathValues.TASKS_TASK_ID_KILL:
@@ -99,6 +101,16 @@ PathToApi = typing_extensions.TypedDict(
             AdminActiveTasks,
         PathValues.EXECUTERTRACKER_REGISTER:
             ExecuterTrackerRegister,
+        PathValues.EXECUTERTRACKER_ID_TASK:
+            ExecuterTrackerIdTask,
+        PathValues.EXECUTERTRACKER_ID_TASK_TASK_ID_ACK:
+            ExecuterTrackerIdTaskTaskIdAck,
+        PathValues.EXECUTERTRACKER_ID_TASK_TASK_ID_MESSAGE:
+            ExecuterTrackerIdTaskTaskIdMessage,
+        PathValues.EXECUTERTRACKER_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
+            ExecuterTrackerIdTaskTaskIdMessageUnblock,
+        PathValues.EXECUTERTRACKER_ID_EVENT:
+            ExecuterTrackerIdEvent,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
         PathValues.COMPUTE_TYPE:
@@ -154,8 +166,6 @@ path_to_api = PathToApi({
         TasksTaskIdStatus,
     PathValues.TASKS_TASK_ID_OUTPUT_LIST:
         TasksTaskIdOutputList,
-    PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
-        TasksTaskIdDownloadOutputUrl,
     PathValues.TASKS_TASK_ID_OUTPUT:
         TasksTaskIdOutput,
     PathValues.TASKS_TASK_ID_KILL:
@@ -188,6 +198,16 @@ path_to_api = PathToApi({
         AdminActiveTasks,
     PathValues.EXECUTERTRACKER_REGISTER:
         ExecuterTrackerRegister,
+    PathValues.EXECUTERTRACKER_ID_TASK:
+        ExecuterTrackerIdTask,
+    PathValues.EXECUTERTRACKER_ID_TASK_TASK_ID_ACK:
+        ExecuterTrackerIdTaskTaskIdAck,
+    PathValues.EXECUTERTRACKER_ID_TASK_TASK_ID_MESSAGE:
+        ExecuterTrackerIdTaskTaskIdMessage,
+    PathValues.EXECUTERTRACKER_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
+        ExecuterTrackerIdTaskTaskIdMessageUnblock,
+    PathValues.EXECUTERTRACKER_ID_EVENT:
+        ExecuterTrackerIdEvent,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
     PathValues.COMPUTE_TYPE:
