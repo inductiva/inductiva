@@ -185,4 +185,7 @@ def get_all(
                                                  project=project):
         all_tasks.extend(tasks_fetched)
         page_counter += 1
-    return all_tasks
+
+    tasks = [inductiva.tasks.Task.from_api_info(info) for info in all_tasks]
+
+    return tasks
