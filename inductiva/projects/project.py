@@ -17,8 +17,10 @@ _CURRENT_PROJECT = contextvars.ContextVar("current_project", default=None)
 def get_current_project():
     """Get the current active project.
     
-    Returns the currently active project in the calling thread.
-    If no project has been defined, the default project (`None`) will be returned.
+    Returns the currently active project in the calling thread.  If no
+    project has been defined, the default project (`None`) will be
+    returned.
+
     """
     return _CURRENT_PROJECT.get()
 
@@ -76,8 +78,8 @@ class Project:
         Args:
           name (str): The name of the project.
           append (bool): A flag indicating that new tasks can be appended to
-              the project. If set to False (default), task submission will fail, even
-              though the project might be opened.
+              the project. If set to False (default), task submission will fail,
+              even though the project might be opened.
         """
         self.append = append
         self._token = None
@@ -252,10 +254,13 @@ class Project:
 
         Args:
             last_n (int): The number of tasks with repect to the submission
-                time to fectch.
+                time to fectch. If `last_n<=0` we fetch all tasks submitted
+                to the project.
             status: Status of the tasks to get. If `None`, tasks with any
                 status will be returned.
         """
+        if last_n <= 0:
+            return inductiva.tasks.get_all(status=status, project=self)
         return inductiva.tasks.get(last_n=last_n, status=status, project=self)
 
     def __enter__(self):

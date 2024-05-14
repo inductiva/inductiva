@@ -160,8 +160,9 @@ def get(
 
 
 def get_all(
-        status: Optional[Union[str,
-                               models.TaskStatusCode]] = None) -> List[Dict]:
+    status: Optional[Union[str, models.TaskStatusCode]] = None,
+    project: Union[str, "inductiva.projects.Project"] = None,
+) -> List[Dict]:
     """Get all tasks of a user.
 
     This function fetches all tasks of a user, sorted by submission
@@ -180,7 +181,8 @@ def get_all(
 
     while tasks_fetched := _fetch_tasks_from_api(status,
                                                  page=page_counter,
-                                                 per_page=50):
+                                                 per_page=50,
+                                                 project=project):
         all_tasks.extend(tasks_fetched)
         page_counter += 1
     return all_tasks
