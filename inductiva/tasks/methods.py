@@ -162,7 +162,7 @@ def get(
 def get_all(
     status: Optional[Union[str, models.TaskStatusCode]] = None,
     project: Union[str, "inductiva.projects.Project"] = None,
-) -> List[Dict]:
+) -> List["inductiva.tasks.Task"]:
     """Get all tasks of a user.
 
     This function fetches all tasks of a user, sorted by submission

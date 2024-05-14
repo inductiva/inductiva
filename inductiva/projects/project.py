@@ -244,7 +244,7 @@ class Project:
         return header + summary
 
     def get_tasks(self,
-                  last_n: int = 5,
+                  last_n: int = -1,
                   status: Optional[Union[str, models.TaskStatusCode]] = None):
         """Get the last N submitted tasks to this project.
 
