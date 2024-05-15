@@ -61,8 +61,7 @@ def setup(level=logging.INFO):
 
     logs_file_path = get_logs_file_path()
     logs_file_dir = logs_file_path.parent
-    if not os.path.exists(logs_file_dir):
-        os.mkdir(logs_file_dir)
+    os.makedirs(logs_file_dir, exist_ok=True)
 
     handlers = [
         logging.handlers.RotatingFileHandler(logs_file_path,
