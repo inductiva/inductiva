@@ -3,11 +3,14 @@ import pathlib
 import contextlib
 import time
 import json
+import zipfile
 from absl import logging
 from typing import Dict, Any, List, Optional, Tuple, Union
 from typing_extensions import TypedDict
 import datetime
 from ..localization import translator as __
+import fsspec
+import urllib3
 
 from inductiva import constants
 from inductiva.client import exceptions, models
@@ -379,18 +382,11 @@ class Task:
             rm_downloaded_zip_archive: Whether to remove the archive after
             uncompressing it. If uncompress is False, this argument is ignored.
         """
-        api_response = self._api.download_task_output(
-            path_params=self._get_path_params(),
-            query_params={
-                "filename": filenames or [],
-            },
-            stream=True,
-            skip_deserialization=True,
-        )
-        # use raw urllib3 response instead of the generated client response, to
-        # implement our own download logic (with progress bar, first checking
-        # the size of the file, etc.)
-        response = api_response.response
+        api_response = self._api.get_output_download_url(
+            path_params=self._get_path_params(),)
+
+        download_url = api_response.body["url"]
+        logging.debug("Download URL: %s", download_url)
 
         if output_dir is None:
             output_dir = files.resolve_output_path(self.id)
@@ -402,8 +398,47 @@ class Task:
         output_dir.mkdir(parents=True, exist_ok=True)
 
         zip_path = output_dir.joinpath("output.zip")
-
         logging.info("Downloading simulation outputs to %s.", zip_path)
+
+        if filenames:
+            partial_download_done = False
+
+            try:
+                filesystem = fsspec.filesystem("http")
+
+                with filesystem.open(download_url, "rb") as remote_file:
+                    with zipfile.ZipFile(remote_file) as remote_zip_file:
+                        for filename in filenames:
+                            try:
+                                remote_zip_file.extract(
+                                    filename,
+                                    path=output_dir,
+                                )
+                            except KeyError:
+                                logging.warning(
+                                    "File %s not found in the output archive.",
+                                    filename)
+
+                partial_download_done = True
+
+            except Exception as _:
+                logging.error("Partial download of files failed. Downloading"
+                              "all files instead.")
+
+            if partial_download_done:
+                return output_dir
+
+        # use raw urllib3 response instead of the generated client response, to
+        # implement our own download logic (with progress bar, first checking
+        # the size of the file, etc.)
+        pool_manager: urllib3.PoolManager = (
+            self._api.api_client.rest_client.pool_manager)
+
+        response = pool_manager.request(
+            "GET",
+            download_url,
+            preload_content=False,
+        )
         data.download_file(response, zip_path)
 
         if uncompress:
