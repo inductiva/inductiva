@@ -147,7 +147,7 @@ class Project:
         self._info = ProjectInfo(**model.get("task_status_overview"))
         self.created_at = model.get("created_at")
         self.num_tasks = model.get("num_tasks")
-        self.name = model.get("name")
+        self._name = model.get("name")
         self.id = model.get("id")
 
         return self
@@ -165,7 +165,10 @@ class Project:
             `get_current_project` returns something other than None.
 
         """
-        _logger.debug("Opening project %s", self.name)
+        if not self.append:
+            raise RuntimeError("Trying to open a project with `append=False`.")
+
+        _logger.debug("Opening project %s", self._name)
         current_project = get_current_project()
 
         if current_project is self:
@@ -191,6 +194,10 @@ class Project:
 
         _CURRENT_PROJECT.reset(self._token)
         self._token = None
+
+    @property
+    def name(self) -> str:
+        return self._name
 
     @property
     def opened(self) -> bool:
@@ -219,13 +226,13 @@ class Project:
         suitable when up-to-date information is required.
 
         """
-        name = self.name
+        name = self._name
         model = self._get_model(name)
         self._update_from_api_response(model)
         return self._info
 
     def __str__(self) -> str:
-        return f"Project '{self.name}' with "\
+        return f"Project '{self._name}' with "\
                f"{self.num_tasks} tasks (id={self.id})"
 
     def desc(self) -> str:
