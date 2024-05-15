@@ -421,7 +421,7 @@ class Task:
 
                 partial_download_done = True
 
-            except Exception as _:
+            except Exception as _:  # pylint: disable=broad-except
                 logging.error("Partial download of files failed. Downloading"
                               "all files instead.")
 
