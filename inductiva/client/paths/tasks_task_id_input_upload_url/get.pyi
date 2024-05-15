@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.file_upload_url import FileUploadUrl
+from inductiva.client.model.task_input_upload_url import TaskInputUploadUrl
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Path params
@@ -54,7 +54,7 @@ request_path_task_id = api_client.PathParameter(
     schema=TaskIdSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = FileUploadUrl
+SchemaFor200ResponseBodyApplicationJson = TaskInputUploadUrl
 
 
 @dataclass
