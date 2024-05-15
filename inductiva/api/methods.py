@@ -338,9 +338,8 @@ def submit_task(api_instance, method_name, request_params, resource_pool,
 
     current_project = inductiva.projects.get_current_project()
     if current_project is not None:
-        if not current_project.append:
-            raise PermissionError(
-                "Trying to log task to project with `append=False`.")
+        if not current_project.opened:
+            raise RuntimeError("Trying to submit a task to a closed project.")
         current_project = current_project.name
 
     task_request = TaskRequest(
