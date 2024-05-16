@@ -229,6 +229,7 @@ def download_file(
     response: urllib3.response.HTTPResponse,
     output_path: pathlib.Path,
     chunk_size=1000,
+    download_size=None,
 ) -> None:
     """Download a file from a urllib3 response object.
 
@@ -245,7 +246,8 @@ def download_file(
     # "x-content-length" is a custom header that is set by the API instead
     # of the standard "content-length" header, because the API needs to use
     # "transfer-encoding: chunked" to stream the response.
-    download_size = response.headers.get("x-content-length", 0)
+    if download_size is None:
+        download_size = response.headers.get("x-content-length", 0)
 
     with tqdm(
             total=int(download_size),

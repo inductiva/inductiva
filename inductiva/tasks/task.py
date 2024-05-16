@@ -385,8 +385,21 @@ class Task:
         api_response = self._api.get_output_download_url(
             path_params=self._get_path_params(),)
 
-        download_url = api_response.body["url"]
+        download_url = api_response.body.get("url")
         logging.debug("Download URL: %s", download_url)
+
+        try:
+            remote_filesystem = fsspec.filesystem("http")
+            download_size = remote_filesystem.info(download_url).get("size")
+            logging.debug("Download size: %s", download_size)
+            file_server_available = True
+        except FileNotFoundError:
+            # If the Web API returns a fallback URL instead of a different
+            # file server (GCP, ICE, etc.) the remote_filesystem.info() will
+            # raise an exception. In this case, the output donwload will be
+            # provided by the Web API itself.
+            file_server_available = False
+            download_size = None
 
         if output_dir is None:
             output_dir = files.resolve_output_path(self.id)
@@ -397,16 +410,15 @@ class Task:
             warnings.warn("Path already exists, files may be overwritten.")
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        zip_path = output_dir.joinpath("output.zip")
-        logging.info("Downloading simulation outputs to %s.", zip_path)
+        download_message = "Downloading simulation outputs to {path}"
 
-        if filenames:
+        if filenames and file_server_available:
             partial_download_done = False
 
-            try:
-                filesystem = fsspec.filesystem("http")
+            logging.info(download_message.format(path=str(output_dir)))
 
-                with filesystem.open(download_url, "rb") as remote_file:
+            try:
+                with remote_filesystem.open(download_url, "rb") as remote_file:
                     with zipfile.ZipFile(remote_file) as remote_zip_file:
                         for filename in filenames:
                             try:
@@ -422,27 +434,42 @@ class Task:
                 partial_download_done = True
 
             except Exception as _:  # pylint: disable=broad-except
-                logging.error("Partial download of files failed. Downloading"
+                logging.error("Partial download of files failed. Downloading "
                               "all files instead.")
 
             if partial_download_done:
                 return output_dir
 
+        zip_path = output_dir.joinpath("output.zip")
+        logging.info(download_message.format(path=zip_path))
+
         # use raw urllib3 response instead of the generated client response, to
         # implement our own download logic (with progress bar, first checking
         # the size of the file, etc.)
-        pool_manager: urllib3.PoolManager = (
-            self._api.api_client.rest_client.pool_manager)
+        if file_server_available:
+            pool_manager: urllib3.PoolManager = (
+                self._api.api_client.rest_client.pool_manager)
+            response = pool_manager.request(
+                "GET",
+                download_url,
+                preload_content=False,
+            )
 
-        response = pool_manager.request(
-            "GET",
-            download_url,
-            preload_content=False,
-        )
-        data.download_file(response, zip_path)
+        else:
+            api_response = self._api.download_task_output(
+                path_params=self._get_path_params(),
+                query_params={
+                    "filename": filenames or [],
+                },
+                stream=True,
+                skip_deserialization=True,
+            )
+            response = api_response.response
+
+        data.download_file(response, zip_path, download_size=download_size)
 
         if uncompress:
-            logging.info("Uncompressing the outputs to %s.", output_dir)
+            logging.info("Uncompressing the outputs to %s", output_dir)
             data.uncompress_task_outputs(zip_path, output_dir)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
