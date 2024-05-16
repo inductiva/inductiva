@@ -11,6 +11,7 @@
 from inductiva.client.paths.tasks_task_id_disable_logs.post import DisableTaskLogs
 from inductiva.client.paths.tasks_task_id_output.get import DownloadTaskOutput
 from inductiva.client.paths.tasks_task_id_input_upload_url.get import GetInputUploadUrl
+from inductiva.client.paths.tasks_task_id_download_output_url.get import GetOutputDownloadUrl
 from inductiva.client.paths.tasks_task_id_output_list.get import GetOutputsList
 from inductiva.client.paths.tasks_task_id.get import GetTask
 from inductiva.client.paths.tasks_task_id_status.get import GetTaskStatus
@@ -26,6 +27,7 @@ class TasksApi(
         DisableTaskLogs,
         DownloadTaskOutput,
         GetInputUploadUrl,
+        GetOutputDownloadUrl,
         GetOutputsList,
         GetTask,
         GetTaskStatus,
