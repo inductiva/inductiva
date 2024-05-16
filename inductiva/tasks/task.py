@@ -410,12 +410,12 @@ class Task:
             warnings.warn("Path already exists, files may be overwritten.")
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        download_message = "Downloading simulation outputs to {path}"
+        download_message = "Downloading simulation outputs to %s"
 
         if filenames and file_server_available:
             partial_download_done = False
 
-            logging.info(download_message.format(path=str(output_dir)))
+            logging.info(download_message, output_dir)
 
             try:
                 with remote_filesystem.open(download_url, "rb") as remote_file:
@@ -441,7 +441,7 @@ class Task:
                 return output_dir
 
         zip_path = output_dir.joinpath("output.zip")
-        logging.info(download_message.format(path=zip_path))
+        logging.info(download_message, zip_path)
 
         # use raw urllib3 response instead of the generated client response, to
         # implement our own download logic (with progress bar, first checking
