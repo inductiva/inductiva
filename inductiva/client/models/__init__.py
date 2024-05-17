@@ -18,7 +18,9 @@ from inductiva.client.model.default_machine_group import DefaultMachineGroup
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
 from inductiva.client.model.executer_tracker_register_info import ExecuterTrackerRegisterInfo
+from inductiva.client.model.file_download_url import FileDownloadUrl
 from inductiva.client.model.file_info import FileInfo
+from inductiva.client.model.file_upload_url import FileUploadUrl
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.machine_group_type import MachineGroupType
 from inductiva.client.model.machine_type import MachineType
@@ -30,7 +32,6 @@ from inductiva.client.model.providers import Providers
 from inductiva.client.model.quota import Quota
 from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.task import Task
-from inductiva.client.model.task_input_upload_url import TaskInputUploadUrl
 from inductiva.client.model.task_request import TaskRequest
 from inductiva.client.model.task_status import TaskStatus
 from inductiva.client.model.task_status_code import TaskStatusCode
