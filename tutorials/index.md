@@ -18,7 +18,7 @@ read this tutorial.
    <img width="75%"
     src="../_static/infographic-apifunctionality-fullscreen.svg"
     alt="Inductiva API Usage Flow">
-<\br>
+</br>
 </div>
 
 * [**Generating Synthetic Data for training Physics-ML models**](generating-synthetic-data/synthetic-data-generation-1.md).
