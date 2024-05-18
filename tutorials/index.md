@@ -14,6 +14,12 @@ the API works, explaining key concepts and how different components
 play together. If you never used the API before, we recommend you
 read this tutorial.
 
+<div align="center">
+   <img width="50%"
+    src="../_static/infographic-apifunctionality-fullscreen.svg"
+    alt="Inductiva API Usage Flow">
+</div>
+
 * [Generating Synthetic Data for training Physics-ML models](generating-synthetic-data/synthetic-data-generation-1.md).
 Synthetic data allows us to train Physics-ML models when you don't
 have enough observational data, which often happens in many practical
@@ -24,6 +30,12 @@ while respecting the underlying physical laws. This tutorial series
 will walk you through the process of using the Inductiva API for
 generating one of such synthetic training dataset to enable your ML
 models to learn complex fluid dynamics.
+
+<div style="display: flex; justify-content:center">
+<video width=250 loop muted autoplay preload="auto">
+<source src="../_static/generating-synthetic-data/dambreak.mp4" type="video/mp4">
+</video>
+</div>
 
 ```{toctree}
 ---
