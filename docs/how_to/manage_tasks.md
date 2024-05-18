@@ -15,8 +15,9 @@ In this section, we will cover the following topics:
 The `Task` class provides mechanisms to track and manage the status of a task.
 With a `Task` object at hand, the user can:
  * Get the status, i.e., whether the task is started, succeeded, failed, etc
- (see the section about [task lifecycle](../explore_api/tasks.md#task-lifecycle)
- for more details);
+ (for more details, see section about
+[task lifecycle](https://tutorials.staging.inductiva.ai/intro_to_api/tasks.html#task-lifecycle)
+on our tutorial);
  * Get the machine type where it ran/is running;
  * Get the execution time.
 
