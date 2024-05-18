@@ -33,8 +33,8 @@ Once started, simulations can be submitted to the queue of the elastic machine g
 
 To explore our elastic machine group, we will follow the example of 
 [running multiple simulations in parallel](./run-parallel_simulations.md), based on the 
-[templating mechanism](../explore_api/templating.md) built in the Inductiva API, but
-now with a scalable infrastructure.
+[templating mechanism](https://tutorials.staging.inductiva.ai/intro_to_api/templating.html)
+built in the Inductiva API, but now with a scalable infrastructure.
 
 ```python
 import inductiva
@@ -163,7 +163,8 @@ Active Resources:
 The elastic machine group plays the trade-off between the idle time of resources and 
 the queue time of the simulations without extra configuration by the user. 
 
-At the end, there will always be the number of `min_machines` active, therefore, don't forget to terminate your resources with:
+At the end, there will always be the number of `min_machines` active,
+therefore, don't forget to terminate your resources with:
 ```bash
 $ inductiva resources terminate --all -y
 ```
