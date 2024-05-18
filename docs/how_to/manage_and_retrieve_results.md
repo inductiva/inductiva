@@ -12,7 +12,7 @@ will cover the following topics:
    of a task and control where the files are downloaded to.
 
 Most of the topics that follow rely on the `Task` class. Please refer to the
-[section about Tasks on our tutorials](https://tutorials.staging.inductiva.ai/intro_to_api/tasks.html)
+[section about Tasks on our tutorials](https://tutorials.inductiva.ai/intro_to_api/tasks.html)
 for more information about it.
 
 ## Saving simulation outputs

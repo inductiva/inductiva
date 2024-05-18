@@ -16,7 +16,7 @@ with each other and can read/write to the shared disk storage.
 
 In the following example, we run a SWASH simulation in an MPICluster. Recall, that
 the same simulation took 9m37s to complete on a
-[single machine of `c2-standard-30`](https://tutorials.staging.inductiva.ai/intro_to_api/shared_dedicated_resources.html#swash-on-dedicated-resources):
+[single machine of `c2-standard-30`](https://tutorials.inductiva.ai/intro_to_api/shared_dedicated_resources.html#swash-on-dedicated-resources):
 
 ```python
 import inductiva

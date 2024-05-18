@@ -81,7 +81,7 @@ such as [Paraview](https://www.paraview.org/download/).
 
 ## What to read next
 
-Learn about the [shared and dedicated resources](https://tutorials.staging.inductiva.ai/intro_to_api/shared_dedicated_resources.html) 
+Learn about the [shared and dedicated resources](https://tutorials.inductiva.ai/intro_to_api/shared_dedicated_resources.html) 
 you can use for running your simulations through the Inductiva API, and explore 
 the available hardware options to enhance your project's performance.
 
