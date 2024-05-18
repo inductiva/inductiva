@@ -14,19 +14,6 @@ get_started/first_example
 
 ```{toctree}
 ---
-caption: Command Line Interface (CLI)
-maxdepth: 1
-hidden: true
----
-cli/cli-overview
-cli/managing-resources
-cli/tracking-tasks
-cli/streaming-logs
-cli/access-storage
-```
-
-```{toctree}
----
 caption: Quick Recipes
 maxdepth: 1
 hidden: true
@@ -43,24 +30,38 @@ how_to/manage_and_retrieve_results
 
 ```{toctree}
 ---
+caption: Command Line Interface (CLI)
+maxdepth: 1
+hidden: true
+---
+cli/cli-overview
+cli/managing-resources
+cli/tracking-tasks
+cli/streaming-logs
+cli/access-storage
+```
+
+
+```{toctree}
+---
 caption: Built-in Simulators
 maxdepth: 1
 hidden: true
 ---
 simulators/overview
+simulators/AmrWind
+simulators/CaNS
 simulators/DualSPHysics
-simulators/SPlisHSPlasH
+simulators/FDS
+simulators/GROMACS
 simulators/OpenFOAM
 simulators/OpenFAST
-simulators/GROMACS
-simulators/AmrWind
 simulators/Reef3D
-simulators/XBeach
 simulators/SCHISM
-simulators/SWASH
-simulators/CaNS
+simulators/SPlisHSPlasH
 simulators/SWAN
-simulators/FDS
+simulators/SWASH
+simulators/XBeach
 ```
 
 ```{toctree}
