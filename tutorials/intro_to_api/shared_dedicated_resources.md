@@ -10,7 +10,8 @@ the two resources using a SWASH simulation.
 
 By default, when you submit simulation tasks via the Inductiva API, they are queued 
 and dispatched to a shared pool of workers on designated Virtual Machines (VMs) 
-serving multiple users, primarily utilizing resources from the [Google Cloud Provider (GCP)](https://cloud.google.com/compute/docs/machine-resource). 
+serving multiple users, primarily utilizing resources from the
+[Google Cloud Provider (GCP)](https://cloud.google.com/compute/docs/machine-resource). 
 Looking ahead, future versions will also support Inductiva's own computational platform.
 
 These VMs are specifically allocated to facilitate easy API testing and to handle light 
@@ -31,14 +32,14 @@ reserved for your use and not shared with others.
 In this option, there are three types of dedicated computational resources you can
 launch for your simulations:
 
-- [**Machine Group**](../api_reference/computational_resources/machinegroup_class.md): 
+- [**Machine Group**](https://docs.inductiva.ai/en/latest/api_reference/computational_resources/machinegroup_class.html): 
 This consists of homogeneous machines designed to operate individually, enabling 
 the distribution of multiple simulations across different machines for parallel processing.
-- [**Elastic Machine Group**](../api_reference/computational_resources/elasticgroup_class.md): 
+- [**Elastic Machine Group**](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/elasticgroup_class.html): 
 Similar to Machine Group, these also consist of individual machines. The key difference here is the 
 elastic scaling feature, which dynamically adjusts the number of machines based 
 on simulation demands, ensuring efficient resource utilization.
-- [**MPI Cluster**](../api_reference/computational_resources/mpicluster_class.md) 
+- [**MPI Cluster**](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/mpicluster_class.html) 
 This setup involves a network of machines configured to work in tandem on a single 
 simulation task, distributing the workload across multiple CPUs. This is particularly 
 useful for complex simulations that exceed the capabilities of a single machine.
@@ -47,7 +48,7 @@ useful for complex simulations that exceed the capabilities of a single machine.
 
 To illustrate the performance differences between running simulations on a shared 
 pool of resources and on dedicated resources using the Inductiva API, we will run 
-[SWASH](../simulators/SWASH.md) as an example.
+[SWASH](https://docs.inductiva.ai/en/latest/simulators/SWASH.html) as an example.
 
 ### SWASH on Shared Resources
 
@@ -110,8 +111,4 @@ and by contrasting the two resource options above, running the simulation on a
 [dedicated machine group](#dedicated-resources) with a `c2-standard-30` machine
 took **9 minutes and 37s** to complete, which is **2.68 times less** than on the 
 [shared pool](#shared-resources). 
-
-
-
-
 

@@ -1,6 +1,7 @@
 # Run your First Simulation
 
-In this first example, you will use the open-source [hydrodynamics REEF3D simulator](https://github.com/REEF3D/REEF3D) to
+In this first example, you will use the open-source
+[hydrodynamics REEF3D simulator](https://github.com/REEF3D/REEF3D) to
 simulate a **2D dam break scenario**. This involves a block of fluid released to 
 flow under the influence of gravity, as shown in the video below. As the simulation
 progresses, you'll find that running simulations through the Inductiva API is not 
@@ -17,8 +18,9 @@ the following steps:
 1. **Prepare and gather all the necessary configuration files for the simulation 
 into one input folder**. To simplify our example, we will provide you with an input folder 
 containing all the necessary configuration files for the dam break simulation, 
-slightly modified from the original REEF3D tutorials found on their [GitHub repository](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/10_1%202D%20Dam%20Break) to reduce
-the simulation run time;
+slightly modified from the original REEF3D tutorials found on their
+[GitHub repository](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/10_1%202D%20Dam%20Break)
+to reduce the simulation run time;
 
 2. **Instantiate a simulator object that identifies the simulator you want to use**, 
 here exemplified by instantiating a REEF3D simulator object;
@@ -79,11 +81,11 @@ such as [Paraview](https://www.paraview.org/download/).
 
 ## What to read next
 
-Learn about the [shared and dedicated resources](../explore_api/shared_dedicated_resources.md) 
+Learn about the [shared and dedicated resources](https://tutorials.staging.inductiva.ai/intro_to_api/shared_dedicated_resources.html) 
 you can use for running your simulations through the Inductiva API, and explore 
-the available hardware options to enhance
-your project's performance.
+the available hardware options to enhance your project's performance.
 
-If you're looking for inspiration, learn how a group of coastal engineering researchers 
-at the University of Porto's Faculty of Engineering have [used the Inductiva API to simulate the most optimal breakwater](https://inductiva.ai/blog/article/scaling-coastal-engineering-projects-inductiva-api) 
+If you're looking for inspiration, learn how a group of coastal engineering
+researchers at the University of Porto's Faculty of Engineering have
+[used the Inductiva API to simulate the most optimal breakwater](https://inductiva.ai/blog/article/scaling-coastal-engineering-projects-inductiva-api) 
 to protect some of Portugal's most endangered coastlines.

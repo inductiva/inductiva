@@ -28,7 +28,7 @@ returns the results back to you.
 
 ## Available Computational Resources
 
-In the current release, version 0.5, Inductiva supports dispatching computational 
+In the current release, version 0.7, Inductiva supports dispatching computational 
 workloads to the Google Cloud Platform (GCP). This means that the simulations initiated 
 through our API are executed on one or more virtual machines (VMs) hosted on GCP.
 
@@ -57,7 +57,11 @@ ratio:
 - **standard** -  Provides a balanced 4 GB of RAM per vCPU, ideal for general-purpose use.
 - **highmem** - Equipped with 8 GB of RAM per vCPU, designed for memory-intensive applications.
 
-These configurations allow for the customization of [MachineGroups](../api_reference/computational_resources/machinegroup_class.md), [ElasticMachineGroups](../api_reference/computational_resources/elasticgroup_class.md), and [MPIClusters](../api_reference/computational_resources/mpicluster_class.md) to match your computational needs.
+These configurations allow for the customization of
+[MachineGroups](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/machinegroup_class.html),
+[ElasticMachineGroups](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/elasticgroup_class.html),
+and [MPIClusters](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/mpicluster_class.html)
+to match your computational needs.
 
 Here's an example of how you can start a MachineGroup with robust "**c3d-standard-60**" 
 general machines:
@@ -78,12 +82,14 @@ Naturally, the cost associated with each machine type varies, and it’s possibl
 to accrue significant expenses if a large number of VMs are initiated! To protect 
 you from inadvertently spinning up too many resources, the API imposes certain 
 limitations on the quantity and types of machines that you can launch. For details 
-on these limitations, please consult the [User Quotas](../api_reference/user_quotas.md) 
+on these limitations, please consult the
+[User Quotas](http://docs.inductiva.ai/en/latest/api_reference/user_quotas.html) 
 we put in place through the current version of the API.
 
 ````{eval-rst}
 .. seealso::
-   Learn how to manage your computational resources through `Inductiva's Command Line Interface <../cli/cli-overview.html>`_
+   Learn how to manage your computational resources through
+   `Inductiva's Command Line Interface <http://docs.inductiva.ai/en/latest/cli/cli-overview.html>`_
 ````  
 
 ## Upcoming Computational Resources

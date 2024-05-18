@@ -9,7 +9,7 @@ myst:
 
 In this step, we'll expand upon our simple "base case" and **generalize the simulation script**
 to be able to programmatically set the physical parameters of the simulation.
-We will achieve this through using Inductiva's own [Templating Engine](https://docs.inductiva.ai/en/latest/explore_api/templating.html).
+We will achieve this through using Inductiva's own [Templating Engine](https://tutorials.staging.inductiva.ai/intro_to_api/templating.html).
 
 ## What is Templating?
 

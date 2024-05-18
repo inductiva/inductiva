@@ -1,10 +1,10 @@
 # Configuring Simulators
 
-Open-source simulation software lies at the heart of the Indutiva API. From its
-inception, the main goal of the API has been to empower scientists and engineers
-to take full advantage of state-of-the-art open-source simulation packages, in a
-way that minimizes installation issues and leverages the vast computational power
-that is currently available in the Cloud. 
+Open-source simulation software lies at the heart of the Indutiva API.
+From its inception, the main goal of the API has been to empower scientists
+and engineers to take full advantage of state-of-the-art open-source
+simulation packages, in a way that minimizes installation issues and leverages
+the vast computational power that is currently available in the Cloud. 
 
 At a high level, a significant amount of what we do at Inductiva is to wrap existing 
 open-source software packages around a few layers that enable them to execute on
@@ -77,9 +77,10 @@ task = splishsplash_simulator.run(input_dir=input_dir,
                                   sim_config_filename="config.json")
 ```
 
-As you can see, besides the input directory we pass one additional parameter to
-the `run()` method: `sim_config_filename`. This refers to the main configuration
-file that the simulator executable expects and for which there is no standard name is expected.
+As you can see, besides the input directory we pass one additional
+parameter to the `run()` method: `sim_config_filename`. This refers
+to the main configuration file that the simulator executable expects
+and for which there is no standard name is expected.
 
 (a-slightly-more-complex-case)=
 ## A slightly more complex case
@@ -89,8 +90,8 @@ but they are always the same and applied in sequence. In these cases, we
 automatically run both executables together giving the appearance that what is 
 being run is a single one. 
 
-An example of this is the REEF3D simulator where the meshing and the simulation step
-are run in sequence as a response to a single API command. Below is the
+An example of this is the REEF3D simulator where the meshing and the simulation
+step are run in sequence as a response to a single API command. Below is the
 call to the REEF3D simulator that only requires passing the input directory
 with the configuration files for both commands.
 
@@ -163,12 +164,14 @@ commands = [
 task = openfoam_simulator.run(input_dir=input_dir, commands=commands)
 ```
 
-For this case, the `commands` follow the usual approach used by OpenFOAM with the 
-`runApplication` and `runParallel` prefix, before stating the executable, to indicate if the steps are to be run in parallel or not. All the input files required
-by each command are set in the input directory. To run the simulation, all
-`OpenFOAM` needs is a pointer to the input directory and the commands.
+For this case, the `commands` follow the usual approach used by OpenFOAM
+with the `runApplication` and `runParallel` prefix, before stating the
+executable, to indicate if the steps are to be run in parallel or not.
+All the input files required by each command are set in the input directory.
+To run the simulation, all `OpenFOAM` needs is a pointer to the input directory
+and the commands.
 
 ## What to Read Next
 
-Explore the [available open source simulators](../simulators/overview.md) built 
-into our API.
+Explore the [available open source simulators](https://docs.inductiva.ai/en/latest/simulators/overview.html)
+built into our API.
