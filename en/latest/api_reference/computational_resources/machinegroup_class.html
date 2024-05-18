@@ -20,10 +20,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://docs.inductiva.ai/api_reference/computational_resources/machinegroup_class.html" />
 <meta property="og:site_name" content="Inductiva.ai Docs" />
-<meta property="og:description" content="A Machine group is a pool of homogeneous machines that work individually and do not communicate with each other in any way. Hence, launching a machine group allows the creation of a private queue t..." />
+<meta property="og:description" content="A Machine group is a pool of homogeneous machines that work individually and which do not communicate with each other in any way. Launching a machine group allows the creation of a private queue th..." />
 <meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
 <meta property="og:image:alt" content="Inductiva.ai Docs" />
-<meta name="description" content="A Machine group is a pool of homogeneous machines that work individually and do not communicate with each other in any way. Hence, launching a machine group allows the creation of a private queue t..." />
+<meta name="description" content="A Machine group is a pool of homogeneous machines that work individually and which do not communicate with each other in any way. Launching a machine group allows the creation of a private queue th..." />
 
     <title>MachineGroup Class &#8212; Inductiva API Python client  documentation</title>
   
@@ -185,25 +185,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../get_started/installation.html">Quickstart Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../get_started/first_example.html">Run your First Simulation</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Explore the API</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../explore_api/how_it_works.html">How it works</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../explore_api/tasks.html">Tasks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../explore_api/shared_dedicated_resources.html">Shared and Dedicated Resources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../explore_api/data_flow.html">Storage and Data Flow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../explore_api/computational-infrastructure.html">Computational Infrastructure</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../explore_api/templating.html">Templating Manager</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../explore_api/configuring-simulators.html">Configuring Simulators</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../cli/cli-overview.html">CLI Overview and Functionalities</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../cli/managing-resources.html">Manage your Computational Resources</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../cli/tracking-tasks.html">Track your Tasks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../cli/streaming-logs.html">Stream Logs of a Task</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../cli/access-storage.html">Access your Remote Storage</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">How-To Guides</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Quick Recipes</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../how_to/run-parallel_simulations.html">Run Multiple Simulations in Parallel</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../how_to/manage_computational_resources.html">Manage Computational Resources</a></li>
@@ -213,22 +195,30 @@
 <li class="toctree-l1"><a class="reference internal" href="../../how_to/manage_tasks.html">Manage Tasks</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../how_to/manage_and_retrieve_results.html">Manage and Retrieve Results</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../cli/cli-overview.html">CLI Overview and Functionalities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/managing-resources.html">Manage your Computational Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/tracking-tasks.html">Track your Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/streaming-logs.html">Stream Logs of a Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../cli/access-storage.html">Access your Remote Storage</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Built-in Simulators</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../simulators/overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulators/AmrWind.html">Amr-Wind</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulators/CaNS.html">CaNS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../simulators/DualSPHysics.html">DualSPHysics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../simulators/SPlisHSPlasH.html">SPlisHSPlasH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulators/FDS.html">FDS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulators/GROMACS.html">GROMACS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../simulators/OpenFOAM.html">OpenFOAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../simulators/OpenFAST.html">OpenFAST</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../simulators/GROMACS.html">GROMACS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../simulators/AmrWind.html">Amr-Wind</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../simulators/Reef3D.html">Reef3D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../simulators/XBeach.html">XBeach</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../simulators/SCHISM.html">SCHISM</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../simulators/SWASH.html">SWASH</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../simulators/CaNS.html">CaNS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulators/SPlisHSPlasH.html">SPlisHSPlasH</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../simulators/SWAN.html">SWAN</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../simulators/FDS.html">FDS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulators/SWASH.html">SWASH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../simulators/XBeach.html">XBeach</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User Reference</span></p>
 <ul class="current nav bd-sidenav">
@@ -406,21 +396,24 @@ document.write(`
                   
   <section id="machinegroup-class">
 <h1><code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> Class<a class="headerlink" href="#machinegroup-class" title="Permalink to this heading">#</a></h1>
-<p>A Machine group is a pool of homogeneous machines that work individually and do
-not communicate with each other in any way. Hence, launching a machine group
+<p>A Machine group is a pool of homogeneous machines that work individually and
+which do not communicate with each other in any way. Launching a machine group
 allows the creation of a private queue that only receives the tasks you specifically
 send to them. Then, the machines can pick simulations from the queue, which allows
 to run multiple simulations in parallel and speeds up the exploration of a design space.</p>
 <p>To instantiate a <code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> object the following parameters can be configured:</p>
 <ul class="simple">
 <li><p>the <code class="docutils literal notranslate"><span class="pre">machine_type</span></code> defines the type of CPU used for each machine. This parameter
-follows the naming convention set by <a class="reference external" href="https://cloud.google.com/compute/docs/machine-types" target="_blank">Google Cloud</a>,
+follows the naming convention set by
+<a class="reference external" href="https://cloud.google.com/compute/docs/machine-types" target="_blank">Google Cloud</a>,
 e.g., <code class="docutils literal notranslate"><span class="pre">c2-standard-16</span></code>. This convention is composed of a prefix that defines the
-CPU series, a suffix that sets the number of <a class="reference external" href="https://cloud.google.com/compute/docs/cpu-platforms" target="_blank">virtual CPUs (vCPU)</a>
+CPU series, a suffix that sets the number of
+<a class="reference external" href="https://cloud.google.com/compute/docs/cpu-platforms" target="_blank">virtual CPUs (vCPU)</a>
 per machine and the middle word refers to the level of RAM per vCPU. In the example,
 <code class="docutils literal notranslate"><span class="pre">c2</span></code> refers to an Intel Xeon Scalable processor of 2nd generation, <code class="docutils literal notranslate"><span class="pre">standard</span></code>
 means 4 GB of RAM per vCPU and will contain <code class="docutils literal notranslate"><span class="pre">16</span></code> vCPUs.
-Currently, this is the <a class="reference internal" href="../../explore_api/computational-infrastructure.html"><span class="std std-doc">list of available machine types available via the API</span></a>.</p></li>
+Currently, this is the
+<a class="reference external" href="https://tutorials.staging.inductiva.ai/intro_to_api/computational-infrastructure.html#available-computational-resources" target="_blank">list of available machine types available via the API</a>.</p></li>
 <li><p>the <code class="docutils literal notranslate"><span class="pre">num_machines</span></code> sets the number of machines available in the computational
 resource. While the computational resource is active, these machines will be reserved
 for the user.</p></li>
@@ -441,18 +434,22 @@ stopped, the simulation is resubmitted to the queue of the machine group again.<
     <span class="n">spot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Creating an instance of <code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> does not start the machines. This only registers
-the configuration on the API which can now be used to manage it further.</p>
+<p>Creating an instance of <code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> does not start the machines.
+This only registers the configuration on the API, which can now be used
+to manage it further.</p>
 <section id="managing-the-machinegroup">
 <h2>Managing the MachineGroup<a class="headerlink" href="#managing-the-machinegroup" title="Permalink to this heading">#</a></h2>
 <p>With your <code class="docutils literal notranslate"><span class="pre">machine_group</span></code> object ready, starting all of the machines at the same
 time is as simple as calling <code class="docutils literal notranslate"><span class="pre">machine_group.start()</span></code>.</p>
 <p>Within a few minutes, the machines will be set up and ready to pick several
-simulations simultaneously. At any moment, you can check an estimate of the price per
-hour of the group with <code class="docutils literal notranslate"><span class="pre">machine_group.estimate_cloud_cost()</span></code> and when you have finished
-you can terminate it with <code class="docutils literal notranslate"><span class="pre">machine_group.terminate()</span></code>. Running simulations will be killed and from this point, the <code class="docutils literal notranslate"><span class="pre">machine_group</span></code> object cannot be re-used.</p>
+simulations simultaneously. At any moment, you can check an estimate of the
+price per hour of the group with <code class="docutils literal notranslate"><span class="pre">machine_group.estimate_cloud_cost()</span></code> and
+when you have finished you can terminate it with <code class="docutils literal notranslate"><span class="pre">machine_group.terminate()</span></code>.
+Running simulations will be killed and from this point, the <code class="docutils literal notranslate"><span class="pre">machine_group</span></code>
+object cannot be re-used.</p>
 <p>To simplify the workflow, the last two functions can also be performed via the CLI.</p>
-<p>First, you can check the cost of the group by selecting the machine type and the number of machines you wish to use:</p>
+<p>First, you can check the cost of the group by selecting the machine
+type and the number of machines you wish to use:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>resources<span class="w"> </span>cost<span class="w"> </span>c2-standard-4<span class="w"> </span>-n<span class="w"> </span><span class="m">4</span>
 Estimated<span class="w"> </span>total<span class="w"> </span>cost<span class="w"> </span><span class="o">(</span>per<span class="w"> </span>machine<span class="o">)</span>:<span class="w"> </span><span class="m">0</span>.919<span class="w"> </span><span class="o">(</span><span class="m">0</span>.230<span class="o">)</span><span class="w"> </span>$/h.
 </pre></div>

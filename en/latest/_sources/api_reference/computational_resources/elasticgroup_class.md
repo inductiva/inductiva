@@ -13,13 +13,16 @@ cost-effective strategy since machines won't stay idle for long.
 ## Instantiating an `ElasticMachineGroup` object
 To create an elastic machine group the following properties can be configured:
 - the `machine_type` defines the type of CPU used for each machine. This parameter
-follows the naming convention set by [Google Cloud](https://cloud.google.com/compute/docs/machine-types),
+follows the naming convention set by
+[Google Cloud](https://cloud.google.com/compute/docs/machine-types),
 e.g., `c2-standard-16`. This convention is composed of a prefix that defines the
-CPU series, a suffix that sets the number of [virtual CPUs (vCPU)](https://cloud.google.com/compute/docs/cpu-platforms)
+CPU series, a suffix that sets the number of
+[virtual CPUs (vCPU)](https://cloud.google.com/compute/docs/cpu-platforms)
 per machine and the middle word refers to the level of RAM per vCPU. In the example,
 `c2` refers to an Intel Xeon Scalable processor of 2nd generation, `standard`
 means 4 GB of RAM per vCPU and will contain `16` vCPUs.
-Currently, this is the [list of available machine types available via the API.](../../explore_api/computational-infrastructure.md)
+Currently, this is the
+[list of available machine types available via the API.](https://tutorials.staging.inductiva.ai/intro_to_api/computational-infrastructure.html#available-computational-resources)
 - the `min_machines`, `max_machines` sets the number of minimum and maximum machines 
 available in the computational resource. That is, the number of active machines will
 never go lower than the minimum and never above the maximum. During runtime, there
@@ -64,8 +67,10 @@ At any moment, you can check an estimate of the price per hour of the group as f
 elastic_machine_group.estimate_cloud_cost()
 ```
 
-When you have finished you can terminate it with `elastic_machine_group.terminate()` or via the CLI with `$ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc`.
+When you have finished you can terminate it with `elastic_machine_group.terminate()`
+or via the CLI with `$ inductiva resources terminate api-agn23rtnv0qnfn03nv93nc`.
 
-Running simulations will be killed and from this point, the `elastic_machine_group` object cannot be re-used.
+Running simulations will be killed and from this point, the `elastic_machine_group`
+object cannot be re-used.
 
 Elastic Machine Group on demand without any hassle.
