@@ -1,12 +1,18 @@
 # Welcome to the Inductiva API Tutorials
 
-Here you will find in-depth guides explaining the inner working of the Inductiva API,
-as well as how to use it for achieving certain pratical goals. These tutorials add to
-the information snippets available in the
-[official API documentation](https://docs.inductiva.ai/en/latest/)
+Here you will find in-depth guides explaining the inner workings
+of the Inductiva API,as well as how to use it for achieving certain
+pratical goals. These tutorials add to the information snippets
+available in the [official API documentation](https://docs.inductiva.ai/en/latest/)
 by providing more detailed step-by-step explanations and instructions.
 
 ## Available Tutorials
+
+* [Introduction to Inductiva API](intro_to_api/how_it_works.md).
+In this tutorial, we will give you a comprehensive overview of how
+the API works, explaining key concepts and how different components
+play together. If you never used the API before, we recommend you
+read this tutorial.
 
 * [Generating Synthetic Data for training Physics-ML models](generating-synthetic-data/synthetic-data-generation-1.md).
 Synthetic data allows us to train Physics-ML models when you don't
