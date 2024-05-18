@@ -14,22 +14,6 @@ get_started/first_example
 
 ```{toctree}
 ---
-caption: Explore the API
-maxdepth: 1
-hidden: true
----
-explore_api/how_it_works
-explore_api/tasks
-explore_api/shared_dedicated_resources
-explore_api/data_flow
-explore_api/computational-infrastructure
-explore_api/templating
-explore_api/configuring-simulators
-
-```
-
-```{toctree}
----
 caption: Command Line Interface (CLI)
 maxdepth: 1
 hidden: true
@@ -43,7 +27,7 @@ cli/access-storage
 
 ```{toctree}
 ---
-caption: How-To Guides
+caption: Quick Recipes
 maxdepth: 1
 hidden: true
 ---
