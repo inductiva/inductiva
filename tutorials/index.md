@@ -8,19 +8,20 @@ by providing more detailed step-by-step explanations and instructions.
 
 ## Available Tutorials
 
-* [Introduction to Inductiva API](intro_to_api/how_it_works.md).
+* [**Introduction to Inductiva API**](intro_to_api/how_it_works.md).
 In this tutorial, we will give you a comprehensive overview of how
 the API works, explaining key concepts and how different components
 play together. If you never used the API before, we recommend you
 read this tutorial.
 
 <div align="center">
-   <img width="50%"
+   <img width="75%"
     src="../_static/infographic-apifunctionality-fullscreen.svg"
     alt="Inductiva API Usage Flow">
+<\br>
 </div>
 
-* [Generating Synthetic Data for training Physics-ML models](generating-synthetic-data/synthetic-data-generation-1.md).
+* [**Generating Synthetic Data for training Physics-ML models**](generating-synthetic-data/synthetic-data-generation-1.md).
 Synthetic data allows us to train Physics-ML models when you don't
 have enough observational data, which often happens in many practical
 scenarios. In those cases, we can use physical simulators to mimic
