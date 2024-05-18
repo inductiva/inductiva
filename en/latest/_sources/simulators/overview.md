@@ -4,11 +4,11 @@ Inductiva API has available several open-source simulators ready to use. Users
 who are familiar with the simulators can easily start running simulations with 
 their previously prepared simulation configuration files. 
 
-As described in our [Tutorial](https://tutorials.staging.inductiva.ai/intro_to_api/configuring-simulators.html)
+As described in our [Tutorial](https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html)
 typical usage patterns involve:
-- [Single executable simulator;](https://tutorials.staging.inductiva.ai/intro_to_api/configuring-simulators.html#the-simple-cases)
-- [Pre-defined executables running in sequence;](https://tutorials.staging.inductiva.ai/intro_to_api/configuring-simulators.html#a-slightly-more-complex-case)
-- [Choose the executables as wished to run in sequence.](https://tutorials.staging.inductiva.ai/intro_to_api/configuring-simulators.html#running-long-simulation-pipelines)
+- [Single executable simulator;](https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html#the-simple-cases)
+- [Pre-defined executables running in sequence;](https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html#a-slightly-more-complex-case)
+- [Choose the executables as wished to run in sequence.](https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html#running-long-simulation-pipelines)
 
 The simulators available in the current version of the API (0.7) are:
 - [Amr-Wind](../simulators/AmrWind.md)
