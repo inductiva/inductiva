@@ -38,7 +38,7 @@ based on the number of cores available in the machine.
 
 **General Arguments:**
 - `on`: set the machines where the simulations will run. Check
-[here](https://tutorials.staging.inductiva.ai/intro_to_api/computational-infrastructure.html#available-computational-resources) 
+[here](https://tutorials.inductiva.ai/intro_to_api/computational-infrastructure.html#available-computational-resources) 
 for further detail. If not selected the simulations will be picked-up by a default 
 pool shared by everyone.
 - `storage_dir`: set the directory where the output files will be stored in the 
@@ -46,7 +46,7 @@ cloud. If not selected the output files will be stored in a folder named with th
 task id of the simulation.
 
 For further information on handling the task of the simulation see
-[here](https://tutorials.staging.inductiva.ai/intro_to_api/tasks.html).
+[here](https://tutorials.inductiva.ai/intro_to_api/tasks.html).
 
 ## Example
 
