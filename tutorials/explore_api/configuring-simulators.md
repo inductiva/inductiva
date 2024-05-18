@@ -170,5 +170,5 @@ by each command are set in the input directory. To run the simulation, all
 
 ## What to Read Next
 
-Explore the [available open source simulators](../simulators/overview.md) built 
+Explore the [available open source simulators](http://docs.inductiva.ai/simulators/overview.md) built 
 into our API.
