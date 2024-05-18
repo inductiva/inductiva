@@ -8,17 +8,17 @@ Here you will find in-depth guides explaining how to use the Inductiva API. Thes
 
 ```{toctree}
 ---
-caption: Explore the API
+caption: Introduction to Inductiva API
 maxdepth: 1 
 hidden: true
 ---
-explore_api/how_it_works
-explore_api/tasks
-explore_api/shared_dedicated_resources
-explore_api/data_flow
-explore_api/computational-infrastructure
-explore_api/templating
-explore_api/configuring-simulators
+intro_to_api/how_it_works
+intro_to_api/tasks
+intro_to_api/shared_dedicated_resources
+intro_to_api/data_flow
+intro_to_api/computational-infrastructure
+intro_to_api/templating
+intro_to_api/configuring-simulators
 
 ```
 
