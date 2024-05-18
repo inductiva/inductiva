@@ -69,7 +69,7 @@ running simulation has gone rogue, or simply because there is no other reason
 to allow a task to proceed, the user can kill a task. The `Task` class provides
 a method to kill a task that hasn't been completed yet. Tasks in the
 `PENDING INPUT`, `SUBMITTED` and `STARTED` states can be killed (see the section
-on [task lifecycle](../explore_api/tasks.md#task-lifecycle)).
+on [task lifecycle](https://tutorials.staging.inductiva.ai/intro_to_api/tasks.html#task-lifecycle)).
 
 To kill a task programmatically, one has 2 options at hand: by declarative
 calling the `kill` method or interrupting the python session/script
