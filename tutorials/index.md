@@ -1,10 +1,23 @@
 # Welcome to the Inductiva API Tutorials
 
-Here you will find in-depth guides explaining how to use the Inductiva API. These tutorials add to the information snippets available in the [official API documentation](https://docs.inductiva.ai/en/latest/) by providing more detailed step-by-step instructions to achieve certain practical goals.
+Here you will find in-depth guides explaining the inner working of the Inductiva API,
+as well as how to use it for achieving certain pratical goals. These tutorials add to
+the information snippets available in the
+[official API documentation](https://docs.inductiva.ai/en/latest/)
+by providing more detailed step-by-step explanations and instructions.
 
 ## Available Tutorials
 
-* [Generating Synthetic Data for training Physics-ML models](generating-synthetic-data/synthetic-data-generation-1.md). Synthetic data allows us to build Physics-ML models without the need for real-world data, which is usually scarce or even impossible to gather for some scenarios. Instead, we use physical simulators that mimic real-world dynamics under various simulated conditions to produce data that inherently reflects these laws, helping the model learn on its own. This tutorial series will walk you through the process of using the Inductiva API for generating such synthetic training datasets to enable your ML models to learn complex physics.
+* [Generating Synthetic Data for training Physics-ML models](generating-synthetic-data/synthetic-data-generation-1.md).
+Synthetic data allows us to train Physics-ML models when you don't
+have enough observational data, which often happens in many practical
+scenarios. In those cases, we can use physical simulators to mimic
+real-world dynamics under various simulated conditions, and produce
+data that can help the model to learn the specifics of the scenario
+while respecting the underlying physical laws. This tutorial series
+will walk you through the process of using the Inductiva API for
+generating one of such synthetic training dataset to enable your ML
+models to learn complex fluid dynamics.
 
 ```{toctree}
 ---
