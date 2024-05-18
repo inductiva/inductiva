@@ -58,9 +58,9 @@ ratio:
 - **highmem** - Equipped with 8 GB of RAM per vCPU, designed for memory-intensive applications.
 
 These configurations allow for the customization of
-[MachineGroups](http://docs.inductiva.ai/api_reference/computational_resources/machinegroup_class.html),
-[ElasticMachineGroups](http://docs.inductiva.ai/api_reference/computational_resources/elasticgroup_class.html),
-and [MPIClusters](http://docs.inductiva.ai/api_reference/computational_resources/mpicluster_class.html)
+[MachineGroups](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/machinegroup_class.html),
+[ElasticMachineGroups](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/elasticgroup_class.html),
+and [MPIClusters](http://docs.inductiva.ai/en/latest/api_reference/computational_resources/mpicluster_class.html)
 to match your computational needs.
 
 Here's an example of how you can start a MachineGroup with robust "**c3d-standard-60**" 
@@ -89,7 +89,7 @@ we put in place through the current version of the API.
 ````{eval-rst}
 .. seealso::
    Learn how to manage your computational resources through
-   `Inductiva's Command Line Interface <http://docs.inductiva.ai/cli/cli-overview.html>`_
+   `Inductiva's Command Line Interface <http://docs.inductiva.ai/en/latest/cli/cli-overview.html>`_
 ````  
 
 ## Upcoming Computational Resources

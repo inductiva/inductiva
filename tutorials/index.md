@@ -16,7 +16,7 @@ read this tutorial.
 
 <div align="center">
    <img width="75%"
-    src="../_static/infographic-apifunctionality-fullscreen.svg"
+    src="./_static/infographic-apifunctionality-fullscreen.svg"
     alt="Inductiva API Usage Flow">
 </br>
 </div>
@@ -34,7 +34,7 @@ models to learn complex fluid dynamics.
 
 <div style="display: flex; justify-content:center">
 <video width=250 loop muted autoplay preload="auto">
-<source src="../_static/generating-synthetic-data/dambreak.mp4" type="video/mp4">
+<source src="./_static/generating-synthetic-data/dambreak.mp4" type="video/mp4">
 </video>
 </div>
 
