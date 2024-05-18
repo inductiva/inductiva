@@ -48,7 +48,7 @@ useful for complex simulations that exceed the capabilities of a single machine.
 
 To illustrate the performance differences between running simulations on a shared 
 pool of resources and on dedicated resources using the Inductiva API, we will run 
-[SWASH](http://docs.inductiva.ai/simulators/SWASH.md) as an example.
+[SWASH](https://docs.inductiva.ai/en/latest/simulators/SWASH.html) as an example.
 
 ### SWASH on Shared Resources
 
