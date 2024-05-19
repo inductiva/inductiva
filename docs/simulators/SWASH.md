@@ -2,10 +2,11 @@
 
 SWASH is a simulator that solves shallow water equations and is used to simulate 
 waves and currents in coastal waters and harbors, long waves in coastal regions 
-and tidal inlets, and rapidly varied flows around coastal structures. The simulator 
-is configured using a single file with the `.sws` extension, and additional files 
-containing information about the domain and the ocean floor, such as a bathymetry 
-file with a `.bot` extension, are necessary for the simulation to run.
+and tidal inlets, and rapidly varied flows around coastal structures. The
+simulator  is configured using a single file with the `.sws` extension, and
+additional files containing information about the domain and the ocean floor,
+such as a bathymetry file with a `.bot` extension, are necessary for the
+simulation to run.
 
 ## Example
 
@@ -27,3 +28,28 @@ task = swash.run(input_dir=input_dir,
 task.wait()
 task.download_outputs()
 ```
+
+## Inductiva Benchmarks
+
+The following benchmark is currently available for SWASH:
+
+* [Three-Dimensional Currents](https://benchmarks.inductiva.ai/SWASH/SWASH_Currents/):
+This benchmark replicates the S1 simulation as outlined in the paper 
+"Modeled Three-Dimensional Currents and Eddies on an Alongshore-Variable Barred
+Beach", authored by Christine M. Baker, Melissa Moulton, Britt Raubenheimer, 
+Steve Elgar, and Nirnimesh Kumar (2021).
+
+## What to read next
+
+If you are interested in SWASH, you may also be interested in checking the
+following related simulators that are also avaiable via Inductiva API:
+
+* [Reef3D](Reef3D.md)
+* [SCHISM](SCHISM.md)
+* [SWAN](SWAN.md)
+* [XBeach](XBeach.md)
+
+You may also want to check the following blog post, where we illustrate a 
+practical use of SWASH:
+
+ * [Scaling coastal engineering projects with Inductiva API](https://inductiva.ai/blog/article/scaling-coastal-engineering-projects-inductiva-api)

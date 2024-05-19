@@ -31,3 +31,20 @@ task.download_outputs()
 
 Check the [official documentation](https://swanmodel.sourceforge.io/) of SWAN to know 
 more about the configuration details specific of the simulator.
+
+## Inductiva Benchmarks
+
+The following benchmark is currently available for SWAN:
+
+* [Ring](https://benchmarks.inductiva.ai/SWAN/ring/): The "Ring" example from 
+SWAN's site.
+
+## What to read next
+
+If you are interested in SWAN, you may also be interested in checking the
+following related simulators that are also avaiable via Inductiva API:
+
+* [Reef3D](Reef3D.md)
+* [SCHISM](SCHISM.md)
+* [SWASH](SWASH.md)
+* [XBeach](XBeach.md)
