@@ -383,6 +383,8 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva-benchmarks">Inductiva Benchmarks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
             </nav>
         </div>
@@ -398,10 +400,11 @@ document.write(`
 <h1>SWASH<a class="headerlink" href="#swash" title="Permalink to this heading">#</a></h1>
 <p>SWASH is a simulator that solves shallow water equations and is used to simulate
 waves and currents in coastal waters and harbors, long waves in coastal regions
-and tidal inlets, and rapidly varied flows around coastal structures. The simulator
-is configured using a single file with the <code class="docutils literal notranslate"><span class="pre">.sws</span></code> extension, and additional files
-containing information about the domain and the ocean floor, such as a bathymetry
-file with a <code class="docutils literal notranslate"><span class="pre">.bot</span></code> extension, are necessary for the simulation to run.</p>
+and tidal inlets, and rapidly varied flows around coastal structures. The
+simulator  is configured using a single file with the <code class="docutils literal notranslate"><span class="pre">.sws</span></code> extension, and
+additional files containing information about the domain and the ocean floor,
+such as a bathymetry file with a <code class="docutils literal notranslate"><span class="pre">.bot</span></code> extension, are necessary for the
+simulation to run.</p>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
@@ -422,6 +425,33 @@ file with a <code class="docutils literal notranslate"><span class="pre">.bot</s
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
 </pre></div>
 </div>
+</section>
+<section id="inductiva-benchmarks">
+<h2>Inductiva Benchmarks<a class="headerlink" href="#inductiva-benchmarks" title="Permalink to this heading">#</a></h2>
+<p>The following benchmark is currently available for SWASH:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://benchmarks.inductiva.ai/SWASH/SWASH_Currents/" target="_blank">Three-Dimensional Currents</a>:
+This benchmark replicates the S1 simulation as outlined in the paper
+“Modeled Three-Dimensional Currents and Eddies on an Alongshore-Variable Barred
+Beach”, authored by Christine M. Baker, Melissa Moulton, Britt Raubenheimer,
+Steve Elgar, and Nirnimesh Kumar (2021).</p></li>
+</ul>
+</section>
+<section id="what-to-read-next">
+<h2>What to read next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
+<p>If you are interested in SWASH, you may also be interested in checking the
+following related simulators that are also avaiable via Inductiva API:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="Reef3D.html"><span class="std std-doc">Reef3D</span></a></p></li>
+<li><p><a class="reference internal" href="SCHISM.html"><span class="std std-doc">SCHISM</span></a></p></li>
+<li><p><a class="reference internal" href="SWAN.html"><span class="std std-doc">SWAN</span></a></p></li>
+<li><p><a class="reference internal" href="XBeach.html"><span class="std std-doc">XBeach</span></a></p></li>
+</ul>
+<p>You may also want to check the following blog post, where we illustrate a
+practical use of SWASH:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://inductiva.ai/blog/article/scaling-coastal-engineering-projects-inductiva-api" target="_blank">Scaling coastal engineering projects with Inductiva API</a></p></li>
+</ul>
 </section>
 </section>
 
@@ -471,6 +501,8 @@ file with a <code class="docutils literal notranslate"><span class="pre">.bot</s
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva-benchmarks">Inductiva Benchmarks</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
   </nav></div>
 

@@ -20,10 +20,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://docs.inductiva.ai/simulators/overview.html" />
 <meta property="og:site_name" content="Inductiva.ai Docs" />
-<meta property="og:description" content="Inductiva API has available several open-source simulators ready to use. Users who are familiar with the simulators can easily start running simulations with their previously prepared simulation co..." />
+<meta property="og:description" content="Inductiva API has available several ready-to-use open-source simulators. Users who are familiar with the simulators can easily start running simulations with their previously prepared simulation co..." />
 <meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
 <meta property="og:image:alt" content="Inductiva.ai Docs" />
-<meta name="description" content="Inductiva API has available several open-source simulators ready to use. Users who are familiar with the simulators can easily start running simulations with their previously prepared simulation co..." />
+<meta name="description" content="Inductiva API has available several ready-to-use open-source simulators. Users who are familiar with the simulators can easily start running simulations with their previously prepared simulation co..." />
 
     <title>Overview &#8212; Python API for Cloud-based Simulation</title>
   
@@ -359,7 +359,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -375,6 +377,15 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#typical-usage-patterns">Typical Usage Patterns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#your-favourite-open-source-simulator-is-not-in-the-list-above">Your favourite open-source simulator is not in the list above?</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -386,19 +397,14 @@ document.write(`
                   
   <section id="overview">
 <h1>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h1>
-<p>Inductiva API has available several open-source simulators ready to use. Users
+<p>Inductiva API has available several ready-to-use open-source simulators. Users
 who are familiar with the simulators can easily start running simulations with
-their previously prepared simulation configuration files.</p>
-<p>As described in our <a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html" target="_blank">Tutorial</a>
-typical usage patterns involve:</p>
+their previously prepared simulation configuration files, and directly scale
+them up on <a class="reference external" href="https://tutorials.staging.inductiva.ai/intro_to_api/computational-infrastructure.html#available-computational-resources" target="_blank">last-generation hardware</a>
+avaialble on the cloud via Inductiva API.</p>
+<p>The simulators available in the current version of the API (0.6) are:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html#the-simple-cases" target="_blank">Single executable simulator;</a></p></li>
-<li><p><a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html#a-slightly-more-complex-case" target="_blank">Pre-defined executables running in sequence;</a></p></li>
-<li><p><a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html#running-long-simulation-pipelines" target="_blank">Choose the executables as wished to run in sequence.</a></p></li>
-</ul>
-<p>The simulators available in the current version of the API (0.7) are:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="AmrWind.html"><span class="std std-doc">Amr-Wind</span></a></p></li>
+<li><p><a class="reference internal" href="AmrWind.html"><span class="std std-doc">AMR-Wind</span></a></p></li>
 <li><p><a class="reference internal" href="CaNS.html"><span class="std std-doc">CaNS</span></a></p></li>
 <li><p><a class="reference internal" href="DualSPHysics.html"><span class="std std-doc">DualSPHysics</span></a></p></li>
 <li><p><a class="reference internal" href="FDS.html"><span class="std std-doc">FDS</span></a></p></li>
@@ -412,12 +418,25 @@ typical usage patterns involve:</p>
 <li><p><a class="reference internal" href="SWASH.html"><span class="std std-doc">SWASH</span></a></p></li>
 <li><p><a class="reference internal" href="XBeach.html"><span class="std std-doc">XBeach</span></a></p></li>
 </ul>
-<p>Check the documentation of each simulator to learn about the specifics
-of how to configure them and launch your simulations via the API.</p>
+<section id="typical-usage-patterns">
+<h2>Typical Usage Patterns<a class="headerlink" href="#typical-usage-patterns" title="Permalink to this heading">#</a></h2>
+<p>As described in our <a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html" target="_blank">Tutorial</a>
+typical usage patterns involve:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html#the-simple-cases" target="_blank">Single executable simulator;</a></p></li>
+<li><p><a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html#a-slightly-more-complex-case" target="_blank">Pre-defined executables running in sequence;</a></p></li>
+<li><p><a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html#running-long-simulation-pipelines" target="_blank">Choose the executables as wished to run in sequence.</a></p></li>
+</ul>
+<p>Check the documentation of each simulator to learn about the specifics of how
+to configure them and launch your simulations via the API.</p>
+</section>
+<section id="your-favourite-open-source-simulator-is-not-in-the-list-above">
+<h2>Your favourite open-source simulator is not in the list above?<a class="headerlink" href="#your-favourite-open-source-simulator-is-not-in-the-list-above" title="Permalink to this heading">#</a></h2>
 <p>If you have any questions or suggestions about other open-source simulation
-packages that you would like to see available via Inductiva API, please
-open an issue on our <a class="reference external" href="https://github.com/inductiva/inductiva/issues" target="_blank">GitHub repository</a>,
+packages that you would like to see available via Inductiva API, please open an
+issue on our <a class="reference external" href="https://github.com/inductiva/inductiva/issues" target="_blank">GitHub repository</a>,
 or contact us via <a class="reference external" href="mailto:support&#37;&#52;&#48;inductiva&#46;ai" target="_blank">support<span>&#64;</span>inductiva<span>&#46;</span>ai</a>.</p>
+</section>
 </section>
 
 
@@ -456,7 +475,21 @@ or contact us via <a class="reference external" href="mailto:support&#37;&#52;&#
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#typical-usage-patterns">Typical Usage Patterns</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#your-favourite-open-source-simulator-is-not-in-the-list-above">Your favourite open-source simulator is not in the list above?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

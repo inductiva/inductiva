@@ -397,20 +397,20 @@ document.write(`
   <section id="gromacs">
 <h1>GROMACS<a class="headerlink" href="#gromacs" title="Permalink to this heading">#</a></h1>
 <p>GROMACS is a versatile simulator to perform molecular dynamics simulations. It
-is primarily designed for biochemical molecules like proteins, lipids and nucleic
-acids that have a lot of complicated bonded interactions, but since GROMACS is
-extremely fast at calculating the nonbonded interactions (that usually dominate
-simulations) many groups are also using it for research on non-biological systems,
-e.g. polymers and fluid dynamics.</p>
-<p>A single simulation of GROMACS via Inductiva API can comprise several steps - e.g.,
-preparing the molecules, minimizing the energy of the system, running the simulation
-and post-processing. Hence, to configure a simulation of GROMACS the user may require
-several files. Moreover, GROMACS has specific commands to run certain tasks that
-already use the files in your input directory.</p>
+is primarily designed for biochemical molecules like proteins, lipids and
+nucleic acids that have a lot of complicated bonded interactions, but since
+GROMACS is extremely fast at calculating the nonbonded interactions (that
+usually dominate simulations) many groups are also using it for research on
+non-biological systems, e.g. polymers and fluid dynamics.</p>
+<p>A single simulation of GROMACS via Inductiva API can comprise several steps -
+e.g., preparing the molecules, minimizing the energy of the system, running the
+simulation and post-processing. Hence, to configure a simulation of GROMACS the
+user may require several files. Moreover, GROMACS has specific commands to run
+certain tasks that already use the files in your input directory.</p>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
-<p>This example runs a simple case of the molecular dynamics of water molecules inside
-a small box.</p>
+<p>This example runs a simple case of the molecular dynamics of water molecules
+inside a small box.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
