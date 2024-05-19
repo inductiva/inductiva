@@ -80,10 +80,9 @@ simulations, facilitating the modeling of interactions between multiple turbines
 within wind farms, accounting for factors like wake effects, turbulence, and
 terrain complexity.
 
-## Benchmarks
+## Inductiva Benchmarks
 
-The following Inductiva benchmarks are currently available for the OpenFAST
-suite:
+The following benchmarks are currently available for the OpenFAST suite:
 
 * [5MW Land](https://benchmarks.inductiva.ai/OpenFAST/OpenFAST_Land/):
 land based NREL 5-MW turbine simulation using BeamDyn as the structural module.
@@ -96,4 +95,12 @@ FAST.Farm is an multiphysics engineering software designed to forecast the
 power performance and structural loads of wind turbines within a wind farm. It
 operates using OpenFAST and it is what allows our simulations to run in
 parallel.
+
+## What to read next
+
+If you are interested in OpenFast, you may also be interested in checking the
+following related simulators that are also avaiable via Inductiva API:
+
+* [AMR-Wind](AmrWind.md)
+* [OpenFOAM](OpenFOAM.md)
 

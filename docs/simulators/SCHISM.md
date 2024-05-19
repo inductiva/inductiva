@@ -26,3 +26,20 @@ task = schism.run(input_dir=input_dir,
 task.wait()
 task.download_outputs()
 ```
+
+## Benchmarks
+
+The following benchmarks are currently available for SCHISM:
+
+* [Test_Inun_NWaves_2D](https://benchmarks.inductiva.ai/SCHISM/schism/):
+The `Test_Inun_NWaves_2D` example from the SCHISM official test suite.
+
+## What to read next
+
+If you are interested in SCHISM, you may also be interested in checking the
+following related simulators that are also avaiable via Inductiva API:
+
+* [Reef3D](Reef3D.md)
+* [SWAN](SWAN.md)
+* [SWASH](SWASH.md)
+* [XBeach](XBeach.md)

@@ -69,3 +69,13 @@ task = reef3d.run(input_dir=input_dir)
 task.wait()
 task.download_outputs()
 ```
+
+## What to read next
+
+If you are interested in Reef3D, you may also be interested in checking the
+following related simulators that are also avaiable via Inductiva API:
+
+* [SCHISM](SCHISM.md)
+* [SWAN](SWAN.md)
+* [SWASH](SWASH.md)
+* [XBeach](XBeach.md)
