@@ -28,6 +28,10 @@ jobs:
           ref: gh-pages
           path: build
 
+      - name: remove all files on the build folder
+        working-directory: build
+        run: rm -vfr *
+
       - uses: nicholasphair/sphinx-action@7.0.0
         with:
           docs-folder: "source/docs/"
