@@ -24,7 +24,7 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.file_upload_url import FileUploadUrl
+from inductiva.client.model.task_status import TaskStatus
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 from . import path
@@ -55,7 +55,7 @@ request_path_task_id = api_client.PathParameter(
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = FileUploadUrl
+SchemaFor200ResponseBodyApplicationJson = TaskStatus
 
 
 @dataclass
@@ -105,7 +105,7 @@ _all_accept_content_types = ('application/json',)
 class BaseApi(api_client.Api):
 
     @typing.overload
-    def _get_input_upload_url_oapg(
+    def _resubmit_task_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -118,7 +118,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_input_upload_url_oapg(
+    def _resubmit_task_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -129,7 +129,7 @@ class BaseApi(api_client.Api):
         ...
 
     @typing.overload
-    def _get_input_upload_url_oapg(
+    def _resubmit_task_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -142,7 +142,7 @@ class BaseApi(api_client.Api):
     ]:
         ...
 
-    def _get_input_upload_url_oapg(
+    def _resubmit_task_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -151,7 +151,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Get Input Upload Url
+        Resubmit Task
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -178,7 +178,7 @@ class BaseApi(api_client.Api):
 
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='get'.upper(),
+            method='post'.upper(),
             headers=_headers,
             auth_settings=_auth,
             stream=stream,
@@ -206,11 +206,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetInputUploadUrl(BaseApi):
+class ResubmitTask(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_input_upload_url(
+    def resubmit_task(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -223,7 +223,7 @@ class GetInputUploadUrl(BaseApi):
         ...
 
     @typing.overload
-    def get_input_upload_url(
+    def resubmit_task(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -234,7 +234,7 @@ class GetInputUploadUrl(BaseApi):
         ...
 
     @typing.overload
-    def get_input_upload_url(
+    def resubmit_task(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -247,7 +247,7 @@ class GetInputUploadUrl(BaseApi):
     ]:
         ...
 
-    def get_input_upload_url(
+    def resubmit_task(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -255,7 +255,7 @@ class GetInputUploadUrl(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_input_upload_url_oapg(
+        return self._resubmit_task_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
@@ -263,11 +263,11 @@ class GetInputUploadUrl(BaseApi):
             skip_deserialization=skip_deserialization)
 
 
-class ApiForget(BaseApi):
+class ApiForpost(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def get(
+    def post(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -280,7 +280,7 @@ class ApiForget(BaseApi):
         ...
 
     @typing.overload
-    def get(
+    def post(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
@@ -291,7 +291,7 @@ class ApiForget(BaseApi):
         ...
 
     @typing.overload
-    def get(
+    def post(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -304,7 +304,7 @@ class ApiForget(BaseApi):
     ]:
         ...
 
-    def get(
+    def post(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -312,7 +312,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_input_upload_url_oapg(
+        return self._resubmit_task_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
