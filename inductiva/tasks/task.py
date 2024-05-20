@@ -386,12 +386,17 @@ class Task:
             path_params=self._get_path_params(),)
 
         download_url = api_response.body.get("url")
-        logging.debug("Download URL: %s", download_url)
+
+        if download_url is None:
+            raise RuntimeError(
+                "The API did not return a download URL for the task outputs.")
+
+        logging.debug("\nDownload URL: %s\n", download_url)
 
         try:
             remote_filesystem = fsspec.filesystem("http")
             download_size = remote_filesystem.info(download_url).get("size")
-            logging.debug("Download size: %s", download_size)
+            logging.debug("\nDownload size: %s\n", download_size)
             file_server_available = True
         except FileNotFoundError:
             # If the Web API returns a fallback URL instead of a different
@@ -412,40 +417,25 @@ class Task:
 
         download_message = "Downloading simulation outputs to %s"
 
-        if filenames and file_server_available:
-            partial_download_done = False
+        if filenames:
+            if file_server_available:
+                logging.info(download_message, output_dir)
+                data.download_partial_outputs(
+                    remote_filesystem,
+                    download_url,
+                    filenames,
+                    output_dir,
+                )
+            else:
+                logging.error("Partial download is not available.")
 
-            logging.info(download_message, output_dir)
-
-            try:
-                with remote_filesystem.open(download_url, "rb") as remote_file:
-                    with zipfile.ZipFile(remote_file) as remote_zip_file:
-                        for filename in filenames:
-                            try:
-                                remote_zip_file.extract(
-                                    filename,
-                                    path=output_dir,
-                                )
-                            except KeyError:
-                                logging.warning(
-                                    "File %s not found in the output archive.",
-                                    filename)
-
-                partial_download_done = True
-
-            except Exception as _:  # pylint: disable=broad-except
-                logging.error("Partial download of files failed. Downloading "
-                              "all files instead.")
-
-            if partial_download_done:
-                return output_dir
+            # If the user requested a partial download, the full download
+            # will be skipped.
+            return output_dir
 
         zip_path = output_dir.joinpath("output.zip")
         logging.info(download_message, zip_path)
 
-        # use raw urllib3 response instead of the generated client response, to
-        # implement our own download logic (with progress bar, first checking
-        # the size of the file, etc.)
         if file_server_available:
             pool_manager: urllib3.PoolManager = (
                 self._api.api_client.rest_client.pool_manager)
@@ -454,18 +444,19 @@ class Task:
                 download_url,
                 preload_content=False,
             )
-
+        # If the file server is not available, the download will be provided
+        # by the Web API. Therefore the standard method is used.
         else:
             api_response = self._api.download_task_output(
                 path_params=self._get_path_params(),
-                query_params={
-                    "filename": filenames or [],
-                },
                 stream=True,
                 skip_deserialization=True,
             )
             response = api_response.response
 
+        # use raw urllib3 response instead of the generated client response, to
+        # implement our own download logic (with progress bar, first checking
+        # the size of the file, etc.)
         data.download_file(response, zip_path, download_size=download_size)
 
         if uncompress:
@@ -473,6 +464,7 @@ class Task:
             data.uncompress_task_outputs(zip_path, output_dir)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
+
         return output_dir
 
     class _PathParams(TypedDict):
