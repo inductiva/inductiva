@@ -50,6 +50,10 @@ jobs:
         working-directory: build
         run: touch .nojekyll
 
+      - name: create subdomain CNAME file
+        working-directory: build
+        run: echo docs.inductiva.ai > CNAME
+
       - name: configure client side redirection
         working-directory: source/docs
         run: cp redirect.html ../../build/index.html
