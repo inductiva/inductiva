@@ -8,7 +8,6 @@ from typing import Dict, Any, List, Optional, Tuple, Union
 from typing_extensions import TypedDict
 import datetime
 from ..localization import translator as __
-import fsspec
 import urllib3
 
 from inductiva import constants
@@ -392,23 +391,16 @@ class Task:
 
         logging.debug("\nDownload URL: %s\n", download_url)
 
-        try:
-            remote_filesystem = fsspec.filesystem("http")
-            download_size = remote_filesystem.info(download_url).get("size")
-            logging.debug("\nDownload size: %s\n", download_size)
-            file_server_available = True
-        except FileNotFoundError:
-            # If the Web API returns a fallback URL instead of a different
-            # file server (GCP, ICE, etc.) the remote_filesystem.info() will
-            # raise an exception. In this case, the output donwload will be
-            # provided by the Web API itself.
-            file_server_available = False
-            download_size = None
+        # If the file server (GCP, ICE, etc.) is not available, the Web API
+        # returns a fallback URL and returns the following flag as False.
+        # In this case, the output donwload will be provided by the Web API
+        # itself.
+        file_server_available = api_response.body.get("file_server_available")
 
         if output_dir is None:
-            output_dir = files.resolve_output_path(self.id)
-        else:
-            output_dir = files.resolve_output_path(output_dir)
+            output_dir = self.id
+
+        output_dir = files.resolve_output_path(output_dir)
 
         if output_dir.exists():
             warnings.warn("Path already exists, files may be overwritten.")
@@ -420,7 +412,6 @@ class Task:
             if file_server_available:
                 logging.info(download_message, output_dir)
                 data.download_partial_outputs(
-                    remote_filesystem,
                     download_url,
                     filenames,
                     output_dir,
@@ -456,7 +447,7 @@ class Task:
         # use raw urllib3 response instead of the generated client response, to
         # implement our own download logic (with progress bar, first checking
         # the size of the file, etc.)
-        data.download_file(response, zip_path, download_size=download_size)
+        data.download_file(response, zip_path)
 
         if uncompress:
             logging.info("Uncompressing the outputs to %s", output_dir)

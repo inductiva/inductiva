@@ -11,7 +11,7 @@ import pathlib
 import zipfile
 import tempfile
 import shutil
-from typing import List, Optional
+from typing import List
 from tqdm import tqdm
 import fsspec
 import urllib3
@@ -228,7 +228,6 @@ def zip_dir(dir_path, zip_name):
 
 
 def download_partial_outputs(
-    remote_filesystem: fsspec.AbstractFileSystem,
     download_url: str,
     filenames: List[str],
     output_dir: Path,
@@ -236,7 +235,6 @@ def download_partial_outputs(
     """Download the partial outputs of a task.
 
     Args:
-        remote_filesystem: Filesystem object to use to download the outputs.
         download_url: URL from which to download the outputs.
         filenames: List of filenames to download.
         output_dir: Path where to store the downloaded files.
@@ -245,6 +243,8 @@ def download_partial_outputs(
         Returns True if the download was successful, False otherwise.
     """
     try:
+        remote_filesystem = fsspec.filesystem("http")
+
         with remote_filesystem.open(download_url, "rb") as remote_file:
             with zipfile.ZipFile(remote_file) as remote_zip_file:
                 for filename in filenames:
@@ -267,7 +267,6 @@ def download_file(
     response: urllib3.response.HTTPResponse,
     output_path: pathlib.Path,
     chunk_size: int = 1000,
-    download_size: Optional[int] = None,
 ) -> None:
     """Download a file from a urllib3 response object.
 
@@ -277,7 +276,6 @@ def download_file(
         response: urllib3 response object.
         output_path: Path where to store the downloaded file.
         chunk_size: Size of the chunks in which to download the file.
-        download_size: Size of the download file in bytes.
     """
     # if the response header does not contain a x-content-length header,
     # the progress bar will not be displayed correctly, but download
@@ -285,8 +283,10 @@ def download_file(
     # "x-content-length" is a custom header that is set by the API instead
     # of the standard "content-length" header, because the API needs to use
     # "transfer-encoding: chunked" to stream the response.
-    if download_size is None:
-        download_size = response.headers.get("x-content-length", 0)
+    # If the download is provided by a file server, the "content-length"
+    # header will be used.
+    download_size = response.headers.get(
+        "x-content-length") or response.headers.get("content-length", 0)
 
     with tqdm(
             total=int(download_size),
