@@ -41,7 +41,7 @@ def test_run_simulation_logging(task_id, disable_logging):
     if not os.path.exists(dummy_dir):
         os.mkdir(dummy_dir)
     os.environ["DISABLE_TASK_METADATA_LOGGING"] = str(disable_logging)
-    inductiva.api_key = "DUMMY"
+    inductiva.set_api_key("DUMMY")
     tasks.run_simulation(api_method_name=task_id,
                          input_dir=dummy_dir,
                          api_invoker=_api_invoker)

@@ -12,7 +12,7 @@ from ..localization import translator as __
 from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api, types
-from inductiva.client.apis.tags import tasks_api
+from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.utils import files, format_utils, data, output_contents
 
 import warnings
@@ -57,7 +57,6 @@ class Task:
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
         self.id = task_id
-        self._api = tasks_api.TasksApi(api.get_client())
         self._info = None
         self._status = None
 
@@ -132,7 +131,7 @@ class Task:
                 self._status in self.TERMINAL_STATUSES):
             return self._status
 
-        resp = self._api.get_task_status(self._get_path_params())
+        resp = self.get_api().get_task_status(self._get_path_params())
 
         return models.TaskStatusCode(resp.body["status"])
 
@@ -151,7 +150,8 @@ class Task:
             return self._info
 
         params = self._get_path_params()
-        resp = self._api.get_task(params, skip_deserialization=True).response
+        resp = self.get_api().get_task(params,
+                                       skip_deserialization=True).response
 
         info = json.loads(resp.data.decode("utf-8"))
         status = models.TaskStatusCode(info["status"])
@@ -211,6 +211,10 @@ class Task:
 
             time.sleep(polling_period)
 
+    def get_api(self) -> TasksApi:
+        """Get an instance of the TasksApi."""
+        return TasksApi(api.get_client())
+
     def _send_kill_request(self, max_api_requests: int) -> None:
         """Send a kill request to the API.
         If the api request fails, it will retry until
@@ -225,7 +229,7 @@ class Task:
                     break
 
                 path_params = self._get_path_params()
-                self._api.kill_task(path_params=path_params)
+                self.get_api().kill_task(path_params=path_params)
                 break
             except exceptions.ApiException as exc:
                 if max_api_requests == 0:
@@ -342,7 +346,7 @@ class Task:
             compressed size). It can also be used to print that information
             in a formatted way.
         """
-        api_response = self._api.get_outputs_list(
+        api_response = self.get_api().get_outputs_list(
             path_params=self._get_path_params())
 
         archive_info = api_response.body
@@ -379,7 +383,7 @@ class Task:
             rm_downloaded_zip_archive: Whether to remove the archive after
             uncompressing it. If uncompress is False, this argument is ignored.
         """
-        api_response = self._api.download_task_output(
+        api_response = self.get_api().download_task_output(
             path_params=self._get_path_params(),
             query_params={
                 "filename": filenames or [],

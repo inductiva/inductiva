@@ -4,16 +4,16 @@ The relevant function for usage outside of this file is invoke_async_api().
 Check the demos directory for examples on how it is used.
 """
 import os
-import pathlib
-import signal
 import time
-from urllib3.exceptions import MaxRetryError, NewConnectionError
-from contextlib import contextmanager
 import tqdm
 import tqdm.utils
+import signal
+import pathlib
 import urllib3
 import urllib3.request
+from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
+from urllib3.exceptions import MaxRetryError, NewConnectionError
 
 from absl import logging
 
@@ -29,9 +29,12 @@ from inductiva.utils.data import (extract_output, get_validate_request_params,
 from inductiva.utils import format_utils, files
 
 
-def validate_api_key(api_key: Optional[str]) -> Configuration:
+def validate_api_key() -> Configuration:
     """Validates the API key and returns API configuration"""
-    if inductiva.api_key is None:
+
+    api_key = inductiva.get_api_key()
+
+    if api_key is None:
         # pylint: disable=line-too-long
         raise ValueError(
             "No API Key specified. "
@@ -53,7 +56,7 @@ def validate_api_key(api_key: Optional[str]) -> Configuration:
 
 def get_client() -> ApiClient:
     """Returns an ApiClient instance."""
-    api_config = validate_api_key(inductiva.api_key)
+    api_config = validate_api_key()
 
     return ApiClient(api_config)
 
@@ -403,7 +406,7 @@ def invoke_async_api(method_name: str,
         Returns the task id.
     """
 
-    api_config = validate_api_key(inductiva.api_key)
+    api_config = validate_api_key()
 
     request_params = get_validate_request_params(
         original_params=params,
