@@ -19,6 +19,7 @@ from inductiva.client.paths.tasks.get import GetUserTasks
 from inductiva.client.paths.tasks_task_id_kill.post import KillTask
 from inductiva.client.paths.tasks_auth.get import LoggingAuthCheck
 from inductiva.client.paths.tasks_task_id_input_uploaded.post import NotifyInputUploaded
+from inductiva.client.paths.tasks_task_id_resubmit.post import ResubmitTask
 from inductiva.client.paths.tasks_submit.post import SubmitTask
 from inductiva.client.paths.tasks_task_id_input.put import UploadTaskInput
 
@@ -35,6 +36,7 @@ class TasksApi(
         KillTask,
         LoggingAuthCheck,
         NotifyInputUploaded,
+        ResubmitTask,
         SubmitTask,
         UploadTaskInput,
 ):
