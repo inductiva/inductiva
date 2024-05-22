@@ -11,7 +11,7 @@ import inductiva
 import inductiva.client.models
 from inductiva import api
 from inductiva.utils import format_utils
-from inductiva.client.apis.tags.compute_api import ComputeApi
+from inductiva.client.apis.tags import compute_api
 from inductiva.client import exceptions
 from inductiva import logs
 
@@ -71,6 +71,10 @@ class BaseMachineGroup:
         #the request machine_groups.get()
         self._active_machines = 0
         self.num_machines = 0
+
+        # Set the API configuration that carries the information from the client
+        # to the backend.
+        self._api = compute_api.ComputeApi(api.get_client())
         self._estimated_cost = None
 
     @property
@@ -80,10 +84,6 @@ class BaseMachineGroup:
     @property
     def name(self):
         return self._name
-
-    def get_api(self) -> ComputeApi:
-        """Return the ComputeApi object."""
-        return ComputeApi(api.get_client())
 
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.
@@ -99,7 +99,7 @@ class BaseMachineGroup:
         )
 
         try:
-            resp = self.get_api().register_vm_group(body=instance_group_config)
+            resp = self._api.register_vm_group(body=instance_group_config)
         except (exceptions.ApiValueError, exceptions.ApiException) as e:
             logs.log_and_exit(
                 logging.getLogger(),
@@ -167,7 +167,7 @@ class BaseMachineGroup:
 
         if max_idle_time is not None or auto_terminate_ts is not None:
             try:
-                self.get_api().update_vm_group_config(
+                self._api.update_vm_group_config(
                     path_params={"mg_id": self._id}, body=update_body)
             except inductiva.client.ApiException as e:
                 logs.log_and_exit(
@@ -223,7 +223,7 @@ class BaseMachineGroup:
 
         try:
 
-            self.get_api().start_vm_group(body=request_body)
+            self._api.start_vm_group(body=request_body)
         except inductiva.client.ApiException as e:
             logs.log_and_exit(logging.getLogger(),
                               logging.ERROR,
@@ -255,7 +255,7 @@ class BaseMachineGroup:
                     **kwargs,
                 )
 
-            self.get_api().delete_vm_group(body=request_body)
+            self._api.delete_vm_group(body=request_body)
             termination_time = format_utils.seconds_formatter(time.time() -
                                                               start_time)
             logging.info("%s successfully terminated in %s.", self,
@@ -294,7 +294,7 @@ class BaseMachineGroup:
             )
             return
 
-        response = self.get_api().get_group_status({"name": self.name})
+        response = self._api.get_group_status({"name": self.name})
         if response.body == "notFound":
             logging.info("Machine group does not exist: %s.", self.name)
         return response.body

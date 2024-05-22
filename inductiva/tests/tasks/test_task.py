@@ -3,9 +3,7 @@ import inductiva
 import pytest
 from unittest.mock import Mock
 from inductiva import constants
-from inductiva import api
 from inductiva.client import exceptions
-from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.model.task_status_code import TaskStatusCode
 
 from inductiva.client.paths.tasks_task_id_input.put import ApiResponseFor200
@@ -100,8 +98,8 @@ def test__send_kill_request__positive_max_api_requests__none(
     """
     task = inductiva.tasks.Task("123")
 
-    task.get_api = Mock(return_value=TasksApi(api.get_client()))
-    task.get_api().kill_task = Mock(return_value=ApiResponseFor200)
+    # pylint: disable=W0212
+    task._api.kill_task = Mock(return_value=ApiResponseFor200)
     task.get_status = Mock(return_value=get_status_response)
 
     # pylint: disable=W0212
@@ -118,8 +116,8 @@ def test__send_kill_request__api_exception__runtimeerror():
     """
     task = inductiva.tasks.Task("123")
 
-    task.get_api = Mock(return_value=TasksApi(api.get_client()))
-    task.get_api().kill_task = Mock(
+    # pylint: disable=W0212
+    task._api.kill_task = Mock(
         side_effect=exceptions.ApiException(400, "Bad Request"))
     task.get_status = Mock(return_value=TaskStatusCode.PENDINGKILL)
 
