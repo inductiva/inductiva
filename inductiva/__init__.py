@@ -20,10 +20,8 @@ from .templating import TemplateManager
 logs.setup()
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
-_output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR")
-_output_dir.set(os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output"))
-_api_key = contextvars.ContextVar("INDUCTIVA_API_KEY")
-_api_key.set(os.environ.get("INDUCTIVA_API_KEY", None))
+_output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR", default= os.environ.get("INDUCTIVA_OUTPUT_DIR", "inductiva_output"))
+_api_key = contextvars.ContextVar("INDUCTIVA_API_KEY", default=os.environ.get("INDUCTIVA_API_KEY", None))
 
 absl.logging.set_verbosity(absl.logging.INFO)
 
