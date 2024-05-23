@@ -1,22 +1,6 @@
----
-layout: post
-title: 'Heat #1: The Heat Equation (and a Classical Solver)'
-short-title: 'Heat #1'
-date: 2022-02-14
-authors: 
-  - name: manuel-madeira
-    role: Author
-  - name: david-carvalho
-    role: Editor and Co-author
-  - name: fabio-cruz
-    role: Technical Reviewer
-image: assets/img/articles/heat_1_introduction/heat_1_snapshot.png
-video: assets/img/articles/heat_1_introduction/heat_1_cover.mp4
-description: In the debut of a 3-post series on solving Partial Differential Equations (PDEs) using Machine Learning, we start by introducing the Heat Equation and then we solve it with a classical algorithm - a Finite Difference Method (FDM) method in a FTCS (Forward in Time, Centered in Space) scheme.
-category: Research
-tags: ["Heat Equation", "Finite Difference Methods", "PDEs", "PINNs", "Classical Methods", "Numerical Methods"]
-published: true
----
+# The Heat Equation and a Classical Solver
+
+**Authors**: Manuel Madeira, David Carvalho, Fábio Cruz
 
 To mark Valentine's day, we let ourselves get inspired by feelings of love
 and human warmth. *Love is to be spread around*, so they say.

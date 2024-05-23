@@ -1,22 +1,7 @@
----
-layout: post
-title: 'Heat #2: The Heat Equation (and a Physics-Informed Neural Network)'
-short-title: 'Heat #2'
-date: 2022-03-21
-authors: 
-  - name: manuel-madeira
-    role: Author
-  - name: david-carvalho
-    role: Editor and Co-author
-  - name: fabio-cruz
-    role: Technical Reviewer
-image: assets/img/articles/heat_2_PINN/heat_2_snapshot.jpg
-video: assets/img/articles/heat_2_PINN/heat_2_cover.mp4
-description: 'In this 2nd part of the series, we show that Neural Networks can learn how to solve Partial Differential Equations! In particular, we use a PINN (Physics-Informed Neural Network) architecture to obtain the results we obtained with classical algorithms in Heat #1.'
-category: Research
-tags: ["Heat Equation", "PDEs", "Machine Learning", "PINNs", "Neuro-solvers"]
-published: true
----
+# The Heat Equation and a Physics-Informed Neural Network
+
+**Authors**: Manuel Madeira, David Carvalho, Fábio Cruz
+
 
 In the [debut]({% post_url 2022-02-14-heat-1-an-introduction %}) of this
 3-post series, where we intend to showcase the power of Neural Networks to solve

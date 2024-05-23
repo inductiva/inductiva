@@ -1,22 +1,9 @@
----
-layout: post
-title: 'Heat #3: The Heat Equation (and a Generalized Neuro-Solver)'
-short-title: 'Heat #3'
-date: 2022-04-08
-authors: 
-  - name: manuel-madeira
-    role: Author
-  - name: david-carvalho
-    role: Editor and Co-author
-  - name: fabio-cruz
-    role: Technical Reviewer
-image: assets/img/articles/heat_3/cover_snapshot.jpg
-video: assets/img/articles/heat_3/cover_slow.mp4
-description: In this 3rd and final part of the Heat series, we delve into the idea of enhancing generalizational power in Neural Networks so they can learn more complex aspects. We exemplify these ideas by running Physics Informed Neural Networks (PINNs) on a custom-designed domain and boundary condition.
-category: Research
-tags: ["Heat Equation", "PDEs", "Machine Learning", "PINNs", "Neuro-solvers"]
-published: true
----
+# The Heat Equation and a Generalized Neuro-Solver
+
+**Authors**: Manuel Madeira, David Carvalho
+
+**Reviewers**: Fábio Cruz
+
 
 In this new post series, we are going to show you that a grand unification
 of gravity within a quantum field theory framework can explain topologically
