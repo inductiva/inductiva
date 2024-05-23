@@ -1,6 +1,9 @@
 # The Heat Equation and a Classical Solver
 
-**Authors**: Manuel Madeira, David Carvalho, Fábio Cruz
+**Authors**: Manuel Madeira, David Carvalho
+
+**Reviewers**: Fábio Cruz
+
 
 To mark Valentine's day, we let ourselves get inspired by feelings of love
 and human warmth. *Love is to be spread around*, so they say.
@@ -47,8 +50,8 @@ process through which energy is transported in space due to gradients in
 temperature.
 
 These considerations are reflected mathematically in the so-called *Heat
-Equation*, which sets how the temperature $$u(t, \mathbf{r})$$ at a
-point in space $$\mathbf{r}$$ and time instant $$t$$ evolves.
+Equation*, which sets how the temperature $u(t, \mathbf{r})$ at a
+point in space $\mathbf{r}$ and time instant $t$ evolves.
 It must satisfy:
 
 $$
@@ -57,22 +60,22 @@ $$
 \end{equation}
 $$
 
-The thermal diffusivity $$D$$ controls how fast heat can spread around a
+The thermal diffusivity $D$ controls how fast heat can spread around a
 neighborhood.
 For more realistic (and oftentimes less structured) media, their specifics
-result in a *local* diffusity $$D(t, \mathbf{r})$$.
-In the *Heat* series, we consider homogeneous media, for which $$D$$ is
+result in a *local* diffusity $D(t, \mathbf{r})$.
+In the *Heat* series, we consider homogeneous media, for which $D$ is
 constant throughout.
 
-Now, what about $$\Delta$$  --- the *Laplacian* operator? Let's see how it acts
-on a function $$u$$:
+Now, what about $\Delta$  --- the *Laplacian* operator? Let's see how it acts
+on a function $u$:
 
 $$
 \Delta u = \nabla \cdot (\nabla u) = \sum_{i} \frac{\partial^2 u}{\partial {r_i}^2}
 $$
 
-So we have $$n$$ $$2^\rm{nd}$$-order partial spatial derivatives to account for
-but also a single $$1^\rm{st}$$-order partial derivative in time.
+So we have $n$ $2^\rm{nd}$-order partial spatial derivatives to account for
+but also a single $1^\rm{st}$-order partial derivative in time.
 That's a large batch of **differential operators** right there. We can lump
 them into a single *differential operator* which governs the evolution of the
 solution we're after:
@@ -97,13 +100,11 @@ intuitive visualization but also to provide the possibility of adding extra
 complexity without much effort.
 
 So let's have a go. Our spatial vector in 2 dimensions is
-$$\mathbf{r} = (x, y)$$ and so the heat equation takes the form:
+$\mathbf{r} = (x, y)$ and so the heat equation takes the form:
 
-<div class="overflow-x-auto">
 $$
 \left[ \frac{\partial}{\partial t} - D \left( \frac{\partial^2}{\partial x ^2} + \frac{\partial^2}{\partial y ^2} \right) \right]u(t,x,y)= 0
 $$
-</div>
 
 From a computational point of view, it will do us a favor to think in terms of
 the result upon applying each differential operator to the solution:
@@ -115,8 +116,8 @@ u_t - D \left( u_{xx} + u_{yy} \right) = 0  \label{HE_2D}
 $$
 
 where the partial derivatives are shorthanded to, say,
-$$\partial_{x} \equiv \partial / \partial x$$ and
-$$\partial_{xx} = \partial_{x} \partial_{x}$$.
+$\partial_{x} \equiv \partial / \partial x$ and
+$\partial_{xx} = \partial_{x} \partial_{x}$.
 
 But hold on! We can't start solving this beast just yet...
 
@@ -124,7 +125,7 @@ But hold on! We can't start solving this beast just yet...
 
 We need more information to formulate completely this PDE.
 **Initial and boundary conditions** ensure that a *unique* solution exists
-by the function at particular points $$(t,x,y)$$ of the input
+by the function at particular points $(t,x,y)$ of the input
 space.
 
 These are normally reasoned through intuition and hindsight.
@@ -132,17 +133,15 @@ Throughout the *Heat* series, we employ *Dirichlet boundary conditions*, which
 ensure:
 
 - through the *initial condition*, that a certain temperature is fixed
-across *all* points on the plate at the initial time instant (when $$t=0$$).
-We'll take $$ u(0, x, y) = -1 ^\mathrm{o}C  $$.
+across *all* points on the plate at the initial time instant (when $t=0$).
+We'll take $ u(0, x, y) = -1 ^\mathrm{o}C  $.
 
 - through the the *boundary conditions*, that a temperature is fixed at *all*
 times *only* for points along the 4 edges of the plate (top, bottom, left and right).
     - We choose the energy source to act as to get the top edge to some hot
-    temperature. We'll take $$u(t, x, y_\mathrm{max}) = 1 ^\mathrm{o}C \ .$$
+    temperature. We'll take $u(t, x, y_\mathrm{max}) = 1 ^\mathrm{o}C \ .$
     - The remaining edges are held at some cold temperature. We'll take
-      <div class="overflow-x-auto">
-      $$\underbrace{u(t, x, y_\mathrm{min})}_{\text{Bottom}} = \underbrace{u(t, x_{\mathrm{min}}, y)}_{\text{Left}} =  \underbrace{u(t, x_\mathrm{max}, y)}_{\text{Right}} = -1 ^\mathrm{o}C \ .$$
-      </div>
+      $\underbrace{u(t, x, y_\mathrm{min})}_{\text{Bottom}} = \underbrace{u(t, x_{\mathrm{min}}, y)}_{\text{Left}} =  \underbrace{u(t, x_\mathrm{max}, y)}_{\text{Right}} = -1 ^\mathrm{o}C \ .$
 
 <div class="flex sm:justify-center max-w-md sm:mx-auto">
     <img src="/assets/img/articles/heat_1_introduction/BIC.png" class="my-1">
@@ -199,26 +198,21 @@ to simulate the Heat Equation in a mug or a pan?
 We'll make our lives easier (for now!) by using a *regular grid* to represent
 the domain. With the aid of the cube:
 
-<div class="overflow-x-auto">
 $$
 (t,x,y) \in [t_\mathrm{min}, t_\mathrm{max}] \times [x_\mathrm{min}, x_\mathrm{max}] \times [y_\mathrm{min}, y_\mathrm{max}]
 $$
-</div>
 
-in a regular grid with $$N_t$$, $$N_x$$ and $$N_y$$ points along the $$t$$,
-$$x$$ and $$y$$-axis, respectively, we can set their step intervals,
+in a regular grid with $N_t$, $N_x$ and $N_y$ points along the $t$,
+$x$ and $y$-axis, respectively, we can set their step intervals,
 defined by their regular spacing along their respective dimension:
 
-<div class="overflow-x-auto">
 $$
 (\Delta t, \Delta x, \Delta y) = \left( \frac{t_\mathrm{max} - t_\mathrm{min}}{N_t-1}, \frac{x_\mathrm{max} - x_\mathrm{min}}{N_x-1}, \frac{y_\mathrm{max} - y_\mathrm{min}}{N_y-1} \right)
 $$
-</div>
 
-Consequently, input points $$(t,x,y)$$ become discretized as $$(t_k, x_i, y_j)$$
-and associated with a node $$[k,i,j]$$. Here,
+Consequently, input points $(t,x,y)$ become discretized as $(t_k, x_i, y_j)$
+and associated with a node $[k,i,j]$. Here,
 
-<div class="overflow-x-auto">
 $$
 (t_k, x_i, y_j) =
 \left\{
@@ -229,7 +223,7 @@ y_j = y_0 + j \Delta y \ \ \ \ \ \ \ \ \ \ \ \text{for} \ 0 \leq j \leq N_y-1
 \end{matrix}
 \right.
 $$
-</div>
+
 
 It is in this *pixelated* world we will express how heat will diffuse
 away...
@@ -238,44 +232,42 @@ away...
 
 So, we now need to express a differential operator in a finite,
 discretized domain. How exactly do we *discretize* such abstract objects,
-like the (univariate) derivative $$f_x(x)$$:
+like the (univariate) derivative $f_x(x)$:
 
 $$
 f_x(x) = \underset{\Delta x \to 0}{\mathrm{lim}} \; \frac{f(x+ \Delta x) - f(x)}{\Delta x}.
 $$
 
-or a partial derivative with respect to, say, a coordinate $$x_j$$:
+or a partial derivative with respect to, say, a coordinate $x_j$:
 
-<div class="overflow-x-auto">
 $$
 f_{x_j}(x_1, \dots, x_j,\ldots,x_N)= \underset{\Delta x_j \to 0}{\mathrm{lim}} \; \frac{f(x_1, \dots, x_j + \Delta x_j, \dots ,x_N) - f(x_1, \ldots,x_j, \dots, x_N)}{\Delta x_j}
 $$
-</div>
 
 Being on a grid means that we require information on a *finite* number of points
 in the domain. The FDM philosophy is to express (infinitesimal) differentials
 by **(finite) differences** between any nodes.
 
 The *continuous* thus becomes *discrete* --- the differential operator
-$$\mathcal{L}(t,x,y)$$ becomes a function-valued discrete *grid*
-$$\equiv \mathcal{L}[k,i,j] = \mathcal{L}(t_k,x_i,y_j) $$.
-Resulting from this, so will our solution be output as the grid $$u[k,i,j]$$.
+$\mathcal{L}(t,x,y)$ becomes a function-valued discrete *grid*
+$\equiv \mathcal{L}[k,i,j] = \mathcal{L}(t_k,x_i,y_j) $.
+Resulting from this, so will our solution be output as the grid $u[k,i,j]$.
 
 In essence, we must find an algorithm which can propagate the constrains
 set by the PDE from the initial conditions as faithfully as possible along the
 grid.
 In a more specific sense, you might wonder:
 
->How to approximate $$\mathcal{L}$$ *reasonably* to obtain $$u[k,i,j]$$ for all
-nodes $$[k,i,j]$$?
+>How to approximate $\mathcal{L}$ *reasonably* to obtain $u[k,i,j]$ for all
+nodes $[k,i,j]$?
 
 This is exactly what the FDM solver will accomplish. For that, it has to
-approximate the differential operators  --- $$u_{t}[k,i,j]$$,
-$$u_{xx}[k,i,j]$$ and $$u_{yy}[k,i,j]$$ --- **at all nodes** $$[k,i,j]$$.
+approximate the differential operators  --- $u_{t}[k,i,j]$,
+$u_{xx}[k,i,j]$ and $u_{yy}[k,i,j]$ --- **at all nodes** $[k,i,j]$.
 
 *Goodbye operators, hello grids!*
 
-### <span class="text-pink-500"> *You've Got (Not) to Hide Your Love Away* </span> <br/> <span class="text-rose-600"> Cupid chooses a Finite Difference Method
+### <span class="text-pink-500"> *You've Got (Not) to Hide Your Love Away* </span> <br/> <span class="text-rose-600"> Cupid chooses a Finite Difference Method</span>
 
 Approximating differentials on a discrete set is also not a recipe set on stone.
 Let us look at two Finite Difference approximations to a function of a single
@@ -284,23 +276,23 @@ variable $$x$$:
 <div class="flex sm:justify-center max-w-sm sm:mx-auto">
 <img src="/assets/img/articles/heat_1_introduction/derivatives.png" >
 </div>
-<span class="mt-0 block sm:text-center text-base"> Fig. 2: Approximation
-schemes of the derivative of $$f(x)$$ at a grid point $$x_i$$ using - (left)
+
+Fig. 2: Approximation schemes of the derivative of $f(x)$ at a grid point $x_i$ using - (left)
 *forward* and (right) *centered* schemes. Note that either method differs from
-the *actual* value $$f_x(x_i)$$, given by the slope of the solid straight line.
+the *actual* value $f_x(x_i)$, given by the slope of the solid straight line.
 Credits: David Carvalho / Inductiva
-</span>
+
 
 These will estimate the true instantaneous rate via neighboring differences.
 Expectedly, an error will be incurred in the process.
 
 The price to pay in "dropping" the limit results in a 1st-order
 approximation, meaning this estimate scales *linearly* with the spacing
-$$\Delta x$$.
-For our approximation to have a chance to succeed, we better sample the $$x$$
-axis with a high $$N_x$$!
+$\Delta x$.
+For our approximation to have a chance to succeed, we better sample the $x$
+axis with a high $N_x$!
 
-## <span class="text-pink-500"> *You Can't Hurry Love*  </span> <br/> <span class="text-rose-600"> Choosing how to spread heat
+## <span class="text-pink-500"> *You Can't Hurry Love*  </span> <br/> <span class="text-rose-600"> Choosing how to spread heat</span>
 
 Given a particular PDE, different FDMs would iterate differently over the grid
 **node by node** to obtain estimates of the differential operators. \
@@ -310,7 +302,7 @@ You guessed it right - for this problem, we will use the 2 approximation
 schemes we showed before to evaluate the differential operators.
 They are combined in the *FTCS scheme*:
 
-* **Forward in Time** - the time partial derivative $$u_t$$ uses the *forward*
+* **Forward in Time** - the time partial derivative $u_t$ uses the *forward*
 1st order differences
   
     $$ u^{k, i, j}_t = \frac{u^{k+1, i, j} - u^{k, i, j}}{\Delta t} $$
@@ -333,7 +325,6 @@ the centered difference *twice*:
 
     - With a bit of rearranging, both spatial derivatives become:
     
-    <div class="overflow-x-auto">
     $$
     \begin{split}
     u_{xx}^{k,i,j} = \frac{u^{k, i+1, j} - 2  u^{k, i, j} +  u^{k, i-1, j}}{(\Delta x)^2} &&
@@ -341,7 +332,6 @@ the centered difference *twice*:
     u_{yy}^{k,i,j}= \frac{u^{k,i,j+1} - 2 u^{k,i,j} + u^{k,i,j-1}}{(\Delta y)^2}
     \end{split}
     $$
-    </div>
 
 Look --- some terms are evaluated *outside* the original grid.
 However, you will notice that these fractional indexes only appear for the
@@ -353,20 +343,18 @@ computation of intermediary constructions/variables [4].
 flow! For that, we must:
 1. *discretize the domain* by sampling each dimension individually and
 considering all possible combinations of the coordinates, creating points
-$$(t_k,x_i,y_j)$$, indexed by nodes $$[k,i,j]$$.
+$(t_k,x_i,y_j)$, indexed by nodes $[k,i,j]$.
 2. *discretize* the differential operators using a FTCS scheme.
-3. solve for the solution grid $$u[k,i,j]$$ by using the *iteration rules*
-that propagate the solution across all nodes $$[k,i,j]$$.
+3. solve for the solution grid $u[k,i,j]$ by using the *iteration rules*
+that propagate the solution across all nodes $[k,i,j]$.
 
 In this fashion, we convert the 2D Heat Equation to this **difference equation**:
 
-<div class="overflow-x-auto">
 $$
 u^{k+1, i, j} = \alpha (u^{k, i+1, j} + u^{k, i-1, j}) +
                 \beta  (u^{k, i, j+1} + u^{k, i, j-1}) +
                 (1 - 2\alpha - 2\beta) u^{k, i, j}
 $$
-</div>
 
 where we can lump all parameters in the ratios:
 
@@ -387,11 +375,11 @@ algorithm so a solution estimate may be computed at all grid points.
     <source src="{{ 'assets/img/articles/heat_1_introduction/fdm_animation.mp4' | relative_url }}" type="video/mp4">
 </video>
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 3: A stencil used by the
-FTCS scheme. At a given node $$[k,i,j]$$, the solution is propagated forward in time as $$u[k+1,i,j]$$
-by considering the 2-point centered derivatives in $$x$$ (the neighboring nodes
- $$[k,i+1,j]$$ and $$[k,i-1,j]$$) and in $$y$$ (the nodes $$[k,i,j+1]$$ and $$[k,i,j-1]$$). <br>
-Credits: Augusto Peres, Inductiva.</span>
+
+Fig. 3: A stencil used by the FTCS scheme. At a given node $[k,i,j]$, the solution is propagated forward in time as $u[k+1,i,j]$
+by considering the 2-point centered derivatives in $x$ (the neighboring nodes
+ $[k,i+1,j]$ and $[k,i-1,j]$) and in $y$ (the nodes $[k,i,j+1]$ and $[k,i,j-1]$). <br>
+Credits: Augusto Peres, Inductiva.
 
 ## <span class="text-pink-500"> Time to Heat [Start] </span> <br/> <span class="text-rose-600"> Run our code</span>
 
@@ -403,12 +391,12 @@ There, you will find the `heat_fdm.py` file for simulations and plotting
 utilities in `/utils`. \
 Have a go yourself!
 
-### <span class="text-pink-500"> *Fast(er) Love*  </span> <br/> <span class="text-rose-600"> The role of the $$D$$-ffusivity </span>
+### *Fast(er) Love* The role of the $D$-ffusivity
 
-We will pick a spatial discretization of, say, $$500 \times 500$$ points.
+We will pick a spatial discretization of, say, $500 \times 500$ points.
 We can now run for different thermal diffusivities and see their effect.
-Below you can see the temperature profiles as we increase $$D$$ ---
-first with $$D=0.01$$, then $$D=0.1$$ and finally $$D=1$$.
+Below you can see the temperature profiles as we increase $D$ ---
+first with $D=0.01$, then $D=0.1$ and finally $D=1$.
 
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
 <video class="mb-0" loop muted autoplay preload="auto">
@@ -421,13 +409,13 @@ first with $$D=0.01$$, then $$D=0.1$$ and finally $$D=1$$.
     <source src="{{ 'assets/img/articles/heat_1_introduction/ftcs_d1.mp4' | relative_url }}" type="video/mp4">
 </video>
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 4: Role of various $$D$$ in the diffusion. Credits: Manuel Madeira / Inductiva </span>
+<span class="mt-0 block sm:text-center text-base">Fig. 4: Role of various $D$ in the diffusion. Credits: Manuel Madeira / Inductiva </span>
 
 *Love is in the air* --- but heat for sure is on the plate! \
 We can reason with these results.
 
-- At the beginning (for $$t=0$$), heat starts developing from the only points
-that are not at the common temperature ($$-1 \; ^\mathrm{o}C$$), where
+- At the beginning (for $t=0$), heat starts developing from the only points
+that are not at the common temperature ($-1 \; ^\mathrm{o}C$), where
 temperature gradients exist. These are points nearby the hot (top) edge.
 
 - From that point on, we can observe the progressive heat diffusion from the
@@ -440,10 +428,10 @@ points along the central line between the edges allow for faster
 diffusion than regions nearby the edges. This will progressively wind down
 until we reach the cold edges and a paraboloid-like pattern is observed.
 
-- But more importantly --- the higher the $$D$$, the faster this spread occurs.
+- But more importantly --- the higher the $D$, the faster this spread occurs.
 This **directly** impacts the choice of the time sampling.
 
-So --- it seems that each **internal** parameter $$D$$ requires its own
+So --- it seems that each **internal** parameter $D$ requires its own
 discretization setup somehow. But in what way?
 
 ### <span class="text-pink-500"> *How Stable Is Your Love?*  </span> <br/> <span class="text-rose-600"> Setting stability criteria </span>
@@ -465,12 +453,12 @@ However, these are the extreme instances. Were we lucky? If we are using
 > How to *be sure* a certain discretization provides a trustful approximation to the PDE solution?
 
 Fortunately for us, you can notice that the discretization setup can be
-monitored **exclusively** through the ratios $$\alpha$$ and $$\beta$$!
+monitored **exclusively** through the ratios $\alpha$ and $\beta$!
 This raises the question:
 
 > Can we somehow fine-tune them to ensure *stability* *i.e.* find
-> admissible combinations of $$(\Delta t, \Delta x, \Delta y)$$ for a
-> fixed $$D$$?
+> admissible combinations of $(\Delta t, \Delta x, \Delta y)$ for a
+> fixed $D$?
 
 Well, theoretical studies can be performed to find a restricted space of
 acceptable discretization setups.
@@ -487,15 +475,16 @@ other and ii) have spacings that can capture meaningful changes of the solution.
 
 **This is not a loose condition**. \
 Just to show you that we're playing with fire, we cannot think of a more
-illustrative example than by ramping up that bound by a mere $$2 \% $$ above
-the theoretical maximum *i.e.* for $$\alpha + \beta \approx 0.51$$:
+illustrative example than by ramping up that bound by a mere $2 \% $ above
+the theoretical maximum *i.e.* for $\alpha + \beta \approx 0.51$:
 
 <div class="flex sm:justify-center max-w-lg sm:mx-auto">
 <video class="mb-0" loop muted autoplay preload="auto">
     <source src="{{ 'assets/img/articles/heat_1_introduction/ftcs_unstable.mp4' | relative_url }}" type="video/mp4">
 </video>
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 5: In a discretization step for which $$\alpha + \beta > 0.5$$, our algorithm is *bound to fail*. Credits: Manuel Madeira / Inductiva </span>
+
+Fig. 5: In a discretization step for which $\alpha + \beta > 0.5$, our algorithm is *bound to fail*. Credits: Manuel Madeira / Inductiva
 
 Yup: for this setup, an "explosion" caused by the FDM instability can be seen
 propagating along the trial solution --- quickly unfolding to some psychedelic
@@ -507,27 +496,28 @@ away and **faster** in regions with already large errors.
 
 It's a race for disaster: the exponential buildup of the errors, even
 if sustained for only a handful of propagation steps, ensures that some nodes
-will experience *huge growth* (and $$u$$ becomes *unbounded*) ---
-$$ u \mapsto 1 \mapsto 10^{15} \mapsto \dots 10^{80} \dots $$,
+will experience *huge growth* (and $u$ becomes *unbounded*) ---
+$ u \mapsto 1 \mapsto 10^{15} \mapsto \dots 10^{80} \dots $,
 until the maximum computer precision is reached --- at which point its value
  becomes a `NaN` (Not a Number). You can see that eventually **all** points
  are not even represented on the scale (they're white)!
 
 By the same token, let's now see what happens if we're *close to the edge* from
-within the admissible area. Dropping our bound by $$2 \% $$, let's heat the start
-button for $$\alpha + \beta \approx 0.49$$.
+within the admissible area. Dropping our bound by $2 \% $, let's heat the start
+button for $\alpha + \beta \approx 0.49$.
 
 <div class="flex sm:justify-center max-w-lg sm:mx-auto ">
 <video class="mb-0" loop muted autoplay preload="auto">
     <source src="{{ 'assets/img/articles/heat_1_introduction/ftcs_almost_unstable.mp4' | relative_url }}" type="video/mp4">
 </video>
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 6: With our parameters recalibrated, stability has been restored! Credits: Manuel Madeira / Inductiva </span>
+
+Fig. 6: With our parameters recalibrated, stability has been restored! Credits: Manuel Madeira / Inductiva
 
 *Incredible!* Not even a minimal sign of instability coming through.
 
 We're happy - we obtained seemingly satisfactory outputs in a reasonable way.
-The simulations take about $$10s$$ and CPUs can handle the computation just fine.
+The simulations take about $10s$ and CPUs can handle the computation just fine.
 
 But remember though: this is an extremely simple system...
 We could be considering this problem in 3D or at way more complex domains and
@@ -548,12 +538,12 @@ performance and the output accuracy. In essence:
 Using the *running time* as a metric, we'll compare 3 mainstream implementations:
 
 * **Nested `For` Cycles**: we fill in the entries for the plate at the new time
-frame $$u^{k+1, i, j}$$, by nesting 2 `For` cycles that iterate through the
-$$x$$ and $$y$$ axes from the previous time frame in $$u^{k, i, j}$$.
+frame $u^{k+1, i, j}$, by nesting 2 `For` cycles that iterate through the
+$x$ and $y$ axes from the previous time frame in $u^{k, i, j}$.
 
-* **Vectorized approach**: we perform arithmetic operations on $$u^{k+1,i,j}$$
+* **Vectorized approach**: we perform arithmetic operations on $u^{k+1,i,j}$
 by considering it as a linear combination of slightly shifted versions
-$$u^{k,i,j}$$, multiplied by constants (known *a priori*), resulting in
+$u^{k,i,j}$, multiplied by constants (known *a priori*), resulting in
 scalar multiplications and additions of matrices.
 *NumPy* implementations will be used.
 
@@ -576,7 +566,7 @@ vectorization_strategy=numpy - Time spent in FDM: 0.6520950794219971s
 vectorization_strategy=jax - Time spent in FDM: 0.297029972076416s
 ```
 
-*Wow!* By using the vectorized approach, we obtain more than a $$100$$-fold boost
+*Wow!* By using the vectorized approach, we obtain more than a $100$-fold boost
 in running speed!
 
 This is not surprising. The vectorized approach takes advantage **SIMD**
@@ -588,7 +578,7 @@ in constrast when ran with the nested `For` cycles,
 where each instruction is executed **one at a time**.
 
 We are not done yet. By compiling the vectorized approach, we obtain yet another
-$$3$$-fold speed-up, further improving our metric!
+$3$-fold speed-up, further improving our metric!
 This improvement would be even more significant if we ran the compiled code in
 GPUs (currently, JAX still only supports CPU in Apple Silicon machines).
 
@@ -631,15 +621,15 @@ Classical algorithms scale **terribly** with the PDE dimensions and grid
 refinements.
 
 For all the Complexity lovers out there --- you know that sweeping the regular
-grid $$[k,i,j]$$ step-by-step requires algorithms of order
-$$\mathcal{O}(N_t N_x N_y)$$. \
-By simply refining our grid by $$5$$ times, we scale the number of nodes by
-a whopping factor $$5^3 = 125$$ (!!!).
+grid $[k,i,j]$ step-by-step requires algorithms of order
+$\mathcal{O}(N_t N_x N_y)$. \
+By simply refining our grid by $5$ times, we scale the number of nodes by
+a whopping factor $5^3 = 125$ (!!!).
 
 Similar bad news are expected as we consider simulations on PDEs for higher
 dimensions. For a problem of 3D heat diffusion, the complexity grows as
-$$\mathcal{O} (N_t N_x N_y N_z)$$ and naturally, $$n$$ dimensions scale as
-$$\mathcal{O}(N^d)$$ --- an *exponential scaling* of the algorithm
+$\mathcal{O} (N_t N_x N_y N_z)$ and naturally, $n$ dimensions scale as
+$\mathcal{O}(N^d)$ --- an *exponential scaling* of the algorithm
 with dimension.
 
 ### <span class="text-pink-500"> *Crazy Little Thing Called...* <br/> <span class="text-rose-600"> Feasibility </span>
@@ -648,8 +638,8 @@ Even though we can rely on stability conditions, this does **not** mean we can
 deploy them --- it may be computationally very, very, ..., heavy or simply
 impossible.
 
-As we saw, simulating a medium with *higher* $$D$$ requires a *finer* time
-discretization. For some instances, satisfactory $$\Delta t$$ might be too
+As we saw, simulating a medium with *higher* $D$ requires a *finer* time
+discretization. For some instances, satisfactory $\Delta t$ might be too
 small to be practical and, in the extreme case, downright untenable!
 
 This comes at a bitter price and is a **major** drawback of the FDM.

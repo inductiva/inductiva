@@ -41,6 +41,12 @@ extensions = [
     'sphinx_sitemap',
 ]
 
+myst_enable_extensions = [
+    "amsmath",
+    "dollarmath",
+    # other MyST extensions
+]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 sphinx_tabs_valid_builders = ['html']
