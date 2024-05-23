@@ -3,18 +3,24 @@ import os
 import sys
 import logging
 import contextvars
+from urllib3.exceptions import MaxRetryError, NewConnectionError
 
 import absl
 
-from . import api
+from inductiva.client.apis.tags.version_api import VersionApi
+from inductiva.client.configuration import Configuration
+from inductiva.client.exceptions import ApiException
+from inductiva.client.api_client import ApiClient
+
 from . import simulators
 from . import resources
+from . import projects
 from . import storage
 from . import utils
 from . import tasks
 from . import users
 from . import logs
-from . import projects
+from . import api
 from .templating import TemplateManager
 
 logs.setup()
@@ -72,16 +78,74 @@ def _check_for_available_package_update():
         print(msg, file=sys.stderr)
 
 
-def _check_key():
-    if utils.format_utils.getenv_bool("GITHUB_ACTIONS", False) is not True:
-        api.methods.validate_api_key()
+def _set_key_and_check_version():
+    """Sets the api key and checks if it is valid."""
+    if not utils.format_utils.getenv_bool("GITHUB_ACTIONS", False):
+        set_api_key(get_api_key())
+
+    # Perform version check only on first invocation
+    if not hasattr(_set_key_and_check_version, "version_checked"):
+        compare_client_and_backend_versions(__version__)
+        _set_key_and_check_version.version_checked = True
 
 
 _check_for_available_package_update()
 
 
+def compare_client_and_backend_versions(client_version: str):
+    """ Compares the provided client version 7with the backend API version.
+
+    Sends a GET request to the backend API's version comparison endpoint
+    with the client version as a parameter. Evaluates the response to
+    determine if the client version is compatible with the backend version.
+    Raises exceptions for communication issues or incompatibility.
+
+    Parameters:
+    - client_version (str): The version of the client to be compared with the
+                            backend version.
+
+    Raises:
+    - RuntimeError: If the API cannot be reached, or if the client version is
+      incompatible with the backend version, or for other general failures.
+    """
+    api_config = Configuration(host=api_url)
+
+    with ApiClient(api_config) as client:
+        api_instance = VersionApi(client)
+        query_params = {"client_version": client_version}
+
+        try:
+            api_instance.compare_client_and_backend_versions(
+                query_params=query_params)
+
+        except (MaxRetryError, NewConnectionError) as exc:
+            raise RuntimeError(
+                "Failed to reach the API. "
+                "Please check your connection and try again.") from exc
+
+        except ApiException as e:
+            if e.status == 406:
+                raise RuntimeError(
+                    f"Client version {client_version} is not compatible "
+                    f"with API version {e.headers['version']}.\n"
+                    "Please update the client version.") from e
+            raise RuntimeError(e) from e
+
+        except Exception as e:
+            raise RuntimeError(
+                f"Failed to compare client and API versions. {e}") from e
+
+
 def set_api_key(api_key):
     """Sets the value of `inductiva._api_key` to `api_key"""
+    if api_key is None:
+        # pylint: disable=line-too-long
+        raise ValueError(
+            "No API Key specified. "
+            "Please set the INDUCTIVA_API_KEY environment variable.\n"
+            "More infomation at:"
+            "https://docs.inductiva.ai/en/latest/get_started/installation.html")
+
     _api_key.set(api_key)
 
 
@@ -103,4 +167,4 @@ def _supports_ansi():
 
 _ansi_enabled = _supports_ansi()
 
-_check_key()
+_set_key_and_check_version()
