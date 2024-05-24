@@ -44,10 +44,13 @@ def run_simulation(
     if provider_id is not None:
         provider_id = ProviderType(provider_id)
 
+    container_image = kwargs.get("container_image", None)
+
     task_id = api_invoker(api_method_name,
                           params,
                           type_annotations,
                           resource_pool=computational_resources,
+                          container_image=container_image,
                           storage_path_prefix=storage_dir,
                           provider_id=provider_id)
 

@@ -329,6 +329,7 @@ def log_task_info(task_id, method_name, params, resource_pool):
 
 def submit_task(api_instance, method_name, request_params, resource_pool,
                 storage_path_prefix, params, type_annotations,
+                container_image: Optional[str], \
                 provider_id: ProviderType):
     """Submit a task and send input files to the API."""
 
@@ -347,6 +348,7 @@ def submit_task(api_instance, method_name, request_params, resource_pool,
         params=request_params,
         resource_pool=resource_pool_id,
         storage_path_prefix=storage_path_prefix,
+        container_image=container_image,
         provider_id=provider_id.value,
         project=current_project,
     )
@@ -374,10 +376,11 @@ def submit_task(api_instance, method_name, request_params, resource_pool,
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
+                     provider_id: ProviderType = ProviderType.GCP,
                      resource_pool: Optional[
                          types.ComputationalResources] = None,
                      storage_path_prefix: Optional[str] = "",
-                     provider_id: ProviderType = ProviderType.GCP) -> str:
+                     container_image: Optional[str] = None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -398,6 +401,8 @@ def invoke_async_api(method_name: str,
         request: Request sent to the API for validation.
         input_dir: Directory containing the input files to be uploaded.
         provider_id: The provider id to use for the simulation (GCP or ICE).
+        container_image: The container image to use for the simulation
+            Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
 
     Return:
         Returns the task id.
@@ -420,6 +425,7 @@ def invoke_async_api(method_name: str,
                               storage_path_prefix=storage_path_prefix,
                               params=params,
                               provider_id=provider_id,
+                              container_image=container_image,
                               type_annotations=type_annotations)
 
     return task_id
