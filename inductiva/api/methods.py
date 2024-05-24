@@ -313,9 +313,15 @@ def log_task_info(task_id, method_name, params, resource_pool):
                      constants.DEFAULT_QUEUE_MACHINE_TYPE)
 
 
-def submit_task(api_instance, method_name, request_params, resource_pool,
-                storage_path_prefix, params, type_annotations,
-                provider_id: ProviderType):
+def submit_task(api_instance,
+                method_name,
+                request_params,
+                resource_pool,
+                storage_path_prefix,
+                params,
+                type_annotations,
+                provider_id: ProviderType,
+                container_image: Optional[str] = None):
     """Submit a task and send input files to the API."""
 
     resource_pool_id = None
@@ -333,6 +339,7 @@ def submit_task(api_instance, method_name, request_params, resource_pool,
         params=request_params,
         resource_pool=resource_pool_id,
         storage_path_prefix=storage_path_prefix,
+        container_image=container_image,
         provider_id=provider_id.value,
         project=current_project,
     )
@@ -363,7 +370,8 @@ def invoke_async_api(method_name: str,
                      resource_pool: Optional[
                          types.ComputationalResources] = None,
                      storage_path_prefix: Optional[str] = "",
-                     provider_id: ProviderType = ProviderType.GCP) -> str:
+                     provider_id: ProviderType = ProviderType.GCP,
+                     container_image: Optional[str] = None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -384,6 +392,8 @@ def invoke_async_api(method_name: str,
         request: Request sent to the API for validation.
         input_dir: Directory containing the input files to be uploaded.
         provider_id: The provider id to use for the simulation (GCP or ICE).
+        container_image: The container image to use for the simulation
+            Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
 
     Return:
         Returns the task id.
@@ -406,6 +416,7 @@ def invoke_async_api(method_name: str,
                               storage_path_prefix=storage_path_prefix,
                               params=params,
                               provider_id=provider_id,
+                              container_image=container_image,
                               type_annotations=type_annotations)
 
     return task_id
