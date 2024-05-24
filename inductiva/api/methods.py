@@ -381,10 +381,10 @@ def submit_task(api_instance,
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
-                     provider_id: ProviderType = ProviderType.GCP,
                      resource_pool: Optional[
                          types.ComputationalResources] = None,
                      storage_path_prefix: Optional[str] = "",
+                     provider_id: ProviderType = ProviderType.GCP,
                      container_image: Optional[str] = None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
