@@ -3,7 +3,7 @@ from typing import TextIO
 import argparse
 import sys
 
-from inductiva import tasks, _cli
+from inductiva import tasks, _cli, projects
 from inductiva.utils import format_utils
 from inductiva.client import models
 
@@ -11,11 +11,15 @@ from inductiva.client import models
 def list_tasks(args, fout: TextIO = sys.stdout):
     """ List the last user's tasks. 
 
-    Lists based on the flags (task_id, last_n).
+    Lists based on the flags (task_id, last_n or project_name).
     It can print the last N tasks (default value is 5)
     or a single task with a specific ID
+    or all tasks of a project.
     """
-    if args.task_id is not None:
+    if args.project_name is not None:
+        print(f"Showing tasks for project: {args.project_name}.")
+        task_list = projects.Project(args.project_name).get_tasks()
+    elif args.task_id is not None:
         task_list = [tasks.Task(args.task_id)]
     else:
         last_n = 5 if args.last_n is None else args.last_n
@@ -80,5 +84,9 @@ def register(parser):
                        "--task-id",
                        type=str,
                        help="List a task with a specific ID.")
+    group.add_argument("-p",
+                       "--project-name",
+                       type=str,
+                       help="List the tasks of a project.")
 
     subparser.set_defaults(func=list_tasks)
