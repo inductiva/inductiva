@@ -2,14 +2,15 @@
 
 import pytest
 from unittest import mock
-from inductiva.api import methods
+
+import inductiva
 from inductiva.client import exceptions
 
 
 @pytest.fixture(name="mock_api_client")
 def api_client_fixture():
     """Mock the API client."""
-    with mock.patch("inductiva.api.methods.VersionApi") as mock_api:
+    with mock.patch("inductiva.VersionApi") as mock_api:
         mock_instance = mock.MagicMock()
         mock_api.return_value = mock_instance
         mock_instance.compare_client_and_backend_versions.return_value = mock.MagicMock(  # pylint: disable=line-too-long
@@ -24,7 +25,7 @@ def api_client_fixture():
 def test_version_match(mock_api_client):  # pylint: disable=unused-argument
     """Test that the method returns successfully when the versions match."""
     # No exception should be raised
-    methods.compare_client_and_backend_versions("1.0.0")
+    inductiva.compare_client_and_backend_versions("1.0.0")
 
 
 # Test version mismatch
@@ -49,7 +50,7 @@ def test_version_mismatch(mock_api_client):
     mock_api_client.compare_client_and_backend_versions.side_effect = mock_api_exception  # pylint: disable=line-too-long
 
     with pytest.raises(RuntimeError) as exc_info:
-        methods.compare_client_and_backend_versions("1.0.0")
+        inductiva.compare_client_and_backend_versions("1.0.0")
 
     assert "Client version 1.0.0 is not compatible" in str(exc_info.value)
     assert "API version 1.0.1" in str(exc_info.value)
@@ -61,6 +62,6 @@ def test_invalid_client_version_format(mock_api_client):
         status=400, reason="Bad Request")
 
     with pytest.raises(RuntimeError) as exc_info:
-        methods.compare_client_and_backend_versions("invalid-version")
+        inductiva.compare_client_and_backend_versions("invalid-version")
 
     assert "Bad Request" in str(exc_info.value)

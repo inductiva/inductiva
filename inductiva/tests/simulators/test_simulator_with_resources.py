@@ -6,7 +6,7 @@ from unittest import mock
 from inductiva import simulators, resources
 import inductiva
 
-inductiva.api_key = "dummy"
+inductiva.set_api_key("dummy")
 
 
 class TesterSimulator(simulators.Simulator):

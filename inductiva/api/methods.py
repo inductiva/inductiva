@@ -4,15 +4,14 @@ The relevant function for usage outside of this file is invoke_async_api().
 Check the demos directory for examples on how it is used.
 """
 import os
-import pathlib
-import signal
 import time
-from urllib3.exceptions import MaxRetryError, NewConnectionError
-from contextlib import contextmanager
 import tqdm
 import tqdm.utils
+import signal
+import pathlib
 import urllib3
 import urllib3.request
+from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
 
 from absl import logging
@@ -20,7 +19,6 @@ from absl import logging
 import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
-from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.models import TaskRequest, TaskStatus
 from inductiva import types, constants
 from inductiva.resources.machine_types import ProviderType
@@ -29,21 +27,9 @@ from inductiva.utils.data import (extract_output, get_validate_request_params,
 from inductiva.utils import format_utils, files
 
 
-def validate_api_key(api_key: Optional[str]) -> Configuration:
-    """Validates the API key and returns API configuration"""
-    if inductiva.api_key is None:
-        # pylint: disable=line-too-long
-        raise ValueError(
-            "No API Key specified. "
-            "Please set the INDUCTIVA_API_KEY environment variable.\n"
-            "More infomation at:"
-            "https://docs.inductiva.ai/en/latest/get_started/installation.html")
-    # pylint: enable=line-too-long
-
-    # Perform version check only on first invocation
-    if not hasattr(validate_api_key, "version_checked"):
-        compare_client_and_backend_versions(inductiva.__version__)
-        validate_api_key.version_checked = True
+def get_api_config() -> Configuration:
+    """Returns an API configuration object."""
+    api_key = inductiva.get_api_key()
 
     api_config = Configuration(host=inductiva.api_url)
     api_config.api_key["APIKeyHeader"] = api_key
@@ -53,7 +39,7 @@ def validate_api_key(api_key: Optional[str]) -> Configuration:
 
 def get_client() -> ApiClient:
     """Returns an ApiClient instance."""
-    api_config = validate_api_key(inductiva.api_key)
+    api_config = get_api_config()
 
     return ApiClient(api_config)
 
@@ -403,7 +389,7 @@ def invoke_async_api(method_name: str,
         Returns the task id.
     """
 
-    api_config = validate_api_key(inductiva.api_key)
+    api_config = get_api_config()
 
     request_params = get_validate_request_params(
         original_params=params,
@@ -423,47 +409,3 @@ def invoke_async_api(method_name: str,
                               type_annotations=type_annotations)
 
     return task_id
-
-
-def compare_client_and_backend_versions(client_version: str):
-    """ Compares the provided client version 7with the backend API version.
-
-    Sends a GET request to the backend API's version comparison endpoint
-    with the client version as a parameter. Evaluates the response to
-    determine if the client version is compatible with the backend version.
-    Raises exceptions for communication issues or incompatibility.
-
-    Parameters:
-    - client_version (str): The version of the client to be compared with the
-                            backend version.
-
-    Raises:
-    - RuntimeError: If the API cannot be reached, or if the client version is
-      incompatible with the backend version, or for other general failures.
-    """
-    api_config = Configuration(host=inductiva.api_url)
-
-    with ApiClient(api_config) as client:
-        api_instance = VersionApi(client)
-        query_params = {"client_version": client_version}
-
-        try:
-            api_instance.compare_client_and_backend_versions(
-                query_params=query_params)
-
-        except (MaxRetryError, NewConnectionError) as exc:
-            raise RuntimeError(
-                "Failed to reach the API. "
-                "Please check your connection and try again.") from exc
-
-        except ApiException as e:
-            if e.status == 406:
-                raise RuntimeError(
-                    f"Client version {client_version} is not compatible "
-                    f"with API version {e.headers['version']}.\n"
-                    "Please update the client version.") from e
-            raise RuntimeError(e) from e
-
-        except Exception as e:
-            raise RuntimeError(
-                f"Failed to compare client and API versions. {e}") from e

@@ -82,7 +82,7 @@ def main():
             _cli.utils.setup_zsh_autocompletion()
 
     if args.api_key:
-        inductiva.api_key = args.api_key
+        inductiva.set_api_key(args.api_key)
 
     exit_code = 0
     # Call the function associated with the subcommand

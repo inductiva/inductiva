@@ -27,7 +27,7 @@ def test_machines__mpicluster__register():
     Goal: Verify that the MPICluster is initializating and the registration is
     processed, by mocking it instead of calling the API.
     """
-    inductiva.api_key = "dummy"
+    inductiva.set_api_key("dummy")
     cluster = inductiva.resources.MPICluster(machine_type="c2-standard-16",
                                              num_machines=2)
 
@@ -47,7 +47,7 @@ def test_machines__machine_group__register():
     mock registration.
     """
 
-    inductiva.api_key = "dummy"
+    inductiva.set_api_key("dummy")
     cluster = inductiva.resources.MachineGroup(machine_type="c2-standard-16",
                                                num_machines=2)
 
@@ -67,7 +67,7 @@ def test_machines__machine_group__ice_register():
     mock registration and the ICE provider.
     """
 
-    inductiva.api_key = "dummy"
+    inductiva.set_api_key("dummy")
     machine = inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
                                                provider="ICE")
 
@@ -90,7 +90,7 @@ def test_machines__ice_register__invalid_args():
     mock registration and the ICE provider.
     """
 
-    inductiva.api_key = "dummy"
+    inductiva.set_api_key("dummy")
 
     with pytest.raises(ValueError) as exception:
         inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
