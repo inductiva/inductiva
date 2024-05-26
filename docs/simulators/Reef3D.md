@@ -71,7 +71,7 @@ task.wait()
 task.download_outputs()
 ```
 
-## Mora Advanced Example
+## A slighly more advanced example
 Let's now run a more advanced example, one that will also require a lot more
 compute power, and will illustrate more advanced features of the API. More
 specifically, we will use the API to run the "3D Dam Break Scenarion with
@@ -83,9 +83,238 @@ two files that are required to configure the simulation:
 * [ctrl.txt](https://github.com/REEF3D/REEF3D/blob/master/Tutorials/REEF3D_CFD/10_2%203D%20Dam%20Break%20with%20Obstacle/ctrl.txt)
 
 Let's start by downloading them and adding them to a folder named
-"10_2_3D_Dam_Break_with_Obstacle".
+"10_2_3D_Dam_Break_with_Obstacle" inside our working folder. Just download each
+file directly from GitHub (use "Download raw file" option) and move them to
+the "10_2_3D_Dam_Break_with_Obstacle" local folder (that you should also create
+locally).
+
+Before we proceed let's inspect the files to check two parameters that are
+going to be important to configure our run: ```N 41``` and ```M 10```:
+
+### control.txt (for DiveMESH)
+```
+C 11 21
+C 12 21
+C 13 21
+C 14 21
+C 15 21
+C 16 21
+
+B 1 0.025
+B 10 0.0 2.0 0.0 1.0 0.0 1.0
+O 10 1.2 1.4 0.4 0.6 0.0 1.0
+
+M 10 4    <---- defines the nr. of processors for parallel computations (4)
+```
+
+### ctrl.txt (for Reef3D)
+```
+D 10 4
+D 20 2
+D 30 1
+F 30 3
+F 40 3
+F 54 0.5
+F 56 0.7
+N 40 3
+N 41 25.0    <---- set the maximum modeled time (25 seconds).
+N 45 50000
+N 47 0.2
+M 10 4    <---- defines the nr. of processors for parallel computations (4)
+P 10 1
+P 30 0.01    <---- defines the rate of paraview results (1 frame per 0.01 s)
+T 10 0
+W 22 -9.81
+```
+
+Observe that parameter ```M 10```, which controls the degree of parallism, is
+set to 4 threads/vCPUs, a very small number. Depending on the number of vCPUs we
+effectively wish to use for running the simulation, we will need to manually
+change  ```M 10``` on **both files** to match the specs of the VM we choose. 
+Since this is already a reasoably heavy simulation, we will be using GCP VMs of
+the c3d family, supported by last-generation AMD chips. More specifically,
+we will be using ```c3d-standard-90``` machines with 90 vCPU. So, we will be
+setting ```M 10 90``` on both files.
+
+Also, Reef3D produces a huge amount of data. As it is currently configured, this
+simulation would produce several dozen gigabytes of data. To reduce that amount
+of data produced, we can both reduce the maximum modeled time (```N 41''') and
+the rate at which Paraview info is being produced (```P 10''').
+
+So, for a reducing the amount of data generated, we will be reducing the rate
+at which Paraview information is going to be generated to 25 frames per second,
+that is, we will set ```P 10 0.04'''. 
+
+Next, we are not going to reduce the maximum modeled time but, when configuring
+our machine, we will add extra disk capacity to ensure we have enough space to
+write all the data being produced. We will request our machine to be equipped
+with 20GB just for data, using the ```data_disk_gb''' parameter of the 
+```inductiva.resources.MachineGroup''' class.
+
+Here is the final script:
+
+```
+import inductiva
 
 
+machine_group = inductiva.resources.MachineGroup(
+    machine_type="c3d-standard-90",
+    spot=True,
+    data_disk_gb=20)  ## We are adding extra disk space here
+machine_group.start()
+
+
+reef3d = inductiva.simulators.REEF3D()
+
+task = reef3d.run(input_dir="./10_2_3D_Dam_Break_with_Obstacle",
+                  on=machine_group,
+                  n_vcpus=90)   ## We need to make sure this matches `N 10`
+
+task.wait()
+task.download_outputs()
+
+## Make sure we terminate the machine.
+machine_group.terminate()
+```
+
+Running this script end-to-end should take about 25 minutes, distributed in
+the following way:
+
+* about 2 minutes of preparation, including starting the executer VM.
+* about 11 minutes of compute time (you can change this by choosing other VMs
+or changing the settings of this one.)
+* 4 minutes to make the output available for download, which involves zipping
+it and moving it from the executer machine to your personal bucket on Inductiva
+so you can access it at any time.
+* about 7 minutes to download the 3.3GB of zipped data, but this time depends
+on the speed of your network. This is an optional step. You don't need to
+download the output data at this point.
+* about 3 minutes to unzip the data locally (about 15GB of data when unzipped).
+This is an optional step that also depends on how fast your local machine is.
+* 1 minute to turn off the executor VM. This step is optional but advisable.
+
+This is what you are supposed to see:
+
+```
+Registering MachineGroup configurations:
+> Name:         api-kw1m7e9hs2yxkxy9n2yf4so6r
+> Machine Type: c3d-standard-90
+> Data disk size:    20 GB
+> Number of machines: 1
+> Spot:               True
+> Estimated cloud cost of machine group: 1.496 $/h
+Starting MachineGroup(name="api-kw1m7e9hs2yxkxy9n2yf4so6r"). This may take a few minutes.
+Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
+Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines successfully started in 0:00:23.
+Task Information:
+> ID:                    ggkjuzhivoon56vkozgqxapfk
+> Method:                reef3d
+> Local input directory: 10_2_3D_Dam_Break_with_Obstacle
+> Submitting to the following computational resources:
+ >> Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines
+Preparing upload of the local input directory 10_2_3D_Dam_Break_with_Obstacle (399 B).
+Input archive size: 640 B
+Uploading input archive...
+100%|█████████████████████████████████████████████████████████████████████████████████| 640/640 [00:00<00:00, 1.03kB/s]
+Local input directory successfully uploaded.
+Task ggkjuzhivoon56vkozgqxapfk submitted to the queue of the Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines.
+Simulation metadata logged to: inductiva_output/task_metadata.json
+Task ggkjuzhivoon56vkozgqxapfk configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
+Consider tracking the status of the task via CLI:
+	inductiva tasks list --task-id ggkjuzhivoon56vkozgqxapfk
+Or, tracking the logs of the task via CLI:
+	inductiva logs ggkjuzhivoon56vkozgqxapfk
+Task ggkjuzhivoon56vkozgqxapfk successfully queued and waiting to be picked-up for execution...
+Task ggkjuzhivoon56vkozgqxapfk has started and is now running remotely.
+Task ggkjuzhivoon56vkozgqxapfk completed successfully.
+Downloading simulation outputs to inductiva_output/ggkjuzhivoon56vkozgqxapfk/output.zip.
+100%|█████████████████████████████████████████████████████████████████████████████| 3.30G/3.30G [07:11<00:00, 7.64MB/s]
+Uncompressing the outputs to inductiva_output/ggkjuzhivoon56vkozgqxapfk.
+Terminating MachineGroup(name="api-kw1m7e9hs2yxkxy9n2yf4so6r"). This may take a few minutes.
+Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines successfully terminated in 0:01:11.
+```
+
+You can check stdout in real time by issueing:
+
+```
+inductiva logs ggkjuzhivoon56vkozgqxapfk
+```
+
+This line is shown in the trace above so you can just copy and paste it to a
+new terminal (which needs also to have the API key set as an environment
+variable). You should then see something like this:
+
+```
+...
+...
+7193
+simtime: 24.982
+timestep: 0.007
+Volume 1: 0.235
+Volume 2: 1.725
+lsmtime: 0.004
+.piter: 3  ptime: 0.010
+.piter: 3  ptime: 0.010
+.piter: 3  ptime: 0.010
+umax: 0.238 	 utime: 0.007
+vmax: 0.199 	 vtime: 0.007
+wmax: 0.277 	 wtime: 0.006
+viscmax: 0.000
+kinmax: 0.000
+epsmax: 0.000
+reinitime: 0.005
+gctime: 0.002	 average gctime: 0.002
+Xtime: 0.013	 average Xtime: 0.014
+total time: 626.067449   average time: 0.087
+timer per step: 0.073
+------------------------------------
+7194
+simtime: 24.989
+timestep: 0.007
+Volume 1: 0.235
+Volume 2: 1.725
+lsmtime: 0.003
+.piter: 3  ptime: 0.010
+.piter: 3  ptime: 0.010
+.piter: 3  ptime: 0.010
+umax: 0.237 	 utime: 0.007
+vmax: 0.202 	 vtime: 0.006
+wmax: 0.276 	 wtime: 0.006
+viscmax: 0.000
+kinmax: 0.000
+epsmax: 0.000
+reinitime: 0.005
+gctime: 0.002	 average gctime: 0.002
+Xtime: 0.011	 average Xtime: 0.014
+total time: 626.138361   average time: 0.087
+timer per step: 0.071
+------------------------------------
+7195
+simtime: 24.996
+timestep: 0.007
+Volume 1: 0.235
+Volume 2: 1.725
+lsmtime: 0.004
+.piter: 3  ptime: 0.010
+.piter: 3  ptime: 0.009
+.piter: 3  ptime: 0.009
+umax: 0.235 	 utime: 0.007
+vmax: 0.204 	 vtime: 0.006
+wmax: 0.276 	 wtime: 0.006
+viscmax: 0.000
+kinmax: 0.000
+epsmax: 0.000
+reinitime: 0.005
+gctime: 0.002	 average gctime: 0.002
+Xtime: 0.013	 average Xtime: 0.014
+total time: 626.217546   average time: 0.087
+timer per step: 0.079
+
+******************************
+
+modelled time: 25.003
+
+```
 
 
 ## What to read next
