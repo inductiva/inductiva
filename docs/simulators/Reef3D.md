@@ -19,7 +19,8 @@ shallow water equations ideal for near-shore hydrodynamics and river flow.
 
 ## Running a simulation
 
-Reef3D in Inductiva API executes two sequential steps: 
+Reef3D in Inductiva API executes two sequential steps:
+
 - the meshing with **DiveMESH**;
 - the simulation with **Reef3D**. 
 
@@ -45,6 +46,10 @@ default pool shared by everyone.
 - `storage_dir`: set the directory where the output files will be stored in the 
 cloud. If not selected the output files will be stored in a folder named with
 the  task id of the simulation.
+- `n_vcpus`: number of virtual CPUs / threads that will be used to configure the
+MPI parallism. This number needs to be set consistently with parameter
+```M 10``` to be set in both `control.txt` and `ctrl.txt` configurations files.
+
 
 For further information on handling the task of the simulation see
 [here](https://tutorials.inductiva.ai/intro_to_api/tasks.html).
@@ -82,14 +87,15 @@ two files that are required to configure the simulation:
 * [control.txt](https://github.com/REEF3D/REEF3D/blob/master/Tutorials/REEF3D_CFD/10_2%203D%20Dam%20Break%20with%20Obstacle/control.txt)
 * [ctrl.txt](https://github.com/REEF3D/REEF3D/blob/master/Tutorials/REEF3D_CFD/10_2%203D%20Dam%20Break%20with%20Obstacle/ctrl.txt)
 
-Let's start by downloading them and adding them to a folder named
+Let's start by downloading both of these files and adding them to a folder named
 "10_2_3D_Dam_Break_with_Obstacle" inside our working folder. Just download each
 file directly from GitHub (use "Download raw file" option) and move them to
-the "10_2_3D_Dam_Break_with_Obstacle" local folder (that you should also create
+the "10_2_3D_Dam_Break_with_Obstacle" local folder (that you also need to create
 locally).
 
-Before we proceed let's inspect the files to check two parameters that are
-going to be important to configure our run: ```N 41``` and ```M 10```:
+Before we proceed, let's inspect the files to check three Reed3D parameters that
+are important to understand before we configure our simulation run. These
+parameters are: ```N 41```, ```P 30 ``` and ```M 10```:
 
 ### control.txt (for DiveMESH)
 ```
@@ -128,32 +134,32 @@ W 22 -9.81
 ```
 
 Observe that parameter ```M 10```, which controls the degree of parallism, is
-set to 4 threads/vCPUs, a very small number. Depending on the number of vCPUs we
+set to 4 threads/vCPUs, a very low number. Depending on the number of vCPUs we
 effectively wish to use for running the simulation, we will need to manually
-change  ```M 10``` on **both files** to match the specs of the VM we choose. 
-Since this is already a reasoably heavy simulation, we will be using GCP VMs of
-the c3d family, supported by last-generation AMD chips. More specifically,
+change  ```M 10``` on **both files** to match the specs of corresponding the VM. 
+Because this is already a reasoably heavy simulation, we will be using GCP VMs
+of the c3d family, supported by last-generation AMD chips. More specifically,
 we will be using ```c3d-standard-90``` machines with 90 vCPU. So, we will be
 setting ```M 10 90``` on both files.
 
 Also, Reef3D produces a huge amount of data. As it is currently configured, this
 simulation would produce several dozen gigabytes of data. To reduce that amount
-of data produced, we can both reduce the maximum modeled time (```N 41''') and
-the rate at which Paraview info is being produced (```P 10''').
+of data produced, we can reduce the maximum modeled time (```N 41```) and
+the rate at which Paraview data is being produced (```P 10```).
 
 So, for a reducing the amount of data generated, we will be reducing the rate
-at which Paraview information is going to be generated to 25 frames per second,
-that is, we will set ```P 10 0.04'''. 
+at which Paraview information is going to be generated to "onyy" 25 frames per
+second, that is, we will set ```P 10 0.04```. 
 
-Next, we are not going to reduce the maximum modeled time but, when configuring
-our machine, we will add extra disk capacity to ensure we have enough space to
-write all the data being produced. We will request our machine to be equipped
-with 20GB just for data, using the ```data_disk_gb''' parameter of the 
-```inductiva.resources.MachineGroup''' class.
+We are not going to reduce the maximum modeled time but, instead, we will add
+extra disk capacity to ensure we have enough space to write all the data will be
+generated. Therefore, we will request our machine to be equipped
+with **20GB** just for data, using the ```data_disk_gb``` parameter of the 
+```inductiva.resources.MachineGroup``` class.
 
 Here is the final script:
 
-```
+```python
 import inductiva
 
 
@@ -180,18 +186,19 @@ machine_group.terminate()
 Running this script end-to-end should take about 25 minutes, distributed in
 the following way:
 
-* about 2 minutes of preparation, including starting the executer VM.
+* about 2 minutes in the preparation stage, including starting the executer VM.
 * about 11 minutes of compute time (you can change this by choosing other VMs
 or changing the settings of this one.)
-* 4 minutes to make the output available for download, which involves zipping
-it and moving it from the executer machine to your personal bucket on Inductiva
-so you can access it at any time.
-* about 7 minutes to download the 3.3GB of zipped data, but this time depends
+* 4 minutes to make the output available for download. This involves zipping
+all the data geneeated in executer VM and the move it to your personal storage
+space on Inductiva platform, so you can access it at any time.
+* about 7 minutes to download the 3.3GB of zipped data. This time depends
 on the speed of your network. This is an optional step. You don't need to
 download the output data at this point.
 * about 3 minutes to unzip the data locally (about 15GB of data when unzipped).
-This is an optional step that also depends on how fast your local machine is.
-* 1 minute to turn off the executor VM. This step is optional but advisable.
+This is another optional step that depends on how fast your local machine is.
+* 1 minute to turn off the executor VM. This step is optional but advisable,
+since you do not want to be spending money on a machine that is sitting idle.
 
 This is what you are supposed to see:
 
@@ -234,15 +241,15 @@ Terminating MachineGroup(name="api-kw1m7e9hs2yxkxy9n2yf4so6r"). This may take a 
 Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines successfully terminated in 0:01:11.
 ```
 
-You can check stdout in real time by issueing:
+You can check the stdout of the simulation process in real time by issuing:
 
 ```
 inductiva logs ggkjuzhivoon56vkozgqxapfk
 ```
 
-This line is shown in the trace above so you can just copy and paste it to a
-new terminal (which needs also to have the API key set as an environment
-variable). You should then see something like this:
+The command line above is also shown in the execution trace, so you can just
+copy and paste it to a new terminal (which needs also to have the API key set
+as an environment variable). Then, you should see something like this:
 
 ```
 ...
