@@ -384,6 +384,11 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-simulation">Running a simulation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-slighly-more-advanced-example">A slighly more advanced example</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#control-txt-for-divemesh">control.txt (for DiveMESH)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ctrl-txt-for-reef3d">ctrl.txt (for Reef3D)</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
             </nav>
@@ -400,20 +405,20 @@ document.write(`
 <h1>Reef3D<a class="headerlink" href="#reef3d" title="Permalink to this heading">#</a></h1>
 <p>REEF3D is an open-source hydrodynamics framework with a focus on coastal, marine
 and hydraulic engineering flows. Tailor-made multiphysics solvers are available
-for a range of relevant problems (e.g. sediment transport or floating body dynamics).
-The modular programming approach allows the framework to incorporate a range of
-different flow solvers which together represent all relevant length scales.<br />
-Depending on the wave or flow conditions, the following optimized hydrodynamic
-modules are available:</p>
+for a range of relevant problems (e.g. sediment transport or floating body
+dynamics). The modular programming approach allows the framework to incorporate
+a range of different flow solvers which together represent all relevant length
+scales. Depending on the wave or flow conditions, the following optimized
+hydrodynamic modules are available:</p>
 <ul class="simple">
 <li><p><strong>REEF3D::CFD</strong> solves the Navier-Stokes equations in three dimensions. For
 near-field simulations with a complex free surface pattern,  it uses a two-phase
 flow approach with the level set method for interface capturing.</p></li>
 <li><p><strong>REEF3D::FNPF</strong> is a three-dimensional fully nonlinear potential flow solver.
-It is massively parallelized and can be used to create large-scale phase-resolved
-sea states at all water depths.</p></li>
-<li><p><strong>REEF3D::SFLOW</strong> is a depth-averaged model, solving the non-hydrostatic shallow
-water equations ideal for near-shore hydrodynamics and river flow.</p></li>
+It is massively parallelized and can be used to create large-scale
+phase-resolved sea states at all water depths.</p></li>
+<li><p><strong>REEF3D::SFLOW</strong> is a depth-averaged model, solving the non-hydrostatic
+shallow water equations ideal for near-shore hydrodynamics and river flow.</p></li>
 </ul>
 <section id="running-a-simulation">
 <h2>Running a simulation<a class="headerlink" href="#running-a-simulation" title="Permalink to this heading">#</a></h2>
@@ -422,10 +427,11 @@ water equations ideal for near-shore hydrodynamics and river flow.</p></li>
 <li><p>the meshing with <strong>DiveMESH</strong>;</p></li>
 <li><p>the simulation with <strong>Reef3D</strong>.</p></li>
 </ul>
-<p>Each step is configured with input files, <code class="docutils literal notranslate"><span class="pre">control.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">ctrl.txt</span></code>, respectively.
-Other files may be used to inform the simulator about the grid, geographical data
-or wave information. Reef3D has strict naming policies for each file and we recommend
-users to follow <a class="reference external" href="https://reef3d.wordpress.com/user-guide/" target="_blank">their guidelines</a>.</p>
+<p>Each step is configured with input files, <code class="docutils literal notranslate"><span class="pre">control.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">ctrl.txt</span></code>,
+respectively. Other files may be used to inform the simulator about the grid,
+geographical data or wave information. Reef3D has strict naming policies for
+each file and we recommend users to follow
+<a class="reference external" href="https://reef3d.wordpress.com/user-guide/" target="_blank">their guidelines</a>.</p>
 <p>To run the simulation users pass a folder with the above files and all others
 required to run the simulation. The folder is then uploaded to Inductiva API and
 the simulation is executed. The output files are then downloaded to the user’s
@@ -436,11 +442,14 @@ based on the number of cores available in the machine.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">on</span></code>: set the machines where the simulations will run. Check
 <a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/computational-infrastructure.html#available-computational-resources" target="_blank">here</a>
-for further detail. If not selected the simulations will be picked-up by a default
-pool shared by everyone.</p></li>
+for further detail. If not selected the simulations will be picked-up by a
+default pool shared by everyone.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">storage_dir</span></code>: set the directory where the output files will be stored in the
-cloud. If not selected the output files will be stored in a folder named with the
-task id of the simulation.</p></li>
+cloud. If not selected the output files will be stored in a folder named with
+the  task id of the simulation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_vcpus</span></code>: number of virtual CPUs / threads that will be used to configure the
+MPI parallism. This number needs to be set consistently with parameter
+<code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span></code> to be set in both <code class="docutils literal notranslate"><span class="pre">control.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">ctrl.txt</span></code> configurations files.</p></li>
 </ul>
 <p>For further information on handling the task of the simulation see
 <a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/tasks.html" target="_blank">here</a>.</p>
@@ -465,6 +474,243 @@ from Reef3D repository.</p>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
 </pre></div>
 </div>
+</section>
+<section id="a-slighly-more-advanced-example">
+<h2>A slighly more advanced example<a class="headerlink" href="#a-slighly-more-advanced-example" title="Permalink to this heading">#</a></h2>
+<p>Let’s now run a more advanced example, one that will also require a lot more
+compute power, and will illustrate more advanced features of the API. More
+specifically, we will use the API to run the “3D Dam Break Scenarion with
+Obstacle” that can be found in
+<a class="reference external" href="https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/10_2%203D%20Dam%20Break%20with%20Obstacle" target="_blank">Reef3D tutorials</a>. As explained before, there are
+two files that are required to configure the simulation:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/REEF3D/REEF3D/blob/master/Tutorials/REEF3D_CFD/10_2%203D%20Dam%20Break%20with%20Obstacle/control.txt" target="_blank">control.txt</a></p></li>
+<li><p><a class="reference external" href="https://github.com/REEF3D/REEF3D/blob/master/Tutorials/REEF3D_CFD/10_2%203D%20Dam%20Break%20with%20Obstacle/ctrl.txt" target="_blank">ctrl.txt</a></p></li>
+</ul>
+<p>Let’s start by downloading both of these files and adding them to a folder named
+“10_2_3D_Dam_Break_with_Obstacle” inside our working folder. Just download each
+file directly from GitHub (use “Download raw file” option) and move them to
+the “10_2_3D_Dam_Break_with_Obstacle” local folder (that you also need to create
+locally).</p>
+<p>Before we proceed, let’s inspect the files to check three Reed3D parameters that
+are important to understand before we configure our simulation run. These
+parameters are: <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">41</span></code>, <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">30</span> </code> and <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span></code>:</p>
+<section id="control-txt-for-divemesh">
+<h3>control.txt (for DiveMESH)<a class="headerlink" href="#control-txt-for-divemesh" title="Permalink to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span> <span class="mi">11</span> <span class="mi">21</span>
+<span class="n">C</span> <span class="mi">12</span> <span class="mi">21</span>
+<span class="n">C</span> <span class="mi">13</span> <span class="mi">21</span>
+<span class="n">C</span> <span class="mi">14</span> <span class="mi">21</span>
+<span class="n">C</span> <span class="mi">15</span> <span class="mi">21</span>
+<span class="n">C</span> <span class="mi">16</span> <span class="mi">21</span>
+
+<span class="n">B</span> <span class="mi">1</span> <span class="mf">0.025</span>
+<span class="n">B</span> <span class="mi">10</span> <span class="mf">0.0</span> <span class="mf">2.0</span> <span class="mf">0.0</span> <span class="mf">1.0</span> <span class="mf">0.0</span> <span class="mf">1.0</span>
+<span class="n">O</span> <span class="mi">10</span> <span class="mf">1.2</span> <span class="mf">1.4</span> <span class="mf">0.4</span> <span class="mf">0.6</span> <span class="mf">0.0</span> <span class="mf">1.0</span>
+
+<span class="n">M</span> <span class="mi">10</span> <span class="mi">4</span>    <span class="o">&lt;----</span> <span class="n">defines</span> <span class="n">the</span> <span class="n">nr</span><span class="o">.</span> <span class="n">of</span> <span class="n">processors</span> <span class="k">for</span> <span class="n">parallel</span> <span class="n">computations</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="ctrl-txt-for-reef3d">
+<h3>ctrl.txt (for Reef3D)<a class="headerlink" href="#ctrl-txt-for-reef3d" title="Permalink to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">D</span> <span class="mi">10</span> <span class="mi">4</span>
+<span class="n">D</span> <span class="mi">20</span> <span class="mi">2</span>
+<span class="n">D</span> <span class="mi">30</span> <span class="mi">1</span>
+<span class="n">F</span> <span class="mi">30</span> <span class="mi">3</span>
+<span class="n">F</span> <span class="mi">40</span> <span class="mi">3</span>
+<span class="n">F</span> <span class="mi">54</span> <span class="mf">0.5</span>
+<span class="n">F</span> <span class="mi">56</span> <span class="mf">0.7</span>
+<span class="n">N</span> <span class="mi">40</span> <span class="mi">3</span>
+<span class="n">N</span> <span class="mi">41</span> <span class="mf">25.0</span>    <span class="o">&lt;----</span> <span class="nb">set</span> <span class="n">the</span> <span class="n">maximum</span> <span class="n">modeled</span> <span class="n">time</span> <span class="p">(</span><span class="mi">25</span> <span class="n">seconds</span><span class="p">)</span><span class="o">.</span>
+<span class="n">N</span> <span class="mi">45</span> <span class="mi">50000</span>
+<span class="n">N</span> <span class="mi">47</span> <span class="mf">0.2</span>
+<span class="n">M</span> <span class="mi">10</span> <span class="mi">4</span>    <span class="o">&lt;----</span> <span class="n">defines</span> <span class="n">the</span> <span class="n">nr</span><span class="o">.</span> <span class="n">of</span> <span class="n">processors</span> <span class="k">for</span> <span class="n">parallel</span> <span class="n">computations</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">P</span> <span class="mi">10</span> <span class="mi">1</span>
+<span class="n">P</span> <span class="mi">30</span> <span class="mf">0.01</span>    <span class="o">&lt;----</span> <span class="n">defines</span> <span class="n">the</span> <span class="n">rate</span> <span class="n">of</span> <span class="n">paraview</span> <span class="n">results</span> <span class="p">(</span><span class="mi">1</span> <span class="n">frame</span> <span class="n">per</span> <span class="mf">0.01</span> <span class="n">s</span><span class="p">)</span>
+<span class="n">T</span> <span class="mi">10</span> <span class="mi">0</span>
+<span class="n">W</span> <span class="mi">22</span> <span class="o">-</span><span class="mf">9.81</span>
+</pre></div>
+</div>
+<p>Observe that parameter <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span></code>, which controls the degree of parallism, is
+set to 4 threads/vCPUs, a very low number. Depending on the number of vCPUs we
+effectively wish to use for running the simulation, we will need to manually
+change  <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span></code> on <strong>both files</strong> to match the specs of corresponding the VM.
+Because this is already a reasoably heavy simulation, we will be using GCP VMs
+of the c3d family, supported by last-generation AMD chips. More specifically,
+we will be using <code class="docutils literal notranslate"><span class="pre">c3d-standard-90</span></code> machines with 90 vCPU. So, we will be
+setting <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span> <span class="pre">90</span></code> on both files.</p>
+<p>Also, Reef3D produces a huge amount of data. As it is currently configured, this
+simulation would produce several dozen gigabytes of data. To reduce that amount
+of data produced, we can reduce the maximum modeled time (<code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">41</span></code>) and
+the rate at which Paraview data is being produced (<code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">10</span></code>).</p>
+<p>So, for a reducing the amount of data generated, we will be reducing the rate
+at which Paraview information is going to be generated to “onyy” 25 frames per
+second, that is, we will set <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">10</span> <span class="pre">0.04</span></code>.</p>
+<p>We are not going to reduce the maximum modeled time but, instead, we will add
+extra disk capacity to ensure we have enough space to write all the data will be
+generated. Therefore, we will request our machine to be equipped
+with <strong>20GB</strong> just for data, using the <code class="docutils literal notranslate"><span class="pre">data_disk_gb</span></code> parameter of the
+<code class="docutils literal notranslate"><span class="pre">inductiva.resources.MachineGroup</span></code> class.</p>
+<p>Here is the final script:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+
+
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c3d-standard-90&quot;</span><span class="p">,</span>
+    <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>  <span class="c1">## We are adding extra disk space here</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+
+<span class="n">reef3d</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">REEF3D</span><span class="p">()</span>
+
+<span class="n">task</span> <span class="o">=</span> <span class="n">reef3d</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;./10_2_3D_Dam_Break_with_Obstacle&quot;</span><span class="p">,</span>
+                  <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">,</span>
+                  <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>   <span class="c1">## We need to make sure this matches `N 10`</span>
+
+<span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
+
+<span class="c1">## Make sure we terminate the machine.</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Running this script end-to-end should take about 25 minutes, distributed in
+the following way:</p>
+<ul class="simple">
+<li><p>about 2 minutes in the preparation stage, including starting the executer VM.</p></li>
+<li><p>about 11 minutes of compute time (you can change this by choosing other VMs
+or changing the settings of this one.)</p></li>
+<li><p>4 minutes to make the output available for download. This involves zipping
+all the data geneeated in executer VM and the move it to your personal storage
+space on Inductiva platform, so you can access it at any time.</p></li>
+<li><p>about 7 minutes to download the 3.3GB of zipped data. This time depends
+on the speed of your network. This is an optional step. You don’t need to
+download the output data at this point.</p></li>
+<li><p>about 3 minutes to unzip the data locally (about 15GB of data when unzipped).
+This is another optional step that depends on how fast your local machine is.</p></li>
+<li><p>1 minute to turn off the executor VM. This step is optional but advisable,
+since you do not want to be spending money on a machine that is sitting idle.</p></li>
+</ul>
+<p>This is what you are supposed to see:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Registering MachineGroup configurations:
+&gt; Name:         api-kw1m7e9hs2yxkxy9n2yf4so6r
+&gt; Machine Type: c3d-standard-90
+&gt; Data disk size:    20 GB
+&gt; Number of machines: 1
+&gt; Spot:               True
+&gt; Estimated cloud cost of machine group: 1.496 $/h
+Starting MachineGroup(name=&quot;api-kw1m7e9hs2yxkxy9n2yf4so6r&quot;). This may take a few minutes.
+Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
+Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines successfully started in 0:00:23.
+Task Information:
+&gt; ID:                    ggkjuzhivoon56vkozgqxapfk
+&gt; Method:                reef3d
+&gt; Local input directory: 10_2_3D_Dam_Break_with_Obstacle
+&gt; Submitting to the following computational resources:
+ &gt;&gt; Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines
+Preparing upload of the local input directory 10_2_3D_Dam_Break_with_Obstacle (399 B).
+Input archive size: 640 B
+Uploading input archive...
+100%|█████████████████████████████████████████████████████████████████████████████████| 640/640 [00:00&lt;00:00, 1.03kB/s]
+Local input directory successfully uploaded.
+Task ggkjuzhivoon56vkozgqxapfk submitted to the queue of the Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines.
+Simulation metadata logged to: inductiva_output/task_metadata.json
+Task ggkjuzhivoon56vkozgqxapfk configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
+Consider tracking the status of the task via CLI:
+	inductiva tasks list --task-id ggkjuzhivoon56vkozgqxapfk
+Or, tracking the logs of the task via CLI:
+	inductiva logs ggkjuzhivoon56vkozgqxapfk
+Task ggkjuzhivoon56vkozgqxapfk successfully queued and waiting to be picked-up for execution...
+Task ggkjuzhivoon56vkozgqxapfk has started and is now running remotely.
+Task ggkjuzhivoon56vkozgqxapfk completed successfully.
+Downloading simulation outputs to inductiva_output/ggkjuzhivoon56vkozgqxapfk/output.zip.
+100%|█████████████████████████████████████████████████████████████████████████████| 3.30G/3.30G [07:11&lt;00:00, 7.64MB/s]
+Uncompressing the outputs to inductiva_output/ggkjuzhivoon56vkozgqxapfk.
+Terminating MachineGroup(name=&quot;api-kw1m7e9hs2yxkxy9n2yf4so6r&quot;). This may take a few minutes.
+Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines successfully terminated in 0:01:11.
+</pre></div>
+</div>
+<p>You can check the stdout of the simulation process in real time by issuing:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span> <span class="n">logs</span> <span class="n">ggkjuzhivoon56vkozgqxapfk</span>
+</pre></div>
+</div>
+<p>The command line above is also shown in the execution trace, so you can just
+copy and paste it to a new terminal (which needs also to have the API key set
+as an environment variable). Then, you should see something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="o">...</span>
+<span class="mi">7193</span>
+<span class="n">simtime</span><span class="p">:</span> <span class="mf">24.982</span>
+<span class="n">timestep</span><span class="p">:</span> <span class="mf">0.007</span>
+<span class="n">Volume</span> <span class="mi">1</span><span class="p">:</span> <span class="mf">0.235</span>
+<span class="n">Volume</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">1.725</span>
+<span class="n">lsmtime</span><span class="p">:</span> <span class="mf">0.004</span>
+<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
+<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
+<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
+<span class="n">umax</span><span class="p">:</span> <span class="mf">0.238</span> 	 <span class="n">utime</span><span class="p">:</span> <span class="mf">0.007</span>
+<span class="n">vmax</span><span class="p">:</span> <span class="mf">0.199</span> 	 <span class="n">vtime</span><span class="p">:</span> <span class="mf">0.007</span>
+<span class="n">wmax</span><span class="p">:</span> <span class="mf">0.277</span> 	 <span class="n">wtime</span><span class="p">:</span> <span class="mf">0.006</span>
+<span class="n">viscmax</span><span class="p">:</span> <span class="mf">0.000</span>
+<span class="n">kinmax</span><span class="p">:</span> <span class="mf">0.000</span>
+<span class="n">epsmax</span><span class="p">:</span> <span class="mf">0.000</span>
+<span class="n">reinitime</span><span class="p">:</span> <span class="mf">0.005</span>
+<span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>	 <span class="n">average</span> <span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>
+<span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.013</span>	 <span class="n">average</span> <span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.014</span>
+<span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">626.067449</span>   <span class="n">average</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.087</span>
+<span class="n">timer</span> <span class="n">per</span> <span class="n">step</span><span class="p">:</span> <span class="mf">0.073</span>
+<span class="o">------------------------------------</span>
+<span class="mi">7194</span>
+<span class="n">simtime</span><span class="p">:</span> <span class="mf">24.989</span>
+<span class="n">timestep</span><span class="p">:</span> <span class="mf">0.007</span>
+<span class="n">Volume</span> <span class="mi">1</span><span class="p">:</span> <span class="mf">0.235</span>
+<span class="n">Volume</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">1.725</span>
+<span class="n">lsmtime</span><span class="p">:</span> <span class="mf">0.003</span>
+<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
+<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
+<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
+<span class="n">umax</span><span class="p">:</span> <span class="mf">0.237</span> 	 <span class="n">utime</span><span class="p">:</span> <span class="mf">0.007</span>
+<span class="n">vmax</span><span class="p">:</span> <span class="mf">0.202</span> 	 <span class="n">vtime</span><span class="p">:</span> <span class="mf">0.006</span>
+<span class="n">wmax</span><span class="p">:</span> <span class="mf">0.276</span> 	 <span class="n">wtime</span><span class="p">:</span> <span class="mf">0.006</span>
+<span class="n">viscmax</span><span class="p">:</span> <span class="mf">0.000</span>
+<span class="n">kinmax</span><span class="p">:</span> <span class="mf">0.000</span>
+<span class="n">epsmax</span><span class="p">:</span> <span class="mf">0.000</span>
+<span class="n">reinitime</span><span class="p">:</span> <span class="mf">0.005</span>
+<span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>	 <span class="n">average</span> <span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>
+<span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.011</span>	 <span class="n">average</span> <span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.014</span>
+<span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">626.138361</span>   <span class="n">average</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.087</span>
+<span class="n">timer</span> <span class="n">per</span> <span class="n">step</span><span class="p">:</span> <span class="mf">0.071</span>
+<span class="o">------------------------------------</span>
+<span class="mi">7195</span>
+<span class="n">simtime</span><span class="p">:</span> <span class="mf">24.996</span>
+<span class="n">timestep</span><span class="p">:</span> <span class="mf">0.007</span>
+<span class="n">Volume</span> <span class="mi">1</span><span class="p">:</span> <span class="mf">0.235</span>
+<span class="n">Volume</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">1.725</span>
+<span class="n">lsmtime</span><span class="p">:</span> <span class="mf">0.004</span>
+<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
+<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.009</span>
+<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.009</span>
+<span class="n">umax</span><span class="p">:</span> <span class="mf">0.235</span> 	 <span class="n">utime</span><span class="p">:</span> <span class="mf">0.007</span>
+<span class="n">vmax</span><span class="p">:</span> <span class="mf">0.204</span> 	 <span class="n">vtime</span><span class="p">:</span> <span class="mf">0.006</span>
+<span class="n">wmax</span><span class="p">:</span> <span class="mf">0.276</span> 	 <span class="n">wtime</span><span class="p">:</span> <span class="mf">0.006</span>
+<span class="n">viscmax</span><span class="p">:</span> <span class="mf">0.000</span>
+<span class="n">kinmax</span><span class="p">:</span> <span class="mf">0.000</span>
+<span class="n">epsmax</span><span class="p">:</span> <span class="mf">0.000</span>
+<span class="n">reinitime</span><span class="p">:</span> <span class="mf">0.005</span>
+<span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>	 <span class="n">average</span> <span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>
+<span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.013</span>	 <span class="n">average</span> <span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.014</span>
+<span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">626.217546</span>   <span class="n">average</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.087</span>
+<span class="n">timer</span> <span class="n">per</span> <span class="n">step</span><span class="p">:</span> <span class="mf">0.079</span>
+
+<span class="o">******************************</span>
+
+<span class="n">modelled</span> <span class="n">time</span><span class="p">:</span> <span class="mf">25.003</span>
+
+</pre></div>
+</div>
+</section>
 </section>
 <section id="what-to-read-next">
 <h2>What to read next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
@@ -526,6 +772,11 @@ following related simulators that are also avaiable via Inductiva API:</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-simulation">Running a simulation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-slighly-more-advanced-example">A slighly more advanced example</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#control-txt-for-divemesh">control.txt (for DiveMESH)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ctrl-txt-for-reef3d">ctrl.txt (for Reef3D)</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
   </nav></div>
