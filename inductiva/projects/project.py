@@ -146,7 +146,7 @@ class Project:
         """Updates itself with information fetched from the backend."""
         self._info = ProjectInfo(**model.get("task_status_overview"))
         self.created_at = model.get("created_at")
-        self.num_tasks = model.get("num_tasks")
+        self.num_tasks = int(model.get("num_tasks"))
         self._name = model.get("name")
         self.id = model.get("id")
 
@@ -235,12 +235,12 @@ class Project:
         return f"Project '{self._name}' with "\
                f"{self.num_tasks} tasks (id={self.id})"
 
-    def desc(self) -> str:
+    def describe(self) -> str:
         """Generates a string description of the object
 
         Returns:
-          str: A string descrption of the object. Includes project name,
-            number of tasks and a description of the tasks' status.
+          str: A string description of the object. Includes project name,
+            total number of tasks and the number of tasks by status.
 
         """
         header = str(self) + "\n"
@@ -274,3 +274,8 @@ class Project:
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         self.close()
+    
+    def __eq__(self, other) -> bool:
+        return isinstance(other, Project) and \
+            self.name == other.name and \
+            self.id == other.id
