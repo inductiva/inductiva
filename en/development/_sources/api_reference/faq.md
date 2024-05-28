@@ -24,5 +24,12 @@ to support@inductiva.ai.*
 **What should I do about dependency conflicts?**
 
 **How can I optimize the performance of my simulations?**
-Performance optimization involves adjusting simulation parameters. Our documentation 
-includes tips for efficiently utilizing [Inductiva's computational resources](../explore_api/computational-infrastructure.md)
+Performance optimization involves adjusting simulation parameters and choosing
+the most appropriate processing option. For that, you should try running your
+simulation using the several types of 
+[computational resources](https://tutorials.inductiva.ai/intro_to_api/computational-infrastructure.html)
+available via the API, and also check our
+[official benchmarks page](https://benchmarks.inductiva.ai/),
+where we compare the performance of running specific simulation use cases
+over several computational resources. 
+ 
