@@ -33,10 +33,8 @@ So let's go!
 
 ## Introduction
 
-So far in this series, we showcased a classical algorithm (in
-[Heat #1]({% post_url 2022-02-14-heat-1-an-introduction %})) and a Neural Network
-(NN) (in [Heat #2]({% post_url 2022-03-21-heat-2-PINN %})) to solve the Heat
-equation.
+So far in this series, we showcased a classical algorithm and a Neural Network
+(NN) to solve the Heat equation.
 Both of these implementations were performed on an **extremely simplistic (and
 unrealistic) scenario.** \
 It is as straightforward as it can get:
@@ -165,9 +163,6 @@ heat diffusion across a 2D rectangular plate:
 
 Fig. 1: The usual initial and boundary conditions (IBCs) we assume to solve the Heat Equation on the 2D plate. Credits: David Carvalho / Inductiva.
 
-More details can be found in [Heat #1]({% post_url 2022-02-14-heat-1-an-introduction %})
-and [Heat #2]({% post_url 2022-03-21-heat-2-PINN %}), but let's also show the Heat
-Equation in this setting for concreteness.
 It states that the temperature profile $u(t,x,y)$ must satisfy:
 
 $$
@@ -239,7 +234,7 @@ within the range $[-1, 1]^\mathrm{o}C$.
 
 ### Running...
 
-Do you remember when in [Heat #2]({% post_url 2022-03-21-heat-2-PINN %}) we
+Do you remember when in we
 mentioned that our implementation was able to accommodate some extra complexity?
 Time to exploit it!
 
@@ -440,7 +435,7 @@ the data domain points considered are sampled is of **huge computational relevan
 While a initial or boundary point is directly fit by the PINN to its
 target (imposed by the initial or boundary condition itself), a point stemming 
 from an interior domain contributes to the fitting procedure through its PDE 
-residue [2].
+residue.
 
 PINNs do not impose an upper limit to the number of IBCs or interior domains.
 Each of these IBCs may have a different target and
@@ -513,6 +508,4 @@ Stay tuned for new material!
 
 ## References & Remarks
 
-[[1]](https://arxiv.org/abs/2111.01008) A great introduction to HyperPINNs! \
-[2] More information about the PINN loss and nodes in
-[Heat #2]({% post_url 2022-03-21-heat-2-PINN %}).
+[[1]](https://arxiv.org/abs/2111.01008) A great introduction to HyperPINNs! 

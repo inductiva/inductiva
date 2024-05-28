@@ -72,8 +72,7 @@ PDE solution.
 *Guess what*? As parametric function approximators, NNs are particularly well
 tailored for this problem.
 
-If you recall what we discussed in
-[Heat #1]({% post_url 2022-02-14-heat-1-an-introduction %}),
+If you recall what we discussed,
 many limiting issues are found when numerically solving a PDE via a
 classical method by **discretizing** the domain --- usually performed with
 Finite Difference or Finite Element Methods.
@@ -217,7 +216,7 @@ But putting these and other technicalities aside, this is pretty much what you
 need to know about PINNs to follow the rest of this post!
 
 <div class="flex sm:justify-center max-w-lg sm:mx-auto">
-    <img src="/../_static/pdes/PINN_sketch.png" class="mb-2">
+    <img style="width:60%;" src="/../_static/pdes/PINN_sketch.png" class="mb-2">
 </div>
 
 Fig. 1: The PINN we used to solve the 2D Heat Equation consists
@@ -247,11 +246,10 @@ Fine --- we are ready to try it out on our new favorite PDE: the 2D Heat Equatio
 ## Hot NN Coming Through!
 
 To keep things simple, let us start with the exact same situation as the one
-presented for FDM from
-[Heat #1]({% post_url 2022-02-14-heat-1-an-introduction %}):
+presented for FDM:
 
 <div class="flex sm:justify-center max-w-md sm:mx-auto">
-    <img src="/assets/img/articles/heat_1_introduction/BIC.png" class="my-1">
+    <img style="width:40%;" src="../_static/pdes/BIC.png" class="my-1">
 </div>
 
 Fig. 2: The boundary and initial conditions used throughout the Heat series. Energy is pumped from the top edge onto an initially completely cold 2D plate. Credits: David Carvalho / Inductiva.
@@ -302,8 +300,7 @@ let the magic happen in the next section 😎.
 ## Classical vs NN --- the fight begins
 
 To see how well our NN-based framework handles the task, we can compare
-the NN output to the one generated from the classical algorithm we used in
-[Heat #1]({% post_url 2022-02-14-heat-1-an-introduction %}):
+the NN output to the one generated from the classical Finite-Differences algorithm:
 
 Let's plot the output obtained with the FDM (a classical algorithm) [top]
 and a PINN we trained [middle], as well as the
