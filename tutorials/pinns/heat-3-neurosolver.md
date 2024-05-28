@@ -46,10 +46,10 @@ It is as straightforward as it can get:
 partial derivatives occur *linearly*, without any cross products or powers and
 any spacial preference for any of the (only) two coordinates.
 *This form of PDE is one of the simplest we can face.*
-+ **a very idealized medium with a constant diffusivity $$D$$ was used**:
++ **a very idealized medium with a constant diffusivity $D$ was used**:
 admittedly a huge simplification, as it assumes a perfectly homogeneous and
 stationary medium.
-In a more plausible setting, we would have to consider a function $$D(t, x, y)$$
+In a more plausible setting, we would have to consider a function $D(t, x, y)$
 instead.
 + **very simplistic conditions**: the geometry considered of a square plate
 where the boundaries are *always* kept fixed and the heat flow uniformly set up
@@ -164,23 +164,22 @@ heat diffusion across a 2D rectangular plate:
 <div class="flex sm:justify-center max-w-md sm:mx-auto">
     <img src="/assets/img/articles/heat_3/IBCs_hot_edge.png">
 </div>
-<span class="mt-0 block sm:text-center text-base"> Fig. 1: The usual initial and boundary conditions (IBCs) we assume to solve the Heat Equation on the 2D plate. Credits: David Carvalho / Inductiva </span>
+
+Fig. 1: The usual initial and boundary conditions (IBCs) we assume to solve the Heat Equation on the 2D plate. Credits: David Carvalho / Inductiva.
 
 More details can be found in [Heat #1]({% post_url 2022-02-14-heat-1-an-introduction %})
 and [Heat #2]({% post_url 2022-03-21-heat-2-PINN %}), but let's also show the Heat
 Equation in this setting for concreteness.
-It states that the temperature profile $$u(t,x,y)$$ must satisfy:
+It states that the temperature profile $u(t,x,y)$ must satisfy:
 
-<div class="overflow-x-auto">
 $$
 \left[ \frac{\partial}{\partial t} - D \left( \frac{\partial^2}{\partial x ^2} + \frac{\partial^2}{\partial y ^2} \right) \right]u(t,x,y)= 0,
 $$
-</div>
 
 With it, let's investigate three topics:
 
 + **Learning for parametrized boundary conditions**: keeping this admittedly simple
-domain, we *parametrize* the top edge temperature $$u_{\rm top}$$ into our PINN.
+domain, we *parametrize* the top edge temperature $u_{\rm top}$ into our PINN.
 After the network has been trained, we compare its prediction for an *unseen*
 top edge temperature by benchmarking it 
 with respect to the classical algorithm (FDM) output.
@@ -192,7 +191,7 @@ interior of the plate.
 gets if generalization principles are neglected. In other words, we will adress 
 generalization by brute force. Using our new holed plate,
 we will run PINNs that can solve across this harder domain *when trained (each 
-at a time) for various diffusitivities $$D$$*.
+at a time) for various diffusitivities $D$*.
 
 ### Let's Heat `run`
 
@@ -226,18 +225,19 @@ Once again, we pick the simplest approach to achieve generalization: via
 of *variables* (or any other sensible descriptor) to allow the NN to extend the
 solution function to other IBCs *natively* in its architecture.
 
-In this simple configuration, a single **parameter** $$u_{\rm top}$$ will become
+In this simple configuration, a single **parameter** $u_{\rm top}$ will become
 an **additional** input.
 
 <div class="flex sm:justify-center sm:mx-auto">
     <img src="/assets/img/articles/heat_3/PINN_top_edge.png">
 </div>
-<span class="mt-0 block sm:text-center text-base"> Fig 2: Our PINN will now be able to learn the behavior of the solution as the hot edge temperature $$u_{\rm top}$$ is an input of the model. Credits: David Carvalho / Inductiva </span>
+
+Fig 2: Our PINN will now be able to learn the behavior of the solution as the hot edge temperature $u_{\rm top}$ is an input of the model. Credits: David Carvalho / Inductiva.
 
 To see how well the PINN fares, we:
-- train it by sampling many instances of $$u_{\rm top}$$
-within the range $$[-1, 1]^\mathrm{o}C$$.
-- then infer for the unseen case $$u_{\rm top} = 0^\mathrm{o}C$$.
+- train it by sampling many instances of $u_{\rm top}$
+within the range $[-1, 1]^\mathrm{o}C$.
+- then infer for the unseen case $u_{\rm top} = 0^\mathrm{o}C$.
 
 ### Running...
 
@@ -266,7 +266,7 @@ the Heat series. The flags in this command line fulfill different purposes:
 + `colorbar_limits` defines the range of the colorbar used.
 
 Let's analyze it by using a classical Finite Difference Method (FDM) for
-$$u_{\rm top} =0 \;^\mathrm{o}C$$) as the benchmark.
+$u_{\rm top} =0 \;^\mathrm{o}C$) as the benchmark.
 
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
 <video class="mb-0" loop muted autoplay preload="auto">
@@ -279,7 +279,8 @@ $$u_{\rm top} =0 \;^\mathrm{o}C$$) as the benchmark.
     <source src="{{ 'assets/img/articles/heat_3/generalization_bc_error.mp4' | relative_url }}" type="video/mp4">
 </video>
 </div>
-<span class="mt-0 block sm:text-center text-base"> Fig. 3: A PINN estimate of the solution of the Heat Equation for a top edge temperature $$u_{\rm top} = 0^\mathrm{o}C$$ [top], the output generated by a classical (FDM) method [middle] and their difference [bottom]. Credits: Manuel Madeira / Inductiva </span>
+
+Fig. 3: A PINN estimate of the solution of the Heat Equation for a top edge temperature $u_{\rm top} = 0^\mathrm{o}C$ [top], the output generated by a classical (FDM) method [middle] and their difference [bottom]. Credits: Manuel Madeira / Inductiva.
 
 Very nice! As expected, the network [top] recovers the diffusion patterns
 predicted by the classical algorithm [middle].
@@ -321,21 +322,20 @@ Let's focus on a single hole at the plate center:
 <div class="flex sm:justify-center max-w-md sm:mx-auto">
     <img src="/assets/img/articles/heat_3/IBCs_hole.png">
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 4: We now generalize our
-boundary and initial conditions given the domain by taking the top edge
-temperature as a variable parameter $$u_{\rm top} \in [-1,1] \;^\mathrm{o}C$$,
-while the hole boundary is of the hot or cold type. Credits: David Carvalho / Inductiva </span>
+
+Fig. 4: We now generalize our boundary and initial conditions given the domain by taking the top edge temperature as a variable parameter $u_{\rm top} \in [-1,1] \;^\mathrm{o}C$,
+while the hole boundary is of the hot or cold type. Credits: David Carvalho / Inductiva.
 
 Given this, we keep the boundary and initial conditions as in the previous setting
-(top edge at the maximal temperature ($$u =  1\;^\mathrm{o}C$$) and the rest of
-the boundaries and initial points at the minimal temperature ($$u = -1\;^\mathrm{o}C$$).
+(top edge at the maximal temperature ($u =  1\;^\mathrm{o}C$) and the rest of
+the boundaries and initial points at the minimal temperature ($u = -1\;^\mathrm{o}C$).
 
 We consider two types of holes now:
 
 + **Hot hole**: The points sampled from the hole boundary are set to the 
-maximal temperature ($$u = 1\;^\mathrm{o}C$$);
+maximal temperature ($u = 1\;^\mathrm{o}C$);
 + **Cold hole**: Conversely, in this case, the points sampled from the hole
-boundary are set to the minimal temperature ($$u = -1\;^\mathrm{o}C$$).
+boundary are set to the minimal temperature ($u = -1\;^\mathrm{o}C$).
 
 ### ...Running
 
@@ -353,11 +353,11 @@ python heat_idrlnet.py --max_iter=10000 --output_folder=cold_hole --holes_list=0
 Regarding the new flags in these command lines:
 + `holes_list` is the list of holes we consider in our plate, where each
   group of three contiguous entries define a hole as 
-  $$(x_\rm{center}, y_\rm{center}, radius)$$ ;
+  $(x_\rm{center}, y_\rm{center}, radius)$ ;
 + `holes_temp` defines the temperature of the holes boundaries (it is not 
-  defined for the hot hole as it is $$1\;^\mathrm{o}C$$ by default);
+  defined for the hot hole as it is $1\;^\mathrm{o}C$ by default);
 
-So, for the same $$u_{\rm top} = 1\;^\mathrm{o}C$$, we see the difference in the
+So, for the same $u_{\rm top} = 1\;^\mathrm{o}C$, we see the difference in the
 profile for both the cold and hot hole edge scenarios:
 
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
@@ -368,7 +368,7 @@ profile for both the cold and hot hole edge scenarios:
     <source src="{{ 'assets/img/articles/heat_3/cold_hole.mp4' | relative_url }}" type="video/mp4">
 </video>
 </div>
-<span class="mt-0 block sm:text-center text-base"> Fig. 5: Heat diffusion profiles for a hot [top] and cold [bottom] temperature of the hole boundary. Case on point: small changes in parameters can result in very different outputs! Credits: Manuel Madeira / Inductiva </span>
+Fig. 5: Heat diffusion profiles for a hot [top] and cold [bottom] temperature of the hole boundary. Case on point: small changes in parameters can result in very different outputs! Credits: Manuel Madeira / Inductiva.
 
 *Woah*! The results from these experiments are clear: the hole in the domain
 clearly affects the heat diffusion profile in **very different** outputs!
@@ -394,16 +394,16 @@ various sizes and positions are found and the boundary is now curved?
 <video class="mb-0" loop muted autoplay preload="auto">
     <source src="{{ 'assets/img/articles/heat_3/3_holes.mp4' | relative_url }}" type="video/mp4">
 </video>
-<span class="mt-0 block sm:text-center text-base"> Fig. 6: Heat flow across a more complex domain composed of three holes of varying sizes and positions, as well as curved left and right boundaries. Credits: Manuel Madeira / Inductiva </span>
-</div>
+
+Fig. 6: Heat flow across a more complex domain composed of three holes of varying sizes and positions, as well as curved left and right boundaries. Credits: Manuel Madeira / Inductiva.
 
 ### Generalizing through grid-searching (is inefficient)
 
 To make a point (and get more awesome visualizations 😁), let's see how the
-output changes by changing the diffusitivity rate $$D$$ for the hot hole
+output changes by changing the diffusitivity rate $D$ for the hot hole
 scenario.
 
-For that, we simply run each PDE for each $$D$$:
+For that, we simply run each PDE for each $D$:
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
 <video class="mb-0" loop muted autoplay preload="auto">
     <source src="{{ 'assets/img/articles/heat_3/hot_hole_d0.01.mp4' | relative_url }}" type="video/mp4">
@@ -415,12 +415,13 @@ For that, we simply run each PDE for each $$D$$:
     <source src="{{ 'assets/img/articles/heat_3/hot_hole_d1.mp4' | relative_url }}" type="video/mp4">
 </video>
 </div>
-<span class="mt-0 block sm:text-center text-base"> Fig. 7: Heat diffusion profile in the holed domain by ramping up the diffusitivity from $$D=0.01$$ [top] to $$D=0.1$$ [middle] and $$D=1$$ [bottom]. Note that each PINN had to be trained individually. Credits: Manuel Madeira / Inductiva </span>
+
+Fig. 7: Heat diffusion profile in the holed domain by ramping up the diffusitivity from $D=0.01$ [top] to $D=0.1$ [middle] and $D=1$ [bottom]. Note that each PINN had to be trained individually. Credits: Manuel Madeira / Inductiva.
 
 *Hot*! We can see that the diffusitivity allows us to disentangle both phenomena
 streams we discussed (downward vs radial).
 Additionally, it sets the time scale for *equilibration*, when the state
-becomes *stationary* *i.e.* whenever $$\frac{\partial u}{\partial t} = 0 $$
+becomes *stationary* *i.e.* whenever $\frac{\partial u}{\partial t} = 0 $
 
 The main point to grab here though is that the output you see comes after training
 each PINN **individually**! For instance, for these settings, each PINN will take
@@ -458,7 +459,8 @@ For this our instance, the representations obtained can be visualized as:
 <div class="flex sm:justify-center sm:mx-auto">
     <img src="/assets/img/articles/heat_3/nodes.png">
 </div>
-<span class="mt-0 block sm:text-center text-base"> Fig. 8: Computational graphs considered by IDRLnet for each sampling domain considered. If we added holes to our plate, an extra graph would be obtained (similar to the ones from the IBCs). Credits: Manuel Madeira / Inductiva </span>
+
+Fig. 8: Computational graphs considered by IDRLnet for each sampling domain considered. If we added holes to our plate, an extra graph would be obtained (similar to the ones from the IBCs). Credits: Manuel Madeira / Inductiva.
 
 Note that the blue nodes are obtained by sampling the different domains 
 considered (DataNodes), the red nodes are computational (PDENodes or NetNodes), and the
