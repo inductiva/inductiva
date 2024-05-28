@@ -98,7 +98,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
 
         method = api_response.body["method"]
         url = api_response.body["url"]
-        file_server_available = api_response.body["file_server_available"]
+        file_server_available = bool(api_response.body["file_server_available"])
 
         headers = {"Content-Type": "application/octet-stream"}
 
