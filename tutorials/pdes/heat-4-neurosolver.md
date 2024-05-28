@@ -463,7 +463,7 @@ Having a graphical representation of what is going on inside our code is always
 helpful. Naturally, this tool may become extremely handy to ensure that the 
 problem solution is well implemented.
 
-## Our fiery conclusions on Neuro-Solvers
+## Conclusion
 
 Well, it has been quite a ride!
 To finish off the tutorial, we took the opportunity to sail through seas that
@@ -498,13 +498,6 @@ that will need to continue being optimized are different in nature:
 - the challenges in computation and algorithm architecture caused by evermore
 realistic and refined systems of interest.
 
-We at Inductiva are precisely learning to understand how Machine Learning
-can be used to expand our knowledge of Partial Differential Equations to
-realms never computed before.
-
-Stay tuned for new material!
-
-🔥🔥🔥 Fire out 🔥🔥🔥
 
 ## References & Remarks
 
