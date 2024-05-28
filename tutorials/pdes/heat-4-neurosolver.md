@@ -11,7 +11,7 @@ nontrivial dynamics observed in simulations of graviton inelastic collisions
 in a AdS space. Let's go!
 
 <div class="flex sm:justify-center">
-<img src="/assets/img/articles/heat_3/shaq.gif" class="max-w-xs mb-0">
+<img src="/../_static/pdes/shaq.gif" class="max-w-xs mb-0">
 </div>
 <span class="mt-0 block sm:text-center text-base"> It's all good. We're just
 messing with your mental sanity.
@@ -160,7 +160,7 @@ To test these notions of *generalization*, we will consider our usual setup of
 heat diffusion across a 2D rectangular plate:
 
 <div class="flex sm:justify-center max-w-md sm:mx-auto">
-    <img src="/assets/img/articles/heat_3/IBCs_hot_edge.png">
+    <img style="width:40%;" src="/../_static/pdes/IBCs_hot_edge.png">
 </div>
 
 Fig. 1: The usual initial and boundary conditions (IBCs) we assume to solve the Heat Equation on the 2D plate. Credits: David Carvalho / Inductiva.
@@ -227,7 +227,7 @@ In this simple configuration, a single **parameter** $u_{\rm top}$ will become
 an **additional** input.
 
 <div class="flex sm:justify-center sm:mx-auto">
-    <img src="/assets/img/articles/heat_3/PINN_top_edge.png">
+    <img style="width:80%;" src="/../_static/pdes/PINN_top_edge.png">
 </div>
 
 Fig 2: Our PINN will now be able to learn the behavior of the solution as the hot edge temperature $u_{\rm top}$ is an input of the model. Credits: David Carvalho / Inductiva.
@@ -267,14 +267,14 @@ Let's analyze it by using a classical Finite Difference Method (FDM) for
 $u_{\rm top} =0 \;^\mathrm{o}C$) as the benchmark.
 
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_3/generalization_bc.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/generalization_bc.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_3/generalization_bc_fdm.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/generalization_bc_fdm.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_3/generalization_bc_error.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/generalization_bc_error.mp4" type="video/mp4">
 </video>
 </div>
 
@@ -318,7 +318,7 @@ holes inside the problem domain.
 Let's focus on a single hole at the plate center:
 
 <div class="flex sm:justify-center max-w-md sm:mx-auto">
-    <img src="/assets/img/articles/heat_3/IBCs_hole.png">
+    <img style="width:60%;" src="/../_static/pdes/IBCs_hole.png">
 </div>
 
 Fig. 4: We now generalize our boundary and initial conditions given the domain by taking the top edge temperature as a variable parameter $u_{\rm top} \in [-1,1] \;^\mathrm{o}C$,
@@ -359,11 +359,11 @@ So, for the same $u_{\rm top} = 1\;^\mathrm{o}C$, we see the difference in the
 profile for both the cold and hot hole edge scenarios:
 
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_3/hot_hole.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/hot_hole.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_3/cold_hole.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/cold_hole.mp4" type="video/mp4">
 </video>
 </div>
 Fig. 5: Heat diffusion profiles for a hot [top] and cold [bottom] temperature of the hole boundary. Case on point: small changes in parameters can result in very different outputs! Credits: Manuel Madeira / Inductiva.
@@ -389,8 +389,8 @@ Can we understand the physics behind this irregular setting where 3 holes of
 various sizes and positions are found and the boundary is now curved?
 
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_3/3_holes.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/3_holes.mp4" type="video/mp4">
 </video>
 
 Fig. 6: Heat flow across a more complex domain composed of three holes of varying sizes and positions, as well as curved left and right boundaries. Credits: Manuel Madeira / Inductiva.
@@ -403,14 +403,14 @@ scenario.
 
 For that, we simply run each PDE for each $D$:
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_3/hot_hole_d0.01.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/hot_hole_d0.01.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_3/hot_hole.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/hot_hole.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_3/hot_hole_d1.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/hot_hole_d1.mp4" type="video/mp4">
 </video>
 </div>
 
@@ -455,7 +455,7 @@ it receives.
 For this our instance, the representations obtained can be visualized as:
 
 <div class="flex sm:justify-center sm:mx-auto">
-    <img src="/assets/img/articles/heat_3/nodes.png">
+    <img style="width:80%;" src="/../_static/pdes/nodes.png">
 </div>
 
 Fig. 8: Computational graphs considered by IDRLnet for each sampling domain considered. If we added holes to our plate, an extra graph would be obtained (similar to the ones from the IBCs). Credits: Manuel Madeira / Inductiva.

@@ -90,7 +90,7 @@ Let us look at two Finite Difference approximations to a function of a single
 variable $x$:
 
 <div class="flex sm:justify-center max-w-sm sm:mx-auto">
-<img src="/assets/img/articles/heat_1_introduction/derivatives.png" >
+<img style="width:40%;" src="../_static/pdes/derivatives.png" >
 </div>
 
 Fig. 2: Approximation schemes of the derivative of $f(x)$ at a grid point $x_i$ using - (left)
@@ -185,10 +185,9 @@ We can understand how knowledge about the function **propagates** along the grid
 with a *stencil* by depicting which input grid points are needed to iterate the
 algorithm so a solution estimate may be computed at all grid points.
 
-
-<div class="flex sm:justify-center">
-<video loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_1_introduction/fdm_animation.mp4' | relative_url }}" type="video/mp4">
+<div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
+<video class="mb-0" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/fdm_animation.mp4" type="video/mp4">
 </video>
 </div>
 
@@ -214,15 +213,15 @@ We can now run for different thermal diffusivities and see their effect.
 Below you can see the temperature profiles as we increase $D$ ---
 first with $D=0.01$, then $D=0.1$ and finally $D=1$.
 
-<div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_1_introduction/ftcs_d001.mp4' | relative_url }}" type="video/mp4">
+<div>
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/ftcs_d001.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_1_introduction/ftcs_d01.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/ftcs_d01.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_1_introduction/ftcs_d1.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/ftcs_d1.mp4" type="video/mp4">
 </video>
 </div>
 
@@ -297,8 +296,8 @@ illustrative example than by ramping up that bound by a mere $2 \% $ above
 the theoretical maximum *i.e.* for $\alpha + \beta \approx 0.51$:
 
 <div class="flex sm:justify-center max-w-lg sm:mx-auto">
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_1_introduction/ftcs_unstable.mp4' | relative_url }}" type="video/mp4">
+<video style="width:80%;" class="mb-0" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/ftcs_unstable.mp4" type="video/mp4">
 </video>
 </div>
 
@@ -325,8 +324,8 @@ within the admissible area. Dropping our bound by $2 \% $, let's heat the start
 button for $\alpha + \beta \approx 0.49$.
 
 <div class="flex sm:justify-center max-w-lg sm:mx-auto ">
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_1_introduction/ftcs_almost_unstable.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/ftcs_almost_unstable.mp4" type="video/mp4">
 </video>
 </div>
 

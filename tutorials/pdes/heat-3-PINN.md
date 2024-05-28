@@ -217,7 +217,7 @@ But putting these and other technicalities aside, this is pretty much what you
 need to know about PINNs to follow the rest of this post!
 
 <div class="flex sm:justify-center max-w-lg sm:mx-auto">
-    <img src="/assets/img/articles/heat_2_PINN/PINN_sketch.png" class="mb-2">
+    <img src="/../_static/pdes/PINN_sketch.png" class="mb-2">
 </div>
 
 Fig. 1: The PINN we used to solve the 2D Heat Equation consists
@@ -311,14 +311,14 @@ error $\text{Error} = |u_{\rm FDM} - u_{\rm PINN}|$ [bottom]. This error plot
 can be easily computed by running the provided `heat_error.py` python script.
 
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_2_PINN/fdm.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/fdm.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_2_PINN/idrlnet_10000epochs.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/idrlnet_10000epochs.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_2_PINN/error_10000epochs.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/error_10000epochs.mp4" type="video/mp4">
 </video>
 </div>
 
@@ -344,14 +344,14 @@ so no nonsensical estimates were output, there must be some suitable tuning to
 assure us the algorithm can indeed approximate the solution.
 
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_2_PINN/error_100epochs.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/error_100epochs.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_2_PINN/error_1000epochs.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/error_1000epochs.mp4" type="video/mp4">
 </video>
-<video class="mb-0" loop muted autoplay preload="auto">
-    <source src="{{ 'assets/img/articles/heat_2_PINN/error_10000epochs.mp4' | relative_url }}" type="video/mp4">
+<video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
+    <source src="../_static/pdes/error_10000epochs.mp4" type="video/mp4">
 </video>
 </div>
 
@@ -387,7 +387,7 @@ For this, we set different **numbers of epochs** and see how the output is
 impacted by this choice.
 
 <div class="flex sm:justify-center sm:mx-auto">
-    <img src="/assets/img/articles/heat_2_PINN/learning_across_epochs.png">
+    <img src="/../_static/pdes/learning_across_epochs.png">
 </div>
 
 Fig. 5: Learning curves (in logarithmic scale) for different sub-domains. We can see that, even though all terms have different behavior, they eventually converge to exceedingly small values. Credits: Manuel Madeira / Inductiva.
@@ -453,8 +453,8 @@ To see this, let us see the effect of using larger and smaller
 learning rates $\alpha$ than the one chosen in the previous experiment.
 
 <div class="flex flex-col sm:justify-center sm:mx-auto space-y-1">
-    <img src="/assets/img/articles/heat_2_PINN/big_lr.png">
-    <img src="/assets/img/articles/heat_2_PINN/small_lr.png">
+    <img src="/../_static/pdes/big_lr.png">
+    <img src="/../_static/pdes/small_lr.png">
 </div>
 
 Fig. 6: Learning curves (in logarithmic scale) for two different learning rates. Note that a very large
