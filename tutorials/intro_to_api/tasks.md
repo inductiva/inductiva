@@ -1,10 +1,11 @@
 # Tasks
 
-Central to the API's functionality is the concept of a `Task`, which is an 
-abstraction that encapsulates all the information about the
-computational workload you defined as the user. Once you submit a simulation to the 
-API, a `Task` is generated. This allows for real-time updates on simulation status, 
-including monitoring its progress and retrieving its outputs.
+Central to the API's functionality is the concept of a `Task`,
+which is an  abstraction that encapsulates all the information
+about the computational workload you defined as the user.
+Once you submit a simulation to the  API, a `Task` is generated.
+This allows for real-time updates on simulation status, including
+monitoring its progress and retrieving its outputs.
 
 In this reference, you will learn about the entire lifecycle of a `Task`, 
 including its creation, various operational states, and termination. This information 

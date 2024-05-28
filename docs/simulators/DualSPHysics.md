@@ -47,3 +47,12 @@ task.wait()
 task.download_outputs()
 
 ```
+
+## What to read next
+
+If you are interested in DualSPHysics, you may also be interested in checking
+the following related simulators that are also avaiable via Inductiva API:
+
+* [CaNS](CaNS.md)
+* [OpenFOAM](OpenFOAM.md)
+* [SPlisHSPlasH](SPlisHSPlasH.md)

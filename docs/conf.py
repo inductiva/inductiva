@@ -92,6 +92,8 @@ html_static_path = ['_static']
 
 html_favicon = 'favicon.ico'
 
+html_title = 'Python API for Cloud-based Simulation'
+
 # Google Analytics
 googleanalytics_id = "UA-188572165-1"
 googleanalytics_enabled = True
