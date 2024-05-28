@@ -274,7 +274,7 @@ class Project:
 
     def __exit__(self, exc_type, exc_value, exc_tb):
         self.close()
-    
+
     def __eq__(self, other) -> bool:
         return isinstance(other, Project) and \
             self.name == other.name and \
