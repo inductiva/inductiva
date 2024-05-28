@@ -271,7 +271,8 @@ presented for FDM from
 <div class="flex sm:justify-center max-w-md sm:mx-auto">
     <img src="/assets/img/articles/heat_1_introduction/BIC.png" class="my-1">
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 2: The boundary and initial conditions used throughout the Heat series. Energy is pumped from the top edge onto an initially completely cold 2D plate. Credits: David Carvalho / Inductiva </span>
+
+Fig. 2: The boundary and initial conditions used throughout the Heat series. Energy is pumped from the top edge onto an initially completely cold 2D plate. Credits: David Carvalho / Inductiva.
 
 A very simple domain was chosen --- a regular 2D square plate. We must
 then consider points of the form $(t, \mathbf{r}) = (t, x, y)$.
@@ -406,7 +407,8 @@ impacted by this choice.
 <div class="flex sm:justify-center sm:mx-auto">
     <img src="/assets/img/articles/heat_2_PINN/learning_across_epochs.png">
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 5: Learning curves (in logarithmic scale) for different sub-domains. We can see that, even though all terms have different behavior, they eventually converge to exceedingly small values. Credits: Manuel Madeira / Inductiva </span>
+
+Fig. 5: Learning curves (in logarithmic scale) for different sub-domains. We can see that, even though all terms have different behavior, they eventually converge to exceedingly small values. Credits: Manuel Madeira / Inductiva.
 
 You can see how the loss for various subdomains (the captions should be clear to follow) changes
 as training takes place.

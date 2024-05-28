@@ -146,7 +146,8 @@ times *only* for points along the 4 edges of the plate (top, bottom, left and ri
 <div class="flex sm:justify-center max-w-md sm:mx-auto">
     <img src="/assets/img/articles/heat_1_introduction/BIC.png" class="my-1">
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 1: The boundary and initial conditions used throughout the Heat series. Energy is pumped from the top edge onto an initially completely cold 2D plate. Credits: David Carvalho / Inductiva </span>
+
+Fig. 1: The boundary and initial conditions used throughout the Heat series. Energy is pumped from the top edge onto an initially completely cold 2D plate. Credits: David Carvalho / Inductiva.
 
 ## <span class="text-pink-500"> *The Power of Love* </span> <br/> <span class="text-rose-600"> ... and Classical Numerical Methods </span>
 
@@ -280,7 +281,7 @@ variable $x$:
 Fig. 2: Approximation schemes of the derivative of $f(x)$ at a grid point $x_i$ using - (left)
 *forward* and (right) *centered* schemes. Note that either method differs from
 the *actual* value $f_x(x_i)$, given by the slope of the solid straight line.
-Credits: David Carvalho / Inductiva
+Credits: David Carvalho / Inductiva.
 
 
 These will estimate the true instantaneous rate via neighboring differences.
