@@ -1,4 +1,4 @@
-# The Heat Equation and a Generalized Neuro-Solver
+# Generalized Neuro-Solver
 
 **Authors**: Manuel Madeira, David Carvalho
 

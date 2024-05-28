@@ -70,11 +70,12 @@ generating-synthetic-data/synthetic-data-generation-5.md
 
 ```{toctree}
 ---
-caption: Heat Diffusion and Physics Informed Neural Networks
+caption: Physics-Informed Neural Networks
 maxdepth: 1
 hidden: true
 ---
 pinns/heat-1-an-introduction.md
-pinns/heat-2-PINN.md
-pinns/heat-3-neurosolver.md
+pinns/heat-2-finite-differences.md
+pinns/heat-3-PINN.md
+pinns/heat-4-neurosolver.md
 ```

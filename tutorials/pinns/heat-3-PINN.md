@@ -1,4 +1,4 @@
-# The Heat Equation and a Physics-Informed Neural Network
+# Physics-Informed Neural Network
 
 **Authors**: Manuel Madeira, David Carvalho
 
