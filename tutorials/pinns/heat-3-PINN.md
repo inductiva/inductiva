@@ -4,30 +4,12 @@
 
 **Reviewers**: Fábio Cruz
 
-In the [debut]({% post_url 2022-02-14-heat-1-an-introduction %}) of this
-3-post series, where we intend to showcase the power of Neural Networks to solve
-differential equations, we introduced you to the equation that serves as our
-prototypical example (*the Heat Equation*) and to the general setup we will use
-throughout (a 2D plate with edges kept at fixed temperatures).
-
-At this initial stage, we showcased a **classical algorithm** comprised of a set
-of *numerical routines* to solve the Heat Equation.
-It consisted in *discretizing* the differential operators and thus
-obtaining an estimate which approximates the solution at specific positions and
-times (remember the term Finite Differences Method?)
-
-At the very end of that post, we motivated for the importance of reaching fast
-*computation runtimes* and how they can become a bottleneck for
-*large optimization problems*.
-
 As our scientific and technological needs evolve, it is not unrealistic to
 expect problems depending on solving *billions* of partial differential equations
 (PDEs) with hundreds of variables and defined on high-dimensional spaces with
 hard boundaries constraints.
 
 Can Deep Learning lend us a hand in this regard? Let's find out!
-
-# Heat #2: The Heat Equation (and a Physics-Informed Neural Network)
 
 Employing a disruptive ethos, in this post we will *hopefully* convince you
 that there is a whole lot of potential stemming from **Deep Learning** (DL) methods
@@ -85,7 +67,7 @@ on its *derivatives*. In general, these derivative can involve any order term.
 Our hope is thus to find a NN whose output trial solution can mimic the actual
 PDE solution.
 
-### Deep Advantages
+## Deep Advantages
 
 *Guess what*? As parametric function approximators, NNs are particularly well
 tailored for this problem.
@@ -145,7 +127,7 @@ to physical systems. By Physics, it is assumed that some strong principle or
 law must be held across the system. Curiously enough, these tend to be expressed
 precisely with PDEs!
 
-### Training the PINN
+## Training the PINN
 
 But how can we obtain a NN that we are confident has mimicked the *actual*
 solution of the PDE taking into consideration the two aforementioned notions?
@@ -161,7 +143,7 @@ respect the PDE;
 could be tight by some relation --- and consequently an inverse fast Fourier
 transform could be used to map the solution to the direct domain.
 
-#### A Clever Loss Function
+### A Clever Loss Function
 
 The answer that requires minimal change though is to tweak the way the loss
 function is computed. This *objective* function $\mathcal{L}$ is parametrized
@@ -294,7 +276,7 @@ $$
 \mathcal{L}_\mathrm{PDE} = \frac{1}{N} \sum_{i=1}^N \left\|\left[ \frac{\partial}{\partial t} - D \left( \frac{\partial^2}{\partial x ^2} + \frac{\partial^2}{\partial y ^2} \right) \right]\hat{u}(t^i,x^i,y^i) \right\|^2= 0.
 $$
 
-### Time to Heat [Start]
+## Time to Heat [Start]
 
 You can find our code [here](https://github.com/inductiva/blog_code_snippets)
 and run your very first PINN! Run this experiment through the following
@@ -315,9 +297,9 @@ the entire post.
 
 **Disclaimer:** our code is able to accommodate some extra complexity
 that is not needed in this post. For now though, we will not dive in detail but 
-let the magic happen in Heat #3 😎.
+let the magic happen in the next section 😎.
 
-### Classical vs NN --- the fight begins
+## Classical vs NN --- the fight begins
 
 To see how well our NN-based framework handles the task, we can compare
 the NN output to the one generated from the classical algorithm we used in
@@ -352,7 +334,7 @@ function are found, and it is thus natural that our PINN has more difficulty to 
 This certainly seems hopeful --- but an inquisitive mind like yours must be
 wondering about *why* this PINN worked.
 
-### How long should we train?
+## How long should we train?
 
 In order to train the PINN, a rather large number of epochs
 ($N_{\rm epochs}=10000$) was used for training.
@@ -386,7 +368,7 @@ In general, tuning this parameter can be costly (moreso if performed in a brute 
 
 Specific knowledge of the PDE or domain in question may make our lives easier!...
 
-### Customized training
+## Customized training
 
 The versatility of the PINNs in focusing on different regions differently begs
 a question of the utmost relevance:
@@ -417,7 +399,7 @@ The training of PINNs (or generally with NNs), is **not** a completely trivial
 task. In fact, from the learning curves above, it is clear that if we stopped
 our training too early on, our results would be necessarily **worse**.
 
-### The ghost of *overfitting*
+## The ghost of *overfitting*
 
 We typically find overfitting whenever we train our model excessively with a
 training dataset --- ultimately providing a strict fitting across the given
@@ -446,7 +428,7 @@ are the most troublesome ones --- due to their higher loss.
 To contrast this, FDM implementations have those points directly *hard-coded*
 onto the final solution.
 
-### Learning Rate
+## Learning Rate
 
 Another typical issue impacting the performance of PINNs (and NNs in general)
 is the choice of the learning rate $\alpha$.
@@ -520,7 +502,7 @@ we will show you more as progress is made 😛!
 
 ## Next episode
 
-In the next (and final!) post of the *Heat series*, we will precisely unveil
+In the next (and final!) section of our tutorial, we will precisely unveil
 some of the aspects that can make our problem harder to solve but also
 **more realistic**.
 
@@ -531,7 +513,7 @@ version of PINNs to be able to:
 + solve a PDE to more than one instance of the boundary conditions without
   having to retrain the whole model again.
 
-Neural Networks sure sound exciting, right? Stay tuned for Heat #3 🌶️!
+Neural Networks sure sound exciting, right? Stay tuned 🌶️!
 
 ## References
 
@@ -544,16 +526,3 @@ Defining papers outlining the architecture and ideas of PINNs in the Literature.
 Yet another influential paper on PINNs. \
 [[4]](https://idrlnet.readthedocs.io/en/latest/)
 Check out the documentation of the IDRLnet library here.
-
-## Credits & Thanks
-
-We thank our Inductiva pals — Manuel Madeira (main author), David Carvalho
-(editor and co-author), Fábio Cruz (technical editor and reviewer) and
-Mariana Prazeres (who helped us set up and use the ILDRnet library).
-
-## Dedication
-This post is dedicated to Sílvio Macedo (01/02/1975 - 17/03/2022), a
-technology enthusiast, a founder of many companies, and a friend.
-
-Thank you Sílvio for inspiring everyone around you to go further and higher.
-We try to do that every day at Inductiva. This post is also a bit of you.

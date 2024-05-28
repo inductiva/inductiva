@@ -5,29 +5,19 @@
 **Reviewers**: Fábio Cruz
 
 
-To mark Valentine's day, we let ourselves get inspired by feelings of love
-and human warmth. *Love is to be spread around*, so they say.
+In this tutorial, we delve into the problem of ... 🔥 **heat diffusion** on a plate! 🔥
 
-Yeah, we're sure you guessed it right --- in this *all-new* blog series, we delve
-into the problem of ... 🔥 **heat diffusion** on a plate! 🔥
+We will take you step by step up to a point where you can gauge the potential of Neural Networks
+-- in both strength and versatility -- in solving Partial Differential Equations:
 
-Let us set the bar here --- in the *Heat series*, we will take you step by step
-up to a point where you can gauge the potential of Neural Networks
--- in both strength and versatility -- in solving Partial Differential Equations.
+1. **The Heat Equation**: introduces the physics behind heat diffusion.
 
-## <span class="text-pink-500"> *The Heat Series* </span>  <br/> <span class="text-rose-600"> A 3-Part Journey on ML for PDEs </span>
+2. **Finite-Differences**: classical numerical routine to approximate its solution across a 2D plate.
 
-For us, it's about *No Love Lost* and so, in this 3-part series, we'll use the
-*Heat Equation* to plough through. We
-
-- *Heat #1*: introduce the physics behind heat diffusion and use a
-**classical numerical routine** to approximate its solution across a 2D plate.
-
-- *Heat #2*: with that estimate of the solution as a *benchmark*, see how
-**Machine-Learning algorithms** fare for the same situation, by deploying a PINN
+3. **Physics-Inspired Neural Network**: with that estimate of the solution as a *benchmark*, see how **Machine-Learning algorithms** fare for the same situation, by deploying a PINN
 (Physics-Inspired Neural Network).
 
-- *Heat #3*: explore further into how versatile these Neural Networks are in
+4. **Generalized Neuro-Solver***: explore further into how versatile these Neural Networks are in
 handling **more complex geometries** than the 2D domain and **varying
 initial/boundary conditions**;
 
@@ -41,9 +31,7 @@ granted us so far!
 
 Alright. 🔥 *Let's get hot in here!* 🔥
 
-# <span> Heat #1: the Heat Equation </span> <br/> <span> (and a Classical Solver) </span>
-
-## <span class="text-pink-500"> *Hello, I Love You* </span> <br/> <span class="text-rose-600"> The Heat Equation: a warm-up </span>
+## The Heat Equation: a warm-up
 
 Everybody has an elementary feeling for what heat is. *Heat diffusion* is the
 process through which energy is transported in space due to gradients in
@@ -90,7 +78,7 @@ Alright --- no doubt we're in the presence of a **Partial Differential Equation*
 series, we exploit the structural simplicity of the Heat Equation --- alongside
 the fact it is both very intuitive to understand and easy to set up meaningfully.
 
-### <span class="text-pink-500"> *Between Love and Hate* </span> <br/> <span class="text-rose-600"> Heating across a 2D square plate
+### Heating across a 2D square plate
 
 We'll guide you on how to solve this equation in a simple yet realistic
 geometric setup: across a *2-dimensional plate* of variable size [2].
@@ -121,7 +109,7 @@ $\partial_{xx} = \partial_{x} \partial_{x}$.
 
 But hold on! We can't start solving this beast just yet...
 
-### <span class="text-pink-500"> *Love is the Drug* </span> <br/> <span class="text-rose-600"> Setting the boundaries (& initial condition)
+### Setting boundary and initial conditions
 
 We need more information to formulate completely this PDE.
 **Initial and boundary conditions** ensure that a *unique* solution exists
@@ -149,7 +137,7 @@ times *only* for points along the 4 edges of the plate (top, bottom, left and ri
 
 Fig. 1: The boundary and initial conditions used throughout the Heat series. Energy is pumped from the top edge onto an initially completely cold 2D plate. Credits: David Carvalho / Inductiva.
 
-## <span class="text-pink-500"> *The Power of Love* </span> <br/> <span class="text-rose-600"> ... and Classical Numerical Methods </span>
+### Classical Numerical Methods
 
 As usual, finding governing equations from first principles is actually the
 easy part. Rather, solving them presents us major challenges. Why?
@@ -179,7 +167,7 @@ exact computation (taking advantage of the divergence theorem) of the average
 value of the solution function in each of the smaller sub-volumes in which the
 domain is partitioned.
 
-Cupid shouldn't show his preference here. All these methods have their advantages
+All these methods have their advantages
 and shortcomings given the idiosyncrasies of each PDE and setup of the problem.
 Sometimes they may even coincide --- for some simple scenarios
 (such as regular grids) FEMs and FDMs *might* end up being the same [1].

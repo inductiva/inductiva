@@ -2,9 +2,9 @@
 
 **Authors**: Manuel Madeira, David Carvalho
 
-**Reviewers**: Fábio Cruz
+**Reviewers**: Fábio Cruz, Augusto Peres
 
-## *Never Mesh with Love* <br/> <span class="text-rose-600"> Discretizing our domain
+## Discretizing our domain
 
 Deciding how to discretize the domain is also *far* from being set on stone:
 for a given instantiation of a PDE problem, it is typically one of the most
@@ -44,7 +44,7 @@ $$
 It is in this *pixelated* world we will express how heat will diffuse
 away...
 
-### <span class="text-pink-500"> *Eu Tenho Dois Amores (I Have Two Lovers)* </span> <br/> <span class="text-rose-600"> From continuous to discrete derivatives </span>
+## From continuous to discrete derivatives
 
 So, we now need to express a differential operator in a finite,
 discretized domain. How exactly do we *discretize* such abstract objects,
@@ -83,7 +83,7 @@ $u_{xx}[k,i,j]$ and $u_{yy}[k,i,j]$ --- **at all nodes** $[k,i,j]$.
 
 *Goodbye operators, hello grids!*
 
-### <span class="text-pink-500"> *You've Got (Not) to Hide Your Love Away* </span> <br/> <span class="text-rose-600"> Cupid chooses a Finite Difference Method</span>
+## Finite Difference Method
 
 Approximating differentials on a discrete set is also not a recipe set on stone.
 Let us look at two Finite Difference approximations to a function of a single
@@ -108,7 +108,7 @@ $\Delta x$.
 For our approximation to have a chance to succeed, we better sample the $x$
 axis with a high $N_x$!
 
-## <span class="text-pink-500"> *You Can't Hurry Love*  </span> <br/> <span class="text-rose-600"> Choosing how to spread heat</span>
+## Choosing how to spread heat
 
 Given a particular PDE, different FDMs would iterate differently over the grid
 **node by node** to obtain estimates of the differential operators. \
@@ -153,7 +153,7 @@ Look --- some terms are evaluated *outside* the original grid.
 However, you will notice that these fractional indexes only appear for the
 computation of intermediary constructions/variables [4].
 
-### <span class="text-pink-500"> *Victim of Love* <br/> <span class="text-rose-600"> Heat diffusion on a grid
+## Heat diffusion on a grid
 
 *Phew*! That was intense but we now have all the tools to start simulating heat
 flow! For that, we must:
@@ -197,7 +197,7 @@ by considering the 2-point centered derivatives in $x$ (the neighboring nodes
  $[k,i+1,j]$ and $[k,i-1,j]$) and in $y$ (the nodes $[k,i,j+1]$ and $[k,i,j-1]$). <br>
 Credits: Augusto Peres, Inductiva.
 
-## <span class="text-pink-500"> Time to Heat [Start] </span> <br/> <span class="text-rose-600"> Run our code</span>
+## Run our code
 
 It's time to play with all these concepts and see how our FDM approximation
 fares.
@@ -207,7 +207,7 @@ There, you will find the `heat_fdm.py` file for simulations and plotting
 utilities in `/utils`. \
 Have a go yourself!
 
-### *Fast(er) Love* The role of the $D$-ffusivity
+## The role of the $D$-ffusivity
 
 We will pick a spatial discretization of, say, $500 \times 500$ points.
 We can now run for different thermal diffusivities and see their effect.
@@ -228,7 +228,7 @@ first with $D=0.01$, then $D=0.1$ and finally $D=1$.
 
 Fig. 4: Role of various $D$ in the diffusion. Credits: Manuel Madeira / Inductiva.
 
-### *Love is in the air* --- but heat for sure is on the plate!
+## Heat is on the plate!
 
 We can reason with these results.
 
@@ -252,7 +252,7 @@ This **directly** impacts the choice of the time sampling.
 So --- it seems that each **internal** parameter $D$ requires its own
 discretization setup somehow. But in what way?
 
-### <span class="text-pink-500"> *How Stable Is Your Love?*  </span> <br/> <span class="text-rose-600"> Setting stability criteria </span>
+## Setting stability criteria
 
 We ran our first PDE classical solver. *Yay!*
 However, why are we happy with the results?
@@ -342,7 +342,7 @@ We could be considering this problem in 3D or at way more complex domains and
 boundaries. In an extreme limit, we could be
 using these FDMs in highly-nonlinear equations with hundreds of variables.
 
-## <span class="text-pink-500"> *To Vectorize or Not To Vectorize* </span> <br/> <span class="text-rose-600"> That is not the question </span>
+## *To Vectorize or Not To Vectorize* -- that is not the question
 
 Understandingly, instructing how to compute many functions over a grid is not a
 trivial task --- issues like computation power and memory storage can be
@@ -405,14 +405,14 @@ by the compiled vectorized approach,
 this methodology improved our task by 2 orders of magnitude.
 Is that enough when dealing with far more complex PDEs in higher dimensions?
 
-## <span class="text-pink-500"> *Limit to Your Love* </span> <br/>  <span class="text-rose-600"> How far can we push classical methods?
+## How far can we push classical methods?
 
 Despite our pleasant experience with a low-dimensional problem on a regular
 geometry, we should be careful thinking ahead.
 Classical methods for solving PDEs have long been recognized for suffering
 from some significant drawbacks and we will comment on a few:
 
-### <span class="text-pink-500"> *Meshing* <br/> ... <span class="text-rose-600"> Gives Love a Bad Name
+## Meshing 
 
 Meshing becomes a daunting task in more complex geometries.
 Different discretization setups can always be chosen but once one is fixed,
@@ -433,7 +433,7 @@ respect to all others.
 The best we can do is to infer a solution through **interpolation** but this is
 admittedly **unsatisfactory**.
 
-### <span class="text-pink-500"> *Scaling*  <br/> <span class="text-rose-600"> *Will Tear Us Apart*
+### Scaling
 
 Classical algorithms scale **terribly** with the PDE dimensions and grid
 refinements.
@@ -450,7 +450,7 @@ $\mathcal{O} (N_t N_x N_y N_z)$ and naturally, $n$ dimensions scale as
 $\mathcal{O}(N^d)$ --- an *exponential scaling* of the algorithm
 with dimension.
 
-### <span class="text-pink-500"> *Crazy Little Thing Called...* <br/> <span class="text-rose-600"> Feasibility </span>
+## Feasibility
 
 Even though we can rely on stability conditions, this does **not** mean we can
 deploy them --- it may be computationally very, very, ..., heavy or simply
@@ -461,9 +461,9 @@ discretization. For some instances, satisfactory $\Delta t$ might be too
 small to be practical and, in the extreme case, downright untenable!
 
 This comes at a bitter price and is a **major** drawback of the FDM.
-*Baby, was that a cheap Mon Cherrie knock-off?*
 
-## <span class="text-pink-500"> *All for Love* </span> <br/> <span class="text-rose-600"> ... and Machine Learning?
+
+## Machine Learning?
 
 PDE simulations must be **as fast and light as possible**.
 But can classical methods, in general, get *fast enough*?
@@ -500,7 +500,7 @@ those approaches to possibly overcome these issues raised by classical methods.
 
 *Until then, don't melt away!*
  
-## <span class="text-pink-500"> *Advice For The Young At Heart* </span> <br/> <span class="text-rose-600"> References & Remarks
+## References & Remarks
 
 [[1]](https://www.machinedesign.com/3d-printing-cad/fea-and-simulation/article/21832072/whats-the-difference-between-fem-fdm-and-fvm)
 More on this FEM and FDM possible similarity here. \
@@ -510,10 +510,3 @@ The FDM-based approach we present is loosely following this excellent example th
 More details of the derivation of this expression can be found here (pages 11/12). \
 **[4]** There are more complex cases where it is convenient to define such
 *staggered grids* with fractional offsets to the original (e.g for Maxwell's Equations).
-
-## <span class="text-pink-500"> *Love For...* </span> <br/> <span class="text-rose-600"> Credits
-
-We thank our Inductiva pals --- *Manuel Madeira* (main author), *David Carvalho* (editor and co-author), 
-*Fábio Cruz* (technical editor and reviewer) and *Augusto Peres* (reviewer and animation creator) for this post.
-    
-### ❤️❤️❤️️ <span class="text-pink-500">*Pounds of Love*</span>, from us at Inductiva. ❤️❤️❤️

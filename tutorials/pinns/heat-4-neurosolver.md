@@ -5,7 +5,7 @@
 **Reviewers**: Fábio Cruz
 
 
-In this new post series, we are going to show you that a grand unification
+In this section, we are going to show you that a grand unification
 of gravity within a quantum field theory framework can explain topologically
 nontrivial dynamics observed in simulations of graviton inelastic collisions
 in a AdS space. Let's go!
@@ -31,9 +31,7 @@ In this final instalment of the *Heat series*, we delve once more into this topi
 with the aid of our very cherished *Heat Equation*.
 So let's go!
 
-# Heat #3: The Heat Equation (and a Generalized Neuro-Solver)
-
-## A very simplistic system (so far)
+## Introduction
 
 So far in this series, we showcased a classical algorithm (in
 [Heat #1]({% post_url 2022-02-14-heat-1-an-introduction %})) and a Neural Network
@@ -96,7 +94,7 @@ In either case, the **training time naturally becomes a major bottleneck**.
 
 How to tackle these issues?
 
-### Hard-(en)coding the variability
+## Hard-(en)coding the variability
 
 There are two direct answers --- either we directly:
 + *decrease* the training time by exploiting some magically-enhanced novel
@@ -299,7 +297,7 @@ in the series.
 provide us the generalization power we sought, saving us a huge amount of
 computation resources and with very little damage in results accuracy!
 
-## <span> A hole lotta love </span> <br/> <span> Probing complex geometries </span>
+## Probing complex geometries
 
 We are interested in testing PINNs for more complex geometries than the regular 
 square plate. Let us then now go the extra mile and address precisely the
@@ -337,7 +335,7 @@ maximal temperature ($u = 1\;^\mathrm{o}C$);
 + **Cold hole**: Conversely, in this case, the points sampled from the hole
 boundary are set to the minimal temperature ($u = -1\;^\mathrm{o}C$).
 
-### ...Running
+## Running our code
 
 Let's now get some code running! The instruction in the command line that leads to the PINN results is the following:
 ```
@@ -397,7 +395,7 @@ various sizes and positions are found and the boundary is now curved?
 
 Fig. 6: Heat flow across a more complex domain composed of three holes of varying sizes and positions, as well as curved left and right boundaries. Credits: Manuel Madeira / Inductiva.
 
-### Generalizing through grid-searching (is inefficient)
+## Generalizing through grid-searching (is inefficient)
 
 To make a point (and get more awesome visualizations 😁), let's see how the
 output changes by changing the diffusitivity rate $D$ for the hot hole
@@ -472,10 +470,8 @@ problem solution is well implemented.
 
 ## Our fiery conclusions on Neuro-Solvers
 
-*This post completes the Heat series.*
-
 Well, it has been quite a ride!
-To finish off the *Heat series*, we took the opportunity to sail through seas that
+To finish off the tutorial, we took the opportunity to sail through seas that
 classical methods can not achieve (or at least through simple procedures).
 The reason is that they are not scalable with increasing parameter customization.
 Classical methods have underwhelming potential in providing acceleration into solving PDEs.
@@ -511,7 +507,7 @@ We at Inductiva are precisely learning to understand how Machine Learning
 can be used to expand our knowledge of Partial Differential Equations to
 realms never computed before.
 
-Stay tuned by following our new blog posts!
+Stay tuned for new material!
 
 🔥🔥🔥 Fire out 🔥🔥🔥
 
@@ -520,10 +516,3 @@ Stay tuned by following our new blog posts!
 [[1]](https://arxiv.org/abs/2111.01008) A great introduction to HyperPINNs! \
 [2] More information about the PINN loss and nodes in
 [Heat #2]({% post_url 2022-03-21-heat-2-PINN %}).
-
-## Credits & Thanks
-
-We thank our Inductiva pals — Manuel Madeira (main author), David Carvalho
-(editor and co-author), Fábio Cruz (technical editor and reviewer).
-
-### From us at Inductiva, it has been a hot ride.
