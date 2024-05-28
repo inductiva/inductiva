@@ -216,7 +216,7 @@ But putting these and other technicalities aside, this is pretty much what you
 need to know about PINNs to follow the rest of this post!
 
 <div class="flex sm:justify-center max-w-lg sm:mx-auto">
-    <img style="width:60%;" src="/../_static/pdes/PINN_sketch.png" class="mb-2">
+    <img style="width:60%;" src="../_static/pdes/PINN_sketch.png" class="mb-2">
 </div>
 
 Fig. 1: The PINN we used to solve the 2D Heat Equation consists
@@ -384,7 +384,7 @@ For this, we set different **numbers of epochs** and see how the output is
 impacted by this choice.
 
 <div class="flex sm:justify-center sm:mx-auto">
-    <img src="/../_static/pdes/learning_across_epochs.png">
+    <img src="../_static/pdes/learning_across_epochs.png">
 </div>
 
 Fig. 5: Learning curves (in logarithmic scale) for different sub-domains. We can see that, even though all terms have different behavior, they eventually converge to exceedingly small values. Credits: Manuel Madeira / Inductiva.
@@ -450,8 +450,8 @@ To see this, let us see the effect of using larger and smaller
 learning rates $\alpha$ than the one chosen in the previous experiment.
 
 <div class="flex flex-col sm:justify-center sm:mx-auto space-y-1">
-    <img src="/../_static/pdes/big_lr.png">
-    <img src="/../_static/pdes/small_lr.png">
+    <img src="../_static/pdes/big_lr.png">
+    <img src="../_static/pdes/small_lr.png">
 </div>
 
 Fig. 6: Learning curves (in logarithmic scale) for two different learning rates. Note that a very large
