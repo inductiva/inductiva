@@ -70,12 +70,12 @@ generating-synthetic-data/synthetic-data-generation-5.md
 
 ```{toctree}
 ---
-caption: Physics-Informed Neural Networks
+caption: Partial Differential Equations
 maxdepth: 1
 hidden: true
 ---
-pinns/heat-1-an-introduction.md
-pinns/heat-2-finite-differences.md
-pinns/heat-3-PINN.md
-pinns/heat-4-neurosolver.md
+pdes/heat-1-an-introduction.md
+pdes/heat-2-finite-differences.md
+pdes/heat-3-PINN.md
+pdes/heat-4-neurosolver.md
 ```
