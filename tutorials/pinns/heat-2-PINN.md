@@ -1,7 +1,8 @@
 # The Heat Equation and a Physics-Informed Neural Network
 
-**Authors**: Manuel Madeira, David Carvalho, Fábio Cruz
+**Authors**: Manuel Madeira, David Carvalho
 
+**Reviewers**: Fábio Cruz
 
 In the [debut]({% post_url 2022-02-14-heat-1-an-introduction %}) of this
 3-post series, where we intend to showcase the power of Neural Networks to solve
@@ -68,16 +69,16 @@ In PDEs, the unknowns are functions which depend on various variables and are
 defined over some domain. *Solving the PDE (or systems thereof)* entails
 finding such functions.
 
-For a single real-valued PDE with $$n$$ spatial variables $$r_i$$ and a single
-temporal variable $$t$$, we are after a function
-$$u: \Omega \in \mathbb{R}^{n+1} \rightarrow \mathbb{R}^d$$ which satisfies:
+For a single real-valued PDE with $n$ spatial variables $r_i$ and a single
+temporal variable $t$, we are after a function
+$u: \Omega \in \mathbb{R}^{n+1} \rightarrow \mathbb{R}^d$ which satisfies:
 
 $$
 \mathcal{F} \left[u, \frac{\partial u}{\partial r_i}, \frac{\partial u}{\partial t}, \ldots \right] = 0,
 $$
 
-where $$d$$ sets thedimensionality of the output. \
-$$\mathcal{F}$$ is a *differential operator* --- an operator which may depend
+where $d$ sets thedimensionality of the output. \
+$\mathcal{F}$ is a *differential operator* --- an operator which may depend
 on those variables but also on the trial solution itself and, most importantly,
 on its *derivatives*. In general, these derivative can involve any order term.
 
@@ -163,8 +164,8 @@ transform could be used to map the solution to the direct domain.
 #### A Clever Loss Function
 
 The answer that requires minimal change though is to tweak the way the loss
-function is computed. This *objective* function $$\mathcal{L}$$ is parametrized
-by tunable parameters $$\mathbf{\theta} = (\theta_1, \theta_2, ...)$$ and
+function is computed. This *objective* function $\mathcal{L}$ is parametrized
+by tunable parameters $\mathbf{\theta} = (\theta_1, \theta_2, ...)$ and
 dictated by the model. In order to **learn** the solution, this loss must be
 **minimized**.
 
@@ -172,7 +173,7 @@ We want to make the loss as small as possible. Once we're in that regime,
 we can be fairly sure our trial output is *somehow* close to the *true* solution
 and we can say our model has **learnt** how to solve the PDE.
 
-Tracking the behavior of $$\mathcal{L}$$ allows the NN to adjust
+Tracking the behavior of $\mathcal{L}$ allows the NN to adjust
 its internal parameters towards the values that lead to a smaller loss and
 thus to the best approximation of the PDE output by the NN.
 
@@ -180,29 +181,27 @@ Considering this motivation --- admittedly more mathematical --- we can now
 formulate the impact of each term on the overall loss through an individual
 term:
 
-+ **Output values loss** $$\mathcal{L}_\mathrm{data}$$ --- any loss that penalizes
++ **Output values loss** $\mathcal{L}_\mathrm{data}$ --- any loss that penalizes
 a NN that does not verify the value function at the several prescribed points.
 For instance, we can consider a Mean Squared Error function between the values
 output by the NN and the target ones (which we know *a priori*):
 
-    <div class="overflow-x-auto">
     $$
     \mathcal{L}_\mathrm{data} = \frac{1}{N} \sum_{i=1}^N \|\hat{u}(t^i, r^i_1, \ldots, r^i_n) - u^i\|^2,
     $$
-    </div>
 
-    where $$\hat{u}(\ldots)$$ is the NN estimate and $$u^i$$ is the
-    *ground truth* value of $$u$$ at the point $$(t^i, r^i_1, \ldots, r^i_n)$$.
+    where $\hat{u}(\ldots)$ is the NN estimate and $u^i$ is the
+    *ground truth* value of $u$ at the point $(t^i, r^i_1, \ldots, r^i_n)$.
 
-    Typically, the $$N$$ points used to compute $$\mathcal{L}_\mathrm{data}$$
+    Typically, the $N$ points used to compute $\mathcal{L}_\mathrm{data}$
     are drawn from the initial and the boundary conditions, but this is *not* strict ---
     those could be any points!
 
-+ **PDE "Regularization"** $$\mathcal{L}_\mathrm{PDE}$$ --- a term
++ **PDE "Regularization"** $\mathcal{L}_\mathrm{PDE}$ --- a term
 which penalizes models that do not satisfy the PDE. To achieve this, we can use a
-little trick. Since we wrote our PDE in the form $$\mathcal{F}[u, \ldots]=0$$,
-we want the left-hand side to be as close to $$0$$ as possible.
-We can then simply make sure our mimicking function $$\hat{u}$$
+little trick. Since we wrote our PDE in the form $\mathcal{F}[u, \ldots]=0$,
+we want the left-hand side to be as close to $0$ as possible.
+We can then simply make sure our mimicking function $\hat{u}$
 yields the lowest loss:
 
     $$
@@ -238,9 +237,10 @@ need to know about PINNs to follow the rest of this post!
 <div class="flex sm:justify-center max-w-lg sm:mx-auto">
     <img src="/assets/img/articles/heat_2_PINN/PINN_sketch.png" class="mb-2">
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 1: The PINN we used to solve the 2D Heat Equation consists
-of two parts: firstly, by updating the NN's weights $$\mathbf{W}$$ and biases $$\mathbf{b}$$ we can minimize the residual difference
-between the model and the prescribed values at some selected points; then the NN output is also optimized so that $$\|\mathcal{F}[u, \ldots] \|$$ gets as close to 0 as possible. Credits: David Carvalho / Inductiva </span>
+
+Fig. 1: The PINN we used to solve the 2D Heat Equation consists
+of two parts: firstly, by updating the NN's weights $\mathbf{W}$ and biases $\mathbf{b}$ we can minimize the residual difference
+between the model and the prescribed values at some selected points; then the NN output is also optimized so that $\|\mathcal{F}[u, \ldots] \|$ gets as close to 0 as possible. Credits: David Carvalho / Inductiva 
 
 ### IDRLnet: a PINNs library
 
@@ -274,28 +274,24 @@ presented for FDM from
 <span class="mt-0 block sm:text-center text-base">Fig. 2: The boundary and initial conditions used throughout the Heat series. Energy is pumped from the top edge onto an initially completely cold 2D plate. Credits: David Carvalho / Inductiva </span>
 
 A very simple domain was chosen --- a regular 2D square plate. We must
-then consider points of the form $$(t, \mathbf{r}) = (t, x, y)$$.
-The temperature $$u(t, \mathbf{r})$$ must satisfy *the 2D Heat Equation*:
+then consider points of the form $(t, \mathbf{r}) = (t, x, y)$.
+The temperature $u(t, \mathbf{r})$ must satisfy *the 2D Heat Equation*:
 
-<div class="overflow-x-auto">
 $$
 \left[ \frac{\partial}{\partial t} - D \left( \frac{\partial^2}{\partial x ^2} + \frac{\partial^2}{\partial y ^2} \right) \right]u(t,x,y)= 0
 $$
-</div>
 
 Recall that the hot edge was kept at the *maximal* temperature
-($$1\;^\mathrm{o}C$$), while the remaining boundaries at the *minimal* temperature
-($$-1\;^\mathrm{o}C$$). Initially, at $$t=0$$, all points were kept
+($1\;^\mathrm{o}C$), while the remaining boundaries at the *minimal* temperature
+($-1\;^\mathrm{o}C$). Initially, at $t=0$, all points were kept
 at the minimal temperature too.
 
-This prescription allows us to compute the loss term $$\mathcal{L}_{\mathrm{data}}$$.
-As for the regularization, the loss term $$\mathcal{L}_{\mathrm{PDE}}$$ is:
+This prescription allows us to compute the loss term $\mathcal{L}_{\mathrm{data}}$.
+As for the regularization, the loss term $\mathcal{L}_{\mathrm{PDE}}$ is:
 
-<div class="overflow-x-auto">
 $$
 \mathcal{L}_\mathrm{PDE} = \frac{1}{N} \sum_{i=1}^N \left\|\left[ \frac{\partial}{\partial t} - D \left( \frac{\partial^2}{\partial x ^2} + \frac{\partial^2}{\partial y ^2} \right) \right]\hat{u}(t^i,x^i,y^i) \right\|^2= 0.
 $$
-</div>
 
 ### Time to Heat [Start]
 
@@ -313,7 +309,7 @@ The flags used trigger the following instructions:
   and y-axis, respectively, of the grid in which we infer results;
 + `colorbar_limits` defines the range of the colorbar used.
 
-For illustrative purposes, we set the diffusivity constant to $$D=0.1$$ throughout
+For illustrative purposes, we set the diffusivity constant to $D=0.1$ throughout
 the entire post.
 
 **Disclaimer:** our code is able to accommodate some extra complexity
@@ -328,7 +324,7 @@ the NN output to the one generated from the classical algorithm we used in
 
 Let's plot the output obtained with the FDM (a classical algorithm) [top]
 and a PINN we trained [middle], as well as the
-error $$\text{Error} = |u_{\rm FDM} - u_{\rm PINN}|$$ [bottom]. This error plot
+error $\text{Error} = |u_{\rm FDM} - u_{\rm PINN}|$ [bottom]. This error plot
 can be easily computed by running the provided `heat_error.py` python script.
 
 <div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
@@ -342,7 +338,8 @@ can be easily computed by running the provided `heat_error.py` python script.
     <source src="{{ 'assets/img/articles/heat_2_PINN/error_10000epochs.mp4' | relative_url }}" type="video/mp4">
 </video>
 </div>
-<span class="mt-0 block sm:text-center text-base"> Fig. 3: Comparison of the results obtained via a classical algorithm (a FDM)[top], a DL algorithm (the PINN computed with IDRLnet)[middle] and the absolute value of their difference [bottom]. They seem very similar! Indeed, an inspection of the error shows global convergence. Credits: Manuel Madeira / Inductiva </span>
+
+Fig. 3: Comparison of the results obtained via a classical algorithm (a FDM)[top], a DL algorithm (the PINN computed with IDRLnet)[middle] and the absolute value of their difference [bottom]. They seem very similar! Indeed, an inspection of the error shows global convergence. Credits: Manuel Madeira / Inductiva
 
 Wow --- this looks rather good!
 
@@ -357,7 +354,7 @@ wondering about *why* this PINN worked.
 ### How long should we train?
 
 In order to train the PINN, a rather large number of epochs
-($$N_{\rm epochs}=10000$$) was used for training.
+($N_{\rm epochs}=10000$) was used for training.
 
 This can make us think: just like the classical algorithm had to be tuned
 so no nonsensical estimates were output, there must be some suitable tuning to
@@ -374,17 +371,16 @@ assure us the algorithm can indeed approximate the solution.
     <source src="{{ 'assets/img/articles/heat_2_PINN/error_10000epochs.mp4' | relative_url }}" type="video/mp4">
 </video>
 </div>
-<span class="mt-0 block sm:text-center text-base"> Fig. 4: Difference between the
-PINN output after training with different number of epochs and its respective
-classical output (serving as a benchmark). 
-We can see a substantial error for few epochs ($$N_{\rm epochs} = 100$$) [top].
-If we ramp up 10-fold ($$N_{\rm epochs} = 1000$$), the error is essentially gone [middle] and even further
-suppressed for $$N_{\rm epochs} = 10000$$ [bottom]. For this regime,
-both the classical and DL algorithms provide essentially the same estimate. Credits: Manuel Madeira / Inductiva </span>
 
-The results are just as we expected: the higher $$N_{\rm epochs}$$, the better
+Fig. 4: Difference between the PINN output after training with different number of epochs and its respective classical output (serving as a benchmark). 
+We can see a substantial error for few epochs ($N_{\rm epochs} = 100$) [top].
+If we ramp up 10-fold ($N_{\rm epochs} = 1000$), the error is essentially gone [middle] and even further
+suppressed for $N_{\rm epochs} = 10000$ [bottom]. For this regime,
+both the classical and DL algorithms provide essentially the same estimate. Credits: Manuel Madeira / Inductiva.
+
+The results are just as we expected: the higher $N_{\rm epochs}$, the better
 the NN learns. 
-In this particular case, it seems that by around $$N_{\rm epochs} \approx 1000$$ it already leads to appropriate learning.
+In this particular case, it seems that by around $N_{\rm epochs} \approx 1000$ it already leads to appropriate learning.
 In general, tuning this parameter can be costly (moreso if performed in a brute force fashion).
 
 Specific knowledge of the PDE or domain in question may make our lives easier!...
@@ -441,7 +437,7 @@ two main reasons:
 + firstly, we are sampling a different set of data points in each
 epoch, *i.e.*, our training set is changing from epoch to epoch
 + secondly, we are considering a regularization term in our loss (recall
-$$\mathcal{L}_\mathrm{PDE}$$).
+$\mathcal{L}_\mathrm{PDE}$).
 
 Furthermore, we see that points coming from the boundary conditions
 are the most troublesome ones --- due to their higher loss.
@@ -451,7 +447,7 @@ onto the final solution.
 ### Learning Rate
 
 Another typical issue impacting the performance of PINNs (and NNs in general)
-is the choice of the learning rate $$\alpha$$.
+is the choice of the learning rate $\alpha$.
 
 This is a *hyperparameter* --- a variable which pertains to the structure of
 the model itself. The update of the NNs parameters is performed by applying
@@ -470,23 +466,23 @@ parameters and thus **faster** progress but at the same time it may lead to
 we may never be in conditions to access the optimal regions.
 
 To see this, let us see the effect of using larger and smaller
-learning rates $$\alpha$$ than the one chosen in the previous experiment.
+learning rates $\alpha$ than the one chosen in the previous experiment.
 
 <div class="flex flex-col sm:justify-center sm:mx-auto space-y-1">
     <img src="/assets/img/articles/heat_2_PINN/big_lr.png">
     <img src="/assets/img/articles/heat_2_PINN/small_lr.png">
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 6: Learning curves
-(in logarithmic scale) for two different learning rates. Note that a very large
-rate $$\alpha = 0.1$$ leads to curves that never get smaller and so the
-NN is bound to fail [top]. Using a smaller rate ($$\alpha=0.0001$$) [bottom], although takes
- more time to run, indeed leads to increasingly smaller losses. Credits: Manuel Madeira / Inductiva </span>
 
-On the one hand, for $$\alpha = 0.1$$, the model runs rather quickly but
+Fig. 6: Learning curves (in logarithmic scale) for two different learning rates. Note that a very large
+rate $\alpha = 0.1$ leads to curves that never get smaller and so the
+NN is bound to fail [top]. Using a smaller rate ($\alpha=0.0001$) [bottom], although takes
+ more time to run, indeed leads to increasingly smaller losses. Credits: Manuel Madeira / Inductiva.
+
+On the one hand, for $\alpha = 0.1$, the model runs rather quickly but
 the learning curve stagnates quickly since further progress will not get us closer to the optimal minima of
 the loss function -- we simply keep meandering in parameter space!
 
-Contrary to this regime, a small rate $$\alpha=0.0001$$ may take more time but allows
+Contrary to this regime, a small rate $\alpha=0.0001$ may take more time but allows
 the model to eventually have ever-smaller losses.
 
 Balancing performance, accuracy and computation resources surely is a
