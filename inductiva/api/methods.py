@@ -98,12 +98,14 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
 
         method = api_response.body["method"]
         url = api_response.body["url"]
-        headers = {
-            "Content-Type":
-                "application/octet-stream",
-            "X-API-Key":
-                (api_instance.api_client.configuration.api_key["APIKeyHeader"])
-        }
+        file_server_available = api_response.body["file_server_available"]
+
+        headers = {"Content-Type": "application/octet-stream"}
+
+        if file_server_available is False:
+            headers["X-API-Key"] = (
+                api_instance.api_client.configuration.api_key["APIKeyHeader"])
+
         logging.debug("Upload URL: %s", url)
 
         with open(input_zip_path, "rb") as zip_fp, tqdm.tqdm(
