@@ -271,7 +271,7 @@ $u_{xx}[k,i,j]$ and $u_{yy}[k,i,j]$ --- **at all nodes** $[k,i,j]$.
 
 Approximating differentials on a discrete set is also not a recipe set on stone.
 Let us look at two Finite Difference approximations to a function of a single
-variable $$x$$:
+variable $x$:
 
 <div class="flex sm:justify-center max-w-sm sm:mx-auto">
 <img src="/assets/img/articles/heat_1_introduction/derivatives.png" >
@@ -307,17 +307,17 @@ They are combined in the *FTCS scheme*:
   
     $$ u^{k, i, j}_t = \frac{u^{k+1, i, j} - u^{k, i, j}}{\Delta t} $$
 
-* **Centered in Space** - the spatial partial derivatives $$u_{xx}$$ and
-$$u_{yy}$$ are are computed through a 2nd-order *central difference* by applying
+* **Centered in Space** - the spatial partial derivatives $u_{xx}$ and
+$u_{yy}$ are are computed through a 2nd-order *central difference* by applying
 the centered difference *twice*:
-    - We first approximate the (second-order) derivative (say, $$u_{xx}$$) via
+    - We first approximate the (second-order) derivative (say, $u_{xx}$) via
     the centered difference:
 
     $$
     u^{k, i, j}_{xx} = \frac{u^{k, i+\frac{1}{2}, j}_x - u^{k, i-\frac{1}{2}, j}_x}{\Delta x}
     $$
 
-    - And then express each first-order term $$u_x$$ in the same fashion e.g.:
+    - And then express each first-order term $u_x$ in the same fashion e.g.:
 
     $$
     u^{k, i, j}_{x} = \frac{u^{k, i+\frac{1}{2}, j} - u^{k, i-\frac{1}{2}, j}}{\Delta x}
@@ -409,9 +409,11 @@ first with $D=0.01$, then $D=0.1$ and finally $D=1$.
     <source src="{{ 'assets/img/articles/heat_1_introduction/ftcs_d1.mp4' | relative_url }}" type="video/mp4">
 </video>
 </div>
-<span class="mt-0 block sm:text-center text-base">Fig. 4: Role of various $D$ in the diffusion. Credits: Manuel Madeira / Inductiva </span>
 
-*Love is in the air* --- but heat for sure is on the plate! \
+Fig. 4: Role of various $D$ in the diffusion. Credits: Manuel Madeira / Inductiva.
+
+### *Love is in the air* --- but heat for sure is on the plate!
+
 We can reason with these results.
 
 - At the beginning (for $t=0$), heat starts developing from the only points
