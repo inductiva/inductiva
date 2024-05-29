@@ -38,86 +38,27 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
             "create_time",
             "cpu_count_logical",
             "cpu_count_physical",
+            "machine_group_id",
             "vm_name",
         }
 
         class properties:
+            machine_group_id = schemas.UUIDSchema
             create_time = schemas.DateTimeSchema
             cpu_count_logical = schemas.IntSchema
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
             vm_name = schemas.StrSchema
             vm_id = schemas.StrSchema
-
-            class machine_group_id(
-                    schemas.UUIDBase,
-                    schemas.ComposedSchema,
-            ):
-
-                class MetaOapg:
-                    format = 'uuid'
-                    any_of_0 = schemas.StrSchema
-                    any_of_1 = schemas.NoneSchema
-
-                    @classmethod
-                    @functools.lru_cache()
-                    def any_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            cls.any_of_0,
-                            cls.any_of_1,
-                        ]
-
-                def __new__(
-                    cls,
-                    *_args: typing.Union[
-                        dict,
-                        frozendict.frozendict,
-                        str,
-                        date,
-                        datetime,
-                        uuid.UUID,
-                        int,
-                        float,
-                        decimal.Decimal,
-                        bool,
-                        None,
-                        list,
-                        tuple,
-                        bytes,
-                        io.FileIO,
-                        io.BufferedReader,
-                    ],
-                    _configuration: typing.Optional[
-                        schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
-                                           frozendict.frozendict, str, date,
-                                           datetime, uuid.UUID, int, float,
-                                           decimal.Decimal, None, list, tuple,
-                                           bytes],
-                ) -> 'machine_group_id':
-                    return super().__new__(
-                        cls,
-                        *_args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
-
             mpi_cluster = schemas.BoolSchema
             __annotations__ = {
+                "machine_group_id": machine_group_id,
                 "create_time": create_time,
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
                 "vm_name": vm_name,
                 "vm_id": vm_id,
-                "machine_group_id": machine_group_id,
                 "mpi_cluster": mpi_cluster,
             }
 
@@ -126,7 +67,14 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
     create_time: MetaOapg.properties.create_time
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
+    machine_group_id: MetaOapg.properties.machine_group_id
     vm_name: MetaOapg.properties.vm_name
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["machine_group_id"]
+    ) -> MetaOapg.properties.machine_group_id:
+        ...
 
     @typing.overload
     def __getitem__(
@@ -162,12 +110,6 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
     def __getitem__(
             self, name: typing_extensions.Literal["vm_id"]
     ) -> MetaOapg.properties.vm_id:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["machine_group_id"]
-    ) -> MetaOapg.properties.machine_group_id:
         ...
 
     @typing.overload
@@ -181,17 +123,23 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
         ...
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "machine_group_id",
         "create_time",
         "cpu_count_logical",
         "cpu_count_physical",
         "memory",
         "vm_name",
         "vm_id",
-        "machine_group_id",
         "mpi_cluster",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["machine_group_id"]
+    ) -> MetaOapg.properties.machine_group_id:
+        ...
 
     @typing.overload
     def get_item_oapg(
@@ -227,12 +175,6 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
     def get_item_oapg(
             self, name: typing_extensions.Literal["vm_id"]
     ) -> MetaOapg.properties.vm_id:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["machine_group_id"]
-    ) -> typing.Union[MetaOapg.properties.machine_group_id, schemas.Unset]:
         ...
 
     @typing.overload
@@ -248,13 +190,13 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
         ...
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "machine_group_id",
         "create_time",
         "cpu_count_logical",
         "cpu_count_physical",
         "memory",
         "vm_name",
         "vm_id",
-        "machine_group_id",
         "mpi_cluster",
     ], str]):
         return super().get_item_oapg(name)
@@ -289,16 +231,15 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
             decimal.Decimal,
             int,
         ],
+        machine_group_id: typing.Union[
+            MetaOapg.properties.machine_group_id,
+            str,
+            uuid.UUID,
+        ],
         vm_name: typing.Union[
             MetaOapg.properties.vm_name,
             str,
         ],
-        machine_group_id: typing.Union[MetaOapg.properties.machine_group_id,
-                                       dict, frozendict.frozendict, str, date,
-                                       datetime, uuid.UUID, int, float,
-                                       decimal.Decimal, bool, None, list, tuple,
-                                       bytes, io.FileIO, io.BufferedReader,
-                                       schemas.Unset] = schemas.unset,
         mpi_cluster: typing.Union[MetaOapg.properties.mpi_cluster, bool,
                                   schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -315,8 +256,8 @@ class ExecuterTrackerRegisterInfo(schemas.DictSchema):
             create_time=create_time,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
-            vm_name=vm_name,
             machine_group_id=machine_group_id,
+            vm_name=vm_name,
             mpi_cluster=mpi_cluster,
             _configuration=_configuration,
             **kwargs,
