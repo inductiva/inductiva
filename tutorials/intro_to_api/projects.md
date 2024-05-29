@@ -77,10 +77,9 @@ project, which is particularly useful to ensure the consistency of the project's
 content.
 
 ```python
-import inductiva
-
-project = inductiva.projects.Project("demo", append=False)
-project.open() # <-- An exception will be raised because the project is appendable
+>>> import inductiva
+>>> project = inductiva.projects.Project("demo", append=False)
+>>> project.open() # <-- An exception will be raised because the project is appendable
 ...
 RuntimeError: Trying to open a project with `append=False`.
 A Project can only be opened when instantiated with the `append=True` option.
@@ -92,46 +91,16 @@ is not explicitly specified as an argument to the `run` method. It will be infer
 from the context where the `run` method is being called.
 
 The client library offers two mechanisms to manage how tasks are added to a
-project: via a context manager or by manually opening and closing a `project`.
+project: by manually opening and closing a `project` or via a context manager.
 
-#### Using a Context Manager
+### Explicit management
 
-The following snippet demonstrates how to add a task to a project using a context
-manager. The manager ensures that the project is opened for task submission
-by calling the `open` and `close` methods when entering and exiting the context
-of the `with` block, respectively. Any task that is created inside the `with` block
-will be appended to the project managed in that context; tasks submitted outside
-will be added to the default one:
-
-```python
-import inductiva
-
-# get example input data
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "xbeach-input-example.zip", unzip=True)
-
-with inductiva.projects.Project("my_xbeach_project", append=True) as project:
-    simulator = inductiva.simulators.XBeach()
-
-    # add a task to the "my_xbeach_project" project
-    task1 = simulator.run(input_dir=input_dir,
-                          sim_config_filename="params.txt")
-
-# task2 will be added to the default project
-task2 = simulator.run(input_dir=input_dir,
-                      sim_config_filename="params.txt")
-
-print(task1.get_info()['project']) # "my_xbeach_project"
-print(task2.get_info()['project']) # "userab1cdef2" (default project)
-```
-
-#### Explicit management
-
-Alternatively, the user can explicitly open and close the project by calling
-the `open` and `close` methods of the `Project` object. The following
-snippet shows how to accomplish the same behavior as the previous example, but
-using explicit management:
+Explicit management requires that the user opens and closes the project manually
+using the `open` and `close` methods of the `Project` class. The project needs to
+be instantiated, opened for task submission and then closed to prevent further tasks
+from being appended to it. Any task submitted between the opening and closing of
+the project will be added to it. The following snippet demonstrates how to add a
+task to a project using explicit management:
 
 ```python
 import inductiva
@@ -160,6 +129,39 @@ task2 = simulator.run(input_dir=input_dir,
 print(task1.get_info()['project']) # "my_xbeach_project"
 print(task2.get_info()['project']) # "userab1cdef2" (default project)
 
+```
+
+### Using a Context Manager
+
+Alternatively, the project can be managed using a context manager that automatically
+opens and closes the project for task submission, and helps clarify the scope of
+the project. The manager ensures that the project is opened for task submission
+by calling the `open` and `close` methods when entering and exiting the context
+of the `with` block, respectively. Any task that is created inside the `with` block
+will be appended to the project managed in that context; tasks submitted outside
+will be added to the default one:
+
+```python
+import inductiva
+
+# get example input data
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "xbeach-input-example.zip", unzip=True)
+
+with inductiva.projects.Project("my_xbeach_project", append=True) as project:
+    simulator = inductiva.simulators.XBeach()
+
+    # add a task to the "my_xbeach_project" project
+    task1 = simulator.run(input_dir=input_dir,
+                          sim_config_filename="params.txt")
+
+# task2 will be added to the default project
+task2 = simulator.run(input_dir=input_dir,
+                      sim_config_filename="params.txt")
+
+print(task1.get_info()['project']) # "my_xbeach_project"
+print(task2.get_info()['project']) # "userab1cdef2" (default project)
 ```
 
 At any moment, the user can query what project is currently **open** for task submission
