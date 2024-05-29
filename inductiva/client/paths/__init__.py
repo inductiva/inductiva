@@ -48,5 +48,6 @@ class PathValues(str, enum.Enum):
     VERSION = "/version"
     VERSIONCHECK = "/version-check"
     USERS_QUOTAS = "/users/quotas"
+    USERS_ME = "/users/me"
     PROJECTS = "/projects"
     PROJECTS_NAME = "/projects/{name}"
