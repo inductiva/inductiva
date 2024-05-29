@@ -28,6 +28,7 @@ from inductiva.client.apis.paths.admin_providers import AdminProviders
 from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvidersProviderId
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
+from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
@@ -36,7 +37,6 @@ from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
 from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.compute_machine_types import ComputeMachineTypes
-from inductiva.client.apis.paths.compute_group_machine import ComputeGroupMachine
 from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_contents import StorageContents
@@ -103,6 +103,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminActiveTasks,
         PathValues.EXECUTERTRACKER_REGISTER:
             ExecuterTrackerRegister,
+        PathValues.EXECUTERTRACKER_MACHINE_ID:
+            ExecuterTrackerMachineId,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
         PathValues.COMPUTE_TYPE:
@@ -119,8 +121,6 @@ PathToApi = typing_extensions.TypedDict(
             ComputeGroupStatus,
         PathValues.COMPUTE_MACHINE_TYPES:
             ComputeMachineTypes,
-        PathValues.COMPUTE_GROUP_MACHINE:
-            ComputeGroupMachine,
         PathValues.COMPUTE_GROUP_NAME:
             ComputeGroupName,
         PathValues.STORAGE_SIZE:
@@ -196,6 +196,8 @@ path_to_api = PathToApi({
         AdminActiveTasks,
     PathValues.EXECUTERTRACKER_REGISTER:
         ExecuterTrackerRegister,
+    PathValues.EXECUTERTRACKER_MACHINE_ID:
+        ExecuterTrackerMachineId,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
     PathValues.COMPUTE_TYPE:
@@ -212,8 +214,6 @@ path_to_api = PathToApi({
         ComputeGroupStatus,
     PathValues.COMPUTE_MACHINE_TYPES:
         ComputeMachineTypes,
-    PathValues.COMPUTE_GROUP_MACHINE:
-        ComputeGroupMachine,
     PathValues.COMPUTE_GROUP_NAME:
         ComputeGroupName,
     PathValues.STORAGE_SIZE:
