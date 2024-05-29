@@ -23,7 +23,7 @@ from . import logs
 from . import api
 from .templating import TemplateManager
 
-logs.setup()
+logs.setup(getattr(logging, os.environ.get("INDUCTIVA_LOG_LEVEL", "INFO")))
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
 _output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR",
