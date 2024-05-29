@@ -166,7 +166,10 @@ class Project:
 
         """
         if not self.append:
-            raise RuntimeError("Trying to open a project with `append=False`.")
+            raise RuntimeError(
+                "Trying to open a project with `append=False`.\n"
+                "A Project can only be opened when instantiated with the"
+                " `append=True` option.")
 
         _logger.debug("Opening project %s", self._name)
         current_project = get_current_project()

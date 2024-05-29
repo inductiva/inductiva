@@ -2,7 +2,7 @@
 
 Projects are the primary way to organize `Tasks` in the Inductiva API.
 A project is a collection of tasks that run under a common umbrella, identified
-by its name. Any submitted task will always belong to a project, either a
+by its name. Any submitted task will always belong to a project: either a
 user-specified one or the default project. This allows users to organize their
 tasks in a way that makes sense to them.
 The following sections will explain how to create and interact with projects.
@@ -70,10 +70,21 @@ the default one is used. This ensures that no orphaned tasks are created.
 To add a task to a project other than the default one, the user needs to create
 a new project (or reference an existing one) and open it for task submission. However,
 the project can only be opened for task submission if it gets instantiated with
-an explicit `append=True` argument in the constructor. This mechanism is
-meant to work as a security measure that ensures that the user is explicitly aware
-that new tasks are being appended to the project, which is particularly useful
-to ensure the consistency of the project's content.
+an explicit `append=True` argument in the constructor or, otherwise, a RunTime
+error will be raised. This mechanism is meant to work as a security measure that
+ensures that the user is explicitly aware that new tasks are being appended to the
+project, which is particularly useful to ensure the consistency of the project's
+content.
+
+```python
+import inductiva
+
+project = inductiva.projects.Project("demo", append=False)
+project.open() # <-- An exception will be raised because the project is appendable
+...
+RuntimeError: Trying to open a project with `append=False`.
+A Project can only be opened when instantiated with the `append=True` option.
+```
 
 Whenever the `run` method of a `Simulator` object is called, the resulting task
 will be created under the project that is currently open, even though the project
@@ -83,7 +94,7 @@ from the context where the `run` method is being called.
 The client library offers two mechanisms to manage how tasks are added to a
 project: via a context manager or by manually opening and closing a `project`.
 
-### Using a Context Manager
+#### Using a Context Manager
 
 The following snippet demonstrates how to add a task to a project using a context
 manager. The manager ensures that the project is opened for task submission
@@ -115,11 +126,12 @@ print(task1.get_info()['project']) # "my_xbeach_project"
 print(task2.get_info()['project']) # "userab1cdef2" (default project)
 ```
 
-### Explicit management
+#### Explicit management
 
 Alternatively, the user can explicitly open and close the project by calling
-the `open` and `close` methods of the `Project` class. The following
-snippet shows how to accomplish the same behavior as the previous example:
+the `open` and `close` methods of the `Project` object. The following
+snippet shows how to accomplish the same behavior as the previous example, but
+using explicit management:
 
 ```python
 import inductiva
@@ -148,6 +160,17 @@ task2 = simulator.run(input_dir=input_dir,
 print(task1.get_info()['project']) # "my_xbeach_project"
 print(task2.get_info()['project']) # "userab1cdef2" (default project)
 
+```
+
+At any moment, the user can query what project is currently **open** for task submission
+by calling the `get_current_project` function from the `projects` module:
+
+```python
+>>> inductiva.projects.get_current_project()
+None
+>>> with inductiva.projects.Project("my_xbeach_project", append=True):
+...     inductiva.projects.get_current_project().name
+my_xbeach_project
 ```
 
 ## Listing Tasks in a Project
@@ -213,7 +236,7 @@ True
 To illustrate the thread-awareness of projects, consider the following example.
 The main thread opens a project, and a new thread is created in the context of the
 opened project. The new thread retrieves the current project and prints its name
-just to find out that the default project is being therein, even though
+just to find out that the default project is being used therein, even though
 the main thread has opened a project other than the default one:
 
 ```python
@@ -228,4 +251,8 @@ with inductiva.projects.Project("demo", append=True):
     thread = threading.Thread(target=run)
     thread.start()
     thread.join()
+
+# would print:
+# Main thread: inductiva.projects.get_current_project()=<inductiva.projects.project.Project object at 0x1242be910>
+# Thread 1: inductiva.projects.get_current_project()=None
 ```
