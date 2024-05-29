@@ -70,7 +70,7 @@ class Task:
 
     def is_failed(self) -> bool:
         """Validate if the task has failed.
-        
+
         This method issues a request to the API.
         """
         return self.get_status() in self.FAILED_STATUSES
@@ -200,6 +200,15 @@ class Task:
                 elif status == models.TaskStatusCode.ZOMBIE:
                     logging.info("The machine was terminated while the task "
                                  "was pending.")
+                elif status == models.TaskStatusCode.EXECUTERFAILED:
+                    info = self.get_info()
+                    detail = info.get("executer", {}).get("error_detail", None)
+                    logging.info("The remote process running the task failed:")
+                    if detail:
+                        logging.info(" > Message: %s", detail)
+                    else:
+                        logging.info(" > No error message available.")
+
                 else:
                     logging.info(
                         "An internal error occurred with status %s "
@@ -264,10 +273,10 @@ class Task:
              wait_timeout: Optional[Union[float, int]] = None,
              verbosity_level: int = 2) -> Union[bool, None]:
         """Request a task to be killed.
-        
+
         This method requests that the current task is remotely killed.
         If `wait_timeout` is None (default), the kill request is sent to the
-        backend and the method returns. However, if `wait_timeout` is 
+        backend and the method returns. However, if `wait_timeout` is
         a positive number, the method waits up to `wait_timeout` seconds
         to ensure that the task transitions to the KILLED state.
         Args:
