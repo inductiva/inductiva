@@ -40,28 +40,32 @@ class ExecuterTrackerAPIConnectionInfo(
             "redis_consumer_group",
             "redis_stream",
             "redis_consumer_name",
-            "uuid",
+            "executer_tracker_id",
+            "machine_group_id",
         }
         
         class properties:
-            uuid = schemas.StrSchema
+            executer_tracker_id = schemas.UUIDSchema
             redis_stream = schemas.StrSchema
             redis_consumer_name = schemas.StrSchema
             redis_consumer_group = schemas.StrSchema
+            machine_group_id = schemas.UUIDSchema
             __annotations__ = {
-                "uuid": uuid,
+                "executer_tracker_id": executer_tracker_id,
                 "redis_stream": redis_stream,
                 "redis_consumer_name": redis_consumer_name,
                 "redis_consumer_group": redis_consumer_group,
+                "machine_group_id": machine_group_id,
             }
     
     redis_consumer_group: MetaOapg.properties.redis_consumer_group
     redis_stream: MetaOapg.properties.redis_stream
     redis_consumer_name: MetaOapg.properties.redis_consumer_name
-    uuid: MetaOapg.properties.uuid
+    executer_tracker_id: MetaOapg.properties.executer_tracker_id
+    machine_group_id: MetaOapg.properties.machine_group_id
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["uuid"]) -> MetaOapg.properties.uuid: ...
+    def __getitem__(self, name: typing_extensions.Literal["executer_tracker_id"]) -> MetaOapg.properties.executer_tracker_id: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["redis_stream"]) -> MetaOapg.properties.redis_stream: ...
@@ -73,15 +77,18 @@ class ExecuterTrackerAPIConnectionInfo(
     def __getitem__(self, name: typing_extensions.Literal["redis_consumer_group"]) -> MetaOapg.properties.redis_consumer_group: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["machine_group_id"]) -> MetaOapg.properties.machine_group_id: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["uuid", "redis_stream", "redis_consumer_name", "redis_consumer_group", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["executer_tracker_id", "redis_stream", "redis_consumer_name", "redis_consumer_group", "machine_group_id", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["uuid"]) -> MetaOapg.properties.uuid: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["executer_tracker_id"]) -> MetaOapg.properties.executer_tracker_id: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["redis_stream"]) -> MetaOapg.properties.redis_stream: ...
@@ -93,9 +100,12 @@ class ExecuterTrackerAPIConnectionInfo(
     def get_item_oapg(self, name: typing_extensions.Literal["redis_consumer_group"]) -> MetaOapg.properties.redis_consumer_group: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["machine_group_id"]) -> MetaOapg.properties.machine_group_id: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["uuid", "redis_stream", "redis_consumer_name", "redis_consumer_group", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["executer_tracker_id", "redis_stream", "redis_consumer_name", "redis_consumer_group", "machine_group_id", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -105,7 +115,8 @@ class ExecuterTrackerAPIConnectionInfo(
         redis_consumer_group: typing.Union[MetaOapg.properties.redis_consumer_group, str, ],
         redis_stream: typing.Union[MetaOapg.properties.redis_stream, str, ],
         redis_consumer_name: typing.Union[MetaOapg.properties.redis_consumer_name, str, ],
-        uuid: typing.Union[MetaOapg.properties.uuid, str, ],
+        executer_tracker_id: typing.Union[MetaOapg.properties.executer_tracker_id, str, uuid.UUID, ],
+        machine_group_id: typing.Union[MetaOapg.properties.machine_group_id, str, uuid.UUID, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'ExecuterTrackerAPIConnectionInfo':
@@ -115,7 +126,8 @@ class ExecuterTrackerAPIConnectionInfo(
             redis_consumer_group=redis_consumer_group,
             redis_stream=redis_stream,
             redis_consumer_name=redis_consumer_name,
-            uuid=uuid,
+            executer_tracker_id=executer_tracker_id,
+            machine_group_id=machine_group_id,
             _configuration=_configuration,
             **kwargs,
         )
