@@ -135,8 +135,8 @@ times *only* for points along the 4 edges of the plate (top, bottom, left and ri
     - The remaining edges are held at some cold temperature. We'll take
       $\underbrace{u(t, x, y_\mathrm{min})}_{\text{Bottom}} = \underbrace{u(t, x_{\mathrm{min}}, y)}_{\text{Left}} =  \underbrace{u(t, x_\mathrm{max}, y)}_{\text{Right}} = -1 ^\mathrm{o}C \ .$
 
-<div class="flex sm:justify-center max-w-md sm:mx-auto">
-    <img style="width:40%;" src="../_static/pdes/BIC.png" class="my-1">
+<div style="align-center">
+    <img style="width:40%;" src="../_static/pdes/BIC.png">
 </div>
 
 Fig. 1: The boundary and initial conditions used throughout the Heat series. Energy is pumped from the top edge onto an initially completely cold 2D plate. Credits: David Carvalho / Inductiva.

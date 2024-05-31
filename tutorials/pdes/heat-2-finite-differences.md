@@ -89,8 +89,8 @@ Approximating differentials on a discrete set is also not a recipe set on stone.
 Let us look at two Finite Difference approximations to a function of a single
 variable $x$:
 
-<div class="flex sm:justify-center max-w-sm sm:mx-auto">
-<img style="width:40%;" src="../_static/pdes/derivatives.png" >
+<div class="align-center">
+    <img style="width:40%;" src="../_static/pdes/derivatives.png" >
 </div>
 
 Fig. 2: Approximation schemes of the derivative of $f(x)$ at a grid point $x_i$ using - (left)
@@ -185,7 +185,7 @@ We can understand how knowledge about the function **propagates** along the grid
 with a *stencil* by depicting which input grid points are needed to iterate the
 algorithm so a solution estimate may be computed at all grid points.
 
-<div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
+<div class="align-center">
 <video class="mb-0" loop muted autoplay preload="auto">
     <source src="../_static/pdes/fdm_animation.mp4" type="video/mp4">
 </video>
@@ -213,7 +213,7 @@ We can now run for different thermal diffusivities and see their effect.
 Below you can see the temperature profiles as we increase $D$ ---
 first with $D=0.01$, then $D=0.1$ and finally $D=1$.
 
-<div>
+<div class="align-center">
 <video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
     <source src="../_static/pdes/ftcs_d001.mp4" type="video/mp4">
 </video>
@@ -295,7 +295,7 @@ Just to show you that we're playing with fire, we cannot think of a more
 illustrative example than by ramping up that bound by a mere $2 \% $ above
 the theoretical maximum *i.e.* for $\alpha + \beta \approx 0.51$:
 
-<div class="flex sm:justify-center max-w-lg sm:mx-auto">
+<div class="align-center">
 <video style="width:80%;" class="mb-0" loop muted autoplay preload="auto">
     <source src="../_static/pdes/ftcs_unstable.mp4" type="video/mp4">
 </video>
@@ -323,7 +323,7 @@ By the same token, let's now see what happens if we're *close to the edge* from
 within the admissible area. Dropping our bound by $2 \% $, let's heat the start
 button for $\alpha + \beta \approx 0.49$.
 
-<div class="flex sm:justify-center max-w-lg sm:mx-auto ">
+<div class="align-center">
 <video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
     <source src="../_static/pdes/ftcs_almost_unstable.mp4" type="video/mp4">
 </video>

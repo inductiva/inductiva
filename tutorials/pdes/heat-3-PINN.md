@@ -215,8 +215,8 @@ requiring appropriate fine-tuning.
 But putting these and other technicalities aside, this is pretty much what you
 need to know about PINNs to follow the rest of this post!
 
-<div class="flex sm:justify-center max-w-lg sm:mx-auto">
-    <img style="width:60%;" src="../_static/pdes/PINN_sketch.png" class="mb-2">
+<div class="align-center">
+    <img style="width:60%;" src="../_static/pdes/PINN_sketch.png">
 </div>
 
 Fig. 1: The PINN we used to solve the 2D Heat Equation consists
@@ -248,8 +248,8 @@ Fine --- we are ready to try it out on our new favorite PDE: the 2D Heat Equatio
 To keep things simple, let us start with the exact same situation as the one
 presented for FDM:
 
-<div class="flex sm:justify-center max-w-md sm:mx-auto">
-    <img style="width:40%;" src="../_static/pdes/BIC.png" class="my-1">
+<div class="align-center">
+    <img style="width:40%;" src="../_static/pdes/BIC.png">
 </div>
 
 Fig. 2: The boundary and initial conditions used throughout the Heat series. Energy is pumped from the top edge onto an initially completely cold 2D plate. Credits: David Carvalho / Inductiva.
@@ -307,7 +307,7 @@ and a PINN we trained [middle], as well as the
 error $\text{Error} = |u_{\rm FDM} - u_{\rm PINN}|$ [bottom]. This error plot
 can be easily computed by running the provided `heat_error.py` python script.
 
-<div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
+<div class="align-center">
 <video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
     <source src="../_static/pdes/fdm.mp4" type="video/mp4">
 </video>
@@ -340,7 +340,7 @@ This can make us think: just like the classical algorithm had to be tuned
 so no nonsensical estimates were output, there must be some suitable tuning to
 assure us the algorithm can indeed approximate the solution.
 
-<div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
+<div class="align-center">
 <video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
     <source src="../_static/pdes/error_100epochs.mp4" type="video/mp4">
 </video>
@@ -383,7 +383,7 @@ With it, we can then see the effect of extending the training procedure.
 For this, we set different **numbers of epochs** and see how the output is
 impacted by this choice.
 
-<div class="flex sm:justify-center sm:mx-auto">
+<div class="align-center">
     <img src="../_static/pdes/learning_across_epochs.png">
 </div>
 
@@ -449,7 +449,7 @@ we may never be in conditions to access the optimal regions.
 To see this, let us see the effect of using larger and smaller
 learning rates $\alpha$ than the one chosen in the previous experiment.
 
-<div class="flex flex-col sm:justify-center sm:mx-auto space-y-1">
+<div class="align-center">
     <img src="../_static/pdes/big_lr.png">
     <img src="../_static/pdes/small_lr.png">
 </div>

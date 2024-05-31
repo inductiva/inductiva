@@ -10,12 +10,11 @@ of gravity within a quantum field theory framework can explain topologically
 nontrivial dynamics observed in simulations of graviton inelastic collisions
 in a AdS space. Let's go!
 
-<div class="flex sm:justify-center">
-<img src="../_static/pdes/shaq.gif" class="max-w-xs mb-0">
+<div class="align-center">
+<img src="../_static/pdes/shaq.gif">
 </div>
-<span class="mt-0 block sm:text-center text-base"> It's all good. We're just
-messing with your mental sanity.
-</span>
+
+It's all good. We're just messing with your mental sanity!
 
 *Ok*. Now that we have caught your attention, let us snap back to reality
 --- maybe one day we will pay this topic some attention!
@@ -157,7 +156,7 @@ appropriate algorithms that can handle such beasts as *dem'* mighty PDEs!
 To test these notions of *generalization*, we will consider our usual setup of
 heat diffusion across a 2D rectangular plate:
 
-<div class="flex sm:justify-center max-w-md sm:mx-auto">
+<div class="align-center">
     <img style="width:40%;" src="../_static/pdes/IBCs_hot_edge.png">
 </div>
 
@@ -221,7 +220,7 @@ solution function to other IBCs *natively* in its architecture.
 In this simple configuration, a single **parameter** $u_{\rm top}$ will become
 an **additional** input.
 
-<div class="flex sm:justify-center sm:mx-auto">
+<div class="align-center">
     <img style="width:80%;" src="../_static/pdes/PINN_top_edge.png">
 </div>
 
@@ -261,7 +260,7 @@ the Heat series. The flags in this command line fulfill different purposes:
 Let's analyze it by using a classical Finite Difference Method (FDM) for
 $u_{\rm top} =0 \;^\mathrm{o}C$) as the benchmark.
 
-<div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
+<div class="align-center">
 <video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
     <source src="../_static/pdes/generalization_bc.mp4" type="video/mp4">
 </video>
@@ -312,7 +311,7 @@ Our code implementation supports designing a plate with an arbitrary number of
 holes inside the problem domain.
 Let's focus on a single hole at the plate center:
 
-<div class="flex sm:justify-center max-w-md sm:mx-auto">
+<div class="align-center">
     <img style="width:60%;" src="../_static/pdes/IBCs_hole.png">
 </div>
 
@@ -353,7 +352,7 @@ Regarding the new flags in these command lines:
 So, for the same $u_{\rm top} = 1\;^\mathrm{o}C$, we see the difference in the
 profile for both the cold and hot hole edge scenarios:
 
-<div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
+<div class="align-center">
 <video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
     <source src="../_static/pdes/hot_hole.mp4" type="video/mp4">
 </video>
@@ -383,7 +382,7 @@ For instance, let's think of more physically-relevant cases.
 Can we understand the physics behind this irregular setting where 3 holes of
 various sizes and positions are found and the boundary is now curved?
 
-<div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
+<div class="align-center">
 <video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
     <source src="../_static/pdes/3_holes.mp4" type="video/mp4">
 </video>
@@ -397,7 +396,7 @@ output changes by changing the diffusitivity rate $D$ for the hot hole
 scenario.
 
 For that, we simply run each PDE for each $D$:
-<div class="flex flex-col sm:justify-center max-w-lg sm:mx-auto space-y-2">
+<div class="align-center">
 <video class="mb-0" style="width:80%;" loop muted autoplay preload="auto">
     <source src="../_static/pdes/hot_hole_d0.01.mp4" type="video/mp4">
 </video>
@@ -449,7 +448,7 @@ it receives.
 
 For this our instance, the representations obtained can be visualized as:
 
-<div class="flex sm:justify-center sm:mx-auto">
+<div class="align-center">
     <img style="width:80%;" src="../_static/pdes/nodes.png">
 </div>
 
