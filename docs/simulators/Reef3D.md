@@ -65,8 +65,7 @@ import inductiva
 
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-input-example.zip", unzip=True
-)
+    "reef3d-input-example.zip", unzip=True)
 
 reef3d = inductiva.simulators.REEF3D()
 
@@ -97,7 +96,8 @@ Before we proceed, let's inspect the files to check three Reed3D parameters that
 are important to understand before we configure our simulation run. These
 parameters are: ```N 41```, ```P 30 ``` and ```M 10```:
 
-### control.txt (for DiveMESH)
+
+**control.txt (for DiveMESH):**
 ```
 C 11 21
 C 12 21
@@ -113,7 +113,7 @@ O 10 1.2 1.4 0.4 0.6 0.0 1.0
 M 10 4    <---- defines the nr. of processors for parallel computations (4)
 ```
 
-### ctrl.txt (for Reef3D)
+**ctrl.txt (for Reef3D):**
 ```
 D 10 4
 D 20 2
@@ -133,7 +133,7 @@ T 10 0
 W 22 -9.81
 ```
 
-Observe that parameter ```M 10```, which controls the degree of parallism, is
+Observe that parameter ```M 10```, which controls the level of parallism, is
 set to 4 threads/vCPUs, a very low number. Depending on the number of vCPUs we
 effectively wish to use for running the simulation, we will need to manually
 change  ```M 10``` on **both files** to match the specs of corresponding the VM. 
@@ -142,19 +142,19 @@ of the c3d family, supported by last-generation AMD chips. More specifically,
 we will be using ```c3d-standard-90``` machines with 90 vCPU. So, we will be
 setting ```M 10 90``` on both files.
 
-Also, Reef3D produces a huge amount of data. As it is currently configured, this
-simulation would produce several dozen gigabytes of data. To reduce that amount
-of data produced, we can reduce the maximum modeled time (```N 41```) and
-the rate at which Paraview data is being produced (```P 10```).
+Also, Reef3D produces a huge amount of data. As it is currently configured, 
+this simulation would produce several dozen gigabytes of data. To reduce that
+amount of data produced, we can reduce the maximum modeled time (```N 41```)
+and the rate at which Paraview data is being produced (```P 10```).
 
 So, for a reducing the amount of data generated, we will be reducing the rate
-at which Paraview information is going to be generated to "onyy" 25 frames per
+at which Paraview information is going to be generated to "only" 25 frames per
 second, that is, we will set ```P 10 0.04```. 
 
 We are not going to reduce the maximum modeled time but, instead, we will add
 extra disk capacity to ensure we have enough space to write all the data will be
-generated. Therefore, we will request our machine to be equipped
-with **20GB** just for data, using the ```data_disk_gb``` parameter of the 
+generated. Therefore, we will request our machine to be equipped with a 20GB
+partition (just for data), using the ```data_disk_gb``` parameter of the 
 ```inductiva.resources.MachineGroup``` class.
 
 Here is the final script:
@@ -162,19 +162,18 @@ Here is the final script:
 ```python
 import inductiva
 
-
 machine_group = inductiva.resources.MachineGroup(
     machine_type="c3d-standard-90",
     spot=True,
     data_disk_gb=20)  ## We are adding extra disk space here
 machine_group.start()
 
-
 reef3d = inductiva.simulators.REEF3D()
 
-task = reef3d.run(input_dir="./10_2_3D_Dam_Break_with_Obstacle",
-                  on=machine_group,
-                  n_vcpus=90)   ## We need to make sure this matches `N 10`
+task = reef3d.run(
+    input_dir="./10_2_3D_Dam_Break_with_Obstacle",
+    on=machine_group,
+    n_vcpus=90)   ## We need to make sure this matches `N 10`
 
 task.wait()
 task.download_outputs()
@@ -202,7 +201,7 @@ since you do not want to be spending money on a machine that is sitting idle.
 
 This is what you are supposed to see:
 
-```
+```bash
 Registering MachineGroup configurations:
 > Name:         api-kw1m7e9hs2yxkxy9n2yf4so6r
 > Machine Type: c3d-standard-90
@@ -243,7 +242,7 @@ Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines succes
 
 You can check the stdout of the simulation process in real time by issuing:
 
-```
+```bash
 inductiva logs ggkjuzhivoon56vkozgqxapfk
 ```
 
@@ -251,7 +250,7 @@ The command line above is also shown in the execution trace, so you can just
 copy and paste it to a new terminal (which needs also to have the API key set
 as an environment variable). Then, you should see something like this:
 
-```
+```bash
 ...
 ...
 7193
@@ -320,7 +319,6 @@ timer per step: 0.079
 ******************************
 
 modelled time: 25.003
-
 ```
 
 
