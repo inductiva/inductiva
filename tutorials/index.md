@@ -20,6 +20,7 @@ read this tutorial.
     alt="Inductiva API Usage Flow">
 </br>
 </div>
+<br>
 
 * [**Generating Synthetic Data for training Physics-ML models**](generating-synthetic-data/synthetic-data-generation-1.md).
 Synthetic data allows us to train Physics-ML models when you don't
@@ -37,6 +38,21 @@ models to learn complex fluid dynamics.
 <source src="./_static/generating-synthetic-data/dambreak.mp4" type="video/mp4">
 </video>
 </div>
+<br>
+
+* [**Partial Differential Equations -- Finite Differences and Physics-Informed Neural Networks**](pdes/heat-1-an-introduction.md).
+
+A step by step tutorial on numerical methods to solve Partial Differential Equations,
+where we use the 2D Heat Equation as our working example. We start with the Finite-Differences method, 
+introduce the main concepts behind Physics-Informed Neural Networks, and conclude with a Generalized Neuro-Solver
+that can handle more complex geometries and varying initial/boundary conditions;
+
+<div style="display: flex; justify-content:center">
+<video width=250 loop muted autoplay preload="auto">
+<source src="./_static/pdes/cover_slow.mp4" type="video/mp4">
+</video>
+</div>
+<br>
 
 ```{toctree}
 ---

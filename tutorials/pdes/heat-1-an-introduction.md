@@ -5,17 +5,21 @@
 **Reviewers**: Fábio Cruz
 
 
-In this tutorial, we delve into the problem of ... 🔥 **heat diffusion** on a plate! 🔥
+The world of classical simulation and the world AI are merging into a broader form of computational solutions for science and engineering. In a previous [tutorial](../generating-synthetic-data/synthetic-data-generation-1.md), we showed how you could use Inductiva's simulation API to generate synthetic data for training a GNN. 
+
+In this tutorial, we will go in a slightly different direction and we guide you through an example one of the most exciting technical outcomes of this marriage between classical simulation and AI: Physics-Informed Neural Networks, or PINNs for short. The most notable difference between using PINNs vs using more generic neural networks is that, in PINNs, we explicitly encode knowledge about the the physical laws in the training loss of the neural network, allowing it to more quickly converge to functions that are physically sound.
+
+As a simple example, we will focus on the problem of 🔥 **heat diffusion** on a plate! 🔥
 
 We will take you step by step up to a point where you can gauge the potential of Neural Networks
--- in both strength and versatility -- in solving Partial Differential Equations:
+ in solving Partial Differential Equations:
 
 1. **The Heat Equation**: introduces the physics behind heat diffusion.
 
 2. **Finite-Differences**: classical numerical routine to approximate its solution across a 2D plate.
 
-3. **Physics-Inspired Neural Network**: with that estimate of the solution as a *benchmark*, see how **Machine-Learning algorithms** fare for the same situation, by deploying a PINN
-(Physics-Inspired Neural Network).
+3. **Physics-Informed Neural Network**: with that estimate of the solution as a *benchmark*, see how **Machine-Learning algorithms** fare for the same situation, by deploying a PINN
+(Physics-Informed Neural Network).
 
 4. **Generalized Neuro-Solver***: explore further into how versatile these Neural Networks are in
 handling **more complex geometries** than the 2D domain and **varying
