@@ -8,6 +8,8 @@ from inductiva.client.model.task_status_code import TaskStatusCode
 
 from inductiva.client.paths.tasks_task_id_input.put import ApiResponseFor200
 
+import inductiva.client.paths.tasks_task_id_output_list.get as output_list_get
+
 
 def test_task_kill__string_timeout__typeerror_exception():
     """
@@ -145,3 +147,38 @@ def test__check_if_pending_kill__wait_timeout_positive__success_status(
     success, status = task._check_if_pending_kill(2)
 
     assert success == expected_success and status == status_code
+
+
+def test__get_output_info():
+    """
+    Check if the output info is correctly returned.
+    """
+    task = inductiva.tasks.Task("123")
+    # pylint: disable=W0212
+    mock_resp_body = output_list_get.SchemaFor200ResponseBodyApplicationJson(
+        size=320,
+        contents=[
+            {
+                "name": "file1.txt",
+                "size": 100,
+                "compressed_size": 50
+            },
+            {
+                "name": "file2.txt",
+                "size": 200,
+                "compressed_size": 100
+            },
+        ],
+    )
+
+    task._api.get_outputs_list = Mock(
+        return_value=output_list_get.ApiResponseFor200(
+            response=Mock(),
+            body=mock_resp_body,
+        ))
+
+    output_info = task.get_output_info()
+
+    assert output_info.n_files == 2
+    assert output_info.total_size == 300
+    assert output_info.total_compressed_size == 150
