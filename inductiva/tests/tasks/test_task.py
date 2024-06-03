@@ -180,5 +180,5 @@ def test__get_output_info():
     output_info = task.get_output_info()
 
     assert output_info.n_files == 2
-    assert output_info.total_size == 300
+    assert output_info.total_size == 320
     assert output_info.total_compressed_size == 150

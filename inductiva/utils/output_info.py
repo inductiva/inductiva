@@ -17,14 +17,11 @@ class FileInfo:
 class OutputInfo:
     """Information about the contents of a Task output archive."""
     files: List[FileInfo]
+    total_size: int
 
     @property
     def n_files(self) -> int:
         return len(self.files)
-
-    @property
-    def total_size(self) -> int:
-        return sum(file.size for file in self.files)
 
     @property
     def total_compressed_size(self) -> int:

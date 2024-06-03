@@ -364,7 +364,10 @@ class Task:
             ) for file_info in archive_info["contents"]
         ]
 
-        return output_info.OutputInfo(files=output_files)
+        return output_info.OutputInfo(
+            total_size=int(archive_info["size"]),
+            files=output_files,
+        )
 
     def download_outputs(
         self,
