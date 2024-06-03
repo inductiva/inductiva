@@ -26,7 +26,7 @@ def path(filename):
 def test_gen_suffix__input_name__name_with_suffix(name, listnames,
                                                   expected_output):
     """Verifies if an input name is returned with a suffix.
-    
+
     Goal: Test creation of suffixes when a name already exists in a list
     of names, with the following structure {name}#{number}.
     This suffix should increase with each repetition and with the suffix
@@ -40,7 +40,7 @@ def test_gen_suffix__input_name__name_with_suffix(name, listnames,
 
 def test_set_root_dir__valid_input__creates_folder():
     """Check that with a non-empty input name the root dir is created.
-    
+
     Goal: Test root dir creation from a given name. The folder is
     created in the current working dir, so we want to verify that the
     root dir was actually created, that the name is correct and that it
@@ -59,7 +59,7 @@ def test_set_root_dir__valid_input__creates_folder():
 
 def test_set_root_dir_null_input__raises_error():
     """Check that with a null input name an error is raised.
-    
+
     Goal: Test the usability of the set_root_dir method when root_dir is None.
     We capture the error that we raise (ValueError) and match the sentence to
     validate it is the correct error.
@@ -73,7 +73,7 @@ def test_set_root_dir_null_input__raises_error():
 
 def test_set_root_dir__root_exists__disable_filemanager_suffix(monkeypatch):
     """Test the env variable to disable the suffix creation.
-    
+
     Goal: Test that setting the env variable to True, disables the auto-suffix
     and raises an error informing the user that the directory already exists.
     """
@@ -89,10 +89,10 @@ def test_set_root_dir__root_exists__disable_filemanager_suffix(monkeypatch):
 
 def test_get_root_dir__root_is_none__create_default_dir():
     """Check that with a null root dir the default dir is created.
-    
+
     Goal: Test the scenario when the root_dir is created by default, when
     no root_dir is set first. Hence, the workflow should be still valid to
-    not raise errors during the workflow. 
+    not raise errors during the workflow.
     """
     manager = file_manager.FileManager()
     original_dir = os.getcwd()
@@ -109,7 +109,7 @@ def test_get_root_dir__root_is_none__create_default_dir():
                    (path("test_file.txt"), "copyed_file.txt")])
 def test_copy_file__valid_file__to_target(source_file, target_file):
     """Check that a non-empty input file is copied to the given target.
-    
+
     Goal: Test one of the functionalities of the FileManager().copy_file method,
     which copies a source file into a target file, without rendering any args.
     In this case, the copy_file function just copies the file directly.
@@ -130,7 +130,7 @@ def test_copy_file__valid_file__to_target(source_file, target_file):
 ])
 def test_copy_dir__valid_dir__no_args(source_dir, target_dir):
     """Check that an existing input dir is copied to the given target dir.
-    
+
     Goal: Test one of the functionalities of FileManager().copy_dir which just
     copies a source dir into a new target dir. If no arguments are passed, then
     no rendering occurs, which means that even template files are copied as is.
@@ -148,7 +148,7 @@ def test_copy_dir__valid_dir__no_args(source_dir, target_dir):
 
 def test_validate_destination__raise_error__on_file_existence():
     """Check that the validation method raises an error when a file exists.
-    
+
     Goal: Test if when another file with the same name already exists, the
     method raises a FileExistsError. This tests the overwrite mechanism of the
     FileManager.
@@ -168,7 +168,7 @@ def test_validate_destination__raise_error__on_file_existence():
 
 def test_validate_destination__raise_error__on_dir_existence():
     """Check that the validation method raises an error when a file exists.
-    
+
     Goal: Test if when a file with the same name of any file in the directory
     being passed already exists, the method raises a FileExistsError. This tests
     the overwrite mechanism of the FileManager.

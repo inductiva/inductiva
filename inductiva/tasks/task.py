@@ -13,7 +13,8 @@ from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api, types
 from inductiva.client.apis.tags import tasks_api
-from inductiva.utils import files, format_utils, data, output_contents
+from inductiva.utils import files, format_utils, data
+from inductiva.tasks import output_info
 
 import warnings
 
@@ -341,32 +342,32 @@ class Task:
     def get_storage_path(self) -> str:
         return self.get_info()["storage_path"]
 
-    def get_output_files_info(self) -> output_contents.OutputContents:
-        """Get information of the output files of the task.
+    def get_output_info(self) -> output_info.TaskOutputInfo:
+        """Get information about the output files of the task.
 
         Returns:
-            An instance of the OutputContents class, which can be used to
-            access info about the output files, such as the archive's size,
-            number of files, and information about each file (name, size,
-            compressed size). It can also be used to print that information
-            in a formatted way.
+            An instance of the OutputInfo class, which can be used to
+            access info about the output archive (number of files, total
+            compressed size, total uncompressed size) and information about
+            each file (name, size, compressed size). It can also be used to
+            print that information in a formatted way.
         """
         api_response = self._api.get_outputs_list(
             path_params=self._get_path_params())
 
         archive_info = api_response.body
 
-        contents = [
-            output_contents.FileInfo(
+        output_files = [
+            output_info.FileInfo(
                 name=file_info["name"],
-                size=file_info["size"],
-                compressed_size=file_info["compressed_size"],
+                size=int(file_info["size"]),
+                compressed_size=int(file_info["compressed_size"]),
             ) for file_info in archive_info["contents"]
         ]
 
-        return output_contents.OutputContents(
-            size=int(archive_info["size"]),
-            contents=contents,
+        return output_info.TaskOutputInfo(
+            total_size_bytes=int(archive_info["size"]),
+            files=output_files,
         )
 
     def download_outputs(
