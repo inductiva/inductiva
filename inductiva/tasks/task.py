@@ -13,7 +13,8 @@ from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api, types
 from inductiva.client.apis.tags import tasks_api
-from inductiva.utils import files, format_utils, data, output_info
+from inductiva.utils import files, format_utils, data
+from inductiva.tasks import output_info
 
 import warnings
 
@@ -341,7 +342,7 @@ class Task:
     def get_storage_path(self) -> str:
         return self.get_info()["storage_path"]
 
-    def get_output_info(self) -> output_info.OutputInfo:
+    def get_output_info(self) -> output_info.TaskOutputInfo:
         """Get information about the output files of the task.
 
         Returns:
@@ -364,8 +365,8 @@ class Task:
             ) for file_info in archive_info["contents"]
         ]
 
-        return output_info.OutputInfo(
-            total_size=int(archive_info["size"]),
+        return output_info.TaskOutputInfo(
+            total_size_bytes=int(archive_info["size"]),
             files=output_files,
         )
 

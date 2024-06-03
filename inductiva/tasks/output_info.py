@@ -14,17 +14,17 @@ class FileInfo:
 
 
 @dataclass
-class OutputInfo:
+class TaskOutputInfo:
     """Information about the contents of a Task output archive."""
     files: List[FileInfo]
-    total_size: int
+    total_size_bytes: int
 
     @property
     def n_files(self) -> int:
         return len(self.files)
 
     @property
-    def total_compressed_size(self) -> int:
+    def total_compressed_size_bytes(self) -> int:
         return sum(file.compressed_size for file in self.files)
 
     def __str__(self) -> str:
@@ -32,10 +32,14 @@ class OutputInfo:
         compressed_header = "Compressed"
         name_header = "Name"
 
+        total_size_formatted = format_utils.bytes_formatter(
+            self.total_size_bytes)
+        total_compressed_size_formatted = format_utils.bytes_formatter(
+            self.total_compressed_size_bytes)
+
         lines = [
-            f"Total size: {format_utils.bytes_formatter(self.total_size)}",
-            ("Total compressed size: "
-             f"{format_utils.bytes_formatter(self.total_compressed_size)}"),
+            f"Total size: {total_size_formatted}",
+            f"Total compressed size: {total_compressed_size_formatted}",
             f"Number of files: {self.n_files}",
             "Contents:",
             f"  {size_header:<12} {compressed_header:<12} {name_header:<12}",
