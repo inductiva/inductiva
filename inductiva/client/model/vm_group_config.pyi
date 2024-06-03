@@ -36,14 +36,8 @@ class VMGroupConfig(
 
 
     class MetaOapg:
-        required = {
-            "spot",
-            "is_elastic",
-        }
         
         class properties:
-            spot = schemas.BoolSchema
-            is_elastic = schemas.BoolSchema
             
             
             class max_idle_time(
@@ -516,6 +510,8 @@ class VMGroupConfig(
                         **kwargs,
                     )
             started = schemas.BoolSchema
+            spot = schemas.BoolSchema
+            is_elastic = schemas.BoolSchema
             
             
             class min_vms(
@@ -631,8 +627,6 @@ class VMGroupConfig(
                         **kwargs,
                     )
             __annotations__ = {
-                "spot": spot,
-                "is_elastic": is_elastic,
                 "max_idle_time": max_idle_time,
                 "auto_terminate_ts": auto_terminate_ts,
                 "id": id,
@@ -646,19 +640,12 @@ class VMGroupConfig(
                 "type": type,
                 "provider_id": provider_id,
                 "started": started,
+                "spot": spot,
+                "is_elastic": is_elastic,
                 "min_vms": min_vms,
                 "max_vms": max_vms,
                 "autoscale_policy": autoscale_policy,
             }
-    
-    spot: MetaOapg.properties.spot
-    is_elastic: MetaOapg.properties.is_elastic
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["is_elastic"]) -> MetaOapg.properties.is_elastic: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["max_idle_time"]) -> MetaOapg.properties.max_idle_time: ...
@@ -700,6 +687,12 @@ class VMGroupConfig(
     def __getitem__(self, name: typing_extensions.Literal["started"]) -> MetaOapg.properties.started: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["is_elastic"]) -> MetaOapg.properties.is_elastic: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["min_vms"]) -> MetaOapg.properties.min_vms: ...
     
     @typing.overload
@@ -711,16 +704,10 @@ class VMGroupConfig(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "min_vms", "max_vms", "autoscale_policy", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "spot", "is_elastic", "min_vms", "max_vms", "autoscale_policy", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["spot"]) -> MetaOapg.properties.spot: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["is_elastic"]) -> MetaOapg.properties.is_elastic: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["max_idle_time"]) -> typing.Union[MetaOapg.properties.max_idle_time, schemas.Unset]: ...
@@ -762,6 +749,12 @@ class VMGroupConfig(
     def get_item_oapg(self, name: typing_extensions.Literal["started"]) -> typing.Union[MetaOapg.properties.started, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["spot"]) -> typing.Union[MetaOapg.properties.spot, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["is_elastic"]) -> typing.Union[MetaOapg.properties.is_elastic, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["min_vms"]) -> typing.Union[MetaOapg.properties.min_vms, schemas.Unset]: ...
     
     @typing.overload
@@ -773,15 +766,13 @@ class VMGroupConfig(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["spot", "is_elastic", "max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "min_vms", "max_vms", "autoscale_policy", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "spot", "is_elastic", "min_vms", "max_vms", "autoscale_policy", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        spot: typing.Union[MetaOapg.properties.spot, bool, ],
-        is_elastic: typing.Union[MetaOapg.properties.is_elastic, bool, ],
         max_idle_time: typing.Union[MetaOapg.properties.max_idle_time, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         auto_terminate_ts: typing.Union[MetaOapg.properties.auto_terminate_ts, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         id: typing.Union[MetaOapg.properties.id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -795,6 +786,8 @@ class VMGroupConfig(
         type: typing.Union[MetaOapg.properties.type, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         provider_id: typing.Union[MetaOapg.properties.provider_id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         started: typing.Union[MetaOapg.properties.started, bool, schemas.Unset] = schemas.unset,
+        spot: typing.Union[MetaOapg.properties.spot, bool, schemas.Unset] = schemas.unset,
+        is_elastic: typing.Union[MetaOapg.properties.is_elastic, bool, schemas.Unset] = schemas.unset,
         min_vms: typing.Union[MetaOapg.properties.min_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         max_vms: typing.Union[MetaOapg.properties.max_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         autoscale_policy: typing.Union[MetaOapg.properties.autoscale_policy, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -804,8 +797,6 @@ class VMGroupConfig(
         return super().__new__(
             cls,
             *_args,
-            spot=spot,
-            is_elastic=is_elastic,
             max_idle_time=max_idle_time,
             auto_terminate_ts=auto_terminate_ts,
             id=id,
@@ -819,6 +810,8 @@ class VMGroupConfig(
             type=type,
             provider_id=provider_id,
             started=started,
+            spot=spot,
+            is_elastic=is_elastic,
             min_vms=min_vms,
             max_vms=max_vms,
             autoscale_policy=autoscale_policy,
