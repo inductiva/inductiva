@@ -95,6 +95,7 @@ def fake_get_available_machine_types(provider):
 @patch("inductiva.resources.methods.get_available_machine_types",
        new=fake_get_available_machine_types)
 def test_resources__query__ice():
+    """Test the query function with the ICE provider and no filter."""
     res = inductiva.resources.query(provider="ICE")
     assert len(res) == 2
     assert res[0]["machine_type"] == "g2-standard-4"
@@ -104,6 +105,7 @@ def test_resources__query__ice():
 @patch("inductiva.resources.methods.get_available_machine_types",
        new=fake_get_available_machine_types)
 def test_resources__query__gcp():
+    """Test the query function with the GCP provider and no filter."""
     res = inductiva.resources.query(provider="GCP")
     assert len(res) == 8
     assert res[0]["machine_type"] == "n2d-highcpu-128"
@@ -114,17 +116,24 @@ def test_resources__query__gcp():
 @patch("inductiva.resources.methods.get_available_machine_types",
        new=fake_get_available_machine_types)
 def test_resources__query__gcp_string_filter():
+    """Test the query function with the GCP provider and a string filter.
+    This test should raise a ValueError.
+    """
     with pytest.raises(ValueError):
         inductiva.resources.query(provider="GCP", query_filter="all")
 
 
 def c2d_filter(machine_type):
+    """Filter function for c2d machines."""
     return "c2d" in machine_type
 
 
 @patch("inductiva.resources.methods.get_available_machine_types",
        new=fake_get_available_machine_types)
 def test_resources__query__gcp_c2d():
+    """Test the query function with the GCP provider and a filter for c2d 
+    machines.
+    """
     res = inductiva.resources.query(provider="GCP", query_filter=c2d_filter)
     assert len(res) == 3
     assert res[0]["machine_type"] == "c2d-highcpu-112"
