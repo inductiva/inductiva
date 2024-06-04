@@ -29,6 +29,13 @@ from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvide
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
+from inductiva.client.apis.paths.executer_tracker_machine_id_task import ExecuterTrackerMachineIdTask
+from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_ack import ExecuterTrackerMachineIdTaskTaskIdAck
+from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_message import ExecuterTrackerMachineIdTaskTaskIdMessage
+from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_message_unblock import ExecuterTrackerMachineIdTaskTaskIdMessageUnblock
+from inductiva.client.apis.paths.executer_tracker_machine_id_event import ExecuterTrackerMachineIdEvent
+from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_download_input_url import ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl
+from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_upload_output_url import ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
@@ -105,6 +112,20 @@ PathToApi = typing_extensions.TypedDict(
             ExecuterTrackerRegister,
         PathValues.EXECUTERTRACKER_MACHINE_ID:
             ExecuterTrackerMachineId,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK:
+            ExecuterTrackerMachineIdTask,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_ACK:
+            ExecuterTrackerMachineIdTaskTaskIdAck,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE:
+            ExecuterTrackerMachineIdTaskTaskIdMessage,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
+            ExecuterTrackerMachineIdTaskTaskIdMessageUnblock,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_EVENT:
+            ExecuterTrackerMachineIdEvent,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
+            ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
+            ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
         PathValues.COMPUTE_TYPE:
@@ -198,6 +219,20 @@ path_to_api = PathToApi({
         ExecuterTrackerRegister,
     PathValues.EXECUTERTRACKER_MACHINE_ID:
         ExecuterTrackerMachineId,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK:
+        ExecuterTrackerMachineIdTask,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_ACK:
+        ExecuterTrackerMachineIdTaskTaskIdAck,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE:
+        ExecuterTrackerMachineIdTaskTaskIdMessage,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
+        ExecuterTrackerMachineIdTaskTaskIdMessageUnblock,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_EVENT:
+        ExecuterTrackerMachineIdEvent,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
+        ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
+        ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
     PathValues.COMPUTE_TYPE:

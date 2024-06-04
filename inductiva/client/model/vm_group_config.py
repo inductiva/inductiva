@@ -32,14 +32,8 @@ class VMGroupConfig(schemas.DictSchema):
     """
 
     class MetaOapg:
-        required = {
-            "spot",
-            "is_elastic",
-        }
 
         class properties:
-            spot = schemas.BoolSchema
-            is_elastic = schemas.BoolSchema
 
             class max_idle_time(
                     schemas.ComposedSchema,):
@@ -733,6 +727,8 @@ class VMGroupConfig(schemas.DictSchema):
                     )
 
             started = schemas.BoolSchema
+            spot = schemas.BoolSchema
+            is_elastic = schemas.BoolSchema
 
             class min_vms(
                     schemas.ComposedSchema,):
@@ -903,8 +899,6 @@ class VMGroupConfig(schemas.DictSchema):
                     )
 
             __annotations__ = {
-                "spot": spot,
-                "is_elastic": is_elastic,
                 "max_idle_time": max_idle_time,
                 "auto_terminate_ts": auto_terminate_ts,
                 "id": id,
@@ -918,25 +912,12 @@ class VMGroupConfig(schemas.DictSchema):
                 "type": type,
                 "provider_id": provider_id,
                 "started": started,
+                "spot": spot,
+                "is_elastic": is_elastic,
                 "min_vms": min_vms,
                 "max_vms": max_vms,
                 "autoscale_policy": autoscale_policy,
             }
-
-    spot: MetaOapg.properties.spot
-    is_elastic: MetaOapg.properties.is_elastic
-
-    @typing.overload
-    def __getitem__(
-            self, name: typing_extensions.Literal["spot"]
-    ) -> MetaOapg.properties.spot:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["is_elastic"]
-    ) -> MetaOapg.properties.is_elastic:
-        ...
 
     @typing.overload
     def __getitem__(
@@ -1018,6 +999,18 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+            self, name: typing_extensions.Literal["spot"]
+    ) -> MetaOapg.properties.spot:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["is_elastic"]
+    ) -> MetaOapg.properties.is_elastic:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["min_vms"]
     ) -> MetaOapg.properties.min_vms:
         ...
@@ -1039,8 +1032,6 @@ class VMGroupConfig(schemas.DictSchema):
         ...
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "spot",
-        "is_elastic",
         "max_idle_time",
         "auto_terminate_ts",
         "id",
@@ -1054,24 +1045,14 @@ class VMGroupConfig(schemas.DictSchema):
         "type",
         "provider_id",
         "started",
+        "spot",
+        "is_elastic",
         "min_vms",
         "max_vms",
         "autoscale_policy",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-
-    @typing.overload
-    def get_item_oapg(
-            self, name: typing_extensions.Literal["spot"]
-    ) -> MetaOapg.properties.spot:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["is_elastic"]
-    ) -> MetaOapg.properties.is_elastic:
-        ...
 
     @typing.overload
     def get_item_oapg(
@@ -1153,6 +1134,18 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["spot"]
+    ) -> typing.Union[MetaOapg.properties.spot, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["is_elastic"]
+    ) -> typing.Union[MetaOapg.properties.is_elastic, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["min_vms"]
     ) -> typing.Union[MetaOapg.properties.min_vms, schemas.Unset]:
         ...
@@ -1176,8 +1169,6 @@ class VMGroupConfig(schemas.DictSchema):
         ...
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "spot",
-        "is_elastic",
         "max_idle_time",
         "auto_terminate_ts",
         "id",
@@ -1191,6 +1182,8 @@ class VMGroupConfig(schemas.DictSchema):
         "type",
         "provider_id",
         "started",
+        "spot",
+        "is_elastic",
         "min_vms",
         "max_vms",
         "autoscale_policy",
@@ -1202,14 +1195,6 @@ class VMGroupConfig(schemas.DictSchema):
         *_args: typing.Union[
             dict,
             frozendict.frozendict,
-        ],
-        spot: typing.Union[
-            MetaOapg.properties.spot,
-            bool,
-        ],
-        is_elastic: typing.Union[
-            MetaOapg.properties.is_elastic,
-            bool,
         ],
         max_idle_time: typing.Union[MetaOapg.properties.max_idle_time, dict,
                                     frozendict.frozendict, str, date, datetime,
@@ -1284,6 +1269,10 @@ class VMGroupConfig(schemas.DictSchema):
                                   schemas.Unset] = schemas.unset,
         started: typing.Union[MetaOapg.properties.started, bool,
                               schemas.Unset] = schemas.unset,
+        spot: typing.Union[MetaOapg.properties.spot, bool,
+                           schemas.Unset] = schemas.unset,
+        is_elastic: typing.Union[MetaOapg.properties.is_elastic, bool,
+                                 schemas.Unset] = schemas.unset,
         min_vms: typing.Union[MetaOapg.properties.min_vms, dict,
                               frozendict.frozendict, str, date, datetime,
                               uuid.UUID, int, float, decimal.Decimal, bool,
@@ -1309,8 +1298,6 @@ class VMGroupConfig(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
-            spot=spot,
-            is_elastic=is_elastic,
             max_idle_time=max_idle_time,
             auto_terminate_ts=auto_terminate_ts,
             id=id,
@@ -1324,6 +1311,8 @@ class VMGroupConfig(schemas.DictSchema):
             type=type,
             provider_id=provider_id,
             started=started,
+            spot=spot,
+            is_elastic=is_elastic,
             min_vms=min_vms,
             max_vms=max_vms,
             autoscale_policy=autoscale_policy,
