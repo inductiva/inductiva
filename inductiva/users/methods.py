@@ -2,7 +2,6 @@
 import json
 from typing import Any, Dict, List
 
-import inductiva
 from inductiva import api
 from inductiva.client import ApiClient
 from inductiva.client.apis.tags.users_api import UsersApi
@@ -11,7 +10,7 @@ from inductiva.client.apis.tags.users_api import UsersApi
 def _fetch_quotas_from_api() -> List[Dict]:
     """Get information about a user's quotas.
     """
-    api_config = api.validate_api_key(inductiva.api_key)
+    api_config = api.get_api_config()
 
     with ApiClient(api_config) as client:
         api_instance = UsersApi(client)

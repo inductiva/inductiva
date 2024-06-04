@@ -266,12 +266,13 @@ class TaskStreamConsumer:
 
         while True:
             url = endpoint + urlencode(params, safe='{="}')
-            ws = websocket.WebSocketApp(url,
-                                        header={"X-API-Key": inductiva.api_key},
-                                        on_open=self.__on_open,
-                                        on_error=self.__on_error,
-                                        on_close=self.__on_close,
-                                        on_message=self.__on_message)
+            ws = websocket.WebSocketApp(
+                url,
+                header={"X-API-Key": inductiva.get_api_key()},
+                on_open=self.__on_open,
+                on_error=self.__on_error,
+                on_close=self.__on_close,
+                on_message=self.__on_message)
 
             ws.run_forever(reconnect=0,
                            ping_interval=self.PING_INTERVAL_SEC,

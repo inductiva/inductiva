@@ -31,36 +31,79 @@ class User(schemas.DictSchema):
 
     class MetaOapg:
         required = {
-            "bucket_name",
-            "expiry_ts",
             "email",
             "username",
         }
 
         class properties:
-            email = schemas.StrSchema
             username = schemas.StrSchema
-            bucket_name = schemas.StrSchema
-            expiry_ts = schemas.DateTimeSchema
-            is_admin = schemas.BoolSchema
+            email = schemas.StrSchema
+
+            class name(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'name':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
-                "email": email,
                 "username": username,
-                "bucket_name": bucket_name,
-                "expiry_ts": expiry_ts,
-                "is_admin": is_admin,
+                "email": email,
+                "name": name,
             }
 
-    bucket_name: MetaOapg.properties.bucket_name
-    expiry_ts: MetaOapg.properties.expiry_ts
     email: MetaOapg.properties.email
     username: MetaOapg.properties.username
-
-    @typing.overload
-    def __getitem__(
-            self, name: typing_extensions.Literal["email"]
-    ) -> MetaOapg.properties.email:
-        ...
 
     @typing.overload
     def __getitem__(
@@ -70,20 +113,14 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["bucket_name"]
-    ) -> MetaOapg.properties.bucket_name:
+            self, name: typing_extensions.Literal["email"]
+    ) -> MetaOapg.properties.email:
         ...
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["expiry_ts"]
-    ) -> MetaOapg.properties.expiry_ts:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["is_admin"]
-    ) -> MetaOapg.properties.is_admin:
+            self, name: typing_extensions.Literal["name"]
+    ) -> MetaOapg.properties.name:
         ...
 
     @typing.overload
@@ -91,20 +128,12 @@ class User(schemas.DictSchema):
         ...
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "email",
         "username",
-        "bucket_name",
-        "expiry_ts",
-        "is_admin",
+        "email",
+        "name",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-
-    @typing.overload
-    def get_item_oapg(
-            self, name: typing_extensions.Literal["email"]
-    ) -> MetaOapg.properties.email:
-        ...
 
     @typing.overload
     def get_item_oapg(
@@ -114,20 +143,14 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["bucket_name"]
-    ) -> MetaOapg.properties.bucket_name:
+            self, name: typing_extensions.Literal["email"]
+    ) -> MetaOapg.properties.email:
         ...
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["expiry_ts"]
-    ) -> MetaOapg.properties.expiry_ts:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["is_admin"]
-    ) -> typing.Union[MetaOapg.properties.is_admin, schemas.Unset]:
+        self, name: typing_extensions.Literal["name"]
+    ) -> typing.Union[MetaOapg.properties.name, schemas.Unset]:
         ...
 
     @typing.overload
@@ -137,11 +160,9 @@ class User(schemas.DictSchema):
         ...
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "email",
         "username",
-        "bucket_name",
-        "expiry_ts",
-        "is_admin",
+        "email",
+        "name",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -151,15 +172,6 @@ class User(schemas.DictSchema):
             dict,
             frozendict.frozendict,
         ],
-        bucket_name: typing.Union[
-            MetaOapg.properties.bucket_name,
-            str,
-        ],
-        expiry_ts: typing.Union[
-            MetaOapg.properties.expiry_ts,
-            str,
-            datetime,
-        ],
         email: typing.Union[
             MetaOapg.properties.email,
             str,
@@ -168,8 +180,11 @@ class User(schemas.DictSchema):
             MetaOapg.properties.username,
             str,
         ],
-        is_admin: typing.Union[MetaOapg.properties.is_admin, bool,
-                               schemas.Unset] = schemas.unset,
+        name: typing.Union[MetaOapg.properties.name, dict,
+                           frozendict.frozendict, str, date, datetime,
+                           uuid.UUID, int, float, decimal.Decimal, bool, None,
+                           list, tuple, bytes, io.FileIO, io.BufferedReader,
+                           schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -179,11 +194,9 @@ class User(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
-            bucket_name=bucket_name,
-            expiry_ts=expiry_ts,
             email=email,
             username=username,
-            is_admin=is_admin,
+            name=name,
             _configuration=_configuration,
             **kwargs,
         )

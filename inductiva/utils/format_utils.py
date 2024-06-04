@@ -18,9 +18,9 @@ tabulate._table_formats["inductiva"] = TableFormat(
     linebelowheader=None,
     linebetweenrows=None,
     linebelow=None,
-    headerrow=DataRow("", " ", ""),
-    datarow=DataRow("", " ", ""),
-    padding=3,
+    headerrow=DataRow("", "   ", ""),
+    datarow=DataRow("", "   ", ""),
+    padding=0,
     with_header_hide=None,
 )
 
@@ -171,7 +171,7 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
                     headers: Optional[Iterable[Any]] = None,
                     formatters: Optional[Dict[str, Callable]] = None,
                     header_formatters: Optional[List[Callable]] = None,
-                    indentation_level: Optional[int] = 4) -> str:
+                    indentation_level: Optional[int] = 1) -> str:
     """Converts a table of data (Mapping or any Iterable) to a string table.
 
     Args:
