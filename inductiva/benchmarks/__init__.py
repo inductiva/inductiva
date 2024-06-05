@@ -1,2 +1,2 @@
-
-from inductiva.benchmarks.benchmark import Benchmark
+from .methods import run
+from .methods import analyze
