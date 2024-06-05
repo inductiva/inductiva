@@ -1,12 +1,21 @@
+from collections import namedtuple
 import datetime
+import platform
+import subprocess
 import time
 from typing import Any, Dict, List
 
-import inductiva
-from inductiva import types
-from inductiva.benchmarks.benchmark_logger import BenchmarkLogger
-from inductiva.benchmarks.to_json import ToJson
+from inductiva import types, users
+from inductiva.loggers.benchmark_logger import BenchmarkLogger
+from inductiva.loggers.to_json import ToJson
+from inductiva.projects.project import Project
+from inductiva.resources.machines import MachineGroup
+from inductiva.resources.machines_base import BaseMachineGroup
+from inductiva.simulators.simulator import Simulator
+from inductiva.templating.manager import TemplateManager
 
+TestCaseInstance = namedtuple("TestCaseInstance",
+                                    ["input_dir", "hash"])
 
 class Benchmark:
     """Class to create a benchmark."""
@@ -16,7 +25,7 @@ class Benchmark:
                  input_files: types.Path,
                  replicas: int,
                  machines: List[Dict[str, Any]],
-                 simulator: inductiva.simulators.Simulator,
+                 simulator: Simulator,
                  logger: BenchmarkLogger = ToJson(path="metadata"),
                  append: bool = False,
                  input_args: Dict[str, Any] = None,
@@ -51,8 +60,10 @@ class Benchmark:
         # Test
         # And more tests
 
-        project = inductiva.projects.Project(self.name, append=True)
+        project = Project(self.name, append=True)
         project.open()
+
+        self.logger.log_benchmark(self)
 
         tasks = project.get_tasks()
         if len(tasks) > 0 and not self.append:
@@ -73,7 +84,7 @@ class Benchmark:
             elif response in ("yes", "y"):
                 print("Appending tasks to the existing benchmark.")
 
-        quotas = inductiva.users.get_quotas()
+        quotas = users.get_quotas()
 
         if (quotas["total_num_vcpus"]["in_use"] + self.total_vcpu
                 > quotas["total_num_vcpus"]["max_allowed"] or
@@ -105,8 +116,10 @@ class Benchmark:
                 f"\nCreating machine group {machine['machine_type']} with {self.machine_args}"
             )
 
-            machine_group = inductiva.resources.MachineGroup(
+            machine_group = MachineGroup(
                 machine_type=machine["machine_type"], **self.machine_args)
+            
+            self.logger.log_resource(machine_group)
 
             #Iterate over input_args and simulator_args check if any value is callable,
             #if it is call it with machine_group as parameter
@@ -119,7 +132,7 @@ class Benchmark:
                     if callable(value):
                         self.input_args[key] = value(machine_group)
 
-                template_manager = inductiva.TemplateManager(
+                template_manager = TemplateManager(
                     template_dir=self.input_files)
 
                 template_manager.set_root_dir(self.name)
@@ -130,6 +143,18 @@ class Benchmark:
             # input_files either come from the template manager or are passed directly
             self.simulator_args["input_dir"] = input_files
             self.simulator_args["on"] = machine_group
+
+            md5 = "md5" if platform == "darwin" else "md5sum"
+            cmd = (f"find {input_files} -type f -print0  | "
+                f"sort -z | xargs -0 {md5} | {md5}")
+
+            testcase_id = subprocess.run(cmd, shell=True, \
+                                        stdout=subprocess.PIPE, check=True)
+
+            testcase_instance = TestCaseInstance(hash=testcase_id.stdout.decode("utf-8").strip(),
+                                input_dir=input_files)
+
+            self.logger.log_testcase(testcase_instance)
 
             print(
                 f"\nRunning {self.simulator.api_method_name} with {self.simulator_args}"
@@ -143,12 +168,13 @@ class Benchmark:
                 machine_group.start(max_idle_time=datetime.timedelta(minutes=1))
 
             for _ in range(self.replicas):
-                self.simulator.run(**self.simulator_args)
+                task = self.simulator.run(**self.simulator_args)
+                self.logger.log_task(task, test_case_instance=testcase_instance, resource=machine_group)
 
         project.close()
 
     def _can_start_resource(
-            self, resource: inductiva.resources.machines_base.BaseMachineGroup
+            self, resource: BaseMachineGroup
     ) -> bool:
         """Check if the resource can be started.
         
@@ -158,7 +184,7 @@ class Benchmark:
         returns:
             bool: True if the resource can be started, False otherwise.
         """
-        quotas = inductiva.users.get_quotas()
+        quotas = users.get_quotas()
         cost_in_use = quotas["cost_per_hour"]["in_use"]
         vcpu_in_use = quotas["total_num_vcpus"]["in_use"]
         machines_in_use = quotas["total_num_machines"]["in_use"]
