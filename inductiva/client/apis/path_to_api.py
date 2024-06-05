@@ -27,6 +27,8 @@ from inductiva.client.apis.paths.admin_groups_default_machine_group_id import Ad
 from inductiva.client.apis.paths.admin_providers import AdminProviders
 from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvidersProviderId
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
+from inductiva.client.apis.paths.admin_users_username_cost import AdminUsersUsernameCost
+from inductiva.client.apis.paths.admin_executer_tracker_token import AdminExecuterTrackerToken
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
 from inductiva.client.apis.paths.executer_tracker_machine_id_task import ExecuterTrackerMachineIdTask
@@ -50,6 +52,7 @@ from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_contents import StorageContents
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
+from inductiva.client.apis.paths.users_cost import UsersCost
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
 from inductiva.client.apis.paths.users_me import UsersMe
 from inductiva.client.apis.paths.projects import Projects
@@ -109,6 +112,10 @@ PathToApi = typing_extensions.TypedDict(
             AdminProvidersProviderId,
         PathValues.ADMIN_ACTIVE_TASKS:
             AdminActiveTasks,
+        PathValues.ADMIN_USERS_USERNAME_COST:
+            AdminUsersUsernameCost,
+        PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
+            AdminExecuterTrackerToken,
         PathValues.EXECUTERTRACKER_REGISTER:
             ExecuterTrackerRegister,
         PathValues.EXECUTERTRACKER_MACHINE_ID:
@@ -155,6 +162,8 @@ PathToApi = typing_extensions.TypedDict(
             Version,
         PathValues.VERSIONCHECK:
             VersionCheck,
+        PathValues.USERS_COST:
+            UsersCost,
         PathValues.USERS_QUOTAS:
             UsersQuotas,
         PathValues.USERS_ME:
@@ -218,6 +227,10 @@ path_to_api = PathToApi({
         AdminProvidersProviderId,
     PathValues.ADMIN_ACTIVE_TASKS:
         AdminActiveTasks,
+    PathValues.ADMIN_USERS_USERNAME_COST:
+        AdminUsersUsernameCost,
+    PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
+        AdminExecuterTrackerToken,
     PathValues.EXECUTERTRACKER_REGISTER:
         ExecuterTrackerRegister,
     PathValues.EXECUTERTRACKER_MACHINE_ID:
@@ -264,6 +277,8 @@ path_to_api = PathToApi({
         Version,
     PathValues.VERSIONCHECK:
         VersionCheck,
+    PathValues.USERS_COST:
+        UsersCost,
     PathValues.USERS_QUOTAS:
         UsersQuotas,
     PathValues.USERS_ME:
