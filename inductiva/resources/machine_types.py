@@ -12,6 +12,7 @@ class ProviderType(format_utils.CaseInsensitiveEnum):
     """Enum to represent the provider of the machine to be launched."""
     GCP = "GCP"
     ICE = "ICE"
+    LOCAL = "LOCAL"
 
 
 def list_available_machines(provider: Union[str, ProviderType]):
@@ -29,7 +30,7 @@ def list_available_machines(provider: Union[str, ProviderType]):
 def get_available_machine_types(provider: Union[str, ProviderType],
                                 machine_family: str = None):
     """Get all available machine types for a given provider.
-    
+
     Args:
         provider (str): The provider to list the available machine types.
         machine_family (str): The machine family to filter the specific
