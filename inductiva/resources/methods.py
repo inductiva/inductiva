@@ -24,12 +24,18 @@ def query(provider: str = "GCP", query_filter=None) -> List[Dict[str, Any]]:
 
     all_machines = get_available_machine_types(provider)
 
+    #remove duplicate machines
+    #(we get one machine with spot True and another with spot False)
+    all_machines = list(
+        {machine["machine_type"]: machine for machine in all_machines}.values())
+
     if query_filter is None:
         return all_machines
+    if not callable(query_filter):
+        raise ValueError("query_filter must be a callable")
+
     for machine in all_machines:
-        if callable(query_filter):
-            if query_filter(machine["machine_type"]):
-                queried_machines.append(machine)
-        else:
-            raise ValueError("query_filter must be a callable")
+        if query_filter(machine["machine_type"]):
+            queried_machines.append(machine)
+
     return queried_machines

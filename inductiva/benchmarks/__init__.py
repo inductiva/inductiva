@@ -1,0 +1,2 @@
+from inductiva.benchmarks.benchmark_logger import BenchmarkLogger
+from inductiva.benchmarks.benchmark import Benchmark
