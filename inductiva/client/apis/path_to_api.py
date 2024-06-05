@@ -36,6 +36,7 @@ from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_messag
 from inductiva.client.apis.paths.executer_tracker_machine_id_event import ExecuterTrackerMachineIdEvent
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_download_input_url import ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_upload_output_url import ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl
+from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_metric import ExecuterTrackerMachineIdTaskTaskIdMetric
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
@@ -126,6 +127,8 @@ PathToApi = typing_extensions.TypedDict(
             ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl,
         PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
             ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_METRIC:
+            ExecuterTrackerMachineIdTaskTaskIdMetric,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
         PathValues.COMPUTE_TYPE:
@@ -233,6 +236,8 @@ path_to_api = PathToApi({
         ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl,
     PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
         ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_METRIC:
+        ExecuterTrackerMachineIdTaskTaskIdMetric,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
     PathValues.COMPUTE_TYPE:
