@@ -33,12 +33,10 @@ class Quota(schemas.DictSchema):
         required = {
             "max_allowed",
             "name",
-            "description",
         }
 
         class properties:
             name = schemas.StrSchema
-            description = schemas.StrSchema
             max_allowed = schemas.NumberSchema
 
             class in_use(
@@ -100,25 +98,17 @@ class Quota(schemas.DictSchema):
 
             __annotations__ = {
                 "name": name,
-                "description": description,
                 "max_allowed": max_allowed,
                 "in_use": in_use,
             }
 
     max_allowed: MetaOapg.properties.max_allowed
     name: MetaOapg.properties.name
-    description: MetaOapg.properties.description
 
     @typing.overload
     def __getitem__(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["description"]
-    ) -> MetaOapg.properties.description:
         ...
 
     @typing.overload
@@ -139,7 +129,6 @@ class Quota(schemas.DictSchema):
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "name",
-        "description",
         "max_allowed",
         "in_use",
     ], str]):
@@ -150,12 +139,6 @@ class Quota(schemas.DictSchema):
     def get_item_oapg(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["description"]
-    ) -> MetaOapg.properties.description:
         ...
 
     @typing.overload
@@ -178,7 +161,6 @@ class Quota(schemas.DictSchema):
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "name",
-        "description",
         "max_allowed",
         "in_use",
     ], str]):
@@ -200,10 +182,6 @@ class Quota(schemas.DictSchema):
             MetaOapg.properties.name,
             str,
         ],
-        description: typing.Union[
-            MetaOapg.properties.description,
-            str,
-        ],
         in_use: typing.Union[MetaOapg.properties.in_use, dict,
                              frozendict.frozendict, str, date, datetime,
                              uuid.UUID, int, float, decimal.Decimal, bool, None,
@@ -220,7 +198,6 @@ class Quota(schemas.DictSchema):
             *_args,
             max_allowed=max_allowed,
             name=name,
-            description=description,
             in_use=in_use,
             _configuration=_configuration,
             **kwargs,
