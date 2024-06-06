@@ -216,11 +216,13 @@ take a few seconds or a few minutes:
 ```
 Downloading simulation outputs to inductiva_output/dz3nbyekv0ds17hzi6227a7b9/output.zip.
 100%|███████████████████████████████████████████████████████████████████████████████| 399M/399M [02:34<00:00, 2.59MB/s]
-Uncompressing the outputs to inductiva_output/dz3nbyekv0ds17hzi6227a7b9.```
+Uncompressing the outputs to inductiva_output/dz3nbyekv0ds17hzi6227a7b9.
+```
 
 If you now look under ```inductiva_output/dz3nbyekv0ds17hzi6227a7b9``` 
 (please check the id of the task that you actually run on your terminal) inside
 your project directory you should see something like:
+
 ```
 ls -las inductiva_output/dz3nbyekv0ds17hzi6227a7b9
 total 1313072
