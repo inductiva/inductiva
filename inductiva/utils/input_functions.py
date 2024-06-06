@@ -4,8 +4,8 @@ from inductiva import constants
 from ..localization import translator as __
 
 
-def user_confirmation_prompt(items: list, all_msg: str, unlisted_msg: str,
-                             listed_msg: str, is_all: bool) -> bool:
+def user_confirmation_prompt(items: list, unlisted_msg: str,
+                             listed_msg: str) -> bool:
     """Prompt the user for confirmation to proceed with an action.
 
     Args:
