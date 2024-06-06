@@ -7,6 +7,8 @@ from inductiva import resources
 from inductiva.utils import input_functions
 from ...localization import translator as __
 
+import concurrent.futures
+
 
 def terminate_machine_group(args):
     """Terminate one or all computational resoruces."""
@@ -52,11 +54,18 @@ def terminate_machine_group(args):
     if not confirm:
         return 0
 
-    machines_to_kill = active_machine_names if (all_names) else (
-        target_machine_names)
+    machines_to_kill = active_machine_names if all_names else target_machine_names
 
-    for name in machines_to_kill:
+    def terminate_machine(name):
         name_to_machine[name].terminate()
+
+    with concurrent.futures.ThreadPoolExecutor(
+            max_workers=min(32, len(machines_to_kill))) as executor:
+        futures = [
+            executor.submit(terminate_machine, name)
+            for name in machines_to_kill
+        ]
+        concurrent.futures.wait(futures)
 
     return 0
 
