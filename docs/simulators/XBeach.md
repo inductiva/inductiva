@@ -34,6 +34,226 @@ task.wait()
 task.download_outputs()
 ```
 
+## A more advanced example
+We are now going to run a much longer simulation, namely one whose configuration 
+scripts and input data are mae available via the
+[GRIIDC](https://www.griidc.org/), a data repository based out of the Harte
+Research Institute for Gulf of Mexico Studies at Texas A&M University-Corpus 
+Christi. 
+
+More specifically, we will run one of simulations described in 
+"XBeach model setup and results for beach and dune enhancement scenarios on 
+Galveston Island, Texas", which is made available
+[here](https://data.griidc.org/data/HI.x833.000:0001).
+
+We will start by downloading the required input files. At the bottom of the 
+[dataset page](https://data.griidc.org/data/HI.x833.000:0001#individual-files)
+you will find a widget for downloading indvidual files. We will need to 
+download the contents of an entire directory. Using the widget, please
+select: **Files >> XBeach_Model_Runs >> Beach_Nourish_Only >> Input**.
+
+Select all files inside the directory using the checkbox and click on the 
+elipsis "⋮" to download them. Move all files to a directory named 
+"Beach_Nourish_Only" inside your Inductiva python project directory. Inside the 
+"Beach_Nourish_Only" you should then have something like:
+
+```
+ls -las Beach_Nourish_Only 
+total 130976
+    0 drwxr-xr-x  12        384  5 Jun 16:13 .
+    0 drwxr-xr-x   3         96  5 Jun 16:14 ..
+    8 -rw-r--r--@  1       3069  5 Jun 16:12 README.txt
+26184 -rw-r--r--@  1   13404906  5 Jun 16:12 bed.dep
+26184 -rw-r--r--@  1   13404906  5 Jun 16:12 bedfricfile.txt
+   16 -rw-r--r--@  1       5324  5 Jun 16:12 jonswap3.txt
+26184 -rw-r--r--@  1   13404906  5 Jun 16:12 nebed.dep
+    8 -rw-r--r--@  1       2281  5 Jun 16:12 params.txt
+   16 -rw-r--r--@  1       4850  5 Jun 16:12 tide.txt
+26184 -rw-r--r--@  1   13404906  5 Jun 16:12 x.grd
+    8 -rw-r--r--@  1        635  5 Jun 16:12 xbeach.slurm
+26184 -rw-r--r--@  1   13404906  5 Jun 16:12 y.grd
+```
+
+We are going to run this simulation, almost as it is, with only two small 
+changes to the parametrization defined in ```params.txt```. First, we will need
+to add an extra configuration parameter to account for the fact the API is 
+already running XBeach v10+, but the original simulation configuration files
+where prepared for an older version of XBeach. So will need to add the following
+line to ```params.txt``` :
+```
+single_dir = 0
+``` 
+Second, to reduce the time to complete this simulation, we will change the
+stop time of simulation, ```tstop```, to just 34560 (10x less than original
+parametrization).
+
+That's it! We won't do any more changes. Let's start the simulation. The python
+script we are going to use to trigger the simulation is:
+
+```python
+import inductiva
+
+machine_group = inductiva.resources.MachineGroup(
+    machine_type="c3d-highcpu-90",
+    spot=True,
+    data_disk_gb=20)
+machine_group.start()
+
+# Initialize the Simulator
+xbeach = inductiva.simulators.XBeach()
+
+# Run simulation with config files in the input directory
+task = xbeach.run(
+    input_dir="Beach_Nourish_Only",
+    sim_config_filename="params.txt",
+    n_vcpus=45,
+    on=machine_group)
+
+task.wait()
+task.print_summary()
+
+# Terminate your dedicated MachineGroup at then end of the simulation.
+machine_group.terminate()
+```
+
+There are a few of things you should notice in the script above:
+
+* Although we are requesting a machine with 90 vCPUs, we are setting the 
+simulation to run on "only" 45 vCPU in the method ```run()```. In general,
+paralelizing the simulation over only half of the vCPU available in the machine
+tends to lead to better peformance than choosing parallezation over all vCPUs
+because the virtualization scheme of these machines assigns two vCPU per
+physical core. By setting n_vcpus to half the number of vCPUs we are implicitly
+assinging one thread per physical core.
+* We are not requesting the outputs of the simulation to be donwloaded to our
+local machine yet. That would be done by calling ```task.download_outputs()```
+in this script right after ```task.wait()```. Instead, we opted for letting the
+simulation finish and turning off the machine we are using. We will download the
+outputs at a late time, after checking the size of the output that will be
+automatically placed in our remote personal storage when the simulation ends.
+* Finally, we are calling ```task.print_summary()``` that shows the times
+spent at all stages of the process, including all auxiliary tasks, such as
+moving data around between your local computer, your personal remote storage
+space and the executer machine (i.e. the ```c3d-highcpu-90``` VM.)
+
+Running this script, takes about 1h15, and should produce an output such as:
+
+```
+Registering MachineGroup configurations:
+> Name:         api-4sbmo0oi3x3jwx1o7903oobkj
+> Machine Type: c3d-highcpu-90
+> Data disk size:    20 GB
+> Number of machines: 1
+> Spot:               True
+> Estimated cloud cost of machine group: 1.230 $/h
+Starting MachineGroup(name="api-4sbmo0oi3x3jwx1o7903oobkj"). This may take a few minutes.
+Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
+Machine Group api-4sbmo0oi3x3jwx1o7903oobkj with c3d-highcpu-90 machines successfully started in 0:00:24.
+Task Information:
+> ID:                    avh4o90otnqauzw0pc9hx83sm
+> Method:                xbeach
+> Local input directory: Beach_Nourish_Only
+> Submitting to the following computational resources:
+ >> Machine Group api-4sbmo0oi3x3jwx1o7903oobkj with c3d-highcpu-90 machines
+Preparing upload of the local input directory Beach_Nourish_Only (67.04 MB).
+Input archive size: 9.32 MB
+Uploading input archive...
+100%|█████████████████████████████████████████████████████████████████████████████| 9.32M/9.32M [00:09<00:00, 1.03MB/s]
+Local input directory successfully uploaded.
+Task avh4o90otnqauzw0pc9hx83sm submitted to the queue of the Machine Group api-4sbmo0oi3x3jwx1o7903oobkj with c3d-highcpu-90 machines.
+Simulation metadata logged to: inductiva_output/task_metadata.json
+Task avh4o90otnqauzw0pc9hx83sm configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
+Consider tracking the status of the task via CLI:
+	inductiva tasks list --task-id avh4o90otnqauzw0pc9hx83sm
+Or, tracking the logs of the task via CLI:
+	inductiva logs avh4o90otnqauzw0pc9hx83sm
+Task avh4o90otnqauzw0pc9hx83sm successfully queued and waiting to be picked-up for execution...
+Task avh4o90otnqauzw0pc9hx83sm has started and is now running remotely.
+Task avh4o90otnqauzw0pc9hx83sm completed successfully.
+Wall time:                      4394.23s
+	input_upload:	              10.72
+	container_image_download       0.47
+	queue_time:	                  19.86
+	input_download:                0.22
+	input_decompression:	       0.20
+	computation:	            4338.85
+	output_compression:	          18.12
+	output_upload:	               6.22
+Data:
+	output_zipped_size:	        391.85 MB
+```
+
+The summary is pretty handy to understand that almost 99% of the (wall) time is
+spent where is should be: on the computation stage, i.e. actually executing the
+simulation.
+
+Now, it is time to fecth the results. We will be downloading a zip file with
+391.85MB of data (as shown in the summary). This can be done very conveniently
+using the CLI. So, from your command line run (with the appropriate task id that
+you can see above):
+
+```
+inductiva tasks download avh4o90otnqauzw0pc9hx83sm
+```
+
+Depending on the speed of your internet connection, donwloading thie files may
+take a few seconds or a few minutes:
+
+```
+Downloading simulation outputs to inductiva_output/avh4o90otnqauzw0pc9hx83sm/output.zip.
+100%|███████████████████████████████████████████████████████████████████████████████| 392M/392 [01:44<00:00, 3.74MB/s]
+Uncompressing the outputs to inductiva_output/avh4o90otnqauzw0pc9hx83sm.
+```
+
+If you now look under ```inductiva_output/avh4o90otnqauzw0pc9hx83sm``` 
+(please check the id of the task that you actually run on your terminal) inside
+your project directory you should see something like:
+```
+ls -las inductiva_output/avh4o90otnqauzw0pc9hx83sm
+total 1313072
+     0 drwxr-xr-x  29         928  6 Jun 07:09 .
+     0 drwxr-xr-x   8         256  6 Jun 07:07 ..
+ 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00001.bcf
+ 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00002.bcf
+ 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00003.bcf
+ 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00004.bcf
+ 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00005.bcf
+ 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00006.bcf
+ 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00007.bcf
+ 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00008.bcf
+ 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00009.bcf
+ 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00010.bcf
+   256 -rw-r--r--   1      128821  6 Jun 07:09 XBlog.txt
+     8 -rw-r--r--   1        1105  6 Jun 07:09 XBwarning.txt
+     8 -rw-r--r--   1         860  6 Jun 07:09 ebcflist.bcf
+ 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00001.bcf
+ 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00002.bcf
+ 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00003.bcf
+ 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00004.bcf
+ 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00005.bcf
+ 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00006.bcf
+ 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00007.bcf
+ 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00008.bcf
+ 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00009.bcf
+ 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00010.bcf
+     8 -rw-r--r--   1         860  6 Jun 07:09 qbcflist.bcf
+     8 -rw-r--r--   1        1248  6 Jun 07:09 stderr.txt
+   256 -rw-r--r--   1      129208  6 Jun 07:09 stdout.txt
+819328 -rw-r--r--   1   415526280  6 Jun 07:09 xboutput.nc
+```
+
+that contains all the files produced by XBeach, as well as two additional log 
+files that the Inductiva API always captures: ```stdout.txt``` and 
+```stderr.txt```. Now that you have your files locally, you can execute all 
+sorts of post-processing steps on them, as you would if you had run your
+simulations locally. 
+
+That's it! You can now go bigger! You can start by trying to run the complete
+simulation (the original parameter is ```tstop = 34560```) on an even faster 
+machine such as a ```c3d-highcpu-360```!
+
+Good luck!
+
 ## What to read next
 
 If you are interested in XBeach, you may also be interested in checking the
