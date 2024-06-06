@@ -53,9 +53,13 @@ download the contents of an entire directory. Using the widget, please
 select: **Files >> XBeach_Model_Runs >> Beach_Nourish_Only >> Input**.
 
 Select all files inside the directory using the checkbox and click on the 
-elipsis "⋮" to download them. Move all files to a directory named 
-"Beach_Nourish_Only" inside your Inductiva python project directory. Inside the 
-"Beach_Nourish_Only" you should then have something like:
+elipsis "⋮" to download them:
+
+![Select each of the files inside the Input folder](xbeach_source_files.png)
+
+Move all files to a directory named  "Beach_Nourish_Only" inside your Inductiva
+python project directory. Inside the  "Beach_Nourish_Only" you should then have
+something like:
 
 ```
 ls -las Beach_Nourish_Only 
@@ -79,13 +83,14 @@ changes to the parametrization defined in ```params.txt```. First, we will need
 to add an extra configuration parameter to account for the fact the API is 
 already running XBeach v10+, but the original simulation configuration files
 where prepared for an older version of XBeach. So will need to add the following
-line to ```params.txt``` :
+line to ```params.txt``` (you can add it right at the top, after the header):
 ```
 single_dir = 0
 ``` 
 Second, to reduce the time to complete this simulation, we will change the
 stop time of simulation, ```tstop```, to just 34560 (10x less than original
-parametrization).
+parametrization). Find the ```tstop``` parameter in ```params.txt``` and change
+the value to 34560.
 
 That's it! We won't do any more changes. Let's start the simulation. The python
 script we are going to use to trigger the simulation is:
@@ -171,16 +176,16 @@ Task avh4o90otnqauzw0pc9hx83sm successfully queued and waiting to be picked-up f
 Task avh4o90otnqauzw0pc9hx83sm has started and is now running remotely.
 Task avh4o90otnqauzw0pc9hx83sm completed successfully.
 Wall time:                      4394.23s
-	input_upload:	              10.72
-	container_image_download       0.47
-	queue_time:	                  19.86
+	input_upload:                 10.72
+	container_image_download:      0.47
+	queue_time:                   19.86
 	input_download:                0.22
-	input_decompression:	       0.20
-	computation:	            4338.85
-	output_compression:	          18.12
-	output_upload:	               6.22
+	input_decompression:           0.20
+	computation:                4338.85
+	output_compression:           18.12
+	output_upload:                 6.22
 Data:
-	output_zipped_size:	        391.85 MB
+	output_zipped_size:          391.85 MB
 ```
 
 The summary is pretty handy to understand that almost 99% of the (wall) time is
@@ -249,7 +254,7 @@ sorts of post-processing steps on them, as you would if you had run your
 simulations locally. 
 
 That's it! You can now go bigger! You can start by trying to run the complete
-simulation (the original parameter is ```tstop = 34560```) on an even faster 
+simulation (the original parameter is ```tstop = 345600```) on an even faster 
 machine such as a ```c3d-highcpu-360```!
 
 Good luck!
