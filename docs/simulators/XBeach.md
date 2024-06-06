@@ -188,16 +188,17 @@ The summary is pretty handy to understand that almost 99% of the (wall) time is
 spent where is should be: on the computation stage, i.e. actually executing the
 simulation.
 
-Note: As seen in the code above we are using a machine with 90 vCPUs and,
+Note: As seen in the code above, we are using a machine with 90 vCPUs and,
 in the method ```run()```, we are requesting the simulation to be parallelized
 over all of those 90 vCPU. In some cases, parallelizing the simulation over only
 half of the available vCPUs leads to better peformance. This is because the 
-virtualization scheme of these VMs assigns two vCPU per underlying physical core
-and so by setting ```n_vcpus``` to half the number of vCPUs we are implicitly
-assinging one thread per physical core, which is many cases is more efficient.
-However, this is NOT the case for this specific simulation with XBeach. In fact,
-running the simulation on the same machine and setting ```n_vcpus =45``` will
-make the computation about 35% slower. 
+virtualization scheme of these VMs assigns two vCPU per underlying physical
+core. So, by setting ```n_vcpus``` to half the number of vCPUs we are implicitly
+assigning one thread per physical core, which, is many cases, is more efficient
+because there is less competition for cache, and less I/O contention. However,
+this is NOT the case for this specific simulation with XBeach. In fact, running
+the simulation on the same machine and setting ```n_vcpus =45``` will make the
+computation about 35% slower.
 
 ### Downloading simulation dats
 
