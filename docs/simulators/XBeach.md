@@ -111,7 +111,7 @@ xbeach = inductiva.simulators.XBeach()
 task = xbeach.run(
     input_dir="Beach_Nourish_Only",
     sim_config_filename="params.txt",
-    n_vcpus=45,
+    n_vcpus=90,
     on=machine_group)
 
 task.wait()
@@ -123,13 +123,6 @@ machine_group.terminate()
 
 There are a few of things you should notice in the script above:
 
-* Although we are requesting a machine with 90 vCPUs, we are setting the 
-simulation to run on "only" 45 vCPU in the method ```run()```. In general,
-paralelizing the simulation over only half of the vCPU available in the machine
-tends to lead to better peformance than choosing parallezation over all vCPUs
-because the virtualization scheme of these machines assigns two vCPU per
-physical core. By setting n_vcpus to half the number of vCPUs we are implicitly
-assinging one thread per physical core.
 * We are not requesting the outputs of the simulation to be donwloaded to our
 local machine yet. That would be done by calling ```task.download_outputs()```
 in this script right after ```task.wait()```. Instead, we opted for letting the
@@ -144,48 +137,51 @@ space and the executer machine (i.e. the ```c3d-highcpu-90``` VM.)
 Running this script, takes about 1h15, and should produce an output such as:
 
 ```
+(base) lsarmento@Luiss-MacBook-Air xbeach % python run.py 
 Registering MachineGroup configurations:
-> Name:         api-4sbmo0oi3x3jwx1o7903oobkj
+> Name:         api-6smqv1nofow4axk6vf99j1hwm
 > Machine Type: c3d-highcpu-90
 > Data disk size:    20 GB
 > Number of machines: 1
 > Spot:               True
 > Estimated cloud cost of machine group: 1.230 $/h
-Starting MachineGroup(name="api-4sbmo0oi3x3jwx1o7903oobkj"). This may take a few minutes.
+Starting MachineGroup(name="api-6smqv1nofow4axk6vf99j1hwm"). This may take a few minutes.
 Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
-Machine Group api-4sbmo0oi3x3jwx1o7903oobkj with c3d-highcpu-90 machines successfully started in 0:00:24.
+Machine Group api-6smqv1nofow4axk6vf99j1hwm with c3d-highcpu-90 machines successfully started in 0:00:29.
 Task Information:
-> ID:                    avh4o90otnqauzw0pc9hx83sm
+> ID:                    dz3nbyekv0ds17hzi6227a7b9
 > Method:                xbeach
 > Local input directory: Beach_Nourish_Only
 > Submitting to the following computational resources:
- >> Machine Group api-4sbmo0oi3x3jwx1o7903oobkj with c3d-highcpu-90 machines
+ >> Machine Group api-6smqv1nofow4axk6vf99j1hwm with c3d-highcpu-90 machines
 Preparing upload of the local input directory Beach_Nourish_Only (67.04 MB).
 Input archive size: 9.32 MB
 Uploading input archive...
-100%|█████████████████████████████████████████████████████████████████████████████| 9.32M/9.32M [00:09<00:00, 1.03MB/s]
+100%|██████████████████████████████████████████████████████████████████████████████| 9.32M/9.32M [00:10<00:00, 863kB/s]
 Local input directory successfully uploaded.
-Task avh4o90otnqauzw0pc9hx83sm submitted to the queue of the Machine Group api-4sbmo0oi3x3jwx1o7903oobkj with c3d-highcpu-90 machines.
+Task dz3nbyekv0ds17hzi6227a7b9 submitted to the queue of the Machine Group api-6smqv1nofow4axk6vf99j1hwm with c3d-highcpu-90 machines.
 Simulation metadata logged to: inductiva_output/task_metadata.json
-Task avh4o90otnqauzw0pc9hx83sm configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
+Task dz3nbyekv0ds17hzi6227a7b9 configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
 Consider tracking the status of the task via CLI:
-	inductiva tasks list --task-id avh4o90otnqauzw0pc9hx83sm
+	inductiva tasks list --task-id dz3nbyekv0ds17hzi6227a7b9
 Or, tracking the logs of the task via CLI:
-	inductiva logs avh4o90otnqauzw0pc9hx83sm
-Task avh4o90otnqauzw0pc9hx83sm successfully queued and waiting to be picked-up for execution...
-Task avh4o90otnqauzw0pc9hx83sm has started and is now running remotely.
-Task avh4o90otnqauzw0pc9hx83sm completed successfully.
-Wall time:                      4394.23s
-	input_upload:                 10.72
-	container_image_download:      0.47
-	queue_time:                   19.86
-	input_download:                0.22
-	input_decompression:           0.20
-	computation:                4338.85
-	output_compression:           18.12
-	output_upload:                 6.22
-Data:
-	output_zipped_size:          391.85 MB
+	inductiva logs dz3nbyekv0ds17hzi6227a7b9
+Task dz3nbyekv0ds17hzi6227a7b9 successfully queued and waiting to be picked-up for execution...
+Task dz3nbyekv0ds17hzi6227a7b9 has started and is now running remotely.
+Task dz3nbyekv0ds17hzi6227a7b9 completed successfully.
+Wall time 3263.68s
+	input_upload:	12.59
+	container_image_download	1.02
+	queue_time:	8.53
+	input_download:	0.21
+	input_decompression:	0.20
+	computation:	3217.49
+	output_compression:	18.35
+	output_upload:	6.28
+Data
+	output_size:	398.82 MB
+Terminating MachineGroup(name="api-6smqv1nofow4axk6vf99j1hwm"). This may take a few minutes.
+Machine Group api-6smqv1nofow4axk6vf99j1hwm with c3d-highcpu-90 machines successfully terminated in 0:01:22.
 ```
 
 The summary is pretty handy to understand that almost 99% of the (wall) time is
@@ -193,28 +189,27 @@ spent where is should be: on the computation stage, i.e. actually executing the
 simulation.
 
 Now, it is time to fecth the results. We will be downloading a zip file with
-391.85MB of data (as shown in the summary). This can be done very conveniently
+398.82MB of data (as shown in the summary). This can be done very conveniently
 using the CLI. So, from your command line run (with the appropriate task id that
 you can see above):
 
 ```
-inductiva tasks download avh4o90otnqauzw0pc9hx83sm
+inductiva tasks download dz3nbyekv0ds17hzi6227a7b9
 ```
 
 Depending on the speed of your internet connection, donwloading thie files may
 take a few seconds or a few minutes:
 
 ```
-Downloading simulation outputs to inductiva_output/avh4o90otnqauzw0pc9hx83sm/output.zip.
-100%|███████████████████████████████████████████████████████████████████████████████| 392M/392 [01:44<00:00, 3.74MB/s]
-Uncompressing the outputs to inductiva_output/avh4o90otnqauzw0pc9hx83sm.
-```
+Downloading simulation outputs to inductiva_output/dz3nbyekv0ds17hzi6227a7b9/output.zip.
+100%|███████████████████████████████████████████████████████████████████████████████| 399M/399M [02:34<00:00, 2.59MB/s]
+Uncompressing the outputs to inductiva_output/dz3nbyekv0ds17hzi6227a7b9.```
 
-If you now look under ```inductiva_output/avh4o90otnqauzw0pc9hx83sm``` 
+If you now look under ```inductiva_output/dz3nbyekv0ds17hzi6227a7b9``` 
 (please check the id of the task that you actually run on your terminal) inside
 your project directory you should see something like:
 ```
-ls -las inductiva_output/avh4o90otnqauzw0pc9hx83sm
+ls -las inductiva_output/dz3nbyekv0ds17hzi6227a7b9
 total 1313072
      0 drwxr-xr-x  29         928  6 Jun 07:09 .
      0 drwxr-xr-x   8         256  6 Jun 07:07 ..
