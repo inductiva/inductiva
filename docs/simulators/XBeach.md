@@ -169,15 +169,15 @@ Or, tracking the logs of the task via CLI:
 Task dz3nbyekv0ds17hzi6227a7b9 successfully queued and waiting to be picked-up for execution...
 Task dz3nbyekv0ds17hzi6227a7b9 has started and is now running remotely.
 Task dz3nbyekv0ds17hzi6227a7b9 completed successfully.
-Wall time 3263.68s
-	input_upload:	12.59
-	container_image_download	1.02
-	queue_time:	8.53
-	input_download:	0.21
-	input_decompression:	0.20
-	computation:	3217.49
-	output_compression:	18.35
-	output_upload:	6.28
+Wall time                         3263.68s
+	input_upload:                   12.59
+	container_image_download         1.02
+	queue_time:                      8.53
+	input_download:                  0.21
+	input_decompression:             0.20
+	computation:                  3217.49
+	output_compression:             18.35
+	output_upload:                   6.28
 Data
 	output_size:	398.82 MB
 Terminating MachineGroup(name="api-6smqv1nofow4axk6vf99j1hwm"). This may take a few minutes.
@@ -187,6 +187,19 @@ Machine Group api-6smqv1nofow4axk6vf99j1hwm with c3d-highcpu-90 machines success
 The summary is pretty handy to understand that almost 99% of the (wall) time is
 spent where is should be: on the computation stage, i.e. actually executing the
 simulation.
+
+Note: As seen in the code above we are using a machine with 90 vCPUs and,
+in the method ```run()```, we are requesting the simulation to be parallelized
+over all of those 90 vCPU. In some cases, parallelizing the simulation over only
+half of the available vCPUs leads to better peformance. This is because the 
+virtualization scheme of these VMs assigns two vCPU per underlying physical core
+and so by setting ```n_vcpus``` to half the number of vCPUs we are implicitly
+assinging one thread per physical core, which is many cases is more efficient.
+However, this is NOT the case for this specific simulation with XBeach. In fact,
+running the simulation on the same machine and setting ```n_vcpus =45``` will
+make the computation about 35% slower. 
+
+### Downloading simulation dats
 
 Now, it is time to fecth the results. We will be downloading a zip file with
 398.82MB of data (as shown in the summary). This can be done very conveniently
