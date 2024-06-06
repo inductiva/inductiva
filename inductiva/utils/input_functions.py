@@ -28,15 +28,12 @@ def user_confirmation_prompt(items: list, all_msg: str, unlisted_msg: str,
     Returns:
         bool: Whether the user has confirmed the action.
     """
-    if is_all:
-        print(all_msg)
+    if len(items) > constants.MAX_CONFIRMATION_LINES:
+        print(unlisted_msg)
     else:
-        if len(items) > constants.MAX_CONFIRMATION_LINES:
-            print(unlisted_msg)
-        else:
-            print(listed_msg)
-            for thing in items:
-                print(f"  - {thing}")
+        print(listed_msg)
+        for thing in items:
+            print(f"  - {thing}")
     prompt = input(__("user-prompt-confirmation"))
     confirm = prompt.lower() in ["y", "ye", "yes"]
     return confirm

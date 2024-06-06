@@ -36,10 +36,9 @@ def terminate_machine_group(args):
 
     # dict to map from name to machine
     name_to_machine = {machine.name: machine for machine in active_machines}
-    active_machine_names = name_to_machine.keys()
     # the user can give the same name multiple times
-    target_machine_names = set(names)
-    invalid_names = target_machine_names.difference(active_machine_names)
+    target_machine_names = set(names or name_to_machine.keys())
+    invalid_names = target_machine_names.difference(name_to_machine)
 
     if invalid_names:
         for name in invalid_names:
@@ -49,27 +48,25 @@ def terminate_machine_group(args):
 
     confirm = confirm or input_functions.user_confirmation_prompt(
         target_machine_names, __("resources-prompt-terminate-all"),
-        __("resources-prompt-terminate-big", len(names)),
+        __("resources-prompt-terminate-big", len(target_machine_names)),
         __("resources-prompt-terminate-small"), all_names)
 
     if not confirm:
         return 0
 
-    machines_to_kill = active_machine_names if all_names else target_machine_names
-
     def terminate_machine(name):
         name_to_machine[name].terminate()
 
     # if there is only one machine to terminate do it in the main thread
-    if len(machines_to_kill) == 1:
-        terminate_machine(machines_to_kill.pop())
+    if len(target_machine_names) == 1:
+        terminate_machine(target_machine_names.pop())
         return 0
 
     with concurrent.futures.ThreadPoolExecutor(
-            max_workers=min(32, len(machines_to_kill))) as executor:
+            max_workers=min(32, len(target_machine_names))) as executor:
         futures = [
             executor.submit(terminate_machine, name)
-            for name in machines_to_kill
+            for name in target_machine_names
         ]
         concurrent.futures.wait(futures)
 
