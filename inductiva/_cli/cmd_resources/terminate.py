@@ -11,7 +11,7 @@ import concurrent.futures
 
 
 def terminate_machine_group(args):
-    """Terminate one or all computational resoruces."""
+    """Terminate one or all computational resources."""
     names = args.name
     all_names = args.all
     confirm = args.confirm
@@ -26,6 +26,7 @@ def terminate_machine_group(args):
     active_machines = resources.machine_groups.get()
 
     if not active_machines:
+        print("No active resources to terminate.")
         return 0
 
     if not all_names and not names:
@@ -36,7 +37,7 @@ def terminate_machine_group(args):
     # dict to map from name to machine
     name_to_machine = {machine.name: machine for machine in active_machines}
     active_machine_names = name_to_machine.keys()
-    # the user can give the same name multiple times!!
+    # the user can give the same name multiple times
     target_machine_names = set(names)
     invalid_names = target_machine_names.difference(active_machine_names)
 
