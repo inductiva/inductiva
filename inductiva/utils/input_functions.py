@@ -4,8 +4,8 @@ from inductiva import constants
 from ..localization import translator as __
 
 
-def user_confirmation_prompt(items: list, unlisted_msg: str,
-                             listed_msg: str) -> bool:
+def user_confirmation_prompt(items: list, all_msg: str, unlisted_msg: str,
+                             listed_msg: str, is_all: bool) -> bool:
     """Prompt the user for confirmation to proceed with an action.
 
     Args:
@@ -28,12 +28,15 @@ def user_confirmation_prompt(items: list, unlisted_msg: str,
     Returns:
         bool: Whether the user has confirmed the action.
     """
-    if len(items) > constants.MAX_CONFIRMATION_LINES:
-        print(unlisted_msg)
+    if is_all:
+        print(all_msg)
     else:
-        print(listed_msg)
-        for thing in items:
-            print(f"  - {thing}")
+        if len(items) > constants.MAX_CONFIRMATION_LINES:
+            print(unlisted_msg)
+        else:
+            print(listed_msg)
+            for thing in items:
+                print(f"  - {thing}")
     prompt = input(__("user-prompt-confirmation"))
     confirm = prompt.lower() in ["y", "ye", "yes"]
     return confirm
