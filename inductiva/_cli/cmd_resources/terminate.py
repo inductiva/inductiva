@@ -60,6 +60,11 @@ def terminate_machine_group(args):
     def terminate_machine(name):
         name_to_machine[name].terminate()
 
+    # if there is only one machine to terminate do it in the main thread
+    if len(machines_to_kill) == 1:
+        terminate_machine(machines_to_kill.pop())
+        return 0
+
     with concurrent.futures.ThreadPoolExecutor(
             max_workers=min(32, len(machines_to_kill))) as executor:
         futures = [
