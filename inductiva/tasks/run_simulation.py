@@ -57,6 +57,11 @@ def run_simulation(
     if computational_resources is not None:
         logging.info("Task %s submitted to the queue of the %s.", task_id,
                      computational_resources)
+
+        if not computational_resources.is_running():
+            logging.warning(
+                "Warning: The computational resource is not running.")
+
     else:
         logging.info("Task %s submitted to the default queue.", task_id)
 
