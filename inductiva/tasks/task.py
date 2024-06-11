@@ -70,8 +70,8 @@ class TaskInfo:
 
     def __init__(self, **kwargs):
         """Initialize the instance with attributes from keyword arguments."""
-        self._is_running = None
-        self._is_terminal = None
+        self.is_running = None
+        self.is_terminal = None
         self.task_id = None
         self.status = None
         self.method_name = None
@@ -124,7 +124,7 @@ class TaskInfo:
             if value >= 60.0:
                 value_str = format_utils.seconds_formatter(value)
             else:
-                value_str = "{:.2f} s".format(value)
+                value_str = f"{value:.2f} s"
 
             if metric_key in ("total_seconds",
                               "computation_seconds") and self._is_running:
@@ -709,11 +709,11 @@ class Task:
         info: TaskInfo = self.get_info()
 
         # Update running info
-        info._is_running = self.is_running(cached=True)
-        info._is_terminal = self.is_terminal(cached=True)
+        info.is_running = self.is_running(cached=True)
+        info.is_terminal = self.is_terminal(cached=True)
 
         # Update the duration metrics if the task is still running
-        if info._is_running is True:
+        if info.is_running is True:
             info.time_metrics.total_seconds.value = self.get_total_time(
                 cached=True)
             info.time_metrics.computation_seconds.value = \

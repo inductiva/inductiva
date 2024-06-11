@@ -46,10 +46,7 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
         if info.executer is None:
             resource_type = None
         else:
-            resource_type = "{host_type} {vm_type}".format(
-                host_type=info.executer.host_type,
-                vm_type=info.executer.vm_type,
-            )
+            resource_type = f"{info.executer.host_type} {info.executer.vm_type}"
             if info.executer.n_mpi_hosts > 1:
                 resource_type += f" x{info.executer.n_mpi_hosts}"
         table["ID"].append(task.id)
