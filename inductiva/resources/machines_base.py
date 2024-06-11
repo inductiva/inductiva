@@ -80,6 +80,12 @@ class BaseMachineGroup:
     @property
     def id(self):
         return self._id
+    
+    @property
+    def vcpus(self):
+        # This works for GCP and ICE
+        # TODO: Add support for other providers
+        return int(self.machine_type.split("-")[2])
 
     @property
     def vcpus(self):
