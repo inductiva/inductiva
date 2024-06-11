@@ -121,6 +121,9 @@ def _tasks_by_vm_type(project: Project) -> Dict[str, List[Task]]:
     resources = defaultdict(list)
     for task in tasks:
         task_info = task.get_info()
+        if task_info["executer"] is None:
+            raise RuntimeError(__("tasks_not_executed_yet"))
+
         resource = task_info["executer"]["vm_type"]
         resources[resource].append(task)
     return resources
@@ -143,7 +146,12 @@ def _compute_tasks_to_run(machines_to_run: List[Dict[str, Any]],
     """
     to_run = {}
     for machine in machines_to_run:
-        if len(already_ran[machine["machine_type"]]) < intended_replicas:
+
+        # if the machine has not been ran yet, run the intended replicas
+        if machine["machine_type"] not in already_ran:
+            to_run[machine["machine_type"]] = intended_replicas
+        # if the machine has been ran, run the remaining replicas
+        elif len(already_ran[machine["machine_type"]]) < intended_replicas:
             to_run[machine["machine_type"]] = intended_replicas - len(
                 already_ran[machine["machine_type"]])
     return to_run
@@ -251,7 +259,7 @@ def run(name: str,
 
     if input_args is not None:
         template_manager = TemplateManager(template_dir=input_files)
-
+        base_path = template_manager.get_root_dir()
     for machine, current_replicas in to_run.items():
 
         machine_args_current = _replace_callable_from_dict(
@@ -269,7 +277,8 @@ def run(name: str,
         input_args_current = _replace_callable_from_dict(input_args, resource)
 
         if input_args_current:
-            template_manager.set_root_dir(name)
+
+            template_manager.set_root_dir(f"{base_path}/{name}")
             input_files = template_manager.render_dir(**input_args_current)
 
         # input_files either come from the template manager or
@@ -277,7 +286,7 @@ def run(name: str,
         simulator_args_current["input_dir"] = input_files
         simulator_args_current["on"] = resource
 
-        print(f"\nRunning {simulator.api_method_name}"
+        print(f"\nRunning {simulator}"
               f"with {simulator_args_current}")
         if resource is not None:
             while not _can_start_resource(resource):
