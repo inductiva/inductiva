@@ -106,11 +106,6 @@ class TaskInfo:
                 if hasattr(self.executer, key):
                     setattr(self.executer, key, value)
 
-        print("\n", self.__dict__)
-        print("\n", self.time_metrics.__dict__)
-        print("\n", self.data_metrics.__dict__)
-        print("\n", self.executer.__dict__)
-
     def __update_metrics(
         self,
         metrics_obj: Metric,
