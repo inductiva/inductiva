@@ -80,7 +80,7 @@ class BaseMachineGroup:
     @property
     def id(self):
         return self._id
-    
+
     @property
     def vcpus(self):
         # This works for GCP and ICE

@@ -7,8 +7,8 @@ from inductiva.resources.machine_types import get_available_machine_types
 def query(provider: str = "GCP", query_filter=None) -> List[Dict[str, Any]]:
     """Query available resources.
 
-    This function returns a list of available resources for a given provider. And
-    optionally filters the results based on a query_filter. The query_filter
+    This function returns a list of available resources for a given provider.
+    And optionally filters the results based on a query_filter. The query_filter
     should be a callable that takes a single argument, the machine type (str).
 
     Args:

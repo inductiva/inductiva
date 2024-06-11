@@ -272,13 +272,13 @@ def run(name: str,
             template_manager.set_root_dir(name)
             input_files = template_manager.render_dir(**input_args_current)
 
-        # input_files either come from the template manager or are passed directly
+        # input_files either come from the template manager or
+        # are passed directly
         simulator_args_current["input_dir"] = input_files
         simulator_args_current["on"] = resource
 
-        print(
-            f"\nRunning {simulator.api_method_name} with {simulator_args_current}"
-        )
+        print(f"\nRunning {simulator.api_method_name}"
+              f"with {simulator_args_current}")
         if resource is not None:
             while not _can_start_resource(resource):
                 print("This machine will exceed the current quotas.\n"
