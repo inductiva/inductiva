@@ -1,6 +1,5 @@
 """Base and specific renderers packages to manage template files."""
 from typing import Union, IO
-from abc import abstractmethod
 import pathlib
 import os
 
@@ -9,43 +8,8 @@ import jinja2
 from inductiva import types
 
 
-class RendererAdapter:
-    """Abstract base class for template renderers."""
-
-    TEMPLATE_EXTENSION = None
-
-    @abstractmethod
-    def set_template_dir(self, template_dir: types.PathOrStr) -> None:
-        """Set the directory where the templates are located."""
-        pass
-
-    @abstractmethod
-    def render(self, template_name: types.PathOrStr,
-               target_file: Union[types.PathOrStr, IO], **render_args):
-        """Render a file."""
-        pass
-
-    @classmethod
-    def is_template(cls, file: types.PathOrStr) -> bool:
-        """Check if the given file is of template type."""
-        if isinstance(file, pathlib.Path):
-            return file.suffix == cls.TEMPLATE_EXTENSION
-        elif isinstance(file, str):
-            return file.endswith(cls.TEMPLATE_EXTENSION)
-        return False
-
-    @classmethod
-    def strip_extension(cls, file: types.PathOrStr) -> str:
-        """Strip the template extension if the given file is a template."""
-        if not cls.is_template(file):
-            return file
-        if isinstance(file, pathlib.Path):
-            return file.with_suffix("")
-        return os.path.splitext(file)[0]
-
-
-class JinjaRendererAdapter(RendererAdapter):
-    """Adapter for the Jinja2 template engine.
+class JinjaRenderer():
+    """Renderer based on Jinja2 template engine.
 
     Attributes:
         TEMPLATE_EXTENSION (str): The file extension used by Jinja2 templates.
@@ -54,19 +18,7 @@ class JinjaRendererAdapter(RendererAdapter):
     TEMPLATE_EXTENSION = ".jinja"
 
     def __init__(self, template_dir: types.PathOrStr):
-        """Initialize the JinjaRendererAdapter.
-        Args:
-            template_dir (PathOrStr): The directory where the templates are
-                located.
-        """
-        self.set_template_dir(template_dir)
-
-    def set_template_dir(self, template_dir: types.PathOrStr) -> None:
-        """Set the directory where the templates are located.
-
-        Sets the directory where the templates are located and initializes the
-        Jinja2 environment and loader.
-
+        """Initialize the Jinja based Renderer.
         Args:
             template_dir (PathOrStr): The directory where the templates are
                 located.
@@ -103,3 +55,19 @@ class JinjaRendererAdapter(RendererAdapter):
             stream.dump(str(target_file))
         else:
             stream.dump(target_file)
+
+    def is_template(self, file: types.PathOrStr) -> bool:
+        """Check if the given file is of template type."""
+        if isinstance(file, pathlib.Path):
+            return file.suffix == self.TEMPLATE_EXTENSION
+        elif isinstance(file, str):
+            return file.endswith(self.TEMPLATE_EXTENSION)
+        return False
+
+    def strip_extension(self, file: types.PathOrStr) -> str:
+        """Strip the template extension if the given file is a template."""
+        if not self.is_template(file):
+            return file
+        if isinstance(file, pathlib.Path):
+            return file.with_suffix("")
+        return os.path.splitext(file)[0]
