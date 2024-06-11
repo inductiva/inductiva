@@ -87,7 +87,7 @@ class BaseMachineGroup:
 
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.
-        
+
         Returns:
             The unique ID and name identifying the machine on the API."""
 
@@ -241,10 +241,6 @@ class BaseMachineGroup:
             return
 
         try:
-            logging.info("Terminating %s. This may take a few minutes.",
-                         repr(self))
-            start_time = time.time()
-
             request_body = \
                 inductiva.client.models.VMGroupConfig(
                     id=self.id,
@@ -256,10 +252,8 @@ class BaseMachineGroup:
                 )
 
             self._api.delete_vm_group(body=request_body)
-            termination_time = format_utils.seconds_formatter(time.time() -
-                                                              start_time)
-            logging.info("%s successfully terminated in %s.", self,
-                         termination_time)
+            logging.info("Successfully requested termination of %s.",
+                         repr(self))
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
