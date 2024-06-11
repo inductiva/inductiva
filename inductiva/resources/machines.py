@@ -95,7 +95,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
               max_idle_time: datetime.timedelta = None,
               auto_terminate_ts: datetime.datetime = None):
         """Start the MachineGroup.
-        
+
         Args:
             max_idle_time (timedelta): Max idle time, i.e. time without
                 executing any task, after which the resource will be terminated.
@@ -169,7 +169,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         retrieving already registered machine groups that can be started, for
         example, when retrieving with the `machines_groups.get` method.
         Users should not set this argument.
-        
+
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
@@ -217,7 +217,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return machine_group
 
     def active_machines_to_str(self) -> str:
-        """Returns a string representation of the 
+        """Returns a string representation of the
         number of machines currently running.
         """
         return f"{self._active_machines}/{self.max_machines} (max)"
@@ -234,7 +234,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
               max_idle_time: datetime.timedelta = None,
               auto_terminate_ts: datetime.datetime = None):
         """Start the MachineGroup.
-        
+
         Args:
             max_idle_time (timedelta): Max idle time, i.e. time without
                 executing any task, after which the resource will be terminated.

@@ -1,6 +1,7 @@
 """Base class for machine groups."""
 import time
 import enum
+import json
 from typing import Union
 from abc import abstractmethod
 import datetime
@@ -99,7 +100,11 @@ class BaseMachineGroup:
         )
 
         try:
-            resp = self._api.register_vm_group(body=instance_group_config)
+            resp = self._api.register_vm_group(
+                body=instance_group_config,
+                skip_deserialization=True,
+            )
+            body = json.loads(resp.response.data)
         except (exceptions.ApiValueError, exceptions.ApiException) as e:
             logs.log_and_exit(
                 logging.getLogger(),
@@ -108,9 +113,9 @@ class BaseMachineGroup:
                 e,
                 exc_info=e)
 
-        self._id = resp.body["id"]
-        self._name = resp.body["name"]
-        self.quota_usage = resp.body.get("quota_usage") or {}
+        self._id = body["id"]
+        self._name = body["name"]
+        self.quota_usage = body.get("quota_usage") or {}
         self.register = False
         self._log_machine_group_info()
 
@@ -217,6 +222,7 @@ class BaseMachineGroup:
 
         logging.info("Starting %s. "
                      "This may take a few minutes.", repr(self))
+        self._log_quota_usage()
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
@@ -263,6 +269,11 @@ class BaseMachineGroup:
             logging.info("%s successfully terminated in %s.", self,
                          termination_time)
 
+            logging.info(
+                "Terminating the resource frees up the following quotas:")
+            for name, value in self.quota_usage.items():
+                logging.info("> %s: %s", name, value)
+
         except inductiva.client.ApiException as api_exception:
             raise api_exception
 
@@ -285,6 +296,12 @@ class BaseMachineGroup:
         )
 
         return self._estimated_cost
+
+    def _log_quota_usage(self):
+
+        logging.info("Starting the resource consumes the following quotas:")
+        for name, value in self.quota_usage.items():
+            logging.info("> %s: %s", name, value)
 
     def status(self):
         """Returns the status of a machine group if it exists.
