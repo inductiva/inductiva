@@ -53,6 +53,12 @@
     "benchmark-exceed-quotas":[
         "This benchmark will exceed the current quotas.",
         "Do you want to continue? (yes/no)"
-    ]
+    ],
+    "operation_canceled": "Operation canceled.",
+    "appending_tasks": "Appending tasks to the existing benchmark.",
+    "all_tasks_run": "All tasks have already been run.",
+    "tasks_ran" : "Tasks already ran:",
+    "tasks_to_run": "Tasks to run:"
+
     
 }

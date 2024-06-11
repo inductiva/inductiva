@@ -1,7 +1,6 @@
 """ 
 Methods to interact with Benchmarks.
 """
-
 from collections import defaultdict
 import datetime
 import time
@@ -9,19 +8,33 @@ import json
 
 from typing import Any, Callable, Dict, List, Union
 
-from inductiva.resources import machine_groups
 from inductiva.resources.machines_base import BaseMachineGroup
-from inductiva.tasks.task import Task
 from inductiva.templating.manager import TemplateManager
 from inductiva.resources.machines import MachineGroup
 from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
-from ..localization import translator as __
+from inductiva.resources import machine_groups
+from inductiva.tasks.task import Task
 from inductiva import types, users
 
+from ..localization import translator as __
 
-#fazer analyze para as terminadas apenas
-def analyze(name: str, metadata_path: types.Path):
+
+def analyze(name: str,
+            metadata_path: types.Path,
+            ouput_path: types.Path = None) -> Dict:
+    """Analyzes a benchmark.
+    This method creates a dictionary with all the relevant information about
+    the benchmark.
+    Args:
+        name (str): Name of the benchmark.
+        metadata_path (types.Path): Path to the metadata file.
+        ouput_path (types.Path): Path to the output file.
+            If it will not create an output file.
+    Returns:
+    
+    """
+
     project = Project(name, append=True)
     project.open()
 
@@ -39,10 +52,14 @@ def analyze(name: str, metadata_path: types.Path):
             metadata_tasks[temp_task["task_id"]] = temp_task
 
     for task in tasks:
+
+        if task.get_status() != "success":
+            continue
+
         task_info = task.get_info()
 
-        mg_name = task_info["executer"]['vm_name'].split(
-            "-")[0] + '-' + task_info["executer"]['vm_name'].split("-")[1]
+        mg_name = task_info["executer"]["vm_name"].split(
+            "-")[0] + "-" + task_info["executer"]["vm_name"].split("-")[1]
 
         end_time = datetime.datetime.strptime(task_info["computation_end_time"],
                                               "%Y-%m-%dT%H:%M:%S.%f%z")
@@ -53,7 +70,7 @@ def analyze(name: str, metadata_path: types.Path):
 
         resource = machine_groups.get_by_name(mg_name)
 
-        vm_type = task_info["executer"]['vm_type']
+        vm_type = task_info["executer"]["vm_type"]
 
         if vm_type not in report["resources"]:
             report["resources"][vm_type] = {
@@ -62,7 +79,7 @@ def analyze(name: str, metadata_path: types.Path):
                 "type":
                     type(resource).__name__,
                 "provider":
-                    task_info["executer"]['host_type'],
+                    task_info["executer"]["host_type"],
                 "machine_count":
                     resource.num_machines,
                 "tasks": [{
@@ -82,10 +99,15 @@ def analyze(name: str, metadata_path: types.Path):
                 "metadata": metadata_tasks[task_info["task_id"]]
             })
 
+    if ouput_path:
+        with open(f"{ouput_path}/{name}.json", "w",
+                  encoding="utf-8") as output_file:
+            output_file.write(json.dumps(report, indent=4))
+
     return report
 
 
-def _get_project_tasks_by_vm_type(project: Project) -> Dict[str, List[Task]]:
+def _tasks_by_vm_type(project: Project) -> Dict[str, List[Task]]:
     """Returns a dictionary with the resources and the tasks ran on them.
     Args:
         project (Project): Project to get the resources and tasks from.
@@ -135,11 +157,11 @@ def _print_info(already_ran: Dict[str, List[Task]], tasks_to_run: Dict[str,
     """
 
     print()
-    print("Tasks already ran:")
+    print(__("tasks_ran"))
     for key, value in already_ran.items():
         print(f"--->{key}: {len(value)}")
-
-    print("\nTasks to run:")
+    print()
+    print(__("tasks_to_run"))
     for key, value in tasks_to_run.items():
         print(f"--->{key}: {value}")
     print()
@@ -156,13 +178,13 @@ def run(name: str,
         machine_args: Dict[str, Union[Callable, Any]] = None,
         simulator_args: Dict[str, Union[Callable, Any]] = None):
     """Runs a benchmark.
-    This method creates a project and runs a benchmark with the given
-    parameters. It will check if the benchmark already exists (using the given
-    name), if it does, it will prompt the user to append the tasks to the
-    existing benchmark or cancel the operation. It will also check if the
-    benchmark will exceed the quotas and prompt if he wants to continue with
-    the operation or cancel it. This method will wait for quotas to be available
-    before starting the resources.
+    This method creates a project and runs a benchmark using the provided
+    parameters. It checks if a benchmark with the given name already exists. If
+    it does, the user is prompted to either append tasks to the existing
+    benchmark or cancel the operation. The method waits for quotas to be
+    available before starting the necessary resources. If the benchmark is
+    already completed, no further action is taken. If the benchmark is
+    incomplete, only the remaining tasks are executed.
 
     input_args, machine_args and simulator_args can be dictionaries where the
     values can be callables that will be called with the resource object as
@@ -207,21 +229,21 @@ def run(name: str,
         print(__("benchmark-already-exists", name))
         response = input()
         if response in ("no", "n"):
-            print("Operation canceled.")
+            print(__("operation_caceled"))
             project.close()
             return
         elif response in ("yes", "ye", "y"):
-            print("Appending tasks to the existing benchmark.")
+            print(__("appending_tasks"))
 
     # create dict with resource type: list of tasks ran on that resource
     # Example
     # { "n1-standard-4": [task1, task2], "n1-standard-8": [task3]}
-    current_project_tasks = _get_project_tasks_by_vm_type(project)
+    current_project_tasks = _tasks_by_vm_type(project)
     to_run = _compute_tasks_to_run(machines, current_project_tasks, replicas)
 
     print()
     if not to_run:
-        print("All tasks have already been run.")
+        print(__("all_tasks_run"))
         project.close()
         return
 
@@ -272,9 +294,10 @@ def run(name: str,
 
 
 def _replace_callable_from_dict(dictionary: Dict[str, Union[Callable, Any]],
-                                argument):
-    """Replaces callables from a dictionary. It replaces them with the result
-    of calling the callable with the argument.
+                                argument: Any):
+    """Replaces callables from a dictionary.
+    This function replaces callables with the result of calling the callable
+    with the argument passed.
     Args:
         dictionary (Dict[str, Union[Callable, Any]]): Dictionary to replace
             callables from.
