@@ -87,7 +87,7 @@ class BaseMachineGroup:
 
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.
-        
+
         Returns:
             The unique ID and name identifying the machine on the API."""
 
@@ -110,6 +110,7 @@ class BaseMachineGroup:
 
         self._id = resp.body["id"]
         self._name = resp.body["name"]
+        self.quota_usage = resp.body.get("quota_usage") or {}
         self.register = False
         self._log_machine_group_info()
 
@@ -136,6 +137,7 @@ class BaseMachineGroup:
         machine_group._name = resp["name"]
         machine_group.create_time = resp["creation_timestamp"]
         machine_group._started = bool(resp["started"])
+        machine_group.quota_usage = resp.get("quota_usage") or {}
 
         return machine_group
 
