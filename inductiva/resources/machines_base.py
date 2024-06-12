@@ -1,4 +1,5 @@
 """Base class for machine groups."""
+from collections import defaultdict
 import time
 import enum
 import json
@@ -10,7 +11,7 @@ import logging
 
 import inductiva
 import inductiva.client.models
-from inductiva import api
+from inductiva import api, users
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
 from inductiva.client import exceptions
@@ -222,7 +223,6 @@ class BaseMachineGroup:
 
         logging.info("Starting %s. "
                      "This may take a few minutes.", repr(self))
-        self._log_quota_usage()
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
@@ -241,6 +241,9 @@ class BaseMachineGroup:
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         logging.info("%s successfully started in %s.", self, creation_time)
+
+        logging.info("The machine group is using the following quotas:")
+        self._log_quota_usage("used by resource")
 
     def terminate(self, **kwargs):
         """Terminates a machine group."""
@@ -268,11 +271,9 @@ class BaseMachineGroup:
                                                               start_time)
             logging.info("%s successfully terminated in %s.", self,
                          termination_time)
-
             logging.info(
-                "Terminating the resource frees up the following quotas:")
-            for name, value in self.quota_usage.items():
-                logging.info("> %s: %s", name, value)
+                "Termination of the machine group frees the following quotas:")
+            self._log_quota_usage("freed by resource")
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
@@ -297,11 +298,31 @@ class BaseMachineGroup:
 
         return self._estimated_cost
 
-    def _log_quota_usage(self):
+    def _log_quota_usage(self, resource_usage_header: str):
+        quotas = users.get_quotas()
 
-        logging.info("Starting the resource consumes the following quotas:")
+        table = defaultdict(list)
+        emph_formatter = format_utils.get_ansi_formatter()
+
+        header_formatters = [
+            lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
+        ]
+
         for name, value in self.quota_usage.items():
-            logging.info("> %s: %s", name, value)
+            in_use = quotas.get(name, {}).get("in_use", "n/a")
+            max_allowed = quotas.get(name, {}).get("max_allowed", "n/a")
+
+            table["name"].append(name)
+            table[resource_usage_header].append(value)
+            table["new total usage"].append(in_use)
+            table["max allowed"].append(max_allowed)
+
+        table_str = format_utils.get_tabular_str(
+            table,
+            header_formatters=header_formatters,
+        )
+
+        logging.info(table_str)
 
     def status(self):
         """Returns the status of a machine group if it exists.
