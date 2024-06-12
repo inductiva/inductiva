@@ -9,6 +9,7 @@ from inductiva.client.apis.paths.tasks_task_id_input import TasksTaskIdInput
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
+from inductiva.client.apis.paths.tasks_task_id_position_in_queue import TasksTaskIdPositionInQueue
 from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
 from inductiva.client.apis.paths.tasks_task_id_download_output_url import TasksTaskIdDownloadOutputUrl
 from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
@@ -76,6 +77,8 @@ PathToApi = typing_extensions.TypedDict(
             Tasks,
         PathValues.TASKS_TASK_ID_STATUS:
             TasksTaskIdStatus,
+        PathValues.TASKS_TASK_ID_POSITION_IN_QUEUE:
+            TasksTaskIdPositionInQueue,
         PathValues.TASKS_TASK_ID_OUTPUT_LIST:
             TasksTaskIdOutputList,
         PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
@@ -191,6 +194,8 @@ path_to_api = PathToApi({
         Tasks,
     PathValues.TASKS_TASK_ID_STATUS:
         TasksTaskIdStatus,
+    PathValues.TASKS_TASK_ID_POSITION_IN_QUEUE:
+        TasksTaskIdPositionInQueue,
     PathValues.TASKS_TASK_ID_OUTPUT_LIST:
         TasksTaskIdOutputList,
     PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:

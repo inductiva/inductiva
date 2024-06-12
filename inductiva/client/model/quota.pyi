@@ -36,11 +36,9 @@ class Quota(
     class MetaOapg:
         required = {
             "max_allowed",
-            "name",
         }
         
         class properties:
-            name = schemas.StrSchema
             max_allowed = schemas.NumberSchema
             
             
@@ -82,16 +80,11 @@ class Quota(
                         **kwargs,
                     )
             __annotations__ = {
-                "name": name,
                 "max_allowed": max_allowed,
                 "in_use": in_use,
             }
     
     max_allowed: MetaOapg.properties.max_allowed
-    name: MetaOapg.properties.name
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["max_allowed"]) -> MetaOapg.properties.max_allowed: ...
@@ -102,13 +95,10 @@ class Quota(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["name", "max_allowed", "in_use", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["max_allowed", "in_use", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["name"]) -> MetaOapg.properties.name: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["max_allowed"]) -> MetaOapg.properties.max_allowed: ...
@@ -119,7 +109,7 @@ class Quota(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["name", "max_allowed", "in_use", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["max_allowed", "in_use", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -127,7 +117,6 @@ class Quota(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         max_allowed: typing.Union[MetaOapg.properties.max_allowed, decimal.Decimal, int, float, ],
-        name: typing.Union[MetaOapg.properties.name, str, ],
         in_use: typing.Union[MetaOapg.properties.in_use, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -136,7 +125,6 @@ class Quota(
             cls,
             *_args,
             max_allowed=max_allowed,
-            name=name,
             in_use=in_use,
             _configuration=_configuration,
             **kwargs,
