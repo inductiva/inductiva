@@ -135,6 +135,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         estimated_cost = cost_per_machine * self.num_machines
         logging.info("> Estimated cloud cost of machine group: %.3f $/h",
                      estimated_cost)
+        super()._log_estimated_spot_vm_savings()
         return estimated_cost
 
 
@@ -283,3 +284,4 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         logging.info(
             "> Maximum estimated cloud cost of elastic machine group:"
             " %.3f $/h.", cost_per_machine * self.max_machines)
+        super()._log_estimated_spot_vm_savings()
