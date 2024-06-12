@@ -51,6 +51,7 @@ class TaskInfo:
 
         def __init__(self):
             self.total_seconds = Metric("Total seconds")
+            self.input_upload_seconds = Metric("Input upload")
             self.container_image_download_seconds = Metric(
                 "Container image download")
             self.queue_time_seconds = Metric("Time in queue")
@@ -127,14 +128,14 @@ class TaskInfo:
                 value_str = f"{value:.2f} s"
 
             if metric_key in ("total_seconds",
-                              "computation_seconds") and self._is_running:
+                              "computation_seconds") and self.is_running:
                 value_str += " (Task still running)"
 
             return value_str
 
         # Value is None
         if (metric_key == "computation_seconds" and
-                self._is_running is False and self._is_terminal is False):
+                self.is_running is False and self.is_terminal is False):
             return "N/A until task is started"
 
         if metric_key == "container_image_download_seconds":
