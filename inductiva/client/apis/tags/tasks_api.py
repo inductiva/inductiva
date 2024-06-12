@@ -14,6 +14,7 @@ from inductiva.client.paths.tasks_task_id_input_upload_url.get import GetInputUp
 from inductiva.client.paths.tasks_task_id_download_output_url.get import GetOutputDownloadUrl
 from inductiva.client.paths.tasks_task_id_output_list.get import GetOutputsList
 from inductiva.client.paths.tasks_task_id.get import GetTask
+from inductiva.client.paths.tasks_task_id_position_in_queue.get import GetTaskPositionInQueue
 from inductiva.client.paths.tasks_task_id_status.get import GetTaskStatus
 from inductiva.client.paths.tasks.get import GetUserTasks
 from inductiva.client.paths.tasks_task_id_kill.post import KillTask
@@ -31,6 +32,7 @@ class TasksApi(
         GetOutputDownloadUrl,
         GetOutputsList,
         GetTask,
+        GetTaskPositionInQueue,
         GetTaskStatus,
         GetUserTasks,
         KillTask,
