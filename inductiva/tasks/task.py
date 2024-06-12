@@ -133,14 +133,19 @@ class TaskInfo:
 
             return value_str
 
-        # Value is None
+        # If the value is not float, it is None
         if (metric_key == "computation_seconds" and self.is_running is False and
                 self.is_terminal is False):
             return "N/A until task is started"
 
+        # The metric "Container image download" contains "N/A" instead of
+        # "N/A until task is started" because if the container image is already
+        # in local cache the download is skipped, therefore the metric does not
+        # exist
         if metric_key == "container_image_download_seconds":
             return "N/A"
 
+        # None values will be replaced with a default missing value message
         return value
 
     @staticmethod
