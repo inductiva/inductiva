@@ -433,7 +433,7 @@ class Task:
         zip_path = output_dir.joinpath("output.zip")
 
         if filenames is self.STANDARD_OUTPUT_FILES:
-            logging.info("Downloading only stdout and stderr files...")
+            logging.info("Downloading stdout and stderr files")
         else:
             logging.info("Downloading simulation outputs to %s.", zip_path)
 
