@@ -134,8 +134,8 @@ class TaskInfo:
             return value_str
 
         # Value is None
-        if (metric_key == "computation_seconds" and
-                self.is_running is False and self.is_terminal is False):
+        if (metric_key == "computation_seconds" and self.is_running is False and
+                self.is_terminal is False):
             return "N/A until task is started"
 
         if metric_key == "container_image_download_seconds":
