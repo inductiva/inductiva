@@ -32,87 +32,37 @@ class TaskPositionInQueue(schemas.DictSchema):
     class MetaOapg:
         required = {
             "tasks_ahead",
-            "total_tasks",
-            "tasks_behind",
-            "position",
         }
 
         class properties:
-            total_tasks = schemas.IntSchema
             tasks_ahead = schemas.IntSchema
-            tasks_behind = schemas.IntSchema
-            position = schemas.IntSchema
             __annotations__ = {
-                "total_tasks": total_tasks,
                 "tasks_ahead": tasks_ahead,
-                "tasks_behind": tasks_behind,
-                "position": position,
             }
 
     tasks_ahead: MetaOapg.properties.tasks_ahead
-    total_tasks: MetaOapg.properties.total_tasks
-    tasks_behind: MetaOapg.properties.tasks_behind
-    position: MetaOapg.properties.position
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["total_tasks"]
-    ) -> MetaOapg.properties.total_tasks:
-        ...
 
     @typing.overload
     def __getitem__(
         self, name: typing_extensions.Literal["tasks_ahead"]
     ) -> MetaOapg.properties.tasks_ahead:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["tasks_behind"]
-    ) -> MetaOapg.properties.tasks_behind:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["position"]
-    ) -> MetaOapg.properties.position:
         ...
 
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "total_tasks",
-        "tasks_ahead",
-        "tasks_behind",
-        "position",
-    ], str]):
+    def __getitem__(self,
+                    name: typing.Union[typing_extensions.Literal[
+                        "tasks_ahead",
+                    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["total_tasks"]
-    ) -> MetaOapg.properties.total_tasks:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
         self, name: typing_extensions.Literal["tasks_ahead"]
     ) -> MetaOapg.properties.tasks_ahead:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["tasks_behind"]
-    ) -> MetaOapg.properties.tasks_behind:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["position"]
-    ) -> MetaOapg.properties.position:
         ...
 
     @typing.overload
@@ -121,12 +71,10 @@ class TaskPositionInQueue(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "total_tasks",
-        "tasks_ahead",
-        "tasks_behind",
-        "position",
-    ], str]):
+    def get_item_oapg(self,
+                      name: typing.Union[typing_extensions.Literal[
+                          "tasks_ahead",
+                      ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -140,21 +88,6 @@ class TaskPositionInQueue(schemas.DictSchema):
             decimal.Decimal,
             int,
         ],
-        total_tasks: typing.Union[
-            MetaOapg.properties.total_tasks,
-            decimal.Decimal,
-            int,
-        ],
-        tasks_behind: typing.Union[
-            MetaOapg.properties.tasks_behind,
-            decimal.Decimal,
-            int,
-        ],
-        position: typing.Union[
-            MetaOapg.properties.position,
-            decimal.Decimal,
-            int,
-        ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -165,9 +98,6 @@ class TaskPositionInQueue(schemas.DictSchema):
             cls,
             *_args,
             tasks_ahead=tasks_ahead,
-            total_tasks=total_tasks,
-            tasks_behind=tasks_behind,
-            position=position,
             _configuration=_configuration,
             **kwargs,
         )
