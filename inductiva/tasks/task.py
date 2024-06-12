@@ -55,6 +55,8 @@ class Task:
 
     KILL_VERBOSITY_LEVELS = [0, 1, 2]
 
+    STANDARD_OUTPUT_FILES = ["stdout.txt", "stderr.txt"]
+
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
         self.id = task_id
@@ -162,13 +164,17 @@ class Task:
 
         return info
 
-    def wait(self, polling_period: int = 5) -> models.TaskStatusCode:
+    def wait(self,
+             polling_period: int = 5,
+             download_std_on_completion: bool = True) -> models.TaskStatusCode:
         """Wait for the task to complete.
 
         This method issues requests to the API.
 
         Args:
             polling_period: How often to poll the API for the task status.
+            download_std_on_completion: Whether to download the standard
+                                    files after the task completes.
 
         Returns:
             The final status of the task.
@@ -191,9 +197,6 @@ class Task:
                     logging.info("Task %s completed successfully.", self.id)
                 elif status == models.TaskStatusCode.FAILED:
                     logging.info("Task %s failed.", self.id)
-                    logging.info("Download the 'stdout.txt' and 'stderr.txt' "
-                                 "files with `task.download_outputs()` for "
-                                 "more detail.")
                 elif status == models.TaskStatusCode.PENDINGKILL:
                     logging.info("Task %s is being killed.", self.id)
                 elif status == models.TaskStatusCode.KILLED:
@@ -217,6 +220,10 @@ class Task:
             prev_status = status
 
             if self.is_terminal():
+
+                if download_std_on_completion:
+                    self.download_outputs(filenames=self.STANDARD_OUTPUT_FILES)
+
                 return status
 
             time.sleep(polling_period)
@@ -370,6 +377,17 @@ class Task:
             files=output_files,
         )
 
+    def _contains_only_std_files(self, output_dir: types.Path) -> bool:
+        """Check if the output archive contains only stdout and stderr files.
+
+        Returns:
+            True if the output archive contains only stdout and stderr files,
+            False otherwise.
+        """
+        output_files = list(pathlib.Path(output_dir).iterdir())
+        return all(
+            file.name in self.STANDARD_OUTPUT_FILES for file in output_files)
+
     def download_outputs(
         self,
         filenames: Optional[List[str]] = None,
@@ -407,13 +425,18 @@ class Task:
         else:
             output_dir = files.resolve_output_path(output_dir)
 
-        if output_dir.exists():
+        if (output_dir.exists() and
+                not self._contains_only_std_files(output_dir)):
             warnings.warn("Path already exists, files may be overwritten.")
         output_dir.mkdir(parents=True, exist_ok=True)
 
         zip_path = output_dir.joinpath("output.zip")
 
-        logging.info("Downloading simulation outputs to %s.", zip_path)
+        if filenames is self.STANDARD_OUTPUT_FILES:
+            logging.info("Downloading only stdout and stderr files...")
+        else:
+            logging.info("Downloading simulation outputs to %s.", zip_path)
+
         data.download_file(response, zip_path)
 
         if uncompress:
