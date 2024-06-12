@@ -272,7 +272,7 @@ class BaseMachineGroup:
             logging.info("%s successfully terminated in %s.", self,
                          termination_time)
             logging.info(
-                "Termination of the machine group frees the following quotas:")
+                "Termination of the machine group freed the following quotas:")
             self._log_quota_usage("freed by resource")
 
         except inductiva.client.ApiException as api_exception:
