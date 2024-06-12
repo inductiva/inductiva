@@ -67,8 +67,9 @@ def run_simulation(
 
     position = task.get_position_in_queue()
     if position is not None:
-        logging.info("There are %s tasks ahead of this task in the queue.",
-                     position)
+        logging.info("Number of tasks ahead in the queue: %s", position)
+    else:
+        logging.info("Task %s does not have queue information.", task_id)
 
     if not format_utils.getenv_bool("DISABLE_TASK_METADATA_LOGGING", False):
         machine_group_id = None
