@@ -24,36 +24,14 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.quota import Quota
+from inductiva.client.model.user_quotas import UserQuotas
 
 from . import path
 
 _auth = [
     'APIKeyHeader',
 ]
-
-
-class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
-
-    class MetaOapg:
-
-        @staticmethod
-        def items() -> typing.Type['Quota']:
-            return Quota
-
-    def __new__(
-        cls,
-        _arg: typing.Union[typing.Tuple['Quota'], typing.List['Quota']],
-        _configuration: typing.Optional[schemas.Configuration] = None,
-    ) -> 'SchemaFor200ResponseBodyApplicationJson':
-        return super().__new__(
-            cls,
-            _arg,
-            _configuration=_configuration,
-        )
-
-    def __getitem__(self, i: int) -> 'Quota':
-        return super().__getitem__(i)
+SchemaFor200ResponseBodyApplicationJson = UserQuotas
 
 
 @dataclass
