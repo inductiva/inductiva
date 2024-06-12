@@ -137,6 +137,19 @@ class Task:
 
         return models.TaskStatusCode(resp.body["status"])
 
+    def get_position_in_queue(self) -> Optional[int]:
+        """Get the position of the task in the queue.
+
+        This method issues a request to the API.
+        """
+        try:
+            resp = self._api.get_task_position_in_queue(self._get_path_params())
+            tasks_ahead = resp.body.get("tasks_ahead", None)
+            return tasks_ahead
+        except exceptions.ApiException as exc:
+            if exc.status == 404:
+                return None
+
     def get_info(self) -> Dict[str, Any]:
         """Get a dictionary with information about the task.
 

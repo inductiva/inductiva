@@ -65,6 +65,11 @@ def run_simulation(
         raise RuntimeError(
             f"Expected result to be a string with task_id, got {type(task_id)}")
 
+    position = task.get_position_in_queue()
+    if position is not None:
+        logging.info("There are %s tasks ahead of this task in the queue.",
+                     position)
+
     if not format_utils.getenv_bool("DISABLE_TASK_METADATA_LOGGING", False):
         machine_group_id = None
         if computational_resources is not None:
