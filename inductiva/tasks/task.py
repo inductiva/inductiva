@@ -72,6 +72,7 @@ class TaskInfo:
 
     def __init__(self, **kwargs):
         """Initialize the instance with attributes from keyword arguments."""
+        self.is_submitted = None
         self.is_running = None
         self.is_terminal = None
         self.task_id = None
@@ -108,6 +109,11 @@ class TaskInfo:
                 if hasattr(self.executer, key):
                     setattr(self.executer, key, value)
 
+        # Update running info
+        self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
+        self.is_running = self.status == models.TaskStatusCode.STARTED
+        self.is_terminal = self.status in Task.TERMINAL_STATUSES
+
     def __update_metrics(
         self,
         metrics_obj: Metric,
@@ -135,16 +141,16 @@ class TaskInfo:
             return value_str
 
         # If the value is not float, it is None
-        if (metric_key == "computation_seconds" and self.is_running is False and
-                self.is_terminal is False):
+        if metric_key in (
+                "computation_seconds",
+                "container_image_download_seconds") and self.is_submitted:
             return "N/A until task is started"
 
-        # The metric "Container image download" contains "N/A" instead of
-        # "N/A until task is started" because if the container image is already
-        # in local cache the download is skipped, therefore the metric does not
-        # exist
-        if metric_key == "container_image_download_seconds":
-            return "N/A"
+        # If the container image is already present in the local cache the
+        # download is skipped, therefore the metric does not exist
+        if metric_key == "container_image_download_seconds" and (
+                self.is_running or self.is_terminal):
+            return "N/A (using cached image)"
 
         # None values will be replaced with a default missing value message
         return value
@@ -253,33 +259,34 @@ class Task:
         self._api = tasks_api.TasksApi(api.get_client())
         self._info = None
         self._status = None
+        self._summary = None
 
-    def is_running(self, cached: bool = False) -> bool:
+    def is_running(self) -> bool:
         """Validate if the task is running.
 
         This method issues a request to the API.
         """
-        return self.get_status(cached) == models.TaskStatusCode.STARTED
+        return self.get_status() == models.TaskStatusCode.STARTED
 
-    def is_failed(self, cached: bool = False) -> bool:
+    def is_failed(self) -> bool:
         """Validate if the task has failed.
 
         This method issues a request to the API.
         """
-        return self.get_status(cached) in self.FAILED_STATUSES
+        return self.get_status() in self.FAILED_STATUSES
 
-    def is_terminal(self, cached: bool = False) -> bool:
+    def is_terminal(self) -> bool:
         """Check if the task is in a terminal status.
 
         This method issues a request to the API.
         """
-        return self.get_status(cached) in self.TERMINAL_STATUSES
+        return self.get_status() in self.TERMINAL_STATUSES
 
     @classmethod
     def from_api_info(cls, info: Dict[str, Any]) -> "Task":
 
         task = cls(info["task_id"])
-        task._info = info
+        task._info = TaskInfo(**info)
         task._status = models.TaskStatusCode(info["status"])
 
         # TODO(luispcunha): construct correct output class from API info.
@@ -313,7 +320,7 @@ class Task:
             self.kill()
             raise e
 
-    def get_status(self, cached: bool = False) -> models.TaskStatusCode:
+    def get_status(self) -> models.TaskStatusCode:
         """Get status of the task.
 
         This method issues a request to the API.
@@ -322,7 +329,7 @@ class Task:
         # return it without refreshing it from the API.
         # Can't call is_terminal because it calls get status (infinite loop)
         if (self._status is not None and
-                self._status in self.TERMINAL_STATUSES) or cached is True:
+                self._status in self.TERMINAL_STATUSES):
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
@@ -336,6 +343,8 @@ class Task:
         It contains cached information about the task from the latest call to
         `get_info`, therefore it can be outdated.
         """
+        if self._info is None:
+            return self.get_info()
         return self._info
 
     def get_info(self) -> TaskInfo:
@@ -755,12 +764,10 @@ class Task:
 
         return machine_provider + "-" + machine_type
 
-    def print_summary(self, fhandle=sys.stdout):
+    def _get_summary(self) -> str:
+        """Get a formatted summary of the task. This method caches the
+        summary."""
         info: TaskInfo = self.get_info()
-
-        # Update running info
-        info.is_running = self.is_running(cached=True)
-        info.is_terminal = self.is_terminal(cached=True)
 
         # Update the duration metrics if the task is still running
         if info.is_running is True:
@@ -769,4 +776,15 @@ class Task:
             info.time_metrics.computation_seconds.value = \
                 self.get_computation_time(cached=True)
 
-        print(info, file=fhandle)
+        self._summary = str(info)
+        return self._summary
+
+    @property
+    def summary(self) -> str:
+        """It returns cached information about the task summary."""
+        if self._summary is None:
+            return self._get_summary()
+        return self._summary
+
+    def print_summary(self, fhandle=sys.stdout):
+        print(self._get_summary(), file=fhandle)
