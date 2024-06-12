@@ -11,7 +11,9 @@ import pathlib
 import zipfile
 import tempfile
 import shutil
+from typing import List
 from tqdm import tqdm
+import fsspec
 import urllib3
 
 from absl import logging
@@ -225,10 +227,46 @@ def zip_dir(dir_path, zip_name):
     return zip_path
 
 
+def download_partial_outputs(
+    download_url: str,
+    filenames: List[str],
+    output_dir: Path,
+) -> None:
+    """Download the partial outputs of a task.
+
+    Args:
+        download_url: URL from which to download the outputs.
+        filenames: List of filenames to download.
+        output_dir: Path where to store the downloaded files.
+
+    Return:
+        Returns True if the download was successful, False otherwise.
+    """
+    try:
+        remote_filesystem = fsspec.filesystem("http")
+
+        with remote_filesystem.open(download_url, "rb") as remote_file:
+            with zipfile.ZipFile(remote_file) as remote_zip_file:
+                for filename in filenames:
+                    try:
+                        remote_zip_file.extract(
+                            filename,
+                            path=output_dir,
+                        )
+                    except KeyError:
+                        logging.warning(
+                            "File %s not found in the output archive.",
+                            filename)
+
+    except Exception as e:  # pylint: disable=broad-except
+        logging.debug("Error downloading partial outputs: %s", e)
+        logging.error("Partial download failed.")
+
+
 def download_file(
     response: urllib3.response.HTTPResponse,
     output_path: pathlib.Path,
-    chunk_size=1000,
+    chunk_size: int = 1000,
 ) -> None:
     """Download a file from a urllib3 response object.
 
@@ -245,7 +283,10 @@ def download_file(
     # "x-content-length" is a custom header that is set by the API instead
     # of the standard "content-length" header, because the API needs to use
     # "transfer-encoding: chunked" to stream the response.
-    download_size = response.headers.get("x-content-length", 0)
+    # If the download is provided by a file server, the "content-length"
+    # header will be used.
+    download_size = response.headers.get(
+        "x-content-length") or response.headers.get("content-length", 0)
 
     with tqdm(
             total=int(download_size),
