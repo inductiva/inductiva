@@ -61,6 +61,7 @@ class Task:
         self._api = tasks_api.TasksApi(api.get_client())
         self._info = None
         self._status = None
+        self._tasks_ahead: Optional[int] = None
 
     def is_running(self) -> bool:
         """Validate if the task is running.
@@ -144,8 +145,8 @@ class Task:
         """
         try:
             resp = self._api.get_task_position_in_queue(self._get_path_params())
-            tasks_ahead = resp.body.get("tasks_ahead", None)
-            return tasks_ahead
+            self._tasks_ahead = resp.body.get("tasks_ahead", None)
+            return self._tasks_ahead
         except exceptions.ApiException as exc:
             if exc.status == 404:
                 return None
