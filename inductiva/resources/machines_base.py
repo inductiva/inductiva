@@ -268,15 +268,36 @@ class BaseMachineGroup:
         if self.provider == "ICE":
             return 0
 
-        if self._estimated_cost is not None:
-            return self._estimated_cost
-
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
             self.machine_type,
             spot,
         )
 
         return self._estimated_cost
+
+    def _log_estimated_spot_vm_savings(self):
+        spot_cost = self._get_estimated_cost(True)
+        non_spot_cost = self._get_estimated_cost(False)
+        cost_difference = non_spot_cost - spot_cost
+
+        is_spot = getattr(self, "spot", False)
+        estimated_cost = spot_cost if is_spot else non_spot_cost
+        percentage_savings = cost_difference / non_spot_cost * 100
+
+        if not is_spot:
+            logging.info(
+                ">> The same machine group with spot instances would cost "
+                "%.3f $/h less per machine (%.2f%% savings). Specify "
+                "`spot=True` in the constructor to use spot machines.",
+                cost_difference,
+                percentage_savings,
+            )
+        else:
+            logging.info(
+                ">> You are spending %.3f $/h less per machine "
+                "by using spot instances.", cost_difference)
+
+        return estimated_cost
 
     def status(self):
         """Returns the status of a machine group if it exists.
