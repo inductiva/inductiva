@@ -136,6 +136,10 @@ class Task:
 
         resp = self._api.get_task_status(self._get_path_params())
 
+        queue_position = resp.body.get("position_in_queue", None)
+        if queue_position is not None:
+            self._tasks_ahead = queue_position.get("tasks_ahead", None)
+
         return models.TaskStatusCode(resp.body["status"])
 
     def get_position_in_queue(self) -> Optional[int]:
@@ -188,7 +192,9 @@ class Task:
             The final status of the task.
         """
         prev_status = None
+        prev_tasks_ahead = None
         while True:
+            prev_tasks_ahead = self._tasks_ahead
             status = self.get_status()
             if status != prev_status:
                 if status == models.TaskStatusCode.PENDINGINPUT:
@@ -229,6 +235,11 @@ class Task:
                         "An internal error occurred with status %s "
                         "while performing the task.", status)
             prev_status = status
+
+            if (self._tasks_ahead is not None and
+                    self._tasks_ahead != prev_tasks_ahead):
+                logging.info("Number of tasks ahead of task %s: %s", self.id,
+                             self._tasks_ahead)
 
             if self.is_terminal():
                 return status
