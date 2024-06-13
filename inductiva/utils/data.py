@@ -227,6 +227,27 @@ def zip_dir(dir_path, zip_name):
     return zip_path
 
 
+def _extract_zip_file_to_output(
+    output_dir: Path,
+    remove_zip_file: zipfile.ZipFile,
+    filename: str,
+    zip_path: str,
+):
+    """Write a file from a ZIP archive to the output directory.
+
+    Args:
+        output_dir: Directory where to store the extracted file.
+        remove_zip_file: ZipFile object from which to extract the file.
+        filename: Name of the file to extract.
+        zip_path: Path of the file inside the ZIP archive.
+    """
+    with remove_zip_file.open(zip_path) as source:
+        target_path = output_dir / pathlib.Path(filename)
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(target_path, "wb") as target:
+            target.write(source.read())
+
+
 def download_partial_outputs(
     download_url: str,
     filenames: List[str],
@@ -248,15 +269,14 @@ def download_partial_outputs(
         with remote_filesystem.open(download_url, "rb") as remote_file:
             with zipfile.ZipFile(remote_file) as remote_zip_file:
                 for filename in filenames:
+                    zip_path = "artifacts/" + filename
                     try:
-                        remote_zip_file.extract(
-                            filename,
-                            path=output_dir,
-                        )
+                        _extract_zip_file_to_output(output_dir, remote_zip_file,
+                                                    filename, zip_path)
                     except KeyError:
                         logging.warning(
                             "File %s not found in the output archive.",
-                            filename)
+                            zip_path)
 
     except Exception as e:  # pylint: disable=broad-except
         logging.debug("Error downloading partial outputs: %s", e)
