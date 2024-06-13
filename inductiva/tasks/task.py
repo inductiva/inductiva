@@ -395,6 +395,7 @@ class Task:
         output_dir: Optional[types.Path] = None,
         uncompress: bool = True,
         rm_downloaded_zip_archive: bool = True,
+        rm_remote_files: bool = False,
     ) -> pathlib.Path:
         """Download output files of the task.
 
@@ -486,6 +487,9 @@ class Task:
             data.uncompress_task_outputs(zip_path, output_dir)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
+
+        if rm_remote_files:
+            self.remove_remote_files()
 
         return output_dir
 
