@@ -11,7 +11,6 @@ import datetime
 from ..localization import translator as __
 import urllib3
 import tabulate
-import sys
 from dataclasses import dataclass
 
 from inductiva import constants
