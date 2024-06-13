@@ -9,7 +9,7 @@ from inductiva.utils import format_utils
 
 
 def get_quotas(_, fout: TextIO = sys.stdout):
-    """ Lists the user's quotas. 
+    """ Lists the user's quotas.
 
     Lists all the user's quotas and the quotas left for the user to use.
     """
