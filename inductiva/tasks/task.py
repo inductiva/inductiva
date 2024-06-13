@@ -435,10 +435,10 @@ class Task:
             warnings.warn("Path already exists, files may be overwritten.")
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        download_message = "Downloading simulation outputs to %s"
+        download_message = "Downloading simulation outputs to %s..."
 
         if filenames is self.STANDARD_OUTPUT_FILES:
-            download_message = "Downloading stdout and stderr files to %s"
+            download_message = "Downloading stdout and stderr files to %s..."
 
         if filenames:
             if file_server_available:
@@ -482,7 +482,7 @@ class Task:
         data.download_file(response, zip_path)
 
         if uncompress:
-            logging.info("Uncompressing the outputs to %s", output_dir)
+            logging.info("Uncompressing the outputs to %s...", output_dir)
             data.uncompress_task_outputs(zip_path, output_dir)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
