@@ -569,3 +569,16 @@ class Task:
         machine_type = machine_info["vm_type"].split("/")[-1]
 
         return machine_provider + "-" + machine_type
+
+    def remove_remote_files(self) -> None:
+        """Removes all files associated with the task from remote storage."""
+        logging.info(
+            "Removing files from remote storage for task %s...",
+            self.id,
+        )
+        try:
+            self._api.delete_task_files(path_params=self._get_path_params())
+            logging.info("Remote task files removed successfully.")
+        except exceptions.ApiException as e:
+            logging.error("An error occurred while removing the files:")
+            logging.error(" > %s", json.loads(e.body)["detail"])
