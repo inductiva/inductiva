@@ -489,6 +489,8 @@ class Task:
 
             # If the user requested a partial download, the full download
             # will be skipped.
+
+            logging.info("Partial download completed to %s.", output_dir)
             return output_dir
 
         zip_path = output_dir.joinpath("output.zip")
@@ -523,6 +525,7 @@ class Task:
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
 
+        logging.info("Download completed to %s.", output_dir)
         return output_dir
 
     class _PathParams(TypedDict):
