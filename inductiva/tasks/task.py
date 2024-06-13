@@ -153,7 +153,10 @@ class TaskInfo:
             if self.is_terminal:
                 return "N/A (used cached image)"
 
-        if metric_key in ("output_compression_seconds", "output_upload_seconds",):
+        if metric_key in (
+                "output_compression_seconds",
+                "output_upload_seconds",
+        ):
             return self.MISSING_UNTIL_TASK_ENDED
 
         # None values will be replaced with a default missing value message
