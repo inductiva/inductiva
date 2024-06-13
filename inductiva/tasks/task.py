@@ -423,7 +423,8 @@ class Task:
         # returns a fallback URL and returns the following flag as False.
         # In this case, the output donwload will be provided by the Web API
         # itself.
-        file_server_available = api_response.body.get("file_server_available")
+        file_server_available = bool(
+            api_response.body.get("file_server_available"))
 
         if output_dir is None:
             output_dir = self.id
