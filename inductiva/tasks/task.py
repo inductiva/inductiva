@@ -407,7 +407,11 @@ class Task:
                 {inductiva.get_output_dir()}/{output_dir}/{task_id}.
             uncompress: Whether to uncompress the archive after downloading it.
             rm_downloaded_zip_archive: Whether to remove the archive after
-            uncompressing it. If uncompress is False, this argument is ignored.
+                uncompressing it. If uncompress is False, this argument is
+                ignored.
+            rm_remote_files: Whether to remove all task files from remote
+                storage after the download is complete. Only used if filenames
+                is None or empty (i.e., all output files are downloaded).
         """
         api_response = self._api.get_output_download_url(
             path_params=self._get_path_params(),)
