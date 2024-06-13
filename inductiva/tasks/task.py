@@ -184,12 +184,19 @@ class Task:
 
         return info
 
-    def _setup_queue_message(self) -> str:
+    def _setup_queue_message(self, is_tty: bool) -> str:
         if self._tasks_ahead == 0:
-            return f"The task {self.id} is about to start.\n"
-
-        return (f"Number of tasks ahead of task {self.id} in queue: "
-                f"{self._tasks_ahead}")
+            s = f"The task {self.id} is about to start."
+        else:
+            s = (f"Number of tasks ahead of task {self.id} in queue: "
+                 f"{self._tasks_ahead}")
+        if not is_tty:
+            # We do this because notebooks do not support some escape sequences
+            # like the one used to clear the line. So we need to move the cursor
+            # to the beginning of the line and overwrite the previous message.
+            max_line_length = 73
+            return s.ljust(max_line_length, " ")
+        return s
 
     def wait(self,
              polling_period: int = 5,
@@ -208,8 +215,8 @@ class Task:
         """
         prev_status = None
         prev_tasks_ahead = None
+        is_tty = sys.stdout.isatty()
         while True:
-            prev_tasks_ahead = self._tasks_ahead
             status = self.get_status()
             if status != prev_status:
                 if status == models.TaskStatusCode.PENDINGINPUT:
@@ -247,16 +254,16 @@ class Task:
                         "An internal error occurred with status %s "
                         "while performing the task.", status)
             prev_status = status
-
             if (self._tasks_ahead is not None and
                     self._tasks_ahead != prev_tasks_ahead):
-                sys.stdout.write("\033[2K\r")
-                sys.stdout.write(self._setup_queue_message())
+                sys.stdout.write("\r\033[2K")
+                sys.stdout.write(self._setup_queue_message(is_tty))
                 sys.stdout.flush()
+                prev_tasks_ahead = self._tasks_ahead
 
             if self.is_terminal():
                 sys.stdout.flush()
-                sys.stdout.write("\033[2K\r")
+                sys.stdout.write("\r\033[2K")
 
                 if download_std_on_completion:
                     self.download_outputs(filenames=self.STANDARD_OUTPUT_FILES)
