@@ -1,6 +1,7 @@
 """Manage running/completed tasks on the Inductiva API."""
 import pathlib
 import contextlib
+import sys
 import time
 import json
 from absl import logging
@@ -238,10 +239,14 @@ class Task:
 
             if (self._tasks_ahead is not None and
                     self._tasks_ahead != prev_tasks_ahead):
-                logging.info("Number of tasks ahead of task %s: %s", self.id,
-                             self._tasks_ahead)
+                sys.stdout.write("\033[2K\r")
+                sys.stdout.write(
+                    f"Number of tasks ahead of task {self.id} in queue: "
+                    f"{self._tasks_ahead}")
 
             if self.is_terminal():
+                sys.stdout.flush()
+                sys.stdout.write("\033[2K\r")
                 return status
 
             time.sleep(polling_period)
