@@ -174,8 +174,8 @@ class Task:
 
         Args:
             polling_period: How often to poll the API for the task status.
-            download_std_on_completion: Whether to download the standard
-                                    files after the task completes.
+            download_std_on_completion: Request immediate download of the
+                standard files (stdout and stderr) after the task completes.
 
         Returns:
             The final status of the task.
@@ -436,6 +436,9 @@ class Task:
         output_dir.mkdir(parents=True, exist_ok=True)
 
         download_message = "Downloading simulation outputs to %s"
+
+        if filenames is self.STANDARD_OUTPUT_FILES:
+            download_message = "Downloading stdout and stderr files to %s"
 
         if filenames:
             if file_server_available:
