@@ -1,6 +1,7 @@
 """Manage running/completed tasks on the Inductiva API."""
 import pathlib
 import contextlib
+import sys
 import time
 import json
 from absl import logging
@@ -64,6 +65,7 @@ class Task:
         self._api = tasks_api.TasksApi(api.get_client())
         self._info = None
         self._status = None
+        self._tasks_ahead: Optional[int] = None
 
     def is_running(self) -> bool:
         """Validate if the task is running.
@@ -138,7 +140,24 @@ class Task:
 
         resp = self._api.get_task_status(self._get_path_params())
 
+        queue_position = resp.body.get("position_in_queue", None)
+        if queue_position is not None:
+            self._tasks_ahead = queue_position.get("tasks_ahead", None)
+
         return models.TaskStatusCode(resp.body["status"])
+
+    def get_position_in_queue(self) -> Optional[int]:
+        """Get the position of the task in the queue.
+
+        This method issues a request to the API.
+        """
+        try:
+            resp = self._api.get_task_position_in_queue(self._get_path_params())
+            self._tasks_ahead = resp.body.get("tasks_ahead", None)
+            return self._tasks_ahead
+        except exceptions.ApiException as exc:
+            if exc.status == 404:
+                return None
 
     def get_info(self) -> Dict[str, Any]:
         """Get a dictionary with information about the task.
@@ -165,6 +184,13 @@ class Task:
 
         return info
 
+    def _setup_queue_message(self) -> str:
+        if self._tasks_ahead == 0:
+            return f"The task {self.id} is about to start.\n"
+
+        return (f"Number of tasks ahead of task {self.id} in queue: "
+                f"{self._tasks_ahead}")
+
     def wait(self,
              polling_period: int = 5,
              download_std_on_completion: bool = True) -> models.TaskStatusCode:
@@ -181,7 +207,9 @@ class Task:
             The final status of the task.
         """
         prev_status = None
+        prev_tasks_ahead = None
         while True:
+            prev_tasks_ahead = self._tasks_ahead
             status = self.get_status()
             if status != prev_status:
                 if status == models.TaskStatusCode.PENDINGINPUT:
@@ -220,7 +248,15 @@ class Task:
                         "while performing the task.", status)
             prev_status = status
 
+            if (self._tasks_ahead is not None and
+                    self._tasks_ahead != prev_tasks_ahead):
+                sys.stdout.write("\033[2K\r")
+                sys.stdout.write(self._setup_queue_message())
+                sys.stdout.flush()
+
             if self.is_terminal():
+                sys.stdout.flush()
+                sys.stdout.write("\033[2K\r")
 
                 if download_std_on_completion:
                     self.download_outputs(filenames=self.STANDARD_OUTPUT_FILES)
@@ -458,6 +494,8 @@ class Task:
 
             # If the user requested a partial download, the full download
             # will be skipped.
+
+            logging.info("Partial download completed to %s.", output_dir)
             return output_dir
 
         zip_path = output_dir.joinpath("output.zip")
