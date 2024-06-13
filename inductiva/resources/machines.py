@@ -95,7 +95,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
               max_idle_time: datetime.timedelta = None,
               auto_terminate_ts: datetime.datetime = None):
         """Start the MachineGroup.
-        
+
         Args:
             max_idle_time (timedelta): Max idle time, i.e. time without
                 executing any task, after which the resource will be terminated.
@@ -135,6 +135,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         estimated_cost = cost_per_machine * self.num_machines
         logging.info("> Estimated cloud cost of machine group: %.3f $/h",
                      estimated_cost)
+        super()._log_estimated_spot_vm_savings()
         return estimated_cost
 
 
@@ -169,7 +170,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         retrieving already registered machine groups that can be started, for
         example, when retrieving with the `machines_groups.get` method.
         Users should not set this argument.
-        
+
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
@@ -217,7 +218,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return machine_group
 
     def active_machines_to_str(self) -> str:
-        """Returns a string representation of the 
+        """Returns a string representation of the
         number of machines currently running.
         """
         return f"{self._active_machines}/{self.max_machines} (max)"
@@ -234,7 +235,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
               max_idle_time: datetime.timedelta = None,
               auto_terminate_ts: datetime.datetime = None):
         """Start the MachineGroup.
-        
+
         Args:
             max_idle_time (timedelta): Max idle time, i.e. time without
                 executing any task, after which the resource will be terminated.
@@ -283,3 +284,4 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         logging.info(
             "> Maximum estimated cloud cost of elastic machine group:"
             " %.3f $/h.", cost_per_machine * self.max_machines)
+        super()._log_estimated_spot_vm_savings()

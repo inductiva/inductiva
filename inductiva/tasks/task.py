@@ -9,6 +9,7 @@ from typing import Dict, Any, List, Optional, Tuple, Union
 from typing_extensions import TypedDict
 import datetime
 from ..localization import translator as __
+import urllib3
 
 from inductiva import constants
 from inductiva.client import exceptions, models
@@ -55,6 +56,8 @@ class Task:
                         }.union(RUNNING_STATUSES)
 
     KILL_VERBOSITY_LEVELS = [0, 1, 2]
+
+    STANDARD_OUTPUT_FILES = ["stdout.txt", "stderr.txt"]
 
     def __init__(self, task_id: str):
         """Initialize the instance from a task ID."""
@@ -188,13 +191,17 @@ class Task:
         return (f"Number of tasks ahead of task {self.id} in queue: "
                 f"{self._tasks_ahead}")
 
-    def wait(self, polling_period: int = 5) -> models.TaskStatusCode:
+    def wait(self,
+             polling_period: int = 5,
+             download_std_on_completion: bool = True) -> models.TaskStatusCode:
         """Wait for the task to complete.
 
         This method issues requests to the API.
 
         Args:
             polling_period: How often to poll the API for the task status.
+            download_std_on_completion: Request immediate download of the
+                standard files (stdout and stderr) after the task completes.
 
         Returns:
             The final status of the task.
@@ -219,9 +226,6 @@ class Task:
                     logging.info("Task %s completed successfully.", self.id)
                 elif status == models.TaskStatusCode.FAILED:
                     logging.info("Task %s failed.", self.id)
-                    logging.info("Download the 'stdout.txt' and 'stderr.txt' "
-                                 "files with `task.download_outputs()` for "
-                                 "more detail.")
                 elif status == models.TaskStatusCode.PENDINGKILL:
                     logging.info("Task %s is being killed.", self.id)
                 elif status == models.TaskStatusCode.KILLED:
@@ -253,6 +257,10 @@ class Task:
             if self.is_terminal():
                 sys.stdout.flush()
                 sys.stdout.write("\033[2K\r")
+
+                if download_std_on_completion:
+                    self.download_outputs(filenames=self.STANDARD_OUTPUT_FILES)
+
                 return status
 
             time.sleep(polling_period)
@@ -406,6 +414,17 @@ class Task:
             files=output_files,
         )
 
+    def _contains_only_std_files(self, output_dir: types.Path) -> bool:
+        """Check if the output archive contains only stdout and stderr files.
+
+        Returns:
+            True if the output archive contains only stdout and stderr files,
+            False otherwise.
+        """
+        output_files = list(pathlib.Path(output_dir).iterdir())
+        return all(
+            file.name in self.STANDARD_OUTPUT_FILES for file in output_files)
+
     def download_outputs(
         self,
         filenames: Optional[List[str]] = None,
@@ -425,38 +444,85 @@ class Task:
             rm_downloaded_zip_archive: Whether to remove the archive after
             uncompressing it. If uncompress is False, this argument is ignored.
         """
-        api_response = self._api.download_task_output(
-            path_params=self._get_path_params(),
-            query_params={
-                "filename": filenames or [],
-            },
-            stream=True,
-            skip_deserialization=True,
-        )
-        # use raw urllib3 response instead of the generated client response, to
-        # implement our own download logic (with progress bar, first checking
-        # the size of the file, etc.)
-        response = api_response.response
+        api_response = self._api.get_output_download_url(
+            path_params=self._get_path_params(),)
+
+        download_url = api_response.body.get("url")
+
+        if download_url is None:
+            raise RuntimeError(
+                "The API did not return a download URL for the task outputs.")
+
+        logging.debug("\nDownload URL: %s\n", download_url)
+
+        # If the file server (GCP, ICE, etc.) is not available, the Web API
+        # returns a fallback URL and returns the following flag as False.
+        # In this case, the output donwload will be provided by the Web API
+        # itself.
+        file_server_available = api_response.body.get("file_server_available")
 
         if output_dir is None:
-            output_dir = files.resolve_output_path(self.id)
-        else:
-            output_dir = files.resolve_output_path(output_dir)
+            output_dir = self.id
 
-        if output_dir.exists():
+        output_dir = files.resolve_output_path(output_dir)
+
+        if (output_dir.exists() and
+                not self._contains_only_std_files(output_dir)):
             warnings.warn("Path already exists, files may be overwritten.")
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        zip_path = output_dir.joinpath("output.zip")
+        download_message = "Downloading simulation outputs to %s..."
 
-        logging.info("Downloading simulation outputs to %s.", zip_path)
+        if filenames is self.STANDARD_OUTPUT_FILES:
+            download_message = "Downloading stdout and stderr files to %s..."
+
+        if filenames:
+            if file_server_available:
+                logging.info(download_message, output_dir)
+                data.download_partial_outputs(
+                    download_url,
+                    filenames,
+                    output_dir,
+                )
+            else:
+                logging.error("Partial download is not available.")
+
+            # If the user requested a partial download, the full download
+            # will be skipped.
+            return output_dir
+
+        zip_path = output_dir.joinpath("output.zip")
+        logging.info(download_message, zip_path)
+
+        if file_server_available:
+            pool_manager: urllib3.PoolManager = (
+                self._api.api_client.rest_client.pool_manager)
+            response = pool_manager.request(
+                "GET",
+                download_url,
+                preload_content=False,
+            )
+        # If the file server is not available, the download will be provided
+        # by the Web API. Therefore the standard method is used.
+        else:
+            api_response = self._api.download_task_output(
+                path_params=self._get_path_params(),
+                stream=True,
+                skip_deserialization=True,
+            )
+            response = api_response.response
+
+        # use raw urllib3 response instead of the generated client response, to
+        # implement our own download logic (with progress bar, first checking
+        # the size of the file, etc.)
         data.download_file(response, zip_path)
 
         if uncompress:
-            logging.info("Uncompressing the outputs to %s.", output_dir)
+            logging.info("Uncompressing the outputs to %s...", output_dir)
             data.uncompress_task_outputs(zip_path, output_dir)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
+
         return output_dir
 
     class _PathParams(TypedDict):
