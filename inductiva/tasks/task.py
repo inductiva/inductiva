@@ -431,6 +431,7 @@ class Task:
         output_dir: Optional[types.Path] = None,
         uncompress: bool = True,
         rm_downloaded_zip_archive: bool = True,
+        rm_remote_files: bool = False,
     ) -> pathlib.Path:
         """Download output files of the task.
 
@@ -442,7 +443,11 @@ class Task:
                 {inductiva.get_output_dir()}/{output_dir}/{task_id}.
             uncompress: Whether to uncompress the archive after downloading it.
             rm_downloaded_zip_archive: Whether to remove the archive after
-            uncompressing it. If uncompress is False, this argument is ignored.
+                uncompressing it. If uncompress is False, this argument is
+                ignored.
+            rm_remote_files: Whether to remove all task files from remote
+                storage after the download is complete. Only used if filenames
+                is None or empty (i.e., all output files are downloaded).
         """
         api_response = self._api.get_output_download_url(
             path_params=self._get_path_params(),)
@@ -525,7 +530,9 @@ class Task:
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
 
-        logging.info("Download completed to %s.", output_dir)
+        if rm_remote_files:
+            self.remove_remote_files()
+
         return output_dir
 
     class _PathParams(TypedDict):
@@ -608,3 +615,16 @@ class Task:
         machine_type = machine_info["vm_type"].split("/")[-1]
 
         return machine_provider + "-" + machine_type
+
+    def remove_remote_files(self) -> None:
+        """Removes all files associated with the task from remote storage."""
+        logging.info(
+            "Removing files from remote storage for task %s...",
+            self.id,
+        )
+        try:
+            self._api.delete_task_files(path_params=self._get_path_params())
+            logging.info("Remote task files removed successfully.")
+        except exceptions.ApiException as e:
+            logging.error("An error occurred while removing the files:")
+            logging.error(" > %s", json.loads(e.body)["detail"])
