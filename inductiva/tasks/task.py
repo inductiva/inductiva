@@ -181,6 +181,13 @@ class Task:
 
         return info
 
+    def _setup_queue_message(self) -> str:
+        if self._tasks_ahead == 0:
+            return f"The task {self.id} is about to start.\n"
+
+        return (f"Number of tasks ahead of task {self.id} in queue: "
+                f"{self._tasks_ahead}")
+
     def wait(self, polling_period: int = 5) -> models.TaskStatusCode:
         """Wait for the task to complete.
 
@@ -240,9 +247,8 @@ class Task:
             if (self._tasks_ahead is not None and
                     self._tasks_ahead != prev_tasks_ahead):
                 sys.stdout.write("\033[2K\r")
-                sys.stdout.write(
-                    f"Number of tasks ahead of task {self.id} in queue: "
-                    f"{self._tasks_ahead}")
+                sys.stdout.write(self._setup_queue_message())
+                sys.stdout.flush()
 
             if self.is_terminal():
                 sys.stdout.flush()
