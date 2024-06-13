@@ -1,6 +1,6 @@
 """Classes to manage different Google Cloud machine group types."""
 from absl import logging
-from typing import Union
+from typing import Optional, Union
 import datetime
 
 from inductiva.resources import machine_types, machines_base
@@ -28,6 +28,8 @@ class MachineGroup(machines_base.BaseMachineGroup):
         num_machines: int = 1,
         spot: bool = False,
         data_disk_gb: int = 10,
+        max_idle_time: Optional[datetime.timedelta] = None,
+        auto_terminate_ts: Optional[datetime.timedelta] = None,
         register: bool = True,
     ) -> None:
         """Create a MachineGroup object.
@@ -44,9 +46,14 @@ class MachineGroup(machines_base.BaseMachineGroup):
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
               information about machine types.
+            provider: The cloud provider of the machine group.
             num_machines: The number of virtual machines to launch.
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
+            max_idle_time: Time without executing any task, after which the
+              resource will be terminated.
+            auto_terminate_ts: Moment in which the resource will be
+              automatically terminated.
         """
         if num_machines < 1:
             raise ValueError(
@@ -55,10 +62,14 @@ class MachineGroup(machines_base.BaseMachineGroup):
         if provider == "ICE":
             _check_ice_args(spot)
 
-        super().__init__(machine_type=machine_type,
-                         data_disk_gb=data_disk_gb,
-                         provider=provider,
-                         register=register)
+        super().__init__(
+            machine_type=machine_type,
+            provider=provider,
+            data_disk_gb=data_disk_gb,
+            max_idle_time=max_idle_time,
+            auto_terminate_ts=auto_terminate_ts,
+            register=register,
+        )
 
         # Num_machines is the number of requested machines
         self.num_machines = num_machines
@@ -155,10 +166,13 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
     def __init__(
         self,
         machine_type: str,
+        provider: Union[str, machine_types.ProviderType] = "GCP",
         min_machines: int = 1,
         max_machines: int = 2,
         spot: bool = False,
         data_disk_gb: int = 10,
+        max_idle_time: Optional[datetime.timedelta] = None,
+        auto_terminate_ts: Optional[datetime.timedelta] = None,
         register: bool = True,
     ) -> None:
         """Create an ElasticMachineGroup object.
@@ -175,6 +189,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
             more information about machine types.
+            provider: The cloud provider of the machine group.
             min_machines: The minimum number of available machines. This is
               a qunatity of machines that will be started initially and the
               minimum available machines, even in cases of low CPU load.
@@ -182,6 +197,10 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
               can scale up to.
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
+            max_idle_time: Time without executing any task, after which the
+              resource will be terminated.
+            auto_terminate_ts: Moment in which the resource will be
+              automatically terminated.
         """
         if min_machines < 1:
             raise ValueError(
@@ -191,9 +210,15 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             raise ValueError("`max_machines` should be greater "
                              "than `min_machines`.")
 
-        super().__init__(machine_type=machine_type,
-                         data_disk_gb=data_disk_gb,
-                         register=register)
+        super().__init__(
+            machine_type=machine_type,
+            provider=provider,
+            data_disk_gb=data_disk_gb,
+            max_idle_time=max_idle_time,
+            auto_terminate_ts=auto_terminate_ts,
+            register=register,
+        )
+
         self.min_machines = min_machines
         self.max_machines = max_machines
         self._active_machines = min_machines

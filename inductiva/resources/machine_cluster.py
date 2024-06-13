@@ -1,8 +1,9 @@
 """Class to manage the MPI cluster in Google Cloud."""
 from absl import logging
+from typing import Optional, Union
 import datetime
 
-from inductiva.resources import machines_base
+from inductiva.resources import machine_types, machines_base
 
 
 class MPICluster(machines_base.BaseMachineGroup):
@@ -13,11 +14,16 @@ class MPICluster(machines_base.BaseMachineGroup):
     Note: The cluster will be available only after calling 'start' method.
     The billing will start only after the machines are started."""
 
-    def __init__(self,
-                 machine_type: str,
-                 num_machines: int = 2,
-                 data_disk_gb: int = 10,
-                 register: bool = True) -> None:
+    def __init__(
+        self,
+        machine_type: str,
+        provider: Union[str, machine_types.ProviderType] = "GCP",
+        num_machines: int = 2,
+        data_disk_gb: int = 10,
+        max_idle_time: Optional[datetime.timedelta] = None,
+        auto_terminate_ts: Optional[datetime.timedelta] = None,
+        register: bool = True,
+    ) -> None:
         """Create a MPICluster object.
 
         The register argument is used to indicate if the machine group should
@@ -32,16 +38,27 @@ class MPICluster(machines_base.BaseMachineGroup):
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
               information about machine types.
+            provider: The cloud provider of the machine group.
             num_machines: The number of virtual machines to launch.
             data_disk_gb: The size of the disk for user data (in GB).
+            max_idle_time: Time without executing any task, after which the
+              resource will be terminated.
+            auto_terminate_ts: Moment in which the resource will be
+              automatically terminated.
         """
         if num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
 
-        super().__init__(machine_type=machine_type,
-                         data_disk_gb=data_disk_gb,
-                         register=register)
+        super().__init__(
+            machine_type=machine_type,
+            provider=provider,
+            data_disk_gb=data_disk_gb,
+            max_idle_time=max_idle_time,
+            auto_terminate_ts=auto_terminate_ts,
+            register=register,
+        )
+
         # num_machines is the number of machines requested
         self.num_machines = num_machines
         #Number of active machines at the time of
