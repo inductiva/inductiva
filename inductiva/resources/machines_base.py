@@ -1,6 +1,8 @@
 """Base class for machine groups."""
+from collections import defaultdict
 import time
 import enum
+import json
 from typing import Union
 from abc import abstractmethod
 import datetime
@@ -9,7 +11,7 @@ import logging
 
 import inductiva
 import inductiva.client.models
-from inductiva import api
+from inductiva import api, users
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
 from inductiva.client import exceptions
@@ -99,7 +101,11 @@ class BaseMachineGroup:
         )
 
         try:
-            resp = self._api.register_vm_group(body=instance_group_config)
+            resp = self._api.register_vm_group(
+                body=instance_group_config,
+                skip_deserialization=True,
+            )
+            body = json.loads(resp.response.data)
         except (exceptions.ApiValueError, exceptions.ApiException) as e:
             logs.log_and_exit(
                 logging.getLogger(),
@@ -108,8 +114,9 @@ class BaseMachineGroup:
                 e,
                 exc_info=e)
 
-        self._id = resp.body["id"]
-        self._name = resp.body["name"]
+        self._id = body["id"]
+        self._name = body["name"]
+        self.quota_usage = body.get("quota_usage") or {}
         self.register = False
         self._log_machine_group_info()
 
@@ -136,6 +143,7 @@ class BaseMachineGroup:
         machine_group._name = resp["name"]
         machine_group.create_time = resp["creation_timestamp"]
         machine_group._started = bool(resp["started"])
+        machine_group.quota_usage = resp.get("quota_usage") or {}
 
         return machine_group
 
@@ -234,6 +242,9 @@ class BaseMachineGroup:
         self._started = True
         logging.info("%s successfully started in %s.", self, creation_time)
 
+        logging.info("The machine group is using the following quotas:")
+        self._log_quota_usage("used by resource")
+
     def terminate(self, **kwargs):
         """Terminates a machine group."""
         if not self._started or self.id is None or self.name is None:
@@ -254,6 +265,9 @@ class BaseMachineGroup:
             self._api.delete_vm_group(body=request_body)
             logging.info("Successfully requested termination of %s.",
                          repr(self))
+            logging.info(
+                "Termination of the machine group freed the following quotas:")
+            self._log_quota_usage("freed by resource")
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
@@ -268,15 +282,62 @@ class BaseMachineGroup:
         if self.provider == "ICE":
             return 0
 
-        if self._estimated_cost is not None:
-            return self._estimated_cost
-
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
             self.machine_type,
             spot,
         )
 
         return self._estimated_cost
+
+    def _log_quota_usage(self, resource_usage_header: str):
+        quotas = users.get_quotas()
+
+        table = defaultdict(list)
+        emph_formatter = format_utils.get_ansi_formatter()
+
+        header_formatters = [
+            lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
+        ]
+
+        for name, value in self.quota_usage.items():
+            in_use = quotas.get(name, {}).get("in_use", "n/a")
+            max_allowed = quotas.get(name, {}).get("max_allowed", "n/a")
+
+            table["name"].append(name)
+            table[resource_usage_header].append(value)
+            table["new total usage"].append(in_use)
+            table["max allowed"].append(max_allowed)
+
+        table_str = format_utils.get_tabular_str(
+            table,
+            header_formatters=header_formatters,
+        )
+
+        logging.info(table_str)
+
+    def _log_estimated_spot_vm_savings(self):
+        spot_cost = self._get_estimated_cost(True)
+        non_spot_cost = self._get_estimated_cost(False)
+        cost_difference = non_spot_cost - spot_cost
+
+        is_spot = getattr(self, "spot", False)
+        estimated_cost = spot_cost if is_spot else non_spot_cost
+        percentage_savings = cost_difference / non_spot_cost * 100
+
+        if not is_spot:
+            logging.info(
+                ">> The same machine group with spot instances would cost "
+                "%.3f $/h less per machine (%.2f%% savings). Specify "
+                "`spot=True` in the constructor to use spot machines.",
+                cost_difference,
+                percentage_savings,
+            )
+        else:
+            logging.info(
+                ">> You are spending %.3f $/h less per machine "
+                "by using spot instances.", cost_difference)
+
+        return estimated_cost
 
     def status(self):
         """Returns the status of a machine group if it exists.
