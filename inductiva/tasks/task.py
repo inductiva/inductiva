@@ -11,6 +11,7 @@ from ..localization import translator as __
 import urllib3
 import tabulate
 import sys
+from dataclasses import dataclass
 
 from inductiva import constants
 from inductiva.client import exceptions, models
@@ -22,16 +23,18 @@ from inductiva.tasks import output_info
 import warnings
 
 
+@dataclass
 class Metric:
     """Represents a single metric with a value and a label."""
-
-    def __init__(self, label: str, value=None):
-        self.label = label
-        self.value = value
+    label: str
+    value: Optional[float] = None
 
 
 class TaskInfo:
     """Represents the task information."""
+
+    MISSING_UNTIL_TASK_STARTED = "N/A until task is started"
+    MISSING_UNTIL_TASK_ENDED = "N/A until task ends"
 
     class Executer:
         """Encapsulates information about the executer."""
@@ -53,12 +56,12 @@ class TaskInfo:
         def __init__(self):
             self.total_seconds = Metric("Total seconds")
             self.input_upload_seconds = Metric("Input upload")
+            self.queue_time_seconds = Metric("Time in queue")
             self.container_image_download_seconds = Metric(
                 "Container image download")
-            self.queue_time_seconds = Metric("Time in queue")
-            self.computation_seconds = Metric("Computation")
             self.input_download_seconds = Metric("Input download")
             self.input_decompression_seconds = Metric("Input decompression")
+            self.computation_seconds = Metric("Computation")
             self.output_compression_seconds = Metric("Output compression")
             self.output_upload_seconds = Metric("Output upload")
 
@@ -140,17 +143,18 @@ class TaskInfo:
 
             return value_str
 
-        # If the value is not float, it is None
-        if metric_key in (
-                "computation_seconds",
-                "container_image_download_seconds") and self.is_submitted:
-            return "N/A until task is started"
+        if metric_key == "container_image_download_seconds":
+            # If the task is running, the local cache image may be used or the
+            # download could be in progress
+            if self.is_running:
+                return "N/A"
+            # If the container image is already present in the local cache the
+            # download is skipped, therefore the metric does not exist
+            if self.is_terminal:
+                return "N/A (used cached image)"
 
-        # If the container image is already present in the local cache the
-        # download is skipped, therefore the metric does not exist
-        if metric_key == "container_image_download_seconds" and (
-                self.is_running or self.is_terminal):
-            return "N/A (using cached image)"
+        if metric_key in ("output_compression_seconds", "output_upload_seconds",):
+            return self.MISSING_UNTIL_TASK_ENDED
 
         # None values will be replaced with a default missing value message
         return value
@@ -166,7 +170,6 @@ class TaskInfo:
 
     def __str__(self):
         table_format = "plain"
-        default_missing_val = "N/A until task ends"
 
         wall_time_data = [[
             "Wall time:",
@@ -190,7 +193,7 @@ class TaskInfo:
         ]
         time_metrics_table = tabulate.tabulate(
             time_metrics_data,
-            missingval=default_missing_val,
+            missingval=self.MISSING_UNTIL_TASK_STARTED,
             tablefmt=table_format,
         )
 
@@ -200,7 +203,7 @@ class TaskInfo:
         ] for metric_key, metric in self.data_metrics.__dict__.items()]
         data_metrics_table = tabulate.tabulate(
             data_metrics_data,
-            missingval=default_missing_val,
+            missingval=self.MISSING_UNTIL_TASK_ENDED,
             tablefmt=table_format,
         )
 
