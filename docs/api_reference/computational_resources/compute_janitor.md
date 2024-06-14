@@ -48,22 +48,3 @@ machine_group = inductiva.resources.MachineGroup(
 When omitted, these parameters will have the values mentioned above, a timestamp
 that is 36 hours in the future for `auto_terminate_ts` and 30 minutes for
 `max_idle_time`.
-
-Alternatively, it is possible to define or update one or both of these parameters
-when starting the machine group.
-
-```python
-import inductiva
-import datetime
-
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-16",
-    data_disk_gb=20,
-)
-
-machine_group.start(
-    max_idle_time=datetime.timedelta(minutes=2),
-    auto_terminate_ts=datetime.datetime.now(datetime.timezone.utc) +
-    datetime.timedelta(hours=20),
-)
-```
