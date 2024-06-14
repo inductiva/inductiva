@@ -17,7 +17,6 @@ class MPICluster(machines_base.BaseMachineGroup):
     def __init__(
         self,
         machine_type: str,
-        provider: Union[str, machine_types.ProviderType] = "GCP",
         num_machines: int = 2,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
@@ -38,7 +37,6 @@ class MPICluster(machines_base.BaseMachineGroup):
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
               information about machine types.
-            provider: The cloud provider of the machine group.
             num_machines: The number of virtual machines to launch.
             data_disk_gb: The size of the disk for user data (in GB).
             max_idle_time: Time without executing any task, after which the
@@ -52,7 +50,6 @@ class MPICluster(machines_base.BaseMachineGroup):
 
         super().__init__(
             machine_type=machine_type,
-            provider=provider,
             data_disk_gb=data_disk_gb,
             max_idle_time=max_idle_time,
             auto_terminate_ts=auto_terminate_ts,

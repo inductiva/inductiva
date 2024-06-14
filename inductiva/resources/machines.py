@@ -166,7 +166,6 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
     def __init__(
         self,
         machine_type: str,
-        provider: Union[str, machine_types.ProviderType] = "GCP",
         min_machines: int = 1,
         max_machines: int = 2,
         spot: bool = False,
@@ -189,7 +188,6 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
             more information about machine types.
-            provider: The cloud provider of the machine group.
             min_machines: The minimum number of available machines. This is
               a qunatity of machines that will be started initially and the
               minimum available machines, even in cases of low CPU load.
@@ -212,7 +210,6 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
 
         super().__init__(
             machine_type=machine_type,
-            provider=provider,
             data_disk_gb=data_disk_gb,
             max_idle_time=max_idle_time,
             auto_terminate_ts=auto_terminate_ts,
