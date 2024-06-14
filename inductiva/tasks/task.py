@@ -142,12 +142,19 @@ class TaskInfo:
 
             return value_str
 
-        if metric_key == "container_image_download_seconds":
-            # If the container image is already present in the local cache the
-            # download is skipped, therefore the metric does not exist
-            if self.is_terminal:
+        # Value is None if it is not float
+        if self.is_terminal:
+            if metric_key == "container_image_download_seconds":
+                # If the container image is already present in the local cache
+                # the download is skipped, therefore the metric does not exist
                 return "N/A (used cached image)"
-            # If the task has not ended, the local cache image may be used or
+            if metric_key == "computation_seconds":
+                # The task might have ended but the metric is not available in
+                # the database yet
+                return "N/A"
+
+        if metric_key == "container_image_download_seconds":
+            # If the task has not ended the local cache image may be used or
             # the download could be in progress
             return "N/A"
 
@@ -173,7 +180,7 @@ class TaskInfo:
         table_format = "plain"
 
         wall_time_data = [[
-            "Wall time:",
+            "Wall clock time:",
             self._format_time_metric(
                 "total_seconds",
                 self.time_metrics.total_seconds.value,
