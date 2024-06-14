@@ -1,15 +1,16 @@
 """CLI for logs."""
+import json
 import re
 import sys
 from typing import Tuple
 
 from .. import utils as cli_utils
-from ... import tasks
+from ... import tasks, ApiException
 
 
 def _get_task_id_from_mode(mode: str) -> Tuple[bool, str]:
     """Extract the task_id from the mode."""
-    match = re.match(r'^(submitted|started)(-(\d+))?$', mode)
+    match = re.match(r"^(submitted|started)(-(\d+))?$", mode)
     if not match:
         return False, f"Invalid mode format: {mode}"
 
@@ -43,6 +44,29 @@ def validate_mode_or_task_id(mode: str) -> Tuple[bool, str]:
     return True, mode
 
 
+def _check_if_task_is_running(task: tasks.Task) -> Tuple[bool, str]:
+    """Check if the task is running.
+    
+    This is done inside a try-except block to catch any exceptions that may
+    occur when trying to get the task status. Mainly if the task does not exist.
+    """
+
+    is_running = False
+    try:
+        is_running = task.is_running()
+    except ApiException as e:
+        return False, f"{ json.loads(e.body)['detail']}"
+
+    if not is_running:
+        return False, (
+            f"The current status of task {task.id} is '{task.get_status()}'\n"
+            "and the simulation logs are not available for streaming.\n"
+            "For more information about the task status, use:\n\n"
+            f"  inductiva tasks list --task-id {task.id}\n")
+
+    return True, task.id
+
+
 def stream_task_logs(args):
     """Consume the stream logs of a certain task."""
     mode = args.mode.lower()
@@ -54,13 +78,9 @@ def stream_task_logs(args):
     task_id = data
     task = tasks.Task(data)
 
-    if not task.is_running():
-        print(
-            f"The current status of task {task_id} is '{task.get_status()}'\n"
-            "and the simulation logs are not available for streaming.\n"
-            "For more information about the task status, use:\n\n"
-            f"  inductiva tasks list --task-id {task_id}\n",
-            file=sys.stderr)
+    result, data = _check_if_task_is_running(task)
+    if not result:
+        print(data, file=sys.stderr)
         return 1
 
     consumer = tasks.streams.TaskStreamConsumer(task_id)
@@ -74,7 +94,7 @@ def register(parser):
     parser.add_argument(
         "mode",
         type=str,
-        nargs='?',
+        nargs="?",
         default="SUBMITTED",
         help=(
             "Mode of log retrieval. "
