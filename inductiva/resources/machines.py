@@ -29,7 +29,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         spot: bool = False,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
-        auto_terminate_ts: Optional[datetime.timedelta] = None,
+        auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
     ) -> None:
         """Create a MachineGroup object.
@@ -161,7 +161,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         spot: bool = False,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
-        auto_terminate_ts: Optional[datetime.timedelta] = None,
+        auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
     ) -> None:
         """Create an ElasticMachineGroup object.

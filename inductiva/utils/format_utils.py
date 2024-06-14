@@ -109,6 +109,28 @@ def seconds_formatter(secs: float) -> str:
     return str(datetime.timedelta(seconds=round(secs)))
 
 
+def timedelta_formatter(td: datetime.timedelta) -> str:
+    """Convert timedelta to human readable string."""
+    parts = []
+    if td.days:
+        parts.append(f"{td.days} day{'s' if td.days > 1 else ''}")
+    hours, remainder = divmod(td.seconds, 3600)
+    if hours:
+        parts.append(f"{hours} hour{'s' if hours > 1 else ''}")
+    minutes, seconds = divmod(remainder, 60)
+    if minutes:
+        parts.append(f"{minutes} minute{'s' if minutes > 1 else ''}")
+    if seconds or not parts:
+        parts.append(f"{seconds} second{'s' if seconds != 1 else ''}")
+
+    # Join parts and replace the last comma with "and"
+    result = ', '.join(parts)
+    parts = result.rsplit(', ', 1)
+    result = ' and '.join(parts) if len(parts) == 2 else result
+
+    return result
+
+
 def apply_formatters(table_data: dict, formatters: dict):
     """Applies a dict of formatters to dict of data.
 

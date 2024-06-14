@@ -36,7 +36,7 @@ class BaseMachineGroup:
         provider: Union[machine_types.ProviderType, str] = "GCP",
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
-        auto_terminate_ts: Optional[datetime.timedelta] = None,
+        auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
     ) -> None:
         """Create a BaseMachineGroup object.
@@ -82,8 +82,8 @@ class BaseMachineGroup:
         #the request machine_groups.get()
         self._active_machines = 0
         self.num_machines = 0
-        self.max_idle_time = max_idle_time
-        self.auto_terminate_ts = auto_terminate_ts
+        self._max_idle_time = max_idle_time
+        self._auto_terminate_ts = auto_terminate_ts
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -98,30 +98,52 @@ class BaseMachineGroup:
     def name(self):
         return self._name
 
-    def _get_timedelta_seconds(
-        self,
-        value: Optional[datetime.timedelta] = None,
-    ) -> Optional[int]:
-        """Converts a timedelta object to seconds."""
-        return int(value.total_seconds()) if value is not None else None
+    @property
+    def max_idle_time(self):
+        return self._max_idle_time
 
+    @property
+    def auto_terminate_ts(self):
+        return self._auto_terminate_ts
+
+    @staticmethod
+    def _timedelta_to_seconds(
+            value: Optional[datetime.timedelta] = None) -> Optional[float]:
+        """Converts a timedelta object to seconds."""
+        return value.total_seconds() if value is not None else None
+
+    @staticmethod
+    def _seconds_to_timedelta(
+            value: Optional[float] = None) -> Optional[datetime.timedelta]:
+        """Converts seconds to a timedelta object."""
+        return datetime.timedelta(seconds=value) if value is not None else None
+
+    @staticmethod
     def _convert_auto_terminate_ts(
-        self,
-        auto_terminate_ts: Optional[datetime.datetime],
-    ) -> Optional[str]:
+            timestamp: Optional[datetime.datetime]) -> Optional[str]:
         """Converts a datetime object to ISO format. Additionally, it checks
         if the datetime is in the future and if it is timezone aware."""
-        if auto_terminate_ts is not None:
-            if (auto_terminate_ts.tzinfo is None or
-                    auto_terminate_ts.tzinfo.utcoffset(auto_terminate_ts)
-                    is None):
+        if timestamp is not None:
+            if (timestamp.tzinfo is None or
+                    timestamp.tzinfo.utcoffset(timestamp) is None):
                 raise ValueError("auto_terminate_ts must be timezone aware.")
 
-            now_ts = datetime.datetime.now(auto_terminate_ts.tzinfo)
-            if auto_terminate_ts < now_ts:
+            now_ts = datetime.datetime.now(timestamp.tzinfo)
+            if timestamp < now_ts:
                 raise ValueError("auto_terminate_ts must be in the future.")
-            return auto_terminate_ts.isoformat()
+            return timestamp.isoformat()
 
+        return None
+
+    @staticmethod
+    def _iso_to_datetime(iso_str: Optional[str]) -> Optional[datetime.datetime]:
+        """Converts an ISO format string back to a datetime object. It ensures
+        the datetime is timezone aware."""
+        if iso_str is not None:
+            dt = datetime.datetime.fromisoformat(iso_str)
+            if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
+                raise ValueError("The datetime string must be timezone aware.")
+            return dt
         return None
 
     def _register_machine_group(self, **kwargs):
@@ -134,7 +156,7 @@ class BaseMachineGroup:
             machine_type=self.machine_type,
             provider_id=self.provider,
             disk_size_gb=self.data_disk_gb,
-            max_idle_time=self._get_timedelta_seconds(self.max_idle_time),
+            max_idle_time=self._timedelta_to_seconds(self.max_idle_time),
             auto_terminate_ts=self._convert_auto_terminate_ts(
                 self.auto_terminate_ts),
             **kwargs,
@@ -158,7 +180,12 @@ class BaseMachineGroup:
         self._name = body["name"]
         self.quota_usage = body.get("quota_usage") or {}
         self.register = False
-        # TODO: update config lifecycle parameters if they are None
+        # Lifecycle configuration parameters are updated with default values
+        # from the API response if they were not provided by the user
+        self._max_idle_time = self._seconds_to_timedelta(
+            body.get("max_idle_time"))
+        self._auto_terminate_ts = self._iso_to_datetime(
+            body.get("auto_terminate_ts"))
         self._log_machine_group_info()
 
     @abstractmethod
@@ -185,6 +212,10 @@ class BaseMachineGroup:
         machine_group.create_time = resp["creation_timestamp"]
         machine_group._started = bool(resp["started"])
         machine_group.quota_usage = resp.get("quota_usage") or {}
+        machine_group._max_idle_time = cls._seconds_to_timedelta(
+            resp.get("max_idle_time"))
+        machine_group._auto_terminate_ts = cls._iso_to_datetime(
+            resp.get("auto_terminate_ts"))
 
         return machine_group
 
@@ -354,24 +385,12 @@ class BaseMachineGroup:
         logging.info("> Data disk size:    %s GB", self.data_disk_gb)
 
         # Log max idle time
-        value = self._get_timedelta_seconds(self.max_idle_time)
-        value_str = f"{value} seconds" if value else "N/A"
-        log_msg = f"> Maximum idle time: {value_str}"
-
-        if self.max_idle_time is None:
-            log_msg += ". The machine group will be terminated after "
-            log_msg += "30 minutes without executing tasks."
-
-        logging.info(log_msg)
+        value_str = format_utils.timedelta_formatter(
+            self.max_idle_time) if self.max_idle_time is not None else "N/A"
+        logging.info("> Maximum idle time: %s", value_str)
 
         # Log auto terminate timestamp
-        value = self.auto_terminate_ts.strftime(
-            "%Y:%m:%d %H:%M:%S"
+        value_str = self.auto_terminate_ts.strftime(
+            "%Y/%m/%d %H:%M:%S"
         ) if self.auto_terminate_ts is not None else "N/A"
-        log_msg = f"> Auto terminate timestamp: {value}"
-
-        if self.auto_terminate_ts is None:
-            log_msg += ". The machine group will be terminated in 36 hours "
-            log_msg += "at most."
-
-        logging.info(log_msg)
+        logging.info("> Auto terminate timestamp: %s", value_str)

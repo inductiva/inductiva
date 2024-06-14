@@ -20,7 +20,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         num_machines: int = 2,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
-        auto_terminate_ts: Optional[datetime.timedelta] = None,
+        auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
     ) -> None:
         """Create a MPICluster object.
