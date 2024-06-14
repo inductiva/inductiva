@@ -343,9 +343,9 @@ class BaseMachineGroup:
             in_use = quotas.get(name, {}).get("in_use", "n/a")
             max_allowed = quotas.get(name, {}).get("max_allowed", "n/a")
 
-            table["name"].append(name)
+            table[""].append(name)
             table[resource_usage_header].append(value)
-            table["new total usage"].append(in_use)
+            table["current usage"].append(in_use)
             table["max allowed"].append(max_allowed)
 
         table_str = format_utils.get_tabular_str(

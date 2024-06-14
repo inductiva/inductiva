@@ -10,6 +10,8 @@ from typing_extensions import TypedDict
 import datetime
 from ..localization import translator as __
 import urllib3
+import tabulate
+from dataclasses import dataclass
 
 from inductiva import constants
 from inductiva.client import exceptions, models
@@ -19,6 +21,212 @@ from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 
 import warnings
+
+
+@dataclass
+class Metric:
+    """Represents a single metric with a value and a label."""
+    label: str
+    value: Optional[float] = None
+
+
+class TaskInfo:
+    """Represents the task information."""
+
+    MISSING_UNTIL_TASK_STARTED = "N/A until task is started"
+    MISSING_UNTIL_TASK_ENDED = "N/A until task ends"
+
+    class Executer:
+        """Encapsulates information about the executer."""
+
+        def __init__(self):
+            self.uuid = None
+            self.cpu_count_logical = None
+            self.cpu_count_physical = None
+            self.memory = None
+            self.n_mpi_hosts = None
+            self.vm_type = None
+            self.vm_name = None
+            self.host_type = None
+            self.error_detail = None
+
+    class TimeMetrics:
+        """Encapsulates time-related metrics."""
+
+        def __init__(self):
+            self.total_seconds = Metric("Total seconds")
+            self.input_upload_seconds = Metric("Input upload")
+            self.queue_time_seconds = Metric("Time in queue")
+            self.container_image_download_seconds = Metric(
+                "Container image download")
+            self.input_download_seconds = Metric("Input download")
+            self.input_decompression_seconds = Metric("Input decompression")
+            self.computation_seconds = Metric("Computation")
+            self.output_compression_seconds = Metric("Output compression")
+            self.output_upload_seconds = Metric("Output upload")
+
+    class DataMetrics:
+        """Encapsulates data-related metrics."""
+
+        def __init__(self):
+            self.output_zipped_size_bytes = Metric("Size of zipped output")
+            self.output_size_bytes = Metric("Size of unzipped output")
+            self.output_total_files = Metric("Number of output files")
+
+    def __init__(self, **kwargs):
+        """Initialize the instance with attributes from keyword arguments."""
+        self.is_submitted = None
+        self.is_running = None
+        self.is_terminal = None
+        self.task_id = None
+        self.status = None
+        self.method_name = None
+        self.storage_path = None
+        self.container_image = None
+        self.project = None
+        self.create_time = None
+        self.input_submit_time = None
+        self.start_time = None
+        self.computation_start_time = None
+        self.computation_end_time = None
+        self.end_time = None
+        self.time_metrics = self.TimeMetrics()
+        self.data_metrics = self.DataMetrics()
+
+        # Set the general attributes
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+
+        # Set the metrics objects
+        metrics_info: dict = kwargs.get("metrics", {})
+        self.__update_metrics(self.time_metrics, metrics_info)
+        self.__update_metrics(self.data_metrics, metrics_info)
+
+        # Set the executer object
+        self.executer = None
+        executer_info: dict = kwargs.get("executer", {})
+        if executer_info:
+            self.executer = self.Executer()
+            for key, value in executer_info.items():
+                if hasattr(self.executer, key):
+                    setattr(self.executer, key, value)
+
+        # Update running info
+        self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
+        self.is_running = self.status == models.TaskStatusCode.STARTED
+        self.is_terminal = self.status in Task.TERMINAL_STATUSES
+
+    def __update_metrics(
+        self,
+        metrics_obj: Metric,
+        metrics_info: Dict[str, Any],
+    ) -> None:
+        for key, value in metrics_info.items():
+            if key in metrics_obj.__dict__:
+                getattr(metrics_obj, key).value = value
+
+    def _format_time_metric(
+        self,
+        metric_key: str,
+        value: Optional[float],
+    ) -> str:
+        if isinstance(value, float):
+            if value >= 60.0:
+                value_str = format_utils.seconds_formatter(value)
+            else:
+                value_str = f"{value:.2f} s"
+
+            if metric_key == "computation_seconds" and self.is_running:
+                value_str += " (Task still running)"
+
+            return value_str
+
+        # Value is None if it is not float
+        if self.is_terminal:
+            if metric_key == "container_image_download_seconds":
+                # If the container image is already present in the local cache
+                # the download is skipped, therefore the metric does not exist
+                return "N/A (used cached image)"
+            if metric_key == "computation_seconds":
+                # The task might have ended but the metric is not available in
+                # the database yet
+                return "N/A"
+
+        if metric_key == "container_image_download_seconds":
+            # If the task has not ended the local cache image may be used or
+            # the download could be in progress
+            return "N/A"
+
+        if metric_key in (
+                "output_compression_seconds",
+                "output_upload_seconds",
+        ):
+            return self.MISSING_UNTIL_TASK_ENDED
+
+        # None values will be replaced with a default missing value message
+        return value
+
+    @staticmethod
+    def _format_data_metric(
+        metric_key: str,
+        value: Optional[float],
+    ) -> Optional[str]:
+        if isinstance(value, int) and "bytes" in metric_key:
+            return format_utils.bytes_formatter(value)
+        return value
+
+    def __str__(self):
+        table_format = "plain"
+
+        wall_time_data = [[
+            "Wall clock time:",
+            self._format_time_metric(
+                "total_seconds",
+                self.time_metrics.total_seconds.value,
+            ),
+        ]]
+        wall_time_table = tabulate.tabulate(
+            wall_time_data,
+            tablefmt=table_format,
+        )
+
+        time_metrics_data = [
+            [
+                f"{metric.label}:",
+                self._format_time_metric(metric_key, metric.value),
+            ]
+            for metric_key, metric in self.time_metrics.__dict__.items()
+            if metric_key != "total_seconds"
+        ]
+        time_metrics_table = tabulate.tabulate(
+            time_metrics_data,
+            missingval=self.MISSING_UNTIL_TASK_STARTED,
+            tablefmt=table_format,
+        )
+
+        data_metrics_data = [[
+            f"{metric.label}:",
+            self._format_data_metric(metric_key, metric.value)
+        ] for metric_key, metric in self.data_metrics.__dict__.items()]
+        data_metrics_table = tabulate.tabulate(
+            data_metrics_data,
+            missingval=self.MISSING_UNTIL_TASK_ENDED,
+            tablefmt=table_format,
+        )
+
+        # Add a tab to the beginning of each line in the tables
+        time_metrics_table = "\n".join(
+            "\t" + line for line in time_metrics_table.splitlines())
+        data_metrics_table = "\n".join(
+            "\t" + line for line in data_metrics_table.splitlines())
+
+        table_str = f"\nTask status: {self.status}"
+        table_str += f"\n{wall_time_table}"
+        table_str += f"\nTime breakdown:\n{time_metrics_table}"
+        table_str += f"\nData:\n{data_metrics_table}\n"
+
+        return table_str
 
 
 class Task:
@@ -66,6 +274,7 @@ class Task:
         self._info = None
         self._status = None
         self._tasks_ahead: Optional[int] = None
+        self._summary = None
 
     def is_running(self) -> bool:
         """Validate if the task is running.
@@ -92,7 +301,7 @@ class Task:
     def from_api_info(cls, info: Dict[str, Any]) -> "Task":
 
         task = cls(info["task_id"])
-        task._info = info
+        task._info = TaskInfo(**info)
         task._status = models.TaskStatusCode(info["status"])
 
         # TODO(luispcunha): construct correct output class from API info.
@@ -159,7 +368,18 @@ class Task:
             if exc.status == 404:
                 return None
 
-    def get_info(self) -> Dict[str, Any]:
+    @property
+    def info(self) -> TaskInfo:
+        """Get information about the task.
+
+        It contains cached information about the task from the latest call to
+        `get_info`, therefore it can be outdated.
+        """
+        if self._info is None:
+            return self.get_info()
+        return self._info
+
+    def get_info(self) -> TaskInfo:
         """Get a dictionary with information about the task.
 
         Information includes e.g., "task_id", "status", timestamps
@@ -168,21 +388,16 @@ class Task:
 
         This method issues a request to the API.
         """
-        # If the task is in a terminal status and we already have the info,
-        # return it without refreshing it from the API.
-        if self._info is not None and self.is_terminal():
-            return self._info
-
         params = self._get_path_params()
         resp = self._api.get_task(params, skip_deserialization=True).response
 
         info = json.loads(resp.data.decode("utf-8"))
         status = models.TaskStatusCode(info["status"])
 
-        self._info = info
+        self._info = TaskInfo(**info)
         self._status = status
 
-        return info
+        return self._info
 
     def _setup_queue_message(self, is_tty: bool) -> str:
         if self._tasks_ahead == 0:
@@ -213,12 +428,18 @@ class Task:
         Returns:
             The final status of the task.
         """
+        # TODO: refactor method to make it cleaner
         prev_status = None
         prev_tasks_ahead = None
         is_tty = sys.stdout.isatty()
+        requires_newline = False
         while True:
             status = self.get_status()
             if status != prev_status:
+                if requires_newline:
+                    requires_newline = False
+                    sys.stdout.write("\n")
+
                 if status == models.TaskStatusCode.PENDINGINPUT:
                     pass
                 elif status == models.TaskStatusCode.SUBMITTED:
@@ -242,7 +463,7 @@ class Task:
                                  "was pending.")
                 elif status == models.TaskStatusCode.EXECUTERFAILED:
                     info = self.get_info()
-                    detail = info.get("executer", {}).get("error_detail", None)
+                    detail = info.executer.error_detail
                     logging.info("The remote process running the task failed:")
                     if detail:
                         logging.info(" > Message: %s", detail)
@@ -254,14 +475,16 @@ class Task:
                         "An internal error occurred with status %s "
                         "while performing the task.", status)
             prev_status = status
-            if (self._tasks_ahead is not None and
+            if (status == models.TaskStatusCode.SUBMITTED and
+                    self._tasks_ahead is not None and
                     self._tasks_ahead != prev_tasks_ahead):
+                requires_newline = True
                 sys.stdout.write("\r\033[2K")
                 sys.stdout.write(self._setup_queue_message(is_tty))
                 sys.stdout.flush()
                 prev_tasks_ahead = self._tasks_ahead
 
-            if self.is_terminal():
+            if status in self.TERMINAL_STATUSES:
                 sys.stdout.flush()
                 sys.stdout.write("\r\033[2K")
 
@@ -388,10 +611,10 @@ class Task:
 
     def get_simulator_name(self) -> str:
         # e.g. retrieve openfoam from fvm.openfoam.run_simulation
-        return self.get_info()["method_name"].split(".")[1]
+        return self.get_info().method_name.split(".")[1]
 
     def get_storage_path(self) -> str:
-        return self.get_info()["storage_path"]
+        return self.get_info().storage_path
 
     def get_output_info(self) -> output_info.TaskOutputInfo:
         """Get information about the output files of the task.
@@ -551,58 +774,72 @@ class Task:
         """Get dictionary with the URL path parameters for API calls."""
         return {"task_id": self.id}
 
-    def get_computation_time(self,
-                             fail_if_running: bool = True) -> Optional[float]:
+    def _get_duration(
+        self,
+        start_attribute: str,
+        metric_attribute: str,
+        cached: bool,
+    ) -> Optional[float]:
+        """Get the duration of a task phase.
+
+        Args:
+            start_attribute: The attribute containing the start time.
+            metric_attribute: The attribute containing the duration if the task
+                has ended.
+            cached: Whether to use the cached info or fetch the latest info.
+
+        Returns:
+            The duration in seconds, or None if the start or end time is None.
+        """
+        info: TaskInfo = self.get_info() if not cached else self.info
+
+        # The task has ended and the metric is available
+        metric = getattr(info.time_metrics, metric_attribute)
+        if metric.value is not None:
+            return metric.value
+
+        # The task has ended but the metric is not available
+        if self.is_terminal():
+            return None
+
+        # The task is still running
+        start_time = getattr(info, start_attribute)
+
+        # start time may be None if the task was killed before it started
+        if start_time is None:
+            return None
+
+        # Format the time to datetime type
+        start_time = datetime.datetime.fromisoformat(start_time)
+        end_time = datetime.datetime.now(datetime.timezone.utc)
+
+        return (end_time - start_time).total_seconds()
+
+    def get_computation_time(self, cached: bool = False) -> Optional[float]:
         """Get the time the computation of the task took to complete.
 
         Returns:
-            The time in hh mm ss or None if the task hasn't completed yet.
+            The task computation time if the task is already started or in a
+            terminal state, or None otherwise.
         """
-        info = self.get_info()
-        if fail_if_running and not self.is_terminal():
-            return None
-        # start_time may be None if the task was killed before it started
-        if info["computation_start_time"] is None:
-            return None
+        return self._get_duration(
+            start_attribute="computation_start_time",
+            metric_attribute="computation_seconds",
+            cached=cached,
+        )
 
-        # Format the time to datetime type
-        start_time = datetime.datetime.fromisoformat(
-            info["computation_start_time"])
-        end_time = info.get("computation_end_time")
-        if end_time is None:
-            end_time = datetime.datetime.now(datetime.timezone.utc)
-        else:
-            end_time = datetime.datetime.fromisoformat(
-                info["computation_end_time"])
-
-        total_seconds = (end_time - start_time).total_seconds()
-        return format_utils.seconds_formatter(total_seconds)
-
-    def get_total_time(self, fail_if_running: bool = True) -> Optional[float]:
+    def get_total_time(self, cached: bool = False) -> Optional[float]:
         """Get the total time the task workflow took to complete.
 
         Returns:
-            The time in hh mm ss or None if the task hasn't completed yet.
+            The task total duration since it was created, or None if the
+            metric is not available or can't be computed.
         """
-        info = self.get_info()
-        if fail_if_running and not self.is_terminal():
-            return None
-        # start_time may be None if the task was killed before it started
-        if info["input_submit_time"] is None:
-            return None
-
-        # Format the time to datetime type
-        submitted_time = datetime.datetime.fromisoformat(
-            info["input_submit_time"])
-        end_time = info.get("end_time")
-
-        if end_time is None:
-            end_time = datetime.datetime.now(datetime.timezone.utc)
-        else:
-            end_time = datetime.datetime.fromisoformat(info["end_time"])
-
-        total_seconds = (end_time - submitted_time).total_seconds()
-        return format_utils.seconds_formatter(total_seconds)
+        return self._get_duration(
+            start_attribute="create_time",
+            metric_attribute="total_seconds",
+            cached=cached,
+        )
 
     def get_machine_type(self) -> Optional[str]:
         """Get the machine type used in the task.
@@ -613,14 +850,12 @@ class Task:
         Returns:
             The machine type, or None if a machine hasn't been assigned yet.
         """
-        info = self.get_info()
-        if info["executer"] is None:
+        info: TaskInfo = self.get_info()
+        if info.executer is None:
             return None
 
-        machine_info = info["executer"]
-
-        machine_provider = machine_info["host_type"]
-        machine_type = machine_info["vm_type"].split("/")[-1]
+        machine_provider = info.executer.host_type
+        machine_type = info.executer.vm_type.split("/")[-1]
 
         return machine_provider + "-" + machine_type
 
@@ -636,3 +871,27 @@ class Task:
         except exceptions.ApiException as e:
             logging.error("An error occurred while removing the files:")
             logging.error(" > %s", json.loads(e.body)["detail"])
+
+    def _get_summary(self) -> str:
+        """Get a formatted summary of the task. This method caches the
+        summary."""
+        info: TaskInfo = self.get_info()
+
+        # Update the duration metrics if the task is still running, otherwise
+        # the cached values will be used
+        info.time_metrics.total_seconds.value = self.get_total_time(cached=True)
+        info.time_metrics.computation_seconds.value = \
+            self.get_computation_time(cached=True)
+
+        self._summary = str(info)
+        return self._summary
+
+    @property
+    def summary(self) -> str:
+        """It returns cached information about the task summary."""
+        if self._summary is None:
+            return self._get_summary()
+        return self._summary
+
+    def print_summary(self, fhandle=sys.stdout):
+        print(self._get_summary(), file=fhandle)
