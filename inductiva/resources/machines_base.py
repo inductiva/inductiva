@@ -116,7 +116,8 @@ class BaseMachineGroup:
     def _seconds_to_timedelta(
             value: Optional[float] = None) -> Optional[datetime.timedelta]:
         """Converts seconds to a timedelta object."""
-        return datetime.timedelta(seconds=value) if value is not None else None
+        return datetime.timedelta(
+            seconds=float(value)) if value is not None else None
 
     @staticmethod
     def _convert_auto_terminate_ts(
@@ -136,11 +137,12 @@ class BaseMachineGroup:
         return None
 
     @staticmethod
-    def _iso_to_datetime(iso_str: Optional[str]) -> Optional[datetime.datetime]:
+    def _iso_to_datetime(
+            timestamp: Optional[str]) -> Optional[datetime.datetime]:
         """Converts an ISO format string back to a datetime object. It ensures
         the datetime is timezone aware."""
-        if iso_str is not None:
-            dt = datetime.datetime.fromisoformat(iso_str)
+        if timestamp is not None:
+            dt = datetime.datetime.fromisoformat(str(timestamp))
             if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
                 raise ValueError("The datetime string must be timezone aware.")
             return dt
