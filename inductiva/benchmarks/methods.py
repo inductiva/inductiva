@@ -237,7 +237,7 @@ def run(name: str,
         print(__("benchmark-already-exists", name))
         response = input()
         if response in ("no", "n"):
-            print(__("operation_caceled"))
+            print(__("operation_canceled"))
             project.close()
             return
         elif response in ("yes", "ye", "y"):
