@@ -124,9 +124,9 @@ def timedelta_formatter(td: datetime.timedelta) -> str:
         parts.append(f"{seconds} second{'s' if seconds != 1 else ''}")
 
     # Join parts and replace the last comma with "and"
-    result = ', '.join(parts)
-    parts = result.rsplit(', ', 1)
-    result = ' and '.join(parts) if len(parts) == 2 else result
+    result = ", ".join(parts)
+    parts = result.rsplit(", ", 1)
+    result = " and ".join(parts) if len(parts) == 2 else result
 
     return result
 

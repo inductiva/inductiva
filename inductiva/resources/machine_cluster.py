@@ -1,9 +1,9 @@
 """Class to manage the MPI cluster in Google Cloud."""
 from absl import logging
-from typing import Optional, Union
+from typing import Optional
 import datetime
 
-from inductiva.resources import machine_types, machines_base
+from inductiva.resources import machines_base
 
 
 class MPICluster(machines_base.BaseMachineGroup):
