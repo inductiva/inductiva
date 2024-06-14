@@ -13,9 +13,16 @@ def _get_task_id_from_mode(mode: str) -> Tuple[bool, str]:
     if not match:
         return False, f"Invalid mode format: {mode}"
 
-    status = match.group(1).lower()
-    offset = int(match.group(3)) if match.group(3) else 0
-    offset += 1
+    status_match = match.group(1)
+    offset_match = match.group(3)
+
+    status = status_match
+    offset = (int(offset_match) + 1) if offset_match else 1
+
+    # If the status is submitted, send None to the API to get all the tasks.
+    # The endpoint already returns the tasks in the submitted order by default
+    if status == "submitted":
+        status = None
 
     task_list = tasks.get(last_n=offset, status=status)
 
