@@ -864,8 +864,7 @@ class Task:
 
         # Update the duration metrics if the task is still running, otherwise
         # the cached values will be used
-        info.time_metrics.total_seconds.value = self.get_total_time(
-            cached=True)
+        info.time_metrics.total_seconds.value = self.get_total_time(cached=True)
         info.time_metrics.computation_seconds.value = \
             self.get_computation_time(cached=True)
 
