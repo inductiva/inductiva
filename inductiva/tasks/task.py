@@ -269,7 +269,7 @@ class Task:
                 sys.stdout.flush()
                 prev_tasks_ahead = self._tasks_ahead
 
-            if self.is_terminal():
+            if status in self.TERMINAL_STATUSES:
                 sys.stdout.flush()
                 sys.stdout.write("\r\033[2K")
 
