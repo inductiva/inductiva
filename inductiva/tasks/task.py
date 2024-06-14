@@ -213,12 +213,18 @@ class Task:
         Returns:
             The final status of the task.
         """
+        # TODO: refactor method to make it cleaner
         prev_status = None
         prev_tasks_ahead = None
         is_tty = sys.stdout.isatty()
+        requires_newline = False
         while True:
             status = self.get_status()
             if status != prev_status:
+                if requires_newline:
+                    requires_newline = False
+                    sys.stdout.write("\n")
+
                 if status == models.TaskStatusCode.PENDINGINPUT:
                     pass
                 elif status == models.TaskStatusCode.SUBMITTED:
@@ -254,8 +260,10 @@ class Task:
                         "An internal error occurred with status %s "
                         "while performing the task.", status)
             prev_status = status
-            if (self._tasks_ahead is not None and
+            if (status == models.TaskStatusCode.SUBMITTED and
+                    self._tasks_ahead is not None and
                     self._tasks_ahead != prev_tasks_ahead):
+                requires_newline = True
                 sys.stdout.write("\r\033[2K")
                 sys.stdout.write(self._setup_queue_message(is_tty))
                 sys.stdout.flush()
