@@ -1,6 +1,7 @@
 """Manage running/completed tasks on the Inductiva API."""
 import pathlib
 import contextlib
+import sys
 import time
 import json
 from absl import logging
@@ -64,6 +65,7 @@ class Task:
         self._api = tasks_api.TasksApi(api.get_client())
         self._info = None
         self._status = None
+        self._tasks_ahead: Optional[int] = None
 
     def is_running(self) -> bool:
         """Validate if the task is running.
@@ -138,7 +140,24 @@ class Task:
 
         resp = self._api.get_task_status(self._get_path_params())
 
+        queue_position = resp.body.get("position_in_queue", None)
+        if queue_position is not None:
+            self._tasks_ahead = queue_position.get("tasks_ahead", None)
+
         return models.TaskStatusCode(resp.body["status"])
+
+    def get_position_in_queue(self) -> Optional[int]:
+        """Get the position of the task in the queue.
+
+        This method issues a request to the API.
+        """
+        try:
+            resp = self._api.get_task_position_in_queue(self._get_path_params())
+            self._tasks_ahead = resp.body.get("tasks_ahead", None)
+            return self._tasks_ahead
+        except exceptions.ApiException as exc:
+            if exc.status == 404:
+                return None
 
     def get_info(self) -> Dict[str, Any]:
         """Get a dictionary with information about the task.
@@ -165,6 +184,20 @@ class Task:
 
         return info
 
+    def _setup_queue_message(self, is_tty: bool) -> str:
+        if self._tasks_ahead == 0:
+            s = f"The task {self.id} is about to start."
+        else:
+            s = (f"Number of tasks ahead of task {self.id} in queue: "
+                 f"{self._tasks_ahead}")
+        if not is_tty:
+            # We do this because notebooks do not support some escape sequences
+            # like the one used to clear the line. So we need to move the cursor
+            # to the beginning of the line and overwrite the previous message.
+            max_line_length = 73
+            return s.ljust(max_line_length, " ")
+        return s
+
     def wait(self,
              polling_period: int = 5,
              download_std_on_completion: bool = True) -> models.TaskStatusCode:
@@ -180,10 +213,18 @@ class Task:
         Returns:
             The final status of the task.
         """
+        # TODO: refactor method to make it cleaner
         prev_status = None
+        prev_tasks_ahead = None
+        is_tty = sys.stdout.isatty()
+        requires_newline = False
         while True:
             status = self.get_status()
             if status != prev_status:
+                if requires_newline:
+                    requires_newline = False
+                    sys.stdout.write("\n")
+
                 if status == models.TaskStatusCode.PENDINGINPUT:
                     pass
                 elif status == models.TaskStatusCode.SUBMITTED:
@@ -219,8 +260,18 @@ class Task:
                         "An internal error occurred with status %s "
                         "while performing the task.", status)
             prev_status = status
+            if (status == models.TaskStatusCode.SUBMITTED and
+                    self._tasks_ahead is not None and
+                    self._tasks_ahead != prev_tasks_ahead):
+                requires_newline = True
+                sys.stdout.write("\r\033[2K")
+                sys.stdout.write(self._setup_queue_message(is_tty))
+                sys.stdout.flush()
+                prev_tasks_ahead = self._tasks_ahead
 
-            if self.is_terminal():
+            if status in self.TERMINAL_STATUSES:
+                sys.stdout.flush()
+                sys.stdout.write("\r\033[2K")
 
                 if download_std_on_completion:
                     self.download_outputs(filenames=self.STANDARD_OUTPUT_FILES)
@@ -395,6 +446,7 @@ class Task:
         output_dir: Optional[types.Path] = None,
         uncompress: bool = True,
         rm_downloaded_zip_archive: bool = True,
+        rm_remote_files: bool = False,
     ) -> pathlib.Path:
         """Download output files of the task.
 
@@ -406,7 +458,11 @@ class Task:
                 {inductiva.get_output_dir()}/{output_dir}/{task_id}.
             uncompress: Whether to uncompress the archive after downloading it.
             rm_downloaded_zip_archive: Whether to remove the archive after
-            uncompressing it. If uncompress is False, this argument is ignored.
+                uncompressing it. If uncompress is False, this argument is
+                ignored.
+            rm_remote_files: Whether to remove all task files from remote
+                storage after the download is complete. Only used if filenames
+                is None or empty (i.e., all output files are downloaded).
         """
         api_response = self._api.get_output_download_url(
             path_params=self._get_path_params(),)
@@ -423,7 +479,8 @@ class Task:
         # returns a fallback URL and returns the following flag as False.
         # In this case, the output donwload will be provided by the Web API
         # itself.
-        file_server_available = api_response.body.get("file_server_available")
+        file_server_available = bool(
+            api_response.body.get("file_server_available"))
 
         if output_dir is None:
             output_dir = self.id
@@ -453,6 +510,8 @@ class Task:
 
             # If the user requested a partial download, the full download
             # will be skipped.
+
+            logging.info("Partial download completed to %s.", output_dir)
             return output_dir
 
         zip_path = output_dir.joinpath("output.zip")
@@ -486,6 +545,9 @@ class Task:
             data.uncompress_task_outputs(zip_path, output_dir)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
+
+        if rm_remote_files:
+            self.remove_remote_files()
 
         return output_dir
 
@@ -569,3 +631,16 @@ class Task:
         machine_type = machine_info["vm_type"].split("/")[-1]
 
         return machine_provider + "-" + machine_type
+
+    def remove_remote_files(self) -> None:
+        """Removes all files associated with the task from remote storage."""
+        logging.info(
+            "Removing files from remote storage for task %s...",
+            self.id,
+        )
+        try:
+            self._api.delete_task_files(path_params=self._get_path_params())
+            logging.info("Remote task files removed successfully.")
+        except exceptions.ApiException as e:
+            logging.error("An error occurred while removing the files:")
+            logging.error(" > %s", json.loads(e.body)["detail"])
