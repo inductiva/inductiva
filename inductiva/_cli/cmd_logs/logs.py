@@ -7,15 +7,12 @@ from ... import tasks
 
 def stream_task_logs(args):
     """Consume the stream logs of a certain task."""
+    io_stream = None if (
+        args.stdout and args.stderr
+    ) else "std_out" if args.stdout else "std_err" if args.stderr else None
 
-    if args.stdout and args.stderr:
-        print(
-            "inductiva logs: error: "
-            "argument --stdout not allowed with argument --stderr",
-            file=sys.stderr)
-        return 1
+    no_color = True if io_stream else args.no_color
 
-    io_stream = "std_out" if args.stdout else "std_err" if args.stderr else None
     task_id = args.task_id
     task = tasks.Task(task_id)
 
@@ -28,7 +25,9 @@ def stream_task_logs(args):
             file=sys.stderr)
         return 1
 
-    consumer = tasks.streams.TaskStreamConsumer(task_id, io_stream=io_stream)
+    consumer = tasks.streams.TaskStreamConsumer(task_id,
+                                                io_stream=io_stream,
+                                                no_color=no_color)
     consumer.run_forever()
     return 0
 
@@ -45,6 +44,8 @@ def register(parser):
     parser.add_argument("--stderr",
                         action="store_true",
                         help="Consumes the standard error stream of the task.")
-
+    parser.add_argument("--no-color",
+                        action="store_true",
+                        help="Disables the colorized output.")
     # Register function to call when this subcommand is used
     parser.set_defaults(func=stream_task_logs)

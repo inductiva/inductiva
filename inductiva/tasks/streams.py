@@ -66,7 +66,8 @@ class TaskStreamConsumer:
                  task_id: str,
                  fout: IO = sys.stdout,
                  ferr: IO = sys.stderr,
-                 io_stream: str = None):
+                 io_stream: str = None,
+                 no_color: bool = False):
         """Initialize websocket connection to the task STDOUT & STDERR streams.
 
         Args:
@@ -105,6 +106,7 @@ class TaskStreamConsumer:
             raise ValueError(f"Invalid io_stream: {io_stream}\n"
                              f"Allowed values are: {self.ALLOWED_IO_STREAMS}.")
         self.io_stream = io_stream
+        self.no_color = no_color
 
     def __on_message(self, ws: websocket.WebSocketApp, message: str):
         data = json.loads(message)
@@ -120,7 +122,7 @@ class TaskStreamConsumer:
             # and the output is stderr
             is_stderr = (self.io_stream is None and
                          stream["stream"]["io_type"] == "IOTypes.STD_ERR")
-            self._write_message(msg, is_stderr=is_stderr)
+            self._write_message(msg, is_stderr=is_stderr and not self.no_color)
 
     def _get_message_formatter(self):
         """Get the message formatter based on the output file
