@@ -102,24 +102,14 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __str__(self):
         return f"Machine Group {self.name} with {self.machine_type} machines"
 
-    def start(self,
-              max_idle_time: datetime.timedelta = None,
-              auto_terminate_ts: datetime.datetime = None):
-        """Start the MachineGroup.
+    def start(self):
+        """Start the machine group."""
 
-        Args:
-            max_idle_time (timedelta): Max idle time, i.e. time without
-                executing any task, after which the resource will be terminated.
-            auto_terminate_ts (datetime): Moment in which the resource will
-                be automatically terminated, irrespectively of the existence of
-                tasks yet to be executed by the resource.
-        """
-
-        return super().start(num_vms=self.num_machines,
-                             is_elastic=self.__is_elastic,
-                             spot=self.spot,
-                             max_idle_time=max_idle_time,
-                             auto_terminate_ts=auto_terminate_ts)
+        return super().start(
+            num_vms=self.num_machines,
+            is_elastic=self.__is_elastic,
+            spot=self.spot,
+        )
 
     def terminate(self):
         """Terminates all machines of the machine group."""
@@ -253,26 +243,16 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return f"Elastic Machine Group {self.name} with {self.machine_type} " \
              "machines"
 
-    def start(self,
-              max_idle_time: datetime.timedelta = None,
-              auto_terminate_ts: datetime.datetime = None):
-        """Start the MachineGroup.
+    def start(self):
+        """Start the elastic machine group."""
 
-        Args:
-            max_idle_time (timedelta): Max idle time, i.e. time without
-                executing any task, after which the resource will be terminated.
-            auto_terminate_ts (datetime): Moment in which the resource will
-                be automatically terminated, irrespectively of the existence of
-                tasks yet to be executed by the resource.
-        """
-
-        return super().start(num_vms=self.min_machines,
-                             min_vms=self.min_machines,
-                             max_vms=self.max_machines,
-                             is_elastic=self.__is_elastic,
-                             spot=self.spot,
-                             max_idle_time=max_idle_time,
-                             auto_terminate_ts=auto_terminate_ts)
+        return super().start(
+            num_vms=self.min_machines,
+            min_vms=self.min_machines,
+            max_vms=self.max_machines,
+            is_elastic=self.__is_elastic,
+            spot=self.spot,
+        )
 
     def terminate(self):
         """Terminates all machines of the machine group."""

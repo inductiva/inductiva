@@ -158,6 +158,7 @@ class BaseMachineGroup:
         self._name = body["name"]
         self.quota_usage = body.get("quota_usage") or {}
         self.register = False
+        # TODO: update config lifecycle parameters if they are None
         self._log_machine_group_info()
 
     @abstractmethod
@@ -187,57 +188,10 @@ class BaseMachineGroup:
 
         return machine_group
 
-    def update_termination_timers(
-        self,
-        max_idle_time: datetime.timedelta = None,
-        auto_terminate_ts: datetime.datetime = None,
-    ):
-        """Update the termination timers of a machine group.
-
-        Args:
-            max_idle_time (timedelta): Max idle time, i.e. time without
-                executing any task, after which the resource will be terminated.
-            auto_terminate_ts (datetime): Moment in which the resource will
-                be automatically terminated, irrespectively of the existence of
-                tasks yet to be executed by the resource.
-        """
-
-        # Convert max_idle_time from minutes to seconds
-        max_idle_time = self._get_timedelta_seconds(max_idle_time)
-
-        # Convert auto_terminate_ts to ISO format
-        auto_terminate_ts = self._convert_auto_terminate_ts(auto_terminate_ts)
-
-        update_body = inductiva.client.models.VMGroupLifecycleConfig(
-            max_idle_time=max_idle_time, auto_terminate_ts=auto_terminate_ts)
-
-        if max_idle_time is not None or auto_terminate_ts is not None:
-            try:
-                self._api.update_vm_group_config(
-                    path_params={"mg_id": self._id}, body=update_body)
-            except inductiva.client.ApiException as e:
-                logs.log_and_exit(
-                    logging.getLogger(),
-                    logging.ERROR,
-                    "Setting termination timers for machine group failed " \
-                    "with exception %s.",
-                    e,
-                    exc_info=e)
-
-    def start(
-        self,
-        max_idle_time: datetime.timedelta = None,
-        auto_terminate_ts: datetime.datetime = None,
-        **kwargs,
-    ):
+    def start(self, **kwargs):
         """Starts a machine group.
 
         Args:
-            max_idle_time (timedelta): Max idle time, i.e. time without
-                executing any task, after which the resource will be terminated.
-            auto_terminate_ts (datetime): Moment in which the resource will
-                be automatically terminated, irrespectively of the existence of
-                tasks yet to be executed by the resource.
             **kwargs: Depending on the type of machine group to be started,
               this can be num_machines, max_machines, min_machines,
               and is_elastic."""
@@ -266,8 +220,6 @@ class BaseMachineGroup:
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
-
-        self.update_termination_timers(max_idle_time, auto_terminate_ts)
 
         try:
 
