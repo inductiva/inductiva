@@ -1,13 +1,13 @@
 """Methods to interact with the user info on the API."""
 import json
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from inductiva import api
 from inductiva.client import ApiClient
 from inductiva.client.apis.tags.users_api import UsersApi
 
 
-def _fetch_quotas_from_api() -> List[Dict]:
+def _fetch_quotas_from_api() -> Dict[str, Dict[str, Any]]:
     """Get information about a user's quotas.
     """
     api_config = api.get_api_config()
@@ -15,7 +15,7 @@ def _fetch_quotas_from_api() -> List[Dict]:
     with ApiClient(api_config) as client:
         api_instance = UsersApi(client)
 
-        resp = api_instance.get_user_quotas().response
+        resp = api_instance.get_user_quotas(skip_deserialization=True).response
         quotas = json.loads(resp.data.decode("utf-8"))
 
         return quotas
@@ -31,6 +31,4 @@ def get_quotas() -> Dict[str, Dict[str, Any]]:
     """
     quotas = _fetch_quotas_from_api()
 
-    quotas_dict = {quota.pop("name"): quota for quota in quotas}
-
-    return quotas_dict
+    return quotas
