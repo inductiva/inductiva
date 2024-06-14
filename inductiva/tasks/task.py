@@ -137,21 +137,19 @@ class TaskInfo:
             else:
                 value_str = f"{value:.2f} s"
 
-            if metric_key in ("total_seconds",
-                              "computation_seconds") and self.is_running:
+            if metric_key == "computation_seconds" and self.is_running:
                 value_str += " (Task still running)"
 
             return value_str
 
         if metric_key == "container_image_download_seconds":
-            # If the task is running, the local cache image may be used or the
-            # download could be in progress
-            if self.is_running:
-                return "N/A"
             # If the container image is already present in the local cache the
             # download is skipped, therefore the metric does not exist
             if self.is_terminal:
                 return "N/A (used cached image)"
+            # If the task has not ended, the local cache image may be used or
+            # the download could be in progress
+            return "N/A"
 
         if metric_key in (
                 "output_compression_seconds",
@@ -216,8 +214,9 @@ class TaskInfo:
         data_metrics_table = "\n".join(
             "\t" + line for line in data_metrics_table.splitlines())
 
-        table_str = f"\n{wall_time_table}"
-        table_str += f"\n\tTime breakdown:\n{time_metrics_table}"
+        table_str = f"\nTask status: {self.status}"
+        table_str += f"\n{wall_time_table}"
+        table_str += f"\nTime breakdown:\n{time_metrics_table}"
         table_str += f"\nData:\n{data_metrics_table}\n"
 
         return table_str
@@ -863,12 +862,12 @@ class Task:
         summary."""
         info: TaskInfo = self.get_info()
 
-        # Update the duration metrics if the task is still running
-        if info.is_running is True:
-            info.time_metrics.total_seconds.value = self.get_total_time(
-                cached=True)
-            info.time_metrics.computation_seconds.value = \
-                self.get_computation_time(cached=True)
+        # Update the duration metrics if the task is still running, otherwise
+        # the cached values will be used
+        info.time_metrics.total_seconds.value = self.get_total_time(
+            cached=True)
+        info.time_metrics.computation_seconds.value = \
+            self.get_computation_time(cached=True)
 
         self._summary = str(info)
         return self._summary
