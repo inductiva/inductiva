@@ -77,6 +77,8 @@ class TaskStreamConsumer:
             ferr (IO): I/O streams, such as returned by open(), for the STDERR.
             io_stream (str): The type of stream to consume. It can be either
                 "std_out" or "std_err". If not provided, both are consumed.
+            no_color (bool): Disable ANSI color codes in the output. Default is
+                False.
         """
         self.task_id = task_id
         self.fout = fout
@@ -183,6 +185,8 @@ class TaskStreamConsumer:
         s = f"\r{CLEAR_LINE}{status} ● {RESET}{EMPHASIS}{elapsed}{msg}{RESET}"
         return s
 
+    # _ to make it have the same number or arguments as the other formatters
+    # In this case, the second argument is not used.
     def _plain_status_formatter(self, msg, _):
         """Simple message formatter for plain status message output."""
         return msg + "\n"
