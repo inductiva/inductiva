@@ -106,8 +106,8 @@ class TaskStreamConsumer:
         self._last_message_timestamp = None
         self._keyboard_interrupt = False
         self._end_of_stream = False
-        # pylint: disable=consider-iterating-dictionary
-        if io_stream and io_stream not in self.ALLOWED_IO_STREAMS.keys():
+
+        if io_stream and io_stream not in self.ALLOWED_IO_STREAMS:
             raise ValueError(
                 f"Invalid io_stream: {io_stream}\n"
                 f"Allowed values are: {list(self.ALLOWED_IO_STREAMS.keys())}.")
