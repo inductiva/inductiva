@@ -270,7 +270,7 @@ class TaskStreamConsumer:
         self._conn_opened = True
         self._conn_count += 1
 
-        output = self.READABLE_IO_STREAMS.get(self.io_stream, "output")
+        output = self.ALLOWED_IO_STREAMS.get(self.io_stream, "output")
         msg = f"Streaming {output} from task {self.task_id}"
         if ANSI_ENABLED and not self._fout_isatty:
             msg += " (redirected)"
