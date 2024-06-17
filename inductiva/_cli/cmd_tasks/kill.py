@@ -35,7 +35,7 @@ def kill_task(args):
             } for task in get_all(status=status)])
 
     if not tasks:
-        print("There are not tasks to kill.")
+        print("There are no tasks to kill.")
         return 1
 
     ids = [task["task_id"] for task in tasks]
