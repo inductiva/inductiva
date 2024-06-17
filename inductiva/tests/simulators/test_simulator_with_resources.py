@@ -9,8 +9,8 @@ import inductiva
 inductiva.set_api_key("dummy")
 
 
-@pytest.fixture(name="list_available")
-def list_available():
+@pytest.fixture(name="list_available_fixture")
+def _list_available_fixture():
     # Fixture that returns a dictionary with the available images for
     # the TesterSimulator local class.
     ret = {
@@ -49,7 +49,7 @@ def new_machine_init(self, machine_type):
 
 @mock.patch("inductiva.resources.MPICluster")
 def test_validate_computational_resources__unsupported_resource__raise_error(
-        mpi_cluster_mock, list_available):
+        mpi_cluster_mock, list_available_fixture):  # pylint: disable=unused-argument
     """Check non-mpi simulator raises error with MPICluster.
 
     Goal: Verify that simulators without the mpi_enabled decorator raise an
@@ -91,7 +91,7 @@ def test_valid_resources__non_mpi_simulators(simulator):
 
 
 def test_validate_computational_resources__none_resource__no_wrapper(
-        list_available):
+        list_available_fixture):  # pylint: disable=unused-argument
     """Verify that simulators the mpi_enabled decorator run
     normally with a standard machine group."""
 
@@ -103,7 +103,7 @@ def test_validate_computational_resources__none_resource__no_wrapper(
 
 
 def test_validate_computational_resources__none_resource_mpi_wrapped(
-        list_available):
+        list_available_fixture):  # pylint: disable=unused-argument
     """Verify that simulators with the mpi_enabled decorator run
     normally with a standard machine group."""
 
@@ -115,7 +115,7 @@ def test_validate_computational_resources__none_resource_mpi_wrapped(
 
 
 def test_validate_computational_resources__valid_machine_group__no_error(
-        list_available):
+        list_available_fixture):  # pylint: disable=unused-argument
     """Check simulator run correctly with a standard machine group.
     
     Goal: Verify that simulators with and without the mpi_enabled decorator run
@@ -141,7 +141,7 @@ def test_validate_computational_resources__valid_machine_group__no_error(
 
 
 def test_validate_computational_resources__valid_mpi_cluster__no_error(
-        list_available):
+        list_available_fixture):  # pylint: disable=unused-argument
     """Check mpi-enabled simulator runs correctly with a standard MPICluster.
     
     Goal: Verify that an mpi simulator correctly validated the MPI Cluster"""
