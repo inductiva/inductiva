@@ -38,9 +38,6 @@ def validate_mode_or_task_id(mode: str) -> Tuple[bool, str]:
     if mode.startswith("submitted") or mode.startswith("started"):
         return _get_task_id_from_mode(mode)
 
-    if not cli_utils.is_task_id_valid(mode):
-        return False, f"Invalid task_id: {mode}"
-
     return True, mode
 
 

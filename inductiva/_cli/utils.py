@@ -10,7 +10,6 @@ from inductiva import logs
 
 BEGIN_TAG = "# >>> INDUCTIVA BEGIN:"
 END_TAG = "# >>> INDUCTIVA END:"
-ALPHABET = "0123456789abcdefghijkmnopqrstuvwxyz"
 
 
 def positive_float(value):
@@ -113,15 +112,3 @@ def setup_zsh_autocompletion():
         lines_as_string = "".join(lines_to_append)
         content += f"\n{lines_as_string}\n"
         f.write(content)
-
-
-def is_task_id_valid(task_id: str):
-    """Validates the task id.
-
-    Args:
-        task_id: The task id to validate.
-    
-    Returns:
-        True if the task_id is valid, False otherwise.
-    """
-    return all(c in ALPHABET for c in task_id) and len(task_id) == 25
