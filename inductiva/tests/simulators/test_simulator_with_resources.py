@@ -9,6 +9,23 @@ import inductiva
 inductiva.set_api_key("dummy")
 
 
+@pytest.fixture(name="list_available")
+def list_available():
+    # Fixture that returns a dictionary with the available images for
+    # the TesterSimulator local class.
+    ret = {
+        "production": {
+            "testersimulator": ["1.0.0"]
+        },
+        "development": {
+            "testersimulator": ["1.0.0"]
+        }
+    }
+    fn = "inductiva.simulators.simulator.list_available_images"
+    with mock.patch(fn, return_value=ret) as mocker:
+        yield mocker
+
+
 class TesterSimulator(simulators.Simulator):
     """Dummy simulator for testing purposes."""
 
@@ -32,14 +49,14 @@ def new_machine_init(self, machine_type):
 
 @mock.patch("inductiva.resources.MPICluster")
 def test_validate_computational_resources__unsupported_resource__raise_error(
-        mpi_cluster_mock):
+        mpi_cluster_mock, list_available):
     """Check non-mpi simulator raises error with MPICluster.
 
     Goal: Verify that simulators without the mpi_enabled decorator raise an
     error stating that MPICluster is not available for this simulator."""
     mock_instance = mpi_cluster_mock()
 
-    simulator = simulators.Simulator()
+    simulator = TesterSimulator()
 
     with pytest.raises(ValueError) as excinfo:
         simulator.validate_computational_resources(mock_instance)
@@ -73,23 +90,32 @@ def test_valid_resources__non_mpi_simulators(simulator):
     assert resources.MPICluster not in simulator.get_supported_resources()
 
 
-@mark.parametrize(
-    "simulator",
-    [TesterSimulator(),
-     simulators.simulator.mpi_enabled(TesterSimulator)()])
-def test_validate_computational_resources__nono_resource(simulator):
-    """Check validate computational resources for None argument.
-
-    Goal: Verify that simulators with or without the mpi_enabled decorator run
+def test_validate_computational_resources__none_resource__no_wrapper(
+        list_available):
+    """Verify that simulators the mpi_enabled decorator run
     normally with a standard machine group."""
 
     try:
+        simulator = TesterSimulator()
         simulator.validate_computational_resources(None)
     except ValueError:
         assert False, "'validate_computational_resources' raised an exception."
 
 
-def test_validate_computational_resources__valid_machine_group__no_error():
+def test_validate_computational_resources__none_resource_mpi_wrapped(
+        list_available):
+    """Verify that simulators with the mpi_enabled decorator run
+    normally with a standard machine group."""
+
+    try:
+        simulator = simulators.simulator.mpi_enabled(TesterSimulator)()
+        simulator.validate_computational_resources(None)
+    except ValueError:
+        assert False, "'validate_computational_resources' raised an exception."
+
+
+def test_validate_computational_resources__valid_machine_group__no_error(
+        list_available):
     """Check simulator run correctly with a standard machine group.
     
     Goal: Verify that simulators with and without the mpi_enabled decorator run
@@ -114,7 +140,8 @@ def test_validate_computational_resources__valid_machine_group__no_error():
             assert False, error_message
 
 
-def test_validate_computational_resources__valid_mpi_cluster__no_error():
+def test_validate_computational_resources__valid_mpi_cluster__no_error(
+        list_available):
     """Check mpi-enabled simulator runs correctly with a standard MPICluster.
     
     Goal: Verify that an mpi simulator correctly validated the MPI Cluster"""
