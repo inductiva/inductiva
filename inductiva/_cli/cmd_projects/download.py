@@ -8,15 +8,15 @@ import inductiva
 def download_projects(args):
     """Download the project tasks files.
 
-    This function downloads the files of the tasks of a project. The project
-    name is specified with the --project-name flag. The files to download can
-    be specified with the --files flag. If no files are specified, all files are
-    downloaded. The standard output and error files can be downloaded with the
-    --std flag. The files are saved in the default directory (inductiva-output)
-    if no output directory is specified with the --output-dir flag.
-
+    This function downloads the files of the tasks of a project.
+    Args:
+        args.project_name (str): Name of the project to download.
+        args.output_dir (str): Directory to save the downloaded files 
+            default(inductiva-output).
+        args.files (list): List of files to download.
+        args.std (bool): Flag to download the standard output and error files.
     The downloads are done in parallel using a ThreadPoolExecutor with a maximum
-    of 100 workers.
+    of 10 workers.
     """
 
     project_name = args.project_name
@@ -35,7 +35,7 @@ def download_projects(args):
 
     futures = []
 
-    with cf.ThreadPoolExecutor(max_workers=100) as executor:
+    with cf.ThreadPoolExecutor(max_workers=10) as executor:
         for task in project_tasks:
             future = executor.submit(task.download_outputs, filenames=files)
             futures.append(future)
@@ -45,11 +45,12 @@ def download_projects(args):
 
 
 def register(parser):
-    """Register the projetcs list command."""
+    """Register the projects download command."""
 
-    subparser = parser.add_parser("download",
-                                  help="List the user's projetcs.",
-                                  formatter_class=argparse.RawTextHelpFormatter)
+    subparser = parser.add_parser(
+        "download",
+        help="Downloads the tasks files of a project.",
+        formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.add_argument("project_name",
                            type=str,

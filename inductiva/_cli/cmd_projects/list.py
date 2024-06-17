@@ -1,4 +1,4 @@
-"""List the user projetcs information via CLI."""
+"""List the user projects information via CLI."""
 from collections import defaultdict
 from typing import TextIO
 import argparse
@@ -10,14 +10,14 @@ from inductiva.utils import format_utils
 
 
 def get_projects(_, fout: TextIO = sys.stdout):
-    """ Lists the user's projetcs. 
+    """ Lists the user's projects. 
 
-    Lists all the user's projetcs.
+    Lists all the user's projects.
     """
 
-    projetcs = inductiva.projects.project.get_projects()
+    projects = inductiva.projects.project.get_projects()
     table = defaultdict(list)
-    for p in projetcs:
+    for p in projects:
         table["name"].append(p.name)
         table["nr_tasks"].append(p.num_tasks)
 
@@ -36,11 +36,11 @@ def get_projects(_, fout: TextIO = sys.stdout):
 
 
 def register(parser):
-    """Register the projetcs list command."""
+    """Register the projects list command."""
 
     subparser = parser.add_parser("list",
                                   aliases=["ls"],
-                                  help="List the user's projetcs.",
+                                  help="List the user's projects.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = ("The `inductiva projects list` command provides "
