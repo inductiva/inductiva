@@ -14,10 +14,9 @@ def _get_task_id_from_mode(mode: str) -> Tuple[bool, str]:
     if not match:
         return False, f"Invalid mode format: {mode}"
 
-    status_match = match.group(1)
     offset_match = match.group(3)
 
-    status = status_match
+    status = match.group(1)
     offset = (int(offset_match) + 1) if offset_match else 1
 
     # If the status is submitted, send None to the API to get all the tasks.
@@ -93,11 +92,13 @@ def register(parser):
         type=str,
         nargs="?",
         default="SUBMITTED",
-        help=(
-            "Mode of log retrieval. "
-            "Use 'SUBMITTED[-n]' for the last submitted tasks, "
-            "'STARTED[-n]' for the last started tasks, "
-            "or a specific 'task_id' to retrieve logs for a particular task."))
+        help=
+        ("Mode of log retrieval. "
+         "Use 'SUBMITTED' for the last submitted task, "
+         "'SUBMITTED-1' for the second last submitted task, and so on. "
+         "'STARTED' and 'STARTED-n' follow the same pattern for started tasks. "
+         "Or, use a specific 'task_id' to retrieve logs for a particular task."
+        ))
 
     # Register function to call when this subcommand is used
     parser.set_defaults(func=stream_task_logs)
