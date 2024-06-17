@@ -30,32 +30,32 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
     table = defaultdict(list, {key: [] for key in column_names})
 
     for task in list_of_tasks:
-        info: TaskInfo = task.get_info()
-        status = task.get_status()
-        computation_end_time = info.computation_end_time
-        execution_time = task.get_computation_time()
+        execution_time = task.get_computation_time(cached=True)
 
         if execution_time is not None:
             execution_time = format_utils.seconds_formatter(execution_time)
-            if computation_end_time is None:
-                if status in ["started", "submitted"]:
+            if task.info.computation_end_time is None:
+                if task.info.status in ["started", "submitted"]:
                     execution_time = f"*{execution_time}"
                 else:
                     execution_time = "n/a"
 
-        if info.executer is None:
+        if task.info.executer is None:
             resource_type = None
         else:
-            resource_type = f"{info.executer.host_type} {info.executer.vm_type}"
-            if info.executer.n_mpi_hosts > 1:
-                resource_type += f" x{info.executer.n_mpi_hosts}"
+            resource_type = (f"{task.info.executer.host_type} "
+                             f"{task.info.executer.vm_type}")
+            if task.info.executer.n_mpi_hosts > 1:
+                resource_type += f" x{task.info.executer.n_mpi_hosts}"
+
         table["ID"].append(task.id)
         table["Simulator"].append(task.get_simulator_name())
-        table["Status"].append(status)
-        table["Submitted"].append(info.input_submit_time)
-        table["Started"].append(info.start_time)
+        table["Status"].append(task.info.status)
+        table["Submitted"].append(task.info.input_submit_time)
+        table["Started"].append(task.info.start_time)
         table["Computation Time"].append(execution_time)
         table["Resource Type"].append(resource_type)
+
     return table
 
 
