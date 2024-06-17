@@ -60,7 +60,10 @@ class TaskStreamConsumer:
     PING_TIMEOUT_SEC = 5.
     TICK_INTERVAL_SEC = 1.
     END_OF_STREAM = "<<end_of_stream>>"
-    ALLOWED_IO_STREAMS = ["std_out", "std_err"]
+    ALLOWED_IO_STREAMS = {
+        "std_err": "standard error",
+        "std_out": "standard output"
+    }
 
     def __init__(self,
                  task_id: str,
@@ -104,9 +107,10 @@ class TaskStreamConsumer:
         self._keyboard_interrupt = False
         self._end_of_stream = False
 
-        if io_stream and io_stream not in self.ALLOWED_IO_STREAMS:
-            raise ValueError(f"Invalid io_stream: {io_stream}\n"
-                             f"Allowed values are: {self.ALLOWED_IO_STREAMS}.")
+        if io_stream and io_stream not in self.ALLOWED_IO_STREAMS.keys():
+            raise ValueError(
+                f"Invalid io_stream: {io_stream}\n"
+                f"Allowed values are: {list(self.ALLOWED_IO_STREAMS.keys())}.")
         self.io_stream = io_stream
         self.no_color = no_color
 
@@ -266,7 +270,7 @@ class TaskStreamConsumer:
         self._conn_opened = True
         self._conn_count += 1
 
-        output = self.io_stream or "output"
+        output = self.READABLE_IO_STREAMS.get(self.io_stream, "output")
         msg = f"Streaming {output} from task {self.task_id}"
         if ANSI_ENABLED and not self._fout_isatty:
             msg += " (redirected)"
