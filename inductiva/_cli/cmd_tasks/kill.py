@@ -34,13 +34,17 @@ def kill_task(args):
                 "task_id": task.id
             } for task in get_all(status=status)])
 
+    if not tasks:
+        print("There are not tasks to kill.")
+        return 1
+
     ids = [task["task_id"] for task in tasks]
 
     confirm = args.yes or \
         user_confirmation_prompt(ids,
                                 __("task-prompt-kill-all"),
                                 __("task-prompt-kill-big", len(ids)),
-                                __("task-prompt-kill-small"), kill_all
+                                __("task-prompt-kill-small"), False
                                 )
 
     if not confirm:
