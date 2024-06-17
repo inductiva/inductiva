@@ -3,7 +3,7 @@ from typing import Optional
 
 from inductiva import types, tasks, simulators
 
-AVAILABLE_OPENFOAM_BRANCHES = ["foundation", "esi"]
+AVAILABLE_OPENFOAM_DISTRIBUTIONS = ["foundation", "esi"]
 
 
 @simulators.simulator.mpi_enabled
@@ -17,32 +17,34 @@ class OpenFOAM(simulators.Simulator):
 
     def __init__(self,
                  /,
-                 branch: str = "foundation",
+                 distribution: str = "foundation",
                  version: Optional[str] = None,
                  use_dev: bool = False):
         """Initialize the OpenFOAM simulator.
 
         Args:
-            branch (str): The branch of OpenFOAM to use. Available branches are
-                "foundation" and "esi". Default is "foundation".
+            distribution (str): The distribution of OpenFOAM to use. Available
+                distributions are "foundation" and "esi". Default is
+                "foundation".
             version (str): The version of the simulator to use. If None, the
                 latest available version in the platform is used.
             use_dev (bool): Request use of the development version of
                 the simulator. By default (False), the production version
                 is used.
         """
-        if branch not in AVAILABLE_OPENFOAM_BRANCHES:
+        if distribution not in AVAILABLE_OPENFOAM_DISTRIBUTIONS:
             raise ValueError(
-                f"Branch {branch} of OpenFOAM is not supported. "
-                f"Available branches are: {AVAILABLE_OPENFOAM_BRANCHES}")
+                f"Distribution '{distribution}' of OpenFOAM is not supported. "
+                f"Available distributions are: "
+                f"{AVAILABLE_OPENFOAM_DISTRIBUTIONS}")
 
-        self._branch = branch
+        self._distribution = distribution
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = f"fvm.openfoam_{branch}.run_simulation"
+        self.api_method_name = f"fvm.openfoam_{distribution}.run_simulation"
 
     def _get_simulator_name(self):
         """Get the name of the simulator."""
-        return "OpenFOAM-" + self._branch
+        return "OpenFOAM-" + self._distribution
 
     def run(self,
             input_dir: types.Path,
