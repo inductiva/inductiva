@@ -128,7 +128,8 @@ class TaskStreamConsumer:
             # and the output is stderr
             is_stderr = (self.io_stream is None and
                          stream["stream"]["io_type"] == "IOTypes.STD_ERR")
-            self._write_message(msg, is_stderr=is_stderr and not self.no_color)
+            self._write_message(msg.rstrip(),
+                                is_stderr=is_stderr and not self.no_color)
 
     def _get_message_formatter(self):
         """Get the message formatter based on the output file
