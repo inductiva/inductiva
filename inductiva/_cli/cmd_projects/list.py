@@ -39,6 +39,7 @@ def register(parser):
     """Register the projetcs list command."""
 
     subparser = parser.add_parser("list",
+                                  aliases=["ls"],
                                   help="List the user's projetcs.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
