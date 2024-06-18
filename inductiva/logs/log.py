@@ -44,7 +44,9 @@ def handle_uncaught_exception(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, KeyboardInterrupt):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
         return
-    if issubclass(exc_type, exceptions.ApiException):
+    if issubclass(exc_type,
+                  exceptions.ApiException) and (exc_value.code >= 400 and
+                                                exc_value.code < 500):
         detail = json.loads(exc_value.body)["detail"]
         root_logger.error(detail, exc_info=(exc_type, exc_value, exc_traceback))
         return
