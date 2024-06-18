@@ -11,7 +11,7 @@ from ...localization import translator as __
 
 
 def terminate_machine_group(args):
-    """Terminate one or all computational resoruces."""
+    """Terminate one or all computational resources."""
     names = args.name
     all_names = args.all
     confirm = args.confirm
@@ -26,6 +26,7 @@ def terminate_machine_group(args):
     active_machines = resources.machine_groups.get()
 
     if not active_machines:
+        print("No active resources to terminate.")
         return 0
 
     if not all_names and not names:
@@ -35,10 +36,9 @@ def terminate_machine_group(args):
 
     # dict to map from name to machine
     name_to_machine = {machine.name: machine for machine in active_machines}
-    active_machine_names = name_to_machine.keys()
-    # the user can give the same name multiple times!!
-    target_machine_names = set(names)
-    invalid_names = target_machine_names.difference(active_machine_names)
+    # the user can give the same name multiple times
+    target_machine_names = set(names or name_to_machine.keys())
+    invalid_names = target_machine_names.difference(name_to_machine)
 
     if invalid_names:
         for name in invalid_names:
@@ -48,17 +48,14 @@ def terminate_machine_group(args):
 
     confirm = confirm or input_functions.user_confirmation_prompt(
         target_machine_names, __("resources-prompt-terminate-all"),
-        __("resources-prompt-terminate-big", len(names)),
-        __("resources-prompt-terminate-small"), all_names)
+        __("resources-prompt-terminate-big", len(target_machine_names)),
+        __("resources-prompt-terminate-small"), False)
 
     if not confirm:
         return 0
 
-    machines_to_kill = active_machine_names if (all_names) else (
-        target_machine_names)
-
     before_quotas = inductiva.users.get_quotas()
-    for name in machines_to_kill:
+    for name in target_machine_names:
         name_to_machine[name].terminate(verbose=False)
         logging.info("Successfully requested termination of %s.",
                      name_to_machine[name].name)
