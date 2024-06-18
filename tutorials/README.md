@@ -33,10 +33,10 @@ pyenv install 3.8
 pyenv local 3.8
 ```
 
-### Install `sphinx-autobuild`
+### Install all sphinx dependencies including,`sphinx-autobuild`
 
 ```console
-pip install sphinx-autobuild
+pip3 install -r requirements.txt
 ```
 
 ### Launch a local documentation build and monitor it for changes
