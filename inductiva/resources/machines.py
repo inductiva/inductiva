@@ -110,10 +110,11 @@ class MachineGroup(machines_base.BaseMachineGroup):
                              max_idle_time=max_idle_time,
                              auto_terminate_ts=auto_terminate_ts)
 
-    def terminate(self):
+    def terminate(self, verbose: bool = True):
         """Terminates all machines of the machine group."""
         return super().terminate(num_vms=self.num_machines,
                                  is_elastic=self.__is_elastic,
+                                 verbose=verbose,
                                  spot=self.spot)
 
     def _log_machine_group_info(self):
@@ -252,12 +253,13 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
                              max_idle_time=max_idle_time,
                              auto_terminate_ts=auto_terminate_ts)
 
-    def terminate(self):
+    def terminate(self, verbose: bool = True):
         """Terminates all machines of the machine group."""
         return super().terminate(num_vms=self.min_machines,
                                  min_vms=self.min_machines,
                                  max_vms=self.max_machines,
                                  is_elastic=self.__is_elastic,
+                                 verbose=verbose,
                                  spot=self.spot)
 
     def _log_machine_group_info(self):

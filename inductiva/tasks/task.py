@@ -176,6 +176,9 @@ class TaskInfo:
             return format_utils.bytes_formatter(value)
         return value
 
+    def __repr__(self) -> str:
+        return str(self)
+
     def __str__(self):
         table_format = "plain"
 

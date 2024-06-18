@@ -1,9 +1,11 @@
 """CLI commands to terminate computational resources."""
+import logging
 import sys
 
 import argparse
 
 from inductiva import resources
+import inductiva
 from inductiva.utils import input_functions
 from ...localization import translator as __
 
@@ -52,8 +54,16 @@ def terminate_machine_group(args):
     if not confirm:
         return 0
 
+    before_quotas = inductiva.users.get_quotas()
     for name in target_machine_names:
-        name_to_machine[name].terminate()
+        name_to_machine[name].terminate(verbose=False)
+        logging.info("Successfully requested termination of %s.",
+                     name_to_machine[name].name)
+    cls = inductiva.resources.machines_base.BaseMachineGroup
+    base_machine = cls.__new__(cls)
+    rows = ["cost_per_hour", "total_num_vcpus", "total_num_machines"]
+    base_machine.quota_usage = {k: before_quotas[k]["in_use"] for k in rows}
+    base_machine.log_quota_usage("freed by resources")
 
     return 0
 
