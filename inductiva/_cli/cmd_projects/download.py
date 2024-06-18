@@ -1,8 +1,21 @@
 """Download the project tasks files via CLI."""
 import concurrent.futures as cf
 import argparse
+from typing import List
 
 import inductiva
+from inductiva.tasks.task import Task
+
+
+def download_wrapper(task: Task,
+                     output_dir: str = None,
+                     filenames: List[str] = None):
+    """Download the project tasks files.
+    This method is a wrapper around the download_outputs method of the Task
+    class. We do this to be able to set the outputdir for each worker.
+    """
+    inductiva.set_output_dir(output_dir)
+    task.download_outputs(filenames)
 
 
 def download_projects(args):
@@ -30,14 +43,14 @@ def download_projects(args):
     project = inductiva.projects.Project(project_name)
     project_tasks = project.get_tasks()
 
-    if output_dir is not None:
-        inductiva.set_output_dir(output_dir)
-
     futures = []
 
     with cf.ThreadPoolExecutor(max_workers=10) as executor:
         for task in project_tasks:
-            future = executor.submit(task.download_outputs, filenames=files)
+            future = executor.submit(download_wrapper,
+                                     task=task,
+                                     output_dir=output_dir,
+                                     filenames=files)
             futures.append(future)
 
     cf.wait(futures)
