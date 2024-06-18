@@ -14,7 +14,8 @@ def download_wrapper(task: Task,
     This method is a wrapper around the download_outputs method of the Task
     class. We do this to be able to set the outputdir for each worker.
     """
-    inductiva.set_output_dir(output_dir)
+    if output_dir:
+        inductiva.set_output_dir(output_dir)
     task.download_outputs(filenames)
 
 
