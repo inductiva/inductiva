@@ -86,5 +86,12 @@ def main():
 
     exit_code = 0
     # Call the function associated with the subcommand
-    exit_code = args.func(args)
+    if getattr(args, "watchable", False) and args.watch is not None:
+        if ansi_pager is None:
+            raise ImportError("watch module is not available.")
+        else:
+            cmd = " ".join(sys.argv[1:])
+            watch(args.func, args.watch, args, cmd)
+    else:
+        exit_code = args.func(args)
     return exit_code
