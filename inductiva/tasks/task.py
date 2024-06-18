@@ -799,7 +799,7 @@ class Task:
             return metric.value
 
         # The task has ended but the metric is not available
-        if self.is_terminal():
+        if self.info.is_terminal:
             return None
 
         # The task is still running
