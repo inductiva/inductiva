@@ -406,11 +406,13 @@ up to a certain limit, which must satisfy the quotas we present on this section.
 The quotas are in place to establish a limit over the totality of the computational
 resources launched by the user.</p>
 <p>Note that for the Elastic Machine Groups the quotas are applied to the maximum
-number of machines requested, not the number of machines that are currently active.</p>
+number of machines requested, not the number of machines that are currently
+active.</p>
 <section id="maximum-allowed-price-2-h">
 <h2>Maximum allowed price: 2 $/h<a class="headerlink" href="#maximum-allowed-price-2-h" title="Permalink to this heading">#</a></h2>
-<p>The quota limit can be reached even with a single machine. For example, if you select a machine of type
-<code class="docutils literal notranslate"><span class="pre">c2d-standard-56</span></code>, which has a cost of 2.799 $/h, this is what will happen:</p>
+<p>The quota limit can be reached even with a single machine. For example, if you
+select a machine of type <code class="docutils literal notranslate"><span class="pre">c2d-standard-56</span></code>, which has a cost of 2.799 $/h, this
+is what will happen:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="n">mg</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2d-standard-56&quot;</span><span class="p">)</span>
@@ -432,8 +434,10 @@ HTTP<span class="w"> </span>response<span class="w"> </span>headers:<span class=
 HTTP<span class="w"> </span>response<span class="w"> </span>body:<span class="w"> </span>b<span class="s1">&#39;{&quot;detail&quot;:&quot;Quota exceeded: cost ($/h)\\nRequested: 2.79927\\nIn use: 0.0\\nMax allowed: 2\\n&quot;}&#39;</span>
 </pre></div>
 </div>
-<p>However, users can take advantage of spot instances, that despite being preemptible
-by the cloud provider, are less expensive. For example, you can even get a higher-performance machine than the one above, if you select it to run as spot instance:</p>
+<p>However, users can take advantage of <strong>spot instances</strong> that, despite being
+preemptible by the cloud provider, are much less expensive. For example, you
+can get an even better machine than the one above, if you select it to run as
+spot instance:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Cost: 0.870 $/h</span>
 <span class="kn">import</span> <span class="nn">inductiva</span>
 
@@ -454,11 +458,19 @@ Note<span class="w"> </span>that<span class="w"> </span>stopping<span class="w">
 Machine<span class="w"> </span>Group<span class="w"> </span>api-ibg2s91an4po453ry7cwv8ie9<span class="w"> </span>with<span class="w"> </span>c2d-highcpu-112<span class="w"> </span>machines<span class="w"> </span>successfully<span class="w"> </span>started<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>:00:20.
 </pre></div>
 </div>
-<p>Notice, that you should also take into account the variant you choose. For example, in the case of the CPU series <code class="docutils literal notranslate"><span class="pre">c2d</span></code>, the highmem machines (8 GB RAM per vCPU) are more expensive than standard machines (4 GB RAM per vCPU), which in turn are more expensive than highcpu machines (2 GB RAM per vCPU). The amount of RAM attached to a machine is one of the most determining aspects of its price.</p>
+<p>Notice, that you should also take into account the machine <strong>variant</strong> you
+choose. For example, in the case of the CPU series <code class="docutils literal notranslate"><span class="pre">c2d</span></code>, machines of the
+<code class="docutils literal notranslate"><span class="pre">highmem</span></code> variant (8 GB RAM per vCPU) are more expensive than machines of
+the <code class="docutils literal notranslate"><span class="pre">standard</span></code> variant (4 GB RAM per vCPU), which, in turn, are more expensive
+than machines of the <code class="docutils literal notranslate"><span class="pre">highcpu</span></code> variant (2 GB RAM per vCPU). The amount of RAM
+attached to a machine is one of the most determining aspects of its price.</p>
 </section>
 <section id="maximum-allowed-machines-20">
 <h2>Maximum allowed machines: 20<a class="headerlink" href="#maximum-allowed-machines-20" title="Permalink to this heading">#</a></h2>
-<p>Launching a machine group with 20 preemptible machines of the type <code class="docutils literal notranslate"><span class="pre">c2d-highcpu-4</span></code> contains 44 vCPUs and costs in total 0.341 $/h. However, it exceeds the allowed limit of machines and running the following code snippet raises the following error:</p>
+<p>Launching a machine group with 20 preemptible machines of the type
+<code class="docutils literal notranslate"><span class="pre">c2d-highcpu-4</span></code> contains 44 vCPUs and costs in total 0.341 $/h. However, it
+exceeds the allowed limit of machines and running the following code snippet
+raises the following error:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="n">mg</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
@@ -490,21 +502,31 @@ HTTP<span class="w"> </span>response<span class="w"> </span>body:<span class="w"
 <section id="maximum-allowed-vcpus-240">
 <h2>Maximum allowed vCPUs: 240<a class="headerlink" href="#maximum-allowed-vcpus-240" title="Permalink to this heading">#</a></h2>
 <p>The quota limit of the maximum allowed vCPUs is harder to reach with a single
-machine group. In most cases, the two above quotas will be reached before this one.</p>
+machine group. In most cases, the two above quotas will be reached before this
+one.</p>
 <p>Still, there is an example where the limit can be reached and uses the ability
 of having several machine groups active at the same time.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="c1"># Sucessfull launch with cost 1.045 $/h and total 128 vCPUs</span>
-<span class="n">mg1</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;e2-highcpu-32&quot;</span><span class="p">,</span> <span class="n">num_machines</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">mg1</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="s2">&quot;e2-highcpu-32&quot;</span><span class="p">,</span>
+    <span class="n">num_machines</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">mg1</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
 <span class="c1"># Sucessfull launch. Total cost 1.959 $/h and total 240 vCPUs </span>
-<span class="n">mg2</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;e2-highcpu-16&quot;</span><span class="p">,</span> <span class="n">num_machines</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">mg2</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="s2">&quot;e2-highcpu-16&quot;</span><span class="p">,</span>
+    <span class="n">num_machines</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">mg2</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
 <span class="c1"># Failed launch. Total cost 1.975 $/h, total machines 11 and total vCPUs 242.</span>
-<span class="n">mg3</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;e2-highcpu-2&quot;</span><span class="p">,</span> <span class="n">num_machines</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">mg3</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="s2">&quot;e2-highcpu-2&quot;</span><span class="p">,</span> 
+    <span class="n">num_machines</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">mg3</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -521,9 +543,9 @@ HTTP<span class="w"> </span>response<span class="w"> </span>body:<span class="w"
 <section id="maximum-allowed-data-disk-20-gb">
 <h2>Maximum allowed data disk: 20 GB<a class="headerlink" href="#maximum-allowed-data-disk-20-gb" title="Permalink to this heading">#</a></h2>
 <p>The last quota sets the maximum data disk that users can set for their
-computational resources. Here, the quota works per machine. The current limit on
-disk space is 20 GB, so the next request will hit the limit:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+computational resources. Here, the quota works per machine. The current limit
+on disk space is 20 GB, so the next request will hit the limit:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="n">mg</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">,</span> <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
 </pre></div>
@@ -544,9 +566,9 @@ HTTP<span class="w"> </span>response<span class="w"> </span>body:<span class="w"
 </pre></div>
 </div>
 <p><strong>Maximum allowed vCPUs:</strong></p>
-<p>The API provides immediate acess to performant machines with a high number of vCPUs.
-However, at the moment, there is a limit to the maximum number of vCPUs that can be
-active. This encapsulates two different scenarios:</p>
+<p>The API provides immediate acess to performant machines with a high number of
+vCPUs. However, at the moment, there is a limit to the maximum number of vCPUs
+that can be active. This encapsulates two different scenarios:</p>
 <ul class="simple">
 <li><p>launching a machine group with a single machine:</p></li>
 </ul>
@@ -584,25 +606,25 @@ HTTP<span class="w"> </span>response<span class="w"> </span>body:<span class="w"
 </pre></div>
 </div>
 <p><strong>Maximum allowed data disk:</strong></p>
-<p>The last quota sets the maximum data disk that users can set for their computational
-resources. Here, the quota works per machine, which means you can have a machine group
-with four machines all with <code class="docutils literal notranslate"><span class="pre">100</span></code> GB of disk storage dedicated to simulation data.
-Only when exceeding this value per machine an error is raised:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+<p>The last quota sets the maximum data disk that users can set for their
+computational resources. Here, the quota works per machine, which means you can
+have a machine group with four machines all with <code class="docutils literal notranslate"><span class="pre">100</span></code> GB of disk storage
+dedicated to simulation data. Only when exceeding this value per machine an
+error is raised:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="n">mg</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">,</span> <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>If any of these quotas establish a limit for what you can achieve with Inductiva API,
-please <a class="reference external" href="mailto:support&#37;&#52;&#48;inductiva&#46;ai" target="_blank">reach out to us</a> and we can better understand your
-needs.</p>
+<p>If any of these quotas establish a limit for what you can achieve with Inductiva
+API, please <a class="reference external" href="mailto:support&#37;&#52;&#48;inductiva&#46;ai" target="_blank">reach out to us</a> and we can better
+understand your needs.</p>
 </section>
 <section id="how-to-monitor-quotas">
 <h2>How to monitor quotas<a class="headerlink" href="#how-to-monitor-quotas" title="Permalink to this heading">#</a></h2>
-<p>Inductiva’s cli provides an easy way to monitor your quotas
-usage. Simply use the command <code class="docutils literal notranslate"><span class="pre">inductiva</span> <span class="pre">quotas</span> <span class="pre">list</span></code>. This will
-output a detailed list of all the quotas together with their current
-usage. For example:</p>
+<p>Inductiva’s cli provides an easy way to monitor your quotas usage. Simply use
+the command <code class="docutils literal notranslate"><span class="pre">inductiva</span> <span class="pre">quotas</span> <span class="pre">list</span></code>. This will output a detailed list of all
+the quotas together with their current usage. For example:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>quotas<span class="w"> </span>list
 
 <span class="w">       </span>NAME<span class="w">                               </span>IN_USE<span class="w">         </span>MAX_ALLOWED
@@ -615,7 +637,7 @@ usage. For example:</p>
 </pre></div>
 </div>
 <p>Alternatively, you can also get the quotas directly from our python client:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="n">inductiva</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">get_quotas</span><span class="p">()</span>
 </pre></div>
