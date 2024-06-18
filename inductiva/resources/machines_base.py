@@ -268,9 +268,8 @@ class BaseMachineGroup:
             if verbose:
                 logging.info("Successfully requested termination of %s.",
                              repr(self))
-                logging.info(
-                    "Termination of the machine group freed the following quotas:"
-                )
+                logging.info("Termination of the machine group "
+                             "freed the following quotas:")
                 self.log_quota_usage("freed by resource")
             return True
 
