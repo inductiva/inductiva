@@ -1,6 +1,6 @@
 # User Quotas
 
-In the current version of the API (0.4) users can launch several computational resources
+In the current version of the API (0.7) users can launch several computational resources
 up to a certain limit, which must satisfy the quotas we present on this section.
 The quotas are in place to establish a limit over the totality of the computational
 resources launched by the user. 
