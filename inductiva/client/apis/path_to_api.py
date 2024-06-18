@@ -44,7 +44,6 @@ from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_metric
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
-from inductiva.client.apis.paths.compute_group_mg_id import ComputeGroupMgId
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
 from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
@@ -148,8 +147,6 @@ PathToApi = typing_extensions.TypedDict(
             ComputeType,
         PathValues.COMPUTE_GROUP_START:
             ComputeGroupStart,
-        PathValues.COMPUTE_GROUP_MG_ID:
-            ComputeGroupMgId,
         PathValues.COMPUTE_PRICE:
             ComputePrice,
         PathValues.COMPUTE_GROUPS:
@@ -267,8 +264,6 @@ path_to_api = PathToApi({
         ComputeType,
     PathValues.COMPUTE_GROUP_START:
         ComputeGroupStart,
-    PathValues.COMPUTE_GROUP_MG_ID:
-        ComputeGroupMgId,
     PathValues.COMPUTE_PRICE:
         ComputePrice,
     PathValues.COMPUTE_GROUPS:

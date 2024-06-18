@@ -46,6 +46,5 @@ from inductiva.client.model.user_api_key import UserApiKey
 from inductiva.client.model.user_create import UserCreate
 from inductiva.client.model.user_quotas import UserQuotas
 from inductiva.client.model.vm_group_config import VMGroupConfig
-from inductiva.client.model.vm_group_lifecycle_config import VMGroupLifecycleConfig
 from inductiva.client.model.validation_error import ValidationError
 from inductiva.client.model.version_comparison_result import VersionComparisonResult
