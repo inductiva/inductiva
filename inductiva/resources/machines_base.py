@@ -279,7 +279,10 @@ class BaseMachineGroup:
         it verifies if the cost has already been estimated and returns
         it immediately if it has.
         """
-        if self.provider == "ICE":
+        if self.provider in (
+                machine_types.ProviderType.ICE,
+                machine_types.ProviderType.LOCAL,
+        ):
             return 0
 
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
@@ -303,9 +306,9 @@ class BaseMachineGroup:
             in_use = quotas.get(name, {}).get("in_use", "n/a")
             max_allowed = quotas.get(name, {}).get("max_allowed", "n/a")
 
-            table["name"].append(name)
+            table[""].append(name)
             table[resource_usage_header].append(value)
-            table["new total usage"].append(in_use)
+            table["current usage"].append(in_use)
             table["max allowed"].append(max_allowed)
 
         table_str = format_utils.get_tabular_str(
@@ -315,29 +318,32 @@ class BaseMachineGroup:
 
         logging.info(table_str)
 
-    def _log_estimated_spot_vm_savings(self):
+    def _log_estimated_spot_vm_savings(self) -> None:
+        if self.provider in (
+                machine_types.ProviderType.ICE,
+                machine_types.ProviderType.LOCAL,
+        ):
+            return
+
         spot_cost = self._get_estimated_cost(True)
         non_spot_cost = self._get_estimated_cost(False)
-        cost_difference = non_spot_cost - spot_cost
+        spot_times_cheaper = round(non_spot_cost / spot_cost, 2)
 
         is_spot = getattr(self, "spot", False)
-        estimated_cost = spot_cost if is_spot else non_spot_cost
-        percentage_savings = cost_difference / non_spot_cost * 100
 
         if not is_spot:
             logging.info(
-                ">> The same machine group with spot instances would cost "
-                "%.3f $/h less per machine (%.2f%% savings). Specify "
+                " >> The same machine group with spot machines would cost "
+                "%.1fx less. Specify "
                 "`spot=True` in the constructor to use spot machines.",
-                cost_difference,
-                percentage_savings,
+                spot_times_cheaper,
             )
         else:
             logging.info(
-                ">> You are spending %.3f $/h less per machine "
-                "by using spot instances.", cost_difference)
-
-        return estimated_cost
+                " >> You are spending %.1fx less "
+                "by using spot machines.",
+                spot_times_cheaper,
+            )
 
     def status(self):
         """Returns the status of a machine group if it exists.
