@@ -8,7 +8,7 @@ from inductiva import api
 from inductiva.client import ApiClient, ApiException
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
-from inductiva.tasks.task import Task, TaskInfo
+from inductiva.tasks.task import Task
 from inductiva.utils import format_utils
 
 
