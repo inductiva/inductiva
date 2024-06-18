@@ -9,6 +9,7 @@ from inductiva.client import ApiClient, ApiException
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client import models
 from inductiva.tasks.task import Task
+from inductiva.utils import format_utils
 
 
 def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
@@ -29,33 +30,32 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
     table = defaultdict(list, {key: [] for key in column_names})
 
     for task in list_of_tasks:
-        info = task.get_info()
-        status = task.get_status()
-        computation_end_time = info.get("computation_end_time", None)
-        execution_time = task.get_computation_time(fail_if_running=False)
+        execution_time = task.get_computation_time(cached=True)
 
         if execution_time is not None:
-            if computation_end_time is None:
-                if status in ["started", "submitted"]:
+            execution_time = format_utils.seconds_formatter(execution_time)
+            if task.info.computation_end_time is None:
+                if task.info.status in ["started", "submitted"]:
                     execution_time = f"*{execution_time}"
                 else:
                     execution_time = "n/a"
 
-        executer = info["executer"]
-        if executer is None:
+        if task.info.executer is None:
             resource_type = None
         else:
-            resource_type = executer["host_type"] + " " + executer["vm_type"]
-            n_mpi_hosts = executer["n_mpi_hosts"]
-            if n_mpi_hosts > 1:
-                resource_type += f" x{n_mpi_hosts}"
+            resource_type = (f"{task.info.executer.host_type} "
+                             f"{task.info.executer.vm_type}")
+            if task.info.executer.n_mpi_hosts > 1:
+                resource_type += f" x{task.info.executer.n_mpi_hosts}"
+
         table["ID"].append(task.id)
         table["Simulator"].append(task.get_simulator_name())
-        table["Status"].append(status)
-        table["Submitted"].append(info.get("input_submit_time", None))
-        table["Started"].append(info.get("start_time", None))
+        table["Status"].append(task.info.status)
+        table["Submitted"].append(task.info.input_submit_time)
+        table["Started"].append(task.info.start_time)
         table["Computation Time"].append(execution_time)
         table["Resource Type"].append(resource_type)
+
     return table
 
 

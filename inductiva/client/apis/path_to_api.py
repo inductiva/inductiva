@@ -9,12 +9,14 @@ from inductiva.client.apis.paths.tasks_task_id_input import TasksTaskIdInput
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
+from inductiva.client.apis.paths.tasks_task_id_position_in_queue import TasksTaskIdPositionInQueue
 from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
 from inductiva.client.apis.paths.tasks_task_id_download_output_url import TasksTaskIdDownloadOutputUrl
 from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_resubmit import TasksTaskIdResubmit
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
+from inductiva.client.apis.paths.tasks_task_id_files import TasksTaskIdFiles
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_email import AdminUsersEmail
@@ -76,6 +78,8 @@ PathToApi = typing_extensions.TypedDict(
             Tasks,
         PathValues.TASKS_TASK_ID_STATUS:
             TasksTaskIdStatus,
+        PathValues.TASKS_TASK_ID_POSITION_IN_QUEUE:
+            TasksTaskIdPositionInQueue,
         PathValues.TASKS_TASK_ID_OUTPUT_LIST:
             TasksTaskIdOutputList,
         PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
@@ -88,6 +92,8 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdKill,
         PathValues.TASKS_TASK_ID_DISABLE_LOGS:
             TasksTaskIdDisableLogs,
+        PathValues.TASKS_TASK_ID_FILES:
+            TasksTaskIdFiles,
         PathValues.ADMIN_USERS:
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_API_KEY:
@@ -191,6 +197,8 @@ path_to_api = PathToApi({
         Tasks,
     PathValues.TASKS_TASK_ID_STATUS:
         TasksTaskIdStatus,
+    PathValues.TASKS_TASK_ID_POSITION_IN_QUEUE:
+        TasksTaskIdPositionInQueue,
     PathValues.TASKS_TASK_ID_OUTPUT_LIST:
         TasksTaskIdOutputList,
     PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
@@ -203,6 +211,8 @@ path_to_api = PathToApi({
         TasksTaskIdKill,
     PathValues.TASKS_TASK_ID_DISABLE_LOGS:
         TasksTaskIdDisableLogs,
+    PathValues.TASKS_TASK_ID_FILES:
+        TasksTaskIdFiles,
     PathValues.ADMIN_USERS:
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_API_KEY:

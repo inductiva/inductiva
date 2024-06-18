@@ -32,11 +32,9 @@ class Quota(schemas.DictSchema):
     class MetaOapg:
         required = {
             "max_allowed",
-            "name",
         }
 
         class properties:
-            name = schemas.StrSchema
             max_allowed = schemas.NumberSchema
 
             class in_use(
@@ -97,19 +95,11 @@ class Quota(schemas.DictSchema):
                     )
 
             __annotations__ = {
-                "name": name,
                 "max_allowed": max_allowed,
                 "in_use": in_use,
             }
 
     max_allowed: MetaOapg.properties.max_allowed
-    name: MetaOapg.properties.name
-
-    @typing.overload
-    def __getitem__(
-            self, name: typing_extensions.Literal["name"]
-    ) -> MetaOapg.properties.name:
-        ...
 
     @typing.overload
     def __getitem__(
@@ -128,18 +118,11 @@ class Quota(schemas.DictSchema):
         ...
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "name",
         "max_allowed",
         "in_use",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
-
-    @typing.overload
-    def get_item_oapg(
-            self, name: typing_extensions.Literal["name"]
-    ) -> MetaOapg.properties.name:
-        ...
 
     @typing.overload
     def get_item_oapg(
@@ -160,7 +143,6 @@ class Quota(schemas.DictSchema):
         ...
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "name",
         "max_allowed",
         "in_use",
     ], str]):
@@ -178,10 +160,6 @@ class Quota(schemas.DictSchema):
             int,
             float,
         ],
-        name: typing.Union[
-            MetaOapg.properties.name,
-            str,
-        ],
         in_use: typing.Union[MetaOapg.properties.in_use, dict,
                              frozendict.frozendict, str, date, datetime,
                              uuid.UUID, int, float, decimal.Decimal, bool, None,
@@ -197,7 +175,6 @@ class Quota(schemas.DictSchema):
             cls,
             *_args,
             max_allowed=max_allowed,
-            name=name,
             in_use=in_use,
             _configuration=_configuration,
             **kwargs,

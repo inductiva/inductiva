@@ -9,16 +9,16 @@ from inductiva.utils import format_utils
 
 
 def get_quotas(_, fout: TextIO = sys.stdout):
-    """ Lists the user's quotas. 
+    """ Lists the user's quotas.
 
     Lists all the user's quotas and the quotas left for the user to use.
     """
     table = defaultdict(list)
 
     for name, quota in users.get_quotas().items():
-        table["name"].append(name)
-        table["in_use"].append(quota["in_use"])
-        table["max_allowed"].append(quota["max_allowed"])
+        table[""].append(name)
+        table["current usage"].append(quota["in_use"])
+        table["max allowed"].append(quota["max_allowed"])
 
     emph_formatter = format_utils.get_ansi_formatter()
 

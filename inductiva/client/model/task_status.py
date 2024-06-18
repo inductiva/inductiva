@@ -42,9 +42,66 @@ class TaskStatus(schemas.DictSchema):
             def status() -> typing.Type['TaskStatusCode']:
                 return TaskStatusCode
 
+            class position_in_queue(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            TaskPositionInQueue,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'position_in_queue':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "id": id,
                 "status": status,
+                "position_in_queue": position_in_queue,
             }
 
     id: MetaOapg.properties.id
@@ -63,14 +120,20 @@ class TaskStatus(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["position_in_queue"]
+    ) -> MetaOapg.properties.position_in_queue:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self,
-                    name: typing.Union[typing_extensions.Literal[
-                        "id",
-                        "status",
-                    ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
+        "id",
+        "status",
+        "position_in_queue",
+    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -88,15 +151,21 @@ class TaskStatus(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["position_in_queue"]
+    ) -> typing.Union[MetaOapg.properties.position_in_queue, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self,
-                      name: typing.Union[typing_extensions.Literal[
-                          "id",
-                          "status",
-                      ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
+        "id",
+        "status",
+        "position_in_queue",
+    ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -110,6 +179,13 @@ class TaskStatus(schemas.DictSchema):
             str,
         ],
         status: 'TaskStatusCode',
+        position_in_queue: typing.Union[MetaOapg.properties.position_in_queue,
+                                        dict, frozendict.frozendict, str, date,
+                                        datetime, uuid.UUID, int, float,
+                                        decimal.Decimal, bool, None, list,
+                                        tuple, bytes, io.FileIO,
+                                        io.BufferedReader,
+                                        schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -121,9 +197,11 @@ class TaskStatus(schemas.DictSchema):
             *_args,
             id=id,
             status=status,
+            position_in_queue=position_in_queue,
             _configuration=_configuration,
             **kwargs,
         )
 
 
+from inductiva.client.model.task_position_in_queue import TaskPositionInQueue
 from inductiva.client.model.task_status_code import TaskStatusCode

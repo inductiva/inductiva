@@ -157,11 +157,82 @@ class UserCreate(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class extra_metadata(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    additional_properties = schemas.StrSchema
+                    any_of_0 = schemas.DictSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __getitem__(
+                        self, name: typing.Union[
+                            str,
+                        ]) -> MetaOapg.additional_properties:
+                    # dict_instance[name] accessor
+                    return super().__getitem__(name)
+
+                def get_item_oapg(
+                        self, name: typing.Union[
+                            str,
+                        ]) -> MetaOapg.additional_properties:
+                    return super().get_item_oapg(name)
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[
+                        MetaOapg.additional_properties,
+                        str,
+                    ],
+                ) -> 'extra_metadata':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "email": email,
                 "is_admin": is_admin,
                 "expiry_ts": expiry_ts,
                 "name": name,
+                "extra_metadata": extra_metadata,
             }
 
     email: MetaOapg.properties.email
@@ -191,6 +262,12 @@ class UserCreate(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["extra_metadata"]
+    ) -> MetaOapg.properties.extra_metadata:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -199,6 +276,7 @@ class UserCreate(schemas.DictSchema):
         "is_admin",
         "expiry_ts",
         "name",
+        "extra_metadata",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -229,6 +307,12 @@ class UserCreate(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["extra_metadata"]
+    ) -> typing.Union[MetaOapg.properties.extra_metadata, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -238,6 +322,7 @@ class UserCreate(schemas.DictSchema):
         "is_admin",
         "expiry_ts",
         "name",
+        "extra_metadata",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -264,6 +349,12 @@ class UserCreate(schemas.DictSchema):
                            uuid.UUID, int, float, decimal.Decimal, bool, None,
                            list, tuple, bytes, io.FileIO, io.BufferedReader,
                            schemas.Unset] = schemas.unset,
+        extra_metadata: typing.Union[MetaOapg.properties.extra_metadata, dict,
+                                     frozendict.frozendict, str, date, datetime,
+                                     uuid.UUID, int, float, decimal.Decimal,
+                                     bool, None, list, tuple, bytes, io.FileIO,
+                                     io.BufferedReader,
+                                     schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -277,6 +368,7 @@ class UserCreate(schemas.DictSchema):
             is_admin=is_admin,
             expiry_ts=expiry_ts,
             name=name,
+            extra_metadata=extra_metadata,
             _configuration=_configuration,
             **kwargs,
         )

@@ -727,6 +727,63 @@ class BaseVMGroup(schemas.DictSchema):
                     )
 
             started = schemas.BoolSchema
+
+            class quota_usage(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            QuotaUsage,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'quota_usage':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "max_idle_time": max_idle_time,
                 "auto_terminate_ts": auto_terminate_ts,
@@ -741,6 +798,7 @@ class BaseVMGroup(schemas.DictSchema):
                 "type": type,
                 "provider_id": provider_id,
                 "started": started,
+                "quota_usage": quota_usage,
             }
 
     @typing.overload
@@ -822,6 +880,12 @@ class BaseVMGroup(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["quota_usage"]
+    ) -> MetaOapg.properties.quota_usage:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -839,6 +903,7 @@ class BaseVMGroup(schemas.DictSchema):
         "type",
         "provider_id",
         "started",
+        "quota_usage",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -923,6 +988,12 @@ class BaseVMGroup(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["quota_usage"]
+    ) -> typing.Union[MetaOapg.properties.quota_usage, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -941,6 +1012,7 @@ class BaseVMGroup(schemas.DictSchema):
         "type",
         "provider_id",
         "started",
+        "quota_usage",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -1023,6 +1095,12 @@ class BaseVMGroup(schemas.DictSchema):
                                   schemas.Unset] = schemas.unset,
         started: typing.Union[MetaOapg.properties.started, bool,
                               schemas.Unset] = schemas.unset,
+        quota_usage: typing.Union[MetaOapg.properties.quota_usage, dict,
+                                  frozendict.frozendict, str, date, datetime,
+                                  uuid.UUID, int, float, decimal.Decimal, bool,
+                                  None, list, tuple, bytes, io.FileIO,
+                                  io.BufferedReader,
+                                  schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -1045,6 +1123,7 @@ class BaseVMGroup(schemas.DictSchema):
             type=type,
             provider_id=provider_id,
             started=started,
+            quota_usage=quota_usage,
             _configuration=_configuration,
             **kwargs,
         )
@@ -1052,3 +1131,4 @@ class BaseVMGroup(schemas.DictSchema):
 
 from inductiva.client.model.machine_group_type import MachineGroupType
 from inductiva.client.model.providers import Providers
+from inductiva.client.model.quota_usage import QuotaUsage
