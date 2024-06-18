@@ -270,7 +270,9 @@ def run(name: str,
         # Use MachineGroup as default value for machine_class
         machine_class = machine_class or MachineGroup
 
-        resource = machine_class(machine_type=machine, **machine_args_current)
+        resource = machine_class(machine_type=machine,
+                                 max_idle_time=datetime.timedelta(minutes=1),
+                                 **machine_args_current)
 
         simulator_args_current = _replace_callable_from_dict(
             simulator_args, resource)
@@ -294,7 +296,7 @@ def run(name: str,
                       "Going to sleep and trying again later.")
                 time.sleep(60)
 
-            resource.start(max_idle_time=datetime.timedelta(minutes=1))
+            resource.start()
 
         for _ in range(current_replicas):
             _ = simulator.run(**simulator_args_current)
