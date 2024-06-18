@@ -62,6 +62,13 @@ class Task:
         self._info = None
         self._status = None
 
+    def is_running(self) -> bool:
+        """Validate if the task is running.
+
+        This method issues a request to the API.
+        """
+        return self.get_status() == models.TaskStatusCode.STARTED
+
     def is_failed(self) -> bool:
         """Validate if the task has failed.
 

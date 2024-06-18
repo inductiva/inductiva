@@ -284,9 +284,6 @@ class BaseMachineGroup:
 
         return self._estimated_cost
 
-    def is_running(self):
-        return self._started
-
     def status(self):
         """Returns the status of a machine group if it exists.
 
