@@ -1,5 +1,6 @@
 """Class to manage the MPI cluster in Google Cloud."""
 from absl import logging
+from typing import Optional
 import datetime
 
 from inductiva.resources import machines_base
@@ -13,11 +14,15 @@ class MPICluster(machines_base.BaseMachineGroup):
     Note: The cluster will be available only after calling 'start' method.
     The billing will start only after the machines are started."""
 
-    def __init__(self,
-                 machine_type: str,
-                 num_machines: int = 2,
-                 data_disk_gb: int = 10,
-                 register: bool = True) -> None:
+    def __init__(
+        self,
+        machine_type: str,
+        num_machines: int = 2,
+        data_disk_gb: int = 10,
+        max_idle_time: Optional[datetime.timedelta] = None,
+        auto_terminate_ts: Optional[datetime.datetime] = None,
+        register: bool = True,
+    ) -> None:
         """Create a MPICluster object.
 
         The register argument is used to indicate if the machine group should
@@ -34,14 +39,23 @@ class MPICluster(machines_base.BaseMachineGroup):
               information about machine types.
             num_machines: The number of virtual machines to launch.
             data_disk_gb: The size of the disk for user data (in GB).
+            max_idle_time: Time without executing any task, after which the
+              resource will be terminated.
+            auto_terminate_ts: Moment in which the resource will be
+              automatically terminated.
         """
         if num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
 
-        super().__init__(machine_type=machine_type,
-                         data_disk_gb=data_disk_gb,
-                         register=register)
+        super().__init__(
+            machine_type=machine_type,
+            data_disk_gb=data_disk_gb,
+            max_idle_time=max_idle_time,
+            auto_terminate_ts=auto_terminate_ts,
+            register=register,
+        )
+
         # num_machines is the number of machines requested
         self.num_machines = num_machines
         #Number of active machines at the time of
@@ -74,24 +88,14 @@ class MPICluster(machines_base.BaseMachineGroup):
         return f"MPI Cluster {self.name} with {self.machine_type} " \
                f"x{self.num_machines} machines"
 
-    def start(self,
-              max_idle_time: datetime.timedelta = None,
-              auto_terminate_ts: datetime.datetime = None):
-        """Start the MPI Cluster.
-
-        Args:
-            max_idle_time (timedelta): Max idle time, i.e. time without
-                executing any task, after which the resource will be terminated.
-            auto_terminate_ts (datetime): Moment in which the resource will
-                be automatically terminated, irrespectively of the existence of
-                tasks yet to be executed by the resource.
-        """
-        return super().start(num_vms=self.num_machines,
-                             is_elastic=self.__is_elastic,
-                             spot=self.__spot,
-                             type=self.__type,
-                             max_idle_time=max_idle_time,
-                             auto_terminate_ts=auto_terminate_ts)
+    def start(self):
+        """Start the MPI Cluster."""
+        return super().start(
+            num_vms=self.num_machines,
+            is_elastic=self.__is_elastic,
+            spot=self.__spot,
+            type=self.__type,
+        )
 
     def terminate(self, verbose: bool = True):
         """Terminates the MPI Cluster."""
