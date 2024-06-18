@@ -6,10 +6,10 @@ from inductiva.client.exceptions import ApiException
 
 class TaskSubmissionException(Exception):
     """
-    Custom exception class for handling errors that occur during task submission.
+    Custom exception class for handling errors for task submission.
 
     Attributes:
-        exception: The original ApiException instance that triggered this exception.
+        exception: The ApiException instance that triggered this exception.
         reason: The reason for the exception, extracted from ApiException.body.
     """
 
@@ -28,9 +28,9 @@ class TaskSubmissionException(Exception):
         """
         Returns a user-friendly representation of the error.
 
-        If ApiException.body is a JSON string, tries to extract a detailed error message.
-        If parsing the JSON fails or the expected detail key is missing, falls back to
-        displaying the ApiException as a string.
+        If ApiException.body is a JSON string, extract a detailed error message.
+        If parsing the JSON fails or the expected detail key is missing, falls
+        back to displaying the ApiException as a string.
         """
         try:
             body_json = json.loads(self.reason)
