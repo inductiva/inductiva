@@ -10,6 +10,8 @@ from absl import logging
 
 from inductiva import tasks, types
 from inductiva.api import methods
+from inductiva.client.exceptions import ApiException
+from inductiva.tasks.exceptions import TaskSubmissionException
 from inductiva.utils import format_utils, files
 from inductiva.resources.machine_types import ProviderType
 
@@ -46,13 +48,16 @@ def run_simulation(
 
     container_image = kwargs.get("container_image", None)
 
-    task_id = api_invoker(api_method_name,
-                          params,
-                          type_annotations,
-                          resource_pool=computational_resources,
-                          container_image=container_image,
-                          storage_path_prefix=storage_dir,
-                          provider_id=provider_id)
+    try:
+        task_id = api_invoker(api_method_name,
+                              params,
+                              type_annotations,
+                              resource_pool=computational_resources,
+                              container_image=container_image,
+                              storage_path_prefix=storage_dir,
+                              provider_id=provider_id)
+    except ApiException as e:
+        raise TaskSubmissionException(e) from e
 
     if computational_resources is not None:
         logging.info("Task %s submitted to the queue of the %s.", task_id,
