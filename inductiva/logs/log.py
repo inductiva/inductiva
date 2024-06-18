@@ -46,6 +46,7 @@ def handle_uncaught_exception(exc_type, exc_value, exc_traceback):
         return
     sys.__excepthook__(exc_type, exc_value, exc_traceback)
 
+
 def _handle_api_exception(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, exceptions.ApiException) and \
         400 <= exc_value.status  < 500:
@@ -55,6 +56,7 @@ def _handle_api_exception(exc_type, exc_value, exc_traceback):
                           exc_info=(exc_type, exc_value, exc_traceback))
         return True
     return False
+
 
 def ipy_handle_uncaught_exception(self,
                                   exc_type,
