@@ -614,10 +614,10 @@ class Task:
 
     def get_simulator_name(self) -> str:
         # e.g. retrieve openfoam from fvm.openfoam.run_simulation
-        return self.get_info().method_name.split(".")[1]
+        return self.info.method_name.split(".")[1]
 
     def get_storage_path(self) -> str:
-        return self.get_info().storage_path
+        return self.info.storage_path
 
     def get_output_info(self) -> output_info.TaskOutputInfo:
         """Get information about the output files of the task.
@@ -802,7 +802,7 @@ class Task:
             return metric.value
 
         # The task has ended but the metric is not available
-        if self.is_terminal():
+        if self.info.is_terminal:
             return None
 
         # The task is still running
