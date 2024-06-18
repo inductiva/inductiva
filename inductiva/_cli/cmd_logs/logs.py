@@ -49,13 +49,14 @@ def _check_if_task_is_running(task: tasks.Task) -> Tuple[bool, str]:
 
     is_running = False
     try:
-        is_running = task.is_running()
+        info = task.get_info()
+        is_running = info.is_running
     except ApiException as e:
         return False, f"{ json.loads(e.body)['detail']}"
 
     if not is_running:
         return False, (
-            f"The current status of task {task.id} is '{task.get_status()}'\n"
+            f"The current status of task {task.id} is '{info.status}'\n"
             "and the simulation logs are not available for streaming.\n"
             "For more information about the task status, use:\n\n"
             f"  inductiva tasks list --task-id {task.id}\n")
