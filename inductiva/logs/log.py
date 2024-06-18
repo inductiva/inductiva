@@ -11,6 +11,7 @@ import platform
 
 from inductiva import constants
 from inductiva.client import exceptions
+from inductiva.utils import format_utils
 
 root_logger = logging.getLogger()
 
@@ -41,19 +42,29 @@ def log_and_exit(logger, level, msg, *args, **kwargs):
 
 
 def handle_uncaught_exception(exc_type, exc_value, exc_traceback):
-    if issubclass(exc_type, KeyboardInterrupt):
-        sys.__excepthook__(exc_type, exc_value, exc_traceback)
+    if _handle_api_exception(exc_type, exc_value, exc_traceback):
         return
+    sys.__excepthook__(exc_type, exc_value, exc_traceback)
+
+def _handle_api_exception(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, exceptions.ApiException) and \
         400 <= exc_value.status  < 500:
         detail = json.loads(exc_value.body)["detail"]
-        root_logger.error(detail, exc_info=(exc_type, exc_value, exc_traceback))
+        root_logger.error("Error: %s",
+                          detail,
+                          exc_info=(exc_type, exc_value, exc_traceback))
+        return True
+    return False
+
+def ipy_handle_uncaught_exception(self,
+                                  exc_type,
+                                  exc_value,
+                                  exc_traceback,
+                                  tb_offset=None):
+    if _handle_api_exception(exc_type, exc_value, exc_traceback):
         return
-    root_logger.error(
-        "System encountered the following unhandled exception:\n"
-        "%s\n  Exiting with code 1.",
-        exc_value,
-        exc_info=(exc_type, exc_value, exc_traceback))
+    self.showtraceback((exc_type, exc_value, exc_traceback),
+                       tb_offset=tb_offset)
 
 
 def setup(level=logging.INFO):
@@ -83,4 +94,20 @@ def setup(level=logging.INFO):
         root_logger.addHandler(handler)
 
     root_logger.setLevel(level)
-    sys.excepthook = handle_uncaught_exception
+
+    api_traceback = format_utils.getenv_bool("INDUCTIVA_DEBUG_API_TRACEBACK",
+                                             False)
+    if api_traceback:
+        return
+
+    has_ipython = False
+    try:
+        ipython = __import__("IPython")
+        has_ipython = True
+    except ImportError:
+        pass
+
+    if has_ipython and (ip := ipython.get_ipython()):
+        ip.set_custom_exc((Exception,), ipy_handle_uncaught_exception)
+    else:
+        sys.excepthook = handle_uncaught_exception
