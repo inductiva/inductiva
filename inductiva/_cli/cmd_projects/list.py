@@ -10,10 +10,7 @@ from inductiva.utils import format_utils
 
 
 def get_projects(_, fout: TextIO = sys.stdout):
-    """ Lists the user's projects. 
-
-    Lists all the user's projects.
-    """
+    """Lists all the user's projects."""
 
     projects = inductiva.projects.project.get_projects()
     table = defaultdict(list)
