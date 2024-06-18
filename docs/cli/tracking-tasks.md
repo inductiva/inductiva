@@ -5,10 +5,10 @@ simulation you submit to the API, you generate a `task`. The Inductiva CLI makes
 easy to monitor and manage all tasks you generated with the `list` subcommand that displays details about the most recent 
 tasks you launched. You can also track a specific task using its unique`--id`.
 
-````{eval-rst}
-.. seealso::
-   Learn more about how `tasks <../explore_api/tasks.html>`_ are generated through the Inductiva API.
-````
+```{seealso}
+Learn more about how [tasks](https://tutorials.inductiva.ai/intro_to_api/tasks.html) are generated through the Inductiva API.
+```
+
 Here's an example of how you can use these features:
 
 ```bash

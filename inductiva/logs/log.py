@@ -1,4 +1,5 @@
 """Custom logging functions"""
+import json
 import os
 
 import logging.handlers
@@ -9,6 +10,7 @@ import pathlib
 import platform
 
 from inductiva import constants
+from inductiva.client import exceptions
 
 root_logger = logging.getLogger()
 
@@ -41,6 +43,11 @@ def log_and_exit(logger, level, msg, *args, **kwargs):
 def handle_uncaught_exception(exc_type, exc_value, exc_traceback):
     if issubclass(exc_type, KeyboardInterrupt):
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
+        return
+    if issubclass(exc_type, exceptions.ApiException) and \
+        400 <= exc_value.status  < 500:
+        detail = json.loads(exc_value.body)["detail"]
+        root_logger.error(detail, exc_info=(exc_type, exc_value, exc_traceback))
         return
     root_logger.error(
         "System encountered the following unhandled exception:\n"
