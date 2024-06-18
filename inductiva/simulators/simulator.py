@@ -52,15 +52,21 @@ class Simulator(ABC):
         """Get whether the development version of the simulator is used."""
         return self._use_dev
 
-    def _get_simulator_name(self):
+    @property
+    def name(self):
         """Get the name of the simulator."""
         return self.__class__.__name__
+
+    @property
+    def image_uri(self):
+        """Get the image URI for this simulator."""
+        return self._image_uri
 
     def _get_image_uri(self):
         """Get the appropriate image name for this simulator."""
 
         img_type = "development" if self._use_dev else "production"
-        sim_name = self._get_simulator_name()
+        sim_name = self.name
         name = sim_name.lower()
 
         available = list_available_images()
@@ -152,6 +158,7 @@ class Simulator(ABC):
             computational_resources=on,
             extra_metadata=extra_metadata,
             container_image=container_image,
+            simulator=self,
             **kwargs,
         )
 

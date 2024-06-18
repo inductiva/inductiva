@@ -42,7 +42,8 @@ class OpenFOAM(simulators.Simulator):
         super().__init__(version=version, use_dev=use_dev)
         self.api_method_name = f"fvm.openfoam_{distribution}.run_simulation"
 
-    def _get_simulator_name(self):
+    @property
+    def name(self):
         """Get the name of the simulator."""
         return "OpenFOAM-" + self._distribution
 
