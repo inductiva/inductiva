@@ -93,11 +93,12 @@ class MPICluster(machines_base.BaseMachineGroup):
                              max_idle_time=max_idle_time,
                              auto_terminate_ts=auto_terminate_ts)
 
-    def terminate(self):
+    def terminate(self, verbose: bool = True):
         """Terminates the MPI Cluster."""
         return super().terminate(num_vms=self.num_machines,
                                  is_elastic=self.__is_elastic,
-                                 spot=self.__spot)
+                                 spot=self.__spot,
+                                 verbose=verbose)
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()

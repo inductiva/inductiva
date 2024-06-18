@@ -243,12 +243,14 @@ class BaseMachineGroup:
         logging.info("%s successfully started in %s.", self, creation_time)
 
         logging.info("The machine group is using the following quotas:")
-        self._log_quota_usage("used by resource")
+        self.log_quota_usage("used by resource")
+        return True
 
-    def terminate(self, **kwargs):
+    def terminate(self, verbose: bool = True, **kwargs):
         """Terminates a machine group."""
         if not self._started or self.id is None or self.name is None:
-            logging.info("Attempting to terminate an unstarted machine group.")
+            logging.warning(
+                "Attempting to terminate an unstarted machine group.")
             return
 
         try:
@@ -263,11 +265,14 @@ class BaseMachineGroup:
                 )
 
             self._api.delete_vm_group(body=request_body)
-            logging.info("Successfully requested termination of %s.",
-                         repr(self))
-            logging.info(
-                "Termination of the machine group freed the following quotas:")
-            self._log_quota_usage("freed by resource")
+            if verbose:
+                logging.info("Successfully requested termination of %s.",
+                             repr(self))
+                logging.info(
+                    "Termination of the machine group freed the following quotas:"
+                )
+                self.log_quota_usage("freed by resource")
+            return True
 
         except inductiva.client.ApiException as api_exception:
             raise api_exception
@@ -292,7 +297,7 @@ class BaseMachineGroup:
 
         return self._estimated_cost
 
-    def _log_quota_usage(self, resource_usage_header: str):
+    def log_quota_usage(self, resource_usage_header: str):
         quotas = users.get_quotas()
 
         table = defaultdict(list)
