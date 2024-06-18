@@ -45,10 +45,10 @@ Both options are shown below and both output the same version:
 ```console
 # using the CLI tool ($ is the shell prompt):
 $ inductiva --version
-inductiva 0.7.1
+inductiva 0.7.2
 # programmatically through direct python invocation:
 $ python -c 'import inductiva; print(inductiva.__version__)'
-0.7.1
+0.7.2
 ```
 
 
