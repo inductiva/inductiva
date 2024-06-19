@@ -5,28 +5,34 @@ from inductiva.benchmarks.methods import _replace_callable_from_dict
 from inductiva.benchmarks.methods import _compute_tasks_to_run
 from inductiva.benchmarks.methods import _can_start_resource
 from inductiva.benchmarks.methods import _tasks_by_vm_type
+from inductiva.tasks.task import TaskInfo
+
+executer_4 = mock.MagicMock()
+executer_4.vm_type = "c2-standard-4"
+executer_8 = mock.MagicMock()
+executer_8.vm_type = "c2-standard-8"
+executer_4d = mock.MagicMock()
+executer_4d.vm_type = "c2d-standard-4"
+executer_8d = mock.MagicMock()
+executer_8d.vm_type = "c2d-standard-8"
 
 
 def test___tasks_by_vm_type():
     """Test the tasks_by_vm_type function
     when a project has multiple vm_types.
     """
+    task_info_4 = TaskInfo()
+    task_info_4.executer = executer_4d
+    task_info_8 = TaskInfo()
+    task_info_8.executer = executer_8d
+
     project = mock.MagicMock()
     task1 = mock.MagicMock()
-    task1.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2d-standard-4"
-        }})
+    task1.get_info = mock.MagicMock(return_value=task_info_4)
     task2 = mock.MagicMock()
-    task2.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2d-standard-8"
-        }})
+    task2.get_info = mock.MagicMock(return_value=task_info_8)
     task3 = mock.MagicMock()
-    task3.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2d-standard-4"
-        }})
+    task3.get_info = mock.MagicMock(return_value=task_info_4)
 
     project.get_tasks = mock.MagicMock(return_value=[task1, task2, task3])
     # pylint: disable=W0212
@@ -53,22 +59,16 @@ def test___tasks_by_vm_type__all_same_vm_type():
     """Test the tasks_by_vm_type function
     when all tasks have the same vm_type.
     """
+    task_info_4 = TaskInfo()
+    task_info_4.executer = executer_4d
+
     project = mock.MagicMock()
     task1 = mock.MagicMock()
-    task1.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2d-standard-4"
-        }})
+    task1.get_info = mock.MagicMock(return_value=task_info_4)
     task2 = mock.MagicMock()
-    task2.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2d-standard-4"
-        }})
+    task2.get_info = mock.MagicMock(return_value=task_info_4)
     task3 = mock.MagicMock()
-    task3.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2d-standard-4"
-        }})
+    task3.get_info = mock.MagicMock(return_value=task_info_4)
 
     project.get_tasks = mock.MagicMock(return_value=[task1, task2, task3])
     # pylint: disable=W0212
@@ -97,21 +97,17 @@ def test__compute_tasks_to_run_some_task_ran():
         "region": "europe-west1"
     }]
 
+    task_info_4 = TaskInfo()
+    task_info_4.executer = executer_4
+    task_info_8 = TaskInfo()
+    task_info_8.executer = executer_8
+
     task1 = mock.MagicMock()
-    task1.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2-standard-4"
-        }})
+    task1.get_info = mock.MagicMock(return_value=task_info_4)
     task2 = mock.MagicMock()
-    task2.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2-standard-8"
-        }})
+    task2.get_info = mock.MagicMock(return_value=task_info_8)
     task3 = mock.MagicMock()
-    task3.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2-standard-4"
-        }})
+    task3.get_info = mock.MagicMock(return_value=task_info_4)
     current_project_tasks = {
         "c2-standard-4": [task1, task3],
         "c2-standard-8": [task2]
@@ -168,26 +164,20 @@ def test__compute_tasks_to_run_all_task_ran():
         "region": "europe-west1"
     }]
 
+    task_info_4 = TaskInfo()
+    task_info_4.executer = executer_4
+
+    task_info_8 = TaskInfo()
+    task_info_8.executer = executer_8
+
     task1 = mock.MagicMock()
-    task1.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2-standard-4"
-        }})
+    task1.get_info = mock.MagicMock(return_value=task_info_4)
     task2 = mock.MagicMock()
-    task2.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2-standard-8"
-        }})
+    task2.get_info = mock.MagicMock(return_value=task_info_8)
     task3 = mock.MagicMock()
-    task3.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2-standard-4"
-        }})
+    task3.get_info = mock.MagicMock(return_value=task_info_4)
     task4 = mock.MagicMock()
-    task4.get_info = mock.MagicMock(
-        return_value={"executer": {
-            "vm_type": "c2-standard-8"
-        }})
+    task4.get_info = mock.MagicMock(return_value=task_info_8)
     current_project_tasks = {
         "c2-standard-4": [task1, task3],
         "c2-standard-8": [task2, task4]

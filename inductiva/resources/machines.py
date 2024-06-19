@@ -282,8 +282,8 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         if verbose:
             logging.info(
                 "Note: these are the estimated costs of having minimum and the "
-                "maximum number of machines up in the cloud. The final cost will "
-                "vary depending on the total usage of the machines.")
+                "maximum number of machines up in the cloud. The final cost "
+                "will vary depending on the total usage of the machines.")
             logging.info(
                 "> Minimum estimated cloud cost of elastic machine group: "
                 "%.3f $/h.", cost_per_machine * self.min_machines)
