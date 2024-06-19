@@ -6,11 +6,11 @@ extensive
 range of features to solve anything from complex fluid flows involving chemical 
 reactions, turbulence and heat transfer, to solid dynamics and electromagnetics.
 
-There are two main open-source versions of OpenFOAM, one developed by
+There are two main open-source distributions of OpenFOAM, one developed by
 [OpenFOAM foundation](https://openfoam.org/) and another by the
-[ESI Group](https://www.openfoam.com/). Inductiva API supports both versions,
-and you can choose which one you want to use by setting the `version` parameter
-when initializing the simulator. The default version is the one developed by
+[ESI Group](https://www.openfoam.com/). Inductiva API supports both distributions,
+and you can choose which one you want to use by setting the `distribution` parameter
+when initializing the simulator. The default distribution is the one developed by
 the OpenFOAM foundation.
 
 A single simulation via Inductiva API comprises several steps done via OpenFOAM 
@@ -67,7 +67,7 @@ commands = [
 ]
 
 # Initialize the Simulator
-openfoam = inductiva.simulators.OpenFOAM(version="foundation")
+openfoam = inductiva.simulators.OpenFOAM(distribution="foundation")
 
 # Run simulation with config files in the input directory
 task = openfoam.run(input_dir=input_dir, commands=commands, n_vcpus=4)
@@ -79,13 +79,14 @@ task.download_outputs()
 ## What to read next
 
 If you are interested in OpenFOAM, you may also be interested in checking
-the following related simulators that are also avaiable via Inductiva API:
+the following related simulators that are also available via Inductiva API:
 
 * [CaNS](CaNS.md)
 * [DualSPHysics](DualSPHysics.md)
 * [SPlisHSPlasH](SPlisHSPlasH.md)
 
 You may also be interested in reading our blog post
-[The 3D Mesh Resolution Threshold - 5k Points is All You Need!](https://inductiva.ai/blog/article/5k-points-is-all-you-need), where we investigate the impact of reducing the
-level of detail of a 3D object in the accuracy of aerodynamic metrics obtain
-using a (virtual) wind tunnel implemented using OpenFOAM.
+[The 3D Mesh Resolution Threshold - 5k Points is All You Need!](https://inductiva.ai/blog/article/5k-points-is-all-you-need),
+where we investigate the impact of reducing the level of detail of a 3D object in
+the accuracy of aerodynamic metrics obtained using a (virtual) wind tunnel
+implemented using OpenFOAM.
