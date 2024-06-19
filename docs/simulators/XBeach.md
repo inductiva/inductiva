@@ -115,10 +115,10 @@ task = xbeach.run(
     n_vcpus=90,
     on=machine_group)
 
-# Task wait is a blocking call and will only return when the simulation
+# task.wait() is a blocking call and will only return when the simulation
 # ends. However, you can close your terminal without interrupting the 
-# simulation, and use Inductiva CLI (Command Line Interface) tools to
-# check the status of the simulation.
+# simulation and use Inductiva CLI (Command Line Interface) tools to
+# check the status of the simulation from another terminal.
 task.wait()
 
 # Terminate your dedicated MachineGroup at then end of the simulation.
@@ -219,9 +219,9 @@ Data:
 
 ```
 
-The summary is pretty handy to understand that almost 99% of the (wall) time is
-spent where is should be: on the computation stage, i.e. actually executing the
-simulation.
+The summary is pretty handy to understand that almost 99% of the (wall clock) 
+time is spent where is should be: on the computation stage, i.e. actually
+executing the simulation.
 
 Note: As seen in the code above, we are using a machine with 90 vCPUs and,
 in the method `run()`, we are requesting the simulation to be parallelized
