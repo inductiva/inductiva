@@ -55,50 +55,39 @@ def analyze(name: str,
 
         if task.get_status() != "success":
             continue
-
-        task_info = task.get_info()
-
-        mg_name = task_info["executer"]["vm_name"].split(
-            "-")[0] + "-" + task_info["executer"]["vm_name"].split("-")[1]
-
-        end_time = datetime.datetime.strptime(task_info["computation_end_time"],
-                                              "%Y-%m-%dT%H:%M:%S.%f%z")
-        start_time = datetime.datetime.strptime(
-            task_info["computation_start_time"], "%Y-%m-%dT%H:%M:%S.%f%z")
-
-        execution_time = end_time - start_time
-
+        task_info = task.info
+        mg_name = task_info.executer.vm_name.split(
+            "-")[0] + "-" + task_info.executer.vm_name.split("-")[1]
+        execution_time = task.get_computation_time(cached=True)
         resource = machine_groups.get_by_name(mg_name)
-
-        vm_type = task_info["executer"]["vm_type"]
+        vm_type = task_info.executer.vm_type
 
         if vm_type not in report["resources"]:
             report["resources"][vm_type] = {
                 "cost_per_hour":
-                    resource.estimate_cloud_cost(),
+                    resource.estimate_cloud_cost(verbose=False),
                 "type":
                     type(resource).__name__,
                 "provider":
-                    task_info["executer"]["host_type"],
+                    task_info.executer.host_type,
                 "machine_count":
                     resource.num_machines,
                 "tasks": [{
-                    "task_id": task_info["task_id"],
-                    "start_time": task_info["start_time"],
-                    "submit_time": task_info["create_time"],
-                    "execution_time_seconds": execution_time.total_seconds(),
-                    "metadata": metadata_tasks[task_info["task_id"]]
+                    "task_id": task_info.task_id,
+                    "start_time": task_info.start_time,
+                    "submit_time": task_info.create_time,
+                    "execution_time_seconds": execution_time,
+                    "metadata": metadata_tasks[task_info.task_id]
                 }]
             }
         else:
             report["resources"][vm_type]["tasks"].append({
-                "task_id": task_info["task_id"],
-                "start_time": task_info["start_time"],
-                "submit_time": task_info["create_time"],
-                "execution_time_seconds": execution_time.total_seconds(),
-                "metadata": metadata_tasks[task_info["task_id"]]
+                "task_id": task_info.task_id,
+                "start_time": task_info.start_time,
+                "submit_time": task_info.create_time,
+                "execution_time_seconds": execution_time,
+                "metadata": metadata_tasks[task_info.task_id]
             })
-
     if ouput_path:
         with open(f"{ouput_path}/{name}.json", "w",
                   encoding="utf-8") as output_file:
@@ -121,10 +110,10 @@ def _tasks_by_vm_type(project: Project) -> Dict[str, List[Task]]:
     resources = defaultdict(list)
     for task in tasks:
         task_info = task.get_info()
-        if task_info["executer"] is None:
+        if task_info.executer is None:
             raise RuntimeError(__("tasks_not_executed_yet"))
 
-        resource = task_info["executer"]["vm_type"]
+        resource = task_info.executer.vm_type
         resources[resource].append(task)
     return resources
 
@@ -346,7 +335,7 @@ def _can_start_resource(resource: BaseMachineGroup) -> bool:
 
     current_vcpu = int(resource.machine_type.split("-")[2])
 
-    if (cost_in_use + resource.estimate_cloud_cost() > cost_max or
+    if (cost_in_use + resource.estimate_cloud_cost(verbose=False) > cost_max or
             vcpu_in_use + current_vcpu > vcpu_max or
             machines_in_use + 1 > machines_max):
         return False
