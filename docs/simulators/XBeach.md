@@ -147,7 +147,8 @@ similar to the one below (note that the values shown for the quotas you have
 available may be different from the ones shown in this run):
 
 ```
-(base) lsarmento@Luiss-MacBook-Air xbeach % python run.py 
+python run.py 
+
 Registering MachineGroup configurations:
 > Name:         api-d4gzm10qxwvjus7mc58o4033o
 > Machine Type: c3d-highcpu-90
@@ -242,7 +243,7 @@ using the CLI. So, from your command line run (with the appropriate task id
 that you can see above):
 
 ```
-xbeach % inductiva tasks download 9ob6gknv794pvazg5bzd4oczo
+inductiva tasks download 9ob6gknv794pvazg5bzd4oczo
 ```
 
 Depending on the speed of your internet connection, donwloading thie files may
