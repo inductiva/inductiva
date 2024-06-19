@@ -22,6 +22,11 @@ class AmrWind(simulators.Simulator):
         super().__init__(version=version, use_dev=use_dev)
         self.api_method_name = "amrWind.amrWind.run_simulation"
 
+    @property
+    def name(self):
+        """Get the name of the this simulator."""
+        return "AMR-Wind"
+
     def run(self,
             input_dir: types.Path,
             sim_config_filename: str,
