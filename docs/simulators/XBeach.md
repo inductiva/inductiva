@@ -18,7 +18,7 @@ the number of cores available in the machine.
 ```python
 import inductiva
 
-# Set simulation input directory
+# Download example configuration files from Inductiva storage
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "xbeach-input-example.zip", unzip=True)
@@ -26,9 +26,10 @@ input_dir = inductiva.utils.download_from_url(
 # Initialize the Simulator
 xbeach = inductiva.simulators.XBeach()
 
-# Run simulation with config files in the input directory
-task = xbeach.run(input_dir=input_dir,
-                  sim_config_filename="params.txt")
+# Run simulation with configuration files in the input directory
+task = xbeach.run(
+    input_dir=input_dir,
+    sim_config_filename="params.txt")
 
 task.wait()
 task.download_outputs()
@@ -36,7 +37,7 @@ task.download_outputs()
 
 ## A more advanced example
 We are now going to run a much longer simulation, namely one whose configuration 
-scripts and input data are mae available via the
+scripts and input data are made available via the
 [GRIIDC](https://www.griidc.org/), a data repository based out of the Harte
 Research Institute for Gulf of Mexico Studies at Texas A&M University-Corpus 
 Christi. 
@@ -79,18 +80,18 @@ total 130976
 ```
 
 We are going to run this simulation, almost as it is, with only two small 
-changes to the parametrization defined in ```params.txt```. First, we will need
-to add an extra configuration parameter to account for the fact the API is 
-already running XBeach v10+, but the original simulation configuration files
-where prepared for an older version of XBeach. So will need to add the following
-line to ```params.txt``` (you can add it right at the top, after the header):
+changes to the parametrization defined in `params.txt`. First, we will need to
+add an extra configuration parameter to account for the fact the API is already
+running XBeach v10+, but the original simulation configuration files where
+prepared for an older version of XBeach. So will need to add the following line
+to `params.txt` (you can add it right at the top, after the header):
 ```
 single_dir = 0
 ``` 
-Second, to reduce the time to complete this simulation, we will change the
-stop time of simulation, ```tstop```, to just 34560 (10x less than original
-parametrization). Find the ```tstop``` parameter in ```params.txt``` and change
-the value to 34560.
+Second, to reduce the time to complete this simulation, we will change the stop 
+time of simulation, `tstop`, to just 34560 (10x less than original
+parametrization). Find the `tstop` parameter in `params.txt` and change the 
+value to `34560`.
 
 That's it! We won't do any more changes. Let's start the simulation. The python
 script we are going to use to trigger the simulation is:
@@ -114,27 +115,34 @@ task = xbeach.run(
     n_vcpus=90,
     on=machine_group)
 
+# Task wait is a blocking call and will only return when the simulation ends.
+# However, you can close your terminal without interrupting the simulation.
 task.wait()
-task.print_summary()
 
 # Terminate your dedicated MachineGroup at then end of the simulation.
 machine_group.terminate()
+
+# Let's get a small summary of the run.
+task.print_summary()
 ```
 
 There are a few of things you should notice in the script above:
 
 * We are not requesting the outputs of the simulation to be donwloaded to our
-local machine yet. That would be done by calling ```task.download_outputs()```
-in this script right after ```task.wait()```. Instead, we opted for letting the
-simulation finish and turning off the machine we are using. We will download the
-outputs at a late time, after checking the size of the output that will be
-automatically placed in our remote personal storage when the simulation ends.
-* Finally, we are calling ```task.print_summary()``` that shows the times
-spent at all stages of the process, including all auxiliary tasks, such as
-moving data around between your local computer, your personal remote storage
-space and the executer machine (i.e. the ```c3d-highcpu-90``` VM.)
+local machine immediately after we run the simulation. That could be done by
+calling `task.download_outputs()` in this script right after `task.wait()`. 
+Instead, we opted for just letting the simulation finish and 
+turning off the machine we are using. We will download the outputs later, after
+checking the size of the output that will be automatically placed in our remote
+personal storage when the simulation ends.
+* Finally, we are calling `task.print_summary()` that shows the times spent at
+all stages of the run, including all auxiliary tasks, such as moving data around
+between your local computer, your personal remote storage space and the executer
+machine (i.e. the `c3d-highcpu-90` VM.)
 
-Running this script, takes about 1h15, and should produce an output such as:
+Running this script, takes about 1h15, and should produce an output similar to
+the one below (note that the values shown for the quotas you have available may
+be different from the ones shown in this run):
 
 ```
 (base) lsarmento@Luiss-MacBook-Air xbeach % python run.py 
@@ -189,23 +197,23 @@ spent where is should be: on the computation stage, i.e. actually executing the
 simulation.
 
 Note: As seen in the code above, we are using a machine with 90 vCPUs and,
-in the method ```run()```, we are requesting the simulation to be parallelized
+in the method `run()`, we are requesting the simulation to be parallelized
 over all of those 90 vCPU. In some cases, parallelizing the simulation over only
 half of the available vCPUs leads to better peformance. This is because the 
 virtualization scheme of these VMs assigns two vCPU per underlying physical
-core. So, by setting ```n_vcpus``` to half the number of vCPUs we are implicitly
+core. So, by setting `n_vcpus` to half the number of vCPUs we are implicitly
 assigning one thread per physical core, which, is many cases, is more efficient
 because there is less competition for cache, and less I/O contention. However,
 this is NOT the case for this specific simulation with XBeach. In fact, running
-the simulation on the same machine and setting ```n_vcpus =45``` will make the
+the simulation on the same machine and setting `n_vcpus=45` will make the
 computation about 35% slower.
 
-### Downloading simulation dats
+### Downloading simulation data
 
 Now, it is time to fecth the results. We will be downloading a zip file with
 398.82MB of data (as shown in the summary). This can be done very conveniently
-using the CLI. So, from your command line run (with the appropriate task id that
-you can see above):
+using the CLI. So, from your command line run (with the appropriate task id 
+that you can see above):
 
 ```
 inductiva tasks download dz3nbyekv0ds17hzi6227a7b9
@@ -220,7 +228,7 @@ Downloading simulation outputs to inductiva_output/dz3nbyekv0ds17hzi6227a7b9/out
 Uncompressing the outputs to inductiva_output/dz3nbyekv0ds17hzi6227a7b9.
 ```
 
-If you now look under ```inductiva_output/dz3nbyekv0ds17hzi6227a7b9``` 
+If you now look under `inductiva_output/dz3nbyekv0ds17hzi6227a7b9` 
 (please check the id of the task that you actually run on your terminal) inside
 your project directory you should see something like:
 
@@ -259,21 +267,30 @@ total 1313072
 ```
 
 that contains all the files produced by XBeach, as well as two additional log 
-files that the Inductiva API always captures: ```stdout.txt``` and 
-```stderr.txt```. Now that you have your files locally, you can execute all 
-sorts of post-processing steps on them, as you would if you had run your
-simulations locally. 
+files that the Inductiva API always captures: `stdout.txt` and `stderr.txt`.
+Now that you have your files locally, you can execute all  sorts of
+post-processing steps on them, as you would if you had run your simulations
+locally. 
 
 That's it! You can now go bigger! You can start by trying to run the complete
-simulation (the original parameter is ```tstop = 345600```) on an even faster 
-machine such as a ```c3d-highcpu-360```!
+simulation (the original parameter is `tstop = 345600`) on an even faster 
+machine such as a `c3d-highcpu-180`!
 
 Good luck!
 
 ## What to read next
 
-If you are interested in XBeach, you may also be interested in checking the
-following related simulators that are also avaiable via Inductiva API:
+We invite you to read the 
+[XBeach benchmark](https://benchmarks.inductiva.ai/Xbeach/cova_gala/)
+that we are making available on our official benchmarks site. We show the
+performance of XBeach on several hardwate configurations for a simulation of
+a scenario involving the
+[Cova Gala](https://www.visitportugal.com/pt-pt/content/praia-da-cova-gala) 
+beach in the north of Portugal. This beach has been the focus of several studies
+over the years due to its high erosion rates.
+
+You may also be interested in checking the documentation related with other 
+coastal dynamic / hydrology simulators that are avaiable via Inductiva API:
 
 * [Reef3D](Reef3D.md)
 * [SCHISM](SCHISM.md)
