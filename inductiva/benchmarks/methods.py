@@ -3,10 +3,12 @@ Methods to interact with Benchmarks.
 """
 from collections import defaultdict
 import datetime
+import logging
 import time
 import json
 
 from typing import Any, Callable, Dict, List, Union
+from tqdm import tqdm
 
 from inductiva.resources.machines_base import BaseMachineGroup
 from inductiva.templating.manager import TemplateManager
@@ -34,7 +36,7 @@ def analyze(name: str,
     Returns:
         Dict: Dictionary with the information about the benchmark.
     """
-
+    logging.info("Starting analysis of benchmark %s", name)
     project = Project(name, append=True)
     project.open()
 
@@ -50,10 +52,11 @@ def analyze(name: str,
         for line in lines:
             temp_task = json.loads(line)
             metadata_tasks[temp_task["task_id"]] = temp_task
-
-    for task in tasks:
-
-        if task.get_status() != "success":
+    skipped_tasks = []
+    for task in tqdm(tasks, desc="Analyzing tasks"):
+        task_status = task.get_status()
+        if task_status != "success":
+            skipped_tasks.append(task)
             continue
         task_info = task.info
         mg_name = task_info.executer.vm_name.split(
@@ -88,7 +91,11 @@ def analyze(name: str,
                 "execution_time_seconds": execution_time,
                 "metadata": metadata_tasks[task_info.task_id]
             })
+    for task in skipped_tasks:
+        logging.info("Task %s was skipped due to status %s", task.info.task_id,
+                     task.info.status)
     if ouput_path:
+        logging.info("Writing report to %s", ouput_path)
         with open(f"{ouput_path}/{name}.json", "w",
                   encoding="utf-8") as output_file:
             output_file.write(json.dumps(report, indent=4))
