@@ -115,8 +115,10 @@ task = xbeach.run(
     n_vcpus=90,
     on=machine_group)
 
-# Task wait is a blocking call and will only return when the simulation ends.
-# However, you can close your terminal without interrupting the simulation.
+# Task wait is a blocking call and will only return when the simulation
+# ends. However, you can close your terminal without interrupting the 
+# simulation, and use Inductiva CLI (Command Line Interface) tools to
+# check the status of the simulation.
 task.wait()
 
 # Terminate your dedicated MachineGroup at then end of the simulation.
@@ -160,9 +162,9 @@ Machine Group api-d4gzm10qxwvjus7mc58o4033o with c3d-highcpu-90 machines success
 The machine group is using the following quotas:
 
                       USED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
- cost_per_hour        1.23045              1.23045           270
- total_num_machines   1                    1                 100
- total_num_vcpus      90                   90                1500
+ cost_per_hour        1.23045              1.23045           50
+ total_num_machines   1                    1                 10
+ total_num_vcpus      90                   90                500
 
 Task Information:
 > ID:                    9ob6gknv794pvazg5bzd4oczo
@@ -193,9 +195,9 @@ Successfully requested termination of MachineGroup(name="api-d4gzm10qxwvjus7mc58
 Termination of the machine group freed the following quotas:
 
                       FREED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
- cost_per_hour        1.23045               0                 270
- total_num_machines   1                     0                 100
- total_num_vcpus      90                    0                 1500
+ cost_per_hour        1.23045               0                 50
+ total_num_machines   1                     0                 10
+ total_num_vcpus      90                    0                 500
 
 
 Task status: success
@@ -287,7 +289,8 @@ total 1309960
      8 -rw-r--r--   1         860 19 Jun 11:41 qbcflist.bcf
      8 -rw-r--r--   1        1370 19 Jun 11:41 stderr.txt
    256 -rw-r--r--   1      109975 19 Jun 11:41 stdout.txt
-816256 -rw-r--r--   1   415526280 19 Jun 11:41 xboutput.nc```
+816256 -rw-r--r--   1   415526280 19 Jun 11:41 xboutput.nc
+```
 
 that contains all the files produced by XBeach, as well as two additional log 
 files that the Inductiva API always captures: `stdout.txt` and `stderr.txt`.
