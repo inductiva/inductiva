@@ -37,9 +37,11 @@ class Simulator(ABC):
                 the simulator. By default (False), the production version
                 is used.
         """
+        if version is not None and not isinstance(version, str):
+            raise ValueError("Version must be a string or None.")
         self.api_method_name = ""
         self._version = version
-        self._use_dev = use_dev
+        self._use_dev = bool(use_dev)
         self._image_uri = self._get_image_uri()
 
     @property
