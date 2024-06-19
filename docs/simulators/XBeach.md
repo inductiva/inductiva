@@ -140,56 +140,80 @@ all stages of the run, including all auxiliary tasks, such as moving data around
 between your local computer, your personal remote storage space and the executer
 machine (i.e. the `c3d-highcpu-90` VM.)
 
-Running this script, takes about 1h15, and should produce an output similar to
-the one below (note that the values shown for the quotas you have available may
-be different from the ones shown in this run):
+Running this script takes about 55 minutes and it should produce an output 
+similar to the one below (note that the values shown for the quotas you have 
+available may be different from the ones shown in this run):
 
 ```
 (base) lsarmento@Luiss-MacBook-Air xbeach % python run.py 
 Registering MachineGroup configurations:
-> Name:         api-6smqv1nofow4axk6vf99j1hwm
+> Name:         api-d4gzm10qxwvjus7mc58o4033o
 > Machine Type: c3d-highcpu-90
 > Data disk size:    20 GB
 > Number of machines: 1
 > Spot:               True
 > Estimated cloud cost of machine group: 1.230 $/h
-Starting MachineGroup(name="api-6smqv1nofow4axk6vf99j1hwm"). This may take a few minutes.
+ >> You are spending 3.0x less by using spot machines.
+Starting MachineGroup(name="api-d4gzm10qxwvjus7mc58o4033o"). This may take a few minutes.
 Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
-Machine Group api-6smqv1nofow4axk6vf99j1hwm with c3d-highcpu-90 machines successfully started in 0:00:29.
+Machine Group api-d4gzm10qxwvjus7mc58o4033o with c3d-highcpu-90 machines successfully started in 0:00:22.
+The machine group is using the following quotas:
+
+                      USED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
+ cost_per_hour        1.23045              1.23045           270
+ total_num_machines   1                    1                 100
+ total_num_vcpus      90                   90                1500
+
 Task Information:
-> ID:                    dz3nbyekv0ds17hzi6227a7b9
+> ID:                    9ob6gknv794pvazg5bzd4oczo
 > Method:                xbeach
 > Local input directory: Beach_Nourish_Only
 > Submitting to the following computational resources:
- >> Machine Group api-6smqv1nofow4axk6vf99j1hwm with c3d-highcpu-90 machines
+ >> Machine Group api-d4gzm10qxwvjus7mc58o4033o with c3d-highcpu-90 machines
 Preparing upload of the local input directory Beach_Nourish_Only (67.04 MB).
 Input archive size: 9.32 MB
 Uploading input archive...
-100%|██████████████████████████████████████████████████████████████████████████████| 9.32M/9.32M [00:10<00:00, 863kB/s]
+100%|███████████████████████████████████████████████████████████████████████████| 9.32M/9.32M [00:01<00:00, 5.44MB/s]
 Local input directory successfully uploaded.
-Task dz3nbyekv0ds17hzi6227a7b9 submitted to the queue of the Machine Group api-6smqv1nofow4axk6vf99j1hwm with c3d-highcpu-90 machines.
+Task 9ob6gknv794pvazg5bzd4oczo submitted to the queue of the Machine Group api-d4gzm10qxwvjus7mc58o4033o with c3d-highcpu-90 machines.
+Number of tasks ahead in the queue: 0
 Simulation metadata logged to: inductiva_output/task_metadata.json
-Task dz3nbyekv0ds17hzi6227a7b9 configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
+Task 9ob6gknv794pvazg5bzd4oczo configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
 Consider tracking the status of the task via CLI:
-	inductiva tasks list --task-id dz3nbyekv0ds17hzi6227a7b9
+	inductiva tasks list --task-id 9ob6gknv794pvazg5bzd4oczo
 Or, tracking the logs of the task via CLI:
-	inductiva logs dz3nbyekv0ds17hzi6227a7b9
-Task dz3nbyekv0ds17hzi6227a7b9 successfully queued and waiting to be picked-up for execution...
-Task dz3nbyekv0ds17hzi6227a7b9 has started and is now running remotely.
-Task dz3nbyekv0ds17hzi6227a7b9 completed successfully.
-Wall time                         3263.68s
-	input_upload:                   12.59
-	container_image_download         1.02
-	queue_time:                      8.53
-	input_download:                  0.21
-	input_decompression:             0.20
-	computation:                  3217.49
-	output_compression:             18.35
-	output_upload:                   6.28
-Data
-	output_size:	398.82 MB
-Terminating MachineGroup(name="api-6smqv1nofow4axk6vf99j1hwm"). This may take a few minutes.
-Machine Group api-6smqv1nofow4axk6vf99j1hwm with c3d-highcpu-90 machines successfully terminated in 0:01:22.
+	inductiva logs 9ob6gknv794pvazg5bzd4oczo
+Task 9ob6gknv794pvazg5bzd4oczo successfully queued and waiting to be picked-up for execution...
+The task 9ob6gknv794pvazg5bzd4oczo is about to start.
+Task 9ob6gknv794pvazg5bzd4oczo has started and is now running remotely.
+Task 9ob6gknv794pvazg5bzd4oczo completed successfully.
+Downloading stdout and stderr files to inductiva_output/9ob6gknv794pvazg5bzd4oczo...
+Partial download completed to inductiva_output/9ob6gknv794pvazg5bzd4oczo.
+Successfully requested termination of MachineGroup(name="api-d4gzm10qxwvjus7mc58o4033o").
+Termination of the machine group freed the following quotas:
+
+                      FREED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
+ cost_per_hour        1.23045               0                 270
+ total_num_machines   1                     0                 100
+ total_num_vcpus      90                    0                 1500
+
+
+Task status: success
+Wall clock time:  0:52:41
+Time breakdown:
+	Input upload:              3.65 s
+	Time in queue:             58.57 s
+	Container image download:  1.64 s
+	Input download:            0.19 s
+	Input decompression:       0.21 s
+	Computation:               0:51:13
+	Output compression:        18.31 s
+	Output upload:             6.12 s
+Data:
+	Size of zipped output:    390.13 MB
+	Size of unzipped output:  668.23 MB
+	Number of output files:   28
+
 ```
 
 The summary is pretty handy to understand that almost 99% of the (wall) time is
@@ -211,60 +235,59 @@ computation about 35% slower.
 ### Downloading simulation data
 
 Now, it is time to fecth the results. We will be downloading a zip file with
-398.82MB of data (as shown in the summary). This can be done very conveniently
+390MB of data (as shown in the summary). This can be done very conveniently
 using the CLI. So, from your command line run (with the appropriate task id 
 that you can see above):
 
 ```
-inductiva tasks download dz3nbyekv0ds17hzi6227a7b9
+xbeach % inductiva tasks download 9ob6gknv794pvazg5bzd4oczo
 ```
 
 Depending on the speed of your internet connection, donwloading thie files may
 take a few seconds or a few minutes:
 
 ```
-Downloading simulation outputs to inductiva_output/dz3nbyekv0ds17hzi6227a7b9/output.zip.
-100%|███████████████████████████████████████████████████████████████████████████████| 399M/399M [02:34<00:00, 2.59MB/s]
-Uncompressing the outputs to inductiva_output/dz3nbyekv0ds17hzi6227a7b9.
+Downloading simulation outputs to inductiva_output/9ob6gknv794pvazg5bzd4oczo/output.zip...
+100%|█████████████████████████████████████████████████████████████████████████████| 390M/390M [00:52<00:00, 7.48MB/s]
+Uncompressing the outputs to inductiva_output/9ob6gknv794pvazg5bzd4oczo...
 ```
 
-If you now look under `inductiva_output/dz3nbyekv0ds17hzi6227a7b9` 
+If you now look under `inductiva_output/9ob6gknv794pvazg5bzd4oczo` 
 (please check the id of the task that you actually run on your terminal) inside
 your project directory you should see something like:
 
 ```
-ls -las inductiva_output/dz3nbyekv0ds17hzi6227a7b9
-total 1313072
-     0 drwxr-xr-x  29         928  6 Jun 07:09 .
-     0 drwxr-xr-x   8         256  6 Jun 07:07 ..
- 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00001.bcf
- 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00002.bcf
- 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00003.bcf
- 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00004.bcf
- 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00005.bcf
- 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00006.bcf
- 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00007.bcf
- 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00008.bcf
- 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00009.bcf
- 35224 -rw-r--r--   1    18033840  6 Jun 07:09 E_series00010.bcf
-   256 -rw-r--r--   1      128821  6 Jun 07:09 XBlog.txt
-     8 -rw-r--r--   1        1105  6 Jun 07:09 XBwarning.txt
-     8 -rw-r--r--   1         860  6 Jun 07:09 ebcflist.bcf
- 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00001.bcf
- 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00002.bcf
- 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00003.bcf
- 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00004.bcf
- 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00005.bcf
- 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00006.bcf
- 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00007.bcf
- 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00008.bcf
- 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00009.bcf
- 14096 -rw-r--r--   1     7213536  6 Jun 07:09 q_series00010.bcf
-     8 -rw-r--r--   1         860  6 Jun 07:09 qbcflist.bcf
-     8 -rw-r--r--   1        1248  6 Jun 07:09 stderr.txt
-   256 -rw-r--r--   1      129208  6 Jun 07:09 stdout.txt
-819328 -rw-r--r--   1   415526280  6 Jun 07:09 xboutput.nc
-```
+ls -las inductiva_output/9ob6gknv794pvazg5bzd4oczo
+total 1309960
+     0 drwxr-xr-x  29         928 19 Jun 11:41 .
+     0 drwxr-xr-x  23         736 19 Jun 11:27 ..
+ 35224 -rw-r--r--   1    18033840 19 Jun 11:41 E_series00001.bcf
+ 35224 -rw-r--r--   1    18033840 19 Jun 11:41 E_series00002.bcf
+ 35224 -rw-r--r--   1    18033840 19 Jun 11:41 E_series00003.bcf
+ 35224 -rw-r--r--   1    18033840 19 Jun 11:41 E_series00004.bcf
+ 35224 -rw-r--r--   1    18033840 19 Jun 11:41 E_series00005.bcf
+ 35224 -rw-r--r--   1    18033840 19 Jun 11:41 E_series00006.bcf
+ 35224 -rw-r--r--   1    18033840 19 Jun 11:41 E_series00007.bcf
+ 35224 -rw-r--r--   1    18033840 19 Jun 11:41 E_series00008.bcf
+ 35224 -rw-r--r--   1    18033840 19 Jun 11:41 E_series00009.bcf
+ 35224 -rw-r--r--   1    18033840 19 Jun 11:41 E_series00010.bcf
+   216 -rw-r--r--   1      109588 19 Jun 11:41 XBlog.txt
+     8 -rw-r--r--   1        1227 19 Jun 11:41 XBwarning.txt
+     8 -rw-r--r--   1         860 19 Jun 11:41 ebcflist.bcf
+ 14096 -rw-r--r--   1     7213536 19 Jun 11:41 q_series00001.bcf
+ 14096 -rw-r--r--   1     7213536 19 Jun 11:41 q_series00002.bcf
+ 14096 -rw-r--r--   1     7213536 19 Jun 11:41 q_series00003.bcf
+ 14096 -rw-r--r--   1     7213536 19 Jun 11:41 q_series00004.bcf
+ 14096 -rw-r--r--   1     7213536 19 Jun 11:41 q_series00005.bcf
+ 14096 -rw-r--r--   1     7213536 19 Jun 11:41 q_series00006.bcf
+ 14096 -rw-r--r--   1     7213536 19 Jun 11:41 q_series00007.bcf
+ 14096 -rw-r--r--   1     7213536 19 Jun 11:41 q_series00008.bcf
+ 14096 -rw-r--r--   1     7213536 19 Jun 11:41 q_series00009.bcf
+ 14096 -rw-r--r--   1     7213536 19 Jun 11:41 q_series00010.bcf
+     8 -rw-r--r--   1         860 19 Jun 11:41 qbcflist.bcf
+     8 -rw-r--r--   1        1370 19 Jun 11:41 stderr.txt
+   256 -rw-r--r--   1      109975 19 Jun 11:41 stdout.txt
+816256 -rw-r--r--   1   415526280 19 Jun 11:41 xboutput.nc```
 
 that contains all the files produced by XBeach, as well as two additional log 
 files that the Inductiva API always captures: `stdout.txt` and `stderr.txt`.
@@ -281,7 +304,7 @@ Good luck!
 ## What to read next
 
 We invite you to read the 
-[XBeach benchmark](https://benchmarks.inductiva.ai/Xbeach/cova_gala/)
+[XBeach benchmark](https://benchmarks.staging.inductiva.ai/Xbeach/cova_gala/)
 that we are making available on our official benchmarks site. We show the
 performance of XBeach on several hardwate configurations for a simulation of
 a scenario involving the
