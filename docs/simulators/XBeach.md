@@ -307,11 +307,12 @@ Good luck!
 
 ## What to read next
 
-We invite you to read the 
+To better understand how you can optimize your XBeach runs, we invite you to 
+read the 
 [XBeach benchmark](https://benchmarks.staging.inductiva.ai/Xbeach/cova_gala/)
-that we are making available on our official benchmarks site. We show the
-performance of XBeach on several hardwate configurations for a simulation of
-a scenario involving the
+that we prepared for you on our official benchmarks site. You will be able to
+compare the performance of XBeach on several hardware configurations for a
+simulation scenario involving the
 [Cova Gala](https://www.visitportugal.com/pt-pt/content/praia-da-cova-gala) 
 beach in the north of Portugal. This beach has been the focus of several studies
 over the years due to its high erosion rates.
