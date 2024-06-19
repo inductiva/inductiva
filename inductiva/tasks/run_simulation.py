@@ -26,6 +26,7 @@ def run_simulation(
     storage_dir: Optional[types.Path] = "",
     api_invoker=None,
     extra_metadata=None,
+    simulator=None,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -52,7 +53,8 @@ def run_simulation(
                           resource_pool=computational_resources,
                           container_image=container_image,
                           storage_path_prefix=storage_dir,
-                          provider_id=provider_id)
+                          provider_id=provider_id,
+                          simulator=simulator)
 
     if computational_resources is not None:
         logging.info("Task %s submitted to the queue of the %s.", task_id,
