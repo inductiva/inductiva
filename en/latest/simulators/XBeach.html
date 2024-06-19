@@ -384,6 +384,10 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-more-advanced-example">A more advanced example</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-simulation-data">Downloading simulation data</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
             </nav>
@@ -413,7 +417,7 @@ the number of cores available in the machine.</p>
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
-<span class="c1"># Set simulation input directory</span>
+<span class="c1"># Download example configuration files from Inductiva storage</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
     <span class="s2">&quot;xbeach-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -421,19 +425,279 @@ the number of cores available in the machine.</p>
 <span class="c1"># Initialize the Simulator</span>
 <span class="n">xbeach</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">XBeach</span><span class="p">()</span>
 
-<span class="c1"># Run simulation with config files in the input directory</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">xbeach</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-                  <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;params.txt&quot;</span><span class="p">)</span>
+<span class="c1"># Run simulation with configuration files in the input directory</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">xbeach</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;params.txt&quot;</span><span class="p">)</span>
 
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
+<section id="a-more-advanced-example">
+<h2>A more advanced example<a class="headerlink" href="#a-more-advanced-example" title="Permalink to this heading">#</a></h2>
+<p>We are now going to run a much longer simulation, namely one whose configuration
+scripts and input data are made available via the
+<a class="reference external" href="https://www.griidc.org/" target="_blank">GRIIDC</a>, a data repository based out of the Harte
+Research Institute for Gulf of Mexico Studies at Texas A&amp;M University-Corpus
+Christi.</p>
+<p>More specifically, we will run one of simulations described in
+“XBeach model setup and results for beach and dune enhancement scenarios on
+Galveston Island, Texas”, which is made available
+<a class="reference external" href="https://data.griidc.org/data/HI.x833.000:0001" target="_blank">here</a>.</p>
+<p>We will start by downloading the required input files. At the bottom of the
+<a class="reference external" href="https://data.griidc.org/data/HI.x833.000:0001#individual-files" target="_blank">dataset page</a>
+you will find a widget for downloading indvidual files. We will need to
+download the contents of an entire directory. Using the widget, please
+select: <strong>Files &gt;&gt; XBeach_Model_Runs &gt;&gt; Beach_Nourish_Only &gt;&gt; Input</strong>.</p>
+<p>Select all files inside the directory using the checkbox and click on the
+elipsis “⋮” to download them:</p>
+<p><img alt="Select each of the files inside the Input folder" src="../_images/xbeach_source_files.png" /></p>
+<p>Move all files to a directory named  “Beach_Nourish_Only” inside your Inductiva
+python project directory. Inside the  “Beach_Nourish_Only” you should then have
+something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">-</span><span class="n">las</span> <span class="n">Beach_Nourish_Only</span> 
+<span class="n">total</span> <span class="mi">130976</span>
+    <span class="mi">0</span> <span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">12</span>        <span class="mi">384</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">13</span> <span class="o">.</span>
+    <span class="mi">0</span> <span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>   <span class="mi">3</span>         <span class="mi">96</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">14</span> <span class="o">..</span>
+    <span class="mi">8</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span>       <span class="mi">3069</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span> <span class="n">README</span><span class="o">.</span><span class="n">txt</span>
+<span class="mi">26184</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span>   <span class="mi">13404906</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span> <span class="n">bed</span><span class="o">.</span><span class="n">dep</span>
+<span class="mi">26184</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span>   <span class="mi">13404906</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span> <span class="n">bedfricfile</span><span class="o">.</span><span class="n">txt</span>
+   <span class="mi">16</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span>       <span class="mi">5324</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span> <span class="n">jonswap3</span><span class="o">.</span><span class="n">txt</span>
+<span class="mi">26184</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span>   <span class="mi">13404906</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span> <span class="n">nebed</span><span class="o">.</span><span class="n">dep</span>
+    <span class="mi">8</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span>       <span class="mi">2281</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span> <span class="n">params</span><span class="o">.</span><span class="n">txt</span>
+   <span class="mi">16</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span>       <span class="mi">4850</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span> <span class="n">tide</span><span class="o">.</span><span class="n">txt</span>
+<span class="mi">26184</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span>   <span class="mi">13404906</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span> <span class="n">x</span><span class="o">.</span><span class="n">grd</span>
+    <span class="mi">8</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span>        <span class="mi">635</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span> <span class="n">xbeach</span><span class="o">.</span><span class="n">slurm</span>
+<span class="mi">26184</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--@</span>  <span class="mi">1</span>   <span class="mi">13404906</span>  <span class="mi">5</span> <span class="n">Jun</span> <span class="mi">16</span><span class="p">:</span><span class="mi">12</span> <span class="n">y</span><span class="o">.</span><span class="n">grd</span>
+</pre></div>
+</div>
+<p>We are going to run this simulation, almost as it is, with only two small
+changes to the parametrization defined in <code class="docutils literal notranslate"><span class="pre">params.txt</span></code>. First, we will need to
+add an extra configuration parameter to account for the fact the API is already
+running XBeach v10+, but the original simulation configuration files where
+prepared for an older version of XBeach. So will need to add the following line
+to <code class="docutils literal notranslate"><span class="pre">params.txt</span></code> (you can add it right at the top, after the header):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">single_dir</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>Second, to reduce the time to complete this simulation, we will change the stop
+time of simulation, <code class="docutils literal notranslate"><span class="pre">tstop</span></code>, to just 34560 (10x less than original
+parametrization). Find the <code class="docutils literal notranslate"><span class="pre">tstop</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">params.txt</span></code> and change the
+value to <code class="docutils literal notranslate"><span class="pre">34560</span></code>.</p>
+<p>That’s it! We won’t do any more changes. Let’s start the simulation. The python
+script we are going to use to trigger the simulation is:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c3d-highcpu-90&quot;</span><span class="p">,</span>
+    <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Initialize the Simulator</span>
+<span class="n">xbeach</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">XBeach</span><span class="p">()</span>
+
+<span class="c1"># Run simulation with config files in the input directory</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">xbeach</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;Beach_Nourish_Only&quot;</span><span class="p">,</span>
+    <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;params.txt&quot;</span><span class="p">,</span>
+    <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+
+<span class="c1"># task.wait() is a blocking call and will only return when the simulation</span>
+<span class="c1"># ends. However, you can close your terminal without interrupting the </span>
+<span class="c1"># simulation and use Inductiva CLI (Command Line Interface) tools to</span>
+<span class="c1"># check the status of the simulation from another terminal.</span>
+<span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+<span class="c1"># Terminate your dedicated MachineGroup at then end of the simulation.</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+
+<span class="c1"># Let&#39;s get a small summary of the run.</span>
+<span class="n">task</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>There are a few of things you should notice in the script above:</p>
+<ul class="simple">
+<li><p>We are not requesting the outputs of the simulation to be donwloaded to our
+local machine immediately after we run the simulation. That could be done by
+calling <code class="docutils literal notranslate"><span class="pre">task.download_outputs()</span></code> in this script right after <code class="docutils literal notranslate"><span class="pre">task.wait()</span></code>.
+Instead, we opted for just letting the simulation finish and
+turning off the machine we are using. We will download the outputs later, after
+checking the size of the output that will be automatically placed in our remote
+personal storage when the simulation ends.</p></li>
+<li><p>Finally, we are calling <code class="docutils literal notranslate"><span class="pre">task.print_summary()</span></code> that shows the times spent at
+all stages of the run, including all auxiliary tasks, such as moving data around
+between your local computer, your personal remote storage space and the executer
+machine (i.e. the <code class="docutils literal notranslate"><span class="pre">c3d-highcpu-90</span></code> VM.)</p></li>
+</ul>
+<p>Running this script takes about 55 minutes and it should produce an output
+similar to the one below (note that the values shown for the quotas you have
+available may be different from the ones shown in this run):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>python run.py 
+
+Registering MachineGroup configurations:
+&gt; Name:         api-d4gzm10qxwvjus7mc58o4033o
+&gt; Machine Type: c3d-highcpu-90
+&gt; Data disk size:    20 GB
+&gt; Number of machines: 1
+&gt; Spot:               True
+&gt; Estimated cloud cost of machine group: 1.230 $/h
+ &gt;&gt; You are spending 3.0x less by using spot machines.
+Starting MachineGroup(name=&quot;api-d4gzm10qxwvjus7mc58o4033o&quot;). This may take a few minutes.
+Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
+Machine Group api-d4gzm10qxwvjus7mc58o4033o with c3d-highcpu-90 machines successfully started in 0:00:22.
+The machine group is using the following quotas:
+
+                      USED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
+ cost_per_hour        1.23045              1.23045           50
+ total_num_machines   1                    1                 10
+ total_num_vcpus      90                   90                500
+
+Task Information:
+&gt; ID:                    9ob6gknv794pvazg5bzd4oczo
+&gt; Method:                xbeach
+&gt; Local input directory: Beach_Nourish_Only
+&gt; Submitting to the following computational resources:
+ &gt;&gt; Machine Group api-d4gzm10qxwvjus7mc58o4033o with c3d-highcpu-90 machines
+Preparing upload of the local input directory Beach_Nourish_Only (67.04 MB).
+Input archive size: 9.32 MB
+Uploading input archive...
+100%|███████████████████████████████████████████████████████████████████████████| 9.32M/9.32M [00:01&lt;00:00, 5.44MB/s]
+Local input directory successfully uploaded.
+Task 9ob6gknv794pvazg5bzd4oczo submitted to the queue of the Machine Group api-d4gzm10qxwvjus7mc58o4033o with c3d-highcpu-90 machines.
+Number of tasks ahead in the queue: 0
+Simulation metadata logged to: inductiva_output/task_metadata.json
+Task 9ob6gknv794pvazg5bzd4oczo configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
+Consider tracking the status of the task via CLI:
+	inductiva tasks list --task-id 9ob6gknv794pvazg5bzd4oczo
+Or, tracking the logs of the task via CLI:
+	inductiva logs 9ob6gknv794pvazg5bzd4oczo
+Task 9ob6gknv794pvazg5bzd4oczo successfully queued and waiting to be picked-up for execution...
+The task 9ob6gknv794pvazg5bzd4oczo is about to start.
+Task 9ob6gknv794pvazg5bzd4oczo has started and is now running remotely.
+Task 9ob6gknv794pvazg5bzd4oczo completed successfully.
+Downloading stdout and stderr files to inductiva_output/9ob6gknv794pvazg5bzd4oczo...
+Partial download completed to inductiva_output/9ob6gknv794pvazg5bzd4oczo.
+Successfully requested termination of MachineGroup(name=&quot;api-d4gzm10qxwvjus7mc58o4033o&quot;).
+Termination of the machine group freed the following quotas:
+
+                      FREED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
+ cost_per_hour        1.23045               0                 50
+ total_num_machines   1                     0                 10
+ total_num_vcpus      90                    0                 500
+
+
+Task status: success
+Wall clock time:  0:52:41
+Time breakdown:
+	Input upload:              3.65 s
+	Time in queue:             58.57 s
+	Container image download:  1.64 s
+	Input download:            0.19 s
+	Input decompression:       0.21 s
+	Computation:               0:51:13
+	Output compression:        18.31 s
+	Output upload:             6.12 s
+Data:
+	Size of zipped output:    390.13 MB
+	Size of unzipped output:  668.23 MB
+	Number of output files:   28
+
+</pre></div>
+</div>
+<p>The summary is pretty handy to understand that almost 99% of the (wall clock)
+time is spent where is should be: on the computation stage, i.e. actually
+executing the simulation.</p>
+<p>Note: As seen in the code above, we are using a machine with 90 vCPUs and,
+in the method <code class="docutils literal notranslate"><span class="pre">run()</span></code>, we are requesting the simulation to be parallelized
+over all of those 90 vCPU. In some cases, parallelizing the simulation over only
+half of the available vCPUs leads to better peformance. This is because the
+virtualization scheme of these VMs assigns two vCPU per underlying physical
+core. So, by setting <code class="docutils literal notranslate"><span class="pre">n_vcpus</span></code> to half the number of vCPUs we are implicitly
+assigning one thread per physical core, which, is many cases, is more efficient
+because there is less competition for cache, and less I/O contention. However,
+this is NOT the case for this specific simulation with XBeach. In fact, running
+the simulation on the same machine and setting <code class="docutils literal notranslate"><span class="pre">n_vcpus=45</span></code> will make the
+computation about 35% slower.</p>
+<section id="downloading-simulation-data">
+<h3>Downloading simulation data<a class="headerlink" href="#downloading-simulation-data" title="Permalink to this heading">#</a></h3>
+<p>Now, it is time to fecth the results. We will be downloading a zip file with
+390MB of data (as shown in the summary). This can be done very conveniently
+using the CLI. So, from your command line run (with the appropriate task id
+that you can see above):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span> <span class="n">tasks</span> <span class="n">download</span> <span class="mi">9</span><span class="n">ob6gknv794pvazg5bzd4oczo</span>
+</pre></div>
+</div>
+<p>Depending on the speed of your internet connection, donwloading thie files may
+take a few seconds or a few minutes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Downloading simulation outputs to inductiva_output/9ob6gknv794pvazg5bzd4oczo/output.zip...
+100%|█████████████████████████████████████████████████████████████████████████████| 390M/390M [00:52&lt;00:00, 7.48MB/s]
+Uncompressing the outputs to inductiva_output/9ob6gknv794pvazg5bzd4oczo...
+</pre></div>
+</div>
+<p>If you now look under <code class="docutils literal notranslate"><span class="pre">inductiva_output/9ob6gknv794pvazg5bzd4oczo</span></code>
+(please check the id of the task that you actually run on your terminal) inside
+your project directory you should see something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="o">-</span><span class="n">las</span> <span class="n">inductiva_output</span><span class="o">/</span><span class="mi">9</span><span class="n">ob6gknv794pvazg5bzd4oczo</span>
+<span class="n">total</span> <span class="mi">1309960</span>
+     <span class="mi">0</span> <span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">29</span>         <span class="mi">928</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="o">.</span>
+     <span class="mi">0</span> <span class="n">drwxr</span><span class="o">-</span><span class="n">xr</span><span class="o">-</span><span class="n">x</span>  <span class="mi">23</span>         <span class="mi">736</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">27</span> <span class="o">..</span>
+ <span class="mi">35224</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>    <span class="mi">18033840</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">E_series00001</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">35224</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>    <span class="mi">18033840</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">E_series00002</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">35224</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>    <span class="mi">18033840</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">E_series00003</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">35224</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>    <span class="mi">18033840</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">E_series00004</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">35224</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>    <span class="mi">18033840</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">E_series00005</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">35224</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>    <span class="mi">18033840</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">E_series00006</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">35224</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>    <span class="mi">18033840</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">E_series00007</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">35224</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>    <span class="mi">18033840</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">E_series00008</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">35224</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>    <span class="mi">18033840</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">E_series00009</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">35224</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>    <span class="mi">18033840</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">E_series00010</span><span class="o">.</span><span class="n">bcf</span>
+   <span class="mi">216</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>      <span class="mi">109588</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">XBlog</span><span class="o">.</span><span class="n">txt</span>
+     <span class="mi">8</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>        <span class="mi">1227</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">XBwarning</span><span class="o">.</span><span class="n">txt</span>
+     <span class="mi">8</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>         <span class="mi">860</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">ebcflist</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">14096</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>     <span class="mi">7213536</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">q_series00001</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">14096</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>     <span class="mi">7213536</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">q_series00002</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">14096</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>     <span class="mi">7213536</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">q_series00003</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">14096</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>     <span class="mi">7213536</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">q_series00004</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">14096</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>     <span class="mi">7213536</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">q_series00005</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">14096</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>     <span class="mi">7213536</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">q_series00006</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">14096</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>     <span class="mi">7213536</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">q_series00007</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">14096</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>     <span class="mi">7213536</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">q_series00008</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">14096</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>     <span class="mi">7213536</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">q_series00009</span><span class="o">.</span><span class="n">bcf</span>
+ <span class="mi">14096</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>     <span class="mi">7213536</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">q_series00010</span><span class="o">.</span><span class="n">bcf</span>
+     <span class="mi">8</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>         <span class="mi">860</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">qbcflist</span><span class="o">.</span><span class="n">bcf</span>
+     <span class="mi">8</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>        <span class="mi">1370</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">stderr</span><span class="o">.</span><span class="n">txt</span>
+   <span class="mi">256</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>      <span class="mi">109975</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">stdout</span><span class="o">.</span><span class="n">txt</span>
+<span class="mi">816256</span> <span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>   <span class="mi">1</span>   <span class="mi">415526280</span> <span class="mi">19</span> <span class="n">Jun</span> <span class="mi">11</span><span class="p">:</span><span class="mi">41</span> <span class="n">xboutput</span><span class="o">.</span><span class="n">nc</span>
+</pre></div>
+</div>
+<p>that contains all the files produced by XBeach, as well as two additional log
+files that the Inductiva API always captures: <code class="docutils literal notranslate"><span class="pre">stdout.txt</span></code> and <code class="docutils literal notranslate"><span class="pre">stderr.txt</span></code>.
+Now that you have your files locally, you can execute all  sorts of
+post-processing steps on them, as you would if you had run your simulations
+locally.</p>
+<p>That’s it! You can now go bigger! You can start by trying to run the complete
+simulation (the original parameter is <code class="docutils literal notranslate"><span class="pre">tstop</span> <span class="pre">=</span> <span class="pre">345600</span></code>) on an even faster
+machine such as a <code class="docutils literal notranslate"><span class="pre">c3d-highcpu-180</span></code>!</p>
+<p>Good luck!</p>
+</section>
+</section>
 <section id="what-to-read-next">
 <h2>What to read next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
-<p>If you are interested in XBeach, you may also be interested in checking the
-following related simulators that are also avaiable via Inductiva API:</p>
+<p>To better understand how you can optimize your XBeach runs, we invite you to
+read the
+<a class="reference external" href="https://benchmarks.staging.inductiva.ai/Xbeach/cova_gala/" target="_blank">XBeach benchmark</a>
+that we prepared for you on our official benchmarks site. You will be able to
+compare the performance of XBeach on several hardware configurations for a
+simulation scenario involving the
+<a class="reference external" href="https://www.visitportugal.com/pt-pt/content/praia-da-cova-gala" target="_blank">Cova Gala</a>
+beach in the north of Portugal. This beach has been the focus of several studies
+over the years due to its high erosion rates.</p>
+<p>You may also be interested in checking the documentation related with other
+coastal dynamic / hydrology simulators that are avaiable via Inductiva API:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="Reef3D.html"><span class="std std-doc">Reef3D</span></a></p></li>
 <li><p><a class="reference internal" href="SCHISM.html"><span class="std std-doc">SCHISM</span></a></p></li>
@@ -489,6 +753,10 @@ following related simulators that are also avaiable via Inductiva API:</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-more-advanced-example">A more advanced example</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-simulation-data">Downloading simulation data</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
   </nav></div>
