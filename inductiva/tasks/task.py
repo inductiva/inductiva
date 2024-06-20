@@ -280,6 +280,8 @@ class Task:
         self._status = None
         self._tasks_ahead: Optional[int] = None
         self._summary = None
+        # Internal state to track if the method was called from the wait method
+        self._called_from_wait = False
 
     def is_running(self) -> bool:
         """Validate if the task is running.
@@ -499,8 +501,8 @@ class Task:
                         filenames=self.STANDARD_OUTPUT_FILES)
                     if status == models.TaskStatusCode.FAILED:
                         logging.error(
-                            "Please inspect the stdout and stderr files at: %s",
-                            out_dir)
+                            "Please inspect the stdout.txt and"
+                            " stderr.txt files at: %s", out_dir)
                 return status
 
             time.sleep(polling_period)
