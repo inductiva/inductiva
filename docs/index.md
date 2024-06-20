@@ -4,16 +4,6 @@
 
 ```{toctree}
 ---
-caption: Get Started
-maxdepth: 1
-hidden: true
----
-get_started/installation
-get_started/first_example
-```
-
-```{toctree}
----
 caption: Quick Recipes
 maxdepth: 1
 hidden: true
