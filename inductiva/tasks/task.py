@@ -502,7 +502,8 @@ class Task:
                     if status == models.TaskStatusCode.FAILED:
                         logging.error(
                             "Please inspect the stdout.txt and"
-                            " stderr.txt files at: %s", out_dir)
+                            " stderr.txt files at: %s\n"
+                            "For more information.", out_dir)
                 return status
 
             time.sleep(polling_period)
@@ -691,13 +692,14 @@ class Task:
                 storage after the download is complete. Only used if filenames
                 is None or empty (i.e., all output files are downloaded).
         """
+        self._status = self.get_status()
         try:
             api_response = self._api.get_output_download_url(
                 path_params=self._get_path_params(),)
         except exceptions.ApiException as e:
             if not self._called_from_wait:
-                status = self.get_status()
-                if status == models.TaskStatusCode.EXECUTERFAILED:
+
+                if self._status == models.TaskStatusCode.EXECUTERFAILED:
                     logging.info("The remote process running the task failed:")
                     self.get_info()
                     detail = self.info.executer.error_detail
@@ -794,6 +796,12 @@ class Task:
 
         if rm_remote_files:
             self.remove_remote_files()
+
+        if self._status == models.TaskStatusCode.FAILED:
+            logging.error(
+                "Task %s failed.\n"
+                "Please inspect the stdout.txt and stderr.txt files at: %s\n"
+                "For more information.", self.id, output_dir)
 
         return output_dir
 
