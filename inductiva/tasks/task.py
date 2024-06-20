@@ -697,16 +697,16 @@ class Task:
                 status = self.get_status()
                 if status == models.TaskStatusCode.EXECUTERFAILED:
                     logging.info("The remote process running the task failed:")
+                    self.get_info()
+                    detail = self.info.executer.error_detail
+                    if detail:
+                        logging.info(" > Message: %s", detail)
+                    else:
+                        logging.info(" > No error message available.")
                 else:
-                    exception_data = json.loads(e.body)
-                    logging.error(exception_data["detail"])
-                self.get_info()
-                detail = self.info.executer.error_detail
-                if detail:
-                    logging.info(" > Message: %s", detail)
-                else:
-                    logging.info(" > No error message available.")
-                return None
+                    # Raise the exception to be handled by the exception handler
+                    raise e
+            return None
         finally:
             # Reset internal state
             self._called_from_wait = False
