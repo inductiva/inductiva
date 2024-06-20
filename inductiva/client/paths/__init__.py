@@ -36,6 +36,7 @@ class PathValues(str, enum.Enum):
     ADMIN_ACTIVE_TASKS = "/admin/active_tasks"
     ADMIN_USERS_USERNAME_COST = "/admin/users/{username}/cost"
     ADMIN_EXECUTERTRACKER_TOKEN = "/admin/executer-tracker/token"
+    ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE = "/admin/groups/{machine_group_id}/terminate"
     EXECUTERTRACKER_REGISTER = "/executer-tracker/register"
     EXECUTERTRACKER_MACHINE_ID = "/executer-tracker/{machine_id}"
     EXECUTERTRACKER_MACHINE_ID_TASK = "/executer-tracker/{machine_id}/task"

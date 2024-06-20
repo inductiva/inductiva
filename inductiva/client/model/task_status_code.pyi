@@ -76,6 +76,10 @@ class TaskStatusCode(
         return cls("executer-terminated-by-user")
     
     @schemas.classproperty
+    def EXECUTERTERMINATEDTTLEXCEEDED(cls):
+        return cls("executer-terminated-ttl-exceeded")
+    
+    @schemas.classproperty
     def EXECUTERFAILED(cls):
         return cls("executer-failed")
     
