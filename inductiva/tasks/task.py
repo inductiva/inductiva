@@ -492,8 +492,12 @@ class Task:
                 sys.stdout.write("\r\033[2K")
 
                 if download_std_on_completion:
-                    self.download_outputs(filenames=self.STANDARD_OUTPUT_FILES)
-
+                    out_dir = self.download_outputs(
+                        filenames=self.STANDARD_OUTPUT_FILES)
+                    if status == models.TaskStatusCode.EXECUTERFAILED:
+                        logging.error(
+                            "Please check the stdout and stderr files at: %s",
+                            out_dir)
                 return status
 
             time.sleep(polling_period)
