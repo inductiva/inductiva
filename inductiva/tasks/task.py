@@ -492,9 +492,10 @@ class Task:
                 sys.stdout.write("\r\033[2K")
 
                 if download_std_on_completion:
+                    self._called_from_wait = True
                     out_dir = self.download_outputs(
                         filenames=self.STANDARD_OUTPUT_FILES)
-                    if status == models.TaskStatusCode.EXECUTERFAILED:
+                    if status == models.TaskStatusCode.FAILED:
                         logging.error(
                             "Please check the stdout and stderr files at: %s",
                             out_dir)
@@ -690,22 +691,23 @@ class Task:
             api_response = self._api.get_output_download_url(
                 path_params=self._get_path_params(),)
         except exceptions.ApiException as e:
-            status = self.get_status()
-
-            if status == models.TaskStatusCode.EXECUTERFAILED:
-                logging.info("The remote process running the task failed:")
-            else:
-                exception_data = json.loads(e.body)
-                logging.error(exception_data["detail"])
-
-            self.get_info()
-            detail = self.info.executer.error_detail
-            if detail:
-                logging.info(" > Message: %s", detail)
-            else:
-                logging.info(" > No error message available.")
-
-            return None
+            if not self._called_from_wait:
+                status = self.get_status()
+                if status == models.TaskStatusCode.EXECUTERFAILED:
+                    logging.info("The remote process running the task failed:")
+                else:
+                    exception_data = json.loads(e.body)
+                    logging.error(exception_data["detail"])
+                self.get_info()
+                detail = self.info.executer.error_detail
+                if detail:
+                    logging.info(" > Message: %s", detail)
+                else:
+                    logging.info(" > No error message available.")
+                return None
+        finally:
+            # Reset internal state
+            self._called_from_wait = False
 
         download_url = api_response.body.get("url")
 
