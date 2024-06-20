@@ -682,8 +682,26 @@ class Task:
                 storage after the download is complete. Only used if filenames
                 is None or empty (i.e., all output files are downloaded).
         """
-        api_response = self._api.get_output_download_url(
-            path_params=self._get_path_params(),)
+        try:
+            api_response = self._api.get_output_download_url(
+                path_params=self._get_path_params(),)
+        except exceptions.ApiException as e:
+            status = self.get_status()
+
+            if status == models.TaskStatusCode.EXECUTERFAILED:
+                logging.info("The remote process running the task failed:")
+            else:
+                exception_data = json.loads(e.body)
+                logging.error(exception_data["detail"])
+
+            self.get_info()
+            detail = self.info.executer.error_detail
+            if detail:
+                logging.info(" > Message: %s", detail)
+            else:
+                logging.info(" > No error message available.")
+
+            return None
 
         download_url = api_response.body.get("url")
 
