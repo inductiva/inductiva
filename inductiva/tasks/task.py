@@ -497,7 +497,7 @@ class Task:
                         filenames=self.STANDARD_OUTPUT_FILES)
                     if status == models.TaskStatusCode.FAILED:
                         logging.error(
-                            "Please check the stdout and stderr files at: %s",
+                            "Please inspect the stdout and stderr files at: %s",
                             out_dir)
                 return status
 
