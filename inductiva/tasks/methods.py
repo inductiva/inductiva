@@ -12,6 +12,93 @@ from inductiva.tasks.task import Task
 from inductiva.utils import format_utils
 
 
+def compare(list_of_tasks: Iterable[Task],
+            sort_by: str = "Computation",
+            reverse: bool = False,
+            verbose: int = 2) -> str:
+    """Prints tasks sorted by a given metric and returns the ID of the first
+    task.
+
+    This method prints a table of tasks sorted by a given metric (computation by
+    default). The sort order can be reversed. The ID of the first task in the
+    sorted list is returned. This can represent the task with the lowest
+    computation time, or the highest compression time, based on the sort_by and
+    reverse parameters.
+
+    Args:
+        list_of_tasks: An iterable of tasks.
+        sort_by: The metric to sort by. Allowed values: "Computation",
+            "Compression", "Upload", "Total Cost".
+        reverse: Whether to sort in reverse order.
+        verbose: 0: no output, 1: only prints the table, 2: prints table and
+        task info
+    returns:
+        The ID of the first task in the sorted dict.
+    """
+
+    final_table = defaultdict(list)
+
+    str_to_index = {
+        "ID": 0,
+        "Computation": 1,
+        "Compression": 2,
+        "Upload": 3,
+        "Total Cost": 4,
+    }
+
+    if sort_by not in str_to_index:
+        raise ValueError(f"Invalid sort_by value: {sort_by}.\n"
+                         f"Allowed values: {list(str_to_index.keys())}")
+
+    for task in list_of_tasks:
+        if not task.info.status == models.TaskStatusCode.SUCCESS:
+            continue
+        final_table["ID"].append(task.id)
+
+        final_table["Computation"].append(
+            task.info.time_metrics.computation_seconds.value)
+        final_table["Compression"].append(
+            task.info.time_metrics.output_compression_seconds.value)
+        final_table["Upload"].append(
+            task.info.time_metrics.output_upload_seconds.value)
+        final_table["Total cost"].append(1.0)
+
+    combined_data = list(zip(*final_table.values()))
+
+    sorted_data = sorted(combined_data,
+                         key=lambda x: x[str_to_index[sort_by]],
+                         reverse=reverse)
+
+    # Unpack the sorted data back into the defaultdict
+    sorted_data_dict = defaultdict(list)
+    for entry in sorted_data:
+        sorted_data_dict["ID"].append(entry[0])
+        sorted_data_dict["Computation"].append(entry[1])
+        sorted_data_dict["Compression"].append(entry[2])
+        sorted_data_dict["Upload"].append(entry[3])
+        sorted_data_dict["Total Cost"].append(entry[4])
+
+    emph_formatter = format_utils.get_ansi_formatter()
+
+    header_formatters = [
+        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
+    ]
+
+    list_str_sorted = format_utils.get_tabular_str(
+        sorted_data_dict, header_formatters=header_formatters)
+
+    first_task_id = sorted_data_dict["ID"][0]
+
+    if verbose > 0:
+        print(f"Tasks sorted by {sort_by}:")
+        print(list_str_sorted)
+        if verbose > 1:
+            print(f"The first task id is -> {first_task_id}")
+            print(inductiva.tasks.Task(first_task_id).get_info())
+
+    return first_task_id
+
+
 def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
     """
     Converts an Iterable of tasks to a dictionary with all the
