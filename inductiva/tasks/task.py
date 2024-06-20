@@ -225,6 +225,8 @@ class TaskInfo:
             "\t" + line for line in data_metrics_table.splitlines())
 
         table_str = f"\nTask status: {self.status}"
+        if self.executer and self.executer.error_detail:
+            table_str += f"\n\tStatus detail: {self.executer.error_detail}"
         table_str += f"\n{wall_time_table}"
         table_str += f"\nTime breakdown:\n{time_metrics_table}"
         table_str += f"\nData:\n{data_metrics_table}\n"
