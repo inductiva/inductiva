@@ -39,14 +39,13 @@ Define the variations for your simulation - _here, different water levels_ — a
 launch the simulations:
 
 ```python
-
 # Initialize the SWASH simulator
 swash = inductiva.simulators.SWASH()
 
-# Explore the simulation for different water levels
+# Define different water levels to explore
 water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
 
-# Launch multiple simulations
+# Launch multiple simulations for each water level
 for i, water_level in enumerate(water_levels_list):
     target_dir = f"./inductiva_input/swash-sim-{i}"  
     inductiva.TemplateManager.render_dir(
