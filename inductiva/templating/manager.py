@@ -1,7 +1,6 @@
 """Inductiva template manager class to manipulate files and render templates."""
 import pathlib
 import shutil
-import os
 from inductiva import types
 from inductiva.templating import renderers
 

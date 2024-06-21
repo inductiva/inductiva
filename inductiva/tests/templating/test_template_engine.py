@@ -12,7 +12,7 @@ ASSETS_DIR = pathlib.Path(__file__).parent / "assets"
 
 
 def _get_file_contents(file):
-    with open(file, "r") as f:
+    with open(file, "r", encoding="utf-8") as f:
         return f.read()
 
 
