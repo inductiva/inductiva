@@ -1,4 +1,4 @@
-"""Base and specific renderers packages to manage template files."""
+"""Jinja2-based renderer to manage template files."""
 from typing import Union, IO
 import pathlib
 import os
