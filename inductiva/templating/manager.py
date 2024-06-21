@@ -49,7 +49,7 @@ class TemplateManager:
         source_dir = pathlib.Path(source_dir)
         if not source_dir.is_dir():
             raise ValueError(f"Source directory {source_dir} does not exist.")
-        
+
         if not target_dir:
             raise ValueError("Target directory not provided.")
 
