@@ -39,25 +39,26 @@ Define the variations for your simulation - _here, different water levels_ — a
 launch the simulations:
 
 ```python
+
 # Initialize the SWASH simulator
 swash = inductiva.simulators.SWASH()
 
-# Define different water levels to explore
+# Explore the simulation for different water levels
 water_levels_list = [3.5, 3.75, 4.0, 4.5, 5.0]
 
-# Launch multiple simulations for each water level
-for water_level in water_levels_list:
-    # Set the root directory and render the template files into it.
-    template_manager = inductiva.TemplateManager(
-                            template_dir=template_dir,
-                            root_dir="swash-example"
-                        )
-    template_manager.render_dir(water_level=water_level)
-    
-    # Run simulation with the configured input directory on the dedicated MachineGroup
-    task = swash.run(input_dir=template_manager.get_root_dir(),
-                     sim_config_filename="input.sws",
-                     on=machine_group)
+# Launch multiple simulations
+for i, water_level in enumerate(water_levels_list):
+    target_dir = f"./inductiva_input/swash-sim-{i}"  
+    inductiva.TemplateManager.render_dir(
+                            source_dir=template_dir,
+                            target_dir=target_dir,
+                            water_level=water_level,
+                            overwrite=False)
+
+    # Run the simulation on the dedicated MachineGroup
+    task = swash.run(input_dir=target_dir,
+                    sim_config_filename="input.sws",
+                    on=machine_group)
 ```
 
 ## 4. Monitoring Simulations

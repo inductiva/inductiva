@@ -45,10 +45,14 @@ class TemplateManager:
         """
         if not source_dir:
             raise ValueError("Source directory not provided.")
+
+        source_dir = pathlib.Path(source_dir)
+        if not source_dir.is_dir():
+            raise ValueError(f"Source directory {source_dir} does not exist.")
+        
         if not target_dir:
             raise ValueError("Target directory not provided.")
 
-        source_dir = pathlib.Path(source_dir)
         target_dir = pathlib.Path(target_dir)
 
         renderer = renderers.JinjaRenderer(source_dir)
