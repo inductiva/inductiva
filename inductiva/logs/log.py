@@ -36,11 +36,6 @@ class NoExceptionFormatter(logging.Formatter):
         return super().format(record)
 
 
-def log_and_exit(logger, level, msg, *args, **kwargs):
-    logger.log(level, msg, *args, **kwargs)
-    sys.exit(1)
-
-
 def handle_uncaught_exception(exc_type, exc_value, exc_traceback):
     if _handle_api_exception(exc_type, exc_value, exc_traceback):
         return
@@ -53,6 +48,11 @@ def _handle_api_exception(exc_type, exc_value, exc_traceback):
         detail = json.loads(exc_value.body)["detail"]
         root_logger.error("Error: %s",
                           detail,
+                          exc_info=(exc_type, exc_value, exc_traceback))
+        return True
+    if issubclass(exc_type, exceptions.ApiValueError):
+        root_logger.error("Error: %s",
+                          exc_value,
                           exc_info=(exc_type, exc_value, exc_traceback))
         return True
     return False
