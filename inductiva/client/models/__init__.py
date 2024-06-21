@@ -24,6 +24,8 @@ from inductiva.client.model.file_download_url import FileDownloadUrl
 from inductiva.client.model.file_info import FileInfo
 from inductiva.client.model.file_upload_url import FileUploadUrl
 from inductiva.client.model.http_validation_error import HTTPValidationError
+from inductiva.client.model.machine_group_terminate_reason import MachineGroupTerminateReason
+from inductiva.client.model.machine_group_terminate_request import MachineGroupTerminateRequest
 from inductiva.client.model.machine_group_type import MachineGroupType
 from inductiva.client.model.machine_type import MachineType
 from inductiva.client.model.output_archive_info import OutputArchiveInfo
