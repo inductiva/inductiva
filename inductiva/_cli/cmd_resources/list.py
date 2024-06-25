@@ -1,25 +1,70 @@
 """CLI commands for listing both the active and available machine groups."""
 
+from collections import defaultdict
 from typing import TextIO
 import argparse
+import bisect
 import sys
 
 from inductiva import resources, _cli
 from inductiva.resources.machine_types import ProviderType
+from inductiva.utils import format_utils
 
 
 def pretty_print_machines_info(machines_dict):
     """Format and print the information for given machine dict."""
-
+    emph_formatter = format_utils.get_ansi_formatter()
+    header_formatters = [
+        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
+    ]
     print()
-
-    for family, memory_types in machines_dict.items():
+    for family, family_details in machines_dict.items():
         print(f"CPU family: {family}")
-        for memory, details in memory_types.items():
-            vcpus = sorted([int(k) for k in details["vcpus"]], key=int)
-            lssd = "(-lssd)" if details["lssd"] else ""
-            print(f"   > {family}-{memory}- {(vcpus)} {lssd}")
-        print()
+        final_table = {"Machine Type": [], "Supported vCPUs": [], "Config": []}
+        for machine_type, details in family_details.items():
+            # Used to determine if we write the machine type name
+            first_time = True
+            # Add's an empty line between the machine types
+            final_table["Machine Type"].append("")
+            final_table["Supported vCPUs"].append("")
+            final_table["Config"].append("")
+
+            for config, vcpus in details.items():
+                if first_time:
+                    final_table["Machine Type"].append(machine_type)
+                    # The first time we add the machine type, we don't want to
+                    # write its name
+                    first_time = False
+                else:
+                    # If we have more than one config for the same machine type
+                    # we dont want to repeat the machine type name
+                    # (ex c3 standard)
+                    final_table["Machine Type"].append("")
+
+                final_table["Supported vCPUs"].append(vcpus["vcpus"])
+                final_table["Config"].append(config)
+
+        res_table = format_utils.get_tabular_str(
+            final_table,
+            header_formatters=header_formatters,
+            indentation_level=4)
+        print(res_table)
+
+    print("Ex:\tc3d-highcpu-4")
+    print("\tc3d-highcpu-8-lssd")
+
+
+def _replace_empty_lists_with_value(d, value_to_replace):
+    """Replace empty lists with a value in a nested dictionary.
+    Used to prevent printing of [] in the pretty print.
+    """
+    for key, value in d.items():
+        if isinstance(value, dict):
+            _replace_empty_lists_with_value(value,
+                                            value_to_replace=value_to_replace)
+        elif isinstance(value, list):
+            if len(value) == 0:
+                d[key] = value_to_replace
 
 
 def list_machine_types_available(args):
@@ -28,10 +73,10 @@ def list_machine_types_available(args):
     provider = args.provider
     machine_family = args.family
 
-    machines_dict = {}
-
     resources_available = resources.machine_types.get_available_machine_types(
         provider, machine_family)
+
+    machines_dict = {}
 
     for machine in resources_available:
         # Avoid the duplication of adding machine types with spot instances.
@@ -40,27 +85,24 @@ def list_machine_types_available(args):
 
         machine_type = machine["machine_type"]
         machine_info = machine_type.split("-")
-        machine_family = machine_info[0]
-        memory_type = machine_info[1]
+
+        family = machine_info[0]
+        memory = machine_info[1]
         vcpus = machine_info[2] if len(machine_info) > 2 else None
-        lssd = True if len(machine_info) > 3 else None
+        config = machine_info[3] if len(machine_info) > 3 else None
 
-        if machine_family not in machines_dict:
-            machines_dict[machine_family] = {}
+        if family not in machines_dict:
+            machines_dict[family] = {}
+        if memory not in machines_dict[family]:
+            machines_dict[family][memory] = {}
+        if config not in machines_dict[family][memory]:
+            machines_dict[family][memory][config] = {"vcpus": []}
 
-        if memory_type not in machines_dict[machine_family]:
-            machines_dict[machine_family][memory_type] = {
-                "vcpus": [],
-                "lssd": False
-            }
-
-        if vcpus is not None and vcpus not in machines_dict[machine_family][
-                memory_type]["vcpus"]:
-            machines_dict[machine_family][memory_type]["vcpus"].append(vcpus)
-
-        if lssd is not None:
-            machines_dict[machine_family][memory_type]["lssd"] = True
-
+        if vcpus is not None:
+            # Sorted insertion of vcpus
+            bisect.insort(machines_dict[family][memory][config]["vcpus"],
+                          int(vcpus))
+    _replace_empty_lists_with_value(machines_dict, "n/a")
     pretty_print_machines_info(machines_dict)
 
 
