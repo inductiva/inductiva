@@ -54,16 +54,17 @@ particle_radii = [0.01, 0.008, 0.006, 0.004]
 
 tasks_list = []
 
-# Initialize the templating engine
-template_manager = inductiva.TemplateManager(template_dir)
 for n, radius in enumerate(particle_radii, start=1):
-    # set the output directory to a different folder for each simulation
-    # and render the entire content of the template directory with the
-    # particle radius set to the current value
-    template_manager.set_root_dir("splishsplash-hyperparameter-search_%d" % n)
-    template_manager.render_dir(particle_radius=radius)
-
-    task = SPlisHSPlasH.run(input_dir=template_manager.get_root_dir(),
+    # Define the directory where the rendered templates will appear filled 
+    # with the values of the variables defined below.
+    target_dir = f"splishsplash-hyperparameter-search_{n}"
+    inductiva.TemplateManager.render_dir(
+                            source_dir=template_dir,
+                            target_dir=target_dir,
+                            particle_radius=radius,
+                            overwrite=False)
+    
+    task = SPlisHSPlasH.run(input_dir=target_dir,
                             sim_config_filename="config.json",
                             on=machine_group)
     tasks_list.append(task)
