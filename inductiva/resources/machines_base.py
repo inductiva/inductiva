@@ -14,8 +14,6 @@ import inductiva.client.models
 from inductiva import api, users
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
-from inductiva.client import exceptions
-from inductiva import logs
 
 from inductiva.resources import machine_types
 

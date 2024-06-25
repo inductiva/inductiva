@@ -1,14 +1,13 @@
 """CLI commands for listing both the active and available machine groups."""
 
-from collections import defaultdict
 from typing import TextIO
 import argparse
 import bisect
 import sys
 
-from inductiva import resources, _cli
 from inductiva.resources.machine_types import ProviderType
 from inductiva.utils import format_utils
+from inductiva import resources, _cli
 
 
 def pretty_print_machines_info(machines_dict):
