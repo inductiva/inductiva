@@ -80,5 +80,3 @@ class TemplateManager:
                 target = target_subdir / renderer.strip_extension(file)
                 template_name = (pathlib.Path(subdir) / file).as_posix()
                 renderer.render_file(template_name, target, **render_args)
-
-        return target_dir
