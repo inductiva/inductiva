@@ -6,12 +6,19 @@ import inductiva
 def compare(args):
     """Kills a task by id."""
     ids = args.id
+    project = args.project
     sort_by = args.sort_by
     reverse = args.reverse
     no_info = 1 if args.no_info else 2
-    ids = set(ids)
 
-    list_of_tasks = [inductiva.tasks.Task(id) for id in ids]
+    if project is not None and ids:
+        raise ValueError("You can't use project and ids at the same time.")
+
+    if project is not None:
+        list_of_tasks = inductiva.projects.Project(project).get_tasks()
+    else:
+        ids = set(ids)
+        list_of_tasks = [inductiva.tasks.Task(id) for id in ids]
 
     inductiva.tasks.compare(list_of_tasks, sort_by, reverse, verbose=no_info)
 
@@ -34,7 +41,11 @@ def register(parser):
     subparser.add_argument("id",
                            type=str,
                            help="ID(s) of the task(s) to compare.",
-                           nargs="+")
+                           nargs="*")
+    subparser.add_argument("-p",
+                           "--project",
+                           type=str,
+                           help="Project of the task(s) to compare.")
     subparser.add_argument("--sort-by",
                            type=str,
                            default="Computation",
