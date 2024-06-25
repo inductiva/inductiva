@@ -20,27 +20,33 @@ def pretty_print_machines_info(machines_dict):
     for family, family_details in machines_dict.items():
         print(f"CPU family: {family}")
         final_table = {"Machine Type": [], "Supported vCPUs": [], "Config": []}
+        first_line = True
         for machine_type, details in family_details.items():
             # Used to determine if we write the machine type name
-            first_time = True
-            # Add's an empty line between the machine types
-            final_table["Machine Type"].append("")
-            final_table["Supported vCPUs"].append("")
-            final_table["Config"].append("")
+            first_time_type = True
+
+            # Don't want to add an empty line before the first machine type
+            if not first_line:
+                # Add's an empty line between the machine types
+                final_table["Machine Type"].append("")
+                final_table["Supported vCPUs"].append("")
+                final_table["Config"].append("")
+            first_line = False
 
             for config, vcpus in details.items():
-                if first_time:
+                if first_time_type:
                     final_table["Machine Type"].append(machine_type)
                     # The first time we add the machine type, we don't want to
                     # write its name
-                    first_time = False
+                    first_time_type = False
                 else:
                     # If we have more than one config for the same machine type
                     # we dont want to repeat the machine type name
                     # (ex c3 standard)
                     final_table["Machine Type"].append("")
 
-                final_table["Supported vCPUs"].append(vcpus["vcpus"])
+                str_vcpus = ", ".join([str(v) for v in vcpus["vcpus"]])
+                final_table["Supported vCPUs"].append(str_vcpus)
                 final_table["Config"].append(config)
 
         res_table = format_utils.get_tabular_str(
