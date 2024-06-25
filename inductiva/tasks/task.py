@@ -502,7 +502,7 @@ class Task:
                     if status == models.TaskStatusCode.FAILED:
                         logging.error(
                             "Please inspect the stdout.txt and"
-                            " stderr.txt files at: %s\n"
+                            " stderr.txt files at %s\n"
                             "For more information.", out_dir)
                 return status
 
@@ -800,7 +800,7 @@ class Task:
         if self._status == models.TaskStatusCode.FAILED:
             logging.error(
                 "Task %s failed.\n"
-                "Please inspect the stdout.txt and stderr.txt files at: %s\n"
+                "Please inspect the stdout.txt and stderr.txt files at %s\n"
                 "For more information.", self.id, output_dir)
 
         return output_dir
