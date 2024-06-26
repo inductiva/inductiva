@@ -24,12 +24,12 @@ class CaNS(simulators.Simulator):
         self.api_method_name = "cans.cans.run_simulation"
 
     def run(self,
-            input_dir: types.Path,
+            input_dir: types.PathOrStr,
             sim_config_filename: str,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
             extra_metadata: Optional[dict] = None,
-            storage_dir: Optional[types.Path] = "",
+            storage_dir: Optional[types.PathOrStr] = "",
             on: Optional[types.ComputationalResources] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.

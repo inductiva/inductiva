@@ -48,12 +48,12 @@ class OpenFOAM(simulators.Simulator):
         return "OpenFOAM-" + self._distribution
 
     def run(self,
-            input_dir: types.Path,
+            input_dir: types.PathOrStr,
             commands: types.Commands,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
             on: Optional[types.ComputationalResources] = None,
-            storage_dir: Optional[types.Path] = "",
+            storage_dir: Optional[types.PathOrStr] = "",
             extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.

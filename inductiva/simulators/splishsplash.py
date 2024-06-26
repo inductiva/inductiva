@@ -22,10 +22,10 @@ class SplishSplash(simulators.Simulator):
 
     def run(
         self,
-        input_dir: types.Path,
+        input_dir: types.PathOrStr,
         sim_config_filename: str,
         on: Optional[types.ComputationalResources] = None,
-        storage_dir: Optional[types.Path] = "",
+        storage_dir: Optional[types.PathOrStr] = "",
         extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:

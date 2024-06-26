@@ -154,7 +154,8 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
 def download_output(
         api_instance: TasksApi,
         task_id,
-        output_dir: Optional[types.Path] = None) -> Tuple[List, pathlib.Path]:
+        output_dir: Optional[types.PathOrStr] = None
+) -> Tuple[List, pathlib.Path]:
     """Downloads the output of a given task from the API.
 
     Args:

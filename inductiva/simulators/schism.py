@@ -22,10 +22,10 @@ class SCHISM(simulators.Simulator):
         self.api_method_name = "schism.schism.run_simulation"
 
     def run(self,
-            input_dir: types.Path,
+            input_dir: types.PathOrStr,
             num_scribes: int = 1,
             on: Optional[types.ComputationalResources] = None,
-            storage_dir: Optional[types.Path] = "",
+            storage_dir: Optional[types.PathOrStr] = "",
             use_hwthread: bool = True,
             extra_metadata: Optional[dict] = None,
             n_vcpus: int = None,

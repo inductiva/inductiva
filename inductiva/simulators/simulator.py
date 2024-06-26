@@ -111,7 +111,7 @@ class Simulator(ABC):
 
         self.api_method_name = ".".join(all_elements)
 
-    def _setup_input_dir(self, input_dir: types.Path):
+    def _setup_input_dir(self, input_dir: types.PathOrStr):
         """Setup the simulator input directory."""
         input_dir = pathlib.Path(input_dir)
         if not input_dir.is_dir():
@@ -121,10 +121,10 @@ class Simulator(ABC):
 
     def run(
         self,
-        input_dir: types.Path,
+        input_dir: types.PathOrStr,
         *_args,
         on: Optional[types.ComputationalResources] = None,
-        storage_dir: Optional[types.Path] = "",
+        storage_dir: Optional[types.PathOrStr] = "",
         extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:

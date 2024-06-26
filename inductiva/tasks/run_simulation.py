@@ -23,7 +23,7 @@ def run_simulation(
     input_dir: pathlib.Path,
     computational_resources: Optional[types.ComputationalResources] = None,
     provider_id: Optional[Union[ProviderType, str]] = ProviderType.GCP,
-    storage_dir: Optional[types.Path] = "",
+    storage_dir: Optional[types.PathOrStr] = "",
     api_invoker=None,
     extra_metadata=None,
     simulator=None,

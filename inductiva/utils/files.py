@@ -13,7 +13,7 @@ import inductiva
 from inductiva import types
 
 
-def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
+def get_timestamped_path(path: types.PathOrStr, sep: str = "-") -> pathlib.Path:
     """Return a path that does not exist by appending a timestamp.
 
     Args:
@@ -30,7 +30,7 @@ def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     return path.with_name(name + path.suffix)
 
 
-def get_path_size(path: types.Path) -> float:
+def get_path_size(path: types.PathOrStr) -> float:
     """Return the size of a path in bytes.
     
     Args:
@@ -59,7 +59,7 @@ def get_path_size(path: types.Path) -> float:
     return size
 
 
-def resolve_output_path(path: Optional[types.Path]) -> pathlib.Path:
+def resolve_output_path(path: Optional[types.PathOrStr]) -> pathlib.Path:
     """Resolve a path relative to the output_dir
 
     Args:

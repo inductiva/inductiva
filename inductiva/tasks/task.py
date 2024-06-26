@@ -657,7 +657,7 @@ class Task:
             files=output_files,
         )
 
-    def _contains_only_std_files(self, output_dir: types.Path) -> bool:
+    def _contains_only_std_files(self, output_dir: types.PathOrStr) -> bool:
         """Check if the output archive contains only stdout and stderr files.
 
         Returns:
@@ -671,7 +671,7 @@ class Task:
     def download_outputs(
         self,
         filenames: Optional[List[str]] = None,
-        output_dir: Optional[types.Path] = None,
+        output_dir: Optional[types.PathOrStr] = None,
         uncompress: bool = True,
         rm_downloaded_zip_archive: bool = True,
         rm_remote_files: bool = False,

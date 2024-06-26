@@ -22,14 +22,14 @@ class FEniCSx(simulators.Simulator):
         self.api_method_name = "fem.fenicsx.run_simulation"
 
     def run(self,
-            input_dir: types.Path,
+            input_dir: types.PathOrStr,
             geometry_filename: str,
             bcs_filename: str,
             material_filename: str,
             mesh_filename: Optional[str] = None,
             mesh_info_filename: Optional[str] = None,
             on: Optional[types.ComputationalResources] = None,
-            storage_dir: Optional[types.Path] = "",
+            storage_dir: Optional[types.PathOrStr] = "",
             extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
