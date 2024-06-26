@@ -72,6 +72,7 @@ reef3d = inductiva.simulators.REEF3D()
 task = reef3d.run(input_dir=input_dir)
 
 task.wait()
+
 task.download_outputs()
 ```
 
@@ -137,191 +138,172 @@ Observe that parameter ```M 10```, which controls the level of parallism, is
 set to 4 threads/vCPUs, a very low number. Depending on the number of vCPUs we
 effectively wish to use for running the simulation, we will need to manually
 change  ```M 10``` on **both files** to match the specs of corresponding the VM. 
-Because this is already a reasoably heavy simulation, we will be using GCP VMs
-of the c3d family, supported by last-generation AMD chips. More specifically,
-we will be using ```c3d-standard-90``` machines with 90 vCPU. So, we will be
-setting ```M 10 90``` on both files.
+We will be using GCP VMs of the c2d family, which tend to provide a very good 
+price-performance point, especially when you run them in spot mode. More 
+specifically, we will be using the larger ```c2d-highcpu-112``` machines with
+112 vCPUs and 2GB or RAM per vCPU (this simulation will not require more than
+224GB of RAM). 
 
-Also, Reef3D produces a huge amount of data. As it is currently configured, 
+We will be setting ```M 10 56``` on both files. Note that this is half the
+available number of vCPUs available on the VM. Actually, running on only half
+of the vCPUs may provide significantly faster simulation times than running on
+all the vCPUs for some simulators / VM types. This has to do with the fact that
+these VMs run on processors with hyperthreading, running two threads per 
+physical core. One of the issues with hyperthreading is that it increases
+thread competetion for chache (which does is fixed), and this may lead to some
+contention issues for some I/O heavy simulators, as seems to be the case for
+Reef3D.
+
+Indeed, Reef3D produces a huge amount of data. As it is currently configured, 
 this simulation would produce several dozen gigabytes of data. To reduce that
-amount of data produced, we can reduce the maximum modeled time (```N 41```)
-and the rate at which Paraview data is being produced (```P 10```).
-
-So, for a reducing the amount of data generated, we will be reducing the rate
-at which Paraview information is going to be generated to "only" 25 frames per
-second, that is, we will set ```P 10 0.04```. 
-
-We are not going to reduce the maximum modeled time but, instead, we will add
-extra disk capacity to ensure we have enough space to write all the data will be
-generated. Therefore, we will request our machine to be equipped with a 20GB
-partition (just for data), using the ```data_disk_gb``` parameter of the 
-```inductiva.resources.MachineGroup``` class.
+amount of data produced, we can reduce the rate at which (Paraview) data is
+being produced (parameter ```P 30```). Therefore, we will set ```P 30 0.04```
+and make Reef3D "only" generate to "only" 25 frames per second (instead of 100
+frames per second). Also, just in case, we will request our machine to be
+equipped with a 20GB partition (just for data), using the ```data_disk_gb``` 
+parameter of the ```inductiva.resources.MachineGroup``` class.
 
 Here is the final script:
 
 ```python
 import inductiva
 
+
 machine_group = inductiva.resources.MachineGroup(
-    machine_type="c3d-standard-90",
+    machine_type="c2d-highcpu-112",    
     spot=True,
-    data_disk_gb=20)  ## We are adding extra disk space here
+    data_disk_gb=20)
 machine_group.start()
+
 
 reef3d = inductiva.simulators.REEF3D()
 
-task = reef3d.run(
-    input_dir="./10_2_3D_Dam_Break_with_Obstacle",
-    on=machine_group,
-    n_vcpus=90)   ## We need to make sure this matches `N 10`
+task = reef3d.run(input_dir="./10_2_3D_Dam_Break_with_Obstacle",
+                  on=machine_group,
+                  n_vcpus=56,
+                  storage_dir="3D_dam_break_with_obstacle")
 
 task.wait()
-task.download_outputs()
-
-## Make sure we terminate the machine.
 machine_group.terminate()
+task.print_summary()
 ```
 
-Running this script end-to-end should take about 25 minutes, distributed in
-the following way:
-
-* about 2 minutes in the preparation stage, including starting the executer VM.
-* about 11 minutes of compute time (you can change this by choosing other VMs
-or changing the settings of this one.)
-* 4 minutes to make the output available for download. This involves zipping
-all the data geneeated in executer VM and the move it to your personal storage
-space on Inductiva platform, so you can access it at any time.
-* about 7 minutes to download the 3.3GB of zipped data. This time depends
-on the speed of your network. This is an optional step. You don't need to
-download the output data at this point.
-* about 3 minutes to unzip the data locally (about 15GB of data when unzipped).
-This is another optional step that depends on how fast your local machine is.
-* 1 minute to turn off the executor VM. This step is optional but advisable,
-since you do not want to be spending money on a machine that is sitting idle.
-
-This is what you are supposed to see:
+You should see something like this when you run this script end to end (it
+should take approximately 20 minutes)
 
 ```bash
 Registering MachineGroup configurations:
-> Name:         api-kw1m7e9hs2yxkxy9n2yf4so6r
-> Machine Type: c3d-standard-90
+> Name:         api-ktq7n9w81gek0kx82agu3znoj
+> Machine Type: c2d-highcpu-112
 > Data disk size:    20 GB
 > Number of machines: 1
 > Spot:               True
-> Estimated cloud cost of machine group: 1.496 $/h
-Starting MachineGroup(name="api-kw1m7e9hs2yxkxy9n2yf4so6r"). This may take a few minutes.
+> Estimated cloud cost of machine group: 0.814 $/h
+ >> You are spending 5.7x less by using spot machines.
+Starting MachineGroup(name="api-ktq7n9w81gek0kx82agu3znoj"). This may take a few minutes.
 Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
-Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines successfully started in 0:00:23.
+Machine Group api-ktq7n9w81gek0kx82agu3znoj with c2d-highcpu-112 machines successfully started in 0:00:19.
+The machine group is using the following quotas:
+
+                      USED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
+ cost_per_hour        0.81424              0.81424           270
+ total_num_machines   1                    1                 100
+ total_num_vcpus      112                  112               1500
+
 Task Information:
-> ID:                    ggkjuzhivoon56vkozgqxapfk
+> ID:                    n90hpbaiaa26jjb1d93zgbqgn
 > Method:                reef3d
 > Local input directory: 10_2_3D_Dam_Break_with_Obstacle
 > Submitting to the following computational resources:
- >> Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines
-Preparing upload of the local input directory 10_2_3D_Dam_Break_with_Obstacle (399 B).
-Input archive size: 640 B
+ >> Machine Group api-ktq7n9w81gek0kx82agu3znoj with c2d-highcpu-112 machines
+Preparing upload of the local input directory 10_2_3D_Dam_Break_with_Obstacle (392 B).
+Input archive size: 637 B
 Uploading input archive...
-100%|█████████████████████████████████████████████████████████████████████████████████| 640/640 [00:00<00:00, 1.03kB/s]
+100%|███████████████████████████████████████████████████████████████████████████████| 637/637 [00:00<00:00, 1.37kB/s]
 Local input directory successfully uploaded.
-Task ggkjuzhivoon56vkozgqxapfk submitted to the queue of the Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines.
+Task n90hpbaiaa26jjb1d93zgbqgn submitted to the queue of the Machine Group api-ktq7n9w81gek0kx82agu3znoj with c2d-highcpu-112 machines.
+Number of tasks ahead in the queue: 0
 Simulation metadata logged to: inductiva_output/task_metadata.json
-Task ggkjuzhivoon56vkozgqxapfk configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
+Task n90hpbaiaa26jjb1d93zgbqgn configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
 Consider tracking the status of the task via CLI:
-	inductiva tasks list --task-id ggkjuzhivoon56vkozgqxapfk
+	inductiva tasks list --task-id n90hpbaiaa26jjb1d93zgbqgn
 Or, tracking the logs of the task via CLI:
-	inductiva logs ggkjuzhivoon56vkozgqxapfk
-Task ggkjuzhivoon56vkozgqxapfk successfully queued and waiting to be picked-up for execution...
-Task ggkjuzhivoon56vkozgqxapfk has started and is now running remotely.
-Task ggkjuzhivoon56vkozgqxapfk completed successfully.
-Downloading simulation outputs to inductiva_output/ggkjuzhivoon56vkozgqxapfk/output.zip.
-100%|█████████████████████████████████████████████████████████████████████████████| 3.30G/3.30G [07:11<00:00, 7.64MB/s]
-Uncompressing the outputs to inductiva_output/ggkjuzhivoon56vkozgqxapfk.
-Terminating MachineGroup(name="api-kw1m7e9hs2yxkxy9n2yf4so6r"). This may take a few minutes.
-Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines successfully terminated in 0:01:11.
+	inductiva logs n90hpbaiaa26jjb1d93zgbqgn
+Task n90hpbaiaa26jjb1d93zgbqgn successfully queued and waiting to be picked-up for execution...
+The task n90hpbaiaa26jjb1d93zgbqgn is about to start.
+Task n90hpbaiaa26jjb1d93zgbqgn has started and is now running remotely.
+ Task n90hpbaiaa26jjb1d93zgbqgn completed successfully.
+Downloading stdout and stderr files to inductiva_output/n90hpbaiaa26jjb1d93zgbqgn...
+Partial download completed to inductiva_output/n90hpbaiaa26jjb1d93zgbqgn.
+Successfully requested termination of MachineGroup(name="api-ktq7n9w81gek0kx82agu3znoj").
+Termination of the machine group freed the following quotas:
+
+                      FREED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
+ cost_per_hour        0.81424               0                 270
+ total_num_machines   1                     0                 100
+ total_num_vcpus      112                   0                 1500
+
+
+Task status: success
+Wall clock time:  0:13:51
+Time breakdown:
+	Input upload:              0.63 s
+	Time in queue:             24.34 s
+	Container image download:  3.37 s
+	Input download:            0.08 s
+	Input decompression:       0.00 s
+	Computation:               0:07:38
+	Output compression:        0:05:04
+	Output upload:             40.08 s
+Data:
+	Size of zipped output:    3.09 GB
+	Size of unzipped output:  7.51 GB
+	Number of output files:   35751
 ```
 
-You can check the stdout of the simulation process in real time by issuing:
+While the script is running, you can check the stdout of the simulation process
+in real time by issuing:
 
 ```bash
-inductiva logs ggkjuzhivoon56vkozgqxapfk
+inductiva logs n90hpbaiaa26jjb1d93zgbqgn
 ```
 
-The command line above is also shown in the execution trace, so you can just
+The command line above is shown in the execution trace, so you can just
 copy and paste it to a new terminal (which needs also to have the API key set
-as an environment variable). Then, you should see something like this:
+as an environment variable).
 
-```bash
-...
-...
-7193
-simtime: 24.982
-timestep: 0.007
-Volume 1: 0.235
-Volume 2: 1.725
-lsmtime: 0.004
-.piter: 3  ptime: 0.010
-.piter: 3  ptime: 0.010
-.piter: 3  ptime: 0.010
-umax: 0.238 	 utime: 0.007
-vmax: 0.199 	 vtime: 0.007
-wmax: 0.277 	 wtime: 0.006
-viscmax: 0.000
-kinmax: 0.000
-epsmax: 0.000
-reinitime: 0.005
-gctime: 0.002	 average gctime: 0.002
-Xtime: 0.013	 average Xtime: 0.014
-total time: 626.067449   average time: 0.087
-timer per step: 0.073
-------------------------------------
-7194
-simtime: 24.989
-timestep: 0.007
-Volume 1: 0.235
-Volume 2: 1.725
-lsmtime: 0.003
-.piter: 3  ptime: 0.010
-.piter: 3  ptime: 0.010
-.piter: 3  ptime: 0.010
-umax: 0.237 	 utime: 0.007
-vmax: 0.202 	 vtime: 0.006
-wmax: 0.276 	 wtime: 0.006
-viscmax: 0.000
-kinmax: 0.000
-epsmax: 0.000
-reinitime: 0.005
-gctime: 0.002	 average gctime: 0.002
-Xtime: 0.011	 average Xtime: 0.014
-total time: 626.138361   average time: 0.087
-timer per step: 0.071
-------------------------------------
-7195
-simtime: 24.996
-timestep: 0.007
-Volume 1: 0.235
-Volume 2: 1.725
-lsmtime: 0.004
-.piter: 3  ptime: 0.010
-.piter: 3  ptime: 0.009
-.piter: 3  ptime: 0.009
-umax: 0.235 	 utime: 0.007
-vmax: 0.204 	 vtime: 0.006
-wmax: 0.276 	 wtime: 0.006
-viscmax: 0.000
-kinmax: 0.000
-epsmax: 0.000
-reinitime: 0.005
-gctime: 0.002	 average gctime: 0.002
-Xtime: 0.013	 average Xtime: 0.014
-total time: 626.217546   average time: 0.087
-timer per step: 0.079
+Once the script finishes, and you see the summary of the task, you can download
+the resulting files. Observe in the summary above that quite some data was 
+produced: 35751 files for a total of 7.51 GB after uncompressed.
 
-******************************
+You can download the (zipped) data by create a simple script such as this:
+```python
+import inductiva
 
-modelled time: 25.003
+# You can retreive a Task by ID
+task = inductiva.tasks.Task("n90hpbaiaa26jjb1d93zgbqgn")
+
+task.download_outputs()
 ```
 
+Or, perhaps more conveniently, you can use Inductiva's Command Line Interface
+(CLI) to list the contents of your personal remote storage and then download
+them:
+```bash
+inductiva storage list
+```
+which should get you something like this (you may have other contents)
 
+```
+ NAME                          SIZE      CREATION TIME
+ 3D_dam_break_with_obstacle/   3.09 GB   26 Jun, 07:39:11
+```
+
+And you can donwload the folder produced by this task by doing:
+
+```bash
+inductiva tasks download n90hpbaiaa26jjb1d93zgbqgn
+```
 ## What to read next
 
 If you are interested in Reef3D, you may also be interested in checking the
