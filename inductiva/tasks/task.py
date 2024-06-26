@@ -280,6 +280,8 @@ class Task:
         self._status = None
         self._tasks_ahead: Optional[int] = None
         self._summary = None
+        # Internal state to track if the method was called from the wait method
+        self._called_from_wait = False
 
     def is_running(self) -> bool:
         """Validate if the task is running.
@@ -494,8 +496,14 @@ class Task:
                 sys.stdout.write("\r\033[2K")
 
                 if download_std_on_completion:
-                    self.download_outputs(filenames=self.STANDARD_OUTPUT_FILES)
-
+                    self._called_from_wait = True
+                    out_dir = self.download_outputs(
+                        filenames=self.STANDARD_OUTPUT_FILES)
+                    if status == models.TaskStatusCode.FAILED:
+                        logging.error(
+                            "Please inspect the stdout.txt and"
+                            " stderr.txt files at %s\n"
+                            "For more information.", out_dir)
                 return status
 
             time.sleep(polling_period)
@@ -684,8 +692,28 @@ class Task:
                 storage after the download is complete. Only used if filenames
                 is None or empty (i.e., all output files are downloaded).
         """
-        api_response = self._api.get_output_download_url(
-            path_params=self._get_path_params(),)
+        self._status = self.get_status()
+        try:
+            api_response = self._api.get_output_download_url(
+                path_params=self._get_path_params(),)
+        except exceptions.ApiException as e:
+            if not self._called_from_wait:
+
+                if self._status == models.TaskStatusCode.EXECUTERFAILED:
+                    logging.info("The remote process running the task failed:")
+                    self.get_info()
+                    detail = self.info.executer.error_detail
+                    if detail:
+                        logging.info(" > Message: %s", detail)
+                    else:
+                        logging.info(" > No error message available.")
+                else:
+                    # Raise the exception to be handled by the exception handler
+                    raise e
+            return None
+        finally:
+            # Reset internal state
+            self._called_from_wait = False
 
         download_url = api_response.body.get("url")
 
@@ -768,6 +796,12 @@ class Task:
 
         if rm_remote_files:
             self.remove_remote_files()
+
+        if self._status == models.TaskStatusCode.FAILED:
+            logging.error(
+                "Task %s failed.\n"
+                "Please inspect the stdout.txt and stderr.txt files at %s\n"
+                "For more information.", self.id, output_dir)
 
         return output_dir
 
