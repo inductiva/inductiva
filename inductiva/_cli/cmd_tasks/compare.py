@@ -12,7 +12,8 @@ def compare(args):
     no_info = 1 if args.no_info else 2
 
     if project is not None and ids:
-        raise ValueError("You can't use project and ids at the same time.")
+        raise ValueError("inductiva tasks compare: error: argument id: not "
+                         "allowed with argument -p/--project-name")
 
     if project is not None:
         list_of_tasks = inductiva.projects.Project(project).get_tasks()
