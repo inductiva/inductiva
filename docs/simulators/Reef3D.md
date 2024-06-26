@@ -141,27 +141,27 @@ change  ```M 10``` on **both files** to match the specs of corresponding the VM.
 We will be using GCP VMs of the c2d family, which tend to provide a very good 
 price-performance point, especially when you run them in spot mode. More 
 specifically, we will be using the larger ```c2d-highcpu-112``` machines with
-112 vCPUs and 2GB or RAM per vCPU (this simulation will not require more than
+112 vCPUs and 2GB of RAM per vCPU (this simulation will not require more than
 224GB of RAM). 
 
 We will be setting ```M 10 56``` on both files. Note that this is half the
-available number of vCPUs available on the VM. Actually, running on only half
-of the vCPUs may provide significantly faster simulation times than running on
-all the vCPUs for some simulators / VM types. This has to do with the fact that
-these VMs run on processors with hyperthreading, running two threads per 
+available number of vCPUs available on the VM (112!). Actually, running on only
+half of the vCPUs may provide significantly faster simulation times than running
+on all the vCPUs *for some simulators / VM types*. This has to do with the fact
+that these VMs run on processors with hyperthreading, running two threads per 
 physical core. One of the issues with hyperthreading is that it increases
-thread competetion for chache (which does is fixed), and this may lead to some
-contention issues for some I/O heavy simulators, as seems to be the case for
-Reef3D.
+thread competition for cache (which does is fixed), and this may lead to some
+contention issues for I/O heavy simulators, as seems to be the case for Reef3D.
 
 Indeed, Reef3D produces a huge amount of data. As it is currently configured, 
 this simulation would produce several dozen gigabytes of data. To reduce that
 amount of data produced, we can reduce the rate at which (Paraview) data is
 being produced (parameter ```P 30```). Therefore, we will set ```P 30 0.04```
-and make Reef3D "only" generate to "only" 25 frames per second (instead of 100
-frames per second). Also, just in case, we will request our machine to be
-equipped with a 20GB partition (just for data), using the ```data_disk_gb``` 
-parameter of the ```inductiva.resources.MachineGroup``` class.
+and request Reef3D to "only" generate 25 frames per second (instead of 100
+frames per second as it was initially configure). Also, just in case, we will
+request our machine to be equipped with a 20GB partition (just for data), 
+using the ```data_disk_gb``` parameter of the 
+```inductiva.resources.MachineGroup``` class.
 
 Here is the final script:
 
@@ -175,13 +175,13 @@ machine_group = inductiva.resources.MachineGroup(
     data_disk_gb=20)
 machine_group.start()
 
-
 reef3d = inductiva.simulators.REEF3D()
 
-task = reef3d.run(input_dir="./10_2_3D_Dam_Break_with_Obstacle",
-                  on=machine_group,
-                  n_vcpus=56,
-                  storage_dir="3D_dam_break_with_obstacle")
+task = reef3d.run(
+    input_dir="./10_2_3D_Dam_Break_with_Obstacle",
+    on=machine_group,
+    n_vcpus=56,
+    storage_dir="3D_dam_break_with_obstacle")
 
 task.wait()
 machine_group.terminate()
@@ -206,9 +206,9 @@ Machine Group api-ktq7n9w81gek0kx82agu3znoj with c2d-highcpu-112 machines succes
 The machine group is using the following quotas:
 
                       USED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
- cost_per_hour        0.81424              0.81424           270
- total_num_machines   1                    1                 100
- total_num_vcpus      112                  112               1500
+ cost_per_hour        0.81424              0.81424           20
+ total_num_machines   1                    1                 10
+ total_num_vcpus      112                  112               150
 
 Task Information:
 > ID:                    n90hpbaiaa26jjb1d93zgbqgn
@@ -239,9 +239,9 @@ Successfully requested termination of MachineGroup(name="api-ktq7n9w81gek0kx82ag
 Termination of the machine group freed the following quotas:
 
                       FREED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
- cost_per_hour        0.81424               0                 270
- total_num_machines   1                     0                 100
- total_num_vcpus      112                   0                 1500
+ cost_per_hour        0.81424               0                 20
+ total_num_machines   1                     0                 10
+ total_num_vcpus      112                   0                 150
 
 
 Task status: success
@@ -262,7 +262,7 @@ Data:
 ```
 
 While the script is running, you can check the stdout of the simulation process
-in real time by issuing:
+in real time by issuing (please change to the id of your task):
 
 ```bash
 inductiva logs n90hpbaiaa26jjb1d93zgbqgn
@@ -276,7 +276,7 @@ Once the script finishes, and you see the summary of the task, you can download
 the resulting files. Observe in the summary above that quite some data was 
 produced: 35751 files for a total of 7.51 GB after uncompressed.
 
-You can download the (zipped) data by create a simple script such as this:
+You can download the (zipped) data by creating a simple script such as this:
 ```python
 import inductiva
 
