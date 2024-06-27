@@ -27,7 +27,6 @@ def list_tasks(args, fout: TextIO = sys.stdout):
             file=sys.stderr)
         return 1
 
-
     if project_name is not None:
         print(f"Showing tasks for project: {project_name}.")
         # With project the default last_n is -1 (all tasks)
