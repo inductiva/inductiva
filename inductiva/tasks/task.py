@@ -90,6 +90,7 @@ class TaskInfo:
         self.computation_start_time = None
         self.computation_end_time = None
         self.end_time = None
+        self.cost = None
         self.time_metrics = self.TimeMetrics()
         self.data_metrics = self.DataMetrics()
 
@@ -225,6 +226,7 @@ class TaskInfo:
             "\t" + line for line in data_metrics_table.splitlines())
 
         table_str = f"\nTask status: {self.status}"
+        table_str = f"\nTask cost: {self.cost} $/h"
         if self.executer and self.executer.error_detail:
             table_str += f"\n\tStatus detail: {self.executer.error_detail}"
         table_str += f"\n{wall_time_table}"
@@ -400,7 +402,6 @@ class Task:
 
         info = json.loads(resp.data.decode("utf-8"))
         status = models.TaskStatusCode(info["status"])
-
         self._info = TaskInfo(**info)
         self._status = status
 
