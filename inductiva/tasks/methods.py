@@ -33,8 +33,12 @@ def compare(list_of_tasks: Iterable[Task],
         verbose: 0: no output, 1: only prints the table, 2: prints table and
         task info
     returns:
-        The ID of the first task in the sorted dict.
+        The ID of the first task in the sorted dict. If the list is empty,
+        returns None.
     """
+    if not list_of_tasks:
+        print("No tasks to compare.")
+        return None
 
     final_table = defaultdict(list)
 
