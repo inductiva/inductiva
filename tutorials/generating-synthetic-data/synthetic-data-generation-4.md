@@ -103,18 +103,20 @@ kinematic_viscosity = 2       # Represents a fluid with higher viscosity m^2/s
 density = 2500                # A denser fluid compared to water 1000 kg/m^3
 
 
-# Initialize the templating manager, define the root directory name for the
-# rendered files and render all template files inside the template directory
+# Define the directory where the rendered templates will appear filled 
 # with the values of the variables defined above.
-template_manager = inductiva.TemplateManager(template_dir)
-template_manager.set_root_dir("splishsplash-viscous-fluid")
-template_manager.render_dir(density=density,
-                            viscosity=kinematic_viscosity,
-                            initial_velocity=initial_velocity)
+rendered_dir = "./splishsplash-viscous-fluid/"
+
+inductiva.TemplateManager.render_dir(source_dir=template_dir,
+                                     target_dir=rendered_dir,
+                                     density=density,
+                                     viscosity=kinematic_viscosity,
+                                     initial_velocity=initial_velocity,
+                                     overwrite=True)
 
 # Initialize the simulator and run the simulation
 SPlisHSPlasH = inductiva.simulators.SplishSplash()
-task = SPlisHSPlasH.run(input_dir=template_manager.get_root_dir(),
+task = SPlisHSPlasH.run(input_dir=rendered_dir,
                         sim_config_filename="config.json",
                         on=machine_group)
 

@@ -3,7 +3,7 @@ from typing import Optional
 
 from inductiva import types, tasks, simulators
 
-AVAILABLE_OPENFOAM_VERSIONS = ["foundation", "esi"]
+AVAILABLE_OPENFOAM_DISTRIBUTIONS = ["foundation", "esi"]
 
 
 @simulators.simulator.mpi_enabled
@@ -15,13 +15,37 @@ class OpenFOAM(simulators.Simulator):
     some input files may only work for a specific version.
     """
 
-    def __init__(self, version: str = "foundation"):
-        if version not in AVAILABLE_OPENFOAM_VERSIONS:
-            raise ValueError("Version not currently supported."
-                             f"Available: {AVAILABLE_OPENFOAM_VERSIONS}")
+    def __init__(self,
+                 /,
+                 distribution: str = "foundation",
+                 version: Optional[str] = None,
+                 use_dev: bool = False):
+        """Initialize the OpenFOAM simulator.
 
-        super().__init__()
-        self.api_method_name = f"fvm.openfoam_{version}.run_simulation"
+        Args:
+            distribution (str): The distribution of OpenFOAM to use. Available
+                distributions are "foundation" and "esi". Default is
+                "foundation".
+            version (str): The version of the simulator to use. If None, the
+                latest available version in the platform is used.
+            use_dev (bool): Request use of the development version of
+                the simulator. By default (False), the production version
+                is used.
+        """
+        if distribution not in AVAILABLE_OPENFOAM_DISTRIBUTIONS:
+            raise ValueError(
+                f"Distribution '{distribution}' of OpenFOAM is not supported. "
+                f"Available distributions are: "
+                f"{AVAILABLE_OPENFOAM_DISTRIBUTIONS}")
+
+        self._distribution = distribution
+        super().__init__(version=version, use_dev=use_dev)
+        self.api_method_name = f"fvm.openfoam_{distribution}.run_simulation"
+
+    @property
+    def name(self):
+        """Get the name of the simulator."""
+        return "OpenFOAM-" + self._distribution
 
     def run(self,
             input_dir: types.Path,

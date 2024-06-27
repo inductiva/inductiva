@@ -10,7 +10,6 @@ import tqdm.utils
 import signal
 import pathlib
 import urllib3
-import urllib3.request
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
 
@@ -300,12 +299,16 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def log_task_info(task_id, method_name, params, resource_pool):
+def log_task_info(task_id, params, resource_pool, simulator):
     """Logging the main components of a task submission."""
 
     logging.info("Task Information:")
     logging.info("> ID:                    %s", task_id)
-    logging.info("> Method:                %s", method_name.split(".")[1])
+    if simulator is not None:
+        logging.info("> Simulator:             %s", simulator.name)
+        logging.info("> Version:               %s", simulator.version)
+        logging.info("> Image:                 %s", simulator.image_uri)
+
     logging.info("> Local input directory: %s", params["sim_dir"])
     logging.info("> Submitting to the following computational resources:")
     if resource_pool is not None:
@@ -323,7 +326,8 @@ def submit_task(api_instance,
                 params,
                 type_annotations,
                 provider_id: ProviderType,
-                container_image: Optional[str] = None):
+                container_image: Optional[str] = None,
+                simulator=None):
     """Submit a task and send input files to the API."""
 
     resource_pool_id = None
@@ -352,7 +356,7 @@ def submit_task(api_instance,
     )
 
     task_id = task["id"]
-    log_task_info(task_id, method_name, params, resource_pool)
+    log_task_info(task_id, params, resource_pool, simulator)
 
     if task["status"] == "pending-input":
 
@@ -373,7 +377,8 @@ def invoke_async_api(method_name: str,
                          types.ComputationalResources] = None,
                      storage_path_prefix: Optional[str] = "",
                      provider_id: ProviderType = ProviderType.GCP,
-                     container_image: Optional[str] = None) -> str:
+                     container_image: Optional[str] = None,
+                     simulator=None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -419,6 +424,7 @@ def invoke_async_api(method_name: str,
                               params=params,
                               provider_id=provider_id,
                               container_image=container_image,
-                              type_annotations=type_annotations)
+                              type_annotations=type_annotations,
+                              simulator=simulator)
 
     return task_id

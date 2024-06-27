@@ -15,7 +15,7 @@ The "base case" simulation is quite simple: a 0.5m cube of water, initially at r
 for 4 seconds. For simulating this base case, we will be using [SPlisHSPlasH](https://docs.inductiva.ai/en/latest/simulators/SPlisHSPlasH.html), the SPH simulator used by the authors.
 
 > Note: if this is your first encounter with our 
-API, we highly recommend going through our [Quickstart Tutorial](https://docs.inductiva.ai/en/latest/get_started/installation.html) to set up your environment correctly. 
+API, we highly recommend going through our [User Console](https://genesis.inductiva.ai) to set up your environment correctly. 
 
 ## Preparing the Configuration Files
 

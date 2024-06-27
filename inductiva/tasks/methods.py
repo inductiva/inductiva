@@ -265,10 +265,9 @@ def get_all(
 
     all_tasks = []
     page_counter = 1
-
     while tasks_fetched := _fetch_tasks_from_api(status,
                                                  page=page_counter,
-                                                 per_page=50,
+                                                 per_page=500,
                                                  project=project):
         all_tasks.extend(tasks_fetched)
         page_counter += 1

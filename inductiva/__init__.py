@@ -41,7 +41,7 @@ absl.logging.set_verbosity(absl.logging.INFO)
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.7.2"
+__version__ = "0.7.3"
 
 
 def set_output_dir(new_output_dir):
@@ -144,7 +144,7 @@ def set_api_key(api_key):
             "No API Key specified. "
             "Please set the INDUCTIVA_API_KEY environment variable.\n"
             "More infomation at:"
-            "https://docs.inductiva.ai/en/latest/get_started/installation.html")
+            "https://genesis.inductiva.ai")
 
     _api_key.set(api_key)
 

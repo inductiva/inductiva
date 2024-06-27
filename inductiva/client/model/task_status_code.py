@@ -43,6 +43,7 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
             "spot-instance-preempted": "SPOTINSTANCEPREEMPTED",
             "executer-terminated": "EXECUTERTERMINATED",
             "executer-terminated-by-user": "EXECUTERTERMINATEDBYUSER",
+            "executer-terminated-ttl-exceeded": "EXECUTERTERMINATEDTTLEXCEEDED",
             "executer-failed": "EXECUTERFAILED",
             "zombie": "ZOMBIE",
             "computation-started": "COMPUTATIONSTARTED",
@@ -88,6 +89,10 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
     @schemas.classproperty
     def EXECUTERTERMINATEDBYUSER(cls):
         return cls("executer-terminated-by-user")
+
+    @schemas.classproperty
+    def EXECUTERTERMINATEDTTLEXCEEDED(cls):
+        return cls("executer-terminated-ttl-exceeded")
 
     @schemas.classproperty
     def EXECUTERFAILED(cls):

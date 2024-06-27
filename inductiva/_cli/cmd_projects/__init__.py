@@ -1,4 +1,4 @@
-"""Register CLI commands for projetcs."""
+"""Register CLI commands for projects."""
 import argparse
 import os
 
@@ -14,8 +14,10 @@ def register(root_parser):
         formatter_class=argparse.RawTextHelpFormatter)
 
     parser.description = ("Projects management utilities.\n\n"
-                          "The `inductiva projects` command allows you to "
-                          "consult existing projetcs.\n")
+                          "The `inductiva projects list` command allows you to "
+                          "consult existing projects.\n"
+                          "The `inductiva projects download` command allows you"
+                          " to download the files of the tasks of a project.\n")
 
     utils.show_help_msg(parser)
 

@@ -32,7 +32,6 @@ from inductiva.client.model.machine_type import MachineType
 # Query params
 MachineFamilySchema = schemas.StrSchema
 SpotSchema = schemas.BoolSchema
-RegionSchema = schemas.StrSchema
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
@@ -44,7 +43,6 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
     {
         'machine_family': typing.Union[MachineFamilySchema, str, ],
         'spot': typing.Union[SpotSchema, bool, ],
-        'region': typing.Union[RegionSchema, str, ],
         'provider_id': typing.Union[ProviderIdSchema, ],
     },
     total=False
@@ -65,12 +63,6 @@ request_query_spot = api_client.QueryParameter(
     name="spot",
     style=api_client.ParameterStyle.FORM,
     schema=SpotSchema,
-    explode=True,
-)
-request_query_region = api_client.QueryParameter(
-    name="region",
-    style=api_client.ParameterStyle.FORM,
-    schema=RegionSchema,
     explode=True,
 )
 request_query_provider_id = api_client.QueryParameter(
@@ -204,7 +196,6 @@ class BaseApi(api_client.Api):
         for parameter in (
             request_query_machine_family,
             request_query_spot,
-            request_query_region,
             request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
