@@ -23,7 +23,7 @@ def run_simulation(
     input_dir: pathlib.Path,
     computational_resources: Optional[types.ComputationalResources] = None,
     provider_id: Optional[Union[ProviderType, str]] = ProviderType.GCP,
-    storage_dir: Optional[types.PathOrStr] = "",
+    storage_dir: Optional[str] = "",
     api_invoker=None,
     extra_metadata=None,
     simulator=None,
@@ -81,7 +81,7 @@ def run_simulation(
         metadata = {
             "api_method_name": api_method_name.split(".")[1],
             "machine_group_id": machine_group_id,
-            "storage_dir": str(storage_dir),
+            "storage_dir": storage_dir,
             **kwargs,
         }
         if extra_metadata is not None:
