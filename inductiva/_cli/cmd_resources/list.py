@@ -44,8 +44,8 @@ def pretty_print_machines_info(machines_dict):
                     # we dont want to repeat the machine type name
                     # (ex c3 standard)
                     final_table["Machine Type"].append("")
-
-                str_vcpus = ", ".join([str(v) for v in vcpus["vcpus"]])
+                str_vcpus = "n/a" if not vcpus["vcpus"] else ", ".join(
+                    str(v) for v in vcpus["vcpus"])
                 final_table["Supported vCPUs"].append(str_vcpus)
                 final_table["Config"].append(config)
 
@@ -57,19 +57,6 @@ def pretty_print_machines_info(machines_dict):
 
     print("Ex:\tc3d-highcpu-4")
     print("\tc3d-highcpu-8-lssd")
-
-
-def _replace_empty_lists_with_value(d, value_to_replace):
-    """Replace empty lists with a value in a nested dictionary.
-    Used to prevent printing of [] in the pretty print.
-    """
-    for key, value in d.items():
-        if isinstance(value, dict):
-            _replace_empty_lists_with_value(value,
-                                            value_to_replace=value_to_replace)
-        elif isinstance(value, list):
-            if len(value) == 0:
-                d[key] = value_to_replace
 
 
 def list_machine_types_available(args):
@@ -107,7 +94,6 @@ def list_machine_types_available(args):
             # Sorted insertion of vcpus
             bisect.insort(machines_dict[family][memory][config]["vcpus"],
                           int(vcpus))
-    _replace_empty_lists_with_value(machines_dict, "n/a")
     pretty_print_machines_info(machines_dict)
 
 
