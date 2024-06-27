@@ -420,6 +420,10 @@ for the user.</p></li>
 Preemptible machines can be stopped at any time and for that reason are only
 advised for fault-tolerant workloads. If simulations are running when they are
 stopped, the simulation is resubmitted to the queue of the machine group again.</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">max_idle_time</span></code> determines the time a machine group can remain idle (without
+receiving any task) before it is terminated.</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">auto_terminate_ts</span></code> defines the moment in time in which the resource will
+be automatically terminated, even if there are tasks still running.</p></li>
 </ul>
 <p>For example, the following code creates a MachineGroup with 2 machines of type
 <code class="docutils literal notranslate"><span class="pre">c2-standard-16</span></code> with 100 GB of disk space each:</p>

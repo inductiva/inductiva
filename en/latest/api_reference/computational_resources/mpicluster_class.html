@@ -419,6 +419,10 @@ for the user.</p></li>
 <li><p>the <code class="docutils literal notranslate"><span class="pre">data_disk_gb</span></code> defines the size of the NFS partition that is mounted on
 the head node and shared with the worker nodes. This partition is used to store
 the input and output files of the simulations.</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">max_idle_time</span></code> determines the time a machine group can remain idle (without
+receiving any task) before it is terminated.</p></li>
+<li><p>the <code class="docutils literal notranslate"><span class="pre">auto_terminate_ts</span></code> defines the moment in time in which the resource will
+be automatically terminated, even if there are tasks still running.</p></li>
 </ul>
 <p>For example, the following code creates an MPICluster with 2 machines of type
 <code class="docutils literal notranslate"><span class="pre">c2-standard-30</span></code>:</p>

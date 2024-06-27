@@ -400,11 +400,11 @@ applications across several areas of engineering and science. OpenFOAM has an
 extensive
 range of features to solve anything from complex fluid flows involving chemical
 reactions, turbulence and heat transfer, to solid dynamics and electromagnetics.</p>
-<p>There are two main open-source versions of OpenFOAM, one developed by
+<p>There are two main open-source distributions of OpenFOAM, one developed by
 <a class="reference external" href="https://openfoam.org/" target="_blank">OpenFOAM foundation</a> and another by the
-<a class="reference external" href="https://www.openfoam.com/" target="_blank">ESI Group</a>. Inductiva API supports both versions,
-and you can choose which one you want to use by setting the <code class="docutils literal notranslate"><span class="pre">version</span></code> parameter
-when initializing the simulator. The default version is the one developed by
+<a class="reference external" href="https://www.openfoam.com/" target="_blank">ESI Group</a>. Inductiva API supports both distributions,
+and you can choose which one you want to use by setting the <code class="docutils literal notranslate"><span class="pre">distribution</span></code> parameter
+when initializing the simulator. The default distribution is the one developed by
 the OpenFOAM foundation.</p>
 <p>A single simulation via Inductiva API comprises several steps done via OpenFOAM</p>
 <ul class="simple">
@@ -458,7 +458,7 @@ scotch decomposition method is available.</p>
 <span class="p">]</span>
 
 <span class="c1"># Initialize the Simulator</span>
-<span class="n">openfoam</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">OpenFOAM</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="s2">&quot;foundation&quot;</span><span class="p">)</span>
+<span class="n">openfoam</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">OpenFOAM</span><span class="p">(</span><span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;foundation&quot;</span><span class="p">)</span>
 
 <span class="c1"># Run simulation with config files in the input directory</span>
 <span class="n">task</span> <span class="o">=</span> <span class="n">openfoam</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span> <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -471,16 +471,17 @@ scotch decomposition method is available.</p>
 <section id="what-to-read-next">
 <h2>What to read next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
 <p>If you are interested in OpenFOAM, you may also be interested in checking
-the following related simulators that are also avaiable via Inductiva API:</p>
+the following related simulators that are also available via Inductiva API:</p>
 <ul class="simple">
 <li><p><a class="reference internal" href="CaNS.html"><span class="std std-doc">CaNS</span></a></p></li>
 <li><p><a class="reference internal" href="DualSPHysics.html"><span class="std std-doc">DualSPHysics</span></a></p></li>
 <li><p><a class="reference internal" href="SPlisHSPlasH.html"><span class="std std-doc">SPlisHSPlasH</span></a></p></li>
 </ul>
 <p>You may also be interested in reading our blog post
-<a class="reference external" href="https://inductiva.ai/blog/article/5k-points-is-all-you-need" target="_blank">The 3D Mesh Resolution Threshold - 5k Points is All You Need!</a>, where we investigate the impact of reducing the
-level of detail of a 3D object in the accuracy of aerodynamic metrics obtain
-using a (virtual) wind tunnel implemented using OpenFOAM.</p>
+<a class="reference external" href="https://inductiva.ai/blog/article/5k-points-is-all-you-need" target="_blank">The 3D Mesh Resolution Threshold - 5k Points is All You Need!</a>,
+where we investigate the impact of reducing the level of detail of a 3D object in
+the accuracy of aerodynamic metrics obtained using a (virtual) wind tunnel
+implemented using OpenFOAM.</p>
 </section>
 </section>
 
