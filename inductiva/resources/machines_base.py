@@ -3,7 +3,7 @@ from collections import defaultdict
 import time
 import enum
 import json
-from typing import Union
+from typing import Optional, Union
 from abc import abstractmethod
 import datetime
 
@@ -30,18 +30,27 @@ class ResourceType(enum.Enum):
 class BaseMachineGroup:
     """Base class to manage Google Cloud resources."""
 
-    def __init__(self,
-                 machine_type: str,
-                 provider: Union[machine_types.ProviderType, str] = "GCP",
-                 data_disk_gb: int = 10,
-                 register: bool = True) -> None:
+    def __init__(
+        self,
+        machine_type: str,
+        provider: Union[machine_types.ProviderType, str] = "GCP",
+        data_disk_gb: int = 10,
+        max_idle_time: Optional[datetime.timedelta] = None,
+        auto_terminate_ts: Optional[datetime.datetime] = None,
+        register: bool = True,
+    ) -> None:
         """Create a BaseMachineGroup object.
 
         Args:
             machine_type: The type of GC machine to launch. Ex: "e2-standard-4".
               Check https://cloud.google.com/compute/docs/machine-resource for
               more information about machine types.
+            provider: The cloud provider of the machine group.
             data_disk_gb: The size of the disk for user data (in GB).
+            max_idle_time: Time without executing any task, after which the
+              resource will be terminated.
+            auto_terminate_ts: Moment in which the resource will be
+              automatically terminated.
             register: Bool that indicates if a machine group should be register
                 or if it was already registered. If set to False by users on
                 initialization, then, the machine group will not be able to be
@@ -73,6 +82,8 @@ class BaseMachineGroup:
         #the request machine_groups.get()
         self._active_machines = 0
         self.num_machines = 0
+        self._max_idle_time = max_idle_time
+        self._auto_terminate_ts = auto_terminate_ts
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -87,6 +98,56 @@ class BaseMachineGroup:
     def name(self):
         return self._name
 
+    @property
+    def max_idle_time(self):
+        return self._max_idle_time
+
+    @property
+    def auto_terminate_ts(self):
+        return self._auto_terminate_ts
+
+    @staticmethod
+    def _timedelta_to_seconds(
+            value: Optional[datetime.timedelta] = None) -> Optional[float]:
+        """Converts a timedelta object to seconds."""
+        return value.total_seconds() if value is not None else None
+
+    @staticmethod
+    def _seconds_to_timedelta(
+            value: Optional[float] = None) -> Optional[datetime.timedelta]:
+        """Converts seconds to a timedelta object."""
+        return datetime.timedelta(
+            seconds=float(value)) if value is not None else None
+
+    @staticmethod
+    def _convert_auto_terminate_ts(
+            timestamp: Optional[datetime.datetime]) -> Optional[str]:
+        """Converts a datetime object to ISO format. Additionally, it checks
+        if the datetime is in the future and if it is timezone aware."""
+        if timestamp is not None:
+            if (timestamp.tzinfo is None or
+                    timestamp.tzinfo.utcoffset(timestamp) is None):
+                raise ValueError("auto_terminate_ts must be timezone aware.")
+
+            now_ts = datetime.datetime.now(timestamp.tzinfo)
+            if timestamp < now_ts:
+                raise ValueError("auto_terminate_ts must be in the future.")
+            return timestamp.isoformat()
+
+        return None
+
+    @staticmethod
+    def _iso_to_datetime(
+            timestamp: Optional[str]) -> Optional[datetime.datetime]:
+        """Converts an ISO format string back to a datetime object. It ensures
+        the datetime is timezone aware."""
+        if timestamp is not None:
+            dt = datetime.datetime.fromisoformat(str(timestamp))
+            if dt.tzinfo is None or dt.tzinfo.utcoffset(dt) is None:
+                raise ValueError("The datetime string must be timezone aware.")
+            return dt
+        return None
+
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.
 
@@ -97,6 +158,9 @@ class BaseMachineGroup:
             machine_type=self.machine_type,
             provider_id=self.provider,
             disk_size_gb=self.data_disk_gb,
+            max_idle_time=self._timedelta_to_seconds(self.max_idle_time),
+            auto_terminate_ts=self._convert_auto_terminate_ts(
+                self.auto_terminate_ts),
             **kwargs,
         )
 
@@ -118,6 +182,12 @@ class BaseMachineGroup:
         self._name = body["name"]
         self.quota_usage = body.get("quota_usage") or {}
         self.register = False
+        # Lifecycle configuration parameters are updated with default values
+        # from the API response if they were not provided by the user
+        self._max_idle_time = self._seconds_to_timedelta(
+            body.get("max_idle_time"))
+        self._auto_terminate_ts = self._iso_to_datetime(
+            body.get("auto_terminate_ts"))
         self._log_machine_group_info()
 
     @abstractmethod
@@ -144,60 +214,17 @@ class BaseMachineGroup:
         machine_group.create_time = resp["creation_timestamp"]
         machine_group._started = bool(resp["started"])
         machine_group.quota_usage = resp.get("quota_usage") or {}
+        machine_group._max_idle_time = cls._seconds_to_timedelta(
+            resp.get("max_idle_time"))
+        machine_group._auto_terminate_ts = cls._iso_to_datetime(
+            resp.get("auto_terminate_ts"))
 
         return machine_group
 
-    def update_termination_timers(self,
-                                  max_idle_time: datetime.timedelta = None,
-                                  auto_terminate_ts: datetime.datetime = None):
-        """Update the termination timers of a machine group.
-
-        Args:
-            max_idle_time (timedelta): Max idle time, i.e. time without
-                executing any task, after which the resource will be terminated.
-            auto_terminate_ts (datetime): Moment in which the resource will
-                be automatically terminated, irrespectively of the existence of
-                tasks yet to be executed by the resource.
-        """
-
-        # Convert max_idle_time from minutes to seconds
-        max_idle_time = max_idle_time.total_seconds() if max_idle_time else None
-
-        # Convert auto_terminate_ts to ISO format
-        if auto_terminate_ts is not None:
-            now_ts = datetime.datetime.now(auto_terminate_ts.tzinfo)
-            if auto_terminate_ts < now_ts:
-                raise ValueError("auto_terminate_ts must be in the future.")
-            auto_terminate_ts = auto_terminate_ts.isoformat()
-
-        update_body = inductiva.client.models.VMGroupLifecycleConfig(
-            max_idle_time=max_idle_time, auto_terminate_ts=auto_terminate_ts)
-
-        if max_idle_time is not None or auto_terminate_ts is not None:
-            try:
-                self._api.update_vm_group_config(
-                    path_params={"mg_id": self._id}, body=update_body)
-            except inductiva.client.ApiException as e:
-                logs.log_and_exit(
-                    logging.getLogger(),
-                    logging.ERROR,
-                    "Setting termination timers for machine group failed " \
-                    "with exception %s.",
-                    e,
-                    exc_info=e)
-
-    def start(self,
-              max_idle_time: datetime.timedelta = None,
-              auto_terminate_ts: datetime.datetime = None,
-              **kwargs):
+    def start(self, **kwargs):
         """Starts a machine group.
 
         Args:
-            max_idle_time (timedelta): Max idle time, i.e. time without
-                executing any task, after which the resource will be terminated.
-            auto_terminate_ts (datetime): Moment in which the resource will
-                be automatically terminated, irrespectively of the existence of
-                tasks yet to be executed by the resource.
             **kwargs: Depending on the type of machine group to be started,
               this can be num_machines, max_machines, min_machines,
               and is_elastic."""
@@ -226,8 +253,6 @@ class BaseMachineGroup:
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
-
-        self.update_termination_timers(max_idle_time, auto_terminate_ts)
 
         try:
 
@@ -370,3 +395,14 @@ class BaseMachineGroup:
         logging.info("> Name:         %s", self.name)
         logging.info("> Machine Type: %s", self.machine_type)
         logging.info("> Data disk size:    %s GB", self.data_disk_gb)
+
+        # Log max idle time
+        value_str = format_utils.timedelta_formatter(
+            self.max_idle_time) if self.max_idle_time is not None else "N/A"
+        logging.info("> Maximum idle time: %s", value_str)
+
+        # Log auto terminate timestamp
+        value_str = self.auto_terminate_ts.strftime(
+            "%Y/%m/%d %H:%M:%S"
+        ) if self.auto_terminate_ts is not None else "N/A"
+        logging.info("> Auto terminate timestamp: %s", value_str)

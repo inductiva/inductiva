@@ -31,6 +31,7 @@ from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvide
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.admin_users_username_cost import AdminUsersUsernameCost
 from inductiva.client.apis.paths.admin_executer_tracker_token import AdminExecuterTrackerToken
+from inductiva.client.apis.paths.admin_groups_machine_group_id_terminate import AdminGroupsMachineGroupIdTerminate
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
 from inductiva.client.apis.paths.executer_tracker_machine_id_task import ExecuterTrackerMachineIdTask
@@ -44,7 +45,6 @@ from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_metric
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
-from inductiva.client.apis.paths.compute_group_mg_id import ComputeGroupMgId
 from inductiva.client.apis.paths.compute_price import ComputePrice
 from inductiva.client.apis.paths.compute_groups import ComputeGroups
 from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
@@ -122,6 +122,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersUsernameCost,
         PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
             AdminExecuterTrackerToken,
+        PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
+            AdminGroupsMachineGroupIdTerminate,
         PathValues.EXECUTERTRACKER_REGISTER:
             ExecuterTrackerRegister,
         PathValues.EXECUTERTRACKER_MACHINE_ID:
@@ -148,8 +150,6 @@ PathToApi = typing_extensions.TypedDict(
             ComputeType,
         PathValues.COMPUTE_GROUP_START:
             ComputeGroupStart,
-        PathValues.COMPUTE_GROUP_MG_ID:
-            ComputeGroupMgId,
         PathValues.COMPUTE_PRICE:
             ComputePrice,
         PathValues.COMPUTE_GROUPS:
@@ -241,6 +241,8 @@ path_to_api = PathToApi({
         AdminUsersUsernameCost,
     PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
         AdminExecuterTrackerToken,
+    PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
+        AdminGroupsMachineGroupIdTerminate,
     PathValues.EXECUTERTRACKER_REGISTER:
         ExecuterTrackerRegister,
     PathValues.EXECUTERTRACKER_MACHINE_ID:
@@ -267,8 +269,6 @@ path_to_api = PathToApi({
         ComputeType,
     PathValues.COMPUTE_GROUP_START:
         ComputeGroupStart,
-    PathValues.COMPUTE_GROUP_MG_ID:
-        ComputeGroupMgId,
     PathValues.COMPUTE_PRICE:
         ComputePrice,
     PathValues.COMPUTE_GROUPS:
