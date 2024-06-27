@@ -171,6 +171,29 @@ def _print_info(already_ran: Dict[str, List[Task]], tasks_to_run: Dict[str,
     print()
 
 
+def _render_dir(resource: BaseMachineGroup, replica: int, input_files: str,
+                input_args: Dict[str, Any]):
+    """Renders the input files for the benchmark.
+    This method renders the input files for the benchmark using the
+    TemplateManager. The input files are rendered in the benchmark_inputs
+    directory. The directory is named after the machine type and the replica.
+    Args:
+        resource (BaseMachineGroup): Resource to render the input files for.
+        replica (int): Replica number.
+        input_files (str): Path to the input files.
+        input_args (Dict[str, Any]): Arguments for the input files to render.
+    Returns:
+        str: Path to the directory where the input files were rendered.
+    """
+    target_dir = "benchmark_inputs/" + resource.machine_type + "_" + str(
+        replica)
+    TemplateManager.render_dir(source_dir=input_files,
+                               target_dir=target_dir,
+                               overwrite=False,
+                               **input_args)
+    return target_dir
+
+
 def run(name: str,
         input_files: types.Path,
         replicas: int,
@@ -253,9 +276,6 @@ def run(name: str,
 
     _print_info(current_project_tasks, to_run)
 
-    if input_args is not None:
-        template_manager = TemplateManager(template_dir=input_files)
-        base_path = template_manager.get_root_dir()
     for machine, current_replicas in to_run.items():
 
         machine_args_current = _replace_callable_from_dict(
@@ -270,22 +290,7 @@ def run(name: str,
                                  max_idle_time=datetime.timedelta(minutes=1),
                                  **machine_args_current)
 
-        simulator_args_current = _replace_callable_from_dict(
-            simulator_args, resource)
-        input_args_current = _replace_callable_from_dict(input_args, resource)
-
-        if input_args_current:
-
-            template_manager.set_root_dir(f"{base_path}/{name}")
-            input_files = template_manager.render_dir(**input_args_current)
-
-        # input_files either come from the template manager or
-        # are passed directly
-        simulator_args_current["input_dir"] = input_files
-        simulator_args_current["on"] = resource
-
-        print(f"\nRunning {simulator}"
-              f"with {simulator_args_current}")
+        print(f"\nRunning {simulator}")
         if resource is not None:
             while not _can_start_resource(resource):
                 print("This machine will exceed the current quotas.\n"
@@ -294,7 +299,23 @@ def run(name: str,
 
             resource.start()
 
-        for _ in range(current_replicas):
+        for replica in range(current_replicas - 1, replicas):
+            # Each replica can run with different arguments
+            simulator_args_current = _replace_callable_from_dict(
+                simulator_args, resource)
+            input_args_current = _replace_callable_from_dict(
+                input_args, resource)
+            print(f"Simulation arguments {simulator_args_current}")
+            # input_files either come from the template manager or
+            # are passed directly.
+            simulator_args_current["input_dir"] = input_files
+            simulator_args_current["on"] = resource
+
+            if input_args_current:
+                new_input_files = _render_dir(resource, replica, input_files,
+                                              input_args_current)
+                simulator_args_current["input_dir"] = new_input_files
+
             _ = simulator.run(**simulator_args_current)
 
     project.close()
