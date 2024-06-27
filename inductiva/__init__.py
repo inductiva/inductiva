@@ -145,7 +145,7 @@ def set_api_key(api_key):
             "No API Key specified. "
             "Please set the INDUCTIVA_API_KEY environment variable.\n"
             "More infomation at:"
-            "https://docs.inductiva.ai/en/latest/get_started/installation.html")
+            "https://genesis.inductiva.ai")
 
     _api_key.set(api_key)
 

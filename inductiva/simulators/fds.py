@@ -9,8 +9,17 @@ from inductiva.utils import meta
 class FDS(simulators.Simulator):
     """Class to invoke a generic FDS simulation on the API."""
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
+        """Initialize the FDS simulator.
+        
+        Args:
+            version (str): The version of the simulator to use. If None, the
+                latest available version in the platform is used.
+            use_dev (bool): Request use of the development version of
+                the simulator. By default (False), the production version
+                is used.
+        """
+        super().__init__(version=version, use_dev=use_dev)
         self.api_method_name = "fdm.fds.run_simulation"
 
     @meta.deprecated_arg(n_cores="n_vcpus")

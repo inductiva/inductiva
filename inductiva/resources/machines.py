@@ -181,7 +181,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
               Check https://cloud.google.com/compute/docs/machine-resource for
             more information about machine types.
             min_machines: The minimum number of available machines. This is
-              a qunatity of machines that will be started initially and the
+              a quantity of machines that will be started initially and the
               minimum available machines, even in cases of low CPU load.
             max_machines: The maximum number of machines a machine group
               can scale up to.
@@ -192,9 +192,9 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             auto_terminate_ts: Moment in which the resource will be
               automatically terminated.
         """
-        if min_machines < 1:
+        if min_machines < 0:
             raise ValueError(
-                "`min_machines` should be a number greater than 0.")
+                "`min_machines` should be a number equal or greater than 0.")
 
         if min_machines >= max_machines:
             raise ValueError("`max_machines` should be greater "
