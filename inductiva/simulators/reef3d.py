@@ -23,11 +23,11 @@ class REEF3D(simulators.Simulator):
         self.api_method_name = "reef3d.reef3d.run_simulation"
 
     def run(self,
-            input_dir: types.PathOrStr,
+            input_dir: str,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
             on: Optional[types.ComputationalResources] = None,
-            storage_dir: Optional[types.PathOrStr] = "",
+            storage_dir: Optional[str] = "",
             extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.

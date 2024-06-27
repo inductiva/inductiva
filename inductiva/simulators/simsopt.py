@@ -22,7 +22,7 @@ class SIMSOPT(simulators.Simulator):
 
     def run(
         self,
-        input_dir: types.PathOrStr,
+        input_dir: str,
         plasma_surface_filename: str,
         coil_coefficients_filename: str,
         coil_currents_filename: str,
@@ -32,7 +32,7 @@ class SIMSOPT(simulators.Simulator):
         sigma_scaling_factor: float,
         objectives_weights_filename: str,
         on: Optional[types.ComputationalResources] = None,
-        storage_dir: Optional[types.PathOrStr] = "",
+        storage_dir: Optional[str] = "",
         extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:

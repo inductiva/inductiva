@@ -23,10 +23,10 @@ class DualSPHysics(simulators.Simulator):
 
     def run(
         self,
-        input_dir: types.PathOrStr,
+        input_dir: str,
         commands: types.Commands,
         on: Optional[types.ComputationalResources] = None,
-        storage_dir: Optional[types.PathOrStr] = "",
+        storage_dir: Optional[str] = "",
         extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:

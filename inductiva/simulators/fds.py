@@ -24,13 +24,13 @@ class FDS(simulators.Simulator):
 
     @meta.deprecated_arg(n_cores="n_vcpus")
     def run(self,
-            input_dir: types.PathOrStr,
+            input_dir: str,
             sim_config_filename: str,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
             post_processing_filename: str = None,
             on: Optional[types.ComputationalResources] = None,
-            storage_dir: Optional[types.PathOrStr] = "",
+            storage_dir: Optional[str] = "",
             extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.

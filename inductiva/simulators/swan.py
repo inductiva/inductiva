@@ -23,12 +23,12 @@ class SWAN(simulators.Simulator):
 
     def run(
         self,
-        input_dir: types.PathOrStr,
+        input_dir: str,
         sim_config_filename: str,
         n_vcpus: Optional[int] = None,
         use_hwthread: bool = True,
         on: Optional[types.ComputationalResources] = None,
-        storage_dir: Optional[types.PathOrStr] = "",
+        storage_dir: Optional[str] = "",
         extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:
