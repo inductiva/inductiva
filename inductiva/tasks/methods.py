@@ -61,7 +61,7 @@ def compare(list_of_tasks: Iterable[Task],
             task.info.time_metrics.output_compression_seconds.value)
         final_table["Upload"].append(
             task.info.time_metrics.output_upload_seconds.value)
-        final_table["Total cost"].append(1.0)
+        final_table["Total cost"].append(task.info.cost or 0.0)
 
     if len(final_table["ID"]) == 0:
         print("No tasks to compare.")
