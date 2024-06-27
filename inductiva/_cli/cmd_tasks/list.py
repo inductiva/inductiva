@@ -16,14 +16,29 @@ def list_tasks(args, fout: TextIO = sys.stdout):
     or a single task with a specific ID
     or all tasks of a project.
     """
-    if args.project_name is not None:
-        print(f"Showing tasks for project: {args.project_name}.")
-        task_list = projects.Project(args.project_name).get_tasks()
-    elif args.task_id is not None:
-        task_list = [tasks.Task(args.task_id)]
+    project_name = args.project_name
+    task_id = args.task_id
+    last_n = args.last_n
+
+    if task_id is not None and (last_n is not None or project_name is not None):
+        print(
+            "inductiva tasks list: error: "
+            "argument id not allowed with argument --project-name or --last-n",
+            file=sys.stderr)
+        return 1
+
+
+    if project_name is not None:
+        print(f"Showing tasks for project: {project_name}.")
+        # With project the default last_n is -1 (all tasks)
+        last_n = -1 if args.last_n is None else args.last_n
+        task_list = projects.Project(project_name).get_tasks(last_n=last_n)
+    elif task_id is not None:
+        task_list = [tasks.Task(task_id)]
     else:
-        last_n = 5 if args.last_n is None else args.last_n
-        task_list = tasks.get(last_n=last_n)
+        # With no project the default last_n is 10
+        last_n = 10 if args.last_n is None else args.last_n
+        task_list = tasks.get_tasks(last_n=last_n)
 
     if not task_list:
         print("No tasks found.", file=fout)
@@ -75,18 +90,17 @@ def register(parser):
 
     _cli.utils.add_watch_argument(subparser)
 
-    group = subparser.add_mutually_exclusive_group()
-    group.add_argument("-n",
-                       "--last-n",
-                       type=int,
-                       help="List last N tasks. Default: 5.")
-    group.add_argument("-id",
-                       "--task-id",
-                       type=str,
-                       help="List a task with a specific ID.")
-    group.add_argument("-p",
-                       "--project-name",
-                       type=str,
-                       help="List the tasks of a project.")
+    subparser.add_argument("-n",
+                           "--last-n",
+                           type=int,
+                           help="List last N tasks. Default: 5.")
+    subparser.add_argument("-id",
+                           "--task-id",
+                           type=str,
+                           help="List a task with a specific ID.")
+    subparser.add_argument("-p",
+                           "--project-name",
+                           type=str,
+                           help="List the tasks of a project.")
 
     subparser.set_defaults(func=list_tasks)
