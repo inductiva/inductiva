@@ -10,7 +10,6 @@ import tqdm.utils
 import signal
 import pathlib
 import urllib3
-import urllib3.request
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
 
