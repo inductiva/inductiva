@@ -135,7 +135,7 @@ def test_pack_input(tmp_path: pathlib.Path):
                                    zip_name_dir)
     assert zipfile.is_zipfile(zip_path_dir)
 
-    with zipfile.ZipFile(zip_path_dir, 'r') as zip_f:
+    with zipfile.ZipFile(zip_path_dir, "r") as zip_f:
         assert "input.json" in zip_f.namelist()
         assert "param2/file_in_dir.txt" in zip_f.namelist()
         with zip_f.open("input.json") as input_file:
@@ -162,7 +162,7 @@ def test_extract_output(tmp_path: pathlib.Path):
     output_dir.mkdir()
 
     zip_path = tmp_path / "test.zip"
-    with zipfile.ZipFile(zip_path, 'w') as zip_f:
+    with zipfile.ZipFile(zip_path, "w") as zip_f:
         zip_f.writestr("output.json", json.dumps(["result"]))
         zip_f.writestr("artifacts/file.txt", "Hello, World!")
 
@@ -177,10 +177,10 @@ def test_extract_subdir_files(tmp_path: pathlib.Path):
     output_dir = tmp_path / "output"
     output_dir.mkdir()
 
-    with zipfile.ZipFile(zip_path, 'w') as zip_f:
+    with zipfile.ZipFile(zip_path, "w") as zip_f:
         zip_f.writestr("artifacts/file.txt", "Hello, World!")
 
-    with zipfile.ZipFile(zip_path, 'r') as zip_f:
+    with zipfile.ZipFile(zip_path, "r") as zip_f:
         data.extract_subdir_files(zip_f, "artifacts", output_dir)
 
     assert (output_dir / "file.txt").exists()
@@ -204,7 +204,7 @@ def test_uncompress_task_outputs(tmp_path: pathlib.Path):
     output_dir = tmp_path / "output"
     output_dir.mkdir()
 
-    with zipfile.ZipFile(zip_path, 'w') as zip_f:
+    with zipfile.ZipFile(zip_path, "w") as zip_f:
         zip_f.writestr("output.json", json.dumps(["result"]))
         zip_f.writestr("artifacts/file.txt", "Hello, World!")
 
@@ -220,19 +220,21 @@ def test_extract_zip_file_to_output_dir(tmp_path: pathlib.Path):
     output_dir = tmp_path / "output"
     output_dir.mkdir()
 
-    files = ["file1.txt", "file2.txt", "file3.txt"]
+    files_list = ["file1.txt", "file2.txt", "file3.txt"]
 
-    with zipfile.ZipFile(zip_path, 'w') as zip_f:
-        for file in files:
+    with zipfile.ZipFile(zip_path, "w") as zip_f:
+        for file in files_list:
             zip_f.writestr(file, "Hello, World!")
 
-    with zipfile.ZipFile(zip_path, 'r') as zip_f:
+    with zipfile.ZipFile(zip_path, "r") as zip_f:
 
-        for file in files:
+        for file in files_list:
+            #pylint: disable=protected-access
             data._extract_zip_file_to_output(output_dir=output_dir,
                                              remove_zip_file=zip_f,
                                              zip_path=file,
                                              filename=file)
+            #pylint: enable=protected-access
 
     assert (output_dir / "file1.txt").exists()
     assert (output_dir / "file2.txt").exists()
