@@ -1,10 +1,13 @@
 """Inductiva template manager class to manipulate files and render templates."""
-from typing import Union, IO
 import pathlib
 import shutil
 import os
 
 import jinja2
+
+from inductiva import types
+
+TEMPLATE_EXTENSION = ".jinja"
 
 
 class TemplateManager:
@@ -13,53 +16,12 @@ class TemplateManager:
     Template files contains variables that are replaced by
     values provided as keyword arguments to the render methods.
     The underlying template engine is the Jinja2 library.
-
-    Attributes:
-        TEMPLATE_EXTENSION (str): The file extension used by Jinja2 templates.
     """
 
-    TEMPLATE_EXTENSION = ".jinja"
-
-    def __init__(self, template_dir: str):
-        """Initialize the template manager.
-
-        Args:
-            template_dir (str): The directory where the templates are
-                located.
-        """
-        self.template_dir = template_dir
-
-        loader = jinja2.FileSystemLoader(self.template_dir)
-        self.environment = jinja2.Environment(loader=loader,
-                                              undefined=jinja2.StrictUndefined)
-
-    def render_file(self, template_name: str, target_file: Union[str, IO],
-                    **render_args):
-        """Render a template to a file.
-
-        The template with the given `template_name` is rendered to a file named
-        `dest_name`, using the given render arguments. If the template is not
-        found, a jinja2.exceptions.TemplateNotFound exception will be raised.
-        If the file pointed by `template_name` is not a template, the file will
-        be copied to `dest_name` as is.
-
-        Args:
-            template_name (str): The name of the template file to be rendered,
-                relative to the template directory.
-            dest_name (str): The name of the destination file.
-            render_args: Keyword arguments that will be passed to the template
-                renderer.
-        """
-        # jinja uses posix paths (forward slashes) to find templates,
-        # even on Windows
-        template_name = pathlib.Path(template_name).as_posix()
-        template = self.environment.get_template(template_name)
-        stream = template.stream(**render_args)
-        stream.dump(target_file)
-
-    @staticmethod
-    def render_dir(source_dir: str,
-                   target_dir: str,
+    @classmethod
+    def render_dir(cls,
+                   source_dir: types.PathOrStr,
+                   target_dir: types.PathOrStr,
                    overwrite: bool = False,
                    **render_args):
         """
@@ -73,10 +35,10 @@ class TemplateManager:
         overwritten.
 
         Args:
-            source_dir (str): Path to the source directory,
+            source_dir (types.PathOrStr): Path to the source directory,
                 containing template files (and potentially static files to be
                 copied without modification).
-            target_dir (str): Path to the target directory.
+            target_dir (types.PathOrStr): Path to the target directory.
             overwrite (bool): If True, the destination files will be overwritten
                 if they already exist. If False (default), a FileExistsError
                 will be raised if any destination file already exists.
@@ -98,7 +60,10 @@ class TemplateManager:
 
         target_dir = pathlib.Path(target_dir)
 
-        manager = TemplateManager(source_dir)
+        loader = jinja2.FileSystemLoader(source_dir)
+        environment = jinja2.Environment(loader=loader,
+                                         keep_trailing_newline=True,
+                                         undefined=jinja2.StrictUndefined)
 
         template_dir_struct = get_dir_structure(source_dir)
 
@@ -120,14 +85,16 @@ class TemplateManager:
 
             # render template files
             for file in contents["templates"]:
-                target = target_subdir / strip_extension(file)
+                target_path = target_subdir / strip_extension(file)
                 template_name = (pathlib.Path(subdir) / file).as_posix()
-                manager.render_file(template_name, str(target), **render_args)
+                template = environment.get_template(template_name)
+                stream = template.stream(**render_args)
+                stream.dump(str(target_path))
 
 
 def is_template(file: str) -> bool:
     """Check if the given file is of template type."""
-    return file.endswith(TemplateManager.TEMPLATE_EXTENSION)
+    return file.endswith(TEMPLATE_EXTENSION)
 
 
 def strip_extension(file: str) -> str:

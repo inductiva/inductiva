@@ -1,5 +1,4 @@
 """Test the TemplateManager class."""
-from io import StringIO
 import tempfile
 import pathlib
 import shutil
@@ -39,7 +38,7 @@ def test_render_dir__copies_and_renders_files(tmp_target_dir, text):
     assert os.path.isfile(tmp_target_dir / "folder/nested_template.txt")
     assert os.path.isfile(tmp_target_dir / "folder/nested_non_template.txt")
 
-    expected_contents = "hello " + text
+    expected_contents = f"hello {text}\n"
 
     assert _get_file_contents(tmp_target_dir /
                               "template.txt") == expected_contents
@@ -82,16 +81,20 @@ def test_render_dir__target_dir_exists_overwites__renders_correctly(
 
 @mark.parametrize(
     "template_name, expected",
-    [("template.txt.jinja", "hello world"),
-     ("non_template.txt", "this is a non-template file"),
-     ("folder/nested_template.txt.jinja", "hello world"),
-     ("folder/nested_non_template.txt", "this is a non-template file")])
-def test_render_file__correctly_renders_files(template_name, expected):
+    [("template.txt.jinja", "hello world\n"),
+     ("non_template.txt", "this is a non-template file\n"),
+     ("folder/nested_template.txt.jinja", "hello world\n"),
+     ("folder/nested_non_template.txt", "this is a non-template file\n")])
+def test_render_file__correctly_renders_files(tmp_target_dir, template_name,
+                                              expected):
     # Determine if template and non-template files are correctly rendered.
-    template_manager = TemplateManager(ASSETS_DIR)
-    fout = StringIO()
-    template_manager.render_file(template_name, fout, text="world")
-    assert fout.getvalue() == expected
+
+    TemplateManager.render_dir(ASSETS_DIR, tmp_target_dir, text="world")
+
+    if manager.is_template(template_name):
+        template_name = manager.strip_extension(template_name)
+    current = _get_file_contents(tmp_target_dir / template_name)
+    assert current == expected
 
 
 @mark.parametrize("filename, is_template",
@@ -114,18 +117,8 @@ def test_strip_extension__correctly_removes_extension(filename, expected):
     assert manager.strip_extension(filename) == expected
 
 
-def test_render_file__missing_parameter__raises_exception():
+def test_render_file__missing_parameter__raises_exception(tmp_target_dir):
     # Determine if an exception is raised when a template is rendered but not
     # all required parameters are given.
-    file = "template.txt.jinja"
-    template_manager = TemplateManager(ASSETS_DIR)
     with pytest.raises(exceptions.UndefinedError):
-        template_manager.render_file(file, StringIO())
-
-
-def test_render_file__invalid_template__raises_exception():
-    # Determine if an exception is raised when a non-existing template is
-    # rendered.
-    template_manager = TemplateManager("something")
-    with pytest.raises(exceptions.TemplateNotFound):
-        template_manager.render_file("non_existing_template", StringIO())
+        TemplateManager.render_dir(ASSETS_DIR, tmp_target_dir)
