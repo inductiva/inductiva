@@ -25,6 +25,8 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
+from inductiva.client.model.storage_sort_by import StorageSortBy
+from inductiva.client.model.order import Order
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
@@ -34,31 +36,75 @@ MaxResultsSchema = schemas.IntSchema
 
 
 class SortBySchema(
-    schemas.EnumBase,
-    schemas.StrSchema
+    schemas.ComposedSchema,
 ):
-    
-    @schemas.classproperty
-    def SIZE(cls):
-        return cls("size")
-    
-    @schemas.classproperty
-    def CREATION_TIME(cls):
-        return cls("creation_time")
+
+
+    class MetaOapg:
+        
+        @classmethod
+        @functools.lru_cache()
+        def all_of(cls):
+            # we need this here to make our import statements work
+            # we must store _composed_schemas in here so the code is only run
+            # when we invoke this method. If we kept this at the class
+            # level we would get an error because the class level
+            # code would be run when this module is imported, and these composed
+            # classes don't exist yet because their module has not finished
+            # loading
+            return [
+                StorageSortBy,
+            ]
+
+
+    def __new__(
+        cls,
+        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+    ) -> 'SortBySchema':
+        return super().__new__(
+            cls,
+            *_args,
+            _configuration=_configuration,
+            **kwargs,
+        )
 
 
 class OrderSchema(
-    schemas.EnumBase,
-    schemas.StrSchema
+    schemas.ComposedSchema,
 ):
-    
-    @schemas.classproperty
-    def ASC(cls):
-        return cls("asc")
-    
-    @schemas.classproperty
-    def DESC(cls):
-        return cls("desc")
+
+
+    class MetaOapg:
+        
+        @classmethod
+        @functools.lru_cache()
+        def all_of(cls):
+            # we need this here to make our import statements work
+            # we must store _composed_schemas in here so the code is only run
+            # when we invoke this method. If we kept this at the class
+            # level we would get an error because the class level
+            # code would be run when this module is imported, and these composed
+            # classes don't exist yet because their module has not finished
+            # loading
+            return [
+                Order,
+            ]
+
+
+    def __new__(
+        cls,
+        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+    ) -> 'OrderSchema':
+        return super().__new__(
+            cls,
+            *_args,
+            _configuration=_configuration,
+            **kwargs,
+        )
 PathSchema = schemas.StrSchema
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
@@ -70,8 +116,8 @@ RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
         'max_results': typing.Union[MaxResultsSchema, decimal.Decimal, int, ],
-        'sort_by': typing.Union[SortBySchema, str, ],
-        'order': typing.Union[OrderSchema, str, ],
+        'sort_by': typing.Union[SortBySchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        'order': typing.Union[OrderSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         'path': typing.Union[PathSchema, str, ],
         'provider_id': typing.Union[ProviderIdSchema, ],
     },

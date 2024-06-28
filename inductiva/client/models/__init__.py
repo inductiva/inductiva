@@ -28,6 +28,7 @@ from inductiva.client.model.machine_group_terminate_reason import MachineGroupTe
 from inductiva.client.model.machine_group_terminate_request import MachineGroupTerminateRequest
 from inductiva.client.model.machine_group_type import MachineGroupType
 from inductiva.client.model.machine_type import MachineType
+from inductiva.client.model.order import Order
 from inductiva.client.model.output_archive_info import OutputArchiveInfo
 from inductiva.client.model.project import Project
 from inductiva.client.model.project_create import ProjectCreate
@@ -36,6 +37,7 @@ from inductiva.client.model.providers import Providers
 from inductiva.client.model.quota import Quota
 from inductiva.client.model.quota_usage import QuotaUsage
 from inductiva.client.model.storage_file_info import StorageFileInfo
+from inductiva.client.model.storage_sort_by import StorageSortBy
 from inductiva.client.model.task import Task
 from inductiva.client.model.task_metric_create import TaskMetricCreate
 from inductiva.client.model.task_metrics import TaskMetrics

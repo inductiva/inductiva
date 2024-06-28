@@ -16,7 +16,6 @@ from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_resubmit import TasksTaskIdResubmit
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
-from inductiva.client.apis.paths.tasks_task_id_files import TasksTaskIdFiles
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_email import AdminUsersEmail
@@ -92,8 +91,6 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdKill,
         PathValues.TASKS_TASK_ID_DISABLE_LOGS:
             TasksTaskIdDisableLogs,
-        PathValues.TASKS_TASK_ID_FILES:
-            TasksTaskIdFiles,
         PathValues.ADMIN_USERS:
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_API_KEY:
@@ -211,8 +208,6 @@ path_to_api = PathToApi({
         TasksTaskIdKill,
     PathValues.TASKS_TASK_ID_DISABLE_LOGS:
         TasksTaskIdDisableLogs,
-    PathValues.TASKS_TASK_ID_FILES:
-        TasksTaskIdFiles,
     PathValues.ADMIN_USERS:
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_API_KEY:
