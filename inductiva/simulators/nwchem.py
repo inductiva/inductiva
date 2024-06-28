@@ -20,7 +20,7 @@ class NWChem(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "md.nwchem.run_simulation"
+        self.api_method_name = "compchem.nwchem.run_simulation"
 
     def run(self,
             input_dir: types.Path,
