@@ -14,8 +14,6 @@ import inductiva.client.models
 from inductiva import api, users
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
-from inductiva.client import exceptions
-from inductiva import logs
 
 from inductiva.resources import machine_types
 
@@ -164,19 +162,11 @@ class BaseMachineGroup:
             **kwargs,
         )
 
-        try:
-            resp = self._api.register_vm_group(
-                body=instance_group_config,
-                skip_deserialization=True,
-            )
-            body = json.loads(resp.response.data)
-        except (exceptions.ApiValueError, exceptions.ApiException) as e:
-            logs.log_and_exit(
-                logging.getLogger(),
-                logging.ERROR,
-                "Registering machine group failed with exception %s",
-                e,
-                exc_info=e)
+        resp = self._api.register_vm_group(
+            body=instance_group_config,
+            skip_deserialization=True,
+        )
+        body = json.loads(resp.response.data)
 
         self._id = body["id"]
         self._name = body["name"]
@@ -253,16 +243,7 @@ class BaseMachineGroup:
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
-
-        try:
-
-            self._api.start_vm_group(body=request_body)
-        except inductiva.client.ApiException as e:
-            logs.log_and_exit(logging.getLogger(),
-                              logging.ERROR,
-                              "Starting machine group failed with exception %s",
-                              e,
-                              exc_info=e)
+        self._api.start_vm_group(body=request_body)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         logging.info("%s successfully started in %s.", self, creation_time)
