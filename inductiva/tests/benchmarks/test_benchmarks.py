@@ -79,23 +79,7 @@ def test___tasks_by_vm_type__all_same_vm_type():
 
 def test__compute_tasks_to_run_some_task_ran():
     """Test the _compute_tasks_to_run function when some task already ran."""
-    machines = [{
-        "machine_type": "c2-standard-4",
-        "num_cpus": 4,
-        "ram_gb": 16,
-        "price": 0.04724,
-        "provider_id": "GCP",
-        "spot": True,
-        "region": "europe-west1"
-    }, {
-        "machine_type": "c2-standard-8",
-        "num_cpus": 8,
-        "ram_gb": 32,
-        "price": 0.09448,
-        "provider_id": "GCP",
-        "spot": True,
-        "region": "europe-west1"
-    }]
+    machines = ["c2-standard-4", "c2-standard-8"]
 
     task_info_4 = TaskInfo()
     task_info_4.executer = executer_4
@@ -120,23 +104,7 @@ def test__compute_tasks_to_run_some_task_ran():
 
 def test__compute_tasks_to_run_no_task_ran():
     """Test the _compute_tasks_to_run function when no task have ran."""
-    machines = [{
-        "machine_type": "c2-standard-4",
-        "num_cpus": 4,
-        "ram_gb": 16,
-        "price": 0.04724,
-        "provider_id": "GCP",
-        "spot": True,
-        "region": "europe-west1"
-    }, {
-        "machine_type": "c2-standard-8",
-        "num_cpus": 8,
-        "ram_gb": 32,
-        "price": 0.09448,
-        "provider_id": "GCP",
-        "spot": True,
-        "region": "europe-west1"
-    }]
+    machines = ["c2-standard-4", "c2-standard-8"]
     current_project_tasks = {}
     replicas = 6
     # pylint: disable=W0212
@@ -146,23 +114,7 @@ def test__compute_tasks_to_run_no_task_ran():
 
 def test__compute_tasks_to_run_all_task_ran():
     """Test the _compute_tasks_to_run function when all tasks have ran."""
-    machines = [{
-        "machine_type": "c2-standard-4",
-        "num_cpus": 4,
-        "ram_gb": 16,
-        "price": 0.04724,
-        "provider_id": "GCP",
-        "spot": True,
-        "region": "europe-west1"
-    }, {
-        "machine_type": "c2-standard-8",
-        "num_cpus": 8,
-        "ram_gb": 32,
-        "price": 0.09448,
-        "provider_id": "GCP",
-        "spot": True,
-        "region": "europe-west1"
-    }]
+    machines = ["c2-standard-4", "c2-standard-8"]
 
     task_info_4 = TaskInfo()
     task_info_4.executer = executer_4
