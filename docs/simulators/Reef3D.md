@@ -189,7 +189,7 @@ task.print_summary()
 ```
 
 You should see something like this when you run this script end to end (it
-should take approximately 20 minutes)
+should take approximately 15 minutes)
 
 ```bash
 Registering MachineGroup configurations:
