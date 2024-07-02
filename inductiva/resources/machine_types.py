@@ -1,6 +1,6 @@
 """Available machine types and their number of cores."""
 from dataclasses import dataclass
-from typing import Union
+from typing import List, Union
 import json
 
 import inductiva
@@ -37,7 +37,7 @@ class MachineTypeInfo:
 
 def get_available_machine_types(
         provider: Union[str, ProviderType] = ProviderType.GCP,
-        machine_family: str = None) -> list[MachineTypeInfo]:
+        machine_family: str = None) -> List[MachineTypeInfo]:
     """Get all available machine types for a given provider.
 
     Args:
