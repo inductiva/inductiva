@@ -111,20 +111,20 @@ class Simulator(ABC):
 
         self.api_method_name = ".".join(all_elements)
 
-    def _setup_input_dir(self, input_dir: types.Path):
+    def _setup_input_dir(self, input_dir: str):
         """Setup the simulator input directory."""
-        input_dir = pathlib.Path(input_dir)
-        if not input_dir.is_dir():
+        input_dir_path = pathlib.Path(input_dir)
+        if not input_dir_path.is_dir():
             raise ValueError(
                 f"The provided path (\"{input_dir}\") is not a directory.")
-        return input_dir
+        return input_dir_path
 
     def run(
         self,
-        input_dir: types.Path,
+        input_dir: str,
         *_args,
         on: Optional[types.ComputationalResources] = None,
-        storage_dir: Optional[types.Path] = "",
+        storage_dir: Optional[str] = "",
         extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:
@@ -141,7 +141,7 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
-        input_dir = self._setup_input_dir(input_dir)
+        input_dir_path = self._setup_input_dir(input_dir)
 
         self.validate_computational_resources(on)
 
@@ -155,7 +155,7 @@ class Simulator(ABC):
 
         return tasks.run_simulation(
             self.api_method_name,
-            input_dir,
+            input_dir_path,
             storage_dir=storage_dir,
             computational_resources=on,
             extra_metadata=extra_metadata,
