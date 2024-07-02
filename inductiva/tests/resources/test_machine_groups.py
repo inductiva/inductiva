@@ -34,15 +34,10 @@ EXPECTED_RESULTS = [
 def test_get_by_name(response, expected_result):
     mock_compute_api_path =\
         "inductiva.resources.machine_groups.compute_api.ComputeApi"
-    mock_list_available_machines_path =\
-        "inductiva.resources.machines_base"\
-        ".machine_types.list_available_machines"
-    with mock.patch(mock_compute_api_path) as mock_compute_api, mock.patch(
-            mock_list_available_machines_path) as mock_list_available_machines:
+
+    with mock.patch(mock_compute_api_path) as mock_compute_api:
         mock_response = mock.MagicMock()
         mock_response.body = response
-
-        mock_list_available_machines.return_value = ["c2-standard-4"]
 
         mock_get_vm_group_by_name = mock.MagicMock(return_value=mock_response)
         (mock_compute_api.return_value.get_vm_group_by_name

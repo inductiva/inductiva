@@ -17,21 +17,19 @@ from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
 from inductiva.resources import machine_groups
 from inductiva.tasks.task import Task
-from inductiva import types, users
+from inductiva import users
 
 from ..localization import translator as __
 
 
-def analyze(name: str,
-            metadata_path: types.Path,
-            ouput_path: types.Path = None) -> Dict:
+def analyze(name: str, metadata_path: str, ouput_path: str = None) -> Dict:
     """Analyzes a benchmark.
     This method creates a dictionary with all the relevant information about
     the benchmark.
     Args:
         name (str): Name of the benchmark.
-        metadata_path (types.Path): Path to the metadata file.
-        ouput_path (types.Path): Path to the output file.
+        metadata_path (str): Path to the metadata file.
+        ouput_path (str): Path to the output file.
             If it will not create an output file.
     Returns:
         Dict: Dictionary with the information about the benchmark.
@@ -70,7 +68,7 @@ def analyze(name: str,
                 "cost_per_hour":
                     resource.estimate_cloud_cost(verbose=False),
                 "type":
-                    type(resource).__name__,
+                    resource.__class__.__name__,
                 "provider":
                     task_info.executer.host_type,
                 "machine_count":
@@ -125,13 +123,12 @@ def _tasks_by_vm_type(project: Project) -> Dict[str, List[Task]]:
     return resources
 
 
-def _compute_tasks_to_run(machines_to_run: List[Dict[str, Any]],
+def _compute_tasks_to_run(machines_to_run: List[str],
                           already_ran: Dict[str, List[Task]],
                           intended_replicas: int) -> Dict[str, int]:
     """Computes the number of tasks that need to be run for each resource.
     Args:
-        machines_to_run (List[Dict[str, Any]]): List of machines to run the
-            simulation on.
+        machines_to_run (List[str]): List of machines to run the simulation on.
         already_ran (Dict[str, List[Task]]): Dictionary with the resources as
             keys and the tasks ran on them as values.
         intended_replicas (int): Number of replicas to run on each resource.
@@ -144,12 +141,11 @@ def _compute_tasks_to_run(machines_to_run: List[Dict[str, Any]],
     for machine in machines_to_run:
 
         # if the machine has not been ran yet, run the intended replicas
-        if machine["machine_type"] not in already_ran:
-            to_run[machine["machine_type"]] = intended_replicas
+        if machine not in already_ran:
+            to_run[machine] = intended_replicas
         # if the machine has been ran, run the remaining replicas
-        elif len(already_ran[machine["machine_type"]]) < intended_replicas:
-            to_run[machine["machine_type"]] = intended_replicas - len(
-                already_ran[machine["machine_type"]])
+        elif len(already_ran[machine]) < intended_replicas:
+            to_run[machine] = intended_replicas - len(already_ran[machine])
     return to_run
 
 
@@ -171,97 +167,20 @@ def _print_info(already_ran: Dict[str, List[Task]], tasks_to_run: Dict[str,
     print()
 
 
-def _render_dir(resource: BaseMachineGroup, replica: int, input_files: str,
-                input_args: Dict[str, Any]):
-    """Renders the input files for the benchmark.
-    This method renders the input files for the benchmark using the
-    TemplateManager. The input files are rendered in the benchmark_inputs
-    directory. The directory is named after the machine type and the replica.
-    Args:
-        resource (BaseMachineGroup): Resource to render the input files for.
-        replica (int): Replica number.
-        input_files (str): Path to the input files.
-        input_args (Dict[str, Any]): Arguments for the input files to render.
-    Returns:
-        str: Path to the directory where the input files were rendered.
-    """
-    target_dir = "benchmark_inputs/" + resource.machine_type + "_" + str(
-        replica)
-    TemplateManager.render_dir(source_dir=input_files,
-                               target_dir=target_dir,
-                               overwrite=False,
-                               **input_args)
-    return target_dir
-
-
-def run(name: str,
-        input_files: types.Path,
-        replicas: int,
-        machines: List[Dict[str, Any]],
-        simulator: Simulator,
-        append: bool = False,
-        machine_class: BaseMachineGroup = None,
-        input_args: Dict[str, Union[Callable, Any]] = None,
-        machine_args: Dict[str, Union[Callable, Any]] = None,
-        simulator_args: Dict[str, Union[Callable, Any]] = None):
+def _run(project: Project,
+         input_files: str,
+         replicas: int,
+         machines: List[Dict[str, Any]],
+         simulator: Simulator,
+         machine_class: BaseMachineGroup = None,
+         input_args: Dict[str, Union[Callable, Any]] = None,
+         machine_args: Dict[str, Union[Callable, Any]] = None,
+         simulator_args: Dict[str, Union[Callable, Any]] = None):
     """Runs a benchmark.
-    This method creates a project and runs a benchmark using the provided
-    parameters. It checks if a benchmark with the given name already exists. If
-    it does, the user is prompted to either append tasks to the existing
-    benchmark or cancel the operation. The method waits for quotas to be
-    available before starting the necessary resources. If the benchmark is
-    already completed, no further action is taken. If the benchmark is
-    incomplete, only the remaining tasks are executed.
-
-    input_args, machine_args and simulator_args can be dictionaries where the
-    values can be callables that will be called with the resource object as
-    parameter (or str machine_type when it comes to machine_args). This is
-    useful when you want to calculate the values based on the machine_group or
-    machine_type.
-    Example:
-        def data_disk_gb(name):
-            #makes the data disk size relative to the number of vcpus
-            vcpu = int(name.split("-")[2])
-            return vcpu+10
-        machine_args={"data_disk_gb": data_disk_gb}
-        
+    This method runs a benchmark using the provided parameters.
     Args:
-            name (str): Name of the benchmark.
-            input_files (types.Path): Path to the input files.
-            replicas (int): Number of replicas to run on each resource.
-            machines (List[Dict[str, Any]]): List of machines to run the
-                simulation on.
-                The machine in this case is a dict with a lot of information.
-                It is mandatory to have the machine_type key and value.
-                Usually used in conjunction with inductiva.resources.query
-            simulator (Simulator): Simulator to run.
-            append (bool): If True, appends the tasks to a benchmark regardless 
-            if that benchmark is new or not. If False, will prompt the user if
-            the benchmark already exists.
-            machine_class (BaseMachineGroup): Class to use to create the machine
-                group. If not given, MachineGroup will be used.
-            input_args (Dict[str, Union[Callable, Any]]): Arguments for the
-                input files.
-            machine_args (Dict[str, Union[Callable, Any]]): Arguments for the
-                machines.
-            simulator_args (Dict[str, Union[Callable, Any]]): Arguments for the
-                simulator.
+        project (Project): Project to run the benchmark on.
     """
-    project = Project(name, append=True)
-    project.open()
-
-    tasks = project.get_tasks()
-
-    if len(tasks) > 0 and not append:
-        print(__("benchmark-already-exists", name))
-        response = input()
-        if response in ("no", "n"):
-            print(__("operation_canceled"))
-            project.close()
-            return
-        elif response in ("yes", "ye", "y"):
-            print(__("appending_tasks"))
-
     # create dict with resource type: list of tasks ran on that resource
     # Example
     # { "n1-standard-4": [task1, task2], "n1-standard-8": [task3]}
@@ -312,13 +231,78 @@ def run(name: str,
             simulator_args_current["on"] = resource
 
             if input_args_current:
-                new_input_files = _render_dir(resource, replica, input_files,
-                                              input_args_current)
+                target_dir = ("benchmark_inputs/"
+                              f"{resource.machine_type}_{replica}")
+                new_input_files = TemplateManager.render_dir(
+                    source_dir=input_files,
+                    target_dir=target_dir,
+                    overwrite=False,
+                    **input_args)
                 simulator_args_current["input_dir"] = new_input_files
 
             _ = simulator.run(**simulator_args_current)
 
-    project.close()
+
+def run(name: str,
+        input_files: str,
+        replicas: int,
+        machines: List[str],
+        simulator: Simulator,
+        append: bool = False,
+        machine_class: BaseMachineGroup = None,
+        input_args: Dict[str, Union[Callable, Any]] = None,
+        machine_args: Dict[str, Union[Callable, Any]] = None,
+        simulator_args: Dict[str, Union[Callable, Any]] = None):
+    """Runs a benchmark.
+    This method creates a project and runs a benchmark using the provided
+    parameters. It checks if a benchmark with the given name already exists. If
+    it does, the user is prompted to either append tasks to the existing
+    benchmark or cancel the operation. The method waits for quotas to be
+    available before starting the necessary resources. If the benchmark is
+    already completed, no further action is taken. If the benchmark is
+    incomplete, only the remaining tasks are executed.
+
+    input_args, machine_args and simulator_args can be dictionaries where the
+    values can be callables that will be called with the resource object as
+    parameter (or str machine_type when it comes to machine_args). This is
+    useful when you want to calculate the values based on the machine_group or
+    machine_type.
+    Example:
+        def data_disk_gb(name):
+            #makes the data disk size relative to the number of vcpus
+            vcpu = int(name.split("-")[2])
+            return vcpu+10
+        machine_args={"data_disk_gb": data_disk_gb}
+        
+    Args:
+            name (str): Name of the benchmark.
+            input_files (str): Path to the input files.
+            replicas (int): Number of replicas to run on each resource.
+            machines (List[str]): List of machines to run the simulation on.
+                The machine in this case is just a string with the machine type.
+                Ex: ["c2-standard-4", "c2d-standard-4"]
+            simulator (Simulator): Simulator to run.
+            append (bool): If True, appends the tasks to a benchmark regardless 
+            if that benchmark is new or not. If False, will prompt the user if
+            the benchmark already exists.
+            machine_class (BaseMachineGroup): Class to use to create the machine
+                group. If not given, MachineGroup will be used.
+            input_args (Dict[str, Union[Callable, Any]]): Arguments for the
+                input files.
+            machine_args (Dict[str, Union[Callable, Any]]): Arguments for the
+                machines.
+            simulator_args (Dict[str, Union[Callable, Any]]): Arguments for the
+                simulator.
+    """
+
+    project = Project(name, append=True)
+    if project.num_tasks > 0 and not append:
+        raise RuntimeError(
+            __("benchmark_already_exists", name, project.num_tasks))
+
+    with project:
+        _run(project, input_files, replicas, machines, simulator, machine_class,
+             input_args, machine_args, simulator_args)
 
 
 def _replace_callable_from_dict(dictionary: Dict[str, Union[Callable, Any]],
