@@ -1,5 +1,4 @@
 """Type definitions."""
-import os
 from typing import Union, List
 from typing_extensions import TypeAlias
 
