@@ -48,7 +48,7 @@ cloud. If not selected the output files will be stored in a folder named with
 the  task id of the simulation.
 - `n_vcpus`: number of virtual CPUs / threads that will be used to configure the
 MPI parallism. This number needs to be set consistently with parameter
-```M 10``` to be set in both `control.txt` and `ctrl.txt` configurations files.
+`M 10` to be set in both `control.txt` and `ctrl.txt` configurations files.
 
 
 For further information on handling the task of the simulation see
@@ -95,7 +95,7 @@ locally).
 
 Before we proceed, let's inspect the files to check three Reed3D parameters that
 are important to understand before we configure our simulation run. These
-parameters are: ```N 41```, ```P 30 ``` and ```M 10```:
+parameters are: `N 41`, `P 30` and `M 10`:
 
 
 **control.txt (for DiveMESH):**
@@ -134,34 +134,34 @@ T 10 0
 W 22 -9.81
 ```
 
-Observe that parameter ```M 10```, which controls the level of parallism, is
+Observe that parameter `M 10`, which controls the level of parallelism, is
 set to 4 threads/vCPUs, a very low number. Depending on the number of vCPUs we
 effectively wish to use for running the simulation, we will need to manually
-change  ```M 10``` on **both files** to match the specs of corresponding the VM. 
+change  `M 10` on **both files** to match the specs of corresponding the VM. 
 We will be using GCP VMs of the c2d family, which tend to provide a very good 
 price-performance point, especially when you run them in spot mode. More 
-specifically, we will be using the larger ```c2d-highcpu-112``` machines with
+specifically, we will be using the larger `c2d-highcpu-112` machines with  
 112 vCPUs and 2GB of RAM per vCPU (this simulation will not require more than
 224GB of RAM). 
 
-We will be setting ```M 10 56``` on both files. Note that this is half the
+We will be setting `M 10 56` on both files. Note that this is half the
 available number of vCPUs available on the VM (112!). Actually, running on only
 half of the vCPUs may provide significantly faster simulation times than running
 on all the vCPUs *for some simulators / VM types*. This has to do with the fact
-that these VMs run on processors with hyperthreading, running two threads per 
-physical core. One of the issues with hyperthreading is that it increases
-thread competition for cache (which does is fixed), and this may lead to some
-contention issues for I/O heavy simulators, as seems to be the case for Reef3D.
+that these VMs run on processors with hyperthreading, meaning that two threads 
+will run per  physical core. One of the issues with hyperthreading is that it
+increases thread competition for cache (which is fixed), and this may lead to
+some contention issues for I/O heavy simulators, as seems to be the case for
+Reef3D. 
 
 Indeed, Reef3D produces a huge amount of data. As it is currently configured, 
 this simulation would produce several dozen gigabytes of data. To reduce that
 amount of data produced, we can reduce the rate at which (Paraview) data is
-being produced (parameter ```P 30```). Therefore, we will set ```P 30 0.04```
-and request Reef3D to "only" generate 25 frames per second (instead of 100
-frames per second as it was initially configure). Also, just in case, we will
-request our machine to be equipped with a 20GB partition (just for data), 
-using the ```data_disk_gb``` parameter of the 
-```inductiva.resources.MachineGroup``` class.
+being produced (parameter `P 30`). Therefore, we will set `P 30 0.04` and 
+request Reef3D to "only" generate 25 frames per second (instead of 100 frames
+per second as it was initially configure). Also, just in case, we will request
+our machine to be equipped with a 20GB partition (just for data), using the 
+`data_disk_gb` parameter of the `inductiva.resources.MachineGroup` class.
 
 Here is the final script:
 
@@ -274,7 +274,7 @@ as an environment variable).
 
 Once the script finishes, and you see the summary of the task, you can download
 the resulting files. Observe in the summary above that quite some data was 
-produced: 35751 files for a total of 7.51 GB after uncompressed.
+produced: 35751 files for a total of 7.51 GB before compression.
 
 You can download the (zipped) data by creating a simple script such as this:
 ```python
