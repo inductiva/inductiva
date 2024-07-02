@@ -13,6 +13,7 @@ from inductiva.client.exceptions import ApiException
 from inductiva.client.api_client import ApiClient
 
 from . import simulators
+from . import benchmarks
 from . import resources
 from . import projects
 from . import storage

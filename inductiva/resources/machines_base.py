@@ -61,10 +61,6 @@ class BaseMachineGroup:
         provider = machine_types.ProviderType(provider)
         self.provider = provider.value
 
-        if machine_type not in machine_types.list_available_machines(
-                self.provider):
-            raise ValueError(f"Machine type not supported in {self.provider}")
-
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
 
@@ -91,6 +87,13 @@ class BaseMachineGroup:
     @property
     def id(self):
         return self._id
+
+    @property
+    def vcpus(self):
+        # This works for GCP and ICE
+        # TODO: Add support for other providers
+        return self.quota_usage.get("total_num_vcpus",
+                                    int(self.machine_type.split("-")[2]))
 
     @property
     def name(self):
