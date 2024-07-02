@@ -94,3 +94,7 @@ class TaskStatusCode(
     @schemas.classproperty
     def COMPUTATIONENDED(cls):
         return cls("computation-ended")
+    
+    @schemas.classproperty
+    def TTLEXCEEDED(cls):
+        return cls("ttl-exceeded")
