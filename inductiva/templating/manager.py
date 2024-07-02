@@ -5,8 +5,6 @@ import os
 
 import jinja2
 
-from inductiva import types
-
 TEMPLATE_EXTENSION = ".jinja"
 
 
@@ -20,8 +18,8 @@ class TemplateManager:
 
     @classmethod
     def render_dir(cls,
-                   source_dir: types.PathOrStr,
-                   target_dir: types.PathOrStr,
+                   source_dir: str,
+                   target_dir: str,
                    overwrite: bool = False,
                    **render_args):
         """
@@ -35,10 +33,10 @@ class TemplateManager:
         overwritten.
 
         Args:
-            source_dir (types.PathOrStr): Path to the source directory,
+            source_dir (str): Path to the source directory,
                 containing template files (and potentially static files to be
                 copied without modification).
-            target_dir (types.PathOrStr): Path to the target directory.
+            target_dir (str): Path to the target directory.
             overwrite (bool): If True, the destination files will be overwritten
                 if they already exist. If False (default), a FileExistsError
                 will be raised if any destination file already exists.
