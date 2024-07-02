@@ -382,11 +382,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-simulation">Running a simulation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-slighly-more-advanced-example">A slighly more advanced example</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#control-txt-for-divemesh">control.txt (for DiveMESH)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ctrl-txt-for-reef3d">ctrl.txt (for Reef3D)</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-slighly-more-advanced-example">A slighly more advanced example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
             </nav>
@@ -461,14 +457,14 @@ from Reef3D repository.</p>
 
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
-    <span class="s2">&quot;reef3d-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span>
-<span class="p">)</span>
+    <span class="s2">&quot;reef3d-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">reef3d</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">REEF3D</span><span class="p">()</span>
 
 <span class="n">task</span> <span class="o">=</span> <span class="n">reef3d</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">)</span>
 
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -492,9 +488,8 @@ the “10_2_3D_Dam_Break_with_Obstacle” local folder (that you also need to cr
 locally).</p>
 <p>Before we proceed, let’s inspect the files to check three Reed3D parameters that
 are important to understand before we configure our simulation run. These
-parameters are: <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">41</span></code>, <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">30</span> </code> and <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span></code>:</p>
-<section id="control-txt-for-divemesh">
-<h3>control.txt (for DiveMESH)<a class="headerlink" href="#control-txt-for-divemesh" title="Permalink to this heading">#</a></h3>
+parameters are: <code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">41</span></code>, <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">30</span></code> and <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span></code>:</p>
+<p><strong>control.txt (for DiveMESH):</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span> <span class="mi">11</span> <span class="mi">21</span>
 <span class="n">C</span> <span class="mi">12</span> <span class="mi">21</span>
 <span class="n">C</span> <span class="mi">13</span> <span class="mi">21</span>
@@ -509,9 +504,7 @@ parameters are: <code class="docutils literal notranslate"><span class="pre">N</
 <span class="n">M</span> <span class="mi">10</span> <span class="mi">4</span>    <span class="o">&lt;----</span> <span class="n">defines</span> <span class="n">the</span> <span class="n">nr</span><span class="o">.</span> <span class="n">of</span> <span class="n">processors</span> <span class="k">for</span> <span class="n">parallel</span> <span class="n">computations</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="ctrl-txt-for-reef3d">
-<h3>ctrl.txt (for Reef3D)<a class="headerlink" href="#ctrl-txt-for-reef3d" title="Permalink to this heading">#</a></h3>
+<p><strong>ctrl.txt (for Reef3D):</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">D</span> <span class="mi">10</span> <span class="mi">4</span>
 <span class="n">D</span> <span class="mi">20</span> <span class="mi">2</span>
 <span class="n">D</span> <span class="mi">30</span> <span class="mi">1</span>
@@ -530,185 +523,161 @@ parameters are: <code class="docutils literal notranslate"><span class="pre">N</
 <span class="n">W</span> <span class="mi">22</span> <span class="o">-</span><span class="mf">9.81</span>
 </pre></div>
 </div>
-<p>Observe that parameter <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span></code>, which controls the degree of parallism, is
+<p>Observe that parameter <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span></code>, which controls the level of parallelism, is
 set to 4 threads/vCPUs, a very low number. Depending on the number of vCPUs we
 effectively wish to use for running the simulation, we will need to manually
 change  <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span></code> on <strong>both files</strong> to match the specs of corresponding the VM.
-Because this is already a reasoably heavy simulation, we will be using GCP VMs
-of the c3d family, supported by last-generation AMD chips. More specifically,
-we will be using <code class="docutils literal notranslate"><span class="pre">c3d-standard-90</span></code> machines with 90 vCPU. So, we will be
-setting <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span> <span class="pre">90</span></code> on both files.</p>
-<p>Also, Reef3D produces a huge amount of data. As it is currently configured, this
-simulation would produce several dozen gigabytes of data. To reduce that amount
-of data produced, we can reduce the maximum modeled time (<code class="docutils literal notranslate"><span class="pre">N</span> <span class="pre">41</span></code>) and
-the rate at which Paraview data is being produced (<code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">10</span></code>).</p>
-<p>So, for a reducing the amount of data generated, we will be reducing the rate
-at which Paraview information is going to be generated to “onyy” 25 frames per
-second, that is, we will set <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">10</span> <span class="pre">0.04</span></code>.</p>
-<p>We are not going to reduce the maximum modeled time but, instead, we will add
-extra disk capacity to ensure we have enough space to write all the data will be
-generated. Therefore, we will request our machine to be equipped
-with <strong>20GB</strong> just for data, using the <code class="docutils literal notranslate"><span class="pre">data_disk_gb</span></code> parameter of the
-<code class="docutils literal notranslate"><span class="pre">inductiva.resources.MachineGroup</span></code> class.</p>
+We will be using GCP VMs of the c2d family, which tend to provide a very good
+price-performance point, especially when you run them in spot mode. More
+specifically, we will be using the larger <code class="docutils literal notranslate"><span class="pre">c2d-highcpu-112</span></code> machines with<br />
+112 vCPUs and 2GB of RAM per vCPU (this simulation will not require more than
+224GB of RAM).</p>
+<p>We will be setting <code class="docutils literal notranslate"><span class="pre">M</span> <span class="pre">10</span> <span class="pre">56</span></code> on both files. Note that this is half the
+available number of vCPUs available on the VM (112!). Actually, running on only
+half of the vCPUs may provide significantly faster simulation times than running
+on all the vCPUs <em>for some simulators / VM types</em>. This has to do with the fact
+that these VMs run on processors with hyperthreading, meaning that two threads
+will run per  physical core. One of the issues with hyperthreading is that it
+increases thread competition for cache (which is fixed), and this may lead to
+some contention issues for I/O heavy simulators, as seems to be the case for
+Reef3D.</p>
+<p>Indeed, Reef3D produces a huge amount of data. As it is currently configured,
+this simulation would produce several dozen gigabytes of data. To reduce that
+amount of data produced, we can reduce the rate at which (Paraview) data is
+being produced (parameter <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">30</span></code>). Therefore, we will set <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">30</span> <span class="pre">0.04</span></code> and
+request Reef3D to “only” generate 25 frames per second (instead of 100 frames
+per second as it was initially configure). Also, just in case, we will request
+our machine to be equipped with a 20GB partition (just for data), using the
+<code class="docutils literal notranslate"><span class="pre">data_disk_gb</span></code> parameter of the <code class="docutils literal notranslate"><span class="pre">inductiva.resources.MachineGroup</span></code> class.</p>
 <p>Here is the final script:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 
 <span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
-    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c3d-standard-90&quot;</span><span class="p">,</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2d-highcpu-112&quot;</span><span class="p">,</span>    
     <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>  <span class="c1">## We are adding extra disk space here</span>
+    <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 <span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
 
 <span class="n">reef3d</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">REEF3D</span><span class="p">()</span>
 
-<span class="n">task</span> <span class="o">=</span> <span class="n">reef3d</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;./10_2_3D_Dam_Break_with_Obstacle&quot;</span><span class="p">,</span>
-                  <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">,</span>
-                  <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>   <span class="c1">## We need to make sure this matches `N 10`</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">reef3d</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;./10_2_3D_Dam_Break_with_Obstacle&quot;</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">,</span>
+    <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">56</span><span class="p">,</span>
+    <span class="n">storage_dir</span><span class="o">=</span><span class="s2">&quot;3D_dam_break_with_obstacle&quot;</span><span class="p">)</span>
 
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
-<span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
-
-<span class="c1">## Make sure we terminate the machine.</span>
 <span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+<span class="n">task</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Running this script end-to-end should take about 25 minutes, distributed in
-the following way:</p>
-<ul class="simple">
-<li><p>about 2 minutes in the preparation stage, including starting the executer VM.</p></li>
-<li><p>about 11 minutes of compute time (you can change this by choosing other VMs
-or changing the settings of this one.)</p></li>
-<li><p>4 minutes to make the output available for download. This involves zipping
-all the data geneeated in executer VM and the move it to your personal storage
-space on Inductiva platform, so you can access it at any time.</p></li>
-<li><p>about 7 minutes to download the 3.3GB of zipped data. This time depends
-on the speed of your network. This is an optional step. You don’t need to
-download the output data at this point.</p></li>
-<li><p>about 3 minutes to unzip the data locally (about 15GB of data when unzipped).
-This is another optional step that depends on how fast your local machine is.</p></li>
-<li><p>1 minute to turn off the executor VM. This step is optional but advisable,
-since you do not want to be spending money on a machine that is sitting idle.</p></li>
-</ul>
-<p>This is what you are supposed to see:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Registering MachineGroup configurations:
-&gt; Name:         api-kw1m7e9hs2yxkxy9n2yf4so6r
-&gt; Machine Type: c3d-standard-90
-&gt; Data disk size:    20 GB
-&gt; Number of machines: 1
-&gt; Spot:               True
-&gt; Estimated cloud cost of machine group: 1.496 $/h
-Starting MachineGroup(name=&quot;api-kw1m7e9hs2yxkxy9n2yf4so6r&quot;). This may take a few minutes.
-Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
-Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines successfully started in 0:00:23.
-Task Information:
-&gt; ID:                    ggkjuzhivoon56vkozgqxapfk
-&gt; Method:                reef3d
-&gt; Local input directory: 10_2_3D_Dam_Break_with_Obstacle
-&gt; Submitting to the following computational resources:
- &gt;&gt; Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines
-Preparing upload of the local input directory 10_2_3D_Dam_Break_with_Obstacle (399 B).
-Input archive size: 640 B
-Uploading input archive...
-100%|█████████████████████████████████████████████████████████████████████████████████| 640/640 [00:00&lt;00:00, 1.03kB/s]
-Local input directory successfully uploaded.
-Task ggkjuzhivoon56vkozgqxapfk submitted to the queue of the Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines.
-Simulation metadata logged to: inductiva_output/task_metadata.json
-Task ggkjuzhivoon56vkozgqxapfk configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
-Consider tracking the status of the task via CLI:
-	inductiva tasks list --task-id ggkjuzhivoon56vkozgqxapfk
-Or, tracking the logs of the task via CLI:
-	inductiva logs ggkjuzhivoon56vkozgqxapfk
-Task ggkjuzhivoon56vkozgqxapfk successfully queued and waiting to be picked-up for execution...
-Task ggkjuzhivoon56vkozgqxapfk has started and is now running remotely.
-Task ggkjuzhivoon56vkozgqxapfk completed successfully.
-Downloading simulation outputs to inductiva_output/ggkjuzhivoon56vkozgqxapfk/output.zip.
-100%|█████████████████████████████████████████████████████████████████████████████| 3.30G/3.30G [07:11&lt;00:00, 7.64MB/s]
-Uncompressing the outputs to inductiva_output/ggkjuzhivoon56vkozgqxapfk.
-Terminating MachineGroup(name=&quot;api-kw1m7e9hs2yxkxy9n2yf4so6r&quot;). This may take a few minutes.
-Machine Group api-kw1m7e9hs2yxkxy9n2yf4so6r with c3d-standard-90 machines successfully terminated in 0:01:11.
+<p>You should see something like this when you run this script end to end (it
+should take approximately 15 minutes)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Registering<span class="w"> </span>MachineGroup<span class="w"> </span>configurations:
+&gt;<span class="w"> </span>Name:<span class="w">         </span>api-ktq7n9w81gek0kx82agu3znoj
+&gt;<span class="w"> </span>Machine<span class="w"> </span>Type:<span class="w"> </span>c2d-highcpu-112
+&gt;<span class="w"> </span>Data<span class="w"> </span>disk<span class="w"> </span>size:<span class="w">    </span><span class="m">20</span><span class="w"> </span>GB
+&gt;<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>machines:<span class="w"> </span><span class="m">1</span>
+&gt;<span class="w"> </span>Spot:<span class="w">               </span>True
+&gt;<span class="w"> </span>Estimated<span class="w"> </span>cloud<span class="w"> </span>cost<span class="w"> </span>of<span class="w"> </span>machine<span class="w"> </span>group:<span class="w"> </span><span class="m">0</span>.814<span class="w"> </span>$/h
+<span class="w"> </span>&gt;&gt;<span class="w"> </span>You<span class="w"> </span>are<span class="w"> </span>spending<span class="w"> </span><span class="m">5</span>.7x<span class="w"> </span>less<span class="w"> </span>by<span class="w"> </span>using<span class="w"> </span>spot<span class="w"> </span>machines.
+Starting<span class="w"> </span>MachineGroup<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;api-ktq7n9w81gek0kx82agu3znoj&quot;</span><span class="o">)</span>.<span class="w"> </span>This<span class="w"> </span>may<span class="w"> </span>take<span class="w"> </span>a<span class="w"> </span>few<span class="w"> </span>minutes.
+Note<span class="w"> </span>that<span class="w"> </span>stopping<span class="w"> </span>this<span class="w"> </span><span class="nb">local</span><span class="w"> </span>process<span class="w"> </span>will<span class="w"> </span>not<span class="w"> </span>interrupt<span class="w"> </span>the<span class="w"> </span>creation<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>machine<span class="w"> </span>group.<span class="w"> </span>Please<span class="w"> </span>wait...
+Machine<span class="w"> </span>Group<span class="w"> </span>api-ktq7n9w81gek0kx82agu3znoj<span class="w"> </span>with<span class="w"> </span>c2d-highcpu-112<span class="w"> </span>machines<span class="w"> </span>successfully<span class="w"> </span>started<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>:00:19.
+The<span class="w"> </span>machine<span class="w"> </span>group<span class="w"> </span>is<span class="w"> </span>using<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>quotas:
+
+<span class="w">                      </span>USED<span class="w"> </span>BY<span class="w"> </span>RESOURCE<span class="w">     </span>CURRENT<span class="w"> </span>USAGE<span class="w">     </span>MAX<span class="w"> </span>ALLOWED
+<span class="w"> </span>cost_per_hour<span class="w">        </span><span class="m">0</span>.81424<span class="w">              </span><span class="m">0</span>.81424<span class="w">           </span><span class="m">20</span>
+<span class="w"> </span>total_num_machines<span class="w">   </span><span class="m">1</span><span class="w">                    </span><span class="m">1</span><span class="w">                 </span><span class="m">10</span>
+<span class="w"> </span>total_num_vcpus<span class="w">      </span><span class="m">112</span><span class="w">                  </span><span class="m">112</span><span class="w">               </span><span class="m">150</span>
+
+Task<span class="w"> </span>Information:
+&gt;<span class="w"> </span>ID:<span class="w">                    </span>n90hpbaiaa26jjb1d93zgbqgn
+&gt;<span class="w"> </span>Method:<span class="w">                </span>reef3d
+&gt;<span class="w"> </span>Local<span class="w"> </span>input<span class="w"> </span>directory:<span class="w"> </span>10_2_3D_Dam_Break_with_Obstacle
+&gt;<span class="w"> </span>Submitting<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>computational<span class="w"> </span>resources:
+<span class="w"> </span>&gt;&gt;<span class="w"> </span>Machine<span class="w"> </span>Group<span class="w"> </span>api-ktq7n9w81gek0kx82agu3znoj<span class="w"> </span>with<span class="w"> </span>c2d-highcpu-112<span class="w"> </span>machines
+Preparing<span class="w"> </span>upload<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span><span class="nb">local</span><span class="w"> </span>input<span class="w"> </span>directory<span class="w"> </span>10_2_3D_Dam_Break_with_Obstacle<span class="w"> </span><span class="o">(</span><span class="m">392</span><span class="w"> </span>B<span class="o">)</span>.
+Input<span class="w"> </span>archive<span class="w"> </span>size:<span class="w"> </span><span class="m">637</span><span class="w"> </span>B
+Uploading<span class="w"> </span>input<span class="w"> </span>archive...
+<span class="m">100</span>%<span class="p">|</span>███████████████████████████████████████████████████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">637</span>/637<span class="w"> </span><span class="o">[</span><span class="m">00</span>:00&lt;<span class="m">00</span>:00,<span class="w"> </span><span class="m">1</span>.37kB/s<span class="o">]</span>
+Local<span class="w"> </span>input<span class="w"> </span>directory<span class="w"> </span>successfully<span class="w"> </span>uploaded.
+Task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>submitted<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>queue<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>Machine<span class="w"> </span>Group<span class="w"> </span>api-ktq7n9w81gek0kx82agu3znoj<span class="w"> </span>with<span class="w"> </span>c2d-highcpu-112<span class="w"> </span>machines.
+Number<span class="w"> </span>of<span class="w"> </span>tasks<span class="w"> </span>ahead<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>queue:<span class="w"> </span><span class="m">0</span>
+Simulation<span class="w"> </span>metadata<span class="w"> </span>logged<span class="w"> </span>to:<span class="w"> </span>inductiva_output/task_metadata.json
+Task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>configurations<span class="w"> </span>metadata<span class="w"> </span>saved<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>tasks<span class="w"> </span>metadata<span class="w"> </span>file<span class="w"> </span>task_metadata.json<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>current<span class="w"> </span>working<span class="w"> </span>directory.
+Consider<span class="w"> </span>tracking<span class="w"> </span>the<span class="w"> </span>status<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>task<span class="w"> </span>via<span class="w"> </span>CLI:
+<span class="w">	</span>inductiva<span class="w"> </span>tasks<span class="w"> </span>list<span class="w"> </span>--task-id<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn
+Or,<span class="w"> </span>tracking<span class="w"> </span>the<span class="w"> </span>logs<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>task<span class="w"> </span>via<span class="w"> </span>CLI:
+<span class="w">	</span>inductiva<span class="w"> </span>logs<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn
+Task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>successfully<span class="w"> </span>queued<span class="w"> </span>and<span class="w"> </span>waiting<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>picked-up<span class="w"> </span><span class="k">for</span><span class="w"> </span>execution...
+The<span class="w"> </span>task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>is<span class="w"> </span>about<span class="w"> </span>to<span class="w"> </span>start.
+Task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>has<span class="w"> </span>started<span class="w"> </span>and<span class="w"> </span>is<span class="w"> </span>now<span class="w"> </span>running<span class="w"> </span>remotely.
+<span class="w"> </span>Task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>completed<span class="w"> </span>successfully.
+Downloading<span class="w"> </span>stdout<span class="w"> </span>and<span class="w"> </span>stderr<span class="w"> </span>files<span class="w"> </span>to<span class="w"> </span>inductiva_output/n90hpbaiaa26jjb1d93zgbqgn...
+Partial<span class="w"> </span>download<span class="w"> </span>completed<span class="w"> </span>to<span class="w"> </span>inductiva_output/n90hpbaiaa26jjb1d93zgbqgn.
+Successfully<span class="w"> </span>requested<span class="w"> </span>termination<span class="w"> </span>of<span class="w"> </span>MachineGroup<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;api-ktq7n9w81gek0kx82agu3znoj&quot;</span><span class="o">)</span>.
+Termination<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>machine<span class="w"> </span>group<span class="w"> </span>freed<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>quotas:
+
+<span class="w">                      </span>FREED<span class="w"> </span>BY<span class="w"> </span>RESOURCE<span class="w">     </span>CURRENT<span class="w"> </span>USAGE<span class="w">     </span>MAX<span class="w"> </span>ALLOWED
+<span class="w"> </span>cost_per_hour<span class="w">        </span><span class="m">0</span>.81424<span class="w">               </span><span class="m">0</span><span class="w">                 </span><span class="m">20</span>
+<span class="w"> </span>total_num_machines<span class="w">   </span><span class="m">1</span><span class="w">                     </span><span class="m">0</span><span class="w">                 </span><span class="m">10</span>
+<span class="w"> </span>total_num_vcpus<span class="w">      </span><span class="m">112</span><span class="w">                   </span><span class="m">0</span><span class="w">                 </span><span class="m">150</span>
+
+
+Task<span class="w"> </span>status:<span class="w"> </span>success
+Wall<span class="w"> </span>clock<span class="w"> </span>time:<span class="w">  </span><span class="m">0</span>:13:51
+Time<span class="w"> </span>breakdown:
+<span class="w">	</span>Input<span class="w"> </span>upload:<span class="w">              </span><span class="m">0</span>.63<span class="w"> </span>s
+<span class="w">	</span>Time<span class="w"> </span><span class="k">in</span><span class="w"> </span>queue:<span class="w">             </span><span class="m">24</span>.34<span class="w"> </span>s
+<span class="w">	</span>Container<span class="w"> </span>image<span class="w"> </span>download:<span class="w">  </span><span class="m">3</span>.37<span class="w"> </span>s
+<span class="w">	</span>Input<span class="w"> </span>download:<span class="w">            </span><span class="m">0</span>.08<span class="w"> </span>s
+<span class="w">	</span>Input<span class="w"> </span>decompression:<span class="w">       </span><span class="m">0</span>.00<span class="w"> </span>s
+<span class="w">	</span>Computation:<span class="w">               </span><span class="m">0</span>:07:38
+<span class="w">	</span>Output<span class="w"> </span>compression:<span class="w">        </span><span class="m">0</span>:05:04
+<span class="w">	</span>Output<span class="w"> </span>upload:<span class="w">             </span><span class="m">40</span>.08<span class="w"> </span>s
+Data:
+<span class="w">	</span>Size<span class="w"> </span>of<span class="w"> </span>zipped<span class="w"> </span>output:<span class="w">    </span><span class="m">3</span>.09<span class="w"> </span>GB
+<span class="w">	</span>Size<span class="w"> </span>of<span class="w"> </span>unzipped<span class="w"> </span>output:<span class="w">  </span><span class="m">7</span>.51<span class="w"> </span>GB
+<span class="w">	</span>Number<span class="w"> </span>of<span class="w"> </span>output<span class="w"> </span>files:<span class="w">   </span><span class="m">35751</span>
 </pre></div>
 </div>
-<p>You can check the stdout of the simulation process in real time by issuing:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inductiva</span> <span class="n">logs</span> <span class="n">ggkjuzhivoon56vkozgqxapfk</span>
+<p>While the script is running, you can check the stdout of the simulation process
+in real time by issuing (please change to the id of your task):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>inductiva<span class="w"> </span>logs<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn
 </pre></div>
 </div>
-<p>The command line above is also shown in the execution trace, so you can just
+<p>The command line above is shown in the execution trace, so you can just
 copy and paste it to a new terminal (which needs also to have the API key set
-as an environment variable). Then, you should see something like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
-<span class="o">...</span>
-<span class="mi">7193</span>
-<span class="n">simtime</span><span class="p">:</span> <span class="mf">24.982</span>
-<span class="n">timestep</span><span class="p">:</span> <span class="mf">0.007</span>
-<span class="n">Volume</span> <span class="mi">1</span><span class="p">:</span> <span class="mf">0.235</span>
-<span class="n">Volume</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">1.725</span>
-<span class="n">lsmtime</span><span class="p">:</span> <span class="mf">0.004</span>
-<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
-<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
-<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
-<span class="n">umax</span><span class="p">:</span> <span class="mf">0.238</span> 	 <span class="n">utime</span><span class="p">:</span> <span class="mf">0.007</span>
-<span class="n">vmax</span><span class="p">:</span> <span class="mf">0.199</span> 	 <span class="n">vtime</span><span class="p">:</span> <span class="mf">0.007</span>
-<span class="n">wmax</span><span class="p">:</span> <span class="mf">0.277</span> 	 <span class="n">wtime</span><span class="p">:</span> <span class="mf">0.006</span>
-<span class="n">viscmax</span><span class="p">:</span> <span class="mf">0.000</span>
-<span class="n">kinmax</span><span class="p">:</span> <span class="mf">0.000</span>
-<span class="n">epsmax</span><span class="p">:</span> <span class="mf">0.000</span>
-<span class="n">reinitime</span><span class="p">:</span> <span class="mf">0.005</span>
-<span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>	 <span class="n">average</span> <span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>
-<span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.013</span>	 <span class="n">average</span> <span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.014</span>
-<span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">626.067449</span>   <span class="n">average</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.087</span>
-<span class="n">timer</span> <span class="n">per</span> <span class="n">step</span><span class="p">:</span> <span class="mf">0.073</span>
-<span class="o">------------------------------------</span>
-<span class="mi">7194</span>
-<span class="n">simtime</span><span class="p">:</span> <span class="mf">24.989</span>
-<span class="n">timestep</span><span class="p">:</span> <span class="mf">0.007</span>
-<span class="n">Volume</span> <span class="mi">1</span><span class="p">:</span> <span class="mf">0.235</span>
-<span class="n">Volume</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">1.725</span>
-<span class="n">lsmtime</span><span class="p">:</span> <span class="mf">0.003</span>
-<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
-<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
-<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
-<span class="n">umax</span><span class="p">:</span> <span class="mf">0.237</span> 	 <span class="n">utime</span><span class="p">:</span> <span class="mf">0.007</span>
-<span class="n">vmax</span><span class="p">:</span> <span class="mf">0.202</span> 	 <span class="n">vtime</span><span class="p">:</span> <span class="mf">0.006</span>
-<span class="n">wmax</span><span class="p">:</span> <span class="mf">0.276</span> 	 <span class="n">wtime</span><span class="p">:</span> <span class="mf">0.006</span>
-<span class="n">viscmax</span><span class="p">:</span> <span class="mf">0.000</span>
-<span class="n">kinmax</span><span class="p">:</span> <span class="mf">0.000</span>
-<span class="n">epsmax</span><span class="p">:</span> <span class="mf">0.000</span>
-<span class="n">reinitime</span><span class="p">:</span> <span class="mf">0.005</span>
-<span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>	 <span class="n">average</span> <span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>
-<span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.011</span>	 <span class="n">average</span> <span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.014</span>
-<span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">626.138361</span>   <span class="n">average</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.087</span>
-<span class="n">timer</span> <span class="n">per</span> <span class="n">step</span><span class="p">:</span> <span class="mf">0.071</span>
-<span class="o">------------------------------------</span>
-<span class="mi">7195</span>
-<span class="n">simtime</span><span class="p">:</span> <span class="mf">24.996</span>
-<span class="n">timestep</span><span class="p">:</span> <span class="mf">0.007</span>
-<span class="n">Volume</span> <span class="mi">1</span><span class="p">:</span> <span class="mf">0.235</span>
-<span class="n">Volume</span> <span class="mi">2</span><span class="p">:</span> <span class="mf">1.725</span>
-<span class="n">lsmtime</span><span class="p">:</span> <span class="mf">0.004</span>
-<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.010</span>
-<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.009</span>
-<span class="o">.</span><span class="n">piter</span><span class="p">:</span> <span class="mi">3</span>  <span class="n">ptime</span><span class="p">:</span> <span class="mf">0.009</span>
-<span class="n">umax</span><span class="p">:</span> <span class="mf">0.235</span> 	 <span class="n">utime</span><span class="p">:</span> <span class="mf">0.007</span>
-<span class="n">vmax</span><span class="p">:</span> <span class="mf">0.204</span> 	 <span class="n">vtime</span><span class="p">:</span> <span class="mf">0.006</span>
-<span class="n">wmax</span><span class="p">:</span> <span class="mf">0.276</span> 	 <span class="n">wtime</span><span class="p">:</span> <span class="mf">0.006</span>
-<span class="n">viscmax</span><span class="p">:</span> <span class="mf">0.000</span>
-<span class="n">kinmax</span><span class="p">:</span> <span class="mf">0.000</span>
-<span class="n">epsmax</span><span class="p">:</span> <span class="mf">0.000</span>
-<span class="n">reinitime</span><span class="p">:</span> <span class="mf">0.005</span>
-<span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>	 <span class="n">average</span> <span class="n">gctime</span><span class="p">:</span> <span class="mf">0.002</span>
-<span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.013</span>	 <span class="n">average</span> <span class="n">Xtime</span><span class="p">:</span> <span class="mf">0.014</span>
-<span class="n">total</span> <span class="n">time</span><span class="p">:</span> <span class="mf">626.217546</span>   <span class="n">average</span> <span class="n">time</span><span class="p">:</span> <span class="mf">0.087</span>
-<span class="n">timer</span> <span class="n">per</span> <span class="n">step</span><span class="p">:</span> <span class="mf">0.079</span>
+as an environment variable).</p>
+<p>Once the script finishes, and you see the summary of the task, you can download
+the resulting files. Observe in the summary above that quite some data was
+produced: 35751 files for a total of 7.51 GB before compression.</p>
+<p>You can download the (zipped) data by creating a simple script such as this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
-<span class="o">******************************</span>
+<span class="c1"># You can retreive a Task by ID</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span><span class="s2">&quot;n90hpbaiaa26jjb1d93zgbqgn&quot;</span><span class="p">)</span>
 
-<span class="n">modelled</span> <span class="n">time</span><span class="p">:</span> <span class="mf">25.003</span>
-
+<span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
+<p>Or, perhaps more conveniently, you can use Inductiva’s Command Line Interface
+(CLI) to list the contents of your personal remote storage and then download
+them:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>inductiva<span class="w"> </span>storage<span class="w"> </span>list
+</pre></div>
+</div>
+<p>which should get you something like this (you may have other contents)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span> <span class="n">NAME</span>                          <span class="n">SIZE</span>      <span class="n">CREATION</span> <span class="n">TIME</span>
+ <span class="mi">3</span><span class="n">D_dam_break_with_obstacle</span><span class="o">/</span>   <span class="mf">3.09</span> <span class="n">GB</span>   <span class="mi">26</span> <span class="n">Jun</span><span class="p">,</span> <span class="mi">07</span><span class="p">:</span><span class="mi">39</span><span class="p">:</span><span class="mi">11</span>
+</pre></div>
+</div>
+<p>And you can donwload the folder produced by this task by doing:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>inductiva<span class="w"> </span>tasks<span class="w"> </span>download<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn
+</pre></div>
+</div>
 </section>
 <section id="what-to-read-next">
 <h2>What to read next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
@@ -770,11 +739,7 @@ following related simulators that are also avaiable via Inductiva API:</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-simulation">Running a simulation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-slighly-more-advanced-example">A slighly more advanced example</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#control-txt-for-divemesh">control.txt (for DiveMESH)</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ctrl-txt-for-reef3d">ctrl.txt (for Reef3D)</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-slighly-more-advanced-example">A slighly more advanced example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
   </nav></div>
