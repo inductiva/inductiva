@@ -19,7 +19,7 @@ def register(root_parser):
         "finished, or transitioned to a status other than 'running', the\n"
         "logs will not be available for streaming.\n"
         "To check the status of a task, use:\n"
-        "  inductiva tasks list --task-id <task_id>")
+        "  inductiva tasks list --id <task_id>")
 
     utils.show_help_msg(parser)
 

@@ -228,7 +228,7 @@ Task ggkjuzhivoon56vkozgqxapfk submitted to the queue of the Machine Group api-k
 Simulation metadata logged to: inductiva_output/task_metadata.json
 Task ggkjuzhivoon56vkozgqxapfk configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
 Consider tracking the status of the task via CLI:
-	inductiva tasks list --task-id ggkjuzhivoon56vkozgqxapfk
+	inductiva tasks list --id ggkjuzhivoon56vkozgqxapfk
 Or, tracking the logs of the task via CLI:
 	inductiva logs ggkjuzhivoon56vkozgqxapfk
 Task ggkjuzhivoon56vkozgqxapfk successfully queued and waiting to be picked-up for execution...

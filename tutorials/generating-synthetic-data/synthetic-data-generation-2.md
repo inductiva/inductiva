@@ -131,7 +131,7 @@ Simulation metadata logged to: inductiva_output/task_metadata.json
 Task i13o8djcoq70bsdut1x73zi69 configurations metadata saved to the tasks
 metadata file task_metadata.json in the current working directory.
 Consider tracking the status of the task via CLI: 
-        inductiva tasks list --task-id i13o8djcoq70bsdut1x73zi69
+        inductiva tasks list --id i13o8djcoq70bsdut1x73zi69
 Or, tracking the logs of the task via CLI:
         inductiva logs i13o8djcoq70bsdut1x73zi69
 Task i13o8djcoq70bsdut1x73zi69 successfully queued and waiting to be picked-up
