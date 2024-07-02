@@ -251,12 +251,15 @@ class Task:
     """
 
     FAILED_STATUSES = {
-        models.TaskStatusCode.FAILED, models.TaskStatusCode.KILLED,
+        models.TaskStatusCode.FAILED,
+        models.TaskStatusCode.KILLED,
         models.TaskStatusCode.EXECUTERFAILED,
         models.TaskStatusCode.EXECUTERTERMINATED,
         models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
         models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
-        models.TaskStatusCode.ZOMBIE
+        models.TaskStatusCode.ZOMBIE,
+        models.TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED,
+        models.TaskStatusCode.TTLEXCEEDED,
     }
 
     TERMINAL_STATUSES = {models.TaskStatusCode.SUCCESS}.union(FAILED_STATUSES)
