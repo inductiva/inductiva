@@ -195,7 +195,7 @@ def _run(project: Project,
 
     _print_info(current_project_tasks, to_run)
 
-    for machine, current_replicas in to_run.items():
+    for machine, replicas_to_run in to_run.items():
 
         machine_args_current = _replace_callable_from_dict(
             machine_args, machine)
@@ -218,7 +218,7 @@ def _run(project: Project,
 
             resource.start()
 
-        for replica in range(current_replicas - 1, replicas):
+        for replica in range(replicas - replicas_to_run + 1, replicas + 1):
             # Each replica can run with different arguments
             simulator_args_current = _replace_callable_from_dict(
                 simulator_args, resource)
@@ -233,12 +233,11 @@ def _run(project: Project,
             if input_args_current:
                 target_dir = ("benchmark_inputs/"
                               f"{resource.machine_type}_{replica}")
-                new_input_files = TemplateManager.render_dir(
-                    source_dir=input_files,
-                    target_dir=target_dir,
-                    overwrite=False,
-                    **input_args)
-                simulator_args_current["input_dir"] = new_input_files
+                TemplateManager.render_dir(source_dir=input_files,
+                                           target_dir=target_dir,
+                                           overwrite=False,
+                                           **input_args)
+                simulator_args_current["input_dir"] = target_dir
 
             _ = simulator.run(**simulator_args_current)
 
@@ -298,7 +297,7 @@ def run(name: str,
     project = Project(name, append=True)
     if project.num_tasks > 0 and not append:
         raise RuntimeError(
-            __("benchmark_already_exists", name, project.num_tasks))
+            __("benchmark-already-exists", name, project.num_tasks))
 
     with project:
         _run(project, input_files, replicas, machines, simulator, machine_class,
