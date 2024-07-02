@@ -18,7 +18,7 @@ from absl import logging
 import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
-from inductiva.client.models import TaskRequest, TaskStatus
+from inductiva.client.models import TaskRequest, TaskStatus, TaskSubmittedInfo
 from inductiva import types, constants
 from inductiva.resources.machine_types import ProviderType
 from inductiva.utils.data import (extract_output, get_validate_request_params,
@@ -43,7 +43,8 @@ def get_client() -> ApiClient:
     return ApiClient(api_config)
 
 
-def submit_request(api_instance: TasksApi, request: TaskRequest) -> TaskStatus:
+def submit_request(api_instance: TasksApi,
+                   request: TaskRequest) -> TaskSubmittedInfo:
     """Submits a task request to the API.
 
     Args:
@@ -299,7 +300,13 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def log_task_info(task_id, params, resource_pool, simulator):
+def log_task_info(
+    task_id,
+    params,
+    resource_pool,
+    simulator,
+    task_submitted_info: TaskSubmittedInfo,
+):
     """Logging the main components of a task submission."""
 
     logging.info("Task Information:")
@@ -316,6 +323,13 @@ def log_task_info(task_id, params, resource_pool, simulator):
     else:
         logging.info(" >> Default queue with %s machines.",
                      constants.DEFAULT_QUEUE_MACHINE_TYPE)
+        ttl_seconds = task_submitted_info.get("time_to_live_seconds")
+        if ttl_seconds is not None:
+            logging.info(
+                (" >> Task will be killed after the computation time "
+                 "exceeds %s (h:m:s)."),
+                format_utils.seconds_formatter(ttl_seconds),
+            )
 
 
 def submit_task(api_instance,
@@ -350,15 +364,21 @@ def submit_task(api_instance,
         project=current_project,
     )
 
-    task = submit_request(
+    task_submitted_info = submit_request(
         api_instance=api_instance,
         request=task_request,
     )
 
-    task_id = task["id"]
-    log_task_info(task_id, params, resource_pool, simulator)
+    task_id = task_submitted_info["id"]
+    log_task_info(
+        task_id,
+        params,
+        resource_pool,
+        simulator,
+        task_submitted_info,
+    )
 
-    if task["status"] == "pending-input":
+    if task_submitted_info["status"] == "pending-input":
 
         upload_input(
             api_instance=api_instance,
