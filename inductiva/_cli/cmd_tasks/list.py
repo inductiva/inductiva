@@ -31,7 +31,7 @@ def _list_tasks(project_name, last_n, task_id, all_tasks: bool, fout: TextIO,
     last_n = -1 if all_tasks else last_n
 
     if task_id:
-        task_list = [tasks.Task(task_id)]
+        task_list = [tasks.Task(i) for i in task_id]
     elif project_name:
         print(f"Showing tasks for project: {project_name}.", file=fout)
         task_list = projects.Project(project_name).get_tasks(last_n=last_n)
@@ -102,6 +102,7 @@ def register(parser):
     group.add_argument("-i",
                        "--id",
                        type=str,
+                       nargs="+",
                        default=None,
                        dest="task_id",
                        help="List a task with a specific ID.")
