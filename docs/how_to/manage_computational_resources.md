@@ -25,7 +25,7 @@ information of each one either via Python or via the CLI.
 
 **Python**
 ```python
-inductiva.resources.machine_groups.list()
+inductiva.resources.machine_groups.get()
 ```
 
 **CLI**

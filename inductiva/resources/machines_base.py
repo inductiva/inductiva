@@ -104,6 +104,13 @@ class BaseMachineGroup:
     def auto_terminate_ts(self):
         return self._auto_terminate_ts
 
+    @property
+    def idle_time(self) -> str:
+        """
+        String representation of the idle time in seconds.
+        """
+        return f"{self._idle_seconds}/{self._max_idle_time}"
+
     @staticmethod
     def _timedelta_to_seconds(
             value: Optional[datetime.timedelta] = None) -> Optional[float]:
@@ -176,6 +183,8 @@ class BaseMachineGroup:
         # from the API response if they were not provided by the user
         self._max_idle_time = self._seconds_to_timedelta(
             body.get("max_idle_time"))
+        self._idle_seconds = self._seconds_to_timedelta(
+            body.get("idle_seconds"))
         self._auto_terminate_ts = self._iso_to_datetime(
             body.get("auto_terminate_ts"))
         self._log_machine_group_info()
@@ -206,6 +215,8 @@ class BaseMachineGroup:
         machine_group.quota_usage = resp.get("quota_usage") or {}
         machine_group._max_idle_time = cls._seconds_to_timedelta(
             resp.get("max_idle_time"))
+        machine_group._idle_seconds = cls._seconds_to_timedelta(
+            resp.get("idle_seconds"))
         machine_group._auto_terminate_ts = cls._iso_to_datetime(
             resp.get("auto_terminate_ts"))
 
