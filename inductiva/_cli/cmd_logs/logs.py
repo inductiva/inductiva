@@ -59,7 +59,7 @@ def _check_if_task_is_running(task: tasks.Task) -> Tuple[bool, str]:
             f"The current status of task {task.id} is '{info.status}'\n"
             "and the simulation logs are not available for streaming.\n"
             "For more information about the task status, use:\n\n"
-            f"  inductiva tasks list --task-id {task.id}\n")
+            f"  inductiva tasks list --id {task.id}\n")
 
     return True, task.id
 

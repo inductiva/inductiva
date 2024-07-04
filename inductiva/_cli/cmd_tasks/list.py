@@ -8,22 +8,35 @@ from inductiva.utils import format_utils
 from inductiva.client import models
 
 
-def list_tasks(args, fout: TextIO = sys.stdout):
-    """ List the last user's tasks. 
+def list_tasks(args: argparse.Namespace, fout: TextIO = sys.stdout):
+    _list_tasks(**vars(args), fout=fout)
+
+
+def _list_tasks(project_name, last_n, task_id, all_tasks: bool, fout: TextIO,
+                **_):
+    """ List the user's tasks. 
 
     Lists based on the flags (task_id, last_n or project_name).
-    It can print the last N tasks (default value is 5)
+    It can print the last N tasks (default value is 10)
     or a single task with a specific ID
     or all tasks of a project.
     """
-    if args.project_name is not None:
-        print(f"Showing tasks for project: {args.project_name}.")
-        task_list = projects.Project(args.project_name).get_tasks()
-    elif args.task_id is not None:
-        task_list = [tasks.Task(args.task_id)]
+    if project_name and task_id:
+        print(
+            "inductiva tasks list: error: "
+            "argument -i/--id not allowed with argument -p/--project-name",
+            file=sys.stderr)
+        return 1
+
+    last_n = -1 if all_tasks else last_n
+
+    if task_id:
+        task_list = [tasks.Task(i) for i in task_id]
+    elif project_name:
+        print(f"Showing tasks for project: {project_name}.", file=fout)
+        task_list = projects.Project(project_name).get_tasks(last_n=last_n)
     else:
-        last_n = 5 if args.last_n is None else args.last_n
-        task_list = tasks.get(last_n=last_n)
+        task_list = tasks.get_tasks(last_n=last_n)
 
     if not task_list:
         print("No tasks found.", file=fout)
@@ -79,14 +92,25 @@ def register(parser):
     group.add_argument("-n",
                        "--last-n",
                        type=int,
-                       help="List last N tasks. Default: 5.")
-    group.add_argument("-id",
-                       "--task-id",
+                       default=10,
+                       help="List last N tasks. Default: 10.")
+    group.add_argument("-a",
+                       "--all",
+                       dest="all_tasks",
+                       action="store_true",
+                       help="List all tasks.")
+    group.add_argument("-i",
+                       "--id",
                        type=str,
+                       nargs="+",
+                       default=None,
+                       dest="task_id",
                        help="List a task with a specific ID.")
-    group.add_argument("-p",
-                       "--project-name",
-                       type=str,
-                       help="List the tasks of a project.")
+    #project e id da erro exclusivo
+    subparser.add_argument("-p",
+                           "--project-name",
+                           type=str,
+                           default=None,
+                           help="List the tasks of a project.")
 
     subparser.set_defaults(func=list_tasks)

@@ -102,7 +102,7 @@ def run_simulation(
 
     logging.info(
         "Consider tracking the status of the task via CLI:"
-        "\n\tinductiva tasks list --task-id %s", task_id)
+        "\n\tinductiva tasks list --id %s", task_id)
     logging.info(
         "Or, tracking the logs of the task via CLI:"
         "\n\tinductiva logs %s", task_id)

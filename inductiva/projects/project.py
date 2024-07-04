@@ -267,9 +267,9 @@ class Project:
             status: Status of the tasks to get. If `None`, tasks with any
                 status will be returned.
         """
-        if last_n <= 0:
-            return inductiva.tasks.get_all(status=status, project=self)
-        return inductiva.tasks.get(last_n=last_n, status=status, project=self)
+        return inductiva.tasks.get_tasks(last_n=last_n,
+                                         project=self,
+                                         status=status)
 
     def __enter__(self):
         self.open()

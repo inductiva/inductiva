@@ -27,7 +27,7 @@ tabulate._table_formats["inductiva"] = TableFormat(
 
 class Emphasis(Enum):
     RED = "\033[31m"
-    GREEN = "\033[92m"
+    GREEN = "\033[32m"
     BOLD = "\033[1m"
     RESET = "\033[0m"
 
