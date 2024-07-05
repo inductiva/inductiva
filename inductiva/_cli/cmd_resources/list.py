@@ -121,7 +121,8 @@ def _machine_group_list_to_str(machine_group_list) -> str:
         rows.append([
             machine_group.name, machine_group.machine_type, is_elastic,
             resource_type, num_active_machines, machine_group.data_disk_gb,
-            spot, machine_group.create_time, machine_group.idle_time,
+            spot, machine_group.create_time,
+            f"{machine_group.idle_time}/{machine_group.max_idle_time}",
             machine_group.quota_usage.get("cost_per_hour")
         ])
 

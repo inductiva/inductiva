@@ -107,9 +107,9 @@ class BaseMachineGroup:
     @property
     def idle_time(self) -> str:
         """
-        String representation of the idle time in seconds.
+        Resource idle time in seconds.
         """
-        return f"{self._idle_seconds}/{self._max_idle_time}"
+        return self._idle_seconds
 
     @staticmethod
     def _timedelta_to_seconds(
