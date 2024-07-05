@@ -28,6 +28,7 @@ class Col:
             the item, and returns the formatted value.
         header_formatter: a function that takes the name of the column and
             returns the formatted header.
+        description (str): a short description of the contents of the column.
 
     Example:
         In the following example, the Col class is used to define how a column
@@ -40,7 +41,8 @@ class Col:
         f = Col("person name and age",
                 "age",
                 value_formatter=lambda x,p: f"{p.name} is {x} years old",
-                header_formatter=str.capitalize)
+                header_formatter=str.capitalize,
+                description="The name and age of a person")
 
         When applied to a Person("John", 25) instance in the context of the
         BaseTabulator class, the resulting column will have the header
@@ -52,6 +54,8 @@ class Col:
     attr_default: Any = None
     value_formatter: ValueCallable = None
     header_formatter: HeaderCallable = None
+    description: str = ""
+    enabled: bool = True
 
     def __call__(self,
                  item: Any,
@@ -67,8 +71,10 @@ class Col:
         Args:
             item: the item to be formatted.
             default_formatter: the default formatter to be used if the
-                value_formatter is not defined.
+                value_formatter is not defined. If not defined, the item
+                itself will be returned as is.
         """
+        self._check()
         attr = getattr(item, self.attr_name, self.attr_default)
         value = attr() if callable(attr) else attr
         # fallback to the identity method when no valid formatter is available
@@ -86,12 +92,26 @@ class Col:
 
         Args:
             default_formatter: the default formatter to be used if the
-                header_formatter is not defined.
+                header_formatter is not defined. If not defined, the name
+                of the column will be returned as is.
         """
+        self._check()
         fmtr = self.header_formatter or default_formatter or self._id
         return fmtr(self.name)
 
-    def _id(self, item: Any, *args) -> Any:
+    def enable(self, value=True):
+        """Enable or disable rendering of the column."""
+        object.__setattr__(self, "enabled", value)
+
+    def disable(self):
+        """Disable rendering of the column."""
+        object.__setattr__(self, "enabled", False)
+
+    def _check(self):
+        if not self.enabled:
+            raise RuntimeError(f"Column {self.name} is disabled")
+
+    def _id(self, item: Any, *unused_args) -> Any:
         return item
 
 
@@ -128,9 +148,11 @@ class Tabulator(type):
         for base in bases:
             if isinstance(base, Tabulator):
                 columns.update(base.columns)
-        columns.update({cls_attr: value
-                        for cls_attr, value in classdict.items()
-                        if isinstance(value, Col)})
+        columns.update({
+            cls_attr: value
+            for cls_attr, value in classdict.items()
+            if isinstance(value, Col)
+        })
 
         classdict["columns"] = columns
 
@@ -146,6 +168,8 @@ class BaseTabulator(metaclass=Tabulator):
     and a __call__ method that uses the to_dict method to generate a table
     representation of the items iterable using the tabulate library."""
 
+    on_pre_tabulate: Optional[Callable[[Any], None]] = None
+
     def __init__(self, tablefmt: str = "simple"):
         self.tablefmt = tablefmt
 
@@ -160,18 +184,19 @@ class BaseTabulator(metaclass=Tabulator):
         Args:
             items: an iterable of items to be formatted.
         """
-        if (pre_tabulate:= getattr(self, "on_pre_tabulate", None)):
+        if callable(self.on_pre_tabulate):
             for item in items:
-                pre_tabulate(item)
+                self.on_pre_tabulate(item)  # pylint: disable=not-callable
 
-        def_header_fmtr = self.default_header_formatter
-        def_value_fmtr = self.default_value_formatter
-        if not self.columns:
+        def_header_fmtr = self.default_header_formatter  # pylint: disable=no-member
+        def_value_fmtr = self.default_value_formatter  # pylint: disable=no-member
+        columns = self.columns  # pylint: disable=no-member
+        if not columns:
             print("Warning: no columns to display")
         return {
             fmtr.get_formatted_header(def_header_fmtr): [
                 fmtr(item, def_value_fmtr) for item in items
-            ] for fmtr in self.columns.values()
+            ] for fmtr in columns.values() if fmtr.enabled
         }
 
     def __call__(self,
@@ -199,7 +224,7 @@ class BaseTabulator(metaclass=Tabulator):
 class TabulatedList(list):
     """A list subclass that applies a tabulator to its representation."""
 
-    def __init__(self, iterable=(), tabulator=None):
+    def __init__(self, iterable=(), tabulator: BaseTabulator = None):
         """Initialize the TabulatedList instance.
 
         Args:
@@ -209,6 +234,8 @@ class TabulatedList(list):
                 of the items in the list.
         """
         super().__init__(iterable)
+        if not isinstance(tabulator, BaseTabulator):
+            raise ValueError("tabulator must be an instance of BaseTabulator")
         self.tabulator = tabulator
 
     def __repr__(self) -> str:
@@ -231,8 +258,18 @@ class TabulatedList(list):
             return self.tabulator(self, format="unsafehtml")
         return super().__repr__()
 
+    def __getitem__(self, key) -> Any:
+        """Get an item or slice from the TabulatedList instance.
 
-def tabulated(tabulator: BaseTabulator = None):
+        The method returns a TabulatedList instance if the result is a list.
+        """
+        result = super().__getitem__(key)
+        if isinstance(result, list):
+            return TabulatedList(result, self.tabulator)
+        return result
+
+
+def tabulated(tabulator: BaseTabulator = None, tablefmt="simple"):
     """Decorator to apply a tabulator to the return value of a function.
 
     The decorator takes a tabulator class as an argument, and returns a
@@ -245,6 +282,7 @@ def tabulated(tabulator: BaseTabulator = None):
     Args:
         tabulator: a class that inherits from BaseTabulator, and provides a
             table representation of a collection of items.
+        tablefmt: the format of the table, as accepted by tabulate.
     """
 
     def decorator(func):
@@ -252,13 +290,10 @@ def tabulated(tabulator: BaseTabulator = None):
         if tabulator is None:
             return func
 
-        if not isinstance(tabulator, BaseTabulator):
-            raise TypeError("tabulator must be a subclass of BaseTabulator")
-
         def wrapper(*args, **kwargs):
             result = func(*args, **kwargs)
             if isinstance(result, list):
-                return TabulatedList(result, tabulator)
+                return TabulatedList(result, tabulator(tablefmt=tablefmt))
             return result
 
         return wrapper
