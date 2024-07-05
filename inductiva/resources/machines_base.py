@@ -97,7 +97,7 @@ class BaseMachineGroup:
         return self._name
 
     @property
-    def max_idle_time(self):
+    def max_idle_time(self) -> datetime.timedelta:
         return self._max_idle_time
 
     @property
@@ -105,7 +105,7 @@ class BaseMachineGroup:
         return self._auto_terminate_ts
 
     @property
-    def idle_time(self) -> str:
+    def idle_time(self) -> datetime.timedelta:
         """
         Resource idle time in seconds.
         """
