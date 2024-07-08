@@ -9,6 +9,7 @@ import absl
 
 from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.configuration import Configuration
+from inductiva._cli.cmd_user.credits import get_credits
 from inductiva.client.exceptions import ApiException
 from inductiva.client.api_client import ApiClient
 
@@ -165,6 +166,22 @@ def _supports_ansi():
                    "isatty") and sys.stdout.isatty() and not user_disable_ansi
 
 
+def _check_user_credits():
+
+    if utils.format_utils.getenv_bool("GITHUB_ACTIONS", False):
+        return
+
+    # Determine if we are importing from cli or script file
+    caller = sys.argv[0].split("/")[-1]
+    called_from = "cli" if caller == "inductiva" else "other"
+
+    # Only print credits info if called from script file
+    if called_from != "cli":
+        get_credits(None, sys.stdout)
+
+
 _ansi_enabled = _supports_ansi()
 
 _set_key_and_check_version()
+
+_check_user_credits()

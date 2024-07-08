@@ -1,20 +1,20 @@
-"""Register CLI commands for quotas."""
+"""Register CLI commands for user."""
 import argparse
 import os
 
-from inductiva import constants
 from inductiva._cli import loader, utils
+from inductiva import constants
 
 
 def register(root_parser):
     parser = root_parser.add_parser(
-        "quotas",
-        help="Quotas management utilities.",
+        "user",
+        help="User management utilities.",
         formatter_class=argparse.RawTextHelpFormatter)
 
-    parser.description = ("Quotas management utilities.\n\n"
-                          "The `inductiva quotas` command allows you to "
-                          "consult your user's internal quotas.\n")
+    parser.description = ("User management utilities.\n\n"
+                          "The `inductiva user` command allows you to "
+                          "consult your user's internal information.\n")
 
     utils.show_help_msg(parser)
 
