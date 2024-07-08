@@ -3,15 +3,21 @@ from typing import TextIO
 import argparse
 import sys
 
+from inductiva.formatting import TasksTabulator, tabulated
 from inductiva import tasks, _cli, projects
-from inductiva.utils import format_utils
-from inductiva.client import models
 
 
 def list_tasks(args: argparse.Namespace, fout: TextIO = sys.stdout):
-    _list_tasks(**vars(args), fout=fout)
+    task_list = _list_tasks(**vars(args), fout=fout)
+    if not task_list:
+        print("No tasks found.", file=fout)
+        return 1
+    
+    print(task_list, file=fout)
+    return 0
 
 
+@tabulated(TasksTabulator)
 def _list_tasks(project_name, last_n, task_id, all_tasks: bool, fout: TextIO,
                 **_):
     """ List the user's tasks. 
@@ -37,39 +43,8 @@ def _list_tasks(project_name, last_n, task_id, all_tasks: bool, fout: TextIO,
         task_list = projects.Project(project_name).get_tasks(last_n=last_n)
     else:
         task_list = tasks.get_tasks(last_n=last_n)
-
-    if not task_list:
-        print("No tasks found.", file=fout)
-        return 1
-
-    table_dict = tasks.to_dict(task_list)
-
-    emph_formatter = format_utils.get_ansi_formatter()
-
-    def color_formater(status):
-        if status == models.TaskStatusCode.SUCCESS:
-            return emph_formatter(status, format_utils.Emphasis.GREEN)
-        elif status in tasks.Task.FAILED_STATUSES:
-            return emph_formatter(status, format_utils.Emphasis.RED)
-        return status
-
-    formatters = {
-        "Submitted": [format_utils.datetime_formatter,],
-        "Started": [format_utils.datetime_formatter,],
-        "Status": [color_formater]
-    }
-
-    header_formatters = [
-        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
-    ]
-
-    print(format_utils.get_tabular_str(table_dict,
-                                       formatters=formatters,
-                                       header_formatters=header_formatters),
-          file=fout,
-          end="")
-
-    return 0
+    
+    return task_list
 
 
 def register(parser):
