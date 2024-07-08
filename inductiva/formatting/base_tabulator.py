@@ -57,6 +57,10 @@ class Col:
     description: str = ""
     enabled: bool = True
 
+    def __post_init__(self):
+        attr_names = self.attr_name.split(".")
+        object.__setattr__(self, "_attr_names", attr_names)
+
     def __call__(self,
                  item: Any,
                  default_formatter: ValueCallable = None) -> Any:
@@ -75,7 +79,9 @@ class Col:
                 itself will be returned as is.
         """
         self._check()
-        attr = getattr(item, self.attr_name, self.attr_default)
+        attr = item
+        for attr_name in self._attr_names:
+            attr = getattr(attr, attr_name, self.attr_default)
         value = attr() if callable(attr) else attr
         # fallback to the identity method when no valid formatter is available
         fmtr = self.value_formatter or default_formatter or self._id
@@ -236,7 +242,7 @@ class TabulatedList(list):
         super().__init__(iterable)
         if not isinstance(tabulator, BaseTabulator):
             raise ValueError("tabulator must be an instance of BaseTabulator")
-        self.tabulator = tabulator
+        self._tabulator = tabulator
 
     def __repr__(self) -> str:
         """Return a string representation of the TabulatedList instance.
@@ -244,8 +250,8 @@ class TabulatedList(list):
         If a tabulator is defined, it is used to generate a table. Otherwise,
         the default list representation is used.
         """
-        if self.tabulator:
-            return self.tabulator(self)
+        if self._tabulator:
+            return self._tabulator(self)
         return super().__repr__()
 
     def _repr_html_(self) -> str:
@@ -254,8 +260,8 @@ class TabulatedList(list):
         The method is used by Jupyter to display the object in a notebook using
         HTML markup.
         """
-        if self.tabulator:
-            return self.tabulator(self, format="unsafehtml")
+        if self._tabulator:
+            return self._tabulator(self, format="unsafehtml")
         return super().__repr__()
 
     def __getitem__(self, key) -> Any:
@@ -269,7 +275,7 @@ class TabulatedList(list):
         return result
 
 
-def tabulated(tabulator: BaseTabulator = None, tablefmt="simple"):
+def tabulated(tabulator: BaseTabulator = None, tablefmt="inductiva"):
     """Decorator to apply a tabulator to the return value of a function.
 
     The decorator takes a tabulator class as an argument, and returns a
