@@ -20,6 +20,9 @@ input_dir = inductiva.utils.download_from_url(
 
 # Initialize the Simulator
 swash = inductiva.simulators.SWASH()
+# or alternatively, to use a specific version of SWASH:
+# swash = inductiva.simulators.SWASH(version="10.01")
+ 
 
 # Run simulation with config files in the input directory
 task = swash.run(input_dir=input_dir, 
