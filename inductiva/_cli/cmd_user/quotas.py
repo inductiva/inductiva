@@ -28,7 +28,6 @@ def get_quotas(_, fout: TextIO = sys.stdout):
 
         if quota["scope"] == "instance":
             table_instance[""].append(quota["label"])
-            table_instance["current usage"].append(current_str)
             table_instance["max allowed"].append(max_allowed_str)
         else:
             table[""].append(quota["label"])
