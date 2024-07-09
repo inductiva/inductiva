@@ -15,10 +15,25 @@ def get_quotas(_, fout: TextIO = sys.stdout):
     """
     table = defaultdict(list)
 
-    for name, quota in users.get_quotas().items():
-        table[""].append(name)
-        table["current usage"].append(quota["in_use"])
-        table["max allowed"].append(quota["max_allowed"])
+    table_instance = defaultdict(list)
+
+    for _, quota in users.get_quotas().items():
+        current = quota['in_use']
+        max_allowed = quota['max_allowed']
+
+        current_str = (f"{current} {quota['unit']}"
+                       if current is not None else "N/A")
+        max_allowed_str = (f"{max_allowed} {quota['unit']}"
+                           if max_allowed is not None else "N/A")
+
+        if quota["scope"] == "instance":
+            table_instance[""].append(quota["label"])
+            table_instance["current usage"].append(current_str)
+            table_instance["max allowed"].append(max_allowed_str)
+        else:
+            table[""].append(quota["label"])
+            table["current usage"].append(current_str)
+            table["max allowed"].append(max_allowed_str)
 
     emph_formatter = format_utils.get_ansi_formatter()
 
@@ -29,7 +44,13 @@ def get_quotas(_, fout: TextIO = sys.stdout):
     table = format_utils.get_tabular_str(table,
                                          header_formatters=header_formatters)
 
-    print(table, file=fout, end="")
+    table_instance = format_utils.get_tabular_str(
+        table_instance, header_formatters=header_formatters)
+    print("■ Global User quotas", end="")
+    print(table, file=fout)
+    print("═══════════════════════════════════════════════════════════════════")
+    print("■ Instance User quotas", end="")
+    print(table_instance, file=fout, end="")
 
     return 0
 
