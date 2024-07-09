@@ -151,7 +151,7 @@ class Simulator(ABC):
 
         # Get the user-specified image name. If not specified,
         # use the default image name for the current simulator
-        container_image = kwargs.get("container_image", self._image_uri)
+        container_image = kwargs.pop("container_image", self._image_uri)
 
         return tasks.run_simulation(
             self.api_method_name,
