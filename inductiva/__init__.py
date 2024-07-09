@@ -9,7 +9,7 @@ import absl
 
 from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.configuration import Configuration
-from inductiva._cli.cmd_user.credits import get_credits
+from inductiva._cli.cmd_user.info import get_credits
 from inductiva.client.exceptions import ApiException
 from inductiva.client.api_client import ApiClient
 

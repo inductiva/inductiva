@@ -61,13 +61,13 @@ def get_credits(_, fout: TextIO = sys.stdout):
 def register(parser):
     """Register the user credits command."""
 
-    subparser = parser.add_parser("credits",
-                                  help="List the user's credits.",
+    subparser = parser.add_parser("info",
+                                  help="List the user's information.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = ("The `inductiva user credits` command provides "
-                             "an overview of your tier and credits.\n"
-                             "It lists all your total credits as well as the"
+    subparser.description = ("The `inductiva user info` command provides "
+                             "an overview of your tier, programs and credits.\n"
+                             "It lists all your programs as well as the"
                              "credits left for you to use.\n")
 
     _cli.utils.add_watch_argument(subparser)
