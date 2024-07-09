@@ -16,14 +16,22 @@ def get_credits(_, fout: TextIO = sys.stdout):
     table = defaultdict(list)
 
     user_info = users.get_info()
-    tier = user_info["tier"]
-    print(f"Tier: {tier}", file=fout)
 
-    for name, credit in user_info["credits"].items():
-        table[""].append(name)
-        table["current usage"].append(credit["used"])
-        table["max allowed"].append(credit["total"])
-        table["remaining"].append(credit["remaining"])
+    print(f"■ Name: {user_info['name']}", file=fout)
+    print(f"■ Email: {user_info['email']}", file=fout)
+    print(f"■ Username: {user_info['username']}", file=fout)
+
+    tier = user_info["tier"]["name"]
+    available_credits = user_info["tier"]["available_credits"]
+    print(f"     ■ Tier: {tier}", file=fout)
+    print(f"     ■ Available credits: {available_credits}", file=fout)
+
+    for program in user_info["programs"]:
+        table["name"].append(program["name"])
+        table["enrollment date"].append(program["enrollment_date"])
+        table["expiry date"].append(program["expiry_date"])
+        table["available credits"].append(program["available_credits"])
+        table["initial credits"].append(program["initial_credits"])
 
     emph_formatter = format_utils.get_ansi_formatter()
 
@@ -31,11 +39,22 @@ def get_credits(_, fout: TextIO = sys.stdout):
         lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
     ]
 
+    formatters = {
+        "enrollment date": [format_utils.datetime_formatter,],
+        "expiry date": [format_utils.datetime_formatter,]
+    }
+
     table = format_utils.get_tabular_str(table,
+                                         formatters=formatters,
                                          header_formatters=header_formatters)
+    print("════════════════════════════════════", file=fout)
+    print("Programs:", file=fout)
+    print(table, file=fout)
 
-    print(table, file=fout, end="")
-
+    total_available_credits = user_info["total_available_credits"]
+    print("════════════════════════════════════", file=fout)
+    print(f"Total available credits: {total_available_credits}", file=fout)
+    print("════════════════════════════════════", file=fout)
     return 0
 
 
