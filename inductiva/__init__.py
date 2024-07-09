@@ -9,8 +9,8 @@ import absl
 
 from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.configuration import Configuration
-from inductiva._cli.cmd_user.info import get_credits
 from inductiva.client.exceptions import ApiException
+from inductiva._cli.cmd_user.info import get_info
 from inductiva.client.api_client import ApiClient
 
 from . import simulators
@@ -172,12 +172,10 @@ def _check_user_credits():
         return
 
     # Determine if we are importing from cli or script file
-    caller = sys.argv[0].split("/")[-1]
-    called_from = "cli" if caller == "inductiva" else "other"
-
-    # Only print credits info if called from script file
-    if called_from != "cli":
-        get_credits(None, sys.stdout)
+    caller = sys.argv[0]
+    if not caller.endswith("inductiva"):
+        # Only print credits info if called from script file
+        get_info(None, sys.stdout)
 
 
 _ansi_enabled = _supports_ansi()

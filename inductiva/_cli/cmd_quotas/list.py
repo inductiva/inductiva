@@ -5,7 +5,7 @@ import logging
 import sys
 
 from inductiva import _cli
-from inductiva._cli.cmd_user import quotas
+from inductiva._cli.cmd_user import info
 
 
 def get_quotas(_, fout: TextIO = sys.stdout):
@@ -13,12 +13,10 @@ def get_quotas(_, fout: TextIO = sys.stdout):
 
     Lists all the user's quotas and the quotas left for the user to use.
     """
-    #If i give a warning on the init it will print the warning
-    #during the load even if we use another command that is not deprecated
-    logging.warning("\ninductiva quotas is deprecated"
+    logging.warning("\nWARNING: `inductiva quotas list` is deprecated"
                     " and will be removed in a future release.\n"
-                    "Please use the `inductiva user quotas` command instead.\n")
-    quotas.get_quotas(_, fout)
+                    "Please use the `inductiva user info` command instead.\n")
+    info.get_info(_, fout)
     return 0
 
 

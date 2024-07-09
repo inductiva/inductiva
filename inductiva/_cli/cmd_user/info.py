@@ -1,4 +1,4 @@
-"""List the user credits information via CLI."""
+"""List the user information via CLI."""
 from collections import defaultdict
 from typing import TextIO
 import argparse
@@ -8,30 +8,110 @@ from inductiva import users, _cli
 from inductiva.utils import format_utils
 
 
-def get_credits(_, fout: TextIO = sys.stdout):
-    """ Lists the user's credits.
-
-    Lists all the user's credits and the credits left for the user to use.
+def _quotas_to_dict(quotas):
+    """Converts a list of quotas to two dictionaries.
+    One for global quotas and one for instance quotas.
     """
-    table = defaultdict(list)
+    table_global = defaultdict(list)
+    table_instance = defaultdict(list)
+    for _, quota in quotas.items():
+        current = quota["in_use"]
+        max_allowed = quota["max_allowed"]
+        unit = quota["unit"]
+        current_str = (f"{current} {unit}" if current is not None else "N/A")
+        max_allowed_str = (f"{max_allowed} {unit}"
+                           if max_allowed is not None else "N/A")
 
-    user_info = users.get_info()
+        if quota["scope"] == "instance":
+            table_instance[""].append(quota["label"])
+            table_instance["max allowed"].append(max_allowed_str)
+        else:
+            table_global[""].append(quota["label"])
+            table_global["current usage"].append(current_str)
+            table_global["max allowed"].append(max_allowed_str)
+    return table_global, table_instance
 
-    print(f"■ Name: {user_info['name']}", file=fout)
-    print(f"■ Email: {user_info['email']}", file=fout)
-    print(f"■ Username: {user_info['username']}", file=fout)
 
-    tier = user_info["tier"]["name"]
+def _print_quotas(_, fout: TextIO = sys.stdout):
+    """ Lists the user's quotas.
+
+    Lists all the user's quotas and the quotas left for the user to use.
+    """
+    table, table_instance = _quotas_to_dict(users.get_quotas())
+
+    emph_formatter = format_utils.get_ansi_formatter()
+    header_formatters = [
+        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
+    ]
+
+    table = format_utils.get_tabular_str(table,
+                                         header_formatters=header_formatters)
+
+    table_instance = format_utils.get_tabular_str(
+        table_instance, header_formatters=header_formatters)
+    print("■ Global User quotas", end="")
+    print(table, file=fout)
+    print("■ Instance User quotas", end="")
+    print(table_instance, file=fout, end="")
+    return 0
+
+
+def _print_credits_summary(user_info, fout: TextIO = sys.stdout):
+    """Prints the user's credits information."""
+    total_available_credits = user_info["total_available_credits"]
     available_credits = user_info["tier"]["available_credits"]
-    print(f"     ■ Tier: {tier}", file=fout)
-    print(f"     ■ Available credits: {available_credits}", file=fout)
+    tier = user_info["tier"]["name"]
 
+    print("■ Credits", file=fout)
+    print("", file=fout)
+    # pylint: disable=consider-using-f-string
+    print("  {0:<25s} {1:10.2f}".format(tier + " (tier)", available_credits),
+          file=fout)
     for program in user_info["programs"]:
+        print("  {0:<25s} {1:10.2f}".format(program["name"] + " (campaign)",
+                                            program["available_credits"]),
+              file=fout)
+
+    print("  ------------------------------------", file=fout)
+    print("  {0:<25s} {1:10.2f}".format("Total", total_available_credits),
+          file=fout)
+
+
+def _programs_to_dict(programs):
+    """Converts a list of programs to a dictionary."""
+    table = defaultdict(list)
+    for program in programs:
         table["name"].append(program["name"])
         table["enrollment date"].append(program["enrollment_date"])
         table["expiry date"].append(program["expiry_date"])
         table["available credits"].append(program["available_credits"])
         table["initial credits"].append(program["initial_credits"])
+    return table
+
+
+def get_info(_, fout: TextIO = sys.stdout):
+    """ Lists the user's credits.
+
+    Lists all the user's credits and the credits left for the user to use.
+    """
+    user_info = users.get_info()
+
+    tier = user_info["tier"]["name"]
+    username = user_info["username"]
+    email = user_info["email"]
+    name = user_info["name"]
+
+    print(f"Name: {name}", file=fout)
+    print(f"Email: {email}", file=fout)
+    print(f"Username: {username}", file=fout)
+
+    print("", file=fout)
+    print(f"■ Tier: {tier}", file=fout)
+    print("", file=fout)
+
+    _print_credits_summary(user_info, fout=fout)
+
+    table = _programs_to_dict(user_info["programs"])
 
     emph_formatter = format_utils.get_ansi_formatter()
 
@@ -47,14 +127,13 @@ def get_credits(_, fout: TextIO = sys.stdout):
     table = format_utils.get_tabular_str(table,
                                          formatters=formatters,
                                          header_formatters=header_formatters)
-    print("════════════════════════════════════", file=fout)
-    print("Programs:", file=fout)
+    print("", file=fout)
+    print("■ Programs", file=fout)
     print(table, file=fout)
 
-    total_available_credits = user_info["total_available_credits"]
-    print("════════════════════════════════════", file=fout)
-    print(f"Total available credits: {total_available_credits}", file=fout)
-    print("════════════════════════════════════", file=fout)
+    _print_quotas(_, fout)
+
+    print("", file=fout)
     return 0
 
 
@@ -72,4 +151,4 @@ def register(parser):
 
     _cli.utils.add_watch_argument(subparser)
 
-    subparser.set_defaults(func=get_credits)
+    subparser.set_defaults(func=get_info)
