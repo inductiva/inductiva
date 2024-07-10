@@ -6,6 +6,7 @@ import bisect
 import sys
 
 from inductiva.resources.machine_types import ProviderType
+from inductiva.resources import machines_base
 from inductiva.utils import format_utils
 from inductiva import resources, _cli
 
@@ -97,9 +98,70 @@ def list_machine_types_available(args):
     pretty_print_machines_info(machines_dict)
 
 
-def list_machine_groups(unused_args, fout: TextIO = sys.stdout):
-    """List Resources."""
-    resources.machine_groups.list(fout=fout)
+def _machine_group_list_to_str(machine_group_list) -> str:
+    """Returns a string representation of a list of machine groups."""
+    columns = [
+        "Name", "Machine Type", "Elastic", "Type", "# machines",
+        "Data Size in GB", "Spot", "Started at (UTC)", "Idle Time",
+        "Max Cost ($/hour)"
+    ]
+    rows = []
+
+    for machine_group in machine_group_list:
+        is_elastic = False
+        resource_type = machines_base.ResourceType.STANDARD.value
+        spot = machine_group.spot if hasattr(machine_group, "spot") else False
+
+        if isinstance(machine_group, resources.ElasticMachineGroup):
+            is_elastic = True
+        else:
+            if isinstance(machine_group, resources.MPICluster):
+                resource_type = machines_base.ResourceType.MPI.value
+        num_active_machines = machine_group.active_machines_to_str()
+        rows.append([
+            machine_group.name, machine_group.machine_type, is_elastic,
+            resource_type, num_active_machines, machine_group.data_disk_gb,
+            spot, machine_group.create_time,
+            f"{machine_group.idle_time}/{machine_group.max_idle_time}",
+            machine_group.quota_usage.get("max_price_hour")
+        ])
+
+    formatters = {
+        "Started at (UTC)": [format_utils.datetime_formatter],
+    }
+
+    emph_formatter = format_utils.get_ansi_formatter()
+    header_formatters = [
+        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
+    ]
+
+    return format_utils.get_tabular_str(rows,
+                                        columns,
+                                        formatters=formatters,
+                                        header_formatters=header_formatters)
+
+
+def list_machine_groups(_, fout: TextIO = sys.stdout):
+    # pylint: disable=line-too-long
+    """Lists all active resources info.
+
+    This method queries Google Cloud for active resources
+    that belong to the user. It outputs all the information relative to
+    each resource as folllows:
+
+    Active Resources:
+                                        Name         VM Type    Elastic   # machines    Disk Size in GB       Spot   Started at (UTC)
+    api-6359c03d-c4f9-479f-8b11-ba1f8f55a58c   e2-standard-4      False            3                 40      False   10 Oct, 13:40:50
+    api-db2046cf-a6fc-4124-926c-1a24329da5ea   e2-standard-4       True          2/4                 40      False   10 Oct, 12:43:03
+    """
+    # pylint: enable=line-too-long
+
+    machine_group_list = resources.machine_groups.get()
+    if len(machine_group_list) != 0:
+        print("Active Resources:", file=fout)
+        print(_machine_group_list_to_str(machine_group_list), file=fout, end="")
+    else:
+        print("No active computational resources found.", file=fout, end="")
 
 
 def register(parser):
