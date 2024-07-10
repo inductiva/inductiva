@@ -518,6 +518,8 @@ class BaseVMGroup(
             
             
                 class MetaOapg:
+                    additional_properties = schemas.NumberSchema
+                    any_of_0 = schemas.DictSchema
                     any_of_1 = schemas.NoneSchema
                     
                     @classmethod
@@ -531,16 +533,23 @@ class BaseVMGroup(
                         # classes don't exist yet because their module has not finished
                         # loading
                         return [
-                            QuotaUsage,
+                            cls.any_of_0,
                             cls.any_of_1,
                         ]
             
+                
+                def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                    # dict_instance[name] accessor
+                    return super().__getitem__(name)
+                
+                def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                    return super().get_item_oapg(name)
             
                 def __new__(
                     cls,
                     *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                    **kwargs: typing.Union[MetaOapg.additional_properties, decimal.Decimal, int, float, ],
                 ) -> 'quota_usage':
                     return super().__new__(
                         cls,
@@ -707,4 +716,3 @@ class BaseVMGroup(
 
 from inductiva.client.model.machine_group_type import MachineGroupType
 from inductiva.client.model.providers import Providers
-from inductiva.client.model.quota_usage import QuotaUsage
