@@ -123,7 +123,7 @@ def _machine_group_list_to_str(machine_group_list) -> str:
             resource_type, num_active_machines, machine_group.data_disk_gb,
             spot, machine_group.create_time,
             f"{machine_group.idle_time}/{machine_group.max_idle_time}",
-            machine_group.quota_usage.get("cost_per_hour")
+            machine_group.quota_usage.get("max_price_hour")
         ])
 
     formatters = {
