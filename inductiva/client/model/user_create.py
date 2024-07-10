@@ -36,7 +36,6 @@ class UserCreate(schemas.DictSchema):
 
         class properties:
             email = schemas.StrSchema
-            is_admin = schemas.BoolSchema
 
             class expiry_ts(
                     schemas.DateTimeBase,
@@ -229,7 +228,6 @@ class UserCreate(schemas.DictSchema):
 
             __annotations__ = {
                 "email": email,
-                "is_admin": is_admin,
                 "expiry_ts": expiry_ts,
                 "name": name,
                 "extra_metadata": extra_metadata,
@@ -241,12 +239,6 @@ class UserCreate(schemas.DictSchema):
     def __getitem__(
             self, name: typing_extensions.Literal["email"]
     ) -> MetaOapg.properties.email:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["is_admin"]
-    ) -> MetaOapg.properties.is_admin:
         ...
 
     @typing.overload
@@ -273,7 +265,6 @@ class UserCreate(schemas.DictSchema):
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "email",
-        "is_admin",
         "expiry_ts",
         "name",
         "extra_metadata",
@@ -285,12 +276,6 @@ class UserCreate(schemas.DictSchema):
     def get_item_oapg(
             self, name: typing_extensions.Literal["email"]
     ) -> MetaOapg.properties.email:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["is_admin"]
-    ) -> typing.Union[MetaOapg.properties.is_admin, schemas.Unset]:
         ...
 
     @typing.overload
@@ -319,7 +304,6 @@ class UserCreate(schemas.DictSchema):
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "email",
-        "is_admin",
         "expiry_ts",
         "name",
         "extra_metadata",
@@ -336,8 +320,6 @@ class UserCreate(schemas.DictSchema):
             MetaOapg.properties.email,
             str,
         ],
-        is_admin: typing.Union[MetaOapg.properties.is_admin, bool,
-                               schemas.Unset] = schemas.unset,
         expiry_ts: typing.Union[MetaOapg.properties.expiry_ts, dict,
                                 frozendict.frozendict, str, date, datetime,
                                 uuid.UUID, int, float, decimal.Decimal, bool,
@@ -365,7 +347,6 @@ class UserCreate(schemas.DictSchema):
             cls,
             *_args,
             email=email,
-            is_admin=is_admin,
             expiry_ts=expiry_ts,
             name=name,
             extra_metadata=extra_metadata,

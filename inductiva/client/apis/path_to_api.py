@@ -28,7 +28,6 @@ from inductiva.client.apis.paths.admin_groups_default_machine_group_id import Ad
 from inductiva.client.apis.paths.admin_providers import AdminProviders
 from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvidersProviderId
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
-from inductiva.client.apis.paths.admin_users_username_cost import AdminUsersUsernameCost
 from inductiva.client.apis.paths.admin_executer_tracker_token import AdminExecuterTrackerToken
 from inductiva.client.apis.paths.admin_groups_machine_group_id_terminate import AdminGroupsMachineGroupIdTerminate
 from inductiva.client.apis.paths.admin_users_username_storage_size_fs import AdminUsersUsernameStorageSizeFs
@@ -55,11 +54,11 @@ from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_contents import StorageContents
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
-from inductiva.client.apis.paths.users_cost import UsersCost
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
-from inductiva.client.apis.paths.users_me import UsersMe
+from inductiva.client.apis.paths.users_info import UsersInfo
 from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
+from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -117,8 +116,6 @@ PathToApi = typing_extensions.TypedDict(
             AdminProvidersProviderId,
         PathValues.ADMIN_ACTIVE_TASKS:
             AdminActiveTasks,
-        PathValues.ADMIN_USERS_USERNAME_COST:
-            AdminUsersUsernameCost,
         PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
             AdminExecuterTrackerToken,
         PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
@@ -171,16 +168,16 @@ PathToApi = typing_extensions.TypedDict(
             Version,
         PathValues.VERSIONCHECK:
             VersionCheck,
-        PathValues.USERS_COST:
-            UsersCost,
         PathValues.USERS_QUOTAS:
             UsersQuotas,
-        PathValues.USERS_ME:
-            UsersMe,
+        PathValues.USERS_INFO:
+            UsersInfo,
         PathValues.PROJECTS:
             Projects,
         PathValues.PROJECTS_NAME:
             ProjectsName,
+        PathValues.METRICS_USERS_USERNAME_ACTIVITY:
+            MetricsUsersUsernameActivity,
     })
 
 path_to_api = PathToApi({
@@ -238,8 +235,6 @@ path_to_api = PathToApi({
         AdminProvidersProviderId,
     PathValues.ADMIN_ACTIVE_TASKS:
         AdminActiveTasks,
-    PathValues.ADMIN_USERS_USERNAME_COST:
-        AdminUsersUsernameCost,
     PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
         AdminExecuterTrackerToken,
     PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
@@ -292,14 +287,14 @@ path_to_api = PathToApi({
         Version,
     PathValues.VERSIONCHECK:
         VersionCheck,
-    PathValues.USERS_COST:
-        UsersCost,
     PathValues.USERS_QUOTAS:
         UsersQuotas,
-    PathValues.USERS_ME:
-        UsersMe,
+    PathValues.USERS_INFO:
+        UsersInfo,
     PathValues.PROJECTS:
         Projects,
     PathValues.PROJECTS_NAME:
         ProjectsName,
+    PathValues.METRICS_USERS_USERNAME_ACTIVITY:
+        MetricsUsersUsernameActivity,
 })
