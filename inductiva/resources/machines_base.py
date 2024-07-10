@@ -304,7 +304,6 @@ class BaseMachineGroup:
 
     def log_quota_usage(self, resource_usage_header: str):
         quotas = users.get_quotas()
-
         table = defaultdict(list)
         emph_formatter = format_utils.get_ansi_formatter()
 
@@ -313,10 +312,11 @@ class BaseMachineGroup:
         ]
 
         for name, value in self.quota_usage.items():
-            in_use = quotas.get(name, {}).get("in_use", "n/a")
             max_allowed = quotas.get(name, {}).get("max_allowed", "n/a")
+            full_name = quotas.get(name, {}).get("label", "n/a")
+            in_use = quotas.get(name, {}).get("in_use", "n/a")
 
-            table[""].append(name)
+            table[""].append(full_name)
             table[resource_usage_header].append(value)
             table["current usage"].append(in_use)
             table["max allowed"].append(max_allowed)
