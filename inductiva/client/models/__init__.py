@@ -37,7 +37,6 @@ from inductiva.client.model.provider import Provider
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.quota import Quota
 from inductiva.client.model.quota_scope import QuotaScope
-from inductiva.client.model.quota_usage import QuotaUsage
 from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.storage_sort_by import StorageSortBy
 from inductiva.client.model.task import Task
