@@ -67,7 +67,7 @@ def _print_credits_summary(user_info, fout: TextIO = sys.stdout):
     # pylint: disable=consider-using-f-string
     print("  {0:<25s} {1:10.2f}".format(tier + " (tier)", available_credits),
           file=fout)
-    for program in user_info["programs"]:
+    for program in user_info["campaigns"]:
         print("  {0:<25s} {1:10.2f}".format(program["name"] + " (campaign)",
                                             program["available_credits"]),
               file=fout)
@@ -77,10 +77,10 @@ def _print_credits_summary(user_info, fout: TextIO = sys.stdout):
           file=fout)
 
 
-def _programs_to_dict(programs):
-    """Converts a list of programs to a dictionary."""
+def _campaigns_to_dict(campaigns):
+    """Converts a list of campaigns to a dictionary."""
     table = defaultdict(list)
-    for program in programs:
+    for program in campaigns:
         table["name"].append(program["name"])
         table["enrollment date"].append(program["enrollment_date"])
         table["expiry date"].append(program["expiry_date"])
@@ -111,7 +111,7 @@ def get_info(_, fout: TextIO = sys.stdout):
 
     _print_credits_summary(user_info, fout=fout)
 
-    table = _programs_to_dict(user_info["programs"])
+    table = _campaigns_to_dict(user_info["campaigns"])
 
     emph_formatter = format_utils.get_ansi_formatter()
 
@@ -120,15 +120,15 @@ def get_info(_, fout: TextIO = sys.stdout):
     ]
 
     formatters = {
-        "enrollment date": [format_utils.datetime_formatter,],
-        "expiry date": [format_utils.datetime_formatter,]
+        "enrollment date": [format_utils.datetime_formatter_ymd_hm,],
+        "expiry date": [format_utils.datetime_formatter_ymd_hm,]
     }
 
     table = format_utils.get_tabular_str(table,
                                          formatters=formatters,
                                          header_formatters=header_formatters)
     print("", file=fout)
-    print("■ Programs", file=fout)
+    print("■ Campaigns", file=fout)
     print(table, file=fout)
 
     _print_quotas(_, fout)
@@ -145,8 +145,8 @@ def register(parser):
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = ("The `inductiva user info` command provides "
-                             "an overview of your tier, programs and credits.\n"
-                             "It lists all your programs as well as the"
+                             "an overview of your tier, campaigns and credits.\n"
+                             "It lists all your campaigns as well as the"
                              "credits left for you to use.\n")
 
     _cli.utils.add_watch_argument(subparser)
