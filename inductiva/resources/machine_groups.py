@@ -154,7 +154,7 @@ def get():
 
 def get_cheapest_machine_type(num_cpus: int,
                               ram_gb: Optional[int] = None,
-                              spot: bool = False):
+                              spot: bool = True):
     """Get the machine type with the lowest price.
 
     If the machine type with the exact requirements is not found, the closest
