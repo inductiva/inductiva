@@ -479,6 +479,11 @@ class Task:
                         logging.info(" > Message: %s", detail)
                     else:
                         logging.info(" > No error message available.")
+                elif status == models.TaskStatusCode.SPOTINSTANCEPREEMPTED:
+                    msg = ("The task was preempted by the cloud provider.\n"
+                           "Consider using non-spot machines by setting "
+                           "`spot=False` when instantiating the machine group.")
+                    logging.info(msg)
 
                 else:
                     logging.info(

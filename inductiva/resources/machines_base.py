@@ -293,7 +293,7 @@ class BaseMachineGroup:
         except inductiva.client.ApiException as api_exception:
             raise api_exception
 
-    def _get_estimated_cost(self, spot: bool = False) -> float:
+    def _get_estimated_cost(self, spot: bool = True) -> float:
         """Returns estimate cost of a single machine in the group.
 
         This method is an overlay of the more general method, but
@@ -350,7 +350,7 @@ class BaseMachineGroup:
         non_spot_cost = self._get_estimated_cost(False)
         spot_times_cheaper = round(non_spot_cost / spot_cost, 2)
 
-        is_spot = getattr(self, "spot", False)
+        is_spot = getattr(self, "spot", True)
 
         if not is_spot:
             logging.info(
