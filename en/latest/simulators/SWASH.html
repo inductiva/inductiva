@@ -380,7 +380,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versions">Versions</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva-benchmarks">Inductiva Benchmarks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
@@ -414,6 +417,9 @@ simulation to run.</p>
 
 <span class="c1"># Initialize the Simulator</span>
 <span class="n">swash</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SWASH</span><span class="p">()</span>
+<span class="c1"># or alternatively, to use a specific version of SWASH:</span>
+<span class="c1"># swash = inductiva.simulators.SWASH(version=&quot;10.01&quot;)</span>
+ 
 
 <span class="c1"># Run simulation with config files in the input directory</span>
 <span class="n">task</span> <span class="o">=</span> <span class="n">swash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span> 
@@ -423,6 +429,16 @@ simulation to run.</p>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
 </pre></div>
 </div>
+<section id="versions">
+<h3>Versions<a class="headerlink" href="#versions" title="Permalink to this heading">#</a></h3>
+<p>We currently support the following versions of SWASH:</p>
+<ul class="simple">
+<li><p>9.01A (Apr, 2023)</p></li>
+<li><p>10.01 (Oct, 2023)</p></li>
+</ul>
+<p>All available versions for this (and other simulators) can be listed
+using the <code class="docutils literal notranslate"><span class="pre">inductiva</span> <span class="pre">simulators</span> <span class="pre">list</span></code> CLI command.</p>
+</section>
 </section>
 <section id="inductiva-benchmarks">
 <h2>Inductiva Benchmarks<a class="headerlink" href="#inductiva-benchmarks" title="Permalink to this heading">#</a></h2>
@@ -498,7 +514,10 @@ practical use of SWASH:</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#versions">Versions</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva-benchmarks">Inductiva Benchmarks</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
