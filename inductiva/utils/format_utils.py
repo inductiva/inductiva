@@ -103,6 +103,7 @@ def datetime_formatter(dt: str) -> str:
     local_dt = datetime.datetime.fromisoformat(dt).astimezone()
     return local_dt.strftime("%d %b, %H:%M:%S")
 
+
 def datetime_formatter_ymd_hm(dt: str) -> str:
     # get time in local timezone
     if dt is None:
