@@ -129,7 +129,10 @@ def get_info(_, fout: TextIO = sys.stdout):
                                          header_formatters=header_formatters)
     print("", file=fout)
     print("■ Campaigns", file=fout)
-    print(table, file=fout)
+    if not user_info["campaigns"]:
+        print("\n Not currently enrolled in any campaign.\n", file=fout)
+    else:
+        print(table, file=fout)
 
     _print_quotas(_, fout)
 
