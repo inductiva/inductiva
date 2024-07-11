@@ -99,7 +99,7 @@ def get_info(_, fout: TextIO = sys.stdout):
     tier = user_info["tier"]["name"]
     username = user_info["username"]
     email = user_info["email"]
-    name = user_info["name"]
+    name = user_info["name"] or ""
 
     print(f"Name: {name}", file=fout)
     print(f"Email: {email}", file=fout)
