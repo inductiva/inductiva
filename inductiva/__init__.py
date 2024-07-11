@@ -173,7 +173,7 @@ def _check_user_credits():
 
     # Determine if we are importing from cli or script file
     caller = sys.argv[0]
-    if not caller.endswith("inductiva"):
+    if not caller.endswith(("inductiva", "inductiva.exe")):
         # Only print credits info if called from script file
         get_info(None, sys.stdout)
 
