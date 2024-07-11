@@ -60,20 +60,24 @@ def _print_credits_summary(user_info, fout: TextIO = sys.stdout):
     """Prints the user's credits information."""
     total_available_credits = user_info["total_available_credits"]
     available_credits = user_info["tier"]["available_credits"]
+    currency = user_info["credits_currency"]
     tier = user_info["tier"]["name"]
 
     print("■ Credits", file=fout)
     print("", file=fout)
     # pylint: disable=consider-using-f-string
-    print("  {0:<25s} {1:10.2f}".format(tier + " (tier)", available_credits),
+    print("  {0:<25s} {1:10.2f} {2}".format(tier + " (tier)", available_credits,
+                                            currency),
           file=fout)
     for program in user_info["campaigns"]:
-        print("  {0:<25s} {1:10.2f}".format(program["name"] + " (campaign)",
-                                            program["available_credits"]),
+        print("  {0:<25s} {1:10.2f} {2}".format(program["name"] + " (campaign)",
+                                                program["available_credits"],
+                                                currency),
               file=fout)
 
-    print("  ------------------------------------", file=fout)
-    print("  {0:<25s} {1:10.2f}".format("Total", total_available_credits),
+    print("  ----------------------------------------", file=fout)
+    print("  {0:<25s} {1:10.2f} {2}".format("Total", total_available_credits,
+                                            currency),
           file=fout)
 
 
@@ -128,7 +132,7 @@ def get_info(_, fout: TextIO = sys.stdout):
                                          formatters=formatters,
                                          header_formatters=header_formatters)
     print("", file=fout)
-    print("■ Campaigns", file=fout)
+    print("■ Active Campaigns", file=fout)
     if not user_info["campaigns"]:
         print("\n Not currently enrolled in any campaign.\n", file=fout)
     else:
