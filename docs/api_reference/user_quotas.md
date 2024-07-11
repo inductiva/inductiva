@@ -1,3 +1,26 @@
+# User Tiers, Capabilities and Quotas
+
+Users of the Inductiva API are subject to a set of rules that define the
+resources they can use and the limits they are subject to. These rules are
+defined by the user's tier, the set of capabilities they have access to, and the
+quotas that limit the amount of resources they can use.
+In this document, we will explain how these rules are defined and how they
+affect the user's experience with the Inductiva API.
+
+## Tiers
+
+The Inductiva API has four tiers: Freemium, Standard, Power-user, and Enterprise.
+The following table shows the main differences between these tiers:
+
+| Tier | Description |
+|------|-------------|
+| Freemium | The Freemium tier is the entry-level tier for the Inductiva API. It is free to use and provides access to a limited set of capabilities and resources. Members of this tier can only submit tasks to the shared queue, _i.e_, they cannot allocate and use a dedicated machine group for their tasks. |
+| Standard | The Standard tier provides access to a wider set of capabilities and resources than the Freemium tier. Members can allocate dedicated machine groups but with limited capabilities and low quota limits. |
+| Power-user | The Power-user tier extends on the capabilities and resources available to the Standard tier but with higher quota limits and access to a wider set of capabilities. |
+| Enterprise | The Enterprise tier provides access to all capabilities and resources available in the Inductiva API. Members of this tier have the highest quota limits and can use all the features available in the API. |
+
+## Capabilities
+
 
 | Capability| Description | Freemium | Standard | Power-user | Enterprise |
 |-----------|-------------|----------|----------|------------|------------|
@@ -13,12 +36,7 @@
 | Automatically restart tasks interrupted by preemption | A task that was running in a “spot” instance that was preempted (taken back by cloud provider) will be  automatically resubmitted | ❌ | ❌ | ✅︎ | ✅︎ |
 | xxxx | xxxx | ❌ | ✅︎ | ✅︎ | ✅︎ |
 
-
-
-
-
-# Quotas
-
+## Quotas
 
 | Quota | unit | scope | Description | Freemium | Standard | Power-user | Enterprise |
 |-------|------|-------|-------------|----------|----------|------------|------------|
@@ -33,7 +51,7 @@
 | Maximum amount of RAM per VCPU | GB | instance | Maximum amount of RAM per individual VCPU that can be used. Even though RAM is not specifiable per se, this quota constrains the machine types that can be requested | N/A | 4 | 6 | 8 |
 
 
-## FAQS:
+## FAQs:
 
 **When are tiers, credits and quotas verified?**
 
@@ -57,49 +75,65 @@
 
 
 
+## How to monitor your account details
+
+
+Inductiva's CLI provides an easy way to monitor your account details, and get
+information about your tier, credits and current quotas. Simply use 
+the command `inductiva user info`:
+
+```bash
+$ inductiva user info
+Name: <name of the user here>
+Email: <user e-mail here>
+Username: <username here>
+
+■ Tier: Power-User
+
+■ Credits
+
+  Power-User (tier)               0.00
+  pioneer (campaign)          10000.00
+  ------------------------------------
+  Total                       10000.00
+
+■ Campaigns
+
+ NAME      ENROLLMENT DATE     EXPIRY DATE        AVAILABLE CREDITS     INITIAL CREDITS
+ pioneer   2024-02-06 11:40    2024-07-31 01:00   10000                 10000
+
+■ Global User quotas
+                                                                 CURRENT USAGE     MAX ALLOWED
+ Maximum tasks per week                                          0 task            N/A
+ Maximum number of VCPUs                                         0 vcpu            1000 vcpu
+ Maximum price per hour across all instances                     0 USD             270 USD
+ Maximum simultaneous instances                                  0 instance        100 instance
+ Maximum time a machine group can stay idle before termination   N/A               120 minute
+
+■ Instance User quotas
+                                                                                          MAX ALLOWED
+ Maximum time a machine group can stay up before automatic termination                    48 hour
+ Maximum time a task can stay running in the default queue before automatic termination   16 hour
+ Maximum disk size                                                                        2000 GB
+ Maximum amount of RAM per VCPU                                                           6 GB
+
+```
+
+This information is also available programatically through the python client:
+
+```python
+import inductiva
+
+inductiva.users.get_info() # <-- to get information about the tier and credits
+inductiva.users.get_quotas() # <-- to get quotas
+
+```
 
 
 
-
-
-
-
-
-
-
-
-
-
-# User Quotas
 
 
 
 If any of these quotas establish a limit for what you can achieve with Inductiva
 API, please [reach out to us](mailto:support@inductiva.ai) and we can better
 understand your needs.
-
-## How to monitor quotas
-
-Inductiva's cli provides an easy way to monitor your quotas usage. Simply use 
-the command `inductiva quotas list`. This will output a detailed list of all
-the quotas together with their current usage. For example:
-
-```bash
-$ inductiva quotas list
-
-       NAME                               IN_USE         MAX_ALLOWED
-       total_num_vcpus                    0              240
-       total_num_machines                 0              20
-       cost_per_hour                      0              2
-       machine_disk_size_gb               n/a            20
-       machine_group_idle_minutes         n/a            30
-       machine_group_lifetime_hours       n/a            36
-```
-
-Alternatively, you can also get the quotas directly from our python client:
-
-```python
-import inductiva
-
-inductiva.users.get_quotas()
-```
