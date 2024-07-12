@@ -20,6 +20,9 @@ input_dir = inductiva.utils.download_from_url(
 
 # Initialize the Simulator
 swash = inductiva.simulators.SWASH()
+# or alternatively, to use a specific version of SWASH:
+# swash = inductiva.simulators.SWASH(version="10.01")
+ 
 
 # Run simulation with config files in the input directory
 task = swash.run(input_dir=input_dir, 
@@ -28,6 +31,15 @@ task = swash.run(input_dir=input_dir,
 task.wait()
 task.download_outputs()
 ```
+
+### Versions
+
+We currently support the following versions of SWASH:
+- 9.01A (Apr, 2023)
+- 10.01 (Oct, 2023)
+
+All available versions for this (and other simulators) can be listed
+using the `inductiva simulators list` CLI command.
 
 ## Inductiva Benchmarks
 
