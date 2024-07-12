@@ -43,6 +43,7 @@ class Simulator(ABC):
         self._version = version
         self._use_dev = bool(use_dev)
         self._image_uri = self._get_image_uri()
+        self._logger.info("")
 
     @property
     def version(self):
@@ -84,8 +85,8 @@ class Simulator(ABC):
             raise ValueError(
                 f"Version {self.version} is not available for simulator {name}."
                 f" Available versions are: {listing}.")
-        self._logger.info("Using %s image of %s version %s", img_type, sim_name,
-                          self.version)
+        self._logger.info("■ Using %s image of %s version %s", img_type,
+                          sim_name, self.version)
 
         suffix = "_dev" if self._use_dev else ""
         return f"docker://inductiva/kutu:{name}_v{self._version}" + suffix

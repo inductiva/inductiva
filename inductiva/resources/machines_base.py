@@ -258,7 +258,7 @@ class BaseMachineGroup:
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         logging.info("%s successfully started in %s.", self, creation_time)
-
+        logging.info("")
         logging.info("The machine group is using the following quotas:")
         self.log_quota_usage("used by resource")
         return True
@@ -354,17 +354,18 @@ class BaseMachineGroup:
 
         if not is_spot:
             logging.info(
-                " >> The same machine group with spot machines would cost "
+                "\t· The same machine group with spot machines would cost "
                 "%.1fx less. Specify "
                 "`spot=True` in the constructor to use spot machines.",
                 spot_times_cheaper,
             )
         else:
             logging.info(
-                " >> You are spending %.1fx less "
+                "\t· You are spending %.1fx less "
                 "by using spot machines.",
                 spot_times_cheaper,
             )
+        logging.info("")
 
     def status(self):
         """Returns the status of a machine group if it exists.
@@ -384,17 +385,17 @@ class BaseMachineGroup:
     def _log_machine_group_info(self):
         """Logs the machine group info."""
 
-        logging.info("> Name:         %s", self.name)
-        logging.info("> Machine Type: %s", self.machine_type)
-        logging.info("> Data disk size:    %s GB", self.data_disk_gb)
+        logging.info("\t· Name:                       %s", self.name)
+        logging.info("\t· Machine Type:               %s", self.machine_type)
+        logging.info("\t· Data disk size:             %s GB", self.data_disk_gb)
 
         # Log max idle time
         value_str = format_utils.timedelta_formatter(
             self.max_idle_time) if self.max_idle_time is not None else "N/A"
-        logging.info("> Maximum idle time: %s", value_str)
+        logging.info("\t· Maximum idle time:          %s", value_str)
 
         # Log auto terminate timestamp
         value_str = self.auto_terminate_ts.strftime(
             "%Y/%m/%d %H:%M:%S"
         ) if self.auto_terminate_ts is not None else "N/A"
-        logging.info("> Auto terminate timestamp: %s", value_str)
+        logging.info("\t· Auto terminate timestamp:   %s", value_str)

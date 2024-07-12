@@ -68,7 +68,9 @@ def _list_tasks(project_name, last_n, task_id, all_tasks: bool, fout: TextIO,
                                        header_formatters=header_formatters),
           file=fout,
           end="")
-
+    print(
+        "\nTo see more details about a task, "
+        "use `inductiva tasks info <task_id>`.",)
     return 0
 
 

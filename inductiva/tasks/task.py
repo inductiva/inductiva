@@ -454,40 +454,41 @@ class Task:
                     pass
                 elif status == models.TaskStatusCode.SUBMITTED:
                     logging.info(
-                        "Task %s successfully queued and waiting to be "
+                        "■ Task %s successfully queued and waiting to be "
                         "picked-up for execution...", self.id)
                 elif status == models.TaskStatusCode.STARTED:
                     logging.info(
-                        "Task %s has started and is now running "
+                        "■ Task %s has started and is now running "
                         "remotely.", self.id)
                 elif status == models.TaskStatusCode.SUCCESS:
-                    logging.info("Task %s completed successfully.", self.id)
+                    logging.info("■ Task %s completed successfully.", self.id)
                 elif status == models.TaskStatusCode.FAILED:
-                    logging.info("Task %s failed.", self.id)
+                    logging.info("■ Task %s failed.", self.id)
                 elif status == models.TaskStatusCode.PENDINGKILL:
-                    logging.info("Task %s is being killed.", self.id)
+                    logging.info("■ Task %s is being killed.", self.id)
                 elif status == models.TaskStatusCode.KILLED:
-                    logging.info("Task %s killed.", self.id)
+                    logging.info("■ Task %s killed.", self.id)
                 elif status == models.TaskStatusCode.ZOMBIE:
-                    logging.info("The machine was terminated while the task "
+                    logging.info("■ The machine was terminated while the task "
                                  "was pending.")
                 elif status == models.TaskStatusCode.EXECUTERFAILED:
                     info = self.get_info()
                     detail = info.executer.error_detail
-                    logging.info("The remote process running the task failed:")
+                    logging.info(
+                        "■ The remote process running the task failed:")
                     if detail:
-                        logging.info(" > Message: %s", detail)
+                        logging.info("\t· Message: %s", detail)
                     else:
-                        logging.info(" > No error message available.")
+                        logging.info("\t· No error message available.")
                 elif status == models.TaskStatusCode.SPOTINSTANCEPREEMPTED:
-                    msg = ("The task was preempted by the cloud provider.\n"
+                    msg = ("■ The task was preempted by the cloud provider.\n"
                            "Consider using non-spot machines by setting "
                            "`spot=False` when instantiating the machine group.")
                     logging.info(msg)
 
                 else:
                     logging.info(
-                        "An internal error occurred with status %s "
+                        "■ An internal error occurred with status %s "
                         "while performing the task.", status)
             prev_status = status
             if (status == models.TaskStatusCode.SUBMITTED and
