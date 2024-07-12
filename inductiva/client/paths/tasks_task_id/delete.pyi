@@ -25,46 +25,35 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.cost import Cost
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
-# Query params
-StartTsSchema = schemas.DateTimeSchema
-EndTsSchema = schemas.DateTimeSchema
-RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams',
+# Path params
+TaskIdSchema = schemas.StrSchema
+RequestRequiredPathParams = typing_extensions.TypedDict(
+    'RequestRequiredPathParams',
     {
-        'start_ts': typing.Union[StartTsSchema, str, datetime, ],
-        'end_ts': typing.Union[EndTsSchema, str, datetime, ],
+        'task_id': typing.Union[TaskIdSchema, str, ],
     }
 )
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams',
+RequestOptionalPathParams = typing_extensions.TypedDict(
+    'RequestOptionalPathParams',
     {
     },
     total=False
 )
 
 
-class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams):
+class RequestPathParams(RequestRequiredPathParams, RequestOptionalPathParams):
     pass
 
 
-request_query_start_ts = api_client.QueryParameter(
-    name="start_ts",
-    style=api_client.ParameterStyle.FORM,
-    schema=StartTsSchema,
+request_path_task_id = api_client.PathParameter(
+    name="task_id",
+    style=api_client.ParameterStyle.SIMPLE,
+    schema=TaskIdSchema,
     required=True,
-    explode=True,
 )
-request_query_end_ts = api_client.QueryParameter(
-    name="end_ts",
-    style=api_client.ParameterStyle.FORM,
-    schema=EndTsSchema,
-    required=True,
-    explode=True,
-)
-SchemaFor200ResponseBodyApplicationJson = Cost
+SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
 @dataclass
@@ -109,9 +98,9 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _get_cost_oapg(
+    def _delete_task_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -121,19 +110,19 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _get_cost_oapg(
+    def _delete_task_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _get_cost_oapg(
+    def _delete_task_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -143,36 +132,35 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _get_cost_oapg(
+    def _delete_task_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         """
-        Get Cost
+        Delete Task
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
-        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
+        self._verify_typed_dict_inputs_oapg(RequestPathParams, path_params)
         used_path = path.value
 
-        prefix_separator_iterator = None
+        _path_params = {}
         for parameter in (
-            request_query_start_ts,
-            request_query_end_ts,
+            request_path_task_id,
         ):
-            parameter_data = query_params.get(parameter.name, schemas.unset)
+            parameter_data = path_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
-            if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator()
-            serialized_data = parameter.serialize(parameter_data, prefix_separator_iterator)
-            for serialized_value in serialized_data.values():
-                used_path += serialized_value
+            serialized_data = parameter.serialize(parameter_data)
+            _path_params.update(serialized_data)
+
+        for k, v in _path_params.items():
+            used_path = used_path.replace('{%s}' % k, v)
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -182,7 +170,7 @@ class BaseApi(api_client.Api):
 
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='get'.upper(),
+            method='delete'.upper(),
             headers=_headers,
             auth_settings=_auth,
             stream=stream,
@@ -208,13 +196,13 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetCost(BaseApi):
+class DeleteTask(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_cost(
+    def delete_task(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -224,19 +212,19 @@ class GetCost(BaseApi):
     ]: ...
 
     @typing.overload
-    def get_cost(
+    def delete_task(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get_cost(
+    def delete_task(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -246,16 +234,16 @@ class GetCost(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get_cost(
+    def delete_task(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_cost_oapg(
-            query_params=query_params,
+        return self._delete_task_oapg(
+            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -263,13 +251,13 @@ class GetCost(BaseApi):
         )
 
 
-class ApiForget(BaseApi):
+class ApiFordelete(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def get(
+    def delete(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -279,19 +267,19 @@ class ApiForget(BaseApi):
     ]: ...
 
     @typing.overload
-    def get(
+    def delete(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get(
+    def delete(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -301,16 +289,16 @@ class ApiForget(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get(
+    def delete(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
+        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_cost_oapg(
-            query_params=query_params,
+        return self._delete_task_oapg(
+            path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

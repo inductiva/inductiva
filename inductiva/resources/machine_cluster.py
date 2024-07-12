@@ -66,7 +66,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         self.__spot = False
 
         if register:
-            logging.info("Registering MPICluster configurations:")
+            logging.info("■ Registering MPICluster configurations:")
             self._register_machine_group(num_vms=self.num_machines,
                                          is_elastic=self.__is_elastic,
                                          spot=self.__spot,
@@ -106,7 +106,7 @@ class MPICluster(machines_base.BaseMachineGroup):
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
-        logging.info("> Number of machines: %s", self.num_machines)
+        logging.info("\t· Number of machines:       %s", self.num_machines)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self):
@@ -120,6 +120,6 @@ class MPICluster(machines_base.BaseMachineGroup):
               dollars ($/h)."""
         #TODO: Contemplate disk size in the price.
         estimated_cost = super()._get_estimated_cost() * self.num_machines
-        logging.info("> Estimated cloud cost of the MPI cluster: %.3f $/h",
+        logging.info("\t· Estimated cloud cost of the MPI cluster: %.3f $/h",
                      estimated_cost)
         return estimated_cost

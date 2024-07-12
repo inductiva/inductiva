@@ -31,6 +31,9 @@ class User(schemas.DictSchema):
 
     class MetaOapg:
         required = {
+            "campaigns",
+            "tier",
+            "total_available_credits",
             "email",
             "username",
         }
@@ -38,6 +41,35 @@ class User(schemas.DictSchema):
         class properties:
             username = schemas.StrSchema
             email = schemas.StrSchema
+            total_available_credits = schemas.NumberSchema
+
+            @staticmethod
+            def tier() -> typing.Type['Tier']:
+                return Tier
+
+            class campaigns(schemas.ListSchema):
+
+                class MetaOapg:
+
+                    @staticmethod
+                    def items() -> typing.Type['Campaign']:
+                        return Campaign
+
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple['Campaign'],
+                                       typing.List['Campaign']],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                ) -> 'campaigns':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+
+                def __getitem__(self, i: int) -> 'Campaign':
+                    return super().__getitem__(i)
 
             class name(
                     schemas.ComposedSchema,):
@@ -96,12 +128,20 @@ class User(schemas.DictSchema):
                         **kwargs,
                     )
 
+            credits_currency = schemas.StrSchema
             __annotations__ = {
                 "username": username,
                 "email": email,
+                "total_available_credits": total_available_credits,
+                "tier": tier,
+                "campaigns": campaigns,
                 "name": name,
+                "credits_currency": credits_currency,
             }
 
+    campaigns: MetaOapg.properties.campaigns
+    tier: 'Tier'
+    total_available_credits: MetaOapg.properties.total_available_credits
     email: MetaOapg.properties.email
     username: MetaOapg.properties.username
 
@@ -119,8 +159,30 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["total_available_credits"]
+    ) -> MetaOapg.properties.total_available_credits:
+        ...
+
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["tier"]) -> 'Tier':
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["campaigns"]
+    ) -> MetaOapg.properties.campaigns:
+        ...
+
+    @typing.overload
+    def __getitem__(
             self, name: typing_extensions.Literal["name"]
     ) -> MetaOapg.properties.name:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["credits_currency"]
+    ) -> MetaOapg.properties.credits_currency:
         ...
 
     @typing.overload
@@ -130,7 +192,11 @@ class User(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "username",
         "email",
+        "total_available_credits",
+        "tier",
+        "campaigns",
         "name",
+        "credits_currency",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -149,8 +215,30 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["total_available_credits"]
+    ) -> MetaOapg.properties.total_available_credits:
+        ...
+
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["tier"]) -> 'Tier':
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["campaigns"]
+    ) -> MetaOapg.properties.campaigns:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["name"]
     ) -> typing.Union[MetaOapg.properties.name, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["credits_currency"]
+    ) -> typing.Union[MetaOapg.properties.credits_currency, schemas.Unset]:
         ...
 
     @typing.overload
@@ -162,7 +250,11 @@ class User(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "username",
         "email",
+        "total_available_credits",
+        "tier",
+        "campaigns",
         "name",
+        "credits_currency",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -171,6 +263,18 @@ class User(schemas.DictSchema):
         *_args: typing.Union[
             dict,
             frozendict.frozendict,
+        ],
+        campaigns: typing.Union[
+            MetaOapg.properties.campaigns,
+            list,
+            tuple,
+        ],
+        tier: 'Tier',
+        total_available_credits: typing.Union[
+            MetaOapg.properties.total_available_credits,
+            decimal.Decimal,
+            int,
+            float,
         ],
         email: typing.Union[
             MetaOapg.properties.email,
@@ -185,6 +289,8 @@ class User(schemas.DictSchema):
                            uuid.UUID, int, float, decimal.Decimal, bool, None,
                            list, tuple, bytes, io.FileIO, io.BufferedReader,
                            schemas.Unset] = schemas.unset,
+        credits_currency: typing.Union[MetaOapg.properties.credits_currency,
+                                       str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -194,9 +300,17 @@ class User(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
+            campaigns=campaigns,
+            tier=tier,
+            total_available_credits=total_available_credits,
             email=email,
             username=username,
             name=name,
+            credits_currency=credits_currency,
             _configuration=_configuration,
             **kwargs,
         )
+
+
+from inductiva.client.model.campaign import Campaign
+from inductiva.client.model.tier import Tier

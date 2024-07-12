@@ -7,17 +7,17 @@ Once you submit a simulation to the  API, a `Task` is generated.
 This allows for real-time updates on simulation status, including
 monitoring its progress and retrieving its outputs.
 
-In this reference, you will learn about the entire lifecycle of a `Task`, 
-including its creation, various operational states, and termination. This information 
+In this reference, you will learn about the entire lifecycle of a `Task`,
+including its creation, various operational states, and termination. This information
 is crucial to understand how the Inductiva API manages simulations.
 
 ## Task Creation
 
-A `Task` is created when you submit a simulation via the API by invoking the `run` 
-method on a simulator object. Each call to this method, even with identical arguments, 
+A `Task` is created when you submit a simulation via the API by invoking the `run`
+method on a simulator object. Each call to this method, even with identical arguments,
 generates a unique `Task`, leading to separate executions of the same simulation.
 
-Here's an example of how to create a `Task` by submitting a SpliSHSPlasH simulation 
+Here's an example of how to create a `Task` by submitting a SpliSHSPlasH simulation
 to the API:
 
 ```python
@@ -35,7 +35,7 @@ splishsplash_simulator = inductiva.simulators.SplishSplash()
 # Run the SPlisHSPlasH simulation with the required .json config file
 task = splishsplash_simulator.run(input_dir="splishsplash-input-example",
                                   sim_config_filename="config.json")
-print(task.id)  
+print(task.id)
 # Example output: i4ir3kvv62odsfrhko4y8w2an
 ```
 
@@ -45,14 +45,14 @@ input arguments would create a new, distinct task:
 ```python
 task2 = splishsplash_simulator.run(input_dir="splishsplash-example",
                                   sim_config_filename="config.json")
-print (task2.id)  
+print (task2.id)
 # Example output: k9muu1vq1fc6m2oyxm0n3n8y0
 ```
 
-Each `Task` is identified by a unique alphanumeric identifier. While you can 
-instantiate multiple `Task` objects pointing to the same task using this identifier, 
-this does not duplicate the task on the API. These objects refer to the same underlying 
-task. This mechanism is useful when you want to recreate a `Task` object to 
+Each `Task` is identified by a unique alphanumeric identifier. While you can
+instantiate multiple `Task` objects pointing to the same task using this identifier,
+this does not duplicate the task on the API. These objects refer to the same underlying
+task. This mechanism is useful when you want to recreate a `Task` object to
 retrieve information about tasks you created in previous sessions:
 
 ```python
@@ -73,22 +73,22 @@ i4ir3kvv62odsfrhko4y8w2an # Outputs the same task ID as task1.id
 ## Task Execution
 
 Tasks run **asynchronously** by default, enabling you to continue interacting with
-the API without interrupting your code in the background, even as tasks run or are 
-queued for execution. This asynchronous model also allows for batch submissions within 
-a single session without waiting for each to complete, with the API efficiently 
-distributing them across available computational resources for parallel processing. 
+the API without interrupting your code in the background, even as tasks run or are
+queued for execution. This asynchronous model also allows for batch submissions within
+a single session without waiting for each to complete, with the API efficiently
+distributing them across available computational resources for parallel processing.
 
-You can configure how to wait for the task to end by either using the `wait` method or 
-the `sync_context` manager. 
+You can configure how to wait for the task to end by either using the `wait` method or
+the `sync_context` manager.
 
 **`wait`**
 
 You can turn a task into a blocking call by using the `wait` method.
-This method will block the call, allowing your script to wait until the task comes 
-to a terminal status without affecting the remote simulation if it were locally 
-interrupted (ex. the script is abruptly terminated). 
+This method will block the call, allowing your script to wait until the task comes
+to a terminal status without affecting the remote simulation if it were locally
+interrupted (ex. the script is abruptly terminated).
 
-This is useful when you want to wait for the completion of a task before proceeding 
+This is useful when you want to wait for the completion of a task before proceeding
 with some other operation (ex. downloading the output files):
 
 ```python
@@ -99,8 +99,8 @@ task.wait()  # <- The remote simulation WILL NOT DIE if the local session is
 
 **`sync_context`**
 
-Alternatively, you can use the `sync_context` manager to ensure the remote simulation 
-terminates if your local session is interrupted while waiting for the `wait` call 
+Alternatively, you can use the `sync_context` manager to ensure the remote simulation
+terminates if your local session is interrupted while waiting for the `wait` call
 to return (e.g., through a Ctrl+C command):
 
 ```python
@@ -113,11 +113,11 @@ with task.sync_context():
 (task-lifecyle)=
 ## Task Lifecycle
 
-The status of a task changes as it progresses through its lifecycle. Understanding 
-these states is crucial if you want to track a task's progress through the API and 
-manage your simulations effectively. 
+The status of a task changes as it progresses through its lifecycle. Understanding
+these states is crucial if you want to track a task's progress through the API and
+manage your simulations effectively.
 
-The following diagram shows the path a task may take through the API, and identifies 
+The following diagram shows the path a task may take through the API, and identifies
 the relevant states and possible state transitions:
 
 
@@ -142,5 +142,7 @@ lead to a state transition:
 | `SPOT PREEMPTED` 	| Spot instances running the task were terminated. In this case, the task is re-queued or `SUBMITTED` until new resources with the same original machine group become available. 	|
 | `FAILED` 	| Simulator errors prevent completion, usually due to incorrect input configurations or an internal error within the simulator itself. 	|
 | `EXECUTOR TERMINATED` 	| The executor was terminated due to internal reasons. Similar to `SPOT PREEMPTED`, the task is requeued or `SUBMITTED` for execution. 	|
-| `EXECUTOR TERMINATED BY USER` 	| Similar to `KILLED`, the task's executor was terminated either by you or by system-enforced limits (generally when quota limits are reached). 	|
+| `EXECUTOR TERMINATED BY USER` 	| Similar to `KILLED`, the task's executor was terminated by you. 	|
+| `EXECUTOR TERMINATED TTL EXCEEDED` 	| The executor running the task was terminated due to exceeding its maximum time to live.   |
 | `EXECUTOR FAILED` 	| Executor errors prevent completion, such as low disk space. 	|
+| `TTL EXCEEDED` 	| The task exceeded its configured time to live, *i.e.*, a limit to the task's computation time when running in a shared resource.  |

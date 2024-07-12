@@ -26,11 +26,11 @@ class DummySimulator(simulators.Simulator):
         self.api_method_name = "tester.echo.run_simulation"
 
     def run(self,
-            input_dir: types.Path,
+            input_dir: str,
             input_filename: str,
             sleep_time: Optional[float] = 1,
             on: Optional[types.ComputationalResources] = None,
-            storage_dir: Optional[types.Path] = "",
+            storage_dir: Optional[str] = "",
             extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run a dummy simulation that echo's to a file.

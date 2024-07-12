@@ -28,12 +28,12 @@ class AmrWind(simulators.Simulator):
         return "AMR-Wind"
 
     def run(self,
-            input_dir: types.Path,
+            input_dir: str,
             sim_config_filename: str,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
             extra_metadata: Optional[dict] = None,
-            storage_dir: Optional[types.Path] = "",
+            storage_dir: Optional[str] = "",
             on: Optional[types.ComputationalResources] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.

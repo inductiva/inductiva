@@ -15,7 +15,7 @@ from dataclasses import dataclass
 
 from inductiva import constants
 from inductiva.client import exceptions, models
-from inductiva import api, types
+from inductiva import api
 from inductiva.client.apis.tags import tasks_api
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
@@ -251,12 +251,15 @@ class Task:
     """
 
     FAILED_STATUSES = {
-        models.TaskStatusCode.FAILED, models.TaskStatusCode.KILLED,
+        models.TaskStatusCode.FAILED,
+        models.TaskStatusCode.KILLED,
         models.TaskStatusCode.EXECUTERFAILED,
         models.TaskStatusCode.EXECUTERTERMINATED,
         models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
         models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
-        models.TaskStatusCode.ZOMBIE
+        models.TaskStatusCode.ZOMBIE,
+        models.TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED,
+        models.TaskStatusCode.TTLEXCEEDED,
     }
 
     TERMINAL_STATUSES = {models.TaskStatusCode.SUCCESS}.union(FAILED_STATUSES)
@@ -451,35 +454,41 @@ class Task:
                     pass
                 elif status == models.TaskStatusCode.SUBMITTED:
                     logging.info(
-                        "Task %s successfully queued and waiting to be "
+                        "■ Task %s successfully queued and waiting to be "
                         "picked-up for execution...", self.id)
                 elif status == models.TaskStatusCode.STARTED:
                     logging.info(
-                        "Task %s has started and is now running "
+                        "■ Task %s has started and is now running "
                         "remotely.", self.id)
                 elif status == models.TaskStatusCode.SUCCESS:
-                    logging.info("Task %s completed successfully.", self.id)
+                    logging.info("■ Task %s completed successfully.", self.id)
                 elif status == models.TaskStatusCode.FAILED:
-                    logging.info("Task %s failed.", self.id)
+                    logging.info("■ Task %s failed.", self.id)
                 elif status == models.TaskStatusCode.PENDINGKILL:
-                    logging.info("Task %s is being killed.", self.id)
+                    logging.info("■ Task %s is being killed.", self.id)
                 elif status == models.TaskStatusCode.KILLED:
-                    logging.info("Task %s killed.", self.id)
+                    logging.info("■ Task %s killed.", self.id)
                 elif status == models.TaskStatusCode.ZOMBIE:
-                    logging.info("The machine was terminated while the task "
+                    logging.info("■ The machine was terminated while the task "
                                  "was pending.")
                 elif status == models.TaskStatusCode.EXECUTERFAILED:
                     info = self.get_info()
                     detail = info.executer.error_detail
-                    logging.info("The remote process running the task failed:")
+                    logging.info(
+                        "■ The remote process running the task failed:")
                     if detail:
-                        logging.info(" > Message: %s", detail)
+                        logging.info("\t· Message: %s", detail)
                     else:
-                        logging.info(" > No error message available.")
+                        logging.info("\t· No error message available.")
+                elif status == models.TaskStatusCode.SPOTINSTANCEPREEMPTED:
+                    msg = ("■ The task was preempted by the cloud provider.\n"
+                           "Consider using non-spot machines by setting "
+                           "`spot=False` when instantiating the machine group.")
+                    logging.info(msg)
 
                 else:
                     logging.info(
-                        "An internal error occurred with status %s "
+                        "■ An internal error occurred with status %s "
                         "while performing the task.", status)
             prev_status = status
             if (status == models.TaskStatusCode.SUBMITTED and
@@ -657,21 +666,21 @@ class Task:
             files=output_files,
         )
 
-    def _contains_only_std_files(self, output_dir: types.Path) -> bool:
+    def _contains_only_std_files(self, output_dir: pathlib.Path) -> bool:
         """Check if the output archive contains only stdout and stderr files.
 
         Returns:
             True if the output archive contains only stdout and stderr files,
             False otherwise.
         """
-        output_files = list(pathlib.Path(output_dir).iterdir())
+        output_files = list(output_dir.iterdir())
         return all(
             file.name in self.STANDARD_OUTPUT_FILES for file in output_files)
 
     def download_outputs(
         self,
         filenames: Optional[List[str]] = None,
-        output_dir: Optional[types.Path] = None,
+        output_dir: Optional[str] = None,
         uncompress: bool = True,
         rm_downloaded_zip_archive: bool = True,
         rm_remote_files: bool = False,
@@ -733,12 +742,12 @@ class Task:
         if output_dir is None:
             output_dir = self.id
 
-        output_dir = files.resolve_output_path(output_dir)
+        output_dir_path = files.resolve_output_path(output_dir)
 
-        if (output_dir.exists() and
-                not self._contains_only_std_files(output_dir)):
+        if (output_dir_path.exists() and
+                not self._contains_only_std_files(output_dir_path)):
             warnings.warn("Path already exists, files may be overwritten.")
-        output_dir.mkdir(parents=True, exist_ok=True)
+        output_dir_path.mkdir(parents=True, exist_ok=True)
 
         download_message = "Downloading simulation outputs to %s..."
 
@@ -751,7 +760,7 @@ class Task:
                 data.download_partial_outputs(
                     download_url,
                     filenames,
-                    output_dir,
+                    output_dir_path,
                 )
             else:
                 logging.error("Partial download is not available.")
@@ -760,9 +769,9 @@ class Task:
             # will be skipped.
 
             logging.info("Partial download completed to %s.", output_dir)
-            return output_dir
+            return output_dir_path
 
-        zip_path = output_dir.joinpath("output.zip")
+        zip_path = output_dir_path.joinpath("output.zip")
         logging.info(download_message, zip_path)
 
         if file_server_available:
@@ -790,7 +799,7 @@ class Task:
 
         if uncompress:
             logging.info("Uncompressing the outputs to %s...", output_dir)
-            data.uncompress_task_outputs(zip_path, output_dir)
+            data.uncompress_task_outputs(zip_path, output_dir_path)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
 
@@ -803,7 +812,7 @@ class Task:
                 "Please inspect the stdout.txt and stderr.txt files at %s\n"
                 "For more information.", self.id, output_dir)
 
-        return output_dir
+        return output_dir_path
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""

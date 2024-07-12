@@ -19,7 +19,6 @@ import urllib3
 from absl import logging
 
 from .meta import is_tuple
-from inductiva.types import Path
 
 INPUT_FILENAME = "input.json"
 OUTPUT_FILENAME = "output.json"
@@ -129,7 +128,7 @@ def pack_input(params, type_annotations, zip_name) -> str:
     return zip_path
 
 
-def unpack_value(value: str, var_type, output_dir: Path):
+def unpack_value(value: str, var_type, output_dir: pathlib.Path):
     """Unpack a single output value return by the Web API.
 
     Unpack a single output value, returning it as the correct type
@@ -151,7 +150,7 @@ def unpack_value(value: str, var_type, output_dir: Path):
     return type(value)
 
 
-def unpack_output(result_list, output_dir: Path, return_type):
+def unpack_output(result_list, output_dir: pathlib.Path, return_type):
     """Transform outputs of a task executed in the API to the right objects.
 
     Args:
@@ -190,7 +189,7 @@ def extract_output(zip_path, output_dir):
 
 
 def extract_subdir_files(zip_fp: zipfile.ZipFile, dir_name: str,
-                         output_dir: Path):
+                         output_dir: pathlib.Path):
     """Util function to extract the contents of a directory in a ZIP archive.
 
     For instance, if a ZIP archive contains a directory called `dir_name`,
@@ -228,7 +227,7 @@ def zip_dir(dir_path, zip_name):
 
 
 def _extract_zip_file_to_output(
-    output_dir: Path,
+    output_dir: pathlib.Path,
     remove_zip_file: zipfile.ZipFile,
     filename: str,
     zip_path: str,
@@ -251,7 +250,7 @@ def _extract_zip_file_to_output(
 def download_partial_outputs(
     download_url: str,
     filenames: List[str],
-    output_dir: Path,
+    output_dir: pathlib.Path,
 ) -> None:
     """Download the partial outputs of a task.
 

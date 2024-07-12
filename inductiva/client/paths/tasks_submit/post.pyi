@@ -26,7 +26,7 @@ import frozendict  # noqa: F401
 from inductiva.client import schemas  # noqa: F401
 
 from inductiva.client.model.task_request import TaskRequest
-from inductiva.client.model.task_status import TaskStatus
+from inductiva.client.model.task_submitted_info import TaskSubmittedInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # body param
@@ -40,7 +40,7 @@ request_body_task_request = api_client.RequestBody(
     },
     required=True,
 )
-SchemaFor202ResponseBodyApplicationJson = TaskStatus
+SchemaFor202ResponseBodyApplicationJson = TaskSubmittedInfo
 
 
 @dataclass

@@ -183,7 +183,7 @@ Number of tasks ahead in the queue: 0
 Simulation metadata logged to: inductiva_output/task_metadata.json
 Task 9ob6gknv794pvazg5bzd4oczo configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
 Consider tracking the status of the task via CLI:
-	inductiva tasks list --task-id 9ob6gknv794pvazg5bzd4oczo
+	inductiva tasks list --id 9ob6gknv794pvazg5bzd4oczo
 Or, tracking the logs of the task via CLI:
 	inductiva logs 9ob6gknv794pvazg5bzd4oczo
 Task 9ob6gknv794pvazg5bzd4oczo successfully queued and waiting to be picked-up for execution...
