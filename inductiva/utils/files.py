@@ -150,7 +150,7 @@ def download_from_url(url: str, unzip: bool = False) -> str:
     # Unzip all files as they were zipped.
     if unzip and zipfile.is_zipfile(downloaded_to):
         local_path = local_path.with_suffix("")
-        logging.info("Uncompressing the downloaded file to: %s", local_path)
+        logging.info("■ Uncompressing the downloaded file to: %s", local_path)
         _unzip(downloaded_to)
-
+        logging.info("")
     return str(local_path.absolute())

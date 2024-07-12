@@ -149,6 +149,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         raise e
 
     logging.info("Local input directory successfully uploaded.")
+    logging.info("")
     os.remove(input_zip_path)
 
 
@@ -309,27 +310,28 @@ def log_task_info(
 ):
     """Logging the main components of a task submission."""
 
-    logging.info("Task Information:")
-    logging.info("> ID:                    %s", task_id)
+    logging.info("■ Task Information:")
+    logging.info("\t· ID:                    %s", task_id)
     if simulator is not None:
-        logging.info("> Simulator:             %s", simulator.name)
-        logging.info("> Version:               %s", simulator.version)
-        logging.info("> Image:                 %s", simulator.image_uri)
+        logging.info("\t· Simulator:             %s", simulator.name)
+        logging.info("\t· Version:               %s", simulator.version)
+        logging.info("\t· Image:                 %s", simulator.image_uri)
 
-    logging.info("> Local input directory: %s", params["sim_dir"])
-    logging.info("> Submitting to the following computational resources:")
+    logging.info("\t· Local input directory: %s", params["sim_dir"])
+    logging.info("\t· Submitting to the following computational resources:")
     if resource_pool is not None:
-        logging.info(" >> %s", resource_pool)
+        logging.info(" \t\t· %s", resource_pool)
     else:
-        logging.info(" >> Default queue with %s machines.",
+        logging.info(" \t\t· Default queue with %s machines.",
                      constants.DEFAULT_QUEUE_MACHINE_TYPE)
         ttl_seconds = task_submitted_info.get("time_to_live_seconds")
         if ttl_seconds is not None:
             logging.info(
-                (" >> Task will be killed after the computation time "
+                (" \t\t· Task will be killed after the computation time "
                  "exceeds %s (h:m:s)."),
                 format_utils.seconds_formatter(ttl_seconds),
             )
+    logging.info("")
 
 
 def submit_task(api_instance,
