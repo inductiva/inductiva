@@ -1,15 +1,42 @@
-# User Tiers, Capabilities and Quotas
+# Tiers, Capabilities and Quotas
 
-Users of the Inductiva API are subject to a set of rules that define the
-resources they can use and the limits they are subject to. These rules are
-defined by the user's tier, the set of capabilities they have access to, and the
-quotas that limit the amount of resources they can use.
+Each user is assigned to a specific tier, which comes with an associated number
+of credits. The tier defines the functionalities accessible to the user. Each tier
+is associated with quotas that establish limits on the computational resources a
+user can utilize.
+
+Credits are consumed based on the user's resource usage. This includes factors
+like computation time and the specific machine groups utilized. For example,
+running a simulation on a high-memory machine group will consume more credits
+than on a standard machine group. Users spend their credits on the resources and
+functionalities available within their tier. The credits continue to be consumed
+until they are either exhausted or reach their expiration date (if applicable).
+
+Real-time tracking of credit usage allows users to track and optimize their
+consumption efficiently and avoid unexpected shortfalls. Below in this doc are
+described the new methods and updated Console features that guarantee users have
+full visibility over their current tier and credits, as well as remaining credits.
+If a user attempts to access resources or functionalities that they are not allowed
+to due to their tier or have insufficient credits for, a clear message will be
+displayed. This notification will inform the user about the restriction and suggest
+possible actions, such as upgrading their tier or adjusting their resource usage.
+
+The shared queue remains accessible even if the user's credits have expired or been
+exhausted, ensuring uninterrupted access to basic computational resources.
+Tasks submitted to the shared queue do not consume credits, providing a reliable
+and cost-free option for running simulations.
+
+By understanding and managing their credits, users can optimize their resource usage
+ensuring they get the most value from their allocated credits while staying within
+their limits.
+
 In this document, we will explain how these rules are defined and how they
 affect the user's experience with the Inductiva API.
 
+
 ## Tiers
 
-The Inductiva API has four tiers: Freemium, Standard, Power-user, and Enterprise.
+The Inductiva API has four tiers: **Freemium**, **Standard**, **Power-user**, and **Enterprise**.
 The following table shows the main differences between these tiers:
 
 | Tier | Description |
@@ -21,6 +48,9 @@ The following table shows the main differences between these tiers:
 
 ## Capabilities
 
+Each tier comes with a set of capabilities that define the functionalities
+available to the user. The following table shows the main capabilities available
+in each tier:
 
 | Capability| Description | Freemium | Standard | Power-user | Enterprise |
 |-----------|-------------|----------|----------|------------|------------|
@@ -28,17 +58,17 @@ The following table shows the main differences between these tiers:
 | Allow tasks on dedicated machine group | Ability to launch and allocate a machine group, to be dedicated to the the user’s tasks. | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow the override of time to live for tasks | Ability to extend the maximum time that a task can stay running, delaying its automatic termination. | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow running "non Kutu" containers | Ability to specify the use of third-party docker containers that are defined/built outside the context of the KUTU repository. | ❌ | ❌ | ❌ | ✅ |
-| Allow use of the simulators - any version | Ability to run any version of all simulators available in Inductiva API | ✅︎ | ✅︎ | ✅︎ | ✅︎ |
+| Allow use of the simulators - any version | Ability to run any version of all [simulators available in Inductiva API](simulators) | ✅︎ | ✅︎ | ✅︎ | ✅︎ |
+| Allow the use of standard machine groups | Ability to allocate a machine pool with a fixed number of machines | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow the use of MPI cluster | Ability to allocate multiple machines configured as a single cluster for running parallelized simulations across multiple machines using MPI | ❌ | ❌ | ❌ | ✅︎ |
 | Allow the use of elastic clusters | Ability to dynamically allocate a machine pool with flexible sizing | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow the use of "spot" resources | Ability to request spot resources (typically machine groups) to run tasks. Spot resources are resources that can be preempted at any moment by the cloud provider at any moment | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow the use of "on demand" resources | Ability to request dedicated resources (typically machine groups) to run tasks. | ❌ | ✅︎ | ✅︎ | ✅︎ |
-| Automatically restart tasks interrupted by preemption | A task that was running in a “spot” instance that was preempted (taken back by cloud provider) will be  automatically resubmitted | ❌ | ❌ | ✅︎ | ✅︎ |
-| xxxx | xxxx | ❌ | ✅︎ | ✅︎ | ✅︎ |
+| Automatically restart tasks interrupted by preemption | A task that was running in a “spot” instance that was preempted (taken back by cloud provider) will be automatically resubmitted | ❌ | ❌ | ✅︎ | ✅︎ |
 
 ## Quotas
 
-| Quota | unit | scope | Description | Freemium | Standard | Power-user | Enterprise |
+| Quota | unit | scope* | Description | Freemium | Standard | Power-user | Enterprise |
 |-------|------|-------|-------------|----------|----------|------------|------------|
 | Maximum tasks per week | task | global |Total number of tasks ran in the last 7-days window, including the task to be submitted, must not exceed the quota limit| 30 | 300 | inf | inf |
 | Maximum number of VCPUs | vcpu | global | Total number of VCPUs across all running machine instances plus the number of VCPUs of the instance to be requested must not exceed the quota limit | N/A | 160 | 1000 | inf |
@@ -50,12 +80,16 @@ The following table shows the main differences between these tiers:
 | Maximum disk size | GB | instance | Maximum size of the disk that can be assigned to each individual machine in a machine group | N/A | 100 | 200 | inf |
 | Maximum amount of RAM per VCPU | GB | instance | Maximum amount of RAM per individual VCPU that can be used. Even though RAM is not specifiable per se, this quota constrains the machine types that can be requested | N/A | 4 | 6 | 8 |
 
+***NOTE:** _global_ quotas are applied to the user account and will encompass all
+machine groups and tasks submitted by the user.
+_Instance_ quotas are applied to each machine group and task and, therefore,
+are only applicable to each item individually.
 
-## FAQs:
+## FAQs
 
 **When are tiers, credits and quotas verified?**
 
-> Every time the user tries to register a MG or submits a task.
+> Every time the user tries to register a machine group or submits a task.
 
 ***When are credits subtracted from the user’s current amount?***
 
@@ -70,16 +104,13 @@ The following table shows the main differences between these tiers:
 
 ***What happens if a user tries accessing capabilities or resources that are not within their tier’s limits?***
 
-> The task is not executed and an error message is printed to the CLI. 
-> If it was caused by quota overpassing, the message explicitly informs which quota would be over the limit if the task would run, so that the user is able to act upon this information and reattempt to run the task.
-
-
+> The task is not executed and an error message is printed to the CLI.
+> If it was caused by quota overpassing, the message explicitly informs which quota would be over the limit if the task would run, so that the user is able to act upon this information and reattempt to run the task after changing the parameters.
 
 ## How to monitor your account details
 
-
-Inductiva's CLI provides an easy way to monitor your account details, and get
-information about your tier, credits and current quotas. Simply use 
+Inductiva's CLI provides an easy way to monitor your account details and get
+information about your tier, credits and current quotas. Simply use
 the command `inductiva user info`:
 
 ```bash
@@ -119,7 +150,7 @@ Username: <username here>
 
 ```
 
-This information is also available programatically through the python client:
+This information is also available programatically through the Python client:
 
 ```python
 import inductiva
@@ -129,11 +160,8 @@ inductiva.users.get_quotas() # <-- to get quotas
 
 ```
 
-
-
-
-
-
 If any of these quotas establish a limit for what you can achieve with Inductiva
 API, please [reach out to us](mailto:support@inductiva.ai) and we can better
 understand your needs.
+
+[simulators]: ../simulators/overview.md
