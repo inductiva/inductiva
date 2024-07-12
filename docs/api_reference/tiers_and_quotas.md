@@ -13,13 +13,13 @@ functionalities available within their tier. The credits continue to be consumed
 until they are either exhausted or reach their expiration date (if applicable).
 
 Real-time tracking of credit usage allows users to track and optimize their
-consumption efficiently and avoid unexpected shortfalls. Below in this doc are
-described the new methods and updated Console features that guarantee users have
-full visibility over their current tier and credits, as well as remaining credits.
-If a user attempts to access resources or functionalities that they are not allowed
-to due to their tier or have insufficient credits for, a clear message will be
-displayed. This notification will inform the user about the restriction and suggest
-possible actions, such as upgrading their tier or adjusting their resource usage.
+consumption efficiently and avoid unexpected shortfalls. Below we'll
+describe the new tools that guarantee that users have full visibility over their
+current tier and available credits. If a user attempts to access resources or
+functionalities that they are not allowed to due to their tier or have insufficient
+credits for, a clear message will be displayed. This notification will inform
+the user about the restriction and suggest possible actions, such as upgrading
+their tier or adjusting their resource usage.
 
 The shared queue remains accessible even if the user's credits have expired or been
 exhausted, ensuring uninterrupted access to basic computational resources.
@@ -32,7 +32,6 @@ their limits.
 
 In this document, we will explain how these rules are defined and how they
 affect the user's experience with the Inductiva API.
-
 
 ## Tiers
 
@@ -54,14 +53,14 @@ in each tier:
 
 | Capability| Description | Freemium | Standard | Power-user | Enterprise |
 |-----------|-------------|----------|----------|------------|------------|
-|Allow tasks on "default machine group" | Ability to submit tasks to the shared queue - machine group shared among all users that runs tasks in order of submission. | ✅︎ | ✅︎ |✅︎ |✅︎ |
+| Allow tasks on "default machine group" | Ability to submit tasks to the shared queue - machine group shared among all users that runs tasks in order of submission. | ✅︎ | ✅︎ |✅︎ |✅︎ |
 | Allow tasks on dedicated machine group | Ability to launch and allocate a machine group, to be dedicated to the the user’s tasks. | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow the override of time to live for tasks | Ability to extend the maximum time that a task can stay running, delaying its automatic termination. | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow running "non Kutu" containers | Ability to specify the use of third-party docker containers that are defined/built outside the context of the KUTU repository. | ❌ | ❌ | ❌ | ✅ |
 | Allow use of the simulators - any version | Ability to run any version of all [simulators available in Inductiva API](../simulators/overview.md) | ✅︎ | ✅︎ | ✅︎ | ✅︎ |
 | Allow the use of standard machine groups | Ability to allocate a machine pool with a fixed number of machines | ❌ | ✅︎ | ✅︎ | ✅︎ |
+| Allow the use of elastic clusters | Ability to dynamically allocate a machine pool with flexible sizing | ❌ | ❌ | ✅︎ | ✅︎ |
 | Allow the use of MPI cluster | Ability to allocate multiple machines configured as a single cluster for running parallelized simulations across multiple machines using MPI | ❌ | ❌ | ❌ | ✅︎ |
-| Allow the use of elastic clusters | Ability to dynamically allocate a machine pool with flexible sizing | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow the use of "spot" resources | Ability to request spot resources (typically machine groups) to run tasks. Spot resources are resources that can be preempted at any moment by the cloud provider at any moment | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow the use of "on demand" resources | Ability to request dedicated resources (typically machine groups) to run tasks. | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Automatically restart tasks interrupted by preemption | A task that was running in a “spot” instance that was preempted (taken back by cloud provider) will be automatically resubmitted | ❌ | ❌ | ✅︎ | ✅︎ |
@@ -150,7 +149,7 @@ Username: <username here>
 
 ```
 
-This information is also available programatically through the Python client:
+This information is also available programmatically through the Python client:
 
 ```python
 import inductiva
