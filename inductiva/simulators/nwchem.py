@@ -3,9 +3,9 @@
 from typing import Optional
 
 from inductiva import types, tasks, simulators
-from inductiva.utils import meta
 
 
+@simulators.simulator.mpi_enabled
 class NWChem(simulators.Simulator):
     """Class to invoke a generic NWChem simulation on the API."""
 
