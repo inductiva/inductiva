@@ -31,6 +31,17 @@ def test_input_functions_big_list(monkeypatch):
 
     l = [1, 2, 3, 4, 5, 6]
 
-    result = user_confirmation_prompt(l, "all", "unlisted", "listed", True)
+    result = user_confirmation_prompt(l, "all", "unlisted", "listed", False)
 
     assert result is False
+
+
+def test_input_functions_small_list(monkeypatch):
+
+    monkeypatch.setattr("builtins.input", lambda _: "yes")
+
+    l = [1, 2]
+
+    result = user_confirmation_prompt(l, "all", "unlisted", "listed", False)
+
+    assert result is True
