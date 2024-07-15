@@ -32,3 +32,20 @@ def get_quotas() -> Dict[str, Dict[str, Any]]:
     quotas = _fetch_quotas_from_api()
 
     return quotas
+
+
+def get_info() -> Dict[str, Any]:
+    """Get the user information.
+
+    This funtion gets the user information, including the user's name, email,
+    username, tier, programs, and total available credits.
+
+    Returns:
+        Dict with the user information.
+    """
+
+    api_config = api.get_api_config()
+    with (ApiClient(api_config)) as client:
+        api_instance = UsersApi(client)
+        request = api_instance.get_auth_user_info()
+    return request.body

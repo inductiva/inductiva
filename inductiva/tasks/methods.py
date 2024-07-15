@@ -5,11 +5,12 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Union
 
 import inductiva
 from inductiva import api
-from inductiva.client import ApiClient, ApiException
-from inductiva.client.apis.tags.tasks_api import TasksApi
+from inductiva import projects
 from inductiva.client import models
 from inductiva.tasks.task import Task
 from inductiva.utils import format_utils
+from inductiva.client import ApiClient, ApiException
+from inductiva.client.apis.tags.tasks_api import TasksApi
 
 
 def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
@@ -157,6 +158,27 @@ def get(
     ]
 
     return tasks
+
+
+def get_tasks(last_n: int = 10,
+              project: projects.Project = None,
+              status: Optional[Union[str, models.TaskStatusCode]] = None):
+    """Get the last N submitted tasks.
+
+        Get the last N submitted tasks, eventually filtered by status.
+        By default, only the last 10 submitted tasks are returned,
+        irrespectively of their status.
+
+        Args:
+            last_n (int): The number of tasks with repect to the submission
+                time to fectch. If `last_n<=0` we fetch all tasks submitted
+                to the project.
+            status: Status of the tasks to get. If `None`, tasks with any
+                status will be returned.
+        """
+    if last_n <= 0:
+        return inductiva.tasks.get_all(status=status, project=project)
+    return inductiva.tasks.get(last_n=last_n, status=status, project=project)
 
 
 def get_all(

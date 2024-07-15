@@ -18,7 +18,7 @@ from absl import logging
 import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
-from inductiva.client.models import TaskRequest, TaskStatus
+from inductiva.client.models import TaskRequest, TaskStatus, TaskSubmittedInfo
 from inductiva import types, constants
 from inductiva.resources.machine_types import ProviderType
 from inductiva.utils.data import (extract_output, get_validate_request_params,
@@ -43,7 +43,8 @@ def get_client() -> ApiClient:
     return ApiClient(api_config)
 
 
-def submit_request(api_instance: TasksApi, request: TaskRequest) -> TaskStatus:
+def submit_request(api_instance: TasksApi,
+                   request: TaskRequest) -> TaskSubmittedInfo:
     """Submits a task request to the API.
 
     Args:
@@ -148,13 +149,14 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         raise e
 
     logging.info("Local input directory successfully uploaded.")
+    logging.info("")
     os.remove(input_zip_path)
 
 
 def download_output(
         api_instance: TasksApi,
         task_id,
-        output_dir: Optional[types.Path] = None) -> Tuple[List, pathlib.Path]:
+        output_dir: Optional[str] = None) -> Tuple[List, pathlib.Path]:
     """Downloads the output of a given task from the API.
 
     Args:
@@ -299,23 +301,37 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def log_task_info(task_id, params, resource_pool, simulator):
+def log_task_info(
+    task_id,
+    params,
+    resource_pool,
+    simulator,
+    task_submitted_info: TaskSubmittedInfo,
+):
     """Logging the main components of a task submission."""
 
-    logging.info("Task Information:")
-    logging.info("> ID:                    %s", task_id)
+    logging.info("■ Task Information:")
+    logging.info("\t· ID:                    %s", task_id)
     if simulator is not None:
-        logging.info("> Simulator:             %s", simulator.name)
-        logging.info("> Version:               %s", simulator.version)
-        logging.info("> Image:                 %s", simulator.image_uri)
+        logging.info("\t· Simulator:             %s", simulator.name)
+        logging.info("\t· Version:               %s", simulator.version)
+        logging.info("\t· Image:                 %s", simulator.image_uri)
 
-    logging.info("> Local input directory: %s", params["sim_dir"])
-    logging.info("> Submitting to the following computational resources:")
+    logging.info("\t· Local input directory: %s", params["sim_dir"])
+    logging.info("\t· Submitting to the following computational resources:")
     if resource_pool is not None:
-        logging.info(" >> %s", resource_pool)
+        logging.info(" \t\t· %s", resource_pool)
     else:
-        logging.info(" >> Default queue with %s machines.",
+        logging.info(" \t\t· Default queue with %s machines.",
                      constants.DEFAULT_QUEUE_MACHINE_TYPE)
+        ttl_seconds = task_submitted_info.get("time_to_live_seconds")
+        if ttl_seconds is not None:
+            logging.info(
+                (" \t\t· Task will be killed after the computation time "
+                 "exceeds %s (h:m:s)."),
+                format_utils.seconds_formatter(ttl_seconds),
+            )
+    logging.info("")
 
 
 def submit_task(api_instance,
@@ -350,15 +366,21 @@ def submit_task(api_instance,
         project=current_project,
     )
 
-    task = submit_request(
+    task_submitted_info = submit_request(
         api_instance=api_instance,
         request=task_request,
     )
 
-    task_id = task["id"]
-    log_task_info(task_id, params, resource_pool, simulator)
+    task_id = task_submitted_info["id"]
+    log_task_info(
+        task_id,
+        params,
+        resource_pool,
+        simulator,
+        task_submitted_info,
+    )
 
-    if task["status"] == "pending-input":
+    if task_submitted_info["status"] == "pending-input":
 
         upload_input(
             api_instance=api_instance,

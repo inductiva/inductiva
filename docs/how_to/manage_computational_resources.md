@@ -25,7 +25,7 @@ information of each one either via Python or via the CLI.
 
 **Python**
 ```python
-inductiva.resources.machine_groups.list()
+inductiva.resources.machine_groups.get()
 ```
 
 **CLI**
@@ -37,10 +37,10 @@ One obtains for example the following information:
 ```
 Active Resources:
 
-       NAME                                MACHINE TYPE         ELASTIC         TYPE           # MACHINES         DATA SIZE IN GB         SPOT         STARTED AT (UTC)
-       api-23zssj6oq77xxsot3o0nhax3d       c2d-highmem-16       False           mpi            3                  70                      False        01 Feb, 12:30:06
-       api-45fetsr58okcs0x6j9m0vsi2z       c2-standard-4        True            standard       1/5                70                      False        01 Feb, 12:25:54
-       api-4kken08fnoxuu5zjjak6ak2xe       c2-standard-8        False           standard       2                  60                      True         01 Feb, 12:26:37
+ NAME                            MACHINE TYPE     ELASTIC     TYPE       # MACHINES     DATA SIZE IN GB     SPOT     STARTED AT (UTC)     IDLE TIME         MAX COST ($/HOUR)
+ api-3ejvh64mxuxnfcv3yxdhoyjuj   c2-standard-4    False       standard   5/5            50                  False    10 Jul, 16:23:00     0:04:15/0:30:00   1.4909
+ api-5014txg0rwx3jbbpf6y0ndzmv   c2d-highmem-16   False       mpi        3/3            10                  False    10 Jul, 16:22:04     0:05:12/0:30:00   3.27774
+ api-es9sjockjymvkwfmjioibfw8p   c2-standard-8    False       standard   2/2            60                  False    10 Jul, 16:23:25     0:03:50/0:30:00   1.08312
 ```
 
 ## Terminate the active computational resources

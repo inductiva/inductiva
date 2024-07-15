@@ -43,6 +43,7 @@ class Simulator(ABC):
         self._version = version
         self._use_dev = bool(use_dev)
         self._image_uri = self._get_image_uri()
+        self._logger.info("")
 
     @property
     def version(self):
@@ -84,8 +85,8 @@ class Simulator(ABC):
             raise ValueError(
                 f"Version {self.version} is not available for simulator {name}."
                 f" Available versions are: {listing}.")
-        self._logger.info("Using %s image of %s version %s", img_type, sim_name,
-                          self.version)
+        self._logger.info("■ Using %s image of %s version %s", img_type,
+                          sim_name, self.version)
 
         suffix = "_dev" if self._use_dev else ""
         return f"docker://inductiva/kutu:{name}_v{self._version}" + suffix
@@ -111,20 +112,20 @@ class Simulator(ABC):
 
         self.api_method_name = ".".join(all_elements)
 
-    def _setup_input_dir(self, input_dir: types.Path):
+    def _setup_input_dir(self, input_dir: str):
         """Setup the simulator input directory."""
-        input_dir = pathlib.Path(input_dir)
-        if not input_dir.is_dir():
+        input_dir_path = pathlib.Path(input_dir)
+        if not input_dir_path.is_dir():
             raise ValueError(
                 f"The provided path (\"{input_dir}\") is not a directory.")
-        return input_dir
+        return input_dir_path
 
     def run(
         self,
-        input_dir: types.Path,
+        input_dir: str,
         *_args,
         on: Optional[types.ComputationalResources] = None,
-        storage_dir: Optional[types.Path] = "",
+        storage_dir: Optional[str] = "",
         extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:
@@ -141,7 +142,7 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
-        input_dir = self._setup_input_dir(input_dir)
+        input_dir_path = self._setup_input_dir(input_dir)
 
         self.validate_computational_resources(on)
 
@@ -151,11 +152,11 @@ class Simulator(ABC):
 
         # Get the user-specified image name. If not specified,
         # use the default image name for the current simulator
-        container_image = kwargs.get("container_image", self._image_uri)
+        container_image = kwargs.pop("container_image", self._image_uri)
 
         return tasks.run_simulation(
             self.api_method_name,
-            input_dir,
+            input_dir_path,
             storage_dir=storage_dir,
             computational_resources=on,
             extra_metadata=extra_metadata,

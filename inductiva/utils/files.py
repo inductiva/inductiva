@@ -10,10 +10,9 @@ import zipfile
 from absl import logging
 
 import inductiva
-from inductiva import types
 
 
-def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
+def get_timestamped_path(path_str: str, sep: str = "-") -> pathlib.Path:
     """Return a path that does not exist by appending a timestamp.
 
     Args:
@@ -22,7 +21,7 @@ def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     Returns:
         A path that does not exist by appending the timestamp.
     """
-    path = pathlib.Path(path)
+    path = pathlib.Path(path_str)
     timestamp = time.strftime("%Y-%m-%dT%Hh%Mm%Ss")
 
     name = f"{path.stem}{sep}{timestamp}"
@@ -30,7 +29,7 @@ def get_timestamped_path(path: types.Path, sep: str = "-") -> pathlib.Path:
     return path.with_name(name + path.suffix)
 
 
-def get_path_size(path: types.Path) -> float:
+def get_path_size(path_str: str) -> float:
     """Return the size of a path in bytes.
     
     Args:
@@ -40,7 +39,7 @@ def get_path_size(path: types.Path) -> float:
         The size of the path in bytes.
     """
 
-    path = pathlib.Path(path)
+    path = pathlib.Path(path_str)
 
     if not path.exists():
         raise FileNotFoundError(f"Path '{path}' does not exist.")
@@ -59,7 +58,7 @@ def get_path_size(path: types.Path) -> float:
     return size
 
 
-def resolve_output_path(path: Optional[types.Path]) -> pathlib.Path:
+def resolve_output_path(path: Optional[str]) -> pathlib.Path:
     """Resolve a path relative to the output_dir
 
     Args:
@@ -151,7 +150,7 @@ def download_from_url(url: str, unzip: bool = False) -> str:
     # Unzip all files as they were zipped.
     if unzip and zipfile.is_zipfile(downloaded_to):
         local_path = local_path.with_suffix("")
-        logging.info("Uncompressing the downloaded file to: %s", local_path)
+        logging.info("■ Uncompressing the downloaded file to: %s", local_path)
         _unzip(downloaded_to)
-
+        logging.info("")
     return str(local_path.absolute())

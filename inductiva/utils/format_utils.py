@@ -27,7 +27,7 @@ tabulate._table_formats["inductiva"] = TableFormat(
 
 class Emphasis(Enum):
     RED = "\033[31m"
-    GREEN = "\033[92m"
+    GREEN = "\033[32m"
     BOLD = "\033[1m"
     RESET = "\033[0m"
 
@@ -102,6 +102,14 @@ def datetime_formatter(dt: str) -> str:
         return None
     local_dt = datetime.datetime.fromisoformat(dt).astimezone()
     return local_dt.strftime("%d %b, %H:%M:%S")
+
+
+def datetime_formatter_ymd_hm(dt: str) -> str:
+    # get time in local timezone
+    if dt is None:
+        return None
+    local_dt = datetime.datetime.fromisoformat(dt).astimezone()
+    return local_dt.strftime("%Y-%m-%d %H:%M")
 
 
 def seconds_formatter(secs: float) -> str:

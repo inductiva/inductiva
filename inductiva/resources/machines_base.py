@@ -14,8 +14,6 @@ import inductiva.client.models
 from inductiva import api, users
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
-from inductiva.client import exceptions
-from inductiva import logs
 
 from inductiva.resources import machine_types
 
@@ -99,12 +97,19 @@ class BaseMachineGroup:
         return self._name
 
     @property
-    def max_idle_time(self):
+    def max_idle_time(self) -> datetime.timedelta:
         return self._max_idle_time
 
     @property
     def auto_terminate_ts(self):
         return self._auto_terminate_ts
+
+    @property
+    def idle_time(self) -> datetime.timedelta:
+        """
+        Resource idle time in seconds.
+        """
+        return self._idle_seconds
 
     @staticmethod
     def _timedelta_to_seconds(
@@ -164,19 +169,11 @@ class BaseMachineGroup:
             **kwargs,
         )
 
-        try:
-            resp = self._api.register_vm_group(
-                body=instance_group_config,
-                skip_deserialization=True,
-            )
-            body = json.loads(resp.response.data)
-        except (exceptions.ApiValueError, exceptions.ApiException) as e:
-            logs.log_and_exit(
-                logging.getLogger(),
-                logging.ERROR,
-                "Registering machine group failed with exception %s",
-                e,
-                exc_info=e)
+        resp = self._api.register_vm_group(
+            body=instance_group_config,
+            skip_deserialization=True,
+        )
+        body = json.loads(resp.response.data)
 
         self._id = body["id"]
         self._name = body["name"]
@@ -186,6 +183,8 @@ class BaseMachineGroup:
         # from the API response if they were not provided by the user
         self._max_idle_time = self._seconds_to_timedelta(
             body.get("max_idle_time"))
+        self._idle_seconds = self._seconds_to_timedelta(
+            body.get("idle_seconds"))
         self._auto_terminate_ts = self._iso_to_datetime(
             body.get("auto_terminate_ts"))
         self._log_machine_group_info()
@@ -216,6 +215,8 @@ class BaseMachineGroup:
         machine_group.quota_usage = resp.get("quota_usage") or {}
         machine_group._max_idle_time = cls._seconds_to_timedelta(
             resp.get("max_idle_time"))
+        machine_group._idle_seconds = cls._seconds_to_timedelta(
+            resp.get("idle_seconds"))
         machine_group._auto_terminate_ts = cls._iso_to_datetime(
             resp.get("auto_terminate_ts"))
 
@@ -253,20 +254,11 @@ class BaseMachineGroup:
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
-
-        try:
-
-            self._api.start_vm_group(body=request_body)
-        except inductiva.client.ApiException as e:
-            logs.log_and_exit(logging.getLogger(),
-                              logging.ERROR,
-                              "Starting machine group failed with exception %s",
-                              e,
-                              exc_info=e)
+        self._api.start_vm_group(body=request_body)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         logging.info("%s successfully started in %s.", self, creation_time)
-
+        logging.info("")
         logging.info("The machine group is using the following quotas:")
         self.log_quota_usage("used by resource")
         return True
@@ -301,7 +293,7 @@ class BaseMachineGroup:
         except inductiva.client.ApiException as api_exception:
             raise api_exception
 
-    def _get_estimated_cost(self, spot: bool = False) -> float:
+    def _get_estimated_cost(self, spot: bool = True) -> float:
         """Returns estimate cost of a single machine in the group.
 
         This method is an overlay of the more general method, but
@@ -323,7 +315,6 @@ class BaseMachineGroup:
 
     def log_quota_usage(self, resource_usage_header: str):
         quotas = users.get_quotas()
-
         table = defaultdict(list)
         emph_formatter = format_utils.get_ansi_formatter()
 
@@ -332,10 +323,11 @@ class BaseMachineGroup:
         ]
 
         for name, value in self.quota_usage.items():
-            in_use = quotas.get(name, {}).get("in_use", "n/a")
             max_allowed = quotas.get(name, {}).get("max_allowed", "n/a")
+            full_name = quotas.get(name, {}).get("label", "n/a")
+            in_use = quotas.get(name, {}).get("in_use", "n/a")
 
-            table[""].append(name)
+            table[""].append(full_name)
             table[resource_usage_header].append(value)
             table["current usage"].append(in_use)
             table["max allowed"].append(max_allowed)
@@ -358,21 +350,22 @@ class BaseMachineGroup:
         non_spot_cost = self._get_estimated_cost(False)
         spot_times_cheaper = round(non_spot_cost / spot_cost, 2)
 
-        is_spot = getattr(self, "spot", False)
+        is_spot = getattr(self, "spot", True)
 
         if not is_spot:
             logging.info(
-                " >> The same machine group with spot machines would cost "
+                "\t· The same machine group with spot machines would cost "
                 "%.1fx less. Specify "
                 "`spot=True` in the constructor to use spot machines.",
                 spot_times_cheaper,
             )
         else:
             logging.info(
-                " >> You are spending %.1fx less "
+                "\t· You are spending %.1fx less "
                 "by using spot machines.",
                 spot_times_cheaper,
             )
+        logging.info("")
 
     def status(self):
         """Returns the status of a machine group if it exists.
@@ -392,17 +385,17 @@ class BaseMachineGroup:
     def _log_machine_group_info(self):
         """Logs the machine group info."""
 
-        logging.info("> Name:         %s", self.name)
-        logging.info("> Machine Type: %s", self.machine_type)
-        logging.info("> Data disk size:    %s GB", self.data_disk_gb)
+        logging.info("\t· Name:                       %s", self.name)
+        logging.info("\t· Machine Type:               %s", self.machine_type)
+        logging.info("\t· Data disk size:             %s GB", self.data_disk_gb)
 
         # Log max idle time
         value_str = format_utils.timedelta_formatter(
             self.max_idle_time) if self.max_idle_time is not None else "N/A"
-        logging.info("> Maximum idle time: %s", value_str)
+        logging.info("\t· Maximum idle time:          %s", value_str)
 
         # Log auto terminate timestamp
         value_str = self.auto_terminate_ts.strftime(
             "%Y/%m/%d %H:%M:%S"
         ) if self.auto_terminate_ts is not None else "N/A"
-        logging.info("> Auto terminate timestamp: %s", value_str)
+        logging.info("\t· Auto terminate timestamp:   %s", value_str)

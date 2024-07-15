@@ -7,7 +7,6 @@ from inductiva._cli import loader, utils
 
 
 def register(root_parser):
-
     parser = root_parser.add_parser(
         "quotas",
         help="Quotas management utilities.",

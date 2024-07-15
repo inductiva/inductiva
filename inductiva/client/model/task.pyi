@@ -375,6 +375,84 @@ class Task(
                     )
             
             
+            class cost(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    any_of_0 = schemas.NumberSchema
+                    any_of_1 = schemas.NoneSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'cost':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
+            class storage_size(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    any_of_0 = schemas.IntSchema
+                    any_of_1 = schemas.NoneSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'storage_size':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+            
+            
             class metrics(
                 schemas.ComposedSchema,
             ):
@@ -462,6 +540,8 @@ class Task(
                 "computation_start_time": computation_start_time,
                 "computation_end_time": computation_end_time,
                 "end_time": end_time,
+                "cost": cost,
+                "storage_size": storage_size,
                 "metrics": metrics,
                 "executer": executer,
             }
@@ -508,6 +588,12 @@ class Task(
     def __getitem__(self, name: typing_extensions.Literal["end_time"]) -> MetaOapg.properties.end_time: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["cost"]) -> MetaOapg.properties.cost: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["storage_size"]) -> MetaOapg.properties.storage_size: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["metrics"]) -> MetaOapg.properties.metrics: ...
     
     @typing.overload
@@ -516,7 +602,7 @@ class Task(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "project", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "metrics", "executer", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "project", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "cost", "storage_size", "metrics", "executer", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -558,6 +644,12 @@ class Task(
     def get_item_oapg(self, name: typing_extensions.Literal["end_time"]) -> typing.Union[MetaOapg.properties.end_time, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["cost"]) -> typing.Union[MetaOapg.properties.cost, schemas.Unset]: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["storage_size"]) -> typing.Union[MetaOapg.properties.storage_size, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["metrics"]) -> typing.Union[MetaOapg.properties.metrics, schemas.Unset]: ...
     
     @typing.overload
@@ -566,7 +658,7 @@ class Task(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "project", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "metrics", "executer", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "project", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "cost", "storage_size", "metrics", "executer", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -585,6 +677,8 @@ class Task(
         computation_start_time: typing.Union[MetaOapg.properties.computation_start_time, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         computation_end_time: typing.Union[MetaOapg.properties.computation_end_time, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         end_time: typing.Union[MetaOapg.properties.end_time, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        cost: typing.Union[MetaOapg.properties.cost, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        storage_size: typing.Union[MetaOapg.properties.storage_size, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         metrics: typing.Union[MetaOapg.properties.metrics, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         executer: typing.Union[MetaOapg.properties.executer, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -605,6 +699,8 @@ class Task(
             computation_start_time=computation_start_time,
             computation_end_time=computation_end_time,
             end_time=end_time,
+            cost=cost,
+            storage_size=storage_size,
             metrics=metrics,
             executer=executer,
             _configuration=_configuration,

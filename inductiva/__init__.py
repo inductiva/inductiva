@@ -10,6 +10,7 @@ import absl
 from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.configuration import Configuration
 from inductiva.client.exceptions import ApiException
+from inductiva._cli.cmd_user.info import get_info
 from inductiva.client.api_client import ApiClient
 
 from . import simulators
@@ -41,7 +42,7 @@ absl.logging.set_verbosity(absl.logging.INFO)
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.7.3"
+__version__ = "0.8.0"
 
 
 def set_output_dir(new_output_dir):
@@ -165,6 +166,20 @@ def _supports_ansi():
                    "isatty") and sys.stdout.isatty() and not user_disable_ansi
 
 
+def _check_user_credits():
+
+    if utils.format_utils.getenv_bool("GITHUB_ACTIONS", False):
+        return
+
+    # Determine if we are importing from cli or script file
+    caller = sys.argv[0]
+    if not caller.endswith(("inductiva", "inductiva.exe")):
+        # Only print credits info if called from script file
+        get_info(None, sys.stdout)
+
+
 _ansi_enabled = _supports_ansi()
 
 _set_key_and_check_version()
+
+_check_user_credits()

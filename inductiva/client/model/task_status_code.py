@@ -48,6 +48,7 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
             "zombie": "ZOMBIE",
             "computation-started": "COMPUTATIONSTARTED",
             "computation-ended": "COMPUTATIONENDED",
+            "ttl-exceeded": "TTLEXCEEDED",
         }
 
     @schemas.classproperty
@@ -109,3 +110,7 @@ class TaskStatusCode(schemas.EnumBase, schemas.StrSchema):
     @schemas.classproperty
     def COMPUTATIONENDED(cls):
         return cls("computation-ended")
+
+    @schemas.classproperty
+    def TTLEXCEEDED(cls):
+        return cls("ttl-exceeded")

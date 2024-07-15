@@ -23,7 +23,7 @@ def run_simulation(
     input_dir: pathlib.Path,
     computational_resources: Optional[types.ComputationalResources] = None,
     provider_id: Optional[Union[ProviderType, str]] = ProviderType.GCP,
-    storage_dir: Optional[types.Path] = "",
+    storage_dir: Optional[str] = "",
     api_invoker=None,
     extra_metadata=None,
     simulator=None,
@@ -55,12 +55,11 @@ def run_simulation(
                           storage_path_prefix=storage_dir,
                           provider_id=provider_id,
                           simulator=simulator)
-
     if computational_resources is not None:
-        logging.info("Task %s submitted to the queue of the %s.", task_id,
+        logging.info("■ Task %s submitted to the queue of the %s.", task_id,
                      computational_resources)
     else:
-        logging.info("Task %s submitted to the default queue.", task_id)
+        logging.info("■ Task %s submitted to the default queue.", task_id)
 
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
@@ -81,7 +80,7 @@ def run_simulation(
         metadata = {
             "api_method_name": api_method_name.split(".")[1],
             "machine_group_id": machine_group_id,
-            "storage_dir": str(storage_dir),
+            "storage_dir": storage_dir,
             **kwargs,
         }
         if extra_metadata is not None:
@@ -101,12 +100,16 @@ def run_simulation(
             TASK_METADATA_FILENAME)
 
     logging.info(
-        "Consider tracking the status of the task via CLI:"
-        "\n\tinductiva tasks list --task-id %s", task_id)
+        "· Consider tracking the status of the task via CLI:"
+        "\n\tinductiva tasks list --id %s", task_id)
     logging.info(
-        "Or, tracking the logs of the task via CLI:"
+        "· Or, tracking the logs of the task via CLI:"
         "\n\tinductiva logs %s", task_id)
-
+    logging.info(
+        "· You can also get more information "
+        "about the task via the CLI command:"
+        "\n\tinductiva tasks info %s", task_id)
+    logging.info("")
     return task
 
 
