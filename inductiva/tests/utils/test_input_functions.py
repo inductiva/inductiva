@@ -23,3 +23,14 @@ def test_input_functions_not_confirm(monkeypatch):
     result = user_confirmation_prompt(l, "all", "unlisted", "listed", True)
 
     assert result is False
+
+
+def test_input_functions_big_list(monkeypatch):
+
+    monkeypatch.setattr("builtins.input", lambda _: "no")
+
+    l = [1, 2, 3, 4, 5, 6]
+
+    result = user_confirmation_prompt(l, "all", "unlisted", "listed", True)
+
+    assert result is False
