@@ -67,7 +67,7 @@ jobs:
     - name: Coverage report
       if: ${{ always() }}
       run: | # conftest crashes with coverage due to markdown-docs
-        coverage run --source=./inductiva -m pytest --noconftest
+        coverage run --source=./inductiva --omit="*/_cli*","*/client*" -m pytest --noconftest
         coverage report -m
     - name: Generate badge
       if: github.ref == 'refs/heads/main'
