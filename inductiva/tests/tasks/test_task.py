@@ -231,7 +231,7 @@ task_info_dic = {
         "vm_type": "e2-standard-4",
         "vm_name": "default-machine-group-dm1l",
         "host_type": "GCP",
-        "error_detail": None
+        "error_detail": "test error detail"
     }
 }
 
@@ -297,7 +297,7 @@ def test_repr_():
     # pylint: disable=c2801
     result = task_info.__repr__()
     assert ("Container image download:  N/A (used cached image)" in result and
-            "52.24 MB" in result)
+            "52.24 MB" in result and "test error detail" in result)
 
 
 def test_str_():
@@ -306,7 +306,7 @@ def test_str_():
     result = task_info.__str__()
     print(result)
     assert ("Container image download:  N/A (used cached image)" in result and
-            "52.24 MB" in result)
+            "52.24 MB" in result and "test error detail" in result)
 
 
 @pytest.mark.parametrize("get_status_response,expected_result", [
@@ -374,3 +374,10 @@ def test_get_status(status, status_code, tasks_ahead):
         result = task.get_status()
         # pylint: disable=W0212
         assert (task._tasks_ahead == tasks_ahead and result == status_code)
+
+def test_get_status_terminal():
+    task = inductiva.tasks.Task("123")
+    # pylint: disable=W0212
+    task._status = TaskStatusCode.KILLED
+    result = task.get_status()
+    assert result == TaskStatusCode.KILLED
