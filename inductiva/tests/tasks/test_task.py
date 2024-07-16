@@ -10,9 +10,12 @@ import inductiva.client
 from inductiva.client.model.task_status_code import TaskStatusCode
 
 import inductiva.client.paths
+import inductiva.client.paths.tasks_task_id
 from inductiva.client.paths.tasks_task_id_input.put import ApiResponseFor200
 
 import inductiva.client.paths.tasks_task_id_output_list.get as output_list_get
+import inductiva.client.paths.tasks_task_id_position_in_queue
+import inductiva.client.paths.tasks_task_id_position_in_queue.get
 import inductiva.client.paths.tasks_task_id_status
 import inductiva.client.paths.tasks_task_id_status.get
 from inductiva.tasks.task import TaskInfo
@@ -235,6 +238,29 @@ task_info_dic = {
     }
 }
 
+task_info_bytes = (
+    b'{"task_id":"6gpbvrxr46dvm8p7i1hcjt419",'
+    b'"status":"success","method_name":"amrWind.amrWind.run_simulation",'
+    b'"storage_path":null,"container_image":'
+    b'"docker://inductiva/kutu:amr-wind_v1.4.0","project":"user1",'
+    b'"create_time":"2024-07-16T15:07:58.211579+00:00","input_submit_time"'
+    b':"2024-07-16T15:07:58.817154+00:00","start_time":'
+    b'"2024-07-16T15:07:58.819051+00:00","computation_start_time":'
+    b'"2024-07-16T15:07:58.998724+00:00","computation_end_time":'
+    b'"2024-07-16T15:08:05.166285+00:00","end_time":'
+    b'"2024-07-16T15:08:06.932283+00:00","cost":0.0082,"storage_size":1243,'
+    b'"metrics":{"total_seconds":8,"container_image_download_seconds":null,'
+    b'"queue_time_seconds":0.002,"computation_seconds":6.168,'
+    b'"input_upload_seconds":0.603,"input_download_seconds":0.084,'
+    b'"input_decompression_seconds":0.001,"output_compression_seconds":1.4,'
+    b'"output_upload_seconds":0.248,"input_zipped_size_bytes":1437,'
+    b'"input_size_bytes":11294,"output_total_files":44,"output_size_bytes":'
+    b'52241740,"output_zipped_size_bytes":12747906},"executer":{"uuid":'
+    b'"4dbc0ffc-5d23-4365-88b9-7571be845dd3","cpu_count_logical":32,'
+    b'"cpu_count_physical":16,"memory":135081934,"n_mpi_hosts":0,"vm_type":'
+    b'"c2d-standard-32","vm_name":"api-tfmpeknbb41jc6k6n31haewff-7vz2",'
+    b'"host_type":"GCP","error_detail":null}}')
+
 
 def test_taskinfo_innit():
 
@@ -358,8 +384,8 @@ def test_from_api_info():
     ("failed", TaskStatusCode.FAILED, 0),
 ])
 def test_get_status(status, status_code, tasks_ahead):
-    get_task_return = mock.MagicMock()
-    get_task_return.body = {
+    get_task_status_return = mock.MagicMock()
+    get_task_status_return.body = {
         "id": "6gpbvrxr46dvm8p7i1hcjt419",
         "status": status,
         "position_in_queue": {
@@ -369,11 +395,12 @@ def test_get_status(status, status_code, tasks_ahead):
     with mock.patch(
             "inductiva.client.paths.tasks_task_id_status.get."
             "GetTaskStatus.get_task_status",
-            return_value=get_task_return):
+            return_value=get_task_status_return):
         task = inductiva.tasks.Task("123")
         result = task.get_status()
         # pylint: disable=W0212
         assert (task._tasks_ahead == tasks_ahead and result == status_code)
+
 
 def test_get_status_terminal():
     task = inductiva.tasks.Task("123")
@@ -381,3 +408,55 @@ def test_get_status_terminal():
     task._status = TaskStatusCode.KILLED
     result = task.get_status()
     assert result == TaskStatusCode.KILLED
+
+
+@pytest.mark.parametrize("tasks_ahead", [
+    (1),
+    (2),
+    (3),
+    (4),
+    (0),
+])
+def test_get_position_in_queue(tasks_ahead):
+    get_task_position_return = mock.MagicMock()
+    get_task_position_return.body = {"tasks_ahead": tasks_ahead}
+    with mock.patch(
+            "inductiva.client.paths.tasks_task_id_position_in_queue.get"
+            ".GetTaskPositionInQueue.get_task_position_in_queue",
+            return_value=get_task_position_return):
+        task = inductiva.tasks.Task("123")
+        result = task.get_position_in_queue()
+        assert result == tasks_ahead
+
+
+def test_get_position_in_queue_exception():
+    with mock.patch(
+            "inductiva.client.paths.tasks_task_id_position_in_queue.get"
+            ".GetTaskPositionInQueue.get_task_position_in_queue",
+            side_effect=exceptions.ApiException(404, "Not Found")):
+        task = inductiva.tasks.Task("123")
+        result = task.get_position_in_queue()
+        assert result is None
+
+
+def test_get_info():
+    get_task_return = mock.MagicMock()
+    get_task_return.response.data = task_info_bytes
+    with mock.patch("inductiva.client.paths.tasks_task_id.get.GetTask.get_task",
+                    return_value=get_task_return):
+        task = inductiva.tasks.Task("123")
+        info = task.get_info()
+
+        assert info.task_id == "6gpbvrxr46dvm8p7i1hcjt419"
+
+
+def test_info_property_none():
+    get_task_return = mock.MagicMock()
+    get_task_return.response.data = task_info_bytes
+    with mock.patch("inductiva.client.paths.tasks_task_id.get.GetTask.get_task",
+                    return_value=get_task_return):
+        task = inductiva.tasks.Task("123")
+        # pylint: disable=W0212
+        task._info = None
+        info = task.info
+        assert info.task_id == "6gpbvrxr46dvm8p7i1hcjt419"
