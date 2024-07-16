@@ -9,6 +9,7 @@ from inductiva.client.model.task_status_code import TaskStatusCode
 from inductiva.client.paths.tasks_task_id_input.put import ApiResponseFor200
 
 import inductiva.client.paths.tasks_task_id_output_list.get as output_list_get
+from inductiva.tasks.task import TaskInfo
 
 
 def test_task_kill__string_timeout__typeerror_exception():
@@ -182,3 +183,53 @@ def test__get_output_info():
     assert output_info.n_files == 2
     assert output_info.total_size_bytes == 320
     assert output_info.total_compressed_size_bytes == 150
+
+
+def test_taskinfo_innit():
+    dic = {
+        "task_id": "gfuhdirkeqypp3b5cb6ped1re",
+        "status": "success",
+        "method_name": "amrWind.amrWind.run_simulation",
+        "storage_path": None,
+        "container_image": "docker://inductiva/kutu:amr-wind_v1.4.0",
+        "project": "pbarbosaaa788d1b",
+        "create_time": "2024-07-12T09:57:58.111714+00:00",
+        "input_submit_time": "2024-07-12T09:57:58.664646+00:00",
+        "start_time": "2024-07-12T09:57:58.666103+00:00",
+        "computation_start_time": "2024-07-12T09:57:58.773196+00:00",
+        "computation_end_time": "2024-07-12T09:58:03.895437+00:00",
+        "end_time": "2024-07-12T09:58:05.868836+00:00",
+        "cost": 0.00016,
+        "storage_size": 12763590,
+        "metrics": {
+            "total_seconds": 7.757,
+            "container_image_download_seconds": None,
+            "queue_time_seconds": 0.001,
+            "computation_seconds": 5.122,
+            "input_upload_seconds": 0.55,
+            "input_download_seconds": 0.081,
+            "input_decompression_seconds": 0.003,
+            "output_compression_seconds": 1.63,
+            "output_upload_seconds": 0.309,
+            "input_zipped_size_bytes": 1437,
+            "input_size_bytes": 11294,
+            "output_total_files": 92,
+            "output_size_bytes": 52241441,
+            "output_zipped_size_bytes": 12762153
+        },
+        "executer": {
+            "uuid": "d53a581f-f796-4e8d-8e93-104fc747352a",
+            "cpu_count_logical": 4,
+            "cpu_count_physical": 2,
+            "memory": 16785870848,
+            "n_mpi_hosts": 0,
+            "vm_type": "e2-standard-4",
+            "vm_name": "default-machine-group-dm1l",
+            "host_type": "GCP",
+            "error_detail": None
+        }
+    }
+
+    task_info = TaskInfo(**dic)
+
+    assert task_info.task_id == "gfuhdirkeqypp3b5cb6ped1re"
