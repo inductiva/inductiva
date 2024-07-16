@@ -1,14 +1,20 @@
 """Test file for Tasks class."""
+from unittest import mock
+
 import inductiva
 import pytest
 from unittest.mock import Mock
 from inductiva import constants
 from inductiva.client import exceptions
+import inductiva.client
 from inductiva.client.model.task_status_code import TaskStatusCode
 
+import inductiva.client.paths
 from inductiva.client.paths.tasks_task_id_input.put import ApiResponseFor200
 
 import inductiva.client.paths.tasks_task_id_output_list.get as output_list_get
+import inductiva.client.paths.tasks_task_id_status
+import inductiva.client.paths.tasks_task_id_status.get
 from inductiva.tasks.task import TaskInfo
 
 
@@ -284,3 +290,87 @@ def test_format_data_metric():
     result_not_bytes = task_info._format_data_metric("hello world", 123)
 
     assert result_bytes == "123 B" and result_not_bytes == 123
+
+
+def test_repr_():
+    task_info = TaskInfo(**task_info_dic)
+    # pylint: disable=c2801
+    result = task_info.__repr__()
+    assert ("Container image download:  N/A (used cached image)" in result and
+            "52.24 MB" in result)
+
+
+def test_str_():
+    task_info = TaskInfo(**task_info_dic)
+    # pylint: disable=c2801
+    result = task_info.__str__()
+    print(result)
+    assert ("Container image download:  N/A (used cached image)" in result and
+            "52.24 MB" in result)
+
+
+@pytest.mark.parametrize("get_status_response,expected_result", [
+    (TaskStatusCode.PENDINGINPUT, False),
+    (TaskStatusCode.PENDINGKILL, False),
+    (TaskStatusCode.STARTED, True),
+    (TaskStatusCode.KILLED, False),
+    (TaskStatusCode.ZOMBIE, False),
+    (TaskStatusCode.FAILED, False),
+])
+def test_is_running(get_status_response, expected_result):
+    task = inductiva.tasks.Task("123")
+    with mock.patch("inductiva.tasks.Task.get_status",
+                    return_value=get_status_response):
+        result = task.is_running()
+        assert result == expected_result
+
+
+@pytest.mark.parametrize("get_status_response,expected_result", [
+    (TaskStatusCode.PENDINGINPUT, False),
+    (TaskStatusCode.PENDINGKILL, False),
+    (TaskStatusCode.STARTED, False),
+    (TaskStatusCode.KILLED, True),
+    (TaskStatusCode.ZOMBIE, True),
+    (TaskStatusCode.FAILED, True),
+])
+def test_is_failed(get_status_response, expected_result):
+    task = inductiva.tasks.Task("123")
+    with mock.patch("inductiva.tasks.Task.get_status",
+                    return_value=get_status_response):
+        result = task.is_failed()
+        assert result == expected_result
+
+
+def test_from_api_info():
+    task = inductiva.tasks.Task.from_api_info(task_info_dic)
+    # pylint: disable=W0212
+    assert (task.id == task_info_dic["task_id"] and
+            task._status == task_info_dic["status"] and
+            task.info.start_time == task_info_dic["start_time"])
+
+
+@pytest.mark.parametrize("status, status_code, tasks_ahead", [
+    ("pending-input", TaskStatusCode.PENDINGINPUT, 1),
+    ("pending-kill", TaskStatusCode.PENDINGKILL, 2),
+    ("started", TaskStatusCode.STARTED, 3),
+    ("killed", TaskStatusCode.KILLED, 4),
+    ("zombie", TaskStatusCode.ZOMBIE, 5),
+    ("failed", TaskStatusCode.FAILED, 0),
+])
+def test_get_status(status, status_code, tasks_ahead):
+    get_task_return = mock.MagicMock()
+    get_task_return.body = {
+        "id": "6gpbvrxr46dvm8p7i1hcjt419",
+        "status": status,
+        "position_in_queue": {
+            "tasks_ahead": tasks_ahead
+        }
+    }
+    with mock.patch(
+            "inductiva.client.paths.tasks_task_id_status.get."
+            "GetTaskStatus.get_task_status",
+            return_value=get_task_return):
+        task = inductiva.tasks.Task("123")
+        result = task.get_status()
+        # pylint: disable=W0212
+        assert (task._tasks_ahead == tasks_ahead and result == status_code)
