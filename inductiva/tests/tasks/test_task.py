@@ -508,7 +508,7 @@ def test_setup_queue_message(tasks_ahead, is_tty, expected_output):
         (TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED),
         (TaskStatusCode.TTLEXCEEDED),
         (TaskStatusCode.SUCCESS),
-        #All non terminal statuses will result in a infinite loop inside the wait
+        #All non terminal statuses will result in a infinite loop
     ])
 def test_wait(get_status_response):
     task = inductiva.tasks.Task("123")
