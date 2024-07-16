@@ -266,8 +266,7 @@ def test_taskinfo_format_time_metric():
 
     result_final_return = task_info._format_time_metric("hello_world", None)
 
-    assert ("asd" == "123" and \
-            result_smaller_60 == "7.76 s" and \
+    assert (result_smaller_60 == "7.76 s" and \
             result_bigger_60 == "0:01:02" and \
             "still running" in result_still_running and \
             "used cached" in result_container and \
