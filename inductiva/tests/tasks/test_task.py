@@ -275,3 +275,12 @@ def test_taskinfo_format_time_metric():
             "until task ends" in result_compression and \
             result_final_return is None
             )
+
+
+def test_format_data_metric():
+    task_info = TaskInfo(**task_info_dic)
+    # pylint: disable=W0212
+    result_bytes = task_info._format_data_metric("input_size_bytes", 123)
+    result_not_bytes = task_info._format_data_metric("hello world", 123)
+
+    assert result_bytes == "123 B" and result_not_bytes == 123
