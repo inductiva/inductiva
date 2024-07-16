@@ -33,6 +33,17 @@ def test_task_kill__string_timeout__typeerror_exception():
     assert "number" in str(exception.value)
 
 
+def test_task_kill__wrong_verbosity_level():
+    """
+    Check if task.kill throws an exception when verbosity level is not valid.
+    """
+    task = inductiva.tasks.Task("123")
+
+    with pytest.raises(ValueError) as exception:
+        task.kill(verbosity_level=3)
+    assert "level not allowed" in str(exception.value)
+
+
 def test_task_kill__negative_timeout__valueerror_exception():
     """
     Check if task.kill returns ValueError when calling
@@ -460,3 +471,48 @@ def test_info_property_none():
         task._info = None
         info = task.info
         assert info.task_id == "6gpbvrxr46dvm8p7i1hcjt419"
+
+
+@pytest.mark.parametrize("tasks_ahead, is_tty, expected_output", [
+    (0, True, "The task 123 is about to start."),
+    (0, False,
+     "The task 123 is about to start.                                          "
+    ), (1, True, "Number of tasks ahead of task 123 in queue: 1"),
+    (1, False,
+     "Number of tasks ahead of task 123 in queue: 1                            "
+    )
+])
+def test_setup_queue_message(tasks_ahead, is_tty, expected_output):
+    task = inductiva.tasks.Task("123")
+    # pylint: disable=W0212
+    task._tasks_ahead = tasks_ahead
+    result = task._setup_queue_message(is_tty=is_tty)
+    print(result)
+    print(expected_output)
+    assert result == expected_output
+
+
+#Wait is realy hard to test since it depends on the status changing to avoid
+#an infinite loop. We will test only the cases where the status is terminal
+@pytest.mark.parametrize(
+    "get_status_response",
+    [
+        (TaskStatusCode.KILLED),
+        (TaskStatusCode.ZOMBIE),
+        (TaskStatusCode.FAILED),
+        #This status will make an api call and we already have a test for that
+        #(TaskStatusCode.EXECUTERFAILED),
+        (TaskStatusCode.EXECUTERTERMINATED),
+        (TaskStatusCode.EXECUTERTERMINATEDBYUSER),
+        (TaskStatusCode.SPOTINSTANCEPREEMPTED),
+        (TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED),
+        (TaskStatusCode.TTLEXCEEDED),
+        (TaskStatusCode.SUCCESS),
+        #All non terminal statuses will result in a infinite loop inside the wait
+    ])
+def test_wait(get_status_response):
+    task = inductiva.tasks.Task("123")
+    with mock.patch("inductiva.tasks.Task.get_status",
+                    return_value=get_status_response):
+        result = task.wait()
+        assert result == get_status_response
