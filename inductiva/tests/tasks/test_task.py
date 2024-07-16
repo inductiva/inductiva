@@ -185,51 +185,87 @@ def test__get_output_info():
     assert output_info.total_compressed_size_bytes == 150
 
 
-def test_taskinfo_innit():
-    dic = {
-        "task_id": "gfuhdirkeqypp3b5cb6ped1re",
-        "status": "success",
-        "method_name": "amrWind.amrWind.run_simulation",
-        "storage_path": None,
-        "container_image": "docker://inductiva/kutu:amr-wind_v1.4.0",
-        "project": "pbarbosaaa788d1b",
-        "create_time": "2024-07-12T09:57:58.111714+00:00",
-        "input_submit_time": "2024-07-12T09:57:58.664646+00:00",
-        "start_time": "2024-07-12T09:57:58.666103+00:00",
-        "computation_start_time": "2024-07-12T09:57:58.773196+00:00",
-        "computation_end_time": "2024-07-12T09:58:03.895437+00:00",
-        "end_time": "2024-07-12T09:58:05.868836+00:00",
-        "cost": 0.00016,
-        "storage_size": 12763590,
-        "metrics": {
-            "total_seconds": 7.757,
-            "container_image_download_seconds": None,
-            "queue_time_seconds": 0.001,
-            "computation_seconds": 5.122,
-            "input_upload_seconds": 0.55,
-            "input_download_seconds": 0.081,
-            "input_decompression_seconds": 0.003,
-            "output_compression_seconds": 1.63,
-            "output_upload_seconds": 0.309,
-            "input_zipped_size_bytes": 1437,
-            "input_size_bytes": 11294,
-            "output_total_files": 92,
-            "output_size_bytes": 52241441,
-            "output_zipped_size_bytes": 12762153
-        },
-        "executer": {
-            "uuid": "d53a581f-f796-4e8d-8e93-104fc747352a",
-            "cpu_count_logical": 4,
-            "cpu_count_physical": 2,
-            "memory": 16785870848,
-            "n_mpi_hosts": 0,
-            "vm_type": "e2-standard-4",
-            "vm_name": "default-machine-group-dm1l",
-            "host_type": "GCP",
-            "error_detail": None
-        }
+task_info_dic = {
+    "task_id": "gfuhdirkeqypp3b5cb6ped1re",
+    "status": "success",
+    "method_name": "amrWind.amrWind.run_simulation",
+    "storage_path": None,
+    "container_image": "docker://inductiva/kutu:amr-wind_v1.4.0",
+    "project": "pbarbosaaa788d1b",
+    "create_time": "2024-07-12T09:57:58.111714+00:00",
+    "input_submit_time": "2024-07-12T09:57:58.664646+00:00",
+    "start_time": "2024-07-12T09:57:58.666103+00:00",
+    "computation_start_time": "2024-07-12T09:57:58.773196+00:00",
+    "computation_end_time": "2024-07-12T09:58:03.895437+00:00",
+    "end_time": "2024-07-12T09:58:05.868836+00:00",
+    "cost": 0.00016,
+    "storage_size": 12763590,
+    "metrics": {
+        "total_seconds": 7.757,
+        "container_image_download_seconds": None,
+        "queue_time_seconds": 0.001,
+        "computation_seconds": 5.122,
+        "input_upload_seconds": 0.55,
+        "input_download_seconds": 0.081,
+        "input_decompression_seconds": 0.003,
+        "output_compression_seconds": 1.63,
+        "output_upload_seconds": 0.309,
+        "input_zipped_size_bytes": 1437,
+        "input_size_bytes": 11294,
+        "output_total_files": 92,
+        "output_size_bytes": 52241441,
+        "output_zipped_size_bytes": 12762153
+    },
+    "executer": {
+        "uuid": "d53a581f-f796-4e8d-8e93-104fc747352a",
+        "cpu_count_logical": 4,
+        "cpu_count_physical": 2,
+        "memory": 16785870848,
+        "n_mpi_hosts": 0,
+        "vm_type": "e2-standard-4",
+        "vm_name": "default-machine-group-dm1l",
+        "host_type": "GCP",
+        "error_detail": None
     }
+}
 
-    task_info = TaskInfo(**dic)
+
+def test_taskinfo_innit():
+
+    task_info = TaskInfo(**task_info_dic)
 
     assert task_info.task_id == "gfuhdirkeqypp3b5cb6ped1re"
+
+
+def test_taskinfo_format_time_metric():
+
+    task_info = TaskInfo(**task_info_dic)
+    # pylint: disable=W0212
+    result_smaller_60 = task_info._format_time_metric(
+        "total_seconds", task_info.time_metrics.total_seconds.value)
+
+    result_bigger_60 = task_info._format_time_metric("total_seconds", 61.5)
+
+    task_info.is_running = True
+
+    result_still_running = task_info._format_time_metric(
+        "computation_seconds", 61.5)
+
+    task_info.is_terminal = True
+    result_container = task_info._format_time_metric(
+        "container_image_download_seconds", None)
+    result_comp_seconds = task_info._format_time_metric("computation_seconds",
+                                                        None)
+
+    task_info.is_terminal = False
+    result_container_na = task_info._format_time_metric(
+        "container_image_download_seconds", None)
+
+    result_compression = task_info._format_time_metric(
+        "output_compression_seconds", None)
+
+    assert (result_smaller_60 == "7.76 s" and result_bigger_60 == "0:01:02" and
+            "still running" in result_still_running and
+            "used cached" in result_container and
+            "N/A" in result_comp_seconds and "N/A" in result_container_na and
+            "until task ends" in result_compression)
