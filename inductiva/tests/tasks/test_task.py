@@ -1,12 +1,13 @@
 """Test file for Tasks class."""
-from unittest import mock
+import pathlib
 
-import inductiva
 import pytest
+from unittest import mock
 from unittest.mock import Mock
+import inductiva
+import inductiva.client
 from inductiva import constants
 from inductiva.client import exceptions
-import inductiva.client
 from inductiva.client.model.task_status_code import TaskStatusCode
 
 import inductiva.client.paths
@@ -14,10 +15,10 @@ import inductiva.client.paths.tasks_task_id
 from inductiva.client.paths.tasks_task_id_input.put import ApiResponseFor200
 
 import inductiva.client.paths.tasks_task_id_output_list.get as output_list_get
-import inductiva.client.paths.tasks_task_id_position_in_queue
 import inductiva.client.paths.tasks_task_id_position_in_queue.get
-import inductiva.client.paths.tasks_task_id_status
+import inductiva.client.paths.tasks_task_id_position_in_queue
 import inductiva.client.paths.tasks_task_id_status.get
+import inductiva.client.paths.tasks_task_id_status
 from inductiva.tasks.task import TaskInfo
 
 
@@ -516,3 +517,58 @@ def test_wait(get_status_response):
                     return_value=get_status_response):
         result = task.wait()
         assert result == get_status_response
+
+
+def test_get_simulator_name():
+    task = inductiva.tasks.Task("123")
+    # pylint: disable=W0212
+    task._info = TaskInfo(**task_info_dic)
+    result = task.get_simulator_name()
+    assert result == "amrWind"
+
+
+def test_get_storage_path__none():
+    task = inductiva.tasks.Task("123")
+    # pylint: disable=W0212
+    task._info = TaskInfo(**task_info_dic)
+    result = task.get_storage_path()
+    assert result is None
+
+
+def test_get_storage_path__str():
+    task = inductiva.tasks.Task("123")
+    # pylint: disable=W0212
+    task._info = TaskInfo(**task_info_dic)
+    task._info.storage_path = "test/path"
+    result = task.get_storage_path()
+    assert result == "test/path"
+
+
+def test_contains_only_std_files__only_std_files():
+
+    file1 = mock.MagicMock()
+    file1.name = "stdout.txt"
+    file2 = mock.MagicMock()
+    file2.name = "stderr.txt"
+
+    with mock.patch("pathlib.Path.iterdir", return_value=[file1, file2]):
+        task = inductiva.tasks.Task("123")
+        # pylint: disable=W0212
+        result = task._contains_only_std_files(pathlib.Path("."))
+        assert result is True
+
+
+def test_contains_only_std_files__other_files():
+
+    file1 = mock.MagicMock()
+    file1.name = "stdout.txt"
+    file2 = mock.MagicMock()
+    file2.name = "stderr.txt"
+    file3 = mock.MagicMock()
+    file3.name = "other.txt"
+
+    with mock.patch("pathlib.Path.iterdir", return_value=[file1, file2, file3]):
+        task = inductiva.tasks.Task("123")
+        # pylint: disable=W0212
+        result = task._contains_only_std_files(pathlib.Path("."))
+        assert result is False
