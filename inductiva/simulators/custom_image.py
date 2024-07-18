@@ -7,7 +7,6 @@ from inductiva import types, tasks, simulators
 class CustomImage(simulators.Simulator):
     """Class to run commands on an custom image."""
 
-    # pylint: disable=W0231
     def __init__(self, container_image: str):
         """Initialize the ArbitraryImage class.
         Point to the API method to run a simulation.
@@ -15,15 +14,13 @@ class CustomImage(simulators.Simulator):
             container_image: The container image to use for the simulation.
                 Example: container_image="docker://inductiva/kutu:xbeach_v1.23"
         """
-        self._image_uri = container_image
-        self._version = "N/A"
+        self.container_image = container_image
+        super().__init__()
 
         self.api_method_name = "arbitrary.arbitrary_commands.run_simulation"
 
-    @property
-    def name(self):
-        """Get the name of the simulator."""
-        return "N/A"
+    def _get_image_uri(self):
+        return self.container_image
 
     def run(self,
             input_dir: str,
