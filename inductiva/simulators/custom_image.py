@@ -1,5 +1,5 @@
 """Class to run commands on an custom image."""
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -27,7 +27,7 @@ class CustomImage(simulators.Simulator):
 
     def run(self,
             input_dir: str,
-            commands: list[str],
+            commands: List[str],
             storage_dir: Optional[str] = "",
             extra_metadata: Optional[dict] = None,
             on: Optional[types.ComputationalResources] = None,
