@@ -20,6 +20,7 @@ The simulators available in the current version of the API (0.8) are:
 - [SWAN](../simulators/SWAN.md)
 - [SWASH](../simulators/SWASH.md)
 - [XBeach](../simulators/XBeach.md)
+- [NWChem](../simulators/NWChem.md)
 
 ## Typical Usage Patterns
 As described in our [Tutorial](https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html)
