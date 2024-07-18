@@ -212,6 +212,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
         # `run` method of the simulator
         method_signature = inspect.signature(simcls.run)
         print(method_signature.parameters)
+        print(sim_name)
         print(method_signature.parameters.keys())
         assert resubmit_key in method_signature.parameters.keys()
 
