@@ -211,6 +211,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
         # check that the `resubmit_on_preemption` parameter is present in the
         # `run` method of the simulator
         method_signature = inspect.signature(simcls.run)
+        print(method_signature.parameters)
         assert resubmit_key in method_signature.parameters
 
         api_invoker = "inductiva.api.methods.invoke_async_api"
