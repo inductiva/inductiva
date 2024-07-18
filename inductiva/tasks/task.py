@@ -115,7 +115,7 @@ class TaskInfo:
         # Update running info
         self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
         self.is_running = self.status == models.TaskStatusCode.STARTED
-        self.is_terminal = self.status in Task.TERMINAL_STATUSES
+        self.is_terminal = kwargs.get("is_terminated", False)
 
     def __update_metrics(
         self,
@@ -262,8 +262,6 @@ class Task:
         models.TaskStatusCode.TTLEXCEEDED,
     }
 
-    TERMINAL_STATUSES = {models.TaskStatusCode.SUCCESS}.union(FAILED_STATUSES)
-
     RUNNING_STATUSES = {
         models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED
     }
@@ -305,7 +303,8 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() in self.TERMINAL_STATUSES
+        self.get_info()
+        return self.info.is_terminal
 
     @classmethod
     def from_api_info(cls, info: Dict[str, Any]) -> "Task":
@@ -348,16 +347,19 @@ class Task:
     def get_status(self) -> models.TaskStatusCode:
         """Get status of the task.
 
-        This method issues a request to the API.
+        This method issues a request to the API and updates the task info
+        is_terminal. The api call to get the status now returns the status and
+        is_terminated.
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
-        # Can't call is_terminal because it calls get status (infinite loop)
-        if (self._status is not None and
-                self._status in self.TERMINAL_STATUSES):
+        if (self._status is not None and self._info.is_terminal):
             return self._status
-
+        
         resp = self._api.get_task_status(self._get_path_params())
+        
+        #updates the info.is_terminal when getting the status
+        self._info.is_terminal = resp.body.get("is_terminated",False)
 
         queue_position = resp.body.get("position_in_queue", None)
         if queue_position is not None:
@@ -500,7 +502,7 @@ class Task:
                 sys.stdout.flush()
                 prev_tasks_ahead = self._tasks_ahead
 
-            if status in self.TERMINAL_STATUSES:
+            if self.is_terminal():
                 sys.stdout.flush()
                 sys.stdout.write("\r\033[2K")
 
