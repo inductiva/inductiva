@@ -213,7 +213,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
         method_signature = inspect.signature(simcls.run)
         assert resubmit_key in method_signature.parameters
 
-        api_invoker = "inductiva.tasks.run_simulation.methods.invoke_async_api"
+        api_invoker = "inductiva.api.methods.invoke_async_api"
         with mock.patch(api_invoker) as invoker_mock,\
             mock.patch.dict(os.environ,
                             {"DISABLE_TASK_METADATA_LOGGING": "true"}), \
