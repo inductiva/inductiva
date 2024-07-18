@@ -126,6 +126,7 @@ class Simulator(ABC):
         *_args,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[str] = "",
+        resubmit_on_preemption: bool = False,
         extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:
@@ -139,6 +140,10 @@ class Simulator(ABC):
                 the simulation is launched in a machine of the default pool.
             storage_dir: Parent directory for storing simulation
                                results.
+            resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiates with
+                `spot=True`.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
@@ -157,11 +162,12 @@ class Simulator(ABC):
         return tasks.run_simulation(
             self.api_method_name,
             input_dir_path,
+            simulator=self,
             storage_dir=storage_dir,
             computational_resources=on,
             extra_metadata=extra_metadata,
             container_image=container_image,
-            simulator=self,
+            resubmit_on_preemption=resubmit_on_preemption,
             **kwargs,
         )
 
