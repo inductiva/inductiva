@@ -1,7 +1,12 @@
 """Tests for the Simulator class."""
-import pytest
-from pytest import mark
+from argparse import Namespace
 from unittest import mock
+import inspect
+import sys
+import os
+
+from pytest import mark
+import pytest
 
 from inductiva import simulators, resources
 import inductiva
@@ -66,7 +71,7 @@ def test_validate_computational_resources__unsupported_resource__raise_error(
 
 def test_mpi_enabled__dummy_simulator():
     """Check mpi_enabled decorator works correctly with a dummy Simulator.
-    
+
     Goal: Verify that adding the mpi_enabled decorator to a dummy simulator
     adds a new resource (MPICluster) to the _standard_resources tuple.
     """
@@ -82,7 +87,7 @@ def test_mpi_enabled__dummy_simulator():
 ])
 def test_valid_resources__non_mpi_simulators(simulator):
     """Validate  decorator  in non-MPI simulators.
-    
+
     Goal: Verify that the non MPI-compatible simulators are not decorated with
     the mpi_enabled function and that the _standard_resources only contains
     the standard machines."""
@@ -117,7 +122,7 @@ def test_validate_computational_resources__none_resource_mpi_wrapped(
 def test_validate_computational_resources__valid_machine_group__no_error(
         list_available_fixture):  # pylint: disable=unused-argument
     """Check simulator run correctly with a standard machine group.
-    
+
     Goal: Verify that simulators with and without the mpi_enabled decorator run
     normally with a standard machine group."""
 
@@ -143,7 +148,7 @@ def test_validate_computational_resources__valid_machine_group__no_error(
 def test_validate_computational_resources__valid_mpi_cluster__no_error(
         list_available_fixture):  # pylint: disable=unused-argument
     """Check mpi-enabled simulator runs correctly with a standard MPICluster.
-    
+
     Goal: Verify that an mpi simulator correctly validated the MPI Cluster"""
 
     error_message = "'validate_computational_resources' raised an exception."
@@ -165,9 +170,72 @@ def test_validate_computational_resources__valid_mpi_cluster__no_error(
 ])
 def test_valid_resources__mpi_simulators(simulator):
     """Validate the available machines for MPI simulators.
-    
+
     Goal: Verify that the MPI-compatible simulators are decorated with
     the mpi_enabled function and that the _standard_resources is updated
     correctly."""
 
     assert resources.MPICluster in simulator.get_supported_resources()
+
+
+@mark.parametrize("resubmit_on_preemption", [None, False, True])
+def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
+    # Check that the `resubmit_on_preemption` parameter is present in the
+    # `run` method of the simulator and that it is passed correctly to the
+    # final api call.
+
+    sim_classes = inspect.getmembers(sys.modules["inductiva.simulators"],
+                                     inspect.isclass)
+
+    # Some Mock classes
+    class TaskApiMock:
+
+        def __init__(self, *_args, **_kwargs):
+            pass
+
+        def get_task_position_in_queue(self, *_args, **_kwargs):
+            return Namespace(body={"tasks_ahead": 0})
+
+    class DefaultDictMock(dict):
+
+        def get(self, *_args):
+            return ["1.0.0"]
+
+    resubmit_key = "resubmit_on_preemption"
+
+    for sim_name, simcls in sim_classes:
+        # these 2 classes are not wrappers around the simulators in the backend
+        if sim_name in ("FEniCSx", "SIMSOPT"):
+            continue
+
+        # check that the `resubmit_on_preemption` parameter is present in the
+        # `run` method of the simulator
+        method_signature = inspect.signature(simcls.run)
+        assert resubmit_key in method_signature.parameters
+
+        api_invoker = "inductiva.tasks.run_simulation.methods.invoke_async_api"
+        with mock.patch(api_invoker) as invoker_mock,\
+            mock.patch.dict(os.environ,
+                            {"DISABLE_TASK_METADATA_LOGGING": "true"}), \
+            mock.patch("inductiva.tasks.task.tasks_api") as taskapi_mock, \
+            mock.patch("inductiva.simulators.simulator.list_available_images") \
+               as list_mock:
+
+            taskapi_mock.TasksApi = TaskApiMock
+            invoker_mock.return_value = "task_id"
+            list_mock.return_value = {"production": DefaultDictMock()}
+
+            sim_obj = simcls()
+            invoker_kwargs = invoker_mock.call_args.kwargs
+            if resubmit_on_preemption is None:
+                # test that the default value of
+                # `resubmit_on_preemption` is False
+                sim_obj.run("inductiva/tests/simulators/test_input_dir", [])
+                assert not invoker_kwargs[resubmit_key]
+            else:
+                # test that the value of `resubmit_on_preemption` is passed
+                # correctly to the final api call
+                sim_obj.run("inductiva/tests/simulators/test_input_dir", [],
+                            resubmit_on_preemption=resubmit_on_preemption)
+                assert invoker_kwargs[resubmit_key] == resubmit_on_preemption
+            invoker_mock.assert_called_once()
