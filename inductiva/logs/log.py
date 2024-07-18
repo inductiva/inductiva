@@ -39,13 +39,13 @@ class NoExceptionFormatter(logging.Formatter):
 
 def handle_uncaught_exception(exc_type, exc_value, exc_traceback):
     if _handle_api_exception(exc_type, exc_value, exc_traceback,
-                             notebook=False):
+                             is_notebook=False):
         return
     sys.__excepthook__(exc_type, exc_value, exc_traceback)
 
 
 def _get_traceback_first_and_last_lines(exc_traceback, n_lines: int,
-                                        notebook: bool):
+                                        is_notebook: bool):
     """
     This method gets the first and last N lines of the traceback.
     Args:
@@ -54,7 +54,7 @@ def _get_traceback_first_and_last_lines(exc_traceback, n_lines: int,
     """
     tb_list = traceback.extract_tb(exc_traceback)
 
-    skip = 1 if notebook else 0
+    skip = 1 if is_notebook else 0
 
     tb_first_list = tb_list[skip:n_lines + skip]
     tb_last_list = tb_list[-n_lines:]
@@ -75,7 +75,7 @@ def _get_traceback_first_and_last_lines(exc_traceback, n_lines: int,
     return result_string
 
 
-def _handle_api_exception(exc_type, exc_value, exc_traceback, notebook: bool):
+def _handle_api_exception(exc_type, exc_value, exc_traceback, is_notebook: bool):
     if issubclass(exc_type, exceptions.ApiException) and \
         400 <= exc_value.status  < 500:
         detail = json.loads(exc_value.body)["detail"]
@@ -84,7 +84,7 @@ def _handle_api_exception(exc_type, exc_value, exc_traceback, notebook: bool):
         formatted_tb = _get_traceback_first_and_last_lines(
             exc_traceback,
             constants.EXCEPTIONS_MAX_TRACEBACK_DEPTH,
-            notebook=notebook)
+            is_notebook=is_notebook)
 
         detail = (f"{detail} in:\n{formatted_tb}\n"
                   "For more information on this error, "
@@ -107,7 +107,7 @@ def ipy_handle_uncaught_exception(self,
                                   exc_value,
                                   exc_traceback,
                                   tb_offset=None):
-    if _handle_api_exception(exc_type, exc_value, exc_traceback, notebook=True):
+    if _handle_api_exception(exc_type, exc_value, exc_traceback, is_notebook=True):
         return
     self.showtraceback((exc_type, exc_value, exc_traceback),
                        tb_offset=tb_offset)
