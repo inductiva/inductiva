@@ -226,16 +226,17 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             list_mock.return_value = {"production": DefaultDictMock()}
 
             sim_obj = simcls()
-            invoker_kwargs = invoker_mock.call_args.kwargs
             if resubmit_on_preemption is None:
                 # test that the default value of
                 # `resubmit_on_preemption` is False
                 sim_obj.run("inductiva/tests/simulators/test_input_dir", [])
+                invoker_kwargs = invoker_mock.call_args.kwargs
                 assert not invoker_kwargs[resubmit_key]
             else:
                 # test that the value of `resubmit_on_preemption` is passed
                 # correctly to the final api call
                 sim_obj.run("inductiva/tests/simulators/test_input_dir", [],
                             resubmit_on_preemption=resubmit_on_preemption)
+                invoker_kwargs = invoker_mock.call_args.kwargs
                 assert invoker_kwargs[resubmit_key] == resubmit_on_preemption
             invoker_mock.assert_called_once()
