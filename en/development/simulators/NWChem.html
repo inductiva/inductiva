@@ -16,16 +16,16 @@
         gtag('js', new Date());
         gtag('config', 'UA-188572165-1');
     </script>
-    <meta property="og:title" content="OpenFOAM" />
+    <meta property="og:title" content="NWChem" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://docs.inductiva.ai/simulators/OpenFOAM.html" />
+<meta property="og:url" content="https://docs.inductiva.ai/simulators/NWChem.html" />
 <meta property="og:site_name" content="Inductiva.ai Docs" />
-<meta property="og:description" content="OpenFOAM is a Finite Volume method for CFD simulations with a wide range of applications across several areas of engineering and science. OpenFOAM has an extensive range of features to solve anythi..." />
+<meta property="og:description" content="NWChem is a powerful and versatile computational chemistry software designed for simulating molecular and materials systems at a high level of accuracy. Developed by the Environmental Molecular Sci..." />
 <meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
 <meta property="og:image:alt" content="Inductiva.ai Docs" />
-<meta name="description" content="OpenFOAM is a Finite Volume method for CFD simulations with a wide range of applications across several areas of engineering and science. OpenFOAM has an extensive range of features to solve anythi..." />
+<meta name="description" content="NWChem is a powerful and versatile computational chemistry software designed for simulating molecular and materials systems at a high level of accuracy. Developed by the Environmental Molecular Sci..." />
 
-    <title>OpenFOAM &#8212; Python API for Cloud-based Simulation</title>
+    <title>NWChem &#8212; Python API for Cloud-based Simulation</title>
   
   
   
@@ -67,13 +67,13 @@
     <script src="../_static/togglebutton.js"></script>
     <script src="../_static/scripts/sphinx-book-theme.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'simulators/OpenFOAM';</script>
-    <link rel="canonical" href="https://docs.inductiva.ai/simulators/OpenFOAM.html" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'simulators/NWChem';</script>
+    <link rel="canonical" href="https://docs.inductiva.ai/simulators/NWChem.html" />
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="OpenFAST" href="OpenFAST.html" />
-    <link rel="prev" title="NWChem" href="NWChem.html" />
+    <link rel="next" title="OpenFOAM" href="OpenFOAM.html" />
+    <link rel="prev" title="GROMACS" href="GROMACS.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -209,8 +209,8 @@
 <li class="toctree-l1"><a class="reference internal" href="DualSPHysics.html">DualSPHysics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="FDS.html">FDS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="GROMACS.html">GROMACS</a></li>
-<li class="toctree-l1"><a class="reference internal" href="NWChem.html">NWChem</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">OpenFOAM</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">NWChem</a></li>
+<li class="toctree-l1"><a class="reference internal" href="OpenFOAM.html">OpenFOAM</a></li>
 <li class="toctree-l1"><a class="reference internal" href="OpenFAST.html">OpenFAST</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Reef3D.html">Reef3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="SCHISM.html">SCHISM</a></li>
@@ -287,7 +287,7 @@
       
       
       
-      <li><a href="../_sources/simulators/OpenFOAM.md" target="_blank"
+      <li><a href="../_sources/simulators/NWChem.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -371,7 +371,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>OpenFOAM</h1>
+    <h1>NWChem</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -382,7 +382,6 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
             </nav>
         </div>
@@ -394,95 +393,39 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="openfoam">
-<h1>OpenFOAM<a class="headerlink" href="#openfoam" title="Permalink to this heading">#</a></h1>
-<p>OpenFOAM is a Finite Volume method for CFD simulations with a wide range of
-applications across several areas of engineering and science. OpenFOAM has an
-extensive
-range of features to solve anything from complex fluid flows involving chemical
-reactions, turbulence and heat transfer, to solid dynamics and electromagnetics.</p>
-<p>There are two main open-source distributions of OpenFOAM, one developed by
-<a class="reference external" href="https://openfoam.org/" target="_blank">OpenFOAM foundation</a> and another by the
-<a class="reference external" href="https://www.openfoam.com/" target="_blank">ESI Group</a>. Inductiva API supports both distributions,
-and you can choose which one you want to use by setting the <code class="docutils literal notranslate"><span class="pre">distribution</span></code> parameter
-when initializing the simulator. The default distribution is the one developed by
-the OpenFOAM foundation.</p>
-<p>A single simulation via Inductiva API comprises several steps done via OpenFOAM</p>
-<ul class="simple">
-<li><p>e.g., partitioning the domain, meshing, solvers and post-processing. Hence, to
-configure a simulation for OpenFOAM the user will need a set of configuration
-files that are organized in three folders:</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">time</span></code>: containing individual files of data for particular fields, like
-initial values and boundary conditions that the user must specify. For example,
-for an initial condition at $, the initial conditions will be stored in the
-directory <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">constant</span></code>: contains files that describe the objects in the simulation and the
-physical properties of the application we are concerned.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">system</span></code>: contains all of the files that describe the simulation, including
-the solvers, the numerical parameters, and the output files. It must contain at
-least 3 files: <code class="docutils literal notranslate"><span class="pre">controlDict</span></code> where run control parameters are set including
-start/end time, time step and parameters for data output; <code class="docutils literal notranslate"><span class="pre">fvSchemes</span></code> where
-discretization schemes used in the solution may be selected at run-time; and
-<code class="docutils literal notranslate"><span class="pre">fvSolution</span></code> where the equation solvers, tolerances and other algorithm controls
-are set for the run.</p></li>
-</ul>
-<p>All of these folders should be inside an input directory. Finally, to run a
-simulation the user needs to configure a list of dictionaries specifying the
-commands they want to execute on the backend. Below, we run the
-<a class="reference external" href="https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike" target="_blank">motorbike tutorial</a> from OpenFOAM and show how this is done in practice.</p>
-<p>The commands passed to the simulator follow the structure of OpenFOAM, that is,
-using the prefix <code class="docutils literal notranslate"><span class="pre">runApplication</span></code> the command will execute sequentially and with
-<code class="docutils literal notranslate"><span class="pre">runParallel</span></code> the command will use the maximum number of cores the machine has
-available. Hence, you don’t need to set the specific number of processes, the
-simulator will do that for you automatically. In particular, the
-decomposeParDict will be configured automatically and, at the moment, only the
-scotch decomposition method is available.</p>
+  <section id="nwchem">
+<h1>NWChem<a class="headerlink" href="#nwchem" title="Permalink to this heading">#</a></h1>
+<p>NWChem is a powerful and versatile computational chemistry software designed for
+simulating molecular and materials systems at a high level of accuracy. Developed
+by the Environmental Molecular Sciences Laboratory (EMSL) at Pacific Northwest
+National Laboratory (PNNL), NWChem provides a wide range of quantum mechanical
+methods, including density functional theory (DFT), Hartree-Fock, and various
+post-Hartree-Fock approaches. It is capable of performing large-scale simulations
+on modern high-performance computing architectures, making it suitable for
+tackling complex chemical phenomena in both isolated molecules and extended
+materials. NWChem’s modular design allows for the seamless integration of new
+functionalities, fostering ongoing development and collaboration within the
+scientific community. This flexibility and robustness have made NWChem a go-to
+tool for researchers seeking to explore chemical processes with high computational
+demands.</p>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
-<span class="c1"># Set simulation input directory</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
-    <span class="s2">&quot;openfoam-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="s2">&quot;nwchem-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="c1"># Set the simulation commands</span>
-<span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;runApplication surfaceFeatures&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runApplication blockMesh&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runApplication decomposePar -copyZero&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runParallel snappyHexMesh -overwrite&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runParallel potentialFoam&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runParallel simpleFoam&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runApplication reconstructParMesh -constant&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runApplication reconstructPar -latestTime&quot;</span>
-<span class="p">]</span>
+<span class="n">nwchem</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">NWChem</span><span class="p">()</span>
 
-<span class="c1"># Initialize the Simulator</span>
-<span class="n">openfoam</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">OpenFOAM</span><span class="p">(</span><span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;foundation&quot;</span><span class="p">)</span>
-
-<span class="c1"># Run simulation with config files in the input directory</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">openfoam</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span> <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">nwchem</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+                  <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;h2o_sp_scf.nw&quot;</span><span class="p">,</span>
+                  <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
 </pre></div>
 </div>
-</section>
-<section id="what-to-read-next">
-<h2>What to read next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
-<p>If you are interested in OpenFOAM, you may also be interested in checking
-the following related simulators that are also available via Inductiva API:</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="CaNS.html"><span class="std std-doc">CaNS</span></a></p></li>
-<li><p><a class="reference internal" href="DualSPHysics.html"><span class="std std-doc">DualSPHysics</span></a></p></li>
-<li><p><a class="reference internal" href="SPlisHSPlasH.html"><span class="std std-doc">SPlisHSPlasH</span></a></p></li>
-</ul>
-<p>You may also be interested in reading our blog post
-<a class="reference external" href="https://inductiva.ai/blog/article/5k-points-is-all-you-need" target="_blank">The 3D Mesh Resolution Threshold - 5k Points is All You Need!</a>,
-where we investigate the impact of reducing the level of detail of a 3D object in
-the accuracy of aerodynamic metrics obtained using a (virtual) wind tunnel
-implemented using OpenFOAM.</p>
 </section>
 </section>
 
@@ -498,20 +441,20 @@ implemented using OpenFOAM.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="NWChem.html"
+       href="GROMACS.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">NWChem</p>
+        <p class="prev-next-title">GROMACS</p>
       </div>
     </a>
     <a class="right-next"
-       href="OpenFAST.html"
+       href="OpenFOAM.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">OpenFAST</p>
+        <p class="prev-next-title">OpenFOAM</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -532,7 +475,6 @@ implemented using OpenFOAM.</p>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
   </nav></div>
 
