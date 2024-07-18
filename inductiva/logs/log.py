@@ -38,7 +38,9 @@ class NoExceptionFormatter(logging.Formatter):
 
 
 def handle_uncaught_exception(exc_type, exc_value, exc_traceback):
-    if _handle_api_exception(exc_type, exc_value, exc_traceback,
+    if _handle_api_exception(exc_type,
+                             exc_value,
+                             exc_traceback,
                              is_notebook=False):
         return
     sys.__excepthook__(exc_type, exc_value, exc_traceback)
@@ -75,7 +77,8 @@ def _get_traceback_first_and_last_lines(exc_traceback, n_lines: int,
     return result_string
 
 
-def _handle_api_exception(exc_type, exc_value, exc_traceback, is_notebook: bool):
+def _handle_api_exception(exc_type, exc_value, exc_traceback,
+                          is_notebook: bool):
     if issubclass(exc_type, exceptions.ApiException) and \
         400 <= exc_value.status  < 500:
         detail = json.loads(exc_value.body)["detail"]
@@ -107,7 +110,10 @@ def ipy_handle_uncaught_exception(self,
                                   exc_value,
                                   exc_traceback,
                                   tb_offset=None):
-    if _handle_api_exception(exc_type, exc_value, exc_traceback, is_notebook=True):
+    if _handle_api_exception(exc_type,
+                             exc_value,
+                             exc_traceback,
+                             is_notebook=True):
         return
     self.showtraceback((exc_type, exc_value, exc_traceback),
                        tb_offset=tb_offset)
