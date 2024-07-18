@@ -12,6 +12,7 @@ The simulators available in the current version of the API (0.8) are:
 - [DualSPHysics](../simulators/DualSPHysics.md)
 - [FDS](../simulators/FDS.md)
 - [GROMACS](../simulators/GROMACS.md)
+- [NWChem](../simulators/NWChem.md)
 - [OpenFOAM](../simulators/OpenFOAM.md)
 - [OpenFAST](../simulators/OpenFAST.md)
 - [Reef3D](../simulators/Reef3D.md)
@@ -20,7 +21,6 @@ The simulators available in the current version of the API (0.8) are:
 - [SWAN](../simulators/SWAN.md)
 - [SWASH](../simulators/SWASH.md)
 - [XBeach](../simulators/XBeach.md)
-- [NWChem](../simulators/NWChem.md)
 
 ## Typical Usage Patterns
 As described in our [Tutorial](https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html)
