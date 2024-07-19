@@ -213,30 +213,32 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
         method_signature = inspect.signature(simcls.run)
         assert resubmit_key in method_signature.parameters
 
-        api_invoker = "inductiva.api.methods.invoke_async_api"
-        with mock.patch(api_invoker) as invoker_mock,\
-            mock.patch.dict(os.environ,
-                            {"DISABLE_TASK_METADATA_LOGGING": "true"}), \
+        with mock.patch.dict(os.environ,
+                             {"DISABLE_TASK_METADATA_LOGGING": "true"}), \
             mock.patch("inductiva.tasks.task.tasks_api") as taskapi_mock, \
             mock.patch("inductiva.simulators.simulator.list_available_images") \
-               as list_mock:
+               as list_mock, \
+            mock.patch("inductiva.api.methods.submit_request") as submit_mock:
 
             taskapi_mock.TasksApi = TaskApiMock
-            invoker_mock.return_value = "task_id"
             list_mock.return_value = {"production": DefaultDictMock()}
+
+            submit_mock.return_value = {"id": "123", "status": None}
 
             sim_obj = simcls()
             if resubmit_on_preemption is None:
                 # test that the default value of
                 # `resubmit_on_preemption` is False
                 sim_obj.run("inductiva/tests/simulators/test_input_dir", [])
-                invoker_kwargs = invoker_mock.call_args.kwargs
-                assert not invoker_kwargs[resubmit_key]
+                req_arg = submit_mock.call_args[1]["request"]
+                assert not req_arg[resubmit_key]
             else:
                 # test that the value of `resubmit_on_preemption` is passed
                 # correctly to the final api call
                 sim_obj.run("inductiva/tests/simulators/test_input_dir", [],
                             resubmit_on_preemption=resubmit_on_preemption)
-                invoker_kwargs = invoker_mock.call_args.kwargs
-                assert invoker_kwargs[resubmit_key] == resubmit_on_preemption
-            invoker_mock.assert_called_once()
+                req_arg = submit_mock.call_args[1]["request"]
+                assert bool(req_arg[resubmit_key]) == \
+                    resubmit_on_preemption
+
+            submit_mock.assert_called_once()
