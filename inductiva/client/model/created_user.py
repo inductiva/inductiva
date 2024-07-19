@@ -31,7 +31,6 @@ class CreatedUser(schemas.DictSchema):
 
     class MetaOapg:
         required = {
-            "is_admin",
             "bucket_name",
             "expiry_ts",
             "email",
@@ -42,7 +41,6 @@ class CreatedUser(schemas.DictSchema):
             username = schemas.StrSchema
             email = schemas.StrSchema
             expiry_ts = schemas.DateTimeSchema
-            is_admin = schemas.BoolSchema
             bucket_name = schemas.StrSchema
 
             class name(
@@ -106,12 +104,10 @@ class CreatedUser(schemas.DictSchema):
                 "username": username,
                 "email": email,
                 "expiry_ts": expiry_ts,
-                "is_admin": is_admin,
                 "bucket_name": bucket_name,
                 "name": name,
             }
 
-    is_admin: MetaOapg.properties.is_admin
     bucket_name: MetaOapg.properties.bucket_name
     expiry_ts: MetaOapg.properties.expiry_ts
     email: MetaOapg.properties.email
@@ -137,12 +133,6 @@ class CreatedUser(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["is_admin"]
-    ) -> MetaOapg.properties.is_admin:
-        ...
-
-    @typing.overload
-    def __getitem__(
         self, name: typing_extensions.Literal["bucket_name"]
     ) -> MetaOapg.properties.bucket_name:
         ...
@@ -161,7 +151,6 @@ class CreatedUser(schemas.DictSchema):
         "username",
         "email",
         "expiry_ts",
-        "is_admin",
         "bucket_name",
         "name",
     ], str]):
@@ -188,12 +177,6 @@ class CreatedUser(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["is_admin"]
-    ) -> MetaOapg.properties.is_admin:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
         self, name: typing_extensions.Literal["bucket_name"]
     ) -> MetaOapg.properties.bucket_name:
         ...
@@ -214,7 +197,6 @@ class CreatedUser(schemas.DictSchema):
         "username",
         "email",
         "expiry_ts",
-        "is_admin",
         "bucket_name",
         "name",
     ], str]):
@@ -225,10 +207,6 @@ class CreatedUser(schemas.DictSchema):
         *_args: typing.Union[
             dict,
             frozendict.frozendict,
-        ],
-        is_admin: typing.Union[
-            MetaOapg.properties.is_admin,
-            bool,
         ],
         bucket_name: typing.Union[
             MetaOapg.properties.bucket_name,
@@ -261,7 +239,6 @@ class CreatedUser(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
-            is_admin=is_admin,
             bucket_name=bucket_name,
             expiry_ts=expiry_ts,
             email=email,

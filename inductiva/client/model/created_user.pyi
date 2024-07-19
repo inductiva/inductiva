@@ -35,7 +35,6 @@ class CreatedUser(
 
     class MetaOapg:
         required = {
-            "is_admin",
             "bucket_name",
             "expiry_ts",
             "email",
@@ -46,7 +45,6 @@ class CreatedUser(
             username = schemas.StrSchema
             email = schemas.StrSchema
             expiry_ts = schemas.DateTimeSchema
-            is_admin = schemas.BoolSchema
             bucket_name = schemas.StrSchema
             
             
@@ -91,12 +89,10 @@ class CreatedUser(
                 "username": username,
                 "email": email,
                 "expiry_ts": expiry_ts,
-                "is_admin": is_admin,
                 "bucket_name": bucket_name,
                 "name": name,
             }
     
-    is_admin: MetaOapg.properties.is_admin
     bucket_name: MetaOapg.properties.bucket_name
     expiry_ts: MetaOapg.properties.expiry_ts
     email: MetaOapg.properties.email
@@ -112,9 +108,6 @@ class CreatedUser(
     def __getitem__(self, name: typing_extensions.Literal["expiry_ts"]) -> MetaOapg.properties.expiry_ts: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["is_admin"]) -> MetaOapg.properties.is_admin: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["bucket_name"]) -> MetaOapg.properties.bucket_name: ...
     
     @typing.overload
@@ -123,7 +116,7 @@ class CreatedUser(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["username", "email", "expiry_ts", "is_admin", "bucket_name", "name", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["username", "email", "expiry_ts", "bucket_name", "name", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -138,9 +131,6 @@ class CreatedUser(
     def get_item_oapg(self, name: typing_extensions.Literal["expiry_ts"]) -> MetaOapg.properties.expiry_ts: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["is_admin"]) -> MetaOapg.properties.is_admin: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["bucket_name"]) -> MetaOapg.properties.bucket_name: ...
     
     @typing.overload
@@ -149,14 +139,13 @@ class CreatedUser(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["username", "email", "expiry_ts", "is_admin", "bucket_name", "name", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["username", "email", "expiry_ts", "bucket_name", "name", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        is_admin: typing.Union[MetaOapg.properties.is_admin, bool, ],
         bucket_name: typing.Union[MetaOapg.properties.bucket_name, str, ],
         expiry_ts: typing.Union[MetaOapg.properties.expiry_ts, str, datetime, ],
         email: typing.Union[MetaOapg.properties.email, str, ],
@@ -168,7 +157,6 @@ class CreatedUser(
         return super().__new__(
             cls,
             *_args,
-            is_admin=is_admin,
             bucket_name=bucket_name,
             expiry_ts=expiry_ts,
             email=email,
