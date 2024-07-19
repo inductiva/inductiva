@@ -44,6 +44,7 @@ simulators/CaNS
 simulators/DualSPHysics
 simulators/FDS
 simulators/GROMACS
+simulators/NWChem
 simulators/OpenFOAM
 simulators/OpenFAST
 simulators/Reef3D
