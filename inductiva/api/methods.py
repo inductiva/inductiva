@@ -342,6 +342,7 @@ def submit_task(api_instance,
                 params,
                 type_annotations,
                 provider_id: ProviderType,
+                resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
                 simulator=None):
     """Submit a task and send input files to the API."""
@@ -359,11 +360,12 @@ def submit_task(api_instance,
     task_request = TaskRequest(
         method=method_name,
         params=request_params,
-        resource_pool=resource_pool_id,
-        storage_path_prefix=storage_path_prefix,
-        container_image=container_image,
-        provider_id=provider_id.value,
         project=current_project,
+        provider_id=provider_id.value,
+        resource_pool=resource_pool_id,
+        container_image=container_image,
+        storage_path_prefix=storage_path_prefix,
+        resubmit_on_preemption=resubmit_on_preemption,
     )
 
     task_submitted_info = submit_request(
@@ -400,6 +402,7 @@ def invoke_async_api(method_name: str,
                      storage_path_prefix: Optional[str] = "",
                      provider_id: ProviderType = ProviderType.GCP,
                      container_image: Optional[str] = None,
+                     resubmit_on_preemption: bool = False,
                      simulator=None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
@@ -423,7 +426,10 @@ def invoke_async_api(method_name: str,
         provider_id: The provider id to use for the simulation (GCP or ICE).
         container_image: The container image to use for the simulation
             Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
-
+        resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiates with
+                `spot=True`.
     Return:
         Returns the task id.
     """
@@ -447,6 +453,7 @@ def invoke_async_api(method_name: str,
                               provider_id=provider_id,
                               container_image=container_image,
                               type_annotations=type_annotations,
+                              resubmit_on_preemption=resubmit_on_preemption,
                               simulator=simulator)
 
     return task_id
