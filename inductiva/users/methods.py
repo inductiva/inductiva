@@ -47,5 +47,5 @@ def get_info() -> Dict[str, Any]:
     api_config = api.get_api_config()
     with (ApiClient(api_config)) as client:
         api_instance = UsersApi(client)
-        request = api_instance.get_auth_user_info()
+        request = api_instance.get_user_info()
     return request.body
