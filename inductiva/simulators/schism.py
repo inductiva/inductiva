@@ -29,6 +29,7 @@ class SCHISM(simulators.Simulator):
             use_hwthread: bool = True,
             extra_metadata: Optional[dict] = None,
             n_vcpus: int = None,
+            resubmit_on_preemption: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -44,6 +45,10 @@ class SCHISM(simulators.Simulator):
             number of hardware threads on the node, and use that as the
             number of slots available.
             n_vcpus: Number of virtual cpus
+            resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiates with
+                `spot=True`.
         """
         return super().run(input_dir,
                            on=on,
@@ -52,4 +57,5 @@ class SCHISM(simulators.Simulator):
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
                            extra_metadata=extra_metadata,
+                           resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)

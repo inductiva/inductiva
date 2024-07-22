@@ -35,6 +35,7 @@ class AmrWind(simulators.Simulator):
             extra_metadata: Optional[dict] = None,
             storage_dir: Optional[str] = "",
             on: Optional[types.ComputationalResources] = None,
+            resubmit_on_preemption: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -47,6 +48,10 @@ class AmrWind(simulators.Simulator):
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             other arguments: See the documentation of the base class.
+            resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiates with
+                `spot=True`.
         """
         return super().run(input_dir,
                            on=on,
@@ -55,4 +60,5 @@ class AmrWind(simulators.Simulator):
                            use_hwthread=use_hwthread,
                            extra_metadata=extra_metadata,
                            input_filename=sim_config_filename,
+                           resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)
