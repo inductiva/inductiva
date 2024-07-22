@@ -19,6 +19,8 @@ from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDi
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_email import AdminUsersEmail
+from inductiva.client.apis.paths.admin_users_email_campaign_campaign import AdminUsersEmailCampaignCampaign
+from inductiva.client.apis.paths.admin_users_campaign import AdminUsersCampaign
 from inductiva.client.apis.paths.admin_users_username_storage_size_fs import AdminUsersUsernameStorageSizeFs
 from inductiva.client.apis.paths.admin_users_username_storage_size import AdminUsersUsernameStorageSize
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
@@ -103,6 +105,10 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersEmailApiKey,
         PathValues.ADMIN_USERS_EMAIL:
             AdminUsersEmail,
+        PathValues.ADMIN_USERS_EMAIL_CAMPAIGN_CAMPAIGN:
+            AdminUsersEmailCampaignCampaign,
+        PathValues.ADMIN_USERS_CAMPAIGN:
+            AdminUsersCampaign,
         PathValues.ADMIN_USERS_USERNAME_STORAGE_SIZE_FS:
             AdminUsersUsernameStorageSizeFs,
         PathValues.ADMIN_USERS_USERNAME_STORAGE_SIZE:
@@ -232,6 +238,10 @@ path_to_api = PathToApi({
         AdminUsersEmailApiKey,
     PathValues.ADMIN_USERS_EMAIL:
         AdminUsersEmail,
+    PathValues.ADMIN_USERS_EMAIL_CAMPAIGN_CAMPAIGN:
+        AdminUsersEmailCampaignCampaign,
+    PathValues.ADMIN_USERS_CAMPAIGN:
+        AdminUsersCampaign,
     PathValues.ADMIN_USERS_USERNAME_STORAGE_SIZE_FS:
         AdminUsersUsernameStorageSizeFs,
     PathValues.ADMIN_USERS_USERNAME_STORAGE_SIZE:

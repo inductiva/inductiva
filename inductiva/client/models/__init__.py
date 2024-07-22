@@ -15,6 +15,7 @@ from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.backend_version import BackendVersion
 from inductiva.client.model.base_vm_group import BaseVMGroup
 from inductiva.client.model.campaign import Campaign
+from inductiva.client.model.campaign_users_update import CampaignUsersUpdate
 from inductiva.client.model.created_user import CreatedUser
 from inductiva.client.model.default_machine_group import DefaultMachineGroup
 from inductiva.client.model.executer import Executer
