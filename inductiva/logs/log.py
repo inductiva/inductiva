@@ -17,6 +17,12 @@ from inductiva.utils import format_utils
 root_logger = logging.getLogger()
 
 
+def is_cli():
+    """Determines if the caller is the CLI"""
+    caller = sys.argv[0]
+    return caller.endswith(("inductiva", "inductiva.exe"))
+
+
 def get_logs_file_path():
     system = platform.system()
     logs_name = "inductiva.log"
@@ -89,9 +95,10 @@ def _handle_api_exception(exc_type, exc_value, exc_traceback,
             constants.EXCEPTIONS_MAX_TRACEBACK_DEPTH,
             is_notebook=is_notebook)
 
-        detail = (f"{detail} in:\n{formatted_tb}\n"
-                  "For more information on this error, "
-                  f"check the logs at {get_logs_file_path()}")
+        if not is_cli():
+            detail = (f"{detail}\n  in:\n{formatted_tb}\n"
+                      "For more information on this error, "
+                      f"check the logs at {get_logs_file_path()}")
 
         root_logger.error("ERROR: %s",
                           detail,
