@@ -28,6 +28,7 @@ class CustomImage(simulators.Simulator):
             storage_dir: Optional[str] = "",
             extra_metadata: Optional[dict] = None,
             on: Optional[types.ComputationalResources] = None,
+            resubmit_on_preemption: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -37,6 +38,10 @@ class CustomImage(simulators.Simulator):
                 the simulation is submitted to a machine in the default pool.
             storage_dir: Parent directory for storing simulation
                                results.
+            resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiates with
+                `spot=True`.
         """
         return super().run(input_dir,
                            on=on,
@@ -44,4 +49,5 @@ class CustomImage(simulators.Simulator):
                            storage_dir=storage_dir,
                            extra_metadata=extra_metadata,
                            container_image=self._image_uri,
+                           resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)
