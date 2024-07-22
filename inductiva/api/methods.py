@@ -54,7 +54,11 @@ def submit_request(api_instance: TasksApi,
         Contains two fields, "id" and "status".
     """
 
-    api_response = api_instance.submit_task(body=request)
+    try:
+        api_response = api_instance.submit_task(body=request)
+    except ApiException as e:
+        logging.exception("Exception when calling TasksApi->submit_task: %s", e)
+        raise e
 
     logging.debug("Request status: %s", api_response.body["status"])
 
