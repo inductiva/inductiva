@@ -32,6 +32,7 @@ class TaskStatus(schemas.DictSchema):
     class MetaOapg:
         required = {
             "id",
+            "is_terminated",
             "status",
         }
 
@@ -41,6 +42,8 @@ class TaskStatus(schemas.DictSchema):
             @staticmethod
             def status() -> typing.Type['TaskStatusCode']:
                 return TaskStatusCode
+
+            is_terminated = schemas.BoolSchema
 
             class position_in_queue(
                     schemas.ComposedSchema,):
@@ -101,10 +104,12 @@ class TaskStatus(schemas.DictSchema):
             __annotations__ = {
                 "id": id,
                 "status": status,
+                "is_terminated": is_terminated,
                 "position_in_queue": position_in_queue,
             }
 
     id: MetaOapg.properties.id
+    is_terminated: MetaOapg.properties.is_terminated
     status: 'TaskStatusCode'
 
     @typing.overload
@@ -121,6 +126,12 @@ class TaskStatus(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["is_terminated"]
+    ) -> MetaOapg.properties.is_terminated:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["position_in_queue"]
     ) -> MetaOapg.properties.position_in_queue:
         ...
@@ -132,6 +143,7 @@ class TaskStatus(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "id",
         "status",
+        "is_terminated",
         "position_in_queue",
     ], str]):
         # dict_instance[name] accessor
@@ -151,6 +163,12 @@ class TaskStatus(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["is_terminated"]
+    ) -> MetaOapg.properties.is_terminated:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["position_in_queue"]
     ) -> typing.Union[MetaOapg.properties.position_in_queue, schemas.Unset]:
         ...
@@ -164,6 +182,7 @@ class TaskStatus(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "id",
         "status",
+        "is_terminated",
         "position_in_queue",
     ], str]):
         return super().get_item_oapg(name)
@@ -177,6 +196,10 @@ class TaskStatus(schemas.DictSchema):
         id: typing.Union[
             MetaOapg.properties.id,
             str,
+        ],
+        is_terminated: typing.Union[
+            MetaOapg.properties.is_terminated,
+            bool,
         ],
         status: 'TaskStatusCode',
         position_in_queue: typing.Union[MetaOapg.properties.position_in_queue,
@@ -196,6 +219,7 @@ class TaskStatus(schemas.DictSchema):
             cls,
             *_args,
             id=id,
+            is_terminated=is_terminated,
             status=status,
             position_in_queue=position_in_queue,
             _configuration=_configuration,

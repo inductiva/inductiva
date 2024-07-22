@@ -36,6 +36,7 @@ class TaskSubmittedInfo(
     class MetaOapg:
         required = {
             "id",
+            "is_terminated",
             "status",
         }
         
@@ -45,6 +46,7 @@ class TaskSubmittedInfo(
             @staticmethod
             def status() -> typing.Type['TaskStatusCode']:
                 return TaskStatusCode
+            is_terminated = schemas.BoolSchema
             
             
             class position_in_queue(
@@ -125,11 +127,13 @@ class TaskSubmittedInfo(
             __annotations__ = {
                 "id": id,
                 "status": status,
+                "is_terminated": is_terminated,
                 "position_in_queue": position_in_queue,
                 "time_to_live_seconds": time_to_live_seconds,
             }
     
     id: MetaOapg.properties.id
+    is_terminated: MetaOapg.properties.is_terminated
     status: 'TaskStatusCode'
     
     @typing.overload
@@ -137,6 +141,9 @@ class TaskSubmittedInfo(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["status"]) -> 'TaskStatusCode': ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["is_terminated"]) -> MetaOapg.properties.is_terminated: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["position_in_queue"]) -> MetaOapg.properties.position_in_queue: ...
@@ -147,7 +154,7 @@ class TaskSubmittedInfo(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "status", "position_in_queue", "time_to_live_seconds", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["id", "status", "is_terminated", "position_in_queue", "time_to_live_seconds", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -159,6 +166,9 @@ class TaskSubmittedInfo(
     def get_item_oapg(self, name: typing_extensions.Literal["status"]) -> 'TaskStatusCode': ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["is_terminated"]) -> MetaOapg.properties.is_terminated: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["position_in_queue"]) -> typing.Union[MetaOapg.properties.position_in_queue, schemas.Unset]: ...
     
     @typing.overload
@@ -167,7 +177,7 @@ class TaskSubmittedInfo(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "status", "position_in_queue", "time_to_live_seconds", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["id", "status", "is_terminated", "position_in_queue", "time_to_live_seconds", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -175,6 +185,7 @@ class TaskSubmittedInfo(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         id: typing.Union[MetaOapg.properties.id, str, ],
+        is_terminated: typing.Union[MetaOapg.properties.is_terminated, bool, ],
         status: 'TaskStatusCode',
         position_in_queue: typing.Union[MetaOapg.properties.position_in_queue, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         time_to_live_seconds: typing.Union[MetaOapg.properties.time_to_live_seconds, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -185,6 +196,7 @@ class TaskSubmittedInfo(
             cls,
             *_args,
             id=id,
+            is_terminated=is_terminated,
             status=status,
             position_in_queue=position_in_queue,
             time_to_live_seconds=time_to_live_seconds,
