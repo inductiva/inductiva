@@ -171,10 +171,9 @@ def _check_user_credits():
     if utils.format_utils.getenv_bool("GITHUB_ACTIONS", False):
         return
 
-    # Determine if we are importing from cli or script file
-    caller = sys.argv[0]
-    if not caller.endswith(("inductiva", "inductiva.exe")):
-        # Only print credits info if called from script file
+    if not logs.is_cli():
+        # Determine if we are importing from cli or script file
+        # and only print credits info if called from a script file
         get_info(None, sys.stdout)
 
 
