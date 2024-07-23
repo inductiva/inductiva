@@ -26,7 +26,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_type: str,
         provider: Union[str, machine_types.ProviderType] = "GCP",
         num_machines: int = 1,
-        spot: bool = False,
+        spot: bool = True,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
@@ -80,7 +80,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         self.__is_elastic = False
 
         if register:
-            logging.info("Registering MachineGroup configurations:")
+            logging.info("■ Registering MachineGroup configurations:")
             self._register_machine_group(num_vms=self.num_machines,
                                          spot=self.spot,
                                          is_elastic=self.__is_elastic)
@@ -120,8 +120,8 @@ class MachineGroup(machines_base.BaseMachineGroup):
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
-        logging.info("> Number of machines: %s", self.num_machines)
-        logging.info("> Spot:               %s", self.spot)
+        logging.info("\t· Number of machines:         %s", self.num_machines)
+        logging.info("\t· Spot:                       %s", self.spot)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self, verbose: bool = True):
@@ -135,10 +135,9 @@ class MachineGroup(machines_base.BaseMachineGroup):
               dollars ($/h)."""
         cost_per_machine = super()._get_estimated_cost(self.spot)
         estimated_cost = cost_per_machine * self.num_machines
-        if verbose:
-            logging.info("> Estimated cloud cost of machine group: %.3f $/h",
-                         estimated_cost)
-            super()._log_estimated_spot_vm_savings()
+        logging.info("\t· Estimated cloud cost of machine group: %.3f $/h",
+                     estimated_cost)
+        super()._log_estimated_spot_vm_savings()
         return estimated_cost
 
 
@@ -160,7 +159,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         machine_type: str,
         min_machines: int = 1,
         max_machines: int = 2,
-        spot: bool = False,
+        spot: bool = True,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
@@ -215,7 +214,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         self.spot = spot
 
         if self.register:
-            logging.info("Registering ElasticMachineGroup configurations:")
+            logging.info("■ Registering ElasticMachineGroup configurations:")
             self._register_machine_group(min_vms=self.min_machines,
                                          max_vms=self.max_machines,
                                          is_elastic=self.__is_elastic,
@@ -267,9 +266,9 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
 
     def _log_machine_group_info(self):
         super()._log_machine_group_info()
-        logging.info("> Maximum number of machines: %s", self.max_machines)
-        logging.info("> Minimum number of machines: %s", self.min_machines)
-        logging.info("> Spot: %s", self.spot)
+        logging.info("\t· Maximum number of machines: %s", self.max_machines)
+        logging.info("\t· Minimum number of machines: %s", self.min_machines)
+        logging.info("\t· Spot:                       %s", self.spot)
         self.estimate_cloud_cost()
 
     def estimate_cloud_cost(self, verbose: bool = True):
@@ -279,15 +278,14 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         maximum number of machines up in the cloud. The final cost will vary
         depending on the total usage of the machines."""
         cost_per_machine = super()._get_estimated_cost(self.spot)
-        if verbose:
-            logging.info(
-                "Note: these are the estimated costs of having minimum and the "
-                "maximum number of machines up in the cloud. The final cost "
-                "will vary depending on the total usage of the machines.")
-            logging.info(
-                "> Minimum estimated cloud cost of elastic machine group: "
-                "%.3f $/h.", cost_per_machine * self.min_machines)
-            logging.info(
-                "> Maximum estimated cloud cost of elastic machine group:"
-                " %.3f $/h.", cost_per_machine * self.max_machines)
-            super()._log_estimated_spot_vm_savings()
+        logging.info(
+            "\t· Minimum estimated cloud cost of elastic machine group: "
+            "%.3f $/h.", cost_per_machine * self.min_machines)
+        logging.info(
+            "\t· Maximum estimated cloud cost of elastic machine group:"
+            " %.3f $/h.", cost_per_machine * self.max_machines)
+        super()._log_estimated_spot_vm_savings()
+        logging.info(
+            "Note: these are the estimated costs of having minimum and the "
+            "maximum number of machines up in the cloud. The final cost will "
+            "vary depending on the total usage of the machines.")

@@ -1,13 +1,17 @@
 """Test file for Tasks class."""
 import inductiva
 import pytest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 from inductiva import constants
 from inductiva.client import exceptions
+import inductiva.client
 from inductiva.client.model.task_status_code import TaskStatusCode
 
+import inductiva.client.paths
 from inductiva.client.paths.tasks_task_id_input.put import ApiResponseFor200
 
+import inductiva.client.paths.tasks_task_id_kill
+import inductiva.client.paths.tasks_task_id_kill.post
 import inductiva.client.paths.tasks_task_id_output_list.get as output_list_get
 
 
@@ -98,17 +102,29 @@ def test__send_kill_request__positive_max_api_requests__none(
     Check the _send_kill_request return for multiple
     get_status returns.
     """
-    task = inductiva.tasks.Task("123")
 
-    # pylint: disable=W0212
-    task._api.kill_task = Mock(return_value=ApiResponseFor200)
-    task.get_status = Mock(return_value=get_status_response)
+    # Some Mock classes
+    class TaskApiMock:
+        """Some Mock Class"""
 
-    # pylint: disable=W0212
-    kill_request_return = task._send_kill_request(
-        constants.TASK_KILL_MAX_API_REQUESTS)
+        def __init__(self, *_args, **_kwargs):
+            pass
 
-    assert kill_request_return is None
+        def kill_task(self, *_args, **_kwargs):
+            return
+
+    with patch("inductiva.tasks.task.tasks_api") as mock_api, patch(
+            "inductiva.tasks.Task.get_status",
+            return_value=get_status_response), patch(
+                "inductiva.tasks.Task.is_terminal", return_value=False):
+        mock_api.TasksApi = TaskApiMock
+
+        task = inductiva.tasks.Task("123")
+        # pylint: disable=W0212
+        kill_request_return = task._send_kill_request(
+            constants.TASK_KILL_MAX_API_REQUESTS)
+
+        assert kill_request_return is None
 
 
 def test__send_kill_request__api_exception__runtimeerror():
@@ -116,17 +132,30 @@ def test__send_kill_request__api_exception__runtimeerror():
     Check the _send_kill_request return when the api call
     gives an exception.
     """
-    task = inductiva.tasks.Task("123")
 
-    # pylint: disable=W0212
-    task._api.kill_task = Mock(
-        side_effect=exceptions.ApiException(400, "Bad Request"))
-    task.get_status = Mock(return_value=TaskStatusCode.PENDINGKILL)
+    # Some Mock classes
+    class TaskApiMock:
+        """Some Mock Class"""
 
-    with pytest.raises(RuntimeError) as exception:
-        # pylint: disable=W0212
-        _ = task._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
-    assert "kill command" in str(exception.value)
+        def __init__(self, *_args, **_kwargs):
+            pass
+
+        def kill_task(self, *_args, **_kwargs):
+            raise exceptions.ApiException(400, "Bad Request")
+
+    with patch("inductiva.tasks.task.tasks_api") as mock_api, patch(
+            "inductiva.tasks.Task.get_status",
+            return_value=TaskStatusCode.PENDINGKILL), patch(
+                "inductiva.tasks.Task.is_terminal", return_value=False), patch(
+                    "inductiva.constants.TASK_KILL_RETRY_SLEEP_SEC", 0.1):
+        mock_api.TasksApi = TaskApiMock
+
+        task = inductiva.tasks.Task("123")
+
+        with pytest.raises(RuntimeError) as exception:
+            # pylint: disable=W0212
+            _ = task._send_kill_request(constants.TASK_KILL_MAX_API_REQUESTS)
+        assert "kill command" in str(exception.value)
 
 
 @pytest.mark.parametrize("status_code, expected_success", [
@@ -141,44 +170,56 @@ def test__check_if_pending_kill__wait_timeout_positive__success_status(
     Check the _check_if_pending_kill returns for the different satus
     returned by the api.
     """
-    task = inductiva.tasks.Task("123")
-    task.get_status = Mock(return_value=status_code)
-    # pylint: disable=W0212
-    success, status = task._check_if_pending_kill(2)
+    with patch("inductiva.tasks.Task.get_status",
+               return_value=status_code), patch(
+                   "inductiva.constants.TASK_KILL_RETRY_SLEEP_SEC", 0.1):
+        task = inductiva.tasks.Task("123")
+        # pylint: disable=W0212
 
-    assert success == expected_success and status == status_code
+        success, status = task._check_if_pending_kill(0.1)
+
+        assert success == expected_success and status == status_code
 
 
 def test__get_output_info():
     """
     Check if the output info is correctly returned.
     """
-    task = inductiva.tasks.Task("123")
-    # pylint: disable=W0212
-    mock_resp_body = output_list_get.SchemaFor200ResponseBodyApplicationJson(
-        size=320,
-        contents=[
-            {
-                "name": "file1.txt",
-                "size": 100,
-                "compressed_size": 50
-            },
-            {
-                "name": "file2.txt",
-                "size": 200,
-                "compressed_size": 100
-            },
-        ],
-    )
 
-    task._api.get_outputs_list = Mock(
-        return_value=output_list_get.ApiResponseFor200(
-            response=Mock(),
-            body=mock_resp_body,
-        ))
+    # Some Mock classes
+    class TaskApiMock:
+        """Some Mock Class"""
 
-    output_info = task.get_output_info()
+        def __init__(self, *_args, **_kwargs):
+            pass
 
-    assert output_info.n_files == 2
-    assert output_info.total_size_bytes == 320
-    assert output_info.total_compressed_size_bytes == 150
+        def get_outputs_list(self, *_args, **_kwargs):
+            body = output_list_get.SchemaFor200ResponseBodyApplicationJson(
+                size=320,
+                contents=[
+                    {
+                        "name": "file1.txt",
+                        "size": 100,
+                        "compressed_size": 50
+                    },
+                    {
+                        "name": "file2.txt",
+                        "size": 200,
+                        "compressed_size": 100
+                    },
+                ],
+            )
+            return output_list_get.ApiResponseFor200(
+                response=Mock(),
+                body=body,
+            )
+
+    with patch("inductiva.tasks.task.tasks_api") as mock_api:
+        mock_api.TasksApi = TaskApiMock
+
+        task = inductiva.tasks.Task("123")
+        output_info = task.get_output_info()
+
+        assert output_info.n_files == 2
+        assert output_info.total_size_bytes == 320
+        assert output_info.total_compressed_size_bytes == 150

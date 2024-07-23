@@ -28,7 +28,7 @@ returns the results back to you.
 
 ## Available Computational Resources
 
-In the current release, version 0.7, Inductiva supports dispatching computational 
+In the current release, version 0.8, Inductiva supports dispatching computational 
 workloads to the Google Cloud Platform (GCP). This means that the simulations initiated 
 through our API are executed on one or more virtual machines (VMs) hosted on GCP.
 
@@ -83,7 +83,7 @@ to accrue significant expenses if a large number of VMs are initiated! To protec
 you from inadvertently spinning up too many resources, the API imposes certain 
 limitations on the quantity and types of machines that you can launch. For details 
 on these limitations, please consult the
-[User Quotas](http://docs.inductiva.ai/en/latest/api_reference/user_quotas.html) 
+[User Quotas](http://docs.inductiva.ai/en/latest/api_reference/tiers_and_quotas.html) 
 we put in place through the current version of the API.
 
 ````{eval-rst}

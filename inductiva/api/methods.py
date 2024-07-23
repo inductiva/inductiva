@@ -18,7 +18,7 @@ from absl import logging
 import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
-from inductiva.client.models import TaskRequest, TaskStatus
+from inductiva.client.models import TaskRequest, TaskStatus, TaskSubmittedInfo
 from inductiva import types, constants
 from inductiva.resources.machine_types import ProviderType
 from inductiva.utils.data import (extract_output, get_validate_request_params,
@@ -43,7 +43,8 @@ def get_client() -> ApiClient:
     return ApiClient(api_config)
 
 
-def submit_request(api_instance: TasksApi, request: TaskRequest) -> TaskStatus:
+def submit_request(api_instance: TasksApi,
+                   request: TaskRequest) -> TaskSubmittedInfo:
     """Submits a task request to the API.
 
     Args:
@@ -148,6 +149,7 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         raise e
 
     logging.info("Local input directory successfully uploaded.")
+    logging.info("")
     os.remove(input_zip_path)
 
 
@@ -299,23 +301,37 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def log_task_info(task_id, params, resource_pool, simulator):
+def log_task_info(
+    task_id,
+    params,
+    resource_pool,
+    simulator,
+    task_submitted_info: TaskSubmittedInfo,
+):
     """Logging the main components of a task submission."""
 
-    logging.info("Task Information:")
-    logging.info("> ID:                    %s", task_id)
+    logging.info("■ Task Information:")
+    logging.info("\t· ID:                    %s", task_id)
     if simulator is not None:
-        logging.info("> Simulator:             %s", simulator.name)
-        logging.info("> Version:               %s", simulator.version)
-        logging.info("> Image:                 %s", simulator.image_uri)
+        logging.info("\t· Simulator:             %s", simulator.name)
+        logging.info("\t· Version:               %s", simulator.version)
+        logging.info("\t· Image:                 %s", simulator.image_uri)
 
-    logging.info("> Local input directory: %s", params["sim_dir"])
-    logging.info("> Submitting to the following computational resources:")
+    logging.info("\t· Local input directory: %s", params["sim_dir"])
+    logging.info("\t· Submitting to the following computational resources:")
     if resource_pool is not None:
-        logging.info(" >> %s", resource_pool)
+        logging.info(" \t\t· %s", resource_pool)
     else:
-        logging.info(" >> Default queue with %s machines.",
+        logging.info(" \t\t· Default queue with %s machines.",
                      constants.DEFAULT_QUEUE_MACHINE_TYPE)
+        ttl_seconds = task_submitted_info.get("time_to_live_seconds")
+        if ttl_seconds is not None:
+            logging.info(
+                (" \t\t· Task will be killed after the computation time "
+                 "exceeds %s (h:m:s)."),
+                format_utils.seconds_formatter(ttl_seconds),
+            )
+    logging.info("")
 
 
 def submit_task(api_instance,
@@ -326,6 +342,7 @@ def submit_task(api_instance,
                 params,
                 type_annotations,
                 provider_id: ProviderType,
+                resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
                 simulator=None):
     """Submit a task and send input files to the API."""
@@ -343,22 +360,29 @@ def submit_task(api_instance,
     task_request = TaskRequest(
         method=method_name,
         params=request_params,
-        resource_pool=resource_pool_id,
-        storage_path_prefix=storage_path_prefix,
-        container_image=container_image,
-        provider_id=provider_id.value,
         project=current_project,
+        provider_id=provider_id.value,
+        resource_pool=resource_pool_id,
+        container_image=container_image,
+        storage_path_prefix=storage_path_prefix,
+        resubmit_on_preemption=resubmit_on_preemption,
     )
 
-    task = submit_request(
+    task_submitted_info = submit_request(
         api_instance=api_instance,
         request=task_request,
     )
 
-    task_id = task["id"]
-    log_task_info(task_id, params, resource_pool, simulator)
+    task_id = task_submitted_info["id"]
+    log_task_info(
+        task_id,
+        params,
+        resource_pool,
+        simulator,
+        task_submitted_info,
+    )
 
-    if task["status"] == "pending-input":
+    if task_submitted_info["status"] == "pending-input":
 
         upload_input(
             api_instance=api_instance,
@@ -378,6 +402,7 @@ def invoke_async_api(method_name: str,
                      storage_path_prefix: Optional[str] = "",
                      provider_id: ProviderType = ProviderType.GCP,
                      container_image: Optional[str] = None,
+                     resubmit_on_preemption: bool = False,
                      simulator=None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
@@ -401,7 +426,10 @@ def invoke_async_api(method_name: str,
         provider_id: The provider id to use for the simulation (GCP or ICE).
         container_image: The container image to use for the simulation
             Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
-
+        resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiates with
+                `spot=True`.
     Return:
         Returns the task id.
     """
@@ -425,6 +453,7 @@ def invoke_async_api(method_name: str,
                               provider_id=provider_id,
                               container_image=container_image,
                               type_annotations=type_annotations,
+                              resubmit_on_preemption=resubmit_on_preemption,
                               simulator=simulator)
 
     return task_id

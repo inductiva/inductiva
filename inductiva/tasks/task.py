@@ -115,7 +115,7 @@ class TaskInfo:
         # Update running info
         self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
         self.is_running = self.status == models.TaskStatusCode.STARTED
-        self.is_terminal = self.status in Task.TERMINAL_STATUSES
+        self.is_terminal = kwargs.get("is_terminated", False)
 
     def __update_metrics(
         self,
@@ -251,15 +251,16 @@ class Task:
     """
 
     FAILED_STATUSES = {
-        models.TaskStatusCode.FAILED, models.TaskStatusCode.KILLED,
+        models.TaskStatusCode.FAILED,
+        models.TaskStatusCode.KILLED,
         models.TaskStatusCode.EXECUTERFAILED,
         models.TaskStatusCode.EXECUTERTERMINATED,
         models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
         models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
-        models.TaskStatusCode.ZOMBIE
+        models.TaskStatusCode.ZOMBIE,
+        models.TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED,
+        models.TaskStatusCode.TTLEXCEEDED,
     }
-
-    TERMINAL_STATUSES = {models.TaskStatusCode.SUCCESS}.union(FAILED_STATUSES)
 
     RUNNING_STATUSES = {
         models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED
@@ -302,7 +303,8 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() in self.TERMINAL_STATUSES
+        self.get_info()
+        return self.info.is_terminal
 
     @classmethod
     def from_api_info(cls, info: Dict[str, Any]) -> "Task":
@@ -345,16 +347,20 @@ class Task:
     def get_status(self) -> models.TaskStatusCode:
         """Get status of the task.
 
-        This method issues a request to the API.
+        This method issues a request to the API and updates the task info
+        is_terminal. The api call to get the status now returns the status and
+        is_terminated.
         """
         # If the task is in a terminal status and we already have the status,
         # return it without refreshing it from the API.
-        # Can't call is_terminal because it calls get status (infinite loop)
-        if (self._status is not None and
-                self._status in self.TERMINAL_STATUSES):
+        if (self._status is not None and self._info.is_terminal):
             return self._status
 
         resp = self._api.get_task_status(self._get_path_params())
+
+        #updates the info.is_terminal when getting the status
+        self.info.is_terminal = resp.body.get("is_terminated",
+                                              self.info.is_terminal)
 
         queue_position = resp.body.get("position_in_queue", None)
         if queue_position is not None:
@@ -451,35 +457,41 @@ class Task:
                     pass
                 elif status == models.TaskStatusCode.SUBMITTED:
                     logging.info(
-                        "Task %s successfully queued and waiting to be "
+                        "■ Task %s successfully queued and waiting to be "
                         "picked-up for execution...", self.id)
                 elif status == models.TaskStatusCode.STARTED:
                     logging.info(
-                        "Task %s has started and is now running "
+                        "■ Task %s has started and is now running "
                         "remotely.", self.id)
                 elif status == models.TaskStatusCode.SUCCESS:
-                    logging.info("Task %s completed successfully.", self.id)
+                    logging.info("■ Task %s completed successfully.", self.id)
                 elif status == models.TaskStatusCode.FAILED:
-                    logging.info("Task %s failed.", self.id)
+                    logging.info("■ Task %s failed.", self.id)
                 elif status == models.TaskStatusCode.PENDINGKILL:
-                    logging.info("Task %s is being killed.", self.id)
+                    logging.info("■ Task %s is being killed.", self.id)
                 elif status == models.TaskStatusCode.KILLED:
-                    logging.info("Task %s killed.", self.id)
+                    logging.info("■ Task %s killed.", self.id)
                 elif status == models.TaskStatusCode.ZOMBIE:
-                    logging.info("The machine was terminated while the task "
+                    logging.info("■ The machine was terminated while the task "
                                  "was pending.")
                 elif status == models.TaskStatusCode.EXECUTERFAILED:
                     info = self.get_info()
                     detail = info.executer.error_detail
-                    logging.info("The remote process running the task failed:")
+                    logging.info(
+                        "■ The remote process running the task failed:")
                     if detail:
-                        logging.info(" > Message: %s", detail)
+                        logging.info("\t· Message: %s", detail)
                     else:
-                        logging.info(" > No error message available.")
+                        logging.info("\t· No error message available.")
+                elif status == models.TaskStatusCode.SPOTINSTANCEPREEMPTED:
+                    msg = ("■ The task was preempted by the cloud provider.\n"
+                           "Consider using non-spot machines by setting "
+                           "`spot=False` when instantiating the machine group.")
+                    logging.info(msg)
 
                 else:
                     logging.info(
-                        "An internal error occurred with status %s "
+                        "■ An internal error occurred with status %s "
                         "while performing the task.", status)
             prev_status = status
             if (status == models.TaskStatusCode.SUBMITTED and
@@ -491,7 +503,7 @@ class Task:
                 sys.stdout.flush()
                 prev_tasks_ahead = self._tasks_ahead
 
-            if status in self.TERMINAL_STATUSES:
+            if self.is_terminal():
                 sys.stdout.flush()
                 sys.stdout.write("\r\033[2K")
 

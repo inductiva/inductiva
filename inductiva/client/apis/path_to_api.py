@@ -19,7 +19,10 @@ from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDi
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_email import AdminUsersEmail
-from inductiva.client.apis.paths.admin_users_email_expiry_ts import AdminUsersEmailExpiryTs
+from inductiva.client.apis.paths.admin_users_email_campaign_campaign import AdminUsersEmailCampaignCampaign
+from inductiva.client.apis.paths.admin_users_campaign import AdminUsersCampaign
+from inductiva.client.apis.paths.admin_users_username_storage_size_fs import AdminUsersUsernameStorageSizeFs
+from inductiva.client.apis.paths.admin_users_username_storage_size import AdminUsersUsernameStorageSize
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
 from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.admin_groups_active import AdminGroupsActive
@@ -28,7 +31,6 @@ from inductiva.client.apis.paths.admin_groups_default_machine_group_id import Ad
 from inductiva.client.apis.paths.admin_providers import AdminProviders
 from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvidersProviderId
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
-from inductiva.client.apis.paths.admin_users_username_cost import AdminUsersUsernameCost
 from inductiva.client.apis.paths.admin_executer_tracker_token import AdminExecuterTrackerToken
 from inductiva.client.apis.paths.admin_groups_machine_group_id_terminate import AdminGroupsMachineGroupIdTerminate
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
@@ -53,11 +55,17 @@ from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_contents import StorageContents
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
-from inductiva.client.apis.paths.users_cost import UsersCost
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
-from inductiva.client.apis.paths.users_me import UsersMe
+from inductiva.client.apis.paths.users_info import UsersInfo
 from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
+from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
+from inductiva.client.apis.paths.metrics_users_username_cost_over_time import MetricsUsersUsernameCostOverTime
+from inductiva.client.apis.paths.metrics_users_username_task_status_overview import MetricsUsersUsernameTaskStatusOverview
+from inductiva.client.apis.paths.metrics_users_username_computation_time_trend import MetricsUsersUsernameComputationTimeTrend
+from inductiva.client.apis.paths.metrics_users_username_tasks_overview import MetricsUsersUsernameTasksOverview
+from inductiva.client.apis.paths.metrics_users_username_most_used_machine_types import MetricsUsersUsernameMostUsedMachineTypes
+from inductiva.client.apis.paths.metrics_users_username_most_used_simulators_overview import MetricsUsersUsernameMostUsedSimulatorsOverview
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -97,8 +105,14 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersEmailApiKey,
         PathValues.ADMIN_USERS_EMAIL:
             AdminUsersEmail,
-        PathValues.ADMIN_USERS_EMAIL_EXPIRY_TS:
-            AdminUsersEmailExpiryTs,
+        PathValues.ADMIN_USERS_EMAIL_CAMPAIGN_CAMPAIGN:
+            AdminUsersEmailCampaignCampaign,
+        PathValues.ADMIN_USERS_CAMPAIGN:
+            AdminUsersCampaign,
+        PathValues.ADMIN_USERS_USERNAME_STORAGE_SIZE_FS:
+            AdminUsersUsernameStorageSizeFs,
+        PathValues.ADMIN_USERS_USERNAME_STORAGE_SIZE:
+            AdminUsersUsernameStorageSize,
         PathValues.ADMIN_USERS_USERNAME_TASKS:
             AdminUsersUsernameTasks,
         PathValues.ADMIN_GROUPS:
@@ -115,8 +129,6 @@ PathToApi = typing_extensions.TypedDict(
             AdminProvidersProviderId,
         PathValues.ADMIN_ACTIVE_TASKS:
             AdminActiveTasks,
-        PathValues.ADMIN_USERS_USERNAME_COST:
-            AdminUsersUsernameCost,
         PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
             AdminExecuterTrackerToken,
         PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
@@ -165,16 +177,28 @@ PathToApi = typing_extensions.TypedDict(
             Version,
         PathValues.VERSIONCHECK:
             VersionCheck,
-        PathValues.USERS_COST:
-            UsersCost,
         PathValues.USERS_QUOTAS:
             UsersQuotas,
-        PathValues.USERS_ME:
-            UsersMe,
+        PathValues.USERS_INFO:
+            UsersInfo,
         PathValues.PROJECTS:
             Projects,
         PathValues.PROJECTS_NAME:
             ProjectsName,
+        PathValues.METRICS_USERS_USERNAME_ACTIVITY:
+            MetricsUsersUsernameActivity,
+        PathValues.METRICS_USERS_USERNAME_COST_OVER_TIME:
+            MetricsUsersUsernameCostOverTime,
+        PathValues.METRICS_USERS_USERNAME_TASK_STATUS_OVERVIEW:
+            MetricsUsersUsernameTaskStatusOverview,
+        PathValues.METRICS_USERS_USERNAME_COMPUTATION_TIME_TREND:
+            MetricsUsersUsernameComputationTimeTrend,
+        PathValues.METRICS_USERS_USERNAME_TASKS_OVERVIEW:
+            MetricsUsersUsernameTasksOverview,
+        PathValues.METRICS_USERS_USERNAME_MOST_USED_MACHINE_TYPES:
+            MetricsUsersUsernameMostUsedMachineTypes,
+        PathValues.METRICS_USERS_USERNAME_MOST_USED_SIMULATORS_OVERVIEW:
+            MetricsUsersUsernameMostUsedSimulatorsOverview,
     })
 
 path_to_api = PathToApi({
@@ -214,8 +238,14 @@ path_to_api = PathToApi({
         AdminUsersEmailApiKey,
     PathValues.ADMIN_USERS_EMAIL:
         AdminUsersEmail,
-    PathValues.ADMIN_USERS_EMAIL_EXPIRY_TS:
-        AdminUsersEmailExpiryTs,
+    PathValues.ADMIN_USERS_EMAIL_CAMPAIGN_CAMPAIGN:
+        AdminUsersEmailCampaignCampaign,
+    PathValues.ADMIN_USERS_CAMPAIGN:
+        AdminUsersCampaign,
+    PathValues.ADMIN_USERS_USERNAME_STORAGE_SIZE_FS:
+        AdminUsersUsernameStorageSizeFs,
+    PathValues.ADMIN_USERS_USERNAME_STORAGE_SIZE:
+        AdminUsersUsernameStorageSize,
     PathValues.ADMIN_USERS_USERNAME_TASKS:
         AdminUsersUsernameTasks,
     PathValues.ADMIN_GROUPS:
@@ -232,8 +262,6 @@ path_to_api = PathToApi({
         AdminProvidersProviderId,
     PathValues.ADMIN_ACTIVE_TASKS:
         AdminActiveTasks,
-    PathValues.ADMIN_USERS_USERNAME_COST:
-        AdminUsersUsernameCost,
     PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
         AdminExecuterTrackerToken,
     PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
@@ -282,14 +310,26 @@ path_to_api = PathToApi({
         Version,
     PathValues.VERSIONCHECK:
         VersionCheck,
-    PathValues.USERS_COST:
-        UsersCost,
     PathValues.USERS_QUOTAS:
         UsersQuotas,
-    PathValues.USERS_ME:
-        UsersMe,
+    PathValues.USERS_INFO:
+        UsersInfo,
     PathValues.PROJECTS:
         Projects,
     PathValues.PROJECTS_NAME:
         ProjectsName,
+    PathValues.METRICS_USERS_USERNAME_ACTIVITY:
+        MetricsUsersUsernameActivity,
+    PathValues.METRICS_USERS_USERNAME_COST_OVER_TIME:
+        MetricsUsersUsernameCostOverTime,
+    PathValues.METRICS_USERS_USERNAME_TASK_STATUS_OVERVIEW:
+        MetricsUsersUsernameTaskStatusOverview,
+    PathValues.METRICS_USERS_USERNAME_COMPUTATION_TIME_TREND:
+        MetricsUsersUsernameComputationTimeTrend,
+    PathValues.METRICS_USERS_USERNAME_TASKS_OVERVIEW:
+        MetricsUsersUsernameTasksOverview,
+    PathValues.METRICS_USERS_USERNAME_MOST_USED_MACHINE_TYPES:
+        MetricsUsersUsernameMostUsedMachineTypes,
+    PathValues.METRICS_USERS_USERNAME_MOST_USED_SIMULATORS_OVERVIEW:
+        MetricsUsersUsernameMostUsedSimulatorsOverview,
 })

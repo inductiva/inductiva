@@ -67,14 +67,14 @@ jobs:
     - name: Coverage report
       if: ${{ always() }}
       run: | # conftest crashes with coverage due to markdown-docs
-        coverage run --source=./inductiva -m pytest --noconftest
+        coverage run --source=./inductiva --omit="*/_cli/*,*/client/*,*/tests/*" -m pytest --noconftest
         coverage report -m
     - name: Generate badge
-      if: ${{ always() }}
+      if: github.ref == 'refs/heads/main'
       run: |
         coverage-badge -f -o ./badges-folder/badges/cov.svg
     - name: Push badge
-      if: ${{ always() }}
+      if: github.ref == 'refs/heads/main'
       working-directory: badges-folder
       run: |
         git config user.name "${GITHUB_ACTOR}"

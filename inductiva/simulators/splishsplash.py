@@ -26,6 +26,7 @@ class SplishSplash(simulators.Simulator):
         sim_config_filename: str,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[str] = "",
+        resubmit_on_preemption: bool = False,
         extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:
@@ -37,6 +38,10 @@ class SplishSplash(simulators.Simulator):
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
             storage_dir: Directory for storing simulation results.
+            resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiates with
+                `spot=True`.
         Returns:
             Task object representing the simulation task.
         """
@@ -46,5 +51,6 @@ class SplishSplash(simulators.Simulator):
             extra_metadata=extra_metadata,
             storage_dir=storage_dir,
             on=on,
+            resubmit_on_preemption=resubmit_on_preemption,
             **kwargs,
         )

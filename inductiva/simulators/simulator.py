@@ -43,6 +43,7 @@ class Simulator(ABC):
         self._version = version
         self._use_dev = bool(use_dev)
         self._image_uri = self._get_image_uri()
+        self._logger.info("")
 
     @property
     def version(self):
@@ -84,8 +85,8 @@ class Simulator(ABC):
             raise ValueError(
                 f"Version {self.version} is not available for simulator {name}."
                 f" Available versions are: {listing}.")
-        self._logger.info("Using %s image of %s version %s", img_type, sim_name,
-                          self.version)
+        self._logger.info("■ Using %s image of %s version %s", img_type,
+                          sim_name, self.version)
 
         suffix = "_dev" if self._use_dev else ""
         return f"docker://inductiva/kutu:{name}_v{self._version}" + suffix
@@ -125,6 +126,7 @@ class Simulator(ABC):
         *_args,
         on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[str] = "",
+        resubmit_on_preemption: bool = False,
         extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:
@@ -138,6 +140,10 @@ class Simulator(ABC):
                 the simulation is launched in a machine of the default pool.
             storage_dir: Parent directory for storing simulation
                                results.
+            resubmit_on_preemption (bool): Resubmit task for execution when
+                previous execution attempts were preempted. Only applicable when
+                using a preemptible resource, i.e., resource instantiates with
+                `spot=True`.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
@@ -151,16 +157,17 @@ class Simulator(ABC):
 
         # Get the user-specified image name. If not specified,
         # use the default image name for the current simulator
-        container_image = kwargs.get("container_image", self._image_uri)
+        container_image = kwargs.pop("container_image", self._image_uri)
 
         return tasks.run_simulation(
             self.api_method_name,
             input_dir_path,
+            simulator=self,
             storage_dir=storage_dir,
             computational_resources=on,
             extra_metadata=extra_metadata,
             container_image=container_image,
-            simulator=self,
+            resubmit_on_preemption=resubmit_on_preemption,
             **kwargs,
         )
 

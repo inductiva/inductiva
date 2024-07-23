@@ -21,6 +21,7 @@ _metadata_lock = threading.RLock()
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
+    resubmit_on_preemption: bool = False,
     computational_resources: Optional[types.ComputationalResources] = None,
     provider_id: Optional[Union[ProviderType, str]] = ProviderType.GCP,
     storage_dir: Optional[str] = "",
@@ -50,17 +51,17 @@ def run_simulation(
     task_id = api_invoker(api_method_name,
                           params,
                           type_annotations,
+                          resubmit_on_preemption=resubmit_on_preemption,
                           resource_pool=computational_resources,
                           container_image=container_image,
                           storage_path_prefix=storage_dir,
                           provider_id=provider_id,
                           simulator=simulator)
-
     if computational_resources is not None:
-        logging.info("Task %s submitted to the queue of the %s.", task_id,
+        logging.info("■ Task %s submitted to the queue of the %s.", task_id,
                      computational_resources)
     else:
-        logging.info("Task %s submitted to the default queue.", task_id)
+        logging.info("■ Task %s submitted to the default queue.", task_id)
 
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
@@ -101,12 +102,16 @@ def run_simulation(
             TASK_METADATA_FILENAME)
 
     logging.info(
-        "Consider tracking the status of the task via CLI:"
-        "\n\tinductiva tasks list --task-id %s", task_id)
+        "· Consider tracking the status of the task via CLI:"
+        "\n\tinductiva tasks list --id %s", task_id)
     logging.info(
-        "Or, tracking the logs of the task via CLI:"
+        "· Or, tracking the logs of the task via CLI:"
         "\n\tinductiva logs %s", task_id)
-
+    logging.info(
+        "· You can also get more information "
+        "about the task via the CLI command:"
+        "\n\tinductiva tasks info %s", task_id)
+    logging.info("")
     return task
 
 

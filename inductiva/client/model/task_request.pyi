@@ -234,6 +234,7 @@ class TaskRequest(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            resubmit_on_preemption = schemas.BoolSchema
             __annotations__ = {
                 "method": method,
                 "resource_pool": resource_pool,
@@ -242,6 +243,7 @@ class TaskRequest(
                 "project": project,
                 "container_image": container_image,
                 "time_to_live_seconds": time_to_live_seconds,
+                "resubmit_on_preemption": resubmit_on_preemption,
             }
     
     method: MetaOapg.properties.method
@@ -268,9 +270,12 @@ class TaskRequest(
     def __getitem__(self, name: typing_extensions.Literal["time_to_live_seconds"]) -> MetaOapg.properties.time_to_live_seconds: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["resubmit_on_preemption"]) -> MetaOapg.properties.resubmit_on_preemption: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["method", "resource_pool", "storage_path_prefix", "provider_id", "project", "container_image", "time_to_live_seconds", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["method", "resource_pool", "storage_path_prefix", "provider_id", "project", "container_image", "time_to_live_seconds", "resubmit_on_preemption", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -297,9 +302,12 @@ class TaskRequest(
     def get_item_oapg(self, name: typing_extensions.Literal["time_to_live_seconds"]) -> typing.Union[MetaOapg.properties.time_to_live_seconds, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["resubmit_on_preemption"]) -> typing.Union[MetaOapg.properties.resubmit_on_preemption, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["method", "resource_pool", "storage_path_prefix", "provider_id", "project", "container_image", "time_to_live_seconds", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["method", "resource_pool", "storage_path_prefix", "provider_id", "project", "container_image", "time_to_live_seconds", "resubmit_on_preemption", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -313,6 +321,7 @@ class TaskRequest(
         project: typing.Union[MetaOapg.properties.project, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         container_image: typing.Union[MetaOapg.properties.container_image, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         time_to_live_seconds: typing.Union[MetaOapg.properties.time_to_live_seconds, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        resubmit_on_preemption: typing.Union[MetaOapg.properties.resubmit_on_preemption, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'TaskRequest':
@@ -326,6 +335,7 @@ class TaskRequest(
             project=project,
             container_image=container_image,
             time_to_live_seconds=time_to_live_seconds,
+            resubmit_on_preemption=resubmit_on_preemption,
             _configuration=_configuration,
             **kwargs,
         )

@@ -34,6 +34,7 @@ class Task(schemas.DictSchema):
             "method_name",
             "project",
             "task_id",
+            "is_terminated",
             "status",
         }
 
@@ -46,6 +47,7 @@ class Task(schemas.DictSchema):
 
             method_name = schemas.StrSchema
             project = schemas.StrSchema
+            is_terminated = schemas.BoolSchema
 
             class storage_path(
                     schemas.ComposedSchema,):
@@ -752,6 +754,7 @@ class Task(schemas.DictSchema):
                 "status": status,
                 "method_name": method_name,
                 "project": project,
+                "is_terminated": is_terminated,
                 "storage_path": storage_path,
                 "container_image": container_image,
                 "create_time": create_time,
@@ -769,6 +772,7 @@ class Task(schemas.DictSchema):
     method_name: MetaOapg.properties.method_name
     project: MetaOapg.properties.project
     task_id: MetaOapg.properties.task_id
+    is_terminated: MetaOapg.properties.is_terminated
     status: 'TaskStatusCode'
 
     @typing.overload
@@ -793,6 +797,12 @@ class Task(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["project"]
     ) -> MetaOapg.properties.project:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["is_terminated"]
+    ) -> MetaOapg.properties.is_terminated:
         ...
 
     @typing.overload
@@ -876,6 +886,7 @@ class Task(schemas.DictSchema):
         "status",
         "method_name",
         "project",
+        "is_terminated",
         "storage_path",
         "container_image",
         "create_time",
@@ -914,6 +925,12 @@ class Task(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["project"]
     ) -> MetaOapg.properties.project:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["is_terminated"]
+    ) -> MetaOapg.properties.is_terminated:
         ...
 
     @typing.overload
@@ -1000,6 +1017,7 @@ class Task(schemas.DictSchema):
         "status",
         "method_name",
         "project",
+        "is_terminated",
         "storage_path",
         "container_image",
         "create_time",
@@ -1032,6 +1050,10 @@ class Task(schemas.DictSchema):
         task_id: typing.Union[
             MetaOapg.properties.task_id,
             str,
+        ],
+        is_terminated: typing.Union[
+            MetaOapg.properties.is_terminated,
+            bool,
         ],
         status: 'TaskStatusCode',
         storage_path: typing.Union[MetaOapg.properties.storage_path, dict,
@@ -1115,6 +1137,7 @@ class Task(schemas.DictSchema):
             method_name=method_name,
             project=project,
             task_id=task_id,
+            is_terminated=is_terminated,
             status=status,
             storage_path=storage_path,
             container_image=container_image,

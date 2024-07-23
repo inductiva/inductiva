@@ -24,35 +24,8 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.providers import Providers
-from inductiva.client.model.http_validation_error import HTTPValidationError
-
 from . import path
 
-# Query params
-ProviderIdSchema = Providers
-RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams', {})
-RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {
-        'provider_id': typing.Union[
-            ProviderIdSchema,
-        ],
-    },
-    total=False)
-
-
-class RequestQueryParams(RequestRequiredQueryParams,
-                         RequestOptionalQueryParams):
-    pass
-
-
-request_query_provider_id = api_client.QueryParameter(
-    name="provider_id",
-    style=api_client.ParameterStyle.FORM,
-    schema=ProviderIdSchema,
-    explode=True,
-)
 _auth = [
     'APIKeyHeader',
 ]
@@ -76,29 +49,8 @@ _response_for_200 = api_client.OpenApiResponse(
                                 ),
     },
 )
-SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
-
-
-@dataclass
-class ApiResponseFor422(api_client.ApiResponse):
-    response: urllib3.HTTPResponse
-    body: typing.Union[
-        SchemaFor422ResponseBodyApplicationJson,
-    ]
-    headers: schemas.Unset = schemas.unset
-
-
-_response_for_422 = api_client.OpenApiResponse(
-    response_cls=ApiResponseFor422,
-    content={
-        'application/json':
-            api_client.MediaType(schema=SchemaFor422ResponseBodyApplicationJson
-                                ),
-    },
-)
 _status_code_to_response = {
     '200': _response_for_200,
-    '422': _response_for_422,
 }
 _all_accept_content_types = ('application/json',)
 
@@ -108,7 +60,6 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _get_storage_size_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -122,7 +73,6 @@ class BaseApi(api_client.Api):
     def _get_storage_size_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -132,7 +82,6 @@ class BaseApi(api_client.Api):
     @typing.overload
     def _get_storage_size_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -145,7 +94,6 @@ class BaseApi(api_client.Api):
 
     def _get_storage_size_oapg(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -157,21 +105,7 @@ class BaseApi(api_client.Api):
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
-        self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
         used_path = path.value
-
-        prefix_separator_iterator = None
-        for parameter in (request_query_provider_id,):
-            parameter_data = query_params.get(parameter.name, schemas.unset)
-            if parameter_data is schemas.unset:
-                continue
-            if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
-                )
-            serialized_data = parameter.serialize(parameter_data,
-                                                  prefix_separator_iterator)
-            for serialized_value in serialized_data.values():
-                used_path += serialized_value
 
         _headers = HTTPHeaderDict()
         # TODO add cookie handling
@@ -215,7 +149,6 @@ class GetStorageSize(BaseApi):
     @typing.overload
     def get_storage_size(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -229,7 +162,6 @@ class GetStorageSize(BaseApi):
     def get_storage_size(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -239,7 +171,6 @@ class GetStorageSize(BaseApi):
     @typing.overload
     def get_storage_size(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -252,14 +183,12 @@ class GetStorageSize(BaseApi):
 
     def get_storage_size(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         return self._get_storage_size_oapg(
-            query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -272,7 +201,6 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -286,7 +214,6 @@ class ApiForget(BaseApi):
     def get(
         self,
         skip_deserialization: typing_extensions.Literal[True],
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -296,7 +223,6 @@ class ApiForget(BaseApi):
     @typing.overload
     def get(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
@@ -309,14 +235,12 @@ class ApiForget(BaseApi):
 
     def get(
         self,
-        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         return self._get_storage_size_oapg(
-            query_params=query_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

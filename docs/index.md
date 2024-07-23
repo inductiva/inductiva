@@ -44,6 +44,7 @@ simulators/CaNS
 simulators/DualSPHysics
 simulators/FDS
 simulators/GROMACS
+simulators/NWChem
 simulators/OpenFOAM
 simulators/OpenFAST
 simulators/Reef3D
@@ -61,7 +62,7 @@ maxdepth: 2
 hidden: true
 ---
 api_reference/computational_resources/index
-api_reference/user_quotas
+api_reference/tiers_and_quotas
 api_reference/troubleshooting
 api_reference/faq
 api_reference/glossary
