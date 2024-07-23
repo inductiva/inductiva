@@ -10,7 +10,7 @@ class FEniCSx(simulators.Simulator):
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the FEniCSx simulator.
-        
+
         Args:
             version (str): The version of the simulator to use. If None, the
                 latest available version in the platform is used.
@@ -20,6 +20,9 @@ class FEniCSx(simulators.Simulator):
         """
         super().__init__(version=version, use_dev=use_dev)
         self.api_method_name = "fem.fenicsx.run_simulation"
+
+    def _get_image_uri(self):
+        return None
 
     def run(self,
             input_dir: str,

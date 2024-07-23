@@ -21,6 +21,7 @@ _metadata_lock = threading.RLock()
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
+    resubmit_on_preemption: bool = False,
     computational_resources: Optional[types.ComputationalResources] = None,
     provider_id: Optional[Union[ProviderType, str]] = ProviderType.GCP,
     storage_dir: Optional[str] = "",
@@ -50,6 +51,7 @@ def run_simulation(
     task_id = api_invoker(api_method_name,
                           params,
                           type_annotations,
+                          resubmit_on_preemption=resubmit_on_preemption,
                           resource_pool=computational_resources,
                           container_image=container_image,
                           storage_path_prefix=storage_dir,

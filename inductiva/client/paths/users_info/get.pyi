@@ -53,7 +53,7 @@ _all_accept_content_types = (
 
 class BaseApi(api_client.Api):
     @typing.overload
-    def _get_auth_user_info_oapg(
+    def _get_user_info_oapg(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -64,7 +64,7 @@ class BaseApi(api_client.Api):
     ]: ...
 
     @typing.overload
-    def _get_auth_user_info_oapg(
+    def _get_user_info_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -73,7 +73,7 @@ class BaseApi(api_client.Api):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def _get_auth_user_info_oapg(
+    def _get_user_info_oapg(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -84,7 +84,7 @@ class BaseApi(api_client.Api):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def _get_auth_user_info_oapg(
+    def _get_user_info_oapg(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -92,7 +92,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Get Auth User Info
+        Get User Info
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -133,11 +133,11 @@ class BaseApi(api_client.Api):
         return api_response
 
 
-class GetAuthUserInfo(BaseApi):
+class GetUserInfo(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def get_auth_user_info(
+    def get_user_info(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -148,7 +148,7 @@ class GetAuthUserInfo(BaseApi):
     ]: ...
 
     @typing.overload
-    def get_auth_user_info(
+    def get_user_info(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -157,7 +157,7 @@ class GetAuthUserInfo(BaseApi):
     ) -> api_client.ApiResponseWithoutDeserialization: ...
 
     @typing.overload
-    def get_auth_user_info(
+    def get_user_info(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
@@ -168,14 +168,14 @@ class GetAuthUserInfo(BaseApi):
         api_client.ApiResponseWithoutDeserialization,
     ]: ...
 
-    def get_auth_user_info(
+    def get_user_info(
         self,
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_auth_user_info_oapg(
+        return self._get_user_info_oapg(
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
@@ -225,7 +225,7 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._get_auth_user_info_oapg(
+        return self._get_user_info_oapg(
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,

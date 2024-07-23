@@ -15,6 +15,7 @@ from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.backend_version import BackendVersion
 from inductiva.client.model.base_vm_group import BaseVMGroup
 from inductiva.client.model.campaign import Campaign
+from inductiva.client.model.campaign_users_update import CampaignUsersUpdate
 from inductiva.client.model.created_user import CreatedUser
 from inductiva.client.model.default_machine_group import DefaultMachineGroup
 from inductiva.client.model.executer import Executer
@@ -51,7 +52,13 @@ from inductiva.client.model.tier import Tier
 from inductiva.client.model.user import User
 from inductiva.client.model.user_activity import UserActivity
 from inductiva.client.model.user_api_key import UserApiKey
+from inductiva.client.model.user_computation_trend import UserComputationTrend
+from inductiva.client.model.user_costs_over_time import UserCostsOverTime
 from inductiva.client.model.user_create import UserCreate
+from inductiva.client.model.user_most_used_machine_types_overview import UserMostUsedMachineTypesOverview
+from inductiva.client.model.user_most_used_simulators_overview import UserMostUsedSimulatorsOverview
+from inductiva.client.model.user_task_status_overview import UserTaskStatusOverview
+from inductiva.client.model.user_tasks_overview import UserTasksOverview
 from inductiva.client.model.vm_group_config import VMGroupConfig
 from inductiva.client.model.validation_error import ValidationError
 from inductiva.client.model.version_comparison_result import VersionComparisonResult

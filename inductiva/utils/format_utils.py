@@ -65,7 +65,7 @@ def bytes_formatter(n_bytes: int) -> str:
                 return f"{res:.2f} {unit}"
         res /= 1000
 
-    return f"{bytes_formatter:.2f} PB"
+    return f"{res:.2f} PB"
 
 
 def emphasis_formatter(string_to_emphasize: str, *emphasis: Emphasis):

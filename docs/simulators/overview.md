@@ -12,6 +12,7 @@ The simulators available in the current version of the API (0.8) are:
 - [DualSPHysics](../simulators/DualSPHysics.md)
 - [FDS](../simulators/FDS.md)
 - [GROMACS](../simulators/GROMACS.md)
+- [NWChem](../simulators/NWChem.md)
 - [OpenFOAM](../simulators/OpenFOAM.md)
 - [OpenFAST](../simulators/OpenFAST.md)
 - [Reef3D](../simulators/Reef3D.md)

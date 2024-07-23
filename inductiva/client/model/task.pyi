@@ -38,6 +38,7 @@ class Task(
             "method_name",
             "project",
             "task_id",
+            "is_terminated",
             "status",
         }
         
@@ -49,6 +50,7 @@ class Task(
                 return TaskStatusCode
             method_name = schemas.StrSchema
             project = schemas.StrSchema
+            is_terminated = schemas.BoolSchema
             
             
             class storage_path(
@@ -532,6 +534,7 @@ class Task(
                 "status": status,
                 "method_name": method_name,
                 "project": project,
+                "is_terminated": is_terminated,
                 "storage_path": storage_path,
                 "container_image": container_image,
                 "create_time": create_time,
@@ -549,6 +552,7 @@ class Task(
     method_name: MetaOapg.properties.method_name
     project: MetaOapg.properties.project
     task_id: MetaOapg.properties.task_id
+    is_terminated: MetaOapg.properties.is_terminated
     status: 'TaskStatusCode'
     
     @typing.overload
@@ -562,6 +566,9 @@ class Task(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["project"]) -> MetaOapg.properties.project: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["is_terminated"]) -> MetaOapg.properties.is_terminated: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["storage_path"]) -> MetaOapg.properties.storage_path: ...
@@ -602,7 +609,7 @@ class Task(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "project", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "cost", "storage_size", "metrics", "executer", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "project", "is_terminated", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "cost", "storage_size", "metrics", "executer", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -618,6 +625,9 @@ class Task(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["project"]) -> MetaOapg.properties.project: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["is_terminated"]) -> MetaOapg.properties.is_terminated: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["storage_path"]) -> typing.Union[MetaOapg.properties.storage_path, schemas.Unset]: ...
@@ -658,7 +668,7 @@ class Task(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "project", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "cost", "storage_size", "metrics", "executer", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "method_name", "project", "is_terminated", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "cost", "storage_size", "metrics", "executer", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -668,6 +678,7 @@ class Task(
         method_name: typing.Union[MetaOapg.properties.method_name, str, ],
         project: typing.Union[MetaOapg.properties.project, str, ],
         task_id: typing.Union[MetaOapg.properties.task_id, str, ],
+        is_terminated: typing.Union[MetaOapg.properties.is_terminated, bool, ],
         status: 'TaskStatusCode',
         storage_path: typing.Union[MetaOapg.properties.storage_path, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         container_image: typing.Union[MetaOapg.properties.container_image, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -690,6 +701,7 @@ class Task(
             method_name=method_name,
             project=project,
             task_id=task_id,
+            is_terminated=is_terminated,
             status=status,
             storage_path=storage_path,
             container_image=container_image,

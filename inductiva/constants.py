@@ -17,4 +17,7 @@ LOADER_COMMAND_PREFIX = "cmd_"
 
 LOADER_IGNORE_PREFIX = "_"
 
+# when printing the stack trace, how many lines to show
+EXCEPTIONS_MAX_TRACEBACK_DEPTH = 2
+
 HOME_DIR = pathlib.Path.home() / ".inductiva"
