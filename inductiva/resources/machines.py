@@ -289,5 +289,5 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             super()._log_estimated_spot_vm_savings()
             logging.info(
                 "Note: these are the estimated costs of having minimum and the "
-                "maximum number of machines up in the cloud. The final cost will "
-                "vary depending on the total usage of the machines.")
+                "maximum number of machines up in the cloud. The final cost "
+                "will vary depending on the total usage of the machines.")
