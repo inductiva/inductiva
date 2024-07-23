@@ -135,9 +135,10 @@ class MachineGroup(machines_base.BaseMachineGroup):
               dollars ($/h)."""
         cost_per_machine = super()._get_estimated_cost(self.spot)
         estimated_cost = cost_per_machine * self.num_machines
-        logging.info("\t· Estimated cloud cost of machine group: %.3f $/h",
-                     estimated_cost)
-        super()._log_estimated_spot_vm_savings()
+        if verbose:
+            logging.info("\t· Estimated cloud cost of machine group: %.3f $/h",
+                         estimated_cost)
+            super()._log_estimated_spot_vm_savings()
         return estimated_cost
 
 
@@ -278,14 +279,15 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         maximum number of machines up in the cloud. The final cost will vary
         depending on the total usage of the machines."""
         cost_per_machine = super()._get_estimated_cost(self.spot)
-        logging.info(
-            "\t· Minimum estimated cloud cost of elastic machine group: "
-            "%.3f $/h.", cost_per_machine * self.min_machines)
-        logging.info(
-            "\t· Maximum estimated cloud cost of elastic machine group:"
-            " %.3f $/h.", cost_per_machine * self.max_machines)
-        super()._log_estimated_spot_vm_savings()
-        logging.info(
-            "Note: these are the estimated costs of having minimum and the "
-            "maximum number of machines up in the cloud. The final cost will "
-            "vary depending on the total usage of the machines.")
+        if verbose:
+            logging.info(
+                "\t· Minimum estimated cloud cost of elastic machine group: "
+                "%.3f $/h.", cost_per_machine * self.min_machines)
+            logging.info(
+                "\t· Maximum estimated cloud cost of elastic machine group:"
+                " %.3f $/h.", cost_per_machine * self.max_machines)
+            super()._log_estimated_spot_vm_savings()
+            logging.info(
+                "Note: these are the estimated costs of having minimum and the "
+                "maximum number of machines up in the cloud. The final cost will "
+                "vary depending on the total usage of the machines.")

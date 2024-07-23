@@ -35,6 +35,18 @@ class MachineTypeInfo:
         return getattr(self, item)
 
 
+def list_available_machines(provider: Union[str, ProviderType]):
+    """List all available machines types."""
+
+    resources_available = get_available_machine_types(provider)
+    machine_types = []
+
+    for machine in resources_available:
+        machine_types.append(machine["machine_type"])
+
+    return tuple(machine_types)
+
+
 def get_available_machine_types(
         provider: Union[str, ProviderType] = ProviderType.GCP,
         machine_family: str = None) -> List[MachineTypeInfo]:
