@@ -124,7 +124,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         logging.info("\t· Spot:                       %s", self.spot)
         self.estimate_cloud_cost()
 
-    def estimate_cloud_cost(self):
+    def estimate_cloud_cost(self, verbose: bool = True):
         """Estimates a cost per hour of the machine group in US dollars.
 
         This is only an estimate of having a machine group with the
@@ -271,7 +271,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         logging.info("\t· Spot:                       %s", self.spot)
         self.estimate_cloud_cost()
 
-    def estimate_cloud_cost(self):
+    def estimate_cloud_cost(self, verbose: bool = True):
         """Estimates a cost per hour of min and max machines in US dollars.
 
         these are the estimted costs of having minimum and the
