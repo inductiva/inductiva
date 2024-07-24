@@ -62,7 +62,6 @@ class TaskInfo:
             self.input_download_seconds = Metric("Input download")
             self.input_decompression_seconds = Metric("Input decompression")
             self.computation_seconds = Metric("Computation")
-            self.output_compression_seconds = Metric("Output compression")
             self.output_upload_seconds = Metric("Output upload")
 
     class DataMetrics:
@@ -158,10 +157,7 @@ class TaskInfo:
             # the download could be in progress
             return "N/A"
 
-        if metric_key in (
-                "output_compression_seconds",
-                "output_upload_seconds",
-        ):
+        if metric_key in ("output_upload_seconds",):
             return self.MISSING_UNTIL_TASK_ENDED
 
         # None values will be replaced with a default missing value message
