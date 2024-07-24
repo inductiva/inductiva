@@ -51,3 +51,20 @@ def test_to_dict__with_mpi_config():
             }
         }
     }
+
+
+def test_to_dict__mpi_config_is_not_instance_of_mpiconfig():
+    with pytest.raises(TypeError, match="instance of MPIConfig"):
+        commands.Command("command with prompts",
+                         "y",
+                         "y",
+                         mpi_config="not an instance of MPIConfig")
+
+
+def test_to_dict__mpi_config_is_none():
+    cmd = commands.Command("command with prompts", "y", "y", mpi_config=None)
+    assert cmd.to_dict() == {
+        "cmd": "command with prompts",
+        "prompts": ["y", "y"],
+        "mpi_config": None
+    }

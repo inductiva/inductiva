@@ -21,6 +21,9 @@ class Command:
         if not all(isinstance(prompt, str) for prompt in prompts):
             raise ValueError("Prompts must be all strings.")
 
+        if mpi_config and not isinstance(mpi_config, MPIConfig):
+            raise TypeError("'mpi_config' must be an instance of MPIConfig.")
+
         self.cmd = cmd
         self.prompts = list(prompts)
         self.mpi_config = mpi_config
