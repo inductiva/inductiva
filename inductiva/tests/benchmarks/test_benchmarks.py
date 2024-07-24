@@ -192,27 +192,27 @@ def test__replace_callable_from_dict_argument_is_object():
 def fake_get_quotas_small():
     """Fake get_quotas function."""
     return {
-        "total_num_vcpus": {
+        "max_vcpus": {
             "max_allowed": 1.0,
             "in_use": 0.0
         },
-        "total_num_machines": {
+        "max_instances": {
             "max_allowed": 1.0,
             "in_use": 0.0
         },
-        "cost_per_hour": {
+        "max_price_hour": {
             "max_allowed": 1.0,
             "in_use": 0.0
         },
-        "machine_disk_size_gb": {
+        "max_disk_size": {
             "max_allowed": 1.0,
             "in_use": None
         },
-        "machine_group_idle_minutes": {
+        "mg_max_idle": {
             "max_allowed": 1.0,
             "in_use": None
         },
-        "machine_group_lifetime_hours": {
+        "mg_max_ttl": {
             "max_allowed": 1.0,
             "in_use": None
         }
@@ -222,27 +222,27 @@ def fake_get_quotas_small():
 def fake_get_quotas_normal():
     """Fake get_quotas function."""
     return {
-        "total_num_vcpus": {
+        "max_vcpus": {
             "max_allowed": 100.0,
             "in_use": 0.0
         },
-        "total_num_machines": {
+        "max_instances": {
             "max_allowed": 10.0,
             "in_use": 0.0
         },
-        "cost_per_hour": {
+        "max_price_hour": {
             "max_allowed": 20.0,
             "in_use": 0.0
         },
-        "machine_disk_size_gb": {
+        "max_disk_size": {
             "max_allowed": 50.0,
             "in_use": None
         },
-        "machine_group_idle_minutes": {
+        "mg_max_idle": {
             "max_allowed": 150.0,
             "in_use": None
         },
-        "machine_group_lifetime_hours": {
+        "mg_max_ttl": {
             "max_allowed": 48.0,
             "in_use": None
         }
@@ -252,27 +252,27 @@ def fake_get_quotas_normal():
 def fake_get_quotas_no_total_num_machines():
     """Fake get_quotas function."""
     return {
-        "total_num_vcpus": {
+        "max_vcpus": {
             "max_allowed": 100.0,
             "in_use": 0.0
         },
-        "total_num_machines": {
+        "max_instances": {
             "max_allowed": 0.0,
             "in_use": 0.0
         },
-        "cost_per_hour": {
+        "max_price_hour": {
             "max_allowed": 20.0,
             "in_use": 0.0
         },
-        "machine_disk_size_gb": {
+        "max_disk_size": {
             "max_allowed": 50.0,
             "in_use": None
         },
-        "machine_group_idle_minutes": {
+        "mg_max_idle": {
             "max_allowed": 150.0,
             "in_use": None
         },
-        "machine_group_lifetime_hours": {
+        "mg_max_ttl": {
             "max_allowed": 48.0,
             "in_use": None
         }

@@ -30,75 +30,69 @@ def analyze(name: str, metadata_path: str, ouput_path: str = None) -> Dict:
         name (str): Name of the benchmark.
         metadata_path (str): Path to the metadata file.
         ouput_path (str): Path to the output file.
-            If it will not create an output file.
+            If None it will not create an output file.
     Returns:
         Dict: Dictionary with the information about the benchmark.
     """
     logging.info("Starting analysis of benchmark %s", name)
-    project = Project(name, append=True)
-    project.open()
+    with Project(name, append=True) as project:
 
-    tasks = project.get_tasks()
+        tasks = project.get_tasks()
 
-    report = {"name": name, "resources": {}}
+        report = {"name": name, "resources": {}}
 
-    #reads the metadata file and creates a dictionary with the task_id as key
-    #and the metadata as value
-    metadata_tasks = {}
-    with open(metadata_path, "r", encoding="utf-8") as metadata_file:
-        lines = metadata_file.readlines()
-        for line in lines:
-            temp_task = json.loads(line)
-            metadata_tasks[temp_task["task_id"]] = temp_task
-    skipped_tasks = []
-    for task in tqdm(tasks, desc="Analyzing tasks"):
-        task_status = task.get_status()
-        if task_status != "success":
-            skipped_tasks.append(task)
-            continue
-        task_info = task.info
-        mg_name = task_info.executer.vm_name.split(
-            "-")[0] + "-" + task_info.executer.vm_name.split("-")[1]
-        execution_time = task.get_computation_time(cached=True)
-        resource = machine_groups.get_by_name(mg_name)
-        vm_type = task_info.executer.vm_type
+        #reads the metadata file and creates a dictionary with the task_id as
+        #key and the metadata as value
+        metadata_tasks = {}
+        with open(metadata_path, "r", encoding="utf-8") as metadata_file:
+            lines = metadata_file.readlines()
+            for line in lines:
+                temp_task = json.loads(line)
+                metadata_tasks[temp_task["task_id"]] = temp_task
+        skipped_tasks = []
+        for task in tqdm(tasks, desc="Analyzing tasks"):
+            task_status = task.get_status()
+            if task_status != "success":
+                skipped_tasks.append(task)
+                continue
+            task_info = task.info
+            mg_name = task_info.executer.vm_name.split(
+                "-")[0] + "-" + task_info.executer.vm_name.split("-")[1]
+            resource = machine_groups.get_by_name(mg_name)
+            vm_type = task_info.executer.vm_type
 
-        if vm_type not in report["resources"]:
-            report["resources"][vm_type] = {
-                "cost_per_hour":
-                    resource.estimate_cloud_cost(verbose=False),
-                "type":
-                    resource.__class__.__name__,
-                "provider":
-                    task_info.executer.host_type,
-                "machine_count":
-                    resource.num_machines,
-                "tasks": [{
+            if vm_type not in report["resources"]:
+                report["resources"][vm_type] = {
+                    "cost_per_hour":
+                        resource.estimate_cloud_cost(verbose=False),
+                    "type":
+                        resource.__class__.__name__,
+                    "provider":
+                        task_info.executer.host_type,
+                    "machine_count":
+                        resource.num_machines,
+                    "tasks": [{
+                        "task_id": task_info.task_id,
+                        "info": task_info.to_dict,
+                        "metadata": metadata_tasks[task_info.task_id]
+                    }]
+                }
+            else:
+                report["resources"][vm_type]["tasks"].append({
                     "task_id": task_info.task_id,
-                    "start_time": task_info.start_time,
-                    "submit_time": task_info.create_time,
-                    "execution_time_seconds": execution_time,
+                    "info": task_info.to_dict,
                     "metadata": metadata_tasks[task_info.task_id]
-                }]
-            }
-        else:
-            report["resources"][vm_type]["tasks"].append({
-                "task_id": task_info.task_id,
-                "start_time": task_info.start_time,
-                "submit_time": task_info.create_time,
-                "execution_time_seconds": execution_time,
-                "metadata": metadata_tasks[task_info.task_id]
-            })
-    for task in skipped_tasks:
-        logging.info("Task %s was skipped due to status %s", task.info.task_id,
-                     task.info.status)
-    if ouput_path:
-        logging.info("Writing report to %s", ouput_path)
-        with open(f"{ouput_path}/{name}.json", "w",
-                  encoding="utf-8") as output_file:
-            output_file.write(json.dumps(report, indent=4))
+                })
+        for task in skipped_tasks:
+            logging.info("Task %s was skipped due to status %s",
+                         task.info.task_id, task.info.status)
+        if ouput_path:
+            logging.info("Writing report to %s/%s.json", ouput_path, name)
+            with open(f"{ouput_path}/{name}.json", "w",
+                      encoding="utf-8") as output_file:
+                output_file.write(json.dumps(report, indent=4))
 
-    return report
+        return report
 
 
 def _tasks_by_vm_type(project: Project) -> Dict[str, List[Task]]:
@@ -336,13 +330,14 @@ def _can_start_resource(resource: BaseMachineGroup) -> bool:
             bool: True if the resource can be started, False otherwise.
         """
     quotas = users.get_quotas()
-    cost_in_use = quotas["cost_per_hour"]["in_use"]
-    vcpu_in_use = quotas["total_num_vcpus"]["in_use"]
-    machines_in_use = quotas["total_num_machines"]["in_use"]
 
-    cost_max = quotas["cost_per_hour"]["max_allowed"]
-    vcpu_max = quotas["total_num_vcpus"]["max_allowed"]
-    machines_max = quotas["total_num_machines"]["max_allowed"]
+    cost_in_use = quotas["max_price_hour"]["in_use"]
+    vcpu_in_use = quotas["max_vcpus"]["in_use"]
+    machines_in_use = quotas["max_instances"]["in_use"]
+
+    cost_max = quotas["max_price_hour"]["max_allowed"]
+    vcpu_max = quotas["max_vcpus"]["max_allowed"]
+    machines_max = quotas["max_instances"]["max_allowed"]
 
     current_vcpu = int(resource.machine_type.split("-")[2])
 

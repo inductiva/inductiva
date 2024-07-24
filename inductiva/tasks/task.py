@@ -92,6 +92,7 @@ class TaskInfo:
         self.end_time = None
         self.time_metrics = self.TimeMetrics()
         self.data_metrics = self.DataMetrics()
+        self.to_dict = kwargs
 
         # Set the general attributes
         for key, value in kwargs.items():
