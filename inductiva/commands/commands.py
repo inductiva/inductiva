@@ -1,11 +1,12 @@
 """Wrapper class for simulator commands."""
 from inductiva import types
+from .mpiconfig import MPIConfig
 
 
 class Command:
     """Abstraction class for commands."""
 
-    def __init__(self, cmd: str, *prompts: str):
+    def __init__(self, cmd: str, *prompts: str, mpi_config: MPIConfig = None):
         """
         Args:
           cmd: A string with the command, e.g, 'gmx pdb2gmx -f protein.pdb'
@@ -22,6 +23,7 @@ class Command:
 
         self.cmd = cmd
         self.prompts = list(prompts)
+        self.mpi_config = mpi_config
 
     def to_dict(self):
         """
@@ -35,7 +37,12 @@ class Command:
         >>> cmd.to_dict()
         >>> {"cmd": "gmx pdb2gmx -f protein.pdb", prompts: ["y", "y"]}
         """
-        return self.__dict__.copy()
+        ret_dict = self.__dict__.copy()
+
+        if ret_dict["mpi_config"] is not None:
+            ret_dict["mpi_config"] = ret_dict["mpi_config"].to_dict()
+
+        return ret_dict
 
     @staticmethod
     def commands_to_dicts(commands: types.Commands):
