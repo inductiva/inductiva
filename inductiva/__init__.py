@@ -14,7 +14,6 @@ from inductiva._cli.cmd_user.info import get_info
 from inductiva.client.api_client import ApiClient
 
 from . import simulators
-from . import benchmarks
 from . import resources
 from . import projects
 from . import storage
