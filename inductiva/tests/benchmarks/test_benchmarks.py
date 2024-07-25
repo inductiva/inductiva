@@ -285,7 +285,7 @@ def test__can_start_resource_cant_start_low_quotas():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-4"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
-    resource.consumed_vcpus = 4
+    resource.n_vcpus.total = 4
 
     res = _can_start_resource(resource)
 
@@ -300,7 +300,7 @@ def test__can_start_resource_cant_start_too_many_vcpu():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-400"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
-    resource.consumed_vcpus = 400
+    resource.n_vcpus.total = 400
 
     res = _can_start_resource(resource)
 
@@ -316,7 +316,7 @@ def test__can_start_resource_cant_start_no_num_machines():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-4"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
-    resource.consumed_vcpus = 4
+    resource.n_vcpus.total = 4
 
     res = _can_start_resource(resource)
 
@@ -331,7 +331,7 @@ def test__can_start_resource_cant_start_high_cost():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-1"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=10.4724)
-    resource.consumed_vcpus = 1
+    resource.n_vcpus.total = 1
 
     res = _can_start_resource(resource)
 
@@ -346,7 +346,7 @@ def test__can_start_resource_can_start_low_quotas():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-1"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
-    resource.consumed_vcpus = 1
+    resource.n_vcpus.total = 1
 
     res = _can_start_resource(resource)
 
@@ -361,7 +361,7 @@ def test__can_start_resource_can_start_too_many_vcpu():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-4"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
-    resource.consumed_vcpus = 4
+    resource.n_vcpus.total = 4
 
     res = _can_start_resource(resource)
 
@@ -375,7 +375,7 @@ def test__can_start_resource_can_start_high_cost():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-1"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.4724)
-    resource.consumed_vcpus = 1
+    resource.n_vcpus.total = 1
 
     res = _can_start_resource(resource)
 

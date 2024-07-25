@@ -1,5 +1,5 @@
 """Base class for machine groups."""
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 import time
 import enum
 import json
@@ -16,6 +16,8 @@ from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
 
 from inductiva.resources import machine_types
+
+VCPUCount = namedtuple("VCPUCount", ["total", "per_machine"])
 
 
 class ResourceType(enum.Enum):
@@ -89,26 +91,19 @@ class BaseMachineGroup:
         return self._id
 
     @property
-    def available_vcpus(self):
-        """Returns the number of vCPUs available to the resource.
-        
-        For a machine group with 2 machines, each with 4 vCPUs, this will
-        return 4.
-        """
-        # This works for GCP and ICE
-        # TODO: Add support for other providers
-        return (self.quota_usage["max_vcpus"] //
-                self.quota_usage["max_instances"])
+    def n_vcpus(self):
+        """Returns the number of vCPUs available in the resource.
 
-    @property
-    def consumed_vcpus(self):
-        """Returns the number of vCPUs consumed by the resource.
-        
-        For a machine group with 2 machines, each with 4 vCPUs, this will
-        return 8.
+        Returns a tuple with the total number of vCPUs and the number of vCPUs
+        per machine. For a machine group with 2 machines, each with 4 vCPUs,
+        this will return (8, 4).
+        In a case of an Elastic machine group, the total number of vCPUs is
+        the maximum number of vCPUs that can be used at the same time.
         """
+        max_vcpus = int(self.quota_usage["max_vcpus"])
+        max_instances = int(self.quota_usage["max_instances"])
 
-        return int(self.quota_usage["max_vcpus"])
+        return VCPUCount(max_vcpus, max_vcpus // max_instances)
 
     @property
     def name(self):

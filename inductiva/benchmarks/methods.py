@@ -360,7 +360,7 @@ def _can_start_resource(resource: BaseMachineGroup) -> bool:
     vcpu_max = quotas["max_vcpus"]["max_allowed"]
     machines_max = quotas["max_instances"]["max_allowed"]
 
-    current_vcpu = resource.consumed_vcpus
+    current_vcpu = resource.n_vcpus.total
 
     estimated_cost = cost_in_use + resource.estimate_cloud_cost(verbose=False)
     estimated_vcpu_usage = vcpu_in_use + current_vcpu
