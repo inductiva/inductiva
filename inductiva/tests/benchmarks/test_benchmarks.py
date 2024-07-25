@@ -138,7 +138,7 @@ def test__compute_tasks_to_run_all_task_ran():
     # pylint: disable=W0212
     to_run = _compute_tasks_to_run(machines, current_project_tasks, replicas)
 
-    assert {'c2-standard-4': 0, 'c2-standard-8': 0} == to_run
+    assert {"c2-standard-4": 0, "c2-standard-8": 0} == to_run
 
 
 def test__render_dict_all_callable():
