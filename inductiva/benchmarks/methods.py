@@ -7,9 +7,11 @@ import logging
 import time
 import json
 
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List, Type, Union
 from tqdm import tqdm
 
+import inductiva
+from inductiva.client import models
 from inductiva.resources.machines_base import BaseMachineGroup
 from inductiva.templating.manager import TemplateManager
 from inductiva.resources.machines import MachineGroup
@@ -20,6 +22,50 @@ from inductiva.tasks.task import Task
 from inductiva import users
 
 from ..localization import translator as __
+
+QUOTAS_EXCEEDED_SLEEP_TIME = 60
+
+
+def _analyze_task(task: Task, report: Dict[str, Any], skipped_tasks: List[Task],
+                  metadata_tasks: Dict[str, Any]):
+    """Analyzes a task.
+
+    This method analyzes a task and adds the information to the report. If the
+    task is not successful, it is added to the skipped_tasks list.
+
+    Args:
+        task (Task): Task to analyze.
+        report (Dict[str, Any]): Report to add the information to.
+        skipped_tasks (List[Task]): List of tasks that were skipped.
+        metadata_tasks (Dict[str, Any]): Dictionary with the metadata of the
+            tasks.
+    Returns:
+        This method does not return anything. It modifies some parameters
+        instead of returning multiple values.
+    """
+    task_status = task.get_status()
+    if task_status != models.TaskStatusCode.SUCCESS:
+        skipped_tasks.append(task)
+        return
+    task_info = task.info
+    a, b, *_ = task_info.executer.vm_name.split("-")
+    mg_name = a + "-" + b
+    resource = machine_groups.get_by_name(mg_name)
+    vm_type = task_info.executer.vm_type
+
+    if vm_type not in report["resources"]:
+        report["resources"][vm_type] = {
+            "cost_per_hour": resource.estimate_cloud_cost(verbose=False),
+            "type": resource.__class__.__name__,
+            "provider": task_info.executer.host_type,
+            "machine_count": resource.num_machines,
+            "tasks": []
+        }
+    report["resources"][vm_type]["tasks"].append({
+        "task_id": task_info.task_id,
+        "info": task_info.to_dict(),
+        "metadata": metadata_tasks[task_info.task_id]
+    })
 
 
 def analyze(name: str, metadata_path: str, ouput_path: str = None) -> Dict:
@@ -35,64 +81,33 @@ def analyze(name: str, metadata_path: str, ouput_path: str = None) -> Dict:
         Dict: Dictionary with the information about the benchmark.
     """
     logging.info("Starting analysis of benchmark %s", name)
-    with Project(name, append=True) as project:
+    project = Project(name)
 
-        tasks = project.get_tasks()
+    tasks = project.get_tasks()
 
-        report = {"name": name, "resources": {}}
+    report = {"name": name, "resources": {}}
 
-        #reads the metadata file and creates a dictionary with the task_id as
-        #key and the metadata as value
-        metadata_tasks = {}
-        with open(metadata_path, "r", encoding="utf-8") as metadata_file:
-            lines = metadata_file.readlines()
-            for line in lines:
-                temp_task = json.loads(line)
-                metadata_tasks[temp_task["task_id"]] = temp_task
-        skipped_tasks = []
-        for task in tqdm(tasks, desc="Analyzing tasks"):
-            task_status = task.get_status()
-            if task_status != "success":
-                skipped_tasks.append(task)
-                continue
-            task_info = task.info
-            mg_name = task_info.executer.vm_name.split(
-                "-")[0] + "-" + task_info.executer.vm_name.split("-")[1]
-            resource = machine_groups.get_by_name(mg_name)
-            vm_type = task_info.executer.vm_type
+    #reads the metadata file and creates a dictionary with the task_id as
+    #key and the metadata as value
+    metadata_tasks = {}
+    with open(metadata_path, "r", encoding="utf-8") as metadata_file:
+        for line in metadata_file:
+            temp_task = json.loads(line)
+            metadata_tasks[temp_task["task_id"]] = temp_task
+    skipped_tasks = []
+    for task in tqdm(tasks, desc="Analyzing tasks"):
+        _analyze_task(task, report, skipped_tasks, metadata_tasks)
 
-            if vm_type not in report["resources"]:
-                report["resources"][vm_type] = {
-                    "cost_per_hour":
-                        resource.estimate_cloud_cost(verbose=False),
-                    "type":
-                        resource.__class__.__name__,
-                    "provider":
-                        task_info.executer.host_type,
-                    "machine_count":
-                        resource.num_machines,
-                    "tasks": [{
-                        "task_id": task_info.task_id,
-                        "info": task_info.to_dict,
-                        "metadata": metadata_tasks[task_info.task_id]
-                    }]
-                }
-            else:
-                report["resources"][vm_type]["tasks"].append({
-                    "task_id": task_info.task_id,
-                    "info": task_info.to_dict,
-                    "metadata": metadata_tasks[task_info.task_id]
-                })
-        for task in skipped_tasks:
-            logging.info("Task %s was skipped due to status %s",
-                         task.info.task_id, task.info.status)
-        if ouput_path:
-            logging.info("Writing report to %s/%s.json", ouput_path, name)
-            with open(f"{ouput_path}/{name}.json", "w",
-                      encoding="utf-8") as output_file:
-                output_file.write(json.dumps(report, indent=4))
+    for task in skipped_tasks:
+        logging.info("Task %s was skipped due to status %s", task.info.task_id,
+                     task.info.status)
+    if ouput_path:
+        logging.info("Writing report to %s/%s.json", ouput_path, name)
+        with open(f"{ouput_path}/{name}.json", "w",
+                  encoding="utf-8") as output_file:
+            output_file.write(json.dumps(report, indent=4))
 
-        return report
+    return report
 
 
 def _tasks_by_vm_type(project: Project) -> Dict[str, List[Task]]:
@@ -131,16 +146,8 @@ def _compute_tasks_to_run(machines_to_run: List[str],
             tasks that need to be run on them as values.
         Example: { "n1-standard-4": 2, "n1-standard-8": 1}
     """
-    to_run = {}
-    for machine in machines_to_run:
-
-        # if the machine has not been ran yet, run the intended replicas
-        if machine not in already_ran:
-            to_run[machine] = intended_replicas
-        # if the machine has been ran, run the remaining replicas
-        elif len(already_ran[machine]) < intended_replicas:
-            to_run[machine] = intended_replicas - len(already_ran[machine])
-    return to_run
+    already_ran = defaultdict(list, already_ran)
+    return {m: intended_replicas - len(already_ran[m]) for m in machines_to_run}
 
 
 def _print_info(already_ran: Dict[str, List[Task]], tasks_to_run: Dict[str,
@@ -161,14 +168,53 @@ def _print_info(already_ran: Dict[str, List[Task]], tasks_to_run: Dict[str,
     print()
 
 
+def _run_replica(simulator_args: Dict[str, Union[Callable, Any]],\
+                 input_args: Dict[str, Union[Callable,Any]],\
+                 resource: BaseMachineGroup,\
+                 simulator: Simulator,\
+                 input_files: str,\
+                 replica: int):
+    """Runs a replica of the benchmark.
+
+    Args:
+        simulator_args (Dict[str, Union[Callable, Any]]): Arguments for the
+            simulator.
+        input_args (Dict[str, Union[Callable, Any]]): Arguments for the
+            input files.
+        resource (BaseMachineGroup): Resource to run the benchmark on.
+        simulator (Simulator): Simulator to run.
+        input_files (str): Path to the input files.
+        replica (int): Number of the replica.
+    """
+    # Each replica can run with different arguments
+    simulator_args_current = _render_dict(simulator_args, resource)
+    input_args_current = _render_dict(input_args, resource)
+    print(f"Simulation arguments {simulator_args_current}")
+    # input_files either come from the template manager or
+    # are passed directly.
+    simulator_args_current["input_dir"] = input_files
+    simulator_args_current["on"] = resource
+
+    if input_args_current:
+        target_dir = f"benchmark_inputs/{resource.machine_type}_{replica}"
+        TemplateManager.render_dir(source_dir=input_files,
+                                   target_dir=target_dir,
+                                   overwrite=False,
+                                   **input_args)
+        simulator_args_current["input_dir"] = target_dir
+
+    _ = simulator.run(**simulator_args_current)
+
+
 def _run(project: Project,
          input_files: str,
          replicas: int,
          machines: List[Dict[str, Any]],
          simulator: Simulator,
-         machine_class: BaseMachineGroup = None,
          input_args: Dict[str, Union[Callable, Any]] = None,
          machine_args: Dict[str, Union[Callable, Any]] = None,
+         machine_class: Type[BaseMachineGroup] = inductiva.resources.
+         MachineGroup,
          simulator_args: Dict[str, Union[Callable, Any]] = None):
     """Runs a benchmark.
     This method runs a benchmark using the provided parameters.
@@ -191,14 +237,10 @@ def _run(project: Project,
 
     for machine, replicas_to_run in to_run.items():
 
-        machine_args_current = _replace_callable_from_dict(
-            machine_args, machine)
+        machine_args_current = _render_dict(machine_args, machine)
 
         print(f"\nCreating machine group {machine} with {machine_args_current}")
-
-        # Use MachineGroup as default value for machine_class
-        machine_class = machine_class or MachineGroup
-
+        print(machine_class)
         resource = machine_class(machine_type=machine,
                                  max_idle_time=datetime.timedelta(minutes=1),
                                  **machine_args_current)
@@ -208,32 +250,13 @@ def _run(project: Project,
             while not _can_start_resource(resource):
                 print("This machine will exceed the current quotas.\n"
                       "Going to sleep and trying again later.")
-                time.sleep(60)
+                time.sleep(QUOTAS_EXCEEDED_SLEEP_TIME)
 
             resource.start()
 
-        for replica in range(replicas - replicas_to_run + 1, replicas + 1):
-            # Each replica can run with different arguments
-            simulator_args_current = _replace_callable_from_dict(
-                simulator_args, resource)
-            input_args_current = _replace_callable_from_dict(
-                input_args, resource)
-            print(f"Simulation arguments {simulator_args_current}")
-            # input_files either come from the template manager or
-            # are passed directly.
-            simulator_args_current["input_dir"] = input_files
-            simulator_args_current["on"] = resource
-
-            if input_args_current:
-                target_dir = ("benchmark_inputs/"
-                              f"{resource.machine_type}_{replica}")
-                TemplateManager.render_dir(source_dir=input_files,
-                                           target_dir=target_dir,
-                                           overwrite=False,
-                                           **input_args)
-                simulator_args_current["input_dir"] = target_dir
-
-            _ = simulator.run(**simulator_args_current)
+        for replica in range(replicas_to_run, 0, -1):
+            _run_replica(simulator_args, input_args, resource, simulator,
+                         input_files, replica)
 
 
 def run(name: str,
@@ -242,11 +265,13 @@ def run(name: str,
         machines: List[str],
         simulator: Simulator,
         append: bool = False,
-        machine_class: BaseMachineGroup = None,
         input_args: Dict[str, Union[Callable, Any]] = None,
+        machine_class: Type[BaseMachineGroup] = MachineGroup,
         machine_args: Dict[str, Union[Callable, Any]] = None,
         simulator_args: Dict[str, Union[Callable, Any]] = None):
-    """Runs a benchmark.
+    """
+    Runs a benchmark.
+
     This method creates a project and runs a benchmark using the provided
     parameters. It checks if a benchmark with the given name already exists. If
     it does, the user is prompted to either append tasks to the existing
@@ -294,12 +319,11 @@ def run(name: str,
             __("benchmark-already-exists", name, project.num_tasks))
 
     with project:
-        _run(project, input_files, replicas, machines, simulator, machine_class,
-             input_args, machine_args, simulator_args)
+        _run(project, input_files, replicas, machines, simulator, input_args,
+             machine_args, machine_class, simulator_args)
 
 
-def _replace_callable_from_dict(dictionary: Dict[str, Union[Callable, Any]],
-                                argument: Any):
+def _render_dict(dictionary: Dict[str, Union[Callable, Any]], argument: Any):
     """Replaces callables from a dictionary.
     This function replaces callables with the result of calling the callable
     with the argument passed.
@@ -310,14 +334,11 @@ def _replace_callable_from_dict(dictionary: Dict[str, Union[Callable, Any]],
     Returns:
         Dict[str, Any]: Dictionary with callables replaced.
     """
-    new_dict = {}
-    if dictionary is not None:
-        for key, value in dictionary.items():
-            if callable(value):
-                new_dict[key] = value(argument)
-            else:
-                new_dict[key] = value
-    return new_dict
+    if dictionary:
+        return {
+            k: v(argument) if callable(v) else v for k, v in dictionary.items()
+        }
+    return {}
 
 
 def _can_start_resource(resource: BaseMachineGroup) -> bool:
@@ -339,10 +360,11 @@ def _can_start_resource(resource: BaseMachineGroup) -> bool:
     vcpu_max = quotas["max_vcpus"]["max_allowed"]
     machines_max = quotas["max_instances"]["max_allowed"]
 
-    current_vcpu = int(resource.machine_type.split("-")[2])
+    current_vcpu = resource.consumed_vcpus
 
-    if (cost_in_use + resource.estimate_cloud_cost(verbose=False) > cost_max or
-            vcpu_in_use + current_vcpu > vcpu_max or
-            machines_in_use + 1 > machines_max):
-        return False
-    return True
+    estimated_cost = cost_in_use + resource.estimate_cloud_cost(verbose=False)
+    estimated_vcpu_usage = vcpu_in_use + current_vcpu
+    estimated_machine_usage = machines_in_use + 1
+    return estimated_cost <= cost_max and \
+            estimated_vcpu_usage <= vcpu_max and \
+            estimated_machine_usage <= machines_max

@@ -89,11 +89,26 @@ class BaseMachineGroup:
         return self._id
 
     @property
-    def vcpus(self):
+    def available_vcpus(self):
+        """Returns the number of vCPUs available to the resource.
+        
+        For a machine group with 2 machines, each with 4 vCPUs, this will
+        return 4.
+        """
         # This works for GCP and ICE
         # TODO: Add support for other providers
-        return self.quota_usage.get("total_num_vcpus",
-                                    int(self.machine_type.split("-")[2]))
+        return (self.quota_usage["max_vcpus"] //
+                self.quota_usage["max_instances"])
+
+    @property
+    def consumed_vcpus(self):
+        """Returns the number of vCPUs consumed by the resource.
+        
+        For a machine group with 2 machines, each with 4 vCPUs, this will
+        return 8.
+        """
+
+        return int(self.quota_usage["max_vcpus"])
 
     @property
     def name(self):

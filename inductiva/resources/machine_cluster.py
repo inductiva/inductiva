@@ -72,6 +72,16 @@ class MPICluster(machines_base.BaseMachineGroup):
                                          spot=self.__spot,
                                          type=self.__type)
 
+    @property
+    def available_vcpus(self):
+        """Returns the number of vCPUs available to the resource.
+        
+        For a mpi cluster with 2 machines, each with 4 vCPUs, this will
+        return 8.
+        """
+
+        return int(self.quota_usage["max_vcpus"])
+
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
