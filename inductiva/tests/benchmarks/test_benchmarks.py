@@ -1,7 +1,7 @@
 """Tests for the benchmarks module."""
 from unittest import mock
 
-from inductiva.benchmarks.methods import _replace_callable_from_dict
+from inductiva.benchmarks.methods import _render_dict
 from inductiva.benchmarks.methods import _compute_tasks_to_run
 from inductiva.benchmarks.methods import _can_start_resource
 from inductiva.benchmarks.methods import _tasks_by_vm_type
@@ -138,11 +138,11 @@ def test__compute_tasks_to_run_all_task_ran():
     # pylint: disable=W0212
     to_run = _compute_tasks_to_run(machines, current_project_tasks, replicas)
 
-    assert not to_run
+    assert {'c2-standard-4': 0, 'c2-standard-8': 0} == to_run
 
 
-def test__replace_callable_from_dict_all_callable():
-    """Test the _replace_callable_from_dict function
+def test__render_dict_all_callable():
+    """Test the _render_dict function
     when all values are callable.
     """
     dictionary = {
@@ -151,32 +151,32 @@ def test__replace_callable_from_dict_all_callable():
         "c": lambda x: x + 3
     }
     # pylint: disable=W0212
-    result = _replace_callable_from_dict(dictionary, 1)
+    result = _render_dict(dictionary, 1)
     assert result == {"a": 2, "b": 3, "c": 4}
 
 
-def test__replace_callable_from_dict_no_callable():
-    """Test the _replace_callable_from_dict function
+def test__render_dict_no_callable():
+    """Test the _render_dict function
     when no values are callable.
     """
     dictionary = {"a": 1, "b": 1, "c": 3}
     # pylint: disable=W0212
-    result = _replace_callable_from_dict(dictionary, 1)
+    result = _render_dict(dictionary, 1)
     assert result == {"a": 1, "b": 1, "c": 3}
 
 
-def test__replace_callable_from_dict_some_callable():
-    """Test the _replace_callable_from_dict function
+def test__render_dict_some_callable():
+    """Test the _render_dict function
     when some values are callable.
     """
     dictionary = {"a": 1, "b": lambda x: x + 20, "c": 3}
     # pylint: disable=W0212
-    result = _replace_callable_from_dict(dictionary, 1)
+    result = _render_dict(dictionary, 1)
     assert result == {"a": 1, "b": 21, "c": 3}
 
 
-def test__replace_callable_from_dict_argument_is_object():
-    """Test the _replace_callable_from_dict function
+def test__render_dict_argument_is_object():
+    """Test the _render_dict function
     when the argument passed is an object.
     """
     dictionary = {"a": 1, "b": lambda x: x.hello(), "c": 3}
@@ -185,7 +185,7 @@ def test__replace_callable_from_dict_argument_is_object():
     argument.hello = mock.MagicMock(return_value="hello world")
 
     # pylint: disable=W0212
-    result = _replace_callable_from_dict(dictionary, argument)
+    result = _render_dict(dictionary, argument)
     assert result == {"a": 1, "b": "hello world", "c": 3}
 
 
@@ -282,10 +282,10 @@ def fake_get_quotas_no_total_num_machines():
 @mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_small)
 def test__can_start_resource_cant_start_low_quotas():
     """Test the _can_start_resource function when the quotas are small."""
-
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-4"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
+    resource.consumed_vcpus = 4
 
     res = _can_start_resource(resource)
 
@@ -300,6 +300,7 @@ def test__can_start_resource_cant_start_too_many_vcpu():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-400"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
+    resource.consumed_vcpus = 400
 
     res = _can_start_resource(resource)
 
@@ -315,6 +316,7 @@ def test__can_start_resource_cant_start_no_num_machines():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-4"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
+    resource.consumed_vcpus = 4
 
     res = _can_start_resource(resource)
 
@@ -329,6 +331,7 @@ def test__can_start_resource_cant_start_high_cost():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-1"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=10.4724)
+    resource.consumed_vcpus = 1
 
     res = _can_start_resource(resource)
 
@@ -343,6 +346,7 @@ def test__can_start_resource_can_start_low_quotas():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-1"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
+    resource.consumed_vcpus = 1
 
     res = _can_start_resource(resource)
 
@@ -357,6 +361,7 @@ def test__can_start_resource_can_start_too_many_vcpu():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-4"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
+    resource.consumed_vcpus = 4
 
     res = _can_start_resource(resource)
 
@@ -370,6 +375,7 @@ def test__can_start_resource_can_start_high_cost():
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-1"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.4724)
+    resource.consumed_vcpus = 1
 
     res = _can_start_resource(resource)
 
