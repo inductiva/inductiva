@@ -31,6 +31,7 @@ class User(schemas.DictSchema):
 
     class MetaOapg:
         required = {
+            "terms_and_conditions_decision",
             "campaigns",
             "tier",
             "total_available_credits",
@@ -41,6 +42,12 @@ class User(schemas.DictSchema):
         class properties:
             username = schemas.StrSchema
             email = schemas.StrSchema
+
+            @staticmethod
+            def terms_and_conditions_decision(
+            ) -> typing.Type['TermsAndConditions']:
+                return TermsAndConditions
+
             total_available_credits = schemas.NumberSchema
 
             @staticmethod
@@ -52,13 +59,13 @@ class User(schemas.DictSchema):
                 class MetaOapg:
 
                     @staticmethod
-                    def items() -> typing.Type['Campaign']:
-                        return Campaign
+                    def items() -> typing.Type['UserCampaign']:
+                        return UserCampaign
 
                 def __new__(
                     cls,
-                    _arg: typing.Union[typing.Tuple['Campaign'],
-                                       typing.List['Campaign']],
+                    _arg: typing.Union[typing.Tuple['UserCampaign'],
+                                       typing.List['UserCampaign']],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                 ) -> 'campaigns':
@@ -68,7 +75,7 @@ class User(schemas.DictSchema):
                         _configuration=_configuration,
                     )
 
-                def __getitem__(self, i: int) -> 'Campaign':
+                def __getitem__(self, i: int) -> 'UserCampaign':
                     return super().__getitem__(i)
 
             class name(
@@ -128,17 +135,89 @@ class User(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class terms_and_conditions_decision_ts(
+                    schemas.DateTimeBase,
+                    schemas.ComposedSchema,
+            ):
+
+                class MetaOapg:
+                    format = 'date-time'
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'terms_and_conditions_decision_ts':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             credits_currency = schemas.StrSchema
             __annotations__ = {
-                "username": username,
-                "email": email,
-                "total_available_credits": total_available_credits,
-                "tier": tier,
-                "campaigns": campaigns,
-                "name": name,
-                "credits_currency": credits_currency,
+                "username":
+                    username,
+                "email":
+                    email,
+                "terms_and_conditions_decision":
+                    terms_and_conditions_decision,
+                "total_available_credits":
+                    total_available_credits,
+                "tier":
+                    tier,
+                "campaigns":
+                    campaigns,
+                "name":
+                    name,
+                "terms_and_conditions_decision_ts":
+                    terms_and_conditions_decision_ts,
+                "credits_currency":
+                    credits_currency,
             }
 
+    terms_and_conditions_decision: 'TermsAndConditions'
     campaigns: MetaOapg.properties.campaigns
     tier: 'Tier'
     total_available_credits: MetaOapg.properties.total_available_credits
@@ -155,6 +234,12 @@ class User(schemas.DictSchema):
     def __getitem__(
             self, name: typing_extensions.Literal["email"]
     ) -> MetaOapg.properties.email:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["terms_and_conditions_decision"]
+    ) -> 'TermsAndConditions':
         ...
 
     @typing.overload
@@ -181,6 +266,13 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self,
+        name: typing_extensions.Literal["terms_and_conditions_decision_ts"]
+    ) -> MetaOapg.properties.terms_and_conditions_decision_ts:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["credits_currency"]
     ) -> MetaOapg.properties.credits_currency:
         ...
@@ -192,10 +284,12 @@ class User(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "username",
         "email",
+        "terms_and_conditions_decision",
         "total_available_credits",
         "tier",
         "campaigns",
         "name",
+        "terms_and_conditions_decision_ts",
         "credits_currency",
     ], str]):
         # dict_instance[name] accessor
@@ -211,6 +305,12 @@ class User(schemas.DictSchema):
     def get_item_oapg(
             self, name: typing_extensions.Literal["email"]
     ) -> MetaOapg.properties.email:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["terms_and_conditions_decision"]
+    ) -> 'TermsAndConditions':
         ...
 
     @typing.overload
@@ -237,6 +337,14 @@ class User(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self,
+        name: typing_extensions.Literal["terms_and_conditions_decision_ts"]
+    ) -> typing.Union[MetaOapg.properties.terms_and_conditions_decision_ts,
+                      schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["credits_currency"]
     ) -> typing.Union[MetaOapg.properties.credits_currency, schemas.Unset]:
         ...
@@ -250,10 +358,12 @@ class User(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "username",
         "email",
+        "terms_and_conditions_decision",
         "total_available_credits",
         "tier",
         "campaigns",
         "name",
+        "terms_and_conditions_decision_ts",
         "credits_currency",
     ], str]):
         return super().get_item_oapg(name)
@@ -264,6 +374,7 @@ class User(schemas.DictSchema):
             dict,
             frozendict.frozendict,
         ],
+        terms_and_conditions_decision: 'TermsAndConditions',
         campaigns: typing.Union[
             MetaOapg.properties.campaigns,
             list,
@@ -289,6 +400,11 @@ class User(schemas.DictSchema):
                            uuid.UUID, int, float, decimal.Decimal, bool, None,
                            list, tuple, bytes, io.FileIO, io.BufferedReader,
                            schemas.Unset] = schemas.unset,
+        terms_and_conditions_decision_ts: typing.Union[
+            MetaOapg.properties.terms_and_conditions_decision_ts, dict,
+            frozendict.frozendict, str, date, datetime, uuid.UUID, int, float,
+            decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO,
+            io.BufferedReader, schemas.Unset] = schemas.unset,
         credits_currency: typing.Union[MetaOapg.properties.credits_currency,
                                        str, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -300,17 +416,20 @@ class User(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
+            terms_and_conditions_decision=terms_and_conditions_decision,
             campaigns=campaigns,
             tier=tier,
             total_available_credits=total_available_credits,
             email=email,
             username=username,
             name=name,
+            terms_and_conditions_decision_ts=terms_and_conditions_decision_ts,
             credits_currency=credits_currency,
             _configuration=_configuration,
             **kwargs,
         )
 
 
-from inductiva.client.model.campaign import Campaign
+from inductiva.client.model.terms_and_conditions import TermsAndConditions
 from inductiva.client.model.tier import Tier
+from inductiva.client.model.user_campaign import UserCampaign
