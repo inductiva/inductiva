@@ -1,4 +1,4 @@
-""" 
+"""
 Methods to interact with Benchmarks.
 """
 from collections import defaultdict
@@ -209,7 +209,7 @@ def _run_replica(simulator_args: Dict[str, Union[Callable, Any]],\
 def _run(project: Project,
          input_files: str,
          replicas: int,
-         machines: List[Dict[str, Any]],
+         machines: List[str],
          simulator: Simulator,
          input_args: Dict[str, Union[Callable, Any]] = None,
          machine_args: Dict[str, Union[Callable, Any]] = None,
@@ -240,7 +240,7 @@ def _run(project: Project,
         machine_args_current = _render_dict(machine_args, machine)
 
         print(f"\nCreating machine group {machine} with {machine_args_current}")
-        print(machine_class)
+
         resource = machine_class(machine_type=machine,
                                  max_idle_time=datetime.timedelta(minutes=1),
                                  **machine_args_current)
@@ -291,7 +291,7 @@ def run(name: str,
             vcpu = int(name.split("-")[2])
             return vcpu+10
         machine_args={"data_disk_gb": data_disk_gb}
-        
+
     Args:
             name (str): Name of the benchmark.
             input_files (str): Path to the input files.
@@ -300,7 +300,7 @@ def run(name: str,
                 The machine in this case is just a string with the machine type.
                 Ex: ["c2-standard-4", "c2d-standard-4"]
             simulator (Simulator): Simulator to run.
-            append (bool): If True, appends the tasks to a benchmark regardless 
+            append (bool): If True, appends the tasks to a benchmark regardless
             if that benchmark is new or not. If False, will prompt the user if
             the benchmark already exists.
             machine_class (BaseMachineGroup): Class to use to create the machine
@@ -343,7 +343,7 @@ def _render_dict(dictionary: Dict[str, Union[Callable, Any]], argument: Any):
 
 def _can_start_resource(resource: BaseMachineGroup) -> bool:
     """Check if the resource can be started.
-        
+
         This method checks if the resource can be started by checking
         the available quotas and resource usage.
 
