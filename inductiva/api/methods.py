@@ -13,7 +13,7 @@ import urllib3
 from contextlib import contextmanager
 from typing import Any, Dict, List, Optional, Tuple, Type
 
-from absl import logging
+import logging
 
 import inductiva
 from inductiva.client import ApiClient, ApiException, Configuration

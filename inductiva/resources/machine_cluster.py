@@ -1,5 +1,5 @@
 """Class to manage the MPI cluster in Google Cloud."""
-from absl import logging
+import logging
 from typing import Optional
 import datetime
 

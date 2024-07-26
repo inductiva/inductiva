@@ -5,8 +5,6 @@ import logging
 import contextvars
 from urllib3.exceptions import MaxRetryError, NewConnectionError
 
-import absl
-
 from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.configuration import Configuration
 from inductiva.client.exceptions import ApiException
@@ -34,8 +32,6 @@ _output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR",
 _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
                                   default=os.environ.get(
                                       "INDUCTIVA_API_KEY", None))
-
-absl.logging.set_verbosity(absl.logging.INFO)
 
 # Disable urllib3 warnings.
 # TODO: Verify and fix the appearance of this warning.
