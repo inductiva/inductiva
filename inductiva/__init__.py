@@ -16,6 +16,7 @@ from inductiva.client.api_client import ApiClient
 from . import simulators
 from . import resources
 from . import projects
+from . import commands
 from . import storage
 from . import utils
 from . import tasks
