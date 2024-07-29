@@ -1,5 +1,6 @@
 """Available machine types and their number of cores."""
-from typing import Union
+from dataclasses import dataclass
+from typing import List, Union
 import json
 
 import inductiva
@@ -15,6 +16,25 @@ class ProviderType(format_utils.CaseInsensitiveEnum):
     LOCAL = "LOCAL"
 
 
+@dataclass(frozen=True)
+class MachineTypeInfo:
+    """Dataclass to represent a machine type.
+    This class has all the information related to a machine type.
+    """
+
+    machine_type: str
+    provider_id: str
+    num_cpus: int
+    price: float
+    ram_gb: int
+    region: str
+    spot: bool
+    zone: str
+
+    def __getitem__(self, item):
+        return getattr(self, item)
+
+
 def list_available_machines(provider: Union[str, ProviderType]):
     """List all available machines types."""
 
@@ -27,14 +47,18 @@ def list_available_machines(provider: Union[str, ProviderType]):
     return tuple(machine_types)
 
 
-def get_available_machine_types(provider: Union[str, ProviderType],
-                                machine_family: str = None):
+def get_available_machine_types(
+        provider: Union[str, ProviderType] = ProviderType.GCP,
+        machine_family: str = None) -> List[MachineTypeInfo]:
     """Get all available machine types for a given provider.
 
     Args:
         provider (str): The provider to list the available machine types.
         machine_family (str): The machine family to filter the specific
-            available machine types."""
+            available machine types.
+    Returns:
+        list (MachineTypeInfo): List of available machine types.
+    """
 
     provider = ProviderType(provider)
 
@@ -49,7 +73,8 @@ def get_available_machine_types(provider: Union[str, ProviderType],
         resp = api_client.list_available_machine_types(query_params).response
 
         response_body = json.loads(resp.data.decode("utf-8"))
-
-        return response_body
+        return [
+            MachineTypeInfo(**machine_type) for machine_type in response_body
+        ]
     except ApiException as e:
         raise e

@@ -1,5 +1,5 @@
 """Base class for machine groups."""
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 import time
 import enum
 import json
@@ -16,6 +16,8 @@ from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
 
 from inductiva.resources import machine_types
+
+VCPUCount = namedtuple("VCPUCount", ["total", "per_machine"])
 
 
 class ResourceType(enum.Enum):
@@ -61,10 +63,6 @@ class BaseMachineGroup:
         provider = machine_types.ProviderType(provider)
         self.provider = provider.value
 
-        if machine_type not in machine_types.list_available_machines(
-                self.provider):
-            raise ValueError(f"Machine type not supported in {self.provider}")
-
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
 
@@ -91,6 +89,21 @@ class BaseMachineGroup:
     @property
     def id(self):
         return self._id
+
+    @property
+    def n_vcpus(self):
+        """Returns the number of vCPUs available in the resource.
+
+        Returns a tuple with the total number of vCPUs and the number of vCPUs
+        per machine. For a machine group with 2 machines, each with 4 vCPUs,
+        this will return (8, 4).
+        In a case of an Elastic machine group, the total number of vCPUs is
+        the maximum number of vCPUs that can be used at the same time.
+        """
+        max_vcpus = int(self.quota_usage["max_vcpus"])
+        max_instances = int(self.quota_usage["max_instances"])
+
+        return VCPUCount(max_vcpus, max_vcpus // max_instances)
 
     @property
     def name(self):

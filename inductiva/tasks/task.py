@@ -92,6 +92,7 @@ class TaskInfo:
         self.end_time = None
         self.time_metrics = self.TimeMetrics()
         self.data_metrics = self.DataMetrics()
+        self._kwargs = kwargs
 
         # Set the general attributes
         for key, value in kwargs.items():
@@ -116,6 +117,10 @@ class TaskInfo:
         self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
         self.is_running = self.status == models.TaskStatusCode.STARTED
         self.is_terminal = kwargs.get("is_terminated", False)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Return a dictionary with the task information."""
+        return self._kwargs
 
     def __update_metrics(
         self,
