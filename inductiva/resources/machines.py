@@ -1,5 +1,5 @@
 """Classes to manage different Google Cloud machine group types."""
-from absl import logging
+import logging
 from typing import Optional, Union
 import datetime
 

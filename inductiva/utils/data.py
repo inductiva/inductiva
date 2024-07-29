@@ -16,7 +16,7 @@ from tqdm import tqdm
 import fsspec
 import urllib3
 
-from absl import logging
+import logging
 
 from .meta import is_tuple
 

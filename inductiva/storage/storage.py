@@ -1,5 +1,5 @@
 """Methods to interact with the user storage resources."""
-from absl import logging
+import logging
 
 import inductiva
 from inductiva.client import exceptions
