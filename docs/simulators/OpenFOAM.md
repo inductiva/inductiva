@@ -44,7 +44,7 @@ simulator will do that for you automatically. In particular, the
 decomposeParDict will be configured automatically and, at the moment, only the 
 scotch decomposition method is available.
 
-## Example - Foundation
+## Example - Foundation distribution
 
 ````python
 import inductiva
@@ -76,7 +76,7 @@ task.wait()
 task.download_outputs()
 ````
 
-## Example - ESI Group
+## Example - ESI distribution
 
 ````python
 import inductiva
