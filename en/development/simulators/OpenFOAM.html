@@ -381,7 +381,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-foundation-distribution">Example - Foundation distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-esi-distribution">Example - ESI distribution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
             </nav>
@@ -437,8 +438,8 @@ available. Hence, you don’t need to set the specific number of processes, the
 simulator will do that for you automatically. In particular, the
 decomposeParDict will be configured automatically and, at the moment, only the
 scotch decomposition method is available.</p>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
+<section id="example-foundation-distribution">
+<h2>Example - Foundation distribution<a class="headerlink" href="#example-foundation-distribution" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="c1"># Set simulation input directory</span>
@@ -460,6 +461,38 @@ scotch decomposition method is available.</p>
 
 <span class="c1"># Initialize the Simulator</span>
 <span class="n">openfoam</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">OpenFOAM</span><span class="p">(</span><span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;foundation&quot;</span><span class="p">)</span>
+
+<span class="c1"># Run simulation with config files in the input directory</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">openfoam</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span> <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="example-esi-distribution">
+<h2>Example - ESI distribution<a class="headerlink" href="#example-esi-distribution" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+
+<span class="c1"># Set simulation input directory</span>
+<span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
+    <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
+    <span class="s2">&quot;openfoam-esi-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Set the simulation commands</span>
+<span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;runApplication surfaceFeatureExtract&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;runApplication blockMesh&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;runApplication decomposePar -copyZero&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;runParallel snappyHexMesh -overwrite&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;runParallel potentialFoam&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;runParallel simpleFoam&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;runApplication reconstructParMesh -constant&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;runApplication reconstructPar -latestTime&quot;</span>
+<span class="p">]</span>
+
+<span class="c1"># Initialize the Simulator</span>
+<span class="n">openfoam</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">OpenFOAM</span><span class="p">(</span><span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;esi&quot;</span><span class="p">)</span>
 
 <span class="c1"># Run simulation with config files in the input directory</span>
 <span class="n">task</span> <span class="o">=</span> <span class="n">openfoam</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span> <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
@@ -531,7 +564,8 @@ implemented using OpenFOAM.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-foundation-distribution">Example - Foundation distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-esi-distribution">Example - ESI distribution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
   </nav></div>
