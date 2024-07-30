@@ -162,14 +162,15 @@ def _supports_ansi():
                    "isatty") and sys.stdout.isatty() and not user_disable_ansi
 
 
-def _check_user_credits():
+def _check_user_info():
 
-    if utils.format_utils.getenv_bool("GITHUB_ACTIONS", False):
+    if utils.format_utils.getenv_bool("GITHUB_ACTIONS",False) or \
+       utils.format_utils.getenv_bool("INDUCTIVA_DISABLE_IMPORT_INFO",False):
         return
 
     if not logs.is_cli():
         # Determine if we are importing from cli or script file
-        # and only print credits info if called from a script file
+        # and only print info if called from a script file
         get_info(None, sys.stdout)
 
 
@@ -177,4 +178,4 @@ _ansi_enabled = _supports_ansi()
 
 _set_key_and_check_version()
 
-_check_user_credits()
+_check_user_info()
