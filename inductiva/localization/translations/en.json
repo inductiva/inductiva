@@ -43,4 +43,22 @@
     ,
     "task-prompt-kill-small":
         "You are about to kill the following tasks:"
+    ,
+    "benchmark-exceed-quotas":[
+        "This benchmark will exceed the current quotas.",
+        "Do you want to continue? (yes/no)"
+    ],
+    "all_tasks_run": "All tasks have already been run.",
+    "tasks_ran" : "Tasks already ran:",
+    "tasks_to_run": "Tasks to run:",
+    "tasks_not_executed_yet": [
+        "Some tasks are not executed yet.",
+        "Impossible to determine what was ran and what is missing.",
+        "Please wait for the task to finish."
+    ],
+    "benchmark-already-exists": [
+        "Benchmark {0} already exists with {1} tasks.",
+        "You are trying to add tasks to an existing benchmark.",
+        "To do so, set the append parameter to True."
+    ]
 }

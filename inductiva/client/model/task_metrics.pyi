@@ -311,45 +311,6 @@ class TaskMetrics(
                     )
             
             
-            class output_compression_seconds(
-                schemas.ComposedSchema,
-            ):
-            
-            
-                class MetaOapg:
-                    any_of_0 = schemas.NumberSchema
-                    any_of_1 = schemas.NoneSchema
-                    
-                    @classmethod
-                    @functools.lru_cache()
-                    def any_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            cls.any_of_0,
-                            cls.any_of_1,
-                        ]
-            
-            
-                def __new__(
-                    cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'output_compression_seconds':
-                    return super().__new__(
-                        cls,
-                        *_args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
-            
-            
             class output_upload_seconds(
                 schemas.ComposedSchema,
             ):
@@ -590,7 +551,6 @@ class TaskMetrics(
                 "input_upload_seconds": input_upload_seconds,
                 "input_download_seconds": input_download_seconds,
                 "input_decompression_seconds": input_decompression_seconds,
-                "output_compression_seconds": output_compression_seconds,
                 "output_upload_seconds": output_upload_seconds,
                 "input_zipped_size_bytes": input_zipped_size_bytes,
                 "input_size_bytes": input_size_bytes,
@@ -621,9 +581,6 @@ class TaskMetrics(
     def __getitem__(self, name: typing_extensions.Literal["input_decompression_seconds"]) -> MetaOapg.properties.input_decompression_seconds: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["output_compression_seconds"]) -> MetaOapg.properties.output_compression_seconds: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["output_upload_seconds"]) -> MetaOapg.properties.output_upload_seconds: ...
     
     @typing.overload
@@ -644,7 +601,7 @@ class TaskMetrics(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["total_seconds", "container_image_download_seconds", "queue_time_seconds", "computation_seconds", "input_upload_seconds", "input_download_seconds", "input_decompression_seconds", "output_compression_seconds", "output_upload_seconds", "input_zipped_size_bytes", "input_size_bytes", "output_total_files", "output_size_bytes", "output_zipped_size_bytes", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["total_seconds", "container_image_download_seconds", "queue_time_seconds", "computation_seconds", "input_upload_seconds", "input_download_seconds", "input_decompression_seconds", "output_upload_seconds", "input_zipped_size_bytes", "input_size_bytes", "output_total_files", "output_size_bytes", "output_zipped_size_bytes", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -671,9 +628,6 @@ class TaskMetrics(
     def get_item_oapg(self, name: typing_extensions.Literal["input_decompression_seconds"]) -> typing.Union[MetaOapg.properties.input_decompression_seconds, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["output_compression_seconds"]) -> typing.Union[MetaOapg.properties.output_compression_seconds, schemas.Unset]: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["output_upload_seconds"]) -> typing.Union[MetaOapg.properties.output_upload_seconds, schemas.Unset]: ...
     
     @typing.overload
@@ -694,7 +648,7 @@ class TaskMetrics(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["total_seconds", "container_image_download_seconds", "queue_time_seconds", "computation_seconds", "input_upload_seconds", "input_download_seconds", "input_decompression_seconds", "output_compression_seconds", "output_upload_seconds", "input_zipped_size_bytes", "input_size_bytes", "output_total_files", "output_size_bytes", "output_zipped_size_bytes", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["total_seconds", "container_image_download_seconds", "queue_time_seconds", "computation_seconds", "input_upload_seconds", "input_download_seconds", "input_decompression_seconds", "output_upload_seconds", "input_zipped_size_bytes", "input_size_bytes", "output_total_files", "output_size_bytes", "output_zipped_size_bytes", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -708,7 +662,6 @@ class TaskMetrics(
         input_upload_seconds: typing.Union[MetaOapg.properties.input_upload_seconds, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         input_download_seconds: typing.Union[MetaOapg.properties.input_download_seconds, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         input_decompression_seconds: typing.Union[MetaOapg.properties.input_decompression_seconds, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        output_compression_seconds: typing.Union[MetaOapg.properties.output_compression_seconds, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         output_upload_seconds: typing.Union[MetaOapg.properties.output_upload_seconds, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         input_zipped_size_bytes: typing.Union[MetaOapg.properties.input_zipped_size_bytes, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         input_size_bytes: typing.Union[MetaOapg.properties.input_size_bytes, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -728,7 +681,6 @@ class TaskMetrics(
             input_upload_seconds=input_upload_seconds,
             input_download_seconds=input_download_seconds,
             input_decompression_seconds=input_decompression_seconds,
-            output_compression_seconds=output_compression_seconds,
             output_upload_seconds=output_upload_seconds,
             input_zipped_size_bytes=input_zipped_size_bytes,
             input_size_bytes=input_size_bytes,

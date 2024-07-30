@@ -4,7 +4,7 @@ import contextlib
 import sys
 import time
 import json
-from absl import logging
+import logging
 from typing import Dict, Any, List, Optional, Tuple, Union
 from typing_extensions import TypedDict
 import datetime
@@ -62,7 +62,6 @@ class TaskInfo:
             self.input_download_seconds = Metric("Input download")
             self.input_decompression_seconds = Metric("Input decompression")
             self.computation_seconds = Metric("Computation")
-            self.output_compression_seconds = Metric("Output compression")
             self.output_upload_seconds = Metric("Output upload")
 
     class DataMetrics:
@@ -92,6 +91,7 @@ class TaskInfo:
         self.end_time = None
         self.time_metrics = self.TimeMetrics()
         self.data_metrics = self.DataMetrics()
+        self._kwargs = kwargs
 
         # Set the general attributes
         for key, value in kwargs.items():
@@ -116,6 +116,10 @@ class TaskInfo:
         self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
         self.is_running = self.status == models.TaskStatusCode.STARTED
         self.is_terminal = kwargs.get("is_terminated", False)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Return a dictionary with the task information."""
+        return self._kwargs
 
     def __update_metrics(
         self,
@@ -158,10 +162,7 @@ class TaskInfo:
             # the download could be in progress
             return "N/A"
 
-        if metric_key in (
-                "output_compression_seconds",
-                "output_upload_seconds",
-        ):
+        if metric_key in ("output_upload_seconds",):
             return self.MISSING_UNTIL_TASK_ENDED
 
         # None values will be replaced with a default missing value message

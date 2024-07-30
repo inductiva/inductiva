@@ -7,7 +7,7 @@ import urllib.error
 import urllib.request
 import zipfile
 
-from absl import logging
+import logging
 
 import inductiva
 

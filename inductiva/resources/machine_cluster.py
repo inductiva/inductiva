@@ -1,5 +1,5 @@
 """Class to manage the MPI cluster in Google Cloud."""
-from absl import logging
+import logging
 from typing import Optional
 import datetime
 
@@ -72,6 +72,16 @@ class MPICluster(machines_base.BaseMachineGroup):
                                          spot=self.__spot,
                                          type=self.__type)
 
+    @property
+    def available_vcpus(self):
+        """Returns the number of vCPUs available to the resource.
+        
+        For a mpi cluster with 2 machines, each with 4 vCPUs, this will
+        return 8.
+        """
+
+        return int(self.quota_usage["max_vcpus"])
+
     @classmethod
     def from_api_response(cls, resp: dict):
         machine_group = super().from_api_response(resp)
@@ -109,7 +119,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         logging.info("\t· Number of machines:       %s", self.num_machines)
         self.estimate_cloud_cost()
 
-    def estimate_cloud_cost(self):
+    def estimate_cloud_cost(self, verbose: bool = True):
         """Estimates a cost per hour of the MPI cluster in US dollars.
 
         This is an estimate of the cost of MPI cluster with the
@@ -120,6 +130,8 @@ class MPICluster(machines_base.BaseMachineGroup):
               dollars ($/h)."""
         #TODO: Contemplate disk size in the price.
         estimated_cost = super()._get_estimated_cost() * self.num_machines
-        logging.info("\t· Estimated cloud cost of the MPI cluster: %.3f $/h",
-                     estimated_cost)
+        if verbose:
+            logging.info(
+                "\t· Estimated cloud cost of the MPI cluster: %.3f $/h",
+                estimated_cost)
         return estimated_cost

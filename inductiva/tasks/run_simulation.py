@@ -6,7 +6,7 @@ from typing import Any, Optional, Union
 import json
 import threading
 
-from absl import logging
+import logging
 
 from inductiva import tasks, types
 from inductiva.api import methods

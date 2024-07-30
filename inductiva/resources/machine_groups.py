@@ -1,6 +1,6 @@
 """Functions to manage or retrieve user resources."""
 from typing import Optional
-from absl import logging
+import logging
 
 import inductiva
 import inductiva.client

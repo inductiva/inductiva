@@ -5,8 +5,6 @@ import logging
 import contextvars
 from urllib3.exceptions import MaxRetryError, NewConnectionError
 
-import absl
-
 from inductiva.client.apis.tags.version_api import VersionApi
 from inductiva.client.configuration import Configuration
 from inductiva.client.exceptions import ApiException
@@ -36,14 +34,12 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
                                   default=os.environ.get(
                                       "INDUCTIVA_API_KEY", None))
 
-absl.logging.set_verbosity(absl.logging.INFO)
-
 # Disable urllib3 warnings.
 # TODO: Verify and fix the appearance of this warning.
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.8.2"
+__version__ = "0.8.3"
 
 
 def set_output_dir(new_output_dir):
@@ -167,14 +163,15 @@ def _supports_ansi():
                    "isatty") and sys.stdout.isatty() and not user_disable_ansi
 
 
-def _check_user_credits():
+def _check_user_info():
 
-    if utils.format_utils.getenv_bool("GITHUB_ACTIONS", False):
+    if utils.format_utils.getenv_bool("GITHUB_ACTIONS",False) or \
+       utils.format_utils.getenv_bool("INDUCTIVA_DISABLE_IMPORT_INFO",False):
         return
 
     if not logs.is_cli():
         # Determine if we are importing from cli or script file
-        # and only print credits info if called from a script file
+        # and only print info if called from a script file
         get_info(None, sys.stdout)
 
 
@@ -182,4 +179,4 @@ _ansi_enabled = _supports_ansi()
 
 _set_key_and_check_version()
 
-_check_user_credits()
+_check_user_info()
