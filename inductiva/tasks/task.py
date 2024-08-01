@@ -9,7 +9,6 @@ import contextlib
 from typing_extensions import TypedDict
 from typing import Dict, Any, List, Optional, Tuple, Union
 
-
 import urllib3
 import tabulate
 from dataclasses import dataclass
@@ -468,14 +467,13 @@ class Task:
         if file not in ("stdout.txt", "stderr.txt"):
             raise ValueError("File must be stdout.txt or stderr.txt")
 
-
         color_code = "\033[31m" if file == "stderr.txt" else "\033[34m"
         reset_color = "\033[0m"
 
         if not inductiva.ansi_enabled:
             color_code = ""
             reset_color = ""
-        
+
         n = len(lines)
 
         new_lst = [f"{color_code}│{reset_color}{line}" for line in lines]
