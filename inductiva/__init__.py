@@ -39,7 +39,7 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.8.3"
+__version__ = "0.8.4"
 
 
 def set_output_dir(new_output_dir):
@@ -142,7 +142,7 @@ def set_api_key(api_key):
             "No API Key specified. "
             "Please set the INDUCTIVA_API_KEY environment variable.\n"
             "More infomation at:"
-            "https://genesis.inductiva.ai")
+            "https://console.inductiva.ai/")
 
     _api_key.set(api_key)
 
