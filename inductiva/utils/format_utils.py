@@ -91,7 +91,7 @@ def get_ansi_formatter():
     `inductiva.utils.format_utils.emphasis_formatter`
     
     """
-    if not inductiva._ansi_enabled:
+    if not inductiva.ansi_enabled:
         return no_formatter
     return emphasis_formatter
 

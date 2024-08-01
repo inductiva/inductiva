@@ -174,7 +174,7 @@ def _check_user_info():
         get_info(None, sys.stdout)
 
 
-_ansi_enabled = _supports_ansi()
+ansi_enabled = _supports_ansi()
 
 _set_key_and_check_version()
 

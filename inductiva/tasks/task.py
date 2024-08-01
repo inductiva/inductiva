@@ -1,18 +1,21 @@
 """Manage running/completed tasks on the Inductiva API."""
-import pathlib
-import contextlib
 import sys
 import time
 import json
+import pathlib
 import logging
-from typing import Dict, Any, List, Optional, Tuple, Union
-from typing_extensions import TypedDict
 import datetime
-from ..localization import translator as __
+import contextlib
+from typing_extensions import TypedDict
+from typing import Dict, Any, List, Optional, Tuple, Union
+
+
 import urllib3
 import tabulate
 from dataclasses import dataclass
+from ..localization import translator as __
 
+import inductiva
 from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api
@@ -382,6 +385,21 @@ class Task:
             if exc.status == 404:
                 return None
 
+    def _get_last_n_lines_from_file(self, file_path: pathlib.Path,
+                                    n: int) -> List[str]:
+        """Gets the last n lines from a file.
+        
+        This method returns a list with the last n lines from a file.
+        Args:
+            file_path: The path to the file.
+            n: The number of lines to return.
+        Returns:
+            A list with the last n lines from the file.
+        """
+        with open(file_path, "r", encoding="utf-8") as file:
+            lines = file.readlines()
+        return lines[-n:]
+
     @property
     def info(self) -> TaskInfo:
         """Get information about the task.
@@ -426,6 +444,72 @@ class Task:
             max_line_length = 73
             return s.ljust(max_line_length, " ")
         return s
+
+    def _format_list_of_lines(self, lines: List[str], file: str) -> str:
+        """Formats a list of lines with color.
+
+        This method formats a list of lines with a color and adds a header and
+        footer to the list. The color is used to differentiate between stdout
+        and stderr.
+
+        Example:
+        ┌ (last 10 lines from stderr)
+        │ #9  0x7f4ce0941c2d in ???
+        │ #10  0x7f4ceb033199 in ???
+        │ #11  0x7f4cec45a864 in ???
+        │ #12  0x7f4cec4913a6 in ???
+        │ #13  0x7f4cecceb940 in ???
+        │ #14  0x4084ae in ???
+        └ 
+        Args:
+            lines: A list of strings to format.
+            file: The name of the file. Must be "stdout.txt" or "stderr.txt".
+        """
+        if file not in ("stdout.txt", "stderr.txt"):
+            raise ValueError("File must be stdout.txt or stderr.txt")
+
+
+        color_code = "\033[31m" if file == "stderr.txt" else "\033[34m"
+        reset_color = "\033[0m"
+
+        if not inductiva.ansi_enabled:
+            color_code = ""
+            reset_color = ""
+        
+        n = len(lines)
+
+        new_lst = [f"{color_code}│{reset_color}{line}" for line in lines]
+
+        new_lst.insert(
+            0, f"{color_code}┌ (last {n} lines from {file}){reset_color}\n")
+        new_lst.append(f"{color_code}└{reset_color}\n")
+
+        return "".join(new_lst)
+
+    def _print_failed_message(self, out_dir: str) -> None:
+        """Prints the messages when a task fails.
+
+        This method prints the last N lines of the stdout and stderr files
+        and logs a message to the user to inspect the files for more info.
+        Args:
+            out_dir: The directory where the files are stored.
+        """
+        n = constants.TASK_FAILED_LINES_TO_DUMP
+        std_out_lines = self._get_last_n_lines_from_file(
+            f"{out_dir}/stdout.txt", n)
+        std_err_lines = self._get_last_n_lines_from_file(
+            f"{out_dir}/stderr.txt", n)
+
+        logging.error("")
+
+        formatted = self._format_list_of_lines(std_out_lines, "stdout.txt")
+        logging.error(formatted)
+        formatted = self._format_list_of_lines(std_err_lines, "stderr.txt")
+        logging.error(formatted)
+
+        logging.error(
+            "Please inspect the stdout.txt and stderr.txt files at %s\n"
+            "For more information.", out_dir)
 
     def wait(self,
              polling_period: int = 5,
@@ -513,10 +597,7 @@ class Task:
                     out_dir = self.download_outputs(
                         filenames=self.STANDARD_OUTPUT_FILES)
                     if status == models.TaskStatusCode.FAILED:
-                        logging.error(
-                            "Please inspect the stdout.txt and"
-                            " stderr.txt files at %s\n"
-                            "For more information.", out_dir)
+                        self._print_failed_message(out_dir)
                 return status
 
             time.sleep(polling_period)
@@ -760,7 +841,7 @@ class Task:
 
         if filenames:
             if file_server_available:
-                logging.info(download_message, output_dir)
+                logging.info(download_message, output_dir_path)
                 data.download_partial_outputs(
                     download_url,
                     filenames,
@@ -772,7 +853,7 @@ class Task:
             # If the user requested a partial download, the full download
             # will be skipped.
 
-            logging.info("Partial download completed to %s.", output_dir)
+            logging.info("Partial download completed to %s.", output_dir_path)
             return output_dir_path
 
         zip_path = output_dir_path.joinpath("output.zip")
@@ -802,7 +883,7 @@ class Task:
         data.download_file(response, zip_path)
 
         if uncompress:
-            logging.info("Uncompressing the outputs to %s...", output_dir)
+            logging.info("Uncompressing the outputs to %s...", output_dir_path)
             data.uncompress_task_outputs(zip_path, output_dir_path)
             if rm_downloaded_zip_archive:
                 zip_path.unlink()
@@ -814,7 +895,7 @@ class Task:
             logging.error(
                 "Task %s failed.\n"
                 "Please inspect the stdout.txt and stderr.txt files at %s\n"
-                "For more information.", self.id, output_dir)
+                "For more information.", self.id, output_dir_path)
 
         return output_dir_path
 
