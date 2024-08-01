@@ -2,7 +2,7 @@
 In this troubleshooting section, we aim to guide you through resolving issues
 related to incorrect or incomplete installation of the Inductiva package
 or its dependencies. This guide assumes you’ve gone through all steps we've shared
-in the [user console](https://genesis.inductiva.ai), and have faced
+in the [user console](https://console.inductiva.ai/), and have faced
 some issues.
 
 If you find bugs, need help, or want to talk to the developers, reach out to us on
