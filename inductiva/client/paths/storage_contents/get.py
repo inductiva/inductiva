@@ -33,7 +33,12 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 from . import path
 
 # Query params
-MaxResultsSchema = schemas.IntSchema
+
+
+class MaxResultsSchema(schemas.IntSchema):
+
+    class MetaOapg:
+        inclusive_minimum = 1
 
 
 class SortBySchema(
