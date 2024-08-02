@@ -1,11 +1,13 @@
 """CLI for logs."""
-import json
 import re
 import sys
+from time import sleep
 from typing import Tuple
 
+from inductiva import constants
+
 from .. import utils as cli_utils
-from ... import tasks, ApiException
+from ... import tasks
 
 
 def _get_task_id_from_mode(mode: str) -> Tuple[bool, str]:
@@ -40,21 +42,28 @@ def validate_mode_or_task_id(mode: str) -> Tuple[bool, str]:
     return True, mode
 
 
-def _check_if_task_is_running(task: tasks.Task) -> Tuple[bool, str]:
+def _check_if_task_is_running(task: tasks.Task, wait: bool) -> Tuple[bool, str]:
     """Check if the task is running.
     
-    This is done inside a try-except block to catch any exceptions that may
-    occur when trying to get the task status. Mainly if the task does not exist.
+    If the task is not running and the wait flag is set, wait for the task to
+    start running.
+    
+    Args:
+        task (tasks.Task): The task object.
+        wait (bool): If True, wait for the task to start running.
     """
+    info = task.get_info()
+    first_time = True
 
-    is_running = False
-    try:
+    while wait and not info.is_running and not info.is_terminal:
+        if first_time:
+            print(f"The task {task.id} whith status '{info.status}' is not "
+                  "running yet.\nWaiting for it to start running...")
+            first_time = False
+        sleep(constants.INDUCTIVA_LOGS_WAIT_SLEEP_TIME)
         info = task.get_info()
-        is_running = info.is_running
-    except ApiException as e:
-        return False, f"{ json.loads(e.body)['detail']}"
 
-    if not is_running:
+    if not info.is_running:
         return False, (
             f"The current status of task {task.id} is '{info.status}'\n"
             "and the simulation logs are not available for streaming.\n"
@@ -67,6 +76,7 @@ def _check_if_task_is_running(task: tasks.Task) -> Tuple[bool, str]:
 def stream_task_logs(args):
     """Consume the stream logs of a certain task."""
     mode = args.mode.lower()
+    wait = args.wait
     result, data = validate_mode_or_task_id(mode)
     if not result:
         print(data, file=sys.stderr)
@@ -81,7 +91,7 @@ def stream_task_logs(args):
     task_id = data
     task = tasks.Task(data)
 
-    result, data = _check_if_task_is_running(task)
+    result, data = _check_if_task_is_running(task, wait=wait)
     if not result:
         print(data, file=sys.stderr)
         return 1
@@ -118,5 +128,12 @@ def register(parser):
     parser.add_argument("--no-color",
                         action="store_true",
                         help="Disables the colorized output.")
+    parser.add_argument(
+        "--wait",
+        "-w",
+        action="store_true",
+        help=("Wait for the task to start running before consuming the logs.\n"
+              "Without this flag, the logs will be consumed immediately\nor "
+              "returns an error if the task is not running."))
     # Register function to call when this subcommand is used
     parser.set_defaults(func=stream_task_logs)
