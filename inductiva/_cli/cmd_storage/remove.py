@@ -14,6 +14,13 @@ def remove(args):
     confirm = args.confirm
     all_paths = args.all
 
+    if "*" in paths:
+        print(
+            "inductiva storage remove: error: "
+            "argument path: wildcard '*' not allowed",
+            file=sys.stderr)
+        return 1
+
     if not all_paths and not paths:
         print("No path(s) specified.\n"
               "> Use `inductiva storage remove -h` for help.")
@@ -59,8 +66,7 @@ def register(parser):
     subparser.add_argument("path",
                            type=str,
                            nargs="*",
-                           help="Path(s) to be removed from remote storage. "
-                           "To remove all contents, use \"*\".")
+                           help="Path(s) to be removed from remote storage.")
 
     subparser.add_argument(
         "-y",
