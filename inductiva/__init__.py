@@ -155,11 +155,27 @@ def _supports_ansi():
     """Checks if we support ansi formatting for colors and bolds"""
     user_disable_ansi = utils.format_utils.getenv_bool("INDUCTIVA_DISABLE_ANSI",
                                                        False)
+
+    if user_disable_ansi:
+        return False
+
     if sys.platform.startswith("win"):
-        return "TERM" in os.environ and os.environ[
-            "TERM"] == "xterm" and not user_disable_ansi
-    return hasattr(sys.stdout,
-                   "isatty") and sys.stdout.isatty() and not user_disable_ansi
+        return "TERM" in os.environ and os.environ["TERM"] == "xterm"
+
+    if is_notebook():
+        return True
+
+    return hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
+
+
+def is_notebook():
+    try:
+        ipython = __import__("IPython")
+        if ipython.get_ipython() is None:
+            return False
+    except ImportError:
+        return False
+    return True
 
 
 def _check_user_info():
