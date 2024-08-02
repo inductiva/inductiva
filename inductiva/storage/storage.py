@@ -47,27 +47,27 @@ def listdir(path="/",
     anymore and further inspect task outputs and logs using the Task
     class.
     """
-    try:
-        api = storage_api.StorageApi(inductiva.api.get_client())
-        contents = api.list_storage_contents({
-            "path": path,
-            "max_results": max_results,
-            "sort_by": order_by,
-            "order": sort_order
-        }).body
-        all_contents = []
-        for content_name, info in contents.items():
-            size = info["size_bytes"]
-            creation_time = info["creation_time"]
-            all_contents.append({
-                "content_name": content_name,
-                "size": round(float(size), 3),
-                "creation_time": creation_time
-            })
-        print(_print_contents_table(all_contents))
-        return all_contents
-    except inductiva.client.ApiException as api_exception:
-        raise api_exception
+
+    api = storage_api.StorageApi(inductiva.api.get_client())
+    contents = api.list_storage_contents({
+        "path": path,
+        "max_results": max_results,
+        "sort_by": order_by,
+        "order": sort_order
+    }).body
+    all_contents = []
+    for content_name, info in contents.items():
+        size = info["size_bytes"]
+        creation_time = info["creation_time"]
+        all_contents.append({
+            "content_name": content_name,
+            "size": round(float(size), 3),
+            "creation_time": creation_time
+        })
+    print(_print_contents_table(all_contents))
+    print(f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
+          "Use --max-results/-m to control the number of results displayed.")
+    return all_contents
 
 
 def _print_contents_table(contents):
