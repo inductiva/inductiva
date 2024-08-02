@@ -9,6 +9,9 @@ import zipfile
 
 import logging
 
+import requests
+from tqdm import tqdm
+
 import inductiva
 
 
@@ -118,9 +121,36 @@ def _unzip(zip_path: pathlib.Path):
     """Unzip a zip archive and remove the .zip."""
 
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
-        zip_ref.extractall()
+        for member in tqdm(zip_ref.infolist(), desc="Extracting "):
+            try:
+                zip_ref.extract(member)
+            except zipfile.error as e:
+                print(f"Error extracting {member.filename}: {e}")
+                pass
 
     zip_path.unlink()
+
+
+def my_hook(t):
+    """Wraps tqdm instance.
+    """
+    last_b = [0]
+
+    def update_to(b=1, bsize=1, tsize=None):
+        """
+        b  : int, optional
+            Number of blocks transferred so far [default: 1].
+        bsize  : int, optional
+            Size of each block (in tqdm units) [default: 1].
+        tsize  : int, optional
+            Total size (in tqdm units). If [default: None] remains unchanged.
+        """
+        if tsize is not None:
+            t.total = tsize
+        t.update((b - last_b[0]) * bsize)
+        last_b[0] = b
+
+    return update_to
 
 
 def download_from_url(url: str, unzip: bool = False) -> str:
@@ -136,21 +166,37 @@ def download_from_url(url: str, unzip: bool = False) -> str:
     Returns:
         The path to the downloaded file.
     """
-    # Get archive name from url passed
-    local_path = url.split("/")[-1]
-    local_path = pathlib.Path(local_path)
-
     try:
-        logging.info("Downloading from URL to the local path: %s", local_path)
-        downloaded_to, _ = urllib.request.urlretrieve(url, filename=local_path)
+        #Get head to check the filename
+        filename = url.split("/")[-1]
+        response = requests.head(url, allow_redirects=True, timeout=3)
+
+        # Check if the 'Content-Disposition' header is present
+        content_disposition = response.headers.get("Content-Disposition")
+        if content_disposition and "filename=" in content_disposition:
+            filename = content_disposition.split("filename=")[1].strip('"')
+
+        logging.info("Downloading from URL to the local path: %s", filename)
+        with tqdm(unit="B",
+                  unit_scale=True,
+                  unit_divisor=1024,
+                  miniters=1,
+                  desc=filename) as t:
+            downloaded_to, _ = urllib.request.urlretrieve(
+                url, filename=pathlib.Path(filename), reporthook=my_hook(t))
     except urllib.error.URLError as url_error:
         logging.error("Could not download file from %s", url)
         raise url_error
 
+    resulting_path = downloaded_to
+
     # Unzip all files as they were zipped.
     if unzip and zipfile.is_zipfile(downloaded_to):
-        local_path = local_path.with_suffix("")
-        logging.info("■ Uncompressing the downloaded file to: %s", local_path)
+        resulting_path = pathlib.Path(downloaded_to).with_suffix("")
+        logging.info("■ Uncompressing the downloaded file to: %s",
+                     resulting_path)
         _unzip(downloaded_to)
+        #remove .zip extension
         logging.info("")
-    return str(local_path.absolute())
+
+    return str(resulting_path.absolute())
