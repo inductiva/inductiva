@@ -154,7 +154,7 @@ increases thread competition for cache (which is fixed), and this may lead to
 some contention issues for I/O heavy simulators, as seems to be the case for
 Reef3D. 
 
-Indeed, Reef3D produces a huge amount of data. As it is currently configured, 
+Indeed, Reef3D can produce a huge amount of data. As it is currently configured, 
 this simulation would produce several dozen gigabytes of data. To reduce that
 amount of data produced, we can reduce the rate at which (Paraview) data is
 being produced (parameter `P 30`). Therefore, we will set `P 30 0.04` and 
@@ -189,74 +189,117 @@ task.print_summary()
 ```
 
 You should see something like this when you run this script end to end (it
-should take approximately 15 minutes)
+should take approximately 15 minutes). Please take into consideration that some
+values related with user credits, quotas and tiers may differ substantially from
+the ones you see, depending on the tier you are in.
 
 ```bash
-Registering MachineGroup configurations:
-> Name:         api-ktq7n9w81gek0kx82agu3znoj
-> Machine Type: c2d-highcpu-112
-> Data disk size:    20 GB
-> Number of machines: 1
-> Spot:               True
-> Estimated cloud cost of machine group: 0.814 $/h
- >> You are spending 5.7x less by using spot machines.
-Starting MachineGroup(name="api-ktq7n9w81gek0kx82agu3znoj"). This may take a few minutes.
+Username: sarmento
+
+■ Tier: Power-User
+
+■ Credits
+
+  Power-User (tier)               0.00 USD
+  ----------------------------------------
+  Total                         998.36 USD
+
+■ Active Campaigns
+
+ Not currently enrolled in any campaign.
+
+■ Global User quotas
+                                                                 CURRENT USAGE     MAX ALLOWED
+ Maximum simultaneous instances                                  1 instance        100 instance
+ Maximum price per hour across all instances                     0.87444 USD       270 USD
+ Maximum tasks per week                                          0 task            N/A
+ Maximum number of VCPUs                                         112 vcpu          1000 vcpu
+ Maximum time a machine group can stay idle before termination   N/A               120 minute
+
+■ Instance User quotas
+                                                                                          MAX ALLOWED
+ Maximum disk size                                                                        2000 GB
+ Maximum time a machine group can stay up before automatic termination                    48 hour
+ Maximum amount of RAM per VCPU                                                           6 GB
+ Maximum time a task can stay running in the default queue before automatic termination   16 hour
+
+■ Registering MachineGroup configurations:
+	· Name:                       api-o4qozo7wafhwqcyz4xh1g4e7s
+	· Machine Type:               c2d-highcpu-112
+	· Data disk size:             20 GB
+	· Maximum idle time:          30 minutes
+	· Auto terminate timestamp:   2024/08/11 00:43:06
+	· Number of machines:         1
+	· Spot:                       True
+	· Estimated cloud cost of machine group: 0.872 $/h
+	· You are spending 5.3x less by using spot machines.
+
+Starting MachineGroup(name="api-o4qozo7wafhwqcyz4xh1g4e7s"). This may take a few minutes.
 Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
-Machine Group api-ktq7n9w81gek0kx82agu3znoj with c2d-highcpu-112 machines successfully started in 0:00:19.
+Machine Group api-o4qozo7wafhwqcyz4xh1g4e7s with c2d-highcpu-112 machines successfully started in 0:00:18.
+
 The machine group is using the following quotas:
 
-                      USED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
- cost_per_hour        0.81424              0.81424           20
- total_num_machines   1                    1                 10
- total_num_vcpus      112                  112               150
+                                               USED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
+ Maximum number of VCPUs                       112                  224               1000
+ Maximum simultaneous instances                1                    2                 100
+ Maximum price per hour across all instances   0.87444              1.74888           270
 
-Task Information:
-> ID:                    n90hpbaiaa26jjb1d93zgbqgn
-> Method:                reef3d
-> Local input directory: 10_2_3D_Dam_Break_with_Obstacle
-> Submitting to the following computational resources:
- >> Machine Group api-ktq7n9w81gek0kx82agu3znoj with c2d-highcpu-112 machines
-Preparing upload of the local input directory 10_2_3D_Dam_Break_with_Obstacle (392 B).
-Input archive size: 637 B
+■ Using production image of REEF3D version 24.02
+
+■ Task Information:
+	· ID:                    arduwp0bnjkwz9d4xk7rabofi
+	· Simulator:             REEF3D
+	· Version:               24.02
+	· Image:                 docker://inductiva/kutu:reef3d_v24.02
+	· Local input directory: 10_2_3D_Dam_Break_with_Obstacle
+	· Submitting to the following computational resources:
+ 		· Machine Group api-o4qozo7wafhwqcyz4xh1g4e7s with c2d-highcpu-112 machines
+
+Preparing upload of the local input directory 10_2_3D_Dam_Break_with_Obstacle (390 B).
+Input archive size: 689 B
 Uploading input archive...
-100%|███████████████████████████████████████████████████████████████████████████████| 637/637 [00:00<00:00, 1.37kB/s]
+100%|████████████████████████████████████████████████████████████████| 689/689 [00:00<00:00, 1.65kB/s]
 Local input directory successfully uploaded.
-Task n90hpbaiaa26jjb1d93zgbqgn submitted to the queue of the Machine Group api-ktq7n9w81gek0kx82agu3znoj with c2d-highcpu-112 machines.
+
+■ Task arduwp0bnjkwz9d4xk7rabofi submitted to the queue of the Machine Group api-o4qozo7wafhwqcyz4xh1g4e7s with c2d-highcpu-112 machines.
 Number of tasks ahead in the queue: 0
 Simulation metadata logged to: inductiva_output/task_metadata.json
-Task n90hpbaiaa26jjb1d93zgbqgn configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
-Consider tracking the status of the task via CLI:
-	inductiva tasks list --id ggkjuzhivoon56vkozgqxapfk
-Or, tracking the logs of the task via CLI:
-	inductiva logs n90hpbaiaa26jjb1d93zgbqgn
-Task n90hpbaiaa26jjb1d93zgbqgn successfully queued and waiting to be picked-up for execution...
-The task n90hpbaiaa26jjb1d93zgbqgn is about to start.
-Task n90hpbaiaa26jjb1d93zgbqgn has started and is now running remotely.
- Task n90hpbaiaa26jjb1d93zgbqgn completed successfully.
-Downloading stdout and stderr files to inductiva_output/n90hpbaiaa26jjb1d93zgbqgn...
-Partial download completed to inductiva_output/n90hpbaiaa26jjb1d93zgbqgn.
-Successfully requested termination of MachineGroup(name="api-ktq7n9w81gek0kx82agu3znoj").
+Task arduwp0bnjkwz9d4xk7rabofi configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
+· Consider tracking the status of the task via CLI:
+	inductiva tasks list --id arduwp0bnjkwz9d4xk7rabofi
+· Or, tracking the logs of the task via CLI:
+	inductiva logs arduwp0bnjkwz9d4xk7rabofi
+· You can also get more information about the task via the CLI command:
+	inductiva tasks info arduwp0bnjkwz9d4xk7rabofi
+
+■ Task arduwp0bnjkwz9d4xk7rabofi successfully queued and waiting to be picked-up for execution...
+The task arduwp0bnjkwz9d4xk7rabofi is about to start.
+■ Task arduwp0bnjkwz9d4xk7rabofi has started and is now running remotely.
+■ Task arduwp0bnjkwz9d4xk7rabofi completed successfully.
+Downloading stdout and stderr files to arduwp0bnjkwz9d4xk7rabofi...
+Partial download completed to arduwp0bnjkwz9d4xk7rabofi.
+Successfully requested termination of MachineGroup(name="api-o4qozo7wafhwqcyz4xh1g4e7s").
 Termination of the machine group freed the following quotas:
 
-                      FREED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
- cost_per_hour        0.81424               0                 20
- total_num_machines   1                     0                 10
- total_num_vcpus      112                   0                 150
+                                               FREED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
+ Maximum number of VCPUs                       112                   112               1000
+ Maximum simultaneous instances                1                     1                 100
+ Maximum price per hour across all instances   0.87444               0.87444           270
 
 
 Task status: success
-Wall clock time:  0:13:51
+Wall clock time:  0:10:34
 Time breakdown:
-	Input upload:              0.63 s
-	Time in queue:             24.34 s
-	Container image download:  3.37 s
+	Input upload:              0.60 s
+	Time in queue:             24.11 s
+	Container image download:  6.02 s
 	Input download:            0.08 s
 	Input decompression:       0.00 s
-	Computation:               0:07:38
-	Output compression:        0:05:04
-	Output upload:             40.08 s
+	Computation:               0:07:36
+	Output upload:             0:02:27
 Data:
-	Size of zipped output:    3.09 GB
+	Size of zipped output:    3.10 GB
 	Size of unzipped output:  7.51 GB
 	Number of output files:   35751
 ```
@@ -265,7 +308,7 @@ While the script is running, you can check the stdout of the simulation process
 in real time by issuing (please change to the id of your task):
 
 ```bash
-inductiva logs n90hpbaiaa26jjb1d93zgbqgn
+inductiva logs <TASK_ID>
 ```
 
 The command line above is shown in the execution trace, so you can just
@@ -274,14 +317,19 @@ as an environment variable).
 
 Once the script finishes, and you see the summary of the task, you can download
 the resulting files. Observe in the summary above that quite some data was 
-produced: 35751 files for a total of 7.51 GB before compression.
+produced: 35751 files for a total of 7.51 GB before compression. That is why
+the last stage of the process (``Output Upload") that compresses and moves the
+outputs of the simulation to your personal cloud stoarge area still takes a
+significant fraction of time of the overall process execution (2:27 out of 
+10:34).
 
-You can download the (zipped) data by creating a simple script such as this:
+You can download the (zipped) data by creating a simple script such as this
+(again, please change to the corresponding task id):
 ```python
 import inductiva
 
 # You can retreive a Task by ID
-task = inductiva.tasks.Task("n90hpbaiaa26jjb1d93zgbqgn")
+task = inductiva.tasks.Task("arduwp0bnjkwz9d4xk7rabofi")
 
 task.download_outputs()
 ```
@@ -302,7 +350,7 @@ which should get you something like this (you may have other contents)
 And you can donwload the folder produced by this task by doing:
 
 ```bash
-inductiva tasks download n90hpbaiaa26jjb1d93zgbqgn
+inductiva tasks download arduwp0bnjkwz9d4xk7rabofi
 ```
 ## What to read next
 
