@@ -189,9 +189,9 @@ task.print_summary()
 ```
 
 You should see something like this when you run this script end to end (it
-should take approximately 15 minutes). Please take into consideration that some
-values related with user credits, quotas and tiers may differ substantially from
-the ones you see, depending on the tier you are in.
+should take less than 15 minutes). Please take into consideration that some
+values related with user credits and quotas may differ substantially from the 
+ones you may see depending on the tier you are in.
 
 ```bash
 Username: sarmento
@@ -308,7 +308,7 @@ While the script is running, you can check the stdout of the simulation process
 in real time by issuing (please change to the id of your task):
 
 ```bash
-inductiva logs <TASK_ID>
+inductiva logs arduwp0bnjkwz9d4xk7rabofi
 ```
 
 The command line above is shown in the execution trace, so you can just
@@ -318,10 +318,10 @@ as an environment variable).
 Once the script finishes, and you see the summary of the task, you can download
 the resulting files. Observe in the summary above that quite some data was 
 produced: 35751 files for a total of 7.51 GB before compression. That is why
-the last stage of the process (``Output Upload") that compresses and moves the
-outputs of the simulation to your personal cloud stoarge area still takes a
-significant fraction of time of the overall process execution (2:27 out of 
-10:34).
+the last stage of the process, "Output Upload", which involves compressing and
+moving the outputs of the simulation to your personal cloud stoarge area, still
+takes a significant fraction of time of the overall process execution (2:27 out
+of 10:34).
 
 You can download the (zipped) data by creating a simple script such as this
 (again, please change to the corresponding task id):
