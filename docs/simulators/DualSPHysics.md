@@ -201,7 +201,7 @@ boundary_dirout=f"{dirout}/boundary"
 surface_dirout=f"{dirout}/surface"
 ```
 
-Now, we need to convert the 6 command lines to strings, while making use of
+Now, we need to convert the 7 command lines to strings, while making use of
 the variables we have just defined. Also, will be able to we call the 
 DualSPHysics commands (gencase, dualsphysics, partvtk, etc) directly, since they
 are all pre-installed the the machine we will spin up later.
@@ -392,6 +392,54 @@ Data:
 
 ```
 
+That's it!
+
+We can now donwload the results to our local machine using Inductiva's CLI:
+```bash
+inductiva tasks download u8v7p1v7wfyvvkyc0iq0s632k
+```
+Downloading and decompressing data will take a few minutes (depending on your
+network connection):
+```bash
+Downloading simulation outputs to inductiva_output/u8v7p1v7wfyvvkyc0iq0s632k/output.zip...
+100%|█████████████████████████████████████████████████████████████████████████████| 3.52G/3.52G [04:43<00:00, 12.4MB/s]
+Uncompressing the outputs to u8v7p1v7wfyvvkyc0iq0s632k...
+```
+
+As usual, the results are placed inside the `inductiva_output` folder, and then
+inside a folder named after the task. Above, we had set a variable for the
+internal directory where we would place all outputs (`dirout`), and this got
+instatiated to `CaseTurbine_out`. Let's check its content:
+
+```bash
+ls -las inductiva_output/u8v7p1v7wfyvvkyc0iq0s632k/CaseTurbine_out
+total 36080
+   0 drwxr-xr-x    22 lsarmento  staff      704 19 Aug 12:09 .
+   0 drwxr-xr-x    14 lsarmento  staff      448 19 Aug 12:09 ..
+9888 -rw-r--r--     1 lsarmento  staff  5058947 19 Aug 12:07 CaseTurbine.bi4
+  16 -rw-r--r--     1 lsarmento  staff     4523 19 Aug 12:07 CaseTurbine.out
+  24 -rw-r--r--     1 lsarmento  staff    10830 19 Aug 12:07 CaseTurbine.xml
+9432 -rw-r--r--     1 lsarmento  staff  4827935 19 Aug 12:07 CaseTurbine_All.vtk
+1280 -rw-r--r--     1 lsarmento  staff   653967 19 Aug 12:07 CaseTurbine_Bound.vtk
+8160 -rw-r--r--     1 lsarmento  staff  4174240 19 Aug 12:07 CaseTurbine_Fluid.vtk
+ 752 -rw-r--r--     1 lsarmento  staff   382901 19 Aug 12:07 CaseTurbine_MkCells.vtk
+2488 -rw-r--r--     1 lsarmento  staff  1272363 19 Aug 12:07 CaseTurbine__Actual.vtk
+   8 -rw-r--r--     1 lsarmento  staff      583 19 Aug 12:07 CaseTurbine_dbg-fillbox.vtk
+   8 -rw-r--r--     1 lsarmento  staff     1947 19 Aug 12:07 CfgChrono_Scheme.vtk
+   8 -rw-r--r--     1 lsarmento  staff      854 19 Aug 12:07 CfgInit_Domain.vtk
+  16 -rw-r--r--     1 lsarmento  staff     4155 19 Aug 12:07 CfgInit_MapCells.vtk
+   8 -rw-r--r--     1 lsarmento  staff     2415 19 Aug 12:07 Floating_Materials.xml
+3880 -rw-r--r--     1 lsarmento  staff  1985884 19 Aug 12:07 Rotor.stl
+   8 -rw-r--r--     1 lsarmento  staff      909 19 Aug 12:07 Run.csv
+ 104 -rw-r--r--     1 lsarmento  staff    49764 19 Aug 12:07 Run.out
+   0 drwxr-xr-x   504 lsarmento  staff    16128 19 Aug 12:09 boundary
+   0 drwxr-xr-x   508 lsarmento  staff    16256 19 Aug 12:08 data
+   0 drwxr-xr-x  1006 lsarmento  staff    32192 19 Aug 12:08 particles
+   0 drwxr-xr-x   503 lsarmento  staff    16096 19 Aug 12:09 surface
+```
+Data for visualization is placed inside the directories `boundary`, `particles`
+and `surface`. This data can be loaded in ParaView and rendered in a movie as 
+the one seen above.
 
 ## What to read next
 
