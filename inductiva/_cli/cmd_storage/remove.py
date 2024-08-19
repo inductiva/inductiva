@@ -17,7 +17,8 @@ def remove(args):
     if "*" in paths:
         print(
             "inductiva storage remove: error: "
-            "argument path: wildcard '*' not allowed",
+            "argument path: wildcard '*' not allowed.\n",
+            "Use '--all' instead.",
             file=sys.stderr)
         return 1
 
