@@ -18,9 +18,9 @@ Examples of this are:
 - `isosurface`: to generate VTK files with the isosurfaces of the fluid;
 - `measuretool`: to generate CSV files with measurements of the fluid properties.
 
-For an extensive list of commands please check the DualSPHysics 
-[documentation](https://dual.sphysics.org/). For the API, you can passed them
-in lower case and we will handle the rest for you!
+For an extensive list of commands, please refer to the DualSPHysics 
+[documentation](https://dual.sphysics.org/). You can pass the API commands in
+lowercase, and we will handle the rest for you!
 
 ## Example
 
@@ -52,8 +52,8 @@ task.download_outputs()
 
 ```
 
-Below, are going to show how to run a slighly more complex examples that come
-included with the DualPhysics distribution inside the `examples` folder. 
+Below, we will demonstrate how to run a slightly more complex example included
+in the DualSPHysics distribution, located in the `examples` folder. 
 In general, the procedure involves transforming the shell script that controls
 the several steps of the simulation into a list of commands that will then be
 passed via the `run()` method as shown above.
@@ -66,11 +66,12 @@ We are going to run the simulation stored in `examples/chrono/09_Turbine`.
 Originally, this simulation is orchestrated by a shell script that receives
 parameters from the user. The script takes those parameters, performs some 
 initial configurations and then runs a series of Dualphysics commands, including
-pre-processing, simulation and a number of post-processing steps.
+pre-processing, simulation, and a number of post-processing steps.
 
 We are going to start from the original file 
 `examples/chrono/09_Turbine/xCaseTurbine_linux64_CPU.sh` and extract the
-relevant command lines that will be executed via Inductiva API. The original shell script looks like this (it's quite long!):
+relevant command lines that will be executed via Inductiva API. The original
+shell script looks like this (it's quite long!):
 
 ```bash
 #!/bin/bash 
@@ -171,16 +172,15 @@ ${dualsphysicscpu} ${dirout}/${name} ${dirout} -dirdataout data -svres
 if [ $? -ne 0 ] ; then fail; fi
 ```
 
-The post-processing commands follow, with calls to `partvtk`, `partvtkout`,
-`boundaryvtk` and `isosurface`. These are the commands that generate the data
-required for producing the visualization shown above with ParaView.
+The post-processing commands include calls to `partvtk`, `partvtkout`, 
+`boundaryvtk`, and `isosurface`. These commands generate the data required to
+produce the visualization displayed above using ParaView.
 
-There are also a number of variables being set in the beginning of the script. 
-Some of them have to do with the path to DualSPHysics commands, and they
-are assuming a local instalation. For our Inductiva python script, we won't 
-need any of that, since the API takes care of all command paths for us in the
-remote machine. There are also a number of variable related to filenames and 
-input/output directories:
+The script also sets several variables at the beginning, some of which relate
+to the paths for DualSPHysics commands, assuming a local installation. In our
+Inductiva Python script, we won’t need these, as the API automatically handles
+all command paths on the remote machine. There are also a number of variable
+related to filenames and input/output directories:
 ```bash
 export name=CaseTurbine
 export dirout=${name}_out
@@ -188,8 +188,9 @@ export diroutdata=${dirout}/data
 ```
 For a matter of convenience, we will want to keep the control over input / 
 output directories, so we will convert and keep these variables in our python
-script. We will also take the chance to explicitly add a few more output 
-directories, and we will make everything a bit more pythonic. So, in our python script, we should have something like this: 
+script. Additionally, we’ll take this opportunity to explicitly add a few more
+output directories and make the style a bit more Pythonic. So, our Python script
+should look something like this: 
 ```python
 # Let's keep the original variables for the directory names, but we will
 # make them more pythonic and we will add a few others for readibility
@@ -201,10 +202,10 @@ boundary_dirout=f"{dirout}/boundary"
 surface_dirout=f"{dirout}/surface"
 ```
 
-Now, we need to convert the 7 command lines to strings, while making use of
-the variables we have just defined. Also, will be able to we call the 
-DualSPHysics commands (gencase, dualsphysics, partvtk, etc) directly, since they
-are all pre-installed the the machine we will spin up later.
+Next, we need to convert the seven command lines into strings, while making use
+of the variables we just defined. We’ll also be able to call the DualSPHysics
+commands (such as `gencase`, `dualsphysics`, `partvtk`, etc.) directly, as they
+are all pre-installed on the machine we will spin up later.
 
 ```python
 commands = [
@@ -218,11 +219,11 @@ commands = [
 ]
 
 ```
-The rest of the python script follows the usual patter. Here is the finaly 
+The rest of the Python script follows the usual pattern. Here is the final
 resulting script, ready to be executed:
+
 ```python
 import inductiva
-
 
 # Let's keep the original variables for the directory names, but we will
 # make them more pythonic and we will add a few others for readibility
@@ -279,7 +280,7 @@ machine_group.terminate()
 task.print_summary()
 ```
 
-Now we can run this script, and the result should be something like:
+Now, we can run this script, and the output should look something like this:
 
 ```
 
@@ -406,10 +407,10 @@ Downloading simulation outputs to inductiva_output/u8v7p1v7wfyvvkyc0iq0s632k/out
 Uncompressing the outputs to u8v7p1v7wfyvvkyc0iq0s632k...
 ```
 
-As usual, the results are placed inside the `inductiva_output` folder, and then
-inside a folder named after the task. Above, we had set a variable for the
-internal directory where we would place all outputs (`dirout`), and this got
-instatiated to `CaseTurbine_out`. Let's check its content:
+AAs usual, the results are placed in the `inductiva_output` folder, within a 
+subfolder named after the task. Earlier, we set a variable for the internal
+directory where all outputs would be placed (`dirout`), which was instantiated 
+as `CaseTurbine_out`. Let’s check its contents:
 
 ```bash
 ls -las inductiva_output/u8v7p1v7wfyvvkyc0iq0s632k/CaseTurbine_out
