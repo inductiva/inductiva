@@ -32,7 +32,12 @@ from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Query params
-MaxResultsSchema = schemas.IntSchema
+
+
+class MaxResultsSchema(
+    schemas.IntSchema
+):
+    pass
 
 
 class SortBySchema(
