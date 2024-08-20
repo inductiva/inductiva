@@ -160,14 +160,14 @@ def test_emphasis_formatter_exception():
 
 
 def test_get_ansi_formatter_ansi_enabled():
-    with patch("inductiva._ansi_enabled", new=True):
+    with patch("inductiva.ansi_enabled", new=True):
 
         assert format_utils.get_ansi_formatter(
         ) is format_utils.emphasis_formatter
 
 
 def test_get_ansi_formatter_ansi_disabled():
-    with patch("inductiva._ansi_enabled", new=False):
+    with patch("inductiva.ansi_enabled", new=False):
 
         assert format_utils.get_ansi_formatter() is format_utils.no_formatter
 

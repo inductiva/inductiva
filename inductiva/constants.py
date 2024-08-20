@@ -20,6 +20,8 @@ LOADER_IGNORE_PREFIX = "_"
 # when printing the stack trace, how many lines to show
 EXCEPTIONS_MAX_TRACEBACK_DEPTH = 2
 
+TASK_FAILED_LINES_TO_DUMP = 10
+
 INDUCTIVA_LOGS_WAIT_SLEEP_TIME = 1.0
 
 HOME_DIR = pathlib.Path.home() / ".inductiva"
