@@ -207,6 +207,7 @@
 <li class="toctree-l1"><a class="reference internal" href="AmrWind.html">Amr-Wind</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CaNS.html">CaNS</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">DualSPHysics</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="FDS.html">FDS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="GROMACS.html">GROMACS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="NWChem.html">NWChem</a></li>
@@ -381,9 +382,16 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">DualSPHysics</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#running-examples-chrono-09-turbine">Running <code class="docutils literal notranslate"><span class="pre">examples/chrono/09_Turbine</span></code></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
+</li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -397,22 +405,25 @@ document.write(`
   <section id="dualsphysics">
 <h1>DualSPHysics<a class="headerlink" href="#dualsphysics" title="Permalink to this heading">#</a></h1>
 <p>DualSPHysics is a Smoothed-Particle Hydrodynamics (SPH) simulator. The simulator
-is usually configured by a single file with the extension <code class="docutils literal notranslate"><span class="pre">.xml</span></code>. This file contains
-all the information about the simulation, including the geometry, the physical
-properties of the fluids, the boundary conditions, the numerical parameters, and
-the output files. Sometimes the configuration can also use extra geometry files.</p>
+is usually configured by a single file with the extension <code class="docutils literal notranslate"><span class="pre">.xml</span></code>. This file
+contains all the information about the simulation, including the geometry,
+the physical properties of the fluids, the boundary conditions, the numerical
+parameters, and the output files. Sometimes the configuration can also use extra
+geometry files.</p>
 <p>To run a DualSPHysics simulation you will need to set the commands. In general,
 there are two main commands that are required to run a simulation: <code class="docutils literal notranslate"><span class="pre">gencase</span></code> and
-<code class="docutils literal notranslate"><span class="pre">dualsphysics</span></code>. The <code class="docutils literal notranslate"><span class="pre">gencase</span></code> command is used to generate the case files that will
-be used by the <code class="docutils literal notranslate"><span class="pre">dualsphysics</span></code> command to run the simulation. Thereafter, there are
-other commands that allow you to post-process the results. Examples of this are:</p>
+<code class="docutils literal notranslate"><span class="pre">dualsphysics</span></code>. The <code class="docutils literal notranslate"><span class="pre">gencase</span></code> command is used to generate the case files that
+will be used by the <code class="docutils literal notranslate"><span class="pre">dualsphysics</span></code> command to run the simulation.</p>
+<p>Thereafter, there are other commands that allow you to post-process the results.
+Examples of this are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">partvtk</span></code>: to generate VTK files with the particle trajectories;</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">isosurface</span></code>: to generate VTK files with the isosurfaces of the fluid;</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">measuretool</span></code>: to generate CSV files with measurements of the fluid properties.</p></li>
 </ul>
-<p>For an extensive list of commands please check the DualSPHysics <a class="reference external" href="https://dual.sphysics.org/" target="_blank">documentation</a>.
-For the API, you can passed them in lower case and we will handle the rest for you!</p>
+<p>For an extensive list of commands, please refer to the DualSPHysics
+<a class="reference external" href="https://dual.sphysics.org/" target="_blank">documentation</a>. You can pass the API commands in
+lowercase, and we will handle the rest for you!</p>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
 <p>In this example, we run a classical CFD case of a flow over a cylinder.</p>
@@ -441,7 +452,381 @@ For the API, you can passed them in lower case and we will handle the rest for y
 
 </pre></div>
 </div>
+<p>Below, we will demonstrate how to run a slightly more complex example included
+in the DualSPHysics distribution, located in the <code class="docutils literal notranslate"><span class="pre">examples</span></code> folder.
+In general, the procedure involves transforming the shell script that controls
+the several steps of the simulation into a list of commands that will then be
+passed via the <code class="docutils literal notranslate"><span class="pre">run()</span></code> method as shown above.</p>
 </section>
+</section>
+<section id="running-examples-chrono-09-turbine">
+<h1>Running <code class="docutils literal notranslate"><span class="pre">examples/chrono/09_Turbine</span></code><a class="headerlink" href="#running-examples-chrono-09-turbine" title="Permalink to this heading">#</a></h1>
+<p>We are going to run the simulation stored in <code class="docutils literal notranslate"><span class="pre">examples/chrono/09_Turbine</span></code>.</p>
+<p><img alt="Video produced with Paraview using VTK files generated by DualSPHysics" src="../_images/turbine30fps.gif" /></p>
+<p>Originally, this simulation is orchestrated by a shell script that receives
+parameters from the user. The script takes those parameters, performs some
+initial configurations and then runs a series of Dualphysics commands, including
+pre-processing, simulation, and a number of post-processing steps.</p>
+<p>We are going to start from the original file
+<code class="docutils literal notranslate"><span class="pre">examples/chrono/09_Turbine/xCaseTurbine_linux64_CPU.sh</span></code> and extract the
+relevant command lines that will be executed via Inductiva API. The original
+shell script looks like this (it’s quite long!):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash </span>
+
+fail<span class="w"> </span><span class="o">()</span><span class="w"> </span><span class="o">{</span><span class="w"> </span>
+<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>Execution<span class="w"> </span>aborted.<span class="w"> </span>
+<span class="w"> </span><span class="nb">read</span><span class="w"> </span>-n1<span class="w"> </span>-r<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;Press any key to continue...&quot;</span><span class="w"> </span>key<span class="w"> </span>
+<span class="w"> </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>
+<span class="o">}</span>
+
+<span class="c1"># &quot;name&quot; and &quot;dirout&quot; are named according to the testcase</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">name</span><span class="o">=</span>CaseTurbine
+<span class="nb">export</span><span class="w"> </span><span class="nv">dirout</span><span class="o">=</span><span class="si">${</span><span class="nv">name</span><span class="si">}</span>_out
+<span class="nb">export</span><span class="w"> </span><span class="nv">diroutdata</span><span class="o">=</span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span>/data
+
+<span class="c1"># &quot;executables&quot; are renamed and called from their directory</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">dirbin</span><span class="o">=</span>../../../bin/linux
+<span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">LD_LIBRARY_PATH</span><span class="si">}</span>:<span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">gencase</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/GenCase_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">dualsphysicscpu</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/DualSPHysics5.2CPU_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">dualsphysicsgpu</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/DualSPHysics5.2_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">boundaryvtk</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/BoundaryVTK_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">partvtk</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/PartVTK_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">partvtkout</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/PartVTKOut_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">measuretool</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/MeasureTool_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">computeforces</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/ComputeForces_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">isosurface</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/IsoSurface_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">flowtool</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/FlowTool_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">floatinginfo</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/FloatingInfo_linux64&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">tracerparts</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">dirbin</span><span class="si">}</span><span class="s2">/TracerParts_linux64&quot;</span>
+
+<span class="nv">option</span><span class="o">=</span>-1
+<span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-e<span class="w"> </span><span class="nv">$dirout</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$option</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$option</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$option</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="o">]</span><span class="w"> </span>
+<span class="w"> </span><span class="k">do</span><span class="w"> </span>
+
+<span class="w">	</span><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;The folder &quot;</span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span><span class="s2">&quot; already exists. Choose an option.</span>
+<span class="s2">  [1]- Delete it and continue.</span>
+<span class="s2">  [2]- Execute post-processing.</span>
+<span class="s2">  [3]- Abort and exit.</span>
+<span class="s2">&quot;</span>
+<span class="w"> </span><span class="nb">read</span><span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>option<span class="w"> </span>
+<span class="w"> </span><span class="k">done</span><span class="w"> </span>
+<span class="w">  </span><span class="k">else</span><span class="w"> </span>
+<span class="w">   </span><span class="nv">option</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>
+<span class="k">fi</span><span class="w"> </span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$option</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="c1"># &quot;dirout&quot; to store results is removed if it already exists</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-e<span class="w"> </span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>rm<span class="w"> </span>-r<span class="w"> </span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span><span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+
+<span class="c1"># CODES are executed according the selected parameters of execution in this testcase</span>
+<span class="si">${</span><span class="nv">gencase</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">name</span><span class="si">}</span>_Def<span class="w"> </span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span>/<span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="w"> </span>-save:all
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>fail<span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+
+<span class="si">${</span><span class="nv">dualsphysicscpu</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span>/<span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span><span class="w"> </span>-dirdataout<span class="w"> </span>data<span class="w"> </span>-svres
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>fail<span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+
+<span class="k">fi</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$option</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">2</span><span class="w"> </span>-o<span class="w"> </span><span class="nv">$option</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">dirout2</span><span class="o">=</span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span>/particles
+<span class="si">${</span><span class="nv">partvtk</span><span class="si">}</span><span class="w"> </span>-dirin<span class="w"> </span><span class="si">${</span><span class="nv">diroutdata</span><span class="si">}</span><span class="w"> </span>-savevtk<span class="w"> </span><span class="si">${</span><span class="nv">dirout2</span><span class="si">}</span>/PartFloating<span class="w"> </span>-onlytype:-all,+floating
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>fail<span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+
+<span class="si">${</span><span class="nv">partvtk</span><span class="si">}</span><span class="w"> </span>-dirin<span class="w"> </span><span class="si">${</span><span class="nv">diroutdata</span><span class="si">}</span><span class="w"> </span>-savevtk<span class="w"> </span><span class="si">${</span><span class="nv">dirout2</span><span class="si">}</span>/PartFluid<span class="w"> </span>-onlytype:-all,+fluid
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>fail<span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+
+<span class="si">${</span><span class="nv">partvtkout</span><span class="si">}</span><span class="w"> </span>-dirin<span class="w"> </span><span class="si">${</span><span class="nv">diroutdata</span><span class="si">}</span><span class="w"> </span>-savevtk<span class="w"> </span><span class="si">${</span><span class="nv">dirout2</span><span class="si">}</span>/PartFluidOut<span class="w"> </span>-SaveResume<span class="w"> </span><span class="si">${</span><span class="nv">dirout2</span><span class="si">}</span>/_ResumeFluidOut
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>fail<span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">dirout2</span><span class="o">=</span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span>/boundary
+<span class="si">${</span><span class="nv">boundaryvtk</span><span class="si">}</span><span class="w"> </span>-loadvtk<span class="w"> </span>AutoActual<span class="w"> </span>-motiondata<span class="w"> </span><span class="si">${</span><span class="nv">diroutdata</span><span class="si">}</span><span class="w"> </span>-savevtkdata<span class="w"> </span><span class="si">${</span><span class="nv">dirout2</span><span class="si">}</span>/Turbine<span class="w"> </span>-onlytype:floating<span class="w"> </span>-savevtkdata<span class="w"> </span><span class="si">${</span><span class="nv">dirout2</span><span class="si">}</span>/Bound.vtk<span class="w"> </span>-onlytype:fixed
+
+<span class="nb">export</span><span class="w"> </span><span class="nv">dirout2</span><span class="o">=</span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span>/surface
+<span class="si">${</span><span class="nv">isosurface</span><span class="si">}</span><span class="w"> </span>-dirin<span class="w"> </span><span class="si">${</span><span class="nv">diroutdata</span><span class="si">}</span><span class="w"> </span>-saveiso<span class="w"> </span><span class="si">${</span><span class="nv">dirout2</span><span class="si">}</span>/Surface<span class="w"> </span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>fail<span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+
+<span class="k">fi</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$option</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="k">then</span>
+<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>All<span class="w"> </span><span class="k">done</span>
+<span class="w"> </span><span class="k">else</span>
+<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>Execution<span class="w"> </span>aborted
+<span class="k">fi</span>
+
+<span class="nb">read</span><span class="w"> </span>-n1<span class="w"> </span>-r<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;Press any key to continue...&quot;</span><span class="w"> </span>key
+</pre></div>
+</div>
+<p>As you can see above, the main simulation steps involve these two commands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># CODES are executed according the selected parameters of execution in this testcase</span>
+<span class="si">${</span><span class="nv">gencase</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">name</span><span class="si">}</span>_Def<span class="w"> </span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span>/<span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="w"> </span>-save:all
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>fail<span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+
+<span class="si">${</span><span class="nv">dualsphysicscpu</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span>/<span class="si">${</span><span class="nv">name</span><span class="si">}</span><span class="w"> </span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span><span class="w"> </span>-dirdataout<span class="w"> </span>data<span class="w"> </span>-svres
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-ne<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="k">then</span><span class="w"> </span>fail<span class="p">;</span><span class="w"> </span><span class="k">fi</span>
+</pre></div>
+</div>
+<p>The post-processing commands include calls to <code class="docutils literal notranslate"><span class="pre">partvtk</span></code>, <code class="docutils literal notranslate"><span class="pre">partvtkout</span></code>,
+<code class="docutils literal notranslate"><span class="pre">boundaryvtk</span></code>, and <code class="docutils literal notranslate"><span class="pre">isosurface</span></code>. These commands generate the data required to
+produce the visualization displayed above using ParaView.</p>
+<p>The script also sets several variables at the beginning, some of which relate
+to the paths for DualSPHysics commands, assuming a local installation. In our
+Inductiva Python script, we won’t need these, as the API automatically handles
+all command paths on the remote machine. There are also a number of variable
+related to filenames and input/output directories:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">name</span><span class="o">=</span>CaseTurbine
+<span class="nb">export</span><span class="w"> </span><span class="nv">dirout</span><span class="o">=</span><span class="si">${</span><span class="nv">name</span><span class="si">}</span>_out
+<span class="nb">export</span><span class="w"> </span><span class="nv">diroutdata</span><span class="o">=</span><span class="si">${</span><span class="nv">dirout</span><span class="si">}</span>/data
+</pre></div>
+</div>
+<p>For a matter of convenience, we will want to keep the control over input /
+output directories, so we will convert and keep these variables in our python
+script. Additionally, we’ll take this opportunity to explicitly add a few more
+output directories and make the style a bit more Pythonic. So, our Python script
+should look something like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s keep the original variables for the directory names, but we will</span>
+<span class="c1"># make them more pythonic and we will add a few others for readibility</span>
+<span class="n">name</span><span class="o">=</span><span class="s2">&quot;CaseTurbine&quot;</span>
+<span class="n">dirout</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_out&quot;</span>
+<span class="n">data_dirout</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/data&quot;</span>
+<span class="n">particles_dirout</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/particles&quot;</span>
+<span class="n">boundary_dirout</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/boundary&quot;</span>
+<span class="n">surface_dirout</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/surface&quot;</span>
+</pre></div>
+</div>
+<p>Next, we need to convert the seven command lines into strings, while making use
+of the variables we just defined. We’ll also be able to call the DualSPHysics
+commands (such as <code class="docutils literal notranslate"><span class="pre">gencase</span></code>, <code class="docutils literal notranslate"><span class="pre">dualsphysics</span></code>, <code class="docutils literal notranslate"><span class="pre">partvtk</span></code>, etc.) directly, as they
+are all pre-installed on the machine we will spin up later.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="sa">f</span><span class="s2">&quot;gencase </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_Def </span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> -save:all&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;dualsphysics </span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2"> -dirdataout data -svres&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;partvtk -dirin </span><span class="si">{</span><span class="n">data_dirout</span><span class="si">}</span><span class="s2"> -savevtk </span><span class="si">{</span><span class="n">particles_dirout</span><span class="si">}</span><span class="s2">/PartFloating -onlytype:-all,+floating&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;partvtk -dirin </span><span class="si">{</span><span class="n">data_dirout</span><span class="si">}</span><span class="s2"> -savevtk </span><span class="si">{</span><span class="n">particles_dirout</span><span class="si">}</span><span class="s2">/PartFluid -onlytype:-all,+fluid&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;partvtkout -dirin </span><span class="si">{</span><span class="n">data_dirout</span><span class="si">}</span><span class="s2"> -savevtk </span><span class="si">{</span><span class="n">particles_dirout</span><span class="si">}</span><span class="s2">/PartFluidOut -SaveResume </span><span class="si">{</span><span class="n">particles_dirout</span><span class="si">}</span><span class="s2">/_ResumeFluidOut&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;boundaryvtk -loadvtk AutoActual -motiondata </span><span class="si">{</span><span class="n">data_dirout</span><span class="si">}</span><span class="s2"> -savevtkdata </span><span class="si">{</span><span class="n">boundary_dirout</span><span class="si">}</span><span class="s2">/Turbine -onlytype:floating -savevtkdata </span><span class="si">{</span><span class="n">boundary_dirout</span><span class="si">}</span><span class="s2">/Bound.vtk -onlytype:fixed&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;isosurface -dirin </span><span class="si">{</span><span class="n">data_dirout</span><span class="si">}</span><span class="s2"> -saveiso </span><span class="si">{</span><span class="n">surface_dirout</span><span class="si">}</span><span class="s2">/Surface&quot;</span>
+<span class="p">]</span>
+
+</pre></div>
+</div>
+<p>The rest of the Python script follows the usual pattern. Here is the final
+resulting script, ready to be executed:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+
+<span class="c1"># Let&#39;s keep the original variables for the directory names, but we will</span>
+<span class="c1"># make them more pythonic and we will add a few others for readibility</span>
+
+<span class="n">name</span><span class="o">=</span><span class="s2">&quot;CaseTurbine&quot;</span>
+<span class="n">dirout</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_out&quot;</span>
+<span class="n">data_dirout</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/data&quot;</span>
+<span class="n">particles_dirout</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/particles&quot;</span>
+<span class="n">boundary_dirout</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/boundary&quot;</span>
+<span class="n">surface_dirout</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/surface&quot;</span>
+
+<span class="c1"># Now we build the list of commands that we will pass to run(). </span>
+<span class="c1"># We basically map all the commands in the original shell script 1 to 1.</span>
+<span class="c1"># The main changes are related with the new variables we defined above.</span>
+<span class="c1"># Also, we call the commands (gencase, dualsphysics, partvtk, etc) directly.</span>
+
+<span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="sa">f</span><span class="s2">&quot;gencase </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">_Def </span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> -save:all&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;dualsphysics </span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">dirout</span><span class="si">}</span><span class="s2"> -dirdataout data -svres&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;partvtk -dirin </span><span class="si">{</span><span class="n">data_dirout</span><span class="si">}</span><span class="s2"> -savevtk </span><span class="si">{</span><span class="n">particles_dirout</span><span class="si">}</span><span class="s2">/PartFloating -onlytype:-all,+floating&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;partvtk -dirin </span><span class="si">{</span><span class="n">data_dirout</span><span class="si">}</span><span class="s2"> -savevtk </span><span class="si">{</span><span class="n">particles_dirout</span><span class="si">}</span><span class="s2">/PartFluid -onlytype:-all,+fluid&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;partvtkout -dirin </span><span class="si">{</span><span class="n">data_dirout</span><span class="si">}</span><span class="s2"> -savevtk </span><span class="si">{</span><span class="n">particles_dirout</span><span class="si">}</span><span class="s2">/PartFluidOut -SaveResume </span><span class="si">{</span><span class="n">particles_dirout</span><span class="si">}</span><span class="s2">/_ResumeFluidOut&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;boundaryvtk -loadvtk AutoActual -motiondata </span><span class="si">{</span><span class="n">data_dirout</span><span class="si">}</span><span class="s2"> -savevtkdata </span><span class="si">{</span><span class="n">boundary_dirout</span><span class="si">}</span><span class="s2">/Turbine -onlytype:floating -savevtkdata </span><span class="si">{</span><span class="n">boundary_dirout</span><span class="si">}</span><span class="s2">/Bound.vtk -onlytype:fixed&quot;</span><span class="p">,</span>
+    <span class="sa">f</span><span class="s2">&quot;isosurface -dirin </span><span class="si">{</span><span class="n">data_dirout</span><span class="si">}</span><span class="s2"> -saveiso </span><span class="si">{</span><span class="n">surface_dirout</span><span class="si">}</span><span class="s2">/Surface&quot;</span>
+<span class="p">]</span>
+
+<span class="c1"># From this point on, we follow the typical structure for Inductiva API script.</span>
+
+<span class="c1"># We start a machine group. We will use 64 vcpus.</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;n2d-highcpu-64&quot;</span><span class="p">,</span>
+    <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Initialize the Simulator</span>
+<span class="n">dualsphysics</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">DualSPHysics</span><span class="p">()</span>
+
+<span class="c1"># Run simulation with config files in the input directory</span>
+<span class="c1"># We still point to the original directory, where all the</span>
+<span class="c1"># configuration files and required 3D models are.</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">dualsphysics</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;examples/chrono/09_Turbine&quot;</span><span class="p">,</span>
+    <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+
+<span class="c1"># Let&#39;s wait for the task to conclude.</span>
+<span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+
+<span class="c1"># Shut down the machine.</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+
+<span class="c1"># Just see some stats for now. We will download the results later.</span>
+<span class="n">task</span><span class="o">.</span><span class="n">print_summary</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now, we can run this script, and the output should look something like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+■ Tier: Power-User
+
+■ Credits
+
+  Power-User (tier)               0.00 USD
+  ----------------------------------------
+  Total                         989.99 USD
+
+■ Active Campaigns
+
+ Not currently enrolled in any campaign.
+
+■ Global User quotas
+                                                                 CURRENT USAGE     MAX ALLOWED
+ Maximum simultaneous instances                                  0 instance        100 instance
+ Maximum price per hour across all instances                     0 USD             270 USD
+ Maximum tasks per week                                          3 task            N/A
+ Maximum number of VCPUs                                         0 vcpu            1000 vcpu
+ Maximum time a machine group can stay idle before termination   N/A               120 minute
+
+■ Instance User quotas
+                                                                                          MAX ALLOWED
+ Maximum disk size                                                                        2000 GB
+ Maximum time a machine group can stay up before automatic termination                    48 hour
+ Maximum amount of RAM per VCPU                                                           6 GB
+ Maximum time a task can stay running in the default queue before automatic termination   16 hour
+
+■ Registering MachineGroup configurations:
+	· Name:                       api-57yp64vdyz50a8fx0ttuz2n90
+	· Machine Type:               n2d-highcpu-64
+	· Data disk size:             20 GB
+	· Maximum idle time:          30 minutes
+	· Auto terminate timestamp:   2024/08/20 20:01:22
+	· Number of machines:         1
+	· Spot:                       True
+	· Estimated cloud cost of machine group: 0.670 $/h
+	· You are spending 3.3x less by using spot machines.
+
+Starting MachineGroup(name=&quot;api-57yp64vdyz50a8fx0ttuz2n90&quot;). This may take a few minutes.
+Note that stopping this local process will not interrupt the creation of the machine group. Please wait...
+Machine Group api-57yp64vdyz50a8fx0ttuz2n90 with n2d-highcpu-64 machines successfully started in 0:00:29.
+
+The machine group is using the following quotas:
+
+                                               USED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
+ Maximum number of VCPUs                       64                   64                1000
+ Maximum simultaneous instances                1                    1                 100
+ Maximum price per hour across all instances   0.6727               0.6727            270
+
+■ Using production image of DualSPHysics version 5.2.1
+
+■ Task Information:
+	· ID:                    u8v7p1v7wfyvvkyc0iq0s632k
+	· Simulator:             DualSPHysics
+	· Version:               5.2.1
+	· Image:                 docker://inductiva/kutu:dualsphysics_v5.2.1
+	· Local input directory: examples/chrono/09_Turbine
+	· Submitting to the following computational resources:
+ 		· Machine Group api-57yp64vdyz50a8fx0ttuz2n90 with n2d-highcpu-64 machines
+
+Preparing upload of the local input directory examples/chrono/09_Turbine (2.25 MB).
+Input archive size: 1.09 MB
+Uploading input archive...
+100%|██████████████████████████████████████████████████████████████████████████████| 1.09M/1.09M [00:01&lt;00:00, 715kB/s]
+Local input directory successfully uploaded.
+
+■ Task u8v7p1v7wfyvvkyc0iq0s632k submitted to the queue of the Machine Group api-57yp64vdyz50a8fx0ttuz2n90 with n2d-highcpu-64 machines.
+Number of tasks ahead in the queue: 0
+Simulation metadata logged to: inductiva_output/task_metadata.json
+Task u8v7p1v7wfyvvkyc0iq0s632k configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
+· Consider tracking the status of the task via CLI:
+	inductiva tasks list --id u8v7p1v7wfyvvkyc0iq0s632k
+· Or, tracking the logs of the task via CLI:
+	inductiva logs u8v7p1v7wfyvvkyc0iq0s632k
+· You can also get more information about the task via the CLI command:
+	inductiva tasks info u8v7p1v7wfyvvkyc0iq0s632k
+
+■ Task u8v7p1v7wfyvvkyc0iq0s632k successfully queued and waiting to be picked-up for execution...
+The task u8v7p1v7wfyvvkyc0iq0s632k is about to start.
+■ Task u8v7p1v7wfyvvkyc0iq0s632k has started and is now running remotely.
+■ Task u8v7p1v7wfyvvkyc0iq0s632k completed successfully.
+Downloading stdout and stderr files to u8v7p1v7wfyvvkyc0iq0s632k...
+Partial download completed to u8v7p1v7wfyvvkyc0iq0s632k.
+Successfully requested termination of MachineGroup(name=&quot;api-57yp64vdyz50a8fx0ttuz2n90&quot;).
+Termination of the machine group freed the following quotas:
+
+                                               FREED BY RESOURCE     CURRENT USAGE     MAX ALLOWED
+ Maximum number of VCPUs                       64                    0                 1000
+ Maximum simultaneous instances                1                     0                 100
+ Maximum price per hour across all instances   0.6727                0                 270
+
+
+Task status: success
+Wall clock time:  0:09:35
+Time breakdown:
+	Input upload:              1.81 s
+	Time in queue:             10.71 s
+	Container image download:  1.23 s
+	Input download:            0.09 s
+	Input decompression:       0.01 s
+	Computation:               0:06:20
+	Output upload:             0:03:01
+Data:
+	Size of zipped output:    3.52 GB
+	Size of unzipped output:  5.35 GB
+	Number of output files:   2541
+
+</pre></div>
+</div>
+<p>That’s it!</p>
+<p>We can now donwload the results to our local machine using Inductiva’s CLI:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>inductiva<span class="w"> </span>tasks<span class="w"> </span>download<span class="w"> </span>u8v7p1v7wfyvvkyc0iq0s632k
+</pre></div>
+</div>
+<p>Downloading and decompressing data will take a few minutes (depending on your
+network connection):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Downloading<span class="w"> </span>simulation<span class="w"> </span>outputs<span class="w"> </span>to<span class="w"> </span>inductiva_output/u8v7p1v7wfyvvkyc0iq0s632k/output.zip...
+<span class="m">100</span>%<span class="p">|</span>█████████████████████████████████████████████████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">3</span>.52G/3.52G<span class="w"> </span><span class="o">[</span><span class="m">04</span>:43&lt;<span class="m">00</span>:00,<span class="w"> </span><span class="m">12</span>.4MB/s<span class="o">]</span>
+Uncompressing<span class="w"> </span>the<span class="w"> </span>outputs<span class="w"> </span>to<span class="w"> </span>u8v7p1v7wfyvvkyc0iq0s632k...
+</pre></div>
+</div>
+<p>AAs usual, the results are placed in the <code class="docutils literal notranslate"><span class="pre">inductiva_output</span></code> folder, within a
+subfolder named after the task. Earlier, we set a variable for the internal
+directory where all outputs would be placed (<code class="docutils literal notranslate"><span class="pre">dirout</span></code>), which was instantiated
+as <code class="docutils literal notranslate"><span class="pre">CaseTurbine_out</span></code>. Let’s check its contents:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-las<span class="w"> </span>inductiva_output/u8v7p1v7wfyvvkyc0iq0s632k/CaseTurbine_out
+total<span class="w"> </span><span class="m">36080</span>
+<span class="w">   </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">    </span><span class="m">22</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">      </span><span class="m">704</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:09<span class="w"> </span>.
+<span class="w">   </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">    </span><span class="m">14</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">      </span><span class="m">448</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:09<span class="w"> </span>..
+<span class="m">9888</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">  </span><span class="m">5058947</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CaseTurbine.bi4
+<span class="w">  </span><span class="m">16</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">     </span><span class="m">4523</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CaseTurbine.out
+<span class="w">  </span><span class="m">24</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">    </span><span class="m">10830</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CaseTurbine.xml
+<span class="m">9432</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">  </span><span class="m">4827935</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CaseTurbine_All.vtk
+<span class="m">1280</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">   </span><span class="m">653967</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CaseTurbine_Bound.vtk
+<span class="m">8160</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">  </span><span class="m">4174240</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CaseTurbine_Fluid.vtk
+<span class="w"> </span><span class="m">752</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">   </span><span class="m">382901</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CaseTurbine_MkCells.vtk
+<span class="m">2488</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">  </span><span class="m">1272363</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CaseTurbine__Actual.vtk
+<span class="w">   </span><span class="m">8</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">      </span><span class="m">583</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CaseTurbine_dbg-fillbox.vtk
+<span class="w">   </span><span class="m">8</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">     </span><span class="m">1947</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CfgChrono_Scheme.vtk
+<span class="w">   </span><span class="m">8</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">      </span><span class="m">854</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CfgInit_Domain.vtk
+<span class="w">  </span><span class="m">16</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">     </span><span class="m">4155</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>CfgInit_MapCells.vtk
+<span class="w">   </span><span class="m">8</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">     </span><span class="m">2415</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>Floating_Materials.xml
+<span class="m">3880</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">  </span><span class="m">1985884</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>Rotor.stl
+<span class="w">   </span><span class="m">8</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">      </span><span class="m">909</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>Run.csv
+<span class="w"> </span><span class="m">104</span><span class="w"> </span>-rw-r--r--<span class="w">     </span><span class="m">1</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">    </span><span class="m">49764</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:07<span class="w"> </span>Run.out
+<span class="w">   </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">   </span><span class="m">504</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">    </span><span class="m">16128</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:09<span class="w"> </span>boundary
+<span class="w">   </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">   </span><span class="m">508</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">    </span><span class="m">16256</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:08<span class="w"> </span>data
+<span class="w">   </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">  </span><span class="m">1006</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">    </span><span class="m">32192</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:08<span class="w"> </span>particles
+<span class="w">   </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">   </span><span class="m">503</span><span class="w"> </span>lsarmento<span class="w">  </span>staff<span class="w">    </span><span class="m">16096</span><span class="w"> </span><span class="m">19</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">12</span>:09<span class="w"> </span>surface
+</pre></div>
+</div>
+<p>Data for visualization is placed inside the directories <code class="docutils literal notranslate"><span class="pre">boundary</span></code>, <code class="docutils literal notranslate"><span class="pre">particles</span></code>
+and <code class="docutils literal notranslate"><span class="pre">surface</span></code>. This data can be loaded in ParaView and rendered in a movie as
+the one seen above.</p>
 <section id="what-to-read-next">
 <h2>What to read next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
 <p>If you are interested in DualSPHysics, you may also be interested in checking
@@ -499,9 +884,16 @@ the following related simulators that are also avaiable via Inductiva API:</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">DualSPHysics</a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#running-examples-chrono-09-turbine">Running <code class="docutils literal notranslate"><span class="pre">examples/chrono/09_Turbine</span></code></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
+</li>
+</ul>
+
   </nav></div>
 
 </div></div>

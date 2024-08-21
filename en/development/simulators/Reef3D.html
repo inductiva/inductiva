@@ -207,6 +207,7 @@
 <li class="toctree-l1"><a class="reference internal" href="AmrWind.html">Amr-Wind</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CaNS.html">CaNS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="DualSPHysics.html">DualSPHysics</a></li>
+
 <li class="toctree-l1"><a class="reference internal" href="FDS.html">FDS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="GROMACS.html">GROMACS</a></li>
 <li class="toctree-l1"><a class="reference internal" href="NWChem.html">NWChem</a></li>
@@ -542,7 +543,7 @@ will run per  physical core. One of the issues with hyperthreading is that it
 increases thread competition for cache (which is fixed), and this may lead to
 some contention issues for I/O heavy simulators, as seems to be the case for
 Reef3D.</p>
-<p>Indeed, Reef3D produces a huge amount of data. As it is currently configured,
+<p>Indeed, Reef3D can produce a huge amount of data. As it is currently configured,
 this simulation would produce several dozen gigabytes of data. To reduce that
 amount of data produced, we can reduce the rate at which (Paraview) data is
 being produced (parameter <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">30</span></code>). Therefore, we will set <code class="docutils literal notranslate"><span class="pre">P</span> <span class="pre">30</span> <span class="pre">0.04</span></code> and
@@ -574,79 +575,122 @@ our machine to be equipped with a 20GB partition (just for data), using the
 </pre></div>
 </div>
 <p>You should see something like this when you run this script end to end (it
-should take approximately 15 minutes)</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Registering<span class="w"> </span>MachineGroup<span class="w"> </span>configurations:
-&gt;<span class="w"> </span>Name:<span class="w">         </span>api-ktq7n9w81gek0kx82agu3znoj
-&gt;<span class="w"> </span>Machine<span class="w"> </span>Type:<span class="w"> </span>c2d-highcpu-112
-&gt;<span class="w"> </span>Data<span class="w"> </span>disk<span class="w"> </span>size:<span class="w">    </span><span class="m">20</span><span class="w"> </span>GB
-&gt;<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>machines:<span class="w"> </span><span class="m">1</span>
-&gt;<span class="w"> </span>Spot:<span class="w">               </span>True
-&gt;<span class="w"> </span>Estimated<span class="w"> </span>cloud<span class="w"> </span>cost<span class="w"> </span>of<span class="w"> </span>machine<span class="w"> </span>group:<span class="w"> </span><span class="m">0</span>.814<span class="w"> </span>$/h
-<span class="w"> </span>&gt;&gt;<span class="w"> </span>You<span class="w"> </span>are<span class="w"> </span>spending<span class="w"> </span><span class="m">5</span>.7x<span class="w"> </span>less<span class="w"> </span>by<span class="w"> </span>using<span class="w"> </span>spot<span class="w"> </span>machines.
-Starting<span class="w"> </span>MachineGroup<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;api-ktq7n9w81gek0kx82agu3znoj&quot;</span><span class="o">)</span>.<span class="w"> </span>This<span class="w"> </span>may<span class="w"> </span>take<span class="w"> </span>a<span class="w"> </span>few<span class="w"> </span>minutes.
+should take less than 15 minutes). Please take into consideration that some
+values related with user credits and quotas may differ substantially from the
+ones you may see depending on the tier you are in.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Username:<span class="w"> </span>sarmento
+
+■<span class="w"> </span>Tier:<span class="w"> </span>Power-User
+
+■<span class="w"> </span>Credits
+
+<span class="w">  </span>Power-User<span class="w"> </span><span class="o">(</span>tier<span class="o">)</span><span class="w">               </span><span class="m">0</span>.00<span class="w"> </span>USD
+<span class="w">  </span>----------------------------------------
+<span class="w">  </span>Total<span class="w">                         </span><span class="m">998</span>.36<span class="w"> </span>USD
+
+■<span class="w"> </span>Active<span class="w"> </span>Campaigns
+
+<span class="w"> </span>Not<span class="w"> </span>currently<span class="w"> </span>enrolled<span class="w"> </span><span class="k">in</span><span class="w"> </span>any<span class="w"> </span>campaign.
+
+■<span class="w"> </span>Global<span class="w"> </span>User<span class="w"> </span>quotas
+<span class="w">                                                                 </span>CURRENT<span class="w"> </span>USAGE<span class="w">     </span>MAX<span class="w"> </span>ALLOWED
+<span class="w"> </span>Maximum<span class="w"> </span>simultaneous<span class="w"> </span>instances<span class="w">                                  </span><span class="m">1</span><span class="w"> </span>instance<span class="w">        </span><span class="m">100</span><span class="w"> </span>instance
+<span class="w"> </span>Maximum<span class="w"> </span>price<span class="w"> </span>per<span class="w"> </span>hour<span class="w"> </span>across<span class="w"> </span>all<span class="w"> </span>instances<span class="w">                     </span><span class="m">0</span>.87444<span class="w"> </span>USD<span class="w">       </span><span class="m">270</span><span class="w"> </span>USD
+<span class="w"> </span>Maximum<span class="w"> </span>tasks<span class="w"> </span>per<span class="w"> </span>week<span class="w">                                          </span><span class="m">0</span><span class="w"> </span>task<span class="w">            </span>N/A
+<span class="w"> </span>Maximum<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>VCPUs<span class="w">                                         </span><span class="m">112</span><span class="w"> </span>vcpu<span class="w">          </span><span class="m">1000</span><span class="w"> </span>vcpu
+<span class="w"> </span>Maximum<span class="w"> </span><span class="nb">time</span><span class="w"> </span>a<span class="w"> </span>machine<span class="w"> </span>group<span class="w"> </span>can<span class="w"> </span>stay<span class="w"> </span>idle<span class="w"> </span>before<span class="w"> </span>termination<span class="w">   </span>N/A<span class="w">               </span><span class="m">120</span><span class="w"> </span>minute
+
+■<span class="w"> </span>Instance<span class="w"> </span>User<span class="w"> </span>quotas
+<span class="w">                                                                                          </span>MAX<span class="w"> </span>ALLOWED
+<span class="w"> </span>Maximum<span class="w"> </span>disk<span class="w"> </span>size<span class="w">                                                                        </span><span class="m">2000</span><span class="w"> </span>GB
+<span class="w"> </span>Maximum<span class="w"> </span><span class="nb">time</span><span class="w"> </span>a<span class="w"> </span>machine<span class="w"> </span>group<span class="w"> </span>can<span class="w"> </span>stay<span class="w"> </span>up<span class="w"> </span>before<span class="w"> </span>automatic<span class="w"> </span>termination<span class="w">                    </span><span class="m">48</span><span class="w"> </span>hour
+<span class="w"> </span>Maximum<span class="w"> </span>amount<span class="w"> </span>of<span class="w"> </span>RAM<span class="w"> </span>per<span class="w"> </span>VCPU<span class="w">                                                           </span><span class="m">6</span><span class="w"> </span>GB
+<span class="w"> </span>Maximum<span class="w"> </span><span class="nb">time</span><span class="w"> </span>a<span class="w"> </span>task<span class="w"> </span>can<span class="w"> </span>stay<span class="w"> </span>running<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>default<span class="w"> </span>queue<span class="w"> </span>before<span class="w"> </span>automatic<span class="w"> </span>termination<span class="w">   </span><span class="m">16</span><span class="w"> </span>hour
+
+■<span class="w"> </span>Registering<span class="w"> </span>MachineGroup<span class="w"> </span>configurations:
+<span class="w">	</span>·<span class="w"> </span>Name:<span class="w">                       </span>api-o4qozo7wafhwqcyz4xh1g4e7s
+<span class="w">	</span>·<span class="w"> </span>Machine<span class="w"> </span>Type:<span class="w">               </span>c2d-highcpu-112
+<span class="w">	</span>·<span class="w"> </span>Data<span class="w"> </span>disk<span class="w"> </span>size:<span class="w">             </span><span class="m">20</span><span class="w"> </span>GB
+<span class="w">	</span>·<span class="w"> </span>Maximum<span class="w"> </span>idle<span class="w"> </span>time:<span class="w">          </span><span class="m">30</span><span class="w"> </span>minutes
+<span class="w">	</span>·<span class="w"> </span>Auto<span class="w"> </span>terminate<span class="w"> </span>timestamp:<span class="w">   </span><span class="m">2024</span>/08/11<span class="w"> </span><span class="m">00</span>:43:06
+<span class="w">	</span>·<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>machines:<span class="w">         </span><span class="m">1</span>
+<span class="w">	</span>·<span class="w"> </span>Spot:<span class="w">                       </span>True
+<span class="w">	</span>·<span class="w"> </span>Estimated<span class="w"> </span>cloud<span class="w"> </span>cost<span class="w"> </span>of<span class="w"> </span>machine<span class="w"> </span>group:<span class="w"> </span><span class="m">0</span>.872<span class="w"> </span>$/h
+<span class="w">	</span>·<span class="w"> </span>You<span class="w"> </span>are<span class="w"> </span>spending<span class="w"> </span><span class="m">5</span>.3x<span class="w"> </span>less<span class="w"> </span>by<span class="w"> </span>using<span class="w"> </span>spot<span class="w"> </span>machines.
+
+Starting<span class="w"> </span>MachineGroup<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;api-o4qozo7wafhwqcyz4xh1g4e7s&quot;</span><span class="o">)</span>.<span class="w"> </span>This<span class="w"> </span>may<span class="w"> </span>take<span class="w"> </span>a<span class="w"> </span>few<span class="w"> </span>minutes.
 Note<span class="w"> </span>that<span class="w"> </span>stopping<span class="w"> </span>this<span class="w"> </span><span class="nb">local</span><span class="w"> </span>process<span class="w"> </span>will<span class="w"> </span>not<span class="w"> </span>interrupt<span class="w"> </span>the<span class="w"> </span>creation<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>machine<span class="w"> </span>group.<span class="w"> </span>Please<span class="w"> </span>wait...
-Machine<span class="w"> </span>Group<span class="w"> </span>api-ktq7n9w81gek0kx82agu3znoj<span class="w"> </span>with<span class="w"> </span>c2d-highcpu-112<span class="w"> </span>machines<span class="w"> </span>successfully<span class="w"> </span>started<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>:00:19.
+Machine<span class="w"> </span>Group<span class="w"> </span>api-o4qozo7wafhwqcyz4xh1g4e7s<span class="w"> </span>with<span class="w"> </span>c2d-highcpu-112<span class="w"> </span>machines<span class="w"> </span>successfully<span class="w"> </span>started<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>:00:18.
+
 The<span class="w"> </span>machine<span class="w"> </span>group<span class="w"> </span>is<span class="w"> </span>using<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>quotas:
 
-<span class="w">                      </span>USED<span class="w"> </span>BY<span class="w"> </span>RESOURCE<span class="w">     </span>CURRENT<span class="w"> </span>USAGE<span class="w">     </span>MAX<span class="w"> </span>ALLOWED
-<span class="w"> </span>cost_per_hour<span class="w">        </span><span class="m">0</span>.81424<span class="w">              </span><span class="m">0</span>.81424<span class="w">           </span><span class="m">20</span>
-<span class="w"> </span>total_num_machines<span class="w">   </span><span class="m">1</span><span class="w">                    </span><span class="m">1</span><span class="w">                 </span><span class="m">10</span>
-<span class="w"> </span>total_num_vcpus<span class="w">      </span><span class="m">112</span><span class="w">                  </span><span class="m">112</span><span class="w">               </span><span class="m">150</span>
+<span class="w">                                               </span>USED<span class="w"> </span>BY<span class="w"> </span>RESOURCE<span class="w">     </span>CURRENT<span class="w"> </span>USAGE<span class="w">     </span>MAX<span class="w"> </span>ALLOWED
+<span class="w"> </span>Maximum<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>VCPUs<span class="w">                       </span><span class="m">112</span><span class="w">                  </span><span class="m">224</span><span class="w">               </span><span class="m">1000</span>
+<span class="w"> </span>Maximum<span class="w"> </span>simultaneous<span class="w"> </span>instances<span class="w">                </span><span class="m">1</span><span class="w">                    </span><span class="m">2</span><span class="w">                 </span><span class="m">100</span>
+<span class="w"> </span>Maximum<span class="w"> </span>price<span class="w"> </span>per<span class="w"> </span>hour<span class="w"> </span>across<span class="w"> </span>all<span class="w"> </span>instances<span class="w">   </span><span class="m">0</span>.87444<span class="w">              </span><span class="m">1</span>.74888<span class="w">           </span><span class="m">270</span>
 
-Task<span class="w"> </span>Information:
-&gt;<span class="w"> </span>ID:<span class="w">                    </span>n90hpbaiaa26jjb1d93zgbqgn
-&gt;<span class="w"> </span>Method:<span class="w">                </span>reef3d
-&gt;<span class="w"> </span>Local<span class="w"> </span>input<span class="w"> </span>directory:<span class="w"> </span>10_2_3D_Dam_Break_with_Obstacle
-&gt;<span class="w"> </span>Submitting<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>computational<span class="w"> </span>resources:
-<span class="w"> </span>&gt;&gt;<span class="w"> </span>Machine<span class="w"> </span>Group<span class="w"> </span>api-ktq7n9w81gek0kx82agu3znoj<span class="w"> </span>with<span class="w"> </span>c2d-highcpu-112<span class="w"> </span>machines
-Preparing<span class="w"> </span>upload<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span><span class="nb">local</span><span class="w"> </span>input<span class="w"> </span>directory<span class="w"> </span>10_2_3D_Dam_Break_with_Obstacle<span class="w"> </span><span class="o">(</span><span class="m">392</span><span class="w"> </span>B<span class="o">)</span>.
-Input<span class="w"> </span>archive<span class="w"> </span>size:<span class="w"> </span><span class="m">637</span><span class="w"> </span>B
+■<span class="w"> </span>Using<span class="w"> </span>production<span class="w"> </span>image<span class="w"> </span>of<span class="w"> </span>REEF3D<span class="w"> </span>version<span class="w"> </span><span class="m">24</span>.02
+
+■<span class="w"> </span>Task<span class="w"> </span>Information:
+<span class="w">	</span>·<span class="w"> </span>ID:<span class="w">                    </span>arduwp0bnjkwz9d4xk7rabofi
+<span class="w">	</span>·<span class="w"> </span>Simulator:<span class="w">             </span>REEF3D
+<span class="w">	</span>·<span class="w"> </span>Version:<span class="w">               </span><span class="m">24</span>.02
+<span class="w">	</span>·<span class="w"> </span>Image:<span class="w">                 </span>docker://inductiva/kutu:reef3d_v24.02
+<span class="w">	</span>·<span class="w"> </span>Local<span class="w"> </span>input<span class="w"> </span>directory:<span class="w"> </span>10_2_3D_Dam_Break_with_Obstacle
+<span class="w">	</span>·<span class="w"> </span>Submitting<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>computational<span class="w"> </span>resources:
+<span class="w"> 		</span>·<span class="w"> </span>Machine<span class="w"> </span>Group<span class="w"> </span>api-o4qozo7wafhwqcyz4xh1g4e7s<span class="w"> </span>with<span class="w"> </span>c2d-highcpu-112<span class="w"> </span>machines
+
+Preparing<span class="w"> </span>upload<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span><span class="nb">local</span><span class="w"> </span>input<span class="w"> </span>directory<span class="w"> </span>10_2_3D_Dam_Break_with_Obstacle<span class="w"> </span><span class="o">(</span><span class="m">390</span><span class="w"> </span>B<span class="o">)</span>.
+Input<span class="w"> </span>archive<span class="w"> </span>size:<span class="w"> </span><span class="m">689</span><span class="w"> </span>B
 Uploading<span class="w"> </span>input<span class="w"> </span>archive...
-<span class="m">100</span>%<span class="p">|</span>███████████████████████████████████████████████████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">637</span>/637<span class="w"> </span><span class="o">[</span><span class="m">00</span>:00&lt;<span class="m">00</span>:00,<span class="w"> </span><span class="m">1</span>.37kB/s<span class="o">]</span>
+<span class="m">100</span>%<span class="p">|</span>████████████████████████████████████████████████████████████████<span class="p">|</span><span class="w"> </span><span class="m">689</span>/689<span class="w"> </span><span class="o">[</span><span class="m">00</span>:00&lt;<span class="m">00</span>:00,<span class="w"> </span><span class="m">1</span>.65kB/s<span class="o">]</span>
 Local<span class="w"> </span>input<span class="w"> </span>directory<span class="w"> </span>successfully<span class="w"> </span>uploaded.
-Task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>submitted<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>queue<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>Machine<span class="w"> </span>Group<span class="w"> </span>api-ktq7n9w81gek0kx82agu3znoj<span class="w"> </span>with<span class="w"> </span>c2d-highcpu-112<span class="w"> </span>machines.
+
+■<span class="w"> </span>Task<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi<span class="w"> </span>submitted<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>queue<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>Machine<span class="w"> </span>Group<span class="w"> </span>api-o4qozo7wafhwqcyz4xh1g4e7s<span class="w"> </span>with<span class="w"> </span>c2d-highcpu-112<span class="w"> </span>machines.
 Number<span class="w"> </span>of<span class="w"> </span>tasks<span class="w"> </span>ahead<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>queue:<span class="w"> </span><span class="m">0</span>
 Simulation<span class="w"> </span>metadata<span class="w"> </span>logged<span class="w"> </span>to:<span class="w"> </span>inductiva_output/task_metadata.json
-Task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>configurations<span class="w"> </span>metadata<span class="w"> </span>saved<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>tasks<span class="w"> </span>metadata<span class="w"> </span>file<span class="w"> </span>task_metadata.json<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>current<span class="w"> </span>working<span class="w"> </span>directory.
-Consider<span class="w"> </span>tracking<span class="w"> </span>the<span class="w"> </span>status<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>task<span class="w"> </span>via<span class="w"> </span>CLI:
-<span class="w">	</span>inductiva<span class="w"> </span>tasks<span class="w"> </span>list<span class="w"> </span>--id<span class="w"> </span>ggkjuzhivoon56vkozgqxapfk
-Or,<span class="w"> </span>tracking<span class="w"> </span>the<span class="w"> </span>logs<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>task<span class="w"> </span>via<span class="w"> </span>CLI:
-<span class="w">	</span>inductiva<span class="w"> </span>logs<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn
-Task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>successfully<span class="w"> </span>queued<span class="w"> </span>and<span class="w"> </span>waiting<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>picked-up<span class="w"> </span><span class="k">for</span><span class="w"> </span>execution...
-The<span class="w"> </span>task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>is<span class="w"> </span>about<span class="w"> </span>to<span class="w"> </span>start.
-Task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>has<span class="w"> </span>started<span class="w"> </span>and<span class="w"> </span>is<span class="w"> </span>now<span class="w"> </span>running<span class="w"> </span>remotely.
-<span class="w"> </span>Task<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn<span class="w"> </span>completed<span class="w"> </span>successfully.
-Downloading<span class="w"> </span>stdout<span class="w"> </span>and<span class="w"> </span>stderr<span class="w"> </span>files<span class="w"> </span>to<span class="w"> </span>inductiva_output/n90hpbaiaa26jjb1d93zgbqgn...
-Partial<span class="w"> </span>download<span class="w"> </span>completed<span class="w"> </span>to<span class="w"> </span>inductiva_output/n90hpbaiaa26jjb1d93zgbqgn.
-Successfully<span class="w"> </span>requested<span class="w"> </span>termination<span class="w"> </span>of<span class="w"> </span>MachineGroup<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;api-ktq7n9w81gek0kx82agu3znoj&quot;</span><span class="o">)</span>.
+Task<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi<span class="w"> </span>configurations<span class="w"> </span>metadata<span class="w"> </span>saved<span class="w"> </span>to<span class="w"> </span>the<span class="w"> </span>tasks<span class="w"> </span>metadata<span class="w"> </span>file<span class="w"> </span>task_metadata.json<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>current<span class="w"> </span>working<span class="w"> </span>directory.
+·<span class="w"> </span>Consider<span class="w"> </span>tracking<span class="w"> </span>the<span class="w"> </span>status<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>task<span class="w"> </span>via<span class="w"> </span>CLI:
+<span class="w">	</span>inductiva<span class="w"> </span>tasks<span class="w"> </span>list<span class="w"> </span>--id<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi
+·<span class="w"> </span>Or,<span class="w"> </span>tracking<span class="w"> </span>the<span class="w"> </span>logs<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>task<span class="w"> </span>via<span class="w"> </span>CLI:
+<span class="w">	</span>inductiva<span class="w"> </span>logs<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi
+·<span class="w"> </span>You<span class="w"> </span>can<span class="w"> </span>also<span class="w"> </span>get<span class="w"> </span>more<span class="w"> </span>information<span class="w"> </span>about<span class="w"> </span>the<span class="w"> </span>task<span class="w"> </span>via<span class="w"> </span>the<span class="w"> </span>CLI<span class="w"> </span>command:
+<span class="w">	</span>inductiva<span class="w"> </span>tasks<span class="w"> </span>info<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi
+
+■<span class="w"> </span>Task<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi<span class="w"> </span>successfully<span class="w"> </span>queued<span class="w"> </span>and<span class="w"> </span>waiting<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>picked-up<span class="w"> </span><span class="k">for</span><span class="w"> </span>execution...
+The<span class="w"> </span>task<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi<span class="w"> </span>is<span class="w"> </span>about<span class="w"> </span>to<span class="w"> </span>start.
+■<span class="w"> </span>Task<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi<span class="w"> </span>has<span class="w"> </span>started<span class="w"> </span>and<span class="w"> </span>is<span class="w"> </span>now<span class="w"> </span>running<span class="w"> </span>remotely.
+■<span class="w"> </span>Task<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi<span class="w"> </span>completed<span class="w"> </span>successfully.
+Downloading<span class="w"> </span>stdout<span class="w"> </span>and<span class="w"> </span>stderr<span class="w"> </span>files<span class="w"> </span>to<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi...
+Partial<span class="w"> </span>download<span class="w"> </span>completed<span class="w"> </span>to<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi.
+Successfully<span class="w"> </span>requested<span class="w"> </span>termination<span class="w"> </span>of<span class="w"> </span>MachineGroup<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;api-o4qozo7wafhwqcyz4xh1g4e7s&quot;</span><span class="o">)</span>.
 Termination<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>machine<span class="w"> </span>group<span class="w"> </span>freed<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>quotas:
 
-<span class="w">                      </span>FREED<span class="w"> </span>BY<span class="w"> </span>RESOURCE<span class="w">     </span>CURRENT<span class="w"> </span>USAGE<span class="w">     </span>MAX<span class="w"> </span>ALLOWED
-<span class="w"> </span>cost_per_hour<span class="w">        </span><span class="m">0</span>.81424<span class="w">               </span><span class="m">0</span><span class="w">                 </span><span class="m">20</span>
-<span class="w"> </span>total_num_machines<span class="w">   </span><span class="m">1</span><span class="w">                     </span><span class="m">0</span><span class="w">                 </span><span class="m">10</span>
-<span class="w"> </span>total_num_vcpus<span class="w">      </span><span class="m">112</span><span class="w">                   </span><span class="m">0</span><span class="w">                 </span><span class="m">150</span>
+<span class="w">                                               </span>FREED<span class="w"> </span>BY<span class="w"> </span>RESOURCE<span class="w">     </span>CURRENT<span class="w"> </span>USAGE<span class="w">     </span>MAX<span class="w"> </span>ALLOWED
+<span class="w"> </span>Maximum<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>VCPUs<span class="w">                       </span><span class="m">112</span><span class="w">                   </span><span class="m">112</span><span class="w">               </span><span class="m">1000</span>
+<span class="w"> </span>Maximum<span class="w"> </span>simultaneous<span class="w"> </span>instances<span class="w">                </span><span class="m">1</span><span class="w">                     </span><span class="m">1</span><span class="w">                 </span><span class="m">100</span>
+<span class="w"> </span>Maximum<span class="w"> </span>price<span class="w"> </span>per<span class="w"> </span>hour<span class="w"> </span>across<span class="w"> </span>all<span class="w"> </span>instances<span class="w">   </span><span class="m">0</span>.87444<span class="w">               </span><span class="m">0</span>.87444<span class="w">           </span><span class="m">270</span>
 
 
 Task<span class="w"> </span>status:<span class="w"> </span>success
-Wall<span class="w"> </span>clock<span class="w"> </span>time:<span class="w">  </span><span class="m">0</span>:13:51
+Wall<span class="w"> </span>clock<span class="w"> </span>time:<span class="w">  </span><span class="m">0</span>:10:34
 Time<span class="w"> </span>breakdown:
-<span class="w">	</span>Input<span class="w"> </span>upload:<span class="w">              </span><span class="m">0</span>.63<span class="w"> </span>s
-<span class="w">	</span>Time<span class="w"> </span><span class="k">in</span><span class="w"> </span>queue:<span class="w">             </span><span class="m">24</span>.34<span class="w"> </span>s
-<span class="w">	</span>Container<span class="w"> </span>image<span class="w"> </span>download:<span class="w">  </span><span class="m">3</span>.37<span class="w"> </span>s
+<span class="w">	</span>Input<span class="w"> </span>upload:<span class="w">              </span><span class="m">0</span>.60<span class="w"> </span>s
+<span class="w">	</span>Time<span class="w"> </span><span class="k">in</span><span class="w"> </span>queue:<span class="w">             </span><span class="m">24</span>.11<span class="w"> </span>s
+<span class="w">	</span>Container<span class="w"> </span>image<span class="w"> </span>download:<span class="w">  </span><span class="m">6</span>.02<span class="w"> </span>s
 <span class="w">	</span>Input<span class="w"> </span>download:<span class="w">            </span><span class="m">0</span>.08<span class="w"> </span>s
 <span class="w">	</span>Input<span class="w"> </span>decompression:<span class="w">       </span><span class="m">0</span>.00<span class="w"> </span>s
-<span class="w">	</span>Computation:<span class="w">               </span><span class="m">0</span>:07:38
-<span class="w">	</span>Output<span class="w"> </span>compression:<span class="w">        </span><span class="m">0</span>:05:04
-<span class="w">	</span>Output<span class="w"> </span>upload:<span class="w">             </span><span class="m">40</span>.08<span class="w"> </span>s
+<span class="w">	</span>Computation:<span class="w">               </span><span class="m">0</span>:07:36
+<span class="w">	</span>Output<span class="w"> </span>upload:<span class="w">             </span><span class="m">0</span>:02:27
 Data:
-<span class="w">	</span>Size<span class="w"> </span>of<span class="w"> </span>zipped<span class="w"> </span>output:<span class="w">    </span><span class="m">3</span>.09<span class="w"> </span>GB
+<span class="w">	</span>Size<span class="w"> </span>of<span class="w"> </span>zipped<span class="w"> </span>output:<span class="w">    </span><span class="m">3</span>.10<span class="w"> </span>GB
 <span class="w">	</span>Size<span class="w"> </span>of<span class="w"> </span>unzipped<span class="w"> </span>output:<span class="w">  </span><span class="m">7</span>.51<span class="w"> </span>GB
 <span class="w">	</span>Number<span class="w"> </span>of<span class="w"> </span>output<span class="w"> </span>files:<span class="w">   </span><span class="m">35751</span>
 </pre></div>
 </div>
 <p>While the script is running, you can check the stdout of the simulation process
 in real time by issuing (please change to the id of your task):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>inductiva<span class="w"> </span>logs<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>inductiva<span class="w"> </span>logs<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi
 </pre></div>
 </div>
 <p>The command line above is shown in the execution trace, so you can just
@@ -654,12 +698,17 @@ copy and paste it to a new terminal (which needs also to have the API key set
 as an environment variable).</p>
 <p>Once the script finishes, and you see the summary of the task, you can download
 the resulting files. Observe in the summary above that quite some data was
-produced: 35751 files for a total of 7.51 GB before compression.</p>
-<p>You can download the (zipped) data by creating a simple script such as this:</p>
+produced: 35751 files for a total of 7.51 GB before compression. That is why
+the last stage of the process, “Output Upload”, which involves compressing and
+moving the outputs of the simulation to your personal cloud stoarge area, still
+takes a significant fraction of time of the overall process execution (2:27 out
+of 10:34).</p>
+<p>You can download the (zipped) data by creating a simple script such as this
+(again, please change to the corresponding task id):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="c1"># You can retreive a Task by ID</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span><span class="s2">&quot;n90hpbaiaa26jjb1d93zgbqgn&quot;</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span><span class="s2">&quot;arduwp0bnjkwz9d4xk7rabofi&quot;</span><span class="p">)</span>
 
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
 </pre></div>
@@ -676,7 +725,7 @@ them:</p>
 </pre></div>
 </div>
 <p>And you can donwload the folder produced by this task by doing:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>inductiva<span class="w"> </span>tasks<span class="w"> </span>download<span class="w"> </span>n90hpbaiaa26jjb1d93zgbqgn
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>inductiva<span class="w"> </span>tasks<span class="w"> </span>download<span class="w"> </span>arduwp0bnjkwz9d4xk7rabofi
 </pre></div>
 </div>
 </section>
