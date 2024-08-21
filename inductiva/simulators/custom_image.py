@@ -4,6 +4,7 @@ from typing import List, Optional
 from inductiva import types, tasks, simulators
 
 
+@simulators.simulator.mpi_enabled
 class CustomImage(simulators.Simulator):
     """Class to run commands on an custom image."""
 
