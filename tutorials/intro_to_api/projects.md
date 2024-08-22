@@ -126,8 +126,8 @@ project.close() # <-- close the project
 task2 = simulator.run(input_dir=input_dir,
                       sim_config_filename="params.txt")
 
-print(task1.get_info()['project']) # "my_xbeach_project"
-print(task2.get_info()['project']) # "userab1cdef2" (default project)
+print(task1.get_info().to_dict()['project']) # "my_xbeach_project"
+print(task2.get_info().to_dict()['project']) # "userab1cdef2" (default project)
 
 ```
 
@@ -160,8 +160,8 @@ with inductiva.projects.Project("my_xbeach_project", append=True) as project:
 task2 = simulator.run(input_dir=input_dir,
                       sim_config_filename="params.txt")
 
-print(task1.get_info()['project']) # "my_xbeach_project"
-print(task2.get_info()['project']) # "userab1cdef2" (default project)
+print(task1.get_info().to_dict()['project']) # "my_xbeach_project"
+print(task2.get_info().to_dict()['project']) # "userab1cdef2" (default project)
 ```
 
 At any moment, the user can query what project is currently **open** for task submission
