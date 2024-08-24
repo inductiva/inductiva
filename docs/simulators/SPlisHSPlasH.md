@@ -30,14 +30,14 @@ task.download_outputs()
 
 The following benchmarks are currently available for SPlisHSPlasH:
 
-* [Three-Dimensional Currents](https://benchmarks.inductiva.ai/SWASH/SWASH_Currents/):
-This benchmark replicates the S1 simulation as outlined in the paper 
-"Modeled Three-Dimensional Currents and Eddies on an Alongshore-Variable Barred
-Beach", authored by Christine M. Baker, Melissa Moulton, Britt Raubenheimer, 
-Steve Elgar, and Nirnimesh Kumar (2021).
+* [Fluid Cube S](https://benchmarks.inductiva.ai/SPlisHSPlasH/splish_splash/):
+This benchmark replicates the example in [this tutorial](https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-1.html), using the deafult values.
+* [Fluid Cube L](https://benchmarks.inductiva.ai/SPlisHSPlasH/splish_splash/):
+This benchmark mirrors the benchmark [Fluid Cube S](https://benchmarks.inductiva.ai/SPlisHSPlasH/splish_splash/) in all aspects except for the particle radius, which has been decreased to 0.0045 and the fluid model, that was doubled in all axis.
+* [Fluid Cube M](https://benchmarks.inductiva.ai/SPlisHSPlasH/splish_splash/): This benchmark mirrors the [Fluid Cube S](https://benchmarks.inductiva.ai/SPlisHSPlasH/splish_splash/) benchmark in all aspects except for the particle radius, which has been decreased to 0.0045.
 
 ## What to read next
-
+Fluid Cube S
 If you are interested in SPlisHSPlasH, you may also be interested in checking
 the following related simulators that are also avaiable via Inductiva API:
 
