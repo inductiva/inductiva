@@ -309,7 +309,7 @@ Good luck!
 
 To better understand how you can optimize your XBeach runs, we invite you to 
 read the 
-[XBeach benchmark](https://benchmarks.staging.inductiva.ai/Xbeach/cova_gala/)
+[XBeach benchmark](https://benchmarks.inductiva.ai/Xbeach/cova_gala/)
 that we prepared for you on our official benchmarks site. You will be able to
 compare the performance of XBeach on several hardware configurations for a
 simulation scenario involving the
