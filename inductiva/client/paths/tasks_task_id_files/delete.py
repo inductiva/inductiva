@@ -1,5 +1,4 @@
 # coding: utf-8
-
 """
 
 
@@ -27,20 +26,19 @@ from inductiva.client import schemas  # noqa: F401
 
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
+from . import path
+
 # Path params
 TaskIdSchema = schemas.StrSchema
 RequestRequiredPathParams = typing_extensions.TypedDict(
-    'RequestRequiredPathParams',
-    {
-        'task_id': typing.Union[TaskIdSchema, str, ],
-    }
-)
+    'RequestRequiredPathParams', {
+        'task_id': typing.Union[
+            TaskIdSchema,
+            str,
+        ],
+    })
 RequestOptionalPathParams = typing_extensions.TypedDict(
-    'RequestOptionalPathParams',
-    {
-    },
-    total=False
-)
+    'RequestOptionalPathParams', {}, total=False)
 
 
 class RequestPathParams(RequestRequiredPathParams, RequestOptionalPathParams):
@@ -53,6 +51,9 @@ request_path_task_id = api_client.PathParameter(
     schema=TaskIdSchema,
     required=True,
 )
+_auth = [
+    'APIKeyHeader',
+]
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
@@ -68,8 +69,9 @@ class ApiResponseFor200(api_client.ApiResponse):
 _response_for_200 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor200ResponseBodyApplicationJson),
+        'application/json':
+            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
+                                ),
     },
 )
 SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
@@ -87,18 +89,22 @@ class ApiResponseFor422(api_client.ApiResponse):
 _response_for_422 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor422,
     content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor422ResponseBodyApplicationJson),
+        'application/json':
+            api_client.MediaType(schema=SchemaFor422ResponseBodyApplicationJson
+                                ),
     },
 )
-_all_accept_content_types = (
-    'application/json',
-)
+_status_code_to_response = {
+    '200': _response_for_200,
+    '422': _response_for_422,
+}
+_all_accept_content_types = ('application/json',)
 
 
 class BaseApi(api_client.Api):
+
     @typing.overload
-    def _delete_task_oapg(
+    def _delete_task_files_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -106,21 +112,23 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
-    def _delete_task_oapg(
+    def _delete_task_files_oapg(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
-    def _delete_task_oapg(
+    def _delete_task_files_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -128,11 +136,12 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
-    def _delete_task_oapg(
+    def _delete_task_files_oapg(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -141,7 +150,7 @@ class BaseApi(api_client.Api):
         skip_deserialization: bool = False,
     ):
         """
-        Delete Task
+        Delete Task Files
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
@@ -150,9 +159,7 @@ class BaseApi(api_client.Api):
         used_path = path.value
 
         _path_params = {}
-        for parameter in (
-            request_path_task_id,
-        ):
+        for parameter in (request_path_task_id,):
             parameter_data = path_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
@@ -178,29 +185,31 @@ class BaseApi(api_client.Api):
         )
 
         if skip_deserialization:
-            api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+            api_response = api_client.ApiResponseWithoutDeserialization(
+                response=response)
         else:
-            response_for_status = _status_code_to_response.get(str(response.status))
+            response_for_status = _status_code_to_response.get(
+                str(response.status))
             if response_for_status:
-                api_response = response_for_status.deserialize(response, self.api_client.configuration)
+                api_response = response_for_status.deserialize(
+                    response, self.api_client.configuration)
             else:
-                api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+                api_response = api_client.ApiResponseWithoutDeserialization(
+                    response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(
-                status=response.status,
-                reason=response.reason,
-                api_response=api_response
-            )
+            raise exceptions.ApiException(status=response.status,
+                                          reason=response.reason,
+                                          api_response=api_response)
 
         return api_response
 
 
-class DeleteTask(BaseApi):
+class DeleteTaskFiles(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def delete_task(
+    def delete_task_files(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -208,21 +217,23 @@ class DeleteTask(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
-    def delete_task(
+    def delete_task_files(
         self,
         skip_deserialization: typing_extensions.Literal[True],
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
-    def delete_task(
+    def delete_task_files(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -230,11 +241,12 @@ class DeleteTask(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
-    def delete_task(
+    def delete_task_files(
         self,
         path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
@@ -242,13 +254,12 @@ class DeleteTask(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_task_oapg(
+        return self._delete_task_files_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
+            skip_deserialization=skip_deserialization)
 
 
 class ApiFordelete(BaseApi):
@@ -263,8 +274,9 @@ class ApiFordelete(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def delete(
@@ -274,7 +286,8 @@ class ApiFordelete(BaseApi):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def delete(
@@ -285,9 +298,10 @@ class ApiFordelete(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def delete(
         self,
@@ -297,12 +311,9 @@ class ApiFordelete(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_task_oapg(
+        return self._delete_task_files_oapg(
             path_params=path_params,
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
-
-
+            skip_deserialization=skip_deserialization)
