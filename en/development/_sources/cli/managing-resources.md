@@ -30,12 +30,12 @@ CPU family: c3
 
 ```
 
-You can focus on a specific series by using the `-s` flag. 
+You can focus on a specific series by using the `-f` flag. 
 
 For example:
 
 ```bash
-$ inductiva resources available -s c3d
+$ inductiva resources available -f c3d
 Machine types provided in Google Cloud
 c3d: AMD EPYC Genoa (4th Gen) processor.
   > c3d-highcpu-  [4, 8, 16, 30, 60, 90, 180, 360]

@@ -408,8 +408,8 @@ $<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> 
 at set intervals.</p>
 <p>In this example, we refreshed task information every 10 seconds:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Monitor task status updates every 10 seconds</span>
-$<span class="w"> </span>watch<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span><span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>list<span class="w"> </span>-id<span class="w"> </span>jxwt0rm8s8xspdfcegtgkkana
-Every<span class="w"> </span><span class="m">10</span>.0s:<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>list<span class="w"> </span>-id<span class="w"> </span>jxwt0rm8s8xspdfcegtgkkana<span class="w">                                                                                 </span>
+$<span class="w"> </span>watch<span class="w"> </span>-n<span class="w"> </span><span class="m">10</span><span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>list<span class="w"> </span>--id<span class="w"> </span>jxwt0rm8s8xspdfcegtgkkana
+Every<span class="w"> </span><span class="m">10</span>.0s:<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>list<span class="w"> </span>--id<span class="w"> </span>jxwt0rm8s8xspdfcegtgkkana<span class="w">                                                                                 </span>
 
 
 <span class="w">       </span>ID<span class="w">                              </span>SIMULATOR<span class="w">          </span>STATUS<span class="w">         </span>SUBMITTED<span class="w">              </span>STARTED<span class="w">                </span>COMPUTATION<span class="w"> </span>TIME<span class="w">         </span>RESOURCE<span class="w"> </span>TYPE
@@ -430,7 +430,7 @@ Successfully<span class="w"> </span>sent<span class="w"> </span><span class="nb"
 <p>Following the termination, you can track the task status by calling task.get_status(),
 or via the Inductiva CLI:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check the status of the terminated task</span>
-$<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>list<span class="w"> </span>-id<span class="w"> </span>cmvsc9qhz5iy86f6pef8uyxqt
+$<span class="w"> </span>inductiva<span class="w"> </span>tasks<span class="w"> </span>list<span class="w"> </span>--id<span class="w"> </span>cmvsc9qhz5iy86f6pef8uyxqt
 
 <span class="w">      </span>ID<span class="w">                              </span>SIMULATOR<span class="w">          </span>STATUS<span class="w">         </span>SUBMITTED<span class="w">              </span>STARTED<span class="w">         </span>COMPUTATION<span class="w"> </span>TIME<span class="w">         </span>RESOURCE<span class="w"> </span>TYPE
 <span class="w">       </span>cmvsc9qhz5iy86f6pef8uyxqt<span class="w">       </span>splishsplash<span class="w">       </span>killed<span class="w">         </span><span class="m">08</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">13</span>:41:06<span class="w">       </span>n/a<span class="w">             </span>n/a<span class="w">                      </span>n/a
