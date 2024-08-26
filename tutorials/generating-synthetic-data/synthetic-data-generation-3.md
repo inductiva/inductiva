@@ -120,7 +120,7 @@ an additionally 1.75x speed-up over the `c2-standard-60` setup. Observe that, in
 
 ## Show me the money...
 
-It's important to consider the cost of using these exclusive and more powerful machines from the Google Cloud Platform. At the time of writing, the cost per hour for the `c2-standard-60` is $3.446, and for the more powerful `c3-standard-88` is $5.053. Now, compare these values to only $0.23
+It's important to consider the cost of using these exclusive and more powerful machines from the Google Cloud Platform. At the time of writing, the cost per hour for the `c2-standard-60` is \$3.446, and for the more powerful `c3-standard-88` is \$5.053. Now, compare these values to only \$0.23
 per hour for the `c2-standard-4` VMs used in the default queue.
 
 So, while we aim for speed, we must also be mindful of the price of the VMs used, as it directly influences the overall cost of generating our dataset. In the following table, we can see a snapshot of how different machine configurations impact both performance and cost. In the last common, we show the cost of running 1 simulation, that is, the total cost of utilizing a VMs for the time required to run the (same) simulation from beginning to end.
