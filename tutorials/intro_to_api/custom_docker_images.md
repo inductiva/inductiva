@@ -78,10 +78,7 @@ input_dir = inductiva.utils.download_from_url(
 
 custom_simulator = inductiva.simulators.CustomImage(container_image="docker://inductiva/kutu:fds_v6.8")
 
-# Running as root is *strongly* discouraged as any mistake (e.g., in
-# defining TMPDIR) or bug can result in catastrophic damage to the OS
-# file system, leaving your system in an unusable state.
-command = inductiva.commands.Command("mpirun --allow-run-as-root -np 4 --use-hwthread-cpus fds mccaffrey.fds")
+command = inductiva.commands.Command("mpirun -np 4 --use-hwthread-cpus fds mccaffrey.fds")
 
 task = custom_simulator.run(input_dir=input_dir, commands=[command])
 
