@@ -37,7 +37,7 @@ This benchmark mirrors the benchmark [Fluid Cube S](https://benchmarks.inductiva
 * [Fluid Cube M](https://benchmarks.inductiva.ai/SPlisHSPlasH/splish_splash/): This benchmark mirrors the [Fluid Cube S](https://benchmarks.inductiva.ai/SPlisHSPlasH/splish_splash/) benchmark in all aspects except for the particle radius, which has been decreased to 0.0045.
 
 ## What to read next
-Fluid Cube S
+
 If you are interested in SPlisHSPlasH, you may also be interested in checking
 the following related simulators that are also avaiable via Inductiva API:
 
