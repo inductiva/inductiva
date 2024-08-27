@@ -8,18 +8,18 @@ from ...localization import translator as __
 
 def remove(args):
     """Remove user's remote storage contents."""
-    paths = args.id
+    task_ids = args.id
     confirm = args.confirm
 
-    paths = set(paths)
+    task_ids = set(task_ids)
     if not confirm:
         confirm = user_confirmation_prompt(
-            paths, __("storage-prompt-remove-all"),
-            __("storage-prompt-remove-big", len(paths)),
+            task_ids, __("storage-prompt-remove-all"),
+            __("storage-prompt-remove-big", len(task_ids)),
             __("storage-prompt-remove-small"), False)
 
     if confirm:
-        for task_id in paths:
+        for task_id in task_ids:
             inductiva.tasks.Task(task_id).remove_remote_files()
 
     return 0
