@@ -126,8 +126,8 @@ project.close() # <-- close the project
 task2 = simulator.run(input_dir=input_dir,
                       sim_config_filename="params.txt")
 
-print(task1.get_info()['project']) # "my_xbeach_project"
-print(task2.get_info()['project']) # "userab1cdef2" (default project)
+print(task1.get_info().project) # "my_xbeach_project"
+print(task2.get_info().project) # "userab1cdef2" (default project)
 
 ```
 
@@ -160,8 +160,8 @@ with inductiva.projects.Project("my_xbeach_project", append=True) as project:
 task2 = simulator.run(input_dir=input_dir,
                       sim_config_filename="params.txt")
 
-print(task1.get_info()['project']) # "my_xbeach_project"
-print(task2.get_info()['project']) # "userab1cdef2" (default project)
+print(task1.get_info().project) # "my_xbeach_project"
+print(task2.get_info().project) # "userab1cdef2" (default project)
 ```
 
 At any moment, the user can query what project is currently **open** for task submission
@@ -237,7 +237,7 @@ True
 
 To illustrate the thread-awareness of projects, consider the following example.
 The main thread opens a project, and a new thread is created in the context of the
-opened project. The new thread retrieves the current project and prints its name
+opened project. The new thread retrieves the current project and prints its object
 just to find out that the default project is being used therein, even though
 the main thread has opened a project other than the default one:
 
