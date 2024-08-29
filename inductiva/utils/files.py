@@ -131,24 +131,13 @@ def _unzip(zip_path: pathlib.Path):
     zip_path.unlink()
 
 
-def my_hook(t):
-    """Wraps tqdm instance.
-    """
-    last_b = [0]
+def tqdm_refreshhook(tqdm_bar):
 
-    def update_to(b=1, bsize=1, tsize=None):
-        """
-        b  : int, optional
-            Number of blocks transferred so far [default: 1].
-        bsize  : int, optional
-            Size of each block (in tqdm units) [default: 1].
-        tsize  : int, optional
-            Total size (in tqdm units). If [default: None] remains unchanged.
-        """
-        if tsize is not None:
-            t.total = tsize
-        t.update((b - last_b[0]) * bsize)
-        last_b[0] = b
+    def update_to(blocks, block_size, total_size):
+        if total_size is not None:
+            tqdm_bar.total = total_size
+        tqdm_bar.n = blocks * block_size
+        tqdm_bar.refresh()
 
     return update_to
 
@@ -176,14 +165,16 @@ def download_from_url(url: str, unzip: bool = False) -> str:
         if content_disposition and "filename=" in content_disposition:
             filename = content_disposition.split("filename=")[1].strip('"')
 
-        logging.info("Downloading from URL to the local path: %s", filename)
+        logging.info("■ Downloading from URL to %s", filename)
         with tqdm(unit="B",
                   unit_scale=True,
                   unit_divisor=1024,
                   miniters=1,
                   desc=filename) as t:
             downloaded_to, _ = urllib.request.urlretrieve(
-                url, filename=pathlib.Path(filename), reporthook=my_hook(t))
+                url,
+                filename=pathlib.Path(filename),
+                reporthook=tqdm_refreshhook(t))
     except urllib.error.URLError as url_error:
         logging.error("Could not download file from %s", url)
         raise url_error
@@ -193,10 +184,9 @@ def download_from_url(url: str, unzip: bool = False) -> str:
     # Unzip all files as they were zipped.
     if unzip and zipfile.is_zipfile(downloaded_to):
         resulting_path = pathlib.Path(downloaded_to).with_suffix("")
-        logging.info("■ Uncompressing the downloaded file to: %s",
+        logging.info("■ Uncompressing the downloaded archive to %s",
                      resulting_path)
         _unzip(downloaded_to)
-        #remove .zip extension
         logging.info("")
 
     return str(resulting_path.absolute())
