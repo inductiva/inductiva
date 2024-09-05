@@ -29,7 +29,7 @@ class FVCOM(simulators.Simulator):
             debug: int = 0,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
-            run_from: Optional[str] = None,
+            working_dir: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             extra_metadata: Optional[dict] = None,
@@ -40,32 +40,40 @@ class FVCOM(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             casename: Name of the simulation case.
+
             debug: Debug level of the simulation (from 0 to 7).
-            run_from: Path (relative to the input directory) to the directory
+            working_dir: Path (relative to the input directory) to the directory
                 where the simulation nml file is located. If not provided, the
                 input directory is used.
+
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
             (default), all vCPUs will be used.
+
             use_hwthread: If specified Open MPI will attempt to discover the
             number of hardware threads on the node, and use that as the
             number of slots available.
+
             on: The computational resource to launch the simulation on. If None
                 the simulation is submitted to a machine in the default pool.
+
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiates with
                 `spot=True`.
+
             other arguments: See the documentation of the base class.
         """
         if debug < 0 or debug > 7:
             raise ValueError("Debug level must be between 0 and 7.")
 
-        command = f"fvcom --CASENAME={case_name} --dbg={debug}"
+        working_dir = working_dir or ""
+
         return super().run(input_dir,
                            on=on,
-                           command=command,
+                           debug=debug,
                            n_vcpus=n_vcpus,
-                           run_from=run_from,
+                           working_dir=working_dir,
+                           case_name=case_name,
                            storage_dir=storage_dir,
                            use_hwthread=use_hwthread,
                            extra_metadata=extra_metadata,
