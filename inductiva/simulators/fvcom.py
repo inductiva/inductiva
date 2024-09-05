@@ -60,7 +60,7 @@ class FVCOM(simulators.Simulator):
         if debug < 0 or debug > 7:
             raise ValueError("Debug level must be between 0 and 7.")
 
-        command = f"./fvcom --CASENAME={case_name} --dbg={debug}"
+        command = f"fvcom --CASENAME={case_name} --dbg={debug}"
         return super().run(input_dir,
                            on=on,
                            command=command,
