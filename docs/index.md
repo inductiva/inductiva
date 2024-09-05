@@ -43,6 +43,7 @@ simulators/AmrWind
 simulators/CaNS
 simulators/DualSPHysics
 simulators/FDS
+simulators/FVCOM
 simulators/GROMACS
 simulators/NWChem
 simulators/OpenFOAM
