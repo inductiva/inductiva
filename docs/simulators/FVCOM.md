@@ -20,6 +20,32 @@ These are the only FVCOM versions available at the moment, but we are working on
 a solution to allow users to customize and specify their own flags for on-the-fly
 compilation.
 
+If you are having trouble with the nml file you can do the following:
+
+```python
+import inductiva
+
+# Set simulation input directory
+input_dir = inductiva.utils.download_from_url(
+    "https://storage.googleapis.com/inductiva-api-demo-files/"
+    "fvcom-input-example.zip", unzip=True)
+
+# Initialize the Simulator
+fvcom = inductiva.simulators.FVCOM()
+
+# Run simulation with config files in the input directory
+task = fvcom.run( input_dir=input_dir,
+                  working_dir="run/",
+                  create_namelist="tst",
+                  n_vcpus=1)
+
+task.wait()
+task.download_outputs()
+
+```
+This will generate a nml file in the `working_dir` with the expected format for
+that binary.
+
 ## Example
 
 ```python
