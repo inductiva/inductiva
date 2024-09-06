@@ -26,8 +26,8 @@ class FVCOM(simulators.Simulator):
     def run(self,
             input_dir: str,
             debug: int = 0,
-            binary: str = "",
             case_name: str = "",
+            compilation: str = "",
             use_hwthread: bool = True,
             create_namelist: str = "",
             n_vcpus: Optional[int] = None,
@@ -45,11 +45,12 @@ class FVCOM(simulators.Simulator):
 
             debug: Debug level of the simulation (from 0 to 7).
 
-            binary: At the current moment we provide users with two options:
-                - None (default): Uses default FVCOM binary.
-                - 'ESTUARY': Uses the fvcom_ESTUARY binary.
+            compilation: At the current moment we provide users with two 
+            options:
+                - None (default): Uses default fvcom binary.
+                - 'estuary': Uses the fvcom_estuary binary.
                 The flags used to compile each binary can be found in the docker
-                image at /make.inc and /make_ESTUARY.inc.
+                image at /make.inc and /make_estuary.inc.
             
             create_namelist: Used to create a namelist file for the simulation.
                 Example: 'create_namelist=hello' will create hello_run.nml in
@@ -80,10 +81,10 @@ class FVCOM(simulators.Simulator):
         return super().run(input_dir,
                            on=on,
                            debug=debug,
-                           binary=binary,
                            n_vcpus=n_vcpus,
-                           working_dir=working_dir,
                            case_name=case_name,
+                           working_dir=working_dir,
+                           compilation=compilation,
                            storage_dir=storage_dir,
                            use_hwthread=use_hwthread,
                            extra_metadata=extra_metadata,
