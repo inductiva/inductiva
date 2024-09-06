@@ -76,8 +76,6 @@ class FVCOM(simulators.Simulator):
 
             other arguments: See the documentation of the base class.
         """
-        if debug < 0 or debug > 7:
-            raise ValueError("Debug level must be between 0 and 7.")
 
         return super().run(input_dir,
                            on=on,
