@@ -26,6 +26,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_type: str,
         provider: Union[str, machine_types.ProviderType] = "GCP",
         num_machines: int = 1,
+        threads_per_core: int = 2,
         spot: bool = True,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
@@ -48,6 +49,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
               information about machine types.
             provider: The cloud provider of the machine group.
             num_machines: The number of virtual machines to launch.
+            threads_per_core: The number of threads per core (1 or 2).
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
             max_idle_time: Time without executing any task, after which the
@@ -65,6 +67,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         super().__init__(
             machine_type=machine_type,
             provider=provider,
+            threads_per_core=threads_per_core,
             data_disk_gb=data_disk_gb,
             max_idle_time=max_idle_time,
             auto_terminate_ts=auto_terminate_ts,
@@ -161,6 +164,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         min_machines: int = 1,
         max_machines: int = 2,
         spot: bool = True,
+        threads_per_core: int = 2,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
@@ -186,6 +190,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             max_machines: The maximum number of machines a machine group
               can scale up to.
             spot: Whether to use spot machines.
+            threads_per_core: The number of threads per core (1 or 2).
             data_disk_gb: The size of the disk for user data (in GB).
             max_idle_time: Time without executing any task, after which the
               resource will be terminated.
@@ -202,6 +207,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
 
         super().__init__(
             machine_type=machine_type,
+            threads_per_core=threads_per_core,
             data_disk_gb=data_disk_gb,
             max_idle_time=max_idle_time,
             auto_terminate_ts=auto_terminate_ts,
