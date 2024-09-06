@@ -322,7 +322,7 @@ def log_task_info(
         logging.info(" \t\t· Default queue with %s machines.",
                      constants.DEFAULT_QUEUE_MACHINE_TYPE)
         ttl_seconds = task_submitted_info.get("time_to_live_seconds")
-        if ttl_seconds is not None and isinstance(decimal.Decimal, ttl_seconds):
+        if ttl_seconds is not None and isinstance(ttl_seconds, decimal.Decimal):
             logging.info(
                 (" \t\t· Task will be killed after the computation time "
                  "exceeds %s (h:m:s)."),
