@@ -52,8 +52,8 @@ class FVCOM(simulators.Simulator):
                 image at /make.inc and /make_ESTUARY.inc.
             
             create_namelist: Used to create a namelist file for the simulation.
-                Example: 'create_namelist=hello' will create hello_run.nml in the
-                    working_dir.
+                Example: 'create_namelist=hello' will create hello_run.nml in
+                    the working_dir.
 
             working_dir: Path (relative to the input directory) to the directory
                 where the simulation nml file is located. If not provided, the
