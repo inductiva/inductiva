@@ -1,28 +1,24 @@
 # FVCOM
 
 [FVCOM](https://github.com/CaNS-World/CaNS) (Finite Volume Community Ocean Model)
-is a three-dimensional hydrodynamic model designed for simulating coastal and
-ocean dynamics. It uses an unstructured grid with finite-volume methods, allowing
-for greater flexibility in representing complex coastlines, estuaries, and variable
-bathymetry. FVCOM is particularly effective in modeling ocean circulation, tides,
-and coastal processes, providing high-resolution simulations of water currents,
-temperature, salinity, and ecosystem interactions. Its versatility and accuracy
-make it a valuable tool for studying coastal environments, marine habitats, and
-climate change impacts on ocean systems.
+is a 3D hydrodynamic model designed for simulating coastal and ocean dynamics.
+It utilizes an unstructured grid with finite-volume methods, providing flexibility
+in modeling complex coastlines, estuaries, and varying bathymetry. FVCOM excels
+in simulating ocean circulation, tides, and coastal processes, offering
+high-resolution outputs for water currents, temperature, salinity, and ecosystem
+interactions. Its versatility and precision make it an essential tool for
+studying coastal environments, marine ecosystems, and the impacts of climate
+change on ocean systems.
 
-FVCOM has been compiled using OpenMPI 4.1.2 and with the following flags:
- - FLAG_USE_NETCDF4     (DUSE_NETCDF)
- - FLAG_1               (DDOUBLE_PRECISION)
- - FLAG_4               (DMULTIPROCESSOR)
- - FLAG_411             (DMETIS_5)
- - FLAG_8               (DLIMITED_NO)
- - FLAG_10              (DGCN)
- - FLAG_44              (DTVD)
- - FLAG_15              (DMPDATA)
+We have compiled two versions of FVCOM: the standard **fvcom** binary and an
+additional **fvcom_ESTUARY** binary, which is configured to run the Estuary test
+case included in the FVCOM package. Users can check the compilation flags used
+for each binary in the respective `make.inc` files located at `/make.inc` and
+`/make_ESTUARY.inc`.
 
-Any flags not mentioned above are currently disabled. This is our only compiled
-version of FVCOM at the moment, but we are actively working on a solution that
-will allow users to customize and specify their own flags for on-the-fly compilation.
+These are the only FVCOM versions available at the moment, but we are working on
+a solution to allow users to customize and specify their own flags for on-the-fly
+compilation.
 
 ## Example
 
