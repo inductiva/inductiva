@@ -68,6 +68,9 @@ class BaseMachineGroup:
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
 
+        if threads_per_core not in [1, 2]:
+            raise ValueError("`threads_per_core` must be either 1 or 2.")
+
         self.machine_type = machine_type
         self.provider = provider.value
         self.threads_per_core = threads_per_core
