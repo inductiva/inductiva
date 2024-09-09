@@ -50,7 +50,8 @@ class FVCOM(simulators.Simulator):
                 - None (default): Uses default fvcom binary.
                 - 'estuary': Uses the fvcom_estuary binary.
                 The modules used to compile each binary can be found in the
-                docker image, in the /make.inc and /make_estuary.inc files.
+                kutu repository, in the make.inc and make_estuary.inc files
+        (https://github.com/inductiva/kutu/tree/main/simulators/fvcom/v5.1.0).
             
             create_namelist: Used to create a namelist file for the simulation.
                 Example: 'create_namelist=hello' will create hello_run.nml in

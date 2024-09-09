@@ -20,7 +20,9 @@ These are the only FVCOM versions available at the moment, but we are working on
 a solution to allow users to customize and specify their own flags for on-the-fly
 compilation.
 
-If you are having trouble with the nml file you can do the following:
+If you are having trouble with the input namelist file, you can do the following to
+generate a valid `nml` file in the `working_dir` with the expected format for
+the requested model:
 
 ```python
 import inductiva
@@ -43,10 +45,12 @@ task.wait()
 task.download_outputs()
 
 ```
-This will generate a nml file in the `working_dir` with the expected format for
-that binary.
 
 ## Example
+
+In the following example, we run the default model with a debug level of 7 and 1
+MPI process on a very small test scenario. This is just a simple example to check
+if the simulator is working correctly.
 
 ```python
 import inductiva
