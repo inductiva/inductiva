@@ -80,6 +80,8 @@ the `nml` file. If you encounter issues, please set the timezone to either `None
 or `UTC` in the `namelist.nml` file as a workaround.
 [More information](https://github.com/FVCOM-GitHub/FVCOM/issues/27)
 
+All simulation parameters were changed to make sure it runs in a reasonable time.
+
 ## What to read next
 
 If you are interested in FVCOM, you may also be interested in checking
