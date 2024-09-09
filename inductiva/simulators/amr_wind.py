@@ -53,8 +53,8 @@ class AmrWind(simulators.Simulator):
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
         """
-        return super().run(on,
-                           input_dir,
+        return super().run(input_dir,
+                           on=on,
                            n_vcpus=n_vcpus,
                            storage_dir=storage_dir,
                            use_hwthread=use_hwthread,

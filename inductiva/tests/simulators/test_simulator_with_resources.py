@@ -4,6 +4,7 @@ from unittest import mock
 import inspect
 import sys
 import os
+import uuid
 
 from pytest import mark
 import pytest
@@ -97,26 +98,24 @@ def test_valid_resources__non_mpi_simulators(simulator):
 
 def test_validate_computational_resources__none_resource__no_wrapper(
         list_available_fixture):  # pylint: disable=unused-argument
-    """Verify that simulators the mpi_enabled decorator run
-    normally with a standard machine group."""
+    """Verify that resource cannot be None for a standard simulator."""
 
-    try:
+    with pytest.raises(ValueError) as excinfo:
         simulator = TesterSimulator()
         simulator.validate_computational_resources(None)
-    except ValueError:
-        assert False, "'validate_computational_resources' raised an exception."
+
+    assert "The computational resource is invalid" in str(excinfo.value)
 
 
 def test_validate_computational_resources__none_resource_mpi_wrapped(
         list_available_fixture):  # pylint: disable=unused-argument
-    """Verify that simulators with the mpi_enabled decorator run
-    normally with a standard machine group."""
+    """Verify that resource cannot be None with the mpi_enabled decorator."""
 
-    try:
+    with pytest.raises(ValueError) as excinfo:
         simulator = simulators.simulator.mpi_enabled(TesterSimulator)()
         simulator.validate_computational_resources(None)
-    except ValueError:
-        assert False, "'validate_computational_resources' raised an exception."
+
+    assert "The computational resource is invalid" in str(excinfo.value)
 
 
 def test_validate_computational_resources__valid_machine_group__no_error(
@@ -203,10 +202,15 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
 
     resubmit_key = "resubmit_on_preemption"
 
+    mock_mg = mock.Mock()
+    mock_mg.id = uuid.uuid4()
+
     for sim_name, simcls in sim_classes:
         # these 2 classes are not wrappers around the simulators in the backend
         if sim_name in ("FEniCSx", "SIMSOPT"):
             continue
+
+        print(f"Testing simulator: {sim_name}")
 
         # check that the `resubmit_on_preemption` parameter is present in the
         # `run` method of the simulator
@@ -218,7 +222,13 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             mock.patch("inductiva.tasks.task.tasks_api") as taskapi_mock, \
             mock.patch("inductiva.simulators.simulator.list_available_images") \
                as list_mock, \
-            mock.patch("inductiva.api.methods.submit_request") as submit_mock:
+            mock.patch("inductiva.api.methods.submit_request") \
+                as submit_mock, \
+            mock.patch.object(inductiva.simulators.simulator.Simulator,
+                 "validate_computational_resources",) \
+                as validate_resources_mock:
+
+            validate_resources_mock.return_value = None
 
             taskapi_mock.TasksApi = TaskApiMock
             list_mock.return_value = {"production": DefaultDictMock()}
@@ -228,16 +238,25 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
                 sim_obj = simcls(container_image="test")
             else:
                 sim_obj = simcls()
+
+            # get positional arguments for the `run` method
+            args_spec = inspect.getfullargspec(simcls.run).args
+            args = ([],) * (len(args_spec) - 2)  # -2 for self and input_dir
+
             if resubmit_on_preemption is None:
                 # test that the default value of
                 # `resubmit_on_preemption` is False
-                sim_obj.run("inductiva/tests/simulators/test_input_dir", [])
+                sim_obj.run("inductiva/tests/simulators/test_input_dir",
+                            *args,
+                            on=mock_mg)
                 req_arg = submit_mock.call_args[1]["request"]
                 assert not req_arg[resubmit_key]
             else:
                 # test that the value of `resubmit_on_preemption` is passed
                 # correctly to the final api call
-                sim_obj.run("inductiva/tests/simulators/test_input_dir", [],
+                sim_obj.run("inductiva/tests/simulators/test_input_dir",
+                            *args,
+                            on=mock_mg,
                             resubmit_on_preemption=resubmit_on_preemption)
                 req_arg = submit_mock.call_args[1]["request"]
                 assert bool(req_arg[resubmit_key]) == \
