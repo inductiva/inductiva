@@ -231,13 +231,14 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             if resubmit_on_preemption is None:
                 # test that the default value of
                 # `resubmit_on_preemption` is False
-                sim_obj.run("inductiva/tests/simulators/test_input_dir", [])
+                sim_obj.run("inductiva/tests/simulators/test_input_dir", "")
                 req_arg = submit_mock.call_args[1]["request"]
                 assert not req_arg[resubmit_key]
             else:
                 # test that the value of `resubmit_on_preemption` is passed
                 # correctly to the final api call
-                sim_obj.run("inductiva/tests/simulators/test_input_dir", [],
+                sim_obj.run("inductiva/tests/simulators/test_input_dir",
+                            "",
                             resubmit_on_preemption=resubmit_on_preemption)
                 req_arg = submit_mock.call_args[1]["request"]
                 assert bool(req_arg[resubmit_key]) == \
