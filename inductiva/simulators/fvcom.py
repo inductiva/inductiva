@@ -77,7 +77,7 @@ class FVCOM(simulators.Simulator):
 
             other arguments: See the documentation of the base class.
         """
-        if model != "" or model.lower() != "estuary":
+        if model != "" and model.lower() != "estuary":
             raise ValueError(
                 f"Invalid model: {model}. Valid options are None or 'estuary'.")
         return super().run(input_dir,
