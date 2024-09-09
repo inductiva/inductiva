@@ -29,22 +29,22 @@ class FEniCSx(simulators.Simulator):
             geometry_filename: str,
             bcs_filename: str,
             material_filename: str,
+            *,
+            on: types.ComputationalResources,
             mesh_filename: Optional[str] = None,
             mesh_info_filename: Optional[str] = None,
-            on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[str] = "",
             extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
         Args:
+            on: The computational resource to launch the simulation on.
             geometry_filename: Geometry filename.
             bcs_filename: Boundary conditions filename.
             material_filename: Material filename.
             mesh_filename: Mesh filename.
             mesh_info_filename: Mesh information filename.
-            on: The computational resource to launch the simulation on. If None
-                the simulation is submitted to a machine in the default pool.
             storage_dir: Parent directory for storing simulation results.
             **kwargs: Arbitrary keyword arguments, including:
                 - global_refinement_meshing_factor (float): Factor for global

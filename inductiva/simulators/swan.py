@@ -10,7 +10,7 @@ class SWAN(simulators.Simulator):
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the SWAN simulator.
-        
+
         Args:
             version (str): The version of the simulator to use. If None, the
                 latest available version in the platform is used.
@@ -25,9 +25,10 @@ class SWAN(simulators.Simulator):
         self,
         input_dir: str,
         sim_config_filename: str,
+        *,
+        on: types.ComputationalResources,
         n_vcpus: Optional[int] = None,
         use_hwthread: bool = True,
-        on: Optional[types.ComputationalResources] = None,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
         extra_metadata: Optional[dict] = None,
@@ -43,12 +44,11 @@ class SWAN(simulators.Simulator):
             use_hwthread: If specified Open MPI will attempt to discover the
             number of hardware threads on the node, and use that as the
             number of slots available.
-            on: The computational resource to launch the simulation on. If None
-                the simulation is submitted to a machine in the default pool.
+            on: The computational resource to launch the simulation on.
             storage_dir: Directory for storing simulation results.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
         """
         return super().run(input_dir,

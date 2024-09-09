@@ -342,10 +342,7 @@ def submit_task(api_instance,
                 container_image: Optional[str] = None,
                 simulator=None):
     """Submit a task and send input files to the API."""
-
-    resource_pool_id = None
-    if resource_pool is not None:
-        resource_pool_id = resource_pool.id
+    resource_pool_id = resource_pool.id
 
     current_project = inductiva.projects.get_current_project()
     if current_project is not None:
@@ -393,8 +390,7 @@ def submit_task(api_instance,
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
-                     resource_pool: Optional[
-                         types.ComputationalResources] = None,
+                     resource_pool: types.ComputationalResources,
                      storage_path_prefix: Optional[str] = "",
                      provider_id: ProviderType = ProviderType.GCP,
                      container_image: Optional[str] = None,
@@ -424,7 +420,7 @@ def invoke_async_api(method_name: str,
             Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
         resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
     Return:
         Returns the task id.
