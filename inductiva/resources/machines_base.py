@@ -34,6 +34,7 @@ class BaseMachineGroup:
         self,
         machine_type: str,
         provider: Union[machine_types.ProviderType, str] = "GCP",
+        threads_per_core: int = 2,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
@@ -47,6 +48,7 @@ class BaseMachineGroup:
               more information about machine types.
             provider: The cloud provider of the machine group.
             data_disk_gb: The size of the disk for user data (in GB).
+            threads_per_core: The number of threads per core (1 or 2).
             max_idle_time: Time without executing any task, after which the
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
@@ -66,8 +68,12 @@ class BaseMachineGroup:
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
 
+        if threads_per_core not in [1, 2]:
+            raise ValueError("`threads_per_core` must be either 1 or 2.")
+
         self.machine_type = machine_type
         self.provider = provider.value
+        self.threads_per_core = threads_per_core
         self.data_disk_gb = data_disk_gb
         self._id = None
         self._name = None
@@ -175,6 +181,7 @@ class BaseMachineGroup:
         instance_group_config = inductiva.client.models.VMGroupConfig(
             machine_type=self.machine_type,
             provider_id=self.provider,
+            threads_per_core=self.threads_per_core,
             disk_size_gb=self.data_disk_gb,
             max_idle_time=self._timedelta_to_seconds(self.max_idle_time),
             auto_terminate_ts=self._convert_auto_terminate_ts(
@@ -258,6 +265,7 @@ class BaseMachineGroup:
                 name=self.name,
                 machine_type=self.machine_type,
                 provider_id=self.provider,
+                threads_per_core=self.threads_per_core,
                 disk_size_gb=self.data_disk_gb,
                 **kwargs,
             )
@@ -290,6 +298,7 @@ class BaseMachineGroup:
                     name=self.name,
                     machine_type=self.machine_type,
                     provider_id=self.provider,
+                    threads_per_core=self.threads_per_core,
                     disk_size_gb=self.data_disk_gb,
                     **kwargs,
                 )
