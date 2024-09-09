@@ -1,5 +1,6 @@
 """Configuration for pytest and pytest-markdown."""
 import pytest
+import datetime
 import inductiva
 
 
@@ -16,6 +17,17 @@ def input_dir():
         "fds-input-example.zip",
         unzip=True)
     return input_files_dir
+
+
+@pytest.fixture(scope="session")
+def machine_group():
+    mg = inductiva.resources.MachineGroup(
+        "e2-micro",
+        max_idle_time=datetime.timedelta(minutes=1),
+    )
+    mg.start()
+    yield mg
+    mg.terminate()
 
 
 def pytest_markdown_docs_globals():
