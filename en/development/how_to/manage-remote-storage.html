@@ -480,12 +480,11 @@ you can pass a path to the <code class="docutils literal notranslate"><span clas
 <section id="removing-directories">
 <h3>Removing directories<a class="headerlink" href="#removing-directories" title="Permalink to this heading">#</a></h3>
 <p>Whenever space needs to be freed up, or in general, when you want to remove a directory
-from your remote storage, you can use a simple interface to remove it. In particular,
-in case you want to remove everything that is also possible.</p>
+from your remote storage, you can use the task interface to do it.</p>
 <p>The table above provides valuable information that can guide your decision to remove certain directories.</p>
 <p><strong>Python</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
-<span class="n">inductiva</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">rmdir</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;reef3d_simulation&quot;</span><span class="p">)</span>
+<span class="n">inductiva</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span><span class="o">.</span><span class="n">remove_remote_files</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><strong>CLI</strong></p>
