@@ -185,7 +185,6 @@ class BaseMachineGroup:
                 self.auto_terminate_ts),
             **kwargs,
         )
-        print(instance_group_config)
 
         resp = self._api.register_vm_group(
             body=instance_group_config,
