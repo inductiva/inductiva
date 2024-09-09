@@ -26,8 +26,8 @@ class FVCOM(simulators.Simulator):
     def run(self,
             input_dir: str,
             debug: int = 0,
+            model: str = "",
             case_name: str = "",
-            compilation: str = "",
             use_hwthread: bool = True,
             create_namelist: str = "",
             n_vcpus: Optional[int] = None,
@@ -45,12 +45,12 @@ class FVCOM(simulators.Simulator):
 
             debug: Debug level of the simulation (from 0 to 7).
 
-            compilation: At the current moment we provide users with two 
+            model: At the current moment we provide users with two 
             options:
                 - None (default): Uses default fvcom binary.
                 - 'estuary': Uses the fvcom_estuary binary.
-                The flags used to compile each binary can be found in the docker
-                image at /make.inc and /make_estuary.inc.
+                The modules used to compile each binary can be found in the
+                docker image, in the /make.inc and /make_estuary.inc files.
             
             create_namelist: Used to create a namelist file for the simulation.
                 Example: 'create_namelist=hello' will create hello_run.nml in
@@ -77,14 +77,16 @@ class FVCOM(simulators.Simulator):
 
             other arguments: See the documentation of the base class.
         """
-
+        if model != "" or model.lower() != "estuary":
+            raise ValueError(
+                f"Invalid model: {model}. Valid options are None or 'estuary'.")
         return super().run(input_dir,
                            on=on,
                            debug=debug,
                            n_vcpus=n_vcpus,
                            case_name=case_name,
                            working_dir=working_dir,
-                           compilation=compilation,
+                           model=model,
                            storage_dir=storage_dir,
                            use_hwthread=use_hwthread,
                            extra_metadata=extra_metadata,

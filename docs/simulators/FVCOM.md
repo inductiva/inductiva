@@ -1,6 +1,6 @@
 # FVCOM
 
-[FVCOM](https://github.com/CaNS-World/CaNS) (Finite Volume Community Ocean Model)
+[FVCOM](https://www.fvcom.org/) (Finite Volume Community Ocean Model)
 is a 3D hydrodynamic model designed for simulating coastal and ocean dynamics.
 It utilizes an unstructured grid with finite-volume methods, providing flexibility
 in modeling complex coastlines, estuaries, and varying bathymetry. FVCOM excels
@@ -11,10 +11,10 @@ studying coastal environments, marine ecosystems, and the impacts of climate
 change on ocean systems.
 
 We have compiled two versions of FVCOM: the standard **fvcom** binary and an
-additional **fvcom_ESTUARY** binary, which is configured to run the Estuary test
-case included in the FVCOM package. Users can check the compilation flags used
-for each binary in the respective `make.inc` files located at `/make.inc` and
-`/make_ESTUARY.inc`.
+additional **fvcom_estuary** binary, which is configured to run the Estuary test
+case included in the FVCOM package. Users can check the compilation modules used
+in each binary in the respective `make.inc` files located at `/make.inc` and
+`/make_estuary.inc`.
 
 These are the only FVCOM versions available at the moment, but we are working on
 a solution to allow users to customize and specify their own flags for on-the-fly
