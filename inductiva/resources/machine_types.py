@@ -22,6 +22,7 @@ class MachineTypeInfo:
     This class has all the information related to a machine type.
     """
 
+    threads_per_core: int
     machine_type: str
     provider_id: str
     num_cpus: int
