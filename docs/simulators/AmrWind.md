@@ -18,6 +18,11 @@ near future.
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup(
+    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+machine_group.start()
+
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -29,6 +34,7 @@ amr_wind = inductiva.simulators.AmrWind()
 # Run simulation with config files in the input directory
 task = amr_wind.run(input_dir=input_dir, 
                  sim_config_filename="abl_amd_wenoz.inp",
+                 on=machine_group,
                  n_vcpus=4)
 
 task.wait()

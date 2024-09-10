@@ -29,6 +29,11 @@ In this example, we run a classical CFD case of a flow over a cylinder.
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup(
+    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+machine_group.start()
+
 # Download the configuration files into a folder
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -45,7 +50,8 @@ dualsphysics = inductiva.simulators.DualSPHysics()
 
 # Run simulation with config files in the input directory
 task = dualsphysics.run(input_dir=input_dir,
-                        commands=commands)
+                        commands=commands,
+                        on=machine_group)
 
 task.wait()
 task.download_outputs()
@@ -309,7 +315,6 @@ Now, we can run this script, and the output should look something like this:
  Maximum disk size                                                                        2000 GB
  Maximum time a machine group can stay up before automatic termination                    48 hour
  Maximum amount of RAM per VCPU                                                           6 GB
- Maximum time a task can stay running in the default queue before automatic termination   16 hour
 
 ■ Registering MachineGroup configurations:
 	· Name:                       api-57yp64vdyz50a8fx0ttuz2n90
