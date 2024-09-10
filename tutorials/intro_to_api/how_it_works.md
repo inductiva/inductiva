@@ -30,9 +30,8 @@ works:
 gets created when you submit your simulation request, enabling you to track its 
 progress and access its outputs in real-time.
 
-- [Shared and Dedicated Resources](./shared_dedicated_resources.md): Discover how
-the API allocates and runs your simulation tasks on computational resources that 
-are either **shared** among you and other users, or **dedicated** only to your use.
+- [Resource Allocation Options](./shared_dedicated_resources.md): Discover how
+the API allocates and runs your simulation tasks on **dedicated** computational resources.
 
 - [Storage and Data Flow](./data_flow.md): Get to know the typical flow of data 
 when you invoke a remote simulator using the Inductiva API, from sending your input

@@ -13,7 +13,7 @@ via Python scripting. We wrap such simulation packages in a way that allows us t
 them as more abstract computational loads, that have inputs and produce outputs, and 
 our job is “merely” just that of passing data around (See [Storage and Data Flow](./data_flow.md)) 
 and assigning the simulation tasks to the appropriate computational resource See 
-[Shared and Dedicated Resources](./shared_dedicated_resources.md).
+[Resource Allocation Options](./shared_dedicated_resources.md).
 
 Obviously, there is a lot more happening under the hood. For starters, how do we deal 
 with the fact that not all simulation software packages work in the same way and, 
