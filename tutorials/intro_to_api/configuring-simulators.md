@@ -1,6 +1,6 @@
 # Configuring Simulators
 
-Open-source simulation software lies at the heart of the Indutiva API.
+Open-source simulation software lies at the heart of the Inductiva API.
 From its inception, the main goal of the API has been to empower scientists
 and engineers to take full advantage of state-of-the-art open-source
 simulation packages, in a way that minimizes installation issues and leverages
