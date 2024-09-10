@@ -33,6 +33,8 @@ The following benchmarks are currently available for SCHISM:
 
 * [Test_Inun_NWaves_2D](https://benchmarks.inductiva.ai/SCHISM/schism/):
 The `Test_Inun_NWaves_2D` example from the SCHISM official test suite.
+* [Test_Inun_NWaves_3D](https://benchmarks.inductiva.ai/SCHISM/schism_3d/):
+The `Test_Inun_NWaves_3D` example from the SCHISM official test suite.
 
 ## What to read next
 

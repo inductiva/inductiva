@@ -384,6 +384,63 @@ class VMGroupConfig(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class threads_per_core(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.IntSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'threads_per_core':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             class num_vms(
                     schemas.ComposedSchema,):
 
@@ -800,6 +857,62 @@ class VMGroupConfig(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class status(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            MachineGroupStatus,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'status':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             spot = schemas.BoolSchema
             is_elastic = schemas.BoolSchema
 
@@ -971,6 +1084,62 @@ class VMGroupConfig(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class dynamic_disk_resize_config(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            DynamicDiskResizeConfig,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'dynamic_disk_resize_config':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             __annotations__ = {
                 "max_idle_time": max_idle_time,
                 "auto_terminate_ts": auto_terminate_ts,
@@ -978,6 +1147,7 @@ class VMGroupConfig(schemas.DictSchema):
                 "name": name,
                 "machine_type": machine_type,
                 "disk_size_gb": disk_size_gb,
+                "threads_per_core": threads_per_core,
                 "num_vms": num_vms,
                 "idle_seconds": idle_seconds,
                 "creation_timestamp": creation_timestamp,
@@ -986,11 +1156,13 @@ class VMGroupConfig(schemas.DictSchema):
                 "provider_id": provider_id,
                 "started": started,
                 "quota_usage": quota_usage,
+                "status": status,
                 "spot": spot,
                 "is_elastic": is_elastic,
                 "min_vms": min_vms,
                 "max_vms": max_vms,
                 "autoscale_policy": autoscale_policy,
+                "dynamic_disk_resize_config": dynamic_disk_resize_config,
             }
 
     @typing.overload
@@ -1027,6 +1199,12 @@ class VMGroupConfig(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["disk_size_gb"]
     ) -> MetaOapg.properties.disk_size_gb:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["threads_per_core"]
+    ) -> MetaOapg.properties.threads_per_core:
         ...
 
     @typing.overload
@@ -1079,6 +1257,12 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["status"]
+    ) -> MetaOapg.properties.status:
+        ...
+
+    @typing.overload
+    def __getitem__(
             self, name: typing_extensions.Literal["spot"]
     ) -> MetaOapg.properties.spot:
         ...
@@ -1108,6 +1292,12 @@ class VMGroupConfig(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["dynamic_disk_resize_config"]
+    ) -> MetaOapg.properties.dynamic_disk_resize_config:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -1118,6 +1308,7 @@ class VMGroupConfig(schemas.DictSchema):
         "name",
         "machine_type",
         "disk_size_gb",
+        "threads_per_core",
         "num_vms",
         "idle_seconds",
         "creation_timestamp",
@@ -1126,11 +1317,13 @@ class VMGroupConfig(schemas.DictSchema):
         "provider_id",
         "started",
         "quota_usage",
+        "status",
         "spot",
         "is_elastic",
         "min_vms",
         "max_vms",
         "autoscale_policy",
+        "dynamic_disk_resize_config",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -1169,6 +1362,12 @@ class VMGroupConfig(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["disk_size_gb"]
     ) -> typing.Union[MetaOapg.properties.disk_size_gb, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["threads_per_core"]
+    ) -> typing.Union[MetaOapg.properties.threads_per_core, schemas.Unset]:
         ...
 
     @typing.overload
@@ -1221,6 +1420,12 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["status"]
+    ) -> typing.Union[MetaOapg.properties.status, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["spot"]
     ) -> typing.Union[MetaOapg.properties.spot, schemas.Unset]:
         ...
@@ -1251,6 +1456,13 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["dynamic_disk_resize_config"]
+    ) -> typing.Union[MetaOapg.properties.dynamic_disk_resize_config,
+                      schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -1262,6 +1474,7 @@ class VMGroupConfig(schemas.DictSchema):
         "name",
         "machine_type",
         "disk_size_gb",
+        "threads_per_core",
         "num_vms",
         "idle_seconds",
         "creation_timestamp",
@@ -1270,11 +1483,13 @@ class VMGroupConfig(schemas.DictSchema):
         "provider_id",
         "started",
         "quota_usage",
+        "status",
         "spot",
         "is_elastic",
         "min_vms",
         "max_vms",
         "autoscale_policy",
+        "dynamic_disk_resize_config",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -1319,6 +1534,12 @@ class VMGroupConfig(schemas.DictSchema):
                                    None, list, tuple, bytes, io.FileIO,
                                    io.BufferedReader,
                                    schemas.Unset] = schemas.unset,
+        threads_per_core: typing.Union[MetaOapg.properties.threads_per_core,
+                                       dict, frozendict.frozendict, str, date,
+                                       datetime, uuid.UUID, int, float,
+                                       decimal.Decimal, bool, None, list, tuple,
+                                       bytes, io.FileIO, io.BufferedReader,
+                                       schemas.Unset] = schemas.unset,
         num_vms: typing.Union[MetaOapg.properties.num_vms, dict,
                               frozendict.frozendict, str, date, datetime,
                               uuid.UUID, int, float, decimal.Decimal, bool,
@@ -1363,6 +1584,11 @@ class VMGroupConfig(schemas.DictSchema):
                                   None, list, tuple, bytes, io.FileIO,
                                   io.BufferedReader,
                                   schemas.Unset] = schemas.unset,
+        status: typing.Union[MetaOapg.properties.status, dict,
+                             frozendict.frozendict, str, date, datetime,
+                             uuid.UUID, int, float, decimal.Decimal, bool, None,
+                             list, tuple, bytes, io.FileIO, io.BufferedReader,
+                             schemas.Unset] = schemas.unset,
         spot: typing.Union[MetaOapg.properties.spot, bool,
                            schemas.Unset] = schemas.unset,
         is_elastic: typing.Union[MetaOapg.properties.is_elastic, bool,
@@ -1383,6 +1609,11 @@ class VMGroupConfig(schemas.DictSchema):
                                        decimal.Decimal, bool, None, list, tuple,
                                        bytes, io.FileIO, io.BufferedReader,
                                        schemas.Unset] = schemas.unset,
+        dynamic_disk_resize_config: typing.Union[
+            MetaOapg.properties.dynamic_disk_resize_config, dict,
+            frozendict.frozendict, str, date, datetime, uuid.UUID, int, float,
+            decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO,
+            io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -1398,6 +1629,7 @@ class VMGroupConfig(schemas.DictSchema):
             name=name,
             machine_type=machine_type,
             disk_size_gb=disk_size_gb,
+            threads_per_core=threads_per_core,
             num_vms=num_vms,
             idle_seconds=idle_seconds,
             creation_timestamp=creation_timestamp,
@@ -1406,16 +1638,20 @@ class VMGroupConfig(schemas.DictSchema):
             provider_id=provider_id,
             started=started,
             quota_usage=quota_usage,
+            status=status,
             spot=spot,
             is_elastic=is_elastic,
             min_vms=min_vms,
             max_vms=max_vms,
             autoscale_policy=autoscale_policy,
+            dynamic_disk_resize_config=dynamic_disk_resize_config,
             _configuration=_configuration,
             **kwargs,
         )
 
 
 from inductiva.client.model.autoscale_policy import AutoscalePolicy
+from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
+from inductiva.client.model.machine_group_status import MachineGroupStatus
 from inductiva.client.model.machine_group_type import MachineGroupType
 from inductiva.client.model.providers import Providers

@@ -89,8 +89,7 @@ Outputs the following::
 ### Removing directories
 
 Whenever space needs to be freed up, or in general, when you want to remove a directory
-from your remote storage, you can use a simple interface to remove it. In particular,
-in case you want to remove everything that is also possible.
+from your remote storage, you can use the task interface to do it. 
 
 The table above provides valuable information that can guide your decision to remove certain directories. 
 
@@ -98,7 +97,7 @@ The table above provides valuable information that can guide your decision to re
 
 ```python
 import inductiva
-inductiva.storage.rmdir(path="reef3d_simulation")
+inductiva.tasks.Task(task_id).remove_remote_files()
 ```
 
 **CLI**

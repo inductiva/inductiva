@@ -28,8 +28,8 @@ In this example, we refreshed task information every 10 seconds:
 
 ```bash
 # Monitor task status updates every 10 seconds
-$ watch -n 10 inductiva tasks list -id jxwt0rm8s8xspdfcegtgkkana
-Every 10.0s: inductiva tasks list -id jxwt0rm8s8xspdfcegtgkkana                                                                                 
+$ watch -n 10 inductiva tasks list --id jxwt0rm8s8xspdfcegtgkkana
+Every 10.0s: inductiva tasks list --id jxwt0rm8s8xspdfcegtgkkana                                                                                 
 
 
        ID                              SIMULATOR          STATUS         SUBMITTED              STARTED                COMPUTATION TIME         RESOURCE TYPE
@@ -52,7 +52,7 @@ or via the Inductiva CLI:
 
 ```bash
 # Check the status of the terminated task
-$ inductiva tasks list -id cmvsc9qhz5iy86f6pef8uyxqt
+$ inductiva tasks list --id cmvsc9qhz5iy86f6pef8uyxqt
 
       ID                              SIMULATOR          STATUS         SUBMITTED              STARTED         COMPUTATION TIME         RESOURCE TYPE
        cmvsc9qhz5iy86f6pef8uyxqt       splishsplash       killed         08 Feb, 13:41:06       n/a             n/a                      n/a

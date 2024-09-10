@@ -16,6 +16,7 @@ from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_resubmit import TasksTaskIdResubmit
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
+from inductiva.client.apis.paths.tasks_task_id_files import TasksTaskIdFiles
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
@@ -44,13 +45,13 @@ from inductiva.client.apis.paths.admin_campaigns_campaign_id_quotas_quota_id imp
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
 from inductiva.client.apis.paths.executer_tracker_machine_id_task import ExecuterTrackerMachineIdTask
-from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_ack import ExecuterTrackerMachineIdTaskTaskIdAck
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_message import ExecuterTrackerMachineIdTaskTaskIdMessage
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_message_unblock import ExecuterTrackerMachineIdTaskTaskIdMessageUnblock
 from inductiva.client.apis.paths.executer_tracker_machine_id_event import ExecuterTrackerMachineIdEvent
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_download_input_url import ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_upload_output_url import ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_metric import ExecuterTrackerMachineIdTaskTaskIdMetric
+from inductiva.client.apis.paths.executer_tracker_machine_id_resize_disk import ExecuterTrackerMachineIdResizeDisk
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
@@ -107,6 +108,8 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdKill,
         PathValues.TASKS_TASK_ID_DISABLE_LOGS:
             TasksTaskIdDisableLogs,
+        PathValues.TASKS_TASK_ID_FILES:
+            TasksTaskIdFiles,
         PathValues.ADMIN_USERS:
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -163,8 +166,6 @@ PathToApi = typing_extensions.TypedDict(
             ExecuterTrackerMachineId,
         PathValues.EXECUTERTRACKER_MACHINE_ID_TASK:
             ExecuterTrackerMachineIdTask,
-        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_ACK:
-            ExecuterTrackerMachineIdTaskTaskIdAck,
         PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE:
             ExecuterTrackerMachineIdTaskTaskIdMessage,
         PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
@@ -177,6 +178,8 @@ PathToApi = typing_extensions.TypedDict(
             ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl,
         PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_METRIC:
             ExecuterTrackerMachineIdTaskTaskIdMetric,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK:
+            ExecuterTrackerMachineIdResizeDisk,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
         PathValues.COMPUTE_TYPE:
@@ -256,6 +259,8 @@ path_to_api = PathToApi({
         TasksTaskIdKill,
     PathValues.TASKS_TASK_ID_DISABLE_LOGS:
         TasksTaskIdDisableLogs,
+    PathValues.TASKS_TASK_ID_FILES:
+        TasksTaskIdFiles,
     PathValues.ADMIN_USERS:
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -312,8 +317,6 @@ path_to_api = PathToApi({
         ExecuterTrackerMachineId,
     PathValues.EXECUTERTRACKER_MACHINE_ID_TASK:
         ExecuterTrackerMachineIdTask,
-    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_ACK:
-        ExecuterTrackerMachineIdTaskTaskIdAck,
     PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE:
         ExecuterTrackerMachineIdTaskTaskIdMessage,
     PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
@@ -326,6 +329,8 @@ path_to_api = PathToApi({
         ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl,
     PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_METRIC:
         ExecuterTrackerMachineIdTaskTaskIdMetric,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK:
+        ExecuterTrackerMachineIdResizeDisk,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
     PathValues.COMPUTE_TYPE:

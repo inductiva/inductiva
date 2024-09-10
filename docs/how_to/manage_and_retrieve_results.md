@@ -58,7 +58,7 @@ Again, using the CLI, the user can now confirm that the directory
 $ inductiva storage list --max-results 2 --order-by creation_time --sort-order desc
 
        NAME                             SIZE           CREATION TIME
-       reef3d_simulation/               21.67 MB       07 Feb, 14:57:11
+       my_reef3d_simulation/            21.67 MB       07 Feb, 14:57:11
        i4ir3kvv62odsfrhko4y8w2an/       21.67 MB       07 Feb, 13:47:03
 
 ```

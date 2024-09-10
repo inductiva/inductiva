@@ -1,7 +1,5 @@
 # Templating Manager
 
-## Introduction
-
 The Inductiva API is all about enabling you to simulate at scale. As we have shown,
 with a few lines of Python code, you can send your simulations to MPI Clusters
 assembled from last-generation cloud hardware, letting you run much larger simulations

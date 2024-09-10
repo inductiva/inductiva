@@ -18,6 +18,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         self,
         machine_type: str,
         num_machines: int = 2,
+        threads_per_core: int = 2,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
@@ -38,6 +39,7 @@ class MPICluster(machines_base.BaseMachineGroup):
               Check https://cloud.google.com/compute/docs/machine-resource for
               information about machine types.
             num_machines: The number of virtual machines to launch.
+            threads_per_core: The number of threads per core (1 or 2).
             data_disk_gb: The size of the disk for user data (in GB).
             max_idle_time: Time without executing any task, after which the
               resource will be terminated.
@@ -50,6 +52,7 @@ class MPICluster(machines_base.BaseMachineGroup):
 
         super().__init__(
             machine_type=machine_type,
+            threads_per_core=threads_per_core,
             data_disk_gb=data_disk_gb,
             max_idle_time=max_idle_time,
             auto_terminate_ts=auto_terminate_ts,

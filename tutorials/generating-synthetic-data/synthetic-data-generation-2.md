@@ -184,6 +184,6 @@ Following the same steps we took to[run our preconfigured "base case"] above, we
 this simulation should take around **30 minutes** to run, and generates roughly _300 MB of data_ 
 from _601 frames_. If we're aiming to run 10,000 or even 20,000 variations of our "base case" using the current hardware option, then we will have to wait for many thousands hours to achieve a large-enough dataset. 
 
-To speed this up, we will defintely need to choose much more powerful computational resources to run the required number of simulation. Fortunatelly, this is extrmely easy to do using the Inductiva API.
+To speed this up, we will defintely need to choose much more powerful computational resources to run the required number of simulation. Fortunatelly, this is extremely easy to do using the Inductiva API.
 
 

@@ -14,6 +14,7 @@ from .reef3d import REEF3D
 from .xbeach import XBeach
 from .schism import SCHISM
 from .nwchem import NWChem
+from .fvcom import FVCOM
 from .swash import SWASH
 from .cans import CaNS
 from .swan import SWAN

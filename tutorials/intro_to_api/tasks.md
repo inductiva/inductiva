@@ -43,7 +43,7 @@ Note that a subsequent call to `splishsplash_simulator.run()` with the same
 input arguments would create a new, distinct task:
 
 ```python
-task2 = splishsplash_simulator.run(input_dir="splishsplash-example",
+task2 = splishsplash_simulator.run(input_dir="splishsplash-input-example",
                                   sim_config_filename="config.json")
 print (task2.id)
 # Example output: k9muu1vq1fc6m2oyxm0n3n8y0

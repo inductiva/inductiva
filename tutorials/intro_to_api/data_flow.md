@@ -114,7 +114,7 @@ $ inductiva storage ls tc7cwuer45kfzuw8t93r6dxa8
 ```
 
 Once your simulation task gets picked up by a Worker, its input files need to be
-downloaded from your Personal Remote Storage to the corresponding VM. Typically,
+transferred from your Personal Remote Storage to the corresponding VM. Typically,
 this VM lives in the same region of the Google Cloud storage, and so moving data
 is pretty fast.
 
