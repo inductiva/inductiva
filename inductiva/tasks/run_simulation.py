@@ -24,7 +24,6 @@ def run_simulation(
     *,
     computational_resources: types.ComputationalResources,
     resubmit_on_preemption: bool = False,
-    provider_id: Optional[Union[ProviderType, str]] = ProviderType.GCP,
     storage_dir: Optional[str] = "",
     api_invoker=None,
     extra_metadata=None,
@@ -44,9 +43,6 @@ def run_simulation(
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
 
-    if provider_id is not None:
-        provider_id = ProviderType(provider_id)
-
     container_image = kwargs.get("container_image", None)
 
     task_id = api_invoker(api_method_name,
@@ -56,7 +52,6 @@ def run_simulation(
                           resubmit_on_preemption=resubmit_on_preemption,
                           container_image=container_image,
                           storage_path_prefix=storage_dir,
-                          provider_id=provider_id,
                           simulator=simulator)
     logging.info("■ Task %s submitted to the queue of the %s.", task_id,
                  computational_resources)
