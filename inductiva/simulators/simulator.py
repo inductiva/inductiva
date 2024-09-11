@@ -124,7 +124,7 @@ class Simulator(ABC):
         self,
         input_dir: str,
         *_args,
-        on: Optional[types.ComputationalResources] = None,
+        on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
         extra_metadata: Optional[dict] = None,
@@ -133,21 +133,29 @@ class Simulator(ABC):
         """Run the simulation.
 
         Args:
+            on: The computational resource to launch the simulation in. If None
+                the simulation is launched in a machine of the default pool.
             input_dir: Path to the directory containing the input files.
             _args: Unused in this method, but defined to allow for more
                 non-default arguments in method override in subclasses.
-            on: The computational resource to launch the simulation in. If None
-                the simulation is launched in a machine of the default pool.
             storage_dir: Parent directory for storing simulation
                                results.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
         input_dir_path = self._setup_input_dir(input_dir)
+
+        if on is None:
+            raise ValueError(
+                "A default computational resource is no longer "
+                "provided. Please specify a computational resource. "
+                "Check https://docs.inductiva.ai/en/latest/how_to/"
+                "run-parallel_simulations.html "
+                "to learn how to create your own computational resource.")
 
         self.validate_computational_resources(on)
 
@@ -179,8 +187,7 @@ class Simulator(ABC):
             valid_resources: The valid computational resources for the simulator
         """
 
-        if resource is not None \
-            and not isinstance(resource, tuple(self._supported_resources)):
+        if not isinstance(resource, tuple(self._supported_resources)):
             raise ValueError(
                 "The computational resource is invalid for this simulator. "
                 f"Expected one of {self._supported_resources} but got "

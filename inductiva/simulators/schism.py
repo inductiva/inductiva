@@ -10,7 +10,7 @@ class SCHISM(simulators.Simulator):
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the SCHISM simulator.
-        
+
         Args:
             version (str): The version of the simulator to use. If None, the
                 latest available version in the platform is used.
@@ -23,23 +23,21 @@ class SCHISM(simulators.Simulator):
 
     def run(self,
             input_dir: str,
+            *,
+            on: types.ComputationalResources,
             num_scribes: int = 1,
-            on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[str] = "",
             use_hwthread: bool = True,
             extra_metadata: Optional[dict] = None,
-            n_vcpus: int = None,
+            n_vcpus: Optional[int] = None,
             resubmit_on_preemption: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
             input_dir: Path to the directory of the simulation input files.
+            on: The computational resource to launch the simulation on.
             num_scribes: The num_scribes as per the simulator documentation.
-            # pylint: disable=line-too-long
             https://schism-dev.github.io/schism/master/getting-started/running-model.html
-            # pylint: enable=line-too-long
-            on: The computational resource to launch the simulation on. If None
-                the simulation is submitted to a machine in the default pool.
             storage_dir: Directory for storing simulation results.
             use_hwthread: If specified Open MPI will attempt to discover the
             number of hardware threads on the node, and use that as the
@@ -47,7 +45,7 @@ class SCHISM(simulators.Simulator):
             n_vcpus: Number of virtual cpus
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
         """
         return super().run(input_dir,

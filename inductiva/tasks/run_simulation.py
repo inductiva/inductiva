@@ -2,7 +2,7 @@
 import os
 
 import pathlib
-from typing import Any, Optional, Union
+from typing import Any, Optional
 import json
 import threading
 
@@ -11,7 +11,6 @@ import logging
 from inductiva import tasks, types
 from inductiva.api import methods
 from inductiva.utils import format_utils, files
-from inductiva.resources.machine_types import ProviderType
 
 TASK_METADATA_FILENAME = "task_metadata.json"
 
@@ -21,9 +20,9 @@ _metadata_lock = threading.RLock()
 def run_simulation(
     api_method_name: str,
     input_dir: pathlib.Path,
+    *,
+    computational_resources: types.ComputationalResources,
     resubmit_on_preemption: bool = False,
-    computational_resources: Optional[types.ComputationalResources] = None,
-    provider_id: Optional[Union[ProviderType, str]] = ProviderType.GCP,
     storage_dir: Optional[str] = "",
     api_invoker=None,
     extra_metadata=None,
@@ -43,25 +42,18 @@ def run_simulation(
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
 
-    if provider_id is not None:
-        provider_id = ProviderType(provider_id)
-
     container_image = kwargs.get("container_image", None)
 
     task_id = api_invoker(api_method_name,
                           params,
                           type_annotations,
+                          computational_resources,
                           resubmit_on_preemption=resubmit_on_preemption,
-                          resource_pool=computational_resources,
                           container_image=container_image,
                           storage_path_prefix=storage_dir,
-                          provider_id=provider_id,
                           simulator=simulator)
-    if computational_resources is not None:
-        logging.info("■ Task %s submitted to the queue of the %s.", task_id,
-                     computational_resources)
-    else:
-        logging.info("■ Task %s submitted to the default queue.", task_id)
+    logging.info("■ Task %s submitted to the queue of the %s.", task_id,
+                 computational_resources)
 
     task = tasks.Task(task_id)
     if not isinstance(task_id, str):
