@@ -221,12 +221,10 @@ class BaseMachineGroup:
     @classmethod
     def from_api_response(cls, resp: dict, **kwargs):
         """Creates a MachineGroup object from an API response."""
-        machine_group = cls(
-            machine_type=resp["machine_type"],
-            data_disk_gb=resp["disk_size_gb"],
-            register=False,
-            **kwargs
-        )
+        machine_group = cls(machine_type=resp["machine_type"],
+                            data_disk_gb=resp["disk_size_gb"],
+                            register=False,
+                            **kwargs)
         machine_group._id = resp["id"]
         machine_group.provider = resp["provider_id"]
         machine_group._name = resp["name"]
