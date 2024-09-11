@@ -14,6 +14,7 @@ import inductiva.client.models
 from inductiva import api, users
 from inductiva.utils import format_utils
 from inductiva.client.apis.tags import compute_api
+from inductiva.resources.disk_config import DiskConfig
 
 from inductiva.resources import machine_types
 
@@ -35,6 +36,7 @@ class BaseMachineGroup:
         machine_type: str,
         provider: Union[machine_types.ProviderType, str] = "GCP",
         threads_per_core: int = 2,
+        disk_config: DiskConfig = None,
         data_disk_gb: int = 10,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
@@ -49,6 +51,9 @@ class BaseMachineGroup:
             provider: The cloud provider of the machine group.
             data_disk_gb: The size of the disk for user data (in GB).
             threads_per_core: The number of threads per core (1 or 2).
+            disk_config: Disk configuration for the machine group. This config
+                includes disk size_gb and all the parameters needed for resizing
+                the disk. If provided will take precedence over data_disk_gb.
             max_idle_time: Time without executing any task, after which the
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
@@ -71,10 +76,17 @@ class BaseMachineGroup:
         if threads_per_core not in [1, 2]:
             raise ValueError("`threads_per_core` must be either 1 or 2.")
 
+        if disk_config is not None and not isinstance(disk_config, DiskConfig):
+            raise ValueError("`disk_config` must be an instance of DiskConfig.")
+
+        if disk_config is not None:
+            data_disk_gb = disk_config.size_gb
+
         self.machine_type = machine_type
         self.provider = provider.value
         self.threads_per_core = threads_per_core
         self.data_disk_gb = data_disk_gb
+        self.disk_config = disk_config
         self._id = None
         self._name = None
         self.create_time = None
@@ -172,6 +184,13 @@ class BaseMachineGroup:
             return dt
         return None
 
+    def get_disk_config(self):
+        """Returns the disk configuration as a dictionary or None if no config
+        is present."""
+        if self.disk_config and self.disk_config.is_resizable:
+            return self.disk_config.to_dict()
+        return None
+
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.
 
@@ -186,6 +205,8 @@ class BaseMachineGroup:
             max_idle_time=self._timedelta_to_seconds(self.max_idle_time),
             auto_terminate_ts=self._convert_auto_terminate_ts(
                 self.auto_terminate_ts),
+            dynamic_disk_resize_config=self.disk_config.resize_config \
+                                       if self.disk_config else None,
             **kwargs,
         )
 
