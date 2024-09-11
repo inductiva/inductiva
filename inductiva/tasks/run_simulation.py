@@ -2,7 +2,7 @@
 import os
 
 import pathlib
-from typing import Any, Optional, Union
+from typing import Any, Optional
 import json
 import threading
 
@@ -11,7 +11,6 @@ import logging
 from inductiva import tasks, types
 from inductiva.api import methods
 from inductiva.utils import format_utils, files
-from inductiva.resources.machine_types import ProviderType
 
 TASK_METADATA_FILENAME = "task_metadata.json"
 
