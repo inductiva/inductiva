@@ -241,6 +241,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
 
             # get positional arguments for the `run` method
             args_spec = inspect.getfullargspec(simcls.run).args
+            print(args_spec)
             args = ([],) * (len(args_spec) - 2)  # -2 for self and input_dir
 
             if resubmit_on_preemption is None:

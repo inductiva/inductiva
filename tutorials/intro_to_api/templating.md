@@ -112,12 +112,12 @@ import inductiva
 # config.yaml.jinja and obj2.def.jinja files, respectively. This
 # will enforce the default values to be used.
 
-inductiva.TemplateManager.render_dir(template_dir="my_templates",
+inductiva.TemplateManager.render_dir(source_dir="my_templates",
                                      target_dir="my_rendered_files",
-                                     overwrite=False
+                                     overwrite=False,
                                      density=1000,
                                      viscosity=1e-6,
-                                     radius=0.5)
+                                     sphere_radius=0.5)
 ```
 
 After running the code above, the `my_rendered_files` directory will contain the

@@ -1,45 +1,26 @@
 """Remove the user's remote storage contents via CLI."""
 import argparse
-import sys
 
-from inductiva import storage
-from inductiva.client import exceptions
+import inductiva
 from inductiva.utils.input_functions import user_confirmation_prompt
 from ...localization import translator as __
 
 
 def remove(args):
     """Remove user's remote storage contents."""
-    paths = args.path
+    task_ids = args.id
     confirm = args.confirm
-    all_paths = args.all
 
-    if not all_paths and not paths:
-        print("No path(s) specified.\n"
-              "> Use `inductiva storage remove -h` for help.")
-        return 1
-
-    if paths and all_paths:
-        print(
-            "inductiva storage remove: error: "
-            "argument path not allowed with argument --all",
-            file=sys.stderr)
-        return 1
-    paths = set(paths)
+    task_ids = set(task_ids)
     if not confirm:
         confirm = user_confirmation_prompt(
-            paths, __("storage-prompt-remove-all"),
-            __("storage-prompt-remove-big", len(paths)),
-            __("storage-prompt-remove-small"), all_paths)
+            task_ids, __("storage-prompt-remove-all"),
+            __("storage-prompt-remove-big", len(task_ids)),
+            __("storage-prompt-remove-small"), False)
 
     if confirm:
-        if all_paths:
-            storage.rmdir("*", confirm=True)
-        for path in paths:
-            try:
-                storage.rmdir(path, confirm=True)
-            except exceptions.ApiValueError as rmdir_exception:
-                print(rmdir_exception)
+        for task_id in task_ids:
+            inductiva.tasks.Task(task_id).remove_remote_files()
 
     return 0
 
@@ -52,15 +33,13 @@ def register(parser):
     subparser.description = (
         "The `inductiva storage remove` command deletes specified data"
         " from the platform.\n"
-        "It targets a specific path for removal. Use with caution as "
-        "this action is irreversible.\n\n"
-        "Use `inductiva storage remove \"*\"` to remove all folders in"
-        " your storage.")
-    subparser.add_argument("path",
+        "It targets a specific task files for removal. Use with caution as "
+        "this action is irreversible.\n\n")
+    subparser.add_argument("id",
                            type=str,
-                           nargs="*",
-                           help="Path(s) to be removed from remote storage. "
-                           "To remove all contents, use \"*\".")
+                           nargs="+",
+                           help="Id(s) of the task(s) to remove from remote "
+                           "storage.")
 
     subparser.add_argument(
         "-y",
@@ -71,9 +50,5 @@ def register(parser):
         help="Sets any confirmation values to \"yes\" "
         "automatically. Users will not be asked for "
         "confirmation to remove path(s) from remote storage.")
-    subparser.add_argument("--all",
-                           action="store_true",
-                           default=False,
-                           help="Remove all contents from remote storage.")
 
     subparser.set_defaults(func=remove)

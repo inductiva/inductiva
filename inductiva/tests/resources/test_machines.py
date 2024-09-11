@@ -98,3 +98,23 @@ def test_machines__ice_register__invalid_args():
                                          provider="ICE")
 
     assert "only supports persistent machine" in str(exception.value)
+
+
+@mock.patch.object(inductiva.resources.MachineGroup,
+                   attribute="_register_machine_group",
+                   new=fake_register)
+def test_machines__machine_group__invalid_threads_per_core():
+    """Check the registering of a MachineGroup fails with
+    threads_per_core different than 1 or 2.
+    
+    Goal: Verify that the MachineGroup threads_per_core validation is working
+    correctly based on a mock registration.
+    """
+
+    inductiva.set_api_key("dummy")
+
+    with pytest.raises(ValueError) as exception:
+        inductiva.resources.MachineGroup(machine_type="c2-standard-4",
+                                         threads_per_core=4)
+
+    assert "`threads_per_core` must be either 1 or 2." in str(exception.value)
