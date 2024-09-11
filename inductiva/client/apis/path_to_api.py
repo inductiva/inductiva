@@ -19,6 +19,8 @@ from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDi
 from inductiva.client.apis.paths.tasks_task_id_files import TasksTaskIdFiles
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
+from inductiva.client.apis.paths.admin_users_username_tier import AdminUsersUsernameTier
+from inductiva.client.apis.paths.admin_users_username_credits import AdminUsersUsernameCredits
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
 from inductiva.client.apis.paths.admin_users_email import AdminUsersEmail
 from inductiva.client.apis.paths.admin_users_email_campaign_campaign_id import AdminUsersEmailCampaignCampaignId
@@ -27,8 +29,6 @@ from inductiva.client.apis.paths.admin_users_username_storage_size import AdminU
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
 from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.admin_groups_active import AdminGroupsActive
-from inductiva.client.apis.paths.admin_groups_default import AdminGroupsDefault
-from inductiva.client.apis.paths.admin_groups_default_machine_group_id import AdminGroupsDefaultMachineGroupId
 from inductiva.client.apis.paths.admin_providers import AdminProviders
 from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvidersProviderId
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
@@ -42,6 +42,7 @@ from inductiva.client.apis.paths.admin_campaigns_campaign_id_capabilities import
 from inductiva.client.apis.paths.admin_campaigns_campaign_id_capabilities_capability_id import AdminCampaignsCampaignIdCapabilitiesCapabilityId
 from inductiva.client.apis.paths.admin_campaigns_campaign_id_quotas import AdminCampaignsCampaignIdQuotas
 from inductiva.client.apis.paths.admin_campaigns_campaign_id_quotas_quota_id import AdminCampaignsCampaignIdQuotasQuotaId
+from inductiva.client.apis.paths.admin_tiers import AdminTiers
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
 from inductiva.client.apis.paths.executer_tracker_machine_id_task import ExecuterTrackerMachineIdTask
@@ -114,6 +115,10 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
             AdminUsersEmailTermsAndConditions,
+        PathValues.ADMIN_USERS_USERNAME_TIER:
+            AdminUsersUsernameTier,
+        PathValues.ADMIN_USERS_USERNAME_CREDITS:
+            AdminUsersUsernameCredits,
         PathValues.ADMIN_USERS_EMAIL_API_KEY:
             AdminUsersEmailApiKey,
         PathValues.ADMIN_USERS_EMAIL:
@@ -130,10 +135,6 @@ PathToApi = typing_extensions.TypedDict(
             AdminGroups,
         PathValues.ADMIN_GROUPS_ACTIVE:
             AdminGroupsActive,
-        PathValues.ADMIN_GROUPS_DEFAULT:
-            AdminGroupsDefault,
-        PathValues.ADMIN_GROUPS_DEFAULT_MACHINE_GROUP_ID:
-            AdminGroupsDefaultMachineGroupId,
         PathValues.ADMIN_PROVIDERS:
             AdminProviders,
         PathValues.ADMIN_PROVIDERS_PROVIDER_ID:
@@ -160,6 +161,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminCampaignsCampaignIdQuotas,
         PathValues.ADMIN_CAMPAIGNS_CAMPAIGN_ID_QUOTAS_QUOTA_ID:
             AdminCampaignsCampaignIdQuotasQuotaId,
+        PathValues.ADMIN_TIERS:
+            AdminTiers,
         PathValues.EXECUTERTRACKER_REGISTER:
             ExecuterTrackerRegister,
         PathValues.EXECUTERTRACKER_MACHINE_ID:
@@ -265,6 +268,10 @@ path_to_api = PathToApi({
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
         AdminUsersEmailTermsAndConditions,
+    PathValues.ADMIN_USERS_USERNAME_TIER:
+        AdminUsersUsernameTier,
+    PathValues.ADMIN_USERS_USERNAME_CREDITS:
+        AdminUsersUsernameCredits,
     PathValues.ADMIN_USERS_EMAIL_API_KEY:
         AdminUsersEmailApiKey,
     PathValues.ADMIN_USERS_EMAIL:
@@ -281,10 +288,6 @@ path_to_api = PathToApi({
         AdminGroups,
     PathValues.ADMIN_GROUPS_ACTIVE:
         AdminGroupsActive,
-    PathValues.ADMIN_GROUPS_DEFAULT:
-        AdminGroupsDefault,
-    PathValues.ADMIN_GROUPS_DEFAULT_MACHINE_GROUP_ID:
-        AdminGroupsDefaultMachineGroupId,
     PathValues.ADMIN_PROVIDERS:
         AdminProviders,
     PathValues.ADMIN_PROVIDERS_PROVIDER_ID:
@@ -311,6 +314,8 @@ path_to_api = PathToApi({
         AdminCampaignsCampaignIdQuotas,
     PathValues.ADMIN_CAMPAIGNS_CAMPAIGN_ID_QUOTAS_QUOTA_ID:
         AdminCampaignsCampaignIdQuotasQuotaId,
+    PathValues.ADMIN_TIERS:
+        AdminTiers,
     PathValues.EXECUTERTRACKER_REGISTER:
         ExecuterTrackerRegister,
     PathValues.EXECUTERTRACKER_MACHINE_ID:

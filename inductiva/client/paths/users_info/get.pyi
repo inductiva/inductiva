@@ -25,9 +25,9 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.user import User
+from inductiva.client.model.user_detail import UserDetail
 
-SchemaFor200ResponseBodyApplicationJson = User
+SchemaFor200ResponseBodyApplicationJson = UserDetail
 
 
 @dataclass
