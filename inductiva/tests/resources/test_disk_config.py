@@ -1,3 +1,4 @@
+"""Tests for DiskConfig Class"""
 import inductiva
 
 

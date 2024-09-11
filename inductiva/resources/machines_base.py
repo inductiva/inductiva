@@ -184,13 +184,6 @@ class BaseMachineGroup:
             return dt
         return None
 
-    def get_disk_config(self):
-        """Returns the disk configuration as a dictionary or None if no config
-        is present."""
-        if self.disk_config and self.disk_config.is_resizable:
-            return self.disk_config.to_dict()
-        return None
-
     def _register_machine_group(self, **kwargs):
         """Register machine group configuration in API.
 
