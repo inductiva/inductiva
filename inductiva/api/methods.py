@@ -21,7 +21,6 @@ from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import TaskRequest, TaskStatus, TaskSubmittedInfo
 from inductiva import types, constants
-from inductiva.resources.machine_types import ProviderType
 from inductiva.utils.data import (extract_output, get_validate_request_params,
                                   pack_input)
 from inductiva.utils import format_utils, files
@@ -338,15 +337,11 @@ def submit_task(api_instance,
                 storage_path_prefix,
                 params,
                 type_annotations,
-                provider_id: ProviderType,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
                 simulator=None):
     """Submit a task and send input files to the API."""
-
-    resource_pool_id = None
-    if resource_pool is not None:
-        resource_pool_id = resource_pool.id
+    resource_pool_id = resource_pool.id
 
     current_project = inductiva.projects.get_current_project()
     if current_project is not None:
@@ -358,7 +353,6 @@ def submit_task(api_instance,
         method=method_name,
         params=request_params,
         project=current_project,
-        provider_id=provider_id.value,
         resource_pool=resource_pool_id,
         container_image=container_image,
         storage_path_prefix=storage_path_prefix,
@@ -394,10 +388,8 @@ def submit_task(api_instance,
 def invoke_async_api(method_name: str,
                      params,
                      type_annotations: Dict[Any, Type],
-                     resource_pool: Optional[
-                         types.ComputationalResources] = None,
+                     resource_pool: types.ComputationalResources,
                      storage_path_prefix: Optional[str] = "",
-                     provider_id: ProviderType = ProviderType.GCP,
                      container_image: Optional[str] = None,
                      resubmit_on_preemption: bool = False,
                      simulator=None) -> str:
@@ -420,12 +412,11 @@ def invoke_async_api(method_name: str,
     Args:
         request: Request sent to the API for validation.
         input_dir: Directory containing the input files to be uploaded.
-        provider_id: The provider id to use for the simulation (GCP or ICE).
         container_image: The container image to use for the simulation
             Example: container_image="docker://inductiva/kutu:xbeach_v1.23_dev"
         resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
     Return:
         Returns the task id.
@@ -447,7 +438,6 @@ def invoke_async_api(method_name: str,
                               resource_pool=resource_pool,
                               storage_path_prefix=storage_path_prefix,
                               params=params,
-                              provider_id=provider_id,
                               container_image=container_image,
                               type_annotations=type_annotations,
                               resubmit_on_preemption=resubmit_on_preemption,

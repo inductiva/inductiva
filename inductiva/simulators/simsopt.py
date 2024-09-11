@@ -34,7 +34,8 @@ class SIMSOPT(simulators.Simulator):
         num_samples: int,
         sigma_scaling_factor: float,
         objectives_weights_filename: str,
-        on: Optional[types.ComputationalResources] = None,
+        *,
+        on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
         extra_metadata: Optional[dict] = None,
@@ -70,7 +71,7 @@ class SIMSOPT(simulators.Simulator):
             storage_dir: Directory for storing results.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
             other arguments: See the documentation of the base class.
         """

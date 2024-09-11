@@ -12,7 +12,7 @@ class FVCOM(simulators.Simulator):
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the FVCOM simulator.
-        
+
         Args:
             version (str): The version of the simulator to use. If None, the
                 latest available version in the platform is used.
@@ -25,6 +25,8 @@ class FVCOM(simulators.Simulator):
 
     def run(self,
             input_dir: str,
+            *,
+            on: types.ComputationalResources,
             debug: int = 0,
             model: str = "",
             case_name: str = "",
@@ -35,7 +37,6 @@ class FVCOM(simulators.Simulator):
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             extra_metadata: Optional[dict] = None,
-            on: Optional[types.ComputationalResources] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -43,16 +44,19 @@ class FVCOM(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             casename: Name of the simulation case.
 
+            on: The computational resource to launch the simulation on. If None
+                the simulation is submitted to a machine in the default pool.
+
             debug: Debug level of the simulation (from 0 to 7).
 
-            model: At the current moment we provide users with two 
+            model: At the current moment we provide users with two
             options:
                 - None (default): Uses default fvcom binary.
                 - 'estuary': Uses the fvcom_estuary binary.
                 The modules used to compile each binary can be found in the
                 kutu repository, in the make.inc and make_estuary.inc files
         (https://github.com/inductiva/kutu/tree/main/simulators/fvcom/v5.1.0).
-            
+
             create_namelist: Used to create a namelist file for the simulation.
                 Example: 'create_namelist=hello' will create hello_run.nml in
                     the working_dir.
@@ -67,9 +71,6 @@ class FVCOM(simulators.Simulator):
             use_hwthread: If specified Open MPI will attempt to discover the
             number of hardware threads on the node, and use that as the
             number of slots available.
-
-            on: The computational resource to launch the simulation on. If None
-                the simulation is submitted to a machine in the default pool.
 
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
