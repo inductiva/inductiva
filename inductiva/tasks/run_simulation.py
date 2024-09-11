@@ -40,6 +40,9 @@ def run_simulation(
         "sim_dir": pathlib.Path,
     }
 
+    if computational_resources:
+        provider_id = computational_resources.provider
+
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
 

@@ -65,7 +65,7 @@ class BaseMachineGroup:
         provider = machine_types.ProviderType(provider)
         self.provider = provider.value
 
-        if data_disk_gb <= 0:
+        if data_disk_gb <= 0 and provider != machine_types.ProviderType.LOCAL:
             raise ValueError("`data_disk_gb` must be positive.")
 
         if threads_per_core not in [1, 2]:
@@ -223,6 +223,7 @@ class BaseMachineGroup:
         """Creates a MachineGroup object from an API response."""
 
         machine_group = cls(
+            provider=resp["provider_id"],
             machine_type=resp["machine_type"],
             data_disk_gb=resp["disk_size_gb"],
             register=False,
