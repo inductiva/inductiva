@@ -219,18 +219,12 @@ class BaseMachineGroup:
         return f"{self._active_machines}/{self.num_machines}"
 
     @classmethod
-    def from_api_response(cls, resp: dict):
+    def from_api_response(cls, resp: dict, **kwargs):
         """Creates a MachineGroup object from an API response."""
-        kwargs = {
-            "machine_type" : resp["machine_type"],
-            "data_disk_gb" : resp["disk_size_gb"],
-            "register" : False
-        }
-
-        if resp["type"] == "standard":
-            kwargs = {**kwargs, "provider": resp["provider_id"]}
-
         machine_group = cls(
+            machine_type=resp["machine_type"],
+            data_disk_gb=resp["disk_size_gb"],
+            register=False,
             **kwargs
         )
         machine_group._id = resp["id"]

@@ -89,8 +89,8 @@ class MachineGroup(machines_base.BaseMachineGroup):
                                          is_elastic=self.__is_elastic)
 
     @classmethod
-    def from_api_response(cls, resp: dict):
-        machine_group = super().from_api_response(resp)
+    def from_api_response(cls, resp: dict, **kwargs):
+        machine_group = super().from_api_response(resp, **kwargs)
         machine_group.num_machines = int(resp["max_vms"])
         machine_group.provider = resp["provider_id"]
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
@@ -229,8 +229,8 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
                                          spot=self.spot)
 
     @classmethod
-    def from_api_response(cls, resp: dict):
-        machine_group = super().from_api_response(resp)
+    def from_api_response(cls, resp: dict, **kwargs):
+        machine_group = super().from_api_response(resp, **kwargs)
         machine_group.spot = bool(resp["spot"])
         machine_group.max_machines = int(resp["max_vms"])
         machine_group.min_machines = int(resp["min_vms"])

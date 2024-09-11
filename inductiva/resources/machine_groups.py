@@ -50,24 +50,26 @@ def get_by_name(machine_name: str):
     try:
         api = compute_api.ComputeApi(inductiva.api.get_client())
         response = api.get_vm_group_by_name({"name": machine_name}).body
-        mg_class = _get_machine_group_class(response["type"],
-                                            response["is_elastic"])
-        return mg_class.from_api_response(response)
+        mg_class, kwargs = _get_machine_group_class(response["type"],
+                                            response["is_elastic"],
+                                            response["provider_id"])
+        return mg_class.from_api_response(response, **kwargs)
     except inductiva.client.ApiException as api_exception:
         raise api_exception
 
 
-def _get_machine_group_class(machine_type: str, is_elastic: bool):
+def _get_machine_group_class(machine_type: str, is_elastic: bool, provider: str):
     """Returns the class of the machine group"""
     if is_elastic:
         mg_class = resources.ElasticMachineGroup
     elif machine_type == "standard":
         mg_class = resources.MachineGroup
+        kwargs = {"provider": provider}
     elif machine_type == "mpi":
         mg_class = resources.MPICluster
     else:
         raise ValueError("Unknown resource configuration.")
-    return mg_class
+    return mg_class, kwargs
 
 
 def get():
