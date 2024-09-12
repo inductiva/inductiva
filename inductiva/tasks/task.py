@@ -13,9 +13,6 @@ import urllib3
 import tabulate
 from dataclasses import dataclass
 
-import inductiva.client
-import inductiva.client.paths
-import inductiva.client.paths.tasks_task_id_download_output_url
 import inductiva.client.paths.tasks_task_id_download_output_url.get
 
 from ..localization import translator as __
