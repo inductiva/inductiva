@@ -12,6 +12,7 @@ from typing import Dict, Any, List, Optional, Tuple, Union
 import urllib3
 import tabulate
 from dataclasses import dataclass
+
 from ..localization import translator as __
 
 import inductiva
@@ -19,6 +20,8 @@ from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api
 from inductiva.client.apis.tags import tasks_api
+from inductiva.client.paths.tasks_task_id_download_output_url import get \
+    as get_tasks_task_id_download_output_url
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 
@@ -387,7 +390,7 @@ class Task:
     def _get_last_n_lines_from_file(self, file_path: pathlib.Path,
                                     n: int) -> List[str]:
         """Gets the last n lines from a file.
-        
+
         This method returns a list with the last n lines from a file.
         Args:
             file_path: The path to the file.
@@ -459,7 +462,7 @@ class Task:
         │ #12  0x7f4cec4913a6 in ???
         │ #13  0x7f4cecceb940 in ???
         │ #14  0x4084ae in ???
-        └ 
+        └
         Args:
             lines: A list of strings to format.
             file: The name of the file. Must be "stdout.txt" or "stderr.txt".
@@ -760,6 +763,53 @@ class Task:
         return all(
             file.name in self.STANDARD_OUTPUT_FILES for file in output_files)
 
+    def _request_download_output_url(
+        self
+    ) -> Optional[get_tasks_task_id_download_output_url.
+                  SchemaFor200ResponseBodyApplicationJson]:
+        try:
+            api_response = self._api.get_output_download_url(
+                path_params=self._get_path_params(),)
+        except exceptions.ApiException as e:
+            if not self._called_from_wait:
+
+                if self._status == models.TaskStatusCode.EXECUTERFAILED:
+                    logging.info("The remote process running the task failed:")
+                    self.get_info()
+                    detail = self.info.executer.error_detail
+                    if detail:
+                        logging.info(" > Message: %s", detail)
+                    else:
+                        logging.info(" > No error message available.")
+                else:
+                    # Raise the exception to be handled by the exception handler
+                    raise e
+            return None
+        finally:
+            # Reset internal state
+            self._called_from_wait = False
+
+        return api_response.body
+
+    def get_output_url(self) -> str:
+        """Get a public URL to download the output files of the task.
+
+        Returns:
+            The URL to download the output files of the task.
+        """
+        response_body = self._request_download_output_url()
+        if (response_body is None or
+            (download_url := response_body.get("url")) is None):
+            raise RuntimeError(
+                "The API did not return a download URL for the task outputs.")
+
+        logging.info("■ Use the following URL to download the output "
+                     "files of you simulation:")
+        logging.info(" > %s", download_url)
+        logging.info("\nThe link will be available for 30 minutes.")
+
+        return download_url
+
     def download_outputs(
         self,
         filenames: Optional[List[str]] = None,
@@ -785,31 +835,10 @@ class Task:
                 is None or empty (i.e., all output files are downloaded).
         """
         self._status = self.get_status()
-        try:
-            api_response = self._api.get_output_download_url(
-                path_params=self._get_path_params(),)
-        except exceptions.ApiException as e:
-            if not self._called_from_wait:
 
-                if self._status == models.TaskStatusCode.EXECUTERFAILED:
-                    logging.info("The remote process running the task failed:")
-                    self.get_info()
-                    detail = self.info.executer.error_detail
-                    if detail:
-                        logging.info(" > Message: %s", detail)
-                    else:
-                        logging.info(" > No error message available.")
-                else:
-                    # Raise the exception to be handled by the exception handler
-                    raise e
-            return None
-        finally:
-            # Reset internal state
-            self._called_from_wait = False
-
-        download_url = api_response.body.get("url")
-
-        if download_url is None:
+        response_body = self._request_download_output_url()
+        if (response_body is None or
+            (download_url := response_body.get("url")) is None):
             raise RuntimeError(
                 "The API did not return a download URL for the task outputs.")
 
@@ -819,8 +848,7 @@ class Task:
         # returns a fallback URL and returns the following flag as False.
         # In this case, the output donwload will be provided by the Web API
         # itself.
-        file_server_available = bool(
-            api_response.body.get("file_server_available"))
+        file_server_available = bool(response_body.get("file_server_available"))
 
         if output_dir is None:
             output_dir = self.id
