@@ -34,7 +34,9 @@ import inductiva
 
 # Instantiate machine group
 machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+    machine_type="c2-standard-4",
+    num_machines=1,
+    data_disk_gb=10)
 machine_group.start()
 
 input_dir = inductiva.utils.download_from_url(
@@ -51,4 +53,6 @@ task = fds.run(input_dir=input_dir,
 
 task.wait()
 task.download_outputs()
+
+machine_group.terminate()
 ```
