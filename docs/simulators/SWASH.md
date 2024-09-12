@@ -36,8 +36,8 @@ task.download_outputs()
 
 We currently support the following versions of SWASH:
 - 9.01A (Apr, 2023)
-- 10.01A (Oct, 2023)
-- 10.05 (Oct, 2023)
+- 10.01A (Apr, 2024)
+- 10.05 (May, 2024)
 
 All available versions for this (and other simulators) can be listed
 using the `inductiva simulators list` CLI command.
