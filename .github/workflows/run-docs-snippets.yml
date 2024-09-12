@@ -3,8 +3,7 @@ name: Run Docs Snippets
 on:
   pull_request:
     branches:
-      #- main  # Only trigger when the target branch is main
-      - development
+      - main  # Only trigger when the target branch is main
 
 jobs:
   run_docs_snippets:
