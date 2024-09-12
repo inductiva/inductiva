@@ -420,6 +420,11 @@ generate a valid <code class="docutils literal notranslate"><span class="pre">nm
 the requested model:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
+<span class="c1"># Instantiate machine group</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">,</span> <span class="n">num_machines</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
 <span class="c1"># Set simulation input directory</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
@@ -432,7 +437,8 @@ the requested model:</p>
 <span class="n">task</span> <span class="o">=</span> <span class="n">fvcom</span><span class="o">.</span><span class="n">run</span><span class="p">(</span> <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
                   <span class="n">working_dir</span><span class="o">=</span><span class="s2">&quot;run/&quot;</span><span class="p">,</span>
                   <span class="n">create_namelist</span><span class="o">=</span><span class="s2">&quot;tst&quot;</span><span class="p">,</span>
-                  <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                  <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                  <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
 
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
@@ -445,6 +451,11 @@ the requested model:</p>
 MPI process on a very small test scenario. This is just a simple example to check
 if the simulator is working correctly.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+
+<span class="c1"># Instantiate machine group</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">,</span> <span class="n">num_machines</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
 <span class="c1"># Set simulation input directory</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
@@ -459,7 +470,8 @@ if the simulator is working correctly.</p>
                   <span class="n">working_dir</span><span class="o">=</span><span class="s2">&quot;run/&quot;</span><span class="p">,</span>
                   <span class="n">case_name</span><span class="o">=</span><span class="s2">&quot;tst&quot;</span><span class="p">,</span>
                   <span class="n">debug</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
-                  <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                  <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                  <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
 
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>

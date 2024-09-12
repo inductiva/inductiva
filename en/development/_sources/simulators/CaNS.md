@@ -15,6 +15,11 @@ in the near future.
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup(
+    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+machine_group.start()
+
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -26,6 +31,7 @@ cans = inductiva.simulators.CaNS()
 # Run simulation with config files in the input directory
 task = cans.run(input_dir=input_dir, 
                 sim_config_filename="input.nml",
+                on=machine_group,
                 n_vcpus=4)
 
 task.wait()

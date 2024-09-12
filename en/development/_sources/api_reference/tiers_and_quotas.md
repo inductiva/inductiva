@@ -21,11 +21,6 @@ credits for, a clear message will be displayed. This notification will inform
 the user about the restriction and suggest possible actions, such as upgrading
 their tier or adjusting their resource usage.
 
-The shared queue remains accessible even if the user's credits have expired or been
-exhausted, ensuring uninterrupted access to basic computational resources.
-Tasks submitted to the shared queue do not consume credits, providing a reliable
-and cost-free option for running simulations.
-
 By understanding and managing their credits, users can optimize their resource usage
 ensuring they get the most value from their allocated credits while staying within
 their limits.
@@ -40,7 +35,6 @@ The following table shows the main differences between these tiers:
 
 | Tier | Description |
 |------|-------------|
-| Freemium | The Freemium tier is the entry-level tier for the Inductiva API. It is free to use and provides access to a limited set of capabilities and resources. Members of this tier can only submit tasks to the shared queue, _i.e_, they cannot allocate and use a dedicated machine group for their tasks. |
 | Standard | The Standard tier provides access to a wider set of capabilities and resources than the Freemium tier. Members can allocate dedicated machine groups but with limited capabilities and low quota limits. |
 | Power-user | The Power-user tier extends on the capabilities and resources available to the Standard tier but with higher quota limits and access to a wider set of capabilities. |
 | Enterprise | The Enterprise tier provides access to all capabilities and resources available in the Inductiva API. Members of this tier have the highest quota limits and can use all the features available in the API. |
@@ -53,7 +47,6 @@ in each tier:
 
 | Capability| Description | Freemium | Standard | Power-user | Enterprise |
 |-----------|-------------|----------|----------|------------|------------|
-| Allow tasks on "default machine group" | Ability to submit tasks to the shared queue - machine group shared among all users that runs tasks in order of submission. | ✅︎ | ✅︎ |✅︎ |✅︎ |
 | Allow tasks on dedicated machine group | Ability to launch and allocate a machine group, to be dedicated to the the user’s tasks. | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow the override of time to live for tasks | Ability to extend the maximum time that a task can stay running, delaying its automatic termination. | ❌ | ✅︎ | ✅︎ | ✅︎ |
 | Allow running "non Kutu" containers | Ability to specify the use of third-party docker containers that are defined/built outside the context of the KUTU repository. | ❌ | ❌ | ❌ | ✅ |
@@ -143,7 +136,6 @@ Username: <username here>
 ■ Instance User quotas
                                                                                           MAX ALLOWED
  Maximum time a machine group can stay up before automatic termination                    48 hour
- Maximum time a task can stay running in the default queue before automatic termination   16 hour
  Maximum disk size                                                                        2000 GB
  Maximum amount of RAM per VCPU                                                           6 GB
 

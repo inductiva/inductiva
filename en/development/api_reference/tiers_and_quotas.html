@@ -419,10 +419,6 @@ functionalities that they are not allowed to due to their tier or have insuffici
 credits for, a clear message will be displayed. This notification will inform
 the user about the restriction and suggest possible actions, such as upgrading
 their tier or adjusting their resource usage.</p>
-<p>The shared queue remains accessible even if the user’s credits have expired or been
-exhausted, ensuring uninterrupted access to basic computational resources.
-Tasks submitted to the shared queue do not consume credits, providing a reliable
-and cost-free option for running simulations.</p>
 <p>By understanding and managing their credits, users can optimize their resource usage
 ensuring they get the most value from their allocated credits while staying within
 their limits.</p>
@@ -439,16 +435,13 @@ The following table shows the main differences between these tiers:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Freemium</p></td>
-<td><p>The Freemium tier is the entry-level tier for the Inductiva API. It is free to use and provides access to a limited set of capabilities and resources. Members of this tier can only submit tasks to the shared queue, <em>i.e</em>, they cannot allocate and use a dedicated machine group for their tasks.</p></td>
-</tr>
-<tr class="row-odd"><td><p>Standard</p></td>
+<tr class="row-even"><td><p>Standard</p></td>
 <td><p>The Standard tier provides access to a wider set of capabilities and resources than the Freemium tier. Members can allocate dedicated machine groups but with limited capabilities and low quota limits.</p></td>
 </tr>
-<tr class="row-even"><td><p>Power-user</p></td>
+<tr class="row-odd"><td><p>Power-user</p></td>
 <td><p>The Power-user tier extends on the capabilities and resources available to the Standard tier but with higher quota limits and access to a wider set of capabilities.</p></td>
 </tr>
-<tr class="row-odd"><td><p>Enterprise</p></td>
+<tr class="row-even"><td><p>Enterprise</p></td>
 <td><p>The Enterprise tier provides access to all capabilities and resources available in the Inductiva API. Members of this tier have the highest quota limits and can use all the features available in the API.</p></td>
 </tr>
 </tbody>
@@ -471,77 +464,70 @@ in each tier:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>Allow tasks on “default machine group”</p></td>
-<td><p>Ability to submit tasks to the shared queue - machine group shared among all users that runs tasks in order of submission.</p></td>
-<td><p>✅︎</p></td>
-<td><p>✅︎</p></td>
-<td><p>✅︎</p></td>
-<td><p>✅︎</p></td>
-</tr>
-<tr class="row-odd"><td><p>Allow tasks on dedicated machine group</p></td>
+<tr class="row-even"><td><p>Allow tasks on dedicated machine group</p></td>
 <td><p>Ability to launch and allocate a machine group, to be dedicated to the the user’s tasks.</p></td>
 <td><p>❌</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 </tr>
-<tr class="row-even"><td><p>Allow the override of time to live for tasks</p></td>
+<tr class="row-odd"><td><p>Allow the override of time to live for tasks</p></td>
 <td><p>Ability to extend the maximum time that a task can stay running, delaying its automatic termination.</p></td>
 <td><p>❌</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 </tr>
-<tr class="row-odd"><td><p>Allow running “non Kutu” containers</p></td>
+<tr class="row-even"><td><p>Allow running “non Kutu” containers</p></td>
 <td><p>Ability to specify the use of third-party docker containers that are defined/built outside the context of the KUTU repository.</p></td>
 <td><p>❌</p></td>
 <td><p>❌</p></td>
 <td><p>❌</p></td>
 <td><p>✅</p></td>
 </tr>
-<tr class="row-even"><td><p>Allow use of the simulators - any version</p></td>
+<tr class="row-odd"><td><p>Allow use of the simulators - any version</p></td>
 <td><p>Ability to run any version of all <a class="reference internal" href="../simulators/overview.html"><span class="std std-doc">simulators available in Inductiva API</span></a></p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 </tr>
-<tr class="row-odd"><td><p>Allow the use of standard machine groups</p></td>
+<tr class="row-even"><td><p>Allow the use of standard machine groups</p></td>
 <td><p>Ability to allocate a machine pool with a fixed number of machines</p></td>
 <td><p>❌</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 </tr>
-<tr class="row-even"><td><p>Allow the use of elastic clusters</p></td>
+<tr class="row-odd"><td><p>Allow the use of elastic clusters</p></td>
 <td><p>Ability to dynamically allocate a machine pool with flexible sizing</p></td>
 <td><p>❌</p></td>
 <td><p>❌</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 </tr>
-<tr class="row-odd"><td><p>Allow the use of MPI cluster</p></td>
+<tr class="row-even"><td><p>Allow the use of MPI cluster</p></td>
 <td><p>Ability to allocate multiple machines configured as a single cluster for running parallelized simulations across multiple machines using MPI</p></td>
 <td><p>❌</p></td>
 <td><p>❌</p></td>
 <td><p>❌</p></td>
 <td><p>✅︎</p></td>
 </tr>
-<tr class="row-even"><td><p>Allow the use of “spot” resources</p></td>
+<tr class="row-odd"><td><p>Allow the use of “spot” resources</p></td>
 <td><p>Ability to request spot resources (typically machine groups) to run tasks. Spot resources are resources that can be preempted at any moment by the cloud provider at any moment</p></td>
 <td><p>❌</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 </tr>
-<tr class="row-odd"><td><p>Allow the use of “on demand” resources</p></td>
+<tr class="row-even"><td><p>Allow the use of “on demand” resources</p></td>
 <td><p>Ability to request dedicated resources (typically machine groups) to run tasks.</p></td>
 <td><p>❌</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 <td><p>✅︎</p></td>
 </tr>
-<tr class="row-even"><td><p>Automatically restart tasks interrupted by preemption</p></td>
+<tr class="row-odd"><td><p>Automatically restart tasks interrupted by preemption</p></td>
 <td><p>A task that was running in a “spot” instance that was preempted (taken back by cloud provider) will be automatically resubmitted</p></td>
 <td><p>❌</p></td>
 <td><p>❌</p></td>
@@ -714,7 +700,6 @@ Username:<span class="w"> </span>&lt;username<span class="w"> </span>here&gt;
 ■<span class="w"> </span>Instance<span class="w"> </span>User<span class="w"> </span>quotas
 <span class="w">                                                                                          </span>MAX<span class="w"> </span>ALLOWED
 <span class="w"> </span>Maximum<span class="w"> </span><span class="nb">time</span><span class="w"> </span>a<span class="w"> </span>machine<span class="w"> </span>group<span class="w"> </span>can<span class="w"> </span>stay<span class="w"> </span>up<span class="w"> </span>before<span class="w"> </span>automatic<span class="w"> </span>termination<span class="w">                    </span><span class="m">48</span><span class="w"> </span>hour
-<span class="w"> </span>Maximum<span class="w"> </span><span class="nb">time</span><span class="w"> </span>a<span class="w"> </span>task<span class="w"> </span>can<span class="w"> </span>stay<span class="w"> </span>running<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>default<span class="w"> </span>queue<span class="w"> </span>before<span class="w"> </span>automatic<span class="w"> </span>termination<span class="w">   </span><span class="m">16</span><span class="w"> </span>hour
 <span class="w"> </span>Maximum<span class="w"> </span>disk<span class="w"> </span>size<span class="w">                                                                        </span><span class="m">2000</span><span class="w"> </span>GB
 <span class="w"> </span>Maximum<span class="w"> </span>amount<span class="w"> </span>of<span class="w"> </span>RAM<span class="w"> </span>per<span class="w"> </span>VCPU<span class="w">                                                           </span><span class="m">6</span><span class="w"> </span>GB
 </pre></div>

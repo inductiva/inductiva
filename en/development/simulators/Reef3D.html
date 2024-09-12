@@ -439,8 +439,7 @@ based on the number of cores available in the machine.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">on</span></code>: set the machines where the simulations will run. Check
 <a class="reference external" href="https://tutorials.inductiva.ai/intro_to_api/computational-infrastructure.html#available-computational-resources" target="_blank">here</a>
-for further detail. If not selected the simulations will be picked-up by a
-default pool shared by everyone.</p></li>
+for further detail.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">storage_dir</span></code>: set the directory where the output files will be stored in the
 cloud. If not selected the output files will be stored in a folder named with
 the  task id of the simulation.</p></li>
@@ -458,13 +457,18 @@ MPI parallism. This number needs to be set consistently with parameter
 from Reef3D repository.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
+<span class="c1"># Instantiate machine group</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">,</span> <span class="n">num_machines</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
     <span class="s2">&quot;reef3d-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">reef3d</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">REEF3D</span><span class="p">()</span>
 
-<span class="n">task</span> <span class="o">=</span> <span class="n">reef3d</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">reef3d</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
 
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 
@@ -608,7 +612,6 @@ ones you may see depending on the tier you are in.</p>
 <span class="w"> </span>Maximum<span class="w"> </span>disk<span class="w"> </span>size<span class="w">                                                                        </span><span class="m">2000</span><span class="w"> </span>GB
 <span class="w"> </span>Maximum<span class="w"> </span><span class="nb">time</span><span class="w"> </span>a<span class="w"> </span>machine<span class="w"> </span>group<span class="w"> </span>can<span class="w"> </span>stay<span class="w"> </span>up<span class="w"> </span>before<span class="w"> </span>automatic<span class="w"> </span>termination<span class="w">                    </span><span class="m">48</span><span class="w"> </span>hour
 <span class="w"> </span>Maximum<span class="w"> </span>amount<span class="w"> </span>of<span class="w"> </span>RAM<span class="w"> </span>per<span class="w"> </span>VCPU<span class="w">                                                           </span><span class="m">6</span><span class="w"> </span>GB
-<span class="w"> </span>Maximum<span class="w"> </span><span class="nb">time</span><span class="w"> </span>a<span class="w"> </span>task<span class="w"> </span>can<span class="w"> </span>stay<span class="w"> </span>running<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>default<span class="w"> </span>queue<span class="w"> </span>before<span class="w"> </span>automatic<span class="w"> </span>termination<span class="w">   </span><span class="m">16</span><span class="w"> </span>hour
 
 ■<span class="w"> </span>Registering<span class="w"> </span>MachineGroup<span class="w"> </span>configurations:
 <span class="w">	</span>·<span class="w"> </span>Name:<span class="w">                       </span>api-o4qozo7wafhwqcyz4xh1g4e7s

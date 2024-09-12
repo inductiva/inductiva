@@ -49,6 +49,11 @@ scotch decomposition method is available.
 ````python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup(
+    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+machine_group.start()
+
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -70,7 +75,10 @@ commands = [
 openfoam = inductiva.simulators.OpenFOAM(distribution="foundation")
 
 # Run simulation with config files in the input directory
-task = openfoam.run(input_dir=input_dir, commands=commands, n_vcpus=4)
+task = openfoam.run(input_dir=input_dir,
+                    commands=commands,
+                    n_vcpus=4,
+                    on=machine_group)
 
 task.wait()
 task.download_outputs()
@@ -80,6 +88,11 @@ task.download_outputs()
 
 ````python
 import inductiva
+
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup(
+    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+machine_group.start()
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
@@ -102,7 +115,10 @@ commands = [
 openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
 
 # Run simulation with config files in the input directory
-task = openfoam.run(input_dir=input_dir, commands=commands, n_vcpus=4)
+task = openfoam.run(input_dir=input_dir,
+                    commands=commands,
+                    n_vcpus=4,
+                    on=machine_group)
 
 task.wait()
 task.download_outputs()
