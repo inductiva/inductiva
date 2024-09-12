@@ -41,6 +41,8 @@ task = fds.run(input_dir=input_dir,
                sim_config_filename="mccaffrey.fds",
                post_processing_filename="mccaffrey.ssf",
                n_vcpus=1)
+
+task.wait()
 ```
 
 ### Dependency test
@@ -59,11 +61,18 @@ defined inside the snippet):
 
 import inductiva
 
+machine_group = inductiva.resources.MachineGroup(machine_type="c2d-standard-4",num_machines=1)
+machine_group.start()
+
 task = simulator.run(input_dir=input_dir,
                on=machine_group,
                sim_config_filename="mccaffrey.fds",
                post_processing_filename="mccaffrey.ssf",
-               n_vcpus=1)
+               n_vcpus=1,
+               on=machine_group)
+
+task.wait()
+machine_group.terminate()
 ```
 
 ## Link checker
