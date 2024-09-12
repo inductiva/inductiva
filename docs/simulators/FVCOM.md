@@ -90,6 +90,7 @@ task = fvcom.run( input_dir=input_dir,
 task.wait()
 task.download_outputs()
 
+machine_group.terminate()
 ```
 
 **Closing Notes**: There is currently a bug affecting the timezone argument in
