@@ -80,7 +80,7 @@ class BaseMachineGroup:
             raise ValueError("`disk_config` must be an instance of DiskConfig.")
 
         if disk_config is not None:
-            data_disk_gb = disk_config.size_gb
+            data_disk_gb = disk_config.max_size_gb
 
         self.machine_type = machine_type
         self.provider = provider.value

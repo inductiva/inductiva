@@ -4,6 +4,7 @@ configuration for the disk.
 """
 
 from dataclasses import dataclass, field
+from typing import Optional
 
 
 @dataclass(frozen=True)
@@ -20,28 +21,20 @@ class DiskConfig:
 
     Attributes:
         size_gb (int): Disk size in GB.
-        resize_trigger_gb (int): Free space threshold (in GB) to trigger
-            resizing. Example: If set to 5GB, the disk will resize when 5GB of
-            free space remains.
-        resize_increment_gb (int): Amount (in GB) to increase the disk size
-            during each resize.
         max_size_gb (int): Maximum allowed disk size in GB. Disk will not grow
             beyond this limit.
     """
-    size_gb: int
-    resize_trigger_gb: int = field(default=None)
-    resize_increment_gb: int = field(default=None)
-    max_size_gb: int = field(default=None)
+    max_size_gb: int
 
-    def __post_init__(self):
-        args = [
-            self.resize_trigger_gb, self.resize_increment_gb, self.max_size_gb
-        ]
-        if any(arg is not None for arg in args) and not all(arg is not None
-                                                            for arg in args):
-            raise ValueError(
-                "If you provide one of resize_trigger_gb, resize_increment_gb, "
-                "or max_size_gb, all must be provided.")
+    # resize_trigger_gb (int): Free space threshold (in GB) to trigger
+    #     resizing. Example: If set to 5GB, the disk will resize when 5GB of
+    #     free space remains.
+    resize_trigger_gb: int = field(default=5, init=False)
+
+    # resize_increment_gb (int): Amount (in GB) to increase the disk size
+    #     during each resize.
+    resize_increment_gb: int = field(default=10, init=False)
+    is_resizable: bool = True
 
     @property
     def resize_config(self):
@@ -54,13 +47,3 @@ class DiskConfig:
             "size_increment_gb": self.resize_increment_gb,
             "max_disk_size_gb": self.max_size_gb,
         }
-
-    @property
-    def is_resizable(self):
-        """Check if the disk is resizable.
-        A disk is resizable if all the resize attributes are provided.
-        (resize_trigger_gb, resize_increment_gb, and max_size_gb)"""
-
-        return all(arg is not None for arg in [
-            self.resize_trigger_gb, self.resize_increment_gb, self.max_size_gb
-        ])
