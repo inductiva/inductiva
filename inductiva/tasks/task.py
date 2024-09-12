@@ -791,22 +791,25 @@ class Task:
 
         return api_response.body
 
-    def get_output_url(self) -> str:
+    def get_output_url(self) -> Optional[str]:
         """Get a public URL to download the output files of the task.
 
         Returns:
-            The URL to download the output files of the task.
+            The URL to download the output files of the task, or None
+            if the
         """
         response_body = self._request_download_output_url()
-        if (response_body is None or
-            (download_url := response_body.get("url")) is None):
+        if not response_body:
+            return None
+
+        download_url = response_body.get("url")
+        if download_url is None:
             raise RuntimeError(
                 "The API did not return a download URL for the task outputs.")
 
         logging.info("■ Use the following URL to download the output "
                      "files of you simulation:")
         logging.info(" > %s", download_url)
-        logging.info("\nThe link will be available for 30 minutes.")
 
         return download_url
 
@@ -817,7 +820,7 @@ class Task:
         uncompress: bool = True,
         rm_downloaded_zip_archive: bool = True,
         rm_remote_files: bool = False,
-    ) -> pathlib.Path:
+    ) -> Optional[pathlib.Path]:
         """Download output files of the task.
 
         Args:
@@ -837,8 +840,11 @@ class Task:
         self._status = self.get_status()
 
         response_body = self._request_download_output_url()
-        if (response_body is None or
-            (download_url := response_body.get("url")) is None):
+        if not response_body:
+            return None
+
+        download_url = response_body.get("url")
+        if download_url is None:
             raise RuntimeError(
                 "The API did not return a download URL for the task outputs.")
 
