@@ -1,4 +1,5 @@
 """Tests for inductiva/api/methods.py"""
+import uuid
 from unittest import mock
 import pytest
 
@@ -15,8 +16,10 @@ def test_submit_to_closed_project_fails():
                        MOCK_PATH_PROJECTS), mock.patch(MOCK_PATH_CLIENT):
         project = inductiva.projects.Project(name="test_project")
         mock_get_project.return_value = project
+        mg = mock.Mock()
+        mg.id = uuid.uuid4()
 
         assert not project.opened
         with pytest.raises(RuntimeError):
-            inductiva.api.methods.submit_task(None, "dummy_method", {}, None,
-                                              "", None, "", "gcp")
+            inductiva.api.methods.submit_task(None, "dummy_method", {}, mg, "",
+                                              None, "", "gcp")

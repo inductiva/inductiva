@@ -9,7 +9,7 @@ class SplishSplash(simulators.Simulator):
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the SPlisHSplasH simulator.
-        
+
         Args:
             version (str): The version of the simulator to use. If None, the
                 latest available version in the platform is used.
@@ -24,7 +24,8 @@ class SplishSplash(simulators.Simulator):
         self,
         input_dir: str,
         sim_config_filename: str,
-        on: Optional[types.ComputationalResources] = None,
+        *,
+        on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
         extra_metadata: Optional[dict] = None,
@@ -40,7 +41,7 @@ class SplishSplash(simulators.Simulator):
             storage_dir: Directory for storing simulation results.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
         Returns:
             Task object representing the simulation task.

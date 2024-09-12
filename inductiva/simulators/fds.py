@@ -24,10 +24,11 @@ class FDS(simulators.Simulator):
     def run(self,
             input_dir: str,
             sim_config_filename: str,
+            *,
+            on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
-            post_processing_filename: str = None,
-            on: Optional[types.ComputationalResources] = None,
+            post_processing_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             extra_metadata: Optional[dict] = None,
             resubmit_on_preemption: bool = False,
@@ -36,18 +37,17 @@ class FDS(simulators.Simulator):
 
         Args:
             input_dir: Path to the directory of the simulation input files.
+            on: The computational resource to launch the simulation on.
             sim_config_filename: Name of the simulation configuration file.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
+                (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
-            on: The computational resource to launch the simulation on. If None
-                the simulation is submitted to a machine in the default pool.
+                number of hardware threads on the node, and use that as the
+                number of slots available.
             other arguments: See the documentation of the base class.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
         """
         return super().run(input_dir,
