@@ -13,8 +13,6 @@ import urllib3
 import tabulate
 from dataclasses import dataclass
 
-import inductiva.client.paths.tasks_task_id_download_output_url.get
-
 from ..localization import translator as __
 
 import inductiva
@@ -22,6 +20,8 @@ from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api
 from inductiva.client.apis.tags import tasks_api
+from inductiva.client.paths.tasks_task_id_download_output_url import get \
+    as get_tasks_task_id_download_output_url
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 
@@ -763,9 +763,9 @@ class Task:
         return all(
             file.name in self.STANDARD_OUTPUT_FILES for file in output_files)
 
-    def _get_download_output_url(
+    def _request_download_output_url(
         self
-    ) -> Optional[inductiva.client.paths.tasks_task_id_download_output_url.get.
+    ) -> Optional[get_tasks_task_id_download_output_url.
                   SchemaFor200ResponseBodyApplicationJson]:
         try:
             api_response = self._api.get_output_download_url(
@@ -792,7 +792,12 @@ class Task:
         return api_response.body
 
     def get_output_url(self) -> str:
-        response_body = self._get_download_output_url()
+        """Get a public URL to download the output files of the task.
+
+        Returns:
+            The URL to download the output files of the task.
+        """
+        response_body = self._request_download_output_url()
         if (response_body is None or
             (download_url := response_body.get("url")) is None):
             raise RuntimeError(
@@ -831,7 +836,7 @@ class Task:
         """
         self._status = self.get_status()
 
-        response_body = self._get_download_output_url()
+        response_body = self._request_download_output_url()
         if (response_body is None or
             (download_url := response_body.get("url")) is None):
             raise RuntimeError(
