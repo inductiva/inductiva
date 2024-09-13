@@ -41,21 +41,3 @@ def user_confirmation_prompt(items: list, all_msg: str, unlisted_msg: str,
     prompt = input(__("user-prompt-confirmation"))
     confirm = prompt.lower() in ["y", "ye", "yes"]
     return confirm
-
-
-def disable_logs(func, *args, **kwargs):
-    """Disable logging for a function call."""
-    # Get the current logging level
-    current_log_level = logging.getLogger().getEffectiveLevel()
-
-    # Disable logging
-    logging.disable(logging.CRITICAL)
-
-    try:
-        # Call the passed function with any arguments
-        result = func(*args, **kwargs)
-    finally:
-        # Re-enable logging by resetting to the original level
-        logging.disable(current_log_level)
-
-    return result

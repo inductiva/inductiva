@@ -5,7 +5,7 @@ import sys
 import inductiva
 from inductiva.tasks.methods import get_all
 from ...localization import translator as __
-from inductiva.utils.input_functions import user_confirmation_prompt, disable_logs
+from inductiva.utils.input_functions import user_confirmation_prompt
 
 
 def remove(args):
@@ -44,9 +44,7 @@ def remove(args):
 
     failed_ids = []
     for task_id in task_ids:
-        removed = disable_logs(
-            inductiva.tasks.Task(task_id).remove_remote_files)
-        if not removed:
+        if not inductiva.tasks.Task(task_id).remove_remote_files(verbose=False):
             failed_ids.append(task_id)
 
     if failed_ids:

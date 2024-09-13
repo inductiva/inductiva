@@ -1024,19 +1024,21 @@ class Task:
 
         return machine_provider + "-" + machine_type
 
-    def remove_remote_files(self) -> bool:
+    def remove_remote_files(self, verbose: bool = True) -> bool:
         """Removes all files associated with the task from remote storage.
         
         Returns:
             True if the files were removed successfully, False otherwise.
         """
-        logging.info(
-            "Removing files from remote storage for task %s...",
-            self.id,
-        )
+        if verbose:
+            logging.info(
+                "Removing files from remote storage for task %s...",
+                self.id,
+            )
         try:
             self._api.delete_task_files(path_params=self._get_path_params())
-            logging.info("Remote task files removed successfully.")
+            if verbose:
+                logging.info("Remote task files removed successfully.")
         except exceptions.ApiException as e:
             logging.error("An error occurred while removing the files:")
             logging.error(" > %s", json.loads(e.body)["detail"])
