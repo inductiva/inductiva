@@ -31,6 +31,8 @@ class ResourceType(enum.Enum):
 class BaseMachineGroup(ABC):
     """Base class to manage Google Cloud resources."""
 
+    QUOTAS_EXCEEDED_SLEEP_TIME = 60
+
     def __init__(
         self,
         machine_type: str,
@@ -243,10 +245,41 @@ class BaseMachineGroup(ABC):
 
         return machine_group
 
-    def start(self, **kwargs):
+    def _can_start_resource(self) -> bool:
+        """Check if the resource can be started.
+
+        This method checks if the resource can be started by checking
+        the available quotas and resource usage.
+
+        returns:
+            bool: True if the resource can be started, False otherwise.
+        """
+        quotas = users.get_quotas()
+
+        cost_in_use = quotas["max_price_hour"]["in_use"]
+        cost_max = quotas["max_price_hour"]["max_allowed"]
+        estimated_cost = cost_in_use + self.estimate_cloud_cost(verbose=False)
+        is_cost_ok = estimated_cost <= cost_max
+
+        vcpu_in_use = quotas["max_vcpus"]["in_use"]
+        vcpu_max = quotas["max_vcpus"]["max_allowed"]
+        current_vcpu = self.n_vcpus.total
+        estimated_vcpu_usage = vcpu_in_use + current_vcpu
+        is_vcpu_ok = estimated_vcpu_usage <= vcpu_max
+
+        machines_in_use = quotas["max_instances"]["in_use"]
+        machines_max = quotas["max_instances"]["max_allowed"]
+        estimated_machine_usage = machines_in_use + self.num_machines
+        is_instance_ok = estimated_machine_usage <= machines_max
+
+        return is_cost_ok and is_vcpu_ok and is_instance_ok
+
+    def start(self, wait_on_pending_quota: bool = False, **kwargs):
         """Starts a machine group.
 
         Args:
+            wait_on_pending_quota: If True, the method will wait for quotas to
+              become available before starting the resource.
             **kwargs: Depending on the type of machine group to be started,
               this can be num_machines, max_machines, min_machines,
               and is_elastic."""
@@ -276,6 +309,15 @@ class BaseMachineGroup(ABC):
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
+
+        if wait_on_pending_quota:
+            first_time = True
+            while not self._can_start_resource():
+                if first_time:
+                    print("This machine will exceed the current quotas.\n"
+                          "Going wait for quotas to become available.")
+                time.sleep(self.QUOTAS_EXCEEDED_SLEEP_TIME)
+
         self._api.start_vm_group(body=request_body)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True

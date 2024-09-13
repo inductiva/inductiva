@@ -247,12 +247,7 @@ def _run(project: Project,
 
         print(f"\nRunning {simulator}")
         if resource is not None:
-            while not _can_start_resource(resource):
-                print("This machine will exceed the current quotas.\n"
-                      "Going to sleep and trying again later.")
-                time.sleep(QUOTAS_EXCEEDED_SLEEP_TIME)
-
-            resource.start()
+            resource.start(wait_on_pending_quota=True)
 
         for replica in range(replicas_to_run, 0, -1):
             _run_replica(simulator_args, input_args, resource, simulator,
