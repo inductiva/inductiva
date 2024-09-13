@@ -1,5 +1,4 @@
 """Functions to handle input from the user."""
-import logging
 
 from inductiva import constants
 from ..localization import translator as __
