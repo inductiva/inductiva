@@ -27,11 +27,11 @@ def remove(args):
             file=sys.stderr)
         return 1
 
+    task_ids = set(task_ids)
+
     if is_all:
         all_tasks = get_all()
         task_ids = [task.id for task in all_tasks]
-    else:
-        task_ids = set(task_ids)
 
     if not confirm:
         confirm = user_confirmation_prompt(
