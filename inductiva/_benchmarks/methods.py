@@ -4,7 +4,6 @@ Methods to interact with Benchmarks.
 from collections import defaultdict
 import datetime
 import logging
-import time
 import json
 
 from typing import Any, Callable, Dict, List, Type, Union
