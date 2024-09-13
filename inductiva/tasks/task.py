@@ -1024,8 +1024,12 @@ class Task:
 
         return machine_provider + "-" + machine_type
 
-    def remove_remote_files(self) -> None:
-        """Removes all files associated with the task from remote storage."""
+    def remove_remote_files(self) -> bool:
+        """Removes all files associated with the task from remote storage.
+        
+        Returns:
+            True if the files were removed successfully, False otherwise.
+        """
         logging.info(
             "Removing files from remote storage for task %s...",
             self.id,
@@ -1036,6 +1040,8 @@ class Task:
         except exceptions.ApiException as e:
             logging.error("An error occurred while removing the files:")
             logging.error(" > %s", json.loads(e.body)["detail"])
+            return False
+        return True
 
     def _get_summary(self) -> str:
         """Get a formatted summary of the task. This method caches the

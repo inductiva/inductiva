@@ -1,27 +1,60 @@
 """Remove the user's remote storage contents via CLI."""
 import argparse
+import sys
 
 import inductiva
-from inductiva.utils.input_functions import user_confirmation_prompt
+from inductiva.tasks.methods import get_all
 from ...localization import translator as __
+from inductiva.utils.input_functions import user_confirmation_prompt, disable_logs
 
 
 def remove(args):
     """Remove user's remote storage contents."""
+    is_all = args.all
     task_ids = args.id
     confirm = args.confirm
 
-    task_ids = set(task_ids)
+    if is_all and task_ids:
+        print(
+            "inductiva storage remove: error: "
+            "argument id(s) not allowed with argument --all/-a",
+            file=sys.stderr)
+        return 1
+    if not is_all and not task_ids:
+        print(
+            "inductiva storage remove: error: "
+            "argument id(s) or --all/-a required",
+            file=sys.stderr)
+        return 1
+
+    if is_all:
+        all_tasks = get_all()
+        task_ids = [task.id for task in all_tasks]
+    else:
+        task_ids = set(task_ids)
+
     if not confirm:
         confirm = user_confirmation_prompt(
             task_ids, __("storage-prompt-remove-all"),
             __("storage-prompt-remove-big", len(task_ids)),
-            __("storage-prompt-remove-small"), False)
+            __("storage-prompt-remove-small"), is_all)
 
-    if confirm:
-        for task_id in task_ids:
-            inductiva.tasks.Task(task_id).remove_remote_files()
+    if not confirm:
+        return 0
 
+    failed_ids = []
+    for task_id in task_ids:
+        removed = disable_logs(
+            inductiva.tasks.Task(task_id).remove_remote_files)
+        if not removed:
+            failed_ids.append(task_id)
+
+    if failed_ids:
+        print(f"\nFailed to remove the following task(s) storage: {failed_ids}",
+              file=sys.stderr)
+        return 1
+
+    print("All tasks storage removed successfully.")
     return 0
 
 
@@ -37,7 +70,7 @@ def register(parser):
         "this action is irreversible.\n\n")
     subparser.add_argument("id",
                            type=str,
-                           nargs="+",
+                           nargs="*",
                            help="Id(s) of the task(s) to remove from remote "
                            "storage.")
 
@@ -50,5 +83,11 @@ def register(parser):
         help="Sets any confirmation values to \"yes\" "
         "automatically. Users will not be asked for "
         "confirmation to remove path(s) from remote storage.")
+
+    subparser.add_argument("-a",
+                           "--all",
+                           action="store_true",
+                           default=False,
+                           help="Remove all tasks from remote storage.")
 
     subparser.set_defaults(func=remove)
