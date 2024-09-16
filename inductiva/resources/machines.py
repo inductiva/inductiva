@@ -4,7 +4,6 @@ from typing import Optional, Union
 import datetime
 
 from inductiva.resources import machine_types, machines_base
-from inductiva.resources.disk_config import DiskConfig
 
 
 def _check_ice_args(spot: bool):
@@ -30,7 +29,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         threads_per_core: int = 2,
         spot: bool = True,
         data_disk_gb: int = 10,
-        disk_config: DiskConfig = None,
+        auto_resize_disk_max_gb: Optional[int] = None,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
@@ -54,9 +53,18 @@ class MachineGroup(machines_base.BaseMachineGroup):
             threads_per_core: The number of threads per core (1 or 2).
             spot: Whether to use spot machines.
             data_disk_gb: The size of the disk for user data (in GB).
-            disk_config: Disk configuration for the machine group. This config
-                includes disk size_gb and all the parameters needed for resizing
-                the disk. If provided will take precedence over data_disk_gb.
+            auto_resize_disk_max_gb: The maximum size in GB that the hard disk
+                of the cloud VM can reach. If set, the disk will be
+                automatically resized, during the execution of a task, when the
+                free space falls below a certain threshold. This mechanism helps
+                prevent "out of space" errors, that can occur when a task
+                generates a quantity of output files that exceeds the size of
+                the local storage. Increasing disk size during task execution
+                increases the cost of local storage associated with the VM,
+                therefore the user must set an upper limit to the disk size, to
+                prevent uncontrolled costs. Once that limit is reached, the disk
+                is no longer automatically resized, and if the task continues to
+                output files, it will fail.
             max_idle_time: Time without executing any task, after which the
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
@@ -70,14 +78,14 @@ class MachineGroup(machines_base.BaseMachineGroup):
             _check_ice_args(spot)
 
         super().__init__(
-            machine_type=machine_type,
             provider=provider,
-            threads_per_core=threads_per_core,
-            disk_config=disk_config,
+            register=register,
+            machine_type=machine_type,
             data_disk_gb=data_disk_gb,
             max_idle_time=max_idle_time,
+            threads_per_core=threads_per_core,
             auto_terminate_ts=auto_terminate_ts,
-            register=register,
+            auto_resize_disk_max_gb=auto_resize_disk_max_gb,
         )
 
         # Num_machines is the number of requested machines
@@ -172,7 +180,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         spot: bool = True,
         threads_per_core: int = 2,
         data_disk_gb: int = 10,
-        disk_config: DiskConfig = None,
+        auto_resize_disk_max_gb: Optional[int] = None,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
@@ -199,9 +207,18 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
             spot: Whether to use spot machines.
             threads_per_core: The number of threads per core (1 or 2).
             data_disk_gb: The size of the disk for user data (in GB).
-            disk_config: Disk configuration for the machine group. This config
-                includes disk size_gb and all the parameters needed for resizing
-                the disk. If provided will take precedence over data_disk_gb.
+            auto_resize_disk_max_gb: The maximum size in GB that the hard disk
+                of the cloud VM can reach. If set, the disk will be
+                automatically resized, during the execution of a task, when the
+                free space falls below a certain threshold. This mechanism helps
+                prevent "out of space" errors, that can occur when a task
+                generates a quantity of output files that exceeds the size of
+                the local storage. Increasing disk size during task execution
+                increases the cost of local storage associated with the VM,
+                therefore the user must set an upper limit to the disk size, to
+                prevent uncontrolled costs. Once that limit is reached, the disk
+                is no longer automatically resized, and if the task continues to
+                output files, it will fail.
             max_idle_time: Time without executing any task, after which the
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
@@ -217,12 +234,12 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
 
         super().__init__(
             register=register,
-            disk_config=disk_config,
             data_disk_gb=data_disk_gb,
             machine_type=machine_type,
             max_idle_time=max_idle_time,
             threads_per_core=threads_per_core,
             auto_terminate_ts=auto_terminate_ts,
+            auto_resize_disk_max_gb=auto_resize_disk_max_gb,
         )
 
         self.min_machines = min_machines

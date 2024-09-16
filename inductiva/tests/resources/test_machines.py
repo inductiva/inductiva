@@ -130,8 +130,7 @@ def fake_init_disk_resizable(self,
     self.machine_type = machine_type
     self.num_machines = num_machines
     self.provider = provider
-    self.disk_config = inductiva.resources.DiskConfig(max_size_gb=100,
-                                                      is_resizable=True)
+    self.auto_resize_disk_max_gb = 100
 
 
 def fake_init_disk_not_resizable(self,
@@ -144,18 +143,17 @@ def fake_init_disk_not_resizable(self,
     self.machine_type = machine_type
     self.num_machines = num_machines
     self.provider = provider
-    self.disk_config = inductiva.resources.DiskConfig(max_size_gb=100,
-                                                      is_resizable=False)
+    self.auto_resize_disk_max_gb = None
 
 
 @mock.patch.object(inductiva.resources.MachineGroup, "__init__",
                    fake_init_disk_resizable)
-def test_machines__machine_group__disk_config_to_dict__resizable():
+def test_machines__machine_group__dynamic_disk_resize_config__resizable():
     inductiva.set_api_key("dummy")
     machine = inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
                                                provider="GCP")
     #pylint: disable = protected-access
-    config = machine._disk_config_to_dict()
+    config = machine._dynamic_disk_resize_config()
 
     assert "free_space_threshold_gb" in config
     assert "size_increment_gb" in config
@@ -164,11 +162,11 @@ def test_machines__machine_group__disk_config_to_dict__resizable():
 
 @mock.patch.object(inductiva.resources.MachineGroup, "__init__",
                    fake_init_disk_not_resizable)
-def test_machines__machine_group__disk_config_to_dict__not_resizable():
+def test_machines__machine_group__dynamic_disk_resize_config__not_resizable():
     inductiva.set_api_key("dummy")
     machine = inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
                                                provider="GCP")
     #pylint: disable = protected-access
-    config = machine._disk_config_to_dict()
+    config = machine._dynamic_disk_resize_config()
 
     assert config is None
