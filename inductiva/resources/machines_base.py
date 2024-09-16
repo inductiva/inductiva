@@ -178,8 +178,8 @@ class BaseMachineGroup:
             return None
 
         return {
-            "free_space_threshold_gb": self.disk_config.resize_trigger_gb,
-            "size_increment_gb": self.disk_config.resize_increment_gb,
+            "free_space_threshold_gb": self.disk_config.free_space_threshold_gb,
+            "size_increment_gb": self.disk_config.size_increment_gb,
             "max_disk_size_gb": self.disk_config.max_size_gb,
         }
 

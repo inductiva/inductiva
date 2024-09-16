@@ -24,10 +24,10 @@ def test_disk_config_not_resizable():
                                                  is_resizable=False)
     assert disk_config.max_size_gb == 100
     assert not disk_config.is_resizable
-    assert isinstance(disk_config.resize_trigger_gb,
-                      int) and disk_config.resize_trigger_gb > 0
-    assert isinstance(disk_config.resize_increment_gb,
-                      int) and disk_config.resize_increment_gb > 0
+    assert isinstance(disk_config.free_space_threshold_gb,
+                      int) and disk_config.free_space_threshold_gb > 0
+    assert isinstance(disk_config.size_increment_gb,
+                      int) and disk_config.size_increment_gb > 0
 
 
 def test_disk_config_resizable():
@@ -35,7 +35,7 @@ def test_disk_config_resizable():
                                                  is_resizable=True)
     assert disk_config.max_size_gb == 100
     assert disk_config.is_resizable
-    assert isinstance(disk_config.resize_trigger_gb,
-                      int) and disk_config.resize_trigger_gb > 0
-    assert isinstance(disk_config.resize_increment_gb,
-                      int) and disk_config.resize_increment_gb > 0
+    assert isinstance(disk_config.free_space_threshold_gb,
+                      int) and disk_config.free_space_threshold_gb > 0
+    assert isinstance(disk_config.size_increment_gb,
+                      int) and disk_config.size_increment_gb > 0
