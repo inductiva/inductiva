@@ -131,6 +131,8 @@ def fake_init_disk_resizable(self,
     self.num_machines = num_machines
     self.provider = provider
     self.auto_resize_disk_max_gb = 100
+    self._free_space_threshold_gb = 5  # pylint: disable = protected-access
+    self._size_increment_gb = 10  # pylint: disable = protected-access
 
 
 def fake_init_disk_not_resizable(self,
@@ -144,6 +146,8 @@ def fake_init_disk_not_resizable(self,
     self.num_machines = num_machines
     self.provider = provider
     self.auto_resize_disk_max_gb = None
+    self._free_space_threshold_gb = 5  # pylint: disable = protected-access
+    self._size_increment_gb = 10  # pylint: disable = protected-access
 
 
 @mock.patch.object(inductiva.resources.MachineGroup, "__init__",
