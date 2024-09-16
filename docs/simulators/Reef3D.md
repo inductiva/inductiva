@@ -63,8 +63,7 @@ from Reef3D repository.
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
 machine_group.start()
 
 input_dir = inductiva.utils.download_from_url(
@@ -76,8 +75,9 @@ reef3d = inductiva.simulators.REEF3D()
 task = reef3d.run(input_dir=input_dir, on=machine_group)
 
 task.wait()
-
 task.download_outputs()
+
+machine_group.terminate()
 ```
 
 ## A slighly more advanced example
@@ -174,7 +174,7 @@ our machine to be equipped with a 20GB partition (just for data), using the
 
 Here is the final script:
 
-```python
+```python notest
 import inductiva
 
 
@@ -333,7 +333,7 @@ of 10:34).
 
 You can download the (zipped) data by creating a simple script such as this
 (again, please change to the corresponding task id):
-```python
+```python notest
 import inductiva
 
 # You can retreive a Task by ID

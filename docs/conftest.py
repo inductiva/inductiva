@@ -20,7 +20,7 @@ def input_dir():
 
 
 @pytest.fixture(scope="session")
-def machine_group():
+def machine_group_sample():
     mg = inductiva.resources.MachineGroup(
         "e2-micro",
         max_idle_time=datetime.timedelta(minutes=1),

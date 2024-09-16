@@ -30,8 +30,7 @@ In this example, we run a classical CFD case of a flow over a cylinder.
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
 machine_group.start()
 
 # Download the configuration files into a folder
@@ -56,6 +55,7 @@ task = dualsphysics.run(input_dir=input_dir,
 task.wait()
 task.download_outputs()
 
+machine_group.terminate()
 ```
 
 Below, we will demonstrate how to run a slightly more complex example included
@@ -197,7 +197,7 @@ output directories, so we will convert and keep these variables in our python
 script. Additionally, we’ll take this opportunity to explicitly add a few more
 output directories and make the style a bit more Pythonic. So, our Python script
 should look something like this: 
-```python
+```python notest
 # Let's keep the original variables for the directory names, but we will
 # make them more pythonic and we will add a few others for readibility
 name="CaseTurbine"
@@ -213,7 +213,7 @@ of the variables we just defined. We’ll also be able to call the DualSPHysics
 commands (such as `gencase`, `dualsphysics`, `partvtk`, etc.) directly, as they
 are all pre-installed on the machine we will spin up later.
 
-```python
+```python notest
 commands = [
     f"gencase {name}_Def {dirout}/{name} -save:all",
     f"dualsphysics {dirout}/{name} {dirout} -dirdataout data -svres",
@@ -228,7 +228,7 @@ commands = [
 The rest of the Python script follows the usual pattern. Here is the final
 resulting script, ready to be executed:
 
-```python
+```python notest
 import inductiva
 
 # Let's keep the original variables for the directory names, but we will

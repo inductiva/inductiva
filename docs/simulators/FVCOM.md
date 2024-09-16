@@ -28,8 +28,7 @@ the requested model:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
 machine_group.start()
 
 # Set simulation input directory
@@ -50,6 +49,7 @@ task = fvcom.run( input_dir=input_dir,
 task.wait()
 task.download_outputs()
 
+machine_group.terminate()
 ```
 
 ## Example
@@ -62,8 +62,7 @@ if the simulator is working correctly.
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
 machine_group.start()
 
 # Set simulation input directory
@@ -85,6 +84,7 @@ task = fvcom.run( input_dir=input_dir,
 task.wait()
 task.download_outputs()
 
+machine_group.terminate()
 ```
 
 **Closing Notes**: There is currently a bug affecting the timezone argument in
