@@ -24,6 +24,10 @@ with greater precision and accuracy.
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -39,11 +43,13 @@ openfast = inductiva.simulators.OpenFAST()
 
 # Run simulation 
 task = openfast.run(input_dir=input_dir,
-                    commands=commands)
+                    commands=commands,
+                    on=machine_group)
 
 task.wait()
 task.download_outputs()
 
+machine_group.terminate()
 ```
 
 ## Allowed Commands

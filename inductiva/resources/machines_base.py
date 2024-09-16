@@ -1,11 +1,12 @@
 """Base class for machine groups."""
 from collections import defaultdict, namedtuple
+from typing import Optional, Union
+from abc import abstractmethod
+from abc import ABC
+import datetime
 import time
 import enum
 import json
-from typing import Optional, Union
-from abc import abstractmethod
-import datetime
 
 import logging
 
@@ -27,7 +28,7 @@ class ResourceType(enum.Enum):
     MPI = "mpi"
 
 
-class BaseMachineGroup:
+class BaseMachineGroup(ABC):
     """Base class to manage Google Cloud resources."""
 
     def __init__(
