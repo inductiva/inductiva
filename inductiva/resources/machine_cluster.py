@@ -86,8 +86,8 @@ class MPICluster(machines_base.BaseMachineGroup):
         return int(self.quota_usage["max_vcpus"])
 
     @classmethod
-    def from_api_response(cls, resp: dict, **kwargs):
-        machine_group = super().from_api_response(resp, **kwargs)
+    def from_api_response(cls, resp: dict):
+        machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["max_vms"])
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
         machine_group.register = False
