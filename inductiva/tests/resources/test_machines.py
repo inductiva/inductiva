@@ -154,9 +154,8 @@ def test_machines__machine_group__disk_config_to_dict__resizable():
     inductiva.set_api_key("dummy")
     machine = inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
                                                provider="GCP")
-
-    config = machine._disk_config_to_dict(
-    )  # pylint: disable = protected-access
+    #pylint: disable = protected-access
+    config = machine._disk_config_to_dict()
 
     assert "free_space_threshold_gb" in config
     assert "size_increment_gb" in config
@@ -169,8 +168,7 @@ def test_machines__machine_group__disk_config_to_dict__not_resizable():
     inductiva.set_api_key("dummy")
     machine = inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
                                                provider="GCP")
-
-    config = machine._disk_config_to_dict(
-    )  # pylint: disable = protected-access
+    #pylint: disable = protected-access
+    config = machine._disk_config_to_dict()
 
     assert config is None
