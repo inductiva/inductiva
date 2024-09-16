@@ -18,6 +18,10 @@ the number of cores available in the machine.
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Download example configuration files from Inductiva storage
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -29,10 +33,13 @@ xbeach = inductiva.simulators.XBeach()
 # Run simulation with configuration files in the input directory
 task = xbeach.run(
     input_dir=input_dir,
-    sim_config_filename="params.txt")
+    sim_config_filename="params.txt",
+    on=machine_group)
 
 task.wait()
 task.download_outputs()
+
+machine_group.terminate()
 ```
 
 ## A more advanced example
@@ -96,7 +103,7 @@ value to `34560`.
 That's it! We won't do any more changes. Let's start the simulation. The python
 script we are going to use to trigger the simulation is:
 
-```python
+```python notest
 import inductiva
 
 machine_group = inductiva.resources.MachineGroup(
