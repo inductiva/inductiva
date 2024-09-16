@@ -51,7 +51,7 @@ def get_by_name(machine_name: str):
         api = compute_api.ComputeApi(inductiva.api.get_client())
         response = api.get_vm_group_by_name({"name": machine_name}).body
         mg_class = _get_machine_group_class(response["type"],
-                                                    response["is_elastic"])
+                                            response["is_elastic"])
         return mg_class.from_api_response(response)
     except inductiva.client.ApiException as api_exception:
         raise api_exception
@@ -78,8 +78,7 @@ def get():
     machine_group_list = []
 
     for mg in machine_groups:
-        mg_class = _get_machine_group_class(mg["type"],
-                                                    mg["is_elastic"])
+        mg_class = _get_machine_group_class(mg["type"], mg["is_elastic"])
         machine_group_list.append(mg_class.from_api_response(mg))
 
     return machine_group_list
