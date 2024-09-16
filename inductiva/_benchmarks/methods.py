@@ -22,8 +22,6 @@ from inductiva import users
 
 from ..localization import translator as __
 
-QUOTAS_EXCEEDED_SLEEP_TIME = 60
-
 
 def _analyze_task(task: Task, report: Dict[str, Any], skipped_tasks: List[Task],
                   metadata_tasks: Dict[str, Any]):

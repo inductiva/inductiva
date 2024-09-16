@@ -31,7 +31,7 @@ class ResourceType(enum.Enum):
 class BaseMachineGroup(ABC):
     """Base class to manage Google Cloud resources."""
 
-    QUOTAS_EXCEEDED_SLEEP_TIME = 60
+    QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
 
     def __init__(
         self,
@@ -316,7 +316,7 @@ class BaseMachineGroup(ABC):
                 if first_time:
                     print("This machine will exceed the current quotas.\n"
                           "Going wait for quotas to become available.")
-                time.sleep(self.QUOTAS_EXCEEDED_SLEEP_TIME)
+                time.sleep(self.QUOTAS_EXCEEDED_SLEEP_SECONDS)
 
         self._api.start_vm_group(body=request_body)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
