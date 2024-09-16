@@ -42,14 +42,14 @@ def remove(args):
     if not confirm:
         return 0
 
-    failed_ids = []
+    failed = False
     for task_id in task_ids:
         if not inductiva.tasks.Task(task_id).remove_remote_files(verbose=False):
             print(f"Failed to remove the following task storage: {task_id}\n",
                   file=sys.stderr)
-            failed_ids.append(task_id)
+            failed = True
 
-    if failed_ids:
+    if failed:
         return 1
 
     print("All tasks storage removed successfully.")
