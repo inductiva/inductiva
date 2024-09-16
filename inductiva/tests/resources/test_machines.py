@@ -118,3 +118,59 @@ def test_machines__machine_group__invalid_threads_per_core():
                                          threads_per_core=4)
 
     assert "`threads_per_core` must be either 1 or 2." in str(exception.value)
+
+
+def fake_init_disk_resizable(self,
+                             machine_type: str,
+                             num_machines=1,
+                             provider="GCP"):
+    self._id = "id-resource"  # pylint: disable = protected-access
+    self._name = "name-resource"  # pylint: disable = protected-access
+    self.register = False
+    self.machine_type = machine_type
+    self.num_machines = num_machines
+    self.provider = provider
+    self.disk_config = inductiva.resources.DiskConfig(max_size_gb=100,
+                                                      is_resizable=True)
+
+
+def fake_init_disk_not_resizable(self,
+                                 machine_type: str,
+                                 num_machines=1,
+                                 provider="GCP"):
+    self._id = "id-resource"  # pylint: disable = protected-access
+    self._name = "name-resource"  # pylint: disable = protected-access
+    self.register = False
+    self.machine_type = machine_type
+    self.num_machines = num_machines
+    self.provider = provider
+    self.disk_config = inductiva.resources.DiskConfig(max_size_gb=100,
+                                                      is_resizable=False)
+
+
+@mock.patch.object(inductiva.resources.MachineGroup, "__init__",
+                   fake_init_disk_resizable)
+def test_machines__machine_group__disk_config_to_dict__resizable():
+    inductiva.set_api_key("dummy")
+    machine = inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
+                                               provider="GCP")
+
+    config = machine._disk_config_to_dict(
+    )  # pylint: disable = protected-access
+
+    assert "free_space_threshold_gb" in config
+    assert "size_increment_gb" in config
+    assert "max_disk_size_gb" in config
+
+
+@mock.patch.object(inductiva.resources.MachineGroup, "__init__",
+                   fake_init_disk_not_resizable)
+def test_machines__machine_group__disk_config_to_dict__not_resizable():
+    inductiva.set_api_key("dummy")
+    machine = inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
+                                               provider="GCP")
+
+    config = machine._disk_config_to_dict(
+    )  # pylint: disable = protected-access
+
+    assert config is None

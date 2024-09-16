@@ -49,11 +49,11 @@ class BaseMachineGroup:
               Check https://cloud.google.com/compute/docs/machine-resource for
               more information about machine types.
             provider: The cloud provider of the machine group.
-            data_disk_gb: The size of the disk for user data (in GB).
             threads_per_core: The number of threads per core (1 or 2).
+            data_disk_gb: The size of the disk for user data (in GB).
             disk_config: Disk configuration for the machine group. This config
-                includes disk size_gb and all the parameters needed for resizing
-                the disk. If provided will take precedence over data_disk_gb.
+                includes disk max_size_gb and a flag to determine if the disk is
+                resizable.
             max_idle_time: Time without executing any task, after which the
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
@@ -70,17 +70,18 @@ class BaseMachineGroup:
         provider = machine_types.ProviderType(provider)
         self.provider = provider.value
 
+        if disk_config and data_disk_gb:
+            raise ValueError(
+                "You cannot provide both `disk_config` and `data_disk_gb`.")
+
+        if disk_config is not None and not isinstance(disk_config, DiskConfig):
+            raise ValueError("`disk_config` must be an instance of DiskConfig.")
+
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
 
         if threads_per_core not in [1, 2]:
             raise ValueError("`threads_per_core` must be either 1 or 2.")
-
-        if disk_config is not None and not isinstance(disk_config, DiskConfig):
-            raise ValueError("`disk_config` must be an instance of DiskConfig.")
-
-        if disk_config is not None:
-            data_disk_gb = disk_config.max_size_gb
 
         self.machine_type = machine_type
         self.provider = provider.value
@@ -172,6 +173,16 @@ class BaseMachineGroup:
 
         return None
 
+    def _disk_config_to_dict(self):
+        if self.disk_config is None or not self.disk_config.is_resizable:
+            return None
+
+        return {
+            "free_space_threshold_gb": self.disk_config.resize_trigger_gb,
+            "size_increment_gb": self.disk_config.resize_increment_gb,
+            "max_disk_size_gb": self.disk_config.max_size_gb,
+        }
+
     @staticmethod
     def _iso_to_datetime(
             timestamp: Optional[str]) -> Optional[datetime.datetime]:
@@ -198,8 +209,7 @@ class BaseMachineGroup:
             max_idle_time=self._timedelta_to_seconds(self.max_idle_time),
             auto_terminate_ts=self._convert_auto_terminate_ts(
                 self.auto_terminate_ts),
-            dynamic_disk_resize_config=self.disk_config.resize_config \
-                                       if self.disk_config else None,
+            dynamic_disk_resize_config=self._disk_config_to_dict(),
             **kwargs,
         )
 

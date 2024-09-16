@@ -24,6 +24,7 @@ class DiskConfig:
             beyond this limit.
     """
     max_size_gb: int
+    is_resizable: bool = True
 
     # resize_trigger_gb (int): Free space threshold (in GB) to trigger
     #     resizing. Example: If set to 5GB, the disk will resize when 5GB of
@@ -33,16 +34,9 @@ class DiskConfig:
     # resize_increment_gb (int): Amount (in GB) to increase the disk size
     #     during each resize.
     resize_increment_gb: int = field(default=10, init=False)
-    is_resizable: bool = True
 
-    @property
-    def resize_config(self):
-        """Return the disk resize configuration as a dictionary.
-        If the disk is not resizable, it will return None."""
-        if not self.is_resizable:
-            return None
-        return {
-            "free_space_threshold_gb": self.resize_trigger_gb,
-            "size_increment_gb": self.resize_increment_gb,
-            "max_disk_size_gb": self.max_size_gb,
-        }
+    def __post_init__(self):
+        if not isinstance(self.max_size_gb, int) or self.max_size_gb < 1:
+            raise ValueError("`max_size_gb` must be a positive integer.")
+        if not isinstance(self.is_resizable, bool):
+            raise ValueError("`is_resizable` must be a boolean.")
