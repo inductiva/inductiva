@@ -77,6 +77,8 @@ class BaseMachineGroup:
 
         provider = machine_types.ProviderType(provider)
         self.provider = provider.value
+        self._free_space_threshold_gb = 5
+        self._size_increment_gb = 10
 
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
@@ -87,9 +89,10 @@ class BaseMachineGroup:
                 raise ValueError(
                     "`auto_resize_disk_max_gb` must be a positive integer.")
 
-            if auto_resize_disk_max_gb < data_disk_gb:
+            if auto_resize_disk_max_gb < data_disk_gb + self._size_increment_gb:
                 raise ValueError("`auto_resize_disk_max_gb` must be greater "
-                                 "than or equal to `data_disk_gb`.")
+                                 "than or equal to `data_disk_gb + "
+                                 f"{self._size_increment_gb}GB`.")
 
         if threads_per_core not in [1, 2]:
             raise ValueError("`threads_per_core` must be either 1 or 2.")
@@ -99,8 +102,6 @@ class BaseMachineGroup:
         self.threads_per_core = threads_per_core
         self.data_disk_gb = data_disk_gb
         self.auto_resize_disk_max_gb = auto_resize_disk_max_gb
-        self._free_space_threshold_gb = 5
-        self._size_increment_gb = 10
         self._id = None
         self._name = None
         self.create_time = None
