@@ -18,7 +18,7 @@ class CustomImage(simulators.Simulator):
         self.container_image = container_image
         super().__init__()
 
-        self.api_method_name = "arbitrary_commands"
+        self.api_method_name = "arbitrary.arbitrary_commands.run_simulation"
 
     def _get_image_uri(self):
         return self.container_image
