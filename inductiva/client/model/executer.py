@@ -49,7 +49,7 @@ class Executer(schemas.DictSchema):
             vm_type = schemas.StrSchema
             host_type = schemas.StrSchema
 
-            class host_name(
+            class vm_name(
                     schemas.ComposedSchema,):
 
                 class MetaOapg:
@@ -98,7 +98,7 @@ class Executer(schemas.DictSchema):
                                            datetime, uuid.UUID, int, float,
                                            decimal.Decimal, None, list, tuple,
                                            bytes],
-                ) -> 'host_name':
+                ) -> 'vm_name':
                     return super().__new__(
                         cls,
                         *_args,
@@ -171,7 +171,7 @@ class Executer(schemas.DictSchema):
                 "n_mpi_hosts": n_mpi_hosts,
                 "vm_type": vm_type,
                 "host_type": host_type,
-                "host_name": host_name,
+                "vm_name": vm_name,
                 "error_detail": error_detail,
             }
 
@@ -227,8 +227,8 @@ class Executer(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["host_name"]
-    ) -> MetaOapg.properties.host_name:
+        self, name: typing_extensions.Literal["vm_name"]
+    ) -> MetaOapg.properties.vm_name:
         ...
 
     @typing.overload
@@ -249,7 +249,7 @@ class Executer(schemas.DictSchema):
         "n_mpi_hosts",
         "vm_type",
         "host_type",
-        "host_name",
+        "vm_name",
         "error_detail",
     ], str]):
         # dict_instance[name] accessor
@@ -299,8 +299,8 @@ class Executer(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["host_name"]
-    ) -> typing.Union[MetaOapg.properties.host_name, schemas.Unset]:
+        self, name: typing_extensions.Literal["vm_name"]
+    ) -> typing.Union[MetaOapg.properties.vm_name, schemas.Unset]:
         ...
 
     @typing.overload
@@ -323,7 +323,7 @@ class Executer(schemas.DictSchema):
         "n_mpi_hosts",
         "vm_type",
         "host_type",
-        "host_name",
+        "vm_name",
         "error_detail",
     ], str]):
         return super().get_item_oapg(name)
@@ -366,12 +366,11 @@ class Executer(schemas.DictSchema):
             MetaOapg.properties.host_type,
             str,
         ],
-        host_name: typing.Union[MetaOapg.properties.host_name, dict,
-                                frozendict.frozendict, str, date, datetime,
-                                uuid.UUID, int, float, decimal.Decimal, bool,
-                                None, list, tuple, bytes, io.FileIO,
-                                io.BufferedReader,
-                                schemas.Unset] = schemas.unset,
+        vm_name: typing.Union[MetaOapg.properties.vm_name, dict,
+                              frozendict.frozendict, str, date, datetime,
+                              uuid.UUID, int, float, decimal.Decimal, bool,
+                              None, list, tuple, bytes, io.FileIO,
+                              io.BufferedReader, schemas.Unset] = schemas.unset,
         error_detail: typing.Union[MetaOapg.properties.error_detail, dict,
                                    frozendict.frozendict, str, date, datetime,
                                    uuid.UUID, int, float, decimal.Decimal, bool,
@@ -394,7 +393,7 @@ class Executer(schemas.DictSchema):
             cpu_count_physical=cpu_count_physical,
             uuid=uuid,
             host_type=host_type,
-            host_name=host_name,
+            vm_name=vm_name,
             error_detail=error_detail,
             _configuration=_configuration,
             **kwargs,
