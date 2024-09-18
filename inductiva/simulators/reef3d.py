@@ -20,7 +20,7 @@ class REEF3D(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "reef3d.reef3d.run_simulation"
+        self.api_method_name = "reef3d"
 
     def run(self,
             input_dir: str,

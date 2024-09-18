@@ -18,7 +18,7 @@ class SIMSOPT(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "stellarators.simsopt.run_simulation"
+        self.api_method_name = "simsopt"
 
     def _get_image_uri(self):
         return None

@@ -96,22 +96,6 @@ class Simulator(ABC):
         """Get the supported computational resources for this simulator."""
         return tuple(cls._supported_resources)
 
-    def override_api_method_prefix(self, prefix: str):
-        """Override the API method prefix.
-
-        Example:
-            # prefix = "protein_solvation"
-            "md.gromacs.run_simulation" becomes
-              "protein_solvation.gromacs.run_simulation"
-
-        Args:
-            prefix: The new prefix to use.
-        """
-        last_elements = self.api_method_name.split(".")[1:]
-        all_elements = [prefix] + last_elements
-
-        self.api_method_name = ".".join(all_elements)
-
     def _setup_input_dir(self, input_dir: str):
         """Setup the simulator input directory."""
         input_dir_path = pathlib.Path(input_dir)

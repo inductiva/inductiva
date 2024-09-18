@@ -719,7 +719,7 @@ class Task:
 
     def get_simulator_name(self) -> str:
         # e.g. retrieve openfoam from fvm.openfoam.run_simulation
-        return self.info.method_name.split(".")[1]
+        return self.info.method_name
 
     def get_storage_path(self) -> str:
         return self.info.storage_path

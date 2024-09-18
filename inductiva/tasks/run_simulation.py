@@ -72,7 +72,7 @@ def run_simulation(
             machine_group_id = computational_resources.id
 
         metadata = {
-            "api_method_name": api_method_name.split(".")[1],
+            "api_method_name": api_method_name,
             "machine_group_id": machine_group_id,
             "storage_dir": storage_dir,
             **kwargs,

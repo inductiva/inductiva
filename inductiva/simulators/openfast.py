@@ -20,7 +20,7 @@ class OpenFAST(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "openfast.openfast.run_simulation"
+        self.api_method_name = "openfast"
 
     def run(self,
             input_dir: str,

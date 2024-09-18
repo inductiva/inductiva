@@ -40,7 +40,7 @@ class OpenFOAM(simulators.Simulator):
 
         self._distribution = distribution
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = f"fvm.openfoam_{distribution}.run_simulation"
+        self.api_method_name = f"openfoam_{distribution}"
 
     @property
     def name(self):
