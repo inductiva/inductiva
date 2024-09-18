@@ -37,6 +37,7 @@ class BaseMachineGroup(ABC):
         provider: Union[machine_types.ProviderType, str] = "GCP",
         threads_per_core: int = 2,
         data_disk_gb: int = 10,
+        auto_resize_disk_max_gb: Optional[int] = None,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
@@ -48,8 +49,20 @@ class BaseMachineGroup(ABC):
               Check https://cloud.google.com/compute/docs/machine-resource for
               more information about machine types.
             provider: The cloud provider of the machine group.
-            data_disk_gb: The size of the disk for user data (in GB).
             threads_per_core: The number of threads per core (1 or 2).
+            data_disk_gb: The size of the disk for user data (in GB).
+            auto_resize_disk_max_gb: The maximum size in GB that the hard disk
+                of the cloud VM can reach. If set, the disk will be
+                automatically resized, during the execution of a task, when the
+                free space falls below a certain threshold. This mechanism helps
+                prevent "out of space" errors, that can occur when a task
+                generates a quantity of output files that exceeds the size of
+                the local storage. Increasing disk size during task execution
+                increases the cost of local storage associated with the VM,
+                therefore the user must set an upper limit to the disk size, to
+                prevent uncontrolled costs. Once that limit is reached, the disk
+                is no longer automatically resized, and if the task continues to
+                output files, it will fail.
             max_idle_time: Time without executing any task, after which the
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
@@ -65,9 +78,22 @@ class BaseMachineGroup(ABC):
 
         provider = machine_types.ProviderType(provider)
         self.provider = provider.value
+        self._free_space_threshold_gb = 5
+        self._size_increment_gb = 10
 
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
+
+        if auto_resize_disk_max_gb is not None:
+            if not isinstance(auto_resize_disk_max_gb,
+                              int) or auto_resize_disk_max_gb <= 0:
+                raise ValueError(
+                    "`auto_resize_disk_max_gb` must be a positive integer.")
+
+            if auto_resize_disk_max_gb < data_disk_gb + self._size_increment_gb:
+                raise ValueError("`auto_resize_disk_max_gb` must be greater "
+                                 "than or equal to `data_disk_gb + "
+                                 f"{self._size_increment_gb}GB`.")
 
         if threads_per_core not in [1, 2]:
             raise ValueError("`threads_per_core` must be either 1 or 2.")
@@ -76,6 +102,7 @@ class BaseMachineGroup(ABC):
         self.provider = provider.value
         self.threads_per_core = threads_per_core
         self.data_disk_gb = data_disk_gb
+        self.auto_resize_disk_max_gb = auto_resize_disk_max_gb
         self._id = None
         self._name = None
         self.create_time = None
@@ -161,6 +188,16 @@ class BaseMachineGroup(ABC):
 
         return None
 
+    def _dynamic_disk_resize_config(self):
+        if self.auto_resize_disk_max_gb is None:
+            return None
+
+        return {
+            "free_space_threshold_gb": self._free_space_threshold_gb,
+            "size_increment_gb": self._size_increment_gb,
+            "max_disk_size_gb": self.auto_resize_disk_max_gb
+        }
+
     @staticmethod
     def _iso_to_datetime(
             timestamp: Optional[str]) -> Optional[datetime.datetime]:
@@ -187,6 +224,7 @@ class BaseMachineGroup(ABC):
             max_idle_time=self._timedelta_to_seconds(self.max_idle_time),
             auto_terminate_ts=self._convert_auto_terminate_ts(
                 self.auto_terminate_ts),
+            dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
             **kwargs,
         )
 
