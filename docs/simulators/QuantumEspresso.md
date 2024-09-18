@@ -12,10 +12,15 @@ characteristics. Researchers value it for its flexibility, scalability on
 high-performance computing platforms, and its role in advancing quantum
 simulations and computational materials science.
 
-We compiled two versions of Quantum ESPRESSO, one for MPI and one for OpenMP.
-To use the MPI version just call the commands with the normal name (e.g. `pw.x`),
-to use the OpenMP version call the commands with the `_openmp` suffix
-(e.g. `pw_openmp.x`).
+
+We have compiled two versions of Quantum ESPRESSO: one for MPI and the
+other for OpenMP. To run the MPI version, simply use the standard command names
+(e.g., `pw.x`). For the OpenMP version, append `_openmp` to the command names
+(e.g., `pw_openmp.x`). This allows users to choose the most suitable version
+based on their needs.
+
+All available commands are listed in the [table below](#list-of-allowed-commands). 
+
 ## Example
 
 ```python
