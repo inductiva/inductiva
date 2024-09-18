@@ -32,9 +32,7 @@ class UserMostUsedSimulatorsOverview(schemas.DictSchema):
     class MetaOapg:
         required = {
             "num_tasks",
-            "dedicated_resource_tasks",
             "simulator",
-            "shared_resource_tasks",
             "tasks_simulator_cost",
             "success_rate_percentage",
         }
@@ -42,23 +40,17 @@ class UserMostUsedSimulatorsOverview(schemas.DictSchema):
         class properties:
             simulator = schemas.StrSchema
             num_tasks = schemas.IntSchema
-            shared_resource_tasks = schemas.IntSchema
-            dedicated_resource_tasks = schemas.IntSchema
             tasks_simulator_cost = schemas.NumberSchema
             success_rate_percentage = schemas.NumberSchema
             __annotations__ = {
                 "simulator": simulator,
                 "num_tasks": num_tasks,
-                "shared_resource_tasks": shared_resource_tasks,
-                "dedicated_resource_tasks": dedicated_resource_tasks,
                 "tasks_simulator_cost": tasks_simulator_cost,
                 "success_rate_percentage": success_rate_percentage,
             }
 
     num_tasks: MetaOapg.properties.num_tasks
-    dedicated_resource_tasks: MetaOapg.properties.dedicated_resource_tasks
     simulator: MetaOapg.properties.simulator
-    shared_resource_tasks: MetaOapg.properties.shared_resource_tasks
     tasks_simulator_cost: MetaOapg.properties.tasks_simulator_cost
     success_rate_percentage: MetaOapg.properties.success_rate_percentage
 
@@ -72,18 +64,6 @@ class UserMostUsedSimulatorsOverview(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["num_tasks"]
     ) -> MetaOapg.properties.num_tasks:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["shared_resource_tasks"]
-    ) -> MetaOapg.properties.shared_resource_tasks:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["dedicated_resource_tasks"]
-    ) -> MetaOapg.properties.dedicated_resource_tasks:
         ...
 
     @typing.overload
@@ -105,8 +85,6 @@ class UserMostUsedSimulatorsOverview(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "simulator",
         "num_tasks",
-        "shared_resource_tasks",
-        "dedicated_resource_tasks",
         "tasks_simulator_cost",
         "success_rate_percentage",
     ], str]):
@@ -123,18 +101,6 @@ class UserMostUsedSimulatorsOverview(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["num_tasks"]
     ) -> MetaOapg.properties.num_tasks:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["shared_resource_tasks"]
-    ) -> MetaOapg.properties.shared_resource_tasks:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["dedicated_resource_tasks"]
-    ) -> MetaOapg.properties.dedicated_resource_tasks:
         ...
 
     @typing.overload
@@ -158,8 +124,6 @@ class UserMostUsedSimulatorsOverview(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "simulator",
         "num_tasks",
-        "shared_resource_tasks",
-        "dedicated_resource_tasks",
         "tasks_simulator_cost",
         "success_rate_percentage",
     ], str]):
@@ -176,19 +140,9 @@ class UserMostUsedSimulatorsOverview(schemas.DictSchema):
             decimal.Decimal,
             int,
         ],
-        dedicated_resource_tasks: typing.Union[
-            MetaOapg.properties.dedicated_resource_tasks,
-            decimal.Decimal,
-            int,
-        ],
         simulator: typing.Union[
             MetaOapg.properties.simulator,
             str,
-        ],
-        shared_resource_tasks: typing.Union[
-            MetaOapg.properties.shared_resource_tasks,
-            decimal.Decimal,
-            int,
         ],
         tasks_simulator_cost: typing.Union[
             MetaOapg.properties.tasks_simulator_cost,
@@ -212,9 +166,7 @@ class UserMostUsedSimulatorsOverview(schemas.DictSchema):
             cls,
             *_args,
             num_tasks=num_tasks,
-            dedicated_resource_tasks=dedicated_resource_tasks,
             simulator=simulator,
-            shared_resource_tasks=shared_resource_tasks,
             tasks_simulator_cost=tasks_simulator_cost,
             success_rate_percentage=success_rate_percentage,
             _configuration=_configuration,

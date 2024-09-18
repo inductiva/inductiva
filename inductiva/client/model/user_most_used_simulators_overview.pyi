@@ -36,9 +36,7 @@ class UserMostUsedSimulatorsOverview(
     class MetaOapg:
         required = {
             "num_tasks",
-            "dedicated_resource_tasks",
             "simulator",
-            "shared_resource_tasks",
             "tasks_simulator_cost",
             "success_rate_percentage",
         }
@@ -46,23 +44,17 @@ class UserMostUsedSimulatorsOverview(
         class properties:
             simulator = schemas.StrSchema
             num_tasks = schemas.IntSchema
-            shared_resource_tasks = schemas.IntSchema
-            dedicated_resource_tasks = schemas.IntSchema
             tasks_simulator_cost = schemas.NumberSchema
             success_rate_percentage = schemas.NumberSchema
             __annotations__ = {
                 "simulator": simulator,
                 "num_tasks": num_tasks,
-                "shared_resource_tasks": shared_resource_tasks,
-                "dedicated_resource_tasks": dedicated_resource_tasks,
                 "tasks_simulator_cost": tasks_simulator_cost,
                 "success_rate_percentage": success_rate_percentage,
             }
     
     num_tasks: MetaOapg.properties.num_tasks
-    dedicated_resource_tasks: MetaOapg.properties.dedicated_resource_tasks
     simulator: MetaOapg.properties.simulator
-    shared_resource_tasks: MetaOapg.properties.shared_resource_tasks
     tasks_simulator_cost: MetaOapg.properties.tasks_simulator_cost
     success_rate_percentage: MetaOapg.properties.success_rate_percentage
     
@@ -73,12 +65,6 @@ class UserMostUsedSimulatorsOverview(
     def __getitem__(self, name: typing_extensions.Literal["num_tasks"]) -> MetaOapg.properties.num_tasks: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["shared_resource_tasks"]) -> MetaOapg.properties.shared_resource_tasks: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["dedicated_resource_tasks"]) -> MetaOapg.properties.dedicated_resource_tasks: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["tasks_simulator_cost"]) -> MetaOapg.properties.tasks_simulator_cost: ...
     
     @typing.overload
@@ -87,7 +73,7 @@ class UserMostUsedSimulatorsOverview(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["simulator", "num_tasks", "shared_resource_tasks", "dedicated_resource_tasks", "tasks_simulator_cost", "success_rate_percentage", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["simulator", "num_tasks", "tasks_simulator_cost", "success_rate_percentage", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -99,12 +85,6 @@ class UserMostUsedSimulatorsOverview(
     def get_item_oapg(self, name: typing_extensions.Literal["num_tasks"]) -> MetaOapg.properties.num_tasks: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["shared_resource_tasks"]) -> MetaOapg.properties.shared_resource_tasks: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["dedicated_resource_tasks"]) -> MetaOapg.properties.dedicated_resource_tasks: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["tasks_simulator_cost"]) -> MetaOapg.properties.tasks_simulator_cost: ...
     
     @typing.overload
@@ -113,7 +93,7 @@ class UserMostUsedSimulatorsOverview(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["simulator", "num_tasks", "shared_resource_tasks", "dedicated_resource_tasks", "tasks_simulator_cost", "success_rate_percentage", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["simulator", "num_tasks", "tasks_simulator_cost", "success_rate_percentage", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -121,9 +101,7 @@ class UserMostUsedSimulatorsOverview(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         num_tasks: typing.Union[MetaOapg.properties.num_tasks, decimal.Decimal, int, ],
-        dedicated_resource_tasks: typing.Union[MetaOapg.properties.dedicated_resource_tasks, decimal.Decimal, int, ],
         simulator: typing.Union[MetaOapg.properties.simulator, str, ],
-        shared_resource_tasks: typing.Union[MetaOapg.properties.shared_resource_tasks, decimal.Decimal, int, ],
         tasks_simulator_cost: typing.Union[MetaOapg.properties.tasks_simulator_cost, decimal.Decimal, int, float, ],
         success_rate_percentage: typing.Union[MetaOapg.properties.success_rate_percentage, decimal.Decimal, int, float, ],
         _configuration: typing.Optional[schemas.Configuration] = None,
@@ -133,9 +111,7 @@ class UserMostUsedSimulatorsOverview(
             cls,
             *_args,
             num_tasks=num_tasks,
-            dedicated_resource_tasks=dedicated_resource_tasks,
             simulator=simulator,
-            shared_resource_tasks=shared_resource_tasks,
             tasks_simulator_cost=tasks_simulator_cost,
             success_rate_percentage=success_rate_percentage,
             _configuration=_configuration,
