@@ -37,13 +37,13 @@ class ExecuterTrackerRegisterInfo(
 
     class MetaOapg:
         required = {
-            "vm_id",
             "memory",
             "create_time",
             "cpu_count_logical",
             "cpu_count_physical",
+            "host_id",
+            "host_name",
             "machine_group_id",
-            "vm_name",
         }
         
         class properties:
@@ -52,8 +52,8 @@ class ExecuterTrackerRegisterInfo(
             cpu_count_logical = schemas.IntSchema
             cpu_count_physical = schemas.IntSchema
             memory = schemas.IntSchema
-            vm_name = schemas.StrSchema
-            vm_id = schemas.StrSchema
+            host_name = schemas.StrSchema
+            host_id = schemas.StrSchema
             mpi_cluster = schemas.BoolSchema
             __annotations__ = {
                 "machine_group_id": machine_group_id,
@@ -61,18 +61,18 @@ class ExecuterTrackerRegisterInfo(
                 "cpu_count_logical": cpu_count_logical,
                 "cpu_count_physical": cpu_count_physical,
                 "memory": memory,
-                "vm_name": vm_name,
-                "vm_id": vm_id,
+                "host_name": host_name,
+                "host_id": host_id,
                 "mpi_cluster": mpi_cluster,
             }
     
-    vm_id: MetaOapg.properties.vm_id
     memory: MetaOapg.properties.memory
     create_time: MetaOapg.properties.create_time
     cpu_count_logical: MetaOapg.properties.cpu_count_logical
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
+    host_id: MetaOapg.properties.host_id
+    host_name: MetaOapg.properties.host_name
     machine_group_id: MetaOapg.properties.machine_group_id
-    vm_name: MetaOapg.properties.vm_name
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["machine_group_id"]) -> MetaOapg.properties.machine_group_id: ...
@@ -90,10 +90,10 @@ class ExecuterTrackerRegisterInfo(
     def __getitem__(self, name: typing_extensions.Literal["memory"]) -> MetaOapg.properties.memory: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["vm_name"]) -> MetaOapg.properties.vm_name: ...
+    def __getitem__(self, name: typing_extensions.Literal["host_name"]) -> MetaOapg.properties.host_name: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["vm_id"]) -> MetaOapg.properties.vm_id: ...
+    def __getitem__(self, name: typing_extensions.Literal["host_id"]) -> MetaOapg.properties.host_id: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["mpi_cluster"]) -> MetaOapg.properties.mpi_cluster: ...
@@ -101,7 +101,7 @@ class ExecuterTrackerRegisterInfo(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["machine_group_id", "create_time", "cpu_count_logical", "cpu_count_physical", "memory", "vm_name", "vm_id", "mpi_cluster", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["machine_group_id", "create_time", "cpu_count_logical", "cpu_count_physical", "memory", "host_name", "host_id", "mpi_cluster", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -122,10 +122,10 @@ class ExecuterTrackerRegisterInfo(
     def get_item_oapg(self, name: typing_extensions.Literal["memory"]) -> MetaOapg.properties.memory: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["vm_name"]) -> MetaOapg.properties.vm_name: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["host_name"]) -> MetaOapg.properties.host_name: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["vm_id"]) -> MetaOapg.properties.vm_id: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["host_id"]) -> MetaOapg.properties.host_id: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["mpi_cluster"]) -> typing.Union[MetaOapg.properties.mpi_cluster, schemas.Unset]: ...
@@ -133,20 +133,20 @@ class ExecuterTrackerRegisterInfo(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["machine_group_id", "create_time", "cpu_count_logical", "cpu_count_physical", "memory", "vm_name", "vm_id", "mpi_cluster", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["machine_group_id", "create_time", "cpu_count_logical", "cpu_count_physical", "memory", "host_name", "host_id", "mpi_cluster", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        vm_id: typing.Union[MetaOapg.properties.vm_id, str, ],
         memory: typing.Union[MetaOapg.properties.memory, decimal.Decimal, int, ],
         create_time: typing.Union[MetaOapg.properties.create_time, str, datetime, ],
         cpu_count_logical: typing.Union[MetaOapg.properties.cpu_count_logical, decimal.Decimal, int, ],
         cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical, decimal.Decimal, int, ],
+        host_id: typing.Union[MetaOapg.properties.host_id, str, ],
+        host_name: typing.Union[MetaOapg.properties.host_name, str, ],
         machine_group_id: typing.Union[MetaOapg.properties.machine_group_id, str, uuid.UUID, ],
-        vm_name: typing.Union[MetaOapg.properties.vm_name, str, ],
         mpi_cluster: typing.Union[MetaOapg.properties.mpi_cluster, bool, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -154,13 +154,13 @@ class ExecuterTrackerRegisterInfo(
         return super().__new__(
             cls,
             *_args,
-            vm_id=vm_id,
             memory=memory,
             create_time=create_time,
             cpu_count_logical=cpu_count_logical,
             cpu_count_physical=cpu_count_physical,
+            host_id=host_id,
+            host_name=host_name,
             machine_group_id=machine_group_id,
-            vm_name=vm_name,
             mpi_cluster=mpi_cluster,
             _configuration=_configuration,
             **kwargs,
