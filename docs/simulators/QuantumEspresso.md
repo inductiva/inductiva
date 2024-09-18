@@ -39,7 +39,7 @@ commands = [
     "pw_openmp.x -i Al_qe_pseudo.in"
 ]
 
-# Initialize OpenFAST simulator
+# Initialize QuantumEspresso simulator
 qe = inductiva.simulators.QuantumEspresso()
 
 # Run simulation 
