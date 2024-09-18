@@ -1,14 +1,5 @@
 # Quantum ESPRESSO
 
-<style>
-    thead th:empty {
-        border: thin solid red !important;
-        display: none;
-    }
-</style>
-
-# TODO
-
 [Quantum ESPRESSO](https://www.quantum-espresso.org/) is an open-source software
 suite widely used for electronic structure calculations and materials modeling
 at the nanoscale. It is based on density functional theory (DFT) and uses
