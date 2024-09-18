@@ -21,6 +21,11 @@ class QuantumEspresso(simulators.Simulator):
         super().__init__(version=version, use_dev=use_dev)
         self.api_method_name = ("quantum_espresso.quantum_espresso."
                                 "run_simulation")
+        
+    @property
+    def name(self):
+        """Get the name of the this simulator."""
+        return "Quantum-Espresso"
 
     def run(self,
             input_dir: str,
