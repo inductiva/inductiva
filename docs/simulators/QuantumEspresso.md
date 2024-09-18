@@ -59,7 +59,8 @@ machine_group.terminate()
 ```
 
 ## List of allowed Commands
-
+|  |  |  | | |
+| ------| ------| ------|---|---|
 | alpha2f              | dvscf_q2r           | head              | matdyn            | plan_avg           |
 | pw                   | rism1d              | turbo_spectrum    | average           | dynmat             |
 | hp                   | molecularnexafs     | plotband          | pw2bgw            | scan_ibrav         |
