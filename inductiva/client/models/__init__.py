@@ -19,6 +19,7 @@ from inductiva.client.model.campaign_full_info import CampaignFullInfo
 from inductiva.client.model.campaign_quota import CampaignQuota
 from inductiva.client.model.campaign_quota_detail import CampaignQuotaDetail
 from inductiva.client.model.campaign_users_update import CampaignUsersUpdate
+from inductiva.client.model.capability import Capability
 from inductiva.client.model.created_user import CreatedUser
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.executer import Executer
@@ -55,6 +56,8 @@ from inductiva.client.model.task_submitted_info import TaskSubmittedInfo
 from inductiva.client.model.terms_and_conditions import TermsAndConditions
 from inductiva.client.model.tier_full_info import TierFullInfo
 from inductiva.client.model.tier_quota_detail import TierQuotaDetail
+from inductiva.client.model.update_capabilities_actions import UpdateCapabilitiesActions
+from inductiva.client.model.update_capabilities_request import UpdateCapabilitiesRequest
 from inductiva.client.model.user import User
 from inductiva.client.model.user_activity import UserActivity
 from inductiva.client.model.user_api_key import UserApiKey

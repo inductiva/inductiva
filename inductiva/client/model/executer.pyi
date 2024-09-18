@@ -42,7 +42,6 @@ class Executer(
             "cpu_count_physical",
             "uuid",
             "host_type",
-            "vm_name",
         }
         
         class properties:
@@ -52,8 +51,46 @@ class Executer(
             memory = schemas.IntSchema
             n_mpi_hosts = schemas.IntSchema
             vm_type = schemas.StrSchema
-            vm_name = schemas.StrSchema
             host_type = schemas.StrSchema
+            
+            
+            class host_name(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'host_name':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             
             
             class error_detail(
@@ -100,8 +137,8 @@ class Executer(
                 "memory": memory,
                 "n_mpi_hosts": n_mpi_hosts,
                 "vm_type": vm_type,
-                "vm_name": vm_name,
                 "host_type": host_type,
+                "host_name": host_name,
                 "error_detail": error_detail,
             }
     
@@ -112,7 +149,6 @@ class Executer(
     cpu_count_physical: MetaOapg.properties.cpu_count_physical
     uuid: MetaOapg.properties.uuid
     host_type: MetaOapg.properties.host_type
-    vm_name: MetaOapg.properties.vm_name
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["uuid"]) -> MetaOapg.properties.uuid: ...
@@ -133,10 +169,10 @@ class Executer(
     def __getitem__(self, name: typing_extensions.Literal["vm_type"]) -> MetaOapg.properties.vm_type: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["vm_name"]) -> MetaOapg.properties.vm_name: ...
+    def __getitem__(self, name: typing_extensions.Literal["host_type"]) -> MetaOapg.properties.host_type: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["host_type"]) -> MetaOapg.properties.host_type: ...
+    def __getitem__(self, name: typing_extensions.Literal["host_name"]) -> MetaOapg.properties.host_name: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["error_detail"]) -> MetaOapg.properties.error_detail: ...
@@ -144,7 +180,7 @@ class Executer(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "n_mpi_hosts", "vm_type", "vm_name", "host_type", "error_detail", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "n_mpi_hosts", "vm_type", "host_type", "host_name", "error_detail", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -168,10 +204,10 @@ class Executer(
     def get_item_oapg(self, name: typing_extensions.Literal["vm_type"]) -> MetaOapg.properties.vm_type: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["vm_name"]) -> MetaOapg.properties.vm_name: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["host_type"]) -> MetaOapg.properties.host_type: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["host_type"]) -> MetaOapg.properties.host_type: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["host_name"]) -> typing.Union[MetaOapg.properties.host_name, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["error_detail"]) -> typing.Union[MetaOapg.properties.error_detail, schemas.Unset]: ...
@@ -179,7 +215,7 @@ class Executer(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "n_mpi_hosts", "vm_type", "vm_name", "host_type", "error_detail", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["uuid", "cpu_count_logical", "cpu_count_physical", "memory", "n_mpi_hosts", "vm_type", "host_type", "host_name", "error_detail", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -193,7 +229,7 @@ class Executer(
         cpu_count_physical: typing.Union[MetaOapg.properties.cpu_count_physical, decimal.Decimal, int, ],
         uuid: typing.Union[MetaOapg.properties.uuid, str, ],
         host_type: typing.Union[MetaOapg.properties.host_type, str, ],
-        vm_name: typing.Union[MetaOapg.properties.vm_name, str, ],
+        host_name: typing.Union[MetaOapg.properties.host_name, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         error_detail: typing.Union[MetaOapg.properties.error_detail, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -208,7 +244,7 @@ class Executer(
             cpu_count_physical=cpu_count_physical,
             uuid=uuid,
             host_type=host_type,
-            vm_name=vm_name,
+            host_name=host_name,
             error_detail=error_detail,
             _configuration=_configuration,
             **kwargs,

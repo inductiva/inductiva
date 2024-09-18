@@ -12,6 +12,7 @@ from typing import Dict, Any, List, Optional, Tuple, Union
 import urllib3
 import tabulate
 from dataclasses import dataclass
+
 from ..localization import translator as __
 
 import inductiva
@@ -19,6 +20,8 @@ from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api
 from inductiva.client.apis.tags import tasks_api
+from inductiva.client.paths.tasks_task_id_download_output_url import get \
+    as get_tasks_task_id_download_output_url
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 
@@ -387,7 +390,7 @@ class Task:
     def _get_last_n_lines_from_file(self, file_path: pathlib.Path,
                                     n: int) -> List[str]:
         """Gets the last n lines from a file.
-        
+
         This method returns a list with the last n lines from a file.
         Args:
             file_path: The path to the file.
@@ -459,7 +462,7 @@ class Task:
         │ #12  0x7f4cec4913a6 in ???
         │ #13  0x7f4cecceb940 in ???
         │ #14  0x4084ae in ???
-        └ 
+        └
         Args:
             lines: A list of strings to format.
             file: The name of the file. Must be "stdout.txt" or "stderr.txt".
@@ -760,31 +763,10 @@ class Task:
         return all(
             file.name in self.STANDARD_OUTPUT_FILES for file in output_files)
 
-    def download_outputs(
-        self,
-        filenames: Optional[List[str]] = None,
-        output_dir: Optional[str] = None,
-        uncompress: bool = True,
-        rm_downloaded_zip_archive: bool = True,
-        rm_remote_files: bool = False,
-    ) -> pathlib.Path:
-        """Download output files of the task.
-
-        Args:
-            filenames: List of filenames to download. If None or empty, all
-                files are downloaded.
-            output_dir: Directory where to download the files. If None, the
-                files are downloaded to the default directory. The default is
-                {inductiva.get_output_dir()}/{output_dir}/{task_id}.
-            uncompress: Whether to uncompress the archive after downloading it.
-            rm_downloaded_zip_archive: Whether to remove the archive after
-                uncompressing it. If uncompress is False, this argument is
-                ignored.
-            rm_remote_files: Whether to remove all task files from remote
-                storage after the download is complete. Only used if filenames
-                is None or empty (i.e., all output files are downloaded).
-        """
-        self._status = self.get_status()
+    def _request_download_output_url(
+        self
+    ) -> Optional[get_tasks_task_id_download_output_url.
+                  SchemaFor200ResponseBodyApplicationJson]:
         try:
             api_response = self._api.get_output_download_url(
                 path_params=self._get_path_params(),)
@@ -807,8 +789,61 @@ class Task:
             # Reset internal state
             self._called_from_wait = False
 
-        download_url = api_response.body.get("url")
+        return api_response.body
 
+    def get_output_url(self) -> Optional[str]:
+        """Get a public URL to download the output files of the task.
+
+        Returns:
+            The URL to download the output files of the task, or None
+            if the
+        """
+        response_body = self._request_download_output_url()
+        if not response_body:
+            return None
+
+        download_url = response_body.get("url")
+        if download_url is None:
+            raise RuntimeError(
+                "The API did not return a download URL for the task outputs.")
+
+        logging.info("■ Use the following URL to download the output "
+                     "files of you simulation:")
+        logging.info(" > %s", download_url)
+
+        return download_url
+
+    def download_outputs(
+        self,
+        filenames: Optional[List[str]] = None,
+        output_dir: Optional[str] = None,
+        uncompress: bool = True,
+        rm_downloaded_zip_archive: bool = True,
+        rm_remote_files: bool = False,
+    ) -> Optional[pathlib.Path]:
+        """Download output files of the task.
+
+        Args:
+            filenames: List of filenames to download. If None or empty, all
+                files are downloaded.
+            output_dir: Directory where to download the files. If None, the
+                files are downloaded to the default directory. The default is
+                {inductiva.get_output_dir()}/{output_dir}/{task_id}.
+            uncompress: Whether to uncompress the archive after downloading it.
+            rm_downloaded_zip_archive: Whether to remove the archive after
+                uncompressing it. If uncompress is False, this argument is
+                ignored.
+            rm_remote_files: Whether to remove all task files from remote
+                storage after the download is complete. Only used if filenames
+                is None or empty (i.e., all output files are downloaded).
+        """
+        self._status = self.get_status()
+
+        response_body = self._request_download_output_url()
+        if not response_body:
+            return None
+
+        download_url = response_body.get("url")
         if download_url is None:
             raise RuntimeError(
                 "The API did not return a download URL for the task outputs.")
@@ -819,8 +854,7 @@ class Task:
         # returns a fallback URL and returns the following flag as False.
         # In this case, the output donwload will be provided by the Web API
         # itself.
-        file_server_available = bool(
-            api_response.body.get("file_server_available"))
+        file_server_available = bool(response_body.get("file_server_available"))
 
         if output_dir is None:
             output_dir = self.id

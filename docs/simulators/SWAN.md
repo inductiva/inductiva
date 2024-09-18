@@ -13,8 +13,7 @@ the conditions shall be saved in an input directory that is passed to the simula
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c2-standard-4", num_machines=1, data_disk_gb=10)
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
 machine_group.start()
 
 # Set simulation input directory
@@ -32,6 +31,8 @@ task = swan.run(
 # Wait for the simulation to finish and download the results
 task.wait()
 task.download_outputs()
+
+machine_group.terminate()
 ```
 
 Check the [official documentation](https://swanmodel.sourceforge.io/) of SWAN to know 

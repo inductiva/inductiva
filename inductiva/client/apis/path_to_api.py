@@ -27,6 +27,7 @@ from inductiva.client.apis.paths.admin_users_email_campaign_campaign_id import A
 from inductiva.client.apis.paths.admin_users_username_storage_size_fs import AdminUsersUsernameStorageSizeFs
 from inductiva.client.apis.paths.admin_users_username_storage_size import AdminUsersUsernameStorageSize
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
+from inductiva.client.apis.paths.admin_users_username_capabilities import AdminUsersUsernameCapabilities
 from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.admin_groups_active import AdminGroupsActive
 from inductiva.client.apis.paths.admin_providers import AdminProviders
@@ -67,6 +68,7 @@ from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
 from inductiva.client.apis.paths.users_info import UsersInfo
+from inductiva.client.apis.paths.users_capabilities import UsersCapabilities
 from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
 from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
@@ -131,6 +133,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersUsernameStorageSize,
         PathValues.ADMIN_USERS_USERNAME_TASKS:
             AdminUsersUsernameTasks,
+        PathValues.ADMIN_USERS_USERNAME_CAPABILITIES:
+            AdminUsersUsernameCapabilities,
         PathValues.ADMIN_GROUPS:
             AdminGroups,
         PathValues.ADMIN_GROUPS_ACTIVE:
@@ -211,6 +215,8 @@ PathToApi = typing_extensions.TypedDict(
             UsersQuotas,
         PathValues.USERS_INFO:
             UsersInfo,
+        PathValues.USERS_CAPABILITIES:
+            UsersCapabilities,
         PathValues.PROJECTS:
             Projects,
         PathValues.PROJECTS_NAME:
@@ -284,6 +290,8 @@ path_to_api = PathToApi({
         AdminUsersUsernameStorageSize,
     PathValues.ADMIN_USERS_USERNAME_TASKS:
         AdminUsersUsernameTasks,
+    PathValues.ADMIN_USERS_USERNAME_CAPABILITIES:
+        AdminUsersUsernameCapabilities,
     PathValues.ADMIN_GROUPS:
         AdminGroups,
     PathValues.ADMIN_GROUPS_ACTIVE:
@@ -364,6 +372,8 @@ path_to_api = PathToApi({
         UsersQuotas,
     PathValues.USERS_INFO:
         UsersInfo,
+    PathValues.USERS_CAPABILITIES:
+        UsersCapabilities,
     PathValues.PROJECTS:
         Projects,
     PathValues.PROJECTS_NAME:
