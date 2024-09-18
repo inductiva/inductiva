@@ -6,7 +6,7 @@ their previously prepared simulation configuration files, and directly scale
 them up on [last-generation hardware](https://tutorials.staging.inductiva.ai/intro_to_api/computational-infrastructure.html#available-computational-resources) 
 avaialble on the cloud via Inductiva API.
 
-The simulators available in the current version of the API (0.8) are:
+The simulators available in the current version of the API (0.9) are:
 - [AMR-Wind](../simulators/AmrWind.md)
 - [CaNS](../simulators/CaNS.md)
 - [DualSPHysics](../simulators/DualSPHysics.md)
@@ -15,6 +15,7 @@ The simulators available in the current version of the API (0.8) are:
 - [NWChem](../simulators/NWChem.md)
 - [OpenFOAM](../simulators/OpenFOAM.md)
 - [OpenFAST](../simulators/OpenFAST.md)
+- [QuantumEspresso](../simulators/QuantumEspresso.md)
 - [Reef3D](../simulators/Reef3D.md)
 - [SCHISM](../simulators/SCHISM.md)
 - [SPlisHSPlasH](../simulators/SPlisHSPlasH.md)
