@@ -1,5 +1,12 @@
 # Quantum ESPRESSO
 
+<style>
+    thead th:empty {
+        border: thin solid red !important;
+        display: none;
+    }
+</style>
+
 # TODO
 
 [Quantum ESPRESSO](https://www.quantum-espresso.org/) is an open-source software
