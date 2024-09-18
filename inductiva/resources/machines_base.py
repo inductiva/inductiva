@@ -315,7 +315,7 @@ class BaseMachineGroup(ABC):
             while not self._can_start_resource():
                 if first_time:
                     print("This machine will exceed the current quotas.\n"
-                          "Going wait for quotas to become available.")
+                          "Will wait for quotas to become available.")
                 time.sleep(self.QUOTAS_EXCEEDED_SLEEP_SECONDS)
 
         self._api.start_vm_group(body=request_body)
