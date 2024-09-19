@@ -41,8 +41,7 @@ based on the number of cores available in the machine.
 **General Arguments:**
 - `on`: set the machines where the simulations will run. Check
 [here](https://tutorials.inductiva.ai/intro_to_api/computational-infrastructure.html#available-computational-resources) 
-for further detail. If not selected the simulations will be picked-up by a
-default pool shared by everyone.
+for further detail.
 - `storage_dir`: set the directory where the output files will be stored in the 
 cloud. If not selected the output files will be stored in a folder named with
 the  task id of the simulation.
@@ -63,17 +62,22 @@ from Reef3D repository.
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "reef3d-input-example.zip", unzip=True)
 
 reef3d = inductiva.simulators.REEF3D()
 
-task = reef3d.run(input_dir=input_dir)
+task = reef3d.run(input_dir=input_dir, on=machine_group)
 
 task.wait()
-
 task.download_outputs()
+
+machine_group.terminate()
 ```
 
 ## A slighly more advanced example
@@ -170,7 +174,7 @@ our machine to be equipped with a 20GB partition (just for data), using the
 
 Here is the final script:
 
-```python
+```python notest
 import inductiva
 
 
@@ -226,7 +230,6 @@ Username: sarmento
  Maximum disk size                                                                        2000 GB
  Maximum time a machine group can stay up before automatic termination                    48 hour
  Maximum amount of RAM per VCPU                                                           6 GB
- Maximum time a task can stay running in the default queue before automatic termination   16 hour
 
 ■ Registering MachineGroup configurations:
 	· Name:                       api-o4qozo7wafhwqcyz4xh1g4e7s
@@ -330,7 +333,7 @@ of 10:34).
 
 You can download the (zipped) data by creating a simple script such as this
 (again, please change to the corresponding task id):
-```python
+```python notest
 import inductiva
 
 # You can retreive a Task by ID

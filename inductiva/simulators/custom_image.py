@@ -26,22 +26,22 @@ class CustomImage(simulators.Simulator):
     def run(self,
             input_dir: str,
             commands: List[str],
+            *,
+            on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             extra_metadata: Optional[dict] = None,
-            on: Optional[types.ComputationalResources] = None,
             resubmit_on_preemption: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
             input_dir: Path to the directory containing the input files.
             commands: List of commands to run.
-            on: The computational resource to launch the simulation on. If None
-                the simulation is submitted to a machine in the default pool.
+            on: The computational resource to launch the simulation on.
             storage_dir: Parent directory for storing simulation
                                results.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
         """
         return super().run(input_dir,

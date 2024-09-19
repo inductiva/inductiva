@@ -36,87 +36,13 @@ class TaskRequest(
     class MetaOapg:
         required = {
             "method",
+            "resource_pool",
         }
         
         class properties:
             method = schemas.StrSchema
-            
-            
-            class resource_pool(
-                schemas.ComposedSchema,
-            ):
-            
-            
-                class MetaOapg:
-                    format = 'uuid4'
-                    any_of_0 = schemas.StrSchema
-                    any_of_1 = schemas.NoneSchema
-                    
-                    @classmethod
-                    @functools.lru_cache()
-                    def any_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            cls.any_of_0,
-                            cls.any_of_1,
-                        ]
-            
-            
-                def __new__(
-                    cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'resource_pool':
-                    return super().__new__(
-                        cls,
-                        *_args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
+            resource_pool = schemas.StrSchema
             storage_path_prefix = schemas.StrSchema
-            
-            
-            class provider_id(
-                schemas.ComposedSchema,
-            ):
-            
-            
-                class MetaOapg:
-                    
-                    @classmethod
-                    @functools.lru_cache()
-                    def all_of(cls):
-                        # we need this here to make our import statements work
-                        # we must store _composed_schemas in here so the code is only run
-                        # when we invoke this method. If we kept this at the class
-                        # level we would get an error because the class level
-                        # code would be run when this module is imported, and these composed
-                        # classes don't exist yet because their module has not finished
-                        # loading
-                        return [
-                            Providers,
-                        ]
-            
-            
-                def __new__(
-                    cls,
-                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-                    _configuration: typing.Optional[schemas.Configuration] = None,
-                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'provider_id':
-                    return super().__new__(
-                        cls,
-                        *_args,
-                        _configuration=_configuration,
-                        **kwargs,
-                    )
             
             
             class project(
@@ -239,7 +165,6 @@ class TaskRequest(
                 "method": method,
                 "resource_pool": resource_pool,
                 "storage_path_prefix": storage_path_prefix,
-                "provider_id": provider_id,
                 "project": project,
                 "container_image": container_image,
                 "time_to_live_seconds": time_to_live_seconds,
@@ -247,6 +172,7 @@ class TaskRequest(
             }
     
     method: MetaOapg.properties.method
+    resource_pool: MetaOapg.properties.resource_pool
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["method"]) -> MetaOapg.properties.method: ...
@@ -256,9 +182,6 @@ class TaskRequest(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["storage_path_prefix"]) -> MetaOapg.properties.storage_path_prefix: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["provider_id"]) -> MetaOapg.properties.provider_id: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["project"]) -> MetaOapg.properties.project: ...
@@ -275,7 +198,7 @@ class TaskRequest(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["method", "resource_pool", "storage_path_prefix", "provider_id", "project", "container_image", "time_to_live_seconds", "resubmit_on_preemption", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["method", "resource_pool", "storage_path_prefix", "project", "container_image", "time_to_live_seconds", "resubmit_on_preemption", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -284,13 +207,10 @@ class TaskRequest(
     def get_item_oapg(self, name: typing_extensions.Literal["method"]) -> MetaOapg.properties.method: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["resource_pool"]) -> typing.Union[MetaOapg.properties.resource_pool, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["resource_pool"]) -> MetaOapg.properties.resource_pool: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["storage_path_prefix"]) -> typing.Union[MetaOapg.properties.storage_path_prefix, schemas.Unset]: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["provider_id"]) -> typing.Union[MetaOapg.properties.provider_id, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["project"]) -> typing.Union[MetaOapg.properties.project, schemas.Unset]: ...
@@ -307,7 +227,7 @@ class TaskRequest(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["method", "resource_pool", "storage_path_prefix", "provider_id", "project", "container_image", "time_to_live_seconds", "resubmit_on_preemption", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["method", "resource_pool", "storage_path_prefix", "project", "container_image", "time_to_live_seconds", "resubmit_on_preemption", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -315,9 +235,8 @@ class TaskRequest(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
         method: typing.Union[MetaOapg.properties.method, str, ],
-        resource_pool: typing.Union[MetaOapg.properties.resource_pool, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        resource_pool: typing.Union[MetaOapg.properties.resource_pool, str, ],
         storage_path_prefix: typing.Union[MetaOapg.properties.storage_path_prefix, str, schemas.Unset] = schemas.unset,
-        provider_id: typing.Union[MetaOapg.properties.provider_id, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         project: typing.Union[MetaOapg.properties.project, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         container_image: typing.Union[MetaOapg.properties.container_image, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         time_to_live_seconds: typing.Union[MetaOapg.properties.time_to_live_seconds, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -331,7 +250,6 @@ class TaskRequest(
             method=method,
             resource_pool=resource_pool,
             storage_path_prefix=storage_path_prefix,
-            provider_id=provider_id,
             project=project,
             container_image=container_image,
             time_to_live_seconds=time_to_live_seconds,
@@ -339,5 +257,3 @@ class TaskRequest(
             _configuration=_configuration,
             **kwargs,
         )
-
-from inductiva.client.model.providers import Providers

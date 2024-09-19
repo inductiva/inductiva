@@ -31,8 +31,9 @@ class DummySimulator(simulators.Simulator):
     def run(self,
             input_dir: str,
             input_filename: str,
+            *,
+            on: types.ComputationalResources,
             sleep_time: Optional[float] = 1,
-            on: Optional[types.ComputationalResources] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             extra_metadata: Optional[dict] = None,
@@ -46,7 +47,7 @@ class DummySimulator(simulators.Simulator):
             extra_metadata: Extra metadata to be sent to the backend.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
         """
 

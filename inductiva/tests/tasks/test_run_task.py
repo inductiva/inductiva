@@ -1,9 +1,11 @@
 """Test file for the run_simulation file."""
+import uuid
 import os
 import json
 import tempfile
 
 import pytest
+from unittest import mock
 
 import inductiva
 from inductiva import tasks
@@ -42,7 +44,12 @@ def test_run_simulation_logging(task_id, disable_logging):
         os.mkdir(dummy_dir)
     os.environ["DISABLE_TASK_METADATA_LOGGING"] = str(disable_logging)
     inductiva.set_api_key("DUMMY")
+
+    mock_mg = mock.Mock()
+    mock_mg.id = str(uuid.uuid4())
+
     tasks.run_simulation(api_method_name=task_id,
                          input_dir=dummy_dir,
+                         computational_resources=mock_mg,
                          api_invoker=_api_invoker)
     assert _id_in_metadata_file(task_id) == (not disable_logging)

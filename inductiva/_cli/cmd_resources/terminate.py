@@ -59,7 +59,7 @@ def terminate_machine_group(args):
         name_to_machine[name].terminate(verbose=False)
         logging.info("Successfully requested termination of %s.",
                      name_to_machine[name].name)
-    cls = inductiva.resources.machines_base.BaseMachineGroup
+    cls = inductiva.resources.MachineGroup
     base_machine = cls.__new__(cls)
     rows = ["max_price_hour", "max_vcpus", "max_instances"]
     base_machine.quota_usage = {k: before_quotas[k]["in_use"] for k in rows}

@@ -10,7 +10,7 @@ class DualSPHysics(simulators.Simulator):
 
     def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
         """Initialize the DualSPHysics simulator.
-        
+
         Args:
             version (str): The version of the simulator to use. If None, the
                 latest available version in the platform is used.
@@ -25,7 +25,8 @@ class DualSPHysics(simulators.Simulator):
         self,
         input_dir: str,
         commands: types.Commands,
-        on: Optional[types.ComputationalResources] = None,
+        *,
+        on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         extra_metadata: Optional[dict] = None,
         resubmit_on_preemption: bool = False,
@@ -36,12 +37,11 @@ class DualSPHysics(simulators.Simulator):
         Args:
             input_dir: Directory with simulation input files.
             sim_config_filename: Simulation config file.
-            on: The computational resource to launch the simulation on. If None
-                the simulation is submitted to a machine in the default pool.
+            on: The computational resource to launch the simulation on.
             storage_dir: Directory for storing results.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
-                using a preemptible resource, i.e., resource instantiates with
+                using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
 
         Returns:

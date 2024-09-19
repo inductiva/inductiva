@@ -29,6 +29,10 @@ In this example, we run a classical CFD case of a flow over a cylinder.
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Download the configuration files into a folder
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -45,11 +49,13 @@ dualsphysics = inductiva.simulators.DualSPHysics()
 
 # Run simulation with config files in the input directory
 task = dualsphysics.run(input_dir=input_dir,
-                        commands=commands)
+                        commands=commands,
+                        on=machine_group)
 
 task.wait()
 task.download_outputs()
 
+machine_group.terminate()
 ```
 
 Below, we will demonstrate how to run a slightly more complex example included
@@ -191,7 +197,7 @@ output directories, so we will convert and keep these variables in our python
 script. Additionally, we’ll take this opportunity to explicitly add a few more
 output directories and make the style a bit more Pythonic. So, our Python script
 should look something like this: 
-```python
+```python notest
 # Let's keep the original variables for the directory names, but we will
 # make them more pythonic and we will add a few others for readibility
 name="CaseTurbine"
@@ -207,7 +213,7 @@ of the variables we just defined. We’ll also be able to call the DualSPHysics
 commands (such as `gencase`, `dualsphysics`, `partvtk`, etc.) directly, as they
 are all pre-installed on the machine we will spin up later.
 
-```python
+```python notest
 commands = [
     f"gencase {name}_Def {dirout}/{name} -save:all",
     f"dualsphysics {dirout}/{name} {dirout} -dirdataout data -svres",
@@ -222,7 +228,7 @@ commands = [
 The rest of the Python script follows the usual pattern. Here is the final
 resulting script, ready to be executed:
 
-```python
+```python notest
 import inductiva
 
 # Let's keep the original variables for the directory names, but we will
@@ -309,7 +315,6 @@ Now, we can run this script, and the output should look something like this:
  Maximum disk size                                                                        2000 GB
  Maximum time a machine group can stay up before automatic termination                    48 hour
  Maximum amount of RAM per VCPU                                                           6 GB
- Maximum time a task can stay running in the default queue before automatic termination   16 hour
 
 ■ Registering MachineGroup configurations:
 	· Name:                       api-57yp64vdyz50a8fx0ttuz2n90

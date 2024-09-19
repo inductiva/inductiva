@@ -1,11 +1,12 @@
 """Base class for machine groups."""
 from collections import defaultdict, namedtuple
+from typing import Optional, Union
+from abc import abstractmethod
+from abc import ABC
+import datetime
 import time
 import enum
 import json
-from typing import Optional, Union
-from abc import abstractmethod
-import datetime
 
 import logging
 
@@ -27,8 +28,10 @@ class ResourceType(enum.Enum):
     MPI = "mpi"
 
 
-class BaseMachineGroup:
+class BaseMachineGroup(ABC):
     """Base class to manage Google Cloud resources."""
+
+    QUOTAS_EXCEEDED_SLEEP_SECONDS = 60
 
     def __init__(
         self,
@@ -36,6 +39,7 @@ class BaseMachineGroup:
         provider: Union[machine_types.ProviderType, str] = "GCP",
         threads_per_core: int = 2,
         data_disk_gb: int = 10,
+        auto_resize_disk_max_gb: Optional[int] = None,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
@@ -47,8 +51,20 @@ class BaseMachineGroup:
               Check https://cloud.google.com/compute/docs/machine-resource for
               more information about machine types.
             provider: The cloud provider of the machine group.
-            data_disk_gb: The size of the disk for user data (in GB).
             threads_per_core: The number of threads per core (1 or 2).
+            data_disk_gb: The size of the disk for user data (in GB).
+            auto_resize_disk_max_gb: The maximum size in GB that the hard disk
+                of the cloud VM can reach. If set, the disk will be
+                automatically resized, during the execution of a task, when the
+                free space falls below a certain threshold. This mechanism helps
+                prevent "out of space" errors, that can occur when a task
+                generates a quantity of output files that exceeds the size of
+                the local storage. Increasing disk size during task execution
+                increases the cost of local storage associated with the VM,
+                therefore the user must set an upper limit to the disk size, to
+                prevent uncontrolled costs. Once that limit is reached, the disk
+                is no longer automatically resized, and if the task continues to
+                output files, it will fail.
             max_idle_time: Time without executing any task, after which the
               resource will be terminated.
             auto_terminate_ts: Moment in which the resource will be
@@ -64,9 +80,22 @@ class BaseMachineGroup:
 
         provider = machine_types.ProviderType(provider)
         self.provider = provider.value
+        self._free_space_threshold_gb = 5
+        self._size_increment_gb = 10
 
         if data_disk_gb <= 0:
             raise ValueError("`data_disk_gb` must be positive.")
+
+        if auto_resize_disk_max_gb is not None:
+            if not isinstance(auto_resize_disk_max_gb,
+                              int) or auto_resize_disk_max_gb <= 0:
+                raise ValueError(
+                    "`auto_resize_disk_max_gb` must be a positive integer.")
+
+            if auto_resize_disk_max_gb < data_disk_gb + self._size_increment_gb:
+                raise ValueError("`auto_resize_disk_max_gb` must be greater "
+                                 "than or equal to `data_disk_gb + "
+                                 f"{self._size_increment_gb}GB`.")
 
         if threads_per_core not in [1, 2]:
             raise ValueError("`threads_per_core` must be either 1 or 2.")
@@ -75,6 +104,7 @@ class BaseMachineGroup:
         self.provider = provider.value
         self.threads_per_core = threads_per_core
         self.data_disk_gb = data_disk_gb
+        self.auto_resize_disk_max_gb = auto_resize_disk_max_gb
         self._id = None
         self._name = None
         self.create_time = None
@@ -160,6 +190,16 @@ class BaseMachineGroup:
 
         return None
 
+    def _dynamic_disk_resize_config(self):
+        if self.auto_resize_disk_max_gb is None:
+            return None
+
+        return {
+            "free_space_threshold_gb": self._free_space_threshold_gb,
+            "size_increment_gb": self._size_increment_gb,
+            "max_disk_size_gb": self.auto_resize_disk_max_gb
+        }
+
     @staticmethod
     def _iso_to_datetime(
             timestamp: Optional[str]) -> Optional[datetime.datetime]:
@@ -186,6 +226,7 @@ class BaseMachineGroup:
             max_idle_time=self._timedelta_to_seconds(self.max_idle_time),
             auto_terminate_ts=self._convert_auto_terminate_ts(
                 self.auto_terminate_ts),
+            dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
             **kwargs,
         )
 
@@ -242,10 +283,41 @@ class BaseMachineGroup:
 
         return machine_group
 
-    def start(self, **kwargs):
+    def _can_start_resource(self) -> bool:
+        """Check if the resource can be started.
+
+        This method checks if the resource can be started by checking
+        the available quotas and resource usage.
+
+        returns:
+            bool: True if the resource can be started, False otherwise.
+        """
+        quotas = users.get_quotas()
+
+        cost_in_use = quotas["max_price_hour"]["in_use"]
+        cost_max = quotas["max_price_hour"]["max_allowed"]
+        estimated_cost = cost_in_use + self.estimate_cloud_cost(verbose=False)
+        is_cost_ok = estimated_cost <= cost_max
+
+        vcpu_in_use = quotas["max_vcpus"]["in_use"]
+        vcpu_max = quotas["max_vcpus"]["max_allowed"]
+        current_vcpu = self.n_vcpus.total
+        estimated_vcpu_usage = vcpu_in_use + current_vcpu
+        is_vcpu_ok = estimated_vcpu_usage <= vcpu_max
+
+        machines_in_use = quotas["max_instances"]["in_use"]
+        machines_max = quotas["max_instances"]["max_allowed"]
+        estimated_machine_usage = machines_in_use + self.num_machines
+        is_instance_ok = estimated_machine_usage <= machines_max
+
+        return is_cost_ok and is_vcpu_ok and is_instance_ok
+
+    def start(self, wait_on_pending_quota: bool = False, **kwargs):
         """Starts a machine group.
 
         Args:
+            wait_on_pending_quota: If True, the method will wait for quotas to
+              become available before starting the resource.
             **kwargs: Depending on the type of machine group to be started,
               this can be num_machines, max_machines, min_machines,
               and is_elastic."""
@@ -275,6 +347,15 @@ class BaseMachineGroup:
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
+
+        if wait_on_pending_quota:
+            first_time = True
+            while not self._can_start_resource():
+                if first_time:
+                    print("This machine will exceed the current quotas.\n"
+                          "Will wait for quotas to become available.")
+                time.sleep(self.QUOTAS_EXCEEDED_SLEEP_SECONDS)
+
         self._api.start_vm_group(body=request_body)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True

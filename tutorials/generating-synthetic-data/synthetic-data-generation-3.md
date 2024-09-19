@@ -9,18 +9,23 @@ myst:
 
 ## Understanding what is happening under the hood
 
-By default, any task submitted via the API is sent to what we call the “default queue” for execution. The default queue is a shared resource pool of virtual machines (VMs )accessible to all API users. This default queue offers an easy and affordable way for users to prototype and run small-scale simulations similar to our initial low particle count simulation, without the hassle of having to manage any computational resource. The goal of the default queue is to provide this feeling of magic, because things will just work out of the box with minimal configuration effort.
+In simulation projects, efficient access to the right computational resources is
+crucial for achieving accurate and timely results. Our API offers users the
+flexibility to optimize their workflows by **launching dedicated machines**
+tailored to their specific needs. These machines come in a range of configurations,
+from high-performance options for intensive simulations to more cost-effective
+setups for lighter tasks. This allows users to balance computational power and
+budget as required.
 
-However, because of its shared nature and finite capacity, any job sent to the default queue can take a long time to be picked up and executed. This is especially so for higher fidelity simulations requiring many computation cycles, as it was evident when our enhanced simulation took 30 minutes to run.
-
-To speed up our simulation, our API provides a mechanism that allows us to **launch dedicated machines** exclusively for our projects. These dedicated machines can offer significantly more compute power compared to the standard options accessible through the default queue.
-
-We can choose a setup that aligns best with our simulation needs by instantiating a MachineGroup and sending out simulation task to be executed there. This will make it easier for us to adjust our "base case" parameters, allowing for a higher
-particle count that aligns with the more complex scenarios described in the paper, while still having the simulations being executed in a reasonable amount of time.
+By creating a MachineGroup, users can run simulations efficiently, adjusting
+parameters like particle count for more complex scenarios, all while ensuring
+execution times remain manageable. This adaptability makes it easier to scale
+computations as project demands grow.
 
 ## Browsing our Available Machines
 
-Our default queue uses virtual machines VMs from Google Cloud Platform, specifically `c2-standard-4.` VMs, based on Intel Xeon Cascade Lake (2nd Gen) processors. These VMs only have 4 vCPUs and, as we saw before, will require about 30 minutes to execute our simulations. The best way to speed things up is to use our API to launch more powerful user-dedicated machines, reserved for our own exclusive use.
+The best way to speed things up is to use our API to launch more powerful
+user-dedicated machines, reserved for our own exclusive use.
 
 Let's explore alternative machine setups available via the API by running a simple command through the Inductiva [Command Line Interface (CLI)](https://docs.inductiva.ai/en/latest/cli/cli-overview.html):
 
@@ -79,7 +84,11 @@ OK! This looks good. Let's choose something different from the menu.
 
 ## Re-Running our "Base Case" on a better VM
 
-We'll run our "base case" with a _particle radius of 0.008_ again, but now we'll boost our computing power by scaling up the number of vCPUs in the `c2` family available in the default queue. We're moving from the 4 vCPUs of the `c2-standard-4` to a much heftier `c2-standard-60` setup, which hopefully will allow us to significantly decrease the simulation time. This can easily be achieved with just a few extra lines of code:
+We'll run our "base case" with a _particle radius of 0.008_ again, but now we'll
+boost our computing power by scaling up the number of vCPUs in the `c2` family.
+We're moving from the 4 vCPUs of the `c2-standard-4` to a much heftier `c2-standard-60`
+setup, which hopefully will allow us to significantly decrease the simulation time.
+This can easily be achieved with just a few extra lines of code:
 
 ```python
 import inductiva
@@ -121,7 +130,7 @@ an additionally 1.75x speed-up over the `c2-standard-60` setup. Observe that, in
 ## Show me the money...
 
 It's important to consider the cost of using these exclusive and more powerful machines from the Google Cloud Platform. At the time of writing, the cost per hour for the `c2-standard-60` is \$3.446, and for the more powerful `c3-standard-88` is \$5.053. Now, compare these values to only \$0.23
-per hour for the `c2-standard-4` VMs used in the default queue.
+per hour for the `c2-standard-4` VMs.
 
 So, while we aim for speed, we must also be mindful of the price of the VMs used, as it directly influences the overall cost of generating our dataset. In the following table, we can see a snapshot of how different machine configurations impact both performance and cost. In the last common, we show the cost of running 1 simulation, that is, the total cost of utilizing a VMs for the time required to run the (same) simulation from beginning to end.
 

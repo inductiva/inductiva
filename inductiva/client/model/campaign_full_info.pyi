@@ -58,11 +58,39 @@ class CampaignFullInfo(
             
             
                 class MetaOapg:
-                    items = schemas.StrSchema
+                    
+                    
+                    class items(
+                        schemas.DictSchema
+                    ):
+                    
+                    
+                        class MetaOapg:
+                            additional_properties = schemas.StrSchema
+                        
+                        def __getitem__(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                            # dict_instance[name] accessor
+                            return super().__getitem__(name)
+                        
+                        def get_item_oapg(self, name: typing.Union[str, ]) -> MetaOapg.additional_properties:
+                            return super().get_item_oapg(name)
+                    
+                        def __new__(
+                            cls,
+                            *_args: typing.Union[dict, frozendict.frozendict, ],
+                            _configuration: typing.Optional[schemas.Configuration] = None,
+                            **kwargs: typing.Union[MetaOapg.additional_properties, str, ],
+                        ) -> 'items':
+                            return super().__new__(
+                                cls,
+                                *_args,
+                                _configuration=_configuration,
+                                **kwargs,
+                            )
             
                 def __new__(
                     cls,
-                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
+                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, dict, frozendict.frozendict, ]], typing.List[typing.Union[MetaOapg.items, dict, frozendict.frozendict, ]]],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'capabilities':
                     return super().__new__(
@@ -83,12 +111,12 @@ class CampaignFullInfo(
                 class MetaOapg:
                     
                     @staticmethod
-                    def items() -> typing.Type['CampaignQuota']:
-                        return CampaignQuota
+                    def items() -> typing.Type['CampaignQuotaDetail']:
+                        return CampaignQuotaDetail
             
                 def __new__(
                     cls,
-                    _arg: typing.Union[typing.Tuple['CampaignQuota'], typing.List['CampaignQuota']],
+                    _arg: typing.Union[typing.Tuple['CampaignQuotaDetail'], typing.List['CampaignQuotaDetail']],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                 ) -> 'quotas':
                     return super().__new__(
@@ -97,7 +125,7 @@ class CampaignFullInfo(
                         _configuration=_configuration,
                     )
             
-                def __getitem__(self, i: int) -> 'CampaignQuota':
+                def __getitem__(self, i: int) -> 'CampaignQuotaDetail':
                     return super().__getitem__(i)
             __annotations__ = {
                 "id": id,
@@ -201,4 +229,4 @@ class CampaignFullInfo(
             **kwargs,
         )
 
-from inductiva.client.model.campaign_quota import CampaignQuota
+from inductiva.client.model.campaign_quota_detail import CampaignQuotaDetail

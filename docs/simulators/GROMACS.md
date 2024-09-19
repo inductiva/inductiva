@@ -21,6 +21,10 @@ inside a small box.
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
     "gromacs-input-example.zip", unzip=True)
@@ -38,8 +42,11 @@ commands = [
 gromacs = inductiva.simulators.GROMACS()
 
 task = gromacs.run(input_dir=input_dir,
-                   commands=commands)
+                   commands=commands,
+                   on=machine_group)
 
 task.wait()
 task.download_outputs()
+
+machine_group.terminate()
 ```

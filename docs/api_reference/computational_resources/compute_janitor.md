@@ -20,8 +20,7 @@ The janitor follows the following rules before terminating the resources:
 - **Total time after launch of computational resource**, independent of any
 simulation still running: 36h 
 - **Total time of inactivity allowed**, starting from the moment no simulations are
-on queue and reset if any arrive: 30 min 
-- **Total time of task on default machine group**: 4h
+on queue and reset if any arrive: 30 min
 
 Please note that at the moment, the janitor is clumsy and doesn't know how to handle
 the data of running simulations. So please be mindful of the time your simulations
