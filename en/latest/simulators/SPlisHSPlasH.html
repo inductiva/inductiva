@@ -409,6 +409,10 @@ the  configuration can also use extra geometry files.</p>
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
+<span class="c1"># Instantiate machine group</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s1">&#39;c2-standard-4&#39;</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
     <span class="s2">&quot;splishsplash-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -417,10 +421,13 @@ the  configuration can also use extra geometry files.</p>
 <span class="n">splishsplash</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SplishSplash</span><span class="p">()</span>
 
 <span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-                        <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">)</span>
+                        <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
+                        <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
 
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
+
+<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>

@@ -13,6 +13,10 @@ simulation to run.
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -21,22 +25,26 @@ input_dir = inductiva.utils.download_from_url(
 # Initialize the Simulator
 swash = inductiva.simulators.SWASH()
 # or alternatively, to use a specific version of SWASH:
-# swash = inductiva.simulators.SWASH(version="10.01")
+# swash = inductiva.simulators.SWASH(version="10.05")
  
 
 # Run simulation with config files in the input directory
 task = swash.run(input_dir=input_dir, 
-                 sim_config_filename="input.sws")
+                 sim_config_filename="input.sws",
+                 on=machine_group)
 
 task.wait()
 task.download_outputs()
+
+machine_group.terminate()
 ```
 
 ### Versions
 
 We currently support the following versions of SWASH:
 - 9.01A (Apr, 2023)
-- 10.01 (Oct, 2023)
+- 10.01A (Apr, 2024)
+- 10.05 (May, 2024)
 
 All available versions for this (and other simulators) can be listed
 using the `inductiva simulators list` CLI command.

@@ -430,6 +430,10 @@ lowercase, and we will handle the rest for you!</p>
 <p>In this example, we run a classical CFD case of a flow over a cylinder.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
+<span class="c1"># Instantiate machine group</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s1">&#39;c2-standard-4&#39;</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
 <span class="c1"># Download the configuration files into a folder</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
@@ -446,11 +450,13 @@ lowercase, and we will handle the rest for you!</p>
 
 <span class="c1"># Run simulation with config files in the input directory</span>
 <span class="n">task</span> <span class="o">=</span> <span class="n">dualsphysics</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-                        <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">)</span>
+                        <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span>
+                        <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
 
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
 
+<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Below, we will demonstrate how to run a slightly more complex example included
@@ -699,7 +705,6 @@ resulting script, ready to be executed:</p>
  Maximum disk size                                                                        2000 GB
  Maximum time a machine group can stay up before automatic termination                    48 hour
  Maximum amount of RAM per VCPU                                                           6 GB
- Maximum time a task can stay running in the default queue before automatic termination   16 hour
 
 ■ Registering MachineGroup configurations:
 	· Name:                       api-57yp64vdyz50a8fx0ttuz2n90

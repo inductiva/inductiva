@@ -408,6 +408,10 @@ the conditions shall be saved in an input directory that is passed to the simula
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
+<span class="c1"># Instantiate machine group</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s1">&#39;c2-standard-4&#39;</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
 <span class="c1"># Set simulation input directory</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
     <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
@@ -418,11 +422,13 @@ the conditions shall be saved in an input directory that is passed to the simula
 
 <span class="c1"># Run simulation with config files in the input directory</span>
 <span class="n">task</span> <span class="o">=</span> <span class="n">swan</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;a11refr.swn&quot;</span><span class="p">)</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span> <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;a11refr.swn&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
 
 <span class="c1"># Wait for the simulation to finish and download the results</span>
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
+
+<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Check the <a class="reference external" href="https://swanmodel.sourceforge.io/" target="_blank">official documentation</a> of SWAN to know

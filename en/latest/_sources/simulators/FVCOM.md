@@ -27,6 +27,10 @@ the requested model:
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -39,11 +43,13 @@ fvcom = inductiva.simulators.FVCOM()
 task = fvcom.run( input_dir=input_dir,
                   working_dir="run/",
                   create_namelist="tst",
-                  n_vcpus=1)
+                  n_vcpus=1,
+                  on=machine_group)
 
 task.wait()
 task.download_outputs()
 
+machine_group.terminate()
 ```
 
 ## Example
@@ -54,6 +60,10 @@ if the simulator is working correctly.
 
 ```python
 import inductiva
+
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
@@ -68,11 +78,13 @@ task = fvcom.run( input_dir=input_dir,
                   working_dir="run/",
                   case_name="tst",
                   debug=7,
-                  n_vcpus=1)
+                  n_vcpus=1,
+                  on=machine_group)
 
 task.wait()
 task.download_outputs()
 
+machine_group.terminate()
 ```
 
 **Closing Notes**: There is currently a bug affecting the timezone argument in
