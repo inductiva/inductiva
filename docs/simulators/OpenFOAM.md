@@ -126,6 +126,216 @@ task.download_outputs()
 machine_group.terminate()
 ````
 
+## Advanced Example: OpenFOAM Simulation (ExaFOAM Benchmark)
+
+Here's a guide for running an OpenFOAM simulation using the Inductiva platform,
+focusing on a high-lift configuration case from the `rhoPimpleFoam` solver.
+This specific example is based on one of the benchmark cases provided by the
+[ExaFOAM project](https://exafoam.eu/benchmarks/), which aims to develop highly
+scalable CFD solvers using OpenFOAM for exascale computing. We'll use a powerful
+cloud setup to handle the computationally intensive mesh generation and simulation.
+
+We will run a complex OpenFOAM simulation based on a high-lift configuration
+setup, which is part of the [ExaFOAM benchmarks](https://exafoam.eu/benchmarks/).
+Specifically, this case corresponds to the MB9 micro-benchmark, which is
+preparatory work leading up to the HPC Grand Challenge test case of the High
+Lift Common Research Model (CRM-HL). The CRM-HL is a full aircraft configuration
+with deployed high-lift devices, simulated using wall-modeled LES (WMLES). 
+
+The MB9 micro-benchmark captures the essential characteristics of the Grand
+Challenge (such as flow physics and simulation approach) while requiring
+significantly fewer computational resources. It features a two-dimensional,
+three-element high-lift wing configuration, simulated with the IDDES model,
+which provides WMLES functionality in regions of resolved near-wall turbulence.
+This case is based on the well-known 30P30N test case, extensively studied in
+the 4th AIAA CFD High Lift Prediction Workshop (HLPW-4) and supported by
+available experimental data.
+
+You can download the input files for this specific case from the
+[OpenFOAM HPC repository](https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration).
+
+### Prerequisites
+
+Before running the simulation, ensure you have downloaded the input files. You
+can get them from the following
+[repository](https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration).
+Once downloaded, move them into a directory named `highLiftConfiguration` inside
+your working folder.
+
+Here’s an example of how your directory structure should look after downloading
+the necessary files:
+
+```bash
+ls -lasgo highLiftConfiguration
+total 104
+ 0 drwxrwxr-x@  12     384 Jun 13 10:09 .
+ 0 drwx------@ 234    7488 Sep 19 15:15 ..
+ 0 drwxrwxr-x@  11     352 Jun 13 10:09 0.orig
+ 8 -rwxr-xr-x@   1     626 Jun 13 10:09 Allclean
+16 -rwxr-xr-x@   1    6998 Jun 13 10:09 Allrun
+ 8 -rw-rw-r--@   1     991 Jun 13 10:09 COPYING
+48 -rw-rw-r--@   1   21547 Jun 13 10:09 README.md
+ 0 -rw-rw-r--@   1       0 Jun 13 10:09 case.foam
+ 0 drwxrwxr-x@   5     160 Jun 13 10:09 constant
+ 0 drwxrwxr-x@  13     416 Jun 13 10:09 figures
+ 0 drwxrwxr-x@  27     864 Jun 13 10:09 system
+24 -rw-rw-r--@   1   11399 Jun 13 10:09 thumbnail.png
+```
+
+### Configuring and Running the Simulation
+
+We'll run the simulation on a virtual machine with 180 CPUs using the
+`c3d-standard-180` machine type. The simulation involves several preprocessing
+steps, including mesh generation (`blockMesh`, `snappyHexMesh`), and finally,
+the simulation run itself. 
+
+Below is the Python code to configure and run the OpenFOAM simulation:
+
+```python
+import inductiva
+
+machine_group = inductiva.resources.MachineGroup(machine_type="c3d-standard-180")
+machine_group.start()
+
+import inductiva
+
+# Set simulation input directory
+input_dir = "/path/to/highLiftConfiguration"
+
+# Set the simulation commands
+commands = [
+    "runApplication cp system/controlDict.SHM system/controlDict",
+    "runApplication cp system/fvSchemes.SHM system/fvSchemes",
+    "runApplication cp system/fvSolution.SHM system/fvSolution",
+    "runApplication blockMesh",
+    "runApplication blockMesh",
+    "runApplication snappyHexMesh -dict system/snappyHexMeshDict.refineblockMesh -overwrite",
+    "runApplication mv ./0/cellLevel ./constant/polyMesh/",
+    "runApplication mv ./0/pointLevel ./constant/polyMesh/",
+    "runApplication rm -r 0",
+    "runApplication checkMesh",
+    "runApplication extrudeMesh -dict system/extrudeMeshDict.refineblockMesh",
+    "runApplication rm constant/polyMesh/cellLevel",
+    "runApplication rm constant/polyMesh/cellZones",
+    "runApplication rm constant/polyMesh/pointLevel",
+    "runApplication rm constant/polyMesh/pointZones",
+    "runApplication rm constant/polyMesh/faceZones",
+    "runApplication rm constant/polyMesh/level0Edge",
+    "runApplication rm constant/polyMesh/surfaceIndex",
+    'runApplication sed -i s/"ff_zMin"/"ff_SAVE"/g constant/polyMesh/boundary',
+    'runApplication sed -i s/"ff_zMax"/"ff_zMin"/g constant/polyMesh/boundary',
+    'runApplication sed -i s/"ff_SAVE"/"ff_zMax"/g constant/polyMesh/boundary',
+    "runApplication checkMesh",
+    "runApplication surfaceFeatureExtract",
+    "runApplication decomposePar -decomposeParDict system/decomposeParDict.SHM",
+    "runParallel snappyHexMesh -decomposeParDict system/decomposeParDict.SHM -dict system/snappyHexMeshDict -overwrite",
+    "runParallel checkMesh -decomposeParDict system/decomposeParDict.SHM -latestTime -meshQuality",
+    "runApplication reconstructParMesh -mergeTol 1e-08 -constant -latestTime",
+    "runApplication cp -r constant/polyMesh constant/polyMesh.origHalf",
+    "runApplication  mirrorMesh -overwrite",
+    "runApplication topoSet -dict system/topoSetDict.faces.ff_zMin",
+    "runApplication createPatch -overwrite -dict system/createPatchDict.mirrorMesh",
+    "runApplication changeDictionary -constant -dict system/changeDictionaryDict.cyclicPatches -enableFunctionEntries",
+    "runApplication topoSet -dict system/topoSetDict.faces.cyclic",
+    "runApplication checkMesh -constant",
+]
+
+# Initialize the Simulator
+openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
+
+# Run simulation
+task = openfoam.run(
+    input_dir=input_dir,
+    commands=commands,
+    n_vcpus=128,
+    on=machine_group)
+
+task.wait()
+task.download_outputs()
+
+```
+
+The commands used in this simulation were taken from the `Allrun` script found
+in the downloaded files. Some adjustments were made because we execute all
+commands directly from the `highLiftConfiguration` directory, meaning we can't
+use `cd` to navigate into subdirectories and run commands from there.
+Additionally, every command must start with `runApplication` or `runParallel`,
+which is why even basic commands like `rm` and `mv` are preceded by `runApplication`.
+
+### Important Details
+
+1. **ExaFOAM Benchmark**: This simulation replicates the MB9 micro-benchmark
+from the [ExaFOAM](https://exafoam.eu/benchmarks/) project. The benchmark
+focuses on capturing key flow physics and the simulation approach of a larger
+HPC challenge with fewer computational resources, providing a scalable and
+efficient simulation of a high-lift configuration.
+   
+2. **Machine Configuration**: We are using a powerful `c3d-standard-180`
+machine with 180 CPUs to ensure that the computation proceeds efficiently.
+You can adjust this depending on the available resources or your project's needs.
+   
+3. **Commands**: The list of `commands` involves several key OpenFOAM tasks
+like copying necessary configuration files, running mesh generation, and
+parallelizing the process using `decomposePar` and `snappyHexMesh`.
+
+4. **Parallelization**: We use `n_vcpus=128` in the simulation, which will
+allow OpenFOAM to run in parallel, greatly speeding up the computation.
+
+### Running the Simulation
+
+Running the script above will take some time, as OpenFOAM tasks like
+`snappyHexMesh` and `checkMesh` can be computationally intensive, especially
+with large meshes. The `task.wait()` command will block until the simulation
+is complete, after which the output files will be available.
+
+### Post-Simulation
+
+After the simulation completes, the output files will be downloaded locally by
+calling `task.download_outputs()`. The outputs will include simulation results
+like mesh quality reports, final results, and log files for each step in the process.
+
+To inspect the output, look under the `inductiva_output` folder where the
+results are downloaded:
+
+```bash
+ls -lasgo inductiva_output/task_id
+total 672
+  0 drwxr-xr-x  143     4576 Sep 19 16:06 .
+  0 drwxr-xr-x  400    12800 Sep 19 16:05 ..
+  0 drwxr-xr-x   11      352 Sep 19 16:06 0.orig
+  8 -rw-r--r--    1      626 Sep 19 16:06 Allclean
+ 16 -rw-r--r--    1     6998 Sep 19 16:06 Allrun
+  8 -rw-r--r--    1      991 Sep 19 16:06 COPYING
+ 48 -rw-r--r--    1    21547 Sep 19 16:06 README.md
+  0 -rw-r--r--    1        0 Sep 19 16:06 case.foam
+  0 drwxr-xr-x    8      256 Sep 19 16:06 constant
+  0 drwxr-xr-x   27      864 Sep 19 16:06 dynamicCode
+  0 drwxr-xr-x   13      416 Sep 19 16:06 figures
+  0 drwxr-xr-x    4      128 Sep 19 16:06 processor0
+  0 drwxr-xr-x    4      128 Sep 19 16:06 processor1
+  0 drwxr-xr-x    4      128 Sep 19 16:06 processor10
+    ...
+  0 drwxr-xr-x    4      128 Sep 19 16:06 processor126
+  0 drwxr-xr-x    4      128 Sep 19 16:06 processor127
+ 32 -rw-r--r--    1    14437 Sep 19 16:06 stderr.txt
+536 -rw-r--r--    1   272331 Sep 19 16:06 stdout.txt
+  0 drwxr-xr-x   30      960 Sep 19 16:06 system
+ 24 -rw-r--r--    1    11399 Sep 19 16:06 thumbnail.png
+```
+
+You can now perform post-processing on the results, just as you would if you had
+run the simulation locally.
+
+### Conclusion
+
+This setup demonstrates how to leverage cloud resources to run computationally
+heavy OpenFOAM simulations, specifically using a case from the ExaFOAM benchmarks.
+The cloud-based environment enables parallel execution on high-performance
+machines, drastically reducing computation time. Once the simulation completes,
+you can download and analyze the results on your local machine.
+
+Good luck with your OpenFOAM simulations!
+
 ## What to read next
 
 If you are interested in OpenFOAM, you may also be interested in checking
