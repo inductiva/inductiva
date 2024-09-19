@@ -60,6 +60,22 @@ def get_path_size(path_str: str) -> float:
             size += fp.stat().st_size
     return size
 
+def _resolve_io_path(path: Optional[str], io_dir: str) -> pathlib.Path:
+    """Resolve a path relative to I/O directory
+
+    Args:
+        path: Path to a file or directory.
+        io_dir: Name of I/O directory
+    """
+    resolved_path = pathlib.Path.cwd()
+
+    if io_dir:
+        resolved_path = pathlib.Path(io_dir)
+
+    if path is not None:
+        resolved_path = pathlib.Path(resolved_path, path)
+
+    return resolved_path
 
 def resolve_output_path(path: Optional[str]) -> pathlib.Path:
     """Resolve a path relative to the output_dir
@@ -67,16 +83,15 @@ def resolve_output_path(path: Optional[str]) -> pathlib.Path:
     Args:
         path: Path to a file or directory.
     """
-    resolved_path = pathlib.Path.cwd()
+    return _resolve_io_path(path, inductiva.get_output_dir())
 
-    if inductiva.get_output_dir():
-        resolved_path = pathlib.Path(inductiva.get_output_dir())
+def resolve_input_path(path: Optional[str]) -> pathlib.Path:
+    """Resolve a path relative to the output_dir
 
-    if path is not None:
-        resolved_path = pathlib.Path(resolved_path, path)
-
-    return resolved_path
-
+    Args:
+        path: Path to a file or directory.
+    """
+    return _resolve_io_path(path, inductiva.get_input_dir())
 
 def get_sorted_files(data_dir: str,
                      file_format: str = "name",

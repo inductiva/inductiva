@@ -22,6 +22,8 @@ from inductiva import api
 from inductiva.client.apis.tags import tasks_api
 from inductiva.client.paths.tasks_task_id_download_output_url import get \
     as get_tasks_task_id_download_output_url
+from inductiva.client.paths.tasks_task_id_download_input_url import get \
+    as get_tasks_task_id_download_input_url
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 
@@ -791,6 +793,34 @@ class Task:
 
         return api_response.body
 
+    def _request_download_input_url(
+        self
+    ) -> Optional[get_tasks_task_id_download_input_url.
+                  SchemaFor200ResponseBodyApplicationJson]:
+        try:
+            api_response = self._api.get_input_download_url(
+                path_params=self._get_path_params(),)
+        except exceptions.ApiException as e:
+            if not self._called_from_wait:
+
+                if self._status == models.TaskStatusCode.EXECUTERFAILED:
+                    logging.info("The remote process running the task failed:")
+                    self.get_info()
+                    detail = self.info.executer.error_detail
+                    if detail:
+                        logging.info(" > Message: %s", detail)
+                    else:
+                        logging.info(" > No error message available.")
+                else:
+                    # Raise the exception to be handled by the exception handler
+                    raise e
+            return None
+        finally:
+            # Reset internal state
+            self._called_from_wait = False
+
+        return api_response.body
+
     def get_output_url(self) -> Optional[str]:
         """Get a public URL to download the output files of the task.
 
@@ -823,6 +853,7 @@ class Task:
         zip_name: str,
         request_download_url: Callable,
         resolve_path: Callable,
+        download_partial_files: Callable,
         download_task_files: Callable,
     ) -> pathlib.Path:
         self._status = self.get_status()
@@ -861,11 +892,7 @@ class Task:
         if filenames:
             if file_server_available:
                 logging.info(download_message, dir_path)
-                data.download_partial_outputs(
-                    download_url,
-                    filenames,
-                    dir_path,
-                )
+                download_partial_files(download_url, filenames, dir_path)
             else:
                 logging.error("Partial download is not available.")
 
@@ -951,7 +978,45 @@ class Task:
             zip_name="output.zip",
             request_download_url=self._request_download_output_url,
             resolve_path=files.resolve_output_path,
-            download_task_files=self._api.download_task_output,   
+            download_partial_files=data.download_partial_outputs,
+            download_task_files=self._api.download_task_output,
+        )
+    
+    def download_inputs(
+        self,
+        filenames: Optional[List[str]] = None,
+        input_dir: Optional[str] = None,
+        uncompress: bool = True,
+        rm_downloaded_zip_archive: bool = True,
+        rm_remote_files: bool = False,
+    ) -> Optional[pathlib.Path]:
+        """Download input files of the task.
+
+        Args:
+            filenames: List of filenames to download. If None or empty, all
+                files are downloaded.
+            input_dir: Directory where to download the files. If None, the
+                files are downloaded to the default directory. The default is
+                {inductiva.get_input_dir()}/{input_dir}/{task_id}.
+            uncompress: Whether to uncompress the archive after downloading it.
+            rm_downloaded_zip_archive: Whether to remove the archive after
+                uncompressing it. If uncompress is False, this argument is
+                ignored.
+            rm_remote_files: Whether to remove all task files from remote
+                storage after the download is complete. Only used if filenames
+                is None or empty (i.e., all input files are downloaded).
+        """
+        return self._download(
+            filenames=filenames,
+            dest_dir=input_dir,
+            uncompress=uncompress,
+            rm_downloaded_zip_archive=rm_downloaded_zip_archive,
+            rm_remote_files=rm_remote_files,
+            zip_name="input.zip",
+            request_download_url=self._request_download_input_url,
+            resolve_path=files.resolve_input_path,
+            download_partial_files=data.download_partial_inputs,
+            download_task_files=self._api.download_task_input,
         )
 
     class _PathParams(TypedDict):

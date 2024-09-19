@@ -11,7 +11,7 @@ import pathlib
 import zipfile
 import tempfile
 import shutil
-from typing import List
+from typing import Callable, List
 from tqdm import tqdm
 import fsspec
 import urllib3
@@ -226,8 +226,8 @@ def zip_dir(dir_path, zip_name):
     return zip_path
 
 
-def _extract_zip_file_to_output(
-    output_dir: pathlib.Path,
+def _extract_zip_file_to_dir(
+    dest_dir: pathlib.Path,
     remove_zip_file: zipfile.ZipFile,
     filename: str,
     zip_path: str,
@@ -235,17 +235,51 @@ def _extract_zip_file_to_output(
     """Write a file from a ZIP archive to the output directory.
 
     Args:
-        output_dir: Directory where to store the extracted file.
+        dest_dir: Directory where to store the extracted file.
         remove_zip_file: ZipFile object from which to extract the file.
         filename: Name of the file to extract.
         zip_path: Path of the file inside the ZIP archive.
     """
     with remove_zip_file.open(zip_path) as source:
-        target_path = output_dir / pathlib.Path(filename)
+        target_path = dest_dir / pathlib.Path(filename)
         target_path.parent.mkdir(parents=True, exist_ok=True)
         with open(target_path, "wb") as target:
             target.write(source.read())
 
+def _download_partial_files(
+    download_url: str,
+    filenames: List[str],
+    dest_dir: pathlib.Path,
+    make_zip_path: Callable,
+) -> None:
+    """Download the partial files of a task.
+
+    Args:
+        download_url: URL from which to download the files.
+        filenames: List of filenames to download.
+        dest_dir: Path where to store the downloaded files.
+
+    Return:
+        Returns True if the download was successful, False otherwise.
+    """
+    try:
+        remote_filesystem = fsspec.filesystem("http")
+
+        with remote_filesystem.open(download_url, "rb") as remote_file:
+            with zipfile.ZipFile(remote_file) as remote_zip_file:
+                for filename in filenames:
+                    zip_path = make_zip_path(filename)
+                    try:
+                        _extract_zip_file_to_dir(dest_dir, remote_zip_file,
+                                                 filename, zip_path)
+                    except KeyError:
+                        logging.warning(
+                            "File %s not found in the output archive.",
+                            zip_path)
+
+    except Exception as e:  # pylint: disable=broad-except
+        logging.debug("Error downloading partial outputs: %s", e)
+        logging.error("Partial download failed.")
 
 def download_partial_outputs(
     download_url: str,
@@ -262,25 +296,33 @@ def download_partial_outputs(
     Return:
         Returns True if the download was successful, False otherwise.
     """
-    try:
-        remote_filesystem = fsspec.filesystem("http")
+    make_zip_path = lambda filename: "artifacts/" + filename
+    return _download_partial_files(download_url=download_url,
+                                   filenames=filenames,
+                                   dest_dir=output_dir,
+                                   make_zip_path=make_zip_path)
 
-        with remote_filesystem.open(download_url, "rb") as remote_file:
-            with zipfile.ZipFile(remote_file) as remote_zip_file:
-                for filename in filenames:
-                    zip_path = "artifacts/" + filename
-                    try:
-                        _extract_zip_file_to_output(output_dir, remote_zip_file,
-                                                    filename, zip_path)
-                    except KeyError:
-                        logging.warning(
-                            "File %s not found in the output archive.",
-                            zip_path)
+def download_partial_inputs(
+    download_url: str,
+    filenames: List[str],
+    input_dir: pathlib.Path,
+) -> None:
+    """Download the partial inputs of a task.
 
-    except Exception as e:  # pylint: disable=broad-except
-        logging.debug("Error downloading partial outputs: %s", e)
-        logging.error("Partial download failed.")
+    Args:
+        download_url: URL from which to download the inputs.
+        filenames: List of filenames to download.
+        output_dir: Path where to store the downloaded files.
 
+    Return:
+        Returns True if the download was successful, False otherwise.
+    """
+    make_zip_path = lambda filename: "sim_dir/" + filename \
+        if filename != 'input.json' else filename
+    return _download_partial_files(download_url=download_url,
+                                   filenames=filenames,
+                                   dest_dir=input_dir,
+                                   make_zip_path=make_zip_path)
 
 def download_file(
     response: urllib3.response.HTTPResponse,

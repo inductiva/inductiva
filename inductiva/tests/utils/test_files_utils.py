@@ -230,10 +230,10 @@ def test_extract_zip_file_to_output_dir(tmp_path: pathlib.Path):
 
         for file in files_list:
             #pylint: disable=protected-access
-            data._extract_zip_file_to_output(output_dir=output_dir,
-                                             remove_zip_file=zip_f,
-                                             zip_path=file,
-                                             filename=file)
+            data._extract_zip_file_to_dir(dest_dir=output_dir,
+                                          remove_zip_file=zip_f,
+                                          zip_path=file,
+                                          filename=file)
             #pylint: enable=protected-access
 
     assert (output_dir / "file1.txt").exists()
