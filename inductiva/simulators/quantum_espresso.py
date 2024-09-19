@@ -19,7 +19,7 @@ class QuantumEspresso(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = ("quantum_espresso.quantum_espresso."
+        self.api_method_name = ("quantumespresso.quantumespresso."
                                 "run_simulation")
 
     @property
