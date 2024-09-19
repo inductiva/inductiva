@@ -6,7 +6,7 @@
 # Inductiva: a Python package for scaling simulations on the Cloud
 
 
-Welcome to the official Python library for the Inductiva API version **0.8**. 
+Welcome to the official Python library for the Inductiva API version **0.9**. 
 The Inductiva API allows running a set of open-source physical
 simulators on the cloud, easily parallelizing simulations, each running
 on hundreds of CPU cores.
