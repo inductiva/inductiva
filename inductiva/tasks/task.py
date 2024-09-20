@@ -843,6 +843,27 @@ class Task:
 
         return download_url
 
+    def get_input_url(self) -> Optional[str]:
+        """Get a public URL to download the input files of the task.
+
+        Returns:
+            The URL to download the input files of the task, or None
+        """
+        response_body = self._request_download_input_url()
+        if not response_body:
+            return None
+
+        download_url = response_body.get("url")
+        if download_url is None:
+            raise RuntimeError(
+                "The API did not return a download URL for the task outputs.")
+
+        logging.info("■ Use the following URL to download the input "
+                     "files of you simulation:")
+        logging.info(" > %s", download_url)
+
+        return download_url
+
     def _download(
         self,
         filenames: Optional[List[str]],
