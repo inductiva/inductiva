@@ -2,6 +2,7 @@
 from argparse import Namespace
 from unittest import mock
 import inspect
+from pathlib import Path
 import sys
 import os
 import uuid
@@ -244,10 +245,11 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             print(args_spec)
             args = ([],) * (len(args_spec) - 2)  # -2 for self and input_dir
 
+            test_input_dir = Path(__file__).parent / 'test_input_dir'
             if resubmit_on_preemption is None:
                 # test that the default value of
                 # `resubmit_on_preemption` is False
-                sim_obj.run("inductiva/tests/simulators/test_input_dir",
+                sim_obj.run(test_input_dir,
                             *args,
                             on=mock_mg)
                 req_arg = submit_mock.call_args[1]["request"]
@@ -255,7 +257,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             else:
                 # test that the value of `resubmit_on_preemption` is passed
                 # correctly to the final api call
-                sim_obj.run("inductiva/tests/simulators/test_input_dir",
+                sim_obj.run(test_input_dir,
                             *args,
                             on=mock_mg,
                             resubmit_on_preemption=resubmit_on_preemption)
