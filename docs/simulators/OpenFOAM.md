@@ -272,6 +272,26 @@ runApplication createPatch -overwrite -dict system/createPatchDict.mirrorMesh
 runApplication changeDictionary -constant -dict system/changeDictionaryDict.cyclicPatches -enableFunctionEntries
 runApplication topoSet -dict system/topoSetDict.faces.cyclic
 runApplication checkMesh -constant
+runApplication cp -r 0.orig 0
+runApplication cd system
+runApplication cp system/controlDict.SHM system/controlDict
+runApplication cp system/fvSchemes.SHM system/fvSchemes
+runApplication cp system/fvSolution.SHM system/fvSolution
+runApplication decomposePar
+runParallel renumberMesh -overwrite
+runApplication cp system/controlDict.SRS.init system/controlDict
+runApplication cp system/fvSolution.SRS system/fvSolution
+runApplication cp system/fvSchemes.SRS system/fvSchemes
+runParallel applyBoundaryLayer -ybl 0.1 > ${LOGDIR}/log.R03.applyBoundaryLayer 2>&1 || exit 1
+runApplication cp system/controlDict.SRS.init system/controlDict
+runApplication cp system/fvSolution.SRS system/fvSolution
+runApplication cp system/fvSchemes.SRS system/fvSchemes
+runParallel rhoPimpleFoam
+runApplication cp system/controlDict.SRS.avg system/controlDict
+runApplication cp system/fvSolution.SRS system/fvSolution
+runApplication cp system/fvSchemes.SRS system/fvSchemes
+runParallel rhoPimpleFoam
+runParallel postProcess -func sampleDict.surface.SRS -latestTime
 ```
 
 ### Important Details
