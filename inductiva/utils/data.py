@@ -300,11 +300,11 @@ def download_partial_outputs(
     Return:
         Returns True if the download was successful, False otherwise.
     """
-    make_zip_path = lambda filename: "artifacts/" + filename
-    return _download_partial_files(download_url=download_url,
-                                   filenames=filenames,
-                                   dest_dir=output_dir,
-                                   make_zip_path=make_zip_path)
+    return _download_partial_files(
+        download_url=download_url,
+        filenames=filenames,
+        dest_dir=output_dir,
+        make_zip_path=lambda filename: "artifacts/" + filename)
 
 
 def download_partial_inputs(
@@ -322,12 +322,12 @@ def download_partial_inputs(
     Return:
         Returns True if the download was successful, False otherwise.
     """
-    make_zip_path = lambda filename: "sim_dir/" + filename \
-        if filename != 'input.json' else filename
-    return _download_partial_files(download_url=download_url,
-                                   filenames=filenames,
-                                   dest_dir=input_dir,
-                                   make_zip_path=make_zip_path)
+    return _download_partial_files(
+        download_url=download_url,
+        filenames=filenames,
+        dest_dir=input_dir,
+        make_zip_path=lambda filename: "sim_dir/" + filename \
+            if filename != "input.json" else filename)
 
 
 def download_file(
