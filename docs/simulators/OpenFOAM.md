@@ -202,43 +202,9 @@ import inductiva
 # Set simulation input directory
 input_dir = "/path/to/highLiftConfiguration"
 
-# Set the simulation commands
-commands = [
-    "runApplication cp system/controlDict.SHM system/controlDict",
-    "runApplication cp system/fvSchemes.SHM system/fvSchemes",
-    "runApplication cp system/fvSolution.SHM system/fvSolution",
-    "runApplication blockMesh",
-    "runApplication blockMesh",
-    "runApplication snappyHexMesh -dict system/snappyHexMeshDict.refineblockMesh -overwrite",
-    "runApplication mv ./0/cellLevel ./constant/polyMesh/",
-    "runApplication mv ./0/pointLevel ./constant/polyMesh/",
-    "runApplication rm -r 0",
-    "runApplication checkMesh",
-    "runApplication extrudeMesh -dict system/extrudeMeshDict.refineblockMesh",
-    "runApplication rm constant/polyMesh/cellLevel",
-    "runApplication rm constant/polyMesh/cellZones",
-    "runApplication rm constant/polyMesh/pointLevel",
-    "runApplication rm constant/polyMesh/pointZones",
-    "runApplication rm constant/polyMesh/faceZones",
-    "runApplication rm constant/polyMesh/level0Edge",
-    "runApplication rm constant/polyMesh/surfaceIndex",
-    'runApplication sed -i s/"ff_zMin"/"ff_SAVE"/g constant/polyMesh/boundary',
-    'runApplication sed -i s/"ff_zMax"/"ff_zMin"/g constant/polyMesh/boundary',
-    'runApplication sed -i s/"ff_SAVE"/"ff_zMax"/g constant/polyMesh/boundary',
-    "runApplication checkMesh",
-    "runApplication surfaceFeatureExtract",
-    "runApplication decomposePar -decomposeParDict system/decomposeParDict.SHM",
-    "runParallel snappyHexMesh -decomposeParDict system/decomposeParDict.SHM -dict system/snappyHexMeshDict -overwrite",
-    "runParallel checkMesh -decomposeParDict system/decomposeParDict.SHM -latestTime -meshQuality",
-    "runApplication reconstructParMesh -mergeTol 1e-08 -constant -latestTime",
-    "runApplication cp -r constant/polyMesh constant/polyMesh.origHalf",
-    "runApplication  mirrorMesh -overwrite",
-    "runApplication topoSet -dict system/topoSetDict.faces.ff_zMin",
-    "runApplication createPatch -overwrite -dict system/createPatchDict.mirrorMesh",
-    "runApplication changeDictionary -constant -dict system/changeDictionaryDict.cyclicPatches -enableFunctionEntries",
-    "runApplication topoSet -dict system/topoSetDict.faces.cyclic",
-    "runApplication checkMesh -constant",
-]
+# Read the simulation commands
+with open(input_dir + '/input.txt', 'r') as file:
+    commands = [line.strip() for line in file]
 
 # Initialize the Simulator
 openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
@@ -248,10 +214,15 @@ task = openfoam.run(
     input_dir=input_dir,
     commands=commands,
     n_vcpus=128,
+    use_hwthread=True,
     on=machine_group)
 
+# Wait for the task to finish and downloading the outputs
 task.wait()
 task.download_outputs()
+
+# Turn off the machine group
+machine_group.terminate()
 
 ```
 
@@ -261,6 +232,46 @@ commands directly from the `highLiftConfiguration` directory, meaning we can't
 use `cd` to navigate into subdirectories and run commands from there.
 Additionally, every command must start with `runApplication` or `runParallel`,
 which is why even basic commands like `rm` and `mv` are preceded by `runApplication`.
+
+We have consolidated all the commands into a file named `input.txt`, with each
+command placed on a separate line. This file is then read into a list of strings
+to execute sequentially. The contents of `input.txt` are as follows:
+```bash
+runApplication cp system/controlDict.SHM system/controlDict
+runApplication cp system/fvSchemes.SHM system/fvSchemes
+runApplication cp system/fvSolution.SHM system/fvSolution
+runApplication blockMesh
+runApplication blockMesh
+runApplication snappyHexMesh -dict system/snappyHexMeshDict.refineblockMesh -overwrite
+runApplication mv ./0/cellLevel ./constant/polyMesh/
+runApplication mv ./0/pointLevel ./constant/polyMesh/
+runApplication rm -r 0
+runApplication checkMesh
+runApplication extrudeMesh -dict system/extrudeMeshDict.refineblockMesh
+runApplication rm constant/polyMesh/cellLevel
+runApplication rm constant/polyMesh/cellZones
+runApplication rm constant/polyMesh/pointLevel
+runApplication rm constant/polyMesh/pointZones
+runApplication rm constant/polyMesh/faceZones
+runApplication rm constant/polyMesh/level0Edge
+runApplication rm constant/polyMesh/surfaceIndex
+runApplication sed -i s/"ff_zMin"/"ff_SAVE"/g constant/polyMesh/boundary
+runApplication sed -i s/"ff_zMax"/"ff_zMin"/g constant/polyMesh/boundary
+runApplication sed -i s/"ff_SAVE"/"ff_zMax"/g constant/polyMesh/boundary
+runApplication checkMesh
+runApplication surfaceFeatureExtract
+runApplication decomposePar -decomposeParDict system/decomposeParDict.SHM
+runParallel snappyHexMesh -decomposeParDict system/decomposeParDict.SHM -dict system/snappyHexMeshDict -overwrite
+runParallel checkMesh -decomposeParDict system/decomposeParDict.SHM -latestTime -meshQuality
+runApplication reconstructParMesh -mergeTol 1e-08 -constant -latestTime
+runApplication cp -r constant/polyMesh constant/polyMesh.origHalf
+runApplication  mirrorMesh -overwrite
+runApplication topoSet -dict system/topoSetDict.faces.ff_zMin
+runApplication createPatch -overwrite -dict system/createPatchDict.mirrorMesh
+runApplication changeDictionary -constant -dict system/changeDictionaryDict.cyclicPatches -enableFunctionEntries
+runApplication topoSet -dict system/topoSetDict.faces.cyclic
+runApplication checkMesh -constant
+```
 
 ### Important Details
 
@@ -325,6 +336,36 @@ total 672
 
 You can now perform post-processing on the results, just as you would if you had
 run the simulation locally.
+
+### Small benchmark
+
+We conducted a series of OpenFOAM simulations across different machine
+configurations to evaluate the performance impact of varying core counts and the
+effect of hyperthreading. The configurations ranged from 90 to 360 virtual CPUs
+(vCPUs), with some tests utilizing hyperthreading while others disabled it. Our
+goal was to assess how these hardware differences influence simulation time.
+
+| Machine Configuration            | nCores/n_vCPUs           | Hyperthreading Status        | Time (min:sec) |
+|-----------------------------------|--------------------------|------------------------------|----------------|
+| c3d-standard-90                   | 90                       | Enabled                      | 7:48           |
+| c3d-standard-180                  | 180                      | Enabled                      | 7:39           |
+| c3d-standard-360                  | 360                      | Enabled                      | 8:32           |
+| c3d-standard-90                   | 45                       | Disabled (Hyperthreading Off) | 7:20           |
+| c3d-standard-180                  | 90                       | Disabled (Hyperthreading Off) | 6:46           |
+| c3d-standard-360                  | 180                      | Disabled (Hyperthreading Off) | 6:57           |
+
+
+The results clearly demonstrate that disabling hyperthreading significantly
+enhances simulation performance across all tested configurations. For instance,
+in the c3d-standard-180 setup, disabling hyperthreading reduced the runtime by
+nearly a minute, from 7:39 to 6:46. However, the c3d-standard-360 configuration,
+with 360 cores, performed slower than the c3d-standard-180 machines, taking 8:32
+to complete. This suggests that the current OpenFOAM simulation may not scale
+efficiently across such a large number of cores, likely due to the overhead of
+managing many processes relative to the actual work performed by each. While
+larger machines like the c3d-standard-360 may not be ideal for this particular
+simulation, they could still offer advantages for other types of simulations
+better suited to higher core counts.
 
 ### Conclusion
 
