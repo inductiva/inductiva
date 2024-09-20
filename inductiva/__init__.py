@@ -27,9 +27,9 @@ logs.setup(getattr(logging, os.environ.get("INDUCTIVA_LOG_LEVEL", "INFO")))
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
 _input_dir = contextvars.ContextVar("INDUCTIVA_INPUT_DIR",
-                                     default=os.environ.get(
-                                         "INDUCTIVA_INPUT_DIR",
-                                         "inductiva_input"))
+                                    default=os.environ.get(
+                                        "INDUCTIVA_INPUT_DIR",
+                                        "inductiva_input"))
 _output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR",
                                      default=os.environ.get(
                                          "INDUCTIVA_OUTPUT_DIR",

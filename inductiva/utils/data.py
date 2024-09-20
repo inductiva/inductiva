@@ -246,6 +246,7 @@ def _extract_zip_file_to_dir(
         with open(target_path, "wb") as target:
             target.write(source.read())
 
+
 def _download_partial_files(
     download_url: str,
     filenames: List[str],
@@ -283,6 +284,7 @@ def _download_partial_files(
         logging.debug("Error downloading partial outputs: %s", e)
         logging.error("Partial download failed.")
 
+
 def download_partial_outputs(
     download_url: str,
     filenames: List[str],
@@ -303,6 +305,7 @@ def download_partial_outputs(
                                    filenames=filenames,
                                    dest_dir=output_dir,
                                    make_zip_path=make_zip_path)
+
 
 def download_partial_inputs(
     download_url: str,
@@ -325,6 +328,7 @@ def download_partial_inputs(
                                    filenames=filenames,
                                    dest_dir=input_dir,
                                    make_zip_path=make_zip_path)
+
 
 def download_file(
     response: urllib3.response.HTTPResponse,

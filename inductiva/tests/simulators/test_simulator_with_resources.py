@@ -249,9 +249,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             if resubmit_on_preemption is None:
                 # test that the default value of
                 # `resubmit_on_preemption` is False
-                sim_obj.run(test_input_dir,
-                            *args,
-                            on=mock_mg)
+                sim_obj.run(test_input_dir, *args, on=mock_mg)
                 req_arg = submit_mock.call_args[1]["request"]
                 assert not req_arg[resubmit_key]
             else:

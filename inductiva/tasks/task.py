@@ -888,7 +888,7 @@ class Task:
 
         if filenames is self.STANDARD_OUTPUT_FILES:
             download_message = "Downloading stdout and stderr files to %s..."
-        
+
         if filenames:
             if file_server_available:
                 logging.info(download_message, dir_path)
@@ -901,7 +901,7 @@ class Task:
 
             logging.info("Partial download completed to %s.", dir_path)
             return dir_path
-    
+
         zip_path = dir_path.joinpath(zip_name)
         logging.info(download_message, zip_path)
 
@@ -944,7 +944,7 @@ class Task:
                 "For more information.", self.id, dir_path)
 
         return dir_path
-    
+
     def download_outputs(
         self,
         filenames: Optional[List[str]] = None,
@@ -981,7 +981,7 @@ class Task:
             download_partial_files=data.download_partial_outputs,
             download_task_files=self._api.download_task_output,
         )
-    
+
     def download_inputs(
         self,
         filenames: Optional[List[str]] = None,

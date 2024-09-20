@@ -60,6 +60,7 @@ def get_path_size(path_str: str) -> float:
             size += fp.stat().st_size
     return size
 
+
 def _resolve_io_path(path: Optional[str], io_dir: str) -> pathlib.Path:
     """Resolve a path relative to I/O directory
 
@@ -77,6 +78,7 @@ def _resolve_io_path(path: Optional[str], io_dir: str) -> pathlib.Path:
 
     return resolved_path
 
+
 def resolve_output_path(path: Optional[str]) -> pathlib.Path:
     """Resolve a path relative to the output_dir
 
@@ -85,6 +87,7 @@ def resolve_output_path(path: Optional[str]) -> pathlib.Path:
     """
     return _resolve_io_path(path, inductiva.get_output_dir())
 
+
 def resolve_input_path(path: Optional[str]) -> pathlib.Path:
     """Resolve a path relative to the output_dir
 
@@ -92,6 +95,7 @@ def resolve_input_path(path: Optional[str]) -> pathlib.Path:
         path: Path to a file or directory.
     """
     return _resolve_io_path(path, inductiva.get_input_dir())
+
 
 def get_sorted_files(data_dir: str,
                      file_format: str = "name",
