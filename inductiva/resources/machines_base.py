@@ -116,6 +116,7 @@ class BaseMachineGroup(ABC):
         self.num_machines = 0
         self._max_idle_time = max_idle_time
         self._auto_terminate_ts = auto_terminate_ts
+        self._custom_disk_image = None
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -227,6 +228,7 @@ class BaseMachineGroup(ABC):
             auto_terminate_ts=self._convert_auto_terminate_ts(
                 self.auto_terminate_ts),
             dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
+            custom_disk_image=self._custom_disk_image,
             **kwargs,
         )
 
