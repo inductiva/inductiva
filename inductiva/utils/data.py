@@ -258,6 +258,8 @@ def _download_partial_files(
         download_url: URL from which to download the files.
         filenames: List of filenames to download.
         dest_dir: Path where to store the downloaded files.
+        make_zip_path: Function to create a path of a file inside the ZIP 
+        given a filename.
 
     Return:
         Returns True if the download was successful, False otherwise.
