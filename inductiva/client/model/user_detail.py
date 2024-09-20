@@ -35,6 +35,7 @@ class UserDetail(schemas.DictSchema):
             "campaigns",
             "tier",
             "total_available_credits",
+            "organization",
             "email",
             "username",
         }
@@ -42,6 +43,7 @@ class UserDetail(schemas.DictSchema):
         class properties:
             email = schemas.StrSchema
             username = schemas.StrSchema
+            organization = schemas.StrSchema
 
             @staticmethod
             def tier() -> typing.Type['UserTierCredits']:
@@ -202,6 +204,8 @@ class UserDetail(schemas.DictSchema):
                     email,
                 "username":
                     username,
+                "organization":
+                    organization,
                 "tier":
                     tier,
                 "total_available_credits":
@@ -222,6 +226,7 @@ class UserDetail(schemas.DictSchema):
     campaigns: MetaOapg.properties.campaigns
     tier: 'UserTierCredits'
     total_available_credits: MetaOapg.properties.total_available_credits
+    organization: MetaOapg.properties.organization
     email: MetaOapg.properties.email
     username: MetaOapg.properties.username
 
@@ -235,6 +240,12 @@ class UserDetail(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["username"]
     ) -> MetaOapg.properties.username:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["organization"]
+    ) -> MetaOapg.properties.organization:
         ...
 
     @typing.overload
@@ -286,6 +297,7 @@ class UserDetail(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "email",
         "username",
+        "organization",
         "tier",
         "total_available_credits",
         "terms_and_conditions_decision",
@@ -307,6 +319,12 @@ class UserDetail(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["username"]
     ) -> MetaOapg.properties.username:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["organization"]
+    ) -> MetaOapg.properties.organization:
         ...
 
     @typing.overload
@@ -361,6 +379,7 @@ class UserDetail(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "email",
         "username",
+        "organization",
         "tier",
         "total_available_credits",
         "terms_and_conditions_decision",
@@ -389,6 +408,10 @@ class UserDetail(schemas.DictSchema):
             decimal.Decimal,
             int,
             float,
+        ],
+        organization: typing.Union[
+            MetaOapg.properties.organization,
+            str,
         ],
         email: typing.Union[
             MetaOapg.properties.email,
@@ -423,6 +446,7 @@ class UserDetail(schemas.DictSchema):
             campaigns=campaigns,
             tier=tier,
             total_available_credits=total_available_credits,
+            organization=organization,
             email=email,
             username=username,
             name=name,
