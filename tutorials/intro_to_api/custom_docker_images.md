@@ -21,15 +21,22 @@ Here’s an example of how to use the `CustomImage` simulator:
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/fds-input-example.zip", unzip=True)
 
 custom_simulator = inductiva.simulators.CustomImage(container_image="docker://inductiva/kutu:fds_v6.8")
 
-task = custom_simulator.run(input_dir=input_dir, commands=["fds mccaffrey.fds"])
+task = custom_simulator.run(input_dir=input_dir, commands=["fds mccaffrey.fds"],
+                            on=machine_group)
 
 task.wait()
 task.download_outputs()
+
+machine_group.terminate()
 ```
 
 This basic example demonstrates how to run a custom Docker image. To leverage
@@ -47,6 +54,10 @@ example:
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/fds-input-example.zip", unzip=True)
 
@@ -55,10 +66,13 @@ custom_simulator = inductiva.simulators.CustomImage(container_image="docker://in
 mpi_config = inductiva.commands.MPIConfig("4.1.6", np=4, use_hwthread_cpus=True)
 command = inductiva.commands.Command("fds mccaffrey.fds", mpi_config=mpi_config)
 
-task = custom_simulator.run(input_dir=input_dir, commands=[command])
+task = custom_simulator.run(input_dir=input_dir, commands=[command],
+                            on=machine_group)
 
 task.wait()
 task.download_outputs()
+
+machine_group.terminate()
 ```
 
 This example runs four instances of your image with the command `fds mccaffrey.fds`
@@ -73,6 +87,10 @@ Alternatively, you can run MPI directly inside your container with:
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/fds-input-example.zip", unzip=True)
 
@@ -80,10 +98,13 @@ custom_simulator = inductiva.simulators.CustomImage(container_image="docker://in
 
 command = inductiva.commands.Command("mpirun -np 4 --use-hwthread-cpus fds mccaffrey.fds")
 
-task = custom_simulator.run(input_dir=input_dir, commands=[command])
+task = custom_simulator.run(input_dir=input_dir, commands=[command],
+                            on=machine_group)
 
 task.wait()
 task.download_outputs()
+
+machine_group.terminate()
 ```
 
 This runs:
