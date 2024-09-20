@@ -193,6 +193,7 @@ Below is the Python code to configure and run the OpenFOAM simulation:
 
 ```python
 import inductiva
+import os
 
 machine_group = inductiva.resources.MachineGroup(machine_type="c3d-standard-180")
 machine_group.start()
@@ -203,7 +204,7 @@ import inductiva
 input_dir = "/path/to/highLiftConfiguration"
 
 # Read the simulation commands
-with open(input_dir + '/input.txt', 'r') as file:
+with open(os.path.join(input_dir,'input.txt'), 'r') as file:
     commands = [line.strip() for line in file]
 
 # Initialize the Simulator
