@@ -330,7 +330,7 @@ To inspect the output, look under the `inductiva_output` folder where the
 results are downloaded:
 
 ```bash
-ls -lasgo inductiva_output/task_id
+ls -lasgo inductiva_output/<task_id>
 total 672
   0 drwxr-xr-x  143     4576 Sep 19 16:06 .
   0 drwxr-xr-x  400    12800 Sep 19 16:05 ..
