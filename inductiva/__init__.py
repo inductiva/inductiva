@@ -26,10 +26,6 @@ from .templating import TemplateManager
 logs.setup(getattr(logging, os.environ.get("INDUCTIVA_LOG_LEVEL", "INFO")))
 
 api_url = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
-_input_dir = contextvars.ContextVar("INDUCTIVA_INPUT_DIR",
-                                    default=os.environ.get(
-                                        "INDUCTIVA_INPUT_DIR",
-                                        "inductiva_input"))
 _output_dir = contextvars.ContextVar("INDUCTIVA_OUTPUT_DIR",
                                      default=os.environ.get(
                                          "INDUCTIVA_OUTPUT_DIR",
@@ -54,16 +50,6 @@ def set_output_dir(new_output_dir):
 def get_output_dir():
     """Returns the value of inductiva._output_dir"""
     return _output_dir.get()
-
-
-def set_input_dir(new_input_dir):
-    """Sets the value of `inductiva._input_dir` to `new_input_dir`"""
-    _input_dir.set(new_input_dir)
-
-
-def get_input_dir():
-    """Returns the value of inductiva._input_dir"""
-    return _input_dir.get()
 
 
 def _check_for_available_package_update():

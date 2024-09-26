@@ -373,7 +373,7 @@ def uncompress_task_outputs(zip_path: pathlib.Path, output_dir: pathlib.Path):
     """Uncompress a ZIP archive containing the outputs of a task.
 
     If the archive contains the directory called artifacts, it means that the
-    download includes the full ouputs of the task with the full directory
+    download includes the full outputs of the task with the full directory
     structure of the outputs (output.json, artifacts/*). Only the contents
     inside artifacts are extracted to the output directory. If the archive
     does not contain the artifacts directory, it means that the download

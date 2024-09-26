@@ -851,12 +851,12 @@ class Task:
         self,
         filenames: Optional[List[str]],
         dest_dir: Optional[str],
+        sub_dir: str,
         uncompress: bool,
         rm_downloaded_zip_archive: bool,
         rm_remote_files: bool,
         zip_name: str,
         request_download_url: Callable,
-        resolve_path: Callable,
         download_partial_files: Callable,
         download_task_files: Callable,
     ) -> pathlib.Path:
@@ -881,8 +881,9 @@ class Task:
 
         if dest_dir is None:
             dest_dir = self.id
+        dest_dir += f'/{sub_dir}/'
 
-        dir_path = resolve_path(dest_dir)
+        dir_path = files.resolve_output_path(dest_dir)
 
         if (dir_path.exists() and not self._contains_only_std_files(dir_path)):
             warnings.warn("Path already exists, files may be overwritten.")
@@ -964,7 +965,7 @@ class Task:
                 files are downloaded.
             output_dir: Directory where to download the files. If None, the
                 files are downloaded to the default directory. The default is
-                {inductiva.get_output_dir()}/{output_dir}/{task_id}.
+                {inductiva.get_output_dir()}/[{output_dir}|{task_id}]/outputs/.
             uncompress: Whether to uncompress the archive after downloading it.
             rm_downloaded_zip_archive: Whether to remove the archive after
                 uncompressing it. If uncompress is False, this argument is
@@ -976,12 +977,12 @@ class Task:
         return self._download(
             filenames=filenames,
             dest_dir=output_dir,
+            sub_dir='outputs',
             uncompress=uncompress,
             rm_downloaded_zip_archive=rm_downloaded_zip_archive,
             rm_remote_files=rm_remote_files,
             zip_name="output.zip",
             request_download_url=self._request_download_output_url,
-            resolve_path=files.resolve_output_path,
             download_partial_files=data.download_partial_outputs,
             download_task_files=self._api.download_task_output,
         )
@@ -1001,7 +1002,7 @@ class Task:
                 files are downloaded.
             input_dir: Directory where to download the files. If None, the
                 files are downloaded to the default directory. The default is
-                {inductiva.get_input_dir()}/{input_dir}/{task_id}.
+                {inductiva.get_output_dir()}/[{input_dir}|{task_id}]/inputs/.
             uncompress: Whether to uncompress the archive after downloading it.
             rm_downloaded_zip_archive: Whether to remove the archive after
                 uncompressing it. If uncompress is False, this argument is
@@ -1013,12 +1014,12 @@ class Task:
         return self._download(
             filenames=filenames,
             dest_dir=input_dir,
+            sub_dir='inputs',
             uncompress=uncompress,
             rm_downloaded_zip_archive=rm_downloaded_zip_archive,
             rm_remote_files=rm_remote_files,
             zip_name="input.zip",
             request_download_url=self._request_download_input_url,
-            resolve_path=files.resolve_input_path,
             download_partial_files=data.download_partial_inputs,
             download_task_files=self._api.download_task_input,
         )
