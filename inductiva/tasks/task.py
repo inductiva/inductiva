@@ -846,7 +846,7 @@ class Task:
         download_url = response_body.get("url")
         if download_url is None:
             raise RuntimeError(
-                "The API did not return a download URL for the task outputs.")
+                "The API did not return a download URL for the task inputs.")
 
         logging.info("■ Use the following URL to download the input "
                      "files of you simulation:")
