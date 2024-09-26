@@ -830,9 +830,6 @@ class Task:
             The URL to download the input files of the task, or None
         """
         response_body = self._request_download_input_url()
-        if not response_body:
-            return None
-
         download_url = response_body.get("url")
         if download_url is None:
             raise RuntimeError(
