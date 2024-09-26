@@ -68,11 +68,13 @@ def register(parser):
     subparser.add_argument("--dir",
                            type=str,
                            help="Path of where to download the task"
-                                "input/output files.")
-    subparser.add_argument("--input", "-i",
+                           "input/output files.")
+    subparser.add_argument("--input",
+                           "-i",
                            action='store_true',
                            help="Option to download input files.")
-    subparser.add_argument("--output", "-o",
+    subparser.add_argument("--output",
+                           "-o",
                            action='store_true',
                            help="Option to download output files (default).")
 
