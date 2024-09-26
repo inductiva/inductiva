@@ -795,14 +795,11 @@ class Task:
 
     def _request_download_input_url(
         self
-    ) -> Optional[get_tasks_task_id_download_input_url.
-                  SchemaFor200ResponseBodyApplicationJson]:
-        try:
-            api_response = self._api.get_input_download_url(
-                path_params=self._get_path_params(),)
-            return api_response.body
-        except exceptions.ApiException:
-            return None
+    ) -> get_tasks_task_id_download_input_url.\
+         SchemaFor200ResponseBodyApplicationJson:
+        api_response = self._api.get_input_download_url(
+            path_params=self._get_path_params(),)
+        return api_response.body
 
     def get_output_url(self) -> Optional[str]:
         """Get a public URL to download the output files of the task.
