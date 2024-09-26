@@ -881,7 +881,7 @@ class Task:
 
         if dest_dir is None:
             dest_dir = self.id
-        dest_dir += f'/{sub_dir}/'
+        dest_dir += f"/{sub_dir}/"
 
         dir_path = files.resolve_output_path(dest_dir)
 
@@ -977,7 +977,7 @@ class Task:
         return self._download(
             filenames=filenames,
             dest_dir=output_dir,
-            sub_dir='outputs',
+            sub_dir="outputs",
             uncompress=uncompress,
             rm_downloaded_zip_archive=rm_downloaded_zip_archive,
             rm_remote_files=rm_remote_files,
@@ -1014,7 +1014,7 @@ class Task:
         return self._download(
             filenames=filenames,
             dest_dir=input_dir,
-            sub_dir='inputs',
+            sub_dir="inputs",
             uncompress=uncompress,
             rm_downloaded_zip_archive=rm_downloaded_zip_archive,
             rm_remote_files=rm_remote_files,
