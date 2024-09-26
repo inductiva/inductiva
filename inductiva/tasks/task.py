@@ -797,18 +797,8 @@ class Task:
         self
     ) -> Optional[get_tasks_task_id_download_input_url.
                   SchemaFor200ResponseBodyApplicationJson]:
-        try:
-            api_response = self._api.get_input_download_url(
-                path_params=self._get_path_params(),)
-        except exceptions.ApiException as e:
-            if not self._called_from_wait:
-                # Raise the exception to be handled by the exception handler
-                raise e
-            return None
-        finally:
-            # Reset internal state
-            self._called_from_wait = False
-
+        api_response = self._api.get_input_download_url(
+            path_params=self._get_path_params(),)
         return api_response.body
 
     def get_output_url(self) -> Optional[str]:
