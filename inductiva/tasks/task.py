@@ -802,18 +802,8 @@ class Task:
                 path_params=self._get_path_params(),)
         except exceptions.ApiException as e:
             if not self._called_from_wait:
-
-                if self._status == models.TaskStatusCode.EXECUTERFAILED:
-                    logging.info("The remote process running the task failed:")
-                    self.get_info()
-                    detail = self.info.executer.error_detail
-                    if detail:
-                        logging.info(" > Message: %s", detail)
-                    else:
-                        logging.info(" > No error message available.")
-                else:
-                    # Raise the exception to be handled by the exception handler
-                    raise e
+                # Raise the exception to be handled by the exception handler
+                raise e
             return None
         finally:
             # Reset internal state
