@@ -8,15 +8,15 @@ def download(args):
     """Download the outputs of a task by ID."""
     task_ids = args.task_id
     filenames = args.filenames
-    dir = args.dir
+    download_dir = args.dir
 
     if not args.output and not args.input:
         args.output = True
 
-    if dir is not None:
-        inductiva.set_output_dir(dir)
+    if download_dir is not None:
+        inductiva.set_output_dir(download_dir)
 
-    if dir == "":
+    if download_dir == "":
         print("`dir` must not be an empty string.")
         return 1
 
@@ -71,11 +71,11 @@ def register(parser):
                            "input/output files.")
     subparser.add_argument("--input",
                            "-i",
-                           action='store_true',
+                           action="store_true",
                            help="Option to download input files.")
     subparser.add_argument("--output",
                            "-o",
-                           action='store_true',
+                           action="store_true",
                            help="Option to download output files (default).")
 
     subparser.set_defaults(func=download)
