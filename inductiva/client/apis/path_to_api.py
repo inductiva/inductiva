@@ -20,6 +20,7 @@ from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDi
 from inductiva.client.apis.paths.tasks_task_id_files import TasksTaskIdFiles
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
+from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
 from inductiva.client.apis.paths.admin_users_username_tier import AdminUsersUsernameTier
 from inductiva.client.apis.paths.admin_users_username_credits import AdminUsersUsernameCredits
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
@@ -44,6 +45,9 @@ from inductiva.client.apis.paths.admin_campaigns_campaign_id_capabilities import
 from inductiva.client.apis.paths.admin_campaigns_campaign_id_capabilities_capability_id import AdminCampaignsCampaignIdCapabilitiesCapabilityId
 from inductiva.client.apis.paths.admin_campaigns_campaign_id_quotas import AdminCampaignsCampaignIdQuotas
 from inductiva.client.apis.paths.admin_campaigns_campaign_id_quotas_quota_id import AdminCampaignsCampaignIdQuotasQuotaId
+from inductiva.client.apis.paths.admin_organizations import AdminOrganizations
+from inductiva.client.apis.paths.admin_organizations_organization_id import AdminOrganizationsOrganizationId
+from inductiva.client.apis.paths.admin_organizations_billing import AdminOrganizationsBilling
 from inductiva.client.apis.paths.admin_tiers import AdminTiers
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
@@ -120,6 +124,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
             AdminUsersEmailTermsAndConditions,
+        PathValues.ADMIN_USERS_USERNAME_ORGANIZATION:
+            AdminUsersUsernameOrganization,
         PathValues.ADMIN_USERS_USERNAME_TIER:
             AdminUsersUsernameTier,
         PathValues.ADMIN_USERS_USERNAME_CREDITS:
@@ -168,6 +174,12 @@ PathToApi = typing_extensions.TypedDict(
             AdminCampaignsCampaignIdQuotas,
         PathValues.ADMIN_CAMPAIGNS_CAMPAIGN_ID_QUOTAS_QUOTA_ID:
             AdminCampaignsCampaignIdQuotasQuotaId,
+        PathValues.ADMIN_ORGANIZATIONS:
+            AdminOrganizations,
+        PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID:
+            AdminOrganizationsOrganizationId,
+        PathValues.ADMIN_ORGANIZATIONS_BILLING:
+            AdminOrganizationsBilling,
         PathValues.ADMIN_TIERS:
             AdminTiers,
         PathValues.EXECUTERTRACKER_REGISTER:
@@ -279,6 +291,8 @@ path_to_api = PathToApi({
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
         AdminUsersEmailTermsAndConditions,
+    PathValues.ADMIN_USERS_USERNAME_ORGANIZATION:
+        AdminUsersUsernameOrganization,
     PathValues.ADMIN_USERS_USERNAME_TIER:
         AdminUsersUsernameTier,
     PathValues.ADMIN_USERS_USERNAME_CREDITS:
@@ -327,6 +341,12 @@ path_to_api = PathToApi({
         AdminCampaignsCampaignIdQuotas,
     PathValues.ADMIN_CAMPAIGNS_CAMPAIGN_ID_QUOTAS_QUOTA_ID:
         AdminCampaignsCampaignIdQuotasQuotaId,
+    PathValues.ADMIN_ORGANIZATIONS:
+        AdminOrganizations,
+    PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID:
+        AdminOrganizationsOrganizationId,
+    PathValues.ADMIN_ORGANIZATIONS_BILLING:
+        AdminOrganizationsBilling,
     PathValues.ADMIN_TIERS:
         AdminTiers,
     PathValues.EXECUTERTRACKER_REGISTER:
