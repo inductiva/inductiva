@@ -54,8 +54,8 @@ def register(parser):
         "--dir option. Files are downloaded to a subdirectory named after the\n"
         "ID of the corresponding task. The output files are downloaded when\n"
         "the --output/-o option is passed. Similarly, the input files are\n"
-        "downloaded when the --input/-i option is passed. If neither option is\n"
-        "specified, the output files are downloaded by default.")
+        "downloaded when the --input/-i option is passed. If neither option \n"
+        "is specified, the output files are downloaded by default.")
 
     subparser.add_argument("task_id",
                            type=str,
