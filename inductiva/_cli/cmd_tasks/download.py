@@ -4,6 +4,13 @@ import argparse
 import inductiva
 
 
+def _download(download_func, filenames, task_id):
+    try:
+        download_func(filenames=filenames)
+    except inductiva.client.exceptions.ApiException as exc:
+        print(f"Error for task {task_id}:", exc)
+
+
 def download(args):
     """Download the outputs of a task by ID."""
     task_ids = args.task_id
@@ -28,14 +35,11 @@ def download(args):
     task_ids = set(task_ids)
 
     for task_id in task_ids:
-        try:
-            task = inductiva.tasks.Task(task_id)
-            if args.output:
-                task.download_outputs(filenames=filenames)
-            if args.input:
-                task.download_inputs(filenames=filenames)
-        except inductiva.client.exceptions.ApiException as exc:
-            print(f"Error for task {task_id}:", exc)
+        task = inductiva.tasks.Task(task_id)
+        if args.output:
+            _download(task.download_outputs, filenames, task_id)
+        if args.input:
+            _download(task.download_inputs, filenames, task_id)
     return 0
 
 
