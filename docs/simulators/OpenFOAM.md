@@ -168,19 +168,27 @@ the necessary files:
 ```bash
 ls -lasgo highLiftConfiguration
 total 104
- 0 drwxrwxr-x@  12     384 Jun 13 10:09 .
- 0 drwx------@ 234    7488 Sep 19 15:15 ..
- 0 drwxrwxr-x@  11     352 Jun 13 10:09 0.orig
- 8 -rwxr-xr-x@   1     626 Jun 13 10:09 Allclean
-16 -rwxr-xr-x@   1    6998 Jun 13 10:09 Allrun
- 8 -rw-rw-r--@   1     991 Jun 13 10:09 COPYING
-48 -rw-rw-r--@   1   21547 Jun 13 10:09 README.md
- 0 -rw-rw-r--@   1       0 Jun 13 10:09 case.foam
- 0 drwxrwxr-x@   5     160 Jun 13 10:09 constant
- 0 drwxrwxr-x@  13     416 Jun 13 10:09 figures
- 0 drwxrwxr-x@  27     864 Jun 13 10:09 system
-24 -rw-rw-r--@   1   11399 Jun 13 10:09 thumbnail.png
+ 0 drwxrwxr-x@ 14     448 Sep 23 11:44 .
+ 0 drwx------@ 19     608 Sep 23 11:49 ..
+ 0 drwxrwxr-x@ 12     384 Sep 20 09:43 0.orig
+ 8 -rwxr-xr-x@  1     626 Jun 13 10:09 Allclean
+16 -rwxr-xr-x@  1    6998 Jun 13 10:09 Allrun
+ 8 -rw-rw-r--@  1     991 Jun 13 10:09 COPYING
+48 -rw-rw-r--@  1   21547 Jun 13 10:09 README.md
+ 0 -rw-rw-r--@  1       0 Jun 13 10:09 case.foam
+ 0 drwxrwxr-x@  6     192 Sep 20 09:43 constant
+ 0 drwxrwxr-x@ 13     416 Jun 13 10:09 figures
+ 0 drwxrwxr-x@ 28     896 Sep 20 09:43 system
+24 -rw-rw-r--@  1   11399 Jun 13 10:09 thumbnail.png
 ```
+
+### Modifications to the Simulation Parameters
+
+To make the simulation run faster, we made some adjustments to the original
+parameters. Specifically, we modified the time step (`dt`) to 0.00002, the
+initial time to 0.10, and the final time to 0.30. These changes help reduce the
+overall simulation time while maintaining reasonable accuracy for this high-lift
+configuration case.
 
 ### Configuring and Running the Simulation
 
@@ -204,7 +212,7 @@ import inductiva
 input_dir = "/path/to/highLiftConfiguration"
 
 # Read the simulation commands
-with open(os.path.join(input_dir,'input.txt'), 'r') as file:
+with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
     commands = [line.strip() for line in file]
 
 # Initialize the Simulator
@@ -234,9 +242,9 @@ use `cd` to navigate into subdirectories and run commands from there.
 Additionally, every command must start with `runApplication` or `runParallel`,
 which is why even basic commands like `rm` and `mv` are preceded by `runApplication`.
 
-We have consolidated all the commands into a file named `input.txt`, with each
+We have consolidated all the commands into a file named `commands.txt`, with each
 command placed on a separate line. This file is then read into a list of strings
-to execute sequentially. The contents of `input.txt` are as follows:
+to execute sequentially. The contents of `commands.txt` are as follows:
 ```bash
 runApplication cp system/controlDict.SHM system/controlDict
 runApplication cp system/fvSchemes.SHM system/fvSchemes
@@ -272,6 +280,8 @@ runApplication createPatch -overwrite -dict system/createPatchDict.mirrorMesh
 runApplication changeDictionary -constant -dict system/changeDictionaryDict.cyclicPatches -enableFunctionEntries
 runApplication topoSet -dict system/topoSetDict.faces.cyclic
 runApplication checkMesh -constant
+runApplication rm -r processor*
+runApplication rm -r constant/polyMesh.origHalf
 runApplication cp -r 0.orig 0
 runApplication cd system
 runApplication cp system/controlDict.SHM system/controlDict
@@ -282,7 +292,7 @@ runParallel renumberMesh -overwrite
 runApplication cp system/controlDict.SRS.init system/controlDict
 runApplication cp system/fvSolution.SRS system/fvSolution
 runApplication cp system/fvSchemes.SRS system/fvSchemes
-runParallel applyBoundaryLayer -ybl 0.1 > ${LOGDIR}/log.R03.applyBoundaryLayer 2>&1 || exit 1
+runParallel applyBoundaryLayer -ybl 0.1
 runApplication cp system/controlDict.SRS.init system/controlDict
 runApplication cp system/fvSolution.SRS system/fvSolution
 runApplication cp system/fvSchemes.SRS system/fvSchemes
@@ -362,31 +372,47 @@ run the simulation locally.
 
 We conducted a series of OpenFOAM simulations across different machine
 configurations to evaluate the performance impact of varying core counts and the
-effect of hyperthreading. The configurations ranged from 90 to 360 virtual CPUs
+effect of hyperthreading. The configurations ranged from 60 to 720 virtual CPUs
 (vCPUs), with some tests utilizing hyperthreading while others disabled it. Our
 goal was to assess how these hardware differences influence simulation time.
 
-| Machine Configuration            | nCores/n_vCPUs           | Hyperthreading Status        | Time (min:sec) |
-|-----------------------------------|--------------------------|------------------------------|----------------|
-| c3d-standard-90                   | 90                       | Enabled                      | 7:48           |
-| c3d-standard-180                  | 180                      | Enabled                      | 7:39           |
-| c3d-standard-360                  | 360                      | Enabled                      | 8:32           |
-| c3d-standard-90                   | 45                       | Disabled (Hyperthreading Off) | 7:20           |
-| c3d-standard-180                  | 90                       | Disabled (Hyperthreading Off) | 6:46           |
-| c3d-standard-360                  | 180                      | Disabled (Hyperthreading Off) | 6:57           |
+
+| Machine Configuration             | n_vCPUs/total           | Threads per core       | Time (h:min:sec)|
+|-----------------------------------|-------------------------|------------------------|----------------|
+| c3d-highcpu-360 x2 (Mpi Cluster)  | 360/720                 | 2                      | 19:10:09       |
+| c3d-highcpu-360                   | 250/360                 | 2                      | 39:58:37       |
+| c3d-highcpu-360                   | 180/360                 | 2                      | 40:20:00       |
+| c3d-highcpu-360                   | 180/180                 | 1                      | 40:47:14       |
+| c3d-highcpu-60 x6 (Mpi Cluster)   | 180/360                 | 2                      | 41:23:46       |
+| c3d-highcpu-360                   | 360/360                 | 2                      | 42:17:59       |
 
 
-The results clearly demonstrate that disabling hyperthreading significantly
-enhances simulation performance across all tested configurations. For instance,
-in the c3d-standard-180 setup, disabling hyperthreading reduced the runtime by
-nearly a minute, from 7:39 to 6:46. However, the c3d-standard-360 configuration,
-with 360 cores, performed slower than the c3d-standard-180 machines, taking 8:32
-to complete. This suggests that the current OpenFOAM simulation may not scale
-efficiently across such a large number of cores, likely due to the overhead of
-managing many processes relative to the actual work performed by each. While
-larger machines like the c3d-standard-360 may not be ideal for this particular
-simulation, they could still offer advantages for other types of simulations
-better suited to higher core counts.
+The results of the simulation suggest that **limiting the use of hyperthreading**
+or **disabling it altogether** offers better performance than fully utilizing
+all available cores with hyperthreading enabled. However, there appears to be a
+**sweet spot** between using either **half** or **most of the available threads**
+when hyperthreading is active.
+
+When comparing two runs with 180 vCPUs, the scenario with hyperthreading disabled
+actually showed **worse performance** than the one where hyperthreading was
+enabled but not used. This suggests that instead of disabling
+hyperthreading completely, it might be more efficient to launch machines with
+**2 threads per core** and control the number of threads the simulation uses
+through the `n_vcpus` parameter.
+
+Overall, these findings indicate that **disabling hyperthreading** doesn't
+always yield the best performance. Instead, running with 2 threads per core and
+**selectively using a portion of the available cores** can provide a performance
+advantage over fully utilizing all threads. This highlights the need for balancing
+hyperthreading and core usage to achieve optimal results.
+
+Additionally, by leveraging **MPI clusters**, we can distribute the simulation
+across multiple machines, greatly increasing the available computational power.
+For example, in one case, we ran the simulation using **two c3d-highcpu-360 machines**
+in parallel, which nearly **halved the simulation time** compared to running on
+a single machine. This approach opens up the possibility of scaling simulations
+significantly, enabling much faster computations by tapping into larger,
+distributed resources.
 
 ### Conclusion
 
