@@ -62,7 +62,7 @@ def get_path_size(path_str: str) -> float:
 
 
 def resolve_output_path(path: Optional[str]) -> pathlib.Path:
-    """Resolve a path relative to the output_dir
+    """Resolve a path relative to I/O directory
 
     Args:
         path: Path to a file or directory.

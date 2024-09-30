@@ -7,7 +7,7 @@ import logging
 import datetime
 import contextlib
 from typing_extensions import TypedDict
-from typing import Dict, Any, List, Optional, Tuple, Union
+from typing import Callable, Dict, Any, List, Optional, Tuple, Union
 
 import urllib3
 import tabulate
@@ -22,6 +22,8 @@ from inductiva import api
 from inductiva.client.apis.tags import tasks_api
 from inductiva.client.paths.tasks_task_id_download_output_url import get \
     as get_tasks_task_id_download_output_url
+from inductiva.client.paths.tasks_task_id_download_input_url import get \
+    as get_tasks_task_id_download_input_url
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 
@@ -791,6 +793,14 @@ class Task:
 
         return api_response.body
 
+    def _request_download_input_url(
+        self
+    ) -> get_tasks_task_id_download_input_url.\
+         SchemaFor200ResponseBodyApplicationJson:
+        api_response = self._api.get_input_download_url(
+            path_params=self._get_path_params(),)
+        return api_response.body
+
     def get_output_url(self) -> Optional[str]:
         """Get a public URL to download the output files of the task.
 
@@ -813,6 +823,127 @@ class Task:
 
         return download_url
 
+    def get_input_url(self) -> Optional[str]:
+        """Get a public URL to download the input files of the task.
+
+        Returns:
+            The URL to download the input files of the task, or None
+        """
+        response_body = self._request_download_input_url()
+        download_url = response_body.get("url")
+        if download_url is None:
+            raise RuntimeError(
+                "The API did not return a download URL for the task inputs.")
+
+        logging.info("■ Use the following URL to download the input "
+                     "files of you simulation:")
+        logging.info(" > %s", download_url)
+
+        return download_url
+
+    def _download(
+        self,
+        filenames: Optional[List[str]],
+        dest_dir: Optional[str],
+        sub_dir: str,
+        uncompress: bool,
+        rm_downloaded_zip_archive: bool,
+        rm_remote_files: bool,
+        zip_name: str,
+        request_download_url: Callable,
+        download_partial_files: Callable,
+        download_task_files: Callable,
+    ) -> pathlib.Path:
+        self._status = self.get_status()
+
+        response_body = request_download_url()
+        if not response_body:
+            return None
+
+        download_url = response_body.get("url")
+        if download_url is None:
+            raise RuntimeError(
+                "The API did not return a download URL for the task files.")
+
+        logging.debug("\nDownload URL: %s\n", download_url)
+
+        # If the file server (GCP, ICE, etc.) is not available, the Web API
+        # returns a fallback URL and returns the following flag as False.
+        # In this case, the output donwload will be provided by the Web API
+        # itself.
+        file_server_available = bool(response_body.get("file_server_available"))
+
+        if dest_dir is None:
+            dest_dir = self.id
+        dest_dir += f"/{sub_dir}/"
+
+        dir_path = files.resolve_output_path(dest_dir)
+
+        if (dir_path.exists() and not self._contains_only_std_files(dir_path)):
+            warnings.warn("Path already exists, files may be overwritten.")
+        dir_path.mkdir(parents=True, exist_ok=True)
+
+        download_message = "Downloading simulation files to %s..."
+
+        if filenames is self.STANDARD_OUTPUT_FILES:
+            download_message = "Downloading stdout and stderr files to %s..."
+
+        if filenames:
+            if file_server_available:
+                logging.info(download_message, dir_path)
+                download_partial_files(download_url, filenames, dir_path)
+            else:
+                logging.error("Partial download is not available.")
+
+            # If the user requested a partial download, the full download
+            # will be skipped.
+
+            logging.info("Partial download completed to %s.", dir_path)
+            return dir_path
+
+        zip_path = dir_path.joinpath(zip_name)
+        logging.info(download_message, zip_path)
+
+        if file_server_available:
+            pool_manager: urllib3.PoolManager = (
+                self._api.api_client.rest_client.pool_manager)
+            response = pool_manager.request(
+                "GET",
+                download_url,
+                preload_content=False,
+            )
+        # If the file server is not available, the download will be provided
+        # by the Web API. Therefore the standard method is used.
+        else:
+            api_response = download_task_files(
+                path_params=self._get_path_params(),
+                stream=True,
+                skip_deserialization=True,
+            )
+            response = api_response.response
+
+        # use raw urllib3 response instead of the generated client response, to
+        # implement our own download logic (with progress bar, first checking
+        # the size of the file, etc.)
+        data.download_file(response, zip_path)
+
+        if uncompress:
+            logging.info("Uncompressing the files to %s...", dir_path)
+            data.uncompress_task_outputs(zip_path, dir_path)
+            if rm_downloaded_zip_archive:
+                zip_path.unlink()
+
+        if rm_remote_files:
+            self.remove_remote_files()
+
+        if self._status == models.TaskStatusCode.FAILED:
+            logging.error(
+                "Task %s failed.\n"
+                "Please inspect the stdout.txt and stderr.txt files at %s\n"
+                "For more information.", self.id, dir_path)
+
+        return dir_path
+
     def download_outputs(
         self,
         filenames: Optional[List[str]] = None,
@@ -828,7 +959,7 @@ class Task:
                 files are downloaded.
             output_dir: Directory where to download the files. If None, the
                 files are downloaded to the default directory. The default is
-                {inductiva.get_output_dir()}/{output_dir}/{task_id}.
+                {inductiva.get_output_dir()}/[{output_dir}|{task_id}]/outputs/.
             uncompress: Whether to uncompress the archive after downloading it.
             rm_downloaded_zip_archive: Whether to remove the archive after
                 uncompressing it. If uncompress is False, this argument is
@@ -837,99 +968,55 @@ class Task:
                 storage after the download is complete. Only used if filenames
                 is None or empty (i.e., all output files are downloaded).
         """
-        self._status = self.get_status()
+        return self._download(
+            filenames=filenames,
+            dest_dir=output_dir,
+            sub_dir="outputs",
+            uncompress=uncompress,
+            rm_downloaded_zip_archive=rm_downloaded_zip_archive,
+            rm_remote_files=rm_remote_files,
+            zip_name="output.zip",
+            request_download_url=self._request_download_output_url,
+            download_partial_files=data.download_partial_outputs,
+            download_task_files=self._api.download_task_output,
+        )
 
-        response_body = self._request_download_output_url()
-        if not response_body:
-            return None
+    def download_inputs(
+        self,
+        filenames: Optional[List[str]] = None,
+        input_dir: Optional[str] = None,
+        uncompress: bool = True,
+        rm_downloaded_zip_archive: bool = True,
+        rm_remote_files: bool = False,
+    ) -> Optional[pathlib.Path]:
+        """Download input files of the task.
 
-        download_url = response_body.get("url")
-        if download_url is None:
-            raise RuntimeError(
-                "The API did not return a download URL for the task outputs.")
-
-        logging.debug("\nDownload URL: %s\n", download_url)
-
-        # If the file server (GCP, ICE, etc.) is not available, the Web API
-        # returns a fallback URL and returns the following flag as False.
-        # In this case, the output donwload will be provided by the Web API
-        # itself.
-        file_server_available = bool(response_body.get("file_server_available"))
-
-        if output_dir is None:
-            output_dir = self.id
-
-        output_dir_path = files.resolve_output_path(output_dir)
-
-        if (output_dir_path.exists() and
-                not self._contains_only_std_files(output_dir_path)):
-            warnings.warn("Path already exists, files may be overwritten.")
-        output_dir_path.mkdir(parents=True, exist_ok=True)
-
-        download_message = "Downloading simulation outputs to %s..."
-
-        if filenames is self.STANDARD_OUTPUT_FILES:
-            download_message = "Downloading stdout and stderr files to %s..."
-
-        if filenames:
-            if file_server_available:
-                logging.info(download_message, output_dir_path)
-                data.download_partial_outputs(
-                    download_url,
-                    filenames,
-                    output_dir_path,
-                )
-            else:
-                logging.error("Partial download is not available.")
-
-            # If the user requested a partial download, the full download
-            # will be skipped.
-
-            logging.info("Partial download completed to %s.", output_dir_path)
-            return output_dir_path
-
-        zip_path = output_dir_path.joinpath("output.zip")
-        logging.info(download_message, zip_path)
-
-        if file_server_available:
-            pool_manager: urllib3.PoolManager = (
-                self._api.api_client.rest_client.pool_manager)
-            response = pool_manager.request(
-                "GET",
-                download_url,
-                preload_content=False,
-            )
-        # If the file server is not available, the download will be provided
-        # by the Web API. Therefore the standard method is used.
-        else:
-            api_response = self._api.download_task_output(
-                path_params=self._get_path_params(),
-                stream=True,
-                skip_deserialization=True,
-            )
-            response = api_response.response
-
-        # use raw urllib3 response instead of the generated client response, to
-        # implement our own download logic (with progress bar, first checking
-        # the size of the file, etc.)
-        data.download_file(response, zip_path)
-
-        if uncompress:
-            logging.info("Uncompressing the outputs to %s...", output_dir_path)
-            data.uncompress_task_outputs(zip_path, output_dir_path)
-            if rm_downloaded_zip_archive:
-                zip_path.unlink()
-
-        if rm_remote_files:
-            self.remove_remote_files()
-
-        if self._status == models.TaskStatusCode.FAILED:
-            logging.error(
-                "Task %s failed.\n"
-                "Please inspect the stdout.txt and stderr.txt files at %s\n"
-                "For more information.", self.id, output_dir_path)
-
-        return output_dir_path
+        Args:
+            filenames: List of filenames to download. If None or empty, all
+                files are downloaded.
+            input_dir: Directory where to download the files. If None, the
+                files are downloaded to the default directory. The default is
+                {inductiva.get_output_dir()}/[{input_dir}|{task_id}]/inputs/.
+            uncompress: Whether to uncompress the archive after downloading it.
+            rm_downloaded_zip_archive: Whether to remove the archive after
+                uncompressing it. If uncompress is False, this argument is
+                ignored.
+            rm_remote_files: Whether to remove all task files from remote
+                storage after the download is complete. Only used if filenames
+                is None or empty (i.e., all input files are downloaded).
+        """
+        return self._download(
+            filenames=filenames,
+            dest_dir=input_dir,
+            sub_dir="inputs",
+            uncompress=uncompress,
+            rm_downloaded_zip_archive=rm_downloaded_zip_archive,
+            rm_remote_files=rm_remote_files,
+            zip_name="input.zip",
+            request_download_url=self._request_download_input_url,
+            download_partial_files=data.download_partial_inputs,
+            download_task_files=self._api.download_task_input,
+        )
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
