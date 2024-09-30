@@ -87,44 +87,10 @@ machine_group.terminate()
 
 ## Example - ESI distribution
 
-````python
-import inductiva
-
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
-machine_group.start()
-
-# Set simulation input directory
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "openfoam-esi-input-example.zip", unzip=True)
-
-# Set the simulation commands
-commands = [
-    "runApplication surfaceFeatureExtract",
-    "runApplication blockMesh",
-    "runApplication decomposePar -copyZero",
-    "runParallel snappyHexMesh -overwrite",
-    "runParallel potentialFoam",
-    "runParallel simpleFoam",
-    "runApplication reconstructParMesh -constant",
-    "runApplication reconstructPar -latestTime"
-]
-
-# Initialize the Simulator
-openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
-
-# Run simulation with config files in the input directory
-task = openfoam.run(input_dir=input_dir,
-                    commands=commands,
-                    n_vcpus=4,
-                    on=machine_group)
-
-task.wait()
-task.download_outputs()
-
-machine_group.terminate()
-````
+In order to run our sample simulation one just needs to download the
+`openfoam-esi-input-example.zip`, chose the correct distribution
+`inductiva.simulators.OpenFOAM(distribution="esi")` and use the command 
+`runApplication surfaceFeatureExtract` instead of `runApplication surfaceFeatures`.
 
 ## Advanced Example: Running MB9 micro-benchmark by ExaFOAM
 
@@ -313,8 +279,12 @@ You can adjust this depending on the available resources or your project's needs
 like copying necessary configuration files, running mesh generation, and
 parallelizing the process using `decomposePar` and `snappyHexMesh`.
 
-4. **Parallelization**: We use `n_vcpus=180` in the simulation, which will
-allow OpenFOAM to run in parallel, greatly speeding up the computation.
+4. **Parallelization**: We utilize `n_vcpus=180` in the simulation, enabling
+OpenFOAM to run in parallel and significantly accelerate the computation. The
+choice of 180 vCPUs corresponds to one thread per physical core, which is
+generally [recommended](https://cloud.google.com/blog/products/compute/how-to-reduce-mpi-latency-for-hpc-workloads-on-google-cloud)
+for optimal performance. However, this configuration may not always be the best
+option, as there is no strict rule for selecting the number of vCPUs.
 
 ### Running the Simulation
 
@@ -322,6 +292,9 @@ Running the script above will take some time, as OpenFOAM tasks like
 `snappyHexMesh` and `checkMesh` can be computationally intensive, especially
 with large meshes. The `task.wait()` command will block until the simulation
 is complete, after which the output files will be available.
+
+In this configuration, the simulation took 40 hours and 20 minutes to complete,
+producing an output of 24.76 GB.
 
 ### Post-Simulation
 
@@ -363,11 +336,9 @@ run the simulation locally.
 
 ### Utilizing an MPI Cluster for Enhanced Simulation Performance
 
-The initial simulation conducted on a single `c3d-highcpu-360` machine took 40
-hours and 20 minutes to complete. To expedite this process, we opted to deploy
-the simulation across two `c3d-highcpu-360` machines in an MPI cluster configuration.
-This strategic change reduced the simulation time significantly to just 19 hours
-and 10 minutes.
+The initial simulation took a considerable amount of time to finish. To expedite
+this process, we opted to deploy the simulation across two `c3d-highcpu-360`
+machines in an MPI cluster configuration.
 
 Leveraging Inductiva's Python library, scaling the simulation resources is
 straightforward. You simply need to modify the instantiation of the machine group,
@@ -375,12 +346,10 @@ replacing it with an MPI cluster setup, and adjust the `n_vcpus` parameter accor
 Below is an example of the code implementation:
 
 ```python notest
-auto_terminate = (datetime.datetime.now() + datetime.timedelta(days=6)).replace(tzinfo=pytz.utc)
 mpi_cluster = inductiva.resources.MPICluster(
     machine_type="c3d-highcpu-360",
     data_disk_gb=300,
-    num_machines=2,
-    auto_terminate_ts=auto_terminate
+    num_machines=2
 )
 
 mpi_cluster.start()
@@ -390,18 +359,21 @@ mpi_cluster.start()
 task = openfoam.run(
     input_dir=input_dir,
     commands=commands,
-    n_vcpus=360,
+    n_vcpus=360, # 360 out of 720 (360 x2)
     use_hwthread=True,
     on=mpi_cluster
 )
 ```
+
+With such a simple code change we were able to reduced the simulation time
+significantly to just 19 hours and 10 minutes and it generated an output of 25.02 GB.
 
 ### Conclusion
 
 This setup demonstrates how to leverage cloud resources to run computationally
 heavy OpenFOAM simulations, specifically using a case from the ExaFOAM benchmarks.
 The cloud-based environment enables parallel execution on high-performance
-machines, drastically reducing computation time. Once the simulation completes,
+machines, cutting our simulation time in half. Once the simulation completes,
 you can download and analyze the results on your local machine.
 
 Good luck with your OpenFOAM simulations!
