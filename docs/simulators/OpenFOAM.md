@@ -126,14 +126,7 @@ task.download_outputs()
 machine_group.terminate()
 ````
 
-## Advanced Example: OpenFOAM Simulation (ExaFOAM Benchmark)
-
-Here's a guide for running an OpenFOAM simulation using the Inductiva platform,
-focusing on a high-lift configuration case from the `rhoPimpleFoam` solver.
-This specific example is based on one of the benchmark cases provided by the
-[ExaFOAM project](https://exafoam.eu), which aims to develop highly
-scalable CFD solvers using OpenFOAM for exascale computing. We'll use a powerful
-cloud setup to handle the computationally intensive mesh generation and simulation.
+## Advanced Example: Running MB9 micro-benchmark by ExaFOAM
 
 We will run a complex OpenFOAM simulation based on a high-lift configuration
 setup, which is part of the [ExaFOAM benchmarks](https://exafoam.eu/benchmarks/).
@@ -147,31 +140,12 @@ Challenge (such as flow physics and simulation approach) while requiring
 significantly fewer computational resources. It features a two-dimensional,
 three-element high-lift wing configuration, simulated with the IDDES model,
 which provides WMLES functionality in regions of resolved near-wall turbulence.
-This case is based on the well-known 30P30N test case, extensively studied in
-the 4th AIAA CFD High Lift Prediction Workshop (HLPW-4) and supported by
-available experimental data.
-
-Additionally, this simulation utilizes dynamic code compilation. This can be
-observed from the stderr and stdout files. In the stderr file, we encounter the
-following message:
-
-```
-Could not load "/mnt/disks/executer-tracker-data/workdir/880kx9m9j21168n10011ziwui/output/artifacts/dynamicCode/platforms/linux64GccDPInt32Opt/lib/libcodeStream_6a0e8d329f43dbbd4e13ef75c75be041b26176fc.so"
-/mnt/disks/executer-tracker-data/workdir/880kx9m9j21168n10011ziwui/output/artifacts/dynamicCode/platforms/linux64GccDPInt32Opt/lib/libcodeStream_6a0e8d329f43dbbd4e13ef75c75be041b26176fc.so: cannot open shared object file: No such file or directory
-    ln: ./lnInclude
-```
-
-This indicates an issue loading the dynamically compiled shared object file for
-the simulation. However, in the stdout file, the creation of a new library during
-runtime is confirmed:
-
-```
-Creating new library in "dynamicCode/_6a0e8d329f43dbbd4e13ef75c75be041b26176fc/platforms/linux64GccDPInt32Opt/lib/libcodeStream_6a0e8d329f43dbbd4e13ef75c75be041b26176fc.so"
-```
-
-This dynamic compilation feature allows for runtime adjustments and optimizations,
-contributing to the flexibility and efficiency of OpenFOAM simulations in
-high-performance computing environments.
+In this example, we will run a modified version of this benchmark using two hardware
+configurations powered by Inductiva. First, we will run the simulation workflow
+on a large 360 vCPU machine. This is one of the largest single node configuration
+one can use to run simulations at Inductiva. Then, to see if we can halve the
+execution time of the simulation, we will run the simulation on a MPI cluster
+with 2 of these machines large machines.
 
 ### Prerequisites
 
@@ -211,51 +185,13 @@ configuration case.
 
 ### Configuring and Running the Simulation
 
-We'll run the simulation on a virtual machine with 180 CPUs using the
-`c3d-standard-180` machine type. The simulation involves several preprocessing
+We'll run the simulation on a virtual machine with 360 vCPUs using the
+`c3d-highcpu-360` machine type. The simulation involves several preprocessing
 steps, including mesh generation (`blockMesh`, `snappyHexMesh`), and finally,
-the simulation run itself. 
+the simulation run itself.
 
-Below is the Python code to configure and run the OpenFOAM simulation:
-
-```python notest
-import inductiva
-import os
-
-machine_group = inductiva.resources.MachineGroup(machine_type="c3d-standard-180")
-machine_group.start()
-
-import inductiva
-
-# Set simulation input directory
-input_dir = "/path/to/highLiftConfiguration"
-
-# Read the simulation commands
-with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
-    commands = [line.strip() for line in file]
-
-# Initialize the Simulator
-openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
-
-# Run simulation
-task = openfoam.run(
-    input_dir=input_dir,
-    commands=commands,
-    n_vcpus=128,
-    use_hwthread=True,
-    on=machine_group)
-
-# Wait for the task to finish and downloading the outputs
-task.wait()
-task.download_outputs()
-
-# Turn off the machine group
-machine_group.terminate()
-
-```
-
-The commands used in this simulation were taken from the `Allrun` script found
-in the downloaded files. Some adjustments were made because we execute all
+The commands used to run the simulation were all taken from the `Allrun` script
+found in the downloaded files. Some adjustments were made because we execute all
 commands directly from the `highLiftConfiguration` directory, meaning we can't
 use `cd` to navigate into subdirectories and run commands from there.
 Additionally, every command must start with `runApplication` or `runParallel`,
@@ -323,6 +259,44 @@ runParallel rhoPimpleFoam
 runParallel postProcess -func sampleDict.surface.SRS -latestTime
 ```
 
+Below is the Python code to configure and run the OpenFOAM simulation:
+
+```python notest
+import inductiva
+import os
+
+machine_group = inductiva.resources.MachineGroup(machine_type="c3d-highcpu-360")
+machine_group.start()
+
+import inductiva
+
+# Set simulation input directory
+input_dir = "/path/to/highLiftConfiguration"
+
+# Read the simulation commands
+with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
+    commands = [line.strip() for line in file]
+
+# Initialize the Simulator
+openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
+
+# Run simulation
+task = openfoam.run(
+    input_dir=input_dir,
+    commands=commands,
+    n_vcpus=180,
+    use_hwthread=True,
+    on=machine_group)
+
+# Wait for the task to finish and downloading the outputs
+task.wait()
+task.download_outputs()
+
+# Turn off the machine group
+machine_group.terminate()
+
+```
+
 ### Important Details
 
 1. **ExaFOAM Benchmark**: This simulation replicates the MB9 micro-benchmark
@@ -331,15 +305,15 @@ focuses on capturing key flow physics and the simulation approach of a larger
 HPC challenge with fewer computational resources, providing a scalable and
 efficient simulation of a high-lift configuration.
    
-2. **Machine Configuration**: We are using a powerful `c3d-standard-180`
-machine with 180 CPUs to ensure that the computation proceeds efficiently.
+2. **Machine Configuration**: We are using a powerful `c3d-highcpu-360`
+machine with 360 vCPUs to ensure that the computation proceeds efficiently.
 You can adjust this depending on the available resources or your project's needs.
    
 3. **Commands**: The list of `commands` involves several key OpenFOAM tasks
 like copying necessary configuration files, running mesh generation, and
 parallelizing the process using `decomposePar` and `snappyHexMesh`.
 
-4. **Parallelization**: We use `n_vcpus=128` in the simulation, which will
+4. **Parallelization**: We use `n_vcpus=180` in the simulation, which will
 allow OpenFOAM to run in parallel, greatly speeding up the computation.
 
 ### Running the Simulation
@@ -387,51 +361,40 @@ total 672
 You can now perform post-processing on the results, just as you would if you had
 run the simulation locally.
 
-### Small benchmark
+### Utilizing an MPI Cluster for Enhanced Simulation Performance
 
-We conducted a series of OpenFOAM simulations across different machine
-configurations to evaluate the performance impact of varying core counts and the
-effect of hyperthreading. The configurations ranged from 60 to 720 virtual CPUs
-(vCPUs), with some tests utilizing hyperthreading while others disabled it. Our
-goal was to assess how these hardware differences influence simulation time.
+The initial simulation conducted on a single `c3d-highcpu-360` machine took 40
+hours and 20 minutes to complete. To expedite this process, we opted to deploy
+the simulation across two `c3d-highcpu-360` machines in an MPI cluster configuration.
+This strategic change reduced the simulation time significantly to just 19 hours
+and 10 minutes.
 
+Leveraging Inductiva's Python library, scaling the simulation resources is
+straightforward. You simply need to modify the instantiation of the machine group,
+replacing it with an MPI cluster setup, and adjust the `n_vcpus` parameter accordingly.
+Below is an example of the code implementation:
 
-| Machine Configuration             | n_vCPUs/total           | Threads per core       | Time (h:min:sec)|
-|-----------------------------------|-------------------------|------------------------|----------------|
-| c3d-highcpu-360 x2 (Mpi Cluster)  | 360/720                 | 2                      | 19:10:09       |
-| c3d-highcpu-360                   | 250/360                 | 2                      | 39:58:37       |
-| c3d-highcpu-360                   | 180/360                 | 2                      | 40:20:00       |
-| c3d-highcpu-360                   | 180/180                 | 1                      | 40:47:14       |
-| c3d-highcpu-60 x6 (Mpi Cluster)   | 180/360                 | 2                      | 41:23:46       |
-| c3d-highcpu-360                   | 360/360                 | 2                      | 42:17:59       |
+```python notest
+auto_terminate = (datetime.datetime.now() + datetime.timedelta(days=6)).replace(tzinfo=pytz.utc)
+mpi_cluster = inductiva.resources.MPICluster(
+    machine_type="c3d-highcpu-360",
+    data_disk_gb=300,
+    num_machines=2,
+    auto_terminate_ts=auto_terminate
+)
 
+mpi_cluster.start()
 
-The results of the simulation suggest that **limiting the use of hyperthreading**
-or **disabling it altogether** offers better performance than fully utilizing
-all available cores with hyperthreading enabled. However, there appears to be a
-**sweet spot** between using either **half** or **most of the available threads**
-when hyperthreading is active.
-
-When comparing two runs with 180 vCPUs, the scenario with hyperthreading disabled
-actually showed **worse performance** than the one where hyperthreading was
-enabled but not used. This suggests that instead of disabling
-hyperthreading completely, it might be more efficient to launch machines with
-**2 threads per core** and control the number of threads the simulation uses
-through the `n_vcpus` parameter.
-
-Overall, these findings indicate that **disabling hyperthreading** doesn't
-always yield the best performance. Instead, running with 2 threads per core and
-**selectively using a portion of the available cores** can provide a performance
-advantage over fully utilizing all threads. This highlights the need for balancing
-hyperthreading and core usage to achieve optimal results.
-
-Additionally, by leveraging **MPI clusters**, we can distribute the simulation
-across multiple machines, greatly increasing the available computational power.
-For example, in one case, we ran the simulation using **two c3d-highcpu-360 machines**
-in parallel, which nearly **halved the simulation time** compared to running on
-a single machine. This approach opens up the possibility of scaling simulations
-significantly, enabling much faster computations by tapping into larger,
-distributed resources.
+...
+# Execute the simulation
+task = openfoam.run(
+    input_dir=input_dir,
+    commands=commands,
+    n_vcpus=360,
+    use_hwthread=True,
+    on=mpi_cluster
+)
+```
 
 ### Conclusion
 
