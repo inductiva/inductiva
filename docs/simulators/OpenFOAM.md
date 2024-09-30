@@ -218,7 +218,7 @@ the simulation run itself.
 
 Below is the Python code to configure and run the OpenFOAM simulation:
 
-```python
+```python notest
 import inductiva
 import os
 
