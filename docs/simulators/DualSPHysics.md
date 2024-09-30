@@ -357,8 +357,6 @@ Local input directory successfully uploaded.
 
 ■ Task u8v7p1v7wfyvvkyc0iq0s632k submitted to the queue of the Machine Group api-57yp64vdyz50a8fx0ttuz2n90 with n2d-highcpu-64 machines.
 Number of tasks ahead in the queue: 0
-Simulation metadata logged to: inductiva_output/task_metadata.json
-Task u8v7p1v7wfyvvkyc0iq0s632k configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
 · Consider tracking the status of the task via CLI:
 	inductiva tasks list --id u8v7p1v7wfyvvkyc0iq0s632k
 · Or, tracking the logs of the task via CLI:
