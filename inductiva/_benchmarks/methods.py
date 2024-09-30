@@ -62,7 +62,7 @@ def _analyze_task(
     metadata_filename = "input.json"
     inputs_path = task.download_inputs(filenames=[metadata_filename])
     metadata_path = inputs_path.joinpath(metadata_filename)
-    with open(metadata_path, 'r') as metadata_file:
+    with open(metadata_path, mode="r", encoding="utf-8") as metadata_file:
         metadata_content = json.load(metadata_file)
     report["resources"][vm_type]["tasks"].append({
         "task_id": task_info.task_id,

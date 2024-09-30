@@ -4,7 +4,6 @@ from unittest import mock
 import inspect
 from pathlib import Path
 import sys
-import os
 import uuid
 
 from pytest import mark
