@@ -16,7 +16,6 @@ def run_simulation(
     resubmit_on_preemption: bool = False,
     storage_dir: Optional[str] = "",
     api_invoker=None,
-    extra_metadata=None,
     simulator=None,
     **kwargs: Any,
 ) -> tasks.Task:

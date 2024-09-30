@@ -28,7 +28,6 @@ class SCHISM(simulators.Simulator):
             num_scribes: int = 1,
             storage_dir: Optional[str] = "",
             use_hwthread: bool = True,
-            extra_metadata: Optional[dict] = None,
             n_vcpus: Optional[int] = None,
             resubmit_on_preemption: bool = False,
             **kwargs) -> tasks.Task:
@@ -54,6 +53,5 @@ class SCHISM(simulators.Simulator):
                            storage_dir=storage_dir,
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
-                           extra_metadata=extra_metadata,
                            resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)
