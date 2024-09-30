@@ -228,7 +228,7 @@ class BaseMachineGroup(ABC):
             auto_terminate_ts=self._convert_auto_terminate_ts(
                 self.auto_terminate_ts),
             dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
-            custom_disk_image=self._custom_vm_image,
+            custom_vm_image=self._custom_vm_image,
             **kwargs,
         )
 
