@@ -65,7 +65,7 @@ def _analyze_task(task: Task, report: Dict[str, Any], skipped_tasks: List[Task],
     })
 
 
-def analyze(name: str, metadata_path: str, ouput_path: str = None) -> Dict:
+def analyze(name: str, metadata_path: str, output_path: str = None) -> Dict:
     """Analyzes a benchmark.
     This method creates a dictionary with all the relevant information about
     the benchmark.
@@ -98,9 +98,9 @@ def analyze(name: str, metadata_path: str, ouput_path: str = None) -> Dict:
     for task in skipped_tasks:
         logging.info("Task %s was skipped due to status %s", task.info.task_id,
                      task.info.status)
-    if ouput_path:
-        logging.info("Writing report to %s/%s.json", ouput_path, name)
-        with open(f"{ouput_path}/{name}.json", "w",
+    if output_path:
+        logging.info("Writing report to %s/%s.json", output_path, name)
+        with open(f"{output_path}/{name}.json", "w",
                   encoding="utf-8") as output_file:
             output_file.write(json.dumps(report, indent=4))
 
