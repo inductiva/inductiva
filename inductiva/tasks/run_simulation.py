@@ -1,20 +1,11 @@
 """Functions for running simulations via Inductiva Web API."""
-import os
-
 import pathlib
 from typing import Any, Optional
-import json
-import threading
 
 import logging
 
 from inductiva import tasks, types
 from inductiva.api import methods
-from inductiva.utils import format_utils, files
-
-TASK_METADATA_FILENAME = "task_metadata.json"
-
-_metadata_lock = threading.RLock()
 
 
 def run_simulation(
@@ -66,33 +57,6 @@ def run_simulation(
     else:
         logging.info("Task %s does not have queue information.", task_id)
 
-    if not format_utils.getenv_bool("DISABLE_TASK_METADATA_LOGGING", False):
-        machine_group_id = None
-        if computational_resources is not None:
-            machine_group_id = computational_resources.id
-
-        metadata = {
-            "api_method_name": api_method_name.split(".")[1],
-            "machine_group_id": machine_group_id,
-            "storage_dir": storage_dir,
-            **kwargs,
-        }
-        if extra_metadata is not None:
-            metadata = {**metadata, **extra_metadata}
-
-        with _metadata_lock:
-            _save_metadata({
-                **{
-                    "task_id": task_id,
-                    "input_dir": str(input_dir)
-                },
-                **metadata
-            })
-        logging.info(
-            "Task %s configurations metadata saved to the tasks metadata file "
-            "%s in the current working directory.", task_id,
-            TASK_METADATA_FILENAME)
-
     logging.info(
         "· Consider tracking the status of the task via CLI:"
         "\n\tinductiva tasks list --id %s", task_id)
@@ -105,15 +69,3 @@ def run_simulation(
         "\n\tinductiva tasks info %s", task_id)
     logging.info("")
     return task
-
-
-def _save_metadata(metadata, mode="a"):
-    """Appends metadata to the TASK_METADATA_FILENAME in the cwd."""
-
-    file_path = files.resolve_output_path(TASK_METADATA_FILENAME)
-    if not os.path.exists(file_path.parent):
-        os.mkdir(file_path.parent)
-    with open(file_path, mode, encoding="utf-8") as f:
-        json.dump(metadata, f)
-        f.write("\n")
-    logging.info("Simulation metadata logged to: %s", file_path)
