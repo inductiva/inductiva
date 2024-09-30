@@ -127,9 +127,6 @@ Preparing upload of the local input directory splishsplash-input-example
 (128 B).
 Local input directory successfully uploaded.
 Task i13o8djcoq70bsdut1x73zi69 submitted to the default queue.
-Simulation metadata logged to: inductiva_output/task_metadata.json
-Task i13o8djcoq70bsdut1x73zi69 configurations metadata saved to the tasks
-metadata file task_metadata.json in the current working directory.
 Consider tracking the status of the task via CLI: 
         inductiva tasks list --id i13o8djcoq70bsdut1x73zi69
 Or, tracking the logs of the task via CLI:
