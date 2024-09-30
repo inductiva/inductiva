@@ -131,7 +131,7 @@ machine_group.terminate()
 Here's a guide for running an OpenFOAM simulation using the Inductiva platform,
 focusing on a high-lift configuration case from the `rhoPimpleFoam` solver.
 This specific example is based on one of the benchmark cases provided by the
-[ExaFOAM project](https://exafoam.eu/benchmarks/), which aims to develop highly
+[ExaFOAM project](https://exafoam.eu), which aims to develop highly
 scalable CFD solvers using OpenFOAM for exascale computing. We'll use a powerful
 cloud setup to handle the computationally intensive mesh generation and simulation.
 
