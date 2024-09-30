@@ -140,7 +140,7 @@ setup, which is part of the [ExaFOAM benchmarks](https://exafoam.eu/benchmarks/)
 Specifically, this case corresponds to the MB9 micro-benchmark, which is
 preparatory work leading up to the HPC Grand Challenge test case of the High
 Lift Common Research Model (CRM-HL). The CRM-HL is a full aircraft configuration
-with deployed high-lift devices, simulated using wall-modeled LES (WMLES). 
+with deployed high-lift devices, simulated using wall-modeled LES (WMLES).
 
 The MB9 micro-benchmark captures the essential characteristics of the Grand
 Challenge (such as flow physics and simulation approach) while requiring
@@ -151,8 +151,27 @@ This case is based on the well-known 30P30N test case, extensively studied in
 the 4th AIAA CFD High Lift Prediction Workshop (HLPW-4) and supported by
 available experimental data.
 
-You can download the input files for this specific case from the
-[OpenFOAM HPC repository](https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration).
+Additionally, this simulation utilizes dynamic code compilation. This can be
+observed from the stderr and stdout files. In the stderr file, we encounter the
+following message:
+
+```
+Could not load "/mnt/disks/executer-tracker-data/workdir/880kx9m9j21168n10011ziwui/output/artifacts/dynamicCode/platforms/linux64GccDPInt32Opt/lib/libcodeStream_6a0e8d329f43dbbd4e13ef75c75be041b26176fc.so"
+/mnt/disks/executer-tracker-data/workdir/880kx9m9j21168n10011ziwui/output/artifacts/dynamicCode/platforms/linux64GccDPInt32Opt/lib/libcodeStream_6a0e8d329f43dbbd4e13ef75c75be041b26176fc.so: cannot open shared object file: No such file or directory
+    ln: ./lnInclude
+```
+
+This indicates an issue loading the dynamically compiled shared object file for
+the simulation. However, in the stdout file, the creation of a new library during
+runtime is confirmed:
+
+```
+Creating new library in "dynamicCode/_6a0e8d329f43dbbd4e13ef75c75be041b26176fc/platforms/linux64GccDPInt32Opt/lib/libcodeStream_6a0e8d329f43dbbd4e13ef75c75be041b26176fc.so"
+```
+
+This dynamic compilation feature allows for runtime adjustments and optimizations,
+contributing to the flexibility and efficiency of OpenFOAM simulations in
+high-performance computing environments.
 
 ### Prerequisites
 
