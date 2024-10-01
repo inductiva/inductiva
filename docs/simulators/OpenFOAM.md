@@ -230,7 +230,10 @@ Below is the Python code to configure and run the OpenFOAM simulation:
 import inductiva
 import os
 
-machine_group = inductiva.resources.MachineGroup(machine_type="c3d-highcpu-360")
+machine_group = inductiva.resources.MachineGroup(
+                    machine_type="c3d-highcpu-360",
+                    spot=True,
+                    )
 machine_group.start()
 
 import inductiva
@@ -368,6 +371,8 @@ task = openfoam.run(
 
 With this simple code change, we were able to significantly reduce the 
 simulation time to **19 hours and 10 minutes**, generating an output of **25.02 GB**.
+
+PS: Note that an MPI Cluster does not support `spot` machines.
 
 ### Conclusion
 
