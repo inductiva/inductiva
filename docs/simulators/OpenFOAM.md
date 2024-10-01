@@ -141,29 +141,30 @@ total 104
 
 ### Modifications to the Simulation Parameters
 
-To make the simulation run faster, we made some adjustments to the original
-parameters. Specifically, we modified the time step (`dt`) to 0.00002, the
+To speed up the simulation, we made some adjustments to the original
+parameters. Specifically, we set the time step (`dt`) to 0.00002, the
 initial time to 0.10, and the final time to 0.30. These changes help reduce the
-overall simulation time while maintaining reasonable accuracy for this high-lift
+overall simulation runtime while maintaining reasonable accuracy for this high-lift
 configuration case.
 
 ### Configuring and Running the Simulation
 
-We'll run the simulation on a virtual machine with 360 vCPUs using the
-`c3d-highcpu-360` machine type. The simulation involves several preprocessing
-steps, including mesh generation (`blockMesh`, `snappyHexMesh`), and finally,
-the simulation run itself.
+We'll run the simulation on a **virtual machine with 360 vCPUs** using the
+`c3d-highcpu-360` machine type. The process includes several preprocessing
+steps, such as **mesh generation** (`blockMesh`, `snappyHexMesh`), followed 
+by the simulation run.
 
 The commands used to run the simulation were all taken from the `Allrun` script
-found in the downloaded files. Some adjustments were made because we execute all
-commands directly from the `highLiftConfiguration` directory, meaning we can't
-use `cd` to navigate into subdirectories and run commands from there.
+included in the downloaded files. We made a few adjustments because all 
+commands are executed directly from the `highLiftConfiguration` directory, 
+so we can’t use `cd` to navigate into subdirectories and run commands from there.
 Additionally, every command must start with `runApplication` or `runParallel`,
-which is why even basic commands like `rm` and `mv` are preceded by `runApplication`.
+even for basic commands like `rm` and `mv`.
 
-We have consolidated all the commands into a file named `commands.txt`, with each
-command placed on a separate line. This file is then read into a list of strings
-to execute sequentially. The contents of `commands.txt` are as follows:
+We’ve consolidated all the commands into a file called `commands.txt`, with each
+command placed on a separate line. This file is then read as a list of strings 
+for sequential execution. The contents of `commands.txt` are as follows:
+
 ```bash
 runApplication cp system/controlDict.SHM system/controlDict
 runApplication cp system/fvSchemes.SHM system/fvSchemes
@@ -263,45 +264,46 @@ machine_group.terminate()
 
 ### Important Details
 
-1. **ExaFOAM Benchmark**: This simulation replicates the MB9 micro-benchmark
+1. **ExaFOAM Benchmark**: This simulation replicates the **MB9 micro-benchmark**
 from the [ExaFOAM](https://exafoam.eu/benchmarks/) project. The benchmark
-focuses on capturing key flow physics and the simulation approach of a larger
-HPC challenge with fewer computational resources, providing a scalable and
-efficient simulation of a high-lift configuration.
+captures key flow physics and simulation strategies of a larger
+HPC challenge, but with fewer computational resources, making it scalable 
+and efficient for simulating high-lift configurations.
    
-2. **Machine Configuration**: We are using a powerful `c3d-highcpu-360`
-machine with 360 vCPUs to ensure that the computation proceeds efficiently.
-You can adjust this depending on the available resources or your project's needs.
+2. **Machine Configuration**: We are running the simulation on a `c3d-highcpu-360`
+machine with **360 vCPUs** to ensure efficient computation. You can adjust 
+the machine configuration based on your available resources or project 
+requirements.
    
-3. **Commands**: The list of `commands` involves several key OpenFOAM tasks
+3. **Commands**: The list of `commands` includes key OpenFOAM tasks
 like copying necessary configuration files, running mesh generation, and
 parallelizing the process using `decomposePar` and `snappyHexMesh`.
 
-4. **Parallelization**: We utilize `n_vcpus=180` in the simulation, enabling
-OpenFOAM to run in parallel and significantly accelerate the computation. The
-choice of 180 vCPUs corresponds to one thread per physical core, which is
-generally [recommended](https://cloud.google.com/blog/products/compute/how-to-reduce-mpi-latency-for-hpc-workloads-on-google-cloud)
-for optimal performance. However, this configuration may not always be the best
-option, as there is no strict rule for selecting the number of vCPUs.
+4. **Parallelization**: We utilize `n_vcpus=180` for the simulation, allowing
+OpenFOAM to run in parallel and significantly speed up computation. Using 
+one thread per physical core, as recommended by [Google Cloud](https://cloud.google.com/blog/products/compute/how-to-reduce-mpi-latency-for-hpc-workloads-on-google-cloud), 
+typically offers optimal performance. However, this configuration may not 
+always be the best option, as there is no strict rule for selecting the 
+number of vCPUs.
 
 ### Running the Simulation
 
 Running the script above will take some time, as OpenFOAM tasks like
 `snappyHexMesh` and `checkMesh` can be computationally intensive, especially
 with large meshes. The `task.wait()` command will block until the simulation
-is complete, after which the output files will be available.
+finishes, after which the output files will be available.
 
-In this configuration, the simulation took 40 hours and 20 minutes to complete,
-producing an output of 24.76 GB.
+In this configuration, the simulation took **40 hours and 20 minutes** to complete,
+generating **24.76 GB** of output.
 
 ### Post-Simulation
 
 After the simulation completes, the output files will be downloaded locally by
-calling `task.download_outputs()`. The outputs will include simulation results
-like mesh quality reports, final results, and log files for each step in the process.
+calling `task.download_outputs()`. These outputs include the simulation results,
+such as mesh quality reports, final results, and log files for each step in the process.
 
-To inspect the output, look under the `inductiva_output` folder where the
-results are downloaded:
+To inspect the results, navigate to the `inductiva_output` folder, where 
+all outputs are stored:
 
 ```bash
 ls -lasgo inductiva_output/<task_id>
@@ -334,14 +336,15 @@ run the simulation locally.
 
 ### Utilizing an MPI Cluster for Enhanced Simulation Performance
 
-The initial simulation took a considerable amount of time to finish. To expedite
-this process, we opted to deploy the simulation across two `c3d-highcpu-360`
-machines in an MPI cluster configuration.
+The initial simulation took a significant amount of time to complete. 
+To speed things up, we deployed the simulation across two `c3d-highcpu-360`
+machines using an MPI cluster configuration.
 
-Leveraging Inductiva's Python library, scaling the simulation resources is
-straightforward. You simply need to modify the instantiation of the machine group,
-replacing it with an MPI cluster setup, and adjust the `n_vcpus` parameter accordingly.
-Below is an example of the code implementation:
+Using **Inductiva's Python library**, scaling the simulation resources is
+simple. You just need to modify the machine group instantiation to an 
+MPI cluster setup and adjust the `n_vcpus` parameter accordingly.
+
+Here’s an example of the code implementation:
 
 ```python notest
 mpi_cluster = inductiva.resources.MPICluster(
@@ -363,16 +366,16 @@ task = openfoam.run(
 )
 ```
 
-With such a simple code change we were able to reduced the simulation time
-significantly to just 19 hours and 10 minutes and it generated an output of 25.02 GB.
+With this simple code change, we were able to significantly reduce the 
+simulation time to **19 hours and 10 minutes**, generating an output of **25.02 GB**.
 
 ### Conclusion
 
-This setup demonstrates how to leverage cloud resources to run computationally
-heavy OpenFOAM simulations, specifically using a case from the ExaFOAM benchmarks.
-The cloud-based environment enables parallel execution on high-performance
-machines, cutting our simulation time in half. Once the simulation completes,
-you can download and analyze the results on your local machine.
+This setup shows how cloud resources can be leveraged to run computationally 
+intensive **OpenFOAM simulations**, specifically using a case from the **ExaFOAM benchmarks**. 
+The cloud-based environment allows for parallel execution on high-performance 
+machines, significantly reducing our simulation time by half! Once the simulation 
+completes, you can download and analyze the results on your local machine.
 
 Good luck with your OpenFOAM simulations!
 
@@ -385,8 +388,12 @@ the following related simulators that are also available via Inductiva API:
 * [DualSPHysics](DualSPHysics.md)
 * [SPlisHSPlasH](SPlisHSPlasH.md)
 
-You may also be interested in reading our blog post
-[The 3D Mesh Resolution Threshold - 5k Points is All You Need!](https://inductiva.ai/blog/article/5k-points-is-all-you-need),
-where we investigate the impact of reducing the level of detail of a 3D object in
-the accuracy of aerodynamic metrics obtained using a (virtual) wind tunnel
-implemented using OpenFOAM.
+Ready to optimize your own simulations? Try our [Inductiva API](https://console.inductiva.ai/) 
+to streamline your workflows and make the most of cloud resources for 
+large-scale simulations.
+
+You may also be interested in reading our blog post,
+[The 3D Mesh Resolution Threshold - 5k Points is All You Need!](https://inductiva.ai/blog/article/5k-points-is-all-you-need), 
+where we explore just how much you can reduce the level of detail in a 
+3D object while still maintaining accurate aerodynamic results in a virtual 
+wind tunnel built with OpenFOAM.
