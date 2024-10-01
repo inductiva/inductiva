@@ -105,6 +105,10 @@ task to a project using explicit management:
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # get example input data
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -118,17 +122,20 @@ simulator = inductiva.simulators.XBeach()
 
 # add a task to the "my_xbeach_project" project
 task1 = simulator.run(input_dir=input_dir,
-                      sim_config_filename="params.txt")
+                      sim_config_filename="params.txt",
+                      on=machine_group)
 
 project.close() # <-- close the project
 
 # task2 will be added to the default project
 task2 = simulator.run(input_dir=input_dir,
-                      sim_config_filename="params.txt")
+                      sim_config_filename="params.txt",
+                      on=machine_group)
 
 print(task1.get_info().project) # "my_xbeach_project"
 print(task2.get_info().project) # "userab1cdef2" (default project)
 
+machine_group.terminate()
 ```
 
 ### Using a Context Manager
@@ -144,6 +151,10 @@ will be added to the default one:
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # get example input data
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -154,14 +165,18 @@ with inductiva.projects.Project("my_xbeach_project", append=True) as project:
 
     # add a task to the "my_xbeach_project" project
     task1 = simulator.run(input_dir=input_dir,
-                          sim_config_filename="params.txt")
+                          sim_config_filename="params.txt",
+                          on=machine_group)
 
 # task2 will be added to the default project
 task2 = simulator.run(input_dir=input_dir,
-                      sim_config_filename="params.txt")
+                      sim_config_filename="params.txt",
+                      on=machine_group)
 
 print(task1.get_info().project) # "my_xbeach_project"
 print(task2.get_info().project) # "userab1cdef2" (default project)
+
+machine_group.terminate()
 ```
 
 At any moment, the user can query what project is currently **open** for task submission

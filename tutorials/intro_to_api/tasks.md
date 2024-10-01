@@ -24,6 +24,10 @@ to the API:
 # Running the SplishSplash simulator example
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Download example input files
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -34,7 +38,8 @@ splishsplash_simulator = inductiva.simulators.SplishSplash()
 
 # Run the SPlisHSPlasH simulation with the required .json config file
 task = splishsplash_simulator.run(input_dir="splishsplash-input-example",
-                                  sim_config_filename="config.json")
+                                  sim_config_filename="config.json",
+                                  on=machine_group)
 print(task.id)
 # Example output: i4ir3kvv62odsfrhko4y8w2an
 ```
@@ -44,9 +49,12 @@ input arguments would create a new, distinct task:
 
 ```python
 task2 = splishsplash_simulator.run(input_dir="splishsplash-input-example",
-                                  sim_config_filename="config.json")
+                                  sim_config_filename="config.json",
+                                  on=machine_group)
 print (task2.id)
 # Example output: k9muu1vq1fc6m2oyxm0n3n8y0
+
+machine_group.terminate()
 ```
 
 Each `Task` is identified by a unique alphanumeric identifier. While you can
