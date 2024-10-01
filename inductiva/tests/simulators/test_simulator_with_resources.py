@@ -4,7 +4,6 @@ from unittest import mock
 import inspect
 from pathlib import Path
 import sys
-import os
 import uuid
 
 from pytest import mark
@@ -218,9 +217,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
         method_signature = inspect.signature(simcls.run)
         assert resubmit_key in method_signature.parameters
 
-        with mock.patch.dict(os.environ,
-                             {"DISABLE_TASK_METADATA_LOGGING": "true"}), \
-            mock.patch("inductiva.tasks.task.tasks_api") as taskapi_mock, \
+        with mock.patch("inductiva.tasks.task.tasks_api") as taskapi_mock, \
             mock.patch("inductiva.simulators.simulator.list_available_images") \
                as list_mock, \
             mock.patch("inductiva.api.methods.submit_request") \

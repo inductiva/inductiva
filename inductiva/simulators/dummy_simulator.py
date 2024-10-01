@@ -36,7 +36,6 @@ class DummySimulator(simulators.Simulator):
             sleep_time: Optional[float] = 1,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run a dummy simulation that echo's to a file.
 
@@ -44,7 +43,6 @@ class DummySimulator(simulators.Simulator):
             input_dir: Path to directory with simulation input files.
             input_filename: Name of the test input file.
             sleep_time: Time to sleep before running the commands.
-            extra_metadata: Extra metadata to be sent to the backend.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
@@ -56,6 +54,5 @@ class DummySimulator(simulators.Simulator):
                            input_filename=input_filename,
                            sleep_time=sleep_time,
                            storage_dir=storage_dir,
-                           extra_metadata=extra_metadata,
                            resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)
