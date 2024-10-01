@@ -272,8 +272,6 @@ Local input directory successfully uploaded.
 
 ■ Task arduwp0bnjkwz9d4xk7rabofi submitted to the queue of the Machine Group api-o4qozo7wafhwqcyz4xh1g4e7s with c2d-highcpu-112 machines.
 Number of tasks ahead in the queue: 0
-Simulation metadata logged to: inductiva_output/task_metadata.json
-Task arduwp0bnjkwz9d4xk7rabofi configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
 · Consider tracking the status of the task via CLI:
 	inductiva tasks list --id arduwp0bnjkwz9d4xk7rabofi
 · Or, tracking the logs of the task via CLI:
