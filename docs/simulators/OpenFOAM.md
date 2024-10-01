@@ -232,8 +232,7 @@ import os
 
 machine_group = inductiva.resources.MachineGroup(
                     machine_type="c3d-highcpu-360",
-                    spot=True,
-                    )
+                    spot=True)
 machine_group.start()
 
 import inductiva
