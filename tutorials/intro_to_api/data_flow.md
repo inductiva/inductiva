@@ -46,12 +46,20 @@ machine. The following piece of code illustrates this situation:
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Initialize the simulator object
 simulator = inductiva.simulators.REEF3D()
 
 # Invoke the run() method of the simulator object. 
 # This will trigger the packing and uploading the data
-task = simulator.run(input_dir="my_input_data_dir")
+task = simulator.run(input_dir="my_input_data_dir",
+                     on=machine_group)
+
+# Terminate the machine group
+machine_group.terminate()
 ```
 
 The moment you invoke `run()` you start the uploading process. The folder `my_input_data_dir`
