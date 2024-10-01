@@ -1,48 +1,47 @@
 # OpenFOAM
 
 OpenFOAM is a Finite Volume method for CFD simulations with a wide range of 
-applications across several areas of engineering and science. OpenFOAM has an 
-extensive
-range of features to solve anything from complex fluid flows involving chemical 
-reactions, turbulence and heat transfer, to solid dynamics and electromagnetics.
+applications across several areas of engineering and science. It offers 
+a broad set of features for everything from **complex fluid flows** (including 
+chemical reactions, turbulence, and heat transfer) to **solid dynamics** and 
+**electromagnetics**.
 
-There are two main open-source distributions of OpenFOAM, one developed by
+There are two main open-source distributions of OpenFOAM: one developed by the
 [OpenFOAM foundation](https://openfoam.org/) and another by the
-[ESI Group](https://www.openfoam.com/). Inductiva API supports both distributions,
-and you can choose which one you want to use by setting the `distribution` parameter
-when initializing the simulator. The default distribution is the one developed by
-the OpenFOAM foundation.
+[ESI Group](https://www.openfoam.com/). The Inductiva API supports both,
+and you can select your preferred distribution by setting the `distribution` parameter
+when initializing the simulator. *By default, it uses the OpenFOAM Foundation version.*
 
-A single simulation via Inductiva API comprises several steps done via OpenFOAM 
-- e.g., partitioning the domain, meshing, solvers and post-processing. Hence, to 
-configure a simulation for OpenFOAM the user will need a set of configuration
-files that are organized in three folders:
-- `time`: containing individual files of data for particular fields, like
-initial values and boundary conditions that the user must specify. For example,
-for an initial condition at $, the initial conditions will be stored in the
-directory `0`.
-- `constant`: contains files that describe the objects in the simulation and the 
-physical properties of the application we are concerned.
-- `system`: contains all of the files that describe the simulation, including
-the solvers, the numerical parameters, and the output files. It must contain at
-least 3 files: `controlDict` where run control parameters are set including
-start/end time, time step and parameters for data output; `fvSchemes` where
-discretization schemes used in the solution may be selected at run-time; and
-`fvSolution` where the equation solvers, tolerances and other algorithm controls
-are set for the run.
+A single simulation via the Inductiva API follows several steps in OpenFOAM, 
+including domain partitioning, meshing, solving, and post-processing. To 
+configure a simulation for OpenFOAM, you’ll need a set of configuration 
+files organized into three folders:
+- `time`: Contains files for particular fields, like
+initial values and boundary conditions that you must specify. For example, 
+initial conditions at  t=0  are stored in the `0` directory.
+- `constant`: Contains files that describe the objects in the simulation and the 
+physical properties being modeled.
+- `system`: Contains files that describe the simulation, including solvers, 
+numerical parameters, and output files. 
 
-All of these folders should be inside an input directory. Finally, to run a 
-simulation the user needs to configure a list of dictionaries specifying the
-commands they want to execute on the backend. Below, we run the
-[motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) from OpenFOAM and show how this is done in practice.
+It must contain at least 3 files: 
+`controlDict`: Run control parameters (start/end time, time step, and parameters 
+for data output)
+`fvSchemes`: Selection of discretization schemes used during the solution.
+`fvSolution`: Equation solvers, tolerances and other algorithm controls.
 
-The commands passed to the simulator follow the structure of OpenFOAM, that is, 
-using the prefix `runApplication` the command will execute sequentially and with
-`runParallel` the command will use the maximum number of cores the machine has 
-available. Hence, you don't need to set the specific number of processes, the 
-simulator will do that for you automatically. In particular, the
-decomposeParDict will be configured automatically and, at the moment, only the 
-scotch decomposition method is available.
+All of these folders should be placed inside an **input directory**. To run a 
+simulation, you need to configure a list of dictionaries that specify the 
+commands to be executed on the backend. 
+
+Below is an example of how to run the [motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) 
+from OpenFOAM, demonstrating how this process works in practice.
+
+The commands passed to the simulator follow OpenFOAM’s structure. Using 
+the `runApplication` prefix will execute commands sequentially, while
+`runParallel` will use all available CPU cores automatically—no need to 
+manually set the number of processes. The **decomposeParDict** is configured 
+automatically and currently, only the **scotch decomposition method** is supported.
 
 ## Example - Foundation distribution
 
