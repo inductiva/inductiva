@@ -43,7 +43,7 @@ the `runApplication` prefix will execute commands sequentially, while
 manually set the number of processes. The **decomposeParDict** is configured 
 automatically and currently, only the **scotch decomposition method** is supported.
 
-## Example - Foundation distribution
+## Example - OpenFOAM Foundation Distribution
 
 ````python
 import inductiva
@@ -84,44 +84,43 @@ task.download_outputs()
 machine_group.terminate()
 ````
 
-## Example - ESI distribution
+## Example - ESI Distribution
 
-In order to run our sample simulation one just needs to download the
-`openfoam-esi-input-example.zip`, chose the correct distribution
-`inductiva.simulators.OpenFOAM(distribution="esi")` and use the command 
-`runApplication surfaceFeatureExtract` instead of `runApplication surfaceFeatures`.
+To run the sample simulation above, simply download the
+`openfoam-esi-input-example.zip` file, select the correct distribution by
+using `inductiva.simulators.OpenFOAM(distribution="esi")`, and replace  
+`runApplication surfaceFeatures` with `runApplication surfaceFeatureExtract`.
 
-## Advanced Example: Running MB9 micro-benchmark by ExaFOAM
+## Advanced Example: Running MB9 Micro-benchmark by ExaFOAM
 
-We will run a complex OpenFOAM simulation based on a high-lift configuration
-setup, which is part of the [ExaFOAM benchmarks](https://exafoam.eu/benchmarks/).
-Specifically, this case corresponds to the MB9 micro-benchmark, which is
-preparatory work leading up to the HPC Grand Challenge test case of the High
-Lift Common Research Model (CRM-HL). The CRM-HL is a full aircraft configuration
-with deployed high-lift devices, simulated using wall-modeled LES (WMLES).
+In this advanced example, we’ll be running a complex OpenFOAM simulation 
+based on a high-lift configuration setup, which is part of the [ExaFOAM benchmarks](https://exafoam.eu/benchmarks/). Specifically, this case corresponds to the **MB9 micro-benchmark**, which 
+serves as preparatory work for the **HPC Grand Challenge** test case of 
+the **High Lift Common Research Model (CRM-HL)**. The **CRM-HL** is 
+a full aircraft configuration with deployed high-lift devices, simulated 
+using **wall-modeled LES (WMLES)**.
 
-The MB9 micro-benchmark captures the essential characteristics of the Grand
-Challenge (such as flow physics and simulation approach) while requiring
-significantly fewer computational resources. It features a two-dimensional,
-three-element high-lift wing configuration, simulated with the IDDES model,
-which provides WMLES functionality in regions of resolved near-wall turbulence.
-In this example, we will run a modified version of this benchmark using two hardware
-configurations powered by Inductiva. First, we will run the simulation workflow
-on a large 360 vCPU machine. This is one of the largest single node configuration
-one can use to run simulations at Inductiva. Then, to see if we can halve the
-execution time of the simulation, we will run the simulation on a MPI cluster
-with 2 of these machines large machines.
+The **MB9 micro-benchmark** captures the key characteristics of the **Grand Challenge**, 
+such as flow physics and simulation approach, but with significantly fewer 
+computational resources. It features a **2D, three-element high-lift wing configuration**, 
+simulated with the **IDDES model**, which supports **WMLES** for resolving near-wall 
+turbulence.
+
+In this example, we’ll run a modified version of this benchmark using two hardware
+configurations powered by **Inductiva**. First, we’ll run the simulation
+on a large **360 vCPU machine**, one of the largest single-node configurations
+available at Inductiva. Then, to see if we can halve the execution time 
+of the simulation, we’ll run the same simulation on an **MPI cluster** using 
+two of these large machines.
 
 ### Prerequisites
 
-Before running the simulation, ensure you have downloaded the input files. You
-can get them from the following
-[repository](https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration).
-Once downloaded, move them into a directory named `highLiftConfiguration` inside
-your working folder.
+Before running the simulation, make sure to download the input files 
+from this [repository](https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration). Once downloaded, place them in a directory named `highLiftConfiguration` 
+inside your working folder.
 
-Here’s an example of how your directory structure should look after downloading
-the necessary files:
+Here’s an example of what your directory structure should look like after 
+organizing the necessary files:
 
 ```bash
 ls -lasgo highLiftConfiguration
