@@ -421,10 +421,18 @@ after the task id. In the following snippet, the outputs of task with id
 <code class="docutils literal notranslate"><span class="pre">i4ir3kvv62odsfrhko4y8w2an</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
+<span class="c1"># Instantiate machine group</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s1">&#39;c2-standard-4&#39;</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
 <span class="n">simulator</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">REEF3D</span><span class="p">()</span>
 
-<span class="n">task</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;path-to-directory-with-input-files-for-reef3d&quot;</span><span class="p">)</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;path-to-directory-with-input-files-for-reef3d&quot;</span><span class="p">,</span>
+                     <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>  <span class="c1"># will print i4ir3kvv62odsfrhko4y8w2an</span>
+
+<span class="c1"># Terminate the machine group</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Using the command line interface (CLI), the user can list the contents of his remote

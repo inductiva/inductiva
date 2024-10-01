@@ -20,10 +20,10 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://docs.inductiva.ai/simulators/OpenFOAM.html" />
 <meta property="og:site_name" content="Inductiva.ai Docs" />
-<meta property="og:description" content="OpenFOAM is a Finite Volume method for CFD simulations with a wide range of applications across several areas of engineering and science. OpenFOAM has an extensive range of features to solve anythi..." />
+<meta property="og:description" content="OpenFOAM is a Finite Volume method for CFD simulations with a wide range of applications across several areas of engineering and science. It offers a broad set of features for everything from compl..." />
 <meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
 <meta property="og:image:alt" content="Inductiva.ai Docs" />
-<meta name="description" content="OpenFOAM is a Finite Volume method for CFD simulations with a wide range of applications across several areas of engineering and science. OpenFOAM has an extensive range of features to solve anythi..." />
+<meta name="description" content="OpenFOAM is a Finite Volume method for CFD simulations with a wide range of applications across several areas of engineering and science. It offers a broad set of features for everything from compl..." />
 
     <title>OpenFOAM &#8212; Python API for Cloud-based Simulation</title>
   
@@ -383,8 +383,19 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-foundation-distribution">Example - Foundation distribution</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-esi-distribution">Example - ESI distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-openfoam-foundation-distribution">Example - OpenFOAM Foundation Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-esi-distribution">Example - ESI Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-example-running-mb9-micro-benchmark-by-exafoam">Advanced Example: Running MB9 Micro-benchmark by ExaFOAM</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modifications-to-the-simulation-parameters">Modifications to the Simulation Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-and-running-the-simulation">Configuring and Running the Simulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important-details">Important Details</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-simulation">Running the Simulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#post-simulation">Post-Simulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#utilizing-an-mpi-cluster-for-enhanced-simulation-performance">Utilizing an MPI Cluster for Enhanced Simulation Performance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
             </nav>
@@ -400,48 +411,45 @@ document.write(`
   <section id="openfoam">
 <h1>OpenFOAM<a class="headerlink" href="#openfoam" title="Permalink to this heading">#</a></h1>
 <p>OpenFOAM is a Finite Volume method for CFD simulations with a wide range of
-applications across several areas of engineering and science. OpenFOAM has an
-extensive
-range of features to solve anything from complex fluid flows involving chemical
-reactions, turbulence and heat transfer, to solid dynamics and electromagnetics.</p>
-<p>There are two main open-source distributions of OpenFOAM, one developed by
+applications across several areas of engineering and science. It offers
+a broad set of features for everything from <strong>complex fluid flows</strong> (including
+chemical reactions, turbulence, and heat transfer) to <strong>solid dynamics</strong> and
+<strong>electromagnetics</strong>.</p>
+<p>There are two main open-source distributions of OpenFOAM: one developed by the
 <a class="reference external" href="https://openfoam.org/" target="_blank">OpenFOAM foundation</a> and another by the
-<a class="reference external" href="https://www.openfoam.com/" target="_blank">ESI Group</a>. Inductiva API supports both distributions,
-and you can choose which one you want to use by setting the <code class="docutils literal notranslate"><span class="pre">distribution</span></code> parameter
-when initializing the simulator. The default distribution is the one developed by
-the OpenFOAM foundation.</p>
-<p>A single simulation via Inductiva API comprises several steps done via OpenFOAM</p>
+<a class="reference external" href="https://www.openfoam.com/" target="_blank">ESI Group</a>. The Inductiva API supports both,
+and you can select your preferred distribution by setting the <code class="docutils literal notranslate"><span class="pre">distribution</span></code> parameter
+when initializing the simulator. <em>By default, it uses the OpenFOAM Foundation version.</em></p>
+<p>A single simulation via the Inductiva API follows several steps in OpenFOAM,
+including domain partitioning, meshing, solving, and post-processing. To
+configure a simulation for OpenFOAM, you’ll need a set of configuration
+files organized into three folders:</p>
 <ul class="simple">
-<li><p>e.g., partitioning the domain, meshing, solvers and post-processing. Hence, to
-configure a simulation for OpenFOAM the user will need a set of configuration
-files that are organized in three folders:</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">time</span></code>: containing individual files of data for particular fields, like
-initial values and boundary conditions that the user must specify. For example,
-for an initial condition at $, the initial conditions will be stored in the
-directory <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">constant</span></code>: contains files that describe the objects in the simulation and the
-physical properties of the application we are concerned.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">system</span></code>: contains all of the files that describe the simulation, including
-the solvers, the numerical parameters, and the output files. It must contain at
-least 3 files: <code class="docutils literal notranslate"><span class="pre">controlDict</span></code> where run control parameters are set including
-start/end time, time step and parameters for data output; <code class="docutils literal notranslate"><span class="pre">fvSchemes</span></code> where
-discretization schemes used in the solution may be selected at run-time; and
-<code class="docutils literal notranslate"><span class="pre">fvSolution</span></code> where the equation solvers, tolerances and other algorithm controls
-are set for the run.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">time</span></code>: Contains files for particular fields, like
+initial values and boundary conditions that you must specify. For example,
+initial conditions at  t=0  are stored in the <code class="docutils literal notranslate"><span class="pre">0</span></code> directory.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">constant</span></code>: Contains files that describe the objects in the simulation and the
+physical properties being modeled.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">system</span></code>: Contains files that describe the simulation, including solvers,
+numerical parameters, and output files.</p></li>
 </ul>
-<p>All of these folders should be inside an input directory. Finally, to run a
-simulation the user needs to configure a list of dictionaries specifying the
-commands they want to execute on the backend. Below, we run the
-<a class="reference external" href="https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike" target="_blank">motorbike tutorial</a> from OpenFOAM and show how this is done in practice.</p>
-<p>The commands passed to the simulator follow the structure of OpenFOAM, that is,
-using the prefix <code class="docutils literal notranslate"><span class="pre">runApplication</span></code> the command will execute sequentially and with
-<code class="docutils literal notranslate"><span class="pre">runParallel</span></code> the command will use the maximum number of cores the machine has
-available. Hence, you don’t need to set the specific number of processes, the
-simulator will do that for you automatically. In particular, the
-decomposeParDict will be configured automatically and, at the moment, only the
-scotch decomposition method is available.</p>
-<section id="example-foundation-distribution">
-<h2>Example - Foundation distribution<a class="headerlink" href="#example-foundation-distribution" title="Permalink to this heading">#</a></h2>
+<p>It must contain at least 3 files:
+<code class="docutils literal notranslate"><span class="pre">controlDict</span></code>: Run control parameters (start/end time, time step, and parameters
+for data output)
+<code class="docutils literal notranslate"><span class="pre">fvSchemes</span></code>: Selection of discretization schemes used during the solution.
+<code class="docutils literal notranslate"><span class="pre">fvSolution</span></code>: Equation solvers, tolerances and other algorithm controls.</p>
+<p>All of these folders should be placed inside an <strong>input directory</strong>. To run a
+simulation, you need to configure a list of dictionaries that specify the
+commands to be executed on the backend.</p>
+<p>Below is an example of how to run the <a class="reference external" href="https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike" target="_blank">motorbike tutorial</a>
+from OpenFOAM, demonstrating how this process works in practice.</p>
+<p>The commands passed to the simulator follow OpenFOAM’s structure. Using
+the <code class="docutils literal notranslate"><span class="pre">runApplication</span></code> prefix will execute commands sequentially, while
+<code class="docutils literal notranslate"><span class="pre">runParallel</span></code> will use all available CPU cores automatically—no need to
+manually set the number of processes. The <strong>decomposeParDict</strong> is configured
+automatically and currently, only the <strong>scotch decomposition method</strong> is supported.</p>
+<section id="example-openfoam-foundation-distribution">
+<h2>Example - OpenFOAM Foundation Distribution<a class="headerlink" href="#example-openfoam-foundation-distribution" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="c1"># Instantiate machine group</span>
@@ -482,45 +490,283 @@ scotch decomposition method is available.</p>
 </div>
 </section>
 <section id="example-esi-distribution">
-<h2>Example - ESI distribution<a class="headerlink" href="#example-esi-distribution" title="Permalink to this heading">#</a></h2>
+<h2>Example - ESI Distribution<a class="headerlink" href="#example-esi-distribution" title="Permalink to this heading">#</a></h2>
+<p>To run the sample simulation above, simply download the
+<code class="docutils literal notranslate"><span class="pre">openfoam-esi-input-example.zip</span></code> file, select the correct distribution by
+using <code class="docutils literal notranslate"><span class="pre">inductiva.simulators.OpenFOAM(distribution=&quot;esi&quot;)</span></code>, and replace<br />
+<code class="docutils literal notranslate"><span class="pre">runApplication</span> <span class="pre">surfaceFeatures</span></code> with <code class="docutils literal notranslate"><span class="pre">runApplication</span> <span class="pre">surfaceFeatureExtract</span></code>.</p>
+</section>
+<section id="advanced-example-running-mb9-micro-benchmark-by-exafoam">
+<h2>Advanced Example: Running MB9 Micro-benchmark by ExaFOAM<a class="headerlink" href="#advanced-example-running-mb9-micro-benchmark-by-exafoam" title="Permalink to this heading">#</a></h2>
+<p>In this advanced example, we’ll be running a complex OpenFOAM simulation
+based on a high-lift configuration setup, which is part of the <a class="reference external" href="https://exafoam.eu/benchmarks/" target="_blank">ExaFOAM benchmarks</a>. Specifically, this case corresponds to the <strong>MB9 micro-benchmark</strong>, which
+serves as preparatory work for the <strong>HPC Grand Challenge</strong> test case of
+the <strong>High Lift Common Research Model (CRM-HL)</strong>. The <strong>CRM-HL</strong> is
+a full aircraft configuration with deployed high-lift devices, simulated
+using <strong>wall-modeled LES (WMLES)</strong>.</p>
+<p>The <strong>MB9 micro-benchmark</strong> captures the key characteristics of the <strong>Grand Challenge</strong>,
+such as flow physics and simulation approach, but with significantly fewer
+computational resources. It features a <strong>2D, three-element high-lift wing configuration</strong>,
+simulated with the <strong>IDDES model</strong>, which supports <strong>WMLES</strong> for resolving near-wall
+turbulence.</p>
+<p>In this example, we’ll run a modified version of this benchmark using two hardware
+configurations powered by <strong>Inductiva</strong>. First, we’ll run the simulation
+on a large <strong>360 vCPU machine</strong>, one of the largest single-node configurations
+available at Inductiva. Then, to see if we can halve the execution time
+of the simulation, we’ll run the same simulation on an <strong>MPI cluster</strong> using
+two of these large machines.</p>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">#</a></h3>
+<p>Before running the simulation, make sure to download the input files
+from this <a class="reference external" href="https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration" target="_blank">repository</a>. Once downloaded, place them in a directory named <code class="docutils literal notranslate"><span class="pre">highLiftConfiguration</span></code>
+inside your working folder.</p>
+<p>Here’s an example of what your directory structure should look like after
+organizing the necessary files:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-lasgo<span class="w"> </span>highLiftConfiguration
+total<span class="w"> </span><span class="m">104</span>
+<span class="w"> </span><span class="m">0</span><span class="w"> </span>drwxrwxr-x@<span class="w"> </span><span class="m">14</span><span class="w">     </span><span class="m">448</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">23</span><span class="w"> </span><span class="m">11</span>:44<span class="w"> </span>.
+<span class="w"> </span><span class="m">0</span><span class="w"> </span>drwx------@<span class="w"> </span><span class="m">19</span><span class="w">     </span><span class="m">608</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">23</span><span class="w"> </span><span class="m">11</span>:49<span class="w"> </span>..
+<span class="w"> </span><span class="m">0</span><span class="w"> </span>drwxrwxr-x@<span class="w"> </span><span class="m">12</span><span class="w">     </span><span class="m">384</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="m">09</span>:43<span class="w"> </span><span class="m">0</span>.orig
+<span class="w"> </span><span class="m">8</span><span class="w"> </span>-rwxr-xr-x@<span class="w">  </span><span class="m">1</span><span class="w">     </span><span class="m">626</span><span class="w"> </span>Jun<span class="w"> </span><span class="m">13</span><span class="w"> </span><span class="m">10</span>:09<span class="w"> </span>Allclean
+<span class="m">16</span><span class="w"> </span>-rwxr-xr-x@<span class="w">  </span><span class="m">1</span><span class="w">    </span><span class="m">6998</span><span class="w"> </span>Jun<span class="w"> </span><span class="m">13</span><span class="w"> </span><span class="m">10</span>:09<span class="w"> </span>Allrun
+<span class="w"> </span><span class="m">8</span><span class="w"> </span>-rw-rw-r--@<span class="w">  </span><span class="m">1</span><span class="w">     </span><span class="m">991</span><span class="w"> </span>Jun<span class="w"> </span><span class="m">13</span><span class="w"> </span><span class="m">10</span>:09<span class="w"> </span>COPYING
+<span class="m">48</span><span class="w"> </span>-rw-rw-r--@<span class="w">  </span><span class="m">1</span><span class="w">   </span><span class="m">21547</span><span class="w"> </span>Jun<span class="w"> </span><span class="m">13</span><span class="w"> </span><span class="m">10</span>:09<span class="w"> </span>README.md
+<span class="w"> </span><span class="m">0</span><span class="w"> </span>-rw-rw-r--@<span class="w">  </span><span class="m">1</span><span class="w">       </span><span class="m">0</span><span class="w"> </span>Jun<span class="w"> </span><span class="m">13</span><span class="w"> </span><span class="m">10</span>:09<span class="w"> </span><span class="k">case</span>.foam
+<span class="w"> </span><span class="m">0</span><span class="w"> </span>drwxrwxr-x@<span class="w">  </span><span class="m">6</span><span class="w">     </span><span class="m">192</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="m">09</span>:43<span class="w"> </span>constant
+<span class="w"> </span><span class="m">0</span><span class="w"> </span>drwxrwxr-x@<span class="w"> </span><span class="m">13</span><span class="w">     </span><span class="m">416</span><span class="w"> </span>Jun<span class="w"> </span><span class="m">13</span><span class="w"> </span><span class="m">10</span>:09<span class="w"> </span>figures
+<span class="w"> </span><span class="m">0</span><span class="w"> </span>drwxrwxr-x@<span class="w"> </span><span class="m">28</span><span class="w">     </span><span class="m">896</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="m">09</span>:43<span class="w"> </span>system
+<span class="m">24</span><span class="w"> </span>-rw-rw-r--@<span class="w">  </span><span class="m">1</span><span class="w">   </span><span class="m">11399</span><span class="w"> </span>Jun<span class="w"> </span><span class="m">13</span><span class="w"> </span><span class="m">10</span>:09<span class="w"> </span>thumbnail.png
+</pre></div>
+</div>
+</section>
+<section id="modifications-to-the-simulation-parameters">
+<h3>Modifications to the Simulation Parameters<a class="headerlink" href="#modifications-to-the-simulation-parameters" title="Permalink to this heading">#</a></h3>
+<p>To speed up the simulation, we made some adjustments to the original
+parameters. Specifically, we set the time step (<code class="docutils literal notranslate"><span class="pre">dt</span></code>) to 0.00002, the
+initial time to 0.10, and the final time to 0.30. These changes help reduce the
+overall simulation runtime while maintaining reasonable accuracy for this high-lift
+configuration case.</p>
+</section>
+<section id="configuring-and-running-the-simulation">
+<h3>Configuring and Running the Simulation<a class="headerlink" href="#configuring-and-running-the-simulation" title="Permalink to this heading">#</a></h3>
+<p>We’ll run the simulation on a <strong>virtual machine with 360 vCPUs</strong> using the
+<code class="docutils literal notranslate"><span class="pre">c3d-highcpu-360</span></code> machine type. The process includes several preprocessing
+steps, such as <strong>mesh generation</strong> (<code class="docutils literal notranslate"><span class="pre">blockMesh</span></code>, <code class="docutils literal notranslate"><span class="pre">snappyHexMesh</span></code>), followed
+by the simulation run.</p>
+<p>The commands used to run the simulation were all taken from the <code class="docutils literal notranslate"><span class="pre">Allrun</span></code> script
+included in the downloaded files. We made a few adjustments because all
+commands are executed directly from the <code class="docutils literal notranslate"><span class="pre">highLiftConfiguration</span></code> directory,
+so we can’t use <code class="docutils literal notranslate"><span class="pre">cd</span></code> to navigate into subdirectories and run commands from there.
+Additionally, every command must start with <code class="docutils literal notranslate"><span class="pre">runApplication</span></code> or <code class="docutils literal notranslate"><span class="pre">runParallel</span></code>,
+even for basic commands like <code class="docutils literal notranslate"><span class="pre">rm</span></code> and <code class="docutils literal notranslate"><span class="pre">mv</span></code>.</p>
+<p>We’ve consolidated all the commands into a file called <code class="docutils literal notranslate"><span class="pre">commands.txt</span></code>, with each
+command placed on a separate line. This file is then read as a list of strings
+for sequential execution. The contents of <code class="docutils literal notranslate"><span class="pre">commands.txt</span></code> are as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>runApplication<span class="w"> </span>cp<span class="w"> </span>system/controlDict.SHM<span class="w"> </span>system/controlDict
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/fvSchemes.SHM<span class="w"> </span>system/fvSchemes
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/fvSolution.SHM<span class="w"> </span>system/fvSolution
+runApplication<span class="w"> </span>blockMesh
+runApplication<span class="w"> </span>blockMesh
+runApplication<span class="w"> </span>snappyHexMesh<span class="w"> </span>-dict<span class="w"> </span>system/snappyHexMeshDict.refineblockMesh<span class="w"> </span>-overwrite
+runApplication<span class="w"> </span>mv<span class="w"> </span>./0/cellLevel<span class="w"> </span>./constant/polyMesh/
+runApplication<span class="w"> </span>mv<span class="w"> </span>./0/pointLevel<span class="w"> </span>./constant/polyMesh/
+runApplication<span class="w"> </span>rm<span class="w"> </span>-r<span class="w"> </span><span class="m">0</span>
+runApplication<span class="w"> </span>checkMesh
+runApplication<span class="w"> </span>extrudeMesh<span class="w"> </span>-dict<span class="w"> </span>system/extrudeMeshDict.refineblockMesh
+runApplication<span class="w"> </span>rm<span class="w"> </span>constant/polyMesh/cellLevel
+runApplication<span class="w"> </span>rm<span class="w"> </span>constant/polyMesh/cellZones
+runApplication<span class="w"> </span>rm<span class="w"> </span>constant/polyMesh/pointLevel
+runApplication<span class="w"> </span>rm<span class="w"> </span>constant/polyMesh/pointZones
+runApplication<span class="w"> </span>rm<span class="w"> </span>constant/polyMesh/faceZones
+runApplication<span class="w"> </span>rm<span class="w"> </span>constant/polyMesh/level0Edge
+runApplication<span class="w"> </span>rm<span class="w"> </span>constant/polyMesh/surfaceIndex
+runApplication<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span>s/<span class="s2">&quot;ff_zMin&quot;</span>/<span class="s2">&quot;ff_SAVE&quot;</span>/g<span class="w"> </span>constant/polyMesh/boundary
+runApplication<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span>s/<span class="s2">&quot;ff_zMax&quot;</span>/<span class="s2">&quot;ff_zMin&quot;</span>/g<span class="w"> </span>constant/polyMesh/boundary
+runApplication<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span>s/<span class="s2">&quot;ff_SAVE&quot;</span>/<span class="s2">&quot;ff_zMax&quot;</span>/g<span class="w"> </span>constant/polyMesh/boundary
+runApplication<span class="w"> </span>checkMesh
+runApplication<span class="w"> </span>surfaceFeatureExtract
+runApplication<span class="w"> </span>decomposePar<span class="w"> </span>-decomposeParDict<span class="w"> </span>system/decomposeParDict.SHM
+runParallel<span class="w"> </span>snappyHexMesh<span class="w"> </span>-decomposeParDict<span class="w"> </span>system/decomposeParDict.SHM<span class="w"> </span>-dict<span class="w"> </span>system/snappyHexMeshDict<span class="w"> </span>-overwrite
+runParallel<span class="w"> </span>checkMesh<span class="w"> </span>-decomposeParDict<span class="w"> </span>system/decomposeParDict.SHM<span class="w"> </span>-latestTime<span class="w"> </span>-meshQuality
+runApplication<span class="w"> </span>reconstructParMesh<span class="w"> </span>-mergeTol<span class="w"> </span>1e-08<span class="w"> </span>-constant<span class="w"> </span>-latestTime
+runApplication<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>constant/polyMesh<span class="w"> </span>constant/polyMesh.origHalf
+runApplication<span class="w">  </span>mirrorMesh<span class="w"> </span>-overwrite
+runApplication<span class="w"> </span>topoSet<span class="w"> </span>-dict<span class="w"> </span>system/topoSetDict.faces.ff_zMin
+runApplication<span class="w"> </span>createPatch<span class="w"> </span>-overwrite<span class="w"> </span>-dict<span class="w"> </span>system/createPatchDict.mirrorMesh
+runApplication<span class="w"> </span>changeDictionary<span class="w"> </span>-constant<span class="w"> </span>-dict<span class="w"> </span>system/changeDictionaryDict.cyclicPatches<span class="w"> </span>-enableFunctionEntries
+runApplication<span class="w"> </span>topoSet<span class="w"> </span>-dict<span class="w"> </span>system/topoSetDict.faces.cyclic
+runApplication<span class="w"> </span>checkMesh<span class="w"> </span>-constant
+runApplication<span class="w"> </span>rm<span class="w"> </span>-r<span class="w"> </span>processor*
+runApplication<span class="w"> </span>rm<span class="w"> </span>-r<span class="w"> </span>constant/polyMesh.origHalf
+runApplication<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span><span class="m">0</span>.orig<span class="w"> </span><span class="m">0</span>
+runApplication<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>system
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/controlDict.SHM<span class="w"> </span>system/controlDict
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/fvSchemes.SHM<span class="w"> </span>system/fvSchemes
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/fvSolution.SHM<span class="w"> </span>system/fvSolution
+runApplication<span class="w"> </span>decomposePar
+runParallel<span class="w"> </span>renumberMesh<span class="w"> </span>-overwrite
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/controlDict.SRS.init<span class="w"> </span>system/controlDict
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/fvSolution.SRS<span class="w"> </span>system/fvSolution
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/fvSchemes.SRS<span class="w"> </span>system/fvSchemes
+runParallel<span class="w"> </span>applyBoundaryLayer<span class="w"> </span>-ybl<span class="w"> </span><span class="m">0</span>.1
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/controlDict.SRS.init<span class="w"> </span>system/controlDict
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/fvSolution.SRS<span class="w"> </span>system/fvSolution
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/fvSchemes.SRS<span class="w"> </span>system/fvSchemes
+runParallel<span class="w"> </span>rhoPimpleFoam
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/controlDict.SRS.avg<span class="w"> </span>system/controlDict
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/fvSolution.SRS<span class="w"> </span>system/fvSolution
+runApplication<span class="w"> </span>cp<span class="w"> </span>system/fvSchemes.SRS<span class="w"> </span>system/fvSchemes
+runParallel<span class="w"> </span>rhoPimpleFoam
+runParallel<span class="w"> </span>postProcess<span class="w"> </span>-func<span class="w"> </span>sampleDict.surface.SRS<span class="w"> </span>-latestTime
+</pre></div>
+</div>
+<p>Below is the Python code to configure and run the OpenFOAM simulation:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inductiva</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
-<span class="c1"># Instantiate machine group</span>
-<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s1">&#39;c2-standard-4&#39;</span><span class="p">)</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
+                    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c3d-highcpu-360&quot;</span><span class="p">,</span>
+                    <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
-<span class="c1"># Set simulation input directory</span>
-<span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
-    <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
-    <span class="s2">&quot;openfoam-esi-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">inductiva</span>
 
-<span class="c1"># Set the simulation commands</span>
-<span class="n">commands</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;runApplication surfaceFeatureExtract&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runApplication blockMesh&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runApplication decomposePar -copyZero&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runParallel snappyHexMesh -overwrite&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runParallel potentialFoam&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runParallel simpleFoam&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runApplication reconstructParMesh -constant&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;runApplication reconstructPar -latestTime&quot;</span>
-<span class="p">]</span>
+<span class="c1"># Set simulation input directory</span>
+<span class="n">input_dir</span> <span class="o">=</span> <span class="s2">&quot;/path/to/highLiftConfiguration&quot;</span>
+
+<span class="c1"># Read the simulation commands</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_dir</span><span class="p">,</span><span class="s1">&#39;commands.txt&#39;</span><span class="p">),</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">commands</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">]</span>
 
 <span class="c1"># Initialize the Simulator</span>
 <span class="n">openfoam</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">OpenFOAM</span><span class="p">(</span><span class="n">distribution</span><span class="o">=</span><span class="s2">&quot;esi&quot;</span><span class="p">)</span>
 
-<span class="c1"># Run simulation with config files in the input directory</span>
-<span class="n">task</span> <span class="o">=</span> <span class="n">openfoam</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
-                    <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span>
-                    <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-                    <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<span class="c1"># Run simulation</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">openfoam</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+    <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span>
+    <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span>
+    <span class="n">use_hwthread</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
 
+<span class="c1"># Wait for the task to finish and downloading the outputs</span>
 <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
 <span class="n">task</span><span class="o">.</span><span class="n">download_outputs</span><span class="p">()</span>
 
+<span class="c1"># Turn off the machine group</span>
 <span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+
 </pre></div>
 </div>
+</section>
+<section id="important-details">
+<h3>Important Details<a class="headerlink" href="#important-details" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>ExaFOAM Benchmark</strong>: This simulation replicates the <strong>MB9 micro-benchmark</strong>
+from the <a class="reference external" href="https://exafoam.eu/benchmarks/" target="_blank">ExaFOAM</a> project. The benchmark
+captures key flow physics and simulation strategies of a larger
+HPC challenge, but with fewer computational resources, making it scalable
+and efficient for simulating high-lift configurations.</p></li>
+<li><p><strong>Machine Configuration</strong>: We are running the simulation on a <code class="docutils literal notranslate"><span class="pre">c3d-highcpu-360</span></code>
+machine with <strong>360 vCPUs</strong> to ensure efficient computation. You can adjust
+the machine configuration based on your available resources or project
+requirements.</p></li>
+<li><p><strong>Commands</strong>: The list of <code class="docutils literal notranslate"><span class="pre">commands</span></code> includes key OpenFOAM tasks
+like copying necessary configuration files, running mesh generation, and
+parallelizing the process using <code class="docutils literal notranslate"><span class="pre">decomposePar</span></code> and <code class="docutils literal notranslate"><span class="pre">snappyHexMesh</span></code>.</p></li>
+<li><p><strong>Parallelization</strong>: We utilize <code class="docutils literal notranslate"><span class="pre">n_vcpus=180</span></code> for the simulation, allowing
+OpenFOAM to run in parallel and significantly speed up computation. Using
+one thread per physical core, as recommended by <a class="reference external" href="https://cloud.google.com/blog/products/compute/how-to-reduce-mpi-latency-for-hpc-workloads-on-google-cloud" target="_blank">Google Cloud</a>,
+typically offers optimal performance. However, this configuration may not
+always be the best option, as there is no strict rule for selecting the
+number of vCPUs.</p></li>
+</ol>
+</section>
+<section id="running-the-simulation">
+<h3>Running the Simulation<a class="headerlink" href="#running-the-simulation" title="Permalink to this heading">#</a></h3>
+<p>Running the script above will take some time, as OpenFOAM tasks like
+<code class="docutils literal notranslate"><span class="pre">snappyHexMesh</span></code> and <code class="docutils literal notranslate"><span class="pre">checkMesh</span></code> can be computationally intensive, especially
+with large meshes. The <code class="docutils literal notranslate"><span class="pre">task.wait()</span></code> command will block until the simulation
+finishes, after which the output files will be available.</p>
+<p>In this configuration, the simulation took <strong>40 hours and 20 minutes</strong> to complete,
+generating <strong>24.76 GB</strong> of output.</p>
+</section>
+<section id="post-simulation">
+<h3>Post-Simulation<a class="headerlink" href="#post-simulation" title="Permalink to this heading">#</a></h3>
+<p>After the simulation completes, the output files will be downloaded locally by
+calling <code class="docutils literal notranslate"><span class="pre">task.download_outputs()</span></code>. These outputs include the simulation results,
+such as mesh quality reports, final results, and log files for each step in the process.</p>
+<p>To inspect the results, navigate to the <code class="docutils literal notranslate"><span class="pre">inductiva_output</span></code> folder, where
+all outputs are stored:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>-lasgo<span class="w"> </span>inductiva_output/&lt;task_id&gt;
+total<span class="w"> </span><span class="m">672</span>
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">  </span><span class="m">143</span><span class="w">     </span><span class="m">4576</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>.
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">  </span><span class="m">400</span><span class="w">    </span><span class="m">12800</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:05<span class="w"> </span>..
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">   </span><span class="m">11</span><span class="w">      </span><span class="m">352</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span><span class="m">0</span>.orig
+<span class="w">  </span><span class="m">8</span><span class="w"> </span>-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w">      </span><span class="m">626</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>Allclean
+<span class="w"> </span><span class="m">16</span><span class="w"> </span>-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w">     </span><span class="m">6998</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>Allrun
+<span class="w">  </span><span class="m">8</span><span class="w"> </span>-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w">      </span><span class="m">991</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>COPYING
+<span class="w"> </span><span class="m">48</span><span class="w"> </span>-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w">    </span><span class="m">21547</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>README.md
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w">        </span><span class="m">0</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span><span class="k">case</span>.foam
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">    </span><span class="m">8</span><span class="w">      </span><span class="m">256</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>constant
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">   </span><span class="m">27</span><span class="w">      </span><span class="m">864</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>dynamicCode
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">   </span><span class="m">13</span><span class="w">      </span><span class="m">416</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>figures
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">    </span><span class="m">4</span><span class="w">      </span><span class="m">128</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>processor0
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">    </span><span class="m">4</span><span class="w">      </span><span class="m">128</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>processor1
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">    </span><span class="m">4</span><span class="w">      </span><span class="m">128</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>processor10
+<span class="w">    </span>...
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">    </span><span class="m">4</span><span class="w">      </span><span class="m">128</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>processor126
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">    </span><span class="m">4</span><span class="w">      </span><span class="m">128</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>processor127
+<span class="w"> </span><span class="m">32</span><span class="w"> </span>-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w">    </span><span class="m">14437</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>stderr.txt
+<span class="m">536</span><span class="w"> </span>-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w">   </span><span class="m">272331</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>stdout.txt
+<span class="w">  </span><span class="m">0</span><span class="w"> </span>drwxr-xr-x<span class="w">   </span><span class="m">30</span><span class="w">      </span><span class="m">960</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>system
+<span class="w"> </span><span class="m">24</span><span class="w"> </span>-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w">    </span><span class="m">11399</span><span class="w"> </span>Sep<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">16</span>:06<span class="w"> </span>thumbnail.png
+</pre></div>
+</div>
+<p>You can now perform post-processing on the results, just as you would if you had
+run the simulation locally.</p>
+</section>
+<section id="utilizing-an-mpi-cluster-for-enhanced-simulation-performance">
+<h3>Utilizing an MPI Cluster for Enhanced Simulation Performance<a class="headerlink" href="#utilizing-an-mpi-cluster-for-enhanced-simulation-performance" title="Permalink to this heading">#</a></h3>
+<p>The initial simulation took a significant amount of time to complete.
+To speed things up, we deployed the simulation across two <code class="docutils literal notranslate"><span class="pre">c3d-highcpu-360</span></code>
+machines using an MPI cluster configuration.</p>
+<p>Using <strong>Inductiva’s Python library</strong>, scaling the simulation resources is
+simple. You just need to modify the machine group instantiation to an
+MPI cluster setup and adjust the <code class="docutils literal notranslate"><span class="pre">n_vcpus</span></code> parameter accordingly.</p>
+<p>Here’s an example of the code implementation:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mpi_cluster</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MPICluster</span><span class="p">(</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c3d-highcpu-360&quot;</span><span class="p">,</span>
+    <span class="n">data_disk_gb</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">num_machines</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+
+<span class="n">mpi_cluster</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="o">...</span>
+<span class="c1"># Execute the simulation</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">openfoam</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="o">=</span><span class="n">input_dir</span><span class="p">,</span>
+    <span class="n">commands</span><span class="o">=</span><span class="n">commands</span><span class="p">,</span>
+    <span class="n">n_vcpus</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span> <span class="c1"># 360 out of 720 (360 x2)</span>
+    <span class="n">use_hwthread</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">on</span><span class="o">=</span><span class="n">mpi_cluster</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>With this simple code change, we were able to significantly reduce the
+simulation time to <strong>19 hours and 10 minutes</strong>, generating an output of <strong>25.02 GB</strong>.</p>
+<p>PS: Note that an MPI Cluster does not support <code class="docutils literal notranslate"><span class="pre">spot</span></code> machines.</p>
+</section>
+<section id="conclusion">
+<h3>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">#</a></h3>
+<p>This setup shows how cloud resources can be leveraged to run computationally
+intensive <strong>OpenFOAM simulations</strong>, specifically using a case from the <strong>ExaFOAM benchmarks</strong>.
+The cloud-based environment allows for parallel execution on high-performance
+machines, significantly reducing our simulation time by half! Once the simulation
+completes, you can download and analyze the results on your local machine.</p>
+<p>Good luck with your OpenFOAM simulations!</p>
+</section>
 </section>
 <section id="what-to-read-next">
 <h2>What to read next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
@@ -531,11 +777,14 @@ the following related simulators that are also available via Inductiva API:</p>
 <li><p><a class="reference internal" href="DualSPHysics.html"><span class="std std-doc">DualSPHysics</span></a></p></li>
 <li><p><a class="reference internal" href="SPlisHSPlasH.html"><span class="std std-doc">SPlisHSPlasH</span></a></p></li>
 </ul>
-<p>You may also be interested in reading our blog post
+<p>Ready to optimize your own simulations? Try our <a class="reference external" href="https://console.inductiva.ai/" target="_blank">Inductiva API</a>
+to streamline your workflows and make the most of cloud resources for
+large-scale simulations.</p>
+<p>You may also be interested in reading our blog post,
 <a class="reference external" href="https://inductiva.ai/blog/article/5k-points-is-all-you-need" target="_blank">The 3D Mesh Resolution Threshold - 5k Points is All You Need!</a>,
-where we investigate the impact of reducing the level of detail of a 3D object in
-the accuracy of aerodynamic metrics obtained using a (virtual) wind tunnel
-implemented using OpenFOAM.</p>
+where we explore just how much you can reduce the level of detail in a
+3D object while still maintaining accurate aerodynamic results in a virtual
+wind tunnel built with OpenFOAM.</p>
 </section>
 </section>
 
@@ -584,8 +833,19 @@ implemented using OpenFOAM.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-foundation-distribution">Example - Foundation distribution</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-esi-distribution">Example - ESI distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-openfoam-foundation-distribution">Example - OpenFOAM Foundation Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example-esi-distribution">Example - ESI Distribution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-example-running-mb9-micro-benchmark-by-exafoam">Advanced Example: Running MB9 Micro-benchmark by ExaFOAM</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#modifications-to-the-simulation-parameters">Modifications to the Simulation Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-and-running-the-simulation">Configuring and Running the Simulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important-details">Important Details</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#running-the-simulation">Running the Simulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#post-simulation">Post-Simulation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#utilizing-an-mpi-cluster-for-enhanced-simulation-performance">Utilizing an MPI Cluster for Enhanced Simulation Performance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-to-read-next">What to read next</a></li>
 </ul>
   </nav></div>

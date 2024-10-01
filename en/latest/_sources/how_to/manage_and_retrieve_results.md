@@ -25,10 +25,18 @@ after the task id. In the following snippet, the outputs of task with id
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 simulator = inductiva.simulators.REEF3D()
 
-task = simulator.run(input_dir="path-to-directory-with-input-files-for-reef3d")
+task = simulator.run(input_dir="path-to-directory-with-input-files-for-reef3d",
+                     on=machine_group)
 print(task.id)  # will print i4ir3kvv62odsfrhko4y8w2an
+
+# Terminate the machine group
+machine_group.terminate()
 ```
 
 Using the command line interface (CLI), the user can list the contents of his remote
