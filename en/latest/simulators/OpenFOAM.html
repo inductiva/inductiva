@@ -625,11 +625,9 @@ runParallel<span class="w"> </span>postProcess<span class="w"> </span>-func<span
 <span class="kn">import</span> <span class="nn">os</span>
 
 <span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span>
-                    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c3d-highcpu-360&quot;</span><span class="p">,</span>
-                    <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">machine_type</span><span class="o">=</span><span class="s2">&quot;c3d-highcpu-360&quot;</span><span class="p">,</span>
+    <span class="n">spot</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-<span class="kn">import</span> <span class="nn">inductiva</span>
 
 <span class="c1"># Set simulation input directory</span>
 <span class="n">input_dir</span> <span class="o">=</span> <span class="s2">&quot;/path/to/highLiftConfiguration&quot;</span>

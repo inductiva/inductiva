@@ -231,11 +231,9 @@ import inductiva
 import os
 
 machine_group = inductiva.resources.MachineGroup(
-                    machine_type="c3d-highcpu-360",
-                    spot=True)
+    machine_type="c3d-highcpu-360",
+    spot=True)
 machine_group.start()
-
-import inductiva
 
 # Set simulation input directory
 input_dir = "/path/to/highLiftConfiguration"
