@@ -20,7 +20,7 @@ class AmrWind(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "amrWind.amrWind.run_simulation"
+        self.simulator = "amrWind"
 
     @property
     def name(self):

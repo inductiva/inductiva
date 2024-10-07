@@ -19,7 +19,7 @@ class XBeach(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "sw.xbeach.run_simulation"
+        self.simulator = "xbeach"
 
     def run(self,
             input_dir: str,

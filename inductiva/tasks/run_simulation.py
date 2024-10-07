@@ -18,7 +18,7 @@ _metadata_lock = threading.RLock()
 
 
 def run_simulation(
-    api_method_name: str,
+    simulator: str,
     input_dir: pathlib.Path,
     *,
     computational_resources: types.ComputationalResources,
@@ -26,7 +26,6 @@ def run_simulation(
     storage_dir: Optional[str] = "",
     api_invoker=None,
     extra_metadata=None,
-    simulator=None,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -44,14 +43,13 @@ def run_simulation(
 
     container_image = kwargs.get("container_image", None)
 
-    task_id = api_invoker(api_method_name,
+    task_id = api_invoker(simulator,
                           params,
                           type_annotations,
                           computational_resources,
                           resubmit_on_preemption=resubmit_on_preemption,
                           container_image=container_image,
-                          storage_path_prefix=storage_dir,
-                          simulator=simulator)
+                          storage_path_prefix=storage_dir)
     logging.info("■ Task %s submitted to the queue of the %s.", task_id,
                  computational_resources)
 
@@ -72,7 +70,7 @@ def run_simulation(
             machine_group_id = computational_resources.id
 
         metadata = {
-            "api_method_name": api_method_name.split(".")[1],
+            "simulator": simulator,
             "machine_group_id": machine_group_id,
             "storage_dir": storage_dir,
             **kwargs,

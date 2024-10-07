@@ -17,7 +17,7 @@ TASK_METADATA_FILENAME = "task_metadata.json"
 
 # pylint: disable=unused-argument
 def _api_invoker(task_id, *args, **kwargs):
-    """Dummy api_invoker argument for testing. Returns the api_method_name
+    """Dummy api_invoker argument for testing. Returns the simulator
     """
     return task_id
 
@@ -48,7 +48,7 @@ def test_run_simulation_logging(task_id, disable_logging):
     mock_mg = mock.Mock()
     mock_mg.id = str(uuid.uuid4())
 
-    tasks.run_simulation(api_method_name=task_id,
+    tasks.run_simulation(simulator=task_id,
                          input_dir=dummy_dir,
                          computational_resources=mock_mg,
                          api_invoker=_api_invoker)

@@ -331,15 +331,14 @@ def log_task_info(
 
 
 def submit_task(api_instance,
-                method_name,
+                simulator,
                 request_params,
                 resource_pool,
                 storage_path_prefix,
                 params,
                 type_annotations,
                 resubmit_on_preemption: bool = False,
-                container_image: Optional[str] = None,
-                simulator=None):
+                container_image: Optional[str] = None):
     """Submit a task and send input files to the API."""
     resource_pool_id = resource_pool.id
 
@@ -350,7 +349,7 @@ def submit_task(api_instance,
         current_project = current_project.name
 
     task_request = TaskRequest(
-        method=method_name,
+        simulator=simulator,
         params=request_params,
         project=current_project,
         resource_pool=resource_pool_id,
@@ -385,14 +384,13 @@ def submit_task(api_instance,
     return task_id
 
 
-def invoke_async_api(method_name: str,
+def invoke_async_api(simulator: str,
                      params,
                      type_annotations: Dict[Any, Type],
                      resource_pool: types.ComputationalResources,
                      storage_path_prefix: Optional[str] = "",
                      container_image: Optional[str] = None,
-                     resubmit_on_preemption: bool = False,
-                     simulator=None) -> str:
+                     resubmit_on_preemption: bool = False) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -433,14 +431,13 @@ def invoke_async_api(method_name: str,
         api_instance = TasksApi(client)
 
         task_id = submit_task(api_instance=api_instance,
-                              method_name=method_name,
+                              simulator=simulator,
                               request_params=request_params,
                               resource_pool=resource_pool,
                               storage_path_prefix=storage_path_prefix,
                               params=params,
                               container_image=container_image,
                               type_annotations=type_annotations,
-                              resubmit_on_preemption=resubmit_on_preemption,
-                              simulator=simulator)
+                              resubmit_on_preemption=resubmit_on_preemption)
 
     return task_id

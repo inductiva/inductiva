@@ -18,7 +18,7 @@ class SplishSplash(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "sph.splishsplash.run_simulation"
+        self.simulator = "splishsplash"
 
     def run(
         self,
