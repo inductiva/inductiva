@@ -349,15 +349,13 @@ def submit_task(api_instance,
             raise RuntimeError("Trying to submit a task to a closed project.")
         current_project = current_project.name
 
-    task_request = TaskRequest(
-        simulator=simulator,
-        params=request_params,
-        project=current_project,
-        resource_pool=resource_pool_id,
-        container_image=container_image,
-        storage_path_prefix=storage_path_prefix,
-        resubmit_on_preemption=resubmit_on_preemption
-    )
+    task_request = TaskRequest(simulator=simulator,
+                               params=request_params,
+                               project=current_project,
+                               resource_pool=resource_pool_id,
+                               container_image=container_image,
+                               storage_path_prefix=storage_path_prefix,
+                               resubmit_on_preemption=resubmit_on_preemption)
 
     task_submitted_info = submit_request(
         api_instance=api_instance,
