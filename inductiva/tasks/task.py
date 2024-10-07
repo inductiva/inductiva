@@ -658,7 +658,7 @@ class Task:
         return success, status
 
     def kill(self,
-             wait_timeout: Optional[Union[float, int]] = None,
+             wait_timeout: Optional[Union[float, int]] = 1,
              verbosity_level: int = 2) -> Union[bool, None]:
         """Request a task to be killed.
 
