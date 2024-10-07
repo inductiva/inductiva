@@ -285,7 +285,7 @@ class BaseMachineGroup(ABC):
 
         return machine_group
 
-    def _can_start_resource(self) -> bool:
+    def can_start_resource(self) -> bool:
         """Check if the resource can be started.
 
         This method checks if the resource can be started by checking
@@ -352,7 +352,7 @@ class BaseMachineGroup(ABC):
 
         if wait_on_pending_quota:
             first_time = True
-            while not self._can_start_resource():
+            while not self.can_start_resource():
                 if first_time:
                     print("This machine will exceed the current quotas.\n"
                           "Will wait for quotas to become available.")

@@ -279,21 +279,21 @@ def fake_get_quotas_no_total_num_machines():
 
 
 @mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_small)
-def test__can_start_resource_cant_start_low_quotas():
-    """Test the _can_start_resource function when the quotas are small."""
+def test_can_start_resource_cant_start_low_quotas():
+    """Test the can_start_resource function when the quotas are small."""
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-4"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
     resource.n_vcpus.total = 4
 
-    res = resource._can_start_resource()
+    res = resource.can_start_resource()
 
     assert not res
 
 
 @mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_normal)
-def test__can_start_resource_cant_start_too_many_vcpu():
-    """Test the _can_start_resource function when the resource asks for
+def test_can_start_resource_cant_start_too_many_vcpu():
+    """Test the can_start_resource function when the resource asks for
     too many vcpus."""
 
     resource = mock.MagicMock()
@@ -301,15 +301,15 @@ def test__can_start_resource_cant_start_too_many_vcpu():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
     resource.n_vcpus.total = 400
 
-    res = resource._can_start_resource()
+    res = resource.can_start_resource()
 
     assert not res
 
 
 @mock.patch("inductiva.users.get_quotas",
             new=fake_get_quotas_no_total_num_machines)
-def test__can_start_resource_cant_start_no_num_machines():
-    """Test the _can_start_resource function when the quotas dont allow due to
+def test_can_start_resource_cant_start_no_num_machines():
+    """Test the can_start_resource function when the quotas dont allow due to
     not enough num machines."""
 
     resource = mock.MagicMock()
@@ -317,14 +317,14 @@ def test__can_start_resource_cant_start_no_num_machines():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
     resource.n_vcpus.total = 4
 
-    res = resource._can_start_resource()
+    res = resource.can_start_resource()
 
     assert not res
 
 
 @mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_small)
-def test__can_start_resource_cant_start_high_cost():
-    """Test the _can_start_resource function when the resource cost is too
+def test_can_start_resource_cant_start_high_cost():
+    """Test the can_start_resource function when the resource cost is too
     high."""
 
     resource = mock.MagicMock()
@@ -332,14 +332,14 @@ def test__can_start_resource_cant_start_high_cost():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=10.4724)
     resource.n_vcpus.total = 1
 
-    res = resource._can_start_resource()
+    res = resource.can_start_resource()
 
     assert not res
 
 
 @mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_small)
-def test__can_start_resource_can_start_low_quotas():
-    """Test the _can_start_resource function when the quotas are small but can
+def test_can_start_resource_can_start_low_quotas():
+    """Test the can_start_resource function when the quotas are small but can
     start machine."""
 
     resource = mock.MagicMock()
@@ -347,14 +347,14 @@ def test__can_start_resource_can_start_low_quotas():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
     resource.n_vcpus.total = 1
 
-    res = resource._can_start_resource()
+    res = resource.can_start_resource()
 
     assert res
 
 
 @mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_normal)
-def test__can_start_resource_can_start_too_many_vcpu():
-    """Test the _can_start_resource function when the resource asks for
+def test_can_start_resource_can_start_too_many_vcpu():
+    """Test the can_start_resource function when the resource asks for
     a valid amount of vcpus."""
 
     resource = mock.MagicMock()
@@ -362,20 +362,20 @@ def test__can_start_resource_can_start_too_many_vcpu():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
     resource.n_vcpus.total = 4
 
-    res = resource._can_start_resource()
+    res = resource.can_start_resource()
 
     assert res
 
 
 @mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_small)
-def test__can_start_resource_can_start_high_cost():
-    """Test the _can_start_resource function when the resource cost is valid."""
+def test_can_start_resource_can_start_high_cost():
+    """Test the can_start_resource function when the resource cost is valid."""
 
     resource = mock.MagicMock()
     resource.machine_type = "c2-standard-1"
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.4724)
     resource.n_vcpus.total = 1
 
-    res = resource._can_start_resource()
+    res = resource.can_start_resource()
 
     assert res
