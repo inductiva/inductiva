@@ -288,7 +288,7 @@ def test_can_start_resource_cant_start_low_quotas():
     resource.n_vcpus.total = 4
     resource.num_machines = 1
 
-    res = resource.can_start_resource()
+    res = BaseMachineGroup.can_start_resource(resource)
 
     assert not res
 
