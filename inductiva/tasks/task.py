@@ -96,7 +96,7 @@ class TaskInfo:
         self.computation_start_time = None
         self.computation_end_time = None
         self.end_time = None
-        self.cost = None
+        self.estimated_computation_cost = None
         self.time_metrics = self.TimeMetrics()
         self.data_metrics = self.DataMetrics()
         self._kwargs = kwargs
@@ -239,8 +239,9 @@ class TaskInfo:
         table_str += f"\n{wall_time_table}"
         table_str += f"\nTime breakdown:\n{time_metrics_table}"
         table_str += f"\nData:\n{data_metrics_table}\n"
-        if self.cost:
-            table_str += f"\nCost ($US): {self.cost}\n"
+        if self.estimated_computation_cost:
+            table_str += ("\nEstimated computation cost (US$): "
+                          f"{self.estimated_computation_cost}\n")
 
         return table_str
 
@@ -658,7 +659,7 @@ class Task:
         return success, status
 
     def kill(self,
-             wait_timeout: Optional[Union[float, int]] = None,
+             wait_timeout: Optional[Union[float, int]] = 1,
              verbosity_level: int = 2) -> Union[bool, None]:
         """Request a task to be killed.
 
@@ -687,7 +688,8 @@ class Task:
             if not isinstance(wait_timeout, (float, int)):
                 raise TypeError("Wait timeout must be a number.")
             if wait_timeout <= 0.0:
-                raise ValueError("Wait timeout must be a positive number.")
+                raise ValueError("Wait timeout must be a positive number"
+                                 " or None.")
 
         if verbosity_level not in self.KILL_VERBOSITY_LEVELS:
             raise ValueError(f"Verbosity {verbosity_level} level not allowed. "
