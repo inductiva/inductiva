@@ -96,7 +96,7 @@ class TaskInfo:
         self.computation_start_time = None
         self.computation_end_time = None
         self.end_time = None
-        self.cost = None
+        self.estimated_computation_cost = None
         self.time_metrics = self.TimeMetrics()
         self.data_metrics = self.DataMetrics()
         self._kwargs = kwargs
@@ -239,8 +239,9 @@ class TaskInfo:
         table_str += f"\n{wall_time_table}"
         table_str += f"\nTime breakdown:\n{time_metrics_table}"
         table_str += f"\nData:\n{data_metrics_table}\n"
-        if self.cost:
-            table_str += f"\nCost ($US): {self.cost}\n"
+        if self.estimated_computation_cost:
+            table_str += ("\nEstimated computation cost (US$): "
+                          f"{self.estimated_computation_cost}\n")
 
         return table_str
 
