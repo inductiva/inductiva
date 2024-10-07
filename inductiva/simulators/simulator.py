@@ -169,6 +169,7 @@ class Simulator(ABC):
         return tasks.run_simulation(
             self.simulator,
             input_dir_path,
+            simulator_obj=self,
             storage_dir=storage_dir,
             computational_resources=on,
             container_image=container_image,
