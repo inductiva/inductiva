@@ -18,7 +18,6 @@ from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
 from inductiva.resources import machine_groups
 from inductiva.tasks.task import Task
-from inductiva import users
 
 from ..localization import translator as __
 
@@ -329,32 +328,3 @@ def _render_dict(dictionary: Dict[str, Union[Callable, Any]], argument: Any):
             k: v(argument) if callable(v) else v for k, v in dictionary.items()
         }
     return {}
-
-
-def _can_start_resource(resource: BaseMachineGroup) -> bool:
-    """Check if the resource can be started.
-
-        This method checks if the resource can be started by checking
-        the available quotas and resource usage.
-
-        returns:
-            bool: True if the resource can be started, False otherwise.
-        """
-    quotas = users.get_quotas()
-
-    cost_in_use = quotas["max_price_hour"]["in_use"]
-    vcpu_in_use = quotas["max_vcpus"]["in_use"]
-    machines_in_use = quotas["max_instances"]["in_use"]
-
-    cost_max = quotas["max_price_hour"]["max_allowed"]
-    vcpu_max = quotas["max_vcpus"]["max_allowed"]
-    machines_max = quotas["max_instances"]["max_allowed"]
-
-    current_vcpu = resource.n_vcpus.total
-
-    estimated_cost = cost_in_use + resource.estimate_cloud_cost(verbose=False)
-    estimated_vcpu_usage = vcpu_in_use + current_vcpu
-    estimated_machine_usage = machines_in_use + 1
-    return estimated_cost <= cost_max and \
-            estimated_vcpu_usage <= vcpu_max and \
-            estimated_machine_usage <= machines_max

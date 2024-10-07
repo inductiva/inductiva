@@ -3,7 +3,6 @@ from unittest import mock
 
 from inductiva._benchmarks.methods import _render_dict
 from inductiva._benchmarks.methods import _compute_tasks_to_run
-from inductiva._benchmarks.methods import _can_start_resource
 from inductiva._benchmarks.methods import _tasks_by_vm_type
 from inductiva.tasks.task import TaskInfo
 
@@ -287,7 +286,7 @@ def test__can_start_resource_cant_start_low_quotas():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
     resource.n_vcpus.total = 4
 
-    res = _can_start_resource(resource)
+    res = resource._can_start_resource()
 
     assert not res
 
@@ -302,7 +301,7 @@ def test__can_start_resource_cant_start_too_many_vcpu():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
     resource.n_vcpus.total = 400
 
-    res = _can_start_resource(resource)
+    res = resource._can_start_resource()
 
     assert not res
 
@@ -318,7 +317,7 @@ def test__can_start_resource_cant_start_no_num_machines():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
     resource.n_vcpus.total = 4
 
-    res = _can_start_resource(resource)
+    res = resource._can_start_resource()
 
     assert not res
 
@@ -333,7 +332,7 @@ def test__can_start_resource_cant_start_high_cost():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=10.4724)
     resource.n_vcpus.total = 1
 
-    res = _can_start_resource(resource)
+    res = resource._can_start_resource()
 
     assert not res
 
@@ -348,7 +347,7 @@ def test__can_start_resource_can_start_low_quotas():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
     resource.n_vcpus.total = 1
 
-    res = _can_start_resource(resource)
+    res = resource._can_start_resource()
 
     assert res
 
@@ -363,7 +362,7 @@ def test__can_start_resource_can_start_too_many_vcpu():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
     resource.n_vcpus.total = 4
 
-    res = _can_start_resource(resource)
+    res = resource._can_start_resource()
 
     assert res
 
@@ -377,6 +376,6 @@ def test__can_start_resource_can_start_high_cost():
     resource.estimate_cloud_cost = mock.MagicMock(return_value=0.4724)
     resource.n_vcpus.total = 1
 
-    res = _can_start_resource(resource)
+    res = resource._can_start_resource()
 
     assert res
