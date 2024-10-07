@@ -39,6 +39,8 @@ class UserDetail(
             "campaigns",
             "tier",
             "total_available_credits",
+            "organization",
+            "registration_ts",
             "email",
             "username",
         }
@@ -46,6 +48,7 @@ class UserDetail(
         class properties:
             email = schemas.StrSchema
             username = schemas.StrSchema
+            organization = schemas.StrSchema
         
             @staticmethod
             def tier() -> typing.Type['UserTierCredits']:
@@ -55,6 +58,7 @@ class UserDetail(
             @staticmethod
             def terms_and_conditions_decision() -> typing.Type['TermsAndConditions']:
                 return TermsAndConditions
+            registration_ts = schemas.DateTimeSchema
             
             
             class campaigns(
@@ -165,9 +169,11 @@ class UserDetail(
             __annotations__ = {
                 "email": email,
                 "username": username,
+                "organization": organization,
                 "tier": tier,
                 "total_available_credits": total_available_credits,
                 "terms_and_conditions_decision": terms_and_conditions_decision,
+                "registration_ts": registration_ts,
                 "campaigns": campaigns,
                 "name": name,
                 "credits_currency": credits_currency,
@@ -178,6 +184,8 @@ class UserDetail(
     campaigns: MetaOapg.properties.campaigns
     tier: 'UserTierCredits'
     total_available_credits: MetaOapg.properties.total_available_credits
+    organization: MetaOapg.properties.organization
+    registration_ts: MetaOapg.properties.registration_ts
     email: MetaOapg.properties.email
     username: MetaOapg.properties.username
     
@@ -188,6 +196,9 @@ class UserDetail(
     def __getitem__(self, name: typing_extensions.Literal["username"]) -> MetaOapg.properties.username: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["organization"]) -> MetaOapg.properties.organization: ...
+    
+    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["tier"]) -> 'UserTierCredits': ...
     
     @typing.overload
@@ -195,6 +206,9 @@ class UserDetail(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["terms_and_conditions_decision"]) -> 'TermsAndConditions': ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["registration_ts"]) -> MetaOapg.properties.registration_ts: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["campaigns"]) -> MetaOapg.properties.campaigns: ...
@@ -211,7 +225,7 @@ class UserDetail(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["email", "username", "tier", "total_available_credits", "terms_and_conditions_decision", "campaigns", "name", "credits_currency", "terms_and_conditions_decision_ts", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["email", "username", "organization", "tier", "total_available_credits", "terms_and_conditions_decision", "registration_ts", "campaigns", "name", "credits_currency", "terms_and_conditions_decision_ts", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -223,6 +237,9 @@ class UserDetail(
     def get_item_oapg(self, name: typing_extensions.Literal["username"]) -> MetaOapg.properties.username: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["organization"]) -> MetaOapg.properties.organization: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["tier"]) -> 'UserTierCredits': ...
     
     @typing.overload
@@ -230,6 +247,9 @@ class UserDetail(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["terms_and_conditions_decision"]) -> 'TermsAndConditions': ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["registration_ts"]) -> MetaOapg.properties.registration_ts: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["campaigns"]) -> MetaOapg.properties.campaigns: ...
@@ -246,7 +266,7 @@ class UserDetail(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["email", "username", "tier", "total_available_credits", "terms_and_conditions_decision", "campaigns", "name", "credits_currency", "terms_and_conditions_decision_ts", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["email", "username", "organization", "tier", "total_available_credits", "terms_and_conditions_decision", "registration_ts", "campaigns", "name", "credits_currency", "terms_and_conditions_decision_ts", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -257,6 +277,8 @@ class UserDetail(
         campaigns: typing.Union[MetaOapg.properties.campaigns, list, tuple, ],
         tier: 'UserTierCredits',
         total_available_credits: typing.Union[MetaOapg.properties.total_available_credits, decimal.Decimal, int, float, ],
+        organization: typing.Union[MetaOapg.properties.organization, str, ],
+        registration_ts: typing.Union[MetaOapg.properties.registration_ts, str, datetime, ],
         email: typing.Union[MetaOapg.properties.email, str, ],
         username: typing.Union[MetaOapg.properties.username, str, ],
         name: typing.Union[MetaOapg.properties.name, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -272,6 +294,8 @@ class UserDetail(
             campaigns=campaigns,
             tier=tier,
             total_available_credits=total_available_credits,
+            organization=organization,
+            registration_ts=registration_ts,
             email=email,
             username=username,
             name=name,

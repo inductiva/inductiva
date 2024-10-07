@@ -4,17 +4,27 @@ import argparse
 import inductiva
 
 
-def download_outputs(args):
+def _download(download_func, filenames, task_id):
+    try:
+        download_func(filenames=filenames)
+    except inductiva.client.exceptions.ApiException as exc:
+        print(f"Error for task {task_id}:", exc)
+
+
+def download(args):
     """Download the outputs of a task by ID."""
     task_ids = args.task_id
     filenames = args.filenames
-    output_dir = args.output_dir
+    download_dir = args.dir
 
-    if output_dir is not None:
-        inductiva.set_output_dir(output_dir)
+    if not args.output and not args.input:
+        args.output = True
 
-    if output_dir == "":
-        print("`ouput_dir` must not be an empty string.")
+    if download_dir is not None:
+        inductiva.set_output_dir(download_dir)
+
+    if download_dir == "":
+        print("`dir` must not be an empty string.")
         return 1
 
     if not task_ids:
@@ -25,11 +35,11 @@ def download_outputs(args):
     task_ids = set(task_ids)
 
     for task_id in task_ids:
-        try:
-            task = inductiva.tasks.Task(task_id)
-            task.download_outputs(filenames=filenames)
-        except inductiva.client.exceptions.ApiException as exc:
-            print(f"Error for task {task_id}:", exc)
+        task = inductiva.tasks.Task(task_id)
+        if args.output:
+            _download(task.download_outputs, filenames, task_id)
+        if args.input:
+            _download(task.download_inputs, filenames, task_id)
     return 0
 
 
@@ -41,13 +51,15 @@ def register(parser):
                                   formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
-        "Download the output files produced in the context of the tasks with\n"
-        "the given ID(s). All files are downloaded unless the --filenames\n"
-        "list is given, in which case only the indicated files for each task\n"
-        " are downloaded."
-        " The name of the output folder can be configured through the\n"
-        "--output_dir option. Files are downloaded to a subdirectory\n"
-        "named after the ID of the corresponding task.")
+        "Download the input/output files of tasks with the given ID(s).\n"
+        "All files are downloaded unless the --filenames list is given,\n"
+        "in which case only the indicated files for each task are downloaded.\n"
+        "The name of the input/output folder can be configured through the\n"
+        "--dir option. Files are downloaded to a subdirectory named after the\n"
+        "ID of the corresponding task. The output files are downloaded when\n"
+        "the --output/-o option is passed. Similarly, the input files are\n"
+        "downloaded when the --input/-i option is passed. If neither option \n"
+        "is specified, the output files are downloaded by default.")
 
     subparser.add_argument("task_id",
                            type=str,
@@ -57,8 +69,17 @@ def register(parser):
                            type=str,
                            help="Names of the files to download.",
                            nargs="*")
-    subparser.add_argument("--output_dir",
+    subparser.add_argument("--dir",
                            type=str,
-                           help="Path of where to download the task outputs.")
+                           help="Path of where to download the task"
+                           "input/output files.")
+    subparser.add_argument("--input",
+                           "-i",
+                           action="store_true",
+                           help="Option to download input files.")
+    subparser.add_argument("--output",
+                           "-o",
+                           action="store_true",
+                           help="Option to download output files (default).")
 
-    subparser.set_defaults(func=download_outputs)
+    subparser.set_defaults(func=download)

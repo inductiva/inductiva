@@ -36,7 +36,6 @@ class FVCOM(simulators.Simulator):
             working_dir: Optional[str] = "",
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -91,7 +90,6 @@ class FVCOM(simulators.Simulator):
                            model=model,
                            storage_dir=storage_dir,
                            use_hwthread=use_hwthread,
-                           extra_metadata=extra_metadata,
                            create_namelist=create_namelist,
                            resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)

@@ -28,7 +28,6 @@ class OpenFAST(simulators.Simulator):
             *,
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
-            extra_metadata: Optional[dict] = None,
             resubmit_on_preemption: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
@@ -47,6 +46,5 @@ class OpenFAST(simulators.Simulator):
                            on=on,
                            commands=commands,
                            storage_dir=storage_dir,
-                           extra_metadata=extra_metadata,
                            resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)

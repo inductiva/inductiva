@@ -119,12 +119,18 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __str__(self):
         return f"Machine Group {self.name} with {self.machine_type} machines"
 
-    def start(self):
-        """Start the machine group."""
+    def start(self, wait_on_pending_quota: bool = False):
+        """Start the machine group.
+        
+        Args:
+            wait_on_pending_quota: If True, the method will wait for quotas to
+              become available before starting the resource.
+        """
 
         return super().start(
-            num_vms=self.num_machines,
+            wait_on_pending_quota=wait_on_pending_quota,
             is_elastic=self.__is_elastic,
+            num_vms=self.num_machines,
             spot=self.spot,
         )
 
@@ -279,14 +285,20 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return f"Elastic Machine Group {self.name} with {self.machine_type} " \
              "machines"
 
-    def start(self):
-        """Start the elastic machine group."""
+    def start(self, wait_on_pending_quota: bool = False):
+        """Start the elastic machine group.
+
+        Args:
+            wait_on_pending_quota: If True, the method will wait for quotas to
+              become available before starting the resource.
+        """
 
         return super().start(
+            wait_on_pending_quota=wait_on_pending_quota,
+            is_elastic=self.__is_elastic,
             num_vms=self.min_machines,
             min_vms=self.min_machines,
             max_vms=self.max_machines,
-            is_elastic=self.__is_elastic,
             spot=self.spot,
         )
 

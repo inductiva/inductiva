@@ -46,6 +46,10 @@ referred. Below we present the case of two simulators that follow this pattern:
 # Example of how to run the SWASH simulator
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -56,13 +60,21 @@ swash_simulator = inductiva.simulators.SWASH()
 
 # Input directory contains the .sws config file, a bathymetry file and other files.
 task = swash_simulator.run(input_dir=input_dir,
-                           sim_config_filename="input.sws")
+                           sim_config_filename="input.sws",
+                           on=machine_group)
+
+# Terminate the machine group
+machine_group.terminate()
 ```
 
 **SPlisHSPlasH:** The main configuration file is a `.json` file.
 ```python
 # Example of how to run the SplishSplash simulator
 import inductiva
+
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
 
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
@@ -74,7 +86,11 @@ splishsplash_simulator = inductiva.simulators.SplishSplash()
 
 # Input directory contains the .json config file and a .obj file for the domain.
 task = splishsplash_simulator.run(input_dir=input_dir,
-                                  sim_config_filename="config.json")
+                                  sim_config_filename="config.json",
+                                  on=machine_group)
+
+# Terminate the machine group
+machine_group.terminate()
 ```
 
 As you can see, besides the input directory we pass one additional
@@ -101,6 +117,10 @@ with the configuration files for both commands.
 # Example of how to run the REEF3D simulator
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -111,7 +131,11 @@ input_dir = inductiva.utils.download_from_url(
 reef3d_simulator = inductiva.simulators.REEF3D()
 
 # The files for the simulation are in the input directory.
-task = reef3d_simulator.run(input_dir=input_dir)
+task = reef3d_simulator.run(input_dir=input_dir,
+                            on=machine_group)
+
+# Terminate the machine group
+machine_group.terminate()
 ```
 
 In this specific case, REEF3D uses a pre-defined standard for the naming of the
@@ -140,6 +164,10 @@ Below, an example with OpenFOAM is given.
 # Example of how to run the OpenFOAM simulator
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Set simulation input directory
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
@@ -161,7 +189,10 @@ commands = [
 ]
 
 # Run the simulation with the given input directory and commands
-task = openfoam_simulator.run(input_dir=input_dir, commands=commands)
+task = openfoam_simulator.run(input_dir=input_dir, commands=commands,on=machine_group)
+
+# Terminate the machine group
+machine_group.terminate()
 ```
 
 For this case, the `commands` follow the usual approach used by OpenFOAM

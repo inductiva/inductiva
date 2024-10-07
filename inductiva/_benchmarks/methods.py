@@ -4,7 +4,6 @@ Methods to interact with Benchmarks.
 from collections import defaultdict
 import datetime
 import logging
-import time
 import json
 
 from typing import Any, Callable, Dict, List, Type, Union
@@ -23,11 +22,12 @@ from inductiva import users
 
 from ..localization import translator as __
 
-QUOTAS_EXCEEDED_SLEEP_TIME = 60
 
-
-def _analyze_task(task: Task, report: Dict[str, Any], skipped_tasks: List[Task],
-                  metadata_tasks: Dict[str, Any]):
+def _analyze_task(
+    task: Task,
+    report: Dict[str, Any],
+    skipped_tasks: List[Task],
+):
     """Analyzes a task.
 
     This method analyzes a task and adds the information to the report. If the
@@ -37,8 +37,6 @@ def _analyze_task(task: Task, report: Dict[str, Any], skipped_tasks: List[Task],
         task (Task): Task to analyze.
         report (Dict[str, Any]): Report to add the information to.
         skipped_tasks (List[Task]): List of tasks that were skipped.
-        metadata_tasks (Dict[str, Any]): Dictionary with the metadata of the
-            tasks.
     Returns:
         This method does not return anything. It modifies some parameters
         instead of returning multiple values.
@@ -61,21 +59,25 @@ def _analyze_task(task: Task, report: Dict[str, Any], skipped_tasks: List[Task],
             "machine_count": resource.num_machines,
             "tasks": []
         }
+    metadata_filename = "input.json"
+    inputs_path = task.download_inputs(filenames=[metadata_filename])
+    metadata_path = inputs_path.joinpath(metadata_filename)
+    with open(metadata_path, mode="r", encoding="utf-8") as metadata_file:
+        metadata_content = json.load(metadata_file)
     report["resources"][vm_type]["tasks"].append({
         "task_id": task_info.task_id,
         "info": task_info.to_dict(),
-        "metadata": metadata_tasks[task_info.task_id]
+        "metadata": metadata_content,
     })
 
 
-def analyze(name: str, metadata_path: str, ouput_path: str = None) -> Dict:
+def analyze(name: str, output_path: str = None) -> Dict:
     """Analyzes a benchmark.
     This method creates a dictionary with all the relevant information about
     the benchmark.
     Args:
         name (str): Name of the benchmark.
-        metadata_path (str): Path to the metadata file.
-        ouput_path (str): Path to the output file.
+        output_path (str): Path to the output file.
             If None it will not create an output file.
     Returns:
         Dict: Dictionary with the information about the benchmark.
@@ -87,23 +89,16 @@ def analyze(name: str, metadata_path: str, ouput_path: str = None) -> Dict:
 
     report = {"name": name, "resources": {}}
 
-    #reads the metadata file and creates a dictionary with the task_id as
-    #key and the metadata as value
-    metadata_tasks = {}
-    with open(metadata_path, "r", encoding="utf-8") as metadata_file:
-        for line in metadata_file:
-            temp_task = json.loads(line)
-            metadata_tasks[temp_task["task_id"]] = temp_task
     skipped_tasks = []
     for task in tqdm(tasks, desc="Analyzing tasks"):
-        _analyze_task(task, report, skipped_tasks, metadata_tasks)
+        _analyze_task(task, report, skipped_tasks)
 
     for task in skipped_tasks:
         logging.info("Task %s was skipped due to status %s", task.info.task_id,
                      task.info.status)
-    if ouput_path:
-        logging.info("Writing report to %s/%s.json", ouput_path, name)
-        with open(f"{ouput_path}/{name}.json", "w",
+    if output_path:
+        logging.info("Writing report to %s/%s.json", output_path, name)
+        with open(f"{output_path}/{name}.json", "w",
                   encoding="utf-8") as output_file:
             output_file.write(json.dumps(report, indent=4))
 
@@ -247,12 +242,7 @@ def _run(project: Project,
 
         print(f"\nRunning {simulator}")
         if resource is not None:
-            while not _can_start_resource(resource):
-                print("This machine will exceed the current quotas.\n"
-                      "Going to sleep and trying again later.")
-                time.sleep(QUOTAS_EXCEEDED_SLEEP_TIME)
-
-            resource.start()
+            resource.start(wait_on_pending_quota=True)
 
         for replica in range(replicas_to_run, 0, -1):
             _run_replica(simulator_args, input_args, resource, simulator,

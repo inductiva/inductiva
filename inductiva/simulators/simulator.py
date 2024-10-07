@@ -127,7 +127,6 @@ class Simulator(ABC):
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
-        extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -172,7 +171,6 @@ class Simulator(ABC):
             input_dir_path,
             storage_dir=storage_dir,
             computational_resources=on,
-            extra_metadata=extra_metadata,
             container_image=container_image,
             resubmit_on_preemption=resubmit_on_preemption,
             **kwargs,

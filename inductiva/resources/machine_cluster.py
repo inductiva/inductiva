@@ -101,11 +101,16 @@ class MPICluster(machines_base.BaseMachineGroup):
         return f"MPI Cluster {self.name} with {self.machine_type} " \
                f"x{self.num_machines} machines"
 
-    def start(self):
-        """Start the MPI Cluster."""
+    def start(self, wait_on_pending_quota: bool = False):
+        """Start the MPI Cluster.
+        Args:
+            wait_on_pending_quota: If True, the method will wait for quotas to
+              become available before starting the resource.
+        """
         return super().start(
-            num_vms=self.num_machines,
+            wait_on_pending_quota=wait_on_pending_quota,
             is_elastic=self.__is_elastic,
+            num_vms=self.num_machines,
             spot=self.__spot,
             type=self.__type,
         )

@@ -34,7 +34,6 @@ class FEniCSx(simulators.Simulator):
             mesh_filename: Optional[str] = None,
             mesh_info_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
-            extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -63,7 +62,6 @@ class FEniCSx(simulators.Simulator):
                            mesh_info_filename=mesh_info_filename,
                            material_filename=material_filename,
                            geometry_filename=geometry_filename,
-                           extra_metadata=extra_metadata,
                            mesh_filename=mesh_filename,
                            bcs_filename=bcs_filename,
                            storage_dir=storage_dir,

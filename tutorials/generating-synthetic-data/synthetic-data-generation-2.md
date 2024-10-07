@@ -100,6 +100,10 @@ with just a couple lines of code:
 ```python
 import inductiva
 
+# Instantiate machine group
+machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group.start()
+
 # Set path to the input directory with the SPlisHSPlasH configuration files
 input_dir = "splishsplash-base-dir"
 
@@ -108,11 +112,15 @@ splishsplash = inductiva.simulators.SplishSplash()
 
 # Run the simulation task with the parameters defined in the .json file
 task = splishsplash.run(input_dir=input_dir,
-                        sim_config_filename="config.json")
+                        sim_config_filename="config.json",
+                        on=machine_group)
 
 # Wait for the simulation to complete and download the outputs
 task.wait()
 task.download_outputs()
+
+# Terminate the machine group
+machine_group.terminate()
 ```
 This script will upload the input data from our local directory to the API server and schedule a simulation `task` for execution. We will be able check details about the `task`, including its ID and the machine group assigned for its computation, by observing the stdout of your terminal:
 
@@ -127,9 +135,6 @@ Preparing upload of the local input directory splishsplash-input-example
 (128 B).
 Local input directory successfully uploaded.
 Task i13o8djcoq70bsdut1x73zi69 submitted to the default queue.
-Simulation metadata logged to: inductiva_output/task_metadata.json
-Task i13o8djcoq70bsdut1x73zi69 configurations metadata saved to the tasks
-metadata file task_metadata.json in the current working directory.
 Consider tracking the status of the task via CLI: 
         inductiva tasks list --id i13o8djcoq70bsdut1x73zi69
 Or, tracking the logs of the task via CLI:

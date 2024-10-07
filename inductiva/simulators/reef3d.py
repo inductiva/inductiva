@@ -29,7 +29,6 @@ class REEF3D(simulators.Simulator):
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
-            extra_metadata: Optional[dict] = None,
             resubmit_on_preemption: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
@@ -54,6 +53,5 @@ class REEF3D(simulators.Simulator):
                            storage_dir=storage_dir,
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
-                           extra_metadata=extra_metadata,
                            resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)

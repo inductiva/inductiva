@@ -11,6 +11,7 @@ from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
 from inductiva.client.apis.paths.tasks_task_id_position_in_queue import TasksTaskIdPositionInQueue
 from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
+from inductiva.client.apis.paths.tasks_task_id_download_input_url import TasksTaskIdDownloadInputUrl
 from inductiva.client.apis.paths.tasks_task_id_download_output_url import TasksTaskIdDownloadOutputUrl
 from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_resubmit import TasksTaskIdResubmit
@@ -19,6 +20,7 @@ from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDi
 from inductiva.client.apis.paths.tasks_task_id_files import TasksTaskIdFiles
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
+from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
 from inductiva.client.apis.paths.admin_users_username_tier import AdminUsersUsernameTier
 from inductiva.client.apis.paths.admin_users_username_credits import AdminUsersUsernameCredits
 from inductiva.client.apis.paths.admin_users_email_api_key import AdminUsersEmailApiKey
@@ -27,6 +29,7 @@ from inductiva.client.apis.paths.admin_users_email_campaign_campaign_id import A
 from inductiva.client.apis.paths.admin_users_username_storage_size_fs import AdminUsersUsernameStorageSizeFs
 from inductiva.client.apis.paths.admin_users_username_storage_size import AdminUsersUsernameStorageSize
 from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUsernameTasks
+from inductiva.client.apis.paths.admin_users_username_capabilities import AdminUsersUsernameCapabilities
 from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.admin_groups_active import AdminGroupsActive
 from inductiva.client.apis.paths.admin_providers import AdminProviders
@@ -42,6 +45,9 @@ from inductiva.client.apis.paths.admin_campaigns_campaign_id_capabilities import
 from inductiva.client.apis.paths.admin_campaigns_campaign_id_capabilities_capability_id import AdminCampaignsCampaignIdCapabilitiesCapabilityId
 from inductiva.client.apis.paths.admin_campaigns_campaign_id_quotas import AdminCampaignsCampaignIdQuotas
 from inductiva.client.apis.paths.admin_campaigns_campaign_id_quotas_quota_id import AdminCampaignsCampaignIdQuotasQuotaId
+from inductiva.client.apis.paths.admin_organizations import AdminOrganizations
+from inductiva.client.apis.paths.admin_organizations_organization_id import AdminOrganizationsOrganizationId
+from inductiva.client.apis.paths.admin_organizations_billing import AdminOrganizationsBilling
 from inductiva.client.apis.paths.admin_tiers import AdminTiers
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
@@ -67,6 +73,7 @@ from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
 from inductiva.client.apis.paths.users_info import UsersInfo
+from inductiva.client.apis.paths.users_capabilities import UsersCapabilities
 from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
 from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
@@ -99,6 +106,8 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdPositionInQueue,
         PathValues.TASKS_TASK_ID_OUTPUT_LIST:
             TasksTaskIdOutputList,
+        PathValues.TASKS_TASK_ID_DOWNLOAD_INPUT_URL:
+            TasksTaskIdDownloadInputUrl,
         PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
             TasksTaskIdDownloadOutputUrl,
         PathValues.TASKS_TASK_ID_OUTPUT:
@@ -115,6 +124,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
             AdminUsersEmailTermsAndConditions,
+        PathValues.ADMIN_USERS_USERNAME_ORGANIZATION:
+            AdminUsersUsernameOrganization,
         PathValues.ADMIN_USERS_USERNAME_TIER:
             AdminUsersUsernameTier,
         PathValues.ADMIN_USERS_USERNAME_CREDITS:
@@ -131,6 +142,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminUsersUsernameStorageSize,
         PathValues.ADMIN_USERS_USERNAME_TASKS:
             AdminUsersUsernameTasks,
+        PathValues.ADMIN_USERS_USERNAME_CAPABILITIES:
+            AdminUsersUsernameCapabilities,
         PathValues.ADMIN_GROUPS:
             AdminGroups,
         PathValues.ADMIN_GROUPS_ACTIVE:
@@ -161,6 +174,12 @@ PathToApi = typing_extensions.TypedDict(
             AdminCampaignsCampaignIdQuotas,
         PathValues.ADMIN_CAMPAIGNS_CAMPAIGN_ID_QUOTAS_QUOTA_ID:
             AdminCampaignsCampaignIdQuotasQuotaId,
+        PathValues.ADMIN_ORGANIZATIONS:
+            AdminOrganizations,
+        PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID:
+            AdminOrganizationsOrganizationId,
+        PathValues.ADMIN_ORGANIZATIONS_BILLING:
+            AdminOrganizationsBilling,
         PathValues.ADMIN_TIERS:
             AdminTiers,
         PathValues.EXECUTERTRACKER_REGISTER:
@@ -211,6 +230,8 @@ PathToApi = typing_extensions.TypedDict(
             UsersQuotas,
         PathValues.USERS_INFO:
             UsersInfo,
+        PathValues.USERS_CAPABILITIES:
+            UsersCapabilities,
         PathValues.PROJECTS:
             Projects,
         PathValues.PROJECTS_NAME:
@@ -252,6 +273,8 @@ path_to_api = PathToApi({
         TasksTaskIdPositionInQueue,
     PathValues.TASKS_TASK_ID_OUTPUT_LIST:
         TasksTaskIdOutputList,
+    PathValues.TASKS_TASK_ID_DOWNLOAD_INPUT_URL:
+        TasksTaskIdDownloadInputUrl,
     PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
         TasksTaskIdDownloadOutputUrl,
     PathValues.TASKS_TASK_ID_OUTPUT:
@@ -268,6 +291,8 @@ path_to_api = PathToApi({
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
         AdminUsersEmailTermsAndConditions,
+    PathValues.ADMIN_USERS_USERNAME_ORGANIZATION:
+        AdminUsersUsernameOrganization,
     PathValues.ADMIN_USERS_USERNAME_TIER:
         AdminUsersUsernameTier,
     PathValues.ADMIN_USERS_USERNAME_CREDITS:
@@ -284,6 +309,8 @@ path_to_api = PathToApi({
         AdminUsersUsernameStorageSize,
     PathValues.ADMIN_USERS_USERNAME_TASKS:
         AdminUsersUsernameTasks,
+    PathValues.ADMIN_USERS_USERNAME_CAPABILITIES:
+        AdminUsersUsernameCapabilities,
     PathValues.ADMIN_GROUPS:
         AdminGroups,
     PathValues.ADMIN_GROUPS_ACTIVE:
@@ -314,6 +341,12 @@ path_to_api = PathToApi({
         AdminCampaignsCampaignIdQuotas,
     PathValues.ADMIN_CAMPAIGNS_CAMPAIGN_ID_QUOTAS_QUOTA_ID:
         AdminCampaignsCampaignIdQuotasQuotaId,
+    PathValues.ADMIN_ORGANIZATIONS:
+        AdminOrganizations,
+    PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID:
+        AdminOrganizationsOrganizationId,
+    PathValues.ADMIN_ORGANIZATIONS_BILLING:
+        AdminOrganizationsBilling,
     PathValues.ADMIN_TIERS:
         AdminTiers,
     PathValues.EXECUTERTRACKER_REGISTER:
@@ -364,6 +397,8 @@ path_to_api = PathToApi({
         UsersQuotas,
     PathValues.USERS_INFO:
         UsersInfo,
+    PathValues.USERS_CAPABILITIES:
+        UsersCapabilities,
     PathValues.PROJECTS:
         Projects,
     PathValues.PROJECTS_NAME:
