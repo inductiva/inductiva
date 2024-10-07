@@ -353,7 +353,7 @@ class BaseMachineGroup(ABC):
         if wait_on_pending_quota:
             if not self.can_start_resource():
                 print("This machine will exceed the current quotas.\n"
-                        "Will wait for quotas to become available.")
+                      "Will wait for quotas to become available.")
             while not self.can_start_resource():
                 time.sleep(self.QUOTAS_EXCEEDED_SLEEP_SECONDS)
 
