@@ -58,7 +58,7 @@ def test_task_kill__none_timeout__none():
     task = inductiva.tasks.Task("123")
     # pylint: disable=W0212
     task._send_kill_request = Mock(return_value=None)
-    kill_return = task.kill()
+    kill_return = task.kill(wait_timeout=None)
 
     assert kill_return is None
 

@@ -687,7 +687,8 @@ class Task:
             if not isinstance(wait_timeout, (float, int)):
                 raise TypeError("Wait timeout must be a number.")
             if wait_timeout <= 0.0:
-                raise ValueError("Wait timeout must be a positive number.")
+                raise ValueError("Wait timeout must be a positive number"
+                                 " or None.")
 
         if verbosity_level not in self.KILL_VERBOSITY_LEVELS:
             raise ValueError(f"Verbosity {verbosity_level} level not allowed. "
