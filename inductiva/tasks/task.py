@@ -240,7 +240,7 @@ class TaskInfo:
         table_str += f"\nTime breakdown:\n{time_metrics_table}"
         table_str += f"\nData:\n{data_metrics_table}\n"
         if self.estimated_computation_cost:
-            table_str += ("\nEstimated computation cost ($US): "
+            table_str += ("\nEstimated computation cost (US$): "
                           f"{self.estimated_computation_cost}\n")
 
         return table_str
