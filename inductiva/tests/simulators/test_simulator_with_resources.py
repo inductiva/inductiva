@@ -37,7 +37,7 @@ class TesterSimulator(simulators.Simulator):
 
     def __init__(self):
         super().__init__()
-        self.simulator = "tester.run_simulation"
+        self.simulator = "tester"
 
 
 def new_machine_init(self, machine_type):
