@@ -141,7 +141,7 @@ def set_api_key(api_key):
         raise ValueError(
             "No API Key specified. "
             "Please set the INDUCTIVA_API_KEY environment variable.\n"
-            "More infomation at:"
+            "More information at:"
             "https://console.inductiva.ai/")
 
     _api_key.set(api_key)
