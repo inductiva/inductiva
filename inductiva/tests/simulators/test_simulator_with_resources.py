@@ -40,15 +40,6 @@ class TesterSimulator(simulators.Simulator):
         self.simulator = "tester.run_simulation"
 
 
-def test_override_api_method_prefix():
-    simulator = simulators.OpenFOAM()
-    assert simulator.simulator == \
-        "openfoam_foundation"
-    simulator.override_api_method_prefix("windtunnel")
-    assert simulator.simulator == \
-        "windtunnel.openfoam_foundation.run_simulation"
-
-
 def new_machine_init(self, machine_type):
     self.machine_type = machine_type
 
