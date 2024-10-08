@@ -284,16 +284,17 @@ class Task:
             "to be uploaded.",
         models.TaskStatusCode.EXECUTERTERMINATED:
             "The machine running your task was terminated by the cloud provider"
-            " and your task stopped running.\nUse the `resubmit_on_preemption`"
-            " parameter in the Python client to configure if the task should be"
-            " automatically resubmitted to the queue.",
+            " and it stopped.\nUse the `resubmit_on_preemption` parameter when "
+            "running the task to configure it to automatically resubmitted "
+            "to the queue.",
         models.TaskStatusCode.EXECUTERTERMINATEDBYUSER:
             "The task's machine group was terminated by your request while the"
-            " task was still running, causing it to stop.",
+            " task was still running, causing it to be killed.",
         models.TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED:
             "The task's machine group reached its time-to-live (TTL) limit set"
-            " by your quotas and was terminated, causing the task to stop.\n"
-            "Check your quota values and request an increase if needed.",
+            " by your quotas and was terminated, causing the task to be "
+            "killed.\nCheck your quota values and request an increase if "
+            "needed.",
         models.TaskStatusCode.TTLEXCEEDED:
             "Task %s exceeded its configured time-to-live (TTL) and was "
             "automatically stopped.",
@@ -313,7 +314,7 @@ class Task:
         models.TaskStatusCode.ZOMBIE:
             "The machine was terminated while the task was pending.",
         models.TaskStatusCode.SPOTINSTANCEPREEMPTED:
-            "■ The task was preempted by the cloud provider.\n"
+            "The task was preempted by the cloud provider.\n"
             "Consider using non-spot machines by setting `spot=False` when "
             "instantiating the machine group."
     }
