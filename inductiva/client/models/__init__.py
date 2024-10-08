@@ -59,7 +59,9 @@ from inductiva.client.model.task_position_in_queue import TaskPositionInQueue
 from inductiva.client.model.task_request import TaskRequest
 from inductiva.client.model.task_status import TaskStatus
 from inductiva.client.model.task_status_code import TaskStatusCode
+from inductiva.client.model.task_status_info import TaskStatusInfo
 from inductiva.client.model.task_submitted_info import TaskSubmittedInfo
+from inductiva.client.model.task_with_status_history import TaskWithStatusHistory
 from inductiva.client.model.terms_and_conditions import TermsAndConditions
 from inductiva.client.model.tier_full_info import TierFullInfo
 from inductiva.client.model.tier_quota_detail import TierQuotaDetail

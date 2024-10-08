@@ -790,7 +790,7 @@ class VMGroupConfig(
                     )
             
             
-            class custom_disk_image(
+            class custom_vm_image(
                 schemas.ComposedSchema,
             ):
             
@@ -820,7 +820,7 @@ class VMGroupConfig(
                     *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
                     _configuration: typing.Optional[schemas.Configuration] = None,
                     **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
-                ) -> 'custom_disk_image':
+                ) -> 'custom_vm_image':
                     return super().__new__(
                         cls,
                         *_args,
@@ -850,7 +850,7 @@ class VMGroupConfig(
                 "max_vms": max_vms,
                 "autoscale_policy": autoscale_policy,
                 "dynamic_disk_resize_config": dynamic_disk_resize_config,
-                "custom_disk_image": custom_disk_image,
+                "custom_vm_image": custom_vm_image,
             }
     
     @typing.overload
@@ -920,12 +920,12 @@ class VMGroupConfig(
     def __getitem__(self, name: typing_extensions.Literal["dynamic_disk_resize_config"]) -> MetaOapg.properties.dynamic_disk_resize_config: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["custom_disk_image"]) -> MetaOapg.properties.custom_disk_image: ...
+    def __getitem__(self, name: typing_extensions.Literal["custom_vm_image"]) -> MetaOapg.properties.custom_vm_image: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "threads_per_core", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "quota_usage", "status", "spot", "is_elastic", "min_vms", "max_vms", "autoscale_policy", "dynamic_disk_resize_config", "custom_disk_image", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "threads_per_core", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "quota_usage", "status", "spot", "is_elastic", "min_vms", "max_vms", "autoscale_policy", "dynamic_disk_resize_config", "custom_vm_image", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -997,12 +997,12 @@ class VMGroupConfig(
     def get_item_oapg(self, name: typing_extensions.Literal["dynamic_disk_resize_config"]) -> typing.Union[MetaOapg.properties.dynamic_disk_resize_config, schemas.Unset]: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["custom_disk_image"]) -> typing.Union[MetaOapg.properties.custom_disk_image, schemas.Unset]: ...
+    def get_item_oapg(self, name: typing_extensions.Literal["custom_vm_image"]) -> typing.Union[MetaOapg.properties.custom_vm_image, schemas.Unset]: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "threads_per_core", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "quota_usage", "status", "spot", "is_elastic", "min_vms", "max_vms", "autoscale_policy", "dynamic_disk_resize_config", "custom_disk_image", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["max_idle_time", "auto_terminate_ts", "id", "name", "machine_type", "disk_size_gb", "threads_per_core", "num_vms", "idle_seconds", "creation_timestamp", "deletion_timestamp", "type", "provider_id", "started", "quota_usage", "status", "spot", "is_elastic", "min_vms", "max_vms", "autoscale_policy", "dynamic_disk_resize_config", "custom_vm_image", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -1031,7 +1031,7 @@ class VMGroupConfig(
         max_vms: typing.Union[MetaOapg.properties.max_vms, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         autoscale_policy: typing.Union[MetaOapg.properties.autoscale_policy, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         dynamic_disk_resize_config: typing.Union[MetaOapg.properties.dynamic_disk_resize_config, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        custom_disk_image: typing.Union[MetaOapg.properties.custom_disk_image, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        custom_vm_image: typing.Union[MetaOapg.properties.custom_vm_image, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'VMGroupConfig':
@@ -1060,7 +1060,7 @@ class VMGroupConfig(
             max_vms=max_vms,
             autoscale_policy=autoscale_policy,
             dynamic_disk_resize_config=dynamic_disk_resize_config,
-            custom_disk_image=custom_disk_image,
+            custom_vm_image=custom_vm_image,
             _configuration=_configuration,
             **kwargs,
         )
