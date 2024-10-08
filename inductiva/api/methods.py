@@ -331,7 +331,7 @@ def log_task_info(
 
 
 def submit_task(api_instance,
-                method_name,
+                simulator,
                 request_params,
                 resource_pool,
                 storage_path_prefix,
@@ -339,7 +339,7 @@ def submit_task(api_instance,
                 type_annotations,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
-                simulator=None):
+                simulator_obj=None):
     """Submit a task and send input files to the API."""
     resource_pool_id = resource_pool.id
 
@@ -349,15 +349,13 @@ def submit_task(api_instance,
             raise RuntimeError("Trying to submit a task to a closed project.")
         current_project = current_project.name
 
-    task_request = TaskRequest(
-        method=method_name,
-        params=request_params,
-        project=current_project,
-        resource_pool=resource_pool_id,
-        container_image=container_image,
-        storage_path_prefix=storage_path_prefix,
-        resubmit_on_preemption=resubmit_on_preemption,
-    )
+    task_request = TaskRequest(simulator=simulator,
+                               params=request_params,
+                               project=current_project,
+                               resource_pool=resource_pool_id,
+                               container_image=container_image,
+                               storage_path_prefix=storage_path_prefix,
+                               resubmit_on_preemption=resubmit_on_preemption)
 
     task_submitted_info = submit_request(
         api_instance=api_instance,
@@ -369,7 +367,7 @@ def submit_task(api_instance,
         task_id,
         params,
         resource_pool,
-        simulator,
+        simulator_obj,
         task_submitted_info,
     )
 
@@ -385,14 +383,14 @@ def submit_task(api_instance,
     return task_id
 
 
-def invoke_async_api(method_name: str,
+def invoke_async_api(simulator: str,
                      params,
                      type_annotations: Dict[Any, Type],
                      resource_pool: types.ComputationalResources,
                      storage_path_prefix: Optional[str] = "",
                      container_image: Optional[str] = None,
                      resubmit_on_preemption: bool = False,
-                     simulator=None) -> str:
+                     simulator_obj=None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -433,7 +431,7 @@ def invoke_async_api(method_name: str,
         api_instance = TasksApi(client)
 
         task_id = submit_task(api_instance=api_instance,
-                              method_name=method_name,
+                              simulator=simulator,
                               request_params=request_params,
                               resource_pool=resource_pool,
                               storage_path_prefix=storage_path_prefix,
@@ -441,6 +439,6 @@ def invoke_async_api(method_name: str,
                               container_image=container_image,
                               type_annotations=type_annotations,
                               resubmit_on_preemption=resubmit_on_preemption,
-                              simulator=simulator)
+                              simulator_obj=simulator_obj)
 
     return task_id

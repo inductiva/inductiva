@@ -39,7 +39,7 @@ class Simulator(ABC):
         """
         if version is not None and not isinstance(version, str):
             raise ValueError("Version must be a string or None.")
-        self.api_method_name = ""
+        self.simulator = ""
         self._version = version
         self._use_dev = bool(use_dev)
         self._image_uri = self._get_image_uri()
@@ -96,22 +96,6 @@ class Simulator(ABC):
         """Get the supported computational resources for this simulator."""
         return tuple(cls._supported_resources)
 
-    def override_api_method_prefix(self, prefix: str):
-        """Override the API method prefix.
-
-        Example:
-            # prefix = "protein_solvation"
-            "md.gromacs.run_simulation" becomes
-              "protein_solvation.gromacs.run_simulation"
-
-        Args:
-            prefix: The new prefix to use.
-        """
-        last_elements = self.api_method_name.split(".")[1:]
-        all_elements = [prefix] + last_elements
-
-        self.api_method_name = ".".join(all_elements)
-
     def _setup_input_dir(self, input_dir: str):
         """Setup the simulator input directory."""
         input_dir_path = pathlib.Path(input_dir)
@@ -167,9 +151,9 @@ class Simulator(ABC):
         container_image = kwargs.pop("container_image", self._image_uri)
 
         return tasks.run_simulation(
-            self.api_method_name,
+            self.simulator,
             input_dir_path,
-            simulator=self,
+            simulator_obj=self,
             storage_dir=storage_dir,
             computational_resources=on,
             container_image=container_image,

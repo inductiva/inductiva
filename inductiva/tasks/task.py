@@ -86,7 +86,7 @@ class TaskInfo:
         self.is_terminal = None
         self.task_id = None
         self.status = None
-        self.method_name = None
+        self.simulator = None
         self.storage_path = None
         self.container_image = None
         self.project = None
@@ -725,8 +725,7 @@ class Task:
         return success
 
     def get_simulator_name(self) -> str:
-        # e.g. retrieve openfoam from fvm.openfoam.run_simulation
-        return self.info.method_name.split(".")[1]
+        return self.info.simulator
 
     def get_storage_path(self) -> str:
         return self.info.storage_path

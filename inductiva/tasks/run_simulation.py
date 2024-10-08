@@ -9,14 +9,14 @@ from inductiva.api import methods
 
 
 def run_simulation(
-    api_method_name: str,
+    simulator: str,
     input_dir: pathlib.Path,
     *,
     computational_resources: types.ComputationalResources,
     resubmit_on_preemption: bool = False,
     storage_dir: Optional[str] = "",
     api_invoker=None,
-    simulator=None,
+    simulator_obj=None,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -34,14 +34,14 @@ def run_simulation(
 
     container_image = kwargs.get("container_image", None)
 
-    task_id = api_invoker(api_method_name,
+    task_id = api_invoker(simulator,
                           params,
                           type_annotations,
                           computational_resources,
                           resubmit_on_preemption=resubmit_on_preemption,
                           container_image=container_image,
                           storage_path_prefix=storage_dir,
-                          simulator=simulator)
+                          simulator_obj=simulator_obj)
     logging.info("■ Task %s submitted to the queue of the %s.", task_id,
                  computational_resources)
 
