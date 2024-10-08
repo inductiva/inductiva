@@ -278,6 +278,46 @@ class Task:
         models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED
     }
 
+    STATUS_MESSAGES = {
+        models.TaskStatusCode.PENDINGINPUT:
+            "Task %s was created and is waiting for the required input files "
+            "to be uploaded.",
+        models.TaskStatusCode.EXECUTERTERMINATED:
+            "The machine running your task was terminated by the cloud provider"
+            " and your task stopped running.\nUse the `resubmit_on_preemption`"
+            " parameter in the Python client to configure if the task should be"
+            " automatically resubmitted to the queue.",
+        models.TaskStatusCode.EXECUTERTERMINATEDBYUSER:
+            "The task's machine group was terminated by your request while the"
+            " task was still running, causing it to stop.",
+        models.TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED:
+            "The task's machine group reached its time-to-live (TTL) limit set"
+            " by your quotas and was terminated, causing the task to stop.\n"
+            "Check your quota values and request an increase if needed.",
+        models.TaskStatusCode.TTLEXCEEDED:
+            "Task %s exceeded its configured time-to-live (TTL) and was "
+            "automatically stopped.",
+        models.TaskStatusCode.SUBMITTED:
+            "Task %s successfully queued and waiting to be picked-up for "
+            "execution...",
+        models.TaskStatusCode.STARTED:
+            "Task %s has started and is now running remotely.",
+        models.TaskStatusCode.SUCCESS:
+            "Task %s completed successfully.",
+        models.TaskStatusCode.FAILED:
+            "Task %s failed.",
+        models.TaskStatusCode.PENDINGKILL:
+            "Task %s is being killed.",
+        models.TaskStatusCode.KILLED:
+            "Task %s killed.",
+        models.TaskStatusCode.ZOMBIE:
+            "The machine was terminated while the task was pending.",
+        models.TaskStatusCode.SPOTINSTANCEPREEMPTED:
+            "■ The task was preempted by the cloud provider.\n"
+            "Consider using non-spot machines by setting `spot=False` when "
+            "instantiating the machine group."
+    }
+
     KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
                         }.union(RUNNING_STATUSES)
 
@@ -551,27 +591,11 @@ class Task:
                     requires_newline = False
                     sys.stdout.write("\n")
 
-                if status == models.TaskStatusCode.PENDINGINPUT:
-                    pass
-                elif status == models.TaskStatusCode.SUBMITTED:
-                    logging.info(
-                        "■ Task %s successfully queued and waiting to be "
-                        "picked-up for execution...", self.id)
-                elif status == models.TaskStatusCode.STARTED:
-                    logging.info(
-                        "■ Task %s has started and is now running "
-                        "remotely.", self.id)
-                elif status == models.TaskStatusCode.SUCCESS:
-                    logging.info("■ Task %s completed successfully.", self.id)
-                elif status == models.TaskStatusCode.FAILED:
-                    logging.info("■ Task %s failed.", self.id)
-                elif status == models.TaskStatusCode.PENDINGKILL:
-                    logging.info("■ Task %s is being killed.", self.id)
-                elif status == models.TaskStatusCode.KILLED:
-                    logging.info("■ Task %s killed.", self.id)
-                elif status == models.TaskStatusCode.ZOMBIE:
-                    logging.info("■ The machine was terminated while the task "
-                                 "was pending.")
+                #If we only want to print a message just add it to
+                #STATUS_MESSAGES
+                if status in self.STATUS_MESSAGES:
+                    logging.info("■ %s", self.STATUS_MESSAGES[status] % self.id)
+                #If extra logic is needed insert it here
                 elif status == models.TaskStatusCode.EXECUTERFAILED:
                     info = self.get_info()
                     detail = info.executer.error_detail
@@ -581,17 +605,14 @@ class Task:
                         logging.info("\t· Message: %s", detail)
                     else:
                         logging.info("\t· No error message available.")
-                elif status == models.TaskStatusCode.SPOTINSTANCEPREEMPTED:
-                    msg = ("■ The task was preempted by the cloud provider.\n"
-                           "Consider using non-spot machines by setting "
-                           "`spot=False` when instantiating the machine group.")
-                    logging.info(msg)
-
                 else:
                     logging.info(
                         "■ An internal error occurred with status %s "
                         "while performing the task.", status)
+
             prev_status = status
+
+            #Used to print queue information
             if (status == models.TaskStatusCode.SUBMITTED and
                     self._tasks_ahead is not None and
                     self._tasks_ahead != prev_tasks_ahead):
