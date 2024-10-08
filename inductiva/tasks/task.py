@@ -538,6 +538,12 @@ class Task:
         prev_tasks_ahead = None
         is_tty = sys.stdout.isatty()
         requires_newline = False
+
+        logging.info(
+            "Waiting for task %s to complete...\n"
+            "Go to https://console.inductiva.ai/tasks/%s for more details.",
+            self.id, self.id)
+
         while True:
             status = self.get_status()
             if status != prev_status:
