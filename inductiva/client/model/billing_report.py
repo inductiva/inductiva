@@ -32,11 +32,8 @@ class BillingReport(schemas.DictSchema):
     class MetaOapg:
         required = {
             "start_ts",
-            "promotions",
-            "discounts",
             "total_cost",
             "end_ts",
-            "subtotal",
             "report",
         }
 
@@ -44,9 +41,6 @@ class BillingReport(schemas.DictSchema):
             start_ts = schemas.DateTimeSchema
             end_ts = schemas.DateTimeSchema
             total_cost = schemas.NumberSchema
-            discounts = schemas.NumberSchema
-            promotions = schemas.NumberSchema
-            subtotal = schemas.NumberSchema
 
             class report(schemas.ListSchema):
 
@@ -77,19 +71,13 @@ class BillingReport(schemas.DictSchema):
                 "start_ts": start_ts,
                 "end_ts": end_ts,
                 "total_cost": total_cost,
-                "discounts": discounts,
-                "promotions": promotions,
-                "subtotal": subtotal,
                 "report": report,
                 "currency": currency,
             }
 
     start_ts: MetaOapg.properties.start_ts
-    promotions: MetaOapg.properties.promotions
-    discounts: MetaOapg.properties.discounts
     total_cost: MetaOapg.properties.total_cost
     end_ts: MetaOapg.properties.end_ts
-    subtotal: MetaOapg.properties.subtotal
     report: MetaOapg.properties.report
 
     @typing.overload
@@ -112,24 +100,6 @@ class BillingReport(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["discounts"]
-    ) -> MetaOapg.properties.discounts:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["promotions"]
-    ) -> MetaOapg.properties.promotions:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["subtotal"]
-    ) -> MetaOapg.properties.subtotal:
-        ...
-
-    @typing.overload
-    def __getitem__(
         self, name: typing_extensions.Literal["report"]
     ) -> MetaOapg.properties.report:
         ...
@@ -148,9 +118,6 @@ class BillingReport(schemas.DictSchema):
         "start_ts",
         "end_ts",
         "total_cost",
-        "discounts",
-        "promotions",
-        "subtotal",
         "report",
         "currency",
     ], str]):
@@ -177,24 +144,6 @@ class BillingReport(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["discounts"]
-    ) -> MetaOapg.properties.discounts:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["promotions"]
-    ) -> MetaOapg.properties.promotions:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["subtotal"]
-    ) -> MetaOapg.properties.subtotal:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
         self, name: typing_extensions.Literal["report"]
     ) -> MetaOapg.properties.report:
         ...
@@ -215,9 +164,6 @@ class BillingReport(schemas.DictSchema):
         "start_ts",
         "end_ts",
         "total_cost",
-        "discounts",
-        "promotions",
-        "subtotal",
         "report",
         "currency",
     ], str]):
@@ -234,18 +180,6 @@ class BillingReport(schemas.DictSchema):
             str,
             datetime,
         ],
-        promotions: typing.Union[
-            MetaOapg.properties.promotions,
-            decimal.Decimal,
-            int,
-            float,
-        ],
-        discounts: typing.Union[
-            MetaOapg.properties.discounts,
-            decimal.Decimal,
-            int,
-            float,
-        ],
         total_cost: typing.Union[
             MetaOapg.properties.total_cost,
             decimal.Decimal,
@@ -256,12 +190,6 @@ class BillingReport(schemas.DictSchema):
             MetaOapg.properties.end_ts,
             str,
             datetime,
-        ],
-        subtotal: typing.Union[
-            MetaOapg.properties.subtotal,
-            decimal.Decimal,
-            int,
-            float,
         ],
         report: typing.Union[
             MetaOapg.properties.report,
@@ -280,11 +208,8 @@ class BillingReport(schemas.DictSchema):
             cls,
             *_args,
             start_ts=start_ts,
-            promotions=promotions,
-            discounts=discounts,
             total_cost=total_cost,
             end_ts=end_ts,
-            subtotal=subtotal,
             report=report,
             currency=currency,
             _configuration=_configuration,

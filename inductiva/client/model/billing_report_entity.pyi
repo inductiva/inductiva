@@ -35,10 +35,7 @@ class BillingReportEntity(
 
     class MetaOapg:
         required = {
-            "promotions",
-            "discounts",
             "total_cost",
-            "subtotal",
             "description",
             "details",
             "label",
@@ -48,9 +45,6 @@ class BillingReportEntity(
             description = schemas.StrSchema
             label = schemas.StrSchema
             total_cost = schemas.NumberSchema
-            discounts = schemas.NumberSchema
-            promotions = schemas.NumberSchema
-            subtotal = schemas.NumberSchema
             
             
             class details(
@@ -81,16 +75,10 @@ class BillingReportEntity(
                 "description": description,
                 "label": label,
                 "total_cost": total_cost,
-                "discounts": discounts,
-                "promotions": promotions,
-                "subtotal": subtotal,
                 "details": details,
             }
     
-    promotions: MetaOapg.properties.promotions
-    discounts: MetaOapg.properties.discounts
     total_cost: MetaOapg.properties.total_cost
-    subtotal: MetaOapg.properties.subtotal
     description: MetaOapg.properties.description
     details: MetaOapg.properties.details
     label: MetaOapg.properties.label
@@ -105,21 +93,12 @@ class BillingReportEntity(
     def __getitem__(self, name: typing_extensions.Literal["total_cost"]) -> MetaOapg.properties.total_cost: ...
     
     @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["discounts"]) -> MetaOapg.properties.discounts: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["promotions"]) -> MetaOapg.properties.promotions: ...
-    
-    @typing.overload
-    def __getitem__(self, name: typing_extensions.Literal["subtotal"]) -> MetaOapg.properties.subtotal: ...
-    
-    @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["details"]) -> MetaOapg.properties.details: ...
     
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["description", "label", "total_cost", "discounts", "promotions", "subtotal", "details", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["description", "label", "total_cost", "details", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -134,31 +113,19 @@ class BillingReportEntity(
     def get_item_oapg(self, name: typing_extensions.Literal["total_cost"]) -> MetaOapg.properties.total_cost: ...
     
     @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["discounts"]) -> MetaOapg.properties.discounts: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["promotions"]) -> MetaOapg.properties.promotions: ...
-    
-    @typing.overload
-    def get_item_oapg(self, name: typing_extensions.Literal["subtotal"]) -> MetaOapg.properties.subtotal: ...
-    
-    @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["details"]) -> MetaOapg.properties.details: ...
     
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["description", "label", "total_cost", "discounts", "promotions", "subtotal", "details", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["description", "label", "total_cost", "details", ], str]):
         return super().get_item_oapg(name)
     
 
     def __new__(
         cls,
         *_args: typing.Union[dict, frozendict.frozendict, ],
-        promotions: typing.Union[MetaOapg.properties.promotions, decimal.Decimal, int, float, ],
-        discounts: typing.Union[MetaOapg.properties.discounts, decimal.Decimal, int, float, ],
         total_cost: typing.Union[MetaOapg.properties.total_cost, decimal.Decimal, int, float, ],
-        subtotal: typing.Union[MetaOapg.properties.subtotal, decimal.Decimal, int, float, ],
         description: typing.Union[MetaOapg.properties.description, str, ],
         details: typing.Union[MetaOapg.properties.details, list, tuple, ],
         label: typing.Union[MetaOapg.properties.label, str, ],
@@ -168,10 +135,7 @@ class BillingReportEntity(
         return super().__new__(
             cls,
             *_args,
-            promotions=promotions,
-            discounts=discounts,
             total_cost=total_cost,
-            subtotal=subtotal,
             description=description,
             details=details,
             label=label,
