@@ -283,16 +283,16 @@ class Task:
             "Task %s was created and is waiting for the required input files "
             "to be uploaded.",
         models.TaskStatusCode.EXECUTERTERMINATED:
-            "The machine running your task was terminated by the cloud provider"
+            "The machine running task %s was terminated by the cloud provider"
             " and it stopped.\nUse the `resubmit_on_preemption` parameter when "
             "running the task to configure it to automatically resubmitted "
             "to the queue.",
         models.TaskStatusCode.EXECUTERTERMINATEDBYUSER:
             "The task's machine group was terminated by your request while the"
-            " task was still running, causing it to be killed.",
+            " task %s was still running, causing it to be killed.",
         models.TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED:
             "The task's machine group reached its time-to-live (TTL) limit set"
-            " by your quotas and was terminated, causing the task to be "
+            " by your quotas and was terminated, causing the task %s to be "
             "killed.\nCheck your quota values and request an increase if "
             "needed.",
         models.TaskStatusCode.TTLEXCEEDED:
@@ -312,11 +312,16 @@ class Task:
         models.TaskStatusCode.KILLED:
             "Task %s killed.",
         models.TaskStatusCode.ZOMBIE:
-            "The machine was terminated while the task was pending.",
+            "The machine was terminated while the task %s was pending.",
         models.TaskStatusCode.SPOTINSTANCEPREEMPTED:
-            "The task was preempted by the cloud provider.\n"
+            "The task %s was preempted by the cloud provider.\n"
             "Consider using non-spot machines by setting `spot=False` when "
-            "instantiating the machine group."
+            "instantiating the machine group.",
+        models.TaskStatusCode.COMPUTATIONENDED:
+            "The simulation in Task %s has finished and its output is being "
+            "compressed and uploaded to bucket.",
+        models.TaskStatusCode.COMPUTATIONSTARTED:
+            "Task %s has started and is now running the provided commands.",
     }
 
     KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
