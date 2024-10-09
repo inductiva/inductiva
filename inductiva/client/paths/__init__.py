@@ -64,6 +64,7 @@ class PathValues(str, enum.Enum):
     EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL = "/executer-tracker/{machine_id}/task/{task_id}/upload_output_url"
     EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_METRIC = "/executer-tracker/{machine_id}/task/{task_id}/metric"
     EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK = "/executer-tracker/{machine_id}/resize_disk"
+    EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK_DONE = "/executer-tracker/{machine_id}/resize_disk_done"
     COMPUTE_GROUP = "/compute/group"
     COMPUTE_TYPE = "/compute/type"
     COMPUTE_GROUP_START = "/compute/group/start"
