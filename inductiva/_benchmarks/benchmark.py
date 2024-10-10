@@ -1,12 +1,13 @@
 import json
 from typing import  Self
-from ..localization import translator as __
 from inductiva import types
 from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
 from inductiva.resources import machine_groups
 
 class Benchmark(Project):
+    """Represents the benchmark runner."""
+
     def __init__(self, name: str, append: bool = True):
         """
         Initializes a new Benchmark instance.
@@ -66,7 +67,7 @@ class Benchmark(Project):
                                   **kwargs)
             self.runs.clear()
         return self
-    
+
     def wait(self) -> Self:
         """
         Waits for all running tasks to complete.
@@ -78,7 +79,7 @@ class Benchmark(Project):
         for task in tasks:
             task.wait(download_std_on_completion=False)
         return self
-    
+
     def to_dict(self):
         """
         Compiles results from all completed tasks into a dictionary.
