@@ -364,6 +364,8 @@ Number of tasks ahead in the queue: 0
 · You can also get more information about the task via the CLI command:
 	inductiva tasks info u8v7p1v7wfyvvkyc0iq0s632k
 
+Waiting for task u8v7p1v7wfyvvkyc0iq0s632k to complete...
+Go to https://console.inductiva.ai/tasks/u8v7p1v7wfyvvkyc0iq0s632k for more details.
 ■ Task u8v7p1v7wfyvvkyc0iq0s632k successfully queued and waiting to be picked-up for execution...
 The task u8v7p1v7wfyvvkyc0iq0s632k is about to start.
 ■ Task u8v7p1v7wfyvvkyc0iq0s632k has started and is now running remotely.
