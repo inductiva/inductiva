@@ -493,7 +493,7 @@ class BaseMachineGroup(ABC):
         logging.info("\t· Name:                       %s", self.name)
         logging.info("\t· Machine Type:               %s", self.machine_type)
         logging.info("\t· Data disk size:             %s GB", self.data_disk_gb)
-        logging.info("\t· Memory (RAM):               %s GB", self.total_ram_gb)
+        logging.info("\t· Total memory (RAM):         %s GB", self.total_ram_gb)
 
         # Log max idle time
         value_str = format_utils.timedelta_formatter(
