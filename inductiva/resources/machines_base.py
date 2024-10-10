@@ -250,7 +250,7 @@ class BaseMachineGroup(ABC):
             body.get("idle_seconds"))
         self._auto_terminate_ts = self._iso_to_datetime(
             body.get("auto_terminate_ts"))
-        self.ram_gb = body.get("ram_gb")
+        self.total_ram_gb = body.get("total_ram_gb")
         self._log_machine_group_info()
 
     @abstractmethod
@@ -493,7 +493,7 @@ class BaseMachineGroup(ABC):
         logging.info("\t· Name:                       %s", self.name)
         logging.info("\t· Machine Type:               %s", self.machine_type)
         logging.info("\t· Data disk size:             %s GB", self.data_disk_gb)
-        logging.info("\t· Memory (RAM):               %s GB", self.ram_gb)
+        logging.info("\t· Memory (RAM):               %s GB", self.total_ram_gb)
 
         # Log max idle time
         value_str = format_utils.timedelta_formatter(
