@@ -1,9 +1,10 @@
 import json
-from typing import  Self
+from typing import Self
 from inductiva import types
 from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
 from inductiva.resources import machine_groups
+
 
 class Benchmark(Project):
     """Represents the benchmark runner."""
