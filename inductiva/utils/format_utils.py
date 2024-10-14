@@ -235,3 +235,64 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
         table = _table_indenter(table, indentation_level)
 
     return f"\n{table}\n"
+
+
+def currency_formatter(amount, currency="USD"):
+    """Format a currency amount into a human-readable string."""
+    # Define currency-specific information
+    currency_info = {
+        "USD": {
+            "symbol": "$",
+            "dollar_name": "dollar",
+            "cent_name": "cent"
+        },
+        "EUR": {
+            "symbol": "€",
+            "dollar_name": "euro",
+            "cent_name": "cent"
+        },
+        "GBP": {
+            "symbol": "£",
+            "dollar_name": "pound",
+            "cent_name": "penny"
+        },
+        # Add more currencies here if needed
+    }
+
+    # Get the symbol and names from currency_info, default to "USD" if currency not found
+    currency_data = currency_info.get(currency, currency_info["USD"])
+
+    # If the amount is less than 0.01 (i.e., smaller than 1 cent)
+    if amount < 0.01:
+        return ("less than 0 cents for more details check "
+                "\nhttps://console.inductiva.ai/tasks")
+
+    dollars = int(amount)
+    cents = round((amount - dollars) * 100, 2)
+
+    dollar_part = ""
+    cent_part = ""
+
+    # Handle pluralization for dollars
+    if dollars > 0:
+        dollar_name = currency_data["dollar_name"]
+        dollar_part = f"{dollars} {dollar_name}" if dollars == 1 \
+                        else f"{dollars} {dollar_name}s"
+
+    # Handle pluralization for cents
+    if cents > 0:
+        cent_name = currency_data["cent_name"]
+        cent_part = f"{cents} {cent_name}" if cents == 1 \
+                        else f"{cents:.2f} {cent_name}s"
+
+    # Formatting the result
+    result = ""
+    symbol = currency_data["symbol"]
+    if dollar_part and cent_part:
+        result = f"{symbol}{dollar_part} {cent_part}"
+    elif dollar_part:
+        result = f"{symbol}{dollar_part}"
+    else:
+        result = f"{symbol}{cent_part}"
+
+    return result
