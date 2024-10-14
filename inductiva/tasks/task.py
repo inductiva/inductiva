@@ -340,7 +340,7 @@ class Task:
             "Consider using non-spot machines by setting `spot=False` when "
             "instantiating the machine group.",
         models.TaskStatusCode.COMPUTATIONENDED:
-            "The simulation in Task %s has finished and its output is being "
+            "The simulation in task %s has finished and its output is being "
             "compressed and uploaded to bucket.",
         models.TaskStatusCode.COMPUTATIONSTARTED:
             "Task %s has started and is now running the provided commands.",
