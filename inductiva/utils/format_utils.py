@@ -263,7 +263,7 @@ def currency_formatter(amount, currency="USD"):
 
     # If the amount is less than 0.01 (i.e., smaller than 1 cent)
     if amount < 0.01:
-        return ("less than 0 cents for more details check "
+        return ("Less than 1 cent. For more details check "
                 "\nhttps://console.inductiva.ai/tasks")
 
     dollars = int(amount)
