@@ -112,8 +112,6 @@ simulators/XBeach
 ```
 
 ```{toctree}
-
-```{toctree}
 ---
 caption: Partial Differential Equations
 maxdepth: 1
