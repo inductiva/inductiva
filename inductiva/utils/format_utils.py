@@ -259,7 +259,6 @@ def currency_formatter(amount, currency="USD"):
         # Add more currencies here if needed
     }
 
-    # Get the symbol and names from currency_info, default to "USD" if currency not found
     currency_data = currency_info.get(currency, currency_info["USD"])
 
     # If the amount is less than 0.01 (i.e., smaller than 1 cent)
