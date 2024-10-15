@@ -236,8 +236,9 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
 
     return f"\n{table}\n"
 
+
 def currency_formatter(amount, currency="USD"):
-    """Format a currency amount into a human-readable string with currency symbol or cents."""
+    """Format a currency amount into a human-readable string."""
     # Define currency-specific information
     currency_info = {
         "USD": {
