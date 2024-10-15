@@ -237,45 +237,40 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     return f"\n{table}\n"
 
 
-def currency_formatter(amount, currency="USD"):
-    """Format a currency amount into a human-readable string."""
-    # Define currency-specific information
-    currency_info = {
-        "USD": {
-            "symbol": "$"
-        },
-        "EUR": {
-            "symbol": "€"
-        },
-        "GBP": {
-            "symbol": "£"
-        },
-        # Add more currencies here if needed
-    }
+def currency_formatter(amount: float) -> str:
+    """Format a currency amount into a human-readable string.
 
-    currency_data = currency_info.get(currency, currency_info["USD"])
+    Convert the amount to a string with a maximum of 10 decimal places.
+    If the amount is less than 0.0001 (i.e., smaller than 0.01 cents),
+    return a message indicating that the amount is less than 0.0001 USD.
+    If the amount is less than 0.1, show all decimal places until the
+    first two non-zero decimal values (e.g., 0.00012345 -> 0.00012).
+
+    TODO: Add support for other currencies. We need to get the currency from
+    the BE. For now, we are using USD.
+    """
+
+    currency_data = "US$"
 
     # If the amount is less than 0.0001 (i.e., smaller than 0.01 cents)
     if amount < 0.0001:
-        return ("Less than 0.01 cents. For more details check "
+        return (f"Less than 0.0001 {currency_data}. For more details check "
                 "\nhttps://console.inductiva.ai/tasks")
 
-    # Extract dollar and cent amounts
-    dollars = int(amount)
-    cents = round((amount - dollars) * 100, 2)
+    # Convert the value to a string with a maximum of 10 decimal places
+    amount_str = f"{amount:.10f}"
 
-    # Handle formatting when dollars are zero (use cents only)
-    if dollars == 0 and cents > 0:
-        return f"{cents:.2f} cents"
+    # Find the first non-zero decimal
+    decimal_part = amount_str.split(".")[1]
+    first_non_zero_decimal = next(
+        (i for i, digit in enumerate(decimal_part) if digit != "0"), 10)
 
-    # Formatting the result with the appropriate symbol and amount
-    symbol = currency_data["symbol"]
-    if dollars > 0 and cents > 0:
-        # Both dollars and cents
-        return f"{symbol}{dollars}.{int(cents):02d}"
-    elif dollars > 0:
-        # Only dollars
-        return f"{symbol}{dollars}.00"
-    else:
-        # Only cents (in case cents == 0, this will still show properly)
-        return f"{cents:.2f} cents"
+    # Determine the number of decimal places to show
+    decimal_places = max(2, first_non_zero_decimal + 2)
+
+    if amount < 0.1:
+        # If the amount is less than 0.1, show all decimal places until the
+        # first two non-zero decimal values (e.g., 0.00012345 -> 0.00012)
+        return f"{amount:.{decimal_places}f} {currency_data}"
+
+    return f"{amount:.2f} {currency_data}"
