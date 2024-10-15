@@ -236,62 +236,45 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
 
     return f"\n{table}\n"
 
-
 def currency_formatter(amount, currency="USD"):
-    """Format a currency amount into a human-readable string."""
+    """Format a currency amount into a human-readable string with currency symbol or cents."""
     # Define currency-specific information
     currency_info = {
         "USD": {
-            "symbol": "$",
-            "dollar_name": "dollar",
-            "cent_name": "cent"
+            "symbol": "$"
         },
         "EUR": {
-            "symbol": "€",
-            "dollar_name": "euro",
-            "cent_name": "cent"
+            "symbol": "€"
         },
         "GBP": {
-            "symbol": "£",
-            "dollar_name": "pound",
-            "cent_name": "penny"
+            "symbol": "£"
         },
         # Add more currencies here if needed
     }
 
     currency_data = currency_info.get(currency, currency_info["USD"])
 
-    # If the amount is less than 0.01 (i.e., smaller than 1 cent)
-    if amount < 0.01:
-        return ("Less than 1 cent. For more details check "
+    # If the amount is less than 0.0001 (i.e., smaller than 0.01 cents)
+    if amount < 0.0001:
+        return ("Less than 0.01 cents. For more details check "
                 "\nhttps://console.inductiva.ai/tasks")
 
+    # Extract dollar and cent amounts
     dollars = int(amount)
     cents = round((amount - dollars) * 100, 2)
 
-    dollar_part = ""
-    cent_part = ""
+    # Handle formatting when dollars are zero (use cents only)
+    if dollars == 0 and cents > 0:
+        return f"{cents:.2f} cents"
 
-    # Handle pluralization for dollars
-    if dollars > 0:
-        dollar_name = currency_data["dollar_name"]
-        dollar_part = f"{dollars} {dollar_name}" if dollars == 1 \
-                        else f"{dollars} {dollar_name}s"
-
-    # Handle pluralization for cents
-    if cents > 0:
-        cent_name = currency_data["cent_name"]
-        cent_part = f"{cents} {cent_name}" if cents == 1 \
-                        else f"{cents:.2f} {cent_name}s"
-
-    # Formatting the result
-    result = ""
+    # Formatting the result with the appropriate symbol and amount
     symbol = currency_data["symbol"]
-    if dollar_part and cent_part:
-        result = f"{symbol}{dollar_part} {cent_part}"
-    elif dollar_part:
-        result = f"{symbol}{dollar_part}"
+    if dollars > 0 and cents > 0:
+        # Both dollars and cents
+        return f"{symbol}{dollars}.{int(cents):02d}"
+    elif dollars > 0:
+        # Only dollars
+        return f"{symbol}{dollars}.00"
     else:
-        result = f"{symbol}{cent_part}"
-
-    return result
+        # Only cents (in case cents == 0, this will still show properly)
+        return f"{cents:.2f} cents"
