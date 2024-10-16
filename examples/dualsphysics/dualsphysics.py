@@ -14,7 +14,8 @@ input_dir = inductiva.utils.download_from_url(
 commands = [
     "gencase config flow_cylinder -save:all",
     "dualsphysics flow_cylinder flow_cylinder -dirdataout data -svres",
-    "partvtk -dirin flow_cylinder/data -savevtk flow_cylinder/PartFluid -onlytype:-all,+fluid"
+    ("partvtk -dirin flow_cylinder/data -savevtk flow_cylinder/PartFluid "
+     "-onlytype:-all,+fluid")
 ]
 
 # Initialize the Simulator
