@@ -14,6 +14,10 @@ near future.
 
 ## Example
 
+```{literalinclude} file.py
+:language: python
+```
+
 
 ```python
 import inductiva
