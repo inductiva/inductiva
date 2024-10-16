@@ -1,3 +1,4 @@
+"""Reef3D example."""
 import inductiva
 
 # Instantiate machine group

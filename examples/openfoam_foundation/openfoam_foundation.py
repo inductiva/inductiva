@@ -1,3 +1,4 @@
+"""OpenFOAM Foundation example."""
 import inductiva
 
 # Instantiate machine group

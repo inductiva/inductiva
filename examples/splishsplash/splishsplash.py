@@ -1,3 +1,4 @@
+"""SPlisHSPlasH example."""
 import inductiva
 
 # Instantiate machine group

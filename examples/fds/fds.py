@@ -1,3 +1,4 @@
+"""FDS example."""
 import inductiva
 
 # Instantiate machine group
