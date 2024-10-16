@@ -47,7 +47,7 @@ referred. Below we present the case of two simulators that follow this pattern:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 # Set simulation input directory
@@ -73,7 +73,7 @@ machine_group.terminate()
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 # Set simulation input directory
@@ -118,7 +118,7 @@ with the configuration files for both commands.
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 # Set simulation input directory
@@ -165,7 +165,7 @@ Below, an example with OpenFOAM is given.
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 # Set simulation input directory

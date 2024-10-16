@@ -1,5 +1,6 @@
 """Configuration for pytest and pytest-markdown."""
 import pytest
+import datetime
 import inductiva
 
 
@@ -20,3 +21,14 @@ def input_dir():
 
 def pytest_markdown_docs_globals():
     return {"inductiva": inductiva}
+
+
+@pytest.fixture(scope="session")
+def machine_group_sample():
+    mg = inductiva.resources.MachineGroup(
+        "e2-micro",
+        max_idle_time=datetime.timedelta(minutes=1),
+    )
+    mg.start()
+    yield mg
+    mg.terminate()

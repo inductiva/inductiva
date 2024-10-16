@@ -50,7 +50,7 @@ in each tier:
 | Allow tasks on dedicated machine group | Ability to launch and allocate a machine group, to be dedicated to the the user’s tasks. | ✅︎ | ✅︎ | ✅︎ |
 | Allow the override of time to live for tasks | Ability to extend the maximum time that a task can stay running, delaying its automatic termination. | ✅︎ | ✅︎ | ✅︎ |
 | Allow running "non Kutu" containers | Ability to specify the use of third-party docker containers that are defined/built outside the context of the KUTU repository. | ❌ | ❌ | ✅ |
-| Allow use of the simulators - any version | Ability to run any version of all [simulators available in Inductiva API](../simulators/overview.md) | ✅︎ | ✅︎ | ✅︎ |
+| Allow use of the simulators - any version | Ability to run any version of all [simulators available in Inductiva API](https://tutorials.inductiva.ai/simulators/overview.html) | ✅︎ | ✅︎ | ✅︎ |
 | Allow the use of standard machine groups | Ability to allocate a machine pool with a fixed number of machines | ✅︎ | ✅︎ | ✅︎ |
 | Allow the use of elastic clusters | Ability to dynamically allocate a machine pool with flexible sizing | ❌ | ✅︎ | ✅︎ |
 | Allow the use of MPI cluster | Ability to allocate multiple machines configured as a single cluster for running parallelized simulations across multiple machines using MPI | ❌ | ❌ | ✅︎ |

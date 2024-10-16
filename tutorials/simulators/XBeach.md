@@ -1,48 +1,43 @@
+In this guide, we will walk you through setting up and running XBeach using 
+the Inductiva API. 
+
+We will cover:
+
+- Configuring XBeach simulations using the Inductiva API.
+- Example code to help you get started with simulations.
+- An advanced example (Galveston Island Beach and Dune Simulation)
+- Available benchmarks to test XBeach’s capabilities.
+
+
 # XBeach
 
-XBeach is a simulator with a two-dimensional model for wave propagation,
-sediment transport and morphological changes in the nearshore area. The
-simulator is configured with a `params.txt` file that contains grid and
-bathymetry info, wave input, flow input, morphological input, etc. in the form
-of keyword/value pairs. If a `params.txt` cannot be found then XBeach will not
-run. Other files are used to configure the grid and bathymetry profile, like
-`bed.dep` for example, and other files with extra information that can be used
-inside the `params.txt` to configure the simulator further.
+XBeach is a two-dimensional simulator used for modeling **wave propagation**, 
+**sediment transport**, and **morphological changes** in the nearshore environment. 
 
-We advise to always set the `mpiboundary` argument in the `params.txt` file, 
-since we handle automatically the parallelization of the simulation, based on
-the number of cores available in the machine.
+XBeach is configured using a params.txt file, which contains crucial details 
+like the grid, bathymetry, wave input, and flow parameters. The absence 
+of a `params.txt` file will prevent the simulator from running, so it is 
+essential to ensure all necessary files are in place.
 
-## Example
+The configuration also involves using additional files like `bed.dep` for 
+bathymetry and other files to further customize the simulation within 
+`params.txt`. 
 
-```python
-import inductiva
+We recommend setting the `mpiboundary` argument in the `params.txt` file 
+to facilitate automatic parallelization based on the number of available 
+CPU cores.
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
-machine_group.start()
+## Example Code
 
-# Download example configuration files from Inductiva storage
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "xbeach-input-example.zip", unzip=True)
+Below is an example of running a basic XBeach simulation via the Inductiva 
+API:
 
-# Initialize the Simulator
-xbeach = inductiva.simulators.XBeach()
-
-# Run simulation with configuration files in the input directory
-task = xbeach.run(
-    input_dir=input_dir,
-    sim_config_filename="params.txt",
-    on=machine_group)
-
-task.wait()
-task.download_outputs()
-
-machine_group.terminate()
+```{literalinclude} ../../examples/xbeach/xbeach.py
+:language: python
 ```
 
-## A more advanced example
+## Advanced Example: Galveston Island Simulation
+
 We are now going to run a much longer simulation, namely one whose configuration 
 scripts and input data are made available via the
 [GRIIDC](https://www.griidc.org/), a data repository based out of the Harte
@@ -312,22 +307,12 @@ machine such as a `c3d-highcpu-180`!
 
 Good luck!
 
-## What to read next
+## Available Benchmarks for XBeach
 
-To better understand how you can optimize your XBeach runs, we invite you to 
-read the 
-[XBeach benchmark](https://benchmarks.inductiva.ai/Xbeach/cova_gala/)
-that we prepared for you on our official benchmarks site. You will be able to
-compare the performance of XBeach on several hardware configurations for a
-simulation scenario involving the
-[Cova Gala](https://www.visitportugal.com/pt-pt/content/praia-da-cova-gala) 
-beach in the north of Portugal. This beach has been the focus of several studies
-over the years due to its high erosion rates.
+To better understand how you can optimize your XBeach runs, check out 
+our benchmark:
 
-You may also be interested in checking the documentation related with other 
-coastal dynamic / hydrology simulators that are avaiable via Inductiva API:
-
-* [Reef3D](Reef3D.md)
-* [SCHISM](SCHISM.md)
-* [SWASH](SWASH.md)
-* [SWAN](SWAN.md)
+- [Cova Gala Beach Simulation](https://benchmarks.inductiva.ai/Xbeach/cova_gala/): 
+This benchmark demonstrates XBeach’s performance across different 
+hardware configurations for simulating coastal erosion at [Cova Gala](https://www.visitportugal.com/pt-pt/content/praia-da-cova-gala) Beach 
+in Portugal, an area known for high erosion rates.

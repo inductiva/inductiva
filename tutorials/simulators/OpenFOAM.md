@@ -1,3 +1,12 @@
+In this guide, we will walk you through setting up and running OpenFOAM 
+simulations using the Inductiva API.
+
+We will cover:
+
+- Configuring OpenFOAM simulations with the appropriate input directories.
+- Example codes to help you get started with simulations.
+- An advanced example for running MB9 Micro-benchmark by ExaFOAM.
+
 # OpenFOAM
 
 OpenFOAM is a Finite Volume method for CFD simulations with a wide range of 
@@ -43,48 +52,16 @@ the `runApplication` prefix will execute commands sequentially, while
 manually set the number of processes. The **decomposeParDict** is configured 
 automatically and currently, only the **scotch decomposition method** is supported.
 
-## Example - OpenFOAM Foundation Distribution
+## Example Code - OpenFOAM Foundation Distribution
 
-````python
-import inductiva
+In this example, we demonstrate how to run the [motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) 
+tutorial using the OpenFOAM Foundation distribution.
 
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
-machine_group.start()
+```{literalinclude} ../../examples/openfoam-foundation/openfoam-foundation.py
+:language: python
+```
 
-# Set simulation input directory
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "openfoam-input-example.zip", unzip=True)
-
-# Set the simulation commands
-commands = [
-    "runApplication surfaceFeatures",
-    "runApplication blockMesh",
-    "runApplication decomposePar -copyZero",
-    "runParallel snappyHexMesh -overwrite",
-    "runParallel potentialFoam",
-    "runParallel simpleFoam",
-    "runApplication reconstructParMesh -constant",
-    "runApplication reconstructPar -latestTime"
-]
-
-# Initialize the Simulator
-openfoam = inductiva.simulators.OpenFOAM(distribution="foundation")
-
-# Run simulation with config files in the input directory
-task = openfoam.run(input_dir=input_dir,
-                    commands=commands,
-                    n_vcpus=4,
-                    on=machine_group)
-
-task.wait()
-task.download_outputs()
-
-machine_group.terminate()
-````
-
-## Example - ESI Distribution
+## Example Code - ESI Distribution
 
 To run the sample simulation above, simply download the
 `openfoam-esi-input-example.zip` file, select the correct distribution by
@@ -383,14 +360,7 @@ Good luck with your OpenFOAM simulations!
 
 ## What to read next
 
-If you are interested in OpenFOAM, you may also be interested in checking
-the following related simulators that are also available via Inductiva API:
-
-* [CaNS](CaNS.md)
-* [DualSPHysics](DualSPHysics.md)
-* [SPlisHSPlasH](SPlisHSPlasH.md)
-
-Ready to optimize your own simulations? Try our [Inductiva API](https://console.inductiva.ai/) 
+Try our [Inductiva API](https://console.inductiva.ai/) 
 to streamline your workflows and make the most of cloud resources for 
 large-scale simulations.
 
