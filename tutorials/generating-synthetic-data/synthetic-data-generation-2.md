@@ -101,7 +101,7 @@ with just a couple lines of code:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 # Set path to the input directory with the SPlisHSPlasH configuration files

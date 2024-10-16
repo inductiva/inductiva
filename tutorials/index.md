@@ -89,6 +89,30 @@ generating-synthetic-data/synthetic-data-generation-5.md
 
 ```{toctree}
 ---
+caption: Built-in Simulators
+maxdepth: 1
+hidden: true
+---
+simulators/overview
+simulators/AmrWind
+simulators/CaNS
+simulators/DualSPHysics
+simulators/FDS
+simulators/FVCOM
+simulators/GROMACS
+simulators/NWChem
+simulators/OpenFOAM
+simulators/OpenFAST
+simulators/Reef3D
+simulators/SCHISM
+simulators/SPlisHSPlasH
+simulators/SWAN
+simulators/SWASH
+simulators/XBeach
+```
+
+```{toctree}
+---
 caption: Partial Differential Equations
 maxdepth: 1
 hidden: true
