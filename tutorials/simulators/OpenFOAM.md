@@ -57,7 +57,7 @@ automatically and currently, only the **scotch decomposition method** is support
 In this example, we demonstrate how to run the [motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) 
 tutorial using the OpenFOAM Foundation distribution.
 
-```{literalinclude} ../../examples/openfoam-foundation/openfoam-foundation.py
+```{literalinclude} ../../examples/openfoam_foundation/openfoam_foundation.py
 :language: python
 ```
 
