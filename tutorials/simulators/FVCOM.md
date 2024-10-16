@@ -58,33 +58,8 @@ In the following example, we run the default model with a debug level of 7 and 1
 MPI process on a very small test scenario. This is just a simple example to check
 if the simulator is working correctly.
 
-```python
-import inductiva
-
-# Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
-machine_group.start()
-
-# Set simulation input directory
-input_dir = inductiva.utils.download_from_url(
-    "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "fvcom-input-example.zip", unzip=True)
-
-# Initialize the Simulator
-fvcom = inductiva.simulators.FVCOM()
-
-# Run simulation with config files in the input directory
-task = fvcom.run( input_dir=input_dir,
-                  working_dir="run/",
-                  case_name="tst",
-                  debug=7,
-                  n_vcpus=1,
-                  on=machine_group)
-
-task.wait()
-task.download_outputs()
-
-machine_group.terminate()
+```{literalinclude} ../../examples/fvcom/fvcom.py
+:language: python
 ```
 
 **Closing Notes**: There is currently a bug affecting the timezone argument in
