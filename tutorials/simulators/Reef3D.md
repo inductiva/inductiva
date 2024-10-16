@@ -1,9 +1,32 @@
+In this guide, we will walk you through setting up and running REEF3D 
+simulations using the Inductiva API.
+
+We will cover:
+
+- Configuring REEF3D simulations using the Inductiva API.
+- Allowed commands for running Reef3D
+- Example code to help you get started with simulations.
+- An advanced example that uses the API to run the "3D Dam Break Scenario with
+Obstacle" that can be found in 
+[Reef3D tutorials](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/10_2%203D%20Dam%20Break%20with%20Obstacle). 
+
 # Reef3D
 
-REEF3D is an open-source hydrodynamics framework with a focus on coastal, marine 
-and hydraulic engineering flows. Tailor-made multiphysics solvers are available 
-for a range of relevant problems (e.g. sediment transport or floating body
-dynamics). The modular programming approach allows the framework to incorporate
+REEF3D is an open-source computational fluid dynamics (CFD) solver 
+designed for simulating free-surface flows and coastal engineering 
+applications. It supports a wide range of functionalities, including 
+wave modeling, sediment transport, and hydrodynamics.
+
+REEF3D employs a fully coupled numerical approach to handle complex 
+fluid-structure interactions, making it an essential tool for projects 
+in coastal protection, offshore engineering, and environmental assessments. 
+The solver’s ability to model free-surface flows, wave energy devices, 
+and sediment transport allows engineers to simulate real-world conditions 
+with high accuracy.
+
+## Reef3D Key Modules
+
+The modular programming approach allows the framework to incorporate
 a range of different flow solvers which together represent all relevant length
 scales. Depending on the wave or flow conditions, the following optimized
 hydrodynamic modules are available:
@@ -17,7 +40,7 @@ phase-resolved sea states at all water depths.
 - **REEF3D::SFLOW** is a depth-averaged model, solving the non-hydrostatic
 shallow water equations ideal for near-shore hydrodynamics and river flow.
 
-## Running a simulation
+## Running a Reef3D Simulation
 
 Reef3D in Inductiva API executes two sequential steps:
 
@@ -53,9 +76,9 @@ MPI parallism. This number needs to be set consistently with parameter
 For further information on handling the task of the simulation see
 [here](https://tutorials.inductiva.ai/intro_to_api/tasks.html).
 
-## Example
+## Example Code
 
-Here, we follow the tutorial with
+In this example, we follow the tutorial with
 [regular wave propagation](https://github.com/REEF3D/REEF3D/tree/ed0c8d7a6110892706357f72e0404bd63034efa5/Tutorials/REEF3D_FNPF/9_1%20Regular%20Wave%20Propagation)
 from Reef3D repository.
 
@@ -63,7 +86,7 @@ from Reef3D repository.
 :language: python
 ```
 
-## A slighly more advanced example
+## Advanced Example: 3D Dam Break Scenarion with Obstacle
 Let's now run a more advanced example, one that will also require a lot more
 compute power, and will illustrate more advanced features of the API. More
 specifically, we will use the API to run the "3D Dam Break Scenarion with
@@ -338,17 +361,8 @@ which should get you something like this (you may have other contents)
  3D_dam_break_with_obstacle/   3.09 GB   26 Jun, 07:39:11
 ```
 
-And you can donwload the folder produced by this task by doing:
+And you can download the folder produced by this task by doing:
 
 ```bash
 inductiva tasks download arduwp0bnjkwz9d4xk7rabofi
 ```
-## What to read next
-
-If you are interested in Reef3D, you may also be interested in checking the
-following related simulators that are also avaiable via Inductiva API:
-
-* [SCHISM](SCHISM.md)
-* [SWAN](SWAN.md)
-* [SWASH](SWASH.md)
-* [XBeach](XBeach.md)

@@ -1,48 +1,53 @@
-# SWASH
+In this guide, we will walk you through setting up and running SWASH using 
+the Inductiva API. 
 
-SWASH is a simulator that solves shallow water equations and is used to simulate 
-waves and currents in coastal waters and harbors, long waves in coastal regions 
-and tidal inlets, and rapidly varied flows around coastal structures. The
-simulator  is configured using a single file with the `.sws` extension, and
-additional files containing information about the domain and the ocean floor,
-such as a bathymetry file with a `.bot` extension, are necessary for the
-simulation to run.
+We will cover:
 
-## Example
+- Configuring SWASH simulations using the Inductiva API, and all 
+supported versions of the simulator.
+- Example code to help you get started with simulations.
+- Available benchmarks to test SWASH’s capabilities.
+
+# SWASH (Simulating WAves and Surf Hydrodynamics)
+
+SWASH is a simulator designed to solve **shallow water equations**, used for 
+simulating **waves**, **currents**, and **tidal flows** in coastal waters, harbors, 
+and around coastal structures. SWASH is ideal for modeling long waves, 
+tidal inlets, and rapidly varied flows in nearshore regions.
+
+SWASH simulations are configured using a `.sws` file, with additional files 
+such as **bathymetry** (with a `.bot` extension) to define the ocean floor and 
+domain. These files should be placed in an input directory for the 
+simulation.
+
+## Example Code
+
+Below is an example of running a SWASH simulation via the Inductiva API:
 
 ```{literalinclude} ../../examples/swash/swash.py
 :language: python
 ```
 
-### Versions
+## Supported Versions
 
 We currently support the following versions of SWASH:
-- 9.01A (Apr, 2023)
-- 10.01A (Apr, 2024)
-- 10.05 (May, 2024)
 
-All available versions for this (and other simulators) can be listed
-using the `inductiva simulators list` CLI command.
+- **9.01A** (Apr, 2023)
+- **10.01A** (Apr, 2024)
+- **10.05** (May, 2024)
 
-## Inductiva Benchmarks
+To list all available versions of SWASH (or other simulators), you can 
+use the `inductiva simulators list` CLI command.
 
-The following benchmark is currently available for SWASH:
+## Available Benchmarks for SWASH
+
+The following benchmark is available for SWASH:
 
 * [Three-Dimensional Currents](https://benchmarks.inductiva.ai/SWASH/SWASH_Currents/):
-This benchmark replicates the S1 simulation as outlined in the paper 
-"Modeled Three-Dimensional Currents and Eddies on an Alongshore-Variable Barred
-Beach", authored by Christine M. Baker, Melissa Moulton, Britt Raubenheimer, 
-Steve Elgar, and Nirnimesh Kumar (2021).
+This benchmark replicates the S1 simulation from the paper *“Modeled Three-Dimensional Currents and Eddies on an Alongshore-Variable Barred Beach”*, authored by Christine M. Baker et al. (2021).
 
-## What to read next
+## What to Read Next
 
-If you are interested in SWASH, you may also be interested in checking the
-following related simulators that are also avaiable via Inductiva API:
-
-* [Reef3D](Reef3D.md)
-* [SCHISM](SCHISM.md)
-* [SWAN](SWAN.md)
-* [XBeach](XBeach.md)
 
 You may also want to check the following blog post, where we illustrate a 
 practical use of SWASH:

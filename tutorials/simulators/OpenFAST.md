@@ -1,85 +1,80 @@
+In this guide, we will walk you through setting up and running OpenFAST, 
+an open-source engineering toolset developed by the National Renewable 
+Energy Laboratory (NREL) for simulating wind turbine dynamics.
+
+We will cover:
+
+- Configuring OpenFAST and FAST.Farm for wind turbine and wind farm simulations.
+- Allowed Commands for running OpenFAST.
+- Example code to help you get started with simulations.
+- Available benchmarks to help you evaluate the performance of OpenFAST.
+
 # OpenFAST
 
-[OpenFAST](https://www.nrel.gov/wind/nwtc/openfast.html) is an open-source 
-engineering toolset developed by the National Renewable Energy Laboratory (NREL)
-for simulating wind turbine dynamics. It provides a modular framework for
-designing and analyzing wind turbines, allowing engineers to model various
-components such as blades, towers, and control systems.
+[OpenFAST](https://www.nrel.gov/wind/nwtc/openfast.html) provides a 
+modular framework for designing and analyzing wind turbines, allowing for 
+detailed modeling of components such as blades, towers, and control systems.
 
-OpenFAST has been compiled with FAST.Farm, an extension tailored for large-scale
-wind farm simulations. FAST.Farm facilitates the modeling of interactions
-between multiple turbines within wind farms, accounting for factors like wake
-effects, turbulence, and terrain complexity. FAST.Farm's capabilities are
-indispensable for the design and planning of wind energy projects, unlocking the
-full potential of wind resources for renewable energy generation.
+OpenFAST comes integrated with FAST.Farm, an extension designed for 
+large-scale wind farm simulations. FAST.Farm models complex interactions 
+between turbines, accounting for factors like wake effects, turbulence, 
+and terrain. FAST.Farm's capabilities are indispensable for the design 
+and planning of wind energy projects, unlocking the full potential of 
+wind resources for renewable energy generation.
 
-Moreover, both OpenFAST and FAST.Farm were compiled with OpenMP enabled, further
-optimizing their performance and scalability. This integration of parallel
-processing techniques enhances the efficiency and speed of simulations,
-empowering researchers and developers to tackle complex wind energy challenges
-with greater precision and accuracy.
+Both OpenFAST and FAST.Farm are compiled with OpenMP to enable parallel processing, enhancing the performance and scalability of your simulations.
 
-## Example
+## Allowed Commands
+
+The following commands are available for running OpenFAST and its modules:
+
+- `aerodyn_driver`: Performs **aerodynamic analysis** for airflow dynamics 
+around wind turbine blades.
+- `beamdyn_driver`: Focuses on **structural analysis** for the dynamic 
+response of wind turbine blades and towers.
+- `feam_driver`: Executes **finite element analysis (FEA)**, focusing on 
+detailed structural modeling and simulation.
+- `hydrodyn_driver`: Simulates **hydrodynamic interactions** between turbine 
+support structures and water bodies.
+- `inflowwind_driver`: Simulates **atmospheric conditions**, such as wind 
+inflow, and their effects on wind turbine performance.
+- `moordyn_driver`: Focuses on **mooring dynamics** for floating wind turbines, 
+analyzing the behavior of mooring systems.
+- `openfast`: The main **OpenFAST** executable for integrating and running 
+comprehensive wind turbine simulations.
+- `orca_driver`: Enables **aero-elastic and hydrodynamic coupled simulations**,
+useful for analyzing turbine behavior in complex marine environments.
+- `servodyn_driver`: Simulates **control system dynamics**, modeling how 
+wind turbine control systems respond to changing conditions.
+- `subdyn_driver`: Focuses on **substructure dynamics**, analyzing the interaction 
+between turbine components and support structures.
+- `turbsim`: A standalone tool that generates **atmospheric turbulence** data 
+for wind turbine simulations.
+- `unsteadyaero_driver`: Used for **unsteady aerodynamics analysis**, focusing 
+on time-varying airflow around turbine blades.
+- `FAST.Farm`: Specialized for **wind farm simulations**, accounting for 
+turbine interactions, wake effects, and turbulence.
+
+## Example Code
+
+In the following example, we demonstrate how to run an OpenFAST simulation 
+using Inductiva’s cloud infrastructure. 
 
 ```{literalinclude} ../../examples/openfast/openfast.py
 :language: python
 ```
 
-## Allowed Commands
+## Inductiva OpenFAST Benchmarks
 
-- `aerodyn_driver`: Utilized for aerodynamic analysis, this binary focuses on 
-airflow dynamics around wind turbine blades.
-- `beamdyn_driver`: Primarily used for structural analysis, this binary focuses
-on the dynamic response of wind turbine blades and towers.
-- `feam_driver`: This binary is employed for finite element analysis, focusing
-on detailed structural modeling and simulation.
-- `hydrodyn_driver`: Specifically designed for hydrodynamic analysis, this
-binary simulates the interaction between wind turbine support structures and
-water bodies.
-- `inflowwind_driver`: Used for inflow wind modeling, this binary simulates
-atmospheric conditions and their effects on wind turbine performance.
-- `moordyn_driver`: Focused on mooring dynamics, this binary analyzes the
-behavior of floating wind turbines and their mooring systems.
-- `openfast`: The main OpenFAST executable, orchestrating the integration and
-execution of various modules for comprehensive wind turbine simulation.
-- `orca_driver`: Employed for aero-elastic and hydrodynamic coupled simulations,
-this binary enables advanced analysis of wind turbine behavior in complex 
-environments.
-- `servodyn_driver`: This binary specializes in control system analysis,
-simulating the response of wind turbine control systems to varying conditions.
-- `subdyn_driver`: Utilized for substructure dynamics analysis, this binary
-focuses on the interaction between wind turbine components and their support
-structures.
-- `turbsim`: A standalone tool for simulating atmospheric turbulence and its
-effects on wind turbine performance.
-- `unsteadyaero_driver`: This binary is used for unsteady aerodynamics analysis,
-focusing on time-varying airflow around wind turbine blades.
-- `FAST.Farm`: An extension of OpenFAST tailored for large-scale wind farm
-simulations, facilitating the modeling of interactions between multiple turbines
-within wind farms, accounting for factors like wake effects, turbulence, and
-terrain complexity.
-
-## Inductiva Benchmarks
-
-The following benchmarks are currently available for the OpenFAST suite:
+The following benchmarks are available to help you evaluate the performance of 
+the OpenFAST suite on Inductiva’s infrastructure:
 
 * [5MW Land](https://benchmarks.inductiva.ai/OpenFAST/OpenFAST_Land/):
-land based NREL 5-MW turbine simulation using BeamDyn as the structural module.
-It simulates 20 seconds with a time step size of 0.001.
-* [5MW OC4](https://benchmarks.inductiva.ai/OpenFAST/OpenFAST_OC4/): simulates
-an offshore, fixed-bottom NREL 5-MW turbine. The computational emphasis is
-placed on the intricate HydroDyn wave-dynamics calculation.
+A simulation of a land-based NREL 5-MW turbine using **BeamDyn** as the 
+structural module. It simulates 20 seconds with a time step size of 0.001.
+* [5MW OC4](https://benchmarks.inductiva.ai/OpenFAST/OpenFAST_OC4/): Simulates 
+an offshore, fixed-bottom NREL 5-MW turbine, with a focus on **HydroDyn** wave dynamics.
 * [FAST.Farm](https://benchmarks.inductiva.ai/OpenFAST/OpenFAST_FAST.Farm/): 
-FAST.Farm is an multiphysics engineering software designed to forecast the
-power performance and structural loads of wind turbines within a wind farm. It
-operates using OpenFAST and it is what allows our simulations to run in
-parallel.
-
-## What to read next
-
-If you are interested in OpenFast, you may also be interested in checking the
-following related simulators that are also avaiable via Inductiva API:
-
-* [AMR-Wind](AmrWind.md)
-* [OpenFOAM](OpenFOAM.md)
+A tool for forecasting the performance and loads of wind turbines within 
+a wind farm, running simulations in parallel with **OpenFAST**.
 

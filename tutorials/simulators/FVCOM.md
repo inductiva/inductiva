@@ -1,28 +1,38 @@
+In this guide, we will walk you through setting up and running FVCOM, one 
+of the built-in simulators available through the Inductiva API. 
+
+We will cover:
+
+- An overview of how we compiled FVCOM (fvcom and fvcom_estuary binaries.)
+- Generating a valid namelist file for configuring your simulations.
+- Example code to help you get started with simulations.
+
 # FVCOM
 
 [FVCOM](https://www.fvcom.org/) (Finite Volume Community Ocean Model)
-is a 3D hydrodynamic model designed for simulating coastal and ocean dynamics.
-It utilizes an unstructured grid with finite-volume methods, providing flexibility
-in modeling complex coastlines, estuaries, and varying bathymetry. FVCOM excels
-in simulating ocean circulation, tides, and coastal processes, offering
-high-resolution outputs for water currents, temperature, salinity, and ecosystem
-interactions. Its versatility and precision make it an essential tool for
-studying coastal environments, marine ecosystems, and the impacts of climate
-change on ocean systems.
+is a 3D hydrodynamic model specifically designed for simulating coastal 
+and ocean dynamics. It uses an unstructured grid and finite-volume methods, 
+making it highly adaptable for modeling complex coastlines, estuaries, 
+and bathymetry.
 
-We have compiled two versions of FVCOM: the standard **fvcom** binary and an
-additional **fvcom_estuary** binary, which is configured to run the Estuary test
-case included in the FVCOM package. Users can check the compilation modules used
-in each binary in the respective `make.inc` files located at `/make.inc` and
-`/make_estuary.inc`.
+FVCOM excels at simulating ocean circulation, tides, and coastal processes, 
+providing high-resolution outputs for water currents, temperature, salinity, 
+and ecosystem interactions. It’s a valuable tool for studying marine 
+ecosystems, coastal environments, and the impacts of climate change on 
+ocean systems.
 
-These are the only FVCOM versions available at the moment, but we are working on
-a solution to allow users to customize and specify their own flags for on-the-fly
-compilation.
+## Running FVCOM Simulations
 
-If you are having trouble with the input namelist file, you can do the following to
-generate a valid `nml` file in the `working_dir` with the expected format for
-the requested model:
+We have compiled two versions:
+
+- fvcom: The standard version for general use.
+- fvcom_estuary: Configured to run the Estuary test case included with FVCOM.
+
+Users can check the compilation modules used in each binary in the 
+respective `make.inc` files located at `/make.inc` and `/make_estuary.inc`.
+
+If you encounter issues with the input namelist file, the following Python 
+script will generate a valid `.nml` file in your working directory:
 
 ```python
 import inductiva
@@ -52,28 +62,16 @@ task.download_outputs()
 machine_group.terminate()
 ```
 
-## Example
+## Example Code
 
-In the following example, we run the default model with a debug level of 7 and 1
-MPI process on a very small test scenario. This is just a simple example to check
-if the simulator is working correctly.
+Below is an example where we run a simple FVCOM test scenario to verify 
+that the simulator is working correctly, using **1 MPI process** and a **debug level of 7**:
 
 ```{literalinclude} ../../examples/fvcom/fvcom.py
 :language: python
 ```
 
-**Closing Notes**: There is currently a bug affecting the timezone argument in
-the `nml` file. If you encounter issues, please set the timezone to either `None`
-or `UTC` in the `namelist.nml` file as a workaround.
-[More information](https://github.com/FVCOM-GitHub/FVCOM/issues/27)
+**Closing Notes**: If you encounter issues with the timezone argument in the `nml` file, please set it to `None` or `UTC` as a workaround. For more information, 
+check the [bug report](https://github.com/FVCOM-GitHub/FVCOM/issues/27).
 
 All simulation parameters were changed to make sure it runs in a reasonable time.
-
-## What to read next
-
-If you are interested in FVCOM, you may also be interested in checking
-the following related simulators that are also avaiable via Inductiva API:
-
-* [SWAN](SWAN.md)
-* [SWASH](SWASH.md)
-* [OpenFAST](OpenFAST.md)

@@ -1,22 +1,27 @@
+In this guide, we will cover how to set up and run GROMACS simulations, 
+a versatile molecular dynamics simulator built into the Inductiva API.
+
+We will cover:
+
+- Configuring GROMACS simulations with the necessary input files.
+- Example code to help you get started with simulations.
+
 # GROMACS
 
-GROMACS is a versatile simulator to perform molecular dynamics simulations. It 
-is primarily designed for biochemical molecules like proteins, lipids and
-nucleic acids that have a lot of complicated bonded interactions, but since
-GROMACS is extremely fast at calculating the nonbonded interactions (that
-usually dominate simulations) many groups are also using it for research on
-non-biological systems, e.g. polymers and fluid dynamics.
+GROMACS is widely used for simulating biochemical molecules like proteins, 
+lipids, and nucleic acids, but its speed and efficiency make it suitable 
+for a range of non-biological systems, including polymers and fluid dynamics.
 
-A single simulation of GROMACS via Inductiva API can comprise several steps - 
-e.g., preparing the molecules, minimizing the energy of the system, running the
-simulation and post-processing. Hence, to configure a simulation of GROMACS the
-user may require several files. Moreover, GROMACS has specific commands to run
-certain tasks that already use the files in your input directory. 
+A typical GROMACS simulation consists of several stages: preparing the 
+molecular structure, energy minimization, running the simulation, and 
+analyzing the results. You’ll need multiple input files to configure and 
+run your simulation, and specific GROMACS commands will be used to carry 
+out each step.
 
-## Example
+## Example Code
 
-This example runs a simple case of the molecular dynamics of water molecules
-inside a small box.
+In the following example, we run a basic molecular dynamics simulation 
+of water molecules in a small box:
 
 ```{literalinclude} ../../examples/gromacs/gromacs.py
 :language: python

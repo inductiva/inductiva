@@ -1,34 +1,37 @@
-# SWAN
+In this guide, we will walk you through setting up and running SWAN simulations 
+using the Inductiva API. 
 
-SWAN is a simulator for obtaining realistic estimates of wave parameters in coastal
-areas, lakes and eastuaries from given wind, sea floor and current conditions.
+We will cover:
 
-The simulator is configured using a single file with the `.swn` extension, and
-additional files containing information about the domain and the sea floor, and
-the conditions shall be saved in an input directory that is passed to the simulator.
+- Configuring SWAN simulations using the Inductiva API.
+- Example code to help you get started with simulations.
+- Available benchmarks to test SWAN’s capabilities.
 
-## Example
+# SWAN (Simulating WAves Nearshore)
+
+[SWAN](https://swanmodel.sourceforge.io/) is a simulator used to obtain 
+realistic estimates of **wave parameters** in **coastal areas**, **lakes**, and 
+**estuaries** based on wind, sea floor, and current conditions. SWAN is 
+widely applied in coastal engineering, environmental assessments, and 
+maritime safety studies.
+
+The SWAN simulator is typically configured using a single `.swn` file, 
+along with additional files that define the **domain**, **sea floor**, and **input conditions**. These files should be organized in an input directory, which 
+will be passed to the simulator.
+
+## Example Code
+Below is an example of running a SWAN simulation via the Inductiva API:
 
 ```{literalinclude} ../../examples/swan/swan.py
 :language: python
 ```
 
-Check the [official documentation](https://swanmodel.sourceforge.io/) of SWAN to know 
-more about the configuration details specific of the simulator.
+For more detailed information on SWAN configuration, refer to the [official documentation](https://swanmodel.sourceforge.io/).
 
-## Inductiva Benchmarks
+## Available Benchmarks for SWAN
 
-The following benchmark is currently available for SWAN:
+The following benchmark is available to test **SWAN**:
 
-* [Ring](https://benchmarks.inductiva.ai/SWAN/ring/): The "Ring" example from 
-SWAN's site.
-
-## What to read next
-
-If you are interested in SWAN, you may also be interested in checking the
-following related simulators that are also avaiable via Inductiva API:
-
-* [Reef3D](Reef3D.md)
-* [SCHISM](SCHISM.md)
-* [SWASH](SWASH.md)
-* [XBeach](XBeach.md)
+* [Ring](https://benchmarks.inductiva.ai/SWAN/ring/): This example simulates 
+wave propagation and interaction in a circular domain, based on the 
+official SWAN documentation.
