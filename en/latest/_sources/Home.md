@@ -13,7 +13,7 @@ time and energy on what matters: running simulations that solve real problems.
 This documentation includes:
 - A [Quick Recipes](./how_to/index.md) where we will guide you through
 several common tasks and provides practical examples for you to try;
-- A [list of the various open-source simulation packages](./simulators/overview.md)
+- A [list of the various open-source simulation packages](https://tutorials.inductiva.ai/simulators/overview.html)
 that you can invoke via the API (if you have suggestions for adding more
 simulation packages, please let us know by
 [opening a GitHub issue](https://github.com/inductiva/inductiva/issues));
