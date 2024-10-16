@@ -1,12 +1,13 @@
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 input_dir = inductiva.utils.download_from_url(
     "https://storage.googleapis.com/inductiva-api-demo-files/"
-    "reef3d-input-example.zip", unzip=True)
+    "reef3d-input-example.zip",
+    unzip=True)
 
 reef3d = inductiva.simulators.REEF3D()
 

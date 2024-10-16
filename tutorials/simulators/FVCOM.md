@@ -28,7 +28,7 @@ the requested model:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 # Set simulation input directory

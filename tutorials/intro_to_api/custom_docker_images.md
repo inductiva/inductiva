@@ -22,7 +22,7 @@ Here’s an example of how to use the `CustomImage` simulator:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 input_dir = inductiva.utils.download_from_url(
@@ -55,7 +55,7 @@ example:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 input_dir = inductiva.utils.download_from_url(
@@ -88,7 +88,7 @@ Alternatively, you can run MPI directly inside your container with:
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 input_dir = inductiva.utils.download_from_url(
