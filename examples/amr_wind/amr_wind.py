@@ -1,3 +1,4 @@
+"""AMR-Wind example"""
 import inductiva
 
 # Instantiate machine group
