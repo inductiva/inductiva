@@ -35,7 +35,7 @@ simulations:
 ## Example: SWASH
 
 To illustrate the performance of running simulations on dedicated resources using
-the Inductiva API, we will run [SWASH](https://tutorials.inductiva.ai/en/latest/simulators/SWASH.html)
+the Inductiva API, we will run [SWASH](https://tutorials.inductiva.ai/simulators/SWASH.html)
 as an example.
 
 ### Running SWASH on Dedicated Resources
