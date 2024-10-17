@@ -3,8 +3,8 @@ built-in simulators available via the Inductiva API.
 
 We will cover:
 
-- Setting up AMR-Wind for use with our API.
-- Example configurations to help you get started with simulations.
+- Setting up CaNS for use with our API.
+- Example code to help you get started with simulations.
 
 # CaNS
 

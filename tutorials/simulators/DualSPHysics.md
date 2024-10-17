@@ -4,8 +4,8 @@ the built-in tools via the Inductiva API.
 
 We will cover:
 
-- Setting up AMR-Wind for use with our API.
-- Example configurations to help you get started with simulations.
+- Setting up DualSPHysics for use with our API.
+- Example code to help you get started with simulations.
 - Using commands like `gencase` and `dualsphysics` to run your simulations.
 - An advanced Turbine example to show how to execute commands through the 
 Inductiva API.
