@@ -18,10 +18,7 @@ jobs:
         with:
           docs-folder: "source/tutorials/"
           # required by #1291
-          pre-build-command: |
-            apt-get update -y && apt-get install -y git
-            pip install myst-parser -y
-            echo "extensions = ['myst_parser',]" > conf.py
+          pre-build-command: "apt-get update -y && apt-get install -y git && pip install myst-parser -y && echo 'extensions = [\'myst_parser\',]' > conf.py"
           build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
 
       - name: Deploy to staging webserver via rsync
