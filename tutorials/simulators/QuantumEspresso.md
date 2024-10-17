@@ -1,3 +1,12 @@
+In this guide, we will walk you through setting up and running Quantum ESPRESSO, 
+available as one of the built-in tools via the Inductiva API.
+
+We will cover:
+
+- Setting up Quantum ESPRESSO for use with our API.
+- Example code to help you get started with simulations.
+- The list of allowed commands.
+
 # Quantum ESPRESSO
 
 [Quantum ESPRESSO](https://www.quantum-espresso.org/) is an open-source software
