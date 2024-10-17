@@ -204,5 +204,5 @@ and the commands.
 
 ## What to Read Next
 
-Explore the [available open source simulators](https://docs.inductiva.ai/en/latest/simulators/overview.html)
+Explore the [available open source simulators](https://tutorials.inductiva.ai/simulators/overview.html)
 built into our API.
