@@ -23,7 +23,10 @@ from inductiva.client.model.campaign_quota import CampaignQuota
 from inductiva.client.model.campaign_quota_detail import CampaignQuotaDetail
 from inductiva.client.model.campaign_users_update import CampaignUsersUpdate
 from inductiva.client.model.capability import Capability
+from inductiva.client.model.cost_type import CostType
+from inductiva.client.model.costs_components import CostsComponents
 from inductiva.client.model.created_user import CreatedUser
+from inductiva.client.model.currency_code import CurrencyCode
 from inductiva.client.model.disk_resize_request import DiskResizeRequest
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.executer import Executer
@@ -76,6 +79,8 @@ from inductiva.client.model.user_activity import UserActivity
 from inductiva.client.model.user_api_key import UserApiKey
 from inductiva.client.model.user_campaign import UserCampaign
 from inductiva.client.model.user_computation_trend import UserComputationTrend
+from inductiva.client.model.user_costs import UserCosts
+from inductiva.client.model.user_costs_detail import UserCostsDetail
 from inductiva.client.model.user_costs_over_time import UserCostsOverTime
 from inductiva.client.model.user_create import UserCreate
 from inductiva.client.model.user_credits import UserCredits

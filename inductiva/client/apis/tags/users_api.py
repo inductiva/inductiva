@@ -9,12 +9,14 @@
 """
 
 from inductiva.client.paths.users_capabilities.get import GetUserCapabilities
+from inductiva.client.paths.users_costs.get import GetUserCosts
 from inductiva.client.paths.users_info.get import GetUserInfo
 from inductiva.client.paths.users_quotas.get import GetUserQuotas
 
 
 class UsersApi(
         GetUserCapabilities,
+        GetUserCosts,
         GetUserInfo,
         GetUserQuotas,
 ):
