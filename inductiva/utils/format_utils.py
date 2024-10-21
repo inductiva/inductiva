@@ -237,61 +237,38 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     return f"\n{table}\n"
 
 
-def currency_formatter(amount, currency="USD"):
-    """Format a currency amount into a human-readable string."""
-    # Define currency-specific information
-    currency_info = {
-        "USD": {
-            "symbol": "$",
-            "dollar_name": "dollar",
-            "cent_name": "cent"
-        },
-        "EUR": {
-            "symbol": "€",
-            "dollar_name": "euro",
-            "cent_name": "cent"
-        },
-        "GBP": {
-            "symbol": "£",
-            "dollar_name": "pound",
-            "cent_name": "penny"
-        },
-        # Add more currencies here if needed
-    }
+def currency_formatter(amount: float) -> str:
+    """Format a currency amount into a human-readable string.
+    Convert the amount to a string with a maximum of 10 decimal places.
+    If the amount is less than 0.0001 (i.e., smaller than 0.01 cents),
+    return a message indicating that the amount is less than 0.0001 USD.
+    If the amount is less than 0.1, show all decimal places until the
+    first two non-zero decimal values (e.g., 0.00012345 -> 0.00012).
+    TODO: Add support for other currencies. We need to get the currency from
+    the BE. For now, we are using USD.
+    """
 
-    currency_data = currency_info.get(currency, currency_info["USD"])
+    currency_data = "US$"
 
-    # If the amount is less than 0.01 (i.e., smaller than 1 cent)
-    if amount < 0.01:
-        return ("less than 0 cents for more details check "
+    # If the amount is less than 0.0001 (i.e., smaller than 0.01 cents)
+    if amount < 0.0001:
+        return (f"Less than 0.0001 {currency_data}. For more details check "
                 "\nhttps://console.inductiva.ai/tasks")
 
-    dollars = int(amount)
-    cents = round((amount - dollars) * 100, 2)
+    # Convert the value to a string with a maximum of 10 decimal places
+    amount_str = f"{amount:.10f}"
 
-    dollar_part = ""
-    cent_part = ""
+    # Find the first non-zero decimal
+    decimal_part = amount_str.split(".")[1]
+    first_non_zero_decimal = next(
+        (i for i, digit in enumerate(decimal_part) if digit != "0"), 10)
 
-    # Handle pluralization for dollars
-    if dollars > 0:
-        dollar_name = currency_data["dollar_name"]
-        dollar_part = f"{dollars} {dollar_name}" if dollars == 1 \
-                        else f"{dollars} {dollar_name}s"
+    # Determine the number of decimal places to show
+    decimal_places = max(2, first_non_zero_decimal + 2)
 
-    # Handle pluralization for cents
-    if cents > 0:
-        cent_name = currency_data["cent_name"]
-        cent_part = f"{cents} {cent_name}" if cents == 1 \
-                        else f"{cents:.2f} {cent_name}s"
+    if amount < 0.1:
+        # If the amount is less than 0.1, show all decimal places until the
+        # first two non-zero decimal values (e.g., 0.00012345 -> 0.00012)
+        return f"{amount:.{decimal_places}f} {currency_data}"
 
-    # Formatting the result
-    result = ""
-    symbol = currency_data["symbol"]
-    if dollar_part and cent_part:
-        result = f"{symbol}{dollar_part} {cent_part}"
-    elif dollar_part:
-        result = f"{symbol}{dollar_part}"
-    else:
-        result = f"{symbol}{cent_part}"
-
-    return result
+    return f"{amount:.2f} {currency_data}"

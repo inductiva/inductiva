@@ -50,7 +50,9 @@ def get_info() -> Dict[str, Any]:
         request = api_instance.get_user_info()
     return request.body
 
-def get_costs(start_year: int, start_month:int , end_year:int , end_month:int) -> Dict[str, Any]:
+
+def get_costs(start_year: int, start_month: int, end_year: int,
+              end_month: int) -> Dict[str, Any]:
     """Get the user costs.
 
     This function gets a dict with the user costs.
