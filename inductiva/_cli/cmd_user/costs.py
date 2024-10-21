@@ -1,5 +1,4 @@
 """List the user costs via CLI."""
-from collections import defaultdict
 from typing import TextIO
 import argparse
 import sys
