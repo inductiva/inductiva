@@ -122,9 +122,10 @@ class TaskInfo:
 
         # Update running info
         self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
-        self.is_running = self.status in (models.TaskStatusCode.STARTED,
-                                     models.TaskStatusCode.COMPUTATIONSTARTED,
-                                     models.TaskStatusCode.COMPUTATIONENDED)
+        self.is_running = self.status in (
+            models.TaskStatusCode.STARTED,
+            models.TaskStatusCode.COMPUTATIONSTARTED,
+            models.TaskStatusCode.COMPUTATIONENDED)
         self.is_terminal = kwargs.get("is_terminated", False)
 
     def to_dict(self) -> Dict[str, Any]:
