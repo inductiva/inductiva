@@ -122,7 +122,9 @@ class TaskInfo:
 
         # Update running info
         self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
-        self.is_running = self.status == models.TaskStatusCode.STARTED
+        self.is_running = self.status in (
+            models.TaskStatusCode.STARTED,
+            models.TaskStatusCode.COMPUTATIONSTARTED)
         self.is_terminal = kwargs.get("is_terminated", False)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -303,7 +305,8 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() == models.TaskStatusCode.STARTED
+        return self.get_status() in (models.TaskStatusCode.STARTED,
+                                     models.TaskStatusCode.COMPUTATIONSTARTED)
 
     def is_failed(self) -> bool:
         """Validate if the task has failed.
