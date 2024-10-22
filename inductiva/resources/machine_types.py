@@ -92,23 +92,23 @@ def get_available_machine_types(
 
     api_client = compute_api.ComputeApi(inductiva.api.get_client())
 
-    query_params = { "provider_id": provider.value }
+    query_params = {"provider_id": provider.value}
 
     if machine_families:
         query_params["machine_families"] = machine_families
-    
+
     if machine_configs:
         query_params["machine_configs"] = machine_configs
-    
+
     if vcpus_range:
         query_params["vcpus_range"] = vcpus_range
-    
+
     if memory_range:
         query_params["memory_range"] = memory_range
-    
+
     if price_range:
         query_params["price_range"] = price_range
-    
+
     if spot is not None:
         query_params["spot"] = str(spot).lower()
 
