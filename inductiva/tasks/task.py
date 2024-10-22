@@ -645,7 +645,8 @@ class Task:
             if status != prev_status:
                 self._handle_status_change(status, description)
             # Print timer
-            elif status != models.TaskStatusCode.SUBMITTED and not task_info.is_terminal:
+            elif (status != models.TaskStatusCode.SUBMITTED and
+                  not task_info.is_terminal):
                 print(f"Duration: {duration}", end="\r")
 
             prev_status = status
