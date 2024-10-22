@@ -255,9 +255,7 @@ def currency_formatter(amount: float) -> str:
     currency_data = "US$"
 
     if amount < constants.CURRENCY_MIN_VALUE:
-        return (f"Less than {constants.CURRENCY_MIN_VALUE} {currency_data}. "
-                "For more details check \n"
-                "https://console.inductiva.ai/tasks")
+        return (f"Less than {constants.CURRENCY_MIN_VALUE} {currency_data}.")
 
     # Convert the value to a string with a maximum of 10 decimal places
     amount_str = f"{amount:.10f}"

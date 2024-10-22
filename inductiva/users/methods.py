@@ -51,8 +51,10 @@ def get_info() -> Dict[str, Any]:
     return request.body
 
 
-def get_costs(start_year: int, start_month: int, end_year: int,
-              end_month: int) -> Dict[str, Any]:
+def get_costs(start_year: int,
+              start_month: int,
+              end_year: int = None,
+              end_month: int = None) -> Dict[str, Any]:
     """Get the user costs.
 
     This function gets a dict with the user costs.
@@ -64,12 +66,13 @@ def get_costs(start_year: int, start_month: int, end_year: int,
     with (ApiClient(api_config)) as client:
         api_instance = UsersApi(client)
 
-        query_params = {
-            "start_year": start_year,
-            "start_month": start_month,
-            "end_year": end_year,
-            "end_month": end_month
-        }
+        query_params = {"start_year": start_year, "start_month": start_month}
+
+        #add end year and month if provided
+        if end_year:
+            query_params["end_year"] = end_year
+        if end_month:
+            query_params["end_month"] = end_month
 
         request = api_instance.get_user_costs(query_params=query_params)
     return request.body["costs"]

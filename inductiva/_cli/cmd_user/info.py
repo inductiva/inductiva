@@ -1,10 +1,12 @@
 """List the user information via CLI."""
 from collections import defaultdict
+from datetime import datetime
 from typing import TextIO
 import argparse
 import sys
 
 from inductiva import users, _cli
+from inductiva.users.methods import get_costs
 from inductiva.utils import format_utils
 
 
@@ -58,27 +60,9 @@ def _print_quotas(_, fout: TextIO = sys.stdout):
 
 def _print_credits_summary(user_info, fout: TextIO = sys.stdout):
     """Prints the user's credits information."""
-    total_available_credits = user_info["total_available_credits"]
-    available_credits = user_info["tier"]["available_credits"]
-    currency = user_info["credits_currency"]
-    tier = user_info["tier"]["name"]
-
-    print("■ Credits", file=fout)
-    print("", file=fout)
-    # pylint: disable=consider-using-f-string
-    print("  {0:<25s} {1:10.2f} {2}".format(tier + " (tier)", available_credits,
-                                            currency),
-          file=fout)
-    for program in user_info["campaigns"]:
-        print("  {0:<25s} {1:10.2f} {2}".format(program["name"] + " (campaign)",
-                                                program["available_credits"],
-                                                currency),
-              file=fout)
-
-    print("  ----------------------------------------", file=fout)
-    print("  {0:<25s} {1:10.2f} {2}".format("Total", total_available_credits,
-                                            currency),
-          file=fout)
+    total_available_credits = format_utils.currency_formatter(
+        user_info["total_available_credits"])
+    print(f"■ Credits: {total_available_credits}", file=fout)
 
 
 def _campaigns_to_dict(campaigns):
@@ -91,6 +75,31 @@ def _campaigns_to_dict(campaigns):
         table["available credits"].append(program["available_credits"])
         table["initial credits"].append(program["initial_credits"])
     return table
+
+
+def _print_estimated_costs(fout: TextIO = sys.stdout):
+    """Prints the user's estimated costs for the current month."""
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+    costs = get_costs(start_year=current_year, start_month=current_month)
+
+    total_estimated_costs = format_utils.currency_formatter(costs[0]["total"])
+    computation_estimated_costs = format_utils.currency_formatter(
+        costs[0]["components"]["compute"])
+    storage_estimated_costs = format_utils.currency_formatter(
+        costs[0]["components"]["storage"])
+
+    print("■ Estimated Costs (current month):"
+          f" {total_estimated_costs}",
+          file=fout)
+    print(
+        "\tComputation Estimated Cost (current month):"
+        f" {computation_estimated_costs}",
+        file=fout)
+    print(
+        "\tStorage Estimated Cost (current month):"
+        f" {storage_estimated_costs}",
+        file=fout)
 
 
 def get_info(_, fout: TextIO = sys.stdout):
@@ -116,6 +125,10 @@ def get_info(_, fout: TextIO = sys.stdout):
     print("", file=fout)
 
     _print_credits_summary(user_info, fout=fout)
+
+    print("", file=fout)
+
+    _print_estimated_costs(fout=fout)
 
     table = _campaigns_to_dict(user_info["campaigns"])
 
