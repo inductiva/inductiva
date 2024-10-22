@@ -62,6 +62,13 @@ def get_costs(start_year: int,
     Returns:
         Dict with the user costs.
     """
+    if end_year and not end_month:
+        raise ValueError("If end_year is provided, "
+                         "end_month must also be provided.")
+    if end_month and not end_year:
+        raise ValueError("If end_month is provided, "
+                         "end_year must also be provided.")
+
     api_config = api.get_api_config()
     with (ApiClient(api_config)) as client:
         api_instance = UsersApi(client)
@@ -69,9 +76,8 @@ def get_costs(start_year: int,
         query_params = {"start_year": start_year, "start_month": start_month}
 
         #add end year and month if provided
-        if end_year:
+        if end_year and end_month:
             query_params["end_year"] = end_year
-        if end_month:
             query_params["end_month"] = end_month
 
         request = api_instance.get_user_costs(query_params=query_params)
