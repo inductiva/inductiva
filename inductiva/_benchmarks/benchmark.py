@@ -26,7 +26,6 @@ class Benchmark(Project):
         self.on = None
         self.kwargs = {}
 
-
     def set_default(
         self,
         simulator: Optional[Simulator] = None,
