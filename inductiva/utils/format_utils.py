@@ -238,7 +238,6 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     return f"\n{table}\n"
 
 
-
 def currency_formatter(amount: float) -> str:
     """Format a currency amount into a human-readable string.
 
