@@ -8,7 +8,7 @@ using Machine Groups to run several simulations in parallel, using the
 integrated within the Inductiva API. 
 This approach makes it easy to explore variations of a base simulation scenario. 
 As a practical example, we will use a coastal dynamics simulation with 
-the [SWASH simulator](../simulators/SWASH.md).
+the [SWASH simulator](https://tutorials.inductiva.ai/simulators/SWASH.html).
 
 ## 1. Setting Up Your Machine Group
 
