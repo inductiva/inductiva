@@ -1,15 +1,16 @@
 """Util functions for formatting data for printing to console."""
 from typing import (Any, Callable, Dict, Iterable, Mapping, Optional, Tuple,
                     Union, List)
-from enum import Enum
 from distutils.util import strtobool
+from enum import Enum
 import datetime
-import os
 import copy
+import os
 
-import tabulate
 from tabulate import TableFormat, DataRow
+import tabulate
 
+from inductiva import constants
 import inductiva
 
 # pylint: disable=protected-access
@@ -239,21 +240,24 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
 
 def currency_formatter(amount: float) -> str:
     """Format a currency amount into a human-readable string.
+
     Convert the amount to a string with a maximum of 10 decimal places.
-    If the amount is less than 0.0001 (i.e., smaller than 0.01 cents),
-    return a message indicating that the amount is less than 0.0001 USD.
-    If the amount is less than 0.1, show all decimal places until the
-    first two non-zero decimal values (e.g., 0.00012345 -> 0.00012).
+    If the amount is less than CURRENCY_MIN_VALUE (i.e., smaller than 0.01
+    cents), return a message indicating that the amount is less than
+    CURRENCY_MIN_VALUE USD. If the amount is less than 0.1, show all decimal
+    places until the first two non-zero decimal values
+    (e.g., 0.00012345 -> 0.00012).
+
     TODO: Add support for other currencies. We need to get the currency from
     the BE. For now, we are using USD.
     """
 
     currency_data = "US$"
 
-    # If the amount is less than 0.0001 (i.e., smaller than 0.01 cents)
-    if amount < 0.0001:
-        return (f"Less than 0.0001 {currency_data}. For more details check "
-                "\nhttps://console.inductiva.ai/tasks")
+    if amount < constants.CURRENCY_MIN_VALUE:
+        return (f"Less than {constants.CURRENCY_MIN_VALUE} {currency_data}. "
+                "For more details check \n"
+                "https://console.inductiva.ai/tasks")
 
     # Convert the value to a string with a maximum of 10 decimal places
     amount_str = f"{amount:.10f}"

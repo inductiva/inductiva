@@ -122,7 +122,10 @@ class TaskInfo:
 
         # Update running info
         self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
-        self.is_running = self.status == models.TaskStatusCode.STARTED
+        self.is_running = self.status in (
+            models.TaskStatusCode.STARTED,
+            models.TaskStatusCode.COMPUTATIONSTARTED,
+            models.TaskStatusCode.COMPUTATIONENDED)
         self.is_terminal = kwargs.get("is_terminated", False)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -242,9 +245,10 @@ class TaskInfo:
         if self.estimated_computation_cost:
             estimated_cost = format_utils.currency_formatter(
                 self.estimated_computation_cost,)
-            table_str += ("\nEstimated computation cost (US$): "
-                          f"{estimated_cost}\n")
-
+        else:
+            estimated_cost = "N/A"
+        table_str += ("\nEstimated computation cost (US$): "
+                      f"{estimated_cost}\n")
         return table_str
 
 
@@ -303,7 +307,9 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() == models.TaskStatusCode.STARTED
+        return self.get_status() in (models.TaskStatusCode.STARTED,
+                                     models.TaskStatusCode.COMPUTATIONSTARTED,
+                                     models.TaskStatusCode.COMPUTATIONENDED)
 
     def is_failed(self) -> bool:
         """Validate if the task has failed.
