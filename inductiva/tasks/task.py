@@ -150,10 +150,7 @@ class TaskInfo:
         value: Optional[float],
     ) -> str:
         if isinstance(value, float):
-            if value >= 60.0:
-                value_str = format_utils.seconds_formatter(value)
-            else:
-                value_str = f"{value:.2f} s"
+            value_str = f"{value:.2f} s"
 
             if metric_key == "computation_seconds" and self.is_running:
                 value_str += " (Task still running)"
