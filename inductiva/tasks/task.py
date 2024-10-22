@@ -201,13 +201,7 @@ class TaskInfo:
             task_time = now - create_time
             task_time = self._format_time_metric("total_seconds",
                                                  task_time.total_seconds())
-        #task has ended
-        else:
-            end_time = datetime.datetime.fromisoformat(self.end_time)
-            create_time = datetime.datetime.fromisoformat(self.create_time)
-            task_time = end_time - create_time
-            task_time = self._format_time_metric("total_seconds",
-                                                 task_time.total_seconds())
+        #if task has ended we use the metric
         return task_time
 
     def __str__(self):
