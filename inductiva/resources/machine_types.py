@@ -110,7 +110,7 @@ def get_available_machine_types(
         query_params["price_range"] = price_range
     
     if spot is not None:
-        query_params["spot"] = spot
+        query_params["spot"] = str(spot).lower()
 
     try:
         resp = api_client.list_available_machine_types(query_params).response
