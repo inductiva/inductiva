@@ -23,7 +23,11 @@ from inductiva.client.model.campaign_quota import CampaignQuota
 from inductiva.client.model.campaign_quota_detail import CampaignQuotaDetail
 from inductiva.client.model.campaign_users_update import CampaignUsersUpdate
 from inductiva.client.model.capability import Capability
+from inductiva.client.model.cost_type import CostType
+from inductiva.client.model.costs_components import CostsComponents
 from inductiva.client.model.created_user import CreatedUser
+from inductiva.client.model.currency_code import CurrencyCode
+from inductiva.client.model.disk_resize_request import DiskResizeRequest
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.executer import Executer
 from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
@@ -37,6 +41,8 @@ from inductiva.client.model.machine_group_status import MachineGroupStatus
 from inductiva.client.model.machine_group_terminate_reason import MachineGroupTerminateReason
 from inductiva.client.model.machine_group_terminate_request import MachineGroupTerminateRequest
 from inductiva.client.model.machine_group_type import MachineGroupType
+from inductiva.client.model.machine_operation import MachineOperation
+from inductiva.client.model.machine_operation_type import MachineOperationType
 from inductiva.client.model.machine_type import MachineType
 from inductiva.client.model.order import Order
 from inductiva.client.model.org_status import OrgStatus
@@ -53,6 +59,7 @@ from inductiva.client.model.quota_scope import QuotaScope
 from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.storage_sort_by import StorageSortBy
 from inductiva.client.model.task import Task
+from inductiva.client.model.task_machine_operation import TaskMachineOperation
 from inductiva.client.model.task_metric_create import TaskMetricCreate
 from inductiva.client.model.task_metrics import TaskMetrics
 from inductiva.client.model.task_position_in_queue import TaskPositionInQueue
@@ -72,6 +79,8 @@ from inductiva.client.model.user_activity import UserActivity
 from inductiva.client.model.user_api_key import UserApiKey
 from inductiva.client.model.user_campaign import UserCampaign
 from inductiva.client.model.user_computation_trend import UserComputationTrend
+from inductiva.client.model.user_costs import UserCosts
+from inductiva.client.model.user_costs_detail import UserCostsDetail
 from inductiva.client.model.user_costs_over_time import UserCostsOverTime
 from inductiva.client.model.user_create import UserCreate
 from inductiva.client.model.user_credits import UserCredits

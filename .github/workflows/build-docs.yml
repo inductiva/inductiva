@@ -36,14 +36,14 @@ jobs:
         with:
           docs-folder: "source/docs/"
           # required by #1291
-          pre-build-command: "apt-get update -y && apt-get install -y git"
+          pre-build-command: "apt-get update -y && apt-get install -y git && pip install myst-parser -y && echo 'extensions = [\'myst_parser\',]' > conf.py"
           build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
 
       - uses: nicholasphair/sphinx-action@7.0.0
         with:
           docs-folder: "source-dev/docs/"
           # required by #1291
-          pre-build-command: "apt-get update -y && apt-get install -y git"
+          pre-build-command: "apt-get update -y && apt-get install -y git && pip install myst-parser -y && echo 'extensions = [\'myst_parser\',]' > conf.py"
           build-command: "sphinx-build . ../../build/en/development -W -D version=development"
 
       - name: disable jekyll
