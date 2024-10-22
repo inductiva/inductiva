@@ -13,8 +13,6 @@ import urllib3
 import tabulate
 from dataclasses import dataclass
 
-import inductiva.formatting
-
 from ..localization import translator as __
 
 import inductiva
