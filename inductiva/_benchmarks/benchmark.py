@@ -25,7 +25,8 @@ class Benchmark(Project):
         self.input_dir = None
         self.on = None
         self.kwargs = {}
-    
+
+
     def set_default(
         self,
         simulator: Optional[Simulator] = None,
@@ -90,7 +91,10 @@ class Benchmark(Project):
             simulator or self.simulator,
             input_dir or self.input_dir,
             on or self.on,
-            { **self.kwargs, **kwargs },
+            {
+                **self.kwargs,
+                **kwargs
+            },
         ))
         return self
 
