@@ -1,6 +1,6 @@
 """Available machine types and their number of cores."""
 from dataclasses import dataclass
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 import json
 
 import inductiva
@@ -52,9 +52,9 @@ def get_available_machine_types(
     provider: Union[str, ProviderType] = ProviderType.GCP,
     machine_families: Optional[List[str]] = None,
     machine_configs: Optional[List[str]] = None,
-    vcpus_range: Optional[List[int]] = None,
-    memory_range: Optional[List[int]] = None,
-    price_range: Optional[List[float]] = None,
+    vcpus_range: Optional[Tuple[int, int]] = None,
+    memory_range: Optional[Tuple[int, int]] = None,
+    price_range: Optional[Tuple[float, float]] = None,
     spot: Optional[bool] = None,
 ) -> List[MachineTypeInfo]:
     """Get all available machine types from a specified provider,
@@ -70,14 +70,14 @@ def get_available_machine_types(
         machine_configs (Optional[List[str]]): 
             A list of specific machine configurations to filter the results
             (e.g., "highcpu", "highmem", "standard").
-        vcpus_range (Optional[List[int]]): 
-            A list defining the range of virtual CPUs (vCPUs) to filter the 
+        vcpus_range (Optional[Tuple[int, int]]): 
+            A tuple defining the range of virtual CPUs (vCPUs) to filter the 
             machine types.
-        memory_range (Optional[List[int]]): 
-            A list defining the range of memory (in MB) to filter the machine 
+        memory_range (Optional[Tuple[int, int]]): 
+            A tuple defining the range of memory (in MB) to filter the machine 
             types.
-        price_range (Optional[List[float]]): 
-            A list defining the price range (in the respective currency) to 
+        price_range (Optional[Tuple[float, float]]): 
+            A tuple defining the price range (in the respective currency) to 
             filter the machine types.
         spot (Optional[bool]): 
             If set to True, filters for spot instances; if False, filters for 
