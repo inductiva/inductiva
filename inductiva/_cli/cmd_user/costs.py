@@ -1,4 +1,5 @@
 """List the user costs via CLI."""
+from decimal import Decimal
 from typing import TextIO
 import argparse
 import sys
@@ -22,10 +23,9 @@ def get_costs(args, fout: TextIO = sys.stdout):
                                  end_month=end_month)
 
     for element in user_costs:
-
-        compute_cost = float(element["components"]["compute"])
-        storage_cost = float(element["components"]["storage"])
-        total_cost = float(element["total"])
+        compute_cost = Decimal(element["components"]["compute"])
+        storage_cost = Decimal(element["components"]["storage"])
+        total_cost = Decimal(element["total"])
 
         print("", file=fout)
         print("Month: ", element["month"], file=fout)
