@@ -245,9 +245,10 @@ class TaskInfo:
         if self.estimated_computation_cost:
             estimated_cost = format_utils.currency_formatter(
                 self.estimated_computation_cost,)
-            table_str += ("\nEstimated computation cost (US$): "
-                          f"{estimated_cost}\n")
-
+        else:
+            estimated_cost = "N/A"
+        table_str += ("\nEstimated computation cost (US$): "
+                      f"{estimated_cost}\n")
         return table_str
 
 

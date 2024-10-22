@@ -1,15 +1,16 @@
 """Util functions for formatting data for printing to console."""
 from typing import (Any, Callable, Dict, Iterable, Mapping, Optional, Tuple,
                     Union, List)
-from enum import Enum
 from distutils.util import strtobool
+from enum import Enum
 import datetime
-import os
 import copy
+import os
 
-import tabulate
 from tabulate import TableFormat, DataRow
+import tabulate
 
+from inductiva import constants
 import inductiva
 
 # pylint: disable=protected-access
@@ -237,61 +238,41 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
     return f"\n{table}\n"
 
 
-def currency_formatter(amount, currency="USD"):
-    """Format a currency amount into a human-readable string."""
-    # Define currency-specific information
-    currency_info = {
-        "USD": {
-            "symbol": "$",
-            "dollar_name": "dollar",
-            "cent_name": "cent"
-        },
-        "EUR": {
-            "symbol": "€",
-            "dollar_name": "euro",
-            "cent_name": "cent"
-        },
-        "GBP": {
-            "symbol": "£",
-            "dollar_name": "pound",
-            "cent_name": "penny"
-        },
-        # Add more currencies here if needed
-    }
+def currency_formatter(amount: float) -> str:
+    """Format a currency amount into a human-readable string.
 
-    currency_data = currency_info.get(currency, currency_info["USD"])
+    Convert the amount to a string with a maximum of 10 decimal places.
+    If the amount is less than CURRENCY_MIN_VALUE (i.e., smaller than 0.01
+    cents), return a message indicating that the amount is less than
+    CURRENCY_MIN_VALUE USD. If the amount is less than 0.1, show all decimal
+    places until the first two non-zero decimal values
+    (e.g., 0.00012345 -> 0.00012).
 
-    # If the amount is less than 0.01 (i.e., smaller than 1 cent)
-    if amount < 0.01:
-        return ("less than 0 cents for more details check "
-                "\nhttps://console.inductiva.ai/tasks")
+    TODO: Add support for other currencies. We need to get the currency from
+    the BE. For now, we are using USD.
+    """
 
-    dollars = int(amount)
-    cents = round((amount - dollars) * 100, 2)
+    currency_data = "US$"
 
-    dollar_part = ""
-    cent_part = ""
+    if amount < constants.CURRENCY_MIN_VALUE:
+        return (f"Less than {constants.CURRENCY_MIN_VALUE} {currency_data}. "
+                "For more details check \n"
+                "https://console.inductiva.ai/tasks")
 
-    # Handle pluralization for dollars
-    if dollars > 0:
-        dollar_name = currency_data["dollar_name"]
-        dollar_part = f"{dollars} {dollar_name}" if dollars == 1 \
-                        else f"{dollars} {dollar_name}s"
+    # Convert the value to a string with a maximum of 10 decimal places
+    amount_str = f"{amount:.10f}"
 
-    # Handle pluralization for cents
-    if cents > 0:
-        cent_name = currency_data["cent_name"]
-        cent_part = f"{cents} {cent_name}" if cents == 1 \
-                        else f"{cents:.2f} {cent_name}s"
+    # Find the first non-zero decimal
+    decimal_part = amount_str.split(".")[1]
+    first_non_zero_decimal = next(
+        (i for i, digit in enumerate(decimal_part) if digit != "0"), 10)
 
-    # Formatting the result
-    result = ""
-    symbol = currency_data["symbol"]
-    if dollar_part and cent_part:
-        result = f"{symbol}{dollar_part} {cent_part}"
-    elif dollar_part:
-        result = f"{symbol}{dollar_part}"
-    else:
-        result = f"{symbol}{cent_part}"
+    # Determine the number of decimal places to show
+    decimal_places = max(2, first_non_zero_decimal + 2)
 
-    return result
+    if amount < 0.1:
+        # If the amount is less than 0.1, show all decimal places until the
+        # first two non-zero decimal values (e.g., 0.00012345 -> 0.00012)
+        return f"{amount:.{decimal_places}f} {currency_data}"
+
+    return f"{amount:.2f} {currency_data}"
