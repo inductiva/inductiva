@@ -1,6 +1,6 @@
 """Available machine types and their number of cores."""
 from dataclasses import dataclass
-from typing import List, Union
+from typing import List, Optional, Union
 import json
 
 import inductiva
@@ -49,26 +49,68 @@ def list_available_machines(provider: Union[str, ProviderType]):
 
 
 def get_available_machine_types(
-        provider: Union[str, ProviderType] = ProviderType.GCP,
-        machine_family: str = None) -> List[MachineTypeInfo]:
-    """Get all available machine types for a given provider.
-
+    provider: Union[str, ProviderType] = ProviderType.GCP,
+    machine_families: Optional[List[str]] = None,
+    machine_configs: Optional[List[str]] = None,
+    vcpus_range: Optional[List[int]] = None,
+    memory_range: Optional[List[int]] = None,
+    price_range: Optional[List[float]] = None,
+    spot: Optional[bool] = None,
+) -> List[MachineTypeInfo]:
+    """Get all available machine types from a specified provider,
+    allowing for multiple filtering parameters.
+    
     Args:
-        provider (str): The provider to list the available machine types.
-        machine_family (str): The machine family to filter the specific
-            available machine types.
+        provider (Union[str, ProviderType]): 
+            The cloud provider for which to list available machine types. 
+            Defaults to `ProviderType.GCP`.
+        machine_families (Optional[List[str]]): 
+            A list of machine families to filter the available machine types
+            (e.g., "c2", "c2d", "n4", etc).
+        machine_configs (Optional[List[str]]): 
+            A list of specific machine configurations to filter the results
+            (e.g., "highcpu", "highmem", "standard").
+        vcpus_range (Optional[List[int]]): 
+            A list defining the range of virtual CPUs (vCPUs) to filter the 
+            machine types.
+        memory_range (Optional[List[int]]): 
+            A list defining the range of memory (in MB) to filter the machine 
+            types.
+        price_range (Optional[List[float]]): 
+            A list defining the price range (in the respective currency) to 
+            filter the machine types.
+        spot (Optional[bool]): 
+            If set to True, filters for spot instances; if False, filters for 
+            on-demand instances.
+
     Returns:
-        list (MachineTypeInfo): List of available machine types.
+        List[MachineTypeInfo]:
+            A list of available machine types that match the specified criteria.
     """
 
     provider = ProviderType(provider)
 
     api_client = compute_api.ComputeApi(inductiva.api.get_client())
 
-    query_params = {"provider_id": provider.value}
+    query_params = { "provider_id": provider.value }
 
-    if machine_family is not None:
-        query_params["machine_family"] = machine_family
+    if machine_families:
+        query_params["machine_families"] = machine_families
+    
+    if machine_configs:
+        query_params["machine_configs"] = machine_configs
+    
+    if vcpus_range:
+        query_params["vcpus_range"] = vcpus_range
+    
+    if memory_range:
+        query_params["memory_range"] = memory_range
+    
+    if price_range:
+        query_params["price_range"] = price_range
+    
+    if spot is not None:
+        query_params["spot"] = spot
 
     try:
         resp = api_client.list_available_machine_types(query_params).response
