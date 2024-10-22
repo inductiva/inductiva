@@ -10,7 +10,6 @@ import os
 from tabulate import TableFormat, DataRow
 import tabulate
 
-from inductiva import constants
 import inductiva
 
 # pylint: disable=protected-access
