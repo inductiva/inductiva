@@ -147,10 +147,7 @@ class TaskInfo:
         value: Optional[float],
     ) -> str:
         if isinstance(value, float):
-            if value >= 60.0:
-                value_str = format_utils.seconds_formatter(value)
-            else:
-                value_str = f"{value:.2f} s"
+            value_str = format_utils.seconds_formatter(value)
 
             if metric_key == "computation_seconds" and self.is_running:
                 value_str += " (Task still running)"
@@ -214,6 +211,18 @@ class TaskInfo:
     def __str__(self):
         table_format = "plain"
 
+        wall_time_data = [[
+            "Wall clock time:",
+            self._format_time_metric(
+                "total_seconds",
+                self.time_metrics.total_seconds.value,
+            ),
+        ]]
+        wall_time_table = tabulate.tabulate(
+            wall_time_data,
+            tablefmt=table_format,
+        )
+
         time_metrics_data = [
             [
                 f"{metric.label}:",
@@ -244,13 +253,12 @@ class TaskInfo:
         data_metrics_table = "\n".join(
             "\t" + line for line in data_metrics_table.splitlines())
 
-        task_time = self.get_task_time()
-
-        table_str = f"\nTask status: {self.status}"
+        table_str = f"\nTask status: {self.status}\n"
         if self.executer and self.executer.error_detail:
             table_str += f"\n\tStatus detail: {self.executer.error_detail}"
 
-        table_str += f"\nWall clock time: {task_time :<30}"
+        table_str += f"\n{wall_time_table}"
+        table_str += f"\nTime breakdown:\n{time_metrics_table}\n"
 
         table_str += "\nStatus history:\n"
         for item in self.status_history:
@@ -541,7 +549,8 @@ class Task:
             "Please inspect the stdout.txt and stderr.txt files at %s\n"
             "For more information.", out_dir)
 
-    def _handle_status_change(self, status: models.TaskStatusCode, description: str) -> None:
+    def _handle_status_change(self, status: models.TaskStatusCode,
+                              description: str) -> None:
         """Handle a status change.
 
         Prints a message to the user when the status of the task changes.
@@ -626,7 +635,7 @@ class Task:
                                                               status_start_time)
 
             if status != prev_status:
-                self._handle_status_change(status,description)
+                self._handle_status_change(status, description)
             # Print timer
             elif status != models.TaskStatusCode.SUBMITTED and not task_info.is_terminal:
                 print(f"Duration: {duration}", end="\r")
