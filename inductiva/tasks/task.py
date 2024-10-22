@@ -199,14 +199,15 @@ class TaskInfo:
             now = datetime.datetime.now(datetime.timezone.utc)
             create_time = datetime.datetime.fromisoformat(self.create_time)
             task_time = now - create_time
-            task_time = format_utils.timedelta_formatter(task_time)
-            task_time += " (Task still running)"
+            task_time = self._format_time_metric("total_seconds",
+                                                 task_time.total_seconds())
         #task has ended
         else:
             end_time = datetime.datetime.fromisoformat(self.end_time)
             create_time = datetime.datetime.fromisoformat(self.create_time)
             task_time = end_time - create_time
-            task_time = format_utils.timedelta_formatter(task_time)
+            task_time = self._format_time_metric("total_seconds",
+                                                 task_time.total_seconds())
         return task_time
 
     def __str__(self):
@@ -216,7 +217,7 @@ class TaskInfo:
             "Wall clock time:",
             self._format_time_metric(
                 "total_seconds",
-                self.time_metrics.total_seconds.value,
+                self.time_metrics.total_seconds.value or self.get_task_time(),
             ),
         ]]
         wall_time_table = tabulate.tabulate(
