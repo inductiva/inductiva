@@ -190,7 +190,10 @@ class TaskInfo:
         return str(self)
 
     def get_task_time(self) -> str:
-        """Get the task time."""
+        """Computes the task time.
+
+        Computes the task time based on the creation and end time.
+        """
         #has not started yet
         if self.create_time is None:
             task_time = "Task not started yet (N/A)"
@@ -199,6 +202,12 @@ class TaskInfo:
             now = datetime.datetime.now(datetime.timezone.utc)
             create_time = datetime.datetime.fromisoformat(self.create_time)
             task_time = now - create_time
+            task_time = self._format_time_metric("total_seconds",
+                                                 task_time.total_seconds())
+        else:
+            create_time = datetime.datetime.fromisoformat(self.create_time)
+            end_time = datetime.datetime.fromisoformat(self.end_time)
+            task_time = end_time - create_time
             task_time = self._format_time_metric("total_seconds",
                                                  task_time.total_seconds())
         #if task has ended we use the metric
@@ -211,6 +220,8 @@ class TaskInfo:
             "Wall clock time:",
             self._format_time_metric(
                 "total_seconds",
+                #if the metric is provided use it
+                #otherwise computed based on creation and end time
                 self.time_metrics.total_seconds.value or self.get_task_time(),
             ),
         ]]
