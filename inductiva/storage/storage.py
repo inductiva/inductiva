@@ -46,6 +46,11 @@ def listdir(path="/",
     """
 
     api = storage_api.StorageApi(inductiva.api.get_client())
+
+    estimated_storage_cost = api.get_storage_monthly_cost(
+    ).body["estimated_monthly_cost"]
+    storage_total_size = api.get_storage_size().body
+
     contents = api.list_storage_contents({
         "path": path,
         "max_results": max_results,
@@ -62,6 +67,16 @@ def listdir(path="/",
             "creation_time": creation_time
         })
     print(_print_contents_table(all_contents))
+
+    storage_total_size = format_utils.bytes_formatter(storage_total_size)
+    estimated_storage_cost = format_utils.currency_formatter(
+        estimated_storage_cost)
+
+    print("Total storage size used:")
+    print(f"\tVolume: {storage_total_size}")
+    print(f"\tCost: {estimated_storage_cost}/month")
+    print("")
+
     print(f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
           "Use --max-results/-m to control the number of results displayed.")
     return all_contents
