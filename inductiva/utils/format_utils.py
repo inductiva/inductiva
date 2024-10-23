@@ -101,7 +101,7 @@ def datetime_formatter(dt: str) -> str:
     if dt is None:
         return None
     local_dt = datetime.datetime.fromisoformat(dt).astimezone()
-    return local_dt.strftime("%d %b, %H:%M:%S")
+    return local_dt.strftime("%d/%m, %H:%M:%S")
 
 
 def datetime_formatter_ymd_hm(dt: str) -> str:
@@ -137,6 +137,37 @@ def timedelta_formatter(td: datetime.timedelta) -> str:
     result = " and ".join(parts) if len(parts) == 2 else result
 
     return result
+
+
+def short_timedelta_formatter(td: datetime.timedelta) -> str:
+    """Convert timedelta to short human readable string.
+    
+    This is needed because we need beacause when we want to print text and
+    replace (in the notebooks) there is no way to clear the full line. So, we
+    need to fill the line with white spaces and for that the line needs to have
+    a fixed max length. We defined that max length as 73. So, we need to have
+    a short string to fit in that line and give extra space for the rest of the
+    line.
+    Example:
+        Task {self.id} is about to start. 1 d 2 h 3 m 4 s
+        vs
+        Task {self.id} is about to start. 2 days, 2 hours, 3 minutes and 3
+            seconds
+    """
+    parts = []
+    if td.days:
+        parts.append(f"{td.days} d")
+    hours, remainder = divmod(td.seconds, 3600)
+    if hours:
+        parts.append(f"{hours} h")
+    minutes, seconds = divmod(remainder, 60)
+    if minutes:
+        parts.append(f"{minutes} m")
+    if seconds or not parts:
+        parts.append(f"{seconds} s")
+
+    # Join parts separated by space
+    return " ".join(parts)
 
 
 def apply_formatters(table_data: dict, formatters: dict):

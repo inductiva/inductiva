@@ -99,6 +99,7 @@ class TaskInfo:
         self.estimated_computation_cost = None
         self.time_metrics = self.TimeMetrics()
         self.data_metrics = self.DataMetrics()
+        self.status_history = []
         self._kwargs = kwargs
 
         # Set the general attributes
@@ -147,10 +148,7 @@ class TaskInfo:
         value: Optional[float],
     ) -> str:
         if isinstance(value, float):
-            if value >= 60.0:
-                value_str = format_utils.seconds_formatter(value)
-            else:
-                value_str = f"{value:.2f} s"
+            value_str = f"{value:.2f} s"
 
             if metric_key == "computation_seconds" and self.is_running:
                 value_str += " (Task still running)"
@@ -191,6 +189,30 @@ class TaskInfo:
     def __repr__(self) -> str:
         return str(self)
 
+    def get_task_time(self) -> str:
+        """Computes the task time.
+
+        Computes the task time based on the creation and end time.
+        """
+        #has not started yet
+        if self.create_time is None:
+            task_time = "Task not started yet (N/A)"
+        #still running
+        elif self.end_time is None:
+            now = datetime.datetime.now(datetime.timezone.utc)
+            create_time = datetime.datetime.fromisoformat(self.create_time)
+            task_time = now - create_time
+            task_time = self._format_time_metric("total_seconds",
+                                                 task_time.total_seconds())
+        else:
+            create_time = datetime.datetime.fromisoformat(self.create_time)
+            end_time = datetime.datetime.fromisoformat(self.end_time)
+            task_time = end_time - create_time
+            task_time = self._format_time_metric("total_seconds",
+                                                 task_time.total_seconds())
+        #if task has ended we use the metric
+        return task_time
+
     def __str__(self):
         table_format = "plain"
 
@@ -198,7 +220,9 @@ class TaskInfo:
             "Wall clock time:",
             self._format_time_metric(
                 "total_seconds",
-                self.time_metrics.total_seconds.value,
+                #if the metric is provided use it
+                #otherwise computed based on creation and end time
+                self.time_metrics.total_seconds.value or self.get_task_time(),
             ),
         ]]
         wall_time_table = tabulate.tabulate(
@@ -236,11 +260,21 @@ class TaskInfo:
         data_metrics_table = "\n".join(
             "\t" + line for line in data_metrics_table.splitlines())
 
-        table_str = f"\nTask status: {self.status}"
+        table_str = f"\nTask status: {self.status}\n"
         if self.executer and self.executer.error_detail:
             table_str += f"\n\tStatus detail: {self.executer.error_detail}"
+
         table_str += f"\n{wall_time_table}"
-        table_str += f"\nTime breakdown:\n{time_metrics_table}"
+        table_str += f"\nTime breakdown:\n{time_metrics_table}\n"
+
+        table_str += "\nStatus history:\n"
+        for item in self.status_history:
+            formatted_timestamp = format_utils.datetime_formatter(
+                item["timestamp"])
+            status = item["status"]
+            table_str += f"\t{status:<20} at {formatted_timestamp:<30}\n"
+            #add machine operations to each status here
+
         table_str += f"\nData:\n{data_metrics_table}\n"
         if self.estimated_computation_cost:
             estimated_cost = format_utils.currency_formatter(
@@ -443,16 +477,17 @@ class Task:
         status = models.TaskStatusCode(info["status"])
 
         self._info = TaskInfo(**info)
+
         self._status = status
 
         return self._info
 
-    def _setup_queue_message(self, is_tty: bool) -> str:
+    def _setup_queue_message(self, is_tty: bool, duration: str) -> str:
         if self._tasks_ahead == 0:
-            s = f"The task {self.id} is about to start."
+            s = f"Task {self.id} is about to start. {duration}"
         else:
-            s = (f"Number of tasks ahead of task {self.id} in queue: "
-                 f"{self._tasks_ahead}")
+            s = (f"Tasks ahead in queue: "
+                 f"{self._tasks_ahead} {duration}")
         if not is_tty:
             # We do this because notebooks do not support some escape sequences
             # like the one used to clear the line. So we need to move the cursor
@@ -526,8 +561,57 @@ class Task:
             "Please inspect the stdout.txt and stderr.txt files at %s\n"
             "For more information.", out_dir)
 
+    def _handle_status_change(self, status: models.TaskStatusCode,
+                              description: str) -> None:
+        """Handle a status change.
+
+        Prints a message to the user when the status of the task changes.
+        """
+
+        if status == models.TaskStatusCode.EXECUTERFAILED:
+            info = self.get_info()
+            detail = info.executer.error_detail
+            logging.info("■ The remote process running the task failed:")
+            if detail:
+                logging.info("\t· Message: %s", detail)
+            else:
+                logging.info("\t· No error message available.")
+        else:
+            logging.info("■ %s", description)
+
+    def _update_queue_info(self, is_tty: bool, duration: str) -> None:
+        """Update the queue information.
+
+        Prints a message to the user with the number of tasks ahead in the queue
+        or that the task is about to start.
+        This method replaces the previous message in the terminal.
+        """
+        #Get status to update the self._tasks_ahead
+        self.get_status()
+        sys.stdout.write("\r\033[2K")
+        sys.stdout.write(
+            self._setup_queue_message(is_tty=is_tty, duration=duration))
+        sys.stdout.flush()
+
+    def _handle_terminal_status(self, download_std_on_completion: bool,
+                                status: models.TaskStatusCode) -> None:
+        """Handle a terminal status.
+
+        Downloads the standard files (stdout and stderr) if the task is in a
+        terminal status and if the user requested it.
+        """
+        sys.stdout.flush()
+        sys.stdout.write("\r\033[2K")
+
+        if download_std_on_completion:
+            self._called_from_wait = True
+            out_dir = self.download_outputs(
+                filenames=self.STANDARD_OUTPUT_FILES)
+            if status == models.TaskStatusCode.FAILED:
+                self._print_failed_message(out_dir)
+
     def wait(self,
-             polling_period: int = 5,
+             polling_period: int = 1,
              download_std_on_completion: bool = True) -> models.TaskStatusCode:
         """Wait for the task to complete.
 
@@ -543,76 +627,49 @@ class Task:
         """
         # TODO: refactor method to make it cleaner
         prev_status = None
-        prev_tasks_ahead = None
         is_tty = sys.stdout.isatty()
+
+        logging.info(
+            "Waiting for task %s to complete...\n"
+            "Go to https://console.inductiva.ai/tasks/%s for more details.",
+            self.id, self.id)
+
         requires_newline = False
+
         while True:
-            status = self.get_status()
+            # status = self.get_status()
+            task_info = self.get_info()
+            status = models.TaskStatusCode(
+                task_info.status_history[-1]["status"])
+            status_start_time = datetime.datetime.fromisoformat(
+                task_info.status_history[-1]["timestamp"])
+            description = task_info.status_history[-1].get("description", "")
+            now_time = datetime.datetime.now(datetime.timezone.utc)
+            duration = format_utils.short_timedelta_formatter(now_time -
+                                                              status_start_time)
+
             if status != prev_status:
                 if requires_newline:
                     requires_newline = False
                     sys.stdout.write("\n")
+                self._handle_status_change(status, description)
+            # Print timer
+            elif (status != models.TaskStatusCode.SUBMITTED and
+                  not task_info.is_terminal):
+                print(f"Duration: {duration}", end="\r")
 
-                if status == models.TaskStatusCode.PENDINGINPUT:
-                    pass
-                elif status == models.TaskStatusCode.SUBMITTED:
-                    logging.info(
-                        "■ Task %s successfully queued and waiting to be "
-                        "picked-up for execution...", self.id)
-                elif status == models.TaskStatusCode.STARTED:
-                    logging.info(
-                        "■ Task %s has started and is now running "
-                        "remotely.", self.id)
-                elif status == models.TaskStatusCode.SUCCESS:
-                    logging.info("■ Task %s completed successfully.", self.id)
-                elif status == models.TaskStatusCode.FAILED:
-                    logging.info("■ Task %s failed.", self.id)
-                elif status == models.TaskStatusCode.PENDINGKILL:
-                    logging.info("■ Task %s is being killed.", self.id)
-                elif status == models.TaskStatusCode.KILLED:
-                    logging.info("■ Task %s killed.", self.id)
-                elif status == models.TaskStatusCode.ZOMBIE:
-                    logging.info("■ The machine was terminated while the task "
-                                 "was pending.")
-                elif status == models.TaskStatusCode.EXECUTERFAILED:
-                    info = self.get_info()
-                    detail = info.executer.error_detail
-                    logging.info(
-                        "■ The remote process running the task failed:")
-                    if detail:
-                        logging.info("\t· Message: %s", detail)
-                    else:
-                        logging.info("\t· No error message available.")
-                elif status == models.TaskStatusCode.SPOTINSTANCEPREEMPTED:
-                    msg = ("■ The task was preempted by the cloud provider.\n"
-                           "Consider using non-spot machines by setting "
-                           "`spot=False` when instantiating the machine group.")
-                    logging.info(msg)
-
-                else:
-                    logging.info(
-                        "■ An internal error occurred with status %s "
-                        "while performing the task.", status)
             prev_status = status
+
+            #Used to print queue information
             if (status == models.TaskStatusCode.SUBMITTED and
-                    self._tasks_ahead is not None and
-                    self._tasks_ahead != prev_tasks_ahead):
+                    self._tasks_ahead is not None):
                 requires_newline = True
-                sys.stdout.write("\r\033[2K")
-                sys.stdout.write(self._setup_queue_message(is_tty))
-                sys.stdout.flush()
-                prev_tasks_ahead = self._tasks_ahead
+                self._update_queue_info(is_tty=is_tty, duration=duration)
 
             if self.is_terminal():
-                sys.stdout.flush()
-                sys.stdout.write("\r\033[2K")
-
-                if download_std_on_completion:
-                    self._called_from_wait = True
-                    out_dir = self.download_outputs(
-                        filenames=self.STANDARD_OUTPUT_FILES)
-                    if status == models.TaskStatusCode.FAILED:
-                        self._print_failed_message(out_dir)
+                self._handle_terminal_status(
+                    download_std_on_completion=download_std_on_completion,
+                    status=status)
                 return status
 
             time.sleep(polling_period)

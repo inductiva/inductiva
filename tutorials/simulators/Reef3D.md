@@ -285,6 +285,8 @@ Number of tasks ahead in the queue: 0
 · You can also get more information about the task via the CLI command:
 	inductiva tasks info arduwp0bnjkwz9d4xk7rabofi
 
+Waiting for task 9ob6gknv794pvazg5bzd4oczo to complete...
+Go to https://console.inductiva.ai/tasks/9ob6gknv794pvazg5bzd4oczo for more details.
 ■ Task arduwp0bnjkwz9d4xk7rabofi successfully queued and waiting to be picked-up for execution...
 The task arduwp0bnjkwz9d4xk7rabofi is about to start.
 ■ Task arduwp0bnjkwz9d4xk7rabofi has started and is now running remotely.
