@@ -9,9 +9,20 @@ def get_space_used():
     """Returns the occupied storage size in GB."""
     try:
         api = storage_api.StorageApi(inductiva.api.get_client())
-        response = api.get_storage_size()
-        storage_used = round(float(response.body) / (1024**3), 3)
-        print(f"Total user's remote storage in use: {storage_used} GB")
+        storage_total_size = api.get_storage_size().body
+        estimated_storage_cost = api.get_storage_monthly_cost(
+        ).body["estimated_monthly_cost"]
+
+        estimated_storage_cost = format_utils.currency_formatter(
+            estimated_storage_cost)
+        storage_total_size = format_utils.bytes_formatter(storage_total_size)
+
+        print("Total storage size used:")
+        print(f"\tVolume: {storage_total_size}")
+        print(f"\tCost: {estimated_storage_cost}/month")
+        print("")
+        #Return float instead of a string
+        storage_used = round(float(storage_total_size) / (1024**3), 3)
         return storage_used
     except inductiva.client.ApiException as api_exception:
         raise api_exception
