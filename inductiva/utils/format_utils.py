@@ -253,6 +253,9 @@ def currency_formatter(amount: float) -> str:
 
     currency_data = "US$"
 
+    if amount == 0:
+        return f"0 {currency_data}"
+
     # Convert the value to a string with a maximum of 10 decimal places
     amount_str = f"{amount:.15f}"
 
