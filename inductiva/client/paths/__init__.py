@@ -74,6 +74,7 @@ class PathValues(str, enum.Enum):
     COMPUTE_MACHINE_TYPES = "/compute/machine_types"
     COMPUTE_GROUP_NAME = "/compute/group/{name}"
     STORAGE_SIZE = "/storage/size"
+    STORAGE_COST = "/storage/cost"
     STORAGE_CONTENTS = "/storage/contents"
     VERSION = "/version"
     VERSIONCHECK = "/version-check"
