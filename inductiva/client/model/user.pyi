@@ -94,7 +94,42 @@ class User(
                         _configuration=_configuration,
                         **kwargs,
                     )
-            credits_currency = schemas.StrSchema
+            
+            
+            class credits_currency(
+                schemas.ComposedSchema,
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @classmethod
+                    @functools.lru_cache()
+                    def all_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            CurrencyCode,
+                        ]
+            
+            
+                def __new__(
+                    cls,
+                    *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+                ) -> 'credits_currency':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
             
             
             class terms_and_conditions_decision_ts(
@@ -243,7 +278,7 @@ class User(
         email: typing.Union[MetaOapg.properties.email, str, ],
         username: typing.Union[MetaOapg.properties.username, str, ],
         name: typing.Union[MetaOapg.properties.name, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
-        credits_currency: typing.Union[MetaOapg.properties.credits_currency, str, schemas.Unset] = schemas.unset,
+        credits_currency: typing.Union[MetaOapg.properties.credits_currency, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         terms_and_conditions_decision_ts: typing.Union[MetaOapg.properties.terms_and_conditions_decision_ts, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
@@ -265,4 +300,5 @@ class User(
             **kwargs,
         )
 
+from inductiva.client.model.currency_code import CurrencyCode
 from inductiva.client.model.terms_and_conditions import TermsAndConditions

@@ -253,3 +253,18 @@ def test_get_tabular_str_list_of_lists_formatters():
                                        header_formatters=header_formatters)
 
     assert "A" in res and "B" in res and "C" in res
+
+
+@mark.parametrize("amount, result", [
+    (100000.0, "100000.00 US$"),
+    (1000.0, "1000.00 US$"),
+    (1.0, "1.00 US$"),
+    (0.3123456, "0.31 US$"),
+    (0.1234567, "0.12 US$"),
+    (0.01234567, "0.012 US$"),
+    (0.001234567, "0.0012 US$"),
+    (0.0001234567, "0.00012 US$"),
+    (0.00001234567, "0.000012 US$"),
+])
+def test_currency_formatter(amount, result):
+    assert format_utils.currency_formatter(amount) == result

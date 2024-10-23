@@ -26,7 +26,7 @@ after the task id. In the following snippet, the outputs of task with id
 import inductiva
 
 # Instantiate machine group
-machine_group = inductiva.resources.MachineGroup('c2-standard-4')
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
 machine_group.start()
 
 simulator = inductiva.simulators.REEF3D()

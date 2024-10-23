@@ -31,32 +31,6 @@ cli/streaming-logs
 cli/access-storage
 ```
 
-
-```{toctree}
----
-caption: Built-in Simulators
-maxdepth: 1
-hidden: true
----
-simulators/overview
-simulators/AmrWind
-simulators/CaNS
-simulators/DualSPHysics
-simulators/FDS
-simulators/FVCOM
-simulators/GROMACS
-simulators/NWChem
-simulators/OpenFOAM
-simulators/OpenFAST
-simulators/QuantumEspresso
-simulators/Reef3D
-simulators/SCHISM
-simulators/SPlisHSPlasH
-simulators/SWAN
-simulators/SWASH
-simulators/XBeach
-```
-
 ```{toctree}
 ---
 caption: User Reference

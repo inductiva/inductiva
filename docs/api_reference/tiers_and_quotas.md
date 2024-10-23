@@ -30,12 +30,12 @@ affect the user's experience with the Inductiva API.
 
 ## Tiers
 
-The Inductiva API has four tiers: **Freemium**, **Standard**, **Power-user**, and **Enterprise**.
+The Inductiva API has three tiers: **Standard**, **Power-user**, and **Enterprise**.
 The following table shows the main differences between these tiers:
 
 | Tier | Description |
 |------|-------------|
-| Standard | The Standard tier provides access to a wider set of capabilities and resources than the Freemium tier. Members can allocate dedicated machine groups but with limited capabilities and low quota limits. |
+| Standard | The Standard tier serves as the entry-level option for all members, allowing the allocation of dedicated machine groups. However, it comes with limited functionality and lower quota restrictions. |
 | Power-user | The Power-user tier extends on the capabilities and resources available to the Standard tier but with higher quota limits and access to a wider set of capabilities. |
 | Enterprise | The Enterprise tier provides access to all capabilities and resources available in the Inductiva API. Members of this tier have the highest quota limits and can use all the features available in the API. |
 
@@ -45,32 +45,32 @@ Each tier comes with a set of capabilities that define the functionalities
 available to the user. The following table shows the main capabilities available
 in each tier:
 
-| Capability| Description | Freemium | Standard | Power-user | Enterprise |
-|-----------|-------------|----------|----------|------------|------------|
-| Allow tasks on dedicated machine group | Ability to launch and allocate a machine group, to be dedicated to the the user’s tasks. | ❌ | ✅︎ | ✅︎ | ✅︎ |
-| Allow the override of time to live for tasks | Ability to extend the maximum time that a task can stay running, delaying its automatic termination. | ❌ | ✅︎ | ✅︎ | ✅︎ |
-| Allow running "non Kutu" containers | Ability to specify the use of third-party docker containers that are defined/built outside the context of the KUTU repository. | ❌ | ❌ | ❌ | ✅ |
-| Allow use of the simulators - any version | Ability to run any version of all [simulators available in Inductiva API](../simulators/overview.md) | ✅︎ | ✅︎ | ✅︎ | ✅︎ |
-| Allow the use of standard machine groups | Ability to allocate a machine pool with a fixed number of machines | ❌ | ✅︎ | ✅︎ | ✅︎ |
-| Allow the use of elastic clusters | Ability to dynamically allocate a machine pool with flexible sizing | ❌ | ❌ | ✅︎ | ✅︎ |
-| Allow the use of MPI cluster | Ability to allocate multiple machines configured as a single cluster for running parallelized simulations across multiple machines using MPI | ❌ | ❌ | ❌ | ✅︎ |
-| Allow the use of "spot" resources | Ability to request spot resources (typically machine groups) to run tasks. Spot resources are resources that can be preempted at any moment by the cloud provider at any moment | ❌ | ✅︎ | ✅︎ | ✅︎ |
-| Allow the use of "on demand" resources | Ability to request dedicated resources (typically machine groups) to run tasks. | ❌ | ✅︎ | ✅︎ | ✅︎ |
-| Automatically restart tasks interrupted by preemption | A task that was running in a “spot” instance that was preempted (taken back by cloud provider) will be automatically resubmitted | ❌ | ❌ | ✅︎ | ✅︎ |
+| Capability| Description | Standard | Power-user | Enterprise |
+|-----------|-------------|----------|------------|------------|
+| Allow tasks on dedicated machine group | Ability to launch and allocate a machine group, to be dedicated to the the user’s tasks. | ✅︎ | ✅︎ | ✅︎ |
+| Allow the override of time to live for tasks | Ability to extend the maximum time that a task can stay running, delaying its automatic termination. | ✅︎ | ✅︎ | ✅︎ |
+| Allow running "non Kutu" containers | Ability to specify the use of third-party docker containers that are defined/built outside the context of the KUTU repository. | ❌ | ❌ | ✅ |
+| Allow use of the simulators - any version | Ability to run any version of all [simulators available in Inductiva API](https://tutorials.inductiva.ai/simulators/overview.html) | ✅︎ | ✅︎ | ✅︎ |
+| Allow the use of standard machine groups | Ability to allocate a machine pool with a fixed number of machines | ✅︎ | ✅︎ | ✅︎ |
+| Allow the use of elastic clusters | Ability to dynamically allocate a machine pool with flexible sizing | ❌ | ✅︎ | ✅︎ |
+| Allow the use of MPI cluster | Ability to allocate multiple machines configured as a single cluster for running parallelized simulations across multiple machines using MPI | ❌ | ❌ | ✅︎ |
+| Allow the use of "spot" resources | Ability to request spot resources (typically machine groups) to run tasks. Spot resources are resources that can be preempted at any moment by the cloud provider at any moment | ✅︎ | ✅︎ | ✅︎ |
+| Allow the use of "on demand" resources | Ability to request dedicated resources (typically machine groups) to run tasks. | ✅︎ | ✅︎ | ✅︎ |
+| Automatically restart tasks interrupted by preemption | A task that was running in a “spot” instance that was preempted (taken back by cloud provider) will be automatically resubmitted | ❌ | ✅︎ | ✅︎ |
 
 ## Quotas
 
-| Quota | unit | scope* | Description | Freemium | Standard | Power-user | Enterprise |
-|-------|------|-------|-------------|----------|----------|------------|------------|
-| Maximum tasks per week | task | global |Total number of tasks ran in the last 7-days window, including the task to be submitted, must not exceed the quota limit| 30 | 300 | inf | inf |
-| Maximum number of VCPUs | vcpu | global | Total number of VCPUs across all running machine instances plus the number of VCPUs of the instance to be requested must not exceed the quota limit | N/A | 160 | 1000 | inf |
-| Maximum price per hour across all instances | USD | global | Accumulated price per hour of all active machine instances, plus the price of the instance to be requested, must not exceed the quota | 2 | 4 | 270 | inf |
-| Maximum simultaneous instances | instance | global | Maximum number of machine instances running simultaneously at any moment | N/A | 40 | 100 | inf |
-| Maximum time a machine group can stay idle before termination | minute | global | Maximum time that an allocated machine group is allowed to stay active without running a task | N/A | 60 | 120 | 240 |
-| Maximum time a machine group can stay up before automatic termination | hour | instance | Maximum time that an allocated machine group is allowed to stay active (even if it’s running a task), after which it will be automatically terminated | N/A | 36 | 48 | inf |
-| Maximum time a task can stay running before automatic termination | hour | instance | Maximum time that a task can stay running, after which it will be automatically terminated | 4 | 8 | 16 | inf |
-| Maximum disk size | GB | instance | Maximum size of the disk that can be assigned to each individual machine in a machine group | N/A | 100 | 200 | inf |
-| Maximum amount of RAM per VCPU | GB | instance | Maximum amount of RAM per individual VCPU that can be used. Even though RAM is not specifiable per se, this quota constrains the machine types that can be requested | N/A | 4 | 6 | 8 |
+| Quota | unit | scope* | Description | Standard | Power-user | Enterprise |
+|-------|------|-------|-------------|----------|------------|------------|
+| Maximum tasks per week | task | global |Total number of tasks ran in the last 7-days window, including the task to be submitted, must not exceed the quota limit| 300 | inf | inf |
+| Maximum number of VCPUs | vcpu | global | Total number of VCPUs across all running machine instances plus the number of VCPUs of the instance to be requested must not exceed the quota limit | 200 | 1000 | inf |
+| Maximum price per hour across all instances | USD | global | Accumulated price per hour of all active machine instances, plus the price of the instance to be requested, must not exceed the quota | 4 | 270 | inf |
+| Maximum simultaneous instances | instance | global | Maximum number of machine instances running simultaneously at any moment | 40 | 100 | inf |
+| Maximum time a machine group can stay idle before termination | minute | global | Maximum time that an allocated machine group is allowed to stay active without running a task | 60 | 120 | 240 |
+| Maximum time a machine group can stay up before automatic termination | hour | instance | Maximum time that an allocated machine group is allowed to stay active (even if it’s running a task), after which it will be automatically terminated | 36 | 168 | inf |
+| Maximum time a task can stay running before automatic termination | hour | instance | Maximum time that a task can stay running, after which it will be automatically terminated | 8 | 16 | inf |
+| Maximum disk size | GB | instance | Maximum size of the disk that can be assigned to each individual machine in a machine group | 100 | 2000 | inf |
+| Maximum amount of RAM per VCPU | GB | instance | Maximum amount of RAM per individual VCPU that can be used. Even though RAM is not specifiable per se, this quota constrains the machine types that can be requested | 4 | 6 | 8 |
 
 ***NOTE:** _global_ quotas are applied to the user account and will encompass all
 machine groups and tasks submitted by the user.
@@ -135,7 +135,7 @@ Username: <username here>
 
 ■ Instance User quotas
                                                                                           MAX ALLOWED
- Maximum time a machine group can stay up before automatic termination                    48 hour
+ Maximum time a machine group can stay up before automatic termination                    168 hour
  Maximum disk size                                                                        2000 GB
  Maximum amount of RAM per VCPU                                                           6 GB
 
