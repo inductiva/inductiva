@@ -634,6 +634,8 @@ class Task:
             "Go to https://console.inductiva.ai/tasks/%s for more details.",
             self.id, self.id)
 
+        requires_newline = False
+
         while True:
             # status = self.get_status()
             task_info = self.get_info()
@@ -647,6 +649,9 @@ class Task:
                                                               status_start_time)
 
             if status != prev_status:
+                if requires_newline:
+                    requires_newline = False
+                    sys.stdout.write("\n")
                 self._handle_status_change(status, description)
             # Print timer
             elif (status != models.TaskStatusCode.SUBMITTED and
@@ -658,6 +663,7 @@ class Task:
             #Used to print queue information
             if (status == models.TaskStatusCode.SUBMITTED and
                     self._tasks_ahead is not None):
+                requires_newline = True
                 self._update_queue_info(is_tty=is_tty, duration=duration)
 
             if self.is_terminal():
