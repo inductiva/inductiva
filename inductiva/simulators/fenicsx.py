@@ -34,7 +34,7 @@ class FEniCSx(simulators.Simulator):
             mesh_filename: Optional[str] = None,
             mesh_info_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
-            input_resources: List[str] = [],
+            input_resources: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 

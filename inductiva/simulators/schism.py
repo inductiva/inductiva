@@ -30,7 +30,7 @@ class SCHISM(simulators.Simulator):
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
             resubmit_on_preemption: bool = False,
-            input_resources: List[str] = [],
+            input_resources: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:

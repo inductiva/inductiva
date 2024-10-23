@@ -17,7 +17,7 @@ def run_simulation(
     storage_dir: Optional[str] = "",
     api_invoker=None,
     simulator_obj=None,
-    input_resources: List[str] = [],
+    input_resources: Optional[List[str]] = None,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -32,6 +32,9 @@ def run_simulation(
 
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
+
+    if not input_resources:
+        input_resources = []
 
     container_image = kwargs.get("container_image", None)
 

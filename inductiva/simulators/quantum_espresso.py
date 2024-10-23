@@ -36,7 +36,7 @@ class QuantumEspresso(simulators.Simulator):
             on: types.ComputationalResources,
             extra_metadata: Optional[dict] = None,
             resubmit_on_preemption: bool = False,
-            input_resources: List[str] = [],
+            input_resources: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:

@@ -340,7 +340,7 @@ def submit_task(api_instance,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
                 simulator_obj=None,
-                input_resources: List[str] = []):
+                input_resources: Optional[List[str]] = None):
     """Submit a task and send input files to the API."""
     resource_pool_id = resource_pool.id
 
@@ -350,6 +350,8 @@ def submit_task(api_instance,
             raise RuntimeError("Trying to submit a task to a closed project.")
         current_project = current_project.name
 
+    if not input_resources:
+        input_resources = []
     task_request = TaskRequest(simulator=simulator,
                                params=request_params,
                                project=current_project,
@@ -393,7 +395,7 @@ def invoke_async_api(simulator: str,
                      container_image: Optional[str] = None,
                      resubmit_on_preemption: bool = False,
                      simulator_obj=None,
-                     input_resources: List[str] = []) -> str:
+                     input_resources: Optional[List[str]] = None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.

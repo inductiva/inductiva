@@ -30,7 +30,7 @@ class REEF3D(simulators.Simulator):
             use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            input_resources: List[str] = [],
+            input_resources: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
