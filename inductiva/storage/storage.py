@@ -68,11 +68,13 @@ def listdir(path="/",
         })
     print(_print_contents_table(all_contents))
 
+    storage_total_size = format_utils.bytes_formatter(storage_total_size)
+    estimated_storage_cost = format_utils.currency_formatter(
+        estimated_storage_cost)
+
     print("Total storage size used:")
-    print(f"\tVolume: {format_utils.bytes_formatter(storage_total_size)}")
-    print(
-        f"\tCost: {format_utils.currency_formatter(estimated_storage_cost)}/month"
-    )
+    print(f"\tVolume: {storage_total_size}")
+    print(f"\tCost: {estimated_storage_cost}/month")
     print("")
 
     print(f"Listed {len(all_contents)} folder(s). Ordered by {order_by}.\n"
