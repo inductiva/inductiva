@@ -10,7 +10,6 @@ import os
 from tabulate import TableFormat, DataRow
 import tabulate
 
-from inductiva import constants
 import inductiva
 
 # pylint: disable=protected-access
@@ -254,13 +253,11 @@ def currency_formatter(amount: float) -> str:
 
     currency_data = "US$"
 
-    if amount < constants.CURRENCY_MIN_VALUE:
-        return (f"Less than {constants.CURRENCY_MIN_VALUE} {currency_data}. "
-                "For more details check \n"
-                "https://console.inductiva.ai/tasks")
+    if amount == 0:
+        return f"0 {currency_data}"
 
     # Convert the value to a string with a maximum of 10 decimal places
-    amount_str = f"{amount:.10f}"
+    amount_str = f"{amount:.15f}"
 
     # Find the first non-zero decimal
     decimal_part = amount_str.split(".")[1]

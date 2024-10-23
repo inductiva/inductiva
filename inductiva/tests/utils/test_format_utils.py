@@ -264,8 +264,7 @@ def test_get_tabular_str_list_of_lists_formatters():
     (0.01234567, "0.012 US$"),
     (0.001234567, "0.0012 US$"),
     (0.0001234567, "0.00012 US$"),
-    (0.00001234567, "Less than 0.0001 US$. For more details check "
-     "\nhttps://console.inductiva.ai/tasks"),
+    (0.00001234567, "0.000012 US$"),
 ])
 def test_currency_formatter(amount, result):
     assert format_utils.currency_formatter(amount) == result
