@@ -1,5 +1,5 @@
 """FVCOM simulator module of the API."""
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -36,6 +36,7 @@ class FVCOM(simulators.Simulator):
             working_dir: Optional[str] = "",
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
+            input_resources: List[str] = [],
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -92,4 +93,5 @@ class FVCOM(simulators.Simulator):
                            use_hwthread=use_hwthread,
                            create_namelist=create_namelist,
                            resubmit_on_preemption=resubmit_on_preemption,
+                           input_resources=input_resources,
                            **kwargs)

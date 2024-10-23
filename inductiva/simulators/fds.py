@@ -1,6 +1,6 @@
 """FDS simulator module of the API."""
 
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -31,6 +31,7 @@ class FDS(simulators.Simulator):
             post_processing_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
+            input_resources: List[str] = [],
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -57,4 +58,5 @@ class FDS(simulators.Simulator):
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
+                           input_resources=input_resources,
                            **kwargs)

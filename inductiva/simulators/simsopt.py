@@ -1,5 +1,5 @@
 """Simsopt module of the API."""
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import simulators, tasks, types
 
@@ -38,6 +38,7 @@ class SIMSOPT(simulators.Simulator):
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
+        input_resources: List[str] = [],
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -87,5 +88,6 @@ class SIMSOPT(simulators.Simulator):
             num_samples=num_samples,
             storage_dir=storage_dir,
             on=on,
+            input_resources=input_resources,
             **kwargs,
         )

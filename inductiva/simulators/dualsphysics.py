@@ -1,6 +1,6 @@
 """DualSPHysics simulator module of the API."""
 
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -29,6 +29,7 @@ class DualSPHysics(simulators.Simulator):
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
+        input_resources: List[str] = [],
         **kwargs,
     ) -> tasks.Task:
         """Executes a DualSPHysics simulation.
@@ -51,4 +52,5 @@ class DualSPHysics(simulators.Simulator):
                            commands=commands,
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
+                           input_resources=input_resources,
                            **kwargs)

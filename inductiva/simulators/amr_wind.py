@@ -1,5 +1,5 @@
 """AmrWind module of the API for numerical simulations of fluid flows."""
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -36,6 +36,7 @@ class AmrWind(simulators.Simulator):
             n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
+            input_resources: List[str] = [],
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -59,4 +60,5 @@ class AmrWind(simulators.Simulator):
                            use_hwthread=use_hwthread,
                            input_filename=sim_config_filename,
                            resubmit_on_preemption=resubmit_on_preemption,
+                           input_resources=input_resources,
                            **kwargs)
