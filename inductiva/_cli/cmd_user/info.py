@@ -89,16 +89,21 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
     storage_estimated_costs = format_utils.currency_formatter(
         costs[0]["components"]["storage"])
 
-    print("■ Estimated Costs (current month):"
-          f" {total_estimated_costs}",
-          file=fout)
+    label_width = 12
+    cost_width = 10
+
+    print("■ Estimated Costs (current month):", file=fout)
     print(
-        "\tComputation Estimated Cost (current month):"
-        f" {computation_estimated_costs}",
+        f"\t{'Computation:':<{label_width}} "
+        f"{computation_estimated_costs:<{cost_width}}",
         file=fout)
     print(
-        "\tStorage Estimated Cost (current month):"
-        f" {storage_estimated_costs}",
+        f"\t{'Storage:':<{label_width}} "
+        f"{storage_estimated_costs:<{cost_width}}",
+        file=fout)
+    print(
+        f"\t{'Total:':<{label_width}} "
+        f"{total_estimated_costs:<{cost_width}}",
         file=fout)
 
 
