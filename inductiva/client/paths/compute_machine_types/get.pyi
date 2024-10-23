@@ -30,8 +30,173 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.machine_type import MachineType
 
 # Query params
-MachineFamilySchema = schemas.StrSchema
-SpotSchema = schemas.BoolSchema
+
+
+class MachineFamiliesSchema(
+    schemas.ListSchema
+):
+
+
+    class MetaOapg:
+        items = schemas.StrSchema
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'MachineFamiliesSchema':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> MetaOapg.items:
+        return super().__getitem__(i)
+
+
+class MachineConfigsSchema(
+    schemas.ListSchema
+):
+
+
+    class MetaOapg:
+        items = schemas.StrSchema
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'MachineConfigsSchema':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> MetaOapg.items:
+        return super().__getitem__(i)
+
+
+class VcpusRangeSchema(
+    schemas.ListSchema
+):
+
+
+    class MetaOapg:
+        items = schemas.IntSchema
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, ]]],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'VcpusRangeSchema':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> MetaOapg.items:
+        return super().__getitem__(i)
+
+
+class MemoryRangeSchema(
+    schemas.ListSchema
+):
+
+
+    class MetaOapg:
+        items = schemas.IntSchema
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, ]]],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'MemoryRangeSchema':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> MetaOapg.items:
+        return super().__getitem__(i)
+
+
+class PriceRangeSchema(
+    schemas.ListSchema
+):
+
+
+    class MetaOapg:
+        items = schemas.NumberSchema
+
+    def __new__(
+        cls,
+        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+    ) -> 'PriceRangeSchema':
+        return super().__new__(
+            cls,
+            _arg,
+            _configuration=_configuration,
+        )
+
+    def __getitem__(self, i: int) -> MetaOapg.items:
+        return super().__getitem__(i)
+
+
+class SpotSchema(
+    schemas.ComposedSchema,
+):
+
+
+    class MetaOapg:
+        any_of_0 = schemas.BoolSchema
+        
+        
+        class any_of_1(
+            schemas.EnumBase,
+            schemas.StrSchema
+        ):
+            
+            @schemas.classproperty
+            def TRUE(cls):
+                return cls("true")
+            
+            @schemas.classproperty
+            def FALSE(cls):
+                return cls("false")
+        
+        @classmethod
+        @functools.lru_cache()
+        def any_of(cls):
+            # we need this here to make our import statements work
+            # we must store _composed_schemas in here so the code is only run
+            # when we invoke this method. If we kept this at the class
+            # level we would get an error because the class level
+            # code would be run when this module is imported, and these composed
+            # classes don't exist yet because their module has not finished
+            # loading
+            return [
+                cls.any_of_0,
+                cls.any_of_1,
+            ]
+
+
+    def __new__(
+        cls,
+        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        _configuration: typing.Optional[schemas.Configuration] = None,
+        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+    ) -> 'SpotSchema':
+        return super().__new__(
+            cls,
+            *_args,
+            _configuration=_configuration,
+            **kwargs,
+        )
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
     'RequestRequiredQueryParams',
@@ -41,8 +206,12 @@ RequestRequiredQueryParams = typing_extensions.TypedDict(
 RequestOptionalQueryParams = typing_extensions.TypedDict(
     'RequestOptionalQueryParams',
     {
-        'machine_family': typing.Union[MachineFamilySchema, str, ],
-        'spot': typing.Union[SpotSchema, bool, ],
+        'machine_families': typing.Union[MachineFamiliesSchema, list, tuple, ],
+        'machine_configs': typing.Union[MachineConfigsSchema, list, tuple, ],
+        'vcpus_range': typing.Union[VcpusRangeSchema, list, tuple, ],
+        'memory_range': typing.Union[MemoryRangeSchema, list, tuple, ],
+        'price_range': typing.Union[PriceRangeSchema, list, tuple, ],
+        'spot': typing.Union[SpotSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
         'provider_id': typing.Union[ProviderIdSchema, ],
     },
     total=False
@@ -53,10 +222,34 @@ class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams)
     pass
 
 
-request_query_machine_family = api_client.QueryParameter(
-    name="machine_family",
+request_query_machine_families = api_client.QueryParameter(
+    name="machine_families",
     style=api_client.ParameterStyle.FORM,
-    schema=MachineFamilySchema,
+    schema=MachineFamiliesSchema,
+    explode=True,
+)
+request_query_machine_configs = api_client.QueryParameter(
+    name="machine_configs",
+    style=api_client.ParameterStyle.FORM,
+    schema=MachineConfigsSchema,
+    explode=True,
+)
+request_query_vcpus_range = api_client.QueryParameter(
+    name="vcpus_range",
+    style=api_client.ParameterStyle.FORM,
+    schema=VcpusRangeSchema,
+    explode=True,
+)
+request_query_memory_range = api_client.QueryParameter(
+    name="memory_range",
+    style=api_client.ParameterStyle.FORM,
+    schema=MemoryRangeSchema,
+    explode=True,
+)
+request_query_price_range = api_client.QueryParameter(
+    name="price_range",
+    style=api_client.ParameterStyle.FORM,
+    schema=PriceRangeSchema,
     explode=True,
 )
 request_query_spot = api_client.QueryParameter(
@@ -194,7 +387,11 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_machine_family,
+            request_query_machine_families,
+            request_query_machine_configs,
+            request_query_vcpus_range,
+            request_query_memory_range,
+            request_query_price_range,
             request_query_spot,
             request_query_provider_id,
         ):

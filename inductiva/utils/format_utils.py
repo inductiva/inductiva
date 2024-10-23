@@ -1,14 +1,14 @@
 """Util functions for formatting data for printing to console."""
 from typing import (Any, Callable, Dict, Iterable, Mapping, Optional, Tuple,
                     Union, List)
-from enum import Enum
 from distutils.util import strtobool
+from enum import Enum
 import datetime
-import os
 import copy
+import os
 
-import tabulate
 from tabulate import TableFormat, DataRow
+import tabulate
 
 import inductiva
 
@@ -235,3 +235,41 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
         table = _table_indenter(table, indentation_level)
 
     return f"\n{table}\n"
+
+
+def currency_formatter(amount: float) -> str:
+    """Format a currency amount into a human-readable string.
+
+    Convert the amount to a string with a maximum of 10 decimal places.
+    If the amount is less than CURRENCY_MIN_VALUE (i.e., smaller than 0.01
+    cents), return a message indicating that the amount is less than
+    CURRENCY_MIN_VALUE USD. If the amount is less than 0.1, show all decimal
+    places until the first two non-zero decimal values
+    (e.g., 0.00012345 -> 0.00012).
+
+    TODO: Add support for other currencies. We need to get the currency from
+    the BE. For now, we are using USD.
+    """
+
+    currency_data = "US$"
+
+    if amount == 0:
+        return f"0 {currency_data}"
+
+    # Convert the value to a string with a maximum of 10 decimal places
+    amount_str = f"{amount:.15f}"
+
+    # Find the first non-zero decimal
+    decimal_part = amount_str.split(".")[1]
+    first_non_zero_decimal = next(
+        (i for i, digit in enumerate(decimal_part) if digit != "0"), 10)
+
+    # Determine the number of decimal places to show
+    decimal_places = max(2, first_non_zero_decimal + 2)
+
+    if amount < 0.1:
+        # If the amount is less than 0.1, show all decimal places until the
+        # first two non-zero decimal values (e.g., 0.00012345 -> 0.00012)
+        return f"{amount:.{decimal_places}f} {currency_data}"
+
+    return f"{amount:.2f} {currency_data}"

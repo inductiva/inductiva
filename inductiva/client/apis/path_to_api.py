@@ -59,6 +59,7 @@ from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_downlo
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_upload_output_url import ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_metric import ExecuterTrackerMachineIdTaskTaskIdMetric
 from inductiva.client.apis.paths.executer_tracker_machine_id_resize_disk import ExecuterTrackerMachineIdResizeDisk
+from inductiva.client.apis.paths.executer_tracker_machine_id_resize_disk_done import ExecuterTrackerMachineIdResizeDiskDone
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
@@ -68,12 +69,14 @@ from inductiva.client.apis.paths.compute_group_status import ComputeGroupStatus
 from inductiva.client.apis.paths.compute_machine_types import ComputeMachineTypes
 from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.storage_size import StorageSize
+from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
 from inductiva.client.apis.paths.users_info import UsersInfo
 from inductiva.client.apis.paths.users_capabilities import UsersCapabilities
+from inductiva.client.apis.paths.users_costs import UsersCosts
 from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
 from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
@@ -202,6 +205,8 @@ PathToApi = typing_extensions.TypedDict(
             ExecuterTrackerMachineIdTaskTaskIdMetric,
         PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK:
             ExecuterTrackerMachineIdResizeDisk,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK_DONE:
+            ExecuterTrackerMachineIdResizeDiskDone,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
         PathValues.COMPUTE_TYPE:
@@ -220,6 +225,8 @@ PathToApi = typing_extensions.TypedDict(
             ComputeGroupName,
         PathValues.STORAGE_SIZE:
             StorageSize,
+        PathValues.STORAGE_COST:
+            StorageCost,
         PathValues.STORAGE_CONTENTS:
             StorageContents,
         PathValues.VERSION:
@@ -232,6 +239,8 @@ PathToApi = typing_extensions.TypedDict(
             UsersInfo,
         PathValues.USERS_CAPABILITIES:
             UsersCapabilities,
+        PathValues.USERS_COSTS:
+            UsersCosts,
         PathValues.PROJECTS:
             Projects,
         PathValues.PROJECTS_NAME:
@@ -369,6 +378,8 @@ path_to_api = PathToApi({
         ExecuterTrackerMachineIdTaskTaskIdMetric,
     PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK:
         ExecuterTrackerMachineIdResizeDisk,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK_DONE:
+        ExecuterTrackerMachineIdResizeDiskDone,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
     PathValues.COMPUTE_TYPE:
@@ -387,6 +398,8 @@ path_to_api = PathToApi({
         ComputeGroupName,
     PathValues.STORAGE_SIZE:
         StorageSize,
+    PathValues.STORAGE_COST:
+        StorageCost,
     PathValues.STORAGE_CONTENTS:
         StorageContents,
     PathValues.VERSION:
@@ -399,6 +412,8 @@ path_to_api = PathToApi({
         UsersInfo,
     PathValues.USERS_CAPABILITIES:
         UsersCapabilities,
+    PathValues.USERS_COSTS:
+        UsersCosts,
     PathValues.PROJECTS:
         Projects,
     PathValues.PROJECTS_NAME:

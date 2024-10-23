@@ -31,6 +31,7 @@ class TaskStatusInfo(schemas.DictSchema):
 
     class MetaOapg:
         required = {
+            "description",
             "status",
             "timestamp",
         }
@@ -42,6 +43,7 @@ class TaskStatusInfo(schemas.DictSchema):
                 return TaskStatusCode
 
             timestamp = schemas.DateTimeSchema
+            description = schemas.StrSchema
 
             class machine_id(
                     schemas.UUIDBase,
@@ -106,9 +108,11 @@ class TaskStatusInfo(schemas.DictSchema):
             __annotations__ = {
                 "status": status,
                 "timestamp": timestamp,
+                "description": description,
                 "machine_id": machine_id,
             }
 
+    description: MetaOapg.properties.description
     status: 'TaskStatusCode'
     timestamp: MetaOapg.properties.timestamp
 
@@ -126,6 +130,12 @@ class TaskStatusInfo(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["description"]
+    ) -> MetaOapg.properties.description:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["machine_id"]
     ) -> MetaOapg.properties.machine_id:
         ...
@@ -137,6 +147,7 @@ class TaskStatusInfo(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "status",
         "timestamp",
+        "description",
         "machine_id",
     ], str]):
         # dict_instance[name] accessor
@@ -156,6 +167,12 @@ class TaskStatusInfo(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["description"]
+    ) -> MetaOapg.properties.description:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["machine_id"]
     ) -> typing.Union[MetaOapg.properties.machine_id, schemas.Unset]:
         ...
@@ -169,6 +186,7 @@ class TaskStatusInfo(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "status",
         "timestamp",
+        "description",
         "machine_id",
     ], str]):
         return super().get_item_oapg(name)
@@ -178,6 +196,10 @@ class TaskStatusInfo(schemas.DictSchema):
         *_args: typing.Union[
             dict,
             frozendict.frozendict,
+        ],
+        description: typing.Union[
+            MetaOapg.properties.description,
+            str,
         ],
         status: 'TaskStatusCode',
         timestamp: typing.Union[
@@ -200,6 +222,7 @@ class TaskStatusInfo(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
+            description=description,
             status=status,
             timestamp=timestamp,
             machine_id=machine_id,

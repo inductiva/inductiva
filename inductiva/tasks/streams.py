@@ -300,7 +300,7 @@ class TaskStreamConsumer:
         else:
             params = {"query": f'{{task_id="{self.task_id}"}}', "limit": 500}
         while True:
-            url = endpoint + urlencode(params, safe='{="}')
+            url = endpoint + urlencode(params)
             ws = websocket.WebSocketApp(
                 url,
                 header={"X-API-Key": inductiva.get_api_key()},
