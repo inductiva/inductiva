@@ -3,6 +3,7 @@
 import argparse
 
 from inductiva import resources
+from inductiva.utils import format_utils
 
 
 def estimate_machine_cost(args):
@@ -17,12 +18,13 @@ def estimate_machine_cost(args):
     )
 
     total_cost = cost * num_machines
-
+    cost_str = format_utils.currency_formatter(cost)
+    total_cost_str = format_utils.currency_formatter(total_cost)
     if num_machines == 1:
-        print(f"Estimated cost of machine: {cost:.3f} $/h.")
+        print(f"Estimated cost of machine: {cost_str}/h.")
     else:
         print("Estimated total cost (per machine)"
-              f": {total_cost:.3f} ({cost:.3f}) $/h.")
+              f": {total_cost_str} ({cost_str})/h.")
 
 
 def register(parser):
