@@ -339,7 +339,8 @@ def submit_task(api_instance,
                 type_annotations,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
-                simulator_obj=None):
+                simulator_obj=None,
+                input_resources: Optional[List[str]] = None):
     """Submit a task and send input files to the API."""
     resource_pool_id = resource_pool.id
 
@@ -349,13 +350,16 @@ def submit_task(api_instance,
             raise RuntimeError("Trying to submit a task to a closed project.")
         current_project = current_project.name
 
+    if not input_resources:
+        input_resources = []
     task_request = TaskRequest(simulator=simulator,
                                params=request_params,
                                project=current_project,
                                resource_pool=resource_pool_id,
                                container_image=container_image,
                                storage_path_prefix=storage_path_prefix,
-                               resubmit_on_preemption=resubmit_on_preemption)
+                               resubmit_on_preemption=resubmit_on_preemption,
+                               input_resources=input_resources)
 
     task_submitted_info = submit_request(
         api_instance=api_instance,
@@ -390,7 +394,8 @@ def invoke_async_api(simulator: str,
                      storage_path_prefix: Optional[str] = "",
                      container_image: Optional[str] = None,
                      resubmit_on_preemption: bool = False,
-                     simulator_obj=None) -> str:
+                     simulator_obj=None,
+                     input_resources: Optional[List[str]] = None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
     Submits a simulation async to the API and returns the task id.
@@ -416,6 +421,8 @@ def invoke_async_api(simulator: str,
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
+        input_resources: Additional input files that will be copied to the
+                simulation from a bucket or from another task output.
     Return:
         Returns the task id.
     """
@@ -439,6 +446,7 @@ def invoke_async_api(simulator: str,
                               container_image=container_image,
                               type_annotations=type_annotations,
                               resubmit_on_preemption=resubmit_on_preemption,
-                              simulator_obj=simulator_obj)
+                              simulator_obj=simulator_obj,
+                              input_resources=input_resources)
 
     return task_id

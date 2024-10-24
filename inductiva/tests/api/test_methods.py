@@ -22,4 +22,4 @@ def test_submit_to_closed_project_fails():
         assert not project.opened
         with pytest.raises(RuntimeError):
             inductiva.api.methods.submit_task(None, "dummy_method", {}, mg, "",
-                                              None, "", "gcp")
+                                              None, "", "gcp", [])

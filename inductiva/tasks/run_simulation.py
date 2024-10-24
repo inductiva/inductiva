@@ -1,6 +1,6 @@
 """Functions for running simulations via Inductiva Web API."""
 import pathlib
-from typing import Any, Optional
+from typing import Any, List, Optional
 
 import logging
 
@@ -17,6 +17,7 @@ def run_simulation(
     storage_dir: Optional[str] = "",
     api_invoker=None,
     simulator_obj=None,
+    input_resources: Optional[List[str]] = None,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -32,6 +33,9 @@ def run_simulation(
     if api_invoker is None:
         api_invoker = methods.invoke_async_api
 
+    if not input_resources:
+        input_resources = []
+
     container_image = kwargs.get("container_image", None)
 
     task_id = api_invoker(simulator,
@@ -41,7 +45,8 @@ def run_simulation(
                           resubmit_on_preemption=resubmit_on_preemption,
                           container_image=container_image,
                           storage_path_prefix=storage_dir,
-                          simulator_obj=simulator_obj)
+                          simulator_obj=simulator_obj,
+                          input_resources=input_resources)
     logging.info("■ Task %s submitted to the queue of the %s.", task_id,
                  computational_resources)
 
