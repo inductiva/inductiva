@@ -110,9 +110,7 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
             f"{total_estimated_costs:<{cost_width}}",
             file=fout)
     except ApiException as _:
-        print("■ Estimated Costs (current month):",
-              "\n\tNot available.",
-              file=fout)
+        return
 
 
 def get_info(_, fout: TextIO = sys.stdout):
