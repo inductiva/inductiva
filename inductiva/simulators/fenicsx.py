@@ -19,7 +19,7 @@ class FEniCSx(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "fem.fenicsx.run_simulation"
+        self.simulator = "fenicsx"
 
     def _get_image_uri(self):
         return None
@@ -34,7 +34,6 @@ class FEniCSx(simulators.Simulator):
             mesh_filename: Optional[str] = None,
             mesh_info_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
-            extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -63,7 +62,6 @@ class FEniCSx(simulators.Simulator):
                            mesh_info_filename=mesh_info_filename,
                            material_filename=material_filename,
                            geometry_filename=geometry_filename,
-                           extra_metadata=extra_metadata,
                            mesh_filename=mesh_filename,
                            bcs_filename=bcs_filename,
                            storage_dir=storage_dir,

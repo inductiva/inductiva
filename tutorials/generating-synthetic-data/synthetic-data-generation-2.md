@@ -12,7 +12,7 @@ myst:
 In the [introduction](synthetic-data-generation-1.md) of this tutorial, we outlined a series of steps needed for generating synthetic datasets for training Physics-ML models using the Inductiva API. So, in this chapter, we will dive into the first step of this process: **defining a "base case"** simulation model of the system we wish to study.
 
 The "base case" simulation is quite simple: a 0.5m cube of water, initially at rest at one of the top corners of a sealed 1m cubic box, is dropped at the simulation onset, allowing the water to spill and splash against the walls of the closed box 
-for 4 seconds. For simulating this base case, we will be using [SPlisHSPlasH](https://docs.inductiva.ai/en/latest/simulators/SPlisHSPlasH.html), the SPH simulator used by the authors.
+for 4 seconds. For simulating this base case, we will be using [SPlisHSPlasH](https://tutorials.inductiva.ai/simulators/SPlisHSPlasH.html), the SPH simulator used by the authors.
 
 > Note: if this is your first encounter with our 
 API, we highly recommend going through our [User Console](https://console.inductiva.ai/) to set up your environment correctly. 
@@ -135,9 +135,6 @@ Preparing upload of the local input directory splishsplash-input-example
 (128 B).
 Local input directory successfully uploaded.
 Task i13o8djcoq70bsdut1x73zi69 submitted to the default queue.
-Simulation metadata logged to: inductiva_output/task_metadata.json
-Task i13o8djcoq70bsdut1x73zi69 configurations metadata saved to the tasks
-metadata file task_metadata.json in the current working directory.
 Consider tracking the status of the task via CLI: 
         inductiva tasks list --id i13o8djcoq70bsdut1x73zi69
 Or, tracking the logs of the task via CLI:

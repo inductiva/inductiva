@@ -116,6 +116,7 @@ class BaseMachineGroup(ABC):
         self.num_machines = 0
         self._max_idle_time = max_idle_time
         self._auto_terminate_ts = auto_terminate_ts
+        self._custom_vm_image = None
 
         # Set the API configuration that carries the information from the client
         # to the backend.
@@ -227,6 +228,7 @@ class BaseMachineGroup(ABC):
             auto_terminate_ts=self._convert_auto_terminate_ts(
                 self.auto_terminate_ts),
             dynamic_disk_resize_config=self._dynamic_disk_resize_config(),
+            custom_vm_image=self._custom_vm_image,
             **kwargs,
         )
 
@@ -248,6 +250,7 @@ class BaseMachineGroup(ABC):
             body.get("idle_seconds"))
         self._auto_terminate_ts = self._iso_to_datetime(
             body.get("auto_terminate_ts"))
+        self.total_ram_gb = body.get("total_ram_gb")
         self._log_machine_group_info()
 
     @abstractmethod
@@ -283,7 +286,7 @@ class BaseMachineGroup(ABC):
 
         return machine_group
 
-    def _can_start_resource(self) -> bool:
+    def can_start_resource(self) -> bool:
         """Check if the resource can be started.
 
         This method checks if the resource can be started by checking
@@ -349,11 +352,10 @@ class BaseMachineGroup(ABC):
         start_time = time.time()
 
         if wait_on_pending_quota:
-            first_time = True
-            while not self._can_start_resource():
-                if first_time:
-                    print("This machine will exceed the current quotas.\n"
-                          "Will wait for quotas to become available.")
+            if not self.can_start_resource():
+                print("This machine will exceed the current quotas.\n"
+                      "Will wait for quotas to become available.")
+            while not self.can_start_resource():
                 time.sleep(self.QUOTAS_EXCEEDED_SLEEP_SECONDS)
 
         self._api.start_vm_group(body=request_body)
@@ -491,6 +493,7 @@ class BaseMachineGroup(ABC):
         logging.info("\t· Name:                       %s", self.name)
         logging.info("\t· Machine Type:               %s", self.machine_type)
         logging.info("\t· Data disk size:             %s GB", self.data_disk_gb)
+        logging.info("\t· Total memory (RAM):         %s GB", self.total_ram_gb)
 
         # Log max idle time
         value_str = format_utils.timedelta_formatter(

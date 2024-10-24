@@ -20,7 +20,7 @@ class AmrWind(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "amrWind.amrWind.run_simulation"
+        self.simulator = "amrwind"
 
     @property
     def name(self):
@@ -34,7 +34,6 @@ class AmrWind(simulators.Simulator):
             on: types.ComputationalResources,
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
-            extra_metadata: Optional[dict] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             **kwargs) -> tasks.Task:
@@ -58,7 +57,6 @@ class AmrWind(simulators.Simulator):
                            n_vcpus=n_vcpus,
                            storage_dir=storage_dir,
                            use_hwthread=use_hwthread,
-                           extra_metadata=extra_metadata,
                            input_filename=sim_config_filename,
                            resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)

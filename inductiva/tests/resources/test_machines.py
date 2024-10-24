@@ -3,6 +3,7 @@ from unittest import mock
 import pytest
 
 import inductiva
+from inductiva.resources.machines_base import BaseMachineGroup
 
 
 def fake_init(self, machine_type: str, num_machines=1, provider="GCP"):
@@ -174,3 +175,203 @@ def test_machines__machine_group__dynamic_disk_resize_config__not_resizable():
     config = machine._dynamic_disk_resize_config()
 
     assert config is None
+
+
+def fake_get_quotas_small():
+    """Fake get_quotas function."""
+    return {
+        "max_vcpus": {
+            "max_allowed": 1.0,
+            "in_use": 0.0
+        },
+        "max_instances": {
+            "max_allowed": 1.0,
+            "in_use": 0.0
+        },
+        "max_price_hour": {
+            "max_allowed": 1.0,
+            "in_use": 0.0
+        },
+        "max_disk_size": {
+            "max_allowed": 1.0,
+            "in_use": None
+        },
+        "mg_max_idle": {
+            "max_allowed": 1.0,
+            "in_use": None
+        },
+        "mg_max_ttl": {
+            "max_allowed": 1.0,
+            "in_use": None
+        }
+    }
+
+
+def fake_get_quotas_normal():
+    """Fake get_quotas function."""
+    return {
+        "max_vcpus": {
+            "max_allowed": 100.0,
+            "in_use": 0.0
+        },
+        "max_instances": {
+            "max_allowed": 10.0,
+            "in_use": 0.0
+        },
+        "max_price_hour": {
+            "max_allowed": 20.0,
+            "in_use": 0.0
+        },
+        "max_disk_size": {
+            "max_allowed": 50.0,
+            "in_use": None
+        },
+        "mg_max_idle": {
+            "max_allowed": 150.0,
+            "in_use": None
+        },
+        "mg_max_ttl": {
+            "max_allowed": 48.0,
+            "in_use": None
+        }
+    }
+
+
+def fake_get_quotas_no_total_num_machines():
+    """Fake get_quotas function."""
+    return {
+        "max_vcpus": {
+            "max_allowed": 100.0,
+            "in_use": 0.0
+        },
+        "max_instances": {
+            "max_allowed": 0.0,
+            "in_use": 0.0
+        },
+        "max_price_hour": {
+            "max_allowed": 20.0,
+            "in_use": 0.0
+        },
+        "max_disk_size": {
+            "max_allowed": 50.0,
+            "in_use": None
+        },
+        "mg_max_idle": {
+            "max_allowed": 150.0,
+            "in_use": None
+        },
+        "mg_max_ttl": {
+            "max_allowed": 48.0,
+            "in_use": None
+        }
+    }
+
+
+@mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_small)
+def test_can_start_resource_cant_start_low_quotas():
+    """Test the can_start_resource function when the quotas are small."""
+    resource = mock.MagicMock(spec=BaseMachineGroup)
+    resource.machine_type = "c2-standard-4"
+    resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
+    resource.n_vcpus.total = 4
+    resource.num_machines = 1
+
+    res = BaseMachineGroup.can_start_resource(resource)
+
+    assert not res
+
+
+@mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_normal)
+def test_can_start_resource_cant_start_too_many_vcpu():
+    """Test the can_start_resource function when the resource asks for
+    too many vcpus."""
+
+    resource = mock.MagicMock(spec=BaseMachineGroup)
+    resource.machine_type = "c2-standard-400"
+    resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
+    resource.n_vcpus.total = 400
+    resource.num_machines = 1
+
+    res = BaseMachineGroup.can_start_resource(resource)
+
+    assert not res
+
+
+@mock.patch("inductiva.users.get_quotas",
+            new=fake_get_quotas_no_total_num_machines)
+def test_can_start_resource_cant_start_no_num_machines():
+    """Test the can_start_resource function when the quotas dont allow due to
+    not enough num machines."""
+
+    resource = mock.MagicMock(spec=BaseMachineGroup)
+    resource.machine_type = "c2-standard-4"
+    resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
+    resource.n_vcpus.total = 4
+    resource.num_machines = 1
+
+    res = BaseMachineGroup.can_start_resource(resource)
+
+    assert not res
+
+
+@mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_small)
+def test_can_start_resource_cant_start_high_cost():
+    """Test the can_start_resource function when the resource cost is too
+    high."""
+
+    resource = mock.MagicMock(spec=BaseMachineGroup)
+    resource.machine_type = "c2-standard-1"
+    resource.estimate_cloud_cost = mock.MagicMock(return_value=10.4724)
+    resource.n_vcpus.total = 1
+    resource.num_machines = 1
+
+    res = BaseMachineGroup.can_start_resource(resource)
+
+    assert not res
+
+
+@mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_small)
+def test_can_start_resource_can_start_low_quotas():
+    """Test the can_start_resource function when the quotas are small but can
+    start machine."""
+
+    resource = mock.MagicMock(spec=BaseMachineGroup)
+    resource.machine_type = "c2-standard-1"
+    resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
+    resource.n_vcpus.total = 1
+    resource.num_machines = 1
+
+    res = BaseMachineGroup.can_start_resource(resource)
+
+    assert res
+
+
+@mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_normal)
+def test_can_start_resource_can_start_too_many_vcpu():
+    """Test the can_start_resource function when the resource asks for
+    a valid amount of vcpus."""
+
+    resource = mock.MagicMock(spec=BaseMachineGroup)
+    resource.machine_type = "c2-standard-4"
+    resource.estimate_cloud_cost = mock.MagicMock(return_value=0.04724)
+    resource.n_vcpus.total = 4
+    resource.num_machines = 1
+
+    res = BaseMachineGroup.can_start_resource(resource)
+
+    assert res
+
+
+@mock.patch("inductiva.users.get_quotas", new=fake_get_quotas_small)
+def test_can_start_resource_can_start_high_cost():
+    """Test the can_start_resource function when the resource cost is valid."""
+
+    resource = mock.MagicMock(spec=BaseMachineGroup)
+    resource.machine_type = "c2-standard-1"
+    resource.estimate_cloud_cost = mock.MagicMock(return_value=0.4724)
+    resource.n_vcpus.total = 1
+    resource.num_machines = 1
+
+    res = BaseMachineGroup.can_start_resource(resource)
+
+    assert res

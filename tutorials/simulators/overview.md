@@ -16,6 +16,7 @@ The simulators available in the current version of the API (0.9) are:
 - [NWChem](../simulators/NWChem.md)
 - [OpenFOAM](../simulators/OpenFOAM.md)
 - [OpenFAST](../simulators/OpenFAST.md)
+- [QuantumEspresso](../simulators/QuantumEspresso.md)
 - [Reef3D](../simulators/Reef3D.md)
 - [SCHISM](../simulators/SCHISM.md)
 - [SPlisHSPlasH](../simulators/SPlisHSPlasH.md)

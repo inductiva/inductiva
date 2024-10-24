@@ -18,7 +18,7 @@ class SIMSOPT(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "stellarators.simsopt.run_simulation"
+        self.simulator = "simsopt"
 
     def _get_image_uri(self):
         return None
@@ -38,7 +38,6 @@ class SIMSOPT(simulators.Simulator):
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
-        extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -85,7 +84,6 @@ class SIMSOPT(simulators.Simulator):
             sigma_scaling_factor=sigma_scaling_factor,
             num_field_periods=num_field_periods,
             num_iterations=num_iterations,
-            extra_metadata=extra_metadata,
             num_samples=num_samples,
             storage_dir=storage_dir,
             on=on,

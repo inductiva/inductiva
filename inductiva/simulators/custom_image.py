@@ -18,7 +18,7 @@ class CustomImage(simulators.Simulator):
         self.container_image = container_image
         super().__init__()
 
-        self.api_method_name = "arbitrary.arbitrary_commands.run_simulation"
+        self.simulator = "arbitrary_commands"
 
     def _get_image_uri(self):
         return self.container_image
@@ -29,7 +29,6 @@ class CustomImage(simulators.Simulator):
             *,
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
-            extra_metadata: Optional[dict] = None,
             resubmit_on_preemption: bool = False,
             **kwargs) -> tasks.Task:
         """Run the simulation.
@@ -48,7 +47,6 @@ class CustomImage(simulators.Simulator):
                            on=on,
                            commands=commands,
                            storage_dir=storage_dir,
-                           extra_metadata=extra_metadata,
                            container_image=self._image_uri,
                            resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)

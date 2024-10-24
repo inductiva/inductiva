@@ -4,7 +4,7 @@ available via the Inductiva API.
 
 We will cover:
 
-- Configuring SCHISM simulations using the Inductiva API.
+- Configuring SPlisHSPlasH simulations using the Inductiva API.
 - Example code to help you get started with simulations.
 - Available benchmarks to test SPlisHSPlasH’s performance.
 

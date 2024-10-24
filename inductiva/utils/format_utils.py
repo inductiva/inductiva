@@ -1,14 +1,14 @@
 """Util functions for formatting data for printing to console."""
 from typing import (Any, Callable, Dict, Iterable, Mapping, Optional, Tuple,
                     Union, List)
-from enum import Enum
 from distutils.util import strtobool
+from enum import Enum
 import datetime
-import os
 import copy
+import os
 
-import tabulate
 from tabulate import TableFormat, DataRow
+import tabulate
 
 import inductiva
 
@@ -101,7 +101,7 @@ def datetime_formatter(dt: str) -> str:
     if dt is None:
         return None
     local_dt = datetime.datetime.fromisoformat(dt).astimezone()
-    return local_dt.strftime("%d %b, %H:%M:%S")
+    return local_dt.strftime("%d/%m, %H:%M:%S")
 
 
 def datetime_formatter_ymd_hm(dt: str) -> str:
@@ -137,6 +137,37 @@ def timedelta_formatter(td: datetime.timedelta) -> str:
     result = " and ".join(parts) if len(parts) == 2 else result
 
     return result
+
+
+def short_timedelta_formatter(td: datetime.timedelta) -> str:
+    """Convert timedelta to short human readable string.
+    
+    This is needed because we need beacause when we want to print text and
+    replace (in the notebooks) there is no way to clear the full line. So, we
+    need to fill the line with white spaces and for that the line needs to have
+    a fixed max length. We defined that max length as 73. So, we need to have
+    a short string to fit in that line and give extra space for the rest of the
+    line.
+    Example:
+        Task {self.id} is about to start. 1 d 2 h 3 m 4 s
+        vs
+        Task {self.id} is about to start. 2 days, 2 hours, 3 minutes and 3
+            seconds
+    """
+    parts = []
+    if td.days:
+        parts.append(f"{td.days} d")
+    hours, remainder = divmod(td.seconds, 3600)
+    if hours:
+        parts.append(f"{hours} h")
+    minutes, seconds = divmod(remainder, 60)
+    if minutes:
+        parts.append(f"{minutes} m")
+    if seconds or not parts:
+        parts.append(f"{seconds} s")
+
+    # Join parts separated by space
+    return " ".join(parts)
 
 
 def apply_formatters(table_data: dict, formatters: dict):
@@ -235,3 +266,41 @@ def get_tabular_str(tabular_data: Union[Mapping[str, Iterable[Any]],
         table = _table_indenter(table, indentation_level)
 
     return f"\n{table}\n"
+
+
+def currency_formatter(amount: float) -> str:
+    """Format a currency amount into a human-readable string.
+
+    Convert the amount to a string with a maximum of 10 decimal places.
+    If the amount is less than CURRENCY_MIN_VALUE (i.e., smaller than 0.01
+    cents), return a message indicating that the amount is less than
+    CURRENCY_MIN_VALUE USD. If the amount is less than 0.1, show all decimal
+    places until the first two non-zero decimal values
+    (e.g., 0.00012345 -> 0.00012).
+
+    TODO: Add support for other currencies. We need to get the currency from
+    the BE. For now, we are using USD.
+    """
+
+    currency_data = "US$"
+
+    if amount == 0:
+        return f"0 {currency_data}"
+
+    # Convert the value to a string with a maximum of 10 decimal places
+    amount_str = f"{amount:.15f}"
+
+    # Find the first non-zero decimal
+    decimal_part = amount_str.split(".")[1]
+    first_non_zero_decimal = next(
+        (i for i, digit in enumerate(decimal_part) if digit != "0"), 10)
+
+    # Determine the number of decimal places to show
+    decimal_places = max(2, first_non_zero_decimal + 2)
+
+    if amount < 0.1:
+        # If the amount is less than 0.1, show all decimal places until the
+        # first two non-zero decimal values (e.g., 0.00012345 -> 0.00012)
+        return f"{amount:.{decimal_places}f} {currency_data}"
+
+    return f"{amount:.2f} {currency_data}"

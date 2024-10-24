@@ -4,8 +4,8 @@ the built-in tools via the Inductiva API.
 
 We will cover:
 
-- Setting up AMR-Wind for use with our API.
-- Example configurations to help you get started with simulations.
+- Setting up DualSPHysics for use with our API.
+- Example code to help you get started with simulations.
 - Using commands like `gencase` and `dualsphysics` to run your simulations.
 - An advanced Turbine example to show how to execute commands through the 
 Inductiva API.
@@ -341,8 +341,6 @@ Local input directory successfully uploaded.
 
 ■ Task u8v7p1v7wfyvvkyc0iq0s632k submitted to the queue of the Machine Group api-57yp64vdyz50a8fx0ttuz2n90 with n2d-highcpu-64 machines.
 Number of tasks ahead in the queue: 0
-Simulation metadata logged to: inductiva_output/task_metadata.json
-Task u8v7p1v7wfyvvkyc0iq0s632k configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
 · Consider tracking the status of the task via CLI:
 	inductiva tasks list --id u8v7p1v7wfyvvkyc0iq0s632k
 · Or, tracking the logs of the task via CLI:
@@ -350,6 +348,8 @@ Task u8v7p1v7wfyvvkyc0iq0s632k configurations metadata saved to the tasks metada
 · You can also get more information about the task via the CLI command:
 	inductiva tasks info u8v7p1v7wfyvvkyc0iq0s632k
 
+Waiting for task u8v7p1v7wfyvvkyc0iq0s632k to complete...
+Go to https://console.inductiva.ai/tasks/u8v7p1v7wfyvvkyc0iq0s632k for more details.
 ■ Task u8v7p1v7wfyvvkyc0iq0s632k successfully queued and waiting to be picked-up for execution...
 The task u8v7p1v7wfyvvkyc0iq0s632k is about to start.
 ■ Task u8v7p1v7wfyvvkyc0iq0s632k has started and is now running remotely.

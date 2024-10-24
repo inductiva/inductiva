@@ -7,7 +7,7 @@ import logging
 import datetime
 import contextlib
 from typing_extensions import TypedDict
-from typing import Dict, Any, List, Optional, Tuple, Union
+from typing import Callable, Dict, Any, List, Optional, Tuple, Union
 
 import urllib3
 import tabulate
@@ -22,6 +22,8 @@ from inductiva import api
 from inductiva.client.apis.tags import tasks_api
 from inductiva.client.paths.tasks_task_id_download_output_url import get \
     as get_tasks_task_id_download_output_url
+from inductiva.client.paths.tasks_task_id_download_input_url import get \
+    as get_tasks_task_id_download_input_url
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
 
@@ -84,7 +86,7 @@ class TaskInfo:
         self.is_terminal = None
         self.task_id = None
         self.status = None
-        self.method_name = None
+        self.simulator = None
         self.storage_path = None
         self.container_image = None
         self.project = None
@@ -94,8 +96,10 @@ class TaskInfo:
         self.computation_start_time = None
         self.computation_end_time = None
         self.end_time = None
+        self.estimated_computation_cost = None
         self.time_metrics = self.TimeMetrics()
         self.data_metrics = self.DataMetrics()
+        self.status_history = []
         self._kwargs = kwargs
 
         # Set the general attributes
@@ -119,7 +123,10 @@ class TaskInfo:
 
         # Update running info
         self.is_submitted = self.status == models.TaskStatusCode.SUBMITTED
-        self.is_running = self.status == models.TaskStatusCode.STARTED
+        self.is_running = self.status in (
+            models.TaskStatusCode.STARTED,
+            models.TaskStatusCode.COMPUTATIONSTARTED,
+            models.TaskStatusCode.COMPUTATIONENDED)
         self.is_terminal = kwargs.get("is_terminated", False)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -141,10 +148,7 @@ class TaskInfo:
         value: Optional[float],
     ) -> str:
         if isinstance(value, float):
-            if value >= 60.0:
-                value_str = format_utils.seconds_formatter(value)
-            else:
-                value_str = f"{value:.2f} s"
+            value_str = f"{value:.2f} s"
 
             if metric_key == "computation_seconds" and self.is_running:
                 value_str += " (Task still running)"
@@ -185,6 +189,30 @@ class TaskInfo:
     def __repr__(self) -> str:
         return str(self)
 
+    def get_task_time(self) -> str:
+        """Computes the task time.
+
+        Computes the task time based on the creation and end time.
+        """
+        #has not started yet
+        if self.create_time is None:
+            task_time = "Task not started yet (N/A)"
+        #still running
+        elif self.end_time is None:
+            now = datetime.datetime.now(datetime.timezone.utc)
+            create_time = datetime.datetime.fromisoformat(self.create_time)
+            task_time = now - create_time
+            task_time = self._format_time_metric("total_seconds",
+                                                 task_time.total_seconds())
+        else:
+            create_time = datetime.datetime.fromisoformat(self.create_time)
+            end_time = datetime.datetime.fromisoformat(self.end_time)
+            task_time = end_time - create_time
+            task_time = self._format_time_metric("total_seconds",
+                                                 task_time.total_seconds())
+        #if task has ended we use the metric
+        return task_time
+
     def __str__(self):
         table_format = "plain"
 
@@ -192,7 +220,9 @@ class TaskInfo:
             "Wall clock time:",
             self._format_time_metric(
                 "total_seconds",
-                self.time_metrics.total_seconds.value,
+                #if the metric is provided use it
+                #otherwise computed based on creation and end time
+                self.time_metrics.total_seconds.value or self.get_task_time(),
             ),
         ]]
         wall_time_table = tabulate.tabulate(
@@ -230,13 +260,29 @@ class TaskInfo:
         data_metrics_table = "\n".join(
             "\t" + line for line in data_metrics_table.splitlines())
 
-        table_str = f"\nTask status: {self.status}"
+        table_str = f"\nTask status: {self.status}\n"
         if self.executer and self.executer.error_detail:
             table_str += f"\n\tStatus detail: {self.executer.error_detail}"
-        table_str += f"\n{wall_time_table}"
-        table_str += f"\nTime breakdown:\n{time_metrics_table}"
-        table_str += f"\nData:\n{data_metrics_table}\n"
 
+        table_str += f"\n{wall_time_table}"
+        table_str += f"\nTime breakdown:\n{time_metrics_table}\n"
+
+        table_str += "\nStatus history:\n"
+        for item in self.status_history:
+            formatted_timestamp = format_utils.datetime_formatter(
+                item["timestamp"])
+            status = item["status"]
+            table_str += f"\t{status:<20} at {formatted_timestamp:<30}\n"
+            #add machine operations to each status here
+
+        table_str += f"\nData:\n{data_metrics_table}\n"
+        if self.estimated_computation_cost:
+            estimated_cost = format_utils.currency_formatter(
+                self.estimated_computation_cost,)
+        else:
+            estimated_cost = "N/A"
+        table_str += ("\nEstimated computation cost (US$): "
+                      f"{estimated_cost}\n")
         return table_str
 
 
@@ -295,7 +341,9 @@ class Task:
 
         This method issues a request to the API.
         """
-        return self.get_status() == models.TaskStatusCode.STARTED
+        return self.get_status() in (models.TaskStatusCode.STARTED,
+                                     models.TaskStatusCode.COMPUTATIONSTARTED,
+                                     models.TaskStatusCode.COMPUTATIONENDED)
 
     def is_failed(self) -> bool:
         """Validate if the task has failed.
@@ -429,16 +477,17 @@ class Task:
         status = models.TaskStatusCode(info["status"])
 
         self._info = TaskInfo(**info)
+
         self._status = status
 
         return self._info
 
-    def _setup_queue_message(self, is_tty: bool) -> str:
+    def _setup_queue_message(self, is_tty: bool, duration: str) -> str:
         if self._tasks_ahead == 0:
-            s = f"The task {self.id} is about to start."
+            s = f"Task {self.id} is about to start. {duration}"
         else:
-            s = (f"Number of tasks ahead of task {self.id} in queue: "
-                 f"{self._tasks_ahead}")
+            s = (f"Tasks ahead in queue: "
+                 f"{self._tasks_ahead} {duration}")
         if not is_tty:
             # We do this because notebooks do not support some escape sequences
             # like the one used to clear the line. So we need to move the cursor
@@ -512,8 +561,57 @@ class Task:
             "Please inspect the stdout.txt and stderr.txt files at %s\n"
             "For more information.", out_dir)
 
+    def _handle_status_change(self, status: models.TaskStatusCode,
+                              description: str) -> None:
+        """Handle a status change.
+
+        Prints a message to the user when the status of the task changes.
+        """
+
+        if status == models.TaskStatusCode.EXECUTERFAILED:
+            info = self.get_info()
+            detail = info.executer.error_detail
+            logging.info("■ The remote process running the task failed:")
+            if detail:
+                logging.info("\t· Message: %s", detail)
+            else:
+                logging.info("\t· No error message available.")
+        else:
+            logging.info("■ %s", description)
+
+    def _update_queue_info(self, is_tty: bool, duration: str) -> None:
+        """Update the queue information.
+
+        Prints a message to the user with the number of tasks ahead in the queue
+        or that the task is about to start.
+        This method replaces the previous message in the terminal.
+        """
+        #Get status to update the self._tasks_ahead
+        self.get_status()
+        sys.stdout.write("\r\033[2K")
+        sys.stdout.write(
+            self._setup_queue_message(is_tty=is_tty, duration=duration))
+        sys.stdout.flush()
+
+    def _handle_terminal_status(self, download_std_on_completion: bool,
+                                status: models.TaskStatusCode) -> None:
+        """Handle a terminal status.
+
+        Downloads the standard files (stdout and stderr) if the task is in a
+        terminal status and if the user requested it.
+        """
+        sys.stdout.flush()
+        sys.stdout.write("\r\033[2K")
+
+        if download_std_on_completion:
+            self._called_from_wait = True
+            out_dir = self.download_outputs(
+                filenames=self.STANDARD_OUTPUT_FILES)
+            if status == models.TaskStatusCode.FAILED:
+                self._print_failed_message(out_dir)
+
     def wait(self,
-             polling_period: int = 5,
+             polling_period: int = 1,
              download_std_on_completion: bool = True) -> models.TaskStatusCode:
         """Wait for the task to complete.
 
@@ -529,76 +627,49 @@ class Task:
         """
         # TODO: refactor method to make it cleaner
         prev_status = None
-        prev_tasks_ahead = None
         is_tty = sys.stdout.isatty()
+
+        logging.info(
+            "Waiting for task %s to complete...\n"
+            "Go to https://console.inductiva.ai/tasks/%s for more details.",
+            self.id, self.id)
+
         requires_newline = False
+
         while True:
-            status = self.get_status()
+            # status = self.get_status()
+            task_info = self.get_info()
+            status = models.TaskStatusCode(
+                task_info.status_history[-1]["status"])
+            status_start_time = datetime.datetime.fromisoformat(
+                task_info.status_history[-1]["timestamp"])
+            description = task_info.status_history[-1].get("description", "")
+            now_time = datetime.datetime.now(datetime.timezone.utc)
+            duration = format_utils.short_timedelta_formatter(now_time -
+                                                              status_start_time)
+
             if status != prev_status:
                 if requires_newline:
                     requires_newline = False
                     sys.stdout.write("\n")
+                self._handle_status_change(status, description)
+            # Print timer
+            elif (status != models.TaskStatusCode.SUBMITTED and
+                  not task_info.is_terminal):
+                print(f"Duration: {duration}", end="\r")
 
-                if status == models.TaskStatusCode.PENDINGINPUT:
-                    pass
-                elif status == models.TaskStatusCode.SUBMITTED:
-                    logging.info(
-                        "■ Task %s successfully queued and waiting to be "
-                        "picked-up for execution...", self.id)
-                elif status == models.TaskStatusCode.STARTED:
-                    logging.info(
-                        "■ Task %s has started and is now running "
-                        "remotely.", self.id)
-                elif status == models.TaskStatusCode.SUCCESS:
-                    logging.info("■ Task %s completed successfully.", self.id)
-                elif status == models.TaskStatusCode.FAILED:
-                    logging.info("■ Task %s failed.", self.id)
-                elif status == models.TaskStatusCode.PENDINGKILL:
-                    logging.info("■ Task %s is being killed.", self.id)
-                elif status == models.TaskStatusCode.KILLED:
-                    logging.info("■ Task %s killed.", self.id)
-                elif status == models.TaskStatusCode.ZOMBIE:
-                    logging.info("■ The machine was terminated while the task "
-                                 "was pending.")
-                elif status == models.TaskStatusCode.EXECUTERFAILED:
-                    info = self.get_info()
-                    detail = info.executer.error_detail
-                    logging.info(
-                        "■ The remote process running the task failed:")
-                    if detail:
-                        logging.info("\t· Message: %s", detail)
-                    else:
-                        logging.info("\t· No error message available.")
-                elif status == models.TaskStatusCode.SPOTINSTANCEPREEMPTED:
-                    msg = ("■ The task was preempted by the cloud provider.\n"
-                           "Consider using non-spot machines by setting "
-                           "`spot=False` when instantiating the machine group.")
-                    logging.info(msg)
-
-                else:
-                    logging.info(
-                        "■ An internal error occurred with status %s "
-                        "while performing the task.", status)
             prev_status = status
+
+            #Used to print queue information
             if (status == models.TaskStatusCode.SUBMITTED and
-                    self._tasks_ahead is not None and
-                    self._tasks_ahead != prev_tasks_ahead):
+                    self._tasks_ahead is not None):
                 requires_newline = True
-                sys.stdout.write("\r\033[2K")
-                sys.stdout.write(self._setup_queue_message(is_tty))
-                sys.stdout.flush()
-                prev_tasks_ahead = self._tasks_ahead
+                self._update_queue_info(is_tty=is_tty, duration=duration)
 
             if self.is_terminal():
-                sys.stdout.flush()
-                sys.stdout.write("\r\033[2K")
-
-                if download_std_on_completion:
-                    self._called_from_wait = True
-                    out_dir = self.download_outputs(
-                        filenames=self.STANDARD_OUTPUT_FILES)
-                    if status == models.TaskStatusCode.FAILED:
-                        self._print_failed_message(out_dir)
+                self._handle_terminal_status(
+                    download_std_on_completion=download_std_on_completion,
+                    status=status)
                 return status
 
             time.sleep(polling_period)
@@ -653,7 +724,7 @@ class Task:
         return success, status
 
     def kill(self,
-             wait_timeout: Optional[Union[float, int]] = None,
+             wait_timeout: Optional[Union[float, int]] = 1,
              verbosity_level: int = 2) -> Union[bool, None]:
         """Request a task to be killed.
 
@@ -682,7 +753,8 @@ class Task:
             if not isinstance(wait_timeout, (float, int)):
                 raise TypeError("Wait timeout must be a number.")
             if wait_timeout <= 0.0:
-                raise ValueError("Wait timeout must be a positive number.")
+                raise ValueError("Wait timeout must be a positive number"
+                                 " or None.")
 
         if verbosity_level not in self.KILL_VERBOSITY_LEVELS:
             raise ValueError(f"Verbosity {verbosity_level} level not allowed. "
@@ -718,8 +790,7 @@ class Task:
         return success
 
     def get_simulator_name(self) -> str:
-        # e.g. retrieve openfoam from fvm.openfoam.run_simulation
-        return self.info.method_name.split(".")[1]
+        return self.info.simulator
 
     def get_storage_path(self) -> str:
         return self.info.storage_path
@@ -791,6 +862,14 @@ class Task:
 
         return api_response.body
 
+    def _request_download_input_url(
+        self
+    ) -> get_tasks_task_id_download_input_url.\
+         SchemaFor200ResponseBodyApplicationJson:
+        api_response = self._api.get_input_download_url(
+            path_params=self._get_path_params(),)
+        return api_response.body
+
     def get_output_url(self) -> Optional[str]:
         """Get a public URL to download the output files of the task.
 
@@ -813,6 +892,127 @@ class Task:
 
         return download_url
 
+    def get_input_url(self) -> Optional[str]:
+        """Get a public URL to download the input files of the task.
+
+        Returns:
+            The URL to download the input files of the task, or None
+        """
+        response_body = self._request_download_input_url()
+        download_url = response_body.get("url")
+        if download_url is None:
+            raise RuntimeError(
+                "The API did not return a download URL for the task inputs.")
+
+        logging.info("■ Use the following URL to download the input "
+                     "files of you simulation:")
+        logging.info(" > %s", download_url)
+
+        return download_url
+
+    def _download(
+        self,
+        filenames: Optional[List[str]],
+        dest_dir: Optional[str],
+        sub_dir: str,
+        uncompress: bool,
+        rm_downloaded_zip_archive: bool,
+        rm_remote_files: bool,
+        zip_name: str,
+        request_download_url: Callable,
+        download_partial_files: Callable,
+        download_task_files: Callable,
+    ) -> pathlib.Path:
+        self._status = self.get_status()
+
+        response_body = request_download_url()
+        if not response_body:
+            return None
+
+        download_url = response_body.get("url")
+        if download_url is None:
+            raise RuntimeError(
+                "The API did not return a download URL for the task files.")
+
+        logging.debug("\nDownload URL: %s\n", download_url)
+
+        # If the file server (GCP, ICE, etc.) is not available, the Web API
+        # returns a fallback URL and returns the following flag as False.
+        # In this case, the output donwload will be provided by the Web API
+        # itself.
+        file_server_available = bool(response_body.get("file_server_available"))
+
+        if dest_dir is None:
+            dest_dir = self.id
+        dest_dir += f"/{sub_dir}/"
+
+        dir_path = files.resolve_output_path(dest_dir)
+
+        if (dir_path.exists() and not self._contains_only_std_files(dir_path)):
+            warnings.warn("Path already exists, files may be overwritten.")
+        dir_path.mkdir(parents=True, exist_ok=True)
+
+        download_message = "Downloading simulation files to %s..."
+
+        if filenames is self.STANDARD_OUTPUT_FILES:
+            download_message = "Downloading stdout and stderr files to %s..."
+
+        if filenames:
+            if file_server_available:
+                logging.info(download_message, dir_path)
+                download_partial_files(download_url, filenames, dir_path)
+            else:
+                logging.error("Partial download is not available.")
+
+            # If the user requested a partial download, the full download
+            # will be skipped.
+
+            logging.info("Partial download completed to %s.", dir_path)
+            return dir_path
+
+        zip_path = dir_path.joinpath(zip_name)
+        logging.info(download_message, zip_path)
+
+        if file_server_available:
+            pool_manager: urllib3.PoolManager = (
+                self._api.api_client.rest_client.pool_manager)
+            response = pool_manager.request(
+                "GET",
+                download_url,
+                preload_content=False,
+            )
+        # If the file server is not available, the download will be provided
+        # by the Web API. Therefore the standard method is used.
+        else:
+            api_response = download_task_files(
+                path_params=self._get_path_params(),
+                stream=True,
+                skip_deserialization=True,
+            )
+            response = api_response.response
+
+        # use raw urllib3 response instead of the generated client response, to
+        # implement our own download logic (with progress bar, first checking
+        # the size of the file, etc.)
+        data.download_file(response, zip_path)
+
+        if uncompress:
+            logging.info("Uncompressing the files to %s...", dir_path)
+            data.uncompress_task_outputs(zip_path, dir_path)
+            if rm_downloaded_zip_archive:
+                zip_path.unlink()
+
+        if rm_remote_files:
+            self.remove_remote_files()
+
+        if self._status == models.TaskStatusCode.FAILED:
+            logging.error(
+                "Task %s failed.\n"
+                "Please inspect the stdout.txt and stderr.txt files at %s\n"
+                "For more information.", self.id, dir_path)
+
+        return dir_path
+
     def download_outputs(
         self,
         filenames: Optional[List[str]] = None,
@@ -828,7 +1028,7 @@ class Task:
                 files are downloaded.
             output_dir: Directory where to download the files. If None, the
                 files are downloaded to the default directory. The default is
-                {inductiva.get_output_dir()}/{output_dir}/{task_id}.
+                {inductiva.get_output_dir()}/[{output_dir}|{task_id}]/outputs/.
             uncompress: Whether to uncompress the archive after downloading it.
             rm_downloaded_zip_archive: Whether to remove the archive after
                 uncompressing it. If uncompress is False, this argument is
@@ -837,99 +1037,55 @@ class Task:
                 storage after the download is complete. Only used if filenames
                 is None or empty (i.e., all output files are downloaded).
         """
-        self._status = self.get_status()
+        return self._download(
+            filenames=filenames,
+            dest_dir=output_dir,
+            sub_dir="outputs",
+            uncompress=uncompress,
+            rm_downloaded_zip_archive=rm_downloaded_zip_archive,
+            rm_remote_files=rm_remote_files,
+            zip_name="output.zip",
+            request_download_url=self._request_download_output_url,
+            download_partial_files=data.download_partial_outputs,
+            download_task_files=self._api.download_task_output,
+        )
 
-        response_body = self._request_download_output_url()
-        if not response_body:
-            return None
+    def download_inputs(
+        self,
+        filenames: Optional[List[str]] = None,
+        input_dir: Optional[str] = None,
+        uncompress: bool = True,
+        rm_downloaded_zip_archive: bool = True,
+        rm_remote_files: bool = False,
+    ) -> Optional[pathlib.Path]:
+        """Download input files of the task.
 
-        download_url = response_body.get("url")
-        if download_url is None:
-            raise RuntimeError(
-                "The API did not return a download URL for the task outputs.")
-
-        logging.debug("\nDownload URL: %s\n", download_url)
-
-        # If the file server (GCP, ICE, etc.) is not available, the Web API
-        # returns a fallback URL and returns the following flag as False.
-        # In this case, the output donwload will be provided by the Web API
-        # itself.
-        file_server_available = bool(response_body.get("file_server_available"))
-
-        if output_dir is None:
-            output_dir = self.id
-
-        output_dir_path = files.resolve_output_path(output_dir)
-
-        if (output_dir_path.exists() and
-                not self._contains_only_std_files(output_dir_path)):
-            warnings.warn("Path already exists, files may be overwritten.")
-        output_dir_path.mkdir(parents=True, exist_ok=True)
-
-        download_message = "Downloading simulation outputs to %s..."
-
-        if filenames is self.STANDARD_OUTPUT_FILES:
-            download_message = "Downloading stdout and stderr files to %s..."
-
-        if filenames:
-            if file_server_available:
-                logging.info(download_message, output_dir_path)
-                data.download_partial_outputs(
-                    download_url,
-                    filenames,
-                    output_dir_path,
-                )
-            else:
-                logging.error("Partial download is not available.")
-
-            # If the user requested a partial download, the full download
-            # will be skipped.
-
-            logging.info("Partial download completed to %s.", output_dir_path)
-            return output_dir_path
-
-        zip_path = output_dir_path.joinpath("output.zip")
-        logging.info(download_message, zip_path)
-
-        if file_server_available:
-            pool_manager: urllib3.PoolManager = (
-                self._api.api_client.rest_client.pool_manager)
-            response = pool_manager.request(
-                "GET",
-                download_url,
-                preload_content=False,
-            )
-        # If the file server is not available, the download will be provided
-        # by the Web API. Therefore the standard method is used.
-        else:
-            api_response = self._api.download_task_output(
-                path_params=self._get_path_params(),
-                stream=True,
-                skip_deserialization=True,
-            )
-            response = api_response.response
-
-        # use raw urllib3 response instead of the generated client response, to
-        # implement our own download logic (with progress bar, first checking
-        # the size of the file, etc.)
-        data.download_file(response, zip_path)
-
-        if uncompress:
-            logging.info("Uncompressing the outputs to %s...", output_dir_path)
-            data.uncompress_task_outputs(zip_path, output_dir_path)
-            if rm_downloaded_zip_archive:
-                zip_path.unlink()
-
-        if rm_remote_files:
-            self.remove_remote_files()
-
-        if self._status == models.TaskStatusCode.FAILED:
-            logging.error(
-                "Task %s failed.\n"
-                "Please inspect the stdout.txt and stderr.txt files at %s\n"
-                "For more information.", self.id, output_dir_path)
-
-        return output_dir_path
+        Args:
+            filenames: List of filenames to download. If None or empty, all
+                files are downloaded.
+            input_dir: Directory where to download the files. If None, the
+                files are downloaded to the default directory. The default is
+                {inductiva.get_output_dir()}/[{input_dir}|{task_id}]/inputs/.
+            uncompress: Whether to uncompress the archive after downloading it.
+            rm_downloaded_zip_archive: Whether to remove the archive after
+                uncompressing it. If uncompress is False, this argument is
+                ignored.
+            rm_remote_files: Whether to remove all task files from remote
+                storage after the download is complete. Only used if filenames
+                is None or empty (i.e., all input files are downloaded).
+        """
+        return self._download(
+            filenames=filenames,
+            dest_dir=input_dir,
+            sub_dir="inputs",
+            uncompress=uncompress,
+            rm_downloaded_zip_archive=rm_downloaded_zip_archive,
+            rm_remote_files=rm_remote_files,
+            zip_name="input.zip",
+            request_download_url=self._request_download_input_url,
+            download_partial_files=data.download_partial_inputs,
+            download_task_files=self._api.download_task_input,
+        )
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""

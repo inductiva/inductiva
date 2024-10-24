@@ -384,6 +384,63 @@ class VMGroupConfig(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class total_ram_gb(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.IntSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'total_ram_gb':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             class threads_per_core(
                     schemas.ComposedSchema,):
 
@@ -1140,7 +1197,7 @@ class VMGroupConfig(schemas.DictSchema):
                         **kwargs,
                     )
 
-            class custom_disk_image(
+            class custom_vm_image(
                     schemas.ComposedSchema,):
 
                 class MetaOapg:
@@ -1189,7 +1246,7 @@ class VMGroupConfig(schemas.DictSchema):
                                            datetime, uuid.UUID, int, float,
                                            decimal.Decimal, None, list, tuple,
                                            bytes],
-                ) -> 'custom_disk_image':
+                ) -> 'custom_vm_image':
                     return super().__new__(
                         cls,
                         *_args,
@@ -1204,6 +1261,7 @@ class VMGroupConfig(schemas.DictSchema):
                 "name": name,
                 "machine_type": machine_type,
                 "disk_size_gb": disk_size_gb,
+                "total_ram_gb": total_ram_gb,
                 "threads_per_core": threads_per_core,
                 "num_vms": num_vms,
                 "idle_seconds": idle_seconds,
@@ -1220,7 +1278,7 @@ class VMGroupConfig(schemas.DictSchema):
                 "max_vms": max_vms,
                 "autoscale_policy": autoscale_policy,
                 "dynamic_disk_resize_config": dynamic_disk_resize_config,
-                "custom_disk_image": custom_disk_image,
+                "custom_vm_image": custom_vm_image,
             }
 
     @typing.overload
@@ -1257,6 +1315,12 @@ class VMGroupConfig(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["disk_size_gb"]
     ) -> MetaOapg.properties.disk_size_gb:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["total_ram_gb"]
+    ) -> MetaOapg.properties.total_ram_gb:
         ...
 
     @typing.overload
@@ -1357,8 +1421,8 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["custom_disk_image"]
-    ) -> MetaOapg.properties.custom_disk_image:
+        self, name: typing_extensions.Literal["custom_vm_image"]
+    ) -> MetaOapg.properties.custom_vm_image:
         ...
 
     @typing.overload
@@ -1372,6 +1436,7 @@ class VMGroupConfig(schemas.DictSchema):
         "name",
         "machine_type",
         "disk_size_gb",
+        "total_ram_gb",
         "threads_per_core",
         "num_vms",
         "idle_seconds",
@@ -1388,7 +1453,7 @@ class VMGroupConfig(schemas.DictSchema):
         "max_vms",
         "autoscale_policy",
         "dynamic_disk_resize_config",
-        "custom_disk_image",
+        "custom_vm_image",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -1427,6 +1492,12 @@ class VMGroupConfig(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["disk_size_gb"]
     ) -> typing.Union[MetaOapg.properties.disk_size_gb, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["total_ram_gb"]
+    ) -> typing.Union[MetaOapg.properties.total_ram_gb, schemas.Unset]:
         ...
 
     @typing.overload
@@ -1528,8 +1599,8 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["custom_disk_image"]
-    ) -> typing.Union[MetaOapg.properties.custom_disk_image, schemas.Unset]:
+        self, name: typing_extensions.Literal["custom_vm_image"]
+    ) -> typing.Union[MetaOapg.properties.custom_vm_image, schemas.Unset]:
         ...
 
     @typing.overload
@@ -1545,6 +1616,7 @@ class VMGroupConfig(schemas.DictSchema):
         "name",
         "machine_type",
         "disk_size_gb",
+        "total_ram_gb",
         "threads_per_core",
         "num_vms",
         "idle_seconds",
@@ -1561,7 +1633,7 @@ class VMGroupConfig(schemas.DictSchema):
         "max_vms",
         "autoscale_policy",
         "dynamic_disk_resize_config",
-        "custom_disk_image",
+        "custom_vm_image",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -1601,6 +1673,12 @@ class VMGroupConfig(schemas.DictSchema):
                                    io.BufferedReader,
                                    schemas.Unset] = schemas.unset,
         disk_size_gb: typing.Union[MetaOapg.properties.disk_size_gb, dict,
+                                   frozendict.frozendict, str, date, datetime,
+                                   uuid.UUID, int, float, decimal.Decimal, bool,
+                                   None, list, tuple, bytes, io.FileIO,
+                                   io.BufferedReader,
+                                   schemas.Unset] = schemas.unset,
+        total_ram_gb: typing.Union[MetaOapg.properties.total_ram_gb, dict,
                                    frozendict.frozendict, str, date, datetime,
                                    uuid.UUID, int, float, decimal.Decimal, bool,
                                    None, list, tuple, bytes, io.FileIO,
@@ -1686,13 +1764,12 @@ class VMGroupConfig(schemas.DictSchema):
             frozendict.frozendict, str, date, datetime, uuid.UUID, int, float,
             decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO,
             io.BufferedReader, schemas.Unset] = schemas.unset,
-        custom_disk_image: typing.Union[MetaOapg.properties.custom_disk_image,
-                                        dict, frozendict.frozendict, str, date,
-                                        datetime, uuid.UUID, int, float,
-                                        decimal.Decimal, bool, None, list,
-                                        tuple, bytes, io.FileIO,
-                                        io.BufferedReader,
-                                        schemas.Unset] = schemas.unset,
+        custom_vm_image: typing.Union[MetaOapg.properties.custom_vm_image, dict,
+                                      frozendict.frozendict, str, date,
+                                      datetime, uuid.UUID, int, float,
+                                      decimal.Decimal, bool, None, list, tuple,
+                                      bytes, io.FileIO, io.BufferedReader,
+                                      schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -1708,6 +1785,7 @@ class VMGroupConfig(schemas.DictSchema):
             name=name,
             machine_type=machine_type,
             disk_size_gb=disk_size_gb,
+            total_ram_gb=total_ram_gb,
             threads_per_core=threads_per_core,
             num_vms=num_vms,
             idle_seconds=idle_seconds,
@@ -1724,7 +1802,7 @@ class VMGroupConfig(schemas.DictSchema):
             max_vms=max_vms,
             autoscale_policy=autoscale_policy,
             dynamic_disk_resize_config=dynamic_disk_resize_config,
-            custom_disk_image=custom_disk_image,
+            custom_vm_image=custom_vm_image,
             _configuration=_configuration,
             **kwargs,
         )

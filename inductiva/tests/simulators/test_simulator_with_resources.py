@@ -2,8 +2,8 @@
 from argparse import Namespace
 from unittest import mock
 import inspect
+from pathlib import Path
 import sys
-import os
 import uuid
 
 from pytest import mark
@@ -37,16 +37,7 @@ class TesterSimulator(simulators.Simulator):
 
     def __init__(self):
         super().__init__()
-        self.api_method_name = "tester.run_simulation"
-
-
-def test_override_api_method_prefix():
-    simulator = simulators.OpenFOAM()
-    assert simulator.api_method_name == \
-        "fvm.openfoam_foundation.run_simulation"
-    simulator.override_api_method_prefix("windtunnel")
-    assert simulator.api_method_name == \
-        "windtunnel.openfoam_foundation.run_simulation"
+        self.simulator = "tester"
 
 
 def new_machine_init(self, machine_type):
@@ -217,9 +208,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
         method_signature = inspect.signature(simcls.run)
         assert resubmit_key in method_signature.parameters
 
-        with mock.patch.dict(os.environ,
-                             {"DISABLE_TASK_METADATA_LOGGING": "true"}), \
-            mock.patch("inductiva.tasks.task.tasks_api") as taskapi_mock, \
+        with mock.patch("inductiva.tasks.task.tasks_api") as taskapi_mock, \
             mock.patch("inductiva.simulators.simulator.list_available_images") \
                as list_mock, \
             mock.patch("inductiva.api.methods.submit_request") \
@@ -244,18 +233,17 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             print(args_spec)
             args = ([],) * (len(args_spec) - 2)  # -2 for self and input_dir
 
+            test_input_dir = Path(__file__).parent / "test_input_dir"
             if resubmit_on_preemption is None:
                 # test that the default value of
                 # `resubmit_on_preemption` is False
-                sim_obj.run("inductiva/tests/simulators/test_input_dir",
-                            *args,
-                            on=mock_mg)
+                sim_obj.run(test_input_dir, *args, on=mock_mg)
                 req_arg = submit_mock.call_args[1]["request"]
                 assert not req_arg[resubmit_key]
             else:
                 # test that the value of `resubmit_on_preemption` is passed
                 # correctly to the final api call
-                sim_obj.run("inductiva/tests/simulators/test_input_dir",
+                sim_obj.run(test_input_dir,
                             *args,
                             on=mock_mg,
                             resubmit_on_preemption=resubmit_on_preemption)

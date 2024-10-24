@@ -172,9 +172,9 @@ def test_get_ansi_formatter_ansi_disabled():
         assert format_utils.get_ansi_formatter() is format_utils.no_formatter
 
 
-@mark.parametrize("date,result", [("2021-01-01T00:00:00", "01 Jan, 00:00:00"),
-                                  ("2021-01-01T12:00:00", "01 Jan, 12:00:00"),
-                                  ("2021-01-01T23:59:59", "01 Jan, 23:59:59"),
+@mark.parametrize("date,result", [("2021-01-01T00:00:00", "01/01, 00:00:00"),
+                                  ("2021-01-01T12:00:00", "01/01, 12:00:00"),
+                                  ("2021-01-01T23:59:59", "01/01, 23:59:59"),
                                   (None, None)])
 def test_datetime_formatter(date, result):
     assert format_utils.datetime_formatter(date) == result
@@ -253,3 +253,18 @@ def test_get_tabular_str_list_of_lists_formatters():
                                        header_formatters=header_formatters)
 
     assert "A" in res and "B" in res and "C" in res
+
+
+@mark.parametrize("amount, result", [
+    (100000.0, "100000.00 US$"),
+    (1000.0, "1000.00 US$"),
+    (1.0, "1.00 US$"),
+    (0.3123456, "0.31 US$"),
+    (0.1234567, "0.12 US$"),
+    (0.01234567, "0.012 US$"),
+    (0.001234567, "0.0012 US$"),
+    (0.0001234567, "0.00012 US$"),
+    (0.00001234567, "0.000012 US$"),
+])
+def test_currency_formatter(amount, result):
+    assert format_utils.currency_formatter(amount) == result

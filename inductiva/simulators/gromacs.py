@@ -19,7 +19,7 @@ class GROMACS(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "md.gromacs.run_simulation"
+        self.simulator = "gromacs"
 
     def run(
         self,
@@ -29,7 +29,6 @@ class GROMACS(simulators.Simulator):
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
-        extra_metadata: Optional[dict] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run a list of GROMACS commands.
@@ -50,6 +49,5 @@ class GROMACS(simulators.Simulator):
                            on=on,
                            commands=commands,
                            storage_dir=storage_dir,
-                           extra_metadata=extra_metadata,
                            resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)

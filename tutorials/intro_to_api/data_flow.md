@@ -79,7 +79,6 @@ Task Information:
 Preparing upload of the local input directory swash-resources-example (160 B).
 Local input directory successfully uploaded.
 Task tc7cwuer45kfzuw8t93r6dxa8 submitted to the default queue.
-Simulation metadata logged to: inductiva_output/task_metadata.json
 ```
 
 ## Personal Remote Storage

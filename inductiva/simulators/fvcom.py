@@ -21,7 +21,7 @@ class FVCOM(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.api_method_name = "fvcom.fvcom.run_simulation"
+        self.simulator = "fvcom"
 
     def run(self,
             input_dir: str,
@@ -36,7 +36,6 @@ class FVCOM(simulators.Simulator):
             working_dir: Optional[str] = "",
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            extra_metadata: Optional[dict] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -91,7 +90,6 @@ class FVCOM(simulators.Simulator):
                            model=model,
                            storage_dir=storage_dir,
                            use_hwthread=use_hwthread,
-                           extra_metadata=extra_metadata,
                            create_namelist=create_namelist,
                            resubmit_on_preemption=resubmit_on_preemption,
                            **kwargs)

@@ -103,6 +103,7 @@ simulators/GROMACS
 simulators/NWChem
 simulators/OpenFOAM
 simulators/OpenFAST
+simulators/QuantumEspresso
 simulators/Reef3D
 simulators/SCHISM
 simulators/SPlisHSPlasH

@@ -182,12 +182,13 @@ Uploading input archive...
 Local input directory successfully uploaded.
 Task 9ob6gknv794pvazg5bzd4oczo submitted to the queue of the Machine Group api-d4gzm10qxwvjus7mc58o4033o with c3d-highcpu-90 machines.
 Number of tasks ahead in the queue: 0
-Simulation metadata logged to: inductiva_output/task_metadata.json
-Task 9ob6gknv794pvazg5bzd4oczo configurations metadata saved to the tasks metadata file task_metadata.json in the current working directory.
 Consider tracking the status of the task via CLI:
 	inductiva tasks list --id 9ob6gknv794pvazg5bzd4oczo
 Or, tracking the logs of the task via CLI:
 	inductiva logs 9ob6gknv794pvazg5bzd4oczo
+
+Waiting for task 9ob6gknv794pvazg5bzd4oczo to complete...
+Go to https://console.inductiva.ai/tasks/9ob6gknv794pvazg5bzd4oczo for more details.
 Task 9ob6gknv794pvazg5bzd4oczo successfully queued and waiting to be picked-up for execution...
 The task 9ob6gknv794pvazg5bzd4oczo is about to start.
 Task 9ob6gknv794pvazg5bzd4oczo has started and is now running remotely.

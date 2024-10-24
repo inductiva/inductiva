@@ -25,7 +25,7 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.task import Task
+from inductiva.client.model.task_with_status_history import TaskWithStatusHistory
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
 # Path params
@@ -54,7 +54,7 @@ request_path_task_id = api_client.PathParameter(
     schema=TaskIdSchema,
     required=True,
 )
-SchemaFor200ResponseBodyApplicationJson = Task
+SchemaFor200ResponseBodyApplicationJson = TaskWithStatusHistory
 
 
 @dataclass

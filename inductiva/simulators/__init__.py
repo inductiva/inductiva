@@ -1,6 +1,6 @@
 # pylint: disable=missing-module-docstring
 from .simulator import Simulator
-from .dummy_simulator import DummySimulator
+from .quantum_espresso import QuantumEspresso
 from .splishsplash import SplishSplash
 from .dualsphysics import DualSPHysics
 from .custom_image import CustomImage
