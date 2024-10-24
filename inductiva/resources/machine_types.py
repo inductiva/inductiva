@@ -68,7 +68,7 @@ def get_available_machine_types(
     query_params = {"provider_id": provider.value}
 
     if machine_family is not None:
-        query_params["machine_family"] = machine_family
+        query_params["machine_families"] = machine_family
 
     try:
         resp = api_client.list_available_machine_types(query_params).response
