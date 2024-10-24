@@ -179,6 +179,7 @@ def register(parser):
                            help="Filter the available types by provider.")
     subparser.add_argument("-f",
                            "--family",
+                           nargs="+",
                            default=None,
                            type=str,
                            help="Filter the available types by CPU series.")
