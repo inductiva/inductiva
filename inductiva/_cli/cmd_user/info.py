@@ -6,6 +6,7 @@ import argparse
 import sys
 
 from inductiva import users, _cli
+from inductiva.client.exceptions import ApiException
 from inductiva.users.methods import get_costs
 from inductiva.utils import format_utils
 
@@ -81,30 +82,37 @@ def _print_estimated_costs(fout: TextIO = sys.stdout):
     """Prints the user's estimated costs for the current month."""
     current_month = datetime.now().month
     current_year = datetime.now().year
-    costs = get_costs(start_year=current_year, start_month=current_month)
+    # This endpoint is not available for external users for now.
+    # This try will be removed in the future.
+    try:
+        costs = get_costs(start_year=current_year, start_month=current_month)
+        total_estimated_costs = format_utils.currency_formatter(
+            costs[0]["total"])
+        computation_estimated_costs = format_utils.currency_formatter(
+            costs[0]["components"]["compute"])
+        storage_estimated_costs = format_utils.currency_formatter(
+            costs[0]["components"]["storage"])
 
-    total_estimated_costs = format_utils.currency_formatter(costs[0]["total"])
-    computation_estimated_costs = format_utils.currency_formatter(
-        costs[0]["components"]["compute"])
-    storage_estimated_costs = format_utils.currency_formatter(
-        costs[0]["components"]["storage"])
+        label_width = 12
+        cost_width = 10
 
-    label_width = 12
-    cost_width = 10
-
-    print("■ Estimated Costs (current month):", file=fout)
-    print(
-        f"\t{'Computation:':<{label_width}} "
-        f"{computation_estimated_costs:<{cost_width}}",
-        file=fout)
-    print(
-        f"\t{'Storage:':<{label_width}} "
-        f"{storage_estimated_costs:<{cost_width}}",
-        file=fout)
-    print(
-        f"\t{'Total:':<{label_width}} "
-        f"{total_estimated_costs:<{cost_width}}",
-        file=fout)
+        print("■ Estimated Costs (current month):", file=fout)
+        print(
+            f"\t{'Computation:':<{label_width}} "
+            f"{computation_estimated_costs:<{cost_width}}",
+            file=fout)
+        print(
+            f"\t{'Storage:':<{label_width}} "
+            f"{storage_estimated_costs:<{cost_width}}",
+            file=fout)
+        print(
+            f"\t{'Total:':<{label_width}} "
+            f"{total_estimated_costs:<{cost_width}}",
+            file=fout)
+    except ApiException as _:
+        print("■ Estimated Costs (current month):",
+              "\n\tNot available.",
+              file=fout)
 
 
 def get_info(_, fout: TextIO = sys.stdout):
