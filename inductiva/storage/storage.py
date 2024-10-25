@@ -10,6 +10,7 @@ import tqdm
 import urllib3
 
 import inductiva
+from inductiva import constants
 from inductiva.client.apis.tags import storage_api
 from inductiva.client.exceptions import ApiException
 from inductiva.utils import format_utils
@@ -179,7 +180,7 @@ def upload(
 
         api_response = api_instance.get_upload_url(
             query_params={
-                "file_name": "_tmp.zip",
+                "file_name": constants.TMP_ZIP_FILENAME,
                 "overwrite": "t" if overwrite else "f",
             },
             path_params={
@@ -234,7 +235,7 @@ def upload(
 
             api_response = api_instance.notify_upload_file(
                 query_params={
-                    "file_name": "_tmp.zip",
+                    "file_name": constants.TMP_ZIP_FILENAME,
                     "unzip": "t"
                 },
                 path_params={
@@ -262,7 +263,7 @@ def _zip_file_or_folder(source_path):
         raise FileNotFoundError(f"The path {source_path} does not exist.")
 
     temp_dir = tempfile.mkdtemp()
-    zip_path = os.path.join(temp_dir, "_tmp.zip")
+    zip_path = os.path.join(temp_dir, constants.TMP_ZIP_FILENAME)
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
         # If the source is a file, add it directly
