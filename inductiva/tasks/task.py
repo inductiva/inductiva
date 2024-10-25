@@ -665,8 +665,9 @@ class Task:
                     self._tasks_ahead is not None):
                 requires_newline = True
                 self._update_queue_info(is_tty=is_tty, duration=duration)
-
-            if self.is_terminal():
+            #use is_terminal instead of the method to avoid an api call
+            #that can make the task status inconsistent
+            if self.info.is_terminal:
                 self._handle_terminal_status(
                     download_std_on_completion=download_std_on_completion,
                     status=status)
