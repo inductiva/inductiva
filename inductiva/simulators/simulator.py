@@ -111,7 +111,7 @@ class Simulator(ABC):
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
-        input_resources: Optional[List[str]] = None,
+        remote_assets: Optional[List[str]] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -128,7 +128,7 @@ class Simulator(ABC):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
-            input_resources: Additional input files that will be copied to the
+            remote_assets: Additional input files that will be copied to the
                 simulation from a bucket or from another task output.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
@@ -161,7 +161,7 @@ class Simulator(ABC):
             computational_resources=on,
             container_image=container_image,
             resubmit_on_preemption=resubmit_on_preemption,
-            input_resources=input_resources,
+            input_resources=remote_assets,
             **kwargs,
         )
 

@@ -30,7 +30,7 @@ class CustomImage(simulators.Simulator):
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            input_resources: Optional[List[str]] = None,
+            remote_assets: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -50,5 +50,5 @@ class CustomImage(simulators.Simulator):
                            storage_dir=storage_dir,
                            container_image=self._image_uri,
                            resubmit_on_preemption=resubmit_on_preemption,
-                           input_resources=input_resources,
+                           remote_assets=remote_assets,
                            **kwargs)

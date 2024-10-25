@@ -29,7 +29,7 @@ class OpenFAST(simulators.Simulator):
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            input_resources: Optional[List[str]] = None,
+            remote_assets: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -48,5 +48,5 @@ class OpenFAST(simulators.Simulator):
                            commands=commands,
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
-                           input_resources=input_resources,
+                           remote_assets=remote_assets,
                            **kwargs)

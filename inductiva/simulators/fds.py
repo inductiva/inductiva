@@ -31,7 +31,7 @@ class FDS(simulators.Simulator):
             post_processing_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
-            input_resources: Optional[List[str]] = None,
+            remote_assets: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -58,5 +58,5 @@ class FDS(simulators.Simulator):
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
-                           input_resources=input_resources,
+                           remote_assets=remote_assets,
                            **kwargs)

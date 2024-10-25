@@ -38,7 +38,7 @@ class SIMSOPT(simulators.Simulator):
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
-        input_resources: Optional[List[str]] = None,
+        remote_assets: Optional[List[str]] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -88,6 +88,6 @@ class SIMSOPT(simulators.Simulator):
             num_samples=num_samples,
             storage_dir=storage_dir,
             on=on,
-            input_resources=input_resources,
+            remote_assets=remote_assets,
             **kwargs,
         )
