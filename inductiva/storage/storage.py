@@ -1,8 +1,17 @@
 """Methods to interact with the user storage resources."""
+import logging
+import os
+import tempfile
+import zipfile
+from typing import Literal
+
+import tqdm
+import urllib3
+
 import inductiva
 from inductiva.client.apis.tags import storage_api
+from inductiva.client.exceptions import ApiException
 from inductiva.utils import format_utils
-from typing import Literal
 
 
 def get_space_used():
@@ -93,3 +102,144 @@ def _print_contents_table(contents):
         formatters=formatters,
         header_formatters=header_formatters,
     )
+
+
+def _zip_file_or_folder(source_path):
+    """
+    Zips a file or a folder and saves it to a temporary folder.
+
+    :param source_path: The path to the file or folder to zip.
+    :return: The path to the created zip file.
+    """
+    # Check if the source path is valid
+    if not os.path.exists(source_path):
+        raise FileNotFoundError(f"The path {source_path} does not exist.")
+
+    temp_dir = tempfile.mkdtemp()
+    zip_path = os.path.join(temp_dir, '_tmp.zip')
+
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        # If the source is a file, add it directly
+        if os.path.isfile(source_path):
+            zipf.write(source_path, os.path.basename(source_path))
+        # If the source is a folder, walk through the folder and add files
+        else:
+            for root, dirs, files in os.walk(source_path):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    zipf.write(
+                        file_path,
+                        os.path.relpath(file_path,
+                                        os.path.dirname(source_path)))
+
+    return zip_path
+
+
+def upload_files(path,
+                 file_name: str,
+                 folder_name: str = "default",
+                 unzip: bool = False,
+                 overwrite: bool = False,
+                 url: bool = False):
+    """Upload files to the user's workspace."""
+    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+    if url:
+        contents = api_instance.upload_from_url(
+            query_params={
+                "url": path,
+                "file_name": file_name,
+                "unzip": "t" if unzip else "f",
+                "overwrite": "t" if overwrite else "f",
+            },
+            path_params={
+                "folder_name": folder_name,
+            },
+        )
+        if contents.response.status == 200:
+            logging.info("File is being uploaded...")
+        else:
+            logging.info("File upload failed.")
+
+    else:
+        input_zip_path = _zip_file_or_folder(path)
+
+        zip_file_size = os.path.getsize(input_zip_path)
+        logging.info("Input archive size: %s",
+                     format_utils.bytes_formatter(zip_file_size))
+
+        logging.info("Uploading input...")
+        try:
+
+            api_response = api_instance.get_upload_url(
+                query_params={
+                    "file_name": "_tmp.zip",
+                    "overwrite": "t" if overwrite else "f",
+                },
+                path_params={
+                    "folder_name": folder_name,
+                },
+            )
+            print(api_response)
+
+            method = api_response.body["method"]
+            url = api_response.body["url"]
+            file_server_available = bool(
+                api_response.body["file_server_available"])
+
+            headers = {"Content-Type": "application/octet-stream"}
+
+            if file_server_available is False:
+                headers["X-API-Key"] = (api_instance.api_client.configuration.
+                                        api_key["APIKeyHeader"])
+
+            logging.debug("Upload URL: %s", url)
+
+            with open(input_zip_path, "rb") as zip_fp, tqdm.tqdm(
+                    total=zip_file_size,
+                    unit="B",
+                    unit_scale=True,
+                    unit_divisor=1000,
+            ) as progress_bar:
+                # Wrap the file object so that the progress bar is updated every
+                # time a chunk is read.
+                wrapped_file = tqdm.utils.CallbackIOWrapper(
+                    progress_bar.update,
+                    zip_fp,
+                    "read",
+                )
+
+                # Use the pool_manager from the API client to send the request
+                # instead of using the generated client. This is because the
+                # generated client implementation does not support streaming
+                # the file and does not provide a way to update the progress bar.
+                pool_manager: urllib3.PoolManager = (
+                    api_instance.api_client.rest_client.pool_manager)
+
+                resp = pool_manager.request(
+                    method,
+                    url,
+                    body=wrapped_file,
+                    headers=headers,
+                )
+                if resp.status != 200:
+                    raise ApiException(
+                        status=resp.status,
+                        reason=resp.reason,
+                    )
+
+                api_response = api_instance.notify_upload_file(
+                    query_params={
+                        "file_name": "_tmp.zip",
+                        "unzip": "t"
+                    },
+                    path_params={
+                        "folder_name": folder_name,
+                    },
+                )
+        except ApiException as e:
+            logging.exception("Exception while uploading input files: %s", e)
+            raise e
+
+        logging.info("Input files successfully uploaded.")
+        logging.info("")
+        os.remove(input_zip_path)
