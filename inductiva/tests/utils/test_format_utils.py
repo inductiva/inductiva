@@ -172,9 +172,9 @@ def test_get_ansi_formatter_ansi_disabled():
         assert format_utils.get_ansi_formatter() is format_utils.no_formatter
 
 
-@mark.parametrize("date,result", [("2021-01-01T00:00:00", "01 Jan, 00:00:00"),
-                                  ("2021-01-01T12:00:00", "01 Jan, 12:00:00"),
-                                  ("2021-01-01T23:59:59", "01 Jan, 23:59:59"),
+@mark.parametrize("date,result", [("2021-01-01T00:00:00", "01/01, 00:00:00"),
+                                  ("2021-01-01T12:00:00", "01/01, 12:00:00"),
+                                  ("2021-01-01T23:59:59", "01/01, 23:59:59"),
                                   (None, None)])
 def test_datetime_formatter(date, result):
     assert format_utils.datetime_formatter(date) == result
@@ -264,8 +264,7 @@ def test_get_tabular_str_list_of_lists_formatters():
     (0.01234567, "0.012 US$"),
     (0.001234567, "0.0012 US$"),
     (0.0001234567, "0.00012 US$"),
-    (0.00001234567, "Less than 0.0001 US$. For more details check "
-     "\nhttps://console.inductiva.ai/tasks"),
+    (0.00001234567, "0.000012 US$"),
 ])
 def test_currency_formatter(amount, result):
     assert format_utils.currency_formatter(amount) == result
