@@ -1,2 +1,2 @@
 """Storage related functions."""
-from .storage import get_space_used, listdir, upload_files
+from .storage import get_space_used, listdir, upload, upload_from_url
