@@ -130,11 +130,13 @@ def _print_contents_table(contents):
     )
 
 
-def upload_from_url(url: str,
-                    destination_folder: str,
-                    file_name: str = None,
-                    unzip=False,
-                    overwrite=True):
+def upload_from_url(
+    url: str,
+    remote_dir: str,
+    file_name: str = None,
+    unzip: bool = False,
+    overwrite: bool = True,
+):
     """Upload a file from a URL to the user workspace."""
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
@@ -149,7 +151,7 @@ def upload_from_url(url: str,
             "overwrite": "t" if overwrite else "f",
         },
         path_params={
-            "folder_name": destination_folder,
+            "folder_name": remote_dir,
         },
     )
     if contents.response.status == 200:
@@ -158,9 +160,11 @@ def upload_from_url(url: str,
         logging.info("File upload failed.")
 
 
-def upload(local_path,
-           destination_folder: str = "default",
-           overwrite: bool = False):
+def upload(
+    local_path: str,
+    remote_dir: str = "default",
+    overwrite: bool = False,
+):
     """Upload local files to the user workspace."""
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
@@ -179,7 +183,7 @@ def upload(local_path,
                 "overwrite": "t" if overwrite else "f",
             },
             path_params={
-                "folder_name": destination_folder,
+                "folder_name": remote_dir,
             },
         )
 
@@ -234,7 +238,7 @@ def upload(local_path,
                     "unzip": "t"
                 },
                 path_params={
-                    "folder_name": destination_folder,
+                    "folder_name": remote_dir,
                 },
             )
     except ApiException as e:
