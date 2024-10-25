@@ -116,15 +116,15 @@ def _zip_file_or_folder(source_path):
         raise FileNotFoundError(f"The path {source_path} does not exist.")
 
     temp_dir = tempfile.mkdtemp()
-    zip_path = os.path.join(temp_dir, '_tmp.zip')
+    zip_path = os.path.join(temp_dir, "_tmp.zip")
 
-    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
         # If the source is a file, add it directly
         if os.path.isfile(source_path):
             zipf.write(source_path, os.path.basename(source_path))
         # If the source is a folder, walk through the folder and add files
         else:
-            for root, dirs, files in os.walk(source_path):
+            for root, _, files in os.walk(source_path):
                 for file in files:
                     file_path = os.path.join(root, file)
                     zipf.write(
@@ -141,7 +141,7 @@ def upload_files(path,
                  unzip: bool = False,
                  overwrite: bool = False,
                  url: bool = False):
-    """Upload files to the user's workspace."""
+    """Upload files to the user workspace."""
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
     if url:
         contents = api_instance.upload_from_url(
