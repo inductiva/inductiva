@@ -200,8 +200,8 @@ def upload_files(path,
                     unit_scale=True,
                     unit_divisor=1000,
             ) as progress_bar:
-                # Wrap the file object so that the progress bar is updated every
-                # time a chunk is read.
+                # Wrap the file object so that the progress bar is updated
+                # every time a chunk is read.
                 wrapped_file = tqdm.utils.CallbackIOWrapper(
                     progress_bar.update,
                     zip_fp,
@@ -211,7 +211,7 @@ def upload_files(path,
                 # Use the pool_manager from the API client to send the request
                 # instead of using the generated client. This is because the
                 # generated client implementation does not support streaming
-                # the file and does not provide a way to update the progress bar.
+                # file and does not provide a way to update the progress bar.
                 pool_manager: urllib3.PoolManager = (
                     api_instance.api_client.rest_client.pool_manager)
 
