@@ -315,7 +315,9 @@ class Task:
     }
 
     RUNNING_STATUSES = {
-        models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED
+        models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED,
+        models.TaskStatusCode.COMPUTATIONSTARTED,
+        models.TaskStatusCode.COMPUTATIONENDED
     }
 
     KILLABLE_STATUSES = {models.TaskStatusCode.SUBMITTED
