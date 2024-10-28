@@ -1,4 +1,5 @@
 """Methods to interact with the user storage resources."""
+import json
 import logging
 import os
 import tempfile
@@ -11,6 +12,7 @@ import urllib3
 
 import inductiva
 from inductiva import constants
+from inductiva.client import exceptions
 from inductiva.client.apis.tags import storage_api
 from inductiva.client.exceptions import ApiException
 from inductiva.utils import format_utils
@@ -280,3 +282,29 @@ def _zip_file_or_folder(source_path):
                                         os.path.dirname(source_path)))
 
     return zip_path
+
+
+def remove_workspace(remote_dir, file_name=None) -> bool:
+    """Removes a workspace folder or a workspace file.
+    
+    Returns:
+        True if the files were removed successfully, False otherwise.
+    """
+    api = storage_api.StorageApi(inductiva.api.get_client())
+
+    logging.info("Removing workspace file(s)...")
+    try:
+        query_params = {"file_name": file_name} if file_name is not None else {}
+
+        api.delete_file(
+            query_params=query_params,
+            path_params={
+                "folder_name": remote_dir,
+            },
+        )
+        logging.info("Workspace file(s) removed successfully.")
+    except exceptions.ApiException as e:
+        logging.error("An error occurred while removing the workspace:")
+        logging.error(" > %s", json.loads(e.body)["detail"])
+        return False
+    return True
