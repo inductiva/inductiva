@@ -6,9 +6,9 @@ OS: 14.5 (23F79)
 
 Before we continue, we need to make sure you have Python 3 properly installed. It may be the case that you have Python 3 installed in your system. If so, then we can proceed to installing the Python client for the Inductiva API as you would install any other Python package. If Python 3 is not installed, then we need to install it. Depending on the type and version of the operating system, installing Python may be substantially different. But first, let's check if Python is installed on your OSX.
 
-# Stage 1: Checking if python is installed in OSX.
+## Stage 1: Checking if python is installed in OSX.
 
-1) **Open a Terminal window.** For locating the Terminal app, let's use the Mac´s Search box, which can be opened by clicking on the magnifying glass icon on the right side of the top menu (close to the battery and wifi icons). Open the Search Box and type “Terminal”.  
+1. **Open a Terminal window.** For locating the Terminal app, let's use the Mac´s Search box, which can be opened by clicking on the magnifying glass icon on the right side of the top menu (close to the battery and wifi icons). Open the Search Box and type “Terminal”.  
      
     <div align="center">
         <img src="../_static/terminal_search.png" alt="Opening Terminal">
@@ -16,7 +16,7 @@ Before we continue, we need to make sure you have Python 3 properly installed. I
      
    This will allow you to open a Terminal.  
      
-2) On the Terminal type: python3
+2. On the Terminal type: python3
 
 <div align="center">
     <img src="../_static/terminal.png" alt="Checking your python">
@@ -45,14 +45,14 @@ Observe that, behind your Terminal window, there is another window that is askin
 
 Installing the Developer Tools may take a while (perhaps up to an hour depending on the speed of your Internet Connection) because it involves downloading quite a lot of software, including compilers and other development tools. Wait until you get the completion message.
 
-c) **Testing Python3 Again**. Once everything is installed, then you can type python3 again on your terminal and should see something similar to Image X. You now have Python 3 installed, you can proceed to Stage 2.
+3. **Testing Python3 Again**. Once everything is installed, then you can type python3 again on your terminal and should see something similar to Image X. You now have Python 3 installed, you can proceed to Stage 2.
 
-# Stage 2: Updating PIP and setting PATH
+## Stage 2: Updating PIP and setting PATH
 
 Now that you have Python 3 installed, we need to be sure that some other minor dependencies are also met. There are two things we need to do:
 
-1) update pip, the package installer for Python.   
-2) make sure all Python binaries are visible from the command line
+1. update pip, the package installer for Python.   
+2. make sure all Python binaries are visible from the command line
 
 For updating pip, on the terminal type:
 
@@ -87,15 +87,17 @@ As expected, the required path  –  /Users/YOURUSERNAME/Library/Python/3.9/bin 
 
 ```console
 nano ~/.zshrc
+```
 
 and add the following line (adapting YOURUSERNAME to your actual username):  
-   
+
+```console
 export PATH=v$PATH:/Users/YOURUSERNAME/Library/Python/3.9/bin
 
 Save the file. Now open a **different** terminal. On that terminal check the PATH environment variable again:
 
 echo $PATH
-````
+```
 
 You should now see the required directory added to the end of the PATH variable:
 
@@ -106,13 +108,13 @@ You should now see the required directory added to the end of the PATH variable:
 Ok! We are good to go!  
 By the way, we will need to edit the ~/.zshrc for installing the Inductiva API Key permanently. 
 
-# Stage 3: Installing Inductiva Python Package
+## Stage 3: Installing Inductiva Python Package
 
 Now you can try:
 
 ```console
 pip install inductiva
-````
+```
 
 If all goes well, you should see a message such as:
 
