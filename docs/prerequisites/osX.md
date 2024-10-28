@@ -1,4 +1,4 @@
-Installing the API on a clean OsX
+# Installing the API on a clean OsX
 
 Macbook Air 13  
 M3  
