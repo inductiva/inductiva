@@ -57,6 +57,31 @@ complex geometries and varying initial/boundary conditions;
 
 ```{toctree}
 ---
+caption: Built-in Simulators
+maxdepth: 1
+hidden: true
+---
+simulators/overview
+simulators/AmrWind
+simulators/CaNS
+simulators/DualSPHysics
+simulators/FDS
+simulators/FVCOM
+simulators/GROMACS
+simulators/NWChem
+simulators/OpenFOAM
+simulators/OpenFAST
+simulators/QuantumEspresso
+simulators/Reef3D
+simulators/SCHISM
+simulators/SPlisHSPlasH
+simulators/SWAN
+simulators/SWASH
+simulators/XBeach
+```
+
+```{toctree}
+---
 caption: Introduction to Inductiva API
 maxdepth: 1 
 hidden: true
@@ -85,31 +110,6 @@ generating-synthetic-data/synthetic-data-generation-2.md
 generating-synthetic-data/synthetic-data-generation-3.md
 generating-synthetic-data/synthetic-data-generation-4.md
 generating-synthetic-data/synthetic-data-generation-5.md
-```
-
-```{toctree}
----
-caption: Built-in Simulators
-maxdepth: 1
-hidden: true
----
-simulators/overview
-simulators/AmrWind
-simulators/CaNS
-simulators/DualSPHysics
-simulators/FDS
-simulators/FVCOM
-simulators/GROMACS
-simulators/NWChem
-simulators/OpenFOAM
-simulators/OpenFAST
-simulators/QuantumEspresso
-simulators/Reef3D
-simulators/SCHISM
-simulators/SPlisHSPlasH
-simulators/SWAN
-simulators/SWASH
-simulators/XBeach
 ```
 
 ```{toctree}
