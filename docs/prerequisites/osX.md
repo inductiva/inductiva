@@ -137,7 +137,7 @@ More infomation at:https://console.inductiva.ai/
 
 This is expected! We now need to install the Inductiva API Key.
 
-# Stage 4: Installing Inductiva API Key
+## Stage 4: Installing Inductiva API Key
 
 The Inductiva Key is the information required by the API Client to authenticate against the Inductiva server and then be able to invoke operations, such as running simulations, on your behalf.
 
