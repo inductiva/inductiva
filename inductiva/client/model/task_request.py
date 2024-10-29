@@ -157,6 +157,33 @@ class TaskRequest(schemas.DictSchema):
                     )
 
             resubmit_on_preemption = schemas.BoolSchema
+
+            class input_resources(schemas.ListSchema):
+
+                class MetaOapg:
+                    items = schemas.StrSchema
+
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple[typing.Union[
+                        MetaOapg.items,
+                        str,
+                    ]], typing.List[typing.Union[
+                        MetaOapg.items,
+                        str,
+                    ]]],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                ) -> 'input_resources':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
+
             __annotations__ = {
                 "simulator": simulator,
                 "resource_pool": resource_pool,
@@ -165,6 +192,7 @@ class TaskRequest(schemas.DictSchema):
                 "project": project,
                 "time_to_live_seconds": time_to_live_seconds,
                 "resubmit_on_preemption": resubmit_on_preemption,
+                "input_resources": input_resources,
             }
 
     simulator: MetaOapg.properties.simulator
@@ -214,6 +242,12 @@ class TaskRequest(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["input_resources"]
+    ) -> MetaOapg.properties.input_resources:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -225,6 +259,7 @@ class TaskRequest(schemas.DictSchema):
         "project",
         "time_to_live_seconds",
         "resubmit_on_preemption",
+        "input_resources",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -274,6 +309,12 @@ class TaskRequest(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["input_resources"]
+    ) -> typing.Union[MetaOapg.properties.input_resources, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -286,6 +327,7 @@ class TaskRequest(schemas.DictSchema):
         "project",
         "time_to_live_seconds",
         "resubmit_on_preemption",
+        "input_resources",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -323,6 +365,8 @@ class TaskRequest(schemas.DictSchema):
         resubmit_on_preemption: typing.Union[
             MetaOapg.properties.resubmit_on_preemption, bool,
             schemas.Unset] = schemas.unset,
+        input_resources: typing.Union[MetaOapg.properties.input_resources, list,
+                                      tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -339,6 +383,7 @@ class TaskRequest(schemas.DictSchema):
             project=project,
             time_to_live_seconds=time_to_live_seconds,
             resubmit_on_preemption=resubmit_on_preemption,
+            input_resources=input_resources,
             _configuration=_configuration,
             **kwargs,
         )

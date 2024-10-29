@@ -33,6 +33,7 @@ from inductiva.client.model.executer import Executer
 from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
 from inductiva.client.model.executer_tracker_register_info import ExecuterTrackerRegisterInfo
 from inductiva.client.model.executer_tracker_token import ExecuterTrackerToken
+from inductiva.client.model.file_download_details import FileDownloadDetails
 from inductiva.client.model.file_download_url import FileDownloadUrl
 from inductiva.client.model.file_info import FileInfo
 from inductiva.client.model.file_upload_url import FileUploadUrl

@@ -622,6 +622,29 @@ class TaskWithStatusHistory(
                         _configuration=_configuration,
                         **kwargs,
                     )
+            
+            
+            class input_resources(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    items = schemas.StrSchema
+            
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'input_resources':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> MetaOapg.items:
+                    return super().__getitem__(i)
             __annotations__ = {
                 "task_id": task_id,
                 "status": status,
@@ -643,6 +666,7 @@ class TaskWithStatusHistory(
                 "metrics": metrics,
                 "executer": executer,
                 "error_detail": error_detail,
+                "input_resources": input_resources,
             }
     
     simulator: MetaOapg.properties.simulator
@@ -714,9 +738,12 @@ class TaskWithStatusHistory(
     def __getitem__(self, name: typing_extensions.Literal["error_detail"]) -> MetaOapg.properties.error_detail: ...
     
     @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["input_resources"]) -> MetaOapg.properties.input_resources: ...
+    
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "simulator", "project", "is_terminated", "status_history", "machine_operations", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "estimated_computation_cost", "storage_size", "metrics", "executer", "error_detail", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "simulator", "project", "is_terminated", "status_history", "machine_operations", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "estimated_computation_cost", "storage_size", "metrics", "executer", "error_detail", "input_resources", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -782,9 +809,12 @@ class TaskWithStatusHistory(
     def get_item_oapg(self, name: typing_extensions.Literal["error_detail"]) -> typing.Union[MetaOapg.properties.error_detail, schemas.Unset]: ...
     
     @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["input_resources"]) -> typing.Union[MetaOapg.properties.input_resources, schemas.Unset]: ...
+    
+    @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "simulator", "project", "is_terminated", "status_history", "machine_operations", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "estimated_computation_cost", "storage_size", "metrics", "executer", "error_detail", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "simulator", "project", "is_terminated", "status_history", "machine_operations", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "estimated_computation_cost", "storage_size", "metrics", "executer", "error_detail", "input_resources", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -811,6 +841,7 @@ class TaskWithStatusHistory(
         metrics: typing.Union[MetaOapg.properties.metrics, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         executer: typing.Union[MetaOapg.properties.executer, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
         error_detail: typing.Union[MetaOapg.properties.error_detail, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
+        input_resources: typing.Union[MetaOapg.properties.input_resources, list, tuple, schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
     ) -> 'TaskWithStatusHistory':
@@ -837,6 +868,7 @@ class TaskWithStatusHistory(
             metrics=metrics,
             executer=executer,
             error_detail=error_detail,
+            input_resources=input_resources,
             _configuration=_configuration,
             **kwargs,
         )
