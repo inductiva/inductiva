@@ -10,3 +10,4 @@ sphinx-togglebutton
 sphinxcontrib-googleanalytics
 sphinxext.opengraph
 sphinx-sitemap
+sphinx-reredirects
