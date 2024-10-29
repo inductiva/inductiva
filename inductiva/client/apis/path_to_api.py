@@ -60,6 +60,7 @@ from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_upload
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_metric import ExecuterTrackerMachineIdTaskTaskIdMetric
 from inductiva.client.apis.paths.executer_tracker_machine_id_resize_disk import ExecuterTrackerMachineIdResizeDisk
 from inductiva.client.apis.paths.executer_tracker_machine_id_resize_disk_done import ExecuterTrackerMachineIdResizeDiskDone
+from inductiva.client.apis.paths.executer_tracker_machine_id_download_urls import ExecuterTrackerMachineIdDownloadUrls
 from inductiva.client.apis.paths.compute_group import ComputeGroup
 from inductiva.client.apis.paths.compute_type import ComputeType
 from inductiva.client.apis.paths.compute_group_start import ComputeGroupStart
@@ -71,6 +72,11 @@ from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
+from inductiva.client.apis.paths.storage_folder_name_input import StorageFolderNameInput
+from inductiva.client.apis.paths.storage_folder_name_input_url import StorageFolderNameInputUrl
+from inductiva.client.apis.paths.storage_folder_name_input_notify import StorageFolderNameInputNotify
+from inductiva.client.apis.paths.storage_folder_name_input_remote import StorageFolderNameInputRemote
+from inductiva.client.apis.paths.storage_folder_name import StorageFolderName
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
@@ -207,6 +213,8 @@ PathToApi = typing_extensions.TypedDict(
             ExecuterTrackerMachineIdResizeDisk,
         PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK_DONE:
             ExecuterTrackerMachineIdResizeDiskDone,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_DOWNLOAD_URLS:
+            ExecuterTrackerMachineIdDownloadUrls,
         PathValues.COMPUTE_GROUP:
             ComputeGroup,
         PathValues.COMPUTE_TYPE:
@@ -229,6 +237,16 @@ PathToApi = typing_extensions.TypedDict(
             StorageCost,
         PathValues.STORAGE_CONTENTS:
             StorageContents,
+        PathValues.STORAGE_FOLDER_NAME_INPUT:
+            StorageFolderNameInput,
+        PathValues.STORAGE_FOLDER_NAME_INPUT_URL:
+            StorageFolderNameInputUrl,
+        PathValues.STORAGE_FOLDER_NAME_INPUT_NOTIFY:
+            StorageFolderNameInputNotify,
+        PathValues.STORAGE_FOLDER_NAME_INPUT_REMOTE:
+            StorageFolderNameInputRemote,
+        PathValues.STORAGE_FOLDER_NAME:
+            StorageFolderName,
         PathValues.VERSION:
             Version,
         PathValues.VERSIONCHECK:
@@ -380,6 +398,8 @@ path_to_api = PathToApi({
         ExecuterTrackerMachineIdResizeDisk,
     PathValues.EXECUTERTRACKER_MACHINE_ID_RESIZE_DISK_DONE:
         ExecuterTrackerMachineIdResizeDiskDone,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_DOWNLOAD_URLS:
+        ExecuterTrackerMachineIdDownloadUrls,
     PathValues.COMPUTE_GROUP:
         ComputeGroup,
     PathValues.COMPUTE_TYPE:
@@ -402,6 +422,16 @@ path_to_api = PathToApi({
         StorageCost,
     PathValues.STORAGE_CONTENTS:
         StorageContents,
+    PathValues.STORAGE_FOLDER_NAME_INPUT:
+        StorageFolderNameInput,
+    PathValues.STORAGE_FOLDER_NAME_INPUT_URL:
+        StorageFolderNameInputUrl,
+    PathValues.STORAGE_FOLDER_NAME_INPUT_NOTIFY:
+        StorageFolderNameInputNotify,
+    PathValues.STORAGE_FOLDER_NAME_INPUT_REMOTE:
+        StorageFolderNameInputRemote,
+    PathValues.STORAGE_FOLDER_NAME:
+        StorageFolderName,
     PathValues.VERSION:
         Version,
     PathValues.VERSIONCHECK:
