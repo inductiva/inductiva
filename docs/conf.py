@@ -28,17 +28,10 @@ author = 'Inductiva Research Labs'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon',
-    'myst_parser',
-    'sphinxcontrib.mermaid',
-    'sphinx_copybutton',
-    'sphinx_tabs.tabs',
-    'sphinx_togglebutton',
-    'sphinxcontrib.googleanalytics',
-    'sphinxext.opengraph',
-    'sphinx_sitemap',
+    'sphinx.ext.autodoc', 'sphinx.ext.mathjax', 'sphinx.ext.napoleon',
+    'myst_parser', 'sphinxcontrib.mermaid', 'sphinx_copybutton',
+    'sphinx_tabs.tabs', 'sphinx_togglebutton', 'sphinxcontrib.googleanalytics',
+    'sphinxext.opengraph', 'sphinx_sitemap', 'sphinx_reredirects'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -108,3 +101,129 @@ ogp_image = "https://docs.inductiva.ai/_static/inductiva-social-banner.jpg"
 language = 'en'
 version = 'local'
 html_baseurl = 'https://docs.inductiva.ai/'
+
+redirects = {
+    "api_reference/computational_resources/compute_janitor.html":
+        "en/latest/api_reference/computational_resources/compute_janitor.html",
+    "api_reference/computational_resources/elasticgroup_class.html":
+        "en/latest/api_reference/computational_resources/elasticgroup_class.html",
+    "api_reference/computational_resources/index.html":
+        "en/latest/api_reference/computational_resources/index.html",
+    "api_reference/computational_resources/machinegroup_class.html":
+        "en/latest/api_reference/computational_resources/machinegroup_class.html",
+    "api_reference/computational_resources/mpicluster_class.html":
+        "en/latest/api_reference/computational_resources/mpicluster_class.html",
+    "api_reference/faq.html":
+        "en/latest/api_reference/faq.html",
+    "api_reference/glossary.html":
+        "en/latest/api_reference/glossary.html",
+    "api_reference/troubleshooting.html":
+        "en/latest/api_reference/troubleshooting.html",
+    "api_reference/uninstall_inductiva.html":
+        "en/latest/api_reference/uninstall_inductiva.html",
+    "api_reference/user_quotas.html":
+        "en/latest/api_reference/user_quotas.html",
+    "en/latest/api_reference/user_quotas.html":
+        "en/latest/api_reference/tiers_and_quotas.html",
+    "cli/access-storage.html":
+        "en/latest/cli/access-storage.html",
+    "cli/cli-overview.html":
+        "en/latest/cli/cli-overview.html",
+    "cli/managing-resources.html":
+        "en/latest/cli/managing-resources.html",
+    "cli/overview.html":
+        "en/latest/cli/overview.html",
+    "cli/tracking-tasks.html":
+        "en/latest/cli/tracking-tasks.html",
+    "computational_resources/index.html":
+        "en/latest/api_reference/computational_resources/index.html",
+    "computational_resources/machinegroup_class.html":
+        "en/latest/api_reference/computational_resources/machinegroup_class.html",
+    "en/latest/_sources/api_reference/user_quotas.md":
+        "en/latest/api_reference/tiers_and_quotas.html",
+    #this here need to be updated to point to docs at a latter date
+    "en/latest/_sources/explore_api/shared_dedicated_resources.md":
+        "https://tutorials.inductiva.ai/intro_to_api/shared_dedicated_resources.html",
+    "en/latest/explore_api/shared_dedicated_resources.html":
+        "https://tutorials.inductiva.ai/intro_to_api/shared_dedicated_resources.html",
+    "explore_api/shared_dedicated_resources.html":
+        "https://tutorials.inductiva.ai/intro_to_api/shared_dedicated_resources.html",
+    "explore_api/computational-infrastructure.html":
+        "https://tutorials.inductiva.ai/intro_to_api/computational-infrastructure.html",
+    "en/latest/explore_api/computational-infrastructure.html":
+        "https://tutorials.inductiva.ai/intro_to_api/computational-infrastructure.html",
+    "en/latest/explore_api/configuring-simulators.html":
+        "https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html",
+    "en/latest/explore_api/data_flow.html":
+        "https://tutorials.inductiva.ai/intro_to_api/data_flow.html",
+    "en/latest/explore_api/how_it_works.html":
+        "https://tutorials.inductiva.ai/intro_to_api/how_it_works.html",
+    "en/latest/explore_api/tasks.html":
+        "https://tutorials.inductiva.ai/intro_to_api/tasks.html",
+    "en/latest/explore_api/templating.html":
+        "https://tutorials.inductiva.ai/intro_to_api/templating.html",
+    "explore_api/configuring-simulators.html":
+        "https://tutorials.inductiva.ai/intro_to_api/configuring-simulators.html",
+    "explore_api/data_flow.html":
+        "https://tutorials.inductiva.ai/intro_to_api/data_flow.html",
+    "explore_api/how_it_works.html":
+        "https://tutorials.inductiva.ai/intro_to_api/how_it_works.html",
+    "explore_api/tasks.html":
+        "https://tutorials.inductiva.ai/intro_to_api/tasks.html",
+    "explore_api/templating.html":
+        "thttps://tutorials.inductiva.ai/intro_to_api/templating.html",
+    "introduction/templating.html":
+        "https://tutorials.inductiva.ai/intro_to_api/templating.html",
+    #This here needs to be updated to tutorials at a latter date
+    "how_to/index.html":
+        "en/latest/how_to/index.html",
+    "how_to/manage-remote-storage.html":
+        "en/latest/how_to/manage-remote-storage.html",
+    "how_to/manage_and_retrieve_results.html":
+        "en/latest/how_to/manage_and_retrieve_results.html",
+    "how_to/manage_computational_resources.html":
+        "en/latest/how_to/manage_computational_resources.html",
+    "how_to/manage_tasks.html":
+        "en/latest/how_to/manage_tasks.html",
+    "how_to/run-parallel_simulations.html":
+        "en/latest/how_to/run-parallel_simulations.html",
+    "how_to/set-up-elastic-machine-group.html":
+        "en/latest/how_to/set-up-elastic-machine-group.html",
+    "how_to/set-up-mpi-cluster.html":
+        "en/latest/how_to/set-up-mpi-cluster.html",
+    #simulators
+    "en/latest/simulators/SPlisHSPlasH.html":
+        "https://tutorials.inductiva.ai/simulators/SPlisHSPlasH.html",
+    "en/latest/simulators/SWAN.html":
+        "https://tutorials.inductiva.ai/simulators/SWAN.html",
+    "simulators/AmrWind.html":
+        "https://tutorials.inductiva.ai/simulators/AmrWind.html",
+    "simulators/CaNS.html":
+        "https://tutorials.inductiva.ai/simulators/CaNS.html",
+    "simulators/DualSPHysics.html":
+        "https://tutorials.inductiva.ai/simulators/DualSPHysics.html",
+    "simulators/FDS.html":
+        "https://tutorials.inductiva.ai/simulators/FDS.html",
+    "simulators/GROMACS.html":
+        "https://tutorials.inductiva.ai/simulators/GROMACS.html",
+    "simulators/NWChem.html":
+        "https://tutorials.inductiva.ai/simulators/NWChem.html",
+    "simulators/OpenFAST.html":
+        "https://tutorials.inductiva.ai/simulators/OpenFAST.html",
+    "simulators/OpenFOAM.html":
+        "https://tutorials.inductiva.ai/simulators/OpenFOAM.html",
+    "simulators/overview.html":
+        "https://tutorials.inductiva.ai/simulators/overview.html",
+    "simulators/Reef3D.html":
+        "https://tutorials.inductiva.ai/simulators/Reef3D.html",
+    "simulators/SCHISM.html":
+        "https://tutorials.inductiva.ai/simulators/SCHISM.html",
+    "simulators/SPlisHSPlasH.html":
+        "https://tutorials.inductiva.ai/simulators/SPlisHSPlasH.html",
+    "simulators/SWAN.html":
+        "https://tutorials.inductiva.ai/simulators/SWAN.html",
+    "simulators/SWASH.html":
+        "https://tutorials.inductiva.ai/simulators/SWASH.html",
+    "simulators/XBeach.html":
+        "https://tutorials.inductiva.ai/simulators/XBeach.html",
+}
