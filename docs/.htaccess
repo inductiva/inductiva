@@ -1,2 +1,0 @@
-# Redirects any request for test.html to google.com
-Redirect /test.html https://www.google.com

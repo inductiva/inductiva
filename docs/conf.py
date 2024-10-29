@@ -39,6 +39,7 @@ extensions = [
     'sphinxcontrib.googleanalytics',
     'sphinxext.opengraph',
     'sphinx_sitemap',
+    'sphinx_reredirects'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -108,3 +109,7 @@ ogp_image = "https://docs.inductiva.ai/_static/inductiva-social-banner.jpg"
 language = 'en'
 version = 'local'
 html_baseurl = 'https://docs.inductiva.ai/'
+
+redirects = {
+    "simulators/CaNS.html": "https://tutorials.inductiva.ai/simulators/CaNS.html"
+}
