@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
@@ -47,10 +47,10 @@
   <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -58,16 +58,17 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro_to_api/custom_docker_images';</script>
     <link rel="canonical" href="https://docs.inductiva.ai/intro_to_api/custom_docker_images.html" />
@@ -369,7 +370,7 @@
                 <article class="bd-article">
                   
   <section id="running-simulations-with-custom-docker-images">
-<h1>Running Simulations with Custom Docker Images<a class="headerlink" href="#running-simulations-with-custom-docker-images" title="Permalink to this heading">#</a></h1>
+<h1>Running Simulations with Custom Docker Images<a class="headerlink" href="#running-simulations-with-custom-docker-images" title="Link to this heading">#</a></h1>
 <p>In this tutorial, we will guide you through running simulations with custom
 Docker images. This can be particularly useful if you need to use a specific
 version of software that isn’t available on our Docker Hub. Using this feature,
@@ -380,7 +381,7 @@ you can run your own Docker image on the platform.</p>
 <li><p>The inputs required by that simulator</p></li>
 </ul>
 <section id="customimage-simulator">
-<h2>CustomImage Simulator<a class="headerlink" href="#customimage-simulator" title="Permalink to this heading">#</a></h2>
+<h2>CustomImage Simulator<a class="headerlink" href="#customimage-simulator" title="Link to this heading">#</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">CustomImage</span></code> simulator allows you to specify a <code class="docutils literal notranslate"><span class="pre">container_image</span></code> pointing
 to your custom Docker image. Besides the <code class="docutils literal notranslate"><span class="pre">container_image</span></code>, this simulator
 accepts a list of commands to run inside the container. These are the only
@@ -411,7 +412,7 @@ this feature fully, we introduce the <code class="docutils literal notranslate">
 enable you to run commands on MPI clusters supporting multiple MPI versions.</p>
 </section>
 <section id="command-and-mpiconfig">
-<h2>Command and MPIConfig<a class="headerlink" href="#command-and-mpiconfig" title="Permalink to this heading">#</a></h2>
+<h2>Command and MPIConfig<a class="headerlink" href="#command-and-mpiconfig" title="Link to this heading">#</a></h2>
 <p>In the previous example, <code class="docutils literal notranslate"><span class="pre">commands</span></code> is a list of strings to be run inside the
 container. For more advanced usage, such as running a command with a specific
 MPI version, use the <code class="docutils literal notranslate"><span class="pre">Command</span></code> and <code class="docutils literal notranslate"><span class="pre">MPIConfig</span></code> classes. A list of <code class="docutils literal notranslate"><span class="pre">commands</span></code> can

@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
@@ -47,10 +47,10 @@
   <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -58,16 +58,17 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro_to_api/projects';</script>
     <link rel="canonical" href="https://docs.inductiva.ai/intro_to_api/projects.html" />
@@ -376,7 +377,7 @@
                 <article class="bd-article">
                   
   <section id="projects">
-<h1>Projects<a class="headerlink" href="#projects" title="Permalink to this heading">#</a></h1>
+<h1>Projects<a class="headerlink" href="#projects" title="Link to this heading">#</a></h1>
 <p>Projects are the primary way to organize <code class="docutils literal notranslate"><span class="pre">Tasks</span></code> in the Inductiva API.
 A project is a collection of tasks that run under a common umbrella, identified
 by its name. Any submitted task will always belong to a project: either a
@@ -384,7 +385,7 @@ user-specified one or the default project. This allows users to organize their
 tasks in a way that makes sense to them.
 The following sections will explain how to create and interact with projects.</p>
 <section id="creating-a-project">
-<h2>Creating a Project<a class="headerlink" href="#creating-a-project" title="Permalink to this heading">#</a></h2>
+<h2>Creating a Project<a class="headerlink" href="#creating-a-project" title="Link to this heading">#</a></h2>
 <p>A project is created whenever an instance of the <code class="docutils literal notranslate"><span class="pre">Project</span></code> class, from the
 <code class="docutils literal notranslate"><span class="pre">projects</span></code> module, is created. <strong>Projects are uniquely identified by their name</strong>.</p>
 <p>When instantiating a new project, the user needs to specify the project’s name -
@@ -411,7 +412,7 @@ characters appended to it. This project is used when no project is explicitly us
 in the task submission and ensures that no orphaned tasks are created.</p>
 </section>
 <section id="listing-existing-projects">
-<h2>Listing existing projects<a class="headerlink" href="#listing-existing-projects" title="Permalink to this heading">#</a></h2>
+<h2>Listing existing projects<a class="headerlink" href="#listing-existing-projects" title="Link to this heading">#</a></h2>
 <p>To retrieve a list of all existing projects, use the <code class="docutils literal notranslate"><span class="pre">get_projects</span></code> function
 from the <code class="docutils literal notranslate"><span class="pre">projects</span></code> module:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">inductiva</span>
@@ -433,7 +434,7 @@ all existing projects:</p>
 </div>
 </section>
 <section id="adding-a-task-to-a-project">
-<h2>Adding a Task to a Project<a class="headerlink" href="#adding-a-task-to-a-project" title="Permalink to this heading">#</a></h2>
+<h2>Adding a Task to a Project<a class="headerlink" href="#adding-a-task-to-a-project" title="Link to this heading">#</a></h2>
 <p>Any task that is submitted to the Inductiva API must belong to a project.
 When the user is not explicit about the project to which the task is to be added,
 the default one is used. This ensures that no orphaned tasks are created.
@@ -460,7 +461,7 @@ from the context where the <code class="docutils literal notranslate"><span clas
 <p>The client library offers two mechanisms to manage how tasks are added to a
 project: by manually opening and closing a <code class="docutils literal notranslate"><span class="pre">project</span></code> or via a context manager.</p>
 <section id="explicit-management">
-<h3>Explicit management<a class="headerlink" href="#explicit-management" title="Permalink to this heading">#</a></h3>
+<h3>Explicit management<a class="headerlink" href="#explicit-management" title="Link to this heading">#</a></h3>
 <p>Explicit management requires that the user opens and closes the project manually
 using the <code class="docutils literal notranslate"><span class="pre">open</span></code> and <code class="docutils literal notranslate"><span class="pre">close</span></code> methods of the <code class="docutils literal notranslate"><span class="pre">Project</span></code> class. The project needs to
 be instantiated, opened for task submission and then closed to prevent further tasks
@@ -504,7 +505,7 @@ task to a project using explicit management:</p>
 </div>
 </section>
 <section id="using-a-context-manager">
-<h3>Using a Context Manager<a class="headerlink" href="#using-a-context-manager" title="Permalink to this heading">#</a></h3>
+<h3>Using a Context Manager<a class="headerlink" href="#using-a-context-manager" title="Link to this heading">#</a></h3>
 <p>Alternatively, the project can be managed using a context manager that automatically
 opens and closes the project for task submission, and helps clarify the scope of
 the project. The manager ensures that the project is opened for task submission
@@ -554,7 +555,7 @@ by calling the <code class="docutils literal notranslate"><span class="pre">get_
 </section>
 </section>
 <section id="listing-tasks-in-a-project">
-<h2>Listing Tasks in a Project<a class="headerlink" href="#listing-tasks-in-a-project" title="Permalink to this heading">#</a></h2>
+<h2>Listing Tasks in a Project<a class="headerlink" href="#listing-tasks-in-a-project" title="Link to this heading">#</a></h2>
 <p>Each project has a list of tasks that belong to it. To list all tasks in a given
 object, use the <code class="docutils literal notranslate"><span class="pre">get_tasks</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Project</span></code> class:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">inductiva</span>
@@ -578,7 +579,7 @@ Showing<span class="w"> </span>tasks<span class="w"> </span><span class="k">for<
 </div>
 </section>
 <section id="thread-awareness-of-projects">
-<h2>Thread awareness of Projects<a class="headerlink" href="#thread-awareness-of-projects" title="Permalink to this heading">#</a></h2>
+<h2>Thread awareness of Projects<a class="headerlink" href="#thread-awareness-of-projects" title="Link to this heading">#</a></h2>
 <p>Projects are thread-aware. Multiple threads can define and use different
 projects simultaneously. A project opened in one thread will not affect the
 project opened in another thread. If a thread does not open a project, the default

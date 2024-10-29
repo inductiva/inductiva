@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
@@ -47,11 +47,11 @@
   <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -59,18 +59,19 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/tabs.js?v=3030b3cb"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro_to_api/computational-infrastructure';</script>
     <link rel="canonical" href="https://docs.inductiva.ai/intro_to_api/computational-infrastructure.html" />
     <link rel="icon" href="../_static/favicon.ico"/>
@@ -372,7 +373,7 @@
                 <article class="bd-article">
                   
   <section id="computational-infrastructure">
-<h1>Computational Infrastructure<a class="headerlink" href="#computational-infrastructure" title="Permalink to this heading">#</a></h1>
+<h1>Computational Infrastructure<a class="headerlink" href="#computational-infrastructure" title="Link to this heading">#</a></h1>
 <p>The Inductiva API serves as a direct intermediary, bridging the gap between users
 and the complex landscape of computational resources. It streamlines the process
 of managing and allocating computational workloads and simulation tasks, by
@@ -381,7 +382,7 @@ facilitating access to an expansive selection of computing options.</p>
 and introduce you to the various computational options currently available to you,
 as well as preview exciting additions planned for future releases!</p>
 <section id="computational-resource-management">
-<h2>Computational Resource Management<a class="headerlink" href="#computational-resource-management" title="Permalink to this heading">#</a></h2>
+<h2>Computational Resource Management<a class="headerlink" href="#computational-resource-management" title="Link to this heading">#</a></h2>
 <p>The Inductiva API acts as an abstraction layer that enables you to access a wide
 array of computational resources provided by a number of different players through
 a unified Python code. These resources could be from cloud providers, bare-metal
@@ -397,7 +398,7 @@ resource dedicated to you, handles the orchestration of the simulation, and then
 returns the results back to you.</p>
 </section>
 <section id="available-computational-resources">
-<h2>Available Computational Resources<a class="headerlink" href="#available-computational-resources" title="Permalink to this heading">#</a></h2>
+<h2>Available Computational Resources<a class="headerlink" href="#available-computational-resources" title="Link to this heading">#</a></h2>
 <p>In the current release, version 0.8, Inductiva supports dispatching computational
 workloads to the Google Cloud Platform (GCP). This means that the simulations initiated
 through our API are executed on one or more virtual machines (VMs) hosted on GCP.</p>
@@ -425,9 +426,9 @@ ratio:</p>
 <li><p><strong>highmem</strong> - Equipped with 8 GB of RAM per vCPU, designed for memory-intensive applications.</p></li>
 </ul>
 <p>These configurations allow for the customization of
-<a class="reference external" href="http://docs.inductiva.ai/en/latest/api_reference/computational_resources/machinegroup_class.html" target="_blank">MachineGroups</a>,
-<a class="reference external" href="http://docs.inductiva.ai/en/latest/api_reference/computational_resources/elasticgroup_class.html" target="_blank">ElasticMachineGroups</a>,
-and <a class="reference external" href="http://docs.inductiva.ai/en/latest/api_reference/computational_resources/mpicluster_class.html" target="_blank">MPIClusters</a>
+<a class="reference external" href="http://docs.inductiva.ai/en/latest/api_reference/computational_resources/machinegroup_class.html" rel="noreferer noopener" target="_blank">MachineGroups</a>,
+<a class="reference external" href="http://docs.inductiva.ai/en/latest/api_reference/computational_resources/elasticgroup_class.html" rel="noreferer noopener" target="_blank">ElasticMachineGroups</a>,
+and <a class="reference external" href="http://docs.inductiva.ai/en/latest/api_reference/computational_resources/mpicluster_class.html" rel="noreferer noopener" target="_blank">MPIClusters</a>
 to match your computational needs.</p>
 <p>Here’s an example of how you can start a MachineGroup with robust “<strong>c3d-standard-60</strong>”
 general machines:</p>
@@ -448,7 +449,7 @@ to accrue significant expenses if a large number of VMs are initiated! To protec
 you from inadvertently spinning up too many resources, the API imposes certain
 limitations on the quantity and types of machines that you can launch. For details
 on these limitations, please consult the
-<a class="reference external" href="http://docs.inductiva.ai/en/latest/api_reference/tiers_and_quotas.html" target="_blank">User Quotas</a>
+<a class="reference external" href="http://docs.inductiva.ai/en/latest/api_reference/tiers_and_quotas.html" rel="noreferer noopener" target="_blank">User Quotas</a>
 we put in place through the current version of the API.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -457,7 +458,7 @@ we put in place through the current version of the API.</p>
 </div>
 </section>
 <section id="upcoming-computational-resources">
-<h2>Upcoming Computational Resources<a class="headerlink" href="#upcoming-computational-resources" title="Permalink to this heading">#</a></h2>
+<h2>Upcoming Computational Resources<a class="headerlink" href="#upcoming-computational-resources" title="Link to this heading">#</a></h2>
 <p>In future versions of the API, we plan to expand the range of computational resources
 you can access through the API. Here’s a sneak peek at what is on our development
 roadmap:</p>

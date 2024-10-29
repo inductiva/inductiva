@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
@@ -47,10 +47,10 @@
   <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -58,16 +58,17 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cli/streaming-logs';</script>
     <link rel="canonical" href="https://docs.inductiva.ai/cli/streaming-logs.html" />
@@ -369,7 +370,7 @@
                 <article class="bd-article">
                   
   <section id="stream-logs-of-a-task">
-<h1>Stream Logs of a Task<a class="headerlink" href="#stream-logs-of-a-task" title="Permalink to this heading">#</a></h1>
+<h1>Stream Logs of a Task<a class="headerlink" href="#stream-logs-of-a-task" title="Link to this heading">#</a></h1>
 <p>While a task is running, one of the main concerns for scientists and engineers is
 making sure the simulation is progressing as expected or identifying any potential
 errors. To help with this, the Inductiva CLI provides a <code class="docutils literal notranslate"><span class="pre">logs</span></code> subcommand that enables
@@ -377,7 +378,7 @@ you to stream the logs of a running task in <strong>real time</strong>.</p>
 <p>In this way, running a simulation on a powerful remote machine will feel exactly
 like running it on your local computer!</p>
 <section id="check-the-log-stream">
-<h2>Check the Log Stream<a class="headerlink" href="#check-the-log-stream" title="Permalink to this heading">#</a></h2>
+<h2>Check the Log Stream<a class="headerlink" href="#check-the-log-stream" title="Link to this heading">#</a></h2>
 <p>Here’s an example of how you can use the <code class="docutils literal notranslate"><span class="pre">logs</span></code> subcommand to stay updated on your simulation’s
 progress. This command connects you directly to the ongoing logs of the specified
 task, displaying updates such as computation steps, residuals, and execution times as
@@ -453,7 +454,7 @@ timer<span class="w"> </span>per<span class="w"> </span>step:<span class="w"> </
 terminate simulations to achieve the desired simulation configurations.</p>
 </section>
 <section id="save-the-log-stream">
-<h2>Save the Log Stream<a class="headerlink" href="#save-the-log-stream" title="Permalink to this heading">#</a></h2>
+<h2>Save the Log Stream<a class="headerlink" href="#save-the-log-stream" title="Link to this heading">#</a></h2>
 <p>When the simulation ends, the log stream will automatically close, indicating
 that there are no new messages. The stream consumer’s shutdown doesn’t impact the
 simulation or its outputs, and you don’t need to take any further action.</p>

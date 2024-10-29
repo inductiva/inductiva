@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
@@ -47,10 +47,10 @@
   <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -58,16 +58,17 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro_to_api/tasks';</script>
     <link rel="canonical" href="https://docs.inductiva.ai/intro_to_api/tasks.html" />
@@ -370,7 +371,7 @@
                 <article class="bd-article">
                   
   <section id="tasks">
-<h1>Tasks<a class="headerlink" href="#tasks" title="Permalink to this heading">#</a></h1>
+<h1>Tasks<a class="headerlink" href="#tasks" title="Link to this heading">#</a></h1>
 <p>Central to the API’s functionality is the concept of a <code class="docutils literal notranslate"><span class="pre">Task</span></code>,
 which is an  abstraction that encapsulates all the information
 about the computational workload you defined as the user.
@@ -381,7 +382,7 @@ monitoring its progress and retrieving its outputs.</p>
 including its creation, various operational states, and termination. This information
 is crucial to understand how the Inductiva API manages simulations.</p>
 <section id="task-creation">
-<h2>Task Creation<a class="headerlink" href="#task-creation" title="Permalink to this heading">#</a></h2>
+<h2>Task Creation<a class="headerlink" href="#task-creation" title="Link to this heading">#</a></h2>
 <p>A <code class="docutils literal notranslate"><span class="pre">Task</span></code> is created when you submit a simulation via the API by invoking the <code class="docutils literal notranslate"><span class="pre">run</span></code>
 method on a simulator object. Each call to this method, even with identical arguments,
 generates a unique <code class="docutils literal notranslate"><span class="pre">Task</span></code>, leading to separate executions of the same simulation.</p>
@@ -442,7 +443,7 @@ retrieve information about tasks you created in previous sessions:</p>
 </div>
 </section>
 <section id="task-execution">
-<h2>Task Execution<a class="headerlink" href="#task-execution" title="Permalink to this heading">#</a></h2>
+<h2>Task Execution<a class="headerlink" href="#task-execution" title="Link to this heading">#</a></h2>
 <p>Tasks run <strong>asynchronously</strong> by default, enabling you to continue interacting with
 the API without interrupting your code in the background, even as tasks run or are
 queued for execution. This asynchronous model also allows for batch submissions within
@@ -474,7 +475,7 @@ to return (e.g., through a Ctrl+C command):</p>
 </div>
 </section>
 <section id="task-lifecycle">
-<span id="task-lifecyle"></span><h2>Task Lifecycle<a class="headerlink" href="#task-lifecycle" title="Permalink to this heading">#</a></h2>
+<span id="task-lifecyle"></span><h2>Task Lifecycle<a class="headerlink" href="#task-lifecycle" title="Link to this heading">#</a></h2>
 <p>The status of a task changes as it progresses through its lifecycle. Understanding
 these states is crucial if you want to track a task’s progress through the API and
 manage your simulations effectively.</p>

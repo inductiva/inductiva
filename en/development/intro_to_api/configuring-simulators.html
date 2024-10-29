@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
@@ -47,10 +47,10 @@
   <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -58,16 +58,17 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro_to_api/configuring-simulators';</script>
     <link rel="canonical" href="https://docs.inductiva.ai/intro_to_api/configuring-simulators.html" />
@@ -371,7 +372,7 @@
                 <article class="bd-article">
                   
   <section id="configuring-simulators">
-<h1>Configuring Simulators<a class="headerlink" href="#configuring-simulators" title="Permalink to this heading">#</a></h1>
+<h1>Configuring Simulators<a class="headerlink" href="#configuring-simulators" title="Link to this heading">#</a></h1>
 <p>Open-source simulation software lies at the heart of the Inductiva API.
 From its inception, the main goal of the API has been to empower scientists
 and engineers to take full advantage of state-of-the-art open-source
@@ -389,7 +390,7 @@ and assigning the simulation tasks to the appropriate computational resource See
 with the fact that not all simulation software packages work in the same way and,
 therefore, having a fully general formulation for a simulation task is not trivial?</p>
 <section id="the-simple-cases">
-<span id="id1"></span><h2>The simple cases<a class="headerlink" href="#the-simple-cases" title="Permalink to this heading">#</a></h2>
+<span id="id1"></span><h2>The simple cases<a class="headerlink" href="#the-simple-cases" title="Link to this heading">#</a></h2>
 <p>Some simulation packages offer a single executable that takes as input a single
 file containing the full description of the simulation to be run. This is the simplest
 case because all the API needs to do is send that simulation configuration file to a
@@ -462,7 +463,7 @@ to the main configuration file that the simulator executable expects
 and for which there is no standard name is expected.</p>
 </section>
 <section id="a-slightly-more-complex-case">
-<span id="id2"></span><h2>A slightly more complex case<a class="headerlink" href="#a-slightly-more-complex-case" title="Permalink to this heading">#</a></h2>
+<span id="id2"></span><h2>A slightly more complex case<a class="headerlink" href="#a-slightly-more-complex-case" title="Link to this heading">#</a></h2>
 <p>Some simulators require running more than one executable to perform a simulation,
 but they are always the same and applied in sequence. In these cases, we
 automatically run both executables together giving the appearance that what is
@@ -502,7 +503,7 @@ no requirement to pass the <code class="docutils literal notranslate"><span clas
 pointer to the folder containing all the assets required for the simulation.</p>
 </section>
 <section id="running-long-simulation-pipelines">
-<span id="id3"></span><h2>Running long simulation pipelines<a class="headerlink" href="#running-long-simulation-pipelines" title="Permalink to this heading">#</a></h2>
+<span id="id3"></span><h2>Running long simulation pipelines<a class="headerlink" href="#running-long-simulation-pipelines" title="Link to this heading">#</a></h2>
 <p>In other simulation packages, a single simulation is more configurable and different
 executables can be used to run it. For these cases, users will be able to select<br />
 and configure the executables they wish to run by setting <em>a priori</em> a list of
@@ -556,8 +557,8 @@ To run the simulation, all <code class="docutils literal notranslate"><span clas
 and the commands.</p>
 </section>
 <section id="what-to-read-next">
-<h2>What to Read Next<a class="headerlink" href="#what-to-read-next" title="Permalink to this heading">#</a></h2>
-<p>Explore the <a class="reference external" href="https://tutorials.inductiva.ai/simulators/overview.html" target="_blank">available open source simulators</a>
+<h2>What to Read Next<a class="headerlink" href="#what-to-read-next" title="Link to this heading">#</a></h2>
+<p>Explore the <a class="reference external" href="https://tutorials.inductiva.ai/simulators/overview.html" rel="noreferer noopener" target="_blank">available open source simulators</a>
 built into our API.</p>
 </section>
 </section>

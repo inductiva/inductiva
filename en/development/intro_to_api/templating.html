@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
@@ -47,10 +47,10 @@
   <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
   
   <!-- So that users can add custom icons -->
   <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
@@ -58,16 +58,17 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/sphinx_highlight.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro_to_api/templating';</script>
     <link rel="canonical" href="https://docs.inductiva.ai/intro_to_api/templating.html" />
@@ -373,7 +374,7 @@
                 <article class="bd-article">
                   
   <section id="templating-manager">
-<h1>Templating Manager<a class="headerlink" href="#templating-manager" title="Permalink to this heading">#</a></h1>
+<h1>Templating Manager<a class="headerlink" href="#templating-manager" title="Link to this heading">#</a></h1>
 <p>The Inductiva API is all about enabling you to simulate at scale. As we have shown,
 with a few lines of Python code, you can send your simulations to MPI Clusters
 assembled from last-generation cloud hardware, letting you run much larger simulations
@@ -391,7 +392,7 @@ quickly generate a large number of simulation configurations by starting from a
 base case and replacing some of its fixed values with variables that you can programmatically
 change.</p>
 <section id="the-templatemanager-class">
-<h2>The <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class<a class="headerlink" href="#the-templatemanager-class" title="Permalink to this heading">#</a></h2>
+<h2>The <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class<a class="headerlink" href="#the-templatemanager-class" title="Link to this heading">#</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> is an utility class that allows you to manage templating
 files and specify how to render each template into a concrete configuration file.
 It abstracts the rendering process, allowing the user to focus solely on defining
@@ -403,7 +404,7 @@ of template files to a destination folder. In the end, we will discuss some safe
 features that the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class provides to prevent accidental overwriting
 of files and ensure the uniqueness of the destination directory.</p>
 <section id="rendering-basics">
-<h3>Rendering basics<a class="headerlink" href="#rendering-basics" title="Permalink to this heading">#</a></h3>
+<h3>Rendering basics<a class="headerlink" href="#rendering-basics" title="Link to this heading">#</a></h3>
 <p>To start, a template file is a file that contains labels that will be replaced
 with specific values during a rendering process. These labels – variables –
 are enclosed in double curly brackets, optionally specifying default values they
@@ -428,7 +429,7 @@ the resulting file will read:</p>
 </div>
 </section>
 <section id="rendering-a-directory-with-the-templatemanager-class">
-<h3>Rendering a directory with the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class<a class="headerlink" href="#rendering-a-directory-with-the-templatemanager-class" title="Permalink to this heading">#</a></h3>
+<h3>Rendering a directory with the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> class<a class="headerlink" href="#rendering-a-directory-with-the-templatemanager-class" title="Link to this heading">#</a></h3>
 <p>For the sake of illustration, let’s consider a directory, containing three template
 files and a regular (non-template) file, with the following structure:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>tree<span class="w"> </span>my_templates
@@ -505,7 +506,7 @@ following files:</p>
 </div>
 </section>
 <section id="overwrite-safety">
-<h3>Overwrite safety<a class="headerlink" href="#overwrite-safety" title="Permalink to this heading">#</a></h3>
+<h3>Overwrite safety<a class="headerlink" href="#overwrite-safety" title="Link to this heading">#</a></h3>
 <p>By default, the <code class="docutils literal notranslate"><span class="pre">TemplateManager</span></code> <em>will not overwrite</em> any existing files in the
 destination directory. Calls to the <code class="docutils literal notranslate"><span class="pre">render_dir</span></code> method will fail if
 any of the destination files already exist. Rendering and coping actions are
