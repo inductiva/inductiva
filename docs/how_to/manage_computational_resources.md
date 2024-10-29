@@ -1,3 +1,8 @@
+<meta http-equiv="refresh" content="0; url=https://tutorials.inductiva.ai/how_to/manage_computational_resources.html">
+<script type="text/javascript">
+    window.location.href = "https://tutorials.inductiva.ai/how_to/manage_computational_resources.html";
+</script>
+
 # Manage Computational Resources
 
 Once you have launched your computational resources, there are a few API methods

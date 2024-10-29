@@ -1,3 +1,8 @@
+<meta http-equiv="refresh" content="0; url=https://tutorials.inductiva.ai/how_to/run-parallel_simulations.html">
+<script type="text/javascript">
+    window.location.href = "https://tutorials.inductiva.ai/how_to/run-parallel_simulations.html";
+</script>
+
 # Run Multiple Simulations in Parallel
 
 Running multiple simulations in parallel can significantly reduce waiting times, 

@@ -1,3 +1,8 @@
+<meta http-equiv="refresh" content="0; url=https://tutorials.inductiva.ai/how_to/set-up-mpi-cluster.html">
+<script type="text/javascript">
+    window.location.href = "https://tutorials.inductiva.ai/how_to/set-up-mpi-cluster.html";
+</script>
+
 # Set up an MPI Cluster
 
 The `MPICluster` is composed by a group of homogeneous machines that are enabled
