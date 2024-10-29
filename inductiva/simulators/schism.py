@@ -1,5 +1,5 @@
 """SCHISM module of the API."""
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -30,6 +30,7 @@ class SCHISM(simulators.Simulator):
             use_hwthread: bool = True,
             n_vcpus: Optional[int] = None,
             resubmit_on_preemption: bool = False,
+            remote_assets: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
         Args:
@@ -54,4 +55,5 @@ class SCHISM(simulators.Simulator):
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
+                           remote_assets=remote_assets,
                            **kwargs)

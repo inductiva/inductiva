@@ -1,6 +1,6 @@
 """FEniCSx module of the API for Finite Element Analysis."""
 
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import simulators, types, tasks
 
@@ -34,6 +34,7 @@ class FEniCSx(simulators.Simulator):
             mesh_filename: Optional[str] = None,
             mesh_info_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
+            remote_assets: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -66,4 +67,5 @@ class FEniCSx(simulators.Simulator):
                            bcs_filename=bcs_filename,
                            storage_dir=storage_dir,
                            on=on,
+                           remote_assets=remote_assets,
                            **kwargs)

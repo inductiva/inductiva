@@ -1,8 +1,18 @@
 """Methods to interact with the user storage resources."""
+import json
+import logging
+import os
+import tempfile
+import zipfile
+from typing import Literal
+from urllib.parse import unquote, urlparse
+
 import inductiva
+from inductiva import constants
+from inductiva.api import methods
+from inductiva.client import exceptions
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
-from typing import Literal
 
 
 def _print_storage_size_and_cost() -> int:
@@ -118,3 +128,148 @@ def _print_contents_table(contents):
         formatters=formatters,
         header_formatters=header_formatters,
     )
+
+
+def upload_from_url(
+    url: str,
+    remote_dir: str,
+    file_name: str = None,
+    unzip: bool = False,
+    overwrite: bool = True,
+):
+    """
+    Upload a file from a URL to the user workspace.
+
+    Args:
+        url (str): The URL of the file to upload.
+        remote_dir (str): The remote directory to upload the file to. 
+        file_name (str, optional): The name to save the file as. If not
+            provided, the name will be extracted from the URL.
+        unzip (bool, optional): Whether to unzip the file after uploading.
+            Default is False.
+        overwrite (bool, optional): Whether to overwrite the file if it already
+            exists. Default is True.
+    """
+    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+
+    if file_name is None:
+        parsed_url = urlparse(url)
+        file_name = unquote(parsed_url.path.split("/")[-1])
+    contents = api_instance.upload_from_url(
+        query_params={
+            "url": url,
+            "file_name": file_name,
+            "unzip": "t" if unzip else "f",
+            "overwrite": "t" if overwrite else "f",
+        },
+        path_params={
+            "folder_name": remote_dir,
+        },
+    )
+    if contents.response.status == 200:
+        logging.info("File is being uploaded...")
+    else:
+        logging.info("File upload failed.")
+
+
+def upload(
+    local_path: str,
+    remote_dir: str,
+    overwrite: bool = False,
+):
+    """
+    Upload a local file or directory to the user workspace.
+
+    Args:
+        local_path (str): The path to the local file or directory to be
+            uploaded.
+        remote_dir (str, optional): The remote directory where the file will
+            be uploaded. Defaults to "default".
+        overwrite (bool, optional): Whether to overwrite the file if it already
+            exists in the remote directory. Defaults to False.
+    """
+    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+
+    input_zip_path = _zip_file_or_folder(local_path)
+
+    zip_file_size = os.path.getsize(input_zip_path)
+    logging.info("Input archive size: %s",
+                 format_utils.bytes_formatter(zip_file_size))
+
+    logging.info("Uploading input...")
+    if methods.upload_file(
+            api_instance=api_instance,
+            input_zip_path=input_zip_path,
+            remote_dir=remote_dir,
+            overwrite=overwrite,
+            get_upload_url_method=api_instance.get_upload_url,
+            notify_upload_method=api_instance.notify_upload_file,
+    ):
+        logging.info("Input file successfully uploaded.")
+    else:
+        logging.error("An error occurred while uploading the input file.")
+
+    logging.info("")
+    os.remove(input_zip_path)
+
+
+def _zip_file_or_folder(source_path):
+    """
+    Zips a file or a folder and saves it to a temporary folder.
+
+    :param source_path: The path to the file or folder to zip.
+    :return: The path to the created zip file.
+    """
+    # Check if the source path is valid
+    if not os.path.exists(source_path):
+        raise FileNotFoundError(f"The path {source_path} does not exist.")
+
+    temp_dir = tempfile.mkdtemp()
+    zip_path = os.path.join(temp_dir, constants.TMP_ZIP_FILENAME)
+
+    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+        # If the source is a file, add it directly
+        if os.path.isfile(source_path):
+            zipf.write(source_path, os.path.basename(source_path))
+        # If the source is a folder, walk through the folder and add files
+        else:
+            for root, _, files in os.walk(source_path):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    zipf.write(
+                        file_path,
+                        os.path.relpath(file_path,
+                                        os.path.dirname(source_path)))
+
+    return zip_path
+
+
+def remove_workspace(remote_dir, file_name=None) -> bool:
+    """Removes a workspace folder or a workspace file.
+
+    Args:
+        remote_dir (str): The remote directory to remove.
+        file_name (str, optional): The name of the file to remove. If not
+            provided, the entire directory will be removed.
+    
+    Returns:
+        True if the files were removed successfully, False otherwise.
+    """
+    api = storage_api.StorageApi(inductiva.api.get_client())
+
+    logging.info("Removing workspace file(s)...")
+    try:
+        query_params = {"file_name": file_name} if file_name is not None else {}
+
+        api.delete_file(
+            query_params=query_params,
+            path_params={
+                "folder_name": remote_dir,
+            },
+        )
+        logging.info("Workspace file(s) removed successfully.")
+    except exceptions.ApiException as e:
+        logging.error("An error occurred while removing the workspace:")
+        logging.error(" > %s", json.loads(e.body)["detail"])
+        return False
+    return True

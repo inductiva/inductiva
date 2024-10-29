@@ -1,5 +1,5 @@
 """CaNS module of the API for numerical simulations of fluid flows."""
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -32,6 +32,7 @@ class CaNS(simulators.Simulator):
             n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
+            remote_assets: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -56,4 +57,5 @@ class CaNS(simulators.Simulator):
                            use_hwthread=use_hwthread,
                            input_filename=sim_config_filename,
                            resubmit_on_preemption=resubmit_on_preemption,
+                           remote_assets=remote_assets,
                            **kwargs)

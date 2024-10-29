@@ -1,5 +1,5 @@
 """OpenFAST module of the API for wind turbine simulations."""
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -29,6 +29,7 @@ class OpenFAST(simulators.Simulator):
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
+            remote_assets: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -47,4 +48,5 @@ class OpenFAST(simulators.Simulator):
                            commands=commands,
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
+                           remote_assets=remote_assets,
                            **kwargs)
