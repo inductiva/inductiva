@@ -172,9 +172,9 @@ def test_get_ansi_formatter_ansi_disabled():
         assert format_utils.get_ansi_formatter() is format_utils.no_formatter
 
 
-@mark.parametrize("date,result", [("2021-01-01T00:00:00", "01 Jan, 00:00:00"),
-                                  ("2021-01-01T12:00:00", "01 Jan, 12:00:00"),
-                                  ("2021-01-01T23:59:59", "01 Jan, 23:59:59"),
+@mark.parametrize("date,result", [("2021-01-01T00:00:00", "01/01, 00:00:00"),
+                                  ("2021-01-01T12:00:00", "01/01, 12:00:00"),
+                                  ("2021-01-01T23:59:59", "01/01, 23:59:59"),
                                   (None, None)])
 def test_datetime_formatter(date, result):
     assert format_utils.datetime_formatter(date) == result
