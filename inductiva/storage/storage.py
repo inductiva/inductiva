@@ -140,7 +140,19 @@ def upload_from_url(
     unzip: bool = False,
     overwrite: bool = True,
 ):
-    """Upload a file from a URL to the user workspace."""
+    """
+    Upload a file from a URL to the user workspace.
+
+    Args:
+        url (str): The URL of the file to upload.
+        remote_dir (str): The remote directory to upload the file to. 
+        file_name (str, optional): The name to save the file as. If not
+            provided, the name will be extracted from the URL.
+        unzip (bool, optional): Whether to unzip the file after uploading.
+            Default is False.
+        overwrite (bool, optional): Whether to overwrite the file if it already
+            exists. Default is True.
+    """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
     if file_name is None:
@@ -168,7 +180,17 @@ def upload(
     remote_dir: str = "default",
     overwrite: bool = False,
 ):
-    """Upload local files to the user workspace."""
+    """
+    Upload a local file or directory to the user workspace.
+
+    Args:
+        local_path (str): The path to the local file or directory to be
+            uploaded.
+        remote_dir (str, optional): The remote directory where the file will
+            be uploaded. Defaults to "default".
+        overwrite (bool, optional): Whether to overwrite the file if it already
+            exists in the remote directory. Defaults to False.
+    """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
     input_zip_path = _zip_file_or_folder(local_path)
@@ -286,6 +308,11 @@ def _zip_file_or_folder(source_path):
 
 def remove_workspace(remote_dir, file_name=None) -> bool:
     """Removes a workspace folder or a workspace file.
+
+    Args:
+        remote_dir (str): The remote directory to remove.
+        file_name (str, optional): The name of the file to remove. If not
+            provided, the entire directory will be removed.
     
     Returns:
         True if the files were removed successfully, False otherwise.
