@@ -186,6 +186,9 @@ Consider tracking the status of the task via CLI:
 	inductiva tasks list --id 9ob6gknv794pvazg5bzd4oczo
 Or, tracking the logs of the task via CLI:
 	inductiva logs 9ob6gknv794pvazg5bzd4oczo
+
+Waiting for task 9ob6gknv794pvazg5bzd4oczo to complete...
+Go to https://console.inductiva.ai/tasks/9ob6gknv794pvazg5bzd4oczo for more details.
 Task 9ob6gknv794pvazg5bzd4oczo successfully queued and waiting to be picked-up for execution...
 The task 9ob6gknv794pvazg5bzd4oczo is about to start.
 Task 9ob6gknv794pvazg5bzd4oczo has started and is now running remotely.
