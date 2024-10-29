@@ -7,14 +7,11 @@ import zipfile
 from typing import Literal
 from urllib.parse import unquote, urlparse
 
-import tqdm
-import urllib3
-
 import inductiva
 from inductiva import constants
+from inductiva.api import methods
 from inductiva.client import exceptions
 from inductiva.client.apis.tags import storage_api
-from inductiva.client.exceptions import ApiException
 from inductiva.utils import format_utils
 
 
@@ -200,77 +197,18 @@ def upload(
                  format_utils.bytes_formatter(zip_file_size))
 
     logging.info("Uploading input...")
-    try:
+    if methods.upload_file(
+            api_instance=api_instance,
+            input_zip_path=input_zip_path,
+            remote_dir=remote_dir,
+            overwrite=overwrite,
+            get_upload_url_method=api_instance.get_upload_url,
+            notify_upload_method=api_instance.notify_upload_file,
+    ):
+        logging.info("Input file successfully uploaded.")
+    else:
+        logging.error("An error occurred while uploading the input file.")
 
-        api_response = api_instance.get_upload_url(
-            query_params={
-                "file_name": constants.TMP_ZIP_FILENAME,
-                "overwrite": "t" if overwrite else "f",
-            },
-            path_params={
-                "folder_name": remote_dir,
-            },
-        )
-
-        method = api_response.body["method"]
-        url = api_response.body["url"]
-        file_server_available = bool(api_response.body["file_server_available"])
-
-        headers = {"Content-Type": "application/octet-stream"}
-
-        if file_server_available is False:
-            headers["X-API-Key"] = (
-                api_instance.api_client.configuration.api_key["APIKeyHeader"])
-
-        logging.debug("Upload URL: %s", url)
-
-        with open(input_zip_path, "rb") as zip_fp, tqdm.tqdm(
-                total=zip_file_size,
-                unit="B",
-                unit_scale=True,
-                unit_divisor=1000,
-        ) as progress_bar:
-            # Wrap the file object so that the progress bar is updated
-            # every time a chunk is read.
-            wrapped_file = tqdm.utils.CallbackIOWrapper(
-                progress_bar.update,
-                zip_fp,
-                "read",
-            )
-
-            # Use the pool_manager from the API client to send the request
-            # instead of using the generated client. This is because the
-            # generated client implementation does not support streaming
-            # file and does not provide a way to update the progress bar.
-            pool_manager: urllib3.PoolManager = (
-                api_instance.api_client.rest_client.pool_manager)
-
-            resp = pool_manager.request(
-                method,
-                url,
-                body=wrapped_file,
-                headers=headers,
-            )
-            if resp.status != 200:
-                raise ApiException(
-                    status=resp.status,
-                    reason=resp.reason,
-                )
-
-            api_response = api_instance.notify_upload_file(
-                query_params={
-                    "file_name": constants.TMP_ZIP_FILENAME,
-                    "unzip": "t"
-                },
-                path_params={
-                    "folder_name": remote_dir,
-                },
-            )
-    except ApiException as e:
-        logging.exception("Exception while uploading input files: %s", e)
-        raise e
-
-    logging.info("Input files successfully uploaded.")
     logging.info("")
     os.remove(input_zip_path)
 

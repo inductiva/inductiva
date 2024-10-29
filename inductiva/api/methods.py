@@ -61,6 +61,124 @@ def submit_request(api_instance: TasksApi,
     return api_response.body
 
 
+def prepare_input(task_id, original_params, type_annotations):
+    inputs_size = files.get_path_size(original_params["sim_dir"])
+    logging.info("Preparing upload of the local input directory %s (%s).",
+                 original_params["sim_dir"],
+                 format_utils.bytes_formatter(inputs_size))
+    input_zip_path = pack_input(
+        params=original_params,
+        type_annotations=type_annotations,
+        zip_name=task_id,
+    )
+
+    zip_file_size = os.path.getsize(input_zip_path)
+    logging.info("Input archive size: %s",
+                 format_utils.bytes_formatter(zip_file_size))
+
+    logging.info("Uploading input archive...")
+
+    return input_zip_path, zip_file_size
+
+
+def upload_file(api_instance,
+                input_zip_path,
+                remote_dir=None,
+                task_id=None,
+                overwrite=False,
+                get_upload_url_method=None,
+                notify_upload_method=None):
+    """
+    Uploads a file to the specified API endpoint with progress indication.
+
+    Args:
+        api_instance: The instance of the API client.
+        input_zip_path: The local path to the input zip file.
+        remote_dir: The remote directory to upload to (if applicable).
+        task_id: The task ID for input upload (if applicable).
+        overwrite: Boolean indicating whether to overwrite existing files.
+        get_upload_url_method: The method to get the upload URL.
+        notify_upload_method: The method to notify after upload.
+
+    Raises:
+        ApiException: If the API request fails.
+    """
+    try:
+        if task_id is not None:
+            api_response = get_upload_url_method(
+                path_params={"task_id": task_id})
+        else:
+            api_response = get_upload_url_method(
+                query_params={
+                    "file_name": constants.TMP_ZIP_FILENAME,
+                    "overwrite": "t" if overwrite else "f",
+                },
+                path_params={
+                    "folder_name": remote_dir,
+                },
+            )
+
+        method = api_response.body["method"]
+        url = api_response.body["url"]
+        file_server_available = bool(api_response.body["file_server_available"])
+
+        headers = {"Content-Type": "application/octet-stream"}
+
+        if not file_server_available:
+            headers[
+                "X-API-Key"] = api_instance.api_client.configuration.api_key[
+                    "APIKeyHeader"]
+
+        logging.debug("Upload URL: %s", url)
+
+        zip_file_size = os.path.getsize(input_zip_path)
+
+        with open(input_zip_path, "rb") as zip_fp, tqdm.tqdm(
+                total=zip_file_size,
+                unit="B",
+                unit_scale=True,
+                unit_divisor=1000,
+        ) as progress_bar:
+            # Wrap the file object so that the progress bar is updated
+            # every time a chunk is read.
+            wrapped_file = tqdm.utils.CallbackIOWrapper(
+                progress_bar.update,
+                zip_fp,
+                "read",
+            )
+
+            # Use the pool_manager from the API client to send the request
+            pool_manager: urllib3.PoolManager = (
+                api_instance.api_client.rest_client.pool_manager)
+
+            resp = pool_manager.request(method,
+                                        url,
+                                        body=wrapped_file,
+                                        headers=headers)
+            if resp.status != 200:
+                raise ApiException(status=resp.status, reason=resp.reason)
+
+            # Notify the API that the file upload is complete
+            if task_id is not None:
+                notify_upload_method(path_params={"task_id": task_id})
+            else:
+                notify_upload_method(
+                    query_params={
+                        "file_name": constants.TMP_ZIP_FILENAME,
+                        "unzip": "t"
+                    },
+                    path_params={
+                        "folder_name": remote_dir,
+                    },
+                )
+
+    except ApiException as e:
+        logging.exception("Exception while uploading file: %s", e)
+        return False
+
+    return True
+
+
 def upload_input(api_instance: TasksApi, task_id, original_params,
                  type_annotations):
     """Uploads the inputs of a given task to the API.
@@ -88,63 +206,15 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
 
     logging.info("Uploading input archive...")
 
-    try:
-        api_response = api_instance.get_input_upload_url(
-            path_params={"task_id": task_id})
+    if upload_file(api_instance=api_instance,
+                   input_zip_path=input_zip_path,
+                   task_id=task_id,
+                   get_upload_url_method=api_instance.get_input_upload_url,
+                   notify_upload_method=api_instance.notify_input_uploaded):
+        logging.info("Local input directory successfully uploaded.")
+    else:
+        logging.error("Failed to upload local input directory,")
 
-        method = api_response.body["method"]
-        url = api_response.body["url"]
-        file_server_available = bool(api_response.body["file_server_available"])
-
-        headers = {"Content-Type": "application/octet-stream"}
-
-        if file_server_available is False:
-            headers["X-API-Key"] = (
-                api_instance.api_client.configuration.api_key["APIKeyHeader"])
-
-        logging.debug("Upload URL: %s", url)
-
-        with open(input_zip_path, "rb") as zip_fp, tqdm.tqdm(
-                total=zip_file_size,
-                unit="B",
-                unit_scale=True,
-                unit_divisor=1000,
-        ) as progress_bar:
-            # Wrap the file object so that the progress bar is updated every
-            # time a chunk is read.
-            wrapped_file = tqdm.utils.CallbackIOWrapper(
-                progress_bar.update,
-                zip_fp,
-                "read",
-            )
-
-            # Use the pool_manager from the API client to send the request
-            # instead of using the generated client. This is because the
-            # generated client implementation does not support streaming
-            # the file and does not provide a way to update the progress bar.
-            pool_manager: urllib3.PoolManager = (
-                api_instance.api_client.rest_client.pool_manager)
-
-            resp = pool_manager.request(
-                method,
-                url,
-                body=wrapped_file,
-                headers=headers,
-            )
-            if resp.status != 200:
-                raise ApiException(
-                    status=resp.status,
-                    reason=resp.reason,
-                )
-
-            api_response = api_instance.notify_input_uploaded(
-                path_params={"task_id": task_id})
-    except ApiException as e:
-        logging.exception("Exception while uploading local input directory: %s",
-                          e)
-        raise e
-
-    logging.info("Local input directory successfully uploaded.")
     logging.info("")
     os.remove(input_zip_path)
 
