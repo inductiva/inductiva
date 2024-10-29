@@ -100,6 +100,22 @@ intro_to_api/custom_docker_images
 
 ```{toctree}
 ---
+caption: Quick Recipes
+maxdepth: 1
+hidden: true
+---
+how_to/run-parallel_simulations
+how_to/manage_computational_resources
+how_to/set-up-elastic-machine-group
+how_to/set-up-mpi-cluster
+how_to/manage-remote-storage
+how_to/manage_tasks
+how_to/manage_and_retrieve_results
+
+```
+
+```{toctree}
+---
 caption: Synthetic Data for Physics-ML
 maxdepth: 1
 hidden: true
