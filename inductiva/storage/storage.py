@@ -177,7 +177,7 @@ def upload_from_url(
 
 def upload(
     local_path: str,
-    remote_dir: str = "default",
+    remote_dir: str,
     overwrite: bool = False,
 ):
     """
