@@ -9,7 +9,6 @@ maxdepth: 1
 hidden: true
 ---
 prerequisites/osX
-prerequisites/windows
 
 ```
 
