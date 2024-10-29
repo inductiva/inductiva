@@ -6,7 +6,7 @@ With several machines working together, users can launch simulations that requir
 a higher level of parallelization that a single machine cannot offer.
 
 Setting up an MPI cluster is simple with the
-[`MPICluster` class](https://docs.inductiva.ai/en/latest/api_reference/computational_resources/mpicluster_class.html).
+[`MPICluster` class](../api_reference/computational_resources/mpicluster_class.md).
 Users can configure the type and number of machines they want
 to compose the cluster and the size of the disk storage shared between all machines.
 

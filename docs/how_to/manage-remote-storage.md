@@ -1,8 +1,3 @@
-<meta http-equiv="refresh" content="0; url=https://tutorials.inductiva.ai/how_to/manage-remote-storage.html">
-<script type="text/javascript">
-    window.location.href = "https://tutorials.inductiva.ai/how_to/manage-remote-storage.html";
-</script>
-
 # Manage Remote Storage
 
 The Inductiva API provides you with tools to manage your remote storage effectively. 

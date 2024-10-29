@@ -1,8 +1,3 @@
-<meta http-equiv="refresh" content="0; url=https://tutorials.inductiva.ai/how_to/set-up-elastic-machine-group.html">
-<script type="text/javascript">
-    window.location.href = "https://tutorials.inductiva.ai/how_to/set-up-elastic-machine-group.html";
-</script>
-
 # Set up an Elastic Machine Group
 
 The `ElasticMachineGroup`, similarly to the standard `MachineGroup`, is composed of 

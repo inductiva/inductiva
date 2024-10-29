@@ -1,7 +1,3 @@
-<meta http-equiv="refresh" content="0; url=https://tutorials.inductiva.ai/how_to/manage_tasks.html">
-<script type="text/javascript">
-    window.location.href = "https://tutorials.inductiva.ai/how_to/manage_tasks.html";
-</script>
 # Manage Tasks
 
 An important step in the user's workflow is monitoring/managing tasks. Whether
