@@ -1,8 +1,3 @@
-<meta http-equiv="refresh" content="0; url=https://tutorials.inductiva.ai/how_to/manage_and_retrieve_results.html">
-<script type="text/javascript">
-    window.location.href = "https://tutorials.inductiva.ai/how_to/manage_and_retrieve_results.html";
-</script>
-
 # Manage and Retrieve Results
 
 The output results of any simulation are the focal point of the entire simulation
