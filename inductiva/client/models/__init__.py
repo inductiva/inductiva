@@ -69,6 +69,7 @@ from inductiva.client.model.task_request import TaskRequest
 from inductiva.client.model.task_status import TaskStatus
 from inductiva.client.model.task_status_code import TaskStatusCode
 from inductiva.client.model.task_status_info import TaskStatusInfo
+from inductiva.client.model.task_step import TaskStep
 from inductiva.client.model.task_submitted_info import TaskSubmittedInfo
 from inductiva.client.model.task_with_status_history import TaskWithStatusHistory
 from inductiva.client.model.terms_and_conditions import TermsAndConditions
