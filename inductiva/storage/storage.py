@@ -216,6 +216,9 @@ def _zip_file_or_folder(source_path):
     if not os.path.exists(source_path):
         raise FileNotFoundError(f"The path {source_path} does not exist.")
 
+    if os.path.isdir(source_path):
+        source_path = os.path.join(source_path, '')
+
     temp_dir = tempfile.mkdtemp()
     zip_path = os.path.join(temp_dir, constants.TMP_ZIP_FILENAME)
 
