@@ -4,6 +4,16 @@
 
 ```{toctree}
 ---
+caption: Inductiva API prerequisites
+maxdepth: 1 
+hidden: true
+---
+prerequisites/osX
+
+```
+
+```{toctree}
+---
 caption: Introduction to Inductiva API
 maxdepth: 1 
 hidden: true
