@@ -310,6 +310,7 @@ def _list_files(root_path: str, prefix_path: str) -> List[str]:
             file_list.append(full_path)
     return file_list
 
+
 def remove_workspace(remote_dir, file_path=None) -> bool:
     """Removes a workspace folder or a workspace file.
 
