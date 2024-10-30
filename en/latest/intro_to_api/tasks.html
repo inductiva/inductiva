@@ -1,0 +1,688 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NHJ03C6M91');
+    </script>
+    <meta property="og:title" content="Tasks" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.inductiva.ai/intro_to_api/tasks.html" />
+<meta property="og:site_name" content="Inductiva.ai Docs" />
+<meta property="og:description" content="Central to the API’s functionality is the concept of a Task, which is an abstraction that encapsulates all the information about the computational workload you defined as the user. Once you submit ..." />
+<meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
+<meta property="og:image:alt" content="Inductiva.ai Docs" />
+<meta name="description" content="Central to the API’s functionality is the concept of a Task, which is an abstraction that encapsulates all the information about the computational workload you defined as the user. Once you submit ..." />
+
+    <title>Tasks &#8212; Python API for Cloud-based Simulation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intro_to_api/tasks';</script>
+    <link rel="canonical" href="https://docs.inductiva.ai/intro_to_api/tasks.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Resource Allocation Options" href="shared_dedicated_resources.html" />
+    <link rel="prev" title="How it works" href="how_it_works.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="latest" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Python API for Cloud-based Simulation - Home"/>
+    <img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark pst-js-only" alt="Python API for Cloud-based Simulation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Inductiva API prerequisites</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../prerequisites/osX.html">Installing the API on a clean OsX</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to Inductiva API</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="how_it_works.html">How it works</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shared_dedicated_resources.html">Resource Allocation Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_flow.html">Storage and Data Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="computational-infrastructure.html">Computational Infrastructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="templating.html">Templating Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuring-simulators.html">Configuring Simulators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_docker_images.html">Running Simulations with Custom Docker Images</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Quick Recipes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../how_to/run-parallel_simulations.html">Run Multiple Simulations in Parallel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/manage_computational_resources.html">Manage Computational Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/set-up-elastic-machine-group.html">Set up an Elastic Machine Group</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/set-up-mpi-cluster.html">Set up an MPI Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/manage-remote-storage.html">Manage Remote Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/manage_tasks.html">Manage Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/manage_and_retrieve_results.html">Manage and Retrieve Results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../cli/cli-overview.html">CLI Overview and Functionalities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/managing-resources.html">Manage your Computational Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/tracking-tasks.html">Track your Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/streaming-logs.html">Stream Logs of a Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli/access-storage.html">Access your Remote Storage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/computational_resources/index.html">Class Description</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/machinegroup_class.html"><code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/elasticgroup_class.html"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/mpicluster_class.html"><code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/compute_janitor.html">Computational Resources Janitor</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/tiers_and_quotas.html">Tiers, Capabilities and Quotas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/faq.html">FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/uninstall_inductiva.html">Uninstall the <code class="docutils literal notranslate"><span class="pre">inductiva</span></code> package</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/intro_to_api/tasks.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Tasks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-creation">Task Creation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-execution">Task Execution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-lifecycle">Task Lifecycle</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="tasks">
+<h1>Tasks<a class="headerlink" href="#tasks" title="Link to this heading">#</a></h1>
+<p>Central to the API’s functionality is the concept of a <code class="docutils literal notranslate"><span class="pre">Task</span></code>,
+which is an  abstraction that encapsulates all the information
+about the computational workload you defined as the user.
+Once you submit a simulation to the  API, a <code class="docutils literal notranslate"><span class="pre">Task</span></code> is generated.
+This allows for real-time updates on simulation status, including
+monitoring its progress and retrieving its outputs.</p>
+<p>In this reference, you will learn about the entire lifecycle of a <code class="docutils literal notranslate"><span class="pre">Task</span></code>,
+including its creation, various operational states, and termination. This information
+is crucial to understand how the Inductiva API manages simulations.</p>
+<section id="task-creation">
+<h2>Task Creation<a class="headerlink" href="#task-creation" title="Link to this heading">#</a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">Task</span></code> is created when you submit a simulation via the API by invoking the <code class="docutils literal notranslate"><span class="pre">run</span></code>
+method on a simulator object. Each call to this method, even with identical arguments,
+generates a unique <code class="docutils literal notranslate"><span class="pre">Task</span></code>, leading to separate executions of the same simulation.</p>
+<p>Here’s an example of how to create a <code class="docutils literal notranslate"><span class="pre">Task</span></code> by submitting a SpliSHSPlasH simulation
+to the API:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Running the SplishSplash simulator example</span>
+<span class="kn">import</span> <span class="nn">inductiva</span>
+
+<span class="c1"># Instantiate machine group</span>
+<span class="n">machine_group</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">MachineGroup</span><span class="p">(</span><span class="s2">&quot;c2-standard-4&quot;</span><span class="p">)</span>
+<span class="n">machine_group</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># Download example input files</span>
+<span class="n">input_dir</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">download_from_url</span><span class="p">(</span>
+    <span class="s2">&quot;https://storage.googleapis.com/inductiva-api-demo-files/&quot;</span>
+    <span class="s2">&quot;splishsplash-input-example.zip&quot;</span><span class="p">,</span> <span class="n">unzip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Instantiate the simulator</span>
+<span class="n">splishsplash_simulator</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">simulators</span><span class="o">.</span><span class="n">SplishSplash</span><span class="p">()</span>
+
+<span class="c1"># Run the SPlisHSPlasH simulation with the required .json config file</span>
+<span class="n">task</span> <span class="o">=</span> <span class="n">splishsplash_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;splishsplash-input-example&quot;</span><span class="p">,</span>
+                                  <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
+                                  <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">task</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="c1"># Example output: i4ir3kvv62odsfrhko4y8w2an</span>
+</pre></div>
+</div>
+<p>Note that a subsequent call to <code class="docutils literal notranslate"><span class="pre">splishsplash_simulator.run()</span></code> with the same
+input arguments would create a new, distinct task:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">task2</span> <span class="o">=</span> <span class="n">splishsplash_simulator</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_dir</span><span class="o">=</span><span class="s2">&quot;splishsplash-input-example&quot;</span><span class="p">,</span>
+                                  <span class="n">sim_config_filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span><span class="p">,</span>
+                                  <span class="n">on</span><span class="o">=</span><span class="n">machine_group</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">task2</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="c1"># Example output: k9muu1vq1fc6m2oyxm0n3n8y0</span>
+
+<span class="n">machine_group</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Each <code class="docutils literal notranslate"><span class="pre">Task</span></code> is identified by a unique alphanumeric identifier. While you can
+instantiate multiple <code class="docutils literal notranslate"><span class="pre">Task</span></code> objects pointing to the same task using this identifier,
+this does not duplicate the task on the API. These objects refer to the same underlying
+task. This mechanism is useful when you want to recreate a <code class="docutils literal notranslate"><span class="pre">Task</span></code> object to
+retrieve information about tasks you created in previous sessions:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">inductiva</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">task1</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span><span class="s2">&quot;i4ir3kvv62odsfrhko4y8w2an&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">task2</span> <span class="o">=</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">Task</span><span class="p">(</span><span class="s2">&quot;i4ir3kvv62odsfrhko4y8w2an&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">task1</span><span class="p">))</span>
+<span class="go">4410160112</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">task2</span><span class="p">))</span>
+<span class="go">4389863104</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">task1</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="go">i4ir3kvv62odsfrhko4y8w2an</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">task2</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+<span class="go">i4ir3kvv62odsfrhko4y8w2an # Outputs the same task ID as task1.id</span>
+</pre></div>
+</div>
+</section>
+<section id="task-execution">
+<h2>Task Execution<a class="headerlink" href="#task-execution" title="Link to this heading">#</a></h2>
+<p>Tasks run <strong>asynchronously</strong> by default, enabling you to continue interacting with
+the API without interrupting your code in the background, even as tasks run or are
+queued for execution. This asynchronous model also allows for batch submissions within
+a single session without waiting for each to complete, with the API efficiently
+distributing them across available computational resources for parallel processing.</p>
+<p>You can configure how to wait for the task to end by either using the <code class="docutils literal notranslate"><span class="pre">wait</span></code> method or
+the <code class="docutils literal notranslate"><span class="pre">sync_context</span></code> manager.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">wait</span></code></strong></p>
+<p>You can turn a task into a blocking call by using the <code class="docutils literal notranslate"><span class="pre">wait</span></code> method.
+This method will block the call, allowing your script to wait until the task comes
+to a terminal status without affecting the remote simulation if it were locally
+interrupted (ex. the script is abruptly terminated).</p>
+<p>This is useful when you want to wait for the completion of a task before proceeding
+with some other operation (ex. downloading the output files):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Block the call until the simulation completes</span>
+<span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>  <span class="c1"># &lt;- The remote simulation WILL NOT DIE if the local session is</span>
+             <span class="c1">#    interrupted while waiting for the wait() call to return</span>
+</pre></div>
+</div>
+<p><strong><code class="docutils literal notranslate"><span class="pre">sync_context</span></code></strong></p>
+<p>Alternatively, you can use the <code class="docutils literal notranslate"><span class="pre">sync_context</span></code> manager to ensure the remote simulation
+terminates if your local session is interrupted while waiting for the <code class="docutils literal notranslate"><span class="pre">wait</span></code> call
+to return (e.g., through a Ctrl+C command):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Block the call until the simulation completes</span>
+<span class="k">with</span> <span class="n">task</span><span class="o">.</span><span class="n">sync_context</span><span class="p">():</span>
+    <span class="n">task</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>  <span class="c1"># &lt;- The remote simulation WILL DIE if the local session is</span>
+                 <span class="c1">#     interrupted while waiting for the wait() call to return</span>
+</pre></div>
+</div>
+</section>
+<section id="task-lifecycle">
+<span id="task-lifecyle"></span><h2>Task Lifecycle<a class="headerlink" href="#task-lifecycle" title="Link to this heading">#</a></h2>
+<p>The status of a task changes as it progresses through its lifecycle. Understanding
+these states is crucial if you want to track a task’s progress through the API and
+manage your simulations effectively.</p>
+<p>The following diagram shows the path a task may take through the API, and identifies
+the relevant states and possible state transitions:</p>
+<div align="center">
+   <img src="../_static/task_state.svg" alt="Task state diagram">
+   <figcaption align = "center"><b>State diagram of a Task</b></figcaption>
+</div>
+<hr class="docutils" />
+<p>Below a succinct description of each state, including the actions that
+lead to a state transition:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Status</p></th>
+<th class="head"><p>What happened?</p></th>
+<th class="head"><p>Why?</p></th>
+<th class="head"><p>Recommendations to overcome</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PENDING INPUT</p></td>
+<td><p>Your simulation is waiting for all necessary input files.</p></td>
+<td><p>The task will not be queued until the required input files are uploaded.</p></td>
+<td><p>Wait for the input files to be uploaded. If there was an error while uploading the files, submit a new task.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SUBMITTED</p></td>
+<td><p>Your task is queued and waiting for a machine to become available.</p></td>
+<td><p>The task is submitted but hasn’t yet been picked up by an available machine. If you’ve queued more tasks than the number of machines in the machine group, they will be picked up from the queue as machines become free from processing previous tasks.</p></td>
+<td><p>Wait for the task to start, or kill it if no longer needed. To reduce waiting times, submit tasks to a machine group with more machines.</p></td>
+</tr>
+<tr class="row-even"><td><p>STARTED</p></td>
+<td><p>Your task has been picked up by a machine. Required input files and container image are being downloaded in preparation to run the simulation.</p></td>
+<td><p>The task has been picked up by a machine, which is now setting up the appropriate assets to run your task.</p></td>
+<td><p>Wait for the simulation to proceed, or kill the task if no longer needed.</p></td>
+</tr>
+<tr class="row-odd"><td><p>COMPUTATION STARTED</p></td>
+<td><p>The task’s inputs and container image have been downloaded, and the simulation has now started running.</p></td>
+<td><p>The machine has been set up with the requirements to run your simulation, which is now running.</p></td>
+<td><p>Wait for the simulation to proceed, or kill the task if no longer needed. You can monitor the simulator logs in real time using the <code class="docutils literal notranslate"><span class="pre">inductiva</span> <span class="pre">logs</span></code> command.</p></td>
+</tr>
+<tr class="row-even"><td><p>PENDING KILLED</p></td>
+<td><p>Your request to terminate the task has been received and is awaiting execution.</p></td>
+<td><p>The system is processing your termination request for the running task.</p></td>
+<td><p>Wait for the task to be fully terminated.</p></td>
+</tr>
+<tr class="row-odd"><td><p>KILLED</p></td>
+<td><p>The task has been successfully terminated as per your request.</p></td>
+<td><p>The task was terminated by user request.</p></td>
+<td><p>No further action is required.</p></td>
+</tr>
+<tr class="row-even"><td><p>ZOMBIE</p></td>
+<td><p>The machine group where the task was enqueued was terminated before the task started.</p></td>
+<td><p>The task was still in the SUBMITTED status when the machine group was shut down. Since the task hadn’t started, there are no outputs or logs.</p></td>
+<td><p>Restart the task by submitting it to a new machine group or ensure the machine group remains active for future tasks.</p></td>
+</tr>
+<tr class="row-odd"><td><p>SPOT PREEMPTED</p></td>
+<td><p>The spot instances running your task were terminated, and the task has been interrupted.</p></td>
+<td><p>Spot instances were reclaimed by the cloud provider. If auto-resubmission is enabled, the task is re-queued and goes back to the SUBMITTED status. Otherwise, it stays in this state.</p></td>
+<td><p>If cost savings are a priority, spot instances are a good choice. For uninterrupted tasks, consider switching to on-demand instances. If the task is stuck, enable auto-resubmission or manually resubmit it.</p></td>
+</tr>
+<tr class="row-even"><td><p>FAILED</p></td>
+<td><p>The task failed due to an error in the simulator, likely caused by incorrect input configurations or an internal simulator issue.</p></td>
+<td><p>The simulator command returned a non-zero status code, indicating failure.</p></td>
+<td><p>Inspect the simulator logs (stderr and stdout) for more information.</p></td>
+</tr>
+<tr class="row-odd"><td><p>COMPUTATION ENDED</p></td>
+<td><p>The simulation’s commands have ended, and output files will be uploaded.</p></td>
+<td><p>The simulation commands have ran. Results will now be uploaded to the user’s storage.</p></td>
+<td><p>The task’s results will be uploaded to the user’s storage and the task will go to a terminal status.</p></td>
+</tr>
+<tr class="row-even"><td><p>EXECUTOR TERMINATED</p></td>
+<td><p>The machine running your task was terminated due to internal reasons from the provider.</p></td>
+<td><p>The cloud provider terminated the executor unexpectedly. If auto-resubmission is enabled, the task is re-queued and returns to SUBMITTED status. Otherwise, it remains in this state.</p></td>
+<td><p>Enable auto-resubmission to automatically resubmit the task, or manually resubmit the task.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EXECUTOR TERMINATED BY USER</p></td>
+<td><p>The task’s executor was terminated by you while it was running.</p></td>
+<td><p>The machine group was terminated after the task had started, but no outputs or logs are available because they are only saved once the task completes.</p></td>
+<td><p>If outputs are needed, avoid terminating the machine group mid-task. Resubmit the task and let it finish to retrieve logs and results.</p></td>
+</tr>
+<tr class="row-even"><td><p>EXECUTOR TERMINATED TTL EXCEEDED</p></td>
+<td><p>The task’s machine was terminated because it exceeded its time-to-live (TTL) limit.</p></td>
+<td><p>The Machine Group’s TTL, defined by your quotas, was reached. This helps manage costs by ensuring resources don’t run longer than expected.</p></td>
+<td><p>Start a new Machine Group with a larger TTL and resubmit the task. If your quotas don’t allow a big enough TTL, talk to us.</p></td>
+</tr>
+<tr class="row-odd"><td><p>EXECUTOR FAILED</p></td>
+<td><p>The task failed due to an error external to the simulator, such as low disk space.</p></td>
+<td><p>An exception in the machine running the task, most commonly due to insufficient disk space, caused the task to fail.</p></td>
+<td><p>Check the concrete reason for the error and act accordingly. If the the task failed due to insufficient disk space, resubmit the task in a machine group with larger disk space or configure the dynamic disk resize feature.</p></td>
+</tr>
+<tr class="row-even"><td><p>TTL EXCEEDED</p></td>
+<td><p>The task exceeded its configured time-to-live (TTL) and was automatically stopped.</p></td>
+<td><p>The task ran longer than the TTL defined in your quotas, which helps control costs by limiting how long a task can use shared resources. You can also set a TTL manually for better control.</p></td>
+<td><p>Resubmit the task and consider adjusting the TTL if more computation time is needed.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="how_it_works.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">How it works</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="shared_dedicated_resources.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Resource Allocation Options</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-creation">Task Creation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-execution">Task Execution</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-lifecycle">Task Lifecycle</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
