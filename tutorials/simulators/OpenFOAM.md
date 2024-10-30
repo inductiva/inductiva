@@ -314,6 +314,14 @@ automaticly terminated if no simulation runs on it for 30 minutes.
    machine_group.terminate()
    ```
 
+4. **Check your simulation summary**:
+Now that our simulation has finished we can print a summary of said simulation.
+This includes information about the execution times, outputs generated and
+much more.
+    ```python
+    task.print_summary()
+    ```
+
 ### Step 4: Enhancing Performance with MPI Cluster
 
 As you have experienced, simulations can take a long, long time. To further
