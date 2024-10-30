@@ -127,7 +127,7 @@ redirects = {
         "en/latest/api_reference/tiers_and_quotas.html",
     "cli/access-storage.html":
         "/en/latest/cli/access-storage.html",
-    "cli/cli-overview.html":
+    "/cli/cli-overview.html":
         "/en/latest/cli/cli-overview.html",
     "cli/managing-resources.html":
         "/en/latest/cli/managing-resources.html",
