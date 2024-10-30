@@ -109,7 +109,6 @@ version = 'local'
 html_baseurl = 'https://tutorials.inductiva.ai/'
 
 redirects = {
-    #INTRO DO API from TUTORIALS TO DOCS
     "intro_to_api/how_it_works.html":
         "https://docs.inductiva.ai/en/latest/intro_to_api/how_it_works.html",
     "intro_to_api/tasks.html":
