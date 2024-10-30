@@ -1,10 +1,17 @@
 """API for Benchmarking"""
+import enum
 import json
-from typing import Optional, Self
+import csv
+from typing import Optional, Self, Union
 from inductiva import types
 from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
-from inductiva.resources import machine_groups
+
+
+class ExportFormat(enum.Enum):
+    """Enumeration of supported benchmark export formats."""
+    JSON = "json"
+    CSV = "csv"
 
 
 class Benchmark(Project):
@@ -133,38 +140,87 @@ class Benchmark(Project):
             task.wait(download_std_on_completion=False)
         return self
 
-    def to_dict(self):
+    def export(
+        self,
+        fmt: Union[ExportFormat, str] = ExportFormat.JSON,
+        filename: Optional[str] = None,
+    ):
         """
-        Compiles results from all completed tasks into a dictionary.
+        Exports the benchmark performance metrics in the specified format.
 
-        Returns:
-            dict: A dictionary containing the results of each task, organized 
-            by virtual machine type.
+        Args:
+            fmt (ExportFormat): The format to export the results in. Defaults
+                to ExportFormat.JSON.
+            filename (Optional[str]): The name of the output file to save the
+                exported results. Defaults to the benchmark's name if not
+                provided.
         """
-        results = {}
+        if isinstance(fmt, str):
+            fmt = ExportFormat[fmt.upper()]
+        metrics = self.gather_metrics()
+        filename = filename or f"{self.name}.{fmt.value}"
+        if fmt == ExportFormat.JSON:
+            with open(filename, mode="w", encoding="utf-8") as file:
+                json_content = json.dumps(obj=metrics, indent=4)
+                file.write(json_content)
+        elif fmt == ExportFormat.CSV:
+            with open(filename, mode="w", encoding="utf-8") as file:
+                csv_content = [{
+                    "machine_type": machine_type,
+                    **task,
+                } for machine_type, tasks in metrics.items() for task in tasks]
+                fieldnames = csv_content[0].keys()
+                writer = csv.DictWriter(file, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(csv_content)
+        else:
+            raise ValueError(f"Unsupported export format: {fmt}")
+
+    def gather_metrics(self) -> dict:
+        """
+        Gathers performance metrics for all tasks associated with the
+        benchmark, which include computation cost and execution time.    
+    
+        Returns:
+            dict: A dictionary organized by virtual machine type, containing
+                performance metrics for each task associated with the benchmark.
+        """
+        data = {}
         tasks = self.get_tasks()
         for task in tasks:
-            task_info = task.info
-            tmp1, tmp2, *_ = task_info.executer.vm_name.split("-")
-            machine_group_name = tmp1 + "-" + tmp2
-            resource = machine_groups.get_by_name(machine_group_name)
-            vm_type = task_info.executer.vm_type
-            if vm_type not in results:
-                cost_per_hour = resource.estimate_cloud_cost(verbose=False)
-                results[vm_type] = {
-                    "cost per hour": cost_per_hour,
-                    "machine type": resource.__class__.__name__,
-                    "provider": task_info.executer.host_type,
-                    "machine count": resource.num_machines,
-                    "tasks": []
-                }
-            metadata_filename = "input.json"
-            inputs_path = task.download_inputs(filenames=[metadata_filename])
-            metadata_path = inputs_path.joinpath(metadata_filename)
-            with open(metadata_path, mode="r", encoding="utf-8") as file:
-                metadata_content = json.load(file)
-            results[vm_type]["tasks"].append({
-                "info": task_info.to_dict(),
-                "metadata": metadata_content,
+            info = task.get_info()
+            vm_type = info.executer.vm_type
+            data.setdefault(vm_type, [])
+            data[vm_type].append({
+                "task_id": info.task_id,
+                "estimated_computation_cost": info.estimated_computation_cost,
+                "computation_time": info.time_metrics.computation_seconds.value,
             })
-        return results
+        return data
+
+    def gather_detailed_data(self) -> dict:
+        """
+        Gathers comprehensive information about all tasks associated with the 
+        benchmark, including additional performance metrics and task metadata.
+
+        Returns:
+            dict: A dictionary organized by virtual machine type, containing
+                detailed information about each task associated with the
+                benchmark.
+        """
+        data = {}
+        tasks = self.get_tasks()
+        for task in tasks:
+            info = task.get_info()
+            vm_type = info.executer.vm_type
+            data.setdefault(vm_type, [])
+            input_filename = "input.json"
+            input_dir_path = task.download_inputs(filenames=[input_filename])
+            input_file_path = input_dir_path.joinpath(input_filename)
+            with open(input_file_path, mode="r", encoding="utf-8") as file:
+                input_json = json.load(file)
+            data[vm_type].append({
+                "task_info": info.to_dict(),
+                "task_input_metadata": input_json,
+            })
+        return data
