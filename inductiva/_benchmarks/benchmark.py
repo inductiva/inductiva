@@ -1,6 +1,6 @@
 """API for Benchmarking"""
 import json
-from typing import Self
+from typing import Optional, Self
 from inductiva import types
 from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
@@ -21,29 +21,80 @@ class Benchmark(Project):
         """
         super().__init__(name=name, append=append)
         self.runs = []
+        self.simulator = None
+        self.input_dir = None
+        self.on = None
+        self.kwargs = {}
+
+    def set_default(
+        self,
+        simulator: Optional[Simulator] = None,
+        input_dir: Optional[str] = None,
+        on: Optional[types.ComputationalResources] = None,
+        **kwargs,
+    ) -> Self:
+        """
+        Sets default parameters for the benchmark runner.
+
+        This method allows you to configure default settings for the benchmark,
+        which will be used in subsequent runs unless explicitly overridden.
+
+        Args:
+            simulator (Optional[Simulator]): The simulator instance to be used
+                as the default for future runs. If not provided, the current
+                simulator will remain unchanged.
+            input_dir (Optional[str]): The directory path for input files. If
+                not provided, the current input directory will remain unchanged.
+            on (Optional[types.ComputationalResources]): The computational
+                resources to use for running the simulations. If not specified,
+                the current resources will remain unchanged.
+            **kwargs: Additional keyword arguments to set as default parameters 
+                for the simulations. These will update any existing parameters
+                with the same names.
+
+        Returns:
+            Self: The current instance for method chaining.
+        """
+        self.simulator = simulator or self.simulator
+        self.input_dir = input_dir or self.input_dir
+        self.on = on or self.on
+        self.kwargs = kwargs or self.kwargs
+        return self
 
     def add_run(
         self,
-        simulator: Simulator,
-        input_dir: str,
-        on: types.ComputationalResources,
+        simulator: Optional[Simulator] = None,
+        input_dir: Optional[str] = None,
+        on: Optional[types.ComputationalResources] = None,
         **kwargs,
     ) -> Self:
         """
         Adds a simulation run to the benchmark.
 
         Args:
-            simulator (Simulator): The simulator to be used for this run.
-            input_dir (str): The directory containing input files for the
-            simulation.
-            on (types.ComputationalResources): The computational resources to
-            run the simulation on.
-            **kwargs: Additional keyword arguments for the simulator run.
+            simulator (Optional[Simulator]): The simulator to be used for this
+                run. If not provided, the previously set simulator will be used.
+            input_dir (Optional[str]): The directory containing input files for
+                the simulation. If not provided, the previously set input
+                directory will be used.
+            on (Optional[types.ComputationalResources]): The computational
+                resources to run the simulation on. If not provided, the
+                previously set resources will be used.
+            **kwargs: Additional keyword arguments for the simulator run. These
+                will overwrite any previously set parameters.
 
         Returns:
             Self: The current instance for method chaining.
         """
-        self.runs.append((simulator, input_dir, on, kwargs))
+        self.runs.append((
+            simulator or self.simulator,
+            input_dir or self.input_dir,
+            on or self.on,
+            {
+                **self.kwargs,
+                **kwargs
+            },
+        ))
         return self
 
     def run(self, num_repeats: int = 2) -> Self:
