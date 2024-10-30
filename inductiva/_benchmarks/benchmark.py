@@ -149,7 +149,8 @@ class Benchmark(Project):
         Exports the benchmark performance metrics in the specified format.
 
         Args:
-            format (str): The format to export the results in.
+            fmt (ExportFormat): The format to export the results in. Defaults
+                to ExportFormat.JSON.
             filename (Optional[str]): The name of the output file to save the
                 exported results. Defaults to the benchmark's name if not
                 provided.
