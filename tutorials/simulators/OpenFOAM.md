@@ -262,7 +262,7 @@ folder where all your simulation files are located.
    input_dir = "/path/to/highLiftConfiguration"
    ```
 2. **Read Commands**:
-Now, let's read the `commands.txt` created in [Step 2](#Step-2:-Create-Commands-File).
+Now, let's read the `commands.txt` created in [Step 2](##step-2-create-commands-file).
    ```python
    with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
        commands = [line.strip() for line in file]
@@ -291,24 +291,32 @@ essentially determining how many parts your simulation will be split into to
 run in parallel. Here, we’re dividing the simulation into 180 parts and running
 each part simultaneously.
 
-- `use_hwthread`: This enables hyperthreading. Setting this to `True` allows
-your simulation to use up to 360 vCPUs on the machine, even if we’re not
-utilizing all of them."
+- `use_hwthread`: This enables hyperthreading, which lets each CPU core handle
+two tasks at once instead of one. Setting this to `True` allows your simulation
+to use up to 360 vCPUs on the machine, even if we’re not utilizing all of them.
 
 3. **Wait and Download Outputs**:
+That is it. Our simulation is now running on the cloud. We can `wait` for the
+simulation to be over, or we can turn our computer off go for a coffe (☕️).
    ```python
    task.wait()
    task.download_outputs()
    ```
 
 4. **Terminate Machine**:
+Once our simulation is over we can/should terminate our machine to save on costs.
+If you forget, dont worry we got your back. By default, a machine will be
+automaticly terminated if no simulation runs on it for 30 minutes.
+
    ```python
    machine_group.terminate()
    ```
 
 ### Step 4: Enhancing Performance with MPI Cluster
 
-To further reduce runtime, use an MPI cluster with two machines:
+As you have experienced, simulations can take a long, long time. To further
+reduce runtime we can change our machine configuration to a MPI cluster
+with two machines:
 
 ```python
 mpi_cluster = inductiva.resources.MPICluster(
@@ -325,6 +333,9 @@ task = openfoam.run(
                   use_hwthread=True,
                   on=mpi_cluster)
 ```
+
+As you can see the process of scalling up (or down) can be done easly by just
+picking a new resource. We encorage you to try other machines/configurations.
 
 **Note**: `spot` machines are not supported for MPI clusters.
 
