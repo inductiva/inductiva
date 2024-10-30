@@ -4,13 +4,14 @@ import logging
 import os
 import tempfile
 import zipfile
+import tqdm
+import urllib3
 from typing import Literal
 from urllib.parse import unquote, urlparse
 
 import inductiva
 from inductiva import constants
-from inductiva.api import methods
-from inductiva.client import exceptions
+from inductiva.client import exceptions, ApiException
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
 
@@ -185,39 +186,84 @@ def upload(
     """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
+    prefix_path = os.path.dirname(
+        remote_path.lstrip("/")) if remote_path else ""
+
     is_dir = os.path.isdir(local_path)
-
     if is_dir:
-        input_path = _zip_folder(local_path)
-        if remote_path:
-            remote_path = os.path.dirname(remote_path.lstrip("/"))
-            remote_path = os.path.join(remote_path, constants.TMP_ZIP_FILENAME)
-        else:
-            remote_path = constants.TMP_ZIP_FILENAME
+        input_files = _list_files(local_path, prefix_path)
     else:
-        input_path = local_path
-        remote_path = remote_path or input_path
-
-    file_size = os.path.getsize(input_path)
-    logging.info("Input size: %s", format_utils.bytes_formatter(file_size))
+        file_name = os.path.basename(local_path)
+        input_files = [os.path.join(prefix_path, file_name)]
 
     logging.info("Uploading input...")
 
-    if methods.upload_file(
-            api_instance=api_instance,
-            input_zip_path=input_path,
-            remote_dir=remote_dir,
-            remote_path=remote_path,
-            unzip=is_dir,
-            get_upload_url_method=api_instance.get_upload_url,
-            notify_upload_method=api_instance.notify_upload_file,
-    ):
-        logging.info("Input successfully uploaded.")
-    else:
-        logging.error("An error occurred while uploading the input.")
+    api_response = api_instance.get_upload_url(
+        query_params={
+            "file_paths": input_files,
+        },
+        path_params={
+            "folder_name": remote_dir,
+        },
+    )
 
-    logging.info("")
-    os.remove(input_path)
+    for item in api_response.body:
+        method = item["method"]
+        url = item["url"]
+        file_server_available = bool(item["file_server_available"])
+        file_path = item["file_path"]
+        file_path_local = file_path.removeprefix(prefix_path)
+        if is_dir:
+            file_path_local = os.path.join(local_path, file_path_local)
+        else:
+            file_path_local = os.path.join(os.path.dirname(local_path),
+                                           file_path_local)
+
+        headers = {"Content-Type": "application/octet-stream"}
+
+        if not file_server_available:
+            headers[
+                "X-API-Key"] = api_instance.api_client.configuration.api_key[
+                    "APIKeyHeader"]
+
+        logging.debug("Upload URL: %s", url)
+
+        file_size = os.path.getsize(file_path_local)
+
+        with open(file_path_local, "rb") as zip_fp, tqdm.tqdm(
+                total=file_size,
+                unit="B",
+                unit_scale=True,
+                unit_divisor=1000,
+        ) as progress_bar:
+            # Wrap the file object so that the progress bar is updated
+            # every time a chunk is read.
+            wrapped_file = tqdm.utils.CallbackIOWrapper(
+                progress_bar.update,
+                zip_fp,
+                "read",
+            )
+            # Use the pool_manager from the API client to send the request
+            pool_manager: urllib3.PoolManager = (
+                api_instance.api_client.rest_client.pool_manager)
+
+            resp = pool_manager.request(method,
+                                        url,
+                                        body=wrapped_file,
+                                        headers=headers)
+            if resp.status != 200:
+                raise ApiException(status=resp.status, reason=resp.reason)
+
+            # Notify the API that the file upload is complete
+            api_instance.notify_upload_file(
+                query_params={
+                    "file_path": file_path,
+                    "unzip": "f",
+                },
+                path_params={
+                    "folder_name": remote_dir,
+                },
+            )
 
 
 def _zip_folder(source_path):
@@ -253,6 +299,16 @@ def _zip_folder(source_path):
 
     return zip_path
 
+
+def _list_files(root_path: str, prefix_path: str) -> list[str]:
+    file_list = []
+    for dirpath, _, filenames in os.walk(root_path):
+        for filename in filenames:
+            relative_path = os.path.relpath(os.path.join(dirpath, filename),
+                                            root_path)
+            full_path = os.path.join(prefix_path, relative_path)
+            file_list.append(full_path)
+    return file_list
 
 def remove_workspace(remote_dir, file_path=None) -> bool:
     """Removes a workspace folder or a workspace file.
