@@ -102,5 +102,4 @@ language = 'en'
 version = 'local'
 html_baseurl = 'https://docs.inductiva.ai/'
 
-redirects = {
-}
+redirects = {}
