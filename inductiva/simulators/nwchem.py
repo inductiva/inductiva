@@ -1,6 +1,6 @@
 """NWChem simulator module of the API."""
 
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -31,6 +31,7 @@ class NWChem(simulators.Simulator):
             use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
+            remote_assets: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
         """Run the simulation.
 
@@ -56,4 +57,5 @@ class NWChem(simulators.Simulator):
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
+                           remote_assets=remote_assets,
                            **kwargs)

@@ -1,5 +1,5 @@
 """SplisHSPlasH simulator module of the API."""
-from typing import Optional
+from typing import List, Optional
 
 from inductiva import types, tasks, simulators
 
@@ -28,6 +28,7 @@ class SplishSplash(simulators.Simulator):
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
         resubmit_on_preemption: bool = False,
+        remote_assets: Optional[List[str]] = None,
         **kwargs,
     ) -> tasks.Task:
         """Run the SPlisHSPlasH simulation.
@@ -51,5 +52,6 @@ class SplishSplash(simulators.Simulator):
             storage_dir=storage_dir,
             on=on,
             resubmit_on_preemption=resubmit_on_preemption,
+            remote_assets=remote_assets,
             **kwargs,
         )

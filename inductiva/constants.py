@@ -25,3 +25,5 @@ TASK_FAILED_LINES_TO_DUMP = 10
 INDUCTIVA_LOGS_WAIT_SLEEP_TIME = 1.0
 
 HOME_DIR = pathlib.Path.home() / ".inductiva"
+
+TMP_ZIP_FILENAME = "_tmp.zip"

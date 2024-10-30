@@ -4,6 +4,34 @@
 
 ```{toctree}
 ---
+caption: Inductiva API prerequisites
+maxdepth: 1 
+hidden: true
+---
+prerequisites/osX
+
+```
+
+```{toctree}
+---
+caption: Introduction to Inductiva API
+maxdepth: 1 
+hidden: true
+---
+intro_to_api/how_it_works
+intro_to_api/tasks
+intro_to_api/shared_dedicated_resources
+intro_to_api/data_flow
+intro_to_api/computational-infrastructure
+intro_to_api/templating
+intro_to_api/configuring-simulators
+intro_to_api/projects
+intro_to_api/custom_docker_images
+
+```
+
+```{toctree}
+---
 caption: Quick Recipes
 maxdepth: 1
 hidden: true
