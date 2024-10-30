@@ -142,8 +142,8 @@ def upload_from_url(
     Args:
         url (str): The URL of the file to upload.
         remote_dir (str): The remote directory to upload the file to. 
-        file_path (str, optional): The name to save the file as. If not
-            provided, the name will be extracted from the URL.
+        remote_path (str, optional): The path to save the file as. If not
+            provided, the path will be extracted from the URL.
         unzip (bool, optional): Whether to unzip the file after uploading.
             Default is False.
     """
@@ -181,40 +181,47 @@ def upload(
             uploaded.
         remote_dir (str, optional): The remote directory where the file will
             be uploaded. Defaults to "default".
+        remote_path (str, optional): The remote path to save the file as.
     """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
-    input_zip_path = _zip_file_or_folder(local_path)
+    is_dir = os.path.isdir(local_path)
 
-    zip_file_size = os.path.getsize(input_zip_path)
-    logging.info("Input archive size: %s",
-                 format_utils.bytes_formatter(zip_file_size))
+    if is_dir:
+        input_path = _zip_folder(local_path)
+        if remote_path:
+            remote_path = os.path.dirname(remote_path.lstrip("/"))
+            remote_path = os.path.join(remote_path, constants.TMP_ZIP_FILENAME)
+        else:
+            remote_path = constants.TMP_ZIP_FILENAME
+    else:
+        input_path = local_path
+        remote_path = remote_path or input_path
+
+    file_size = os.path.getsize(input_path)
+    logging.info("Input size: %s",
+                 format_utils.bytes_formatter(file_size))
 
     logging.info("Uploading input...")
 
-    if remote_path:
-        remote_path = os.path.dirname(remote_path.lstrip("/"))
-        remote_path = os.path.join(remote_path, constants.TMP_ZIP_FILENAME)
-    else:
-        remote_path = constants.TMP_ZIP_FILENAME
-
     if methods.upload_file(
             api_instance=api_instance,
-            input_zip_path=input_zip_path,
+            input_zip_path=input_path,
             remote_dir=remote_dir,
             remote_path=remote_path,
+            unzip=is_dir,
             get_upload_url_method=api_instance.get_upload_url,
             notify_upload_method=api_instance.notify_upload_file,
     ):
-        logging.info("Input file successfully uploaded.")
+        logging.info("Input successfully uploaded.")
     else:
-        logging.error("An error occurred while uploading the input file.")
+        logging.error("An error occurred while uploading the input.")
 
     logging.info("")
-    os.remove(input_zip_path)
+    os.remove(input_path)
 
 
-def _zip_file_or_folder(source_path):
+def _zip_folder(source_path):
     """
     Zips a file or a folder and saves it to a temporary folder.
 

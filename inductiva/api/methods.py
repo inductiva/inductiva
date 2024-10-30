@@ -88,6 +88,7 @@ def upload_file(
     notify_upload_method,
     remote_dir: Optional[str] = None,
     remote_path: Optional[str] = None,
+    unzip: bool = False,
     task_id: Optional[str] = None,
 ) -> bool:
     """
@@ -100,6 +101,7 @@ def upload_file(
         notify_upload_method: The method to notify after upload.
         remote_dir: The remote directory to upload to (if applicable).
         remote_path: The remote path to upload to (if applicable).
+        unzip: Whether to unzip the file after upload (if applicable).
         task_id: The task ID for input upload (if applicable).
 
     Raises:
@@ -166,7 +168,7 @@ def upload_file(
                 notify_upload_method(
                     query_params={
                         "file_path": remote_path,
-                        "unzip": "t"
+                        "unzip": "t" if unzip else "f",
                     },
                     path_params={
                         "folder_name": remote_dir,
