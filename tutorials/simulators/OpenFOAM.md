@@ -68,79 +68,56 @@ To run the sample simulation above, simply download the
 using `inductiva.simulators.OpenFOAM(distribution="esi")`, and replace  
 `runApplication surfaceFeatures` with `runApplication surfaceFeatureExtract`.
 
-## Advanced Example: Running MB9 Micro-benchmark by ExaFOAM
+## Advanced Tutorial: Running the MB9 Micro-benchmark from ExaFOAM
 
-In this advanced example, we’ll be running a complex OpenFOAM simulation 
-based on a high-lift configuration setup, which is part of the [ExaFOAM benchmarks](https://exafoam.eu/benchmarks/). Specifically, this case corresponds to the **MB9 micro-benchmark**, which 
-serves as preparatory work for the **HPC Grand Challenge** test case of 
-the **High Lift Common Research Model (CRM-HL)**. The **CRM-HL** is 
-a full aircraft configuration with deployed high-lift devices, simulated 
-using **wall-modeled LES (WMLES)**.
+This guide walks you through running a complex OpenFOAM simulation using the
+**MB9 micro-benchmark** from [ExaFOAM](https://exafoam.eu/benchmarks/). This
+benchmark simulates a high-lift aircraft configuration, ideal for studying
+near-wall turbulence using **wall-modeled LES (WMLES)**.
 
-The **MB9 micro-benchmark** captures the key characteristics of the **Grand Challenge**, 
-such as flow physics and simulation approach, but with significantly fewer 
-computational resources. It features a **2D, three-element high-lift wing configuration**, 
-simulated with the **IDDES model**, which supports **WMLES** for resolving near-wall 
-turbulence.
+### Objective
 
-In this example, we’ll run a modified version of this benchmark using two hardware
-configurations powered by **Inductiva**. First, we’ll run the simulation
-on a large **360 vCPU machine**, one of the largest single-node configurations
-available at Inductiva. Then, to see if we can halve the execution time 
-of the simulation, we’ll run the same simulation on an **MPI cluster** using 
-two of these large machines.
+We'll run this simulation on:
+1. **Single 360 vCPU Machine**.
+2. **MPI Cluster** using two 360 vCPU machines to improve performance.
 
 ### Prerequisites
 
-Before running the simulation, make sure to download the input files 
-from this [repository](https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration). Once downloaded, place them in a directory named `highLiftConfiguration` 
-inside your working folder.
+1. **Download Input Files**: Get the input files from the
+[repository](https://develop.openfoam.com/committees/hpc/-/tree/develop/compressible/rhoPimpleFoam/LES/highLiftConfiguration)
+and place them in a folder named `highLiftConfiguration`.
 
-Here’s an example of what your directory structure should look like after 
-organizing the necessary files:
+   **Directory Structure**:
+   ```bash
+   ls -lasgo highLiftConfiguration
+   total 104
+   0 drwxrwxr-x@ 14     448 Sep 23 11:44 .
+   0 drwx------@ 19     608 Sep 23 11:49 ..
+   0 drwxrwxr-x@ 12     384 Sep 20 09:43 0.orig
+   8 -rwxr-xr-x@  1     626 Jun 13 10:09 Allclean
+   16 -rwxr-xr-x@  1    6998 Jun 13 10:09 Allrun
+   8 -rw-rw-r--@  1     991 Jun 13 10:09 COPYING
+   48 -rw-rw-r--@  1   21547 Jun 13 10:09 README.md
+   0 -rw-rw-r--@  1       0 Jun 13 10:09 case.foam
+   0 drwxrwxr-x@  6     192 Sep 20 09:43 constant
+   0 drwxrwxr-x@ 13     416 Jun 13 10:09 figures
+   0 drwxrwxr-x@ 28     896 Sep 20 09:43 system
+   24 -rw-rw-r--@  1   11399 Jun 13 10:09 thumbnail.png
+   ```
 
-```bash
-ls -lasgo highLiftConfiguration
-total 104
- 0 drwxrwxr-x@ 14     448 Sep 23 11:44 .
- 0 drwx------@ 19     608 Sep 23 11:49 ..
- 0 drwxrwxr-x@ 12     384 Sep 20 09:43 0.orig
- 8 -rwxr-xr-x@  1     626 Jun 13 10:09 Allclean
-16 -rwxr-xr-x@  1    6998 Jun 13 10:09 Allrun
- 8 -rw-rw-r--@  1     991 Jun 13 10:09 COPYING
-48 -rw-rw-r--@  1   21547 Jun 13 10:09 README.md
- 0 -rw-rw-r--@  1       0 Jun 13 10:09 case.foam
- 0 drwxrwxr-x@  6     192 Sep 20 09:43 constant
- 0 drwxrwxr-x@ 13     416 Jun 13 10:09 figures
- 0 drwxrwxr-x@ 28     896 Sep 20 09:43 system
-24 -rw-rw-r--@  1   11399 Jun 13 10:09 thumbnail.png
-```
+### Step 1: Adjust Simulation Parameters
 
-### Modifications to the Simulation Parameters
+For a faster simulation, modify the following parameters in the input files:
 
-To speed up the simulation, we made some adjustments to the original
-parameters. Specifically, we set the time step (`dt`) to 0.00002, the
-initial time to 0.10, and the final time to 0.30. These changes help reduce the
-overall simulation runtime while maintaining reasonable accuracy for this high-lift
-configuration case.
+- **Time Step (`dt`)**: Set to 0.00002.
+- **Start Time**: 0.10
+- **End Time**: 0.30
 
-### Configuring and Running the Simulation
+### Step 2: Create Command File
 
-We'll run the simulation on a **virtual machine with 360 vCPUs** using the
-`c3d-highcpu-360` machine type. The process includes several preprocessing
-steps, such as **mesh generation** (`blockMesh`, `snappyHexMesh`), followed 
-by the simulation run.
-
-The commands used to run the simulation were all taken from the `Allrun` script
-included in the downloaded files. We made a few adjustments because all 
-commands are executed directly from the `highLiftConfiguration` directory, 
-so we can’t use `cd` to navigate into subdirectories and run commands from there.
-Additionally, every command must start with `runApplication` or `runParallel`,
-even for basic commands like `rm` and `mv`.
-
-We’ve consolidated all the commands into a file called `commands.txt`, with each
-command placed on a separate line. This file is then read as a list of strings 
-for sequential execution. The contents of `commands.txt` are as follows:
+To avoid navigating between directories, place all commands in a `commands.txt`
+file within the `highLiftConfiguration` directory. Each command should start
+with `runApplication` or `runParallel`. Sample `commands.txt`:
 
 ```bash
 runApplication cp system/controlDict.SHM system/controlDict
@@ -201,162 +178,79 @@ runParallel rhoPimpleFoam
 runParallel postProcess -func sampleDict.surface.SRS -latestTime
 ```
 
-Below is the Python code to configure and run the OpenFOAM simulation:
+### Step 3: Running the Simulation
 
-```python notest
-import inductiva
-import os
+#### a. Configure and Start Machine
 
-machine_group = inductiva.resources.MachineGroup(
-    machine_type="c3d-highcpu-360",
-    spot=True)
-machine_group.start()
+1. **Set up a 360 vCPU machine**:
+    ```python
+    import inductiva
+    machine_group = inductiva.resources.MachineGroup(machine_type="c3d-highcpu-360", spot=True)
+    machine_group.start()
+    ```
 
-# Set simulation input directory
-input_dir = "/path/to/highLiftConfiguration"
+2. **Specify Simulation Directory**:
+   ```python
+   input_dir = "/path/to/highLiftConfiguration"
+   ```
 
-# Read the simulation commands
-with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
-    commands = [line.strip() for line in file]
+#### b. Execute Commands
 
-# Initialize the Simulator
-openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
+1. **Read Commands**:
+   ```python
+   with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
+       commands = [line.strip() for line in file]
+   ```
 
-# Run simulation
-task = openfoam.run(
-    input_dir=input_dir,
-    commands=commands,
-    n_vcpus=180,
-    use_hwthread=True,
-    on=machine_group)
+2. **Run Simulation**:
+   ```python
+   openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
+   task = openfoam.run(
+               input_dir=input_dir,
+               commands=commands,
+               n_vcpus=180,
+               use_hwthread=True,
+               on=machine_group)
+   ```
 
-# Wait for the task to finish and downloading the outputs
-task.wait()
-task.download_outputs()
+3. **Wait and Download Outputs**:
+   ```python
+   task.wait()
+   task.download_outputs()
+   ```
 
-# Turn off the machine group
-machine_group.terminate()
+4. **Terminate Machine**:
+   ```python
+   machine_group.terminate()
+   ```
 
-```
+### Step 4: Enhancing Performance with MPI Cluster
 
-### Important Details
+To further reduce runtime, use an MPI cluster with two machines:
 
-1. **ExaFOAM Benchmark**: This simulation replicates the **MB9 micro-benchmark**
-from the [ExaFOAM](https://exafoam.eu/benchmarks/) project. The benchmark
-captures key flow physics and simulation strategies of a larger
-HPC challenge, but with fewer computational resources, making it scalable 
-and efficient for simulating high-lift configurations.
-   
-2. **Machine Configuration**: We are running the simulation on a `c3d-highcpu-360`
-machine with **360 vCPUs** to ensure efficient computation. You can adjust 
-the machine configuration based on your available resources or project 
-requirements.
-   
-3. **Commands**: The list of `commands` includes key OpenFOAM tasks
-like copying necessary configuration files, running mesh generation, and
-parallelizing the process using `decomposePar` and `snappyHexMesh`.
-
-4. **Parallelization**: We utilize `n_vcpus=180` for the simulation, allowing
-OpenFOAM to run in parallel and significantly speed up computation. Using 
-one thread per physical core, as recommended by [Google Cloud](https://cloud.google.com/blog/products/compute/how-to-reduce-mpi-latency-for-hpc-workloads-on-google-cloud), 
-typically offers optimal performance. However, this configuration may not 
-always be the best option, as there is no strict rule for selecting the 
-number of vCPUs.
-
-### Running the Simulation
-
-Running the script above will take some time, as OpenFOAM tasks like
-`snappyHexMesh` and `checkMesh` can be computationally intensive, especially
-with large meshes. The `task.wait()` command will block until the simulation
-finishes, after which the output files will be available.
-
-In this configuration, the simulation took **40 hours and 20 minutes** to complete,
-generating **24.76 GB** of output.
-
-### Post-Simulation
-
-After the simulation completes, the output files will be downloaded locally by
-calling `task.download_outputs()`. These outputs include the simulation results,
-such as mesh quality reports, final results, and log files for each step in the process.
-
-To inspect the results, navigate to the `inductiva_output` folder, where 
-all outputs are stored:
-
-```bash
-ls -lasgo inductiva_output/<task_id>
-total 672
-  0 drwxr-xr-x  143     4576 Sep 19 16:06 .
-  0 drwxr-xr-x  400    12800 Sep 19 16:05 ..
-  0 drwxr-xr-x   11      352 Sep 19 16:06 0.orig
-  8 -rw-r--r--    1      626 Sep 19 16:06 Allclean
- 16 -rw-r--r--    1     6998 Sep 19 16:06 Allrun
-  8 -rw-r--r--    1      991 Sep 19 16:06 COPYING
- 48 -rw-r--r--    1    21547 Sep 19 16:06 README.md
-  0 -rw-r--r--    1        0 Sep 19 16:06 case.foam
-  0 drwxr-xr-x    8      256 Sep 19 16:06 constant
-  0 drwxr-xr-x   27      864 Sep 19 16:06 dynamicCode
-  0 drwxr-xr-x   13      416 Sep 19 16:06 figures
-  0 drwxr-xr-x    4      128 Sep 19 16:06 processor0
-  0 drwxr-xr-x    4      128 Sep 19 16:06 processor1
-  0 drwxr-xr-x    4      128 Sep 19 16:06 processor10
-    ...
-  0 drwxr-xr-x    4      128 Sep 19 16:06 processor126
-  0 drwxr-xr-x    4      128 Sep 19 16:06 processor127
- 32 -rw-r--r--    1    14437 Sep 19 16:06 stderr.txt
-536 -rw-r--r--    1   272331 Sep 19 16:06 stdout.txt
-  0 drwxr-xr-x   30      960 Sep 19 16:06 system
- 24 -rw-r--r--    1    11399 Sep 19 16:06 thumbnail.png
-```
-
-You can now perform post-processing on the results, just as you would if you had
-run the simulation locally.
-
-### Utilizing an MPI Cluster for Enhanced Simulation Performance
-
-The initial simulation took a significant amount of time to complete. 
-To speed things up, we deployed the simulation across two `c3d-highcpu-360`
-machines using an MPI cluster configuration.
-
-Using **Inductiva's Python library**, scaling the simulation resources is
-simple. You just need to modify the machine group instantiation to an 
-MPI cluster setup and adjust the `n_vcpus` parameter accordingly.
-
-Here’s an example of the code implementation:
-
-```python notest
+```python
 mpi_cluster = inductiva.resources.MPICluster(
-    machine_type="c3d-highcpu-360",
-    data_disk_gb=300,
-    num_machines=2
-)
-
+                  machine_type="c3d-highcpu-360",
+                  data_disk_gb=300,
+                  num_machines=2)
 mpi_cluster.start()
 
-...
-# Execute the simulation
+# Re-run the simulation with adjusted `n_vcpus`
 task = openfoam.run(
-    input_dir=input_dir,
-    commands=commands,
-    n_vcpus=360, # 360 out of 720 (360 x2)
-    use_hwthread=True,
-    on=mpi_cluster
-)
+                  input_dir=input_dir,
+                  commands=commands,
+                  n_vcpus=360,
+                  use_hwthread=True,
+                  on=mpi_cluster)
 ```
 
-With this simple code change, we were able to significantly reduce the 
-simulation time to **19 hours and 10 minutes**, generating an output of **25.02 GB**.
-
-PS: Note that an MPI Cluster does not support `spot` machines.
+**Note**: `spot` machines are not supported for MPI clusters.
 
 ### Conclusion
 
-This setup shows how cloud resources can be leveraged to run computationally 
-intensive **OpenFOAM simulations**, specifically using a case from the **ExaFOAM benchmarks**. 
-The cloud-based environment allows for parallel execution on high-performance 
-machines, significantly reducing our simulation time by half! Once the simulation 
-completes, you can download and analyze the results on your local machine.
-
-Good luck with your OpenFOAM simulations!
+Running the simulation on a high-performance machine and scaling it on an MPI
+cluster can significantly reduce computation time. Download and analyze your
+results locally once complete. Happy simulating!
 
 ## What to read next
 
