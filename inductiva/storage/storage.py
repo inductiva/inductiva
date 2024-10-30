@@ -6,7 +6,7 @@ import tempfile
 import zipfile
 import tqdm
 import urllib3
-from typing import Literal
+from typing import List, Literal
 from urllib.parse import unquote, urlparse
 
 import inductiva
@@ -300,7 +300,7 @@ def _zip_folder(source_path):
     return zip_path
 
 
-def _list_files(root_path: str, prefix_path: str) -> list[str]:
+def _list_files(root_path: str, prefix_path: str) -> List[str]:
     file_list = []
     for dirpath, _, filenames in os.walk(root_path):
         for filename in filenames:
