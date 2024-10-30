@@ -85,7 +85,6 @@ def upload_file(api_instance,
                 input_zip_path,
                 remote_dir=None,
                 task_id=None,
-                overwrite=False,
                 get_upload_url_method=None,
                 notify_upload_method=None):
     """
@@ -96,7 +95,6 @@ def upload_file(api_instance,
         input_zip_path: The local path to the input zip file.
         remote_dir: The remote directory to upload to (if applicable).
         task_id: The task ID for input upload (if applicable).
-        overwrite: Boolean indicating whether to overwrite existing files.
         get_upload_url_method: The method to get the upload URL.
         notify_upload_method: The method to notify after upload.
 
@@ -111,7 +109,6 @@ def upload_file(api_instance,
             api_response = get_upload_url_method(
                 query_params={
                     "file_name": constants.TMP_ZIP_FILENAME,
-                    "overwrite": "t" if overwrite else "f",
                 },
                 path_params={
                     "folder_name": remote_dir,

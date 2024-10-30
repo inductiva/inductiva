@@ -135,7 +135,6 @@ def upload_from_url(
     remote_dir: str,
     file_name: str = None,
     unzip: bool = False,
-    overwrite: bool = True,
 ):
     """
     Upload a file from a URL to the user workspace.
@@ -147,8 +146,6 @@ def upload_from_url(
             provided, the name will be extracted from the URL.
         unzip (bool, optional): Whether to unzip the file after uploading.
             Default is False.
-        overwrite (bool, optional): Whether to overwrite the file if it already
-            exists. Default is True.
     """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
@@ -160,7 +157,6 @@ def upload_from_url(
             "url": url,
             "file_name": file_name,
             "unzip": "t" if unzip else "f",
-            "overwrite": "t" if overwrite else "f",
         },
         path_params={
             "folder_name": remote_dir,
@@ -175,7 +171,6 @@ def upload_from_url(
 def upload(
     local_path: str,
     remote_dir: str,
-    overwrite: bool = False,
 ):
     """
     Upload a local file or directory to the user workspace.
@@ -185,8 +180,6 @@ def upload(
             uploaded.
         remote_dir (str, optional): The remote directory where the file will
             be uploaded. Defaults to "default".
-        overwrite (bool, optional): Whether to overwrite the file if it already
-            exists in the remote directory. Defaults to False.
     """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
@@ -201,7 +194,6 @@ def upload(
             api_instance=api_instance,
             input_zip_path=input_zip_path,
             remote_dir=remote_dir,
-            overwrite=overwrite,
             get_upload_url_method=api_instance.get_upload_url,
             notify_upload_method=api_instance.notify_upload_file,
     ):
