@@ -1,1 +1,565 @@
-<html><head><meta http-equiv="refresh" content="0; url=/en/latest/cli/managing-resources.html"></head></html>
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NHJ03C6M91"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NHJ03C6M91');
+    </script>
+    <meta property="og:title" content="Manage your Computational Resources" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.inductiva.ai/cli/managing-resources.html" />
+<meta property="og:site_name" content="Inductiva.ai Docs" />
+<meta property="og:description" content="The Inductiva API provides a simple way to launch dedicated resources for running your simulations. With the CLI, you can effectively manage these computational resources, from selection and launch..." />
+<meta property="og:image" content="https://docs.inductiva.ai/_static/inductiva-social-banner.jpg" />
+<meta property="og:image:alt" content="Inductiva.ai Docs" />
+<meta name="description" content="The Inductiva API provides a simple way to launch dedicated resources for running your simulations. With the CLI, you can effectively manage these computational resources, from selection and launch..." />
+
+    <title>Manage your Computational Resources &#8212; Python API for Cloud-based Simulation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cli/managing-resources';</script>
+    <link rel="canonical" href="https://docs.inductiva.ai/cli/managing-resources.html" />
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Track your Tasks" href="tracking-tasks.html" />
+    <link rel="prev" title="CLI Overview and Functionalities" href="cli-overview.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="latest" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/inductiva-logo-black.svg" class="logo__image only-light" alt="Python API for Cloud-based Simulation - Home"/>
+    <img src="../_static/inductiva-logo-white.svg" class="logo__image only-dark pst-js-only" alt="Python API for Cloud-based Simulation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Inductiva API prerequisites</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../prerequisites/osX.html">Installing the API on a clean OsX</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction to Inductiva API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/how_it_works.html">How it works</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/tasks.html">Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/shared_dedicated_resources.html">Resource Allocation Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/data_flow.html">Storage and Data Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/computational-infrastructure.html">Computational Infrastructure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/templating.html">Templating Manager</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/configuring-simulators.html">Configuring Simulators</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/projects.html">Projects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_to_api/custom_docker_images.html">Running Simulations with Custom Docker Images</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Quick Recipes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../how_to/run-parallel_simulations.html">Run Multiple Simulations in Parallel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/manage_computational_resources.html">Manage Computational Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/set-up-elastic-machine-group.html">Set up an Elastic Machine Group</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/set-up-mpi-cluster.html">Set up an MPI Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/manage-remote-storage.html">Manage Remote Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/manage_tasks.html">Manage Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how_to/manage_and_retrieve_results.html">Manage and Retrieve Results</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Command Line Interface (CLI)</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cli-overview.html">CLI Overview and Functionalities</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Manage your Computational Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tracking-tasks.html">Track your Tasks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="streaming-logs.html">Stream Logs of a Task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="access-storage.html">Access your Remote Storage</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/computational_resources/index.html">Class Description</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/machinegroup_class.html"><code class="docutils literal notranslate"><span class="pre">MachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/elasticgroup_class.html"><code class="docutils literal notranslate"><span class="pre">ElasticMachineGroup</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/mpicluster_class.html"><code class="docutils literal notranslate"><span class="pre">MPICluster</span></code> Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/computational_resources/compute_janitor.html">Computational Resources Janitor</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/tiers_and_quotas.html">Tiers, Capabilities and Quotas</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/troubleshooting.html">Troubleshooting Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/faq.html">FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_reference/uninstall_inductiva.html">Uninstall the <code class="docutils literal notranslate"><span class="pre">inductiva</span></code> package</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/cli/managing-resources.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Manage your Computational Resources</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discover-available-resources">Discover Available Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-costs">Estimate Costs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-active-resources">List Active Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#terminate-resources">Terminate Resources</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="manage-your-computational-resources">
+<h1>Manage your Computational Resources<a class="headerlink" href="#manage-your-computational-resources" title="Link to this heading">#</a></h1>
+<p>The Inductiva API provides a simple way to <a class="reference internal" href="../how_to/manage_computational_resources.html"><span class="std std-doc">launch dedicated resources</span></a>
+for running your simulations. With the CLI, you can effectively manage these
+computational resources, from selection and launch to termination, directly from
+your terminal. For further details on each command and additional options, refer
+to the CLI’s built-in help system using the <code class="docutils literal notranslate"><span class="pre">--help</span></code> flag.</p>
+<section id="discover-available-resources">
+<h2>Discover Available Resources<a class="headerlink" href="#discover-available-resources" title="Link to this heading">#</a></h2>
+<p>Before launching any resources, you can use the CLI to go through the variety
+of machine types available and their associated costs using the <code class="docutils literal notranslate"><span class="pre">available</span></code> and
+<code class="docutils literal notranslate"><span class="pre">cost</span></code> subcommands:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>resources<span class="w"> </span>available
+Machine<span class="w"> </span>types<span class="w"> </span>provided<span class="w"> </span><span class="k">in</span><span class="w"> </span>Google<span class="w"> </span>Cloud
+
+<span class="c1"># You would get an output listing all available machines:</span>
+
+CPU<span class="w"> </span>family:<span class="w"> </span>c2
+<span class="w">   </span>&gt;<span class="w"> </span>c2-standard-<span class="w"> </span><span class="o">[</span><span class="m">4</span>,<span class="w"> </span><span class="m">8</span>,<span class="w"> </span><span class="m">16</span>,<span class="w"> </span><span class="m">30</span>,<span class="w"> </span><span class="m">60</span><span class="o">]</span><span class="w">                       </span>
+
+CPU<span class="w"> </span>family:<span class="w"> </span>c3
+<span class="w">   </span>&gt;<span class="w"> </span>c3-highcpu-<span class="w"> </span><span class="o">[</span><span class="m">4</span>,<span class="w"> </span><span class="m">8</span>,<span class="w"> </span><span class="m">22</span>,<span class="w"> </span><span class="m">44</span>,<span class="w"> </span><span class="m">88</span>,<span class="w"> </span><span class="m">176</span><span class="o">]</span><span class="w"> </span>
+<span class="w">   </span>&gt;<span class="w"> </span>c3-highmem-<span class="w"> </span><span class="o">[</span><span class="m">4</span>,<span class="w"> </span><span class="m">8</span>,<span class="w"> </span><span class="m">22</span>,<span class="w"> </span><span class="m">44</span>,<span class="w"> </span><span class="m">88</span>,<span class="w"> </span><span class="m">176</span><span class="o">]</span><span class="w"> </span>
+<span class="w">   </span>&gt;<span class="w"> </span>c3-standard-<span class="w"> </span><span class="o">[</span><span class="m">4</span>,<span class="w"> </span><span class="m">8</span>,<span class="w"> </span><span class="m">22</span>,<span class="w"> </span><span class="m">44</span>,<span class="w"> </span><span class="m">88</span>,<span class="w"> </span><span class="m">176</span><span class="o">]</span><span class="w"> </span><span class="o">(</span>-lssd<span class="o">)</span><span class="w">                   </span>
+
+...
+</pre></div>
+</div>
+<p>You can focus on a specific series by using the <code class="docutils literal notranslate"><span class="pre">-f</span></code> flag.</p>
+<p>For example:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>resources<span class="w"> </span>available<span class="w"> </span>-f<span class="w"> </span>c3d
+Machine<span class="w"> </span>types<span class="w"> </span>provided<span class="w"> </span><span class="k">in</span><span class="w"> </span>Google<span class="w"> </span>Cloud
+c3d:<span class="w"> </span>AMD<span class="w"> </span>EPYC<span class="w"> </span>Genoa<span class="w"> </span><span class="o">(</span>4th<span class="w"> </span>Gen<span class="o">)</span><span class="w"> </span>processor.
+<span class="w">  </span>&gt;<span class="w"> </span>c3d-highcpu-<span class="w">  </span><span class="o">[</span><span class="m">4</span>,<span class="w"> </span><span class="m">8</span>,<span class="w"> </span><span class="m">16</span>,<span class="w"> </span><span class="m">30</span>,<span class="w"> </span><span class="m">60</span>,<span class="w"> </span><span class="m">90</span>,<span class="w"> </span><span class="m">180</span>,<span class="w"> </span><span class="m">360</span><span class="o">]</span>
+<span class="w">  </span>&gt;<span class="w"> </span>c3d-standard-<span class="w"> </span><span class="o">[</span><span class="m">4</span>,<span class="w"> </span><span class="m">8</span>,<span class="w"> </span><span class="m">16</span>,<span class="w"> </span><span class="m">30</span>,<span class="w"> </span><span class="m">60</span>,<span class="w"> </span><span class="m">90</span>,<span class="w"> </span><span class="m">180</span>,<span class="w"> </span><span class="m">360</span><span class="o">]</span>
+<span class="w">  </span>&gt;<span class="w"> </span>c3d-highmem-<span class="w">  </span><span class="o">[</span><span class="m">4</span>,<span class="w"> </span><span class="m">8</span>,<span class="w"> </span><span class="m">16</span>,<span class="w"> </span><span class="m">30</span>,<span class="w"> </span><span class="m">60</span>,<span class="w"> </span><span class="m">90</span>,<span class="w"> </span><span class="m">180</span>,<span class="w"> </span><span class="m">360</span><span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="estimate-costs">
+<h2>Estimate Costs<a class="headerlink" href="#estimate-costs" title="Link to this heading">#</a></h2>
+<p>You can estimate the costs of the computational resources you plan to use per hour.
+The CLI provides a cost estimation tool that considers the machine type, usage duration,
+and number of machines.</p>
+<p>Consider the following example, where you wish to estimate the cost of four <strong>c2-standard-8</strong> machines:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>resources<span class="w"> </span>cost<span class="w"> </span>c2-standard-8<span class="w"> </span>--spot<span class="w"> </span>-n<span class="w"> </span><span class="m">4</span>
+Estimated<span class="w"> </span>total<span class="w"> </span>cost<span class="w"> </span><span class="o">(</span>per<span class="w"> </span>machine<span class="o">)</span>:<span class="w"> </span><span class="m">0</span>.445<span class="w"> </span><span class="o">(</span><span class="m">0</span>.111<span class="o">)</span><span class="w"> </span>$/h.
+</pre></div>
+</div>
+</section>
+<section id="list-active-resources">
+<h2>List Active Resources<a class="headerlink" href="#list-active-resources" title="Link to this heading">#</a></h2>
+<p>Once you’ve decided and launched your resources, you can use the <code class="docutils literal notranslate"><span class="pre">list</span></code> subcommand
+to get an overview of your active computational resources:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>resources<span class="w"> </span>list
+Active<span class="w"> </span>Resources:
+
+<span class="w">       </span>NAME<span class="w">                                </span>MACHINE<span class="w"> </span>TYPE<span class="w">         </span>ELASTIC<span class="w">         </span>TYPE<span class="w">           </span><span class="c1"># MACHINES         DATA SIZE IN GB         SPOT         STARTED AT (UTC)</span>
+<span class="w">       </span>api-p3kun5wyta1hacstu4xk38ujr<span class="w">       </span>c2-standard-8<span class="w">        </span>False<span class="w">           </span>mpi<span class="w">            </span><span class="m">2</span><span class="w">                  </span><span class="m">10</span><span class="w">                      </span>False<span class="w">        </span><span class="m">08</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">12</span>:59:10
+<span class="w">       </span>api-rdqprn82417bsd7id1qnac4c6<span class="w">       </span>c2-standard-4<span class="w">        </span>False<span class="w">           </span>standard<span class="w">       </span><span class="m">16</span><span class="w">                 </span><span class="m">10</span><span class="w">                      </span>False<span class="w">        </span><span class="m">08</span><span class="w"> </span>Feb,<span class="w"> </span><span class="m">12</span>:58:28
+</pre></div>
+</div>
+</section>
+<section id="terminate-resources">
+<h2>Terminate Resources<a class="headerlink" href="#terminate-resources" title="Link to this heading">#</a></h2>
+<p>Finally, you can terminate computational resources that are no longer needed through
+the CLI with the <code class="docutils literal notranslate"><span class="pre">terminate</span></code> subcommand. You can either choose a specific resource
+by providing its name or terminate all the resources with the <code class="docutils literal notranslate"><span class="pre">--all</span></code> flag.
+<strong>Any of the steps require user confirmation before proceeding.</strong></p>
+<p>For example, you can choose to terminate all the resources:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>inductiva<span class="w"> </span>resources<span class="w"> </span>terminate<span class="w"> </span>--all
+<span class="c1"># The CLI always prompts for confirmation before terminating resources</span>
+You<span class="w"> </span>are<span class="w"> </span>about<span class="w"> </span>to<span class="w"> </span>terminate<span class="w"> </span>ALL<span class="w"> </span>resources.
+Are<span class="w"> </span>you<span class="w"> </span>sure<span class="w"> </span>you<span class="w"> </span>want<span class="w"> </span>to<span class="w"> </span>proceed<span class="w"> </span><span class="o">(</span>y/<span class="o">[</span>N<span class="o">])</span>?<span class="w"> </span>y
+Terminating<span class="w"> </span>MPICluster<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;api-p3kun5wyta1hacstu4xk38ujr&quot;</span><span class="o">)</span>.<span class="w"> </span>This<span class="w"> </span>may<span class="w"> </span>take<span class="w"> </span>a<span class="w"> </span>few<span class="w"> </span>minutes.
+MPI<span class="w"> </span>Cluster<span class="w"> </span>api-p3kun5wyta1hacstu4xk38ujr<span class="w"> </span>with<span class="w"> </span>c2-standard-8<span class="w"> </span>x2<span class="w"> </span>machines<span class="w"> </span>successfully<span class="w"> </span>terminated<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>:01:10.
+Terminating<span class="w"> </span>MachineGroup<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s2">&quot;api-rdqprn82417bsd7id1qnac4c6&quot;</span><span class="o">)</span>.<span class="w"> </span>This<span class="w"> </span>may<span class="w"> </span>take<span class="w"> </span>a<span class="w"> </span>few<span class="w"> </span>minutes.
+Machine<span class="w"> </span>Group<span class="w"> </span>api-rdqprn82417bsd7id1qnac4c6<span class="w"> </span>with<span class="w"> </span>c2-standard-4<span class="w"> </span>machines<span class="w"> </span>successfully<span class="w"> </span>terminated<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">0</span>:01:18.
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="cli-overview.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CLI Overview and Functionalities</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tracking-tasks.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Track your Tasks</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discover-available-resources">Discover Available Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-costs">Estimate Costs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#list-active-resources">List Active Resources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#terminate-resources">Terminate Resources</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Inductiva Research Labs
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, Inductiva Research Labs.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
