@@ -104,27 +104,27 @@ html_baseurl = 'https://docs.inductiva.ai/'
 
 redirects = {
     "api_reference/computational_resources/compute_janitor.html":
-        "en/latest/api_reference/computational_resources/compute_janitor.html",
+        "/en/latest/api_reference/computational_resources/compute_janitor.html",
     "api_reference/computational_resources/elasticgroup_class.html":
-        "en/latest/api_reference/computational_resources/elasticgroup_class.html",
+        "/en/latest/api_reference/computational_resources/elasticgroup_class.html",
     "api_reference/computational_resources/index.html":
-        "en/latest/api_reference/computational_resources/index.html",
+        "/en/latest/api_reference/computational_resources/index.html",
     "api_reference/computational_resources/machinegroup_class.html":
-        "en/latest/api_reference/computational_resources/machinegroup_class.html",
+        "/en/latest/api_reference/computational_resources/machinegroup_class.html",
     "api_reference/computational_resources/mpicluster_class.html":
-        "en/latest/api_reference/computational_resources/mpicluster_class.html",
+        "/en/latest/api_reference/computational_resources/mpicluster_class.html",
     "api_reference/faq.html":
-        "en/latest/api_reference/faq.html",
+        "/en/latest/api_reference/faq.html",
     "api_reference/glossary.html":
-        "en/latest/api_reference/glossary.html",
+        "/en/latest/api_reference/glossary.html",
     "api_reference/troubleshooting.html":
-        "en/latest/api_reference/troubleshooting.html",
+        "/en/latest/api_reference/troubleshooting.html",
     "api_reference/uninstall_inductiva.html":
-        "en/latest/api_reference/uninstall_inductiva.html",
+        "/en/latest/api_reference/uninstall_inductiva.html",
     "api_reference/user_quotas.html":
-        "en/latest/api_reference/user_quotas.html",
+        "/en/latest/api_reference/user_quotas.html",
     "en/latest/api_reference/user_quotas.html":
-        "en/latest/api_reference/tiers_and_quotas.html",
+        "/en/latest/api_reference/tiers_and_quotas.html",
     "cli/access-storage.html":
         "/en/latest/cli/access-storage.html",
     "cli/cli-overview.html":
@@ -136,11 +136,11 @@ redirects = {
     "cli/tracking-tasks.html":
         "/en/latest/cli/tracking-tasks.html",
     "computational_resources/index.html":
-        "en/latest/api_reference/computational_resources/index.html",
+        "/en/latest/api_reference/computational_resources/index.html",
     "computational_resources/machinegroup_class.html":
-        "en/latest/api_reference/computational_resources/machinegroup_class.html",
+        "/en/latest/api_reference/computational_resources/machinegroup_class.html",
     "en/latest/_sources/api_reference/user_quotas.md":
-        "en/latest/api_reference/tiers_and_quotas.html",
+        "/en/latest/api_reference/tiers_and_quotas.html",
     #this here need to be updated to point to docs at a latter date
     "en/latest/_sources/explore_api/shared_dedicated_resources.md":
         "https://tutorials.inductiva.ai/intro_to_api/shared_dedicated_resources.html",
