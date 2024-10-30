@@ -24,16 +24,11 @@ jobs:
             pip install -y myst-parser && \
             echo "extensions = ['myst_parser']" > conf.py
           build-command: "sphinx-build . ../../build/en/latest -W -D version=latest"
-      - name: configure client side redirection
-        working-directory: source/docs
-        run: |
-          chmod -R 777 ../../build
-          cp redirect.html ../../build/index.html
       - name: Deploy to staging webserver via rsync
         uses: burnett01/rsync-deployments@7.0.0
         with:
           switches: -avzr --delete --no-perms --no-owner --no-group --omit-dir-times
-          path: build/en/latest/
+          path: build/
           remote_path: /var/www/${{ secrets.STAGING_SERVER }}/docs/
           remote_host: ${{secrets.STAGING_SERVER}}
           remote_user: inductiva-bot
