@@ -135,7 +135,6 @@ def upload_from_url(
     url: str,
     remote_dir: str,
     remote_path: str = None,
-    unzip: bool = False,
 ):
     """
     Upload a file from a URL to the user workspace.
@@ -145,8 +144,6 @@ def upload_from_url(
         remote_dir (str): The remote directory to upload the file to. 
         remote_path (str, optional): The path to save the file as. If not
             provided, the path will be extracted from the URL.
-        unzip (bool, optional): Whether to unzip the file after uploading.
-            Default is False.
     """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
@@ -157,7 +154,7 @@ def upload_from_url(
         query_params={
             "url": url,
             "file_path": remote_path,
-            "unzip": "t" if unzip else "f",
+            "unzip": "f",
         },
         path_params={
             "folder_name": remote_dir,
