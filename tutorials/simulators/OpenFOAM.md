@@ -262,7 +262,7 @@ folder where all your simulation files are located.
    input_dir = "/path/to/highLiftConfiguration"
    ```
 2. **Read Commands**:
-Now, let's read the `commands.txt` created in [Step 2](##step-2-create-commands-file).
+Now, let's read the `commands.txt` created in [Step 2](#step-2-create-commands-file).
    ```python
    with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
        commands = [line.strip() for line in file]
