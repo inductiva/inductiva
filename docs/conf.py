@@ -176,21 +176,21 @@ redirects = {
         "https://tutorials.inductiva.ai/intro_to_api/templating.html",
     #This here needs to be updated to tutorials at a latter date
     "how_to/index.html":
-        "https://docs.inductiva.ai/en/latest/how_to/index.html",
+        "/en/latest/how_to/index.html",
     "how_to/manage-remote-storage.html":
-        "https://docs.inductiva.ai/en/latest/how_to/manage-remote-storage.html",
+        "/en/latest/how_to/manage-remote-storage.html",
     "how_to/manage_and_retrieve_results.html":
-        "https://docs.inductiva.ai/en/latest/how_to/manage_and_retrieve_results.html",
+        "/en/latest/how_to/manage_and_retrieve_results.html",
     "how_to/manage_computational_resources.html":
-        "https://docs.inductiva.ai/en/latest/how_to/manage_computational_resources.html",
+        "/en/latest/how_to/manage_computational_resources.html",
     "how_to/manage_tasks.html":
-        "https://docs.inductiva.ai/en/latest/how_to/manage_tasks.html",
+        "/en/latest/how_to/manage_tasks.html",
     "how_to/run-parallel_simulations.html":
-        "https://docs.inductiva.ai/en/latest/how_to/run-parallel_simulations.html",
+        "/en/latest/how_to/run-parallel_simulations.html",
     "how_to/set-up-elastic-machine-group.html":
-        "https://docs.inductiva.ai/en/latest/how_to/set-up-elastic-machine-group.html",
+        "/en/latest/how_to/set-up-elastic-machine-group.html",
     "how_to/set-up-mpi-cluster.html":
-        "https://docs.inductiva.ai/en/latest/how_to/set-up-mpi-cluster.html",
+        "/en/latest/how_to/set-up-mpi-cluster.html",
     #simulators
     "en/latest/simulators/SPlisHSPlasH.html":
         "https://tutorials.inductiva.ai/simulators/SPlisHSPlasH.html",
