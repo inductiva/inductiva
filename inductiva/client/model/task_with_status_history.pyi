@@ -40,6 +40,7 @@ class TaskWithStatusHistory(
             "project",
             "task_id",
             "machine_operations",
+            "steps",
             "is_terminated",
             "status",
         }
@@ -104,6 +105,32 @@ class TaskWithStatusHistory(
                     )
             
                 def __getitem__(self, i: int) -> 'TaskMachineOperation':
+                    return super().__getitem__(i)
+            
+            
+            class steps(
+                schemas.ListSchema
+            ):
+            
+            
+                class MetaOapg:
+                    
+                    @staticmethod
+                    def items() -> typing.Type['TaskStep']:
+                        return TaskStep
+            
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple['TaskStep'], typing.List['TaskStep']],
+                    _configuration: typing.Optional[schemas.Configuration] = None,
+                ) -> 'steps':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+            
+                def __getitem__(self, i: int) -> 'TaskStep':
                     return super().__getitem__(i)
             
             
@@ -653,6 +680,7 @@ class TaskWithStatusHistory(
                 "is_terminated": is_terminated,
                 "status_history": status_history,
                 "machine_operations": machine_operations,
+                "steps": steps,
                 "storage_path": storage_path,
                 "container_image": container_image,
                 "create_time": create_time,
@@ -674,6 +702,7 @@ class TaskWithStatusHistory(
     project: MetaOapg.properties.project
     task_id: MetaOapg.properties.task_id
     machine_operations: MetaOapg.properties.machine_operations
+    steps: MetaOapg.properties.steps
     is_terminated: MetaOapg.properties.is_terminated
     status: 'TaskStatusCode'
     
@@ -697,6 +726,9 @@ class TaskWithStatusHistory(
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["machine_operations"]) -> MetaOapg.properties.machine_operations: ...
+    
+    @typing.overload
+    def __getitem__(self, name: typing_extensions.Literal["steps"]) -> MetaOapg.properties.steps: ...
     
     @typing.overload
     def __getitem__(self, name: typing_extensions.Literal["storage_path"]) -> MetaOapg.properties.storage_path: ...
@@ -743,7 +775,7 @@ class TaskWithStatusHistory(
     @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema: ...
     
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "simulator", "project", "is_terminated", "status_history", "machine_operations", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "estimated_computation_cost", "storage_size", "metrics", "executer", "error_detail", "input_resources", ], str]):
+    def __getitem__(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "simulator", "project", "is_terminated", "status_history", "machine_operations", "steps", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "estimated_computation_cost", "storage_size", "metrics", "executer", "error_detail", "input_resources", ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
     
@@ -768,6 +800,9 @@ class TaskWithStatusHistory(
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["machine_operations"]) -> MetaOapg.properties.machine_operations: ...
+    
+    @typing.overload
+    def get_item_oapg(self, name: typing_extensions.Literal["steps"]) -> MetaOapg.properties.steps: ...
     
     @typing.overload
     def get_item_oapg(self, name: typing_extensions.Literal["storage_path"]) -> typing.Union[MetaOapg.properties.storage_path, schemas.Unset]: ...
@@ -814,7 +849,7 @@ class TaskWithStatusHistory(
     @typing.overload
     def get_item_oapg(self, name: str) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]: ...
     
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "simulator", "project", "is_terminated", "status_history", "machine_operations", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "estimated_computation_cost", "storage_size", "metrics", "executer", "error_detail", "input_resources", ], str]):
+    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal["task_id", "status", "simulator", "project", "is_terminated", "status_history", "machine_operations", "steps", "storage_path", "container_image", "create_time", "input_submit_time", "start_time", "computation_start_time", "computation_end_time", "end_time", "estimated_computation_cost", "storage_size", "metrics", "executer", "error_detail", "input_resources", ], str]):
         return super().get_item_oapg(name)
     
 
@@ -826,6 +861,7 @@ class TaskWithStatusHistory(
         project: typing.Union[MetaOapg.properties.project, str, ],
         task_id: typing.Union[MetaOapg.properties.task_id, str, ],
         machine_operations: typing.Union[MetaOapg.properties.machine_operations, list, tuple, ],
+        steps: typing.Union[MetaOapg.properties.steps, list, tuple, ],
         is_terminated: typing.Union[MetaOapg.properties.is_terminated, bool, ],
         status: 'TaskStatusCode',
         storage_path: typing.Union[MetaOapg.properties.storage_path, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, schemas.Unset] = schemas.unset,
@@ -853,6 +889,7 @@ class TaskWithStatusHistory(
             project=project,
             task_id=task_id,
             machine_operations=machine_operations,
+            steps=steps,
             is_terminated=is_terminated,
             status=status,
             storage_path=storage_path,
@@ -878,3 +915,4 @@ from inductiva.client.model.task_machine_operation import TaskMachineOperation
 from inductiva.client.model.task_metrics import TaskMetrics
 from inductiva.client.model.task_status_code import TaskStatusCode
 from inductiva.client.model.task_status_info import TaskStatusInfo
+from inductiva.client.model.task_step import TaskStep
