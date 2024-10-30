@@ -270,7 +270,9 @@ Now, let's read the `commands.txt` created in [Step 2](#step-2-create-commands-f
 We now have `commands` with a list of commands where each element of that list
 is a command.
 
-2. **Run Simulation**:
+#### c. Run your simulation
+
+1. **Run the simulation**:
 We now have all we need to run our simulation.
    ```python
    #Choose your simulator
@@ -295,7 +297,7 @@ each part simultaneously.
 two tasks at once instead of one. Setting this to `True` allows your simulation
 to use up to 360 vCPUs on the machine, even if we’re not utilizing all of them.
 
-3. **Wait and Download Outputs**:
+2. **Wait and Download Outputs**:
 That is it. Our simulation is now running on the cloud. We can `wait` for the
 simulation to be over, or we can turn our computer off go for a coffe (☕️).
    ```python
@@ -303,7 +305,7 @@ simulation to be over, or we can turn our computer off go for a coffe (☕️).
    task.download_outputs()
    ```
 
-4. **Terminate Machine**:
+3. **Terminate Machine**:
 Once our simulation is over we can/should terminate our machine to save on costs.
 If you forget, dont worry we got your back. By default, a machine will be
 automaticly terminated if no simulation runs on it for 30 minutes.
