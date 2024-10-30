@@ -133,7 +133,7 @@ def _print_contents_table(contents):
 def upload_from_url(
     url: str,
     remote_dir: str,
-    file_name: str = None,
+    remote_path: str = None,
     unzip: bool = False,
 ):
     """
@@ -142,20 +142,20 @@ def upload_from_url(
     Args:
         url (str): The URL of the file to upload.
         remote_dir (str): The remote directory to upload the file to. 
-        file_name (str, optional): The name to save the file as. If not
+        file_path (str, optional): The name to save the file as. If not
             provided, the name will be extracted from the URL.
         unzip (bool, optional): Whether to unzip the file after uploading.
             Default is False.
     """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
-    if file_name is None:
+    if remote_path is None:
         parsed_url = urlparse(url)
-        file_name = unquote(parsed_url.path.split("/")[-1])
+        remote_path = unquote(parsed_url.path.split("/")[-1])
     contents = api_instance.upload_from_url(
         query_params={
             "url": url,
-            "file_name": file_name,
+            "file_path": remote_path,
             "unzip": "t" if unzip else "f",
         },
         path_params={
@@ -171,6 +171,7 @@ def upload_from_url(
 def upload(
     local_path: str,
     remote_dir: str,
+    remote_path: str = None,
 ):
     """
     Upload a local file or directory to the user workspace.
@@ -190,10 +191,18 @@ def upload(
                  format_utils.bytes_formatter(zip_file_size))
 
     logging.info("Uploading input...")
+
+    if remote_path:
+        remote_path = os.path.dirname(remote_path.lstrip('/'))
+        remote_path = os.path.join(remote_path, constants.TMP_ZIP_FILENAME)
+    else:
+        remote_path = constants.TMP_ZIP_FILENAME
+
     if methods.upload_file(
             api_instance=api_instance,
             input_zip_path=input_zip_path,
             remote_dir=remote_dir,
+            remote_path=remote_path,
             get_upload_url_method=api_instance.get_upload_url,
             notify_upload_method=api_instance.notify_upload_file,
     ):
@@ -217,7 +226,7 @@ def _zip_file_or_folder(source_path):
         raise FileNotFoundError(f"The path {source_path} does not exist.")
 
     if os.path.isdir(source_path):
-        source_path = os.path.join(source_path, '')
+        source_path = os.path.join(source_path, "")
 
     temp_dir = tempfile.mkdtemp()
     zip_path = os.path.join(temp_dir, constants.TMP_ZIP_FILENAME)
@@ -239,12 +248,12 @@ def _zip_file_or_folder(source_path):
     return zip_path
 
 
-def remove_workspace(remote_dir, file_name=None) -> bool:
+def remove_workspace(remote_dir, file_path=None) -> bool:
     """Removes a workspace folder or a workspace file.
 
     Args:
         remote_dir (str): The remote directory to remove.
-        file_name (str, optional): The name of the file to remove. If not
+        file_path (str, optional): The path of the file to remove. If not
             provided, the entire directory will be removed.
     
     Returns:
@@ -254,7 +263,7 @@ def remove_workspace(remote_dir, file_name=None) -> bool:
 
     logging.info("Removing workspace file(s)...")
     try:
-        query_params = {"file_name": file_name} if file_name is not None else {}
+        query_params = {"file_path": file_path} if file_path is not None else {}
 
         api.delete_file(
             query_params=query_params,

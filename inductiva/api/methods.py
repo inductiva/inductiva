@@ -81,22 +81,26 @@ def prepare_input(task_id, original_params, type_annotations):
     return input_zip_path, zip_file_size
 
 
-def upload_file(api_instance,
-                input_zip_path,
-                remote_dir=None,
-                task_id=None,
-                get_upload_url_method=None,
-                notify_upload_method=None):
+def upload_file(
+    api_instance: ApiClient,
+    input_zip_path: str,
+    get_upload_url_method,
+    notify_upload_method,
+    remote_dir: Optional[str] = None,
+    remote_path: Optional[str] = None,
+    task_id: Optional[str] = None,
+) -> bool:
     """
     Uploads a file to the specified API endpoint with progress indication.
 
     Args:
         api_instance: The instance of the API client.
         input_zip_path: The local path to the input zip file.
-        remote_dir: The remote directory to upload to (if applicable).
-        task_id: The task ID for input upload (if applicable).
         get_upload_url_method: The method to get the upload URL.
         notify_upload_method: The method to notify after upload.
+        remote_dir: The remote directory to upload to (if applicable).
+        remote_path: The remote path to upload to (if applicable).
+        task_id: The task ID for input upload (if applicable).
 
     Raises:
         ApiException: If the API request fails.
@@ -108,7 +112,7 @@ def upload_file(api_instance,
         else:
             api_response = get_upload_url_method(
                 query_params={
-                    "file_name": constants.TMP_ZIP_FILENAME,
+                    "file_path": remote_path,
                 },
                 path_params={
                     "folder_name": remote_dir,
@@ -161,7 +165,7 @@ def upload_file(api_instance,
             else:
                 notify_upload_method(
                     query_params={
-                        "file_name": constants.TMP_ZIP_FILENAME,
+                        "file_path": remote_path,
                         "unzip": "t"
                     },
                     path_params={
