@@ -73,7 +73,7 @@ using `inductiva.simulators.OpenFOAM(distribution="esi")`, and replace
 This guide walks you through running a complex OpenFOAM simulation using the
 **MB9 micro-benchmark** from [ExaFOAM](https://exafoam.eu/benchmarks/). This
 benchmark simulates a high-lift aircraft configuration, ideal for studying
-near-wall turbulence using **wall-modeled LES (WMLES)**.
+near-wall turbulence using **wall-modeled Large Eddy Simulation (WMLES)**.
 
 ### Objective
 
@@ -107,17 +107,75 @@ and place them in a folder named `highLiftConfiguration`.
 
 ### Step 1: Adjust Simulation Parameters
 
-For a faster simulation, modify the following parameters in the input files:
+For a faster simulation, modify the following parameters in the case definition
+file (`system/include/caseDefinition`):
 
 - **Time Step (`dt`)**: Set to 0.00002.
-- **Start Time**: 0.10
-- **End Time**: 0.30
+- **Start Time (`initTime`)**: 0.10
+- **End Time (`finalTime`)**: 0.30
 
-### Step 2: Create Command File
+### Step 2: Create Commands File
 
-To avoid navigating between directories, place all commands in a `commands.txt`
-file within the `highLiftConfiguration` directory. Each command should start
-with `runApplication` or `runParallel`. Sample `commands.txt`:
+For now, we only allow the user to send a **list of specific commands** to the
+simulator. This commands are `runApplication` and `runParallel`.
+
+Due to this limitation,we need to "translate" the `Allrun` file into a list of
+commands that can be sent to the simulator.
+
+Another important point is that the `Allrun` file contains a lot of `cd`
+commands, which are not supported by the simulator. As a workaround, we can
+replace the `cd` commands with `runApplication` followed by `cd` (the same
+applies to `mv` and other commands).
+
+As an example, the `Allrun` file contains the following commands:
+
+```bash
+snappyHexMesh -dict system/snappyHexMeshDict.refineblockMesh -overwrite > ${LOGDIR}/log.M02.snappyHexMesh.refineblockMesh 2>&1 || exit 1
+mv ./0/cellLevel ./constant/polyMesh/
+mv ./0/pointLevel ./constant/polyMesh/
+
+```
+Those commands can be translated into the following:
+
+```bash
+runApplication snappyHexMesh -dict system/snappyHexMeshDict.refineblockMesh -overwrite
+runApplication mv ./0/cellLevel ./constant/polyMesh/
+runApplication mv ./0/pointLevel ./constant/polyMesh/
+```
+
+Since we only allow a list of commands all `if` statements in the `Allrun` file
+should be removed. And a clear line of execution should be defined.
+
+```bash
+if condition ; then
+    runApplication command1
+    runApplication command2
+else
+    runApplication command3
+    runApplication command4
+fi
+```
+
+Should be translated to:
+
+- If we want to simulate the `if` condition
+
+```bash
+runApplication command1
+runApplication command2
+```
+
+- If we want to simulate the `else` condition
+
+```bash
+runApplication command3
+runApplication command4
+```
+
+In the end, the `Allrun` file should be translated into a list of commands that
+should be placed into a file named `commands.txt`.
+
+Said file should contain the following commands:
 
 ```bash
 runApplication cp system/controlDict.SHM system/controlDict
@@ -182,29 +240,42 @@ runParallel postProcess -func sampleDict.surface.SRS -latestTime
 
 #### a. Configure and Start Machine
 
-1. **Set up a 360 vCPU machine**:
+1. **Pick your machine**:
     ```python
     import inductiva
     machine_group = inductiva.resources.MachineGroup(machine_type="c3d-highcpu-360", spot=True)
+    ```
+    **Note**: `spot` machines are a lot cheaper but can be terminated by the
+    provider if needed.
+
+2. **Start your machine**
+    ```python
     machine_group.start()
     ```
 
-2. **Specify Simulation Directory**:
+#### b. Simulation inputs
+1. **Specify Simulation Directory**:
+Let's start by defining a variable that points to the `highLiftConfiguration`
+folder where all your simulation files are located.
+
    ```python
    input_dir = "/path/to/highLiftConfiguration"
    ```
-
-#### b. Execute Commands
-
-1. **Read Commands**:
+2. **Read Commands**:
+Now, let's read the `commands.txt` created in [Step 2](#Step-2:-Create-Commands-File).
    ```python
    with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
        commands = [line.strip() for line in file]
    ```
+We now have `commands` with a list of commands where each element of that list
+is a command.
 
 2. **Run Simulation**:
+We now have all we need to run our simulation.
    ```python
+   #Choose your simulator
    openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
+
    task = openfoam.run(
                input_dir=input_dir,
                commands=commands,
@@ -212,6 +283,17 @@ runParallel postProcess -func sampleDict.surface.SRS -latestTime
                use_hwthread=True,
                on=machine_group)
    ```
+
+In this snippet, two arguments might need clarification:
+
+- `n_vcpus`: This sets the number of virtual CPUs (vCPUs) for your simulation,
+essentially determining how many parts your simulation will be split into to
+run in parallel. Here, we’re dividing the simulation into 180 parts and running
+each part simultaneously.
+
+- `use_hwthread`: This enables hyperthreading. Setting this to `True` allows
+your simulation to use up to 360 vCPUs on the machine, even if we’re not
+utilizing all of them."
 
 3. **Wait and Download Outputs**:
    ```python
