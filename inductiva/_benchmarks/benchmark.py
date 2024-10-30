@@ -2,7 +2,7 @@
 import enum
 import json
 import csv
-from typing import Optional, Self
+from typing import Optional, Self, Union
 from inductiva import types
 from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
@@ -142,7 +142,7 @@ class Benchmark(Project):
 
     def export(
         self,
-        fmt: ExportFormat = ExportFormat.JSON,
+        fmt: Union[ExportFormat, str] = ExportFormat.JSON,
         filename: Optional[str] = None,
     ):
         """
@@ -155,6 +155,8 @@ class Benchmark(Project):
                 exported results. Defaults to the benchmark's name if not
                 provided.
         """
+        if isinstance(fmt, str):
+            fmt = ExportFormat[fmt.upper()]
         metrics = self.gather_metrics()
         filename = filename or f"{self.name}.{fmt.value}"
         if fmt == ExportFormat.JSON:
