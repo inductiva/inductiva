@@ -199,8 +199,7 @@ def upload(
         remote_path = remote_path or input_path
 
     file_size = os.path.getsize(input_path)
-    logging.info("Input size: %s",
-                 format_utils.bytes_formatter(file_size))
+    logging.info("Input size: %s", format_utils.bytes_formatter(file_size))
 
     logging.info("Uploading input...")
 
