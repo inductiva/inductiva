@@ -405,17 +405,21 @@ through our API are executed on one or more virtual machines (VMs) hosted on GCP
 <p>There are two families of Virtual Machines (VMs) made available by Inductiva on
 Google Cloud Platform (GCP):</p>
 <div class="sphinx-tabs docutils container">
-<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Compute-optimized Machines</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">General-purpose Machines</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><ul class="simple">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Compute-optimized Machines</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Memory-optimized Machines</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">General-purpose Machines</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><ul class="simple">
 <li><p><a class="reference external" href="https://cloud.google.com/compute/docs/compute-optimized-machines#c2_machine_types">C2</a></p></li>
 <li><p><a class="reference external" href="https://cloud.google.com/compute/docs/compute-optimized-machines#c2d_series">C2D</a></p></li>
-<li><p><a class="reference external" href="https://cloud.google.com/compute/docs/compute-optimized-machines#h3_series">H3</a></p></li>
 </ul>
 </div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><ul class="simple">
-<li><p><a class="reference external" href="https://cloud.google.com/compute/docs/general-purpose-machines#n1_machines">N1</a></p></li>
+<li><p><a class="reference external" href="https://cloud.google.com/compute/docs/memory-optimized-machines#m3_series">M3</a></p></li>
+</ul>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p><a class="reference external" href="https://cloud.google.com/compute/docs/general-purpose-machines#e2_machine_types">E2</a></p></li>
 <li><p><a class="reference external" href="https://cloud.google.com/compute/docs/general-purpose-machines#n2_series">N2</a></p></li>
 <li><p><a class="reference external" href="https://cloud.google.com/compute/docs/general-purpose-machines#n2d_machines">N2D</a></p></li>
+<li><p><a class="reference external" href="https://cloud.google.com/compute/docs/general-purpose-machines#n4_series">N4</a></p></li>
 <li><p><a class="reference external" href="https://cloud.google.com/compute/docs/general-purpose-machines#c3_series">C3</a></p></li>
 <li><p><a class="reference external" href="https://cloud.google.com/compute/docs/general-purpose-machines#c3d_series">C3D</a></p></li>
+<li><p><a class="reference external" href="https://cloud.google.com/compute/docs/general-purpose-machines#c4_series">C4</a></p></li>
 </ul>
 </div></div>
 <p>The VMs within these families are categorized into three types, based on the RAM-to-vCPU
@@ -463,9 +467,6 @@ we put in place through the current version of the API.</p>
 you can access through the API. Here’s a sneak peek at what is on our development
 roadmap:</p>
 <ul class="simple">
-<li><p><strong>Inductiva Compute Engine (ICE):</strong> We are developing our own infrastructure to offer
-both CPU-based and high-performance GPU-based VMs. These will be particularly
-beneficial for simulator packages requiring extensive computational power.</p></li>
 <li><p><strong>Bring your own Cloud (BYOC):</strong> This feature will enable you to use your own cloud
 accounts, starting with GCP, to run simulation jobs.</p></li>
 <li><p><strong>Bring your own Hardware (BYOH):</strong> With BYOH, you’ll be able to integrate the API
