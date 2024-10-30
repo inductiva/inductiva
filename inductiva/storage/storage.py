@@ -193,7 +193,7 @@ def upload(
     logging.info("Uploading input...")
 
     if remote_path:
-        remote_path = os.path.dirname(remote_path.lstrip('/'))
+        remote_path = os.path.dirname(remote_path.lstrip("/"))
         remote_path = os.path.join(remote_path, constants.TMP_ZIP_FILENAME)
     else:
         remote_path = constants.TMP_ZIP_FILENAME
