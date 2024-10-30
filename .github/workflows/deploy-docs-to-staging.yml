@@ -28,7 +28,7 @@ jobs:
         uses: burnett01/rsync-deployments@7.0.0
         with:
           switches: -avzr --delete --no-perms --no-owner --no-group --omit-dir-times
-          path: build/
+          path: build/en/latest/
           remote_path: /var/www/${{ secrets.STAGING_SERVER }}/docs/
           remote_host: ${{secrets.STAGING_SERVER}}
           remote_user: inductiva-bot
