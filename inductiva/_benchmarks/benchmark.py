@@ -182,23 +182,28 @@ class Benchmark(Project):
             list: A list containing the configuration and performance 
                 metrics for each run.
         """
-        metrics = []
-        tasks = self.get_tasks()
-        for task in tasks:
+
+        def get_task_input_params(task):
             input_filename = "input.json"
             input_dir_path = task.download_inputs(filenames=[input_filename])
             input_file_path = input_dir_path.joinpath(input_filename)
             with open(input_file_path, mode="r", encoding="utf-8") as file:
-                input_json = json.load(file)
+                params = json.load(file)
+                excluded = ["sim_dir", "container_image"]
+                return {k: v for k, v in params.items() if k not in excluded}
 
+        metrics = []
+        tasks = self.get_tasks()
+        for task in tasks:
+            input_params = get_task_input_params(task)
             info = task.get_info()
             metrics.append({
                 "task id": info.task_id,
                 "simulator": info.simulator,
                 "machine type": info.executer.vm_type,
-                **input_json,
                 "computation time": info.time_metrics.computation_seconds.value,
                 "estimated computation cost": info.estimated_computation_cost,
+                **input_params,
             })
         return metrics
 
