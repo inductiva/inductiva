@@ -120,7 +120,7 @@ class Benchmark(Project):
         """
         with self:
             for simulator, input_dir, machine_group, kwargs in self.runs:
-                machine_group.start(wait_on_pending_quota=True)
+                machine_group.start(wait_on_pending_quota=False)
                 for _ in range(num_repeats):
                     simulator.run(input_dir=input_dir,
                                   on=machine_group,
