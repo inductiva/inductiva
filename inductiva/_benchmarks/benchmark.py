@@ -199,11 +199,12 @@ class Benchmark(Project):
                 return json.load(file)
 
         def get_distinct(metrics):
-            lists = defaultdict(list)
-            for config in metrics:
-                for param, value in config.items():
-                    lists[param].append(value)
-            return {param for param in lists if len(set(lists[param])) > 1}
+            attrs_lsts = defaultdict(list)
+            for attrs in metrics:
+                for k, v in attrs.items():
+                    attrs_lsts[k].append(v)
+            filtered = {k for k, v in attrs_lsts.items() if len(set(v)) > 1}
+            return [{key: attrs[key] for key in filtered} for attrs in metrics]
 
         metrics = []
         tasks = self.get_tasks()
@@ -218,10 +219,8 @@ class Benchmark(Project):
                 "estimated computation cost": info.estimated_computation_cost,
                 **input_params,
             })
- 
+
         if distinct:
-            distinct_params = get_distinct(metrics)
-            metrics = [{param: config[param] for param in distinct_params}
-                       for config in metrics]
+            metrics = get_distinct(metrics)
 
         return metrics
