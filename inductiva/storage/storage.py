@@ -236,40 +236,6 @@ def upload(
             )
 
 
-def _zip_folder(source_path):
-    """
-    Zips a file or a folder and saves it to a temporary folder.
-
-    :param source_path: The path to the file or folder to zip.
-    :return: The path to the created zip file.
-    """
-    # Check if the source path is valid
-    if not os.path.exists(source_path):
-        raise FileNotFoundError(f"The path {source_path} does not exist.")
-
-    if os.path.isdir(source_path):
-        source_path = os.path.join(source_path, "")
-
-    temp_dir = tempfile.mkdtemp()
-    zip_path = os.path.join(temp_dir, constants.TMP_ZIP_FILENAME)
-
-    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
-        # If the source is a file, add it directly
-        if os.path.isfile(source_path):
-            zipf.write(source_path, os.path.basename(source_path))
-        # If the source is a folder, walk through the folder and add files
-        else:
-            for root, _, files in os.walk(source_path):
-                for file in files:
-                    file_path = os.path.join(root, file)
-                    zipf.write(
-                        file_path,
-                        os.path.relpath(file_path,
-                                        os.path.dirname(source_path)))
-
-    return zip_path
-
-
 def _list_files(root_path: str, prefix_path: str) -> Tuple[List[str], int]:
     """
     Lists all files within a directory, returns their prefixed paths and the
