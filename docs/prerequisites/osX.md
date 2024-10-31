@@ -150,3 +150,5 @@ You should now see */Users/YOURUSERNAME/Library/Python/3.9/bin* included at the 
 ---
 
 Awesome! Now that pip is updated and Python is set in your PATH, you’re all set for [installing the Inductiva Python Package](console.inductiva.ai) and start simulating!
+
+If you run into any issues or challenges while installing the API, please reach out to us at support@inductiva.ai. We’d love to help troubleshoot and find ways to make the setup process even smoother.
