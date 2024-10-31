@@ -185,11 +185,18 @@ class Benchmark(Project):
         metrics = []
         tasks = self.get_tasks()
         for task in tasks:
+            input_filename = "input.json"
+            input_dir_path = task.download_inputs(filenames=[input_filename])
+            input_file_path = input_dir_path.joinpath(input_filename)
+            with open(input_file_path, mode="r", encoding="utf-8") as file:
+                input_json = json.load(file)
+
             info = task.get_info()
             metrics.append({
                 "task id": info.task_id,
                 "simulator": info.simulator,
                 "machine type": info.executer.vm_type,
+                **input_json,
                 "computation time": info.time_metrics.computation_seconds.value,
                 "estimated computation cost": info.estimated_computation_cost,
             })
