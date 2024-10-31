@@ -1,80 +1,102 @@
-# Installing the API on a clean OsX
+# System Requirements for Installing the Inductiva API
 
-Macbook Air 13  
-M3  
-OS: 14.5 (23F79) 
 
-Before we continue, we need to make sure you have Python 3 properly installed. It may be the case that you have Python 3 installed in your system. If so, then we can proceed to installing the Python client for the Inductiva API as you would install any other Python package. If Python 3 is not installed, then we need to install it. Depending on the type and version of the operating system, installing Python may be substantially different. But first, let's check if Python is installed on your OSX.
+## TL;DR
+Pre-Install Must-Dos:
+- [Step 1: Check if Python is Installed](#step-1-check-if-python-is-installed)
+- [Step 2: Update pip and Set Up Your PATH for Python](#step-2-update-pip-and-set-up-your-path-for-python)
 
-## Stage 1: Checking if python is installed in OSX.
+## Introduction
+Before diving into the installation process, it’s helpful to ensure your system is primed and ready for the Inductiva API.
 
-1. **Open a Terminal window.** For locating the Terminal app, let's use the Mac´s Search box, which can be opened by clicking on the magnifying glass icon on the right side of the top menu (close to the battery and wifi icons). Open the Search Box and type “Terminal”.  
+We’ve gathered tips and feedback from users with different setups who’ve run into a few bumps while installing our API. The steps below are here to save you time and help you sidestep the most common setup challenges!
+
+## Step 1: Check if Python is Installed
+
+First things first, let’s make sure **Python 3** is set up correctly on your system. If you already have it installed, great! We’ll be able to move straight to installing the Inductiva API like any other Python package.
+If it’s missing, we’ll go over how to install it depending on your operating system.
+
+### Checking if Python is Installed on macOS
+
+**Step-by-Step**
+
+1. **Open the Terminal** 
+	
+    Click on the magnifying glass icon in the top-right of your menu bar (near the battery and Wi-Fi icons).
+
+    Type “Terminal” and press Enter to open the Terminal app.
      
-    <div align="center">
-        <img src="../_static/terminal_search.png" alt="Opening Terminal">
-    </div>
-     
-   This will allow you to open a Terminal.  
-     
-2. On the Terminal type: python3
+2. **Check for Python 3**
+    
+    In Terminal, type:
+    ```bash
+     python3
+     ```
 
-<div align="center">
-    <img src="../_static/terminal.png" alt="Checking your python">
-</div>  
-It you have Python 3 installed you should seed something like:
+If Python 3 is installed, you’ll see something like this:
 
 <div align="center">
     <img src="../_static/terminal_python_check.png" alt="Python message if installed">
 </div>
 
-If so, you are good. You can go directly to Stage 2. Otherwise, you will probably see a long message like the one below:
+If Python 3 isn’t installed, you’ll see a message suggesting installation of **Apple’s Developer Tools**.
 
 <div align="center">
     <img src="../_static/terminal_python_message.png" alt="Python message if not installed">
 </div>
 
-This is telling you that Python3 is not installed and if you want to do so you need to install Apple's Developer Tools, which among other tools includes the latest version of Python. 
+3. **Install Developer Tools**
+  
+    Behind your Terminal window, a prompt should appear asking if you want to install “command line developer tools.”
 
-Although there are other ways of installing Python on your Mac, we recommend installing the Developer Tools to ensure maximum consistency among all components that may be required for running Python properly. 
+    Click **Install** to start.
 
-Observe that, behind your Terminal window, there is another window that is asking if you want to install the “command line developer tools”. You should answer “Install”. 
 
 <div align="center">
-    <img src="../_static/dev_tools.png" alt="Develepoer tools install">
+    <img src="../_static/dev_tools.png" alt="Developer tools install">
 </div>
 
-Installing the Developer Tools may take a while (perhaps up to an hour depending on the speed of your Internet Connection) because it involves downloading quite a lot of software, including compilers and other development tools. Wait until you get the completion message.
+This installation can take a while (*up to an hour, depending on your internet speed*), as it includes necessary tools for running Python smoothly.
 
-3. **Testing Python3 Again**. Once everything is installed, then you can type python3 again on your terminal and should see something similar to Image X. You now have Python 3 installed, you can proceed to Stage 2.
+4. **Test Again**
 
-## Stage 2: Updating PIP and setting PATH
+    Once installation is complete, type `python3` in the Terminal again. You should now see confirmation that Python 3 is ready to go!
 
-Now that you have Python 3 installed, we need to be sure that some other minor dependencies are also met. There are two things we need to do:
+### Checking if Python is Installed on Windows
 
-1. update pip, the package installer for Python.   
-2. make sure all Python binaries are visible from the command line
+(Insert steps for WINDOWS HERE)
 
-For updating pip, on the terminal type:
+## Step 2: Update pip and Set Up Your PATH for Python
 
-```console
+Now that you have **Python 3** installed, let’s make sure pip, the Python package installer, is up to date. This will help avoid any compatibility issues.
+
+### Update pip and Set Up Your PATH for Python on macOS
+
+#### Update pip
+
+To update pip, open your Terminal and type:
+
+```bash
 python3 -m pip install --upgrade pip
 ```
 
-This should run smoothly. However, check if you see warning messages such as:
-```console
-   WARNING: The scripts pip, pip3 and pip3.9 are installed in '/Users/YOURUSERNAME/Library/Python/3.9/bin' which is not on PATH.  
-  Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+This command should run smoothly, but if you see a warning message like this:
+
+```bash
+WARNING: The scripts pip, pip3, and pip3.9 are installed in '/Users/YOURUSERNAME/Library/Python/3.9/bin' which is not on PATH.
+Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
 ```
-This is a sign that we still need to update the PATH environment variable to include the directory
+it means we’ll need to update the **PATH environment variable** to make sure Python-related commands like pip are accessible from the command line.
 
-/Users/YOURUSERNAME/Library/Python/3.9/bin
+#### Add Python to Your PATH
 
-(Note: YOURUSERNAME is your actual username, which you should know or see from the terminal).   
-This is required to let your system know where it can find some Python-related commands, such as pip. In fact, Inductiva’s own Command Line Interface will also be installed in the same location, so we need to make sure that this location is visible from the command line. 
+If you saw the warning above, it’s time to update your PATH variable. This tells your system where to find Python binaries, like pip, and ensures [Inductiva’s Command Line Interface](https://docs.inductiva.ai/en/latest/cli/cli-overview.html) can be accessed later on.
 
-To confirm that the PATH environment variable does not contain the directory mentioned above, on your Terminal type:
+1. **Check Your Current PATH**
 
-```console
+    In your Terminal, type:
+
+```bash
 echo $PATH
 ```
 
@@ -83,82 +105,48 @@ You should see something like this:
     <img src="../_static/echo_path.png" alt="Echo Path">
 </div>
 
-As expected, the required path  –  /Users/YOURUSERNAME/Library/Python/3.9/bin – is not there. So, let’s add it to your environment permanently. If you are using the zsh shell (the default OSX shell), then you can add the PATH information directly to the profile file ~/.zshrc. On  the terminal write 
+If you don’t see */Users/YOURUSERNAME/Library/Python/3.9/bin* in the output, it means this directory isn’t in your PATH yet.
 
-```console
+````{eval-rst}
+.. important::
+   YOURUSERNAME is your actual username, which you can find by checking the Terminal prompt or running whoami in the Terminal!
+````
+
+2. **Add Python to PATH**
+
+To permanently add Python’s location to PATH, let’s edit your profile file. If you’re using the default macOS shell (zsh), follow these steps:
+
+First, Open the profile file in nano editor:
+
+```bash
 nano ~/.zshrc
 ```
 
-and add the following line (adapting YOURUSERNAME to your actual username):  
+Then, add the following line at the bottom of the file, replacing *YOURUSERNAME* with your actual username:
 
-```console
-export PATH=v$PATH:/Users/YOURUSERNAME/Library/Python/3.9/bin
-
-Save the file. Now open a **different** terminal. On that terminal check the PATH environment variable again:
-
-echo $PATH
+```bash
+export PATH=$PATH:/Users/YOURUSERNAME/Library/Python/3.9/bin
 ```
 
-You should now see the required directory added to the end of the PATH variable:
+Now, save the file by pressing CTRL + X, then Y to confirm, and Enter.
+
+3. **Verify the Update**
+
+Close the current Terminal and **open a new one**. Type:
+
+```bash
+echo $PATH
+```
+You should now see */Users/YOURUSERNAME/Library/Python/3.9/bin* included at the end of the PATH.
 
 <div align="center">
     <img src="../_static/echo_path.png" alt="Echo Path">
 </div>
 
-Ok! We are good to go!  
-By the way, we will need to edit the ~/.zshrc for installing the Inductiva API Key permanently. 
+### Update pip and Set Up Your PATH for Python on Windows
 
-## Stage 3: Installing Inductiva Python Package
+(Insert text here)
 
-Now you can try:
+---
 
-```console
-pip install inductiva
-```
-
-If all goes well, you should see a message such as:
-
-```console
-Successfully installed inductiva-0.9.0
-```
-
-If so, you should be able to just type on your Terminal:
-
-```console
-inductiva
-```
-
-and see an error message:
-
-```console
-ValueError: No API Key specified. Please set the INDUCTIVA_API_KEY environment variable.  
-More infomation at:https://console.inductiva.ai/
-```
-
-This is expected! We now need to install the Inductiva API Key.
-
-## Stage 4: Installing Inductiva API Key
-
-The Inductiva Key is the information required by the API Client to authenticate against the Inductiva server and then be able to invoke operations, such as running simulations, on your behalf.
-
-The best way to install your API Key is to add it as an environment variable. For that, you only need to append a line to your shell profile file ~/.zshrc. The specific line you have to add is available from the Inductiva Web console.  
-Assuming you have already registered on the Console, go to (we will need to find a place for the key, I supposed needs to be in the user profile) Account and find the API Key widget:
-
-<div align="center">
-    <img src="../_static/console_key.png" alt="Api Key in the web console">
-</div>
-
-Open ~/.zshrc:
-
-And copy the export statement above to the end of the  ~/.zshrc file. You should end up with something like this:
-
-<div align="center">
-    <img src="../_static/terminal_key.png" alt="Api Key in the terminal configuration file">
-</div>
-Now, open another Terminal window/tab (it has to be a new one). Type:
-
-```console
-env
-```
-
-You should see your Inductiva API key variable at the end of the listing. If so, all is ready for running your first simulation.
+Awesome! Now that pip is updated and Python is set in your PATH, you’re all set for [installing the Inductiva Python Package](console.inductiva.ai) and start simulating!

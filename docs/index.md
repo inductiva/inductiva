@@ -4,7 +4,7 @@
 
 ```{toctree}
 ---
-caption: Inductiva API prerequisites
+caption: Ready Your System
 maxdepth: 1 
 hidden: true
 ---
