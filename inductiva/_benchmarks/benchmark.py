@@ -206,30 +206,3 @@ class Benchmark(Project):
                 **input_params,
             })
         return metrics
-
-    def gather_detailed_data(self) -> dict:
-        """
-        Gathers comprehensive information about all tasks associated with the 
-        benchmark, including additional performance metrics and task metadata.
-
-        Returns:
-            dict: A dictionary organized by virtual machine type, containing
-                detailed information about each task associated with the
-                benchmark.
-        """
-        data = {}
-        tasks = self.get_tasks()
-        for task in tasks:
-            info = task.get_info()
-            vm_type = info.executer.vm_type
-            data.setdefault(vm_type, [])
-            input_filename = "input.json"
-            input_dir_path = task.download_inputs(filenames=[input_filename])
-            input_file_path = input_dir_path.joinpath(input_filename)
-            with open(input_file_path, mode="r", encoding="utf-8") as file:
-                input_json = json.load(file)
-            data[vm_type].append({
-                "task_info": info.to_dict(),
-                "task_input_metadata": input_json,
-            })
-        return data
