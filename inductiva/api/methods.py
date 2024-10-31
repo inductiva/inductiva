@@ -81,105 +81,58 @@ def prepare_input(task_id, original_params, type_annotations):
     return input_zip_path, zip_file_size
 
 
-def upload_file(
-    api_instance: ApiClient,
-    input_zip_path: str,
-    get_upload_url_method,
-    notify_upload_method,
-    remote_dir: Optional[str] = None,
-    remote_path: Optional[str] = None,
-    unzip: bool = False,
-    task_id: Optional[str] = None,
-) -> bool:
+def get_upload_url(
+    api_endpoint,
+    query_params: Dict[str, str] = None,
+    path_params: Dict[str, str] = None,
+):
     """
-    Uploads a file to the specified API endpoint with progress indication.
-
-    Args:
-        api_instance: The instance of the API client.
-        input_zip_path: The local path to the input zip file.
-        get_upload_url_method: The method to get the upload URL.
-        notify_upload_method: The method to notify after upload.
-        remote_dir: The remote directory to upload to (if applicable).
-        remote_path: The remote path to upload to (if applicable).
-        unzip: Whether to unzip the file after upload (if applicable).
-        task_id: The task ID for input upload (if applicable).
-
-    Raises:
-        ApiException: If the API request fails.
+    Fetches the upload URL using the specified method.
     """
-    try:
-        if task_id is not None:
-            api_response = get_upload_url_method(
-                path_params={"task_id": task_id})
-        else:
-            api_response = get_upload_url_method(
-                query_params={
-                    "file_path": remote_path,
-                },
-                path_params={
-                    "folder_name": remote_dir,
-                },
-            )
+    params = {}
+    if query_params is not None:
+        params['query_params'] = query_params
+    if path_params is not None:
+        params['path_params'] = path_params
 
-        method = api_response.body["method"]
-        url = api_response.body["url"]
-        file_server_available = bool(api_response.body["file_server_available"])
+    return api_endpoint(**params).body
 
-        headers = {"Content-Type": "application/octet-stream"}
 
-        if not file_server_available:
-            headers[
-                "X-API-Key"] = api_instance.api_client.configuration.api_key[
-                    "APIKeyHeader"]
+def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
+                file_server_available: bool, progress_bar: tqdm):
+    """
+    Handles the upload of a file, updating the provided progress bar.
+    """
+    headers = {"Content-Type": "application/octet-stream"}
+    if not file_server_available:
+        headers["X-API-Key"] = api_instance.api_client.configuration.api_key[
+            "APIKeyHeader"]
 
-        logging.debug("Upload URL: %s", url)
+    with open(input_path, "rb") as zip_fp:
+        wrapped_file = tqdm.utils.CallbackIOWrapper(progress_bar.update, zip_fp,
+                                                    "read")
+        pool_manager: urllib3.PoolManager = api_instance.api_client.rest_client.pool_manager
+        resp = pool_manager.request(method,
+                                    url,
+                                    body=wrapped_file,
+                                    headers=headers)
+        if resp.status != 200:
+            raise ApiException(status=resp.status, reason=resp.reason)
 
-        zip_file_size = os.path.getsize(input_zip_path)
 
-        with open(input_zip_path, "rb") as zip_fp, tqdm.tqdm(
-                total=zip_file_size,
-                unit="B",
-                unit_scale=True,
-                unit_divisor=1000,
-        ) as progress_bar:
-            # Wrap the file object so that the progress bar is updated
-            # every time a chunk is read.
-            wrapped_file = tqdm.utils.CallbackIOWrapper(
-                progress_bar.update,
-                zip_fp,
-                "read",
-            )
+def notify_upload_complete(api_endpoint,
+                           query_params: Dict[str, str] = None,
+                           path_params: Dict[str, str] = None):
+    """
+    Notifies the API that the file upload is complete.
+    """
+    params = {}
+    if query_params is not None:
+        params['query_params'] = query_params
+    if path_params is not None:
+        params['path_params'] = path_params
 
-            # Use the pool_manager from the API client to send the request
-            pool_manager: urllib3.PoolManager = (
-                api_instance.api_client.rest_client.pool_manager)
-
-            resp = pool_manager.request(method,
-                                        url,
-                                        body=wrapped_file,
-                                        headers=headers)
-            if resp.status != 200:
-                raise ApiException(status=resp.status, reason=resp.reason)
-
-            # Notify the API that the file upload is complete
-            if task_id is not None:
-                notify_upload_method(path_params={"task_id": task_id})
-            else:
-                notify_upload_method(
-                    query_params={
-                        "file_path": remote_path,
-                        "unzip": "t" if unzip else "f",
-                    },
-                    path_params={
-                        "folder_name": remote_dir,
-                    },
-                )
-
-    except ApiException as e:
-        logging.exception("Exception while uploading file: %s", e)
-        return False
-
-    return True
+    api_endpoint(**params)
 
 
 def upload_input(api_instance: TasksApi, task_id, original_params,
@@ -209,15 +162,29 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
 
     logging.info("Uploading input archive...")
 
-    if upload_file(api_instance=api_instance,
-                   input_zip_path=input_zip_path,
-                   task_id=task_id,
-                   get_upload_url_method=api_instance.get_input_upload_url,
-                   notify_upload_method=api_instance.notify_input_uploaded):
-        logging.info("Local input directory successfully uploaded.")
-    else:
-        logging.error("Failed to upload local input directory,")
+    api_response = get_upload_url(
+        api_instance.get_input_upload_url,
+        path_params={"task_id": task_id},
+    )
 
+    with tqdm.tqdm(total=zip_file_size,
+                   unit="B",
+                   unit_scale=True,
+                   unit_divisor=1000) as progress_bar:
+
+        method = api_response["method"]
+        url = api_response["url"]
+        file_server_available = bool(api_response["file_server_available"])
+
+        upload_file(api_instance, input_zip_path, method, url,
+                    file_server_available, progress_bar)
+
+        notify_upload_complete(
+            api_instance.notify_input_uploaded,
+            path_params={"task_id": task_id},
+        )
+
+    logging.info("Local input directory successfully uploaded.")
     logging.info("")
     os.remove(input_zip_path)
 

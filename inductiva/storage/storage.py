@@ -5,13 +5,13 @@ import os
 import tempfile
 import zipfile
 import tqdm
-import urllib3
-from typing import List, Literal
+from typing import List, Literal, Tuple
 from urllib.parse import unquote, urlparse
 
 import inductiva
 from inductiva import constants
-from inductiva.client import exceptions, ApiException
+from inductiva.api import methods
+from inductiva.client import exceptions
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
 
@@ -178,83 +178,56 @@ def upload(
         local_path (str): The path to the local file or directory to be
             uploaded.
         remote_dir (str, optional): The remote directory where the file will
-            be uploaded. Defaults to "default".
-        remote_path (str, optional): The remote path to save the file as.
+            be uploaded.
+        remote_path (str, optional): The remote path to save the file.
     """
-    api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
-    prefix_path = os.path.dirname(
+    remote_prefix = os.path.dirname(
         remote_path.lstrip("/")) if remote_path else ""
 
     is_dir = os.path.isdir(local_path)
     if is_dir:
-        input_files = _list_files(local_path, prefix_path)
+        input_paths_remote, total_size = _list_files(local_path, remote_prefix)
     else:
         file_name = os.path.basename(local_path)
-        input_files = [os.path.join(prefix_path, file_name)]
+        input_paths_remote = [os.path.join(remote_prefix, file_name)]
+        total_size = os.path.getsize(local_path)
 
     logging.info("Uploading input...")
 
-    api_response = api_instance.get_upload_url(
-        query_params={
-            "file_paths": input_files,
-        },
-        path_params={
-            "folder_name": remote_dir,
-        },
+    api_instance = storage_api.StorageApi(inductiva.api.get_client())
+
+    api_response = methods.get_upload_url(
+        api_instance.get_upload_url,
+        query_params={"file_paths": input_paths_remote},
+        path_params={"folder_name": remote_dir},
     )
 
-    for item in api_response.body:
-        method = item["method"]
-        url = item["url"]
-        file_server_available = bool(item["file_server_available"])
-        file_path = item["file_path"]
-        file_path_local = file_path.removeprefix(prefix_path)
-        if is_dir:
-            file_path_local = os.path.join(local_path, file_path_local)
-        else:
-            file_path_local = os.path.join(os.path.dirname(local_path),
-                                           file_path_local)
+    with tqdm.tqdm(total=total_size,
+                   unit="B",
+                   unit_scale=True,
+                   unit_divisor=1000) as progress_bar:
+        for response in api_response:
+            method = response["method"]
+            url = response["url"]
+            file_server_available = bool(response["file_server_available"])
+            file_path_remote = response["file_path"]
+            file_path = file_path_remote.removeprefix(remote_prefix)
+            if is_dir:
+                file_path_local = os.path.join(local_path, file_path)
+            else:
+                file_path_local = os.path.join(os.path.dirname(local_path),
+                                               file_path)
 
-        headers = {"Content-Type": "application/octet-stream"}
+            logging.debug("Upload URL: %s", url)
 
-        if not file_server_available:
-            headers[
-                "X-API-Key"] = api_instance.api_client.configuration.api_key[
-                    "APIKeyHeader"]
+            methods.upload_file(api_instance, file_path_local, method, url,
+                                file_server_available, progress_bar)
 
-        logging.debug("Upload URL: %s", url)
-
-        file_size = os.path.getsize(file_path_local)
-
-        with open(file_path_local, "rb") as zip_fp, tqdm.tqdm(
-                total=file_size,
-                unit="B",
-                unit_scale=True,
-                unit_divisor=1000,
-        ) as progress_bar:
-            # Wrap the file object so that the progress bar is updated
-            # every time a chunk is read.
-            wrapped_file = tqdm.utils.CallbackIOWrapper(
-                progress_bar.update,
-                zip_fp,
-                "read",
-            )
-            # Use the pool_manager from the API client to send the request
-            pool_manager: urllib3.PoolManager = (
-                api_instance.api_client.rest_client.pool_manager)
-
-            resp = pool_manager.request(method,
-                                        url,
-                                        body=wrapped_file,
-                                        headers=headers)
-            if resp.status != 200:
-                raise ApiException(status=resp.status, reason=resp.reason)
-
-            # Notify the API that the file upload is complete
-            api_instance.notify_upload_file(
+            methods.notify_upload_complete(
+                api_instance.notify_upload_file,
                 query_params={
-                    "file_path": file_path,
+                    "file_path": file_path_remote,
                     "unzip": "f",
                 },
                 path_params={
@@ -297,15 +270,29 @@ def _zip_folder(source_path):
     return zip_path
 
 
-def _list_files(root_path: str, prefix_path: str) -> List[str]:
+def _list_files(root_path: str, prefix_path: str) -> Tuple[List[str], int]:
+    """
+    Lists all files within a directory, returns their prefixed paths and the
+    total file size.
+
+    Args:
+        root_path: The root directory to list files from.
+        prefix_path: The prefix to add to each file's relative path.
+    """
     file_list = []
+    total_size = 0
+
     for dirpath, _, filenames in os.walk(root_path):
         for filename in filenames:
             relative_path = os.path.relpath(os.path.join(dirpath, filename),
                                             root_path)
             full_path = os.path.join(prefix_path, relative_path)
             file_list.append(full_path)
-    return file_list
+
+            file_path = os.path.join(dirpath, filename)
+            total_size += os.path.getsize(file_path)
+
+    return file_list, total_size
 
 
 def remove_workspace(remote_dir, file_path=None) -> bool:
