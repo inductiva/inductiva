@@ -6,6 +6,7 @@ from typing import Optional, Self, Union
 from inductiva import types
 from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
+from collections import defaultdict
 
 
 class ExportFormat(enum.Enum):
@@ -144,6 +145,7 @@ class Benchmark(Project):
         self,
         fmt: Union[ExportFormat, str] = ExportFormat.JSON,
         filename: Optional[str] = None,
+        distinct: bool = True,
     ):
         """
         Exports the benchmark performance metrics in the specified format.
@@ -154,10 +156,12 @@ class Benchmark(Project):
             filename (Optional[str]): The name of the output file to save the
                 exported results. Defaults to the benchmark's name if not
                 provided.
+            distinct (bool): Indicates whether to select only the changing
+                parameters associated with each run. Defaults to True.
         """
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
-        metrics = self.gather_metrics()
+        metrics = self.gather_metrics(distinct=distinct)
         filename = filename or f"{self.name}.{fmt.value}"
         if fmt == ExportFormat.JSON:
             with open(filename, mode="w", encoding="utf-8") as file:
@@ -172,11 +176,15 @@ class Benchmark(Project):
         else:
             raise ValueError(f"Unsupported export format: {fmt}")
 
-    def gather_metrics(self) -> list:
+    def gather_metrics(self, distinct: bool = True) -> list:
         """
         Gathers the configuration and performance metrics for each run
         associated with the benchmark in a list, including computation cost
         and execution time.
+
+        Args:
+            distinct (bool): Indicates whether to select only the changing
+                parameters associated with each run. Defaults to True.
 
         Returns:
             list: A list containing the configuration and performance 
@@ -188,9 +196,14 @@ class Benchmark(Project):
             input_dir_path = task.download_inputs(filenames=[input_filename])
             input_file_path = input_dir_path.joinpath(input_filename)
             with open(input_file_path, mode="r", encoding="utf-8") as file:
-                params = json.load(file)
-                excluded = ["sim_dir", "container_image"]
-                return {k: v for k, v in params.items() if k not in excluded}
+                return json.load(file)
+
+        def get_distinct(metrics):
+            lists = defaultdict(list)
+            for config in metrics:
+                for param, value in config.items():
+                    lists[param].append(value)
+            return {param for param in lists if len(set(lists[param])) > 1}
 
         metrics = []
         tasks = self.get_tasks()
@@ -205,4 +218,10 @@ class Benchmark(Project):
                 "estimated computation cost": info.estimated_computation_cost,
                 **input_params,
             })
+ 
+        if distinct:
+            distinct_params = get_distinct(metrics)
+            metrics = [{param: config[param] for param in distinct_params}
+                       for config in metrics]
+
         return metrics
