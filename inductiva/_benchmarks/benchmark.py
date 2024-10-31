@@ -165,7 +165,7 @@ class Benchmark(Project):
                 file.write(json_content)
         elif fmt == ExportFormat.CSV:
             with open(filename, mode="w", encoding="utf-8") as file:
-                fieldnames = metrics[0].keys() if not metrics else []
+                fieldnames = metrics[0].keys() if metrics else []
                 writer = csv.DictWriter(file, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(metrics)
