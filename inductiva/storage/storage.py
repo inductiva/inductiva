@@ -2,14 +2,11 @@
 import json
 import logging
 import os
-import tempfile
-import zipfile
 import tqdm
 from typing import List, Literal, Tuple
 from urllib.parse import unquote, urlparse
 
 import inductiva
-from inductiva import constants
 from inductiva.api import methods
 from inductiva.client import exceptions
 from inductiva.client.apis.tags import storage_api
