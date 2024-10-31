@@ -185,18 +185,18 @@ class Benchmark(Project):
             dict: A dictionary organized by virtual machine type, containing
                 performance metrics for each task associated with the benchmark.
         """
-        data = {}
+        metrics = {}
         tasks = self.get_tasks()
         for task in tasks:
             info = task.get_info()
             vm_type = info.executer.vm_type
-            data.setdefault(vm_type, [])
-            data[vm_type].append({
+            metrics.setdefault(vm_type, [])
+            metrics[vm_type].append({
                 "task_id": info.task_id,
                 "estimated_computation_cost": info.estimated_computation_cost,
                 "computation_time": info.time_metrics.computation_seconds.value,
             })
-        return data
+        return metrics
 
     def gather_detailed_data(self) -> dict:
         """
