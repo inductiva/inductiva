@@ -91,9 +91,9 @@ def get_upload_url(
     """
     params = {}
     if query_params is not None:
-        params['query_params'] = query_params
+        params["query_params"] = query_params
     if path_params is not None:
-        params['path_params'] = path_params
+        params["path_params"] = path_params
 
     return api_endpoint(**params).body
 
@@ -128,9 +128,9 @@ def notify_upload_complete(api_endpoint,
     """
     params = {}
     if query_params is not None:
-        params['query_params'] = query_params
+        params["query_params"] = query_params
     if path_params is not None:
-        params['path_params'] = path_params
+        params["path_params"] = path_params
 
     api_endpoint(**params)
 
