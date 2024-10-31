@@ -198,7 +198,7 @@ class Benchmark(Project):
             with open(input_file_path, mode="r", encoding="utf-8") as file:
                 return json.load(file)
 
-        def get_distinct(metrics):
+        def filter_distinct(metrics):
             attrs_lsts = defaultdict(list)
             for attrs in metrics:
                 for k, v in attrs.items():
@@ -221,6 +221,6 @@ class Benchmark(Project):
             })
 
         if distinct:
-            metrics = get_distinct(metrics)
+            metrics = filter_distinct(metrics)
 
         return metrics
