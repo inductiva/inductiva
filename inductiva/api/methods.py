@@ -111,7 +111,8 @@ def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
     with open(input_path, "rb") as zip_fp:
         wrapped_file = tqdm.utils.CallbackIOWrapper(progress_bar.update, zip_fp,
                                                     "read")
-        pool_manager: urllib3.PoolManager = api_instance.api_client.rest_client.pool_manager
+        pool_manager: urllib3.PoolManager = (
+            api_instance.api_client.rest_client.pool_manager)
         resp = pool_manager.request(method,
                                     url,
                                     body=wrapped_file,
