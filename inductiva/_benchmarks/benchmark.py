@@ -165,36 +165,33 @@ class Benchmark(Project):
                 file.write(json_content)
         elif fmt == ExportFormat.CSV:
             with open(filename, mode="w", encoding="utf-8") as file:
-                csv_content = [{
-                    "machine_type": machine_type,
-                    **task,
-                } for machine_type, tasks in metrics.items() for task in tasks]
-                fieldnames = csv_content[0].keys()
+                fieldnames = metrics[0].keys() if not metrics else []
                 writer = csv.DictWriter(file, fieldnames=fieldnames)
                 writer.writeheader()
-                writer.writerows(csv_content)
+                writer.writerows(metrics)
         else:
             raise ValueError(f"Unsupported export format: {fmt}")
 
-    def gather_metrics(self) -> dict:
+    def gather_metrics(self) -> list:
         """
-        Gathers performance metrics for all tasks associated with the
-        benchmark, which include computation cost and execution time.    
-    
+        Gathers the configuration and performance metrics for each run
+        associated with the benchmark in a list, including computation cost
+        and execution time.
+
         Returns:
-            dict: A dictionary organized by virtual machine type, containing
-                performance metrics for each task associated with the benchmark.
+            list: A list containing the configuration and performance 
+                metrics for each run.
         """
-        metrics = {}
+        metrics = []
         tasks = self.get_tasks()
         for task in tasks:
             info = task.get_info()
-            vm_type = info.executer.vm_type
-            metrics.setdefault(vm_type, [])
-            metrics[vm_type].append({
-                "task_id": info.task_id,
-                "estimated_computation_cost": info.estimated_computation_cost,
-                "computation_time": info.time_metrics.computation_seconds.value,
+            metrics.append({
+                "task id": info.task_id,
+                "simulator": info.simulator,
+                "machine type": info.executer.vm_type,
+                "computation time": info.time_metrics.computation_seconds.value,
+                "estimated computation cost": info.estimated_computation_cost,
             })
         return metrics
 
