@@ -145,7 +145,7 @@ class Benchmark(Project):
         self,
         fmt: Union[ExportFormat, str] = ExportFormat.JSON,
         filename: Optional[str] = None,
-        distinct: bool = True,
+        summary: bool = True,
     ):
         """
         Exports the benchmark performance metrics in the specified format.
@@ -156,12 +156,13 @@ class Benchmark(Project):
             filename (Optional[str]): The name of the output file to save the
                 exported results. Defaults to the benchmark's name if not
                 provided.
-            distinct (bool): Indicates whether to select only the changing
-                parameters associated with each run. Defaults to True.
+            summary (bool): If True, only the parameters that vary between 
+                different runs are included in the result, providing a summary
+                of the information for each run. Defaults to True.
         """
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
-        info = self.runs_info(distinct=distinct)
+        info = self.runs_info(summary=summary)
         filename = filename or f"{self.name}.{fmt.value}"
         if fmt == ExportFormat.JSON:
             with open(filename, mode="w", encoding="utf-8") as file:
@@ -176,15 +177,20 @@ class Benchmark(Project):
         else:
             raise ValueError(f"Unsupported export format: {fmt}")
 
-    def runs_info(self, distinct: bool = True) -> list:
+    def runs_info(self, summary: bool = True) -> list:
         """
         Gathers the configuration and performance metrics for each run
-        associated with the benchmark in a list, including computation cost
-        and execution time.
+        associated with the benchmark in a list, including computation cost and
+        execution time.
 
+        This method retrieves input parameters and task information for each
+        run, and optionally filters the results to include only the parameters
+        that vary between runs.
+        
         Args:
-            distinct (bool): Indicates whether to select only the changing
-                parameters associated with each run. Defaults to True.
+            summary (bool): If True, only the parameters that vary between 
+                different runs are included in the result, providing a
+                summary of the information for each run. Defaults to True.
 
         Returns:
             list: A list containing the configuration and performance 
@@ -198,7 +204,7 @@ class Benchmark(Project):
             with open(input_file_path, mode="r", encoding="utf-8") as file:
                 return json.load(file)
 
-        def filter_distinct_attrs(info):
+        def summarize(info):
             attrs_lsts = defaultdict(list)
             for attrs in info:
                 for k, v in attrs.items():
@@ -222,7 +228,4 @@ class Benchmark(Project):
                 **input_params,
             })
 
-        if distinct:
-            info = filter_distinct_attrs(info)
-
-        return info
+        return summarize(info) if summary else info
