@@ -66,16 +66,17 @@ This installation can take a while (*up to an hour, depending on your internet s
 
 **Step-by-Step**
 
-1. **Command Prompt** 
+1. **Open the Command Prompt** 
 	
-    Click on windows icon on the botton left corner and type `Command Prompt` and press Enter to open the Command Prompt app.
+    Click on the Windows icon in the bottom-left corner, type `Command Prompt`, and press **Enter** to open the Command Prompt app.
      
 2. **Check for Python 3**
     
     In the Command Prompt, type:
+   
     ```bash
-     python3
-     ```
+    python3
+    ```
 
 If Python 3 is installed, you’ll see something like this:
 
@@ -83,17 +84,14 @@ If Python 3 is installed, you’ll see something like this:
     <img src="../_static/python3_installed.png" alt="Python message if installed">
 </div>
 
-If Python 3 isn’t installed, Windows will open up the Microsoft Store on the Python Page. From there just click on `Get` to install Python.
 
-<div align="center">
-    <img src="../_static/microsoft_store.png" alt="Microsoft Store if python not installed">
-</div>
+If Python 3 isn’t installed, Windows will automatically open the Microsoft Store to the Python page. From there, just click on **Get** to install Python.
 
-This installation can take some minutes and will configure your system to run Python smoothly.
+This installation can take a few minutes and will configure your system to run Python smoothly.
 
 4. **Test Again**
 
-    Once installation is complete, type `python3` in the Terminal again. You should now see confirmation that Python 3 is ready to go!
+    Once installation is complete, type `python3` in the Command Prompt again. You should now see confirmation that Python 3 is ready to go!
 
 ## Step 2: Update pip and Set Up Your PATH for Python
 
@@ -125,16 +123,16 @@ If you saw the warning above, it’s time to update your PATH variable. This tel
 
     In your Terminal, type:
 
-```bash
-echo $PATH
-```
+    ```bash
+    echo $PATH
+    ```
 
-You should see something like this:  
+    You should see something like this:  
 <div align="center">
     <img src="../_static/echo_path.png" alt="Echo Path">
 </div>
 
-If you don’t see */Users/YOURUSERNAME/Library/Python/3.9/bin* in the output, it means this directory isn’t in your PATH yet.
+    If you don’t see */Users/YOURUSERNAME/Library/Python/3.9/bin* in the output, it means this directory isn’t in your PATH yet.
 
 ````{eval-rst}
 .. important::
@@ -143,34 +141,30 @@ If you don’t see */Users/YOURUSERNAME/Library/Python/3.9/bin* in the output, i
 
 2. **Add Python to PATH**
 
-To permanently add Python’s location to PATH, let’s edit your profile file. If you’re using the default macOS shell (zsh), follow these steps:
+    To permanently add Python’s location to PATH, let’s edit your profile file. If you’re using the default macOS shell (zsh), follow these steps:
 
-First, Open the profile file in nano editor:
+    First, open the profile file in nano editor:
 
-```bash
-nano ~/.zshrc
-```
+    ```bash
+    nano ~/.zshrc
+    ```
 
-Then, add the following line at the bottom of the file, replacing *YOURUSERNAME* with your actual username:
+    Then, add the following line at the bottom of the file, replacing *YOURUSERNAME* with your actual username:
 
-```bash
-export PATH=$PATH:/Users/YOURUSERNAME/Library/Python/3.9/bin
-```
+    ```bash
+    export PATH=$PATH:/Users/YOURUSERNAME/Library/Python/3.9/bin
+    ```
 
-Now, save the file by pressing CTRL + X, then Y to confirm, and Enter.
+    Now, save the file by pressing CTRL + X, then Y to confirm, and Enter.
 
 3. **Verify the Update**
 
-Close the current Terminal and **open a new one**. Type:
+    Close the current Terminal and **open a new one**. Type:
 
-```bash
-echo $PATH
-```
+    ```bash
+    echo $PATH
+    ```
 You should now see */Users/YOURUSERNAME/Library/Python/3.9/bin* included at the end of the PATH.
-
-<div align="center">
-    <img src="../_static/echo_path.png" alt="Echo Path">
-</div>
 
 ### Update pip and Set Up Your PATH for Python on Windows
 
