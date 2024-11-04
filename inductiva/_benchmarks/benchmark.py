@@ -215,7 +215,7 @@ class Benchmark(Project):
         info = []
         tasks = self.get_tasks()
         for task in tasks:
-            input_params = get_task_input_params(task)
+            task_input_params = get_task_input_params(task)
             task_info = task.get_info()
             info.append({
                 "task_id": task_info.task_id,
@@ -225,7 +225,7 @@ class Benchmark(Project):
                     task_info.time_metrics.computation_seconds.value,
                 "estimated_computation_cost": \
                     task_info.estimated_computation_cost,
-                **input_params,
+                **task_input_params,
             })
 
         return summarize(info) if summary else info
