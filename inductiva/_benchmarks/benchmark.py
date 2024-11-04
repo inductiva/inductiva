@@ -184,8 +184,8 @@ class Benchmark(Project):
         execution time.
 
         This method retrieves input parameters and task information for each
-        run, and optionally filters the results to include only the parameters
-        that vary between runs.
+        run, and optionally summarizes the results by filtering only the
+        parameters that vary between runs.
         
         Args:
             summary (bool): If True, only the parameters that vary between 
