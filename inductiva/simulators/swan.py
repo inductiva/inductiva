@@ -54,13 +54,15 @@ class SWAN(simulators.Simulator):
             command: The command to run the simulation. Default is 'swanrun'.
                 The user can also specify 'swan.exe'.
         """
-        if command != "swanrun" or command != "swan.exe":
+
+        if command != "swanrun" and command != "swan.exe":
             raise ValueError("Invalid command. Use 'swanrun' or 'swan.exe'.")
-        
+
         return super().run(input_dir,
                            on=on,
                            input_filename=sim_config_filename,
                            storage_dir=storage_dir,
+                           command=command,
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
