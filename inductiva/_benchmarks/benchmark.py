@@ -217,14 +217,14 @@ class Benchmark(Project):
         for task in tasks:
             task_input_params = get_task_input_params(task)
             task_info = task.get_info()
+            task_time = task_info.time_metrics.computation_seconds.value
+            task_cost = task_info.estimated_computation_cost
             info.append({
                 "task_id": task_info.task_id,
                 "simulator": task_info.simulator,
                 "machine_type": task_info.executer.vm_type,
-                "computation_time": \
-                    task_info.time_metrics.computation_seconds.value,
-                "estimated_computation_cost": \
-                    task_info.estimated_computation_cost,
+                "computation_time": task_time,
+                "estimated_computation_cost": task_cost,
                 **task_input_params,
             })
 
