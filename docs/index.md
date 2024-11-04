@@ -8,7 +8,7 @@ caption: Ready Your System
 maxdepth: 1 
 hidden: true
 ---
-prerequisites/osX
+preinstallation/system-requirements
 
 ```
 
