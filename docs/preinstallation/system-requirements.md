@@ -127,12 +127,12 @@ If you saw the warning above, it’s time to update your PATH variable. This tel
     echo $PATH
     ```
 
-    You should see something like this:  
+You should see something like this:  
 <div align="center">
     <img src="../_static/echo_path.png" alt="Echo Path">
 </div>
 
-    If you don’t see */Users/YOURUSERNAME/Library/Python/3.9/bin* in the output, it means this directory isn’t in your PATH yet.
+If you don’t see */Users/YOURUSERNAME/Library/Python/3.9/bin* in the output, it means this directory isn’t in your PATH yet.
 
 ````{eval-rst}
 .. important::
@@ -164,7 +164,7 @@ If you saw the warning above, it’s time to update your PATH variable. This tel
     ```bash
     echo $PATH
     ```
-You should now see */Users/YOURUSERNAME/Library/Python/3.9/bin* included at the end of the PATH.
+    You should now see */Users/YOURUSERNAME/Library/Python/3.9/bin* included at the end of the PATH.
 
 ### Update pip and Set Up Your PATH for Python on Windows
 
