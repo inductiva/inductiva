@@ -221,9 +221,9 @@ class Benchmark(Project):
                 "task_id": task_info.task_id,
                 "simulator": task_info.simulator,
                 "machine_type": task_info.executer.vm_type,
-                "computation_time": \
+                "computation_time":  \
                     task_info.time_metrics.computation_seconds.value,
-                "estimated_computation_cost": \
+                "estimated_computation_cost":  \
                     task_info.estimated_computation_cost,
                 **task_input_params,
             })
