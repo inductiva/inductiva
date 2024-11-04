@@ -55,7 +55,7 @@ class SWAN(simulators.Simulator):
                 The user can also specify 'swan.exe'.
         """
 
-        if command not in ('swanrun', 'swan.exe'):
+        if command not in ("swanrun", "swan.exe"):
             raise ValueError("Invalid command. Use 'swanrun' or 'swan.exe'.")
 
         return super().run(input_dir,
