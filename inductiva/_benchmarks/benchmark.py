@@ -215,8 +215,10 @@ class Benchmark(Project):
                 "task id": info.task_id,
                 "simulator": info.simulator,
                 "machine type": info.executer.vm_type,
-                "computation time": info.time_metrics.computation_seconds.value,
-                "estimated computation cost": info.estimated_computation_cost,
+                "computation time (s)": \
+                    info.time_metrics.computation_seconds.value,
+                "estimated computation cost (US$)": \
+                    info.estimated_computation_cost,
                 **input_params,
             })
 
