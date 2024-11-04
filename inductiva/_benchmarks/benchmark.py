@@ -161,22 +161,22 @@ class Benchmark(Project):
         """
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
-        metrics = self.gather_metrics(distinct=distinct)
+        info = self.runs_info(distinct=distinct)
         filename = filename or f"{self.name}.{fmt.value}"
         if fmt == ExportFormat.JSON:
             with open(filename, mode="w", encoding="utf-8") as file:
-                json_content = json.dumps(obj=metrics, indent=4)
+                json_content = json.dumps(obj=info, indent=4)
                 file.write(json_content)
         elif fmt == ExportFormat.CSV:
             with open(filename, mode="w", encoding="utf-8") as file:
-                fieldnames = metrics[0].keys() if metrics else []
+                fieldnames = info[0].keys() if info else []
                 writer = csv.DictWriter(file, fieldnames=fieldnames)
                 writer.writeheader()
-                writer.writerows(metrics)
+                writer.writerows(info)
         else:
             raise ValueError(f"Unsupported export format: {fmt}")
 
-    def gather_metrics(self, distinct: bool = True) -> list:
+    def runs_info(self, distinct: bool = True) -> list:
         """
         Gathers the configuration and performance metrics for each run
         associated with the benchmark in a list, including computation cost
@@ -198,31 +198,31 @@ class Benchmark(Project):
             with open(input_file_path, mode="r", encoding="utf-8") as file:
                 return json.load(file)
 
-        def filter_distinct(metrics):
+        def filter_distinct_attrs(info):
             attrs_lsts = defaultdict(list)
-            for attrs in metrics:
+            for attrs in info:
                 for k, v in attrs.items():
                     attrs_lsts[k].append(v)
             filtered = {k for k, v in attrs_lsts.items() if len(set(v)) > 1}
-            return [{key: attrs[key] for key in filtered} for attrs in metrics]
+            return [{key: attrs[key] for key in filtered} for attrs in info]
 
-        metrics = []
+        info = []
         tasks = self.get_tasks()
         for task in tasks:
             input_params = get_task_input_params(task)
-            info = task.get_info()
-            metrics.append({
-                "task id": info.task_id,
-                "simulator": info.simulator,
-                "machine type": info.executer.vm_type,
+            task_info = task.get_info()
+            info.append({
+                "task id": task_info.task_id,
+                "simulator": task_info.simulator,
+                "machine type": task_info.executer.vm_type,
                 "computation time (s)": \
-                    info.time_metrics.computation_seconds.value,
+                    task_info.time_metrics.computation_seconds.value,
                 "estimated computation cost (US$)": \
-                    info.estimated_computation_cost,
+                    task_info.estimated_computation_cost,
                 **input_params,
             })
 
         if distinct:
-            metrics = filter_distinct(metrics)
+            info = filter_distinct_attrs(info)
 
-        return metrics
+        return info
