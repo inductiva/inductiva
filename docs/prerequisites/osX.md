@@ -64,7 +64,36 @@ This installation can take a while (*up to an hour, depending on your internet s
 
 ### Checking if Python is Installed on Windows
 
-(Insert steps for WINDOWS HERE)
+**Step-by-Step**
+
+1. **Command Prompt** 
+	
+    Click on windows icon on the botton left corner and type `Command Prompt` and press Enter to open the Command Prompt app.
+     
+2. **Check for Python 3**
+    
+    In the Command Prompt, type:
+    ```bash
+     python3
+     ```
+
+If Python 3 is installed, you’ll see something like this:
+
+<div align="center">
+    <img src="../_static/python3_installed.png" alt="Python message if installed">
+</div>
+
+If Python 3 isn’t installed, Windows will open up the Microsoft Store on the Python Page. From there just click on `Get` to install Python.
+
+<div align="center">
+    <img src="../_static/microsoft_store.png" alt="Microsoft Store if python not installed">
+</div>
+
+This installation can take some minutes and will configure your system to run Python smoothly.
+
+4. **Test Again**
+
+    Once installation is complete, type `python3` in the Terminal again. You should now see confirmation that Python 3 is ready to go!
 
 ## Step 2: Update pip and Set Up Your PATH for Python
 
@@ -145,7 +174,16 @@ You should now see */Users/YOURUSERNAME/Library/Python/3.9/bin* included at the 
 
 ### Update pip and Set Up Your PATH for Python on Windows
 
-(Insert text here)
+#### Update pip
+
+To update pip, open your Command Prompt and type:
+
+```bash
+python3 -m pip install --upgrade pip
+```
+
+Since we installed Python using the Microsoft Store, this command should run smoothly and with no issues.
+
 
 ---
 
