@@ -216,7 +216,7 @@ class Benchmark(Project):
         tasks = self.get_tasks()
         for task in tasks:
             task_input_params = get_task_input_params(task)
-            task_info = task.get_info()
+            task_info = task.info
             task_time = task_info.time_metrics.computation_seconds.value
             task_cost = task_info.estimated_computation_cost
             info.append({
