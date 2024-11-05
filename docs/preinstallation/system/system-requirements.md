@@ -10,6 +10,7 @@ into a few bumps while installing our API. The steps below are here to save
 you time and help you sidestep the most common setup challenges!
 
 ```{toctree}
+:titlesonly:
 osx
 windows
 ```
