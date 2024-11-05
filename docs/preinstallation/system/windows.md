@@ -81,4 +81,4 @@ Awesome! Now that pip is updated and Python is set in your PATH, you’re all se
 
 If you run into any issues or challenges while installing the API, please reach out to us at support@inductiva.ai. We’d love to help troubleshoot and find ways to make the setup process even smoother.
 
-You can also check out our [troubleshooting guide](../../api_reference/troubleshooting.md) for more information.
+You can also check out our [troubleshooting guide](https://docs.inductiva.ai/en/latest/api_reference/troubleshooting.html) for more information.
