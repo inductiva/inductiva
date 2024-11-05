@@ -55,7 +55,7 @@ If it’s missing, we’ll go over how to install it on macOS.
 
 
 <div align="center">
-    <img src="../_static/dev_tools.png" alt="Developer tools install">
+    <img src="../../_static/dev_tools.png" alt="Developer tools install">
 </div>
 
 4. **Test Again**
