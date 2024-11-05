@@ -1,12 +1,5 @@
 # MacOS System Prep Guide
 
-## TL;DR
-
-Pre-Install Must-Dos:
-
-- [Step 1: Check if Python is Installed](#step-1-check-if-python-is-installed)
-- [Step 2: Update pip and Set Up Your PATH for Python](#step-2-update-pip-and-set-up-your-path-for-python)
-
 ## Step 1: Check if Python is Installed
 
 First things first, let’s make sure **Python 3** is set up correctly on your system. 
