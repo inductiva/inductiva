@@ -119,10 +119,6 @@ We'll run this simulation on:
     8 -rw-rw-r--@  1   141 Sep  4 08:46 ctrl.txt
    ```
 
-	Before we proceed, let's inspect the files to check three Reed3D parameters that
-	are important to understand before we configure our simulation run. These
-	parameters are: `N 41`, `P 30` and `M 10`:
-
 	**control.txt (for DiveMESH):**
 	
 	```
@@ -161,11 +157,13 @@ We'll run this simulation on:
 	W 22 -9.81
 	```
 
-	`M 10` controls the level of parallelism. `N 41` controls the modeled time. `P 30`
-	controls the rate of Paraview results.
+	Before proceeding, let’s review three key parameters in the Reef3D configuration files:
+    - `N 41`: Maximum simulation time
+    - `P 30`: Result output frequency
+    - `M 10`: Number of processors for parallel computation
 
 ### Step 1: Adjust Simulation Parameters
-For a faster simulation, modify the following parameters:
+For a faster simulation, modify the following parameters in both files:
 
 - **Level of parallelism (`M 10`)**: 56
 - **Simulation time (`N 41`)**: 25.0
@@ -241,7 +239,7 @@ Forthermore, we will generate a Paraview result every 0.01 seconds.
 	simulation to be over, or we can turn our computer off go for a coffe (☕️).
 	```python
 	task.wait()
-	machine_group.terminate()
+	task.download_outputs()
 	```
 	**Note**: run `inductiva logs task_id` ro check the stdout of the simulation
 	process in real time.
@@ -288,10 +286,10 @@ task = openfoam.run(
 As you can see the process of scalling up (or down) can be done easly by just
 picking a new resource. We encorage you to try other machines/configurations.
 
-**Note**: `spot` machines are not supported for MPI clusters.
+> **Note**: Ensure to adjust `M 10` in `control.txt` and `ctrl.txt` to match the 112 vCPU setup.
 
 ### Conclusion
 
 Running the simulation on a high-performance machine and scaling it on an MPI
-cluster can significantly reduce computation time. Download and analyze your
+cluster can significantly reduce computation time (from X to Y). Download and analyze your
 results locally once complete. Happy simulating!
