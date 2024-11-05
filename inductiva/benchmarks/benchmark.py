@@ -2,7 +2,8 @@
 import enum
 import json
 import csv
-from typing import Optional, Self, Union
+from typing import Optional, Union
+from typing_extensions import Self
 from inductiva import types
 from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
