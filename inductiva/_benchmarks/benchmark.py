@@ -6,6 +6,7 @@ from typing import Optional, Self, Union
 from inductiva import types
 from inductiva.simulators.simulator import Simulator
 from inductiva.projects.project import Project
+from collections import defaultdict
 
 
 class ExportFormat(enum.Enum):
@@ -120,7 +121,7 @@ class Benchmark(Project):
         """
         with self:
             for simulator, input_dir, machine_group, kwargs in self.runs:
-                machine_group.start(wait_on_pending_quota=True)
+                machine_group.start(wait_on_pending_quota=False)
                 for _ in range(num_repeats):
                     simulator.run(input_dir=input_dir,
                                   on=machine_group,
@@ -144,83 +145,87 @@ class Benchmark(Project):
         self,
         fmt: Union[ExportFormat, str] = ExportFormat.JSON,
         filename: Optional[str] = None,
+        summary: bool = True,
     ):
         """
         Exports the benchmark performance metrics in the specified format.
 
         Args:
-            fmt (ExportFormat): The format to export the results in. Defaults
-                to ExportFormat.JSON.
+            fmt (Union[ExportFormat, str]): The format to export the results
+                in. Defaults to ExportFormat.JSON.
             filename (Optional[str]): The name of the output file to save the
                 exported results. Defaults to the benchmark's name if not
                 provided.
+            summary (bool): If True, only the parameters that vary between 
+                different runs are included in the result, providing a summary
+                of the information for each run. Defaults to True.
         """
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
-        metrics = self.gather_metrics()
+        info = self.runs_info(summary=summary)
         filename = filename or f"{self.name}.{fmt.value}"
         if fmt == ExportFormat.JSON:
             with open(filename, mode="w", encoding="utf-8") as file:
-                json_content = json.dumps(obj=metrics, indent=4)
+                json_content = json.dumps(obj=info, indent=4)
                 file.write(json_content)
         elif fmt == ExportFormat.CSV:
             with open(filename, mode="w", encoding="utf-8") as file:
-                csv_content = [{
-                    "machine_type": machine_type,
-                    **task,
-                } for machine_type, tasks in metrics.items() for task in tasks]
-                fieldnames = csv_content[0].keys()
+                fieldnames = info[0].keys() if info else []
                 writer = csv.DictWriter(file, fieldnames=fieldnames)
                 writer.writeheader()
-                writer.writerows(csv_content)
+                writer.writerows(info)
         else:
             raise ValueError(f"Unsupported export format: {fmt}")
 
-    def gather_metrics(self) -> dict:
+    def runs_info(self, summary: bool = True) -> list:
         """
-        Gathers performance metrics for all tasks associated with the
-        benchmark, which include computation cost and execution time.    
-    
-        Returns:
-            dict: A dictionary organized by virtual machine type, containing
-                performance metrics for each task associated with the benchmark.
-        """
-        data = {}
-        tasks = self.get_tasks()
-        for task in tasks:
-            info = task.get_info()
-            vm_type = info.executer.vm_type
-            data.setdefault(vm_type, [])
-            data[vm_type].append({
-                "task_id": info.task_id,
-                "estimated_computation_cost": info.estimated_computation_cost,
-                "computation_time": info.time_metrics.computation_seconds.value,
-            })
-        return data
+        Gathers the configuration and performance metrics for each run
+        associated with the benchmark in a list, including computation cost and
+        execution time.
 
-    def gather_detailed_data(self) -> dict:
-        """
-        Gathers comprehensive information about all tasks associated with the 
-        benchmark, including additional performance metrics and task metadata.
+        This method retrieves input parameters and task information for each
+        run, and optionally summarizes the results by filtering only the
+        parameters that vary between runs.
+        
+        Args:
+            summary (bool): If True, only the parameters that vary between 
+                different runs are included in the result, providing a
+                summary of the information for each run. Defaults to True.
 
         Returns:
-            dict: A dictionary organized by virtual machine type, containing
-                detailed information about each task associated with the
-                benchmark.
+            list: A list containing the configuration and performance 
+                metrics for each run.
         """
-        data = {}
-        tasks = self.get_tasks()
-        for task in tasks:
-            info = task.get_info()
-            vm_type = info.executer.vm_type
-            data.setdefault(vm_type, [])
+
+        def get_task_input_params(task):
             input_filename = "input.json"
             input_dir_path = task.download_inputs(filenames=[input_filename])
             input_file_path = input_dir_path.joinpath(input_filename)
             with open(input_file_path, mode="r", encoding="utf-8") as file:
-                input_json = json.load(file)
-            data[vm_type].append({
-                "task_info": info.to_dict(),
-                "task_input_metadata": input_json,
+                return json.load(file)
+
+        def summarize(info):
+            attrs_lsts = defaultdict(list)
+            for attrs in info:
+                for k, v in attrs.items():
+                    attrs_lsts[k].append(v)
+            filtered = {k for k, v in attrs_lsts.items() if len(set(v)) > 1}
+            return [{key: attrs[key] for key in filtered} for attrs in info]
+
+        info = []
+        tasks = self.get_tasks()
+        for task in tasks:
+            task_input_params = get_task_input_params(task)
+            task_info = task.info
+            task_time = task_info.time_metrics.computation_seconds.value
+            task_cost = task_info.estimated_computation_cost
+            info.append({
+                "task_id": task_info.task_id,
+                "simulator": task_info.simulator,
+                "machine_type": task_info.executer.vm_type,
+                "computation_time": task_time,
+                "estimated_computation_cost": task_cost,
+                **task_input_params,
             })
-        return data
+
+        return summarize(info) if summary else info
