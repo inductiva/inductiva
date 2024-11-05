@@ -178,15 +178,18 @@ Forthermore, we will generate a Paraview result every 0.01 seconds.
 
 1. **Pick your machine**:
 
-	For this simulation, we will use a `c2d-highcpu-112` machine. We will also use
-	a 20 GB disk to store the simulation files.
+	In this simulation, we'll use a `c2d-highcpu-112` machine with a 20 GB disk.
+	Automatic disk resizing is enabled, so the disk size will increase as needed,
+	up to the specified maximum of `auto_resize_disk_max_gb`.
+	
 
 	```python
 	import inductiva
 	machine_group = inductiva.resources.MachineGroup(
 						machine_type="c2d-highcpu-112",
 						spot=True,
-						data_disk_gb=20)
+						data_disk_gb=20,
+						auto_resize_disk_max_gb=250)
 	```
 	**Note**: `spot` machines are a lot cheaper but can be terminated by the
 	provider if needed.
@@ -234,12 +237,15 @@ Forthermore, we will generate a Paraview result every 0.01 seconds.
 	- `storage_dir`: This is the directory where the simulation outputs will be
 	stored. You can access these outputs once the simulation is complete.
 
-2. **Wait and Download Outputs**:
+2. **Wait for simulation to finish**:
 	That is it. Our simulation is now running on the cloud. We can `wait` for the
 	simulation to be over, or we can turn our computer off go for a coffe (☕️).
+
+	We will be skipping the `download_outputs` due to the fact that this
+	simulation generates arround 12 GB of data. If you need to download your
+	outputs just run `task.download_outputs()`.
 	```python
 	task.wait()
-	task.download_outputs()
 	```
 	**Note**: run `inductiva logs task_id` ro check the stdout of the simulation
 	process in real time.
