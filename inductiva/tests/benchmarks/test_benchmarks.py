@@ -1,9 +1,9 @@
 """Tests for the benchmarks module."""
 from unittest import mock
 
-from inductiva._benchmarks.methods import _render_dict
-from inductiva._benchmarks.methods import _compute_tasks_to_run
-from inductiva._benchmarks.methods import _tasks_by_vm_type
+from inductiva.benchmarks.methods import _render_dict
+from inductiva.benchmarks.methods import _compute_tasks_to_run
+from inductiva.benchmarks.methods import _tasks_by_vm_type
 from inductiva.tasks.task import TaskInfo
 
 executer_4 = mock.MagicMock()

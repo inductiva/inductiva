@@ -4,6 +4,16 @@
 
 ```{toctree}
 ---
+caption: Ready Your System
+maxdepth: 2 
+hidden: true
+---
+preinstallation/system/system-requirements
+
+```
+
+```{toctree}
+---
 caption: Introduction to Inductiva API
 maxdepth: 1 
 hidden: true

@@ -40,14 +40,16 @@ Google Cloud Platform (GCP):
    .. tab:: Compute-optimized Machines
        - `C2 <https://cloud.google.com/compute/docs/compute-optimized-machines#c2_machine_types>`_
        - `C2D <https://cloud.google.com/compute/docs/compute-optimized-machines#c2d_series>`_
-       - `H3 <https://cloud.google.com/compute/docs/compute-optimized-machines#h3_series>`_
-
+   .. tab:: Memory-optimized Machines
+       - `M3 <https://cloud.google.com/compute/docs/memory-optimized-machines#m3_series>`_
    .. tab:: General-purpose Machines
-       - `N1 <https://cloud.google.com/compute/docs/general-purpose-machines#n1_machines>`_
+       - `E2 <https://cloud.google.com/compute/docs/general-purpose-machines#e2_machine_types>`_
        - `N2 <https://cloud.google.com/compute/docs/general-purpose-machines#n2_series>`_
        - `N2D <https://cloud.google.com/compute/docs/general-purpose-machines#n2d_machines>`_
+       - `N4 <https://cloud.google.com/compute/docs/general-purpose-machines#n4_series>`_
        - `C3 <https://cloud.google.com/compute/docs/general-purpose-machines#c3_series>`_ 
        - `C3D <https://cloud.google.com/compute/docs/general-purpose-machines#c3d_series>`_
+       - `C4 <https://cloud.google.com/compute/docs/general-purpose-machines#c4_series>`_
 ````
 
 The VMs within these families are categorized into three types, based on the RAM-to-vCPU 
@@ -97,10 +99,6 @@ we put in place through the current version of the API.
 In future versions of the API, we plan to expand the range of computational resources 
 you can access through the API. Here’s a sneak peek at what is on our development 
 roadmap:
-
-- **Inductiva Compute Engine (ICE):** We are developing our own infrastructure to offer 
-both CPU-based and high-performance GPU-based VMs. These will be particularly 
-beneficial for simulator packages requiring extensive computational power.
 
 - **Bring your own Cloud (BYOC):** This feature will enable you to use your own cloud 
 accounts, starting with GCP, to run simulation jobs.
