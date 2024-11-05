@@ -1,10 +1,9 @@
 """Methods to interact with the user storage resources."""
-import json
 import logging
 import os
 import tqdm
-from typing import List, Literal, Tuple
-from urllib.parse import unquote, urlparse
+from typing import List, Literal, Optional, Tuple
+import urllib
 
 import inductiva
 from inductiva.api import methods
@@ -131,63 +130,66 @@ def _print_contents_table(contents):
 def upload_from_url(
     url: str,
     remote_dir: str,
-    remote_path: str = None,
+    file_name: Optional[str] = None,
 ):
     """
-    Upload a file from a URL to the user workspace.
+    Upload a file from a given URL to a specified remote directory.
 
+    If no file name is provided, the function extracts the name from the URL.
+    
     Args:
-        url (str): The URL of the file to upload.
-        remote_dir (str): The remote directory to upload the file to. 
-        remote_path (str, optional): The path to save the file as. If not
-            provided, the path will be extracted from the URL.
+        url (str): The URL of the file to be uploaded. 
+        remote_dir (str): The path to the remote directory where the file will
+            be stored.
+        file_name (str, optional): The name to save the uploaded file as. 
+            If not specified, the name will be extracted from the URL.
     """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
 
-    if remote_path is None:
-        parsed_url = urlparse(url)
-        remote_path = unquote(parsed_url.path.split("/")[-1])
-    contents = api_instance.upload_from_url(
-        query_params={
+    # append filename extracted from url to remote_path
+    if not file_name:
+        parsed_url = urllib.parse.urlparse(url)
+        file_name = urllib.parse.unquote(parsed_url.path.split("/")[-1])
+
+    remote_path = os.path.join(remote_dir, file_name)
+
+    try:
+        api_instance.upload_from_url(query_params={
             "url": url,
-            "file_path": remote_path,
+            "path": remote_path,
             "unzip": "f",
-        },
-        path_params={
-            "folder_name": remote_dir,
-        },
-    )
-    if contents.response.status == 200:
-        logging.info("File is being uploaded...")
-    else:
-        logging.info("File upload failed.")
+        },)
+    except exceptions.ApiException as e:
+        raise e
+    logging.info("File is being uploaded...")
+    logging.info("You can use 'inductiva storage ls' to check the status.")
 
 
 def upload(
     local_path: str,
     remote_dir: str,
-    remote_path: str = None,
 ):
     """
-    Upload a local file or directory to the user workspace.
+    Upload a local file or directory to a specified remote directory.
 
     Args:
         local_path (str): The path to the local file or directory to be
             uploaded.
         remote_dir (str, optional): The remote directory where the file will
             be uploaded.
-        remote_path (str, optional): The remote path to save the file.
     """
-
-    remote_prefix = os.path.dirname(
-        remote_path.lstrip("/")) if remote_path else ""
-
     is_dir = os.path.isdir(local_path)
+
     if is_dir:
-        input_paths_remote, total_size = _list_files(local_path, remote_prefix)
+        local_dir = os.path.join(local_path, "")
+        file_paths, total_size = _list_files(local_path)
+        remote_file_paths = [
+            os.path.join(remote_dir, file_path) for file_path in file_paths
+        ]
     else:
-        file_name = os.path.basename(local_path)
-        input_paths_remote = [os.path.join(remote_prefix, file_name)]
+        local_dir = os.path.dirname(local_path)
+        filename = os.path.basename(local_path)
+        remote_file_paths = [os.path.join(remote_dir, filename)]
         total_size = os.path.getsize(local_path)
 
     logging.info("Uploading input...")
@@ -196,94 +198,81 @@ def upload(
 
     api_response = methods.get_upload_url(
         api_instance.get_upload_url,
-        query_params={"file_paths": input_paths_remote},
-        path_params={"folder_name": remote_dir},
+        query_params={"paths": remote_file_paths},
     )
 
     with tqdm.tqdm(total=total_size,
                    unit="B",
                    unit_scale=True,
                    unit_divisor=1000) as progress_bar:
+
         for response in api_response:
             method = response["method"]
             url = response["url"]
             file_server_available = bool(response["file_server_available"])
-            file_path_remote = response["file_path"]
-            file_path = file_path_remote.removeprefix(remote_prefix)
-            if is_dir:
-                file_path_local = os.path.join(local_path, file_path)
-            else:
-                file_path_local = os.path.join(os.path.dirname(local_path),
-                                               file_path)
+            remote_file_path = response["file_path"]
 
-            logging.debug("Upload URL: %s", url)
+            file_path = remote_file_path.removeprefix(f"{remote_dir}/")
+            local_file_path = os.path.join(local_dir, file_path)
 
-            methods.upload_file(api_instance, file_path_local, method, url,
-                                file_server_available, progress_bar)
+            try:
+                methods.upload_file(api_instance, local_file_path, method, url,
+                                    file_server_available, progress_bar)
 
-            methods.notify_upload_complete(
-                api_instance.notify_upload_file,
-                query_params={
-                    "file_path": file_path_remote,
-                    "unzip": "f",
-                },
-                path_params={
-                    "folder_name": remote_dir,
-                },
-            )
+                methods.notify_upload_complete(
+                    api_instance.notify_upload_file,
+                    query_params={
+                        "path": remote_file_path,
+                    },
+                )
+            except exceptions.ApiException as e:
+                raise e
+
+    logging.info("Input uploaded successfully.")
 
 
-def _list_files(root_path: str, prefix_path: str) -> Tuple[List[str], int]:
+def _list_files(root_path: str) -> Tuple[List[str], int]:
     """
-    Lists all files within a directory, returns their prefixed paths and the
-    total file size.
+    Lists all files within a directory and returns their total size.
 
     Args:
         root_path: The root directory to list files from.
-        prefix_path: The prefix to add to each file's relative path.
     """
-    file_list = []
+    file_paths = []
     total_size = 0
 
     for dirpath, _, filenames in os.walk(root_path):
         for filename in filenames:
-            relative_path = os.path.relpath(os.path.join(dirpath, filename),
-                                            root_path)
-            full_path = os.path.join(prefix_path, relative_path)
-            file_list.append(full_path)
+            path = os.path.relpath(os.path.join(dirpath, filename), root_path)
+            file_paths.append(path)
 
-            file_path = os.path.join(dirpath, filename)
-            total_size += os.path.getsize(file_path)
+            full_path = os.path.join(dirpath, filename)
+            total_size += os.path.getsize(full_path)
 
-    return file_list, total_size
+    return file_paths, total_size
 
 
-def remove_workspace(remote_dir, file_path=None) -> bool:
-    """Removes a workspace folder or a workspace file.
+def remove_workspace(remote_dir, file_name: Optional[str] = None) -> bool:
+    """
+    Removes the specified file from a remote directory, or deletes the entire
+    remote directory if no file name is provided.
 
-    Args:
-        remote_dir (str): The remote directory to remove.
-        file_path (str, optional): The path of the file to remove. If not
-            provided, the entire directory will be removed.
-    
-    Returns:
-        True if the files were removed successfully, False otherwise.
+    Parameters:
+    - remote_dir (str): The path to the remote directory.
+    - file_name (str, optional): The name of the file to remove within the
+        remote_dir. If omitted, the function removes the entire remote_dir.
     """
     api = storage_api.StorageApi(inductiva.api.get_client())
 
     logging.info("Removing workspace file(s)...")
-    try:
-        query_params = {"file_path": file_path} if file_path is not None else {}
+    if not file_name:
+        # make sure remote_dir ends with a '/'
+        remote_path = os.path.join(remote_dir, "")
+    else:
+        remote_path = os.path.join(remote_dir, file_name)
 
-        api.delete_file(
-            query_params=query_params,
-            path_params={
-                "folder_name": remote_dir,
-            },
-        )
+    try:
+        api.delete_file(query_params={"path": remote_path},)
         logging.info("Workspace file(s) removed successfully.")
     except exceptions.ApiException as e:
-        logging.error("An error occurred while removing the workspace:")
-        logging.error(" > %s", json.loads(e.body)["detail"])
-        return False
-    return True
+        raise e
