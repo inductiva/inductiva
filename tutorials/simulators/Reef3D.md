@@ -165,15 +165,14 @@ We'll run this simulation on:
 	controls the rate of Paraview results.
 
 ### Step 1: Adjust Simulation Parameters
-
-	For a faster simulation, modify the following parameters:
+For a faster simulation, modify the following parameters:
 
 - **Level of parallelism (`M 10`)**: 56
 - **Simulation time (`N 41`)**: 25.0
 - **Paraview results rate (`P 30`)**: 0.01
 
-	This parameters will allow us to run the simulation faster and limited to 25 seconds.
-	Forthermore, we will generate a Paraview result every 0.01 seconds.
+This parameters will allow us to run the simulation faster and limited to 25 seconds.
+Forthermore, we will generate a Paraview result every 0.01 seconds.
 
 ### Step 2: Running the Simulation
 
