@@ -184,45 +184,45 @@ Forthermore, we will generate a Paraview result every 0.01 seconds.
 For this simulation, we will use a `c2d-highcpu-112` machine. We will also use
 a 20 GB disk to store the simulation files.
 
-    ```python
-    import inductiva
-    machine_group = inductiva.resources.MachineGroup(
-                        machine_type="c2d-highcpu-112",
-                        spot=True,
-                        data_disk_gb=20)
-    ```
-    **Note**: `spot` machines are a lot cheaper but can be terminated by the
-    provider if needed.
+```python
+import inductiva
+machine_group = inductiva.resources.MachineGroup(
+					machine_type="c2d-highcpu-112",
+					spot=True,
+					data_disk_gb=20)
+```
+**Note**: `spot` machines are a lot cheaper but can be terminated by the
+provider if needed.
 
 2. **Start your machine**
-    ```python
-    machine_group.start()
-    ```
+```python
+machine_group.start()
+```
 
 #### b. Simulation inputs
 1. **Specify Simulation Directory**:
 Let's start by defining a variable that points to the `10_2_3D_Dam_Break_with_Obstacle`
 folder where all your simulation files are located.
 
-   ```python
-   input_dir = "./10_2_3D_Dam_Break_with_Obstacle"
-   ```
+```python
+input_dir = "./10_2_3D_Dam_Break_with_Obstacle"
+```
 
 #### c. Run your simulation
 
 1. **Run the simulation**:
 We now have all we need to run our simulation.
-   ```python
-   #Choose your simulator
-   reef3d = inductiva.simulators.REEF3D()
+```python
+#Choose your simulator
+reef3d = inductiva.simulators.REEF3D()
 
-    task = reef3d.run(
-        input_dir=input_dir,
-        on=machine_group,
-        n_vcpus=56,
-        use_hwthread=False,
-        storage_dir="3D_dam_break_with_obstacle")
-   ```
+task = reef3d.run(
+	input_dir=input_dir,
+	on=machine_group,
+	n_vcpus=56,
+	use_hwthread=False,
+	storage_dir="3D_dam_break_with_obstacle")
+```
 
 In this snippet, two arguments might need clarification:
 
@@ -240,10 +240,10 @@ stored. You can access these outputs once the simulation is complete.
 2. **Wait and Download Outputs**:
 That is it. Our simulation is now running on the cloud. We can `wait` for the
 simulation to be over, or we can turn our computer off go for a coffe (☕️).
-   ```python
-    task.wait()
-    machine_group.terminate()
-   ```
+```python
+task.wait()
+machine_group.terminate()
+```
 **Note**: run `inductiva logs task_id` ro check the stdout of the simulation
 process in real time.
 
@@ -252,17 +252,17 @@ Once our simulation is over we can/should terminate our machine to save on costs
 If you forget, dont worry we got your back. By default, a machine will be
 automaticly terminated if no simulation runs on it for 30 minutes.
 
-   ```python
-   machine_group.terminate()
-   ```
+```python
+machine_group.terminate()
+```
 
 4. **Check your simulation summary**:
 Now that our simulation has finished we can print a summary of said simulation.
 This includes information about the execution times, outputs generated and
 much more.
-    ```python
-    task.print_summary()
-    ```
+```python
+task.print_summary()
+```
 
 ### Step 4: Enhancing Performance with MPI Cluster
 
