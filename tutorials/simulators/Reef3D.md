@@ -162,6 +162,39 @@ We'll run this simulation on:
     - `P 30`: Result output frequency
     - `M 10`: Number of processors for parallel computation
 
+### Step 0: An overview
+
+Here’s the code you'll be working on as we progress through the tutorial. Don’t
+worry if it doesn’t all make sense right now; everything will become clearer
+in the upcoming steps.
+
+```python
+import inductiva
+machine_group = inductiva.resources.MachineGroup(
+					machine_type="c2d-highcpu-112",
+					spot=True,
+					data_disk_gb=20,
+                    auto_resize_disk_max_gb=250,
+                    max_idle_time=)
+
+machine_group.start()
+
+input_dir = "path/to/10_2 3D Dam Break with Obstacle"
+
+#Choose your simulator
+reef3d = inductiva.simulators.REEF3D()
+
+task = reef3d.run(
+	input_dir=input_dir,
+	on=machine_group,
+	n_vcpus=56,
+	use_hwthread=False,
+	storage_dir="3D_dam_break_with_obstacle")
+
+task.wait()
+machine_group.terminate()
+```
+
 ### Step 1: Adjust Simulation Parameters
 For a faster simulation, modify the following parameters in both files:
 
