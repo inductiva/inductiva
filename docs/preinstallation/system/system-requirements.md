@@ -14,8 +14,12 @@ Pre-Install Must-Dos:
 - Step 1: Check if Python is Installed
 - Step 2: Update pip and Set Up Your PATH for Python
 
+## Select your OS
+
 ```{toctree}
 :titlesonly:
 osx
 windows
 ```
+
+----
