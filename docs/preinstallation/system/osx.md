@@ -1,4 +1,4 @@
-# macOS System Prep Guide
+# MacOS System Prep Guide
 
 ## TL;DR
 
