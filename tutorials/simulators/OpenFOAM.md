@@ -105,7 +105,7 @@ and place them in a folder named `highLiftConfiguration`.
    24 -rw-rw-r--@  1   11399 Jun 13 10:09 thumbnail.png
    ```
 
-### Step 0: An overview
+### Overview
 
 Here’s the code you'll be working on as we progress through the tutorial. Don’t
 worry if it doesn’t all make sense right now; everything will become clearer

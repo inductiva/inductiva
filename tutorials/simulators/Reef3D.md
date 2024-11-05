@@ -162,7 +162,7 @@ We'll run this simulation on:
     - `P 30`: Result output frequency
     - `M 10`: Number of processors for parallel computation
 
-### Step 0: An overview
+### Overview
 
 Here’s the code you'll be working on as we progress through the tutorial. Don’t
 worry if it doesn’t all make sense right now; everything will become clearer
