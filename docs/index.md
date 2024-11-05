@@ -4,11 +4,11 @@
 
 ```{toctree}
 ---
-caption: Inductiva API prerequisites
-maxdepth: 1 
+caption: Ready Your System
+maxdepth: 2 
 hidden: true
 ---
-prerequisites/osX
+preinstallation/system/system-requirements
 
 ```
 
