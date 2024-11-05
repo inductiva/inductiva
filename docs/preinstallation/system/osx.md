@@ -1,22 +1,19 @@
-# System Requirements for Installing the Inductiva API
-
+# macOS System Prep Guide
 
 ## TL;DR
+
 Pre-Install Must-Dos:
+
 - [Step 1: Check if Python is Installed](#step-1-check-if-python-is-installed)
 - [Step 2: Update pip and Set Up Your PATH for Python](#step-2-update-pip-and-set-up-your-path-for-python)
 
-## Introduction
-Before diving into the installation process, it’s helpful to ensure your system is primed and ready for the Inductiva API.
-
-We’ve gathered tips and feedback from users with different setups who’ve run into a few bumps while installing our API. The steps below are here to save you time and help you sidestep the most common setup challenges!
-
 ## Step 1: Check if Python is Installed
 
-First things first, let’s make sure **Python 3** is set up correctly on your system. If you already have it installed, great! We’ll be able to move straight to installing the Inductiva API like any other Python package.
-If it’s missing, we’ll go over how to install it depending on your operating system.
+First things first, let’s make sure **Python 3** is set up correctly on your system. 
+If you already have it installed, great! We’ll be able to move straight to installing 
+the Inductiva API like any other Python package.
 
-### Checking if Python is Installed on macOS
+If it’s missing, we’ll go over how to install it on macOS.
 
 **Step-by-Step**
 
@@ -26,80 +23,57 @@ If it’s missing, we’ll go over how to install it depending on your operating
 
     Type “Terminal” and press Enter to open the Terminal app.
      
-2. **Check for Python 3**
+2. **Check for Python3**
     
     In Terminal, type:
     ```bash
      python3
      ```
 
-If Python 3 is installed, you’ll see something like this:
+ - *If Python 3 is installed*, you’ll see something like this:
 
-<div align="center">
-    <img src="../_static/terminal_python_check.png" alt="Python message if installed">
-</div>
+    ```bash
+    Python 3.12.7 (tags/v3.12.7:abcdef, Oct  3 2023, 12:00:00) 
+    [Clang 13.0.0 (clang-1300.0.29.30)] on darwin
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> 
+    ```
 
-If Python 3 isn’t installed, you’ll see a message suggesting installation of **Apple’s Developer Tools**.
+- *If Python 3 isn’t installed*, you’ll see a message prompting you to install the Command Line Developer Tools, which include Python 3. 
 
-<div align="center">
-    <img src="../_static/terminal_python_message.png" alt="Python message if not installed">
-</div>
+    ```bash
+    xcode-select: note: No developer tools were found at '/Applications/Xcode.app', requesting installation.
+    If developer tools are located at a non-default location on disk, use 'sudo xcode-select --switch path/to/Xcode.app' to specify the Xcode that you wish to use for command line developer tools, and cancel the installation dialog.
+    See 'man xcode-select' for more details.
+    ```
 
 3. **Install Developer Tools**
   
-    Behind your Terminal window, a prompt should appear asking if you want to install “command line developer tools.”
+    Behind your Terminal window, a pop-up should appear asking if you want to install “command line developer tools.” Follow the installation instructions and click **Install** to start.
 
-    Click **Install** to start.
+    This installation can take a while (*up to an hour, depending on your internet speed*), as it includes necessary tools for running Python smoothly.
 
 
 <div align="center">
     <img src="../_static/dev_tools.png" alt="Developer tools install">
 </div>
 
-This installation can take a while (*up to an hour, depending on your internet speed*), as it includes necessary tools for running Python smoothly.
-
 4. **Test Again**
 
     Once installation is complete, type `python3` in the Terminal again. You should now see confirmation that Python 3 is ready to go!
 
-### Checking if Python is Installed on Windows
-
-**Step-by-Step**
-
-1. **Open the Command Prompt** 
-	
-    Click on the Windows icon in the bottom-left corner, type `Command Prompt`, and press **Enter** to open the Command Prompt app.
-     
-2. **Check for Python 3**
-    
-    In the Command Prompt, type:
-   
-    ```bash
-    python3
+      ```bash
+    Python 3.12.7 (tags/v3.12.7:abcdef, Oct  3 2023, 12:00:00) 
+    [Clang 13.0.0 (clang-1300.0.29.30)] on darwin
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> 
     ```
-
-If Python 3 is installed, you’ll see something like this:
-
-<div align="center">
-    <img src="../_static/python3_installed.png" alt="Python message if installed">
-</div>
-
-
-If Python 3 isn’t installed, Windows will automatically open the Microsoft Store to the Python page. From there, just click on **Get** to install Python.
-
-This installation can take a few minutes and will configure your system to run Python smoothly.
-
-4. **Test Again**
-
-    Once installation is complete, type `python3` in the Command Prompt again. You should now see confirmation that Python 3 is ready to go!
 
 ## Step 2: Update pip and Set Up Your PATH for Python
 
 Now that you have **Python 3** installed, let’s make sure pip, the Python package installer, is up to date. This will help avoid any compatibility issues.
 
-### Update pip and Set Up Your PATH for Python on macOS
-
-#### Update pip
+### Update pip
 
 To update pip, open your Terminal and type:
 
@@ -115,7 +89,7 @@ Consider adding this directory to PATH or, if you prefer to suppress this warnin
 ```
 it means we’ll need to update the **PATH environment variable** to make sure Python-related commands like pip are accessible from the command line.
 
-#### Add Python to Your PATH
+### Add Python to Your PATH
 
 If you saw the warning above, it’s time to update your PATH variable. This tells your system where to find Python binaries, like pip, and ensures [Inductiva’s Command Line Interface](https://docs.inductiva.ai/en/latest/cli/cli-overview.html) can be accessed later on.
 
@@ -127,12 +101,13 @@ If you saw the warning above, it’s time to update your PATH variable. This tel
     echo $PATH
     ```
 
-You should see something like this:  
-<div align="center">
-    <img src="../_static/echo_path.png" alt="Echo Path">
-</div>
+    You should see something like this:  
 
-If you don’t see */Users/YOURUSERNAME/Library/Python/3.9/bin* in the output, it means this directory isn’t in your PATH yet.
+    ```bash
+    /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/
+    ```
+
+    In this case, there’s no */Users/YOURUSERNAME/Library/Python/3.9/bin* directory listed, which means pip is not accessible from the command line. We would need to add the Python path manually to ensure smooth installation and usage.
 
 ````{eval-rst}
 .. important::
@@ -165,20 +140,6 @@ If you don’t see */Users/YOURUSERNAME/Library/Python/3.9/bin* in the output, i
     echo $PATH
     ```
     You should now see */Users/YOURUSERNAME/Library/Python/3.9/bin* included at the end of the PATH.
-
-### Update pip and Set Up Your PATH for Python on Windows
-
-#### Update pip
-
-To update pip, open your Command Prompt and type:
-
-```bash
-python3 -m pip install --upgrade pip
-```
-
-Since we installed Python using the Microsoft Store, this command should run smoothly and with no issues.
-
-
 ---
 
 Awesome! Now that pip is updated and Python is set in your PATH, you’re all set for [installing the Inductiva Python Package](https://console.inductiva.ai/) and start simulating!

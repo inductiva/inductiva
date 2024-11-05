@@ -5,10 +5,10 @@
 ```{toctree}
 ---
 caption: Ready Your System
-maxdepth: 1 
+maxdepth: 2 
 hidden: true
 ---
-preinstallation/system-requirements
+preinstallation/system/system-requirements
 
 ```
 
