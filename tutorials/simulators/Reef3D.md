@@ -109,7 +109,7 @@ We'll run this simulation on:
 1. **Download Input Files**: Get the input files from the
 [Reef3D tutorials](https://github.com/REEF3D/REEF3D/tree/master/Tutorials/REEF3D_CFD/10_2%203D%20Dam%20Break%20with%20Obstacle).
 
-   **Directory Structure**:
+	**Directory Structure**:
    ```bash
    ls -lasgo .
     total 16
@@ -119,61 +119,61 @@ We'll run this simulation on:
     8 -rw-rw-r--@  1   141 Sep  4 08:46 ctrl.txt
    ```
 
+	Before we proceed, let's inspect the files to check three Reed3D parameters that
+	are important to understand before we configure our simulation run. These
+	parameters are: `N 41`, `P 30` and `M 10`:
+
+	**control.txt (for DiveMESH):**
+	
+	```
+	C 11 21
+	C 12 21
+	C 13 21
+	C 14 21
+	C 15 21
+	C 16 21
+
+	B 1 0.025
+	B 10 0.0 2.0 0.0 1.0 0.0 1.0
+	O 10 1.2 1.4 0.4 0.6 0.0 1.0
+
+	M 10 4    ---- defines the nr. of processors for parallel computations (4)
+	```
+
+	**ctrl.txt (for Reef3D):**
+	
+	```
+	D 10 4
+	D 20 2
+	D 30 1
+	F 30 3
+	F 40 3
+	F 54 0.5
+	F 56 0.7
+	N 40 3
+	N 41 25.0    ---- set the maximum modeled time (25 seconds).
+	N 45 50000
+	N 47 0.2
+	M 10 4    ---- defines the nr. of processors for parallel computations (4)
+	P 10 1
+	P 30 0.01    ---- defines the rate of paraview results (1 frame per 0.01 s)
+	T 10 0
+	W 22 -9.81
+	```
+
+	`M 10` controls the level of parallelism. `N 41` controls the modeled time. `P 30`
+	controls the rate of Paraview results.
+
 ### Step 1: Adjust Simulation Parameters
 
-Before we proceed, let's inspect the files to check three Reed3D parameters that
-are important to understand before we configure our simulation run. These
-parameters are: `N 41`, `P 30` and `M 10`:
-
-**control.txt (for DiveMESH):**
-```
-C 11 21
-C 12 21
-C 13 21
-C 14 21
-C 15 21
-C 16 21
-
-B 1 0.025
-B 10 0.0 2.0 0.0 1.0 0.0 1.0
-O 10 1.2 1.4 0.4 0.6 0.0 1.0
-
-M 10 4    ---- defines the nr. of processors for parallel computations (4)
-```
-
-**ctrl.txt (for Reef3D):**
-```
-D 10 4
-D 20 2
-D 30 1
-F 30 3
-F 40 3
-F 54 0.5
-F 56 0.7
-N 40 3
-N 41 25.0    ---- set the maximum modeled time (25 seconds).
-N 45 50000
-N 47 0.2
-M 10 4    ---- defines the nr. of processors for parallel computations (4)
-P 10 1
-P 30 0.01    ---- defines the rate of paraview results (1 frame per 0.01 s)
-T 10 0
-W 22 -9.81
-```
-
-`M 10` controls the level of parallelism. `N 41` controls the modeled time. `P 30`
-controls the rate of Paraview results.
-
-----
-
-For a faster simulation, modify the following parameters:
+	For a faster simulation, modify the following parameters:
 
 - **Level of parallelism (`M 10`)**: 56
 - **Simulation time (`N 41`)**: 25.0
 - **Paraview results rate (`P 30`)**: 0.01
 
-This parameters will allow us to run the simulation faster and limited to 25 seconds.
-Forthermore, we will generate a Paraview result every 0.01 seconds.
+	This parameters will allow us to run the simulation faster and limited to 25 seconds.
+	Forthermore, we will generate a Paraview result every 0.01 seconds.
 
 ### Step 2: Running the Simulation
 
@@ -181,88 +181,88 @@ Forthermore, we will generate a Paraview result every 0.01 seconds.
 
 1. **Pick your machine**:
 
-For this simulation, we will use a `c2d-highcpu-112` machine. We will also use
-a 20 GB disk to store the simulation files.
+	For this simulation, we will use a `c2d-highcpu-112` machine. We will also use
+	a 20 GB disk to store the simulation files.
 
-```python
-import inductiva
-machine_group = inductiva.resources.MachineGroup(
-					machine_type="c2d-highcpu-112",
-					spot=True,
-					data_disk_gb=20)
-```
-**Note**: `spot` machines are a lot cheaper but can be terminated by the
-provider if needed.
+	```python
+	import inductiva
+	machine_group = inductiva.resources.MachineGroup(
+						machine_type="c2d-highcpu-112",
+						spot=True,
+						data_disk_gb=20)
+	```
+	**Note**: `spot` machines are a lot cheaper but can be terminated by the
+	provider if needed.
 
 2. **Start your machine**
-```python
-machine_group.start()
-```
+	```python
+	machine_group.start()
+	```
 
 #### b. Simulation inputs
 1. **Specify Simulation Directory**:
-Let's start by defining a variable that points to the `10_2_3D_Dam_Break_with_Obstacle`
-folder where all your simulation files are located.
+	Let's start by defining a variable that points to the `10_2_3D_Dam_Break_with_Obstacle`
+	folder where all your simulation files are located.
 
-```python
-input_dir = "./10_2_3D_Dam_Break_with_Obstacle"
-```
+	```python
+	input_dir = "./10_2_3D_Dam_Break_with_Obstacle"
+	```
 
 #### c. Run your simulation
 
 1. **Run the simulation**:
-We now have all we need to run our simulation.
-```python
-#Choose your simulator
-reef3d = inductiva.simulators.REEF3D()
+	We now have all we need to run our simulation.
+	```python
+	#Choose your simulator
+	reef3d = inductiva.simulators.REEF3D()
 
-task = reef3d.run(
-	input_dir=input_dir,
-	on=machine_group,
-	n_vcpus=56,
-	use_hwthread=False,
-	storage_dir="3D_dam_break_with_obstacle")
-```
+	task = reef3d.run(
+		input_dir=input_dir,
+		on=machine_group,
+		n_vcpus=56,
+		use_hwthread=False,
+		storage_dir="3D_dam_break_with_obstacle")
+	```
 
-In this snippet, two arguments might need clarification:
+	In this snippet, two arguments might need clarification:
 
-- `n_vcpus`: This sets the number of virtual CPUs (vCPUs) for your simulation,
-essentially determining how many parts your simulation will be split into to
-run in parallel. Here, we’re dividing the simulation into 56 parts and running
-each part simultaneously.
+	- `n_vcpus`: This sets the number of virtual CPUs (vCPUs) for your simulation,
+	essentially determining how many parts your simulation will be split into to
+	run in parallel. Here, we’re dividing the simulation into 56 parts and running
+	each part simultaneously.
 
-- `use_hwthread`: This argument is set to `False` to disable hyper-threading. Since
-we are only using 56 vCPUs, we don’t need hyper-threading to run the simulation.
+	- `use_hwthread`: This argument is set to `False` to disable hyper-threading. Since
+	we are only using 56 vCPUs, we don’t need hyper-threading to run the simulation.
 
-- `storage_dir`: This is the directory where the simulation outputs will be
-stored. You can access these outputs once the simulation is complete.
+	- `storage_dir`: This is the directory where the simulation outputs will be
+	stored. You can access these outputs once the simulation is complete.
 
 2. **Wait and Download Outputs**:
-That is it. Our simulation is now running on the cloud. We can `wait` for the
-simulation to be over, or we can turn our computer off go for a coffe (☕️).
-```python
-task.wait()
-machine_group.terminate()
-```
-**Note**: run `inductiva logs task_id` ro check the stdout of the simulation
-process in real time.
+	That is it. Our simulation is now running on the cloud. We can `wait` for the
+	simulation to be over, or we can turn our computer off go for a coffe (☕️).
+	```python
+	task.wait()
+	machine_group.terminate()
+	```
+	**Note**: run `inductiva logs task_id` ro check the stdout of the simulation
+	process in real time.
 
 3. **Terminate Machine**:
-Once our simulation is over we can/should terminate our machine to save on costs.
-If you forget, dont worry we got your back. By default, a machine will be
-automaticly terminated if no simulation runs on it for 30 minutes.
+	Once our simulation is over we can/should terminate our machine to save on costs.
+	If you forget, dont worry we got your back. By default, a machine will be
+	automaticly terminated if no simulation runs on it for 30 minutes.
 
-```python
-machine_group.terminate()
-```
+	```python
+	machine_group.terminate()
+	```
 
 4. **Check your simulation summary**:
-Now that our simulation has finished we can print a summary of said simulation.
-This includes information about the execution times, outputs generated and
-much more.
-```python
-task.print_summary()
-```
+	Now that our simulation has finished we can print a summary of said simulation.
+	This includes information about the execution times, outputs generated and
+	much more.
+	```python
+	task.print_summary()
+	```
 
 ### Step 4: Enhancing Performance with MPI Cluster
 
