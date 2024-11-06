@@ -175,7 +175,7 @@ machine_group = inductiva.resources.MachineGroup(
 					machine_type="c2d-highcpu-112",
 					spot=True,
 					data_disk_gb=20,
-                    auto_resize_disk_max_gb=250)
+					auto_resize_disk_max_gb=250)
 
 machine_group.start()
 
@@ -337,4 +337,4 @@ simulator being used.
 
 Download and analyze your results locally once complete. 
 
-Happy simulating!
+Happy simulations!

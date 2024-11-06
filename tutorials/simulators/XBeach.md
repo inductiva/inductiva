@@ -204,7 +204,7 @@ Running the simulation on a high-performance machine it's simple and easy. And t
 
 Download and analyze your results locally once complete. 
 
-Happy simulating!
+Happy simulations!
 
 ## Available Benchmarks for XBeach
 
