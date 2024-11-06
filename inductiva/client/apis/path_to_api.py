@@ -72,11 +72,11 @@ from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
-from inductiva.client.apis.paths.storage_folder_name_input import StorageFolderNameInput
-from inductiva.client.apis.paths.storage_folder_name_input_url import StorageFolderNameInputUrl
-from inductiva.client.apis.paths.storage_folder_name_input_notify import StorageFolderNameInputNotify
-from inductiva.client.apis.paths.storage_folder_name_input_remote import StorageFolderNameInputRemote
-from inductiva.client.apis.paths.storage_folder_name import StorageFolderName
+from inductiva.client.apis.paths.storage_input import StorageInput
+from inductiva.client.apis.paths.storage_input_url import StorageInputUrl
+from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
+from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
+from inductiva.client.apis.paths.storage_ import Storage
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
@@ -237,16 +237,16 @@ PathToApi = typing_extensions.TypedDict(
             StorageCost,
         PathValues.STORAGE_CONTENTS:
             StorageContents,
-        PathValues.STORAGE_FOLDER_NAME_INPUT:
-            StorageFolderNameInput,
-        PathValues.STORAGE_FOLDER_NAME_INPUT_URL:
-            StorageFolderNameInputUrl,
-        PathValues.STORAGE_FOLDER_NAME_INPUT_NOTIFY:
-            StorageFolderNameInputNotify,
-        PathValues.STORAGE_FOLDER_NAME_INPUT_REMOTE:
-            StorageFolderNameInputRemote,
-        PathValues.STORAGE_FOLDER_NAME:
-            StorageFolderName,
+        PathValues.STORAGE_INPUT:
+            StorageInput,
+        PathValues.STORAGE_INPUT_URL:
+            StorageInputUrl,
+        PathValues.STORAGE_INPUT_NOTIFY:
+            StorageInputNotify,
+        PathValues.STORAGE_INPUT_REMOTE:
+            StorageInputRemote,
+        PathValues.STORAGE_:
+            Storage,
         PathValues.VERSION:
             Version,
         PathValues.VERSIONCHECK:
@@ -422,16 +422,16 @@ path_to_api = PathToApi({
         StorageCost,
     PathValues.STORAGE_CONTENTS:
         StorageContents,
-    PathValues.STORAGE_FOLDER_NAME_INPUT:
-        StorageFolderNameInput,
-    PathValues.STORAGE_FOLDER_NAME_INPUT_URL:
-        StorageFolderNameInputUrl,
-    PathValues.STORAGE_FOLDER_NAME_INPUT_NOTIFY:
-        StorageFolderNameInputNotify,
-    PathValues.STORAGE_FOLDER_NAME_INPUT_REMOTE:
-        StorageFolderNameInputRemote,
-    PathValues.STORAGE_FOLDER_NAME:
-        StorageFolderName,
+    PathValues.STORAGE_INPUT:
+        StorageInput,
+    PathValues.STORAGE_INPUT_URL:
+        StorageInputUrl,
+    PathValues.STORAGE_INPUT_NOTIFY:
+        StorageInputNotify,
+    PathValues.STORAGE_INPUT_REMOTE:
+        StorageInputRemote,
+    PathValues.STORAGE_:
+        Storage,
     PathValues.VERSION:
         Version,
     PathValues.VERSIONCHECK:

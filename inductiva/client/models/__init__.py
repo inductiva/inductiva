@@ -36,6 +36,7 @@ from inductiva.client.model.executer_tracker_token import ExecuterTrackerToken
 from inductiva.client.model.file_download_details import FileDownloadDetails
 from inductiva.client.model.file_download_url import FileDownloadUrl
 from inductiva.client.model.file_info import FileInfo
+from inductiva.client.model.file_upload_details import FileUploadDetails
 from inductiva.client.model.file_upload_url import FileUploadUrl
 from inductiva.client.model.http_validation_error import HTTPValidationError
 from inductiva.client.model.machine_group_status import MachineGroupStatus
