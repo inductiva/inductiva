@@ -170,12 +170,12 @@ in the upcoming steps.
 
 ```python
 import inductiva
+
 machine_group = inductiva.resources.MachineGroup(
 					machine_type="c2d-highcpu-112",
 					spot=True,
 					data_disk_gb=20,
-                    auto_resize_disk_max_gb=250,
-                    max_idle_time=)
+                    auto_resize_disk_max_gb=250)
 
 machine_group.start()
 
@@ -309,29 +309,31 @@ we can change our machine configuration to an **MPI cluster** with two machines:
 
 ```python
 mpi_cluster = inductiva.resources.MPICluster(
-                  machine_type="c2d-highcpu-112",
-                  data_disk_gb=20,
+                  machine_type="c2d-highcpu-56",
+                  data_disk_gb=250,
                   num_machines=2)
 mpi_cluster.start()
 
 # Re-run the simulation with adjusted `n_vcpus`
-task = openfoam.run(
-                  input_dir=input_dir,
-                  commands=commands,
-                  n_vcpus=112,
-                  use_hwthread=False,
-                  on=mpi_cluster)
+task = reef3d.run(
+		input_dir=input_dir,
+		on=mpi_cluster,
+		n_vcpus=56,
+		use_hwthread=True,
+		storage_dir="3D_dam_break_with_obstacle_cluster")
 ```
 
 As you can see, scaling up (or down) is easy—just select a new resource. 
 We encourage you to experiment with different machines and configurations!
 
-> **Note**: Ensure to adjust `M 10` in `control.txt` and `ctrl.txt` to match the 112 vCPU setup.
-
 ### Conclusion
 
-Running the simulation on a high-performance machine and scaling it on an MPI
-cluster can significantly reduce computation time (from X to Y). 
+Running the simulation on a high-performance machine or scaling it across an
+MPI cluster can significantly reduce computation time. However, in our case,
+this particular simulation does not benefit much from these optimizations due
+to its relatively low computational demands. The performance gain depends
+heavily on both the simulation's complexity and the capabilities of the
+simulator being used. 
 
 Download and analyze your results locally once complete. 
 
