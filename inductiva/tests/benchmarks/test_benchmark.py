@@ -35,8 +35,8 @@ def test_benchmark_single_set_default(benchmark):
 def test_benchmark_partial_set_default(benchmark):
     Benchmark.set_default(self=benchmark, simulator="sim")
     assert benchmark.simulator == "sim"
-    assert benchmark.input_dir == None
-    assert benchmark.on == None
+    assert benchmark.input_dir is None
+    assert benchmark.on is None
     assert benchmark.kwargs == {}
 
 
