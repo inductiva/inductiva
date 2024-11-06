@@ -118,7 +118,7 @@ For instance, if your container has OpenMPI 1.10.6, choose a compatible OpenMPI
 version (like 1.10.7) in `MPIConfig`.
 
 Currently, we support OpenMPI versions 1.10.7 and 4.1.6. If you need a different
-version, please contact us.
+version, please contact us at [contact@inductiva.ai](mailto:contact@inductiva.ai).
 
 ## Advanced Tutorial: Running our Reef3D Advanced example
 
@@ -333,8 +333,9 @@ customImage = inductiva.simulators.CustomImage(
         storage_dir="3D_dam_break_with_obstacle")
 	```
 
-	As you can see, this is very similar to the Reef3D example. The only difference
-    is that here we need to specify the commands to run the simulation.
+	As you can see, this is very similar to the Reef3D example. The only
+	difference here is that we need to specify the specific commands required
+	to run the simulation.
 
 2. **Wait for the simulation to finish**:
 	That is it. Our simulation is now running on the cloud. Every step from now
