@@ -21,5 +21,3 @@ Pre-Install Must-Dos:
 osx
 windows
 ```
-
-----
