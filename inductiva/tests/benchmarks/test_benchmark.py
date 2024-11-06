@@ -7,8 +7,8 @@ from inductiva.resources import MachineGroup
 from inductiva.simulators import Simulator
 
 
-@pytest.fixture
-def benchmark_instance():
+@pytest.fixture(name="benchmark")
+def benchmark_fixture():
     mocked_benchmark = mock.MagicMock(spec=Benchmark)
     mocked_benchmark.runs = []
     mocked_benchmark.simulator = None
@@ -19,76 +19,76 @@ def benchmark_instance():
     return mocked_benchmark
 
 
-def test_benchmark_single_set_default(benchmark_instance):
-    Benchmark.set_default(self=benchmark_instance,
+def test_benchmark_single_set_default(benchmark):
+    Benchmark.set_default(self=benchmark,
                           simulator="sim",
                           input_dir="dir",
                           on="mg",
                           a=1,
                           b=2)
-    assert benchmark_instance.simulator == "sim"
-    assert benchmark_instance.input_dir == "dir"
-    assert benchmark_instance.on == "mg"
-    assert benchmark_instance.kwargs == {"a": 1, "b": 2}
+    assert benchmark.simulator == "sim"
+    assert benchmark.input_dir == "dir"
+    assert benchmark.on == "mg"
+    assert benchmark.kwargs == {"a": 1, "b": 2}
 
 
-def test_benchmark_partial_set_default(benchmark_instance):
-    Benchmark.set_default(self=benchmark_instance, simulator="sim")
-    assert benchmark_instance.simulator == "sim"
-    assert benchmark_instance.input_dir is None
-    assert benchmark_instance.on is None
-    assert benchmark_instance.kwargs == {}
+def test_benchmark_partial_set_default(benchmark):
+    Benchmark.set_default(self=benchmark, simulator="sim")
+    assert benchmark.simulator == "sim"
+    assert benchmark.input_dir is None
+    assert benchmark.on is None
+    assert benchmark.kwargs == {}
 
 
-def test_benchmark_multiple_set_default(benchmark_instance):
-    Benchmark.set_default(self=benchmark_instance, simulator="sim", a=1)
-    Benchmark.set_default(self=benchmark_instance, a=1, b=2)
-    Benchmark.set_default(self=benchmark_instance, input_dir="dir", on="mg")
-    assert benchmark_instance.simulator == "sim"
-    assert benchmark_instance.input_dir == "dir"
-    assert benchmark_instance.on == "mg"
-    assert benchmark_instance.kwargs == {"a": 1, "b": 2}
+def test_benchmark_multiple_set_default(benchmark):
+    Benchmark.set_default(self=benchmark, simulator="sim", a=1)
+    Benchmark.set_default(self=benchmark, a=1, b=2)
+    Benchmark.set_default(self=benchmark, input_dir="dir", on="mg")
+    assert benchmark.simulator == "sim"
+    assert benchmark.input_dir == "dir"
+    assert benchmark.on == "mg"
+    assert benchmark.kwargs == {"a": 1, "b": 2}
 
 
-def test_benchmark_single_add_run(benchmark_instance):
-    Benchmark.add_run(self=benchmark_instance,
+def test_benchmark_single_add_run(benchmark):
+    Benchmark.add_run(self=benchmark,
                       simulator="sim",
                       input_dir="dir",
                       on="mg",
                       a=1,
                       b=2)
-    assert benchmark_instance.runs == [("sim", "dir", "mg", {"a": 1, "b": 2})]
+    assert benchmark.runs == [("sim", "dir", "mg", {"a": 1, "b": 2})]
 
 
-def test_benchmark_config_before_add_run(benchmark_instance):
-    Benchmark.set_default(self=benchmark_instance,
+def test_benchmark_config_before_add_run(benchmark):
+    Benchmark.set_default(self=benchmark,
                           simulator="sim",
                           input_dir="dir",
                           on="mg",
                           a=1,
                           b=2)
-    assert benchmark_instance.runs == []
-    Benchmark.add_run(self=benchmark_instance)
-    assert benchmark_instance.runs == [("sim", "dir", "mg", {"a": 1, "b": 2})]
+    assert benchmark.runs == []
+    Benchmark.add_run(self=benchmark)
+    assert benchmark.runs == [("sim", "dir", "mg", {"a": 1, "b": 2})]
 
 
-def test_benchmark_multiple_add_runs(benchmark_instance):
-    Benchmark.set_default(self=benchmark_instance,
+def test_benchmark_multiple_add_runs(benchmark):
+    Benchmark.set_default(self=benchmark,
                           simulator="sim",
                           input_dir="dir",
                           a=1)
-    Benchmark.add_run(self=benchmark_instance, on="m2", b=2)
-    Benchmark.add_run(self=benchmark_instance, on="m4", b=4)
-    assert benchmark_instance.runs == [("sim", "dir", "m2", {
+    Benchmark.add_run(self=benchmark, on="m2", b=2)
+    Benchmark.add_run(self=benchmark, on="m4", b=4)
+    assert benchmark.runs == [("sim", "dir", "m2", {
         "a": 1,
         "b": 2
     }), ("sim", "dir", "m4", {
         "a": 1,
         "b": 4
     })]
-    Benchmark.set_default(self=benchmark_instance, on="m3")
-    Benchmark.add_run(self=benchmark_instance, b=3)
-    assert benchmark_instance.runs == [("sim", "dir", "m2", {
+    Benchmark.set_default(self=benchmark, on="m3")
+    Benchmark.add_run(self=benchmark, b=3)
+    assert benchmark.runs == [("sim", "dir", "m2", {
         "a": 1,
         "b": 2
     }), ("sim", "dir", "m4", {
@@ -100,21 +100,21 @@ def test_benchmark_multiple_add_runs(benchmark_instance):
     })]
 
 
-def test_benchmark_run(benchmark_instance):
+def test_benchmark_run(benchmark):
     simulator = mock.MagicMock(spec=Simulator)
     simulator.run = mock.MagicMock(return_value=None)
     m4 = mock.MagicMock(spec=MachineGroup)
     m8 = mock.MagicMock(spec=MachineGroup)
     m4.start = mock.MagicMock(return_value=None)
     m8.start = mock.MagicMock(return_value=None)
-    Benchmark.set_default(self=benchmark_instance,
+    Benchmark.set_default(self=benchmark,
                           simulator=simulator,
                           input_dir="dir",
                           a=1)
-    assert benchmark_instance.runs == []
-    Benchmark.add_run(self=benchmark_instance, on=m4, b=4)
-    Benchmark.add_run(self=benchmark_instance, on=m8, b=8)
-    assert benchmark_instance.runs == [
+    assert benchmark.runs == []
+    Benchmark.add_run(self=benchmark, on=m4, b=4)
+    Benchmark.add_run(self=benchmark, on=m8, b=8)
+    assert benchmark.runs == [
         (simulator, "dir", m4, {
             "a": 1,
             "b": 4
@@ -124,11 +124,11 @@ def test_benchmark_run(benchmark_instance):
             "b": 8
         }),
     ]
-    Benchmark.run(self=benchmark_instance)
-    assert benchmark_instance.runs == []
+    Benchmark.run(self=benchmark)
+    assert benchmark.runs == []
 
 
-def test_benchmark_runs_info(benchmark_instance):
+def test_benchmark_runs_info(benchmark):
     task1 = mock.MagicMock()
     task1.download_inputs = mock.MagicMock(return_value=Path("input_dir_path1"))
     task1.info = mock.MagicMock()
@@ -147,11 +147,11 @@ def test_benchmark_runs_info(benchmark_instance):
     task2.info.simulator = "sim2"
     task2.info.executer.vm_type = "vm2"
 
-    benchmark_instance.get_tasks = mock.MagicMock(return_value=[task1, task2])
+    benchmark.get_tasks = mock.MagicMock(return_value=[task1, task2])
 
     with mock.patch("builtins.open",
                     mock.mock_open(read_data='{"param": "value"}')):
-        info = Benchmark.runs_info(self=benchmark_instance, summary=False)
+        info = Benchmark.runs_info(self=benchmark, summary=False)
         assert info == [
             {
                 "task_id": "task1",
@@ -172,7 +172,7 @@ def test_benchmark_runs_info(benchmark_instance):
         ]
 
 
-def test_benchmark_runs_info_summary(benchmark_instance):
+def test_benchmark_runs_info_summary(benchmark):
     task1 = mock.MagicMock()
     task1.download_inputs = mock.MagicMock(return_value=Path("input_dir_path1"))
     task1.info = mock.MagicMock()
@@ -191,11 +191,11 @@ def test_benchmark_runs_info_summary(benchmark_instance):
     task2.info.simulator = "sim1"
     task2.info.executer.vm_type = "vm2"
 
-    benchmark_instance.get_tasks = mock.MagicMock(return_value=[task1, task2])
+    benchmark.get_tasks = mock.MagicMock(return_value=[task1, task2])
 
     with mock.patch("builtins.open",
                     mock.mock_open(read_data='{"param": "value"}')):
-        info = Benchmark.runs_info(self=benchmark_instance, summary=True)
+        info = Benchmark.runs_info(self=benchmark, summary=True)
         assert info == [
             {
                 "task_id": "task1",
