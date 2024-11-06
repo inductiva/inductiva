@@ -9,14 +9,14 @@ from inductiva.simulators import Simulator
 
 @pytest.fixture
 def benchmark():
-    benchmark = mock.MagicMock(spec=Benchmark)
-    benchmark.runs = []
-    benchmark.simulator = None
-    benchmark.input_dir = None
-    benchmark.on = None
-    benchmark.kwargs = {}
-    benchmark.open = mock.MagicMock(return_value=None)
-    return benchmark
+    mocked_benchmark = mock.MagicMock(spec=Benchmark)
+    mocked_benchmark.runs = []
+    mocked_benchmark.simulator = None
+    mocked_benchmark.input_dir = None
+    mocked_benchmark.on = None
+    mocked_benchmark.kwargs = {}
+    mocked_benchmark.open = mock.MagicMock(return_value=None)
+    return mocked_benchmark
 
 
 def test_benchmark_single_set_default(benchmark):
