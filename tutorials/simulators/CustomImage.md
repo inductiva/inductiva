@@ -123,7 +123,7 @@ version, please contact us.
 ## Advanced Tutorial: Running our Reef3D Advanced example
 
 Let's now run a more advanced example. For this we will be using our 
-[advanced tutorial on Reef3D](../simulators/Reef3D.md#advanced-tutorial-3d-dam-break-scenario-with-obstacle)
+[advanced tutorial on Reef3D](Reef3D.md#advanced-tutorial-3d-dam-break-scenario-with-obstacle)
 but we will be running it using our `CustomImage` simulator.
 
 We will be skipping some explenations related with Reef3D and will focus more on
