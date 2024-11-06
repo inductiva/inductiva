@@ -73,10 +73,7 @@ def test_benchmark_config_before_add_run(benchmark):
 
 
 def test_benchmark_multiple_add_runs(benchmark):
-    Benchmark.set_default(self=benchmark,
-                          simulator="sim",
-                          input_dir="dir",
-                          a=1)
+    Benchmark.set_default(self=benchmark, simulator="sim", input_dir="dir", a=1)
     Benchmark.add_run(self=benchmark, on="m2", b=2)
     Benchmark.add_run(self=benchmark, on="m4", b=4)
     assert benchmark.runs == [("sim", "dir", "m2", {
