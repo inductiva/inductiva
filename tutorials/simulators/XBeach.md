@@ -44,12 +44,12 @@ In this example, we’ll run an extensive simulation using configuration scripts
 
 1. **Download Input Files**: We'll use a dataset from "XBeach model setup and results for beach and dune enhancement scenarios on Galveston Island, Texas," available [here](https://data.griidc.org/data/HI.x833.000:0001).
 
-1. Go to the [dataset page](https://data.griidc.org/data/HI.x833.000:0001#individual-files).
-2. Under **Files >> XBeach_Model_Runs >> Beach_Nourish_Only >> Input**, download all files in this directory:
+2. Go to the [dataset page](https://data.griidc.org/data/HI.x833.000:0001#individual-files).
+3. Under **Files >> XBeach_Model_Runs >> Beach_Nourish_Only >> Input**, download all files in this directory:
    ![File Selection](xbeach_source_files.png)
-3. Place these files in a `Beach_Nourish_Only` folder, resulting in a structure like:
+4. Place these files in a `Beach_Nourish_Only` folder, resulting in a structure like:
 
-	```
+```
 	ls -las Beach_Nourish_Only 
 	total 130976
     0 drwxr-xr-x   12 paulobarbosa  staff       384 Nov  6 10:15 .
@@ -64,7 +64,7 @@ In this example, we’ll run an extensive simulation using configuration scripts
 26184 -rw-r--r--@   1 paulobarbosa  staff  13404906 Nov  6 10:14 x.grd
     8 -rw-r--r--@   1 paulobarbosa  staff       635 Nov  6 10:14 xbeach.slurm
 26184 -rw-r--r--@   1 paulobarbosa  staff  13404906 Nov  6 10:14 y.grd
-	```
+```
 
 ### Overview
 
