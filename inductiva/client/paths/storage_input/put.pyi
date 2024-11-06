@@ -1,4 +1,5 @@
 # coding: utf-8
+
 """
 
 
@@ -27,35 +28,32 @@ from inductiva.client import schemas  # noqa: F401
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.http_validation_error import HTTPValidationError
 
-from . import path
-
 # Query params
-FileNameSchema = schemas.StrSchema
+PathSchema = schemas.StrSchema
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams', {})
+    'RequestRequiredQueryParams',
+    {
+    }
+)
 RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams', {
-        'file_name': typing.Union[
-            FileNameSchema,
-            str,
-        ],
-        'provider_id': typing.Union[
-            ProviderIdSchema,
-        ],
+    'RequestOptionalQueryParams',
+    {
+        'path': typing.Union[PathSchema, str, ],
+        'provider_id': typing.Union[ProviderIdSchema, ],
     },
-    total=False)
+    total=False
+)
 
 
-class RequestQueryParams(RequestRequiredQueryParams,
-                         RequestOptionalQueryParams):
+class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams):
     pass
 
 
-request_query_file_name = api_client.QueryParameter(
-    name="file_name",
+request_query_path = api_client.QueryParameter(
+    name="path",
     style=api_client.ParameterStyle.FORM,
-    schema=FileNameSchema,
+    schema=PathSchema,
     explode=True,
 )
 request_query_provider_id = api_client.QueryParameter(
@@ -64,32 +62,17 @@ request_query_provider_id = api_client.QueryParameter(
     schema=ProviderIdSchema,
     explode=True,
 )
-# Path params
-FolderNameSchema = schemas.StrSchema
-RequestRequiredPathParams = typing_extensions.TypedDict(
-    'RequestRequiredPathParams', {
-        'folder_name': typing.Union[
-            FolderNameSchema,
-            str,
-        ],
-    })
-RequestOptionalPathParams = typing_extensions.TypedDict(
-    'RequestOptionalPathParams', {}, total=False)
+# body param
+SchemaForRequestBodyApplicationOctetStream = schemas.BinarySchema
 
 
-class RequestPathParams(RequestRequiredPathParams, RequestOptionalPathParams):
-    pass
-
-
-request_path_folder_name = api_client.PathParameter(
-    name="folder_name",
-    style=api_client.ParameterStyle.SIMPLE,
-    schema=FolderNameSchema,
+request_body_body = api_client.RequestBody(
+    content={
+        'application/octet-stream': api_client.MediaType(
+            schema=SchemaForRequestBodyApplicationOctetStream),
+    },
     required=True,
 )
-_auth = [
-    'APIKeyHeader',
-]
 SchemaFor200ResponseBodyApplicationJson = schemas.AnyTypeSchema
 
 
@@ -105,9 +88,8 @@ class ApiResponseFor200(api_client.ApiResponse):
 _response_for_200 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json':
-            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
-                                ),
+        'application/json': api_client.MediaType(
+            schema=SchemaFor200ResponseBodyApplicationJson),
     },
 )
 SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
@@ -125,104 +107,102 @@ class ApiResponseFor422(api_client.ApiResponse):
 _response_for_422 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor422,
     content={
-        'application/json':
-            api_client.MediaType(schema=SchemaFor422ResponseBodyApplicationJson
-                                ),
+        'application/json': api_client.MediaType(
+            schema=SchemaFor422ResponseBodyApplicationJson),
     },
 )
-_status_code_to_response = {
-    '200': _response_for_200,
-    '422': _response_for_422,
-}
-_all_accept_content_types = ('application/json',)
+_all_accept_content_types = (
+    'application/json',
+)
 
 
 class BaseApi(api_client.Api):
-
     @typing.overload
-    def _delete_file_oapg(
+    def _upload_file_oapg(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: typing_extensions.Literal["application/octet-stream"] = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
 
     @typing.overload
-    def _delete_file_oapg(
+    def _upload_file_oapg(
         self,
-        skip_deserialization: typing_extensions.Literal[True],
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization:
-        ...
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+        ApiResponseFor200,
+    ]: ...
+
 
     @typing.overload
-    def _delete_file_oapg(
+    def _upload_file_oapg(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        skip_deserialization: typing_extensions.Literal[True],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+    ) -> api_client.ApiResponseWithoutDeserialization: ...
+
+    @typing.overload
+    def _upload_file_oapg(
+        self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
-        ...
+        ApiResponseFor200,
+        api_client.ApiResponseWithoutDeserialization,
+    ]: ...
 
-    def _delete_file_oapg(
+    def _upload_file_oapg(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = 'application/octet-stream',
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
         """
-        Delete File
+        Upload File
         :param skip_deserialization: If true then api_response.response will be set but
             api_response.body and api_response.headers will not be deserialized into schema
             class instances
         """
         self._verify_typed_dict_inputs_oapg(RequestQueryParams, query_params)
-        self._verify_typed_dict_inputs_oapg(RequestPathParams, path_params)
         used_path = path.value
-
-        _path_params = {}
-        for parameter in (request_path_folder_name,):
-            parameter_data = path_params.get(parameter.name, schemas.unset)
-            if parameter_data is schemas.unset:
-                continue
-            serialized_data = parameter.serialize(parameter_data)
-            _path_params.update(serialized_data)
-
-        for k, v in _path_params.items():
-            used_path = used_path.replace('{%s}' % k, v)
 
         prefix_separator_iterator = None
         for parameter in (
-                request_query_file_name,
-                request_query_provider_id,
+            request_query_path,
+            request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
             if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
-                )
-            serialized_data = parameter.serialize(parameter_data,
-                                                  prefix_separator_iterator)
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator()
+            serialized_data = parameter.serialize(parameter_data, prefix_separator_iterator)
             for serialized_value in serialized_data.values():
                 used_path += serialized_value
 
@@ -232,153 +212,204 @@ class BaseApi(api_client.Api):
             for accept_content_type in accept_content_types:
                 _headers.add('Accept', accept_content_type)
 
+        if body is schemas.unset:
+            raise exceptions.ApiValueError(
+                'The required body parameter has an invalid value of: unset. Set a valid value instead')
+        _fields = None
+        _body = None
+        serialized_data = request_body_body.serialize(body, content_type)
+        _headers.add('Content-Type', content_type)
+        if 'fields' in serialized_data:
+            _fields = serialized_data['fields']
+        elif 'body' in serialized_data:
+            _body = serialized_data['body']
         response = self.api_client.call_api(
             resource_path=used_path,
-            method='delete'.upper(),
+            method='put'.upper(),
             headers=_headers,
+            fields=_fields,
+            body=_body,
             auth_settings=_auth,
             stream=stream,
             timeout=timeout,
         )
 
         if skip_deserialization:
-            api_response = api_client.ApiResponseWithoutDeserialization(
-                response=response)
+            api_response = api_client.ApiResponseWithoutDeserialization(response=response)
         else:
-            response_for_status = _status_code_to_response.get(
-                str(response.status))
+            response_for_status = _status_code_to_response.get(str(response.status))
             if response_for_status:
-                api_response = response_for_status.deserialize(
-                    response, self.api_client.configuration)
+                api_response = response_for_status.deserialize(response, self.api_client.configuration)
             else:
-                api_response = api_client.ApiResponseWithoutDeserialization(
-                    response=response)
+                api_response = api_client.ApiResponseWithoutDeserialization(response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(status=response.status,
-                                          reason=response.reason,
-                                          api_response=api_response)
+            raise exceptions.ApiException(
+                status=response.status,
+                reason=response.reason,
+                api_response=api_response
+            )
 
         return api_response
 
 
-class DeleteFile(BaseApi):
+class UploadFile(BaseApi):
     # this class is used by api classes that refer to endpoints with operationId fn names
 
     @typing.overload
-    def delete_file(
+    def upload_file(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: typing_extensions.Literal["application/octet-stream"] = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
 
     @typing.overload
-    def delete_file(
+    def upload_file(
         self,
-        skip_deserialization: typing_extensions.Literal[True],
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization:
-        ...
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+        ApiResponseFor200,
+    ]: ...
+
 
     @typing.overload
-    def delete_file(
+    def upload_file(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        skip_deserialization: typing_extensions.Literal[True],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+    ) -> api_client.ApiResponseWithoutDeserialization: ...
+
+    @typing.overload
+    def upload_file(
+        self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
-        ...
+        ApiResponseFor200,
+        api_client.ApiResponseWithoutDeserialization,
+    ]: ...
 
-    def delete_file(
+    def upload_file(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = 'application/octet-stream',
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_file_oapg(query_params=query_params,
-                                      path_params=path_params,
-                                      accept_content_types=accept_content_types,
-                                      stream=stream,
-                                      timeout=timeout,
-                                      skip_deserialization=skip_deserialization)
+        return self._upload_file_oapg(
+            body=body,
+            query_params=query_params,
+            content_type=content_type,
+            accept_content_types=accept_content_types,
+            stream=stream,
+            timeout=timeout,
+            skip_deserialization=skip_deserialization
+        )
 
 
-class ApiFordelete(BaseApi):
+class ApiForput(BaseApi):
     # this class is used by api classes that refer to endpoints by path and http method names
 
     @typing.overload
-    def delete(
+    def put(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: typing_extensions.Literal["application/octet-stream"] = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-    ]:
-        ...
+        ApiResponseFor200,
+    ]: ...
 
     @typing.overload
-    def delete(
+    def put(
         self,
-        skip_deserialization: typing_extensions.Literal[True],
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization:
-        ...
+        skip_deserialization: typing_extensions.Literal[False] = ...,
+    ) -> typing.Union[
+        ApiResponseFor200,
+    ]: ...
+
 
     @typing.overload
-    def delete(
+    def put(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        skip_deserialization: typing_extensions.Literal[True],
+        content_type: str = ...,
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
+        accept_content_types: typing.Tuple[str] = _all_accept_content_types,
+        stream: bool = False,
+        timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
+    ) -> api_client.ApiResponseWithoutDeserialization: ...
+
+    @typing.overload
+    def put(
+        self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = ...,
+        query_params: RequestQueryParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-            ApiResponseFor200,
-            api_client.ApiResponseWithoutDeserialization,
-    ]:
-        ...
+        ApiResponseFor200,
+        api_client.ApiResponseWithoutDeserialization,
+    ]: ...
 
-    def delete(
+    def put(
         self,
+        body: typing.Union[SchemaForRequestBodyApplicationOctetStream,bytes, io.FileIO, io.BufferedReader, ],
+        content_type: str = 'application/octet-stream',
         query_params: RequestQueryParams = frozendict.frozendict(),
-        path_params: RequestPathParams = frozendict.frozendict(),
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = False,
     ):
-        return self._delete_file_oapg(query_params=query_params,
-                                      path_params=path_params,
-                                      accept_content_types=accept_content_types,
-                                      stream=stream,
-                                      timeout=timeout,
-                                      skip_deserialization=skip_deserialization)
+        return self._upload_file_oapg(
+            body=body,
+            query_params=query_params,
+            content_type=content_type,
+            accept_content_types=accept_content_types,
+            stream=stream,
+            timeout=timeout,
+            skip_deserialization=skip_deserialization
+        )
+
+
