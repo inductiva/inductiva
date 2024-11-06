@@ -1,4 +1,4 @@
-# Running Simulations with Custom Docker Images
+# Custom Docker Images
 
 In this tutorial, we will guide you through running simulations with custom
 Docker images. This can be particularly useful if you need to use a specific
@@ -293,31 +293,31 @@ customImage = inductiva.simulators.CustomImage(
 ```
 
 3. **Define Commands**:
-Our `CustomImage` simulator accepts a list of commands to run inside the
-container. We will be running two commands: `DiveMESH` and `REEF3D`, present
-in the Reef3D image.
+    Our `CustomImage` simulator accepts a list of commands to run inside the
+    container. We will be running two commands: `DiveMESH` and `REEF3D`, present
+    in the Reef3D image.
 
-```python
-# Define the MPI configuration
-mpi_config = inductiva.commands.MPIConfig("4.1.6", np=56, use_hwthread_cpus=False)
+    ```python
+    # Define the MPI configuration
+    mpi_config = inductiva.commands.MPIConfig("4.1.6", np=56, use_hwthread_cpus=False)
 
-# Define the commands to run with the MPI configuration
-command = inductiva.commands.Command("/REEF3D/bin/REEF3D", mpi_config=mpi_config)
+    # Define the commands to run with the MPI configuration
+    command = inductiva.commands.Command("/REEF3D/bin/REEF3D", mpi_config=mpi_config)
 
-# List of commands to run our simulation
-commands = [
-    "/DIVEMesh/bin/DiveMESH",
-    command
-]
-```
+    # List of commands to run our simulation
+    commands = [
+        "/DIVEMesh/bin/DiveMESH",
+        command
+    ]
+    ```
 
-Lets talk about the `MPIConfig` for a command. The `MPIConfig` class allows you
-to run your command with a specific MPI version. In this case, we are using
-OpenMPI version 4.1.6 with 56 processes. Creating your command with an `MPIConfig`
-will parallelize said command across the specified number of processes.
+    Lets talk about the `MPIConfig` for a command. The `MPIConfig` class allows you
+    to run your command with a specific MPI version. In this case, we are using
+    OpenMPI version 4.1.6 with 56 processes. Creating your command with an `MPIConfig`
+    will parallelize said command across the specified number of processes.
 
-**Note:** Not all commands can be parallelized. Make sure the command you are
-running supports parallelization.
+    **Note:** Not all commands can be parallelized. Make sure the command you are
+    running supports parallelization.
 
 #### c. Run Your Simulation
 
