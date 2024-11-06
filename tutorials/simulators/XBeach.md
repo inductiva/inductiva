@@ -52,18 +52,18 @@ In this example, we’ll run an extensive simulation using configuration scripts
 	```
 	ls -las Beach_Nourish_Only 
 	total 130976
-		0 drwxr-xr-x  12        384  5 Jun 16:13 .
-		0 drwxr-xr-x   3         96  5 Jun 16:14 ..
-		8 -rw-r--r--@  1       3069  5 Jun 16:12 README.txt
-	26184 -rw-r--r--@  1   13404906  5 Jun 16:12 bed.dep
-	26184 -rw-r--r--@  1   13404906  5 Jun 16:12 bedfricfile.txt
-	16 -rw-r--r--@  1       5324  5 Jun 16:12 jonswap3.txt
-	26184 -rw-r--r--@  1   13404906  5 Jun 16:12 nebed.dep
-		8 -rw-r--r--@  1       2281  5 Jun 16:12 params.txt
-	16 -rw-r--r--@  1       4850  5 Jun 16:12 tide.txt
-	26184 -rw-r--r--@  1   13404906  5 Jun 16:12 x.grd
-		8 -rw-r--r--@  1        635  5 Jun 16:12 xbeach.slurm
-	26184 -rw-r--r--@  1   13404906  5 Jun 16:12 y.grd
+    0 drwxr-xr-x   12 paulobarbosa  staff       384 Nov  6 10:15 .
+    0 drwx------@ 124 paulobarbosa  staff      3968 Nov  6 10:14 ..
+    8 -rw-r--r--@   1 paulobarbosa  staff      3069 Nov  6 10:14 README.txt
+26184 -rw-r--r--@   1 paulobarbosa  staff  13404906 Nov  6 10:14 bed.dep
+26184 -rw-r--r--@   1 paulobarbosa  staff  13404906 Nov  6 10:14 bedfricfile.txt
+   16 -rw-r--r--@   1 paulobarbosa  staff      5324 Nov  6 10:13 jonswap3.txt
+26184 -rw-r--r--@   1 paulobarbosa  staff  13404906 Nov  6 10:14 nebed.dep
+    8 -rw-r--r--@   1 paulobarbosa  staff      2296 Nov  6 10:15 params.txt
+   16 -rw-r--r--@   1 paulobarbosa  staff      4850 Nov  6 10:14 tide.txt
+26184 -rw-r--r--@   1 paulobarbosa  staff  13404906 Nov  6 10:14 x.grd
+    8 -rw-r--r--@   1 paulobarbosa  staff       635 Nov  6 10:14 xbeach.slurm
+26184 -rw-r--r--@   1 paulobarbosa  staff  13404906 Nov  6 10:14 y.grd
 	```
 
 ### Overview
