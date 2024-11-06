@@ -105,6 +105,42 @@ and place them in a folder named `highLiftConfiguration`.
    24 -rw-rw-r--@  1   11399 Jun 13 10:09 thumbnail.png
    ```
 
+### Overview
+
+Here’s the code you'll be working on as we progress through the tutorial. Don’t
+worry if it doesn’t all make sense right now; everything will become clearer
+in the upcoming steps.
+
+```python
+import inductiva
+
+machine_group = inductiva.resources.MachineGroup(
+            machine_type="c3d-highcpu-360",
+            spot=True)
+machine_group.start()
+
+input_dir = "/path/to/highLiftConfiguration"
+with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
+    commands = [line.strip() for line in file]
+
+#Choose your simulator
+openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
+
+task = openfoam.run(
+            input_dir=input_dir,
+            commands=commands,
+            n_vcpus=180,
+            use_hwthread=True,
+            on=machine_group)
+
+task.wait()
+task.download_outputs()
+machine_group.terminate()
+
+task.print_summary()
+
+```
+
 ### Step 1: Adjust Simulation Parameters
 
 For a faster simulation, modify the following parameters in the case definition
