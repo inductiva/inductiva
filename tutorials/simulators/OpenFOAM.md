@@ -389,7 +389,9 @@ picking a new resource. We encorage you to try other machines/configurations.
 
 Running the simulation on a high-performance machine and scaling it on an MPI
 cluster can significantly reduce computation time. Download and analyze your
-results locally once complete. Happy simulating!
+results locally once complete.
+
+Happy simulations!
 
 ## What to read next
 

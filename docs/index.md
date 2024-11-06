@@ -26,7 +26,6 @@ intro_to_api/computational-infrastructure
 intro_to_api/templating
 intro_to_api/configuring-simulators
 intro_to_api/projects
-intro_to_api/custom_docker_images
 
 ```
 
