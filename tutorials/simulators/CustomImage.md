@@ -364,9 +364,6 @@ customImage = inductiva.simulators.CustomImage(
 	task.print_summary()
 	```
 
-
-### Conclusion
-
 ### Conclusion
 
 Congratulations! You've successfully completed the advanced Reef3D example using
