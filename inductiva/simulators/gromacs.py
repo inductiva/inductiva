@@ -23,7 +23,7 @@ class GROMACS(simulators.Simulator):
 
     def run(
         self,
-        input_dir: str,
+        input_dir: Optional[str],
         commands: types.Commands,
         *,
         on: types.ComputationalResources,

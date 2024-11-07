@@ -25,7 +25,7 @@ class SIMSOPT(simulators.Simulator):
 
     def run(
         self,
-        input_dir: str,
+        input_dir: Optional[str],
         plasma_surface_filename: str,
         coil_coefficients_filename: str,
         coil_currents_filename: str,

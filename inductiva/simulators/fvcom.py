@@ -24,7 +24,7 @@ class FVCOM(simulators.Simulator):
         self.simulator = "fvcom"
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
             debug: int = 0,

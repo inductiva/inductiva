@@ -22,7 +22,7 @@ class SCHISM(simulators.Simulator):
         self.simulator = "schism"
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
             num_scribes: int = 1,

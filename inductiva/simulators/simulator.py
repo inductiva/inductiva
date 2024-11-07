@@ -104,9 +104,18 @@ class Simulator(ABC):
                 f"The provided path (\"{input_dir}\") is not a directory.")
         return input_dir_path
 
+    def _validate_input_files(self, input_dir, remote_assets):
+        if input_dir == "":
+            raise ValueError(
+                "input_dir cannot be an empty string. Use None instead.")
+
+        if not input_dir and not remote_assets:
+            raise ValueError(
+                "Either input_dir or remote_assets must be provided.")
+
     def run(
         self,
-        input_dir: str,
+        input_dir: Optional[str],
         *_args,
         on: types.ComputationalResources,
         storage_dir: Optional[str] = "",
@@ -133,7 +142,9 @@ class Simulator(ABC):
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """
-        input_dir_path = self._setup_input_dir(input_dir)
+        self._validate_input_files(input_dir, remote_assets)
+
+        input_dir_path = self._setup_input_dir(input_dir) if input_dir else None
 
         if on is None:
             raise ValueError(

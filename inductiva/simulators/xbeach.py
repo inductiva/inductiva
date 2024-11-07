@@ -22,7 +22,7 @@ class XBeach(simulators.Simulator):
         self.simulator = "xbeach"
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,

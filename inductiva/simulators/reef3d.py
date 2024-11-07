@@ -23,7 +23,7 @@ class REEF3D(simulators.Simulator):
         self.simulator = "reef3d"
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             *,
             on: Optional[types.ComputationalResources],
             n_vcpus: Optional[int] = None,
