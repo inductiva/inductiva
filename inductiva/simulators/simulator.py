@@ -128,8 +128,8 @@ class Simulator(ABC):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
-            remote_assets: Additional input files that will be copied to the
-                simulation from a bucket or from another task output.
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
             **kwargs: Additional keyword arguments to be passed to the
                 simulation API method.
         """

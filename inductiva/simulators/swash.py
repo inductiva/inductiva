@@ -48,6 +48,8 @@ class SWASH(simulators.Simulator):
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
             storage_dir: Directory for storing simulation results.
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
         """
         return super().run(input_dir,
                            on=on,
