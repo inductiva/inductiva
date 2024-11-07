@@ -269,8 +269,8 @@ def remove_workspace(remote_dir) -> bool:
 
     # Since we don't allow root files in workspaces it must be a directory
     # otherwise path validation in the backend will give error
-    if '/' not in remote_dir:
-        remote_dir = remote_dir + '/'
+    if "/" not in remote_dir:
+        remote_dir = remote_dir + "/"
     try:
         api.delete_file(query_params={"path": remote_dir},)
         logging.info("Workspace file(s) removed successfully.")
