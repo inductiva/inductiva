@@ -16,6 +16,12 @@ class ExportFormat(enum.Enum):
     CSV = "csv"
 
 
+class ColumnExportMode(enum.Enum):
+    """Enumeration of benchmark column export modes."""
+    ALL = "all"
+    DISTINCT = "distinct"
+
+
 class Benchmark(Project):
     """Represents the benchmark runner."""
 
@@ -146,7 +152,7 @@ class Benchmark(Project):
         self,
         fmt: Union[ExportFormat, str] = ExportFormat.JSON,
         filename: Optional[str] = None,
-        summary: bool = True,
+        columns: Union[ColumnExportMode, str] = ColumnExportMode.DISTINCT,
     ):
         """
         Exports the benchmark performance metrics in the specified format.
@@ -157,13 +163,13 @@ class Benchmark(Project):
             filename (Optional[str]): The name of the output file to save the
                 exported results. Defaults to the benchmark's name if not
                 provided.
-            summary (bool): If True, only the parameters that vary between 
-                different runs are included in the result, providing a summary
-                of the information for each run. Defaults to True.
+            columns (Union[ColumnExportMode, str]): The columns to include in
+                the exported results. Defaults to ColumnExportMode.DISTINCT that
+                includes only the parameters that vary between different runs.
         """
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
-        info = self.runs_info(summary=summary)
+        info = self.runs_info(columns=columns)
         filename = filename or f"{self.name}.{fmt.value}"
         if fmt == ExportFormat.JSON:
             with open(filename, mode="w", encoding="utf-8") as file:
@@ -178,20 +184,19 @@ class Benchmark(Project):
         else:
             raise ValueError(f"Unsupported export format: {fmt}")
 
-    def runs_info(self, summary: bool = True) -> list:
+    def runs_info(
+        self,
+        columns: Union[ColumnExportMode, str] = ColumnExportMode.DISTINCT,
+    ) -> list:
         """
         Gathers the configuration and performance metrics for each run
         associated with the benchmark in a list, including computation cost and
         execution time.
-
-        This method retrieves input parameters and task information for each
-        run, and optionally summarizes the results by filtering only the
-        parameters that vary between runs.
         
         Args:
-            summary (bool): If True, only the parameters that vary between 
-                different runs are included in the result, providing a
-                summary of the information for each run. Defaults to True.
+            columns (Union[ColumnExportMode, str]): The columns to include in
+                the exported results. Defaults to ColumnExportMode.DISTINCT that
+                includes only the parameters that vary between different runs.
 
         Returns:
             list: A list containing the configuration and performance 
@@ -205,13 +210,16 @@ class Benchmark(Project):
             with open(input_file_path, mode="r", encoding="utf-8") as file:
                 return json.load(file)
 
-        def summarize(info):
+        def filter_distinct_columns(info):
             attrs_lsts = defaultdict(list)
             for attrs in info:
                 for k, v in attrs.items():
                     attrs_lsts[k].append(v)
             filtered = {k for k, v in attrs_lsts.items() if len(set(v)) > 1}
             return [{key: attrs[key] for key in filtered} for attrs in info]
+
+        if isinstance(columns, str):
+            columns = ColumnExportMode[columns.upper()]
 
         info = []
         tasks = self.get_tasks()
@@ -229,4 +237,6 @@ class Benchmark(Project):
                 **task_input_params,
             })
 
-        return summarize(info) if summary else info
+        return filter_distinct_columns(info) \
+            if columns == ColumnExportMode.DISTINCT \
+            else info
