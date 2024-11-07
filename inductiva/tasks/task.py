@@ -418,8 +418,10 @@ class Task:
         self._status = status
 
         #updates the info.is_terminal when getting the status
-        self._info.is_terminal = resp.body.get("is_terminated",
-                                              self.info.is_terminal)
+        self._info.is_terminal = resp.body.get(
+            "is_terminated",
+            self.info.is_terminal,
+        )
 
         queue_position = resp.body.get("position_in_queue", None)
         if queue_position is not None:
