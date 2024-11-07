@@ -208,11 +208,11 @@ class Benchmark(Project):
         def summarize(info):
             attrs_lsts = defaultdict(list)
             for attrs in info:
-                for k, v in attrs.items():
-                    attrs_lsts[k].append(v)
-            filtered = {k for k, v in attrs_lsts.items() \
-                        if len(v) != 0 and len(v) != v.count(v[0])}
-            return [{key: attrs[key] for key in filtered} for attrs in info]
+                for attr, value in attrs.items():
+                    attrs_lsts[attr].append(value)
+            filtered = {attr for attr, values in attrs_lsts.items() \
+                        if values and len(values) != values.count(values[0])}
+            return [{attr: attrs[attr] for attr in filtered} for attrs in info]
 
         info = []
         tasks = self.get_tasks()
