@@ -62,17 +62,21 @@ def submit_request(api_instance: TasksApi,
 
 
 def prepare_input(task_id, original_params, type_annotations):
-    inputs_size = files.get_path_size(original_params["sim_dir"])
-    logging.info("Preparing upload of the local input directory %s (%s).",
-                 original_params["sim_dir"],
-                 format_utils.bytes_formatter(inputs_size))
+    sim_dir = original_params["sim_dir"]
+    # If the input directory is the current directory, dont zip it
+    # still need to zip the input parameters though
+    if os.path.normpath(sim_dir) == os.path.curdir:
+        inputs_size = 0
+    else:
+        inputs_size = files.get_path_size(sim_dir)
+        logging.info("Preparing upload of the local input directory %s (%s).",
+                     sim_dir, format_utils.bytes_formatter(inputs_size))
 
-    logging.info("Packing input directory...")
-
-    if os.path.isfile(
-            os.path.join(original_params["sim_dir"],
-                         constants.TASK_OUTPUT_ZIP)):
-        raise ValueError(f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}'")
+        if os.path.isfile(
+                os.path.join(original_params["sim_dir"],
+                             constants.TASK_OUTPUT_ZIP)):
+            raise ValueError(
+                f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}'")
 
     input_zip_path = pack_input(
         params=original_params,

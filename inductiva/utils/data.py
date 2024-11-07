@@ -75,7 +75,8 @@ def pack_param(name: str, value, param_type, dst_dir):
         dst_dir_name = name
         dst_fullpath = os.path.join(dst_dir, dst_dir_name)
 
-        shutil.copytree(value, dst_fullpath)
+        if os.path.normpath(value) != os.path.curdir:
+            shutil.copytree(value, dst_fullpath)
 
         logging.debug("Copied %s to %s", value, dst_fullpath)
         return str(dst_dir_name)
@@ -395,3 +396,12 @@ def uncompress_task_outputs(zip_path: pathlib.Path, output_dir: pathlib.Path):
             )
         else:
             zip_f.extractall(output_dir)
+
+
+def create_empty_zip(zip_name):
+    """Create an empty ZIP archive."""
+    zip_path = os.path.join(tempfile.gettempdir(), zip_name)
+    with zipfile.ZipFile(zip_path, "w") as _:
+        pass
+
+    return zip_path
