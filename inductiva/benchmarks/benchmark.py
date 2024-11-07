@@ -210,7 +210,8 @@ class Benchmark(Project):
             for attrs in info:
                 for k, v in attrs.items():
                     attrs_lsts[k].append(v)
-            filtered = {k for k, v in attrs_lsts.items() if len(set(v)) > 1}
+            filtered = {k for k, v in attrs_lsts.items() \
+                        if len(v) != 0 and len(v) != v.count(v[0])}
             return [{key: attrs[key] for key in filtered} for attrs in info]
 
         info = []
