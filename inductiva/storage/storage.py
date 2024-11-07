@@ -6,6 +6,7 @@ from typing import List, Literal, Optional, Tuple
 import urllib
 
 import inductiva
+from inductiva import constants
 from inductiva.api import methods
 from inductiva.client import exceptions
 from inductiva.client.apis.tags import storage_api
@@ -191,6 +192,9 @@ def upload(
         filename = os.path.basename(local_path)
         remote_file_paths = [os.path.join(remote_dir, filename)]
         total_size = os.path.getsize(local_path)
+
+    if os.path.join(remote_dir, constants.TASK_OUTPUT_ZIP) in remote_file_paths:
+        raise ValueError(f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}.'")
 
     logging.info("Uploading input...")
 
