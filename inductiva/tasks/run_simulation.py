@@ -10,7 +10,7 @@ from inductiva.api import methods
 
 def run_simulation(
     simulator: str,
-    input_dir: pathlib.Path,
+    input_dir: Optional[pathlib.Path],
     *,
     computational_resources: types.ComputationalResources,
     resubmit_on_preemption: bool = False,

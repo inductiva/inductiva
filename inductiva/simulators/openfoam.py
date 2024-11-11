@@ -48,7 +48,7 @@ class OpenFOAM(simulators.Simulator):
         return "OpenFOAM-" + self._distribution
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             commands: types.Commands,
             *,
             on: types.ComputationalResources,
@@ -73,6 +73,8 @@ class OpenFOAM(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
             other arguments: See the documentation of the base class.
         """
         return super().run(input_dir,

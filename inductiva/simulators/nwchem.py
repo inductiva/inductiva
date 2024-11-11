@@ -23,7 +23,7 @@ class NWChem(simulators.Simulator):
         self.simulator = "nwchem"
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             sim_config_filename: str,
             *,
             on: types.ComputationalResources,
@@ -49,6 +49,8 @@ class NWChem(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
         """
         return super().run(input_dir,
                            on=on,

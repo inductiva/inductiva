@@ -62,10 +62,18 @@ def submit_request(api_instance: TasksApi,
 
 
 def prepare_input(task_id, original_params, type_annotations):
-    inputs_size = files.get_path_size(original_params["sim_dir"])
-    logging.info("Preparing upload of the local input directory %s (%s).",
-                 original_params["sim_dir"],
-                 format_utils.bytes_formatter(inputs_size))
+    sim_dir = original_params["sim_dir"]
+    # If the input directory is empty, do not zip it
+    # still need to zip the input parameters though
+    if sim_dir:
+        inputs_size = files.get_path_size(sim_dir)
+        logging.info("Preparing upload of the local input directory %s (%s).",
+                     sim_dir, format_utils.bytes_formatter(inputs_size))
+
+        if os.path.isfile(os.path.join(sim_dir, constants.TASK_OUTPUT_ZIP)):
+            raise ValueError(
+                f"Invalid file name: '{constants.TASK_OUTPUT_ZIP}'")
+
     input_zip_path = pack_input(
         params=original_params,
         type_annotations=type_annotations,
@@ -147,21 +155,8 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
         type_annotations: Annotations of the params' types.
     """
 
-    inputs_size = files.get_path_size(original_params["sim_dir"])
-    logging.info("Preparing upload of the local input directory %s (%s).",
-                 original_params["sim_dir"],
-                 format_utils.bytes_formatter(inputs_size))
-    input_zip_path = pack_input(
-        params=original_params,
-        type_annotations=type_annotations,
-        zip_name=task_id,
-    )
-
-    zip_file_size = os.path.getsize(input_zip_path)
-    logging.info("Input archive size: %s",
-                 format_utils.bytes_formatter(zip_file_size))
-
-    logging.info("Uploading input archive...")
+    input_zip_path, zip_file_size = prepare_input(task_id, original_params,
+                                                  type_annotations)
 
     api_response = get_upload_url(
         api_instance.get_input_upload_url,

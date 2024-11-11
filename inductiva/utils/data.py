@@ -75,7 +75,8 @@ def pack_param(name: str, value, param_type, dst_dir):
         dst_dir_name = name
         dst_fullpath = os.path.join(dst_dir, dst_dir_name)
 
-        shutil.copytree(value, dst_fullpath)
+        if value:
+            shutil.copytree(value, dst_fullpath)
 
         logging.debug("Copied %s to %s", value, dst_fullpath)
         return str(dst_dir_name)
