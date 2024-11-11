@@ -77,6 +77,9 @@ class FVCOM(simulators.Simulator):
                 using a preemptible resource, i.e., resource instantiates with
                 `spot=True`.
 
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
+
             other arguments: See the documentation of the base class.
         """
         if model != "" and model.lower() != "estuary":

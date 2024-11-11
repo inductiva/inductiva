@@ -46,6 +46,8 @@ class FEniCSx(simulators.Simulator):
             mesh_filename: Mesh filename.
             mesh_info_filename: Mesh information filename.
             storage_dir: Parent directory for storing simulation results.
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
             **kwargs: Arbitrary keyword arguments, including:
                 - global_refinement_meshing_factor (float): Factor for global
                   mesh refinement.

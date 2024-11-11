@@ -39,6 +39,8 @@ class DualSPHysics(simulators.Simulator):
             sim_config_filename: Simulation config file.
             on: The computational resource to launch the simulation on.
             storage_dir: Directory for storing results.
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
