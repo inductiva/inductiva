@@ -63,7 +63,7 @@ def submit_request(api_instance: TasksApi,
 
 def prepare_input(task_id, original_params, type_annotations):
     sim_dir = original_params["sim_dir"]
-    # If the input directory is the current directory, dont zip it
+    # If the input directory is empty, do not zip it
     # still need to zip the input parameters though
     if sim_dir:
         inputs_size = files.get_path_size(sim_dir)
