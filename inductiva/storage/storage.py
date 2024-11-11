@@ -37,13 +37,10 @@ def _print_storage_size_and_cost() -> int:
 
 def get_space_used():
     """Returns the occupied storage size in GB."""
-    try:
-        storage_total_size_bytes = _print_storage_size_and_cost()
-        #Return float instead of a string
-        storage_used = round(float(storage_total_size_bytes) / (1024**3), 3)
-        return storage_used
-    except inductiva.client.ApiException as api_exception:
-        raise api_exception
+    storage_total_size_bytes = _print_storage_size_and_cost()
+    #Return float instead of a string
+    storage_used = round(float(storage_total_size_bytes) / (1024**3), 3)
+    return storage_used
 
 
 def listdir(path="/",
@@ -154,14 +151,11 @@ def upload_from_url(
 
     remote_path = os.path.join(remote_dir, file_name)
 
-    try:
-        api_instance.upload_from_url(query_params={
-            "url": url,
-            "path": remote_path,
-            "unzip": "f",
-        },)
-    except exceptions.ApiException as e:
-        raise e
+    api_instance.upload_from_url(query_params={
+        "url": url,
+        "path": remote_path,
+        "unzip": "f",
+    },)
     logging.info("File is being uploaded...")
     logging.info("You can use 'inductiva storage ls' to check the status.")
 
@@ -256,27 +250,20 @@ def _list_files(root_path: str) -> Tuple[List[str], int]:
     return file_paths, total_size
 
 
-def remove_workspace(remote_dir, file_name: Optional[str] = None) -> bool:
+def remove_workspace(remote_dir) -> bool:
     """
-    Removes the specified file from a remote directory, or deletes the entire
-    remote directory if no file name is provided.
+    Removes path from a remote directory.
 
     Parameters:
     - remote_dir (str): The path to the remote directory.
-    - file_name (str, optional): The name of the file to remove within the
-        remote_dir. If omitted, the function removes the entire remote_dir.
     """
     api = storage_api.StorageApi(inductiva.api.get_client())
 
     logging.info("Removing workspace file(s)...")
-    if not file_name:
-        # make sure remote_dir ends with a '/'
-        remote_path = os.path.join(remote_dir, "")
-    else:
-        remote_path = os.path.join(remote_dir, file_name)
 
-    try:
-        api.delete_file(query_params={"path": remote_path},)
-        logging.info("Workspace file(s) removed successfully.")
-    except exceptions.ApiException as e:
-        raise e
+    # Since we don't allow root files in workspaces it must be a directory
+    # otherwise path validation in the backend will give error
+    if "/" not in remote_dir:
+        remote_dir = remote_dir + "/"
+    api.delete_file(query_params={"path": remote_dir},)
+    logging.info("Workspace file(s) removed successfully.")
