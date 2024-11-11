@@ -25,7 +25,7 @@ class FEniCSx(simulators.Simulator):
         return None
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             geometry_filename: str,
             bcs_filename: str,
             material_filename: str,

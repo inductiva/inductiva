@@ -27,7 +27,7 @@ class QuantumEspresso(simulators.Simulator):
         return "Quantum-Espresso"
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             commands: List[str],
             *,
             use_hwthread: bool = True,

@@ -24,7 +24,7 @@ class CustomImage(simulators.Simulator):
         return self.container_image
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             commands: List[str],
             *,
             on: types.ComputationalResources,

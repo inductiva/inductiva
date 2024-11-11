@@ -48,7 +48,7 @@ class OpenFOAM(simulators.Simulator):
         return "OpenFOAM-" + self._distribution
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             commands: types.Commands,
             *,
             on: types.ComputationalResources,

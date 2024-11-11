@@ -22,7 +22,7 @@ class SplishSplash(simulators.Simulator):
 
     def run(
         self,
-        input_dir: str,
+        input_dir: Optional[str],
         sim_config_filename: str,
         *,
         on: types.ComputationalResources,
