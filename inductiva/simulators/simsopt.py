@@ -25,7 +25,7 @@ class SIMSOPT(simulators.Simulator):
 
     def run(
         self,
-        input_dir: str,
+        input_dir: Optional[str],
         plasma_surface_filename: str,
         coil_coefficients_filename: str,
         coil_currents_filename: str,
@@ -73,6 +73,8 @@ class SIMSOPT(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
             other arguments: See the documentation of the base class.
         """
         return super().run(

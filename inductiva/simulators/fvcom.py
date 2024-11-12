@@ -24,7 +24,7 @@ class FVCOM(simulators.Simulator):
         self.simulator = "fvcom"
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             *,
             on: types.ComputationalResources,
             debug: int = 0,
@@ -76,6 +76,9 @@ class FVCOM(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiates with
                 `spot=True`.
+
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
 
             other arguments: See the documentation of the base class.
         """

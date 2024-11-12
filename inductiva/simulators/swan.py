@@ -23,7 +23,7 @@ class SWAN(simulators.Simulator):
 
     def run(
         self,
-        input_dir: str,
+        input_dir: Optional[str],
         sim_config_filename: str,
         *,
         remote_assets: Optional[List[str]] = None,
@@ -53,6 +53,8 @@ class SWAN(simulators.Simulator):
                 `spot=True`.
             command: The command to run the simulation. Default is 'swanrun'.
                 The user can also specify 'swan.exe'.
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
         """
 
         if command not in ("swanrun", "swan.exe"):
