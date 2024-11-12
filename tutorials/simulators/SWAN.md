@@ -19,6 +19,23 @@ The SWAN simulator is typically configured using a single `.swn` file,
 along with additional files that define the **domain**, **sea floor**, and **input conditions**. These files should be organized in an input directory, which 
 will be passed to the simulator.
 
+### Available Commands
+
+For this simulator, we provide the `command` argument, which specifies the
+executable to run. The available commands are:
+
+- **`swanrun`**: This is the default command when no specific command is
+ provided. It typically generates debug files for your simulation. However,
+ `swanrun` does not support MPI clusters, limiting its use to a single machine.
+
+- **`swan.exe`**: This command is compatible with MPI clusters, allowing
+ simulations to run across multiple machines. However, it may sometimes fail
+ when generating debug files.
+
+**Recommendation**: For simulations on a single machine, we recommend using
+`swanrun` for greater stability. If you need to run simulations on an MPI
+cluster, use `swan.exe`.
+
 ## Example Code
 Below is an example of running a SWAN simulation via the Inductiva API:
 
