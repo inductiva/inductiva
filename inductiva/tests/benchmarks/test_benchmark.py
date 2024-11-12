@@ -218,6 +218,7 @@ def test_benchmark_runs_info_summary(benchmark):
             },
         ]
 
+
 def test_benchmark_terminate(benchmark):
     task1 = mock.MagicMock()
     task1.info = mock.MagicMock()
@@ -241,7 +242,8 @@ def test_benchmark_terminate(benchmark):
     machine3.name = "vm3"
     machine3.terminate = mock.MagicMock()
 
-    resources.machine_groups.get = mock.MagicMock(return_value=[machine1, machine2, machine3])
+    resources.machine_groups.get = mock.MagicMock(
+        return_value=[machine1, machine2, machine3])
 
     Benchmark.terminate(self=benchmark)
 
