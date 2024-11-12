@@ -33,8 +33,10 @@ executable to run. The available commands are:
  when generating debug files.
 
 **Recommendation**: For simulations on a single machine, we recommend using
-`swanrun` for greater stability. If you need to run simulations on an MPI
-cluster, use `swan.exe`.
+`swanrun`. If you need to run simulations on an MPI cluster, use `swan.exe`.
+
+> **Note**: `swanrun` expects the simulation file in the `file.swn` format, while
+`swan.exe` expects the simulation file with the name `INPUT`.
 
 ## Example Code
 Below is an example of running a SWAN simulation via the Inductiva API:
