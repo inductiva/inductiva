@@ -73,7 +73,7 @@ class Benchmark(Project):
         self.simulator = simulator or self.simulator
         self.input_dir = input_dir or self.input_dir
         self.on = on or self.on
-        self.kwargs = kwargs or self.kwargs
+        self.kwargs = {**self.kwargs, **kwargs}
         return self
 
     def add_run(
