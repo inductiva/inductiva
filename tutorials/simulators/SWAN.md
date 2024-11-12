@@ -19,7 +19,7 @@ The SWAN simulator is typically configured using a single `.swn` file,
 along with additional files that define the **domain**, **sea floor**, and **input conditions**. These files should be organized in an input directory, which 
 will be passed to the simulator.
 
-### Available Commands
+## Available Commands
 
 For this simulator, we provide the `command` argument, which specifies the
 executable to run. The available commands are:
