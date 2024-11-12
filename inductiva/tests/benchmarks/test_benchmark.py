@@ -48,6 +48,7 @@ def test_benchmark_set_default_kwargs(benchmark):
     Benchmark.set_default(self=benchmark, c=4)
     assert benchmark.kwargs == {"a": 1, "b": 2, "c": 4}
 
+
 def test_benchmark_multiple_set_default(benchmark):
     Benchmark.set_default(self=benchmark, simulator="sim", a=1)
     Benchmark.set_default(self=benchmark, a=1, b=2)
