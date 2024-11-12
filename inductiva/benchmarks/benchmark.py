@@ -5,8 +5,8 @@ import csv
 from typing import Optional, Union
 from typing_extensions import Self
 from inductiva import types
-from inductiva.simulators.simulator import Simulator
-from inductiva.projects.project import Project
+from inductiva.simulators import Simulator
+from inductiva.projects import Project
 from collections import defaultdict
 
 
