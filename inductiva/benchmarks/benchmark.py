@@ -4,7 +4,7 @@ import json
 import csv
 from typing import Optional, Union
 from typing_extensions import Self
-from inductiva import types
+from inductiva import types, resources
 from inductiva.simulators import Simulator
 from inductiva.projects import Project
 from collections import defaultdict
@@ -243,3 +243,20 @@ class Benchmark(Project):
         return filter_distinct_columns(info) \
             if columns == ColumnExportMode.DISTINCT \
             else info
+
+    def terminate(self):
+        """
+        Terminates all active machines associated with the benchmark tasks.
+
+        This method identifies all active machines that were used to execute
+        the benchmark tasks and terminates them to free up resources.
+        """
+        vm_names = {
+            task.info.executer.vm_name
+            for task in self.get_tasks()
+            if task.info.executer
+        }
+        machines = resources.machine_groups.get()
+        for machine in machines:
+            if machine.name in vm_names:
+                machine.terminate(verbose=False)
