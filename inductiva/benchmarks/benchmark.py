@@ -244,12 +244,15 @@ class Benchmark(Project):
             if columns == ColumnExportMode.DISTINCT \
             else info
 
-    def terminate(self):
+    def terminate(self) -> Self:
         """
         Terminates all active machines associated with the benchmark tasks.
 
         This method identifies all active machines that were used to execute
         the benchmark tasks and terminates them to free up resources.
+
+        Returns:
+            Self: The current instance for method chaining.
         """
         vm_names = {
             task.info.executer.vm_name
