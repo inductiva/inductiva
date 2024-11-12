@@ -5,6 +5,7 @@ from pathlib import Path
 from inductiva.benchmarks import Benchmark
 from inductiva.resources import MachineGroup
 from inductiva.simulators import Simulator
+from inductiva import resources
 
 
 @pytest.fixture(name="benchmark")
@@ -216,3 +217,34 @@ def test_benchmark_runs_info_summary(benchmark):
                 "estimated_computation_cost": 20,
             },
         ]
+
+def test_benchmark_terminate(benchmark):
+    task1 = mock.MagicMock()
+    task1.info = mock.MagicMock()
+    task1.info.executer.vm_name = "vm1"
+
+    task2 = mock.MagicMock()
+    task2.info = mock.MagicMock()
+    task2.info.executer.vm_name = "vm2"
+
+    benchmark.get_tasks = mock.MagicMock(return_value=[task1, task2])
+
+    machine1 = mock.MagicMock()
+    machine1.name = "vm1"
+    machine1.terminate = mock.MagicMock()
+
+    machine2 = mock.MagicMock()
+    machine2.name = "vm2"
+    machine2.terminate = mock.MagicMock()
+
+    machine3 = mock.MagicMock()
+    machine3.name = "vm3"
+    machine3.terminate = mock.MagicMock()
+
+    resources.machine_groups.get = mock.MagicMock(return_value=[machine1, machine2, machine3])
+
+    Benchmark.terminate(self=benchmark)
+
+    machine1.terminate.assert_called_once_with(verbose=False)
+    machine2.terminate.assert_called_once_with(verbose=False)
+    machine3.terminate.assert_not_called()
