@@ -2,12 +2,14 @@
 import enum
 import json
 import csv
+import logging
 from typing import Optional, Union
 from typing_extensions import Self
 from inductiva import types
 from inductiva.simulators import Simulator
 from inductiva.projects import Project
 from inductiva.resources import machine_groups
+from inductiva.client import ApiException
 from collections import defaultdict
 
 
@@ -261,5 +263,8 @@ class Benchmark(Project):
             machine = machine_groups.get_by_name(executer.vm_name)
             machines[executer.uuid] = machine
         for machine in machines.values():
-            machine.terminate(verbose=False)
+            try:
+                machine.terminate(verbose=False)
+            except ApiException as api_exception:
+                logging.warning(api_exception)
         return self
