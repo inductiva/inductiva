@@ -3,9 +3,8 @@ from unittest import mock
 import pytest
 from pathlib import Path
 from inductiva.benchmarks import Benchmark
-from inductiva.resources import MachineGroup
+from inductiva.resources import MachineGroup, machine_groups
 from inductiva.simulators import Simulator
-from inductiva import resources
 
 
 @pytest.fixture(name="benchmark")
@@ -238,22 +237,24 @@ def test_benchmark_terminate(benchmark):
     machine2 = mock.MagicMock()
     machine2.terminate = mock.MagicMock()
 
-    resources.machine_groups.get_by_name = mock.MagicMock(
+    machine_groups.get_by_name = mock.MagicMock(
         side_effect=lambda name: machine1 if name == "vm1" else machine2)
 
     Benchmark.terminate(self=benchmark)
 
+    machine_groups.get_by_name.assert_has_calls([mock.call("vm1"),
+                                                 mock.call("vm2")])
     machine1.terminate.assert_called_once_with(verbose=False)
     machine2.terminate.assert_called_once_with(verbose=False)
 
 
 def test_benchmark_terminate_no_tasks(benchmark):
     benchmark.get_tasks = mock.MagicMock(return_value=[])
-    resources.machine_groups.get_by_name = mock.MagicMock()
+    machine_groups.get_by_name = mock.MagicMock()
 
     Benchmark.terminate(self=benchmark)
 
-    resources.machine_groups.get_by_name.assert_not_called()
+    machine_groups.get_by_name.assert_not_called()
 
 
 def test_benchmark_terminate_single_task(benchmark):
@@ -267,10 +268,11 @@ def test_benchmark_terminate_single_task(benchmark):
     machine = mock.MagicMock()
     machine.terminate = mock.MagicMock()
 
-    resources.machine_groups.get_by_name = mock.MagicMock(return_value=machine)
+    machine_groups.get_by_name = mock.MagicMock(return_value=machine)
 
     Benchmark.terminate(self=benchmark)
 
+    machine_groups.get_by_name.assert_called_once_with("vm1")
     machine.terminate.assert_called_once_with(verbose=False)
 
 
@@ -290,8 +292,9 @@ def test_benchmark_terminate_duplicate_tasks(benchmark):
     machine = mock.MagicMock()
     machine.terminate = mock.MagicMock()
 
-    resources.machine_groups.get_by_name = mock.MagicMock(return_value=machine)
+    machine_groups.get_by_name = mock.MagicMock(return_value=machine)
 
     Benchmark.terminate(self=benchmark)
 
+    machine_groups.get_by_name.assert_called_once_with("vm1")
     machine.terminate.assert_called_once_with(verbose=False)
