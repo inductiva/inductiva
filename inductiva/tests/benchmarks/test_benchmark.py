@@ -245,3 +245,12 @@ def test_benchmark_terminate(benchmark):
 
     machine1.terminate.assert_called_once_with(verbose=False)
     machine2.terminate.assert_called_once_with(verbose=False)
+
+
+def test_benchmark_terminate_no_tasks(benchmark):
+    benchmark.get_tasks = mock.MagicMock(return_value=[])
+    resources.machine_groups.get_by_name = mock.MagicMock()
+
+    Benchmark.terminate(self=benchmark)
+
+    resources.machine_groups.get_by_name.assert_not_called()
