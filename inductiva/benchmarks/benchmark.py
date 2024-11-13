@@ -246,20 +246,13 @@ class Benchmark(Project):
 
     def terminate(self) -> Self:
         """
-        Terminates all active machines associated with the benchmark tasks.
-
-        This method identifies all active machines that were used to execute
-        the benchmark tasks and terminates them to free up resources.
-
-        Returns:
-            Self: The current instance for method chaining.
+        Terminates all active machine groups associated with the benchmark.
         """
-        vm_names = {
-            task.info.executer.vm_name
-            for task in self.get_tasks()
-            if task.info.executer
+        tasks = self.get_tasks()
+        machines = {
+            task.info.executer.uuid:
+            resources.machine_groups.get_by_name(task.info.executer.vm_name)
+            for task in tasks if task.info.executer
         }
-        machines = resources.machine_groups.get()
-        for machine in machines:
-            if machine.name in vm_names:
-                machine.terminate(verbose=False)
+        for machine in machines.values():
+            machine.terminate(verbose=False)

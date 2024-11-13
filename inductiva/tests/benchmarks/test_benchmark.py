@@ -222,31 +222,26 @@ def test_benchmark_runs_info_summary(benchmark):
 def test_benchmark_terminate(benchmark):
     task1 = mock.MagicMock()
     task1.info = mock.MagicMock()
+    task1.info.executer.uuid = 1
     task1.info.executer.vm_name = "vm1"
 
     task2 = mock.MagicMock()
     task2.info = mock.MagicMock()
+    task2.info.executer.uuid = 2
     task2.info.executer.vm_name = "vm2"
 
     benchmark.get_tasks = mock.MagicMock(return_value=[task1, task2])
 
     machine1 = mock.MagicMock()
-    machine1.name = "vm1"
     machine1.terminate = mock.MagicMock()
 
     machine2 = mock.MagicMock()
-    machine2.name = "vm2"
     machine2.terminate = mock.MagicMock()
 
-    machine3 = mock.MagicMock()
-    machine3.name = "vm3"
-    machine3.terminate = mock.MagicMock()
-
-    resources.machine_groups.get = mock.MagicMock(
-        return_value=[machine1, machine2, machine3])
+    resources.machine_groups.get_by_name = mock.MagicMock(
+        side_effect=lambda name: machine1 if name == "vm1" else machine2)
 
     Benchmark.terminate(self=benchmark)
 
     machine1.terminate.assert_called_once_with(verbose=False)
     machine2.terminate.assert_called_once_with(verbose=False)
-    machine3.terminate.assert_not_called()
