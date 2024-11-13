@@ -249,11 +249,12 @@ class Benchmark(Project):
         Terminates all active machine groups associated with the benchmark.
         """
         tasks = self.get_tasks()
-        machines = {
-            task.info.executer.uuid:
-                resources.machine_groups.get_by_name(task.info.executer.vm_name)
-            for task in tasks
-            if task.info.executer
-        }
+        machines = {}
+        for task in tasks:
+            if not task.info.executer or task.info.executer.uuid in machines:
+                continue
+            machine = resources.machine_groups.get_by_name(
+                task.info.executer.vm_name)
+            machines[task.info.executer.uuid] = machine
         for machine in machines.values():
             machine.terminate(verbose=False)
