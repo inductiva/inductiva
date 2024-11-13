@@ -255,11 +255,11 @@ class Benchmark(Project):
         tasks = self.get_tasks()
         machines = {}
         for task in tasks:
-            info = task.info
-            if not info.executer or info.executer.uuid in machines:
+            executer = task.info.executer
+            if not executer or executer.uuid in machines:
                 continue
-            machine = machine_groups.get_by_name(info.executer.vm_name)
-            machines[info.executer.uuid] = machine
+            machine = machine_groups.get_by_name(executer.vm_name)
+            machines[executer.uuid] = machine
         for machine in machines.values():
             machine.terminate(verbose=False)
         return self
