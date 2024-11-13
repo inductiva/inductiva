@@ -248,6 +248,9 @@ class Benchmark(Project):
     def terminate(self) -> Self:
         """
         Terminates all active machine groups associated with the benchmark.
+
+        Returns:
+            Self: The current instance for method chaining.
         """
         tasks = self.get_tasks()
         machines = {}
@@ -259,3 +262,4 @@ class Benchmark(Project):
             machines[info.executer.uuid] = machine
         for machine in machines.values():
             machine.terminate(verbose=False)
+        return self
