@@ -4,9 +4,10 @@ import json
 import csv
 from typing import Optional, Union
 from typing_extensions import Self
-from inductiva import types, resources
+from inductiva import types
 from inductiva.simulators import Simulator
 from inductiva.projects import Project
+from inductiva.resources import machine_groups
 from collections import defaultdict
 
 
@@ -251,10 +252,10 @@ class Benchmark(Project):
         tasks = self.get_tasks()
         machines = {}
         for task in tasks:
-            if not task.info.executer or task.info.executer.uuid in machines:
+            info = task.info
+            if not info.executer or info.executer.uuid in machines:
                 continue
-            machine = resources.machine_groups.get_by_name(
-                task.info.executer.vm_name)
-            machines[task.info.executer.uuid] = machine
+            machine = machine_groups.get_by_name(info.executer.vm_name)
+            machines[info.executer.uuid] = machine
         for machine in machines.values():
             machine.terminate(verbose=False)
