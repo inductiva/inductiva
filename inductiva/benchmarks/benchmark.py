@@ -251,8 +251,9 @@ class Benchmark(Project):
         tasks = self.get_tasks()
         machines = {
             task.info.executer.uuid:
-            resources.machine_groups.get_by_name(task.info.executer.vm_name)
-            for task in tasks if task.info.executer
+                resources.machine_groups.get_by_name(task.info.executer.vm_name)
+            for task in tasks
+            if task.info.executer
         }
         for machine in machines.values():
             machine.terminate(verbose=False)

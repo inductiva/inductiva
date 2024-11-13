@@ -255,6 +255,7 @@ def test_benchmark_terminate_no_tasks(benchmark):
 
     resources.machine_groups.get_by_name.assert_not_called()
 
+
 def test_benchmark_terminate_single_task(benchmark):
     task = mock.MagicMock()
     task.info = mock.MagicMock()
@@ -266,12 +267,12 @@ def test_benchmark_terminate_single_task(benchmark):
     machine = mock.MagicMock()
     machine.terminate = mock.MagicMock()
 
-    resources.machine_groups.get_by_name = mock.MagicMock(
-        return_value=machine)
+    resources.machine_groups.get_by_name = mock.MagicMock(return_value=machine)
 
     Benchmark.terminate(self=benchmark)
 
     machine.terminate.assert_called_once_with(verbose=False)
+
 
 def test_benchmark_terminate_duplicate_tasks(benchmark):
     task1 = mock.MagicMock()
@@ -289,8 +290,7 @@ def test_benchmark_terminate_duplicate_tasks(benchmark):
     machine = mock.MagicMock()
     machine.terminate = mock.MagicMock()
 
-    resources.machine_groups.get_by_name = mock.MagicMock(
-        return_value=machine)
+    resources.machine_groups.get_by_name = mock.MagicMock(return_value=machine)
 
     Benchmark.terminate(self=benchmark)
 
