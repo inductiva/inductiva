@@ -242,8 +242,8 @@ def test_benchmark_terminate(benchmark):
 
     Benchmark.terminate(self=benchmark)
 
-    machine_groups.get_by_name.assert_has_calls([mock.call("vm1"),
-                                                 mock.call("vm2")])
+    machine_groups.get_by_name.assert_has_calls(
+        [mock.call("vm1"), mock.call("vm2")])
     machine1.terminate.assert_called_once_with(verbose=False)
     machine2.terminate.assert_called_once_with(verbose=False)
 
