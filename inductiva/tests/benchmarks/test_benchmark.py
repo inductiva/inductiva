@@ -254,3 +254,44 @@ def test_benchmark_terminate_no_tasks(benchmark):
     Benchmark.terminate(self=benchmark)
 
     resources.machine_groups.get_by_name.assert_not_called()
+
+def test_benchmark_terminate_single_task(benchmark):
+    task = mock.MagicMock()
+    task.info = mock.MagicMock()
+    task.info.executer.uuid = 1
+    task.info.executer.vm_name = "vm1"
+
+    benchmark.get_tasks = mock.MagicMock(return_value=[task])
+
+    machine = mock.MagicMock()
+    machine.terminate = mock.MagicMock()
+
+    resources.machine_groups.get_by_name = mock.MagicMock(
+        return_value=machine)
+
+    Benchmark.terminate(self=benchmark)
+
+    machine.terminate.assert_called_once_with(verbose=False)
+
+def test_benchmark_terminate_duplicate_tasks(benchmark):
+    task1 = mock.MagicMock()
+    task1.info = mock.MagicMock()
+    task1.info.executer.uuid = 1
+    task1.info.executer.vm_name = "vm1"
+
+    task2 = mock.MagicMock()
+    task2.info = mock.MagicMock()
+    task2.info.executer.uuid = 1
+    task2.info.executer.vm_name = "vm1"
+
+    benchmark.get_tasks = mock.MagicMock(return_value=[task1, task2])
+
+    machine = mock.MagicMock()
+    machine.terminate = mock.MagicMock()
+
+    resources.machine_groups.get_by_name = mock.MagicMock(
+        return_value=machine)
+
+    Benchmark.terminate(self=benchmark)
+
+    machine.terminate.assert_called_once_with(verbose=False)
