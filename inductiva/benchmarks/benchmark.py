@@ -5,10 +5,9 @@ import csv
 import logging
 from typing import Optional, Union
 from typing_extensions import Self
-from inductiva import types
+from inductiva import types, resources
 from inductiva.simulators import Simulator
 from inductiva.projects import Project
-from inductiva.resources import machine_groups
 from inductiva.client import ApiException
 from collections import defaultdict
 
@@ -254,17 +253,18 @@ class Benchmark(Project):
         Returns:
             Self: The current instance for method chaining.
         """
-        tasks = self.get_tasks()
-        machines = {}
-        for task in tasks:
-            executer = task.info.executer
-            if not executer or executer.uuid in machines:
+        machine_names = {
+            task.info.executer.vm_name
+            for task in self.get_tasks()
+            if task.info.executer
+        }
+        
+        for machine in resources.get():
+            if machine.name not in machine_names:
                 continue
-            machine = machine_groups.get_by_name(executer.vm_name)
-            machines[executer.uuid] = machine
-        for machine in machines.values():
             try:
                 machine.terminate(verbose=False)
             except ApiException as api_exception:
                 logging.warning(api_exception)
+        
         return self
