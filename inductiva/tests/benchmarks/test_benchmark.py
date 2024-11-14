@@ -161,19 +161,19 @@ def test_benchmark_runs_info(benchmark):
         info = Benchmark.runs_info(self=benchmark, select="all")
         assert info == [
             {
-                "task_id": "task1",
-                "simulator": "sim1",
-                "machine_type": "vm1",
-                "computation_time": 100,
-                "estimated_computation_cost": 10,
+                Benchmark.InfoKey.TASK_ID: "task1",
+                Benchmark.InfoKey.SIMULATOR: "sim1",
+                Benchmark.InfoKey.MACHINE_TYPE: "vm1",
+                Benchmark.InfoKey.TIME: 100,
+                Benchmark.InfoKey.COST: 10,
                 "param": "value",
             },
             {
-                "task_id": "task2",
-                "simulator": "sim2",
-                "machine_type": "vm2",
-                "computation_time": 200,
-                "estimated_computation_cost": 20,
+                Benchmark.InfoKey.TASK_ID: "task2",
+                Benchmark.InfoKey.SIMULATOR: "sim2",
+                Benchmark.InfoKey.MACHINE_TYPE: "vm2",
+                Benchmark.InfoKey.TIME: 200,
+                Benchmark.InfoKey.COST: 20,
                 "param": "value",
             },
         ]
@@ -205,16 +205,16 @@ def test_benchmark_runs_info_summary(benchmark):
         info = Benchmark.runs_info(self=benchmark, select="distinct")
         assert info == [
             {
-                "task_id": "task1",
-                "machine_type": "vm1",
-                "computation_time": 100,
-                "estimated_computation_cost": 10,
+                Benchmark.InfoKey.TASK_ID: "task1",
+                Benchmark.InfoKey.MACHINE_TYPE: "vm1",
+                Benchmark.InfoKey.TIME: 100,
+                Benchmark.InfoKey.COST: 10,
             },
             {
-                "task_id": "task2",
-                "machine_type": "vm2",
-                "computation_time": 200,
-                "estimated_computation_cost": 20,
+                Benchmark.InfoKey.TASK_ID: "task2",
+                Benchmark.InfoKey.MACHINE_TYPE: "vm2",
+                Benchmark.InfoKey.TIME: 200,
+                Benchmark.InfoKey.COST: 20,
             },
         ]
 
