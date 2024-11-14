@@ -31,6 +31,14 @@ class SelectMode(enum.Enum):
 class Benchmark(Project):
     """Represents the benchmark runner."""
 
+    class InfoKey:
+        """Constant keys for the info used in the benchmark runs."""
+        TASK_ID = "task_id"
+        SIMULATOR = "simulator"
+        MACHINE_TYPE = "machine_type"
+        TIME = "computation_time"
+        COST = "estimated_computation_cost"
+
     def __init__(self, name: str, append: bool = True):
         """
         Initializes a new Benchmark instance.
@@ -238,11 +246,11 @@ class Benchmark(Project):
             task_time = task_info.time_metrics.computation_seconds.value
             task_cost = task_info.estimated_computation_cost
             info.append({
-                "task_id": task_info.task_id,
-                "simulator": task_info.simulator,
-                "machine_type": task_machine_type,
-                "computation_time": task_time,
-                "estimated_computation_cost": task_cost,
+                Benchmark.InfoKey.TASK_ID: task_info.task_id,
+                Benchmark.InfoKey.SIMULATOR: task_info.simulator,
+                Benchmark.InfoKey.MACHINE_TYPE: task_machine_type,
+                Benchmark.InfoKey.TIME: task_time,
+                Benchmark.InfoKey.COST: task_cost,
                 **task_input_params,
             })
 
