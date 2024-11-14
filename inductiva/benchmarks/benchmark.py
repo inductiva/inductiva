@@ -254,8 +254,13 @@ class Benchmark(Project):
         Returns:
             Self: The current instance for method chaining.
         """
+        def _handle_suffix(executer):
+            if executer.host_type == "GCP":
+                return "-".join(executer.vm_name.split("-")[:-1])
+            return executer.vm_name
+
         machine_names = {
-            task.info.executer.vm_name
+            _handle_suffix(task.info.executer)
             for task in self.get_tasks()
             if task.info.executer
         }
