@@ -258,7 +258,7 @@ class Benchmark(Project):
             for task in self.get_tasks()
             if task.info.executer
         }
-        
+
         for machine in resources.get():
             if machine.name not in machine_names:
                 continue
@@ -266,5 +266,5 @@ class Benchmark(Project):
                 machine.terminate(verbose=False)
             except ApiException as api_exception:
                 logging.warning(api_exception)
-        
+
         return self
