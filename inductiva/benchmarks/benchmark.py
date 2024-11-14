@@ -9,6 +9,7 @@ from inductiva import types, resources
 from inductiva.simulators import Simulator
 from inductiva.projects import Project
 from inductiva.client import ApiException
+from inductiva.resources.machine_types import ProviderType
 from collections import defaultdict
 
 
@@ -256,7 +257,7 @@ class Benchmark(Project):
         """
 
         def _handle_suffix(executer):
-            if executer.host_type == "GCP":
+            if executer.host_type == ProviderType.GCP:
                 return "-".join(executer.vm_name.split("-")[:-1])
             return executer.vm_name
 
