@@ -2,11 +2,14 @@
 import enum
 import json
 import csv
+import logging
 from typing import Optional, Union
 from typing_extensions import Self
-from inductiva import types
-from inductiva.simulators.simulator import Simulator
-from inductiva.projects.project import Project
+from inductiva import types, resources
+from inductiva.simulators import Simulator
+from inductiva.projects import Project
+from inductiva.client import ApiException
+from inductiva.resources.machine_types import ProviderType
 from collections import defaultdict
 
 
@@ -243,3 +246,33 @@ class Benchmark(Project):
         return filter_distinct_columns(info) \
             if columns == ColumnExportMode.DISTINCT \
             else info
+
+    def terminate(self) -> Self:
+        """
+        Terminates all active machine groups associated with the
+        benchmark.
+
+        Returns:
+            Self: The current instance for method chaining.
+        """
+
+        def _handle_suffix(executer):
+            if executer.host_type == ProviderType.GCP:
+                return "-".join(executer.vm_name.split("-")[:-1])
+            return executer.vm_name
+
+        machine_names = {
+            _handle_suffix(task.info.executer)
+            for task in self.get_tasks()
+            if task.info.executer
+        }
+
+        for machine in resources.get():
+            if machine.name not in machine_names:
+                continue
+            try:
+                machine.terminate(verbose=False)
+            except ApiException as api_exception:
+                logging.warning(api_exception)
+
+        return self
