@@ -184,6 +184,7 @@ class TaskRequest(schemas.DictSchema):
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
 
+            stream_zip = schemas.BoolSchema
             __annotations__ = {
                 "simulator": simulator,
                 "resource_pool": resource_pool,
@@ -193,6 +194,7 @@ class TaskRequest(schemas.DictSchema):
                 "time_to_live_seconds": time_to_live_seconds,
                 "resubmit_on_preemption": resubmit_on_preemption,
                 "input_resources": input_resources,
+                "stream_zip": stream_zip,
             }
 
     simulator: MetaOapg.properties.simulator
@@ -248,6 +250,12 @@ class TaskRequest(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["stream_zip"]
+    ) -> MetaOapg.properties.stream_zip:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -260,6 +268,7 @@ class TaskRequest(schemas.DictSchema):
         "time_to_live_seconds",
         "resubmit_on_preemption",
         "input_resources",
+        "stream_zip",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -315,6 +324,12 @@ class TaskRequest(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["stream_zip"]
+    ) -> typing.Union[MetaOapg.properties.stream_zip, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -328,6 +343,7 @@ class TaskRequest(schemas.DictSchema):
         "time_to_live_seconds",
         "resubmit_on_preemption",
         "input_resources",
+        "stream_zip",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -367,6 +383,8 @@ class TaskRequest(schemas.DictSchema):
             schemas.Unset] = schemas.unset,
         input_resources: typing.Union[MetaOapg.properties.input_resources, list,
                                       tuple, schemas.Unset] = schemas.unset,
+        stream_zip: typing.Union[MetaOapg.properties.stream_zip, bool,
+                                 schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -384,6 +402,7 @@ class TaskRequest(schemas.DictSchema):
             time_to_live_seconds=time_to_live_seconds,
             resubmit_on_preemption=resubmit_on_preemption,
             input_resources=input_resources,
+            stream_zip=stream_zip,
             _configuration=_configuration,
             **kwargs,
         )
