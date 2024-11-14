@@ -158,7 +158,7 @@ def test_benchmark_runs_info(benchmark):
 
     with mock.patch("builtins.open",
                     mock.mock_open(read_data='{"param": "value"}')):
-        info = Benchmark.runs_info(self=benchmark, columns="all")
+        info = Benchmark.runs_info(self=benchmark, select="all")
         assert info == [
             {
                 "task_id": "task1",
@@ -202,7 +202,7 @@ def test_benchmark_runs_info_summary(benchmark):
 
     with mock.patch("builtins.open",
                     mock.mock_open(read_data='{"param": "value"}')):
-        info = Benchmark.runs_info(self=benchmark, columns="distinct")
+        info = Benchmark.runs_info(self=benchmark, select="distinct")
         assert info == [
             {
                 "task_id": "task1",

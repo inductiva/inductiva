@@ -19,8 +19,11 @@ class ExportFormat(enum.Enum):
     CSV = "csv"
 
 
-class ColumnExportMode(enum.Enum):
-    """Enumeration of benchmark column export modes."""
+class SelectMode(enum.Enum):
+    """
+    Enumeration of supported data selection modes, specifying which data 
+    should be included in the benchmarking results.
+    """
     ALL = "all"
     DISTINCT = "distinct"
 
@@ -155,7 +158,7 @@ class Benchmark(Project):
         self,
         fmt: Union[ExportFormat, str] = ExportFormat.JSON,
         filename: Optional[str] = None,
-        columns: Union[ColumnExportMode, str] = ColumnExportMode.DISTINCT,
+        select: Union[SelectMode, str] = SelectMode.DISTINCT,
     ):
         """
         Exports the benchmark performance metrics in the specified format.
@@ -166,13 +169,13 @@ class Benchmark(Project):
             filename (Optional[str]): The name of the output file to save the
                 exported results. Defaults to the benchmark's name if not
                 provided.
-            columns (Union[ColumnExportMode, str]): The columns to include in
-                the exported results. Defaults to ColumnExportMode.DISTINCT that
+            select (Union[SelectMode, str]): The data to include in
+                the benchmarking results. Defaults to SelectMode.DISTINCT that
                 includes only the parameters that vary between different runs.
         """
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
-        info = self.runs_info(columns=columns)
+        info = self.runs_info(select=select)
         filename = filename or f"{self.name}.{fmt.value}"
         if fmt == ExportFormat.JSON:
             with open(filename, mode="w", encoding="utf-8") as file:
@@ -189,7 +192,7 @@ class Benchmark(Project):
 
     def runs_info(
         self,
-        columns: Union[ColumnExportMode, str] = ColumnExportMode.DISTINCT,
+        select: Union[SelectMode, str] = SelectMode.DISTINCT,
     ) -> list:
         """
         Gathers the configuration and performance metrics for each run
@@ -197,8 +200,8 @@ class Benchmark(Project):
         execution time.
         
         Args:
-            columns (Union[ColumnExportMode, str]): The columns to include in
-                the exported results. Defaults to ColumnExportMode.DISTINCT that
+            select (Union[SelectMode, str]): The data to include in
+                the benchmarking results. Defaults to SelectMode.DISTINCT that
                 includes only the parameters that vary between different runs.
 
         Returns:
@@ -213,7 +216,7 @@ class Benchmark(Project):
             with open(input_file_path, mode="r", encoding="utf-8") as file:
                 return json.load(file)
 
-        def filter_distinct_columns(info):
+        def select_distinct(info):
             attrs_lsts = defaultdict(list)
             for attrs in info:
                 for attr, value in attrs.items():
@@ -222,8 +225,8 @@ class Benchmark(Project):
                         if values and len(values) != values.count(values[0])}
             return [{attr: attrs[attr] for attr in filtered} for attrs in info]
 
-        if isinstance(columns, str):
-            columns = ColumnExportMode[columns.upper()]
+        if isinstance(select, str):
+            select = SelectMode[select.upper()]
 
         info = []
         tasks = self.get_tasks()
@@ -243,8 +246,8 @@ class Benchmark(Project):
                 **task_input_params,
             })
 
-        return filter_distinct_columns(info) \
-            if columns == ColumnExportMode.DISTINCT \
+        return select_distinct(info) \
+            if select == SelectMode.DISTINCT \
             else info
 
     def terminate(self) -> Self:
