@@ -248,7 +248,8 @@ class Benchmark(Project):
 
     def terminate(self) -> Self:
         """
-        Terminates all active machine groups associated with the benchmark.
+        Terminates all active machine groups associated with the
+        benchmark.
 
         Returns:
             Self: The current instance for method chaining.
