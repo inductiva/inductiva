@@ -24,7 +24,7 @@ class SWAN(simulators.Simulator):
     def run(
         self,
         input_dir: Optional[str],
-        sim_config_filename: str,
+        sim_config_filename: Optional[str] = None,
         *,
         remote_assets: Optional[List[str]] = None,
         resubmit_on_preemption: bool = False,
@@ -40,6 +40,7 @@ class SWAN(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
+                Mandatory when using 'swanrun' command.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
             (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
@@ -59,6 +60,12 @@ class SWAN(simulators.Simulator):
 
         if command not in ("swanrun", "swan.exe"):
             raise ValueError("Invalid command. Use 'swanrun' or 'swan.exe'.")
+
+        if sim_config_filename is None and command == "swanrun":
+            raise ValueError("Simulation configuration file "
+                             "(sim_config_filename) not provided.\n"
+                             "When using 'swanrun' it is mandatory to provide "
+                             "sim_config_filename.")
 
         return super().run(input_dir,
                            on=on,
