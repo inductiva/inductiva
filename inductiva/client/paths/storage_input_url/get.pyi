@@ -1,5 +1,4 @@
 # coding: utf-8
-
 """
 
 
@@ -32,17 +31,20 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 # Query params
 
 
-class PathsSchema(
-    schemas.ListSchema
-):
-
+class PathsSchema(schemas.ListSchema):
 
     class MetaOapg:
         items = schemas.StrSchema
 
     def __new__(
         cls,
-        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
+        _arg: typing.Union[typing.Tuple[typing.Union[
+            MetaOapg.items,
+            str,
+        ]], typing.List[typing.Union[
+            MetaOapg.items,
+            str,
+        ]]],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'PathsSchema':
         return super().__new__(
@@ -53,23 +55,28 @@ class PathsSchema(
 
     def __getitem__(self, i: int) -> MetaOapg.items:
         return super().__getitem__(i)
+
+
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams',
-    {
-        'paths': typing.Union[PathsSchema, list, tuple, ],
-    }
-)
+    'RequestRequiredQueryParams', {
+        'paths': typing.Union[
+            PathsSchema,
+            list,
+            tuple,
+        ],
+    })
 RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams',
-    {
-        'provider_id': typing.Union[ProviderIdSchema, ],
+    'RequestOptionalQueryParams', {
+        'provider_id': typing.Union[
+            ProviderIdSchema,
+        ],
     },
-    total=False
-)
+    total=False)
 
 
-class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams):
+class RequestQueryParams(RequestRequiredQueryParams,
+                         RequestOptionalQueryParams):
     pass
 
 
@@ -88,20 +95,18 @@ request_query_provider_id = api_client.QueryParameter(
 )
 
 
-class SchemaFor200ResponseBodyApplicationJson(
-    schemas.ListSchema
-):
-
+class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['FileUploadDetails']:
             return FileUploadDetails
 
     def __new__(
         cls,
-        _arg: typing.Union[typing.Tuple['FileUploadDetails'], typing.List['FileUploadDetails']],
+        _arg: typing.Union[typing.Tuple['FileUploadDetails'],
+                           typing.List['FileUploadDetails']],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'SchemaFor200ResponseBodyApplicationJson':
         return super().__new__(
@@ -126,8 +131,9 @@ class ApiResponseFor200(api_client.ApiResponse):
 _response_for_200 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor200ResponseBodyApplicationJson),
+        'application/json':
+            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
+                                ),
     },
 )
 SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
@@ -145,16 +151,16 @@ class ApiResponseFor422(api_client.ApiResponse):
 _response_for_422 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor422,
     content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor422ResponseBodyApplicationJson),
+        'application/json':
+            api_client.MediaType(schema=SchemaFor422ResponseBodyApplicationJson
+                                ),
     },
 )
-_all_accept_content_types = (
-    'application/json',
-)
+_all_accept_content_types = ('application/json',)
 
 
 class BaseApi(api_client.Api):
+
     @typing.overload
     def _get_upload_url_oapg(
         self,
@@ -164,8 +170,9 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def _get_upload_url_oapg(
@@ -175,7 +182,8 @@ class BaseApi(api_client.Api):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def _get_upload_url_oapg(
@@ -186,9 +194,10 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def _get_upload_url_oapg(
         self,
@@ -209,15 +218,17 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_paths,
-            request_query_provider_id,
+                request_query_paths,
+                request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
             if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator()
-            serialized_data = parameter.serialize(parameter_data, prefix_separator_iterator)
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
+                )
+            serialized_data = parameter.serialize(parameter_data,
+                                                  prefix_separator_iterator)
             for serialized_value in serialized_data.values():
                 used_path += serialized_value
 
@@ -237,20 +248,22 @@ class BaseApi(api_client.Api):
         )
 
         if skip_deserialization:
-            api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+            api_response = api_client.ApiResponseWithoutDeserialization(
+                response=response)
         else:
-            response_for_status = _status_code_to_response.get(str(response.status))
+            response_for_status = _status_code_to_response.get(
+                str(response.status))
             if response_for_status:
-                api_response = response_for_status.deserialize(response, self.api_client.configuration)
+                api_response = response_for_status.deserialize(
+                    response, self.api_client.configuration)
             else:
-                api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+                api_response = api_client.ApiResponseWithoutDeserialization(
+                    response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(
-                status=response.status,
-                reason=response.reason,
-                api_response=api_response
-            )
+            raise exceptions.ApiException(status=response.status,
+                                          reason=response.reason,
+                                          api_response=api_response)
 
         return api_response
 
@@ -267,8 +280,9 @@ class GetUploadUrl(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def get_upload_url(
@@ -278,7 +292,8 @@ class GetUploadUrl(BaseApi):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def get_upload_url(
@@ -289,9 +304,10 @@ class GetUploadUrl(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def get_upload_url(
         self,
@@ -306,8 +322,7 @@ class GetUploadUrl(BaseApi):
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
+            skip_deserialization=skip_deserialization)
 
 
 class ApiForget(BaseApi):
@@ -322,8 +337,9 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def get(
@@ -333,7 +349,8 @@ class ApiForget(BaseApi):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def get(
@@ -344,9 +361,10 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def get(
         self,
@@ -361,7 +379,4 @@ class ApiForget(BaseApi):
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
-
-
+            skip_deserialization=skip_deserialization)
