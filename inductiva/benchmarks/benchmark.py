@@ -10,6 +10,7 @@ from inductiva.simulators import Simulator
 from inductiva.projects import Project
 from inductiva.client import ApiException
 from inductiva.resources.machine_types import ProviderType
+from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 from collections import defaultdict
 
 
@@ -36,8 +37,8 @@ class Benchmark(Project):
         TASK_ID = "task_id"
         SIMULATOR = "simulator"
         MACHINE_TYPE = "machine_type"
-        TIME = "computation_time"
-        COST = "estimated_computation_cost"
+        TIME = f"computation_time ({TIME_UNIT})"
+        COST = f"estimated_computation_cost ({CURRENCY_SYMBOL})"
 
     def __init__(self, name: str, append: bool = True):
         """
