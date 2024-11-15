@@ -302,7 +302,7 @@ it to *25 seconds*. Additionally, we’ll generate a Paraview output every *0.01
 	task.print_summary()
 	```
 
-### Step 4: Enhancing Performance with MPI Cluster
+### Step 3: Enhancing Performance with MPI Cluster
 
 You might've noticd that simulations can take quite a while. To cut down on runtime, 
 we can change our machine configuration to an **MPI cluster** with two machines:
