@@ -175,7 +175,7 @@ machine_group = inductiva.resources.MachineGroup(
 					machine_type="c2d-highcpu-112",
 					spot=True,
 					data_disk_gb=20,
-					auto_resize_disk_max_gb=250)
+					auto_resize_disk_max_gb=100)
 
 machine_group.start()
 
@@ -223,7 +223,7 @@ it to *25 seconds*. Additionally, we’ll generate a Paraview output every *0.01
 						machine_type="c2d-highcpu-112",
 						spot=True,
 						data_disk_gb=20,
-						auto_resize_disk_max_gb=250)
+						auto_resize_disk_max_gb=100)
 	```
 	**Note**: `spot` machines are a lot cheaper but can be terminated by the
 	provider if needed.
@@ -310,7 +310,7 @@ we can change our machine configuration to an **MPI cluster** with two machines:
 ```python
 mpi_cluster = inductiva.resources.MPICluster(
                   machine_type="c2d-highcpu-56",
-                  data_disk_gb=250,
+                  data_disk_gb=100,
                   num_machines=2)
 mpi_cluster.start()
 
