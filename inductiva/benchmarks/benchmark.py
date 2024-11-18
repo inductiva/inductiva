@@ -137,9 +137,11 @@ class Benchmark(Project):
         Args:
             num_repeats (int): The number of times to repeat each simulation
                 run (default is 2).
-            wait_for_quotas (bool): Indicates whether to wait for the quotas to
-                be available before starting each resource (default is
-                False).
+            wait_for_quotas (bool): Indicates whether to wait for quotas to 
+                become available before starting each resource. If `True`, the 
+                program will actively wait in a loop, periodically sleeping and 
+                checking for quotas. If `False`, the program crashes if quotas 
+                are not available (default is `False`).
 
         Returns:
             Self: The current instance for method chaining.
