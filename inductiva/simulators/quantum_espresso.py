@@ -27,7 +27,7 @@ class QuantumEspresso(simulators.Simulator):
         return "Quantum-Espresso"
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             commands: List[str],
             *,
             use_hwthread: bool = True,
@@ -54,6 +54,8 @@ class QuantumEspresso(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
         """
         return super().run(input_dir,
                            on=on,

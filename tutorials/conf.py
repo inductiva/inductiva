@@ -126,7 +126,5 @@ redirects = {
     "intro_to_api/configuring-simulators.html":
         "https://docs.inductiva.ai/en/latest/intro_to_api/configuring-simulators.html",
     "intro_to_api/projects.html":
-        "https://docs.inductiva.ai/en/latest/intro_to_api/projects.html",
-    "intro_to_api/custom_docker_images.html":
-        "https://docs.inductiva.ai/en/latest/intro_to_api/custom_docker_images.html",
+        "https://docs.inductiva.ai/en/latest/intro_to_api/projects.html"
 }

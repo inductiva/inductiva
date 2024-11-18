@@ -22,7 +22,7 @@ class FDS(simulators.Simulator):
         self.simulator = "fds"
 
     def run(self,
-            input_dir: str,
+            input_dir: Optional[str],
             sim_config_filename: str,
             *,
             on: types.ComputationalResources,
@@ -44,6 +44,8 @@ class FDS(simulators.Simulator):
             use_hwthread: If specified Open MPI will attempt to discover the
                 number of hardware threads on the node, and use that as the
                 number of slots available.
+            remote_assets: Additional remote files that will be copied to
+                the simulation directory.
             other arguments: See the documentation of the base class.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when

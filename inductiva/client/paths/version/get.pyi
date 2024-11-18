@@ -1,5 +1,4 @@
 # coding: utf-8
-
 """
 
 
@@ -42,16 +41,16 @@ class ApiResponseFor200(api_client.ApiResponse):
 _response_for_200 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor200ResponseBodyApplicationJson),
+        'application/json':
+            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
+                                ),
     },
 )
-_all_accept_content_types = (
-    'application/json',
-)
+_all_accept_content_types = ('application/json',)
 
 
 class BaseApi(api_client.Api):
+
     @typing.overload
     def _get_backend_version_oapg(
         self,
@@ -60,8 +59,9 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def _get_backend_version_oapg(
@@ -70,7 +70,8 @@ class BaseApi(api_client.Api):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def _get_backend_version_oapg(
@@ -80,9 +81,10 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def _get_backend_version_oapg(
         self,
@@ -114,20 +116,22 @@ class BaseApi(api_client.Api):
         )
 
         if skip_deserialization:
-            api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+            api_response = api_client.ApiResponseWithoutDeserialization(
+                response=response)
         else:
-            response_for_status = _status_code_to_response.get(str(response.status))
+            response_for_status = _status_code_to_response.get(
+                str(response.status))
             if response_for_status:
-                api_response = response_for_status.deserialize(response, self.api_client.configuration)
+                api_response = response_for_status.deserialize(
+                    response, self.api_client.configuration)
             else:
-                api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+                api_response = api_client.ApiResponseWithoutDeserialization(
+                    response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(
-                status=response.status,
-                reason=response.reason,
-                api_response=api_response
-            )
+            raise exceptions.ApiException(status=response.status,
+                                          reason=response.reason,
+                                          api_response=api_response)
 
         return api_response
 
@@ -143,8 +147,9 @@ class GetBackendVersion(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def get_backend_version(
@@ -153,7 +158,8 @@ class GetBackendVersion(BaseApi):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def get_backend_version(
@@ -163,9 +169,10 @@ class GetBackendVersion(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def get_backend_version(
         self,
@@ -178,8 +185,7 @@ class GetBackendVersion(BaseApi):
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
+            skip_deserialization=skip_deserialization)
 
 
 class ApiForget(BaseApi):
@@ -193,8 +199,9 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def get(
@@ -203,7 +210,8 @@ class ApiForget(BaseApi):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def get(
@@ -213,9 +221,10 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def get(
         self,
@@ -228,7 +237,4 @@ class ApiForget(BaseApi):
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
-
-
+            skip_deserialization=skip_deserialization)
