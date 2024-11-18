@@ -145,7 +145,7 @@ class BaseMachineGroup(ABC):
     @property
     def name(self):
         return self._name
-    
+
     @property
     def started(self):
         return self._started
