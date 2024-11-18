@@ -145,6 +145,10 @@ class BaseMachineGroup(ABC):
     @property
     def name(self):
         return self._name
+    
+    @property
+    def started(self):
+        return self._started
 
     @property
     def max_idle_time(self) -> datetime.timedelta:
