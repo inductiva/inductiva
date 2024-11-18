@@ -147,6 +147,10 @@ class BaseMachineGroup(ABC):
         return self._name
 
     @property
+    def started(self):
+        return self._started
+
+    @property
     def max_idle_time(self) -> datetime.timedelta:
         return self._max_idle_time
 
@@ -315,11 +319,11 @@ class BaseMachineGroup(ABC):
 
         return is_cost_ok and is_vcpu_ok and is_instance_ok
 
-    def start(self, wait_on_pending_quota: bool = False, **kwargs):
+    def start(self, wait_for_quotas: bool = False, **kwargs):
         """Starts a machine group.
 
         Args:
-            wait_on_pending_quota: If True, the method will wait for quotas to
+            wait_for_quotas: If True, the method will wait for quotas to
               become available before starting the resource.
             **kwargs: Depending on the type of machine group to be started,
               this can be num_machines, max_machines, min_machines,
@@ -351,7 +355,7 @@ class BaseMachineGroup(ABC):
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
 
-        if wait_on_pending_quota:
+        if wait_for_quotas:
             if not self.can_start_resource():
                 print("This machine will exceed the current quotas.\n"
                       "Will wait for quotas to become available.")

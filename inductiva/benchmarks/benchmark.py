@@ -127,7 +127,7 @@ class Benchmark(Project):
         ))
         return self
 
-    def run(self, num_repeats: int = 2) -> Self:
+    def run(self, num_repeats: int = 2, wait_for_quotas: bool = False) -> Self:
         """
         Executes all added runs.
 
@@ -136,14 +136,20 @@ class Benchmark(Project):
 
         Args:
             num_repeats (int): The number of times to repeat each simulation
-            run (default is 2).
+                run (default is 2).
+            wait_for_quotas (bool): Indicates whether to wait for quotas to 
+                become available before starting each resource. If `True`, the 
+                program will actively wait in a loop, periodically sleeping and 
+                checking for quotas. If `False`, the program crashes if quotas 
+                are not available (default is `False`).
 
         Returns:
             Self: The current instance for method chaining.
         """
         with self:
             for simulator, input_dir, machine_group, kwargs in self.runs:
-                machine_group.start(wait_on_pending_quota=False)
+                if not machine_group.started:
+                    machine_group.start(wait_for_quotas=wait_for_quotas)
                 for _ in range(num_repeats):
                     simulator.run(input_dir=input_dir,
                                   on=machine_group,
