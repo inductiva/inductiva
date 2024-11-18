@@ -1,13 +1,14 @@
 from typing import TextIO
 import argparse
 import sys
+import asyncio
 
 from inductiva import _cli, tasks
 
 def list_directories(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
-    directories = task.list_directories()
+    directories = asyncio.run(task.file_operation(tasks.Operations.LIST_DIR))
     print(directories, file=fout)
     return 0
 

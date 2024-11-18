@@ -26,15 +26,15 @@ class FileTracker:
         self._message = None
 
 
-    async def create_peer_connection(self,operation,args=None):
+    async def create_peer_connection(self,operation, **kwargs):
         self.pc.configuration = {"iceServers": ICE_SERVERS}
         channel = self.pc.createDataChannel("file_transfer")
         fut = asyncio.Future()
         @channel.on("open")
         def on_open():
             request = operation.value
-            if args:
-                request += ":" + args
+            if kwargs:
+                request += ":" + json.dumps(",".join(kwargs.values())).strip('"')
             channel.send(request)
 
         @channel.on("message")

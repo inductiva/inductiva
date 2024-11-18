@@ -1,13 +1,14 @@
 from typing import TextIO
 import argparse
 import sys
+import asyncio
 
 from inductiva import _cli, tasks
 
 def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
-    lines = task.tail(args.filename)
+    lines = asyncio.run(task.file_operation(tasks.Operations.TAIL, filename=args.filename))
     print(lines, file=fout)
     return 0
 

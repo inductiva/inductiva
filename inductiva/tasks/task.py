@@ -26,6 +26,7 @@ from inductiva.client.paths.tasks_task_id_download_input_url import get \
     as get_tasks_task_id_download_input_url
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
+from inductiva.tasks.file_tracker import Operations, FileTracker
 
 import warnings
 
@@ -1094,6 +1095,21 @@ class Task:
             download_partial_files=data.download_partial_inputs,
             download_task_files=self._api.download_task_input,
         )
+    
+    async def file_operations(self, operation: Operations, **kwargs) -> str:
+        """Perform file operations on the task that is currently running.
+
+        Args:
+            operation: The operation to perform on the task files.
+            **kwargs: Additional arguments for the operation.
+
+        Returns:
+            The result of the operation.
+        """
+        file_tracker = FileTracker(self.id)
+        ret = await file_tracker.create_peer_connection(operation, **kwargs)
+        file_tracker.connect_to_task()
+        return (await ret)
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
