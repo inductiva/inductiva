@@ -148,7 +148,7 @@ class Benchmark(Project):
         """
         with self:
             for simulator, input_dir, machine_group, kwargs in self.runs:
-                if not machine_group.started():
+                if not machine_group.started:
                     machine_group.start(wait_for_quotas=wait_for_quotas)
                 for _ in range(num_repeats):
                     simulator.run(input_dir=input_dir,
