@@ -57,19 +57,17 @@ def run_simulation(
 
     position = task.get_position_in_queue()
     if position is not None:
-        logging.info("Number of tasks ahead in the queue: %s", position)
+        position_message = f"Number of tasks ahead in the queue: {position}."
     else:
-        logging.info("Task %s does not have queue information.", task_id)
+        position_message = f"Task {task_id} does not have queue information."
 
     logging.info(
+        f"{position_message}\n"
         "· Consider tracking the status of the task via CLI:"
-        "\n\tinductiva tasks list --id %s", task_id)
-    logging.info(
+        f"\n\tinductiva tasks list --id {task_id}\n"
         "· Or, tracking the logs of the task via CLI:"
-        "\n\tinductiva logs %s", task_id)
-    logging.info(
+        f"\n\tinductiva logs {task_id}\n"
         "· You can also get more information "
         "about the task via the CLI command:"
-        "\n\tinductiva tasks info %s", task_id)
-    logging.info("")
+        f"\n\tinductiva tasks info {task_id}\n\n")
     return task
