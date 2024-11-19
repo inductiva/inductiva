@@ -3,8 +3,6 @@ import json
 import uuid
 from aiortc import RTCPeerConnection, RTCSessionDescription
 import aiohttp
-from asyncio import Future
-import sys
 import enum
 
 SIGNALING_SERVER = "http://34.79.246.4:6000"
@@ -20,16 +18,16 @@ class Operations(enum.Enum):
     TAIL = "tail"
 
 class FileTracker:
-    def init(self):
-        self.peer_id = str(uuid.uuid4())
+    def __init__(self):
         self.pc = RTCPeerConnection()
+        self.pc.configuration = {"iceServers": ICE_SERVERS}
         self._message = None
 
 
-    async def create_peer_connection(self,operation, **kwargs):
-        self.pc.configuration = {"iceServers": ICE_SERVERS}
+    async def setup_channel(self, operation, **kwargs):
         channel = self.pc.createDataChannel("file_transfer")
         fut = asyncio.Future()
+
         @channel.on("open")
         def on_open():
             request = operation.value
@@ -40,15 +38,15 @@ class FileTracker:
         @channel.on("message")
         async def on_message(message):
             if operation == Operations.LIST:
-                self.message = json.loads(message)
+                self._message = json.loads(message)
             elif operation == Operations.TAIL:
-                self.message = message.decode()
+                self._message = message.decode()
             channel.close()
 
         @channel.on("close")
         async def on_close():
             print("Channel closed")
-            fut.set_result(self.message)
+            fut.set_result(self._message)
 
         return fut
     

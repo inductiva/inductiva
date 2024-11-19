@@ -1096,7 +1096,7 @@ class Task:
             download_task_files=self._api.download_task_input,
         )
     
-    async def file_operations(self, operation: Operations, **kwargs) -> str:
+    async def file_operation(self, operation: Operations, **kwargs) -> str:
         """Perform file operations on the task that is currently running.
 
         Args:
@@ -1106,9 +1106,9 @@ class Task:
         Returns:
             The result of the operation.
         """
-        file_tracker = FileTracker(self.id)
-        ret = await file_tracker.create_peer_connection(operation, **kwargs)
-        file_tracker.connect_to_task()
+        file_tracker = FileTracker()
+        ret = await file_tracker.setup_channel(operation, **kwargs)
+        await file_tracker.connect_to_task(self.id)
         return (await ret)
 
     class _PathParams(TypedDict):
