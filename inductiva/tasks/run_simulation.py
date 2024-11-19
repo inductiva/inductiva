@@ -50,10 +50,10 @@ def run_simulation(
     logging.info("■ Task %s submitted to the queue of the %s.", task_id,
                  computational_resources)
 
-    task = tasks.Task(task_id)
     if not isinstance(task_id, str):
         raise RuntimeError(
             f"Expected result to be a string with task_id, got {type(task_id)}")
+    task = tasks.Task(task_id)
 
     position = task.get_position_in_queue()
     if position is not None:
