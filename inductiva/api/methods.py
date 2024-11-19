@@ -333,37 +333,36 @@ def blocking_task_context(api_instance: TasksApi, task_id):
         signal.signal(signal.SIGINT, original_sig)
 
 
-def log_task_info(
+def task_info_str(
     task_id,
     params,
     resource_pool,
     simulator,
     task_submitted_info: TaskSubmittedInfo,
-):
-    """Logging the main components of a task submission."""
+) -> str:
+    """Generate a string with the main components of a task submission."""
 
-    logging.info("■ Task Information:")
-    logging.info("\t· ID:                    %s", task_id)
+    info_str = "■ Task Information:\n"
+    info_str += f"\t· ID:                    {task_id}\n"
     if simulator is not None:
-        logging.info("\t· Simulator:             %s", simulator.name)
-        logging.info("\t· Version:               %s", simulator.version)
-        logging.info("\t· Image:                 %s", simulator.image_uri)
+        info_str += f"\t· Simulator:             {simulator.name}\n"
+        info_str += f"\t· Version:               {simulator.version}\n"
+        info_str += f"\t· Image:                 {simulator.image_uri}\n"
 
-    logging.info("\t· Local input directory: %s", params["sim_dir"])
-    logging.info("\t· Submitting to the following computational resources:")
+    info_str += f"\t· Local input directory: {params["sim_dir"]}\n" \
+                 "\t· Submitting to the following computational resources:\n"
     if resource_pool is not None:
-        logging.info(" \t\t· %s", resource_pool)
+        info_str += f" \t\t· {resource_pool}\n"
     else:
-        logging.info(" \t\t· Default queue with %s machines.",
-                     constants.DEFAULT_QUEUE_MACHINE_TYPE)
+        info_str += " \t\t· Default queue with " \
+            f"{constants.DEFAULT_QUEUE_MACHINE_TYPE} machines.\n"
         ttl_seconds = task_submitted_info.get("time_to_live_seconds")
         if ttl_seconds is not None and isinstance(ttl_seconds, decimal.Decimal):
-            logging.info(
-                (" \t\t· Task will be killed after the computation time "
-                 "exceeds %s (h:m:s)."),
-                format_utils.seconds_formatter(ttl_seconds),
-            )
-    logging.info("")
+            ttl_seconds = format_utils.seconds_formatter(ttl_seconds)
+            info_str += f" \t\t· Task will be killed after the computation " \
+                        f"time exceeds {ttl_seconds} (h:m:s).\n"
+    info_str += "\n"
+    return info_str
 
 
 def submit_task(api_instance,
@@ -403,13 +402,13 @@ def submit_task(api_instance,
     )
 
     task_id = task_submitted_info["id"]
-    log_task_info(
+    logging.info(task_info_str(
         task_id,
         params,
         resource_pool,
         simulator_obj,
         task_submitted_info,
-    )
+    ))
 
     if task_submitted_info["status"] == "pending-input":
 
