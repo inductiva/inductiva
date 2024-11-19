@@ -4,6 +4,7 @@ import uuid
 from aiortc import RTCPeerConnection, RTCSessionDescription
 import aiohttp
 import enum
+import logging
 
 SIGNALING_SERVER = "http://34.79.246.4:6000"
 
@@ -36,16 +37,12 @@ class FileTracker:
             channel.send(request)
 
         @channel.on("message")
-        async def on_message(message):
-            if operation == Operations.LIST:
-                self._message = json.loads(message)
-            elif operation == Operations.TAIL:
-                self._message = message.decode()
+        def on_message(message):
+            self._message = json.loads(message)
             channel.close()
 
         @channel.on("close")
-        async def on_close():
-            print("Channel closed")
+        def on_close():
             fut.set_result(self._message)
 
         return fut

@@ -504,7 +504,7 @@ class Task:
             return s.ljust(max_line_length, " ")
         return s
 
-    def _format_list_of_lines(self, lines: List[str], file: str) -> str:
+    def _format_list_of_lines(self, lines: List[str], file: str, sep : Optional[str]="", endl : Optional[str]="\n") -> str:
         """Formats a list of lines with color.
 
         This method formats a list of lines with a color and adds a header and
@@ -524,8 +524,6 @@ class Task:
             lines: A list of strings to format.
             file: The name of the file. Must be "stdout.txt" or "stderr.txt".
         """
-        if file not in ("stdout.txt", "stderr.txt"):
-            raise ValueError("File must be stdout.txt or stderr.txt")
 
         color_code = "\033[31m" if file == "stderr.txt" else "\033[34m"
         reset_color = "\033[0m"
@@ -539,10 +537,33 @@ class Task:
         new_lst = [f"{color_code}│{reset_color}{line}" for line in lines]
 
         new_lst.insert(
-            0, f"{color_code}┌ (last {n} lines from {file}){reset_color}\n")
-        new_lst.append(f"{color_code}└{reset_color}\n")
+            0, f"{color_code}┌ (last {n} lines from {file}){reset_color}{endl}")
+        new_lst.append(f"{color_code}└{reset_color}{endl}")
 
-        return "".join(new_lst)
+        return sep.join(new_lst)
+    
+    def _format_directory_listing(self, directories: list, indent=0) -> str:
+        """Formats a dictionary with directory information.
+
+        This method formats a dictionary with directory information and
+        returns a string with the formatted data.
+
+        Args:
+            directories: A dictionary with directory information.
+        """
+        color_code = "\033[34m"
+        reset_color = "\033[0m"
+        contents = f"{color_code}Directory contents:{reset_color}\n" if indent == 0 else ""
+
+        for item in directories:
+            if isinstance(item, dict):
+                for dir_name, dir_contents in item.items():
+                    contents += "  " * indent + f"{color_code}[DIR]{reset_color} {dir_name}\n"
+                    contents += self._format_directory_listing(dir_contents, indent + 1)
+            else:
+                contents += "  " * indent + f"{color_code}[FILE]{reset_color} {item}\n"
+
+        return contents
 
     def _print_failed_message(self, out_dir: str) -> None:
         """Prints the messages when a task fails.
@@ -1109,7 +1130,13 @@ class Task:
         file_tracker = FileTracker()
         ret = await file_tracker.setup_channel(operation, **kwargs)
         await file_tracker.connect_to_task(self.id)
-        return (await ret)
+        message = await ret
+
+        if operation == Operations.LIST:
+            message = self._format_directory_listing(message)
+        elif operation == Operations.TAIL:
+            message = self._format_list_of_lines(message, kwargs.get("filename"), sep="\n", endl="")
+        return message
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
