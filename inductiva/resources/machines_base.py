@@ -350,7 +350,7 @@ class BaseMachineGroup(ABC):
             )
 
         logging.info(f"Starting {self}. "
-                     "This may take a few minutes."
+                     "This may take a few minutes.\n"
                      "Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
@@ -365,7 +365,7 @@ class BaseMachineGroup(ABC):
         self._api.start_vm_group(body=request_body)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
-        logging.info(f"{self} successfully started in {creation_time}.\n"
+        logging.info(f"{self} successfully started in {creation_time}.\n\n"
                      "The machine group is using the following quotas:\n"
                      f"{self.quota_usage_table_str("used by resource")}")
         return True
