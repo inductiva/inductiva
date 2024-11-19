@@ -12,6 +12,7 @@ from inductiva.client import ApiException
 from inductiva.resources.machine_types import ProviderType
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 
 
 class ExportFormat(enum.Enum):
@@ -146,15 +147,18 @@ class Benchmark(Project):
         Returns:
             Self: The current instance for method chaining.
         """
-        with self:
-            for simulator, input_dir, machine_group, kwargs in self.runs:
-                if not machine_group.started:
-                    machine_group.start(wait_for_quotas=wait_for_quotas)
-                for _ in range(num_repeats):
-                    simulator.run(input_dir=input_dir,
-                                  on=machine_group,
-                                  **kwargs)
-            self.runs.clear()
+        def _run(params):
+            simulator, input_dir, machine_group, kwargs = params
+            if not machine_group.started:
+                machine_group.start(wait_for_quotas=wait_for_quotas)
+            for _ in range(num_repeats):
+                simulator.run(input_dir=input_dir,
+                              on=machine_group,
+                              **kwargs)
+
+        with self, ThreadPoolExecutor() as executor:
+            _ = executor.map(_run, self.runs)
+        self.runs.clear()
         return self
 
     def wait(self) -> Self:
