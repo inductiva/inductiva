@@ -349,9 +349,9 @@ class BaseMachineGroup(ABC):
                 **kwargs,
             )
 
-        logging.info("Starting %s. "
-                     "This may take a few minutes.", repr(self))
-        logging.info("Note that stopping this local process will not interrupt "
+        logging.info(f"Starting {self}. "
+                     "This may take a few minutes."
+                     "Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
 
@@ -365,10 +365,9 @@ class BaseMachineGroup(ABC):
         self._api.start_vm_group(body=request_body)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
-        logging.info("%s successfully started in %s.", self, creation_time)
-        logging.info("")
-        logging.info("The machine group is using the following quotas:")
-        self.log_quota_usage("used by resource")
+        logging.info(f"{self} successfully started in {creation_time}.\n"
+                     "The machine group is using the following quotas:\n"
+                     f"{self.quota_usage_table_str("used by resource")}")
         return True
 
     def terminate(self, verbose: bool = True, **kwargs):
@@ -396,7 +395,7 @@ class BaseMachineGroup(ABC):
                              repr(self))
                 logging.info("Termination of the machine group "
                              "freed the following quotas:")
-                self.log_quota_usage("freed by resource")
+                logging.info(self.quota_usage_table_str("freed by resource"))
             return True
 
         except inductiva.client.ApiException as api_exception:
@@ -422,7 +421,7 @@ class BaseMachineGroup(ABC):
 
         return self._estimated_cost
 
-    def log_quota_usage(self, resource_usage_header: str):
+    def quota_usage_table_str(self, resource_usage_header: str) -> str:
         quotas = users.get_quotas()
         table = defaultdict(list)
         emph_formatter = format_utils.get_ansi_formatter()
@@ -446,7 +445,7 @@ class BaseMachineGroup(ABC):
             header_formatters=header_formatters,
         )
 
-        logging.info(table_str)
+        return table_str
 
     def _log_estimated_spot_vm_savings(self) -> None:
         if self.provider in (
