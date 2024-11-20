@@ -342,12 +342,12 @@ def task_info_str(
 ) -> str:
     """Generate a string with the main components of a task submission."""
 
-    info_str = "■ Task Information:\n"
-    info_str += f"\t· ID:                    {task_id}\n"
+    info_str = ("■ Task Information:\n"
+                f"\t· ID:                    {task_id}\n")
     if simulator is not None:
-        info_str += f"\t· Simulator:             {simulator.name}\n"
-        info_str += f"\t· Version:               {simulator.version}\n"
-        info_str += f"\t· Image:                 {simulator.image_uri}\n"
+        info_str += (f"\t· Simulator:             {simulator.name}\n"
+                     f"\t· Version:               {simulator.version}\n"
+                     f"\t· Image:                 {simulator.image_uri}\n")
 
     local_input_dir = params["sim_dir"]
     info_str += (f"\t· Local input directory: {local_input_dir}\n"
@@ -355,13 +355,13 @@ def task_info_str(
     if resource_pool is not None:
         info_str += f" \t\t· {resource_pool}\n"
     else:
-        info_str += " \t\t· Default queue with " \
-            f"{constants.DEFAULT_QUEUE_MACHINE_TYPE} machines.\n"
+        machine_type = constants.DEFAULT_QUEUE_MACHINE_TYPE
+        info_str += f" \t\t· Default queue with {machine_type} machines.\n"
         ttl_seconds = task_submitted_info.get("time_to_live_seconds")
         if ttl_seconds is not None and isinstance(ttl_seconds, decimal.Decimal):
             ttl_seconds = format_utils.seconds_formatter(ttl_seconds)
-            info_str += f" \t\t· Task will be killed after the computation " \
-                        f"time exceeds {ttl_seconds} (h:m:s).\n"
+            info_str += (f" \t\t· Task will be killed after the computation "
+                         f"time exceeds {ttl_seconds} (h:m:s).\n")
     info_str += "\n"
     return info_str
 
