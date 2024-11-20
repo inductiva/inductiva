@@ -349,8 +349,9 @@ def task_info_str(
         info_str += f"\t· Version:               {simulator.version}\n"
         info_str += f"\t· Image:                 {simulator.image_uri}\n"
 
-    info_str += f"\t· Local input directory: {params["sim_dir"]}\n" \
-                 "\t· Submitting to the following computational resources:\n"
+    local_input_dir = params["sim_dir"]
+    info_str += (f"\t· Local input directory: {local_input_dir}\n"
+                 "\t· Submitting to the following computational resources:\n")
     if resource_pool is not None:
         info_str += f" \t\t· {resource_pool}\n"
     else:
@@ -402,13 +403,14 @@ def submit_task(api_instance,
     )
 
     task_id = task_submitted_info["id"]
-    logging.info(task_info_str(
-        task_id,
-        params,
-        resource_pool,
-        simulator_obj,
-        task_submitted_info,
-    ))
+    logging.info(
+        task_info_str(
+            task_id,
+            params,
+            resource_pool,
+            simulator_obj,
+            task_submitted_info,
+        ))
 
     if task_submitted_info["status"] == "pending-input":
 
