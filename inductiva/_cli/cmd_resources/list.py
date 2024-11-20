@@ -164,7 +164,6 @@ def list_machine_groups(_, fout: TextIO = sys.stdout):
         print("No active computational resources found.", file=fout, end="")
 
 
-
 def register(parser):
     """Register the list resources commands."""
 
