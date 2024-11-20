@@ -349,7 +349,7 @@ class BaseMachineGroup(ABC):
                 **kwargs,
             )
 
-        logging.info(f"Starting {self}. "
+        logging.info(f"Starting {repr(self)}. "
                      "This may take a few minutes.\n"
                      "Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
