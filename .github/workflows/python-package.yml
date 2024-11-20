@@ -43,7 +43,7 @@ jobs:
     - name: Lint with pylint
       if: ${{ always() }}
       run: |
-        find . -type f -not -path "./third_party/*" -name '*.py' | xargs pylint
+        find . -type f -not -path "./inductiva/client/*" -name '*.py' | xargs pylint
     - name: Test with pytest
       if: ${{ always() }}
       run: |
