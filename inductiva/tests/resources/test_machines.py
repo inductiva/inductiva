@@ -60,47 +60,6 @@ def test_machines__machine_group__register():
     assert cluster.register is False
 
 
-@mock.patch.object(inductiva.resources.MachineGroup, "__init__", fake_init)
-def test_machines__machine_group__ice_register():
-    """Check the registering of a MachineGroup with the ICE provider.
-    
-    Goal: Verify that the MachineGroup is initializating correctly based on a
-    mock registration and the ICE provider.
-    """
-
-    inductiva.set_api_key("dummy")
-    machine = inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
-                                               provider="ICE")
-
-    # Check that the cluster has been initialized correctly
-    assert machine.name == "name-resource"  # pylint: disable = protected-access
-    assert machine.id == "id-resource"  # pylint: disable = protected-access
-    assert machine.machine_type == "c2-highmem-4"
-    assert machine.register is False
-    assert machine.provider == "ICE"
-
-
-@mock.patch.object(inductiva.resources.MachineGroup,
-                   attribute="_register_machine_group",
-                   new=fake_register)
-def test_machines__ice_register__invalid_args():
-    """Check the registering of a MachineGroup with the ICE provider fails with
-    num_machines higher than one or spot True.
-    
-    Goal: Verify that the MachineGroup is initializating correctly based on a
-    mock registration and the ICE provider.
-    """
-
-    inductiva.set_api_key("dummy")
-
-    with pytest.raises(ValueError) as exception:
-        inductiva.resources.MachineGroup(machine_type="c2-highmem-4",
-                                         spot=True,
-                                         provider="ICE")
-
-    assert "only supports persistent machine" in str(exception.value)
-
-
 @mock.patch.object(inductiva.resources.MachineGroup,
                    attribute="_register_machine_group",
                    new=fake_register)

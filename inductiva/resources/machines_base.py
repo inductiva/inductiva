@@ -406,7 +406,6 @@ class BaseMachineGroup(ABC):
         it immediately if it has.
         """
         if self.provider in (
-                machine_types.ProviderType.ICE,
                 machine_types.ProviderType.LOCAL,
         ):
             return 0
@@ -446,7 +445,6 @@ class BaseMachineGroup(ABC):
 
     def _log_estimated_spot_vm_savings(self) -> None:
         if self.provider in (
-                machine_types.ProviderType.ICE,
                 machine_types.ProviderType.LOCAL,
         ):
             return
