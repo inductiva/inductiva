@@ -345,8 +345,7 @@ class BaseMachineGroup(ABC):
                 **kwargs,
             )
 
-        logging.info("Starting %s. "
-                     "This may take a few minutes.", repr(self))
+        logging.info("Starting %s. " "This may take a few minutes.", repr(self))
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
@@ -405,9 +404,7 @@ class BaseMachineGroup(ABC):
         it verifies if the cost has already been estimated and returns
         it immediately if it has.
         """
-        if self.provider in (
-                machine_types.ProviderType.LOCAL,
-        ):
+        if self.provider in (machine_types.ProviderType.LOCAL,):
             return 0
 
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
@@ -444,9 +441,7 @@ class BaseMachineGroup(ABC):
         logging.info(table_str)
 
     def _log_estimated_spot_vm_savings(self) -> None:
-        if self.provider in (
-                machine_types.ProviderType.LOCAL,
-        ):
+        if self.provider in (machine_types.ProviderType.LOCAL,):
             return
 
         spot_cost = self._get_estimated_cost(True)
