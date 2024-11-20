@@ -349,10 +349,10 @@ class BaseMachineGroup(ABC):
                 **kwargs,
             )
 
-        logging.info(f"Starting {repr(self)}. "
-                     "This may take a few minutes.\n"
-                     "Note that stopping this local process will not interrupt "
-                     "the creation of the machine group. Please wait...")
+        logging.info(
+            "Starting %s. This may take a few minutes.\n"
+            "Note that stopping this local process will not interrupt "
+            "the creation of the machine group. Please wait...", repr(self))
         start_time = time.time()
 
         if wait_for_quotas:
@@ -366,9 +366,10 @@ class BaseMachineGroup(ABC):
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
         quota_usage_table_str = self.quota_usage_table_str("used by resource")
-        logging.info(f"{self} successfully started in {creation_time}.\n\n"
-                     "The machine group is using the following quotas:\n"
-                     f"{quota_usage_table_str}")
+        logging.info(
+            "%s successfully started in %s.\n\n"
+            "The machine group is using the following quotas:\n"
+            "%s", self, creation_time, quota_usage_table_str)
         return True
 
     def terminate(self, verbose: bool = True, **kwargs):
