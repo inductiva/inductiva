@@ -147,6 +147,7 @@ class Benchmark(Project):
         Returns:
             Self: The current instance for method chaining.
         """
+
         def _run(params):
             with self:
                 simulator, input_dir, machine_group, kwargs = params

@@ -61,13 +61,12 @@ def run_simulation(
     else:
         position_message = f"Task {task_id} does not have queue information."
 
-    logging.info(
-        f"{position_message}\n"
-        "· Consider tracking the status of the task via CLI:"
-        f"\n\tinductiva tasks list --id {task_id}\n"
-        "· Or, tracking the logs of the task via CLI:"
-        f"\n\tinductiva logs {task_id}\n"
-        "· You can also get more information "
-        "about the task via the CLI command:"
-        f"\n\tinductiva tasks info {task_id}\n\n")
+    logging.info(f"{position_message}\n"
+                 "· Consider tracking the status of the task via CLI:"
+                 f"\n\tinductiva tasks list --id {task_id}\n"
+                 "· Or, tracking the logs of the task via CLI:"
+                 f"\n\tinductiva logs {task_id}\n"
+                 "· You can also get more information "
+                 "about the task via the CLI command:"
+                 f"\n\tinductiva tasks info {task_id}\n\n")
     return task
