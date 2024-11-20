@@ -345,7 +345,8 @@ class BaseMachineGroup(ABC):
                 **kwargs,
             )
 
-        logging.info("Starting %s. " "This may take a few minutes.", repr(self))
+        logging.info("Starting %s. "
+                     "This may take a few minutes.", repr(self))
         logging.info("Note that stopping this local process will not interrupt "
                      "the creation of the machine group. Please wait...")
         start_time = time.time()
