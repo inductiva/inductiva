@@ -105,32 +105,54 @@ def test_benchmark_multiple_add_runs(benchmark):
     })]
 
 
-def test_benchmark_run(benchmark):
+@pytest.mark.parametrize("num_repeats, wait_for_quotas", [
+    (1, False),
+    (5, False),
+    (8, True),
+    (64, True),
+])
+def test_benchmark_run(benchmark, num_repeats, wait_for_quotas):
     simulator = mock.MagicMock(spec=simulators.Simulator)
     simulator.run = mock.MagicMock(return_value=None)
+
     m4 = mock.MagicMock(spec=resources.MachineGroup)
-    m8 = mock.MagicMock(spec=resources.MachineGroup)
+    m4.started = True
     m4.start = mock.MagicMock(return_value=None)
+
+    m8 = mock.MagicMock(spec=resources.MachineGroup)
+    m8.started = False
     m8.start = mock.MagicMock(return_value=None)
+
     Benchmark.set_default(self=benchmark,
                           simulator=simulator,
                           input_dir="dir",
                           a=1)
     assert benchmark.runs == []
+
+    num_runs = 3
+    Benchmark.add_run(self=benchmark, on=m4, b=1)
     Benchmark.add_run(self=benchmark, on=m4, b=4)
     Benchmark.add_run(self=benchmark, on=m8, b=8)
-    assert benchmark.runs == [
-        (simulator, "dir", m4, {
-            "a": 1,
-            "b": 4
-        }),
-        (simulator, "dir", m8, {
-            "a": 1,
-            "b": 8
-        }),
-    ]
-    Benchmark.run(self=benchmark)
+    assert benchmark.runs == [(simulator, "dir", m4, {"a": 1, "b": 1}), 
+                              (simulator, "dir", m4, {"a": 1, "b": 4}),
+                              (simulator, "dir", m8, {"a": 1, "b": 8})]
+
+    Benchmark.run(self=benchmark,
+                  num_repeats=num_repeats,
+                  wait_for_quotas=wait_for_quotas)
+
     assert benchmark.runs == []
+
+    m4.start.assert_not_called()
+    m8.start.assert_called_once_with(wait_for_quotas=wait_for_quotas)
+
+    simulator_run_calls = [
+        mock.call(input_dir="dir", on=m4, a=1, b=1),
+        mock.call(input_dir="dir", on=m4, a=1, b=4),
+        mock.call(input_dir="dir", on=m8, a=1, b=8),
+    ] * num_repeats
+    simulator.run.assert_has_calls(calls=simulator_run_calls, any_order=True)
+    assert len(simulator.run.call_args_list) == num_repeats * num_runs
 
 
 def test_benchmark_runs_info(benchmark):
