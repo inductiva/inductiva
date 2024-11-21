@@ -191,8 +191,7 @@ def download_from_url(
     # Unzip all files as they were zipped.
     if unzip and zipfile.is_zipfile(downloaded_to):
         resulting_path = (pathlib.Path(path)
-                          if path
-                          else downloaded_to.with_suffix(""))
+                          if path else downloaded_to.with_suffix(""))
         logging.info("■ Uncompressing the downloaded archive to %s",
                      resulting_path)
         _unzip(zip_path=downloaded_to, unzip_path=resulting_path)
