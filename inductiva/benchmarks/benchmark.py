@@ -155,7 +155,7 @@ class Benchmark(projects.Project):
                                   **kwargs)
 
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            _ = executor.map(_run, self.runs)
+            _ = list(executor.map(_run, self.runs))
         self.runs.clear()
         return self
 
