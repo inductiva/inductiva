@@ -133,6 +133,7 @@ def test_benchmark_run(benchmark, num_repeats, wait_for_quotas):
     Benchmark.add_run(self=benchmark, on=m4, b=1)
     Benchmark.add_run(self=benchmark, on=m4, b=4)
     Benchmark.add_run(self=benchmark, on=m8, b=8)
+
     # yapf: disable
     assert benchmark.runs == [(simulator, "dir", m4, {"a": 1, "b": 1}),
                               (simulator, "dir", m4, {"a": 1, "b": 4}),
