@@ -5,7 +5,6 @@ import uuid
 from aiortc import RTCPeerConnection, RTCSessionDescription
 import aiohttp
 import enum
-import logging
 
 SIGNALING_SERVER = "http://34.79.246.4:6000"
 
@@ -23,7 +22,7 @@ class Operations(enum.Enum):
 
 
 class FileTracker:
-
+    """File Tracker class for connecting to a running task via WebRTC."""
     def __init__(self):
         self.pc = RTCPeerConnection()
         self.pc.configuration = {"iceServers": ICE_SERVERS}
@@ -38,7 +37,7 @@ class FileTracker:
             request = operation.value
             if kwargs:
                 request += ":" + json.dumps(",".join(
-                    kwargs.values())).strip('"')
+                    kwargs.values())).strip("\"")
             channel.send(request)
 
         @channel.on("message")
@@ -69,10 +68,10 @@ class FileTracker:
                     f"{SIGNALING_SERVER}/message?clientId={client_id}") as resp:
                 if resp.status == 200:
                     data = await resp.json()
-                    if data['type'] == 'answer':
+                    if data["type"] == "answer":
                         await self.pc.setRemoteDescription(
-                            RTCSessionDescription(sdp=data['sdp'],
-                                                  type=data['type']))
+                            RTCSessionDescription(sdp=data["sdp"],
+                                                  type=data["type"]))
 
     async def cleanup(self):
         await self.pc.close()
