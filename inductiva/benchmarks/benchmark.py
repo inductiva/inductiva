@@ -3,15 +3,12 @@ import enum
 import json
 import csv
 import logging
+import concurrent.futures
 from typing import Optional, Union
 from typing_extensions import Self
-from inductiva import types, resources
-from inductiva.simulators import Simulator
-from inductiva.projects import Project
-from inductiva.client import ApiException
-from inductiva.resources.machine_types import ProviderType
-from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 from collections import defaultdict
+from inductiva import types, resources, projects, simulators, client
+from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 
 
 class ExportFormat(enum.Enum):
@@ -29,7 +26,7 @@ class SelectMode(enum.Enum):
     DISTINCT = "distinct"
 
 
-class Benchmark(Project):
+class Benchmark(projects.Project):
     """Represents the benchmark runner."""
 
     class InfoKey:
@@ -58,7 +55,7 @@ class Benchmark(Project):
 
     def set_default(
         self,
-        simulator: Optional[Simulator] = None,
+        simulator: Optional[simulators.Simulator] = None,
         input_dir: Optional[str] = None,
         on: Optional[types.ComputationalResources] = None,
         **kwargs,
@@ -93,7 +90,7 @@ class Benchmark(Project):
 
     def add_run(
         self,
-        simulator: Optional[Simulator] = None,
+        simulator: Optional[simulators.Simulator] = None,
         input_dir: Optional[str] = None,
         on: Optional[types.ComputationalResources] = None,
         **kwargs,
@@ -146,15 +143,20 @@ class Benchmark(Project):
         Returns:
             Self: The current instance for method chaining.
         """
-        with self:
-            for simulator, input_dir, machine_group, kwargs in self.runs:
+
+        def _run(params):
+            with self:
+                simulator, input_dir, machine_group, kwargs = params
                 if not machine_group.started:
                     machine_group.start(wait_for_quotas=wait_for_quotas)
                 for _ in range(num_repeats):
                     simulator.run(input_dir=input_dir,
                                   on=machine_group,
                                   **kwargs)
-            self.runs.clear()
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            _ = executor.map(_run, self.runs)
+        self.runs.clear()
         return self
 
     def wait(self) -> Self:
@@ -275,7 +277,7 @@ class Benchmark(Project):
         """
 
         def _handle_suffix(executer):
-            if executer.host_type == ProviderType.GCP:
+            if executer.host_type == resources.machine_types.ProviderType.GCP:
                 return "-".join(executer.vm_name.split("-")[:-1])
             return executer.vm_name
 
@@ -290,7 +292,7 @@ class Benchmark(Project):
                 continue
             try:
                 machine.terminate(verbose=False)
-            except ApiException as api_exception:
+            except client.ApiException as api_exception:
                 logging.warning(api_exception)
 
         return self

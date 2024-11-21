@@ -63,7 +63,7 @@ def terminate_machine_group(args):
     base_machine = cls.__new__(cls)
     rows = ["max_price_hour", "max_vcpus", "max_instances"]
     base_machine.quota_usage = {k: before_quotas[k]["in_use"] for k in rows}
-    base_machine.log_quota_usage("freed by resources")
+    logging.info(base_machine.quota_usage_table_str("freed by resources"))
 
     return 0
 
