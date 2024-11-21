@@ -2,6 +2,8 @@ from typing import TextIO
 import argparse
 import sys
 import asyncio
+import logging
+logging.getLogger().setLevel(level=logging.WARNING)
 
 from inductiva import _cli, tasks
 
