@@ -1131,6 +1131,7 @@ class Task:
         ret = await file_tracker.setup_channel(operation, **kwargs)
         await file_tracker.connect_to_task(self.id)
         message = await ret
+        await file_tracker.cleanup()
 
         if operation == Operations.LIST:
             message = self._format_directory_listing(message)

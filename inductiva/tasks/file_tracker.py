@@ -39,10 +39,6 @@ class FileTracker:
         @channel.on("message")
         def on_message(message):
             self._message = json.loads(message)
-            channel.close()
-
-        @channel.on("close")
-        def on_close():
             fut.set_result(self._message)
 
         return fut
@@ -67,3 +63,6 @@ class FileTracker:
                     data = await resp.json()
                     if data['type'] == 'answer':
                         await self.pc.setRemoteDescription(RTCSessionDescription(sdp=data['sdp'], type=data['type']))
+
+    async def cleanup(self):
+        await self.pc.close()
