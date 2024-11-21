@@ -2,10 +2,8 @@
 from unittest import mock
 import pytest
 from pathlib import Path
+from inductiva import simulators, resources
 from inductiva.benchmarks import Benchmark
-from inductiva.resources import MachineGroup
-from inductiva.simulators import Simulator
-from inductiva import resources
 
 
 @pytest.fixture(name="benchmark")
@@ -108,10 +106,10 @@ def test_benchmark_multiple_add_runs(benchmark):
 
 
 def test_benchmark_run(benchmark):
-    simulator = mock.MagicMock(spec=Simulator)
+    simulator = mock.MagicMock(spec=simulators.Simulator)
     simulator.run = mock.MagicMock(return_value=None)
-    m4 = mock.MagicMock(spec=MachineGroup)
-    m8 = mock.MagicMock(spec=MachineGroup)
+    m4 = mock.MagicMock(spec=resources.MachineGroup)
+    m8 = mock.MagicMock(spec=resources.MachineGroup)
     m4.start = mock.MagicMock(return_value=None)
     m8.start = mock.MagicMock(return_value=None)
     Benchmark.set_default(self=benchmark,
