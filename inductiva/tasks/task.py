@@ -504,7 +504,11 @@ class Task:
             return s.ljust(max_line_length, " ")
         return s
 
-    def _format_list_of_lines(self, lines: List[str], file: str, sep : Optional[str]="", endl : Optional[str]="\n") -> str:
+    def _format_list_of_lines(self,
+                              lines: List[str],
+                              file: str,
+                              sep: Optional[str] = "",
+                              endl: Optional[str] = "\n") -> str:
         """Formats a list of lines with color.
 
         This method formats a list of lines with a color and adds a header and
@@ -541,7 +545,7 @@ class Task:
         new_lst.append(f"{color_code}└{reset_color}{endl}")
 
         return sep.join(new_lst)
-    
+
     def _format_directory_listing(self, directories: list, indent=0) -> str:
         """Formats a dictionary with directory information.
 
@@ -559,7 +563,8 @@ class Task:
             if isinstance(item, dict):
                 for dir_name, dir_contents in item.items():
                     contents += "  " * indent + f"{color_code}[DIR]{reset_color} {dir_name}\n"
-                    contents += self._format_directory_listing(dir_contents, indent + 1)
+                    contents += self._format_directory_listing(
+                        dir_contents, indent + 1)
             else:
                 contents += "  " * indent + f"{color_code}[FILE]{reset_color} {item}\n"
 
@@ -1116,7 +1121,7 @@ class Task:
             download_partial_files=data.download_partial_inputs,
             download_task_files=self._api.download_task_input,
         )
-    
+
     async def file_operation(self, operation: Operations, **kwargs) -> str:
         """Perform file operations on the task that is currently running.
 
@@ -1136,7 +1141,10 @@ class Task:
         if operation == Operations.LIST:
             message = self._format_directory_listing(message)
         elif operation == Operations.TAIL:
-            message = self._format_list_of_lines(message, kwargs.get("filename"), sep="\n", endl="")
+            message = self._format_list_of_lines(message,
+                                                 kwargs.get("filename"),
+                                                 sep="\n",
+                                                 endl="")
         return message
 
     class _PathParams(TypedDict):

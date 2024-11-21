@@ -3,9 +3,11 @@ import argparse
 import sys
 import asyncio
 import logging
+
 logging.getLogger().setLevel(level=logging.WARNING)
 
 from inductiva import _cli, tasks
+
 
 def list_directories(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
@@ -17,9 +19,10 @@ def list_directories(args: argparse.Namespace, fout: TextIO = sys.stdout):
 
 def register(parser):
     """Register the info tasks command."""
-    subparser = parser.add_parser("ls",
-                                  help="Lists directories in a task recursively.",
-                                  formatter_class=argparse.RawTextHelpFormatter)
+    subparser = parser.add_parser(
+        "ls",
+        help="Lists directories in a task recursively.",
+        formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = ("The `inductiva tasks ls` command provides "
                              "the directories generated during a task.")

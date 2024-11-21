@@ -9,21 +9,24 @@ import logging
 SIGNALING_SERVER = "http://34.79.246.4:6000"
 
 # STUN/TURN server configuration
-ICE_SERVERS = [
-    {"urls": ["stun:34.79.246.4:3478"]},
-    {"urls": ["turn:34.79.246.4:3478"]}
-]
+ICE_SERVERS = [{
+    "urls": ["stun:34.79.246.4:3478"]
+}, {
+    "urls": ["turn:34.79.246.4:3478"]
+}]
+
 
 class Operations(enum.Enum):
     LIST = "ls"
     TAIL = "tail"
 
+
 class FileTracker:
+
     def __init__(self):
         self.pc = RTCPeerConnection()
         self.pc.configuration = {"iceServers": ICE_SERVERS}
         self._message = None
-
 
     async def setup_channel(self, operation, **kwargs):
         channel = self.pc.createDataChannel("file_transfer")
@@ -33,7 +36,8 @@ class FileTracker:
         def on_open():
             request = operation.value
             if kwargs:
-                request += ":" + json.dumps(",".join(kwargs.values())).strip('"')
+                request += ":" + json.dumps(",".join(
+                    kwargs.values())).strip('"')
             channel.send(request)
 
         @channel.on("message")
@@ -42,27 +46,32 @@ class FileTracker:
             fut.set_result(self._message)
 
         return fut
-    
+
     async def connect_to_task(self, task_id):
         client_id = str(uuid.uuid4())
         async with aiohttp.ClientSession() as session:
-            await session.post(f"{SIGNALING_SERVER}/register", json={"clientId": client_id})
-            
+            await session.post(f"{SIGNALING_SERVER}/register",
+                               json={"clientId": client_id})
+
             offer = await self.pc.createOffer()
             await self.pc.setLocalDescription(offer)
-            
-            await session.post(f"{SIGNALING_SERVER}/offer", json={
-                "receiverId": task_id,
-                "senderId": client_id,
-                "type": "offer",
-                "sdp": self.pc.localDescription.sdp
-            })
 
-            async with session.get(f"{SIGNALING_SERVER}/message?clientId={client_id}") as resp:
+            await session.post(f"{SIGNALING_SERVER}/offer",
+                               json={
+                                   "receiverId": task_id,
+                                   "senderId": client_id,
+                                   "type": "offer",
+                                   "sdp": self.pc.localDescription.sdp
+                               })
+
+            async with session.get(
+                    f"{SIGNALING_SERVER}/message?clientId={client_id}") as resp:
                 if resp.status == 200:
                     data = await resp.json()
                     if data['type'] == 'answer':
-                        await self.pc.setRemoteDescription(RTCSessionDescription(sdp=data['sdp'], type=data['type']))
+                        await self.pc.setRemoteDescription(
+                            RTCSessionDescription(sdp=data['sdp'],
+                                                  type=data['type']))
 
     async def cleanup(self):
         await self.pc.close()
