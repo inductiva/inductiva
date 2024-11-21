@@ -158,7 +158,7 @@ def test_benchmark_run(benchmark, num_repeats, wait_for_quotas):
     assert len(simulator.run.call_args_list) == num_repeats * num_runs
 
 
-def test_benchmark_runs_info(benchmark):
+def test_benchmark_runs_info_select_all(benchmark):
     task1 = mock.MagicMock()
     task1.download_inputs = mock.MagicMock(return_value=Path("input_dir_path1"))
     task1.info = mock.MagicMock()
@@ -202,7 +202,7 @@ def test_benchmark_runs_info(benchmark):
         ]
 
 
-def test_benchmark_runs_info_summary(benchmark):
+def test_benchmark_runs_info_select_distinct(benchmark):
     task1 = mock.MagicMock()
     task1.download_inputs = mock.MagicMock(return_value=Path("input_dir_path1"))
     task1.info = mock.MagicMock()
