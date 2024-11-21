@@ -23,6 +23,7 @@ class Operations(enum.Enum):
 
 class FileTracker:
     """File Tracker class for connecting to a running task via WebRTC."""
+
     def __init__(self):
         self.pc = RTCPeerConnection()
         self.pc.configuration = {"iceServers": ICE_SERVERS}
