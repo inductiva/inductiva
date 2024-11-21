@@ -1,12 +1,13 @@
+"""Command to list directories in a task."""
 from typing import TextIO
 import argparse
 import sys
 import asyncio
 import logging
 
-logging.getLogger().setLevel(level=logging.WARNING)
-
 from inductiva import _cli, tasks
+
+logging.getLogger().setLevel(level=logging.WARNING)
 
 
 def list_directories(args: argparse.Namespace, fout: TextIO = sys.stdout):

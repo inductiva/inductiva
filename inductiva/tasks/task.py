@@ -557,16 +557,19 @@ class Task:
         """
         color_code = "\033[34m"
         reset_color = "\033[0m"
-        contents = f"{color_code}Directory contents:{reset_color}\n" if indent == 0 else ""
+        contents = (f"{color_code}Directory contents:{reset_color}\n"
+                    if indent == 0 else "")
 
         for item in directories:
             if isinstance(item, dict):
                 for dir_name, dir_contents in item.items():
-                    contents += "  " * indent + f"{color_code}[DIR]{reset_color} {dir_name}\n"
+                    contents += ("  " * indent +
+                                 f"{color_code}[DIR]{reset_color} {dir_name}\n")
                     contents += self._format_directory_listing(
                         dir_contents, indent + 1)
             else:
-                contents += "  " * indent + f"{color_code}[FILE]{reset_color} {item}\n"
+                contents += ("  " * indent +
+                             f"{color_code}[FILE]{reset_color} {item}\n")
 
         return contents
 

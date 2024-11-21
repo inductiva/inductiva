@@ -1,12 +1,13 @@
+"""Tail command for task files."""
 from typing import TextIO
 import argparse
 import sys
 import asyncio
 import logging
 
-logging.getLogger().setLevel(level=logging.WARNING)
-
 from inductiva import _cli, tasks
+
+logging.getLogger().setLevel(level=logging.WARNING)
 
 
 def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):

@@ -1,3 +1,4 @@
+"""File Tracker module for connecting to a running task via WebRTC."""
 import asyncio
 import json
 import uuid
