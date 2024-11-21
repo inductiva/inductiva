@@ -117,7 +117,7 @@ def get_sorted_files(data_dir: str,
     return files
 
 
-def _unzip(zip_path: pathlib.Path, unzip_path: Optional[str] = None):
+def _unzip(zip_path: pathlib.Path, unzip_path: Optional[pathlib.Path] = None):
     """Unzip a zip archive and remove the .zip."""
 
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
@@ -142,7 +142,11 @@ def tqdm_refreshhook(tqdm_bar):
     return update_to
 
 
-def download_from_url(url: str, unzip: bool = False) -> str:
+def download_from_url(
+    url: str,
+    unzip: bool = False,
+    path: Optional[str] = None,
+) -> str:
     """Download a file from an URL.
 
     This function downloads from a set of files from an url.
@@ -152,6 +156,9 @@ def download_from_url(url: str, unzip: bool = False) -> str:
     Args:
         url: The URL to download the file from.
         unzip: Whether to unzip the file after downloading.
+        path: The directory path where the file should be saved. If None, 
+            the file will be saved in the current working directory.
+
     Returns:
         The path to the downloaded file.
     """
@@ -183,7 +190,8 @@ def download_from_url(url: str, unzip: bool = False) -> str:
 
     # Unzip all files as they were zipped.
     if unzip and zipfile.is_zipfile(downloaded_to):
-        resulting_path = pathlib.Path(downloaded_to).with_suffix("")
+        resulting_path = pathlib.Path(path) if path \
+            else downloaded_to.with_suffix()
         logging.info("■ Uncompressing the downloaded archive to %s",
                      resulting_path)
         _unzip(zip_path=downloaded_to, unzip_path=resulting_path)
