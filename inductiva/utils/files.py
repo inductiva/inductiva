@@ -117,13 +117,13 @@ def get_sorted_files(data_dir: str,
     return files
 
 
-def _unzip(zip_path: pathlib.Path):
+def _unzip(zip_path: pathlib.Path, unzip_path: Optional[str] = None):
     """Unzip a zip archive and remove the .zip."""
 
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         for member in tqdm(zip_ref.infolist(), desc="Extracting "):
             try:
-                zip_ref.extract(member)
+                zip_ref.extract(member, path=unzip_path)
             except zipfile.error as e:
                 print(f"Error extracting {member.filename}: {e}")
                 pass
@@ -186,7 +186,7 @@ def download_from_url(url: str, unzip: bool = False) -> str:
         resulting_path = pathlib.Path(downloaded_to).with_suffix("")
         logging.info("■ Uncompressing the downloaded archive to %s",
                      resulting_path)
-        _unzip(downloaded_to)
+        _unzip(zip_path=downloaded_to, unzip_path=resulting_path)
         logging.info("")
 
     return str(resulting_path.absolute())
