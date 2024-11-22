@@ -150,14 +150,15 @@ class Benchmark(projects.Project):
             if not machine_group.started:
                 machine_group.start(wait_for_quotas=wait_for_quotas)
             for _ in range(num_repeats):
-                simulator.run(input_dir=input_dir,
-                              on=machine_group,
-                              **kwargs)
-        
+                simulator.run(input_dir=input_dir, on=machine_group, **kwargs)
+
+        def _initializer(ctx):
+            for var, val in ctx.items():
+                var.set(val)
+
         with self, concurrent.futures.ThreadPoolExecutor(
-            initializer=lambda ctx: [var.set(val) for var, val in ctx.items()],
-            initargs=(contextvars.copy_context(),)
-        ) as executor:
+                initializer=_initializer,
+                initargs=(contextvars.copy_context(),)) as executor:
             _ = list(executor.map(_run, self.runs))
         self.runs.clear()
         return self
