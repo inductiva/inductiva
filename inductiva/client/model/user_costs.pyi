@@ -43,13 +43,13 @@ class UserCosts(schemas.DictSchema):
                 class MetaOapg:
 
                     @staticmethod
-                    def items() -> typing.Type['UserCostsDetail']:
-                        return UserCostsDetail
+                    def items() -> typing.Type['CostDetail']:
+                        return CostDetail
 
                 def __new__(
                     cls,
-                    _arg: typing.Union[typing.Tuple['UserCostsDetail'],
-                                       typing.List['UserCostsDetail']],
+                    _arg: typing.Union[typing.Tuple['CostDetail'],
+                                       typing.List['CostDetail']],
                     _configuration: typing.Optional[
                         schemas.Configuration] = None,
                 ) -> 'costs':
@@ -59,7 +59,7 @@ class UserCosts(schemas.DictSchema):
                         _configuration=_configuration,
                     )
 
-                def __getitem__(self, i: int) -> 'UserCostsDetail':
+                def __getitem__(self, i: int) -> 'CostDetail':
                     return super().__getitem__(i)
 
             class currency(
@@ -226,5 +226,5 @@ class UserCosts(schemas.DictSchema):
         )
 
 
+from inductiva.client.model.cost_detail import CostDetail
 from inductiva.client.model.currency_code import CurrencyCode
-from inductiva.client.model.user_costs_detail import UserCostsDetail
