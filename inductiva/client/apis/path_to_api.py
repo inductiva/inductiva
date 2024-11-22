@@ -47,7 +47,8 @@ from inductiva.client.apis.paths.admin_campaigns_campaign_id_quotas import Admin
 from inductiva.client.apis.paths.admin_campaigns_campaign_id_quotas_quota_id import AdminCampaignsCampaignIdQuotasQuotaId
 from inductiva.client.apis.paths.admin_organizations import AdminOrganizations
 from inductiva.client.apis.paths.admin_organizations_organization_id import AdminOrganizationsOrganizationId
-from inductiva.client.apis.paths.admin_organizations_billing import AdminOrganizationsBilling
+from inductiva.client.apis.paths.admin_organizations_billing_report import AdminOrganizationsBillingReport
+from inductiva.client.apis.paths.admin_organizations_costs import AdminOrganizationsCosts
 from inductiva.client.apis.paths.admin_tiers import AdminTiers
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
@@ -55,6 +56,8 @@ from inductiva.client.apis.paths.executer_tracker_machine_id_task import Execute
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_message import ExecuterTrackerMachineIdTaskTaskIdMessage
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_message_unblock import ExecuterTrackerMachineIdTaskTaskIdMessageUnblock
 from inductiva.client.apis.paths.executer_tracker_machine_id_event import ExecuterTrackerMachineIdEvent
+from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_operation import ExecuterTrackerMachineIdTaskTaskIdOperation
+from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_operation_operation_id_done import ExecuterTrackerMachineIdTaskTaskIdOperationOperationIdDone
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_download_input_url import ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_upload_output_url import ExecuterTrackerMachineIdTaskTaskIdUploadOutputUrl
 from inductiva.client.apis.paths.executer_tracker_machine_id_task_task_id_metric import ExecuterTrackerMachineIdTaskTaskIdMetric
@@ -83,6 +86,7 @@ from inductiva.client.apis.paths.users_quotas import UsersQuotas
 from inductiva.client.apis.paths.users_info import UsersInfo
 from inductiva.client.apis.paths.users_capabilities import UsersCapabilities
 from inductiva.client.apis.paths.users_costs import UsersCosts
+from inductiva.client.apis.paths.users_organization_costs import UsersOrganizationCosts
 from inductiva.client.apis.paths.projects import Projects
 from inductiva.client.apis.paths.projects_name import ProjectsName
 from inductiva.client.apis.paths.metrics_users_username_activity import MetricsUsersUsernameActivity
@@ -92,6 +96,7 @@ from inductiva.client.apis.paths.metrics_users_username_computation_time_trend i
 from inductiva.client.apis.paths.metrics_users_username_tasks_overview import MetricsUsersUsernameTasksOverview
 from inductiva.client.apis.paths.metrics_users_username_most_used_machine_types import MetricsUsersUsernameMostUsedMachineTypes
 from inductiva.client.apis.paths.metrics_users_username_most_used_simulators_overview import MetricsUsersUsernameMostUsedSimulatorsOverview
+from inductiva.client.apis.paths.metrics_usage_statistics import MetricsUsageStatistics
 
 PathToApi = typing_extensions.TypedDict(
     'PathToApi', {
@@ -187,8 +192,10 @@ PathToApi = typing_extensions.TypedDict(
             AdminOrganizations,
         PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID:
             AdminOrganizationsOrganizationId,
-        PathValues.ADMIN_ORGANIZATIONS_BILLING:
-            AdminOrganizationsBilling,
+        PathValues.ADMIN_ORGANIZATIONS_BILLING_REPORT:
+            AdminOrganizationsBillingReport,
+        PathValues.ADMIN_ORGANIZATIONS_COSTS:
+            AdminOrganizationsCosts,
         PathValues.ADMIN_TIERS:
             AdminTiers,
         PathValues.EXECUTERTRACKER_REGISTER:
@@ -203,6 +210,10 @@ PathToApi = typing_extensions.TypedDict(
             ExecuterTrackerMachineIdTaskTaskIdMessageUnblock,
         PathValues.EXECUTERTRACKER_MACHINE_ID_EVENT:
             ExecuterTrackerMachineIdEvent,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_OPERATION:
+            ExecuterTrackerMachineIdTaskTaskIdOperation,
+        PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_OPERATION_OPERATION_ID_DONE:
+            ExecuterTrackerMachineIdTaskTaskIdOperationOperationIdDone,
         PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
             ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl,
         PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
@@ -259,6 +270,8 @@ PathToApi = typing_extensions.TypedDict(
             UsersCapabilities,
         PathValues.USERS_COSTS:
             UsersCosts,
+        PathValues.USERS_ORGANIZATION_COSTS:
+            UsersOrganizationCosts,
         PathValues.PROJECTS:
             Projects,
         PathValues.PROJECTS_NAME:
@@ -277,6 +290,8 @@ PathToApi = typing_extensions.TypedDict(
             MetricsUsersUsernameMostUsedMachineTypes,
         PathValues.METRICS_USERS_USERNAME_MOST_USED_SIMULATORS_OVERVIEW:
             MetricsUsersUsernameMostUsedSimulatorsOverview,
+        PathValues.METRICS_USAGE_STATISTICS:
+            MetricsUsageStatistics,
     })
 
 path_to_api = PathToApi({
@@ -372,8 +387,10 @@ path_to_api = PathToApi({
         AdminOrganizations,
     PathValues.ADMIN_ORGANIZATIONS_ORGANIZATION_ID:
         AdminOrganizationsOrganizationId,
-    PathValues.ADMIN_ORGANIZATIONS_BILLING:
-        AdminOrganizationsBilling,
+    PathValues.ADMIN_ORGANIZATIONS_BILLING_REPORT:
+        AdminOrganizationsBillingReport,
+    PathValues.ADMIN_ORGANIZATIONS_COSTS:
+        AdminOrganizationsCosts,
     PathValues.ADMIN_TIERS:
         AdminTiers,
     PathValues.EXECUTERTRACKER_REGISTER:
@@ -388,6 +405,10 @@ path_to_api = PathToApi({
         ExecuterTrackerMachineIdTaskTaskIdMessageUnblock,
     PathValues.EXECUTERTRACKER_MACHINE_ID_EVENT:
         ExecuterTrackerMachineIdEvent,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_OPERATION:
+        ExecuterTrackerMachineIdTaskTaskIdOperation,
+    PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_OPERATION_OPERATION_ID_DONE:
+        ExecuterTrackerMachineIdTaskTaskIdOperationOperationIdDone,
     PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
         ExecuterTrackerMachineIdTaskTaskIdDownloadInputUrl,
     PathValues.EXECUTERTRACKER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
@@ -444,6 +465,8 @@ path_to_api = PathToApi({
         UsersCapabilities,
     PathValues.USERS_COSTS:
         UsersCosts,
+    PathValues.USERS_ORGANIZATION_COSTS:
+        UsersOrganizationCosts,
     PathValues.PROJECTS:
         Projects,
     PathValues.PROJECTS_NAME:
@@ -462,4 +485,6 @@ path_to_api = PathToApi({
         MetricsUsersUsernameMostUsedMachineTypes,
     PathValues.METRICS_USERS_USERNAME_MOST_USED_SIMULATORS_OVERVIEW:
         MetricsUsersUsernameMostUsedSimulatorsOverview,
+    PathValues.METRICS_USAGE_STATISTICS:
+        MetricsUsageStatistics,
 })

@@ -36,9 +36,5 @@ class Providers(schemas.EnumBase, schemas.StrSchema):
         return cls("GCP")
 
     @schemas.classproperty
-    def ICE(cls):
-        return cls("ICE")
-
-    @schemas.classproperty
     def LOCAL(cls):
         return cls("LOCAL")
