@@ -4,6 +4,7 @@ import json
 import csv
 import logging
 import concurrent.futures
+import contextvars
 from typing import Optional, Union
 from typing_extensions import Self
 from collections import defaultdict
@@ -145,16 +146,18 @@ class Benchmark(projects.Project):
         """
 
         def _run(params):
-            with self:
-                simulator, input_dir, machine_group, kwargs = params
-                if not machine_group.started:
-                    machine_group.start(wait_for_quotas=wait_for_quotas)
-                for _ in range(num_repeats):
-                    simulator.run(input_dir=input_dir,
-                                  on=machine_group,
-                                  **kwargs)
-
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+            simulator, input_dir, machine_group, kwargs = params
+            if not machine_group.started:
+                machine_group.start(wait_for_quotas=wait_for_quotas)
+            for _ in range(num_repeats):
+                simulator.run(input_dir=input_dir,
+                              on=machine_group,
+                              **kwargs)
+        
+        with self, concurrent.futures.ThreadPoolExecutor(
+            initializer=lambda ctx: [var.set(val) for var, val in ctx.items()],
+            initargs=(contextvars.copy_context(),)
+        ) as executor:
             _ = list(executor.map(_run, self.runs))
         self.runs.clear()
         return self
