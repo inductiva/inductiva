@@ -1,21 +1,32 @@
 # Tasks
 
-Central to the API's functionality is the concept of a `Task`,
-which is an  abstraction that encapsulates all the information
-about the computational workload you defined as the user.
-Once you submit a simulation to the  API, a `Task` is generated.
-This allows for real-time updates on simulation status, including
-monitoring its progress and retrieving its outputs.
+The `Task` is the core functionality of the Inductiva API. It represents 
+everything about the computational workload you define and submit for 
+execution. Simply put, a `Task` is how your simulation is tracked, managed, 
+and updated in real-time.
 
-In this reference, you will learn about the entire lifecycle of a `Task`,
-including its creation, various operational states, and termination. This information
-is crucial to understand how the Inductiva API manages simulations.
+When you submit a simulation, the API automatically generates a `Task`. 
+This gives you insights on the simulation status, including monitoring its progress and retrieving its outputs.
+
+**What This Guide Covers**
+
+This guide walks you through the entire lifecycle of a `Task`:
+
+- [Task Creation](#task-creation): How a `Task` is generated when you submit a simulation.
+- [Task Execution](#task-execution): The stages a `Task` goes through during computation.
+- [Task Lifecycle](#task-lifecycle): A diagram illustrating the various states of a `Task`.
+
+By understanding these stages, you’ll gain a clear picture of how the Inductiva API 
+handles simulations, making it easier to optimize your workflows and troubleshoot issues.
 
 ## Task Creation
 
-A `Task` is created when you submit a simulation via the API by invoking the `run`
-method on a simulator object. Each call to this method, even with identical arguments,
-generates a unique `Task`, leading to separate executions of the same simulation.
+A `Task` is automatically created whenever you submit a simulation to the 
+API by calling the `run` method on a simulator object. Each call to this 
+method generates a unique `Task`, even if the arguments remain identical. 
+This ensures separate executions for each submission of the same simulation.
+
+**Example: Submitting a SpliSHSPlasH Simulation**
 
 Here's an example of how to create a `Task` by submitting a SpliSHSPlasH simulation
 to the API:
@@ -56,11 +67,15 @@ print (task2.id)
 
 machine_group.terminate()
 ```
+Every `Task` is assigned a unique alphanumeric identifier upon creation. 
+This identifier ensures that each task is distinct and can be easily referenced.
 
-Each `Task` is identified by a unique alphanumeric identifier. While you can
-instantiate multiple `Task` objects pointing to the same task using this identifier,
-this does not duplicate the task on the API. These objects refer to the same underlying
-task. This mechanism is useful when you want to recreate a `Task` object to
+While it is possible to instantiate multiple `Task` objects using the 
+same identifier, doing so does not create duplicate tasks on the API. 
+Instead, all such objects point to the same underlying task, allowing you 
+to access and manage it across different sessions.
+
+This mechanism is useful when you want to recreate a `Task` object to
 retrieve information about tasks you created in previous sessions:
 
 ```python
@@ -118,15 +133,14 @@ with task.sync_context():
                  #     interrupted while waiting for the wait() call to return
 ```
 
-(task-lifecyle)=
 ## Task Lifecycle
 
-The status of a task changes as it progresses through its lifecycle. Understanding
-these states is crucial if you want to track a task's progress through the API and
-manage your simulations effectively.
+As a `Task` progresses through its lifecycle, its status changes to reflect 
+its current state. Understanding these states is essential for tracking 
+a `Task`’s progress and managing your simulations effectively through the API.
 
-The following diagram shows the path a task may take through the API, and identifies
-the relevant states and possible state transitions:
+Below, you’ll find a diagram illustrating the possible states a `Task` can 
+move through and the transitions between them:
 
 
 <div align="center">
@@ -136,8 +150,8 @@ the relevant states and possible state transitions:
 
 ---
 
-Below a succinct description of each state, including the actions that
-lead to a state transition:
+Here’s a breakdown of each state and the actions that lead to a state 
+transition:
 
 Status | What happened? | Why? | Recommendations to overcome
 -- | -- | -- | --
