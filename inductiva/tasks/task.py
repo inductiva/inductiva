@@ -318,17 +318,6 @@ class Task:
         models.TaskStatusCode.TTLEXCEEDED,
     }
 
-    FAILED_STATUSES_ALIAS = {
-        "Computation error",
-        "Killed",
-        "Task error",
-        "Task-runner terminated",
-        "Spot instance preempted",
-        "Machine group terminated",
-        "Machine group time-to-live exceeded",
-        "Time-to-live exceeded",
-    }
-
     RUNNING_STATUSES = {
         models.TaskStatusCode.PENDINGINPUT, models.TaskStatusCode.STARTED,
         models.TaskStatusCode.COMPUTATIONSTARTED,
