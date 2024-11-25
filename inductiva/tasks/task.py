@@ -319,15 +319,14 @@ class Task:
     }
 
     FAILED_STATUSES_ALIAS = {
-        "Computation error",  #models.TaskStatusCode.FAILED,
-        "Killed",  #models.TaskStatusCode.KILLED,
-        "Task error",  #models.TaskStatusCode.EXECUTERFAILED,
-        "Task-runner terminated",  #models.TaskStatusCode.EXECUTERTERMINATED,
-        "Machine group terminated",  #models.TaskStatusCode.EXECUTERTERMINATEDBYUSER,
-        "Spot instance preempted",  #models.TaskStatusCode.SPOTINSTANCEPREEMPTED,
-        "Machine group terminated",  #models.TaskStatusCode.ZOMBIE,
-        "Machine group time-to-live exceeded",  #models.TaskStatusCode.EXECUTERTERMINATEDTTLEXCEEDED,
-        "Time-to-live exceeded",  #models.TaskStatusCode.TTLEXCEEDED,
+        "Computation error",
+        "Killed",
+        "Task error",
+        "Task-runner terminated",
+        "Spot instance preempted",
+        "Machine group terminated",
+        "Machine group time-to-live exceeded",
+        "Time-to-live exceeded",
     }
 
     RUNNING_STATUSES = {
