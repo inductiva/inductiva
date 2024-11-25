@@ -9,17 +9,14 @@ def logout(_):
     """
     Logs the user out by removing the stored API key.
 
-    The function will remove the stored API key, effectively logging the user out.
+    The function will remove the stored API key, logging the user out.
     """
     if not os.path.exists(constants.API_KEY_FILE_PATH):
         print("Error: You are not logged in.")
         return
 
-    try:
-        os.remove(constants.API_KEY_FILE_PATH)
-        print("Logout successful.")
-    except Exception as e:
-        print(f"Error during logout: {e}")
+    os.remove(constants.API_KEY_FILE_PATH)
+    print("Logout successful.")
 
 
 def register(parser):

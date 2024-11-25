@@ -8,6 +8,7 @@ import logging
 import sys
 
 import inductiva
+from inductiva import constants
 from inductiva.client import exceptions
 from inductiva.utils import format_utils
 

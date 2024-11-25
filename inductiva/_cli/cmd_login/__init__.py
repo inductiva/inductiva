@@ -10,22 +10,21 @@ def login(_):
     """
     Prompts the user to enter their API key and stores it securely.
 
-    The function will prompt the user to enter their API key, which can be obtained from their 
-    account at https://console.inductiva.ai/account.
+    The function will prompt the user to enter their API key, which can be
+    obtained from their account at https://console.inductiva.ai/account.
     """
 
-    # noqa: E501
     inductiva_art = r"""     ___  _   _  ____   _   _   ____  _____  ___ __     __ _    
     |_ _|| \ | ||  _ \ | | | | / ___||_   _||_ _|\ \   / // \   
      | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \  
      | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \ 
     |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\
-    """
+    """ # noqa: E501
     print(inductiva_art)
     if os.path.exists(constants.API_KEY_FILE_PATH):
         print(
-            "    You are already logged in. Run `inductiva logout` if you want to "
-            "log out. \n"
+            "    You are already logged in. Run `inductiva logout` if you want "
+            "to log out. \n"
             "    Setting a new API key will erase the existing one.")
 
     prompt = getpass.getpass(
@@ -35,11 +34,8 @@ def login(_):
 
     api_key = prompt.strip()
 
-    try:
-        utils.set_stored_api_key(api_key)
-        print("Login successful.")
-    except Exception as e:
-        print(f"Error during login: {e}")
+    utils.set_stored_api_key(api_key)
+    print("Login successful.")
 
 
 def register(parser):
