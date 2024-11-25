@@ -7,10 +7,7 @@ import logging.handlers
 import logging
 import sys
 
-import pathlib
-import platform
-
-from inductiva import constants
+import inductiva
 from inductiva.client import exceptions
 from inductiva.utils import format_utils
 
@@ -24,16 +21,7 @@ def is_cli():
 
 
 def get_logs_file_path():
-    system = platform.system()
-    logs_name = "inductiva.log"
-    if system.lower() == "windows":
-        logs_file_path = pathlib.Path.home(
-        ) / "AppData" / "inductiva" / logs_name
-    elif system.lower() in ["linux", "darwin"]:
-        logs_file_path = constants.HOME_DIR / logs_name
-    else:
-        raise RuntimeError(f"Current operating system {system} not supported.")
-    return logs_file_path
+    return inductiva.constants.LOGS_FILE_PATH
 
 
 class NoExceptionFormatter(logging.Formatter):

@@ -33,7 +33,8 @@ def get_main_parser():
         "--api-key",
         type=str,
         help=("API key to use. If not provided, it "
-              "will be read from the INDUCTIVA_API_KEY environment variable."),
+              "will be read from the INDUCTIVA_API_KEY environment variable."
+              "If not set, will be read from the stored API key file."),
     )
 
     # If no subcommand is provided, print help

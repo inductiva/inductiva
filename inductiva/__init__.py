@@ -138,18 +138,17 @@ def set_api_key(api_key):
     """Sets the value of `inductiva._api_key` to `api_key"""
     if api_key is None:
         # pylint: disable=line-too-long
-        raise ValueError(
-            "No API Key specified. "
-            "Please set the INDUCTIVA_API_KEY environment variable.\n"
-            "More information at:"
-            "https://console.inductiva.ai/")
+        raise ValueError("No API Key specified. "
+                         "Please login with inductiva login.\n"
+                         "More information at: "
+                         "https://console.inductiva.ai/")
 
     _api_key.set(api_key)
 
 
 def get_api_key():
-    """Returns the value of inductiva._api_key"""
-    return _api_key.get()
+    """Returns the value of inductiva._api_key or the stored API key."""
+    return _api_key.get() or utils.authentication.get_stored_api_key()
 
 
 def _supports_ansi():
