@@ -14,12 +14,13 @@ def login(_):
     obtained from their account at https://console.inductiva.ai/account.
     """
 
+    # pylint: disable=trailing-whitespace,line-too-long
     inductiva_art = r"""     ___  _   _  ____   _   _   ____  _____  ___ __     __ _    
     |_ _|| \ | ||  _ \ | | | | / ___||_   _||_ _|\ \   / // \   
      | | |  \| || | | || | | || |      | |   | |  \ \ / // _ \  
      | | | |\  || |_| || |_| || |___   | |   | |   \ V // ___ \ 
     |___||_| \_||____/  \___/  \____|  |_|  |___|   \_//_/   \_\
-    """ # noqa: E501
+    """
     print(inductiva_art)
     if os.path.exists(constants.API_KEY_FILE_PATH):
         print(
