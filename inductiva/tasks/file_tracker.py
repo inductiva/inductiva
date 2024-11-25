@@ -2,11 +2,13 @@
 import asyncio
 import json
 import uuid
-from aiortc import RTCPeerConnection, RTCSessionDescription
 import aiohttp
 import enum
+import os
+from aiortc import RTCPeerConnection, RTCSessionDescription
 
-SIGNALING_SERVER = "http://34.79.246.4:6000"
+SIGNALING_SERVER = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
+API_KEY = os.environ.get("INDUCTIVA_API_KEY", None)
 
 # STUN/TURN server configuration
 ICE_SERVERS = [{
@@ -28,6 +30,7 @@ class FileTracker:
         self.pc = RTCPeerConnection()
         self.pc.configuration = {"iceServers": ICE_SERVERS}
         self._message = None
+        self._headers = {"X-API-Key": API_KEY}
 
     async def setup_channel(self, operation, **kwargs):
         channel = self.pc.createDataChannel("file_transfer")
@@ -49,24 +52,24 @@ class FileTracker:
         return fut
 
     async def connect_to_task(self, task_id):
-        client_id = str(uuid.uuid4())
+        connection_id = str(uuid.uuid4())
         async with aiohttp.ClientSession() as session:
-            await session.post(f"{SIGNALING_SERVER}/register",
-                               json={"clientId": client_id})
+            await session.post(f"{SIGNALING_SERVER}/tasks/{task_id}/register",
+                               json={"clientId": connection_id}, headers=self._headers)
 
             offer = await self.pc.createOffer()
             await self.pc.setLocalDescription(offer)
 
-            await session.post(f"{SIGNALING_SERVER}/offer",
+            await session.post(f"{SIGNALING_SERVER}/tasks/{task_id}/offer",
                                json={
                                    "receiverId": task_id,
-                                   "senderId": client_id,
+                                   "senderId": connection_id,
                                    "type": "offer",
                                    "sdp": self.pc.localDescription.sdp
-                               })
+                               }, headers=self._headers)
 
             async with session.get(
-                    f"{SIGNALING_SERVER}/message?clientId={client_id}") as resp:
+                    f"{SIGNALING_SERVER}/tasks/{task_id}/message?client={connection_id}", headers=self._headers) as resp:
                 if resp.status == 200:
                     data = await resp.json()
                     if data["type"] == "answer":
