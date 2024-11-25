@@ -47,9 +47,9 @@ def _list_tasks(project_name, last_n, task_id, all_tasks: bool, fout: TextIO,
     emph_formatter = format_utils.get_ansi_formatter()
 
     def color_formater(status):
-        if status == models.TaskStatusCode.SUCCESS:
+        if status.upper() == models.TaskStatusCode.SUCCESS.upper():
             return emph_formatter(status, format_utils.Emphasis.GREEN)
-        elif status in tasks.Task.FAILED_STATUSES:
+        elif status in tasks.Task.FAILED_STATUSES_ALIAS:
             return emph_formatter(status, format_utils.Emphasis.RED)
         return status
 
