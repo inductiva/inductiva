@@ -9,7 +9,6 @@ maxdepth: 2
 hidden: true
 ---
 preinstallation/system/system-requirements
-preinstallation/i-need-help
 
 ```
 
