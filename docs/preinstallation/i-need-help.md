@@ -28,12 +28,12 @@ typically occurs due to insufficient permissions to create the executable file.
 
 ---
 
-## `inductive` is Not Recognized
+## `inductiva` is Not Recognized
 
 ### Problem
-When attempting to run `inductive`, you see the error:
+When attempting to run `inductiva`, you see the error:
 ```
-'inductive' is not recognized as an internal or external command.
+'inductiva' is not recognized as an internal or external command.
 ```
 This happens for one of two reasons:
 1. The `inductiva.exe` file was not created successfully. (Refer to [Unable to Create `inductiva.exe`](#unable-to-create-inductivaexe)).
