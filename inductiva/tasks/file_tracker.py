@@ -7,7 +7,8 @@ import enum
 import os
 from aiortc import RTCPeerConnection, RTCSessionDescription
 
-SIGNALING_SERVER = os.environ.get("INDUCTIVA_API_URL", "https://api.inductiva.ai")
+SIGNALING_SERVER = os.environ.get("INDUCTIVA_API_URL",
+                                  "https://api.inductiva.ai")
 API_KEY = os.environ.get("INDUCTIVA_API_KEY", None)
 
 # STUN/TURN server configuration
@@ -55,21 +56,24 @@ class FileTracker:
         connection_id = str(uuid.uuid4())
         async with aiohttp.ClientSession() as session:
             await session.post(f"{SIGNALING_SERVER}/tasks/{task_id}/register",
-                               json={"clientId": connection_id}, headers=self._headers)
+                               json={"sender_id": connection_id},
+                               headers=self._headers)
 
             offer = await self.pc.createOffer()
             await self.pc.setLocalDescription(offer)
 
             await session.post(f"{SIGNALING_SERVER}/tasks/{task_id}/offer",
                                json={
-                                   "receiverId": task_id,
-                                   "senderId": connection_id,
+                                   "receiver_id": task_id,
+                                   "sender_id": connection_id,
                                    "type": "offer",
                                    "sdp": self.pc.localDescription.sdp
-                               }, headers=self._headers)
+                               },
+                               headers=self._headers)
 
             async with session.get(
-                    f"{SIGNALING_SERVER}/tasks/{task_id}/message?client={connection_id}", headers=self._headers) as resp:
+                    f"{SIGNALING_SERVER}/tasks/{task_id}/message?client={connection_id}",
+                    headers=self._headers) as resp:
                 if resp.status == 200:
                     data = await resp.json()
                     if data["type"] == "answer":
