@@ -36,11 +36,15 @@ def login(_):
 
     api_key = prompt.strip()
 
+    if not api_key:
+        print("Error: API key cannot be empty.")
+        return
+
+    user_info = users.get_info()
+
     utils.set_stored_api_key(api_key)
     inductiva.set_api_key(api_key)
 
-    user_info = users.get_info()
-    utils.remove_stored_api_key()
 
     user_name = user_info["name"] or ""
     print(f"Welcome back {user_name}!")
