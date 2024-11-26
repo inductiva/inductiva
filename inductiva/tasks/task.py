@@ -230,11 +230,11 @@ class TaskInfo:
         data_metrics_table = "\n".join(
             "\t" + line for line in data_metrics_table.splitlines())
 
-        table_str = f"\nTask status: {self.status}\n"
+        table_str = f"\nTask status: {self.status_alias}\n"
         if self.executer and self.executer.error_detail:
             table_str += f"\n\tStatus detail: {self.executer.error_detail}"
 
-        table_str += "\nStatus history:\n"
+        table_str += "\nTimeline:\n"
         for item in self.status_history:
             formatted_timestamp = format_utils.datetime_formatter(
                 item["timestamp"])
