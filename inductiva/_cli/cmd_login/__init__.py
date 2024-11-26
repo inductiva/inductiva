@@ -3,7 +3,7 @@ import argparse
 import getpass
 import os
 
-from inductiva import constants, utils
+from inductiva import constants, users, utils
 
 
 def login(_):
@@ -36,7 +36,15 @@ def login(_):
     api_key = prompt.strip()
 
     utils.set_stored_api_key(api_key)
-    print("Login successful.")
+
+    try:
+        user_info = users.get_info()
+    except Exception:
+        utils.remove_stored_api_key()
+        raise RuntimeError("Invalid API key. Please try again.")
+
+    user_name = user_info["name"] or ""
+    print(f"Welcome back {user_name}!")
 
 
 def register(parser):
