@@ -13,8 +13,7 @@ def machine_group_info(args, fout: TextIO = sys.stdout):
     machine_group = resources.machine_groups.get_by_name(machine_group_name)
     machines = machine_group.__dict__["machines"]
 
-    print(f"Showing machines of machine group: {machine_group_name}",
-          file=fout)
+    print(f"Showing machines of machine group: {machine_group_name}", file=fout)
 
     table_dict = resources.machine_groups.get_machine_dict(machines)
 
