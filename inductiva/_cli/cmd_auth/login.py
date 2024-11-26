@@ -40,10 +40,13 @@ def login(_):
         print("Error: API key cannot be empty.")
         return
 
+    # Set the API key to check if it is valid
+    inductiva.set_api_key(api_key)
+
+    # If the API key is invalid, this will raise an exception
     user_info = users.get_info()
 
     utils.set_stored_api_key(api_key)
-    inductiva.set_api_key(api_key)
 
     user_name = user_info["name"] or ""
     print(f"Welcome back {user_name}!")
