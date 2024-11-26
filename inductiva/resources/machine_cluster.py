@@ -90,6 +90,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         machine_group = super().from_api_response(resp)
         machine_group.num_machines = int(resp["max_vms"])
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
+        machine_group.__dict__["machines"] = resp["machines"]
         machine_group.register = False
         return machine_group
 

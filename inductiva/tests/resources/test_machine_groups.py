@@ -15,6 +15,7 @@ BASE_RESPONSE = {
     "min_vms": 1,
     "provider_id": "GCP",
     "started": False,
+    "machines": [],
 }
 
 RESPONSE_1 = {**BASE_RESPONSE, **{"type": "standard", "is_elastic": False}}
