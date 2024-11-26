@@ -27,11 +27,13 @@ class Operations(enum.Enum):
 class FileTracker:
     """File Tracker class for connecting to a running task via WebRTC."""
 
-    def __init__(self):
+    def __init__(self, api):
         self.pc = RTCPeerConnection()
         self.pc.configuration = {"iceServers": ICE_SERVERS}
         self._message = None
+        self._api = api
         self._headers = {"X-API-Key": API_KEY}
+        self._headers["Content-Type"] = "application/json"
 
     async def setup_channel(self, operation, **kwargs):
         channel = self.pc.createDataChannel("file_transfer")
@@ -55,9 +57,8 @@ class FileTracker:
     async def connect_to_task(self, task_id):
         connection_id = str(uuid.uuid4())
         async with aiohttp.ClientSession() as session:
-            await session.post(f"{SIGNALING_SERVER}/tasks/{task_id}/register",
-                               json={"sender_id": connection_id},
-                               headers=self._headers)
+            
+            await self._api.call_api(resource_path=f"/tasks/{task_id}/register", method="POST", body={"sender_id": connection_id}, headers=self._headers)
 
             offer = await self.pc.createOffer()
             await self.pc.setLocalDescription(offer)

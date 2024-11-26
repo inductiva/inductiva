@@ -1135,7 +1135,7 @@ class Task:
         Returns:
             The result of the operation.
         """
-        file_tracker = FileTracker()
+        file_tracker = FileTracker(api.get_client())
         ret = await file_tracker.setup_channel(operation, **kwargs)
         await file_tracker.connect_to_task(self.id)
         message = await ret
