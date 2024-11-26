@@ -45,7 +45,6 @@ def login(_):
     utils.set_stored_api_key(api_key)
     inductiva.set_api_key(api_key)
 
-
     user_name = user_info["name"] or ""
     print(f"Welcome back {user_name}!")
 
