@@ -194,7 +194,7 @@ def download_from_url(
                           if path else downloaded_to.with_suffix(""))
         logging.info("■ Uncompressing the downloaded archive to %s",
                      resulting_path)
-        _unzip(zip_path=downloaded_to, unzip_path=resulting_path)
+        _unzip(downloaded_to, resulting_path if path else None)
         logging.info("")
 
     return str(resulting_path.absolute())
