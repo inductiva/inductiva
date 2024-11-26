@@ -1,6 +1,7 @@
 """Constants that can be set for the Inductiva client."""
 import os
 import pathlib
+import platform
 
 LOGS_WEBSOCKET_URL = os.environ.get("INDUCTIVA_TASK_LOGS_URL",
                                     "wss://logs.inductiva.ai")
@@ -24,6 +25,15 @@ TASK_FAILED_LINES_TO_DUMP = 10
 
 INDUCTIVA_LOGS_WAIT_SLEEP_TIME = 1.0
 
-HOME_DIR = pathlib.Path.home() / ".inductiva"
+system = platform.system()
+if platform.system().lower() == "windows":
+    HOME_DIR = pathlib.Path.home() / "AppData" / "inductiva"
+elif platform.system().lower() in ["linux", "darwin"]:
+    HOME_DIR = pathlib.Path.home() / ".inductiva"
+else:
+    raise RuntimeError(f"Current operating system {system} not supported.")
+
+LOGS_FILE_PATH = HOME_DIR / "inductiva.log"
+API_KEY_FILE_PATH = HOME_DIR / "api_key"
 
 TASK_OUTPUT_ZIP = "output.zip"
