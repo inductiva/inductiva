@@ -3,6 +3,7 @@ import argparse
 import getpass
 import os
 
+import inductiva
 from inductiva import constants, users, utils
 
 
@@ -36,6 +37,7 @@ def login(_):
     api_key = prompt.strip()
 
     utils.set_stored_api_key(api_key)
+    inductiva.set_api_key(api_key)
 
     try:
         user_info = users.get_info()
