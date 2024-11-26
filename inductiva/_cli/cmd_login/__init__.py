@@ -39,11 +39,8 @@ def login(_):
     utils.set_stored_api_key(api_key)
     inductiva.set_api_key(api_key)
 
-    try:
-        user_info = users.get_info()
-    except Exception:
-        utils.remove_stored_api_key()
-        raise RuntimeError("Invalid API key. Please try again.")
+    user_info = users.get_info()
+    utils.remove_stored_api_key()
 
     user_name = user_info["name"] or ""
     print(f"Welcome back {user_name}!")
