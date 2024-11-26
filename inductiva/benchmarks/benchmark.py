@@ -9,6 +9,7 @@ from typing import Optional, Union
 from typing_extensions import Self
 from collections import defaultdict
 from inductiva import types, resources, projects, simulators, client
+from inductiva.client.models import TaskStatusCode
 from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 
 
@@ -179,6 +180,7 @@ class Benchmark(projects.Project):
         self,
         fmt: Union[ExportFormat, str] = ExportFormat.JSON,
         filename: Optional[str] = None,
+        status: Optional[Union[TaskStatusCode, str]] = None,
         select: Union[SelectMode, str] = SelectMode.DISTINCT,
     ):
         """
@@ -190,13 +192,16 @@ class Benchmark(projects.Project):
             filename (Optional[str]): The name of the output file to save the
                 exported results. Defaults to the benchmark's name if not
                 provided.
+            status (Optional[Union[TaskStatusCode, str]]): The status of the
+                tasks to include in the benchmarking results. Defaults to None,
+                which includes all tasks.
             select (Union[SelectMode, str]): The data to include in
                 the benchmarking results. Defaults to SelectMode.DISTINCT that
                 includes only the parameters that vary between different runs.
         """
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
-        info = self.runs_info(select=select)
+        info = self.runs_info(status=status, select=select)
         filename = filename or f"{self.name}.{fmt.value}"
         if fmt == ExportFormat.JSON:
             with open(filename, mode="w", encoding="utf-8") as file:
@@ -213,6 +218,7 @@ class Benchmark(projects.Project):
 
     def runs_info(
         self,
+        status: Optional[Union[TaskStatusCode, str]] = None,
         select: Union[SelectMode, str] = SelectMode.DISTINCT,
     ) -> list:
         """
@@ -221,6 +227,9 @@ class Benchmark(projects.Project):
         execution time.
         
         Args:
+            status (Optional[Union[TaskStatusCode, str]]): The status of the
+                tasks to include in the benchmarking results. Defaults to None,
+                which includes all tasks.
             select (Union[SelectMode, str]): The data to include in
                 the benchmarking results. Defaults to SelectMode.DISTINCT that
                 includes only the parameters that vary between different runs.
@@ -250,7 +259,7 @@ class Benchmark(projects.Project):
             select = SelectMode[select.upper()]
 
         info = []
-        tasks = self.get_tasks()
+        tasks = self.get_tasks(status=status)
         for task in tasks:
             task_input_params = get_task_input_params(task)
             task_info = task.info
