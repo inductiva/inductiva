@@ -139,7 +139,7 @@ def set_api_key(api_key):
     if api_key is None:
         # pylint: disable=line-too-long
         raise ValueError("No API Key specified. "
-                         "Please login with `inductiva login`")
+                         "Please login with `inductiva auth login`")
 
     _api_key.set(api_key)
 
