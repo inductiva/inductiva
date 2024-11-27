@@ -1,5 +1,4 @@
 # coding: utf-8
-
 """
 
 
@@ -32,17 +31,20 @@ from inductiva.client.model.machine_type import MachineType
 # Query params
 
 
-class MachineFamiliesSchema(
-    schemas.ListSchema
-):
-
+class MachineFamiliesSchema(schemas.ListSchema):
 
     class MetaOapg:
         items = schemas.StrSchema
 
     def __new__(
         cls,
-        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
+        _arg: typing.Union[typing.Tuple[typing.Union[
+            MetaOapg.items,
+            str,
+        ]], typing.List[typing.Union[
+            MetaOapg.items,
+            str,
+        ]]],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'MachineFamiliesSchema':
         return super().__new__(
@@ -55,17 +57,20 @@ class MachineFamiliesSchema(
         return super().__getitem__(i)
 
 
-class MachineConfigsSchema(
-    schemas.ListSchema
-):
-
+class MachineConfigsSchema(schemas.ListSchema):
 
     class MetaOapg:
         items = schemas.StrSchema
 
     def __new__(
         cls,
-        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, str, ]], typing.List[typing.Union[MetaOapg.items, str, ]]],
+        _arg: typing.Union[typing.Tuple[typing.Union[
+            MetaOapg.items,
+            str,
+        ]], typing.List[typing.Union[
+            MetaOapg.items,
+            str,
+        ]]],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'MachineConfigsSchema':
         return super().__new__(
@@ -78,17 +83,22 @@ class MachineConfigsSchema(
         return super().__getitem__(i)
 
 
-class VcpusRangeSchema(
-    schemas.ListSchema
-):
-
+class VcpusRangeSchema(schemas.ListSchema):
 
     class MetaOapg:
         items = schemas.IntSchema
 
     def __new__(
         cls,
-        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, ]]],
+        _arg: typing.Union[typing.Tuple[typing.Union[
+            MetaOapg.items,
+            decimal.Decimal,
+            int,
+        ]], typing.List[typing.Union[
+            MetaOapg.items,
+            decimal.Decimal,
+            int,
+        ]]],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'VcpusRangeSchema':
         return super().__new__(
@@ -101,17 +111,22 @@ class VcpusRangeSchema(
         return super().__getitem__(i)
 
 
-class MemoryRangeSchema(
-    schemas.ListSchema
-):
-
+class MemoryRangeSchema(schemas.ListSchema):
 
     class MetaOapg:
         items = schemas.IntSchema
 
     def __new__(
         cls,
-        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, ]]],
+        _arg: typing.Union[typing.Tuple[typing.Union[
+            MetaOapg.items,
+            decimal.Decimal,
+            int,
+        ]], typing.List[typing.Union[
+            MetaOapg.items,
+            decimal.Decimal,
+            int,
+        ]]],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'MemoryRangeSchema':
         return super().__new__(
@@ -124,17 +139,24 @@ class MemoryRangeSchema(
         return super().__getitem__(i)
 
 
-class PriceRangeSchema(
-    schemas.ListSchema
-):
-
+class PriceRangeSchema(schemas.ListSchema):
 
     class MetaOapg:
         items = schemas.NumberSchema
 
     def __new__(
         cls,
-        _arg: typing.Union[typing.Tuple[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]], typing.List[typing.Union[MetaOapg.items, decimal.Decimal, int, float, ]]],
+        _arg: typing.Union[typing.Tuple[typing.Union[
+            MetaOapg.items,
+            decimal.Decimal,
+            int,
+            float,
+        ]], typing.List[typing.Union[
+            MetaOapg.items,
+            decimal.Decimal,
+            int,
+            float,
+        ]]],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'PriceRangeSchema':
         return super().__new__(
@@ -148,27 +170,21 @@ class PriceRangeSchema(
 
 
 class SpotSchema(
-    schemas.ComposedSchema,
-):
-
+        schemas.ComposedSchema,):
 
     class MetaOapg:
         any_of_0 = schemas.BoolSchema
-        
-        
-        class any_of_1(
-            schemas.EnumBase,
-            schemas.StrSchema
-        ):
-            
+
+        class any_of_1(schemas.EnumBase, schemas.StrSchema):
+
             @schemas.classproperty
             def TRUE(cls):
                 return cls("true")
-            
+
             @schemas.classproperty
             def FALSE(cls):
                 return cls("false")
-        
+
         @classmethod
         @functools.lru_cache()
         def any_of(cls):
@@ -184,12 +200,31 @@ class SpotSchema(
                 cls.any_of_1,
             ]
 
-
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+            str,
+            date,
+            datetime,
+            uuid.UUID,
+            int,
+            float,
+            decimal.Decimal,
+            bool,
+            None,
+            list,
+            tuple,
+            bytes,
+            io.FileIO,
+            io.BufferedReader,
+        ],
         _configuration: typing.Optional[schemas.Configuration] = None,
-        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+        **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                               frozendict.frozendict, str, date, datetime,
+                               uuid.UUID, int, float, decimal.Decimal, None,
+                               list, tuple, bytes],
     ) -> 'SpotSchema':
         return super().__new__(
             cls,
@@ -197,28 +232,73 @@ class SpotSchema(
             _configuration=_configuration,
             **kwargs,
         )
+
+
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams',
-    {
-    }
-)
+    'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams',
-    {
-        'machine_families': typing.Union[MachineFamiliesSchema, list, tuple, ],
-        'machine_configs': typing.Union[MachineConfigsSchema, list, tuple, ],
-        'vcpus_range': typing.Union[VcpusRangeSchema, list, tuple, ],
-        'memory_range': typing.Union[MemoryRangeSchema, list, tuple, ],
-        'price_range': typing.Union[PriceRangeSchema, list, tuple, ],
-        'spot': typing.Union[SpotSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        'provider_id': typing.Union[ProviderIdSchema, ],
+    'RequestOptionalQueryParams', {
+        'machine_families':
+            typing.Union[
+                MachineFamiliesSchema,
+                list,
+                tuple,
+            ],
+        'machine_configs':
+            typing.Union[
+                MachineConfigsSchema,
+                list,
+                tuple,
+            ],
+        'vcpus_range':
+            typing.Union[
+                VcpusRangeSchema,
+                list,
+                tuple,
+            ],
+        'memory_range':
+            typing.Union[
+                MemoryRangeSchema,
+                list,
+                tuple,
+            ],
+        'price_range':
+            typing.Union[
+                PriceRangeSchema,
+                list,
+                tuple,
+            ],
+        'spot':
+            typing.Union[
+                SpotSchema,
+                dict,
+                frozendict.frozendict,
+                str,
+                date,
+                datetime,
+                uuid.UUID,
+                int,
+                float,
+                decimal.Decimal,
+                bool,
+                None,
+                list,
+                tuple,
+                bytes,
+                io.FileIO,
+                io.BufferedReader,
+            ],
+        'provider_id':
+            typing.Union[
+                ProviderIdSchema,
+            ],
     },
-    total=False
-)
+    total=False)
 
 
-class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams):
+class RequestQueryParams(RequestRequiredQueryParams,
+                         RequestOptionalQueryParams):
     pass
 
 
@@ -266,20 +346,18 @@ request_query_provider_id = api_client.QueryParameter(
 )
 
 
-class SchemaFor200ResponseBodyApplicationJson(
-    schemas.ListSchema
-):
-
+class SchemaFor200ResponseBodyApplicationJson(schemas.ListSchema):
 
     class MetaOapg:
-        
+
         @staticmethod
         def items() -> typing.Type['MachineType']:
             return MachineType
 
     def __new__(
         cls,
-        _arg: typing.Union[typing.Tuple['MachineType'], typing.List['MachineType']],
+        _arg: typing.Union[typing.Tuple['MachineType'],
+                           typing.List['MachineType']],
         _configuration: typing.Optional[schemas.Configuration] = None,
     ) -> 'SchemaFor200ResponseBodyApplicationJson':
         return super().__new__(
@@ -304,8 +382,9 @@ class ApiResponseFor200(api_client.ApiResponse):
 _response_for_200 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor200ResponseBodyApplicationJson),
+        'application/json':
+            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
+                                ),
     },
 )
 SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
@@ -323,16 +402,16 @@ class ApiResponseFor422(api_client.ApiResponse):
 _response_for_422 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor422,
     content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor422ResponseBodyApplicationJson),
+        'application/json':
+            api_client.MediaType(schema=SchemaFor422ResponseBodyApplicationJson
+                                ),
     },
 )
-_all_accept_content_types = (
-    'application/json',
-)
+_all_accept_content_types = ('application/json',)
 
 
 class BaseApi(api_client.Api):
+
     @typing.overload
     def _list_available_machine_types_oapg(
         self,
@@ -342,8 +421,9 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def _list_available_machine_types_oapg(
@@ -353,7 +433,8 @@ class BaseApi(api_client.Api):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def _list_available_machine_types_oapg(
@@ -364,9 +445,10 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def _list_available_machine_types_oapg(
         self,
@@ -387,20 +469,22 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_machine_families,
-            request_query_machine_configs,
-            request_query_vcpus_range,
-            request_query_memory_range,
-            request_query_price_range,
-            request_query_spot,
-            request_query_provider_id,
+                request_query_machine_families,
+                request_query_machine_configs,
+                request_query_vcpus_range,
+                request_query_memory_range,
+                request_query_price_range,
+                request_query_spot,
+                request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
             if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator()
-            serialized_data = parameter.serialize(parameter_data, prefix_separator_iterator)
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
+                )
+            serialized_data = parameter.serialize(parameter_data,
+                                                  prefix_separator_iterator)
             for serialized_value in serialized_data.values():
                 used_path += serialized_value
 
@@ -420,20 +504,22 @@ class BaseApi(api_client.Api):
         )
 
         if skip_deserialization:
-            api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+            api_response = api_client.ApiResponseWithoutDeserialization(
+                response=response)
         else:
-            response_for_status = _status_code_to_response.get(str(response.status))
+            response_for_status = _status_code_to_response.get(
+                str(response.status))
             if response_for_status:
-                api_response = response_for_status.deserialize(response, self.api_client.configuration)
+                api_response = response_for_status.deserialize(
+                    response, self.api_client.configuration)
             else:
-                api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+                api_response = api_client.ApiResponseWithoutDeserialization(
+                    response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(
-                status=response.status,
-                reason=response.reason,
-                api_response=api_response
-            )
+            raise exceptions.ApiException(status=response.status,
+                                          reason=response.reason,
+                                          api_response=api_response)
 
         return api_response
 
@@ -450,8 +536,9 @@ class ListAvailableMachineTypes(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def list_available_machine_types(
@@ -461,7 +548,8 @@ class ListAvailableMachineTypes(BaseApi):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def list_available_machine_types(
@@ -472,9 +560,10 @@ class ListAvailableMachineTypes(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def list_available_machine_types(
         self,
@@ -489,8 +578,7 @@ class ListAvailableMachineTypes(BaseApi):
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
+            skip_deserialization=skip_deserialization)
 
 
 class ApiForget(BaseApi):
@@ -505,8 +593,9 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def get(
@@ -516,7 +605,8 @@ class ApiForget(BaseApi):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def get(
@@ -527,9 +617,10 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def get(
         self,
@@ -544,7 +635,4 @@ class ApiForget(BaseApi):
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
-
-
+            skip_deserialization=skip_deserialization)

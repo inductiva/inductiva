@@ -51,7 +51,7 @@ def to_dict(list_of_tasks: Iterable[Task]) -> Mapping[str, List[Any]]:
 
         table["ID"].append(task.id)
         table["Simulator"].append(task.get_simulator_name())
-        table["Status"].append(task.info.status)
+        table["Status"].append(task.info.status_alias)
         table["Submitted"].append(task.info.input_submit_time)
         table["Started"].append(task.info.start_time)
         table["Computation Time"].append(execution_time)

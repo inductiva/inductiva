@@ -86,6 +86,7 @@ class TaskInfo:
         self.is_terminal = None
         self.task_id = None
         self.status = None
+        self.status_alias = None
         self.simulator = None
         self.storage_path = None
         self.container_image = None
@@ -216,34 +217,6 @@ class TaskInfo:
     def __str__(self):
         table_format = "plain"
 
-        wall_time_data = [[
-            "Wall clock time:",
-            self._format_time_metric(
-                "total_seconds",
-                #if the metric is provided use it
-                #otherwise computed based on creation and end time
-                self.time_metrics.total_seconds.value or self.get_task_time(),
-            ),
-        ]]
-        wall_time_table = tabulate.tabulate(
-            wall_time_data,
-            tablefmt=table_format,
-        )
-
-        time_metrics_data = [
-            [
-                f"{metric.label}:",
-                self._format_time_metric(metric_key, metric.value),
-            ]
-            for metric_key, metric in self.time_metrics.__dict__.items()
-            if metric_key != "total_seconds"
-        ]
-        time_metrics_table = tabulate.tabulate(
-            time_metrics_data,
-            missingval=self.MISSING_UNTIL_TASK_STARTED,
-            tablefmt=table_format,
-        )
-
         data_metrics_data = [[
             f"{metric.label}:",
             self._format_data_metric(metric_key, metric.value)
@@ -254,26 +227,53 @@ class TaskInfo:
             tablefmt=table_format,
         )
 
-        # Add a tab to the beginning of each line in the tables
-        time_metrics_table = "\n".join(
-            "\t" + line for line in time_metrics_table.splitlines())
         data_metrics_table = "\n".join(
             "\t" + line for line in data_metrics_table.splitlines())
 
-        table_str = f"\nTask status: {self.status}\n"
+        table_str = f"\nTask status: {self.status_alias}\n"
         if self.executer and self.executer.error_detail:
             table_str += f"\n\tStatus detail: {self.executer.error_detail}"
 
-        table_str += f"\n{wall_time_table}"
-        table_str += f"\nTime breakdown:\n{time_metrics_table}\n"
-
-        table_str += "\nStatus history:\n"
+        table_str += "\nTimeline:\n"
         for item in self.status_history:
             formatted_timestamp = format_utils.datetime_formatter(
                 item["timestamp"])
-            status = item["status"]
-            table_str += f"\t{status:<20} at {formatted_timestamp:<30}\n"
-            #add machine operations to each status here
+
+            if item["end_timestamp"]:
+                start_time = datetime.datetime.fromisoformat(item["timestamp"])
+                end_time = datetime.datetime.fromisoformat(
+                    item["end_timestamp"])
+                duration_time = end_time - start_time
+                duration = f"{round(duration_time.total_seconds(), 3)} s"
+            elif not self.is_terminal:
+                duration = "(ongoing)"
+            else:
+                duration = ""
+
+            status = item["alias"]
+            table_str += (f"\t{status:<25} at "
+                          f"{formatted_timestamp:<20} {duration}\n")
+
+            for index, sub_item in enumerate(item.get("operations", [])):
+
+                if index + 1 == len(item.get("operations", [])):
+                    ascii_char = "└"
+                else:
+                    ascii_char = "├"
+
+                start_time = datetime.datetime.fromisoformat(
+                    sub_item["start_timestamp"])
+                end_time = datetime.datetime.fromisoformat(
+                    sub_item["end_timestamp"]
+                ) if sub_item["end_timestamp"] else datetime.datetime.now(
+                    datetime.timezone.utc)
+                duration_time = end_time - start_time
+                duration = f"{round(duration_time.total_seconds(), 3)} s"
+
+                if ("attributes" in sub_item and
+                        "command" in sub_item["attributes"]):
+                    table_str += (f"\t\t{ascii_char}> {duration:<15} "
+                                  f"{sub_item['attributes']['command']}\n")
 
         table_str += f"\nData:\n{data_metrics_table}\n"
         if self.estimated_computation_cost:
@@ -282,7 +282,11 @@ class TaskInfo:
         else:
             estimated_cost = "N/A"
         table_str += ("\nEstimated computation cost (US$): "
-                      f"{estimated_cost}\n")
+                      f"{estimated_cost}\n\n")
+        table_str += ("Go to "
+                      f"https://console.inductiva.ai/tasks/{self.task_id} "
+                      "for more details.")
+
         return table_str
 
 
@@ -944,7 +948,7 @@ class Task:
 
         logging.debug("\nDownload URL: %s\n", download_url)
 
-        # If the file server (GCP, ICE, etc.) is not available, the Web API
+        # If the file server (GCP, etc.) is not available, the Web API
         # returns a fallback URL and returns the following flag as False.
         # In this case, the output donwload will be provided by the Web API
         # itself.

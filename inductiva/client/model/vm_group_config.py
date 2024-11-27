@@ -1254,6 +1254,30 @@ class VMGroupConfig(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class machines(schemas.ListSchema):
+
+                class MetaOapg:
+
+                    @staticmethod
+                    def items() -> typing.Type['MachineInfo']:
+                        return MachineInfo
+
+                def __new__(
+                    cls,
+                    _arg: typing.Union[typing.Tuple['MachineInfo'],
+                                       typing.List['MachineInfo']],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                ) -> 'machines':
+                    return super().__new__(
+                        cls,
+                        _arg,
+                        _configuration=_configuration,
+                    )
+
+                def __getitem__(self, i: int) -> 'MachineInfo':
+                    return super().__getitem__(i)
+
             __annotations__ = {
                 "max_idle_time": max_idle_time,
                 "auto_terminate_ts": auto_terminate_ts,
@@ -1279,6 +1303,7 @@ class VMGroupConfig(schemas.DictSchema):
                 "autoscale_policy": autoscale_policy,
                 "dynamic_disk_resize_config": dynamic_disk_resize_config,
                 "custom_vm_image": custom_vm_image,
+                "machines": machines,
             }
 
     @typing.overload
@@ -1426,6 +1451,12 @@ class VMGroupConfig(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["machines"]
+    ) -> MetaOapg.properties.machines:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -1454,6 +1485,7 @@ class VMGroupConfig(schemas.DictSchema):
         "autoscale_policy",
         "dynamic_disk_resize_config",
         "custom_vm_image",
+        "machines",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -1605,6 +1637,12 @@ class VMGroupConfig(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["machines"]
+    ) -> typing.Union[MetaOapg.properties.machines, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -1634,6 +1672,7 @@ class VMGroupConfig(schemas.DictSchema):
         "autoscale_policy",
         "dynamic_disk_resize_config",
         "custom_vm_image",
+        "machines",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -1770,6 +1809,8 @@ class VMGroupConfig(schemas.DictSchema):
                                       decimal.Decimal, bool, None, list, tuple,
                                       bytes, io.FileIO, io.BufferedReader,
                                       schemas.Unset] = schemas.unset,
+        machines: typing.Union[MetaOapg.properties.machines, list, tuple,
+                               schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -1803,6 +1844,7 @@ class VMGroupConfig(schemas.DictSchema):
             autoscale_policy=autoscale_policy,
             dynamic_disk_resize_config=dynamic_disk_resize_config,
             custom_vm_image=custom_vm_image,
+            machines=machines,
             _configuration=_configuration,
             **kwargs,
         )
@@ -1812,4 +1854,5 @@ from inductiva.client.model.autoscale_policy import AutoscalePolicy
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.machine_group_status import MachineGroupStatus
 from inductiva.client.model.machine_group_type import MachineGroupType
+from inductiva.client.model.machine_info import MachineInfo
 from inductiva.client.model.providers import Providers

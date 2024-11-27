@@ -1,5 +1,4 @@
 # coding: utf-8
-
 """
 
 
@@ -34,19 +33,15 @@ from inductiva.client.model.http_validation_error import HTTPValidationError
 # Query params
 
 
-class MaxResultsSchema(
-    schemas.IntSchema
-):
+class MaxResultsSchema(schemas.IntSchema):
     pass
 
 
 class SortBySchema(
-    schemas.ComposedSchema,
-):
-
+        schemas.ComposedSchema,):
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def all_of(cls):
@@ -61,12 +56,31 @@ class SortBySchema(
                 StorageSortBy,
             ]
 
-
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+            str,
+            date,
+            datetime,
+            uuid.UUID,
+            int,
+            float,
+            decimal.Decimal,
+            bool,
+            None,
+            list,
+            tuple,
+            bytes,
+            io.FileIO,
+            io.BufferedReader,
+        ],
         _configuration: typing.Optional[schemas.Configuration] = None,
-        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+        **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                               frozendict.frozendict, str, date, datetime,
+                               uuid.UUID, int, float, decimal.Decimal, None,
+                               list, tuple, bytes],
     ) -> 'SortBySchema':
         return super().__new__(
             cls,
@@ -77,12 +91,10 @@ class SortBySchema(
 
 
 class OrderSchema(
-    schemas.ComposedSchema,
-):
-
+        schemas.ComposedSchema,):
 
     class MetaOapg:
-        
+
         @classmethod
         @functools.lru_cache()
         def all_of(cls):
@@ -97,12 +109,31 @@ class OrderSchema(
                 Order,
             ]
 
-
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+            str,
+            date,
+            datetime,
+            uuid.UUID,
+            int,
+            float,
+            decimal.Decimal,
+            bool,
+            None,
+            list,
+            tuple,
+            bytes,
+            io.FileIO,
+            io.BufferedReader,
+        ],
         _configuration: typing.Optional[schemas.Configuration] = None,
-        **kwargs: typing.Union[schemas.AnyTypeSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, None, list, tuple, bytes],
+        **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                               frozendict.frozendict, str, date, datetime,
+                               uuid.UUID, int, float, decimal.Decimal, None,
+                               list, tuple, bytes],
     ) -> 'OrderSchema':
         return super().__new__(
             cls,
@@ -110,27 +141,75 @@ class OrderSchema(
             _configuration=_configuration,
             **kwargs,
         )
+
+
 PathSchema = schemas.StrSchema
 ProviderIdSchema = Providers
 RequestRequiredQueryParams = typing_extensions.TypedDict(
-    'RequestRequiredQueryParams',
-    {
-    }
-)
+    'RequestRequiredQueryParams', {})
 RequestOptionalQueryParams = typing_extensions.TypedDict(
-    'RequestOptionalQueryParams',
-    {
-        'max_results': typing.Union[MaxResultsSchema, decimal.Decimal, int, ],
-        'sort_by': typing.Union[SortBySchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        'order': typing.Union[OrderSchema, dict, frozendict.frozendict, str, date, datetime, uuid.UUID, int, float, decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO, io.BufferedReader, ],
-        'path': typing.Union[PathSchema, str, ],
-        'provider_id': typing.Union[ProviderIdSchema, ],
+    'RequestOptionalQueryParams', {
+        'max_results':
+            typing.Union[
+                MaxResultsSchema,
+                decimal.Decimal,
+                int,
+            ],
+        'sort_by':
+            typing.Union[
+                SortBySchema,
+                dict,
+                frozendict.frozendict,
+                str,
+                date,
+                datetime,
+                uuid.UUID,
+                int,
+                float,
+                decimal.Decimal,
+                bool,
+                None,
+                list,
+                tuple,
+                bytes,
+                io.FileIO,
+                io.BufferedReader,
+            ],
+        'order':
+            typing.Union[
+                OrderSchema,
+                dict,
+                frozendict.frozendict,
+                str,
+                date,
+                datetime,
+                uuid.UUID,
+                int,
+                float,
+                decimal.Decimal,
+                bool,
+                None,
+                list,
+                tuple,
+                bytes,
+                io.FileIO,
+                io.BufferedReader,
+            ],
+        'path':
+            typing.Union[
+                PathSchema,
+                str,
+            ],
+        'provider_id':
+            typing.Union[
+                ProviderIdSchema,
+            ],
     },
-    total=False
-)
+    total=False)
 
 
-class RequestQueryParams(RequestRequiredQueryParams, RequestOptionalQueryParams):
+class RequestQueryParams(RequestRequiredQueryParams,
+                         RequestOptionalQueryParams):
     pass
 
 
@@ -166,27 +245,31 @@ request_query_provider_id = api_client.QueryParameter(
 )
 
 
-class SchemaFor200ResponseBodyApplicationJson(
-    schemas.DictSchema
-):
-
+class SchemaFor200ResponseBodyApplicationJson(schemas.DictSchema):
 
     class MetaOapg:
-        
+
         @staticmethod
         def additional_properties() -> typing.Type['StorageFileInfo']:
             return StorageFileInfo
-    
-    def __getitem__(self, name: typing.Union[str, ]) -> 'StorageFileInfo':
+
+    def __getitem__(self, name: typing.Union[
+        str,
+    ]) -> 'StorageFileInfo':
         # dict_instance[name] accessor
         return super().__getitem__(name)
-    
-    def get_item_oapg(self, name: typing.Union[str, ]) -> 'StorageFileInfo':
+
+    def get_item_oapg(self, name: typing.Union[
+        str,
+    ]) -> 'StorageFileInfo':
         return super().get_item_oapg(name)
 
     def __new__(
         cls,
-        *_args: typing.Union[dict, frozendict.frozendict, ],
+        *_args: typing.Union[
+            dict,
+            frozendict.frozendict,
+        ],
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: 'StorageFileInfo',
     ) -> 'SchemaFor200ResponseBodyApplicationJson':
@@ -210,8 +293,9 @@ class ApiResponseFor200(api_client.ApiResponse):
 _response_for_200 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor200,
     content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor200ResponseBodyApplicationJson),
+        'application/json':
+            api_client.MediaType(schema=SchemaFor200ResponseBodyApplicationJson
+                                ),
     },
 )
 SchemaFor422ResponseBodyApplicationJson = HTTPValidationError
@@ -229,16 +313,16 @@ class ApiResponseFor422(api_client.ApiResponse):
 _response_for_422 = api_client.OpenApiResponse(
     response_cls=ApiResponseFor422,
     content={
-        'application/json': api_client.MediaType(
-            schema=SchemaFor422ResponseBodyApplicationJson),
+        'application/json':
+            api_client.MediaType(schema=SchemaFor422ResponseBodyApplicationJson
+                                ),
     },
 )
-_all_accept_content_types = (
-    'application/json',
-)
+_all_accept_content_types = ('application/json',)
 
 
 class BaseApi(api_client.Api):
+
     @typing.overload
     def _list_storage_contents_oapg(
         self,
@@ -248,8 +332,9 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def _list_storage_contents_oapg(
@@ -259,7 +344,8 @@ class BaseApi(api_client.Api):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def _list_storage_contents_oapg(
@@ -270,9 +356,10 @@ class BaseApi(api_client.Api):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def _list_storage_contents_oapg(
         self,
@@ -293,18 +380,20 @@ class BaseApi(api_client.Api):
 
         prefix_separator_iterator = None
         for parameter in (
-            request_query_max_results,
-            request_query_sort_by,
-            request_query_order,
-            request_query_path,
-            request_query_provider_id,
+                request_query_max_results,
+                request_query_sort_by,
+                request_query_order,
+                request_query_path,
+                request_query_provider_id,
         ):
             parameter_data = query_params.get(parameter.name, schemas.unset)
             if parameter_data is schemas.unset:
                 continue
             if prefix_separator_iterator is None:
-                prefix_separator_iterator = parameter.get_prefix_separator_iterator()
-            serialized_data = parameter.serialize(parameter_data, prefix_separator_iterator)
+                prefix_separator_iterator = parameter.get_prefix_separator_iterator(
+                )
+            serialized_data = parameter.serialize(parameter_data,
+                                                  prefix_separator_iterator)
             for serialized_value in serialized_data.values():
                 used_path += serialized_value
 
@@ -324,20 +413,22 @@ class BaseApi(api_client.Api):
         )
 
         if skip_deserialization:
-            api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+            api_response = api_client.ApiResponseWithoutDeserialization(
+                response=response)
         else:
-            response_for_status = _status_code_to_response.get(str(response.status))
+            response_for_status = _status_code_to_response.get(
+                str(response.status))
             if response_for_status:
-                api_response = response_for_status.deserialize(response, self.api_client.configuration)
+                api_response = response_for_status.deserialize(
+                    response, self.api_client.configuration)
             else:
-                api_response = api_client.ApiResponseWithoutDeserialization(response=response)
+                api_response = api_client.ApiResponseWithoutDeserialization(
+                    response=response)
 
         if not 200 <= response.status <= 299:
-            raise exceptions.ApiException(
-                status=response.status,
-                reason=response.reason,
-                api_response=api_response
-            )
+            raise exceptions.ApiException(status=response.status,
+                                          reason=response.reason,
+                                          api_response=api_response)
 
         return api_response
 
@@ -354,8 +445,9 @@ class ListStorageContents(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def list_storage_contents(
@@ -365,7 +457,8 @@ class ListStorageContents(BaseApi):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def list_storage_contents(
@@ -376,9 +469,10 @@ class ListStorageContents(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def list_storage_contents(
         self,
@@ -393,8 +487,7 @@ class ListStorageContents(BaseApi):
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
+            skip_deserialization=skip_deserialization)
 
 
 class ApiForget(BaseApi):
@@ -409,8 +502,9 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: typing_extensions.Literal[False] = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-    ]: ...
+            ApiResponseFor200,
+    ]:
+        ...
 
     @typing.overload
     def get(
@@ -420,7 +514,8 @@ class ApiForget(BaseApi):
         accept_content_types: typing.Tuple[str] = _all_accept_content_types,
         stream: bool = False,
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
-    ) -> api_client.ApiResponseWithoutDeserialization: ...
+    ) -> api_client.ApiResponseWithoutDeserialization:
+        ...
 
     @typing.overload
     def get(
@@ -431,9 +526,10 @@ class ApiForget(BaseApi):
         timeout: typing.Optional[typing.Union[int, typing.Tuple]] = None,
         skip_deserialization: bool = ...,
     ) -> typing.Union[
-        ApiResponseFor200,
-        api_client.ApiResponseWithoutDeserialization,
-    ]: ...
+            ApiResponseFor200,
+            api_client.ApiResponseWithoutDeserialization,
+    ]:
+        ...
 
     def get(
         self,
@@ -448,7 +544,4 @@ class ApiForget(BaseApi):
             accept_content_types=accept_content_types,
             stream=stream,
             timeout=timeout,
-            skip_deserialization=skip_deserialization
-        )
-
-
+            skip_deserialization=skip_deserialization)

@@ -24,6 +24,9 @@ tabulate._table_formats["inductiva"] = TableFormat(
     with_header_hide=None,
 )
 
+CURRENCY_SYMBOL = "US$"
+TIME_UNIT = "s"
+
 
 class Emphasis(Enum):
     RED = "\033[31m"
@@ -282,10 +285,8 @@ def currency_formatter(amount: float) -> str:
     the BE. For now, we are using USD.
     """
 
-    currency_data = "US$"
-
     if amount == 0:
-        return f"0 {currency_data}"
+        return f"0 {CURRENCY_SYMBOL}"
 
     # Convert the value to a string with a maximum of 10 decimal places
     amount_str = f"{amount:.15f}"
@@ -301,6 +302,6 @@ def currency_formatter(amount: float) -> str:
     if amount < 0.1:
         # If the amount is less than 0.1, show all decimal places until the
         # first two non-zero decimal values (e.g., 0.00012345 -> 0.00012)
-        return f"{amount:.{decimal_places}f} {currency_data}"
+        return f"{amount:.{decimal_places}f} {CURRENCY_SYMBOL}"
 
-    return f"{amount:.2f} {currency_data}"
+    return f"{amount:.2f} {CURRENCY_SYMBOL}"
