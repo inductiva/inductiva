@@ -7,6 +7,8 @@ import enum
 import os
 from aiortc import RTCPeerConnection, RTCSessionDescription
 
+from inductiva.client.apis.tags import tasks_api
+
 SIGNALING_SERVER = os.environ.get("INDUCTIVA_API_URL",
                                   "https://api.inductiva.ai")
 API_KEY = os.environ.get("INDUCTIVA_API_KEY", None)
@@ -31,9 +33,7 @@ class FileTracker:
         self.pc = RTCPeerConnection()
         self.pc.configuration = {"iceServers": ICE_SERVERS}
         self._message = None
-        self._api = api
-        self._headers = {"X-API-Key": API_KEY}
-        self._headers["Content-Type"] = "application/json"
+        self._api = tasks_api.TasksApi(api)
 
     async def setup_channel(self, operation, **kwargs):
         channel = self.pc.createDataChannel("file_transfer")
@@ -56,31 +56,25 @@ class FileTracker:
 
     async def connect_to_task(self, task_id):
         connection_id = str(uuid.uuid4())
-        async with aiohttp.ClientSession() as session:
-            
-            await self._api.call_api(resource_path=f"/tasks/{task_id}/register", method="POST", body={"sender_id": connection_id}, headers=self._headers)
+        path_params={"task_id": task_id}
+        self._api.register_task(body={"sender_id": connection_id}, path_params=path_params)
 
-            offer = await self.pc.createOffer()
-            await self.pc.setLocalDescription(offer)
+        offer = await self.pc.createOffer()
+        await self.pc.setLocalDescription(offer)
 
-            await session.post(f"{SIGNALING_SERVER}/tasks/{task_id}/offer",
-                               json={
-                                   "receiver_id": task_id,
-                                   "sender_id": connection_id,
-                                   "type": "offer",
-                                   "sdp": self.pc.localDescription.sdp
-                               },
-                               headers=self._headers)
+        self._api.offer_task(body={
+                                "sender_id": connection_id,
+                                "receiver_id": task_id,
+                                "type": "offer",
+                                "sdp": self.pc.localDescription.sdp
+                                }, path_params=path_params)
 
-            async with session.get(
-                    f"{SIGNALING_SERVER}/tasks/{task_id}/message?client={connection_id}",
-                    headers=self._headers) as resp:
-                if resp.status == 200:
-                    data = await resp.json()
-                    if data["type"] == "answer":
-                        await self.pc.setRemoteDescription(
-                            RTCSessionDescription(sdp=data["sdp"],
-                                                  type=data["type"]))
+        resp = self._api.get_message(query_params={"client": connection_id}, path_params=path_params)
+        data = resp.body
+        if data["type"] == "answer":
+            await self.pc.setRemoteDescription(
+                RTCSessionDescription(sdp=data["sdp"],
+                                        type=data["type"]))
 
     async def cleanup(self):
         await self.pc.close()
