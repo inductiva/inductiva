@@ -34,17 +34,12 @@ class Providers(schemas.EnumBase, schemas.StrSchema):
     class MetaOapg:
         enum_value_to_name = {
             "GCP": "GCP",
-            "ICE": "ICE",
             "LOCAL": "LOCAL",
         }
 
     @schemas.classproperty
     def GCP(cls):
         return cls("GCP")
-
-    @schemas.classproperty
-    def ICE(cls):
-        return cls("ICE")
 
     @schemas.classproperty
     def LOCAL(cls):

@@ -6,7 +6,7 @@ import os
 import re
 
 import inductiva
-from inductiva import logs
+from inductiva import constants, logs
 
 BEGIN_TAG = "# >>> INDUCTIVA BEGIN:"
 END_TAG = "# >>> INDUCTIVA END:"
@@ -45,7 +45,7 @@ def check_running_for_first_time():
 
     """
     version = inductiva.__version__
-    dir_name = logs.log.get_logs_file_path().parent / f"v{version}"
+    dir_name = constants.HOME_DIR / f"v{version}"
     if not os.path.exists(dir_name):
         os.mkdir(dir_name)
         return True

@@ -1,21 +1,32 @@
 # Tasks
 
-Central to the API's functionality is the concept of a `Task`,
-which is an  abstraction that encapsulates all the information
-about the computational workload you defined as the user.
-Once you submit a simulation to the  API, a `Task` is generated.
-This allows for real-time updates on simulation status, including
-monitoring its progress and retrieving its outputs.
+The `Task` is the core functionality of the Inductiva API. It represents 
+everything about the computational workload you define and submit for 
+execution. Simply put, a `Task` is how your simulation is tracked, managed, 
+and updated in real-time.
 
-In this reference, you will learn about the entire lifecycle of a `Task`,
-including its creation, various operational states, and termination. This information
-is crucial to understand how the Inductiva API manages simulations.
+When you submit a simulation, the API automatically generates a `Task`. 
+This gives you insights on the simulation status, including monitoring its progress and retrieving its outputs.
+
+**What This Guide Covers**
+
+This guide walks you through the entire lifecycle of a `Task`:
+
+- [Task Creation](#task-creation): How a `Task` is generated when you submit a simulation.
+- [Task Execution](#task-execution): The stages a `Task` goes through during computation.
+- [Task Lifecycle](#task-lifecycle): A diagram illustrating the various states of a `Task`.
+
+By understanding these stages, you’ll gain a clear picture of how the Inductiva API 
+handles simulations, making it easier to optimize your workflows and troubleshoot issues.
 
 ## Task Creation
 
-A `Task` is created when you submit a simulation via the API by invoking the `run`
-method on a simulator object. Each call to this method, even with identical arguments,
-generates a unique `Task`, leading to separate executions of the same simulation.
+A `Task` is automatically created whenever you submit a simulation to the 
+API by calling the `run` method on a simulator object. Each call to this 
+method generates a unique `Task`, even if the arguments remain identical. 
+This ensures separate executions for each submission of the same simulation.
+
+**Example: Submitting a SpliSHSPlasH Simulation**
 
 Here's an example of how to create a `Task` by submitting a SpliSHSPlasH simulation
 to the API:
@@ -56,11 +67,15 @@ print (task2.id)
 
 machine_group.terminate()
 ```
+Every `Task` is assigned a unique alphanumeric identifier upon creation. 
+This identifier ensures that each task is distinct and can be easily referenced.
 
-Each `Task` is identified by a unique alphanumeric identifier. While you can
-instantiate multiple `Task` objects pointing to the same task using this identifier,
-this does not duplicate the task on the API. These objects refer to the same underlying
-task. This mechanism is useful when you want to recreate a `Task` object to
+While it is possible to instantiate multiple `Task` objects using the 
+same identifier, doing so does not create duplicate tasks on the API. 
+Instead, all such objects point to the same underlying task, allowing you 
+to access and manage it across different sessions.
+
+This mechanism is useful when you want to recreate a `Task` object to
 retrieve information about tasks you created in previous sessions:
 
 ```python
@@ -118,41 +133,40 @@ with task.sync_context():
                  #     interrupted while waiting for the wait() call to return
 ```
 
-(task-lifecyle)=
 ## Task Lifecycle
 
-The status of a task changes as it progresses through its lifecycle. Understanding
-these states is crucial if you want to track a task's progress through the API and
-manage your simulations effectively.
+As a `Task` progresses through its lifecycle, its status changes to reflect 
+its current state. Understanding these states is essential for tracking 
+a `Task`’s progress and managing your simulations effectively through the API.
 
-The following diagram shows the path a task may take through the API, and identifies
-the relevant states and possible state transitions:
+Below, you’ll find a diagram illustrating the possible states a `Task` can 
+move through and the transitions between them:
 
 
 <div align="center">
-   <img src="../_static/task_state.svg" alt="Task state diagram">
-   <figcaption align = "center"><b>State diagram of a Task</b></figcaption>
+   <img src="../_static/task-lifecycle-diagram.png" alt="Task Lifecycle">
+   <figcaption align = "center"><b>Task Lifecycle</b></figcaption>
 </div>
 
 ---
 
-Below a succinct description of each state, including the actions that
-lead to a state transition:
+Here’s a breakdown of each state and the actions that lead to a state 
+transition:
 
 Status | What happened? | Why? | Recommendations to overcome
 -- | -- | -- | --
-PENDING INPUT | Your simulation is waiting for all necessary input files. | The task will not be queued until the required input files are uploaded. | Wait for the input files to be uploaded. If there was an error while uploading the files, submit a new task.
-SUBMITTED | Your task is queued and waiting for a machine to become available. | The task is submitted but hasn’t yet been picked up by an available machine. If you’ve queued more tasks than the number of machines in the machine group, they will be picked up from the queue as machines become free from processing previous tasks. | Wait for the task to start, or kill it if no longer needed. To reduce waiting times, submit tasks to a machine group with more machines.
-STARTED | Your task has been picked up by a machine. Required input files and container image are being downloaded in preparation to run the simulation. | The task has been picked up by a machine, which is now setting up the appropriate assets to run your task. | Wait for the simulation to proceed, or kill the task if no longer needed.
-COMPUTATION STARTED | The task's inputs and container image have been downloaded, and the simulation has now started running. | The machine has been set up with the requirements to run your simulation, which is now running. | Wait for the simulation to proceed, or kill the task if no longer needed. You can monitor the simulator logs in real time using the `inductiva logs` command.
-PENDING KILLED | Your request to terminate the task has been received and is awaiting execution. | The system is processing your termination request for the running task. | Wait for the task to be fully terminated.
-KILLED | The task has been successfully terminated as per your request. | The task was terminated by user request. | No further action is required.
-ZOMBIE | The machine group where the task was enqueued was terminated before the task started. | The task was still in the SUBMITTED status when the machine group was shut down. Since the task hadn’t started, there are no outputs or logs. | Restart the task by submitting it to a new machine group or ensure the machine group remains active for future tasks.
-SPOT PREEMPTED | The spot instances running your task were terminated, and the task has been interrupted. | Spot instances were reclaimed by the cloud provider. If auto-resubmission is enabled, the task is re-queued and goes back to the SUBMITTED status. Otherwise, it stays in this state. | If cost savings are a priority, spot instances are a good choice. For uninterrupted tasks, consider switching to on-demand instances. If the task is stuck, enable auto-resubmission or manually resubmit it.
-FAILED | The task failed due to an error in the simulator, likely caused by incorrect input configurations or an internal simulator issue. | The simulator command returned a non-zero status code, indicating failure. | Inspect the simulator logs (stderr and stdout) for more information.
-COMPUTATION ENDED | The simulation's commands have ended, and output files will be uploaded. | The simulation commands have ran. Results will now be uploaded to the user's storage. | The task's results will be uploaded to the user's storage and the task will go to a terminal status.
-EXECUTOR TERMINATED | The machine running your task was terminated due to internal reasons from the provider. | The cloud provider terminated the executor unexpectedly. If auto-resubmission is enabled, the task is re-queued and returns to SUBMITTED status. Otherwise, it remains in this state. | Enable auto-resubmission to automatically resubmit the task, or manually resubmit the task.
-EXECUTOR TERMINATED BY USER | The task’s executor was terminated by you while it was running. | The machine group was terminated after the task had started, but no outputs or logs are available because they are only saved once the task completes. | If outputs are needed, avoid terminating the machine group mid-task. Resubmit the task and let it finish to retrieve logs and results.
-EXECUTOR TERMINATED TTL EXCEEDED | The task’s machine was terminated because it exceeded its time-to-live (TTL) limit. | The Machine Group’s TTL, defined by your quotas, was reached. This helps manage costs by ensuring resources don’t run longer than expected. | Start a new Machine Group with a larger TTL and resubmit the task. If your quotas don't allow a big enough TTL, talk to us.
-EXECUTOR FAILED | The task failed due to an error external to the simulator, such as low disk space. | An exception in the machine running the task, most commonly due to insufficient disk space, caused the task to fail. | Check the concrete reason for the error and act accordingly. If the the task failed due to insufficient disk space, resubmit the task in a machine group with larger disk space or configure the dynamic disk resize feature.
-TTL EXCEEDED | The task exceeded its configured time-to-live (TTL) and was automatically stopped. | The task ran longer than the TTL defined in your quotas, which helps control costs by limiting how long a task can use shared resources. You can also set a TTL manually for better control. | Resubmit the task and consider adjusting the TTL if more computation time is needed.
+Waiting for Input | Your simulation is waiting for all necessary input files. | The task will not be queued until the required input files are uploaded. | Wait for the input files to be uploaded. If there was an error while uploading the files, submit a new task.
+In Queue | Your task is queued and waiting for a machine to become available. | The task is submitted but hasn’t yet been picked up by an available machine. If you’ve queued more tasks than the number of machines in the machine group, they will be picked up from the queue as machines become free from processing previous tasks. | Wait for the task to start, or kill it if no longer needed. To reduce waiting times, submit tasks to a machine group with more machines.
+Preparing to Compute | Your task has been picked up by a machine. Required input files and container image are being downloaded in preparation to run the simulation. | The task has been picked up by a machine, which is now setting up the appropriate assets to run your task. | Wait for the simulation to proceed, or kill the task if no longer needed.
+In Progress | The task's inputs and container image have been downloaded, and the simulation has now started running. | The machine has been set up with the requirements to run your simulation, which is now running. | Wait for the simulation to proceed, or kill the task if no longer needed. You can monitor the simulator logs in real time using the `inductiva logs` command.
+Pending Kill | Your request to terminate the task has been received and is awaiting execution. | The system is processing your termination request for the running task. | Wait for the task to be fully terminated.
+Killed | The task has been successfully terminated as per your request. | The task was terminated by user request. | No further action is required.
+Machine Terminated in Queue | The machine group where the task was enqueued was terminated before the task started. | The task was still in the SUBMITTED status when the machine group was shut down. Since the task hadn’t started, there are no outputs or logs. | Restart the task by submitting it to a new machine group or ensure the machine group remains active for future tasks.
+Spot Reclaimed | The spot instances running your task were terminated, and the task has been interrupted. | Spot instances were reclaimed by the cloud provider. If auto-resubmission is enabled, the task is re-queued and goes back to the SUBMITTED status. Otherwise, it stays in this state. | If cost savings are a priority, spot instances are a good choice. For uninterrupted tasks, consider switching to on-demand instances. If the task is stuck, enable auto-resubmission or manually resubmit it.
+Failed | The task failed due to an error in the simulator, likely caused by incorrect input configurations or an internal simulator issue. | The simulator command returned a non-zero status code, indicating failure. | Inspect the simulator logs (stderr and stdout) for more information.
+Finalizing | The simulation's commands have ended, and output files will be uploaded. | The simulation commands have ran. Results will now be uploaded to the user's storage. | The task's results will be uploaded to the user's storage and the task will go to a terminal status.
+Task Runner Terminated | The machine running your task was terminated due to internal reasons from the provider. | The cloud provider terminated the executor unexpectedly. If auto-resubmission is enabled, the task is re-queued and returns to SUBMITTED status. Otherwise, it remains in this state. | Enable auto-resubmission to automatically resubmit the task, or manually resubmit the task.
+Machine Terminated by User | The task’s executor was terminated by you while it was running. | The machine group was terminated after the task had started, but no outputs or logs are available because they are only saved once the task completes. | If outputs are needed, avoid terminating the machine group mid-task. Resubmit the task and let it finish to retrieve logs and results.
+Machine Time Limit Reached | The task’s machine was terminated because it exceeded its time-to-live (TTL) limit. | The Machine Group’s TTL, defined by your quotas, was reached. This helps manage costs by ensuring resources don’t run longer than expected. | Start a new Machine Group with a larger TTL and resubmit the task. If your quotas don't allow a big enough TTL, talk to us.
+Runtime Error | The task failed due to an error external to the simulator, such as low disk space. | An exception in the machine running the task, most commonly due to insufficient disk space, caused the task to fail. | Check the concrete reason for the error and act accordingly. If the the task failed due to insufficient disk space, resubmit the task in a machine group with larger disk space or configure the dynamic disk resize feature.
+Task Timed Out | The task exceeded its configured time-to-live (TTL) and was automatically stopped. | The task ran longer than the TTL defined in your quotas, which helps control costs by limiting how long a task can use shared resources. You can also set a TTL manually for better control. | Resubmit the task and consider adjusting the TTL if more computation time is needed.

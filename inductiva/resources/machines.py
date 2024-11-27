@@ -98,6 +98,7 @@ class MachineGroup(machines_base.BaseMachineGroup):
         machine_group.num_machines = int(resp["max_vms"])
         machine_group.provider = resp["provider_id"]
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
+        machine_group.__dict__["machines"] = resp["machines"]
         machine_group.spot = bool(resp["spot"])
         machine_group.register = False
         return machine_group
@@ -109,16 +110,16 @@ class MachineGroup(machines_base.BaseMachineGroup):
     def __str__(self):
         return f"Machine Group {self.name} with {self.machine_type} machines"
 
-    def start(self, wait_on_pending_quota: bool = False):
+    def start(self, wait_for_quotas: bool = False):
         """Start the machine group.
         
         Args:
-            wait_on_pending_quota: If True, the method will wait for quotas to
+            wait_for_quotas: If True, the method will wait for quotas to
               become available before starting the resource.
         """
 
         return super().start(
-            wait_on_pending_quota=wait_on_pending_quota,
+            wait_for_quotas=wait_for_quotas,
             is_elastic=self.__is_elastic,
             num_vms=self.num_machines,
             spot=self.spot,
@@ -259,6 +260,7 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         machine_group.max_machines = int(resp["max_vms"])
         machine_group.min_machines = int(resp["min_vms"])
         machine_group.__dict__["_active_machines"] = int(resp["num_vms"])
+        machine_group.__dict__["machines"] = resp["machines"]
         return machine_group
 
     def active_machines_to_str(self) -> str:
@@ -275,16 +277,16 @@ class ElasticMachineGroup(machines_base.BaseMachineGroup):
         return f"Elastic Machine Group {self.name} with {self.machine_type} " \
              "machines"
 
-    def start(self, wait_on_pending_quota: bool = False):
+    def start(self, wait_for_quotas: bool = False):
         """Start the elastic machine group.
 
         Args:
-            wait_on_pending_quota: If True, the method will wait for quotas to
+            wait_for_quotas: If True, the method will wait for quotas to
               become available before starting the resource.
         """
 
         return super().start(
-            wait_on_pending_quota=wait_on_pending_quota,
+            wait_for_quotas=wait_for_quotas,
             is_elastic=self.__is_elastic,
             num_vms=self.min_machines,
             min_vms=self.min_machines,
