@@ -6,13 +6,6 @@ import datetime
 from inductiva.resources import machine_types, machines_base
 
 
-def _check_ice_args(spot: bool):
-
-    if spot:
-        raise ValueError(
-            "ICE provider only supports persistent machine launch.")
-
-
 class MachineGroup(machines_base.BaseMachineGroup):
     """Class to launch and manage a group of machines in Google Cloud.
 
@@ -73,9 +66,6 @@ class MachineGroup(machines_base.BaseMachineGroup):
         if num_machines < 1:
             raise ValueError(
                 "`num_machines` should be a number greater than 0.")
-
-        if provider == "ICE":
-            _check_ice_args(spot)
 
         super().__init__(
             provider=provider,

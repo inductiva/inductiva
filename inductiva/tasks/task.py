@@ -948,7 +948,7 @@ class Task:
 
         logging.debug("\nDownload URL: %s\n", download_url)
 
-        # If the file server (GCP, ICE, etc.) is not available, the Web API
+        # If the file server (GCP, etc.) is not available, the Web API
         # returns a fallback URL and returns the following flag as False.
         # In this case, the output donwload will be provided by the Web API
         # itself.
