@@ -139,7 +139,10 @@ def compare_client_and_backend_versions(client_version: str):
 def set_api_key(api_key):
     """Sets the value of `inductiva._api_key` to `api_key"""
     if not api_key:
-        # pylint: disable=line-too-long
+        if logs.is_cli():
+            print("Error: No API Key specified. "
+                  "Please login with `inductiva auth login`")
+            exit(1)
         raise ValueError("No API Key specified. "
                          "Please login with `inductiva auth login`")
 
