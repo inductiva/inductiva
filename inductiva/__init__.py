@@ -142,7 +142,7 @@ def set_api_key(api_key):
         if logs.is_cli():
             print("Error: No API Key specified. "
                   "Please login with `inductiva auth login`")
-            exit(1)
+            sys.exit(1)
         raise ValueError("No API Key specified. "
                          "Please login with `inductiva auth login`")
 
