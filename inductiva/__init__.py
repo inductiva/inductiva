@@ -78,7 +78,8 @@ def _check_for_available_package_update():
 
 def _set_key_and_check_version():
     """Sets the api key and checks if it is valid."""
-    if not utils.format_utils.getenv_bool("GITHUB_ACTIONS", False):
+    if not utils.format_utils.getenv_bool("GITHUB_ACTIONS", False) \
+            and sys.argv[1] != "auth":
         set_api_key(get_api_key())
 
     # Perform version check only on first invocation
@@ -136,7 +137,7 @@ def compare_client_and_backend_versions(client_version: str):
 
 def set_api_key(api_key):
     """Sets the value of `inductiva._api_key` to `api_key"""
-    if api_key is None:
+    if not api_key:
         # pylint: disable=line-too-long
         raise ValueError("No API Key specified. "
                          "Please login with `inductiva auth login`")
