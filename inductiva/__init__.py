@@ -78,8 +78,9 @@ def _check_for_available_package_update():
 
 def _set_key_and_check_version():
     """Sets the api key and checks if it is valid."""
+    is_auth_cli = len(sys.argv) > 1 and sys.argv[1] == "auth"
     if not utils.format_utils.getenv_bool("GITHUB_ACTIONS", False) \
-            and sys.argv[1] != "auth":
+            and not is_auth_cli:
         set_api_key(get_api_key())
 
     # Perform version check only on first invocation
