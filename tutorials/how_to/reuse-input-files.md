@@ -74,8 +74,32 @@ The `remote_assets` parameter accepts a list, allowing you to specify
 multiple remote files or directories:
 
 ```python
-task = gromacs.run(commands=commands,
-    on=machine,
+import inductiva
+
+machine_group = inductiva.resources.MachineGroup("c2-standard-4")
+machine_group.start()
+
+commands = [
+    "gmx solvate -cs tip4p -box 2.3 -o conf.gro -p topol.top",
+    ("gmx grompp -f energy_minimization.mdp -o min.tpr -pp min.top -po min.mdp "
+     "-c conf.gro -p topol.top"),
+    "gmx mdrun -s min.tpr -o min.trr -c min.gro -e min.edr -g min.log",
+    ("gmx grompp -f positions_decorrelation.mdp -o decorr.tpr -pp decorr.top "
+     "-po decorr.mdp -c min.gro"),
+    ("gmx mdrun -s decorr.tpr -o decorr.trr -x  -c decorr.gro -e decorr.edr "
+     "-g decorr.log"),
+    ("gmx grompp -f simulation.mdp -o eql.tpr -pp eql.top -po eql.mdp "
+     "-c decorr.gro"),
+    ("gmx mdrun -s eql.tpr -o eql.trr -x trajectory.xtc -c eql.gro -e eql.edr "
+     "-g eql.log"),
+]
+
+gromacs = inductiva.simulators.GROMACS()
+
+task = gromacs.run(
+    input_dir=None,
+    commands=commands,
+    on=machine_group,
     remote_assets=["gromacs_bucket/file1.txt", "gromacs_bucket/file2.txt"])
 ```
 
