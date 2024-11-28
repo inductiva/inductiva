@@ -29,14 +29,6 @@ def get_main_parser():
         version=f"%(prog)s {inductiva.__version__}",
     )
 
-    parser.add_argument(
-        "--api-key",
-        type=str,
-        help=("API key to use. If not provided, it "
-              "will be read from the INDUCTIVA_API_KEY environment variable."
-              "If not set, will be read from the stored API key file."),
-    )
-
     # If no subcommand is provided, print help
     _cli.utils.show_help_msg(parser)
 
@@ -81,9 +73,6 @@ def main():
         answer = _cli.utils.user_autocompletion_install_prompt()
         if answer:
             _cli.utils.setup_zsh_autocompletion()
-
-    if args.api_key:
-        inductiva.set_api_key(args.api_key)
 
     exit_code = 0
     # Call the function associated with the subcommand
