@@ -32,6 +32,7 @@ class Task(schemas.DictSchema):
     class MetaOapg:
         required = {
             "simulator",
+            "status_alias",
             "project",
             "task_id",
             "is_terminated",
@@ -45,6 +46,7 @@ class Task(schemas.DictSchema):
             def status() -> typing.Type['TaskStatusCode']:
                 return TaskStatusCode
 
+            status_alias = schemas.StrSchema
             simulator = schemas.StrSchema
             project = schemas.StrSchema
             is_terminated = schemas.BoolSchema
@@ -749,6 +751,123 @@ class Task(schemas.DictSchema):
                         **kwargs,
                     )
 
+            class machine_group_name(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'machine_group_name':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
+            class machine_group_id(
+                    schemas.UUIDBase,
+                    schemas.ComposedSchema,
+            ):
+
+                class MetaOapg:
+                    format = 'uuid'
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'machine_group_id':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             class error_detail(
                     schemas.ComposedSchema,):
 
@@ -836,6 +955,7 @@ class Task(schemas.DictSchema):
             __annotations__ = {
                 "task_id": task_id,
                 "status": status,
+                "status_alias": status_alias,
                 "simulator": simulator,
                 "project": project,
                 "is_terminated": is_terminated,
@@ -851,12 +971,15 @@ class Task(schemas.DictSchema):
                 "storage_size": storage_size,
                 "metrics": metrics,
                 "executer": executer,
+                "machine_group_name": machine_group_name,
+                "machine_group_id": machine_group_id,
                 "error_detail": error_detail,
                 "input_resources": input_resources,
                 "stream_zip": stream_zip,
             }
 
     simulator: MetaOapg.properties.simulator
+    status_alias: MetaOapg.properties.status_alias
     project: MetaOapg.properties.project
     task_id: MetaOapg.properties.task_id
     is_terminated: MetaOapg.properties.is_terminated
@@ -872,6 +995,12 @@ class Task(schemas.DictSchema):
     def __getitem__(
             self,
             name: typing_extensions.Literal["status"]) -> 'TaskStatusCode':
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["status_alias"]
+    ) -> MetaOapg.properties.status_alias:
         ...
 
     @typing.overload
@@ -966,6 +1095,18 @@ class Task(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
+        self, name: typing_extensions.Literal["machine_group_name"]
+    ) -> MetaOapg.properties.machine_group_name:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["machine_group_id"]
+    ) -> MetaOapg.properties.machine_group_id:
+        ...
+
+    @typing.overload
+    def __getitem__(
         self, name: typing_extensions.Literal["error_detail"]
     ) -> MetaOapg.properties.error_detail:
         ...
@@ -989,6 +1130,7 @@ class Task(schemas.DictSchema):
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "task_id",
         "status",
+        "status_alias",
         "simulator",
         "project",
         "is_terminated",
@@ -1004,6 +1146,8 @@ class Task(schemas.DictSchema):
         "storage_size",
         "metrics",
         "executer",
+        "machine_group_name",
+        "machine_group_id",
         "error_detail",
         "input_resources",
         "stream_zip",
@@ -1021,6 +1165,12 @@ class Task(schemas.DictSchema):
     def get_item_oapg(
             self,
             name: typing_extensions.Literal["status"]) -> 'TaskStatusCode':
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["status_alias"]
+    ) -> MetaOapg.properties.status_alias:
         ...
 
     @typing.overload
@@ -1117,6 +1267,18 @@ class Task(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["machine_group_name"]
+    ) -> typing.Union[MetaOapg.properties.machine_group_name, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["machine_group_id"]
+    ) -> typing.Union[MetaOapg.properties.machine_group_id, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
         self, name: typing_extensions.Literal["error_detail"]
     ) -> typing.Union[MetaOapg.properties.error_detail, schemas.Unset]:
         ...
@@ -1142,6 +1304,7 @@ class Task(schemas.DictSchema):
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "task_id",
         "status",
+        "status_alias",
         "simulator",
         "project",
         "is_terminated",
@@ -1157,6 +1320,8 @@ class Task(schemas.DictSchema):
         "storage_size",
         "metrics",
         "executer",
+        "machine_group_name",
+        "machine_group_id",
         "error_detail",
         "input_resources",
         "stream_zip",
@@ -1171,6 +1336,10 @@ class Task(schemas.DictSchema):
         ],
         simulator: typing.Union[
             MetaOapg.properties.simulator,
+            str,
+        ],
+        status_alias: typing.Union[
+            MetaOapg.properties.status_alias,
             str,
         ],
         project: typing.Union[
@@ -1255,6 +1424,19 @@ class Task(schemas.DictSchema):
                                None, list, tuple, bytes, io.FileIO,
                                io.BufferedReader,
                                schemas.Unset] = schemas.unset,
+        machine_group_name: typing.Union[MetaOapg.properties.machine_group_name,
+                                         dict, frozendict.frozendict, str, date,
+                                         datetime, uuid.UUID, int, float,
+                                         decimal.Decimal, bool, None, list,
+                                         tuple, bytes, io.FileIO,
+                                         io.BufferedReader,
+                                         schemas.Unset] = schemas.unset,
+        machine_group_id: typing.Union[MetaOapg.properties.machine_group_id,
+                                       dict, frozendict.frozendict, str, date,
+                                       datetime, uuid.UUID, int, float,
+                                       decimal.Decimal, bool, None, list, tuple,
+                                       bytes, io.FileIO, io.BufferedReader,
+                                       schemas.Unset] = schemas.unset,
         error_detail: typing.Union[MetaOapg.properties.error_detail, dict,
                                    frozendict.frozendict, str, date, datetime,
                                    uuid.UUID, int, float, decimal.Decimal, bool,
@@ -1275,6 +1457,7 @@ class Task(schemas.DictSchema):
             cls,
             *_args,
             simulator=simulator,
+            status_alias=status_alias,
             project=project,
             task_id=task_id,
             is_terminated=is_terminated,
@@ -1291,6 +1474,8 @@ class Task(schemas.DictSchema):
             storage_size=storage_size,
             metrics=metrics,
             executer=executer,
+            machine_group_name=machine_group_name,
+            machine_group_id=machine_group_id,
             error_detail=error_detail,
             input_resources=input_resources,
             stream_zip=stream_zip,

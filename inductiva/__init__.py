@@ -39,7 +39,7 @@ _api_key = contextvars.ContextVar("INDUCTIVA_API_KEY",
 urllib3_logger = logging.getLogger("urllib3.connectionpool")
 urllib3_logger.setLevel(logging.CRITICAL)
 
-__version__ = "0.10.1"
+__version__ = "0.11.1"
 
 
 def set_output_dir(new_output_dir):
@@ -78,7 +78,9 @@ def _check_for_available_package_update():
 
 def _set_key_and_check_version():
     """Sets the api key and checks if it is valid."""
-    if not utils.format_utils.getenv_bool("GITHUB_ACTIONS", False):
+    is_auth_cli = len(sys.argv) > 1 and sys.argv[1] == "auth"
+    if not utils.format_utils.getenv_bool("GITHUB_ACTIONS", False) \
+            and not is_auth_cli:
         set_api_key(get_api_key())
 
     # Perform version check only on first invocation
@@ -136,20 +138,20 @@ def compare_client_and_backend_versions(client_version: str):
 
 def set_api_key(api_key):
     """Sets the value of `inductiva._api_key` to `api_key"""
-    if api_key is None:
-        # pylint: disable=line-too-long
-        raise ValueError(
-            "No API Key specified. "
-            "Please set the INDUCTIVA_API_KEY environment variable.\n"
-            "More information at:"
-            "https://console.inductiva.ai/")
+    if not api_key:
+        if logs.is_cli():
+            print("Error: No API Key specified. "
+                  "Please login with `inductiva auth login`")
+            sys.exit(1)
+        raise ValueError("No API Key specified. "
+                         "Please login with `inductiva auth login`")
 
     _api_key.set(api_key)
 
 
 def get_api_key():
-    """Returns the value of inductiva._api_key"""
-    return _api_key.get()
+    """Returns the value of inductiva._api_key or the stored API key."""
+    return _api_key.get() or utils.authentication.get_stored_api_key()
 
 
 def _supports_ansi():

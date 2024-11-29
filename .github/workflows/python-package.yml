@@ -38,12 +38,12 @@ jobs:
         if [[ -f requirements.txt ]]; then python -m pip install -r requirements.txt; fi
     - name: Check formatting with yapf
       if: ${{ always() }}
-      run: |
-        yapf . --diff --recursive --parallel --exclude=third_party
+      run: # We exclude the auto-generated Python client folder from yapf validation
+        yapf . --diff --recursive --parallel --exclude=inductiva/client 
     - name: Lint with pylint
       if: ${{ always() }}
-      run: |
-        find . -type f -not -path "./third_party/*" -name '*.py' | xargs pylint
+      run: # We exclude the auto-generated Python client folder from pylint validation
+        find . -type f -not -path "./inductiva/client/*" -name '*.py' | xargs pylint
     - name: Test with pytest
       if: ${{ always() }}
       run: |

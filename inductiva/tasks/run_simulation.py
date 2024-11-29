@@ -50,26 +50,25 @@ def run_simulation(
     logging.info("■ Task %s submitted to the queue of the %s.", task_id,
                  computational_resources)
 
-    task = tasks.Task(task_id)
     if not isinstance(task_id, str):
         raise RuntimeError(
             f"Expected result to be a string with task_id, got {type(task_id)}")
+    task = tasks.Task(task_id)
 
     position = task.get_position_in_queue()
     if position is not None:
-        logging.info("Number of tasks ahead in the queue: %s", position)
+        pos_info = f"Number of tasks ahead in the queue: {position}."
     else:
-        logging.info("Task %s does not have queue information.", task_id)
+        pos_info = f"Task {task_id} does not have queue information."
 
     logging.info(
+        "%s\n"
         "· Consider tracking the status of the task via CLI:"
-        "\n\tinductiva tasks list --id %s", task_id)
-    logging.info(
+        "\n\tinductiva tasks list --id %s\n"
         "· Or, tracking the logs of the task via CLI:"
-        "\n\tinductiva logs %s", task_id)
-    logging.info(
+        "\n\tinductiva logs %s\n"
         "· You can also get more information "
         "about the task via the CLI command:"
-        "\n\tinductiva tasks info %s", task_id)
-    logging.info("")
+        "\n\tinductiva tasks info %s\n\n", pos_info, task_id, task_id, task_id)
+
     return task

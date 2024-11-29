@@ -12,7 +12,6 @@ from inductiva.client.apis.tags import compute_api
 class ProviderType(format_utils.CaseInsensitiveEnum):
     """Enum to represent the provider of the machine to be launched."""
     GCP = "GCP"
-    ICE = "ICE"
     LOCAL = "LOCAL"
 
 

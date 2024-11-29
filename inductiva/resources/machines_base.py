@@ -147,6 +147,10 @@ class BaseMachineGroup(ABC):
         return self._name
 
     @property
+    def started(self):
+        return self._started
+
+    @property
     def max_idle_time(self) -> datetime.timedelta:
         return self._max_idle_time
 
@@ -315,11 +319,11 @@ class BaseMachineGroup(ABC):
 
         return is_cost_ok and is_vcpu_ok and is_instance_ok
 
-    def start(self, wait_on_pending_quota: bool = False, **kwargs):
+    def start(self, wait_for_quotas: bool = False, **kwargs):
         """Starts a machine group.
 
         Args:
-            wait_on_pending_quota: If True, the method will wait for quotas to
+            wait_for_quotas: If True, the method will wait for quotas to
               become available before starting the resource.
             **kwargs: Depending on the type of machine group to be started,
               this can be num_machines, max_machines, min_machines,
@@ -345,13 +349,13 @@ class BaseMachineGroup(ABC):
                 **kwargs,
             )
 
-        logging.info("Starting %s. "
-                     "This may take a few minutes.", repr(self))
-        logging.info("Note that stopping this local process will not interrupt "
-                     "the creation of the machine group. Please wait...")
+        logging.info(
+            "Starting %s. This may take a few minutes.\n"
+            "Note that stopping this local process will not interrupt "
+            "the creation of the machine group. Please wait...", repr(self))
         start_time = time.time()
 
-        if wait_on_pending_quota:
+        if wait_for_quotas:
             if not self.can_start_resource():
                 print("This machine will exceed the current quotas.\n"
                       "Will wait for quotas to become available.")
@@ -361,10 +365,11 @@ class BaseMachineGroup(ABC):
         self._api.start_vm_group(body=request_body)
         creation_time = format_utils.seconds_formatter(time.time() - start_time)
         self._started = True
-        logging.info("%s successfully started in %s.", self, creation_time)
-        logging.info("")
-        logging.info("The machine group is using the following quotas:")
-        self.log_quota_usage("used by resource")
+        quota_usage_table_str = self.quota_usage_table_str("used by resource")
+        logging.info(
+            "%s successfully started in %s.\n\n"
+            "The machine group is using the following quotas:\n"
+            "%s", self, creation_time, quota_usage_table_str)
         return True
 
     def terminate(self, verbose: bool = True, **kwargs):
@@ -392,7 +397,7 @@ class BaseMachineGroup(ABC):
                              repr(self))
                 logging.info("Termination of the machine group "
                              "freed the following quotas:")
-                self.log_quota_usage("freed by resource")
+                logging.info(self.quota_usage_table_str("freed by resource"))
             return True
 
         except inductiva.client.ApiException as api_exception:
@@ -405,10 +410,7 @@ class BaseMachineGroup(ABC):
         it verifies if the cost has already been estimated and returns
         it immediately if it has.
         """
-        if self.provider in (
-                machine_types.ProviderType.ICE,
-                machine_types.ProviderType.LOCAL,
-        ):
+        if self.provider in (machine_types.ProviderType.LOCAL,):
             return 0
 
         self._estimated_cost = inductiva.resources.estimate_machine_cost(
@@ -418,7 +420,7 @@ class BaseMachineGroup(ABC):
 
         return self._estimated_cost
 
-    def log_quota_usage(self, resource_usage_header: str):
+    def quota_usage_table_str(self, resource_usage_header: str) -> str:
         quotas = users.get_quotas()
         table = defaultdict(list)
         emph_formatter = format_utils.get_ansi_formatter()
@@ -442,13 +444,10 @@ class BaseMachineGroup(ABC):
             header_formatters=header_formatters,
         )
 
-        logging.info(table_str)
+        return table_str
 
     def _log_estimated_spot_vm_savings(self) -> None:
-        if self.provider in (
-                machine_types.ProviderType.ICE,
-                machine_types.ProviderType.LOCAL,
-        ):
+        if self.provider in (machine_types.ProviderType.LOCAL,):
             return
 
         spot_cost = self._get_estimated_cost(True)

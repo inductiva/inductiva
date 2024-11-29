@@ -3,15 +3,14 @@ import enum
 import json
 import csv
 import logging
+import concurrent.futures
+import contextvars
 from typing import Optional, Union
 from typing_extensions import Self
-from inductiva import types, resources
-from inductiva.simulators import Simulator
-from inductiva.projects import Project
-from inductiva.client import ApiException
-from inductiva.resources.machine_types import ProviderType
-from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 from collections import defaultdict
+from inductiva import types, resources, projects, simulators, client
+from inductiva.client.models import TaskStatusCode
+from inductiva.utils.format_utils import CURRENCY_SYMBOL, TIME_UNIT
 
 
 class ExportFormat(enum.Enum):
@@ -29,7 +28,7 @@ class SelectMode(enum.Enum):
     DISTINCT = "distinct"
 
 
-class Benchmark(Project):
+class Benchmark(projects.Project):
     """Represents the benchmark runner."""
 
     class InfoKey:
@@ -58,7 +57,7 @@ class Benchmark(Project):
 
     def set_default(
         self,
-        simulator: Optional[Simulator] = None,
+        simulator: Optional[simulators.Simulator] = None,
         input_dir: Optional[str] = None,
         on: Optional[types.ComputationalResources] = None,
         **kwargs,
@@ -93,7 +92,7 @@ class Benchmark(Project):
 
     def add_run(
         self,
-        simulator: Optional[Simulator] = None,
+        simulator: Optional[simulators.Simulator] = None,
         input_dir: Optional[str] = None,
         on: Optional[types.ComputationalResources] = None,
         **kwargs,
@@ -127,7 +126,7 @@ class Benchmark(Project):
         ))
         return self
 
-    def run(self, num_repeats: int = 2) -> Self:
+    def run(self, num_repeats: int = 2, wait_for_quotas: bool = False) -> Self:
         """
         Executes all added runs.
 
@@ -136,19 +135,33 @@ class Benchmark(Project):
 
         Args:
             num_repeats (int): The number of times to repeat each simulation
-            run (default is 2).
+                run (default is 2).
+            wait_for_quotas (bool): Indicates whether to wait for quotas to 
+                become available before starting each resource. If `True`, the 
+                program will actively wait in a loop, periodically sleeping and 
+                checking for quotas. If `False`, the program crashes if quotas 
+                are not available (default is `False`).
 
         Returns:
             Self: The current instance for method chaining.
         """
-        with self:
-            for simulator, input_dir, machine_group, kwargs in self.runs:
-                machine_group.start(wait_on_pending_quota=False)
-                for _ in range(num_repeats):
-                    simulator.run(input_dir=input_dir,
-                                  on=machine_group,
-                                  **kwargs)
-            self.runs.clear()
+
+        def _run(params):
+            simulator, input_dir, machine_group, kwargs = params
+            if not machine_group.started:
+                machine_group.start(wait_for_quotas=wait_for_quotas)
+            for _ in range(num_repeats):
+                simulator.run(input_dir=input_dir, on=machine_group, **kwargs)
+
+        def _initializer(ctx):
+            for var, val in ctx.items():
+                var.set(val)
+
+        with self, concurrent.futures.ThreadPoolExecutor(
+                initializer=_initializer,
+                initargs=(contextvars.copy_context(),)) as executor:
+            _ = list(executor.map(_run, self.runs))
+        self.runs.clear()
         return self
 
     def wait(self) -> Self:
@@ -167,6 +180,7 @@ class Benchmark(Project):
         self,
         fmt: Union[ExportFormat, str] = ExportFormat.JSON,
         filename: Optional[str] = None,
+        status: Optional[Union[TaskStatusCode, str]] = None,
         select: Union[SelectMode, str] = SelectMode.DISTINCT,
     ):
         """
@@ -178,13 +192,16 @@ class Benchmark(Project):
             filename (Optional[str]): The name of the output file to save the
                 exported results. Defaults to the benchmark's name if not
                 provided.
+            status (Optional[Union[TaskStatusCode, str]]): The status of the
+                tasks to include in the benchmarking results. Defaults to None,
+                which includes all tasks.
             select (Union[SelectMode, str]): The data to include in
                 the benchmarking results. Defaults to SelectMode.DISTINCT that
                 includes only the parameters that vary between different runs.
         """
         if isinstance(fmt, str):
             fmt = ExportFormat[fmt.upper()]
-        info = self.runs_info(select=select)
+        info = self.runs_info(status=status, select=select)
         filename = filename or f"{self.name}.{fmt.value}"
         if fmt == ExportFormat.JSON:
             with open(filename, mode="w", encoding="utf-8") as file:
@@ -201,6 +218,7 @@ class Benchmark(Project):
 
     def runs_info(
         self,
+        status: Optional[Union[TaskStatusCode, str]] = None,
         select: Union[SelectMode, str] = SelectMode.DISTINCT,
     ) -> list:
         """
@@ -209,6 +227,9 @@ class Benchmark(Project):
         execution time.
         
         Args:
+            status (Optional[Union[TaskStatusCode, str]]): The status of the
+                tasks to include in the benchmarking results. Defaults to None,
+                which includes all tasks.
             select (Union[SelectMode, str]): The data to include in
                 the benchmarking results. Defaults to SelectMode.DISTINCT that
                 includes only the parameters that vary between different runs.
@@ -238,7 +259,7 @@ class Benchmark(Project):
             select = SelectMode[select.upper()]
 
         info = []
-        tasks = self.get_tasks()
+        tasks = self.get_tasks(status=status)
         for task in tasks:
             task_input_params = get_task_input_params(task)
             task_info = task.info
@@ -269,7 +290,7 @@ class Benchmark(Project):
         """
 
         def _handle_suffix(executer):
-            if executer.host_type == ProviderType.GCP:
+            if executer.host_type == resources.machine_types.ProviderType.GCP:
                 return "-".join(executer.vm_name.split("-")[:-1])
             return executer.vm_name
 
@@ -284,7 +305,7 @@ class Benchmark(Project):
                 continue
             try:
                 machine.terminate(verbose=False)
-            except ApiException as api_exception:
+            except client.ApiException as api_exception:
                 logging.warning(api_exception)
 
         return self

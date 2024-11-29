@@ -1,5 +1,6 @@
 """Functions to manage or retrieve user resources."""
 from typing import Optional
+from collections import defaultdict
 import logging
 
 import inductiva
@@ -31,6 +32,30 @@ def estimate_machine_cost(machine_type: str, spot: bool = False):
         estimated_cost = instance_price.body["on_demand_price"]
 
     return float(estimated_cost)
+
+
+def get_machine_dict(machines):
+    """Get a dictionary with the information of the machines."""
+    column_names = [
+        "Host Name",
+        "Started",
+        "Status",
+        "Last seen",
+        "Running task",
+    ]
+    table = defaultdict(list, {key: [] for key in column_names})
+    for machine in machines:
+        status = "Off" if isinstance(machine["terminated_at"],
+                                     str) else "Active"
+        task_id = machine["current_task_id"] if isinstance(
+            machine["current_task_id"], str) else None
+        table["Host Name"].append(machine["host_name"])
+        table["Started"].append(machine["started_at"])
+        table["Status"].append(status)
+        table["Last seen"].append(machine["last_seen_at"])
+        table["Running task"].append(task_id)
+
+    return table
 
 
 def _fetch_machine_groups_from_api():
