@@ -39,11 +39,10 @@ class OpenFOAM(simulators.Simulator):
                 f"{AVAILABLE_OPENFOAM_DISTRIBUTIONS}")
 
         self._distribution = distribution
-        
+
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
         self.container_image = self._get_image_uri()
-
 
     @property
     def name(self):
