@@ -3,14 +3,13 @@ import asyncio
 import json
 import uuid
 import enum
-from aiortc import RTCPeerConnection, RTCSessionDescription
+from aiortc import RTCPeerConnection, RTCSessionDescription, RTCConfiguration, RTCIceServer
 
 # STUN/TURN server configuration
-ICE_SERVERS = [{
-    "urls": ["stun:34.79.246.4:3478"]
-}, {
-    "urls": ["turn:34.79.246.4:3478"]
-}]
+ICE_SERVERS = [
+    RTCIceServer("stun:34.79.246.4:3478"),
+    RTCIceServer("turn:34.79.246.4:3478")
+]
 
 
 class Operations(enum.Enum):
@@ -22,8 +21,7 @@ class FileTracker:
     """File Tracker class for connecting to a running task via WebRTC."""
 
     def __init__(self):
-        self.pc = RTCPeerConnection()
-        self.pc.configuration = {"iceServers": ICE_SERVERS}
+        self.pc = RTCPeerConnection(RTCConfiguration(iceServers=ICE_SERVERS))
         self._message = None
 
     async def setup_channel(self, operation, **kwargs):

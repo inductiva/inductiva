@@ -7,10 +7,9 @@ import logging
 
 from inductiva import _cli, tasks
 
-logging.getLogger().setLevel(level=logging.WARNING)
-
 
 def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
+    logging.getLogger().setLevel(level=logging.WARNING)
     task_id = args.id
     task = tasks.Task(task_id)
     lines = asyncio.run(
