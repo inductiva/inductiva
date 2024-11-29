@@ -42,6 +42,7 @@ class OpenFOAM(simulators.Simulator):
 
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
+        self.simulator_name_alias = f"Openfoam-{distribution}"
         self.container_image = self._get_image_uri()
 
     @property
@@ -54,8 +55,6 @@ class OpenFOAM(simulators.Simulator):
             commands: types.Commands,
             *,
             on: types.ComputationalResources,
-            n_vcpus: Optional[int] = None,
-            use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
@@ -66,11 +65,6 @@ class OpenFOAM(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
             commands: List of commands to run using the OpenFOAM simulator.
-            n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
-            use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
@@ -83,8 +77,6 @@ class OpenFOAM(simulators.Simulator):
                            on=on,
                            commands=commands,
                            storage_dir=storage_dir,
-                           n_vcpus=n_vcpus,
-                           use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            **kwargs)

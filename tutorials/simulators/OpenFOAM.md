@@ -46,12 +46,6 @@ commands to be executed on the backend.
 Below is an example of how to run the [motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) 
 from OpenFOAM, demonstrating how this process works in practice.
 
-The commands passed to the simulator follow OpenFOAM’s structure. Using 
-the `runApplication` prefix will execute commands sequentially, while
-`runParallel` will use all available CPU cores automatically—no need to 
-manually set the number of processes. The **decomposeParDict** is configured 
-automatically and currently, only the **scotch decomposition method** is supported.
-
 ## Example Code - OpenFOAM Foundation Distribution
 
 In this example, we demonstrate how to run the [motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) 
@@ -65,8 +59,56 @@ tutorial using the OpenFOAM Foundation distribution.
 
 To run the sample simulation above, simply download the
 `openfoam-esi-input-example.zip` file, select the correct distribution by
-using `inductiva.simulators.OpenFOAM(distribution="esi")`, and replace  
-`runApplication surfaceFeatures` with `runApplication surfaceFeatureExtract`.
+using `inductiva.simulators.OpenFOAM(distribution="esi")`, and run the respetive
+`Allrun` file.
+
+## Set the commands manually
+
+If you decide to set your commands manually, you can and here are a two examples:
+
+```python
+# Commands to run using single machine
+commands_single_machine = [
+    "runApplication surfaceFeatures",
+    "runApplication blockMesh",
+    "runApplication decomposePar -copyZero",
+    "runParallel snappyHexMesh -overwrite",
+    "runParallel potentialFoam",
+    "runParallel simpleFoam",
+    "runApplication reconstructParMesh -constant",
+    "runApplication reconstructPar -latestTime"
+]
+```
+
+```python
+# Commands to run using cluster
+config = inductiva.commands.MPIConfig("4.1.6",np=4,use_hwthread_cpus=False)
+commands_cluster = [
+    "runApplication surfaceFeatures",
+    "runApplication blockMesh",
+    "runApplication decomposePar -copyZero",
+    inductiva.commands.Command("snappyHexMesh -overwrite -parallel", mpi_config=config),
+    inductiva.commands.Command("potentialFoam -parallel", mpi_config=config),
+    inductiva.commands.Command("simpleFoam -parallel", mpi_config=config),
+    "runApplication reconstructParMesh -constant",
+    "runApplication reconstructPar -latestTime"
+]
+```
+
+In the first example, the MPI configuration is managed automatically by the
+OpenFOAM simulator.
+
+In the second example, you configure the MPI settings manually. This approach
+allows you to select the MPI version, specify the number of processes, and
+enable or disable hyperthreading based on your requirements.  
+
+One advantage of the second approach is that by explicitly defining the MPI
+configuration through our API, you can set up MPI clusters and leverage multiple
+machines for running your simulations.  
+
+For more details on commands and MPI configuration, refer to the
+[Custom Docker Images](https://tutorials.inductiva.ai/simulators/CustomImage.html#command-and-mpiconfig)
+documentation.
 
 ## Advanced Tutorial: Running the MB9 Micro-benchmark from ExaFOAM
 
@@ -120,15 +162,13 @@ machine_group = inductiva.resources.MachineGroup(
 machine_group.start()
 
 input_dir = "/path/to/highLiftConfiguration"
-with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
-    commands = [line.strip() for line in file]
 
 #Choose your simulator
 openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
 
 task = openfoam.run(
             input_dir=input_dir,
-            commands=commands,
+            commands=["bash ./Allrun"],
             n_vcpus=180,
             use_hwthread=True,
             on=machine_group)
@@ -150,129 +190,7 @@ file (`system/include/caseDefinition`):
 - **Start Time (`initTime`)**: 0.10
 - **End Time (`finalTime`)**: 0.30
 
-### Step 2: Create Commands File
-
-For now, we only allow the user to send a **list of specific commands** to the
-simulator. This commands are `runApplication` and `runParallel`.
-
-Due to this limitation,we need to "translate" the `Allrun` file into a list of
-commands that can be sent to the simulator.
-
-Another important point is that the `Allrun` file contains a lot of `cd`
-commands, which are not supported by the simulator. As a workaround, we can
-replace the `cd` commands with `runApplication` followed by `cd` (the same
-applies to `mv` and other commands).
-
-As an example, the `Allrun` file contains the following commands:
-
-```bash
-snappyHexMesh -dict system/snappyHexMeshDict.refineblockMesh -overwrite > ${LOGDIR}/log.M02.snappyHexMesh.refineblockMesh 2>&1 || exit 1
-mv ./0/cellLevel ./constant/polyMesh/
-mv ./0/pointLevel ./constant/polyMesh/
-
-```
-Those commands can be translated into the following:
-
-```bash
-runApplication snappyHexMesh -dict system/snappyHexMeshDict.refineblockMesh -overwrite
-runApplication mv ./0/cellLevel ./constant/polyMesh/
-runApplication mv ./0/pointLevel ./constant/polyMesh/
-```
-
-Since we only allow a list of commands all `if` statements in the `Allrun` file
-should be removed. And a clear line of execution should be defined.
-
-```bash
-if condition ; then
-    runApplication command1
-    runApplication command2
-else
-    runApplication command3
-    runApplication command4
-fi
-```
-
-Should be translated to:
-
-- If we want to simulate the `if` condition
-
-```bash
-runApplication command1
-runApplication command2
-```
-
-- If we want to simulate the `else` condition
-
-```bash
-runApplication command3
-runApplication command4
-```
-
-In the end, the `Allrun` file should be translated into a list of commands that
-should be placed into a file named `commands.txt`.
-
-Said file should contain the following commands:
-
-```bash
-runApplication cp system/controlDict.SHM system/controlDict
-runApplication cp system/fvSchemes.SHM system/fvSchemes
-runApplication cp system/fvSolution.SHM system/fvSolution
-runApplication blockMesh
-runApplication blockMesh
-runApplication snappyHexMesh -dict system/snappyHexMeshDict.refineblockMesh -overwrite
-runApplication mv ./0/cellLevel ./constant/polyMesh/
-runApplication mv ./0/pointLevel ./constant/polyMesh/
-runApplication rm -r 0
-runApplication checkMesh
-runApplication extrudeMesh -dict system/extrudeMeshDict.refineblockMesh
-runApplication rm constant/polyMesh/cellLevel
-runApplication rm constant/polyMesh/cellZones
-runApplication rm constant/polyMesh/pointLevel
-runApplication rm constant/polyMesh/pointZones
-runApplication rm constant/polyMesh/faceZones
-runApplication rm constant/polyMesh/level0Edge
-runApplication rm constant/polyMesh/surfaceIndex
-runApplication sed -i s/"ff_zMin"/"ff_SAVE"/g constant/polyMesh/boundary
-runApplication sed -i s/"ff_zMax"/"ff_zMin"/g constant/polyMesh/boundary
-runApplication sed -i s/"ff_SAVE"/"ff_zMax"/g constant/polyMesh/boundary
-runApplication checkMesh
-runApplication surfaceFeatureExtract
-runApplication decomposePar -decomposeParDict system/decomposeParDict.SHM
-runParallel snappyHexMesh -decomposeParDict system/decomposeParDict.SHM -dict system/snappyHexMeshDict -overwrite
-runParallel checkMesh -decomposeParDict system/decomposeParDict.SHM -latestTime -meshQuality
-runApplication reconstructParMesh -mergeTol 1e-08 -constant -latestTime
-runApplication cp -r constant/polyMesh constant/polyMesh.origHalf
-runApplication  mirrorMesh -overwrite
-runApplication topoSet -dict system/topoSetDict.faces.ff_zMin
-runApplication createPatch -overwrite -dict system/createPatchDict.mirrorMesh
-runApplication changeDictionary -constant -dict system/changeDictionaryDict.cyclicPatches -enableFunctionEntries
-runApplication topoSet -dict system/topoSetDict.faces.cyclic
-runApplication checkMesh -constant
-runApplication rm -r processor*
-runApplication rm -r constant/polyMesh.origHalf
-runApplication cp -r 0.orig 0
-runApplication cd system
-runApplication cp system/controlDict.SHM system/controlDict
-runApplication cp system/fvSchemes.SHM system/fvSchemes
-runApplication cp system/fvSolution.SHM system/fvSolution
-runApplication decomposePar
-runParallel renumberMesh -overwrite
-runApplication cp system/controlDict.SRS.init system/controlDict
-runApplication cp system/fvSolution.SRS system/fvSolution
-runApplication cp system/fvSchemes.SRS system/fvSchemes
-runParallel applyBoundaryLayer -ybl 0.1
-runApplication cp system/controlDict.SRS.init system/controlDict
-runApplication cp system/fvSolution.SRS system/fvSolution
-runApplication cp system/fvSchemes.SRS system/fvSchemes
-runParallel rhoPimpleFoam
-runApplication cp system/controlDict.SRS.avg system/controlDict
-runApplication cp system/fvSolution.SRS system/fvSolution
-runApplication cp system/fvSchemes.SRS system/fvSchemes
-runParallel rhoPimpleFoam
-runParallel postProcess -func sampleDict.surface.SRS -latestTime
-```
-
-### Step 3: Running the Simulation
+### Step 2: Running the Simulation
 
 #### a. Configure and Start Machine
 
@@ -298,13 +216,10 @@ folder where all your simulation files are located.
    input_dir = "/path/to/highLiftConfiguration"
    ```
 2. **Read Commands**:
-Now, let's read the `commands.txt` created in [Step 2](#step-2-create-commands-file).
+Now, to run this simulation you need only to simply run the `Allrun` file.
    ```python
-   with open(os.path.join(input_dir,'commands.txt'), 'r') as file:
-       commands = [line.strip() for line in file]
+   commands = ["bash ./Allrun"]
    ```
-We now have `commands` with a list of commands where each element of that list
-is a command.
 
 #### c. Run your simulation
 
@@ -316,22 +231,9 @@ We now have all we need to run our simulation.
 
    task = openfoam.run(
                input_dir=input_dir,
-               commands=commands,
-               n_vcpus=180,
-               use_hwthread=True,
+               commands=["bash ./Allrun"],
                on=machine_group)
    ```
-
-In this snippet, two arguments might need clarification:
-
-- `n_vcpus`: This sets the number of virtual CPUs (vCPUs) for your simulation,
-essentially determining how many parts your simulation will be split into to
-run in parallel. Here, we’re dividing the simulation into 180 parts and running
-each part simultaneously.
-
-- `use_hwthread`: This enables hyperthreading, which lets each CPU core handle
-two tasks at once instead of one. Setting this to `True` allows your simulation
-to use up to 360 vCPUs on the machine, even if we’re not utilizing all of them.
 
 2. **Wait and Download Outputs**:
 That is it. Our simulation is now running on the cloud. We can `wait` for the
@@ -360,25 +262,109 @@ much more.
 
 ### Step 4: Enhancing Performance with MPI Cluster
 
-As you have experienced, simulations can take a long, long time. To further
-reduce runtime we can change our machine configuration to a MPI cluster
-with two machines:
+Since we now want to scale our simulation into multiple machines we can no longer
+let Openfoam take care of our MPI configuration. We need to do it manually to
+let our API know how to handle MPI.
 
-```python
-mpi_cluster = inductiva.resources.MPICluster(
-                  machine_type="c3d-highcpu-360",
-                  data_disk_gb=300,
-                  num_machines=2)
-mpi_cluster.start()
+The first thing we need to do is move from running `Allrun` into setting the
+commands manually with the correct MPI configuration.
 
-# Re-run the simulation with adjusted `n_vcpus`
-task = openfoam.run(
-                  input_dir=input_dir,
-                  commands=commands,
-                  n_vcpus=360,
-                  use_hwthread=True,
-                  on=mpi_cluster)
-```
+1. **MPI Configuration**:
+
+    The first thing to do is defining the MPI configuration. This is done by:
+
+    ```python
+    config = inductiva.commands.MPIConfig("4.1.6",np=180,use_hwthread_cpus=False)
+    ```
+
+    Apart from that, we need to edit the `nCores` to 180 in the `system/include/caseDefinition`
+    file.
+
+2. **Commands**:
+
+    Now we need to define the commands to run on the cluster. This is done by
+    "translating" the `Allrun` file into a list of commands. Like so:
+
+    ```python
+    commands = [
+        'cp system/controlDict.SHM system/controlDict',
+        'cp system/fvSchemes.SHM system/fvSchemes',
+        'cp system/fvSolution.SHM system/fvSolution',
+        'runApplication blockMesh',
+        'runApplication blockMesh',
+        'runApplication snappyHexMesh -dict system/snappyHexMeshDict.refineblockMesh -overwrite',
+        'mv ./0/cellLevel ./constant/polyMesh/',
+        'mv ./0/pointLevel ./constant/polyMesh/',
+        'rm -r 0',
+        'runApplication checkMesh',
+        'runApplication extrudeMesh -dict system/extrudeMeshDict.refineblockMesh',
+        'rm constant/polyMesh/cellLevel',
+        'rm constant/polyMesh/cellZones',
+        'rm constant/polyMesh/pointLevel',
+        'rm constant/polyMesh/pointZones',
+        'rm constant/polyMesh/faceZones',
+        'rm constant/polyMesh/level0Edge',
+        'rm constant/polyMesh/surfaceIndex',
+        'sed -i s/"ff_zMin"/"ff_SAVE"/g constant/polyMesh/boundary',
+        'sed -i s/"ff_zMax"/"ff_zMin"/g constant/polyMesh/boundary',
+        'sed -i s/"ff_SAVE"/"ff_zMax"/g constant/polyMesh/boundary',
+        'runApplication checkMesh',
+        'runApplication surfaceFeatureExtract',
+        'runApplication decomposePar -decomposeParDict system/decomposeParDict.SHM',
+        inductiva.commands.Command('snappyHexMesh -decomposeParDict system/decomposeParDict.SHM -dict system/snappyHexMeshDict -overwrite',mpi_config=config),
+        inductiva.commands.Command('checkMesh -decomposeParDict system/decomposeParDict.SHM -latestTime -meshQuality',mpi_config=config),
+        'runApplication reconstructParMesh -mergeTol 1e-08 -constant -latestTime',
+        'cp -r constant/polyMesh constant/polyMesh.origHalf',
+        'runApplication mirrorMesh -overwrite',
+        'runApplication topoSet -dict system/topoSetDict.faces.ff_zMin',
+        'runApplication createPatch -overwrite -dict system/createPatchDict.mirrorMesh',
+        'runApplication changeDictionary -constant -dict system/changeDictionaryDict.cyclicPatches -enableFunctionEntries',
+        'runApplication topoSet -dict system/topoSetDict.faces.cyclic',
+        'runApplication checkMesh -constant',
+        'rm -r processor*',
+        'rm -r constant/polyMesh.origHalf',
+        'cp -r 0.orig 0',
+        'cp system/controlDict.SHM system/controlDict',
+        'cp system/fvSchemes.SHM system/fvSchemes',
+        'cp system/fvSolution.SHM system/fvSolution',
+        'runApplication decomposePar',
+        inductiva.commands.Command('renumberMesh -overwrite',mpi_config=config),
+        'cp system/controlDict.SRS.init system/controlDict',
+        'cp system/fvSolution.SRS system/fvSolution',
+        'cp system/fvSchemes.SRS system/fvSchemes',
+        inductiva.commands.Command('applyBoundaryLayer -ybl 0.1',mpi_config=config),
+        'cp system/controlDict.SRS.init system/controlDict',
+        'cp system/fvSolution.SRS system/fvSolution',
+        'cp system/fvSchemes.SRS system/fvSchemes',
+        inductiva.commands.Command('rhoPimpleFoam',mpi_config=config),
+        'cp system/controlDict.SRS.avg system/controlDict',
+        'cp system/fvSolution.SRS system/fvSolution',
+        'cp system/fvSchemes.SRS system/fvSchemes',
+        inductiva.commands.Command('rhoPimpleFoam',mpi_config=config),
+        inductiva.commands.Command('postProcess -func sampleDict.surface.SRS -latestTime',mpi_config=config),
+    ]
+    ```
+3. **Start your Cluster**:
+
+    Now we need to start our cluster. This is done by:
+
+    ```python
+    mpi_cluster = inductiva.resources.MPICluster(
+                    machine_type="c3d-highcpu-360",
+                    data_disk_gb=300,
+                    num_machines=2)
+    mpi_cluster.start()
+    ```
+    
+4. **Run the simulation**:
+    All that is left is to run the simulation on the cluster.
+
+    ```python
+    task = openfoam.run(
+                    input_dir=input_dir,
+                    commands=commands,
+                    on=mpi_cluster)
+    ```
 
 As you can see the process of scalling up (or down) can be done easly by just
 picking a new resource. We encorage you to try other machines/configurations.
