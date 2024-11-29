@@ -40,6 +40,64 @@ class TaskRequest(schemas.DictSchema):
             simulator = schemas.StrSchema
             resource_pool = schemas.StrSchema
             container_image = schemas.StrSchema
+
+            class simulator_name_alias(
+                    schemas.ComposedSchema,):
+
+                class MetaOapg:
+                    any_of_0 = schemas.StrSchema
+                    any_of_1 = schemas.NoneSchema
+
+                    @classmethod
+                    @functools.lru_cache()
+                    def any_of(cls):
+                        # we need this here to make our import statements work
+                        # we must store _composed_schemas in here so the code is only run
+                        # when we invoke this method. If we kept this at the class
+                        # level we would get an error because the class level
+                        # code would be run when this module is imported, and these composed
+                        # classes don't exist yet because their module has not finished
+                        # loading
+                        return [
+                            cls.any_of_0,
+                            cls.any_of_1,
+                        ]
+
+                def __new__(
+                    cls,
+                    *_args: typing.Union[
+                        dict,
+                        frozendict.frozendict,
+                        str,
+                        date,
+                        datetime,
+                        uuid.UUID,
+                        int,
+                        float,
+                        decimal.Decimal,
+                        bool,
+                        None,
+                        list,
+                        tuple,
+                        bytes,
+                        io.FileIO,
+                        io.BufferedReader,
+                    ],
+                    _configuration: typing.Optional[
+                        schemas.Configuration] = None,
+                    **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
+                                           frozendict.frozendict, str, date,
+                                           datetime, uuid.UUID, int, float,
+                                           decimal.Decimal, None, list, tuple,
+                                           bytes],
+                ) -> 'simulator_name_alias':
+                    return super().__new__(
+                        cls,
+                        *_args,
+                        _configuration=_configuration,
+                        **kwargs,
+                    )
+
             storage_path_prefix = schemas.StrSchema
 
             class project(
@@ -184,15 +242,18 @@ class TaskRequest(schemas.DictSchema):
                 def __getitem__(self, i: int) -> MetaOapg.items:
                     return super().__getitem__(i)
 
+            stream_zip = schemas.BoolSchema
             __annotations__ = {
                 "simulator": simulator,
                 "resource_pool": resource_pool,
                 "container_image": container_image,
+                "simulator_name_alias": simulator_name_alias,
                 "storage_path_prefix": storage_path_prefix,
                 "project": project,
                 "time_to_live_seconds": time_to_live_seconds,
                 "resubmit_on_preemption": resubmit_on_preemption,
                 "input_resources": input_resources,
+                "stream_zip": stream_zip,
             }
 
     simulator: MetaOapg.properties.simulator
@@ -215,6 +276,12 @@ class TaskRequest(schemas.DictSchema):
     def __getitem__(
         self, name: typing_extensions.Literal["container_image"]
     ) -> MetaOapg.properties.container_image:
+        ...
+
+    @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["simulator_name_alias"]
+    ) -> MetaOapg.properties.simulator_name_alias:
         ...
 
     @typing.overload
@@ -248,6 +315,12 @@ class TaskRequest(schemas.DictSchema):
         ...
 
     @typing.overload
+    def __getitem__(
+        self, name: typing_extensions.Literal["stream_zip"]
+    ) -> MetaOapg.properties.stream_zip:
+        ...
+
+    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
@@ -255,11 +328,13 @@ class TaskRequest(schemas.DictSchema):
         "simulator",
         "resource_pool",
         "container_image",
+        "simulator_name_alias",
         "storage_path_prefix",
         "project",
         "time_to_live_seconds",
         "resubmit_on_preemption",
         "input_resources",
+        "stream_zip",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -280,6 +355,12 @@ class TaskRequest(schemas.DictSchema):
     def get_item_oapg(
         self, name: typing_extensions.Literal["container_image"]
     ) -> MetaOapg.properties.container_image:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
+        self, name: typing_extensions.Literal["simulator_name_alias"]
+    ) -> typing.Union[MetaOapg.properties.simulator_name_alias, schemas.Unset]:
         ...
 
     @typing.overload
@@ -315,6 +396,12 @@ class TaskRequest(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
+        self, name: typing_extensions.Literal["stream_zip"]
+    ) -> typing.Union[MetaOapg.properties.stream_zip, schemas.Unset]:
+        ...
+
+    @typing.overload
+    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
@@ -323,11 +410,13 @@ class TaskRequest(schemas.DictSchema):
         "simulator",
         "resource_pool",
         "container_image",
+        "simulator_name_alias",
         "storage_path_prefix",
         "project",
         "time_to_live_seconds",
         "resubmit_on_preemption",
         "input_resources",
+        "stream_zip",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -349,6 +438,11 @@ class TaskRequest(schemas.DictSchema):
             MetaOapg.properties.container_image,
             str,
         ],
+        simulator_name_alias: typing.Union[
+            MetaOapg.properties.simulator_name_alias, dict,
+            frozendict.frozendict, str, date, datetime, uuid.UUID, int, float,
+            decimal.Decimal, bool, None, list, tuple, bytes, io.FileIO,
+            io.BufferedReader, schemas.Unset] = schemas.unset,
         storage_path_prefix: typing.Union[
             MetaOapg.properties.storage_path_prefix, str,
             schemas.Unset] = schemas.unset,
@@ -367,6 +461,8 @@ class TaskRequest(schemas.DictSchema):
             schemas.Unset] = schemas.unset,
         input_resources: typing.Union[MetaOapg.properties.input_resources, list,
                                       tuple, schemas.Unset] = schemas.unset,
+        stream_zip: typing.Union[MetaOapg.properties.stream_zip, bool,
+                                 schemas.Unset] = schemas.unset,
         _configuration: typing.Optional[schemas.Configuration] = None,
         **kwargs: typing.Union[schemas.AnyTypeSchema, dict,
                                frozendict.frozendict, str, date, datetime,
@@ -379,11 +475,13 @@ class TaskRequest(schemas.DictSchema):
             simulator=simulator,
             resource_pool=resource_pool,
             container_image=container_image,
+            simulator_name_alias=simulator_name_alias,
             storage_path_prefix=storage_path_prefix,
             project=project,
             time_to_live_seconds=time_to_live_seconds,
             resubmit_on_preemption=resubmit_on_preemption,
             input_resources=input_resources,
+            stream_zip=stream_zip,
             _configuration=_configuration,
             **kwargs,
         )

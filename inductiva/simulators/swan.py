@@ -24,14 +24,15 @@ class SWAN(simulators.Simulator):
     def run(
         self,
         input_dir: Optional[str],
-        sim_config_filename: str,
+        sim_config_filename: Optional[str] = None,
         *,
+        remote_assets: Optional[List[str]] = None,
+        resubmit_on_preemption: bool = False,
         on: types.ComputationalResources,
+        storage_dir: Optional[str] = "",
         n_vcpus: Optional[int] = None,
         use_hwthread: bool = True,
-        storage_dir: Optional[str] = "",
-        resubmit_on_preemption: bool = False,
-        remote_assets: Optional[List[str]] = None,
+        command: str = "swanrun",
         **kwargs,
     ) -> tasks.Task:
         """Run the simulation.
@@ -39,6 +40,7 @@ class SWAN(simulators.Simulator):
         Args:
             input_dir: Path to the directory of the simulation input files.
             sim_config_filename: Name of the simulation configuration file.
+                Mandatory when using 'swanrun' command.
             n_vcpus: Number of vCPUs to use in the simulation. If not provided
             (default), all vCPUs will be used.
             use_hwthread: If specified Open MPI will attempt to discover the
@@ -50,13 +52,26 @@ class SWAN(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
+            command: The command to run the simulation. Default is 'swanrun'.
+                The user can also specify 'swan.exe'.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
         """
+
+        if command not in ("swanrun", "swan.exe"):
+            raise ValueError("Invalid command. Use 'swanrun' or 'swan.exe'.")
+
+        if sim_config_filename is None and command == "swanrun":
+            raise ValueError("Simulation configuration file "
+                             "(sim_config_filename) not provided.\n"
+                             "When using 'swanrun' it is mandatory to provide "
+                             "sim_config_filename.")
+
         return super().run(input_dir,
                            on=on,
                            input_filename=sim_config_filename,
                            storage_dir=storage_dir,
+                           command=command,
                            n_vcpus=n_vcpus,
                            use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
