@@ -8,21 +8,18 @@ from inductiva import types, tasks, simulators
 class SeisSol(simulators.Simulator):
     """Class to run SeisSol simulations on a custom container image."""
 
-    def __init__(self, container_image: str):
-        """
-        Initialize the SeisSol simulator class.
+    def __init__(self, /, version: Optional[str] = None, use_dev: bool = False):
+        """Initialize the CaNS simulator.
 
         Args:
-            container_image: The container image to use for the simulation.
-                Example: container_image="docker://inductiva/seissol:latest"
+            version (str): The version of the simulator to use. If None, the
+                latest available version in the platform is used.
+            use_dev (bool): Request use of the development version of
+                the simulator. By default (False), the production version
+                is used.
         """
-        self.container_image = container_image
-        super().__init__()
+        super().__init__(version=version, use_dev=use_dev)
         self.simulator = "seissol"
-        
-    def _get_image_uri(self):
-        """Return the URI of the container image."""
-        return self.container_image
 
     def run(self,
             input_dir: Optional[str],
@@ -30,6 +27,7 @@ class SeisSol(simulators.Simulator):
             *,
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
+            n_vcpus: Optional[int] = None,
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
@@ -51,8 +49,8 @@ class SeisSol(simulators.Simulator):
         return super().run(input_dir,
                            on=on,
                            commands=commands,
+                           n_vcpus=n_vcpus,
                            storage_dir=storage_dir,
-                           container_image=self._image_uri,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            **kwargs)
