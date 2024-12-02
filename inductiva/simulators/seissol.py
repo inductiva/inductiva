@@ -23,7 +23,6 @@ class SeisSol(simulators.Simulator):
 
     def run(self,
             input_dir: Optional[str],
-            commands: List[str],
             *,
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
@@ -36,7 +35,6 @@ class SeisSol(simulators.Simulator):
 
         Args:
             input_dir: Path to the directory containing the input files.
-            commands: List of commands to run (e.g., SeisSol binaries with parameters).
             on: The computational resource to launch the simulation on.
             storage_dir: Parent directory for storing simulation results.
             resubmit_on_preemption (bool): Resubmit task for execution when
@@ -47,8 +45,6 @@ class SeisSol(simulators.Simulator):
                 the simulation directory.
         """
         return super().run(input_dir,
-                           on=on,
-                           commands=commands,
                            n_vcpus=n_vcpus,
                            storage_dir=storage_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
