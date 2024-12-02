@@ -350,7 +350,7 @@ commands manually with the correct MPI configuration.
 
     ```python
     mpi_cluster = inductiva.resources.MPICluster(
-                    machine_type="c3d-highcpu-360",
+                    machine_type="c3d-highcpu-180",
                     data_disk_gb=300,
                     num_machines=2)
     mpi_cluster.start()
