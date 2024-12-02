@@ -31,12 +31,6 @@ physical properties being modeled.
 - `system`: Contains files that describe the simulation, including solvers, 
 numerical parameters, and output files. 
 
-It must contain at least 3 files: 
-`controlDict`: Run control parameters (start/end time, time step, and parameters 
-for data output)
-`fvSchemes`: Selection of discretization schemes used during the solution.
-`fvSolution`: Equation solvers, tolerances and other algorithm controls.
-
 In order to run your simulation you cam simply run your `Allrun` script and you
 are good to go.
 
