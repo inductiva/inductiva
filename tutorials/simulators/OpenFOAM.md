@@ -40,7 +40,7 @@ for data output)
 In order to run your simulation you cam simply run your `Allrun` script and you
 are good to go.
 
-## First Example: Morotbike Tutorial
+## First Example: Motorbike Tutorial
 
 In this example, we demonstrate how to run the [motorbike tutorial](https://github.com/OpenFOAM/OpenFOAM-8/tree/master/tutorials/incompressible/simpleFoam/motorBike) 
 tutorial using the OpenFOAM Foundation distribution.
