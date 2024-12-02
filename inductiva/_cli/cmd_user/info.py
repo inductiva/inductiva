@@ -66,18 +66,6 @@ def _print_credits_summary(user_info, fout: TextIO = sys.stdout):
     print(f"■ Credits: {total_available_credits}", file=fout)
 
 
-def _campaigns_to_dict(campaigns):
-    """Converts a list of campaigns to a dictionary."""
-    table = defaultdict(list)
-    for program in campaigns:
-        table["name"].append(program["name"])
-        table["enrollment date"].append(program["enrollment_date"])
-        table["expiry date"].append(program["expiry_date"])
-        table["available credits"].append(program["available_credits"])
-        table["initial credits"].append(program["initial_credits"])
-    return table
-
-
 def _print_estimated_costs(fout: TextIO = sys.stdout):
     """Prints the user's estimated costs for the current month."""
     current_month = datetime.now().month
@@ -121,7 +109,7 @@ def get_info(_, fout: TextIO = sys.stdout):
     user_info = users.get_info()
 
     organization = user_info["organization"] or ""
-    tier = user_info["tier"]["name"]
+    tier = user_info["tier"]
     username = user_info["username"]
     email = user_info["email"]
     name = user_info["name"] or ""
@@ -137,36 +125,12 @@ def get_info(_, fout: TextIO = sys.stdout):
 
     _print_credits_summary(user_info, fout=fout)
 
-    print("", file=fout)
-
     _print_estimated_costs(fout=fout)
 
-    table = _campaigns_to_dict(user_info["campaigns"])
-
-    emph_formatter = format_utils.get_ansi_formatter()
-
-    header_formatters = [
-        lambda x: emph_formatter(x.upper(), format_utils.Emphasis.BOLD)
-    ]
-
-    formatters = {
-        "enrollment date": [format_utils.datetime_formatter_ymd_hm,],
-        "expiry date": [format_utils.datetime_formatter_ymd_hm,]
-    }
-
-    table = format_utils.get_tabular_str(table,
-                                         formatters=formatters,
-                                         header_formatters=header_formatters)
     print("", file=fout)
-    print("■ Active Campaigns", file=fout)
-    if not user_info["campaigns"]:
-        print("\n Not currently enrolled in any campaign.\n", file=fout)
-    else:
-        print(table, file=fout)
-
     _print_quotas(_, fout)
-
     print("", file=fout)
+
     return 0
 
 
@@ -179,9 +143,8 @@ def register(parser):
 
     subparser.description = (
         "The `inductiva user info` command provides "
-        "an overview of your tier, campaigns and credits.\n"
-        "It lists all your campaigns as well as the"
-        "credits left for you to use.\n")
+        "an overview of your tier and credits.\n"
+        "It shows the credits left for you to use.\n")
 
     _cli.utils.add_watch_argument(subparser)
 
