@@ -11,16 +11,13 @@ input_dir = inductiva.utils.download_from_url(
     "openfoam-input-example.zip",
     unzip=True)
 
-# Run the Allrun script
-commands = ["bash ./Allrun"]
-
-# Or set the commands manually (Examples below)
-
 # Initialize the Simulator
 openfoam = inductiva.simulators.OpenFOAM(distribution="foundation")
 
 # Run simulation with config files in the input directory
-task = openfoam.run(input_dir=input_dir, commands=commands, on=machine_group)
+task = openfoam.run(input_dir=input_dir,
+                    bash_script="./Allrun",
+                    on=machine_group)
 
 task.wait()
 task.download_outputs()
