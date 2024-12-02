@@ -141,10 +141,9 @@ def register(parser):
                                   help="List the user's information.",
                                   formatter_class=argparse.RawTextHelpFormatter)
 
-    subparser.description = (
-        "The `inductiva user info` command provides "
-        "an overview of your tier and credits.\n"
-        "It shows the credits left for you to use.\n")
+    subparser.description = ("The `inductiva user info` command provides "
+                             "an overview of your tier and credits.\n"
+                             "It shows the credits left for you to use.\n")
 
     _cli.utils.add_watch_argument(subparser)
 
