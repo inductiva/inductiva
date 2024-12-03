@@ -276,15 +276,7 @@ Now, we can run this script, and the output should look something like this:
 
 ■ Tier: Power-User
 
-■ Credits
-
-  Power-User (tier)               0.00 USD
-  ----------------------------------------
-  Total                         989.99 USD
-
-■ Active Campaigns
-
- Not currently enrolled in any campaign.
+■ Credits: 1000.00 US$
 
 ■ Global User quotas
                                                                  CURRENT USAGE     MAX ALLOWED
