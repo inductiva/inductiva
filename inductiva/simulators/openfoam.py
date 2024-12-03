@@ -52,9 +52,9 @@ class OpenFOAM(simulators.Simulator):
 
     def run(self,
             input_dir: Optional[str],
+            *,
             commands: Optional[List[types.Commands]] = None,
             bash_script: Optional[str] = None,
-            *,
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
