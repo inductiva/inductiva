@@ -49,13 +49,6 @@ def check_running_for_first_time():
     return False
 
 
-def user_autocompletion_install_prompt():
-    prompt = input("This is the first time running the inductiva cli. "
-                   "Would you like to enable autocompletion? (y/[N])?\n"
-                   "At the moment only zsh is supported.")
-    return prompt.lower() in ["y", "ye", "yes"]
-
-
 def show_help_msg(parser):
     """Show help message for command if no subcommand is provided."""
     parser.set_defaults(func=lambda _: parser.print_help())
