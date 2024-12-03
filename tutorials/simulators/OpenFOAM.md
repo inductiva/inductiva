@@ -43,6 +43,19 @@ tutorial using the OpenFOAM Foundation distribution.
 :language: python
 ```
 
+The current example is devided into four steps:
+1- **Machine Configuration**: In this step, we define the machine type and start
+it.
+2- **Download Input Files**: In this step, we download the input files from the
+inductiva bucket.
+3- **Picking the simulator**: In this step, we choose the simulator we want to
+use. In this case, we are using the OpenFOAM Foundation distribution.
+4- **Run the Simulation**: In this step, we run the simulation using the `run`
+method and specify the `bash_script` responsible for running the simulation.
+
+The last three lines we are just waiting for the simulation to finish, downloading
+the outputs and terminating the machine, in this order.
+
 ### Example Code - ESI Distribution
 
 To run the sample simulation above, simply download the
@@ -59,9 +72,7 @@ near-wall turbulence using **wall-modeled Large Eddy Simulation (WMLES)**.
 
 ### Objective
 
-We'll run this simulation on:
-1. **Single 360 vCPU Machine**.
-2. **MPI Cluster** using two 360 vCPU machines to improve performance.
+We'll run this simulation on a single 360 vCPU machine.
 
 ### Prerequisites
 
@@ -137,7 +148,9 @@ file (`system/include/caseDefinition`):
 1. **Pick your machine**:
     ```python
     import inductiva
-    machine_group = inductiva.resources.MachineGroup(machine_type="c3d-highcpu-360", spot=True)
+    machine_group = inductiva.resources.MachineGroup(
+            machine_type="c3d-highcpu-360",
+            spot=True)
     ```
     **Note**: `spot` machines are a lot cheaper but can be terminated by the
     provider if needed.
