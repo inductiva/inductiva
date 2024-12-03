@@ -67,9 +67,7 @@ class AmrWind(simulators.Simulator):
 
         return super().run(input_dir,
                            on=on,
-                           n_vcpus=n_vcpus,
                            storage_dir=storage_dir,
-                           use_hwthread=use_hwthread,
                            commands=commands,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
