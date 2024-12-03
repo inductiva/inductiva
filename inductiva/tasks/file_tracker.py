@@ -3,12 +3,12 @@ import asyncio
 import json
 import uuid
 import enum
-from aiortc import RTCPeerConnection, RTCSessionDescription, RTCConfiguration, RTCIceServer
+import aiortc
 
 # STUN/TURN server configuration
 ICE_SERVERS = [
-    RTCIceServer("stun:34.79.246.4:3478"),
-    RTCIceServer("turn:34.79.246.4:3478")
+    aiortc.RTCIceServer("stun:34.79.246.4:3478"),
+    aiortc.RTCIceServer("turn:34.79.246.4:3478")
 ]
 
 
@@ -21,7 +21,7 @@ class FileTracker:
     """File Tracker class for connecting to a running task via WebRTC."""
 
     def __init__(self):
-        self.pc = RTCPeerConnection(RTCConfiguration(iceServers=ICE_SERVERS))
+        self.pc = aiortc.RTCPeerConnection(aiortc.RTCConfiguration(iceServers=ICE_SERVERS))
         self._message = None
 
     async def setup_channel(self, operation, **kwargs):
@@ -65,7 +65,7 @@ class FileTracker:
         data = resp.body
         if data["type"] == "answer":
             await self.pc.setRemoteDescription(
-                RTCSessionDescription(sdp=data["sdp"], type=data["type"]))
+                aiortc.RTCSessionDescription(sdp=data["sdp"], type=data["type"]))
 
     async def cleanup(self):
         await self.pc.close()

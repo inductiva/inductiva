@@ -1140,9 +1140,9 @@ class Task:
             The result of the operation.
         """
         file_tracker = FileTracker()
-        ret = await file_tracker.setup_channel(operation, **kwargs)
+        future_message = await file_tracker.setup_channel(operation, **kwargs)
         await file_tracker.connect_to_task(self._api, self.id)
-        message = await ret
+        message = await future_message
         await file_tracker.cleanup()
 
         if operation == Operations.LIST:

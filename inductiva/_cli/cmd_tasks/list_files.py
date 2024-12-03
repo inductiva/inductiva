@@ -25,8 +25,9 @@ def register(parser):
         formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = (
-        "The `inductiva tasks list-files` command provides "
-        "the files generated during a task.")
+        "The `inductiva tasks list-files` command lists "
+        "the contents of a task's working directory while "
+        "the task in progress.")
 
     _cli.utils.add_watch_argument(subparser)
     subparser.add_argument("id", type=str, help="ID of the task to list files.")
