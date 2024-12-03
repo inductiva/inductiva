@@ -44,13 +44,17 @@ tutorial using the OpenFOAM Foundation distribution.
 ```
 
 The current example is devided into four steps:
-1- **Machine Configuration**: In this step, we define the machine type and start
+
+1. **Machine Configuration**: In this step, we define the machine type and start
 it.
-2- **Download Input Files**: In this step, we download the input files from the
+
+2. **Download Input Files**: In this step, we download the input files from the
 inductiva bucket.
-3- **Picking the simulator**: In this step, we choose the simulator we want to
+
+3. **Picking the simulator**: In this step, we choose the simulator we want to
 use. In this case, we are using the OpenFOAM Foundation distribution.
-4- **Run the Simulation**: In this step, we run the simulation using the `run`
+
+4. **Run the Simulation**: In this step, we run the simulation using the `run`
 method and specify the `bash_script` responsible for running the simulation.
 
 The last three lines we are just waiting for the simulation to finish, downloading
