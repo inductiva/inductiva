@@ -2,6 +2,7 @@
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators
+from inductiva.commands import MPIConfig, Command
 
 
 @simulators.simulator.mpi_enabled
@@ -20,7 +21,9 @@ class AmrWind(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.simulator = "amrwind"
+        self.simulator = "arbitrary_commands"
+        self.simulator_name_alias = "amrwind"
+        self.container_image = self._get_image_uri()
 
     @property
     def name(self):
@@ -55,12 +58,19 @@ class AmrWind(simulators.Simulator):
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
         """
+        mpi_config = MPIConfig(version="4.1.6",
+                               np=n_vcpus,
+                               use_hwthread_cpus=use_hwthread)
+        commands = [
+            Command(f"amr_wind {sim_config_filename}", mpi_config=mpi_config)
+        ]
+
         return super().run(input_dir,
                            on=on,
                            n_vcpus=n_vcpus,
                            storage_dir=storage_dir,
                            use_hwthread=use_hwthread,
-                           input_filename=sim_config_filename,
+                           commands=commands,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            **kwargs)
