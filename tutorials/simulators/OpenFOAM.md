@@ -45,26 +45,26 @@ tutorial using the OpenFOAM Foundation distribution.
 
 The current example is devided into four steps:
 
-1. **Machine Configuration**: In this step, we define the machine type and start
+1. **Configure the Machine Type**: In this step, we define the machine type and start
 it.
 
-2. **Download Input Files**: In this step, we download the input files from the
-inductiva bucket.
+2. **Download Input Files**: In this step, we retrieve the input files from the
+Inductiva bucket.
 
-3. **Picking the simulator**: In this step, we choose the simulator we want to
-use. In this case, we are using the OpenFOAM Foundation distribution.
+3. **Pick the Simulator**: We select the simulator we want to use. in this case,
+the OpenFOAM Foundation distribution.
 
-4. **Run the Simulation**: In this step, we run the simulation using the `run`
-method and specify the `bash_script` responsible for running the simulation.
+4. **Run the Simulation**: In the final step, we run the simulation using the
+`run` method, specifying the `bash_script` responsible for running the process.
 
-The last three lines we are just waiting for the simulation to finish, downloading
-the outputs and terminating the machine, in this order.
+The last three lines handle post-simulation tasks: waiting for the simulation
+to finish, downloading the outputs, and terminating the machine, in that order.
 
 ### Example Code - ESI Distribution
 
-To run the sample simulation above, simply download the
-`openfoam-esi-input-example.zip` file, select the correct distribution by
-using `inductiva.simulators.OpenFOAM(distribution="esi")`, and run the respetive
+To run the sample simulation above, download the `openfoam-esi-input-example.zip`
+file, select the appropriate distribution with
+`inductiva.simulators.OpenFOAM(distribution="esi")`, and run the corresponding
 `Allrun` script.
 
 ## Advanced Tutorial: Running the MB9 Micro-benchmark from ExaFOAM
@@ -220,17 +220,17 @@ much more.
 
 ### Conclusion
 
-Running the simulation on a high-performance machine on the cloud can significantly
-reduce the time it takes to complete the simulation. If you need to scale up
-or down, you can easly do so by changing the machine to a more or less powerful
-one.
+Running your simulation on a high-performance cloud machine can significantly
+reduce the time it takes to complete the simulation. If you need to scale up or
+down, you can easily adjust by selecting a more or less powerful machine to
+match your needs.
 
 Happy simulations!
 
 ## Set Commands Manually
 
-In order to give you more flexibility, you can set the commands to run manually,
-one by one. This is useful because it gives you more control over the simulation.
+For greater flexibility, you can manually set and run commands one by one,
+giving you complete control over your simulation.
 
 If you decide to set your commands manually, here is an example:
 
