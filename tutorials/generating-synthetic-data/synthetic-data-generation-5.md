@@ -143,4 +143,6 @@ Given these performance and cost numbers, it is reasonable to commit to choosing
 
 The issue now becomes: which specific VM type should we use?  This is quite relevant because if we are running 10k simulations or more, we will be spending hundreds to thousands of dollars, and the different between hundreds or thousands is basically up to our choice of VM (and how long we are willing to wait). 
 
-We only actually tested machines of the `c3` family: are there other options that can do the job in reasonable time for even less money? Let's find that out in the next part of this tutorial.
+We’ve only tested machines from the `c3` family so far! Could there be 
+other options that deliver similar results for even less cost? This is 
+something we look forward to exploring in the future!
