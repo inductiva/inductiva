@@ -7,8 +7,8 @@ import aiortc
 
 # STUN/TURN server configuration
 ICE_SERVERS = [
-    aiortc.RTCIceServer("stun:34.79.246.4:3478"),
-    aiortc.RTCIceServer("turn:34.79.246.4:3478")
+    aiortc.RTCIceServer("stun:webrtc.inductiva.ai:3478"),
+    aiortc.RTCIceServer("turn:webrtc.inductiva.ai:3478")
 ]
 
 
