@@ -31,7 +31,7 @@ physical properties being modeled.
 - `system`: Contains files that describe the simulation, including solvers, 
 numerical parameters, and output files. 
 
-In order to run your simulation you cam simply run your `Allrun` script and you
+In order to run your simulation you can simply run your `Allrun` script and you
 are good to go.
 
 ## First Example: Motorbike Tutorial
