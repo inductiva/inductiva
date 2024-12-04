@@ -241,14 +241,6 @@ much more.
    Go to https://console.inductiva.ai/tasks/j416r4dv5u461ys7ovghp7so1 for more details.
    ```
 
-### Conclusion
-
-Running your simulation on a high-performance cloud machine can significantly
-reduce the time it takes to complete the simulation. If you need to scale up or
-down, you can easily adjust by selecting a more or less powerful machine to
-match your needs.
-
-Happy simulations!
 
 ## Set Commands Manually
 
