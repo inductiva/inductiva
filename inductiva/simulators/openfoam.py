@@ -39,8 +39,11 @@ class OpenFOAM(simulators.Simulator):
                 f"{AVAILABLE_OPENFOAM_DISTRIBUTIONS}")
 
         self._distribution = distribution
+
         super().__init__(version=version, use_dev=use_dev)
-        self.simulator = f"openfoam_{distribution}"
+        self.simulator = "arbitrary_commands"
+        self.simulator_name_alias = f"openfoam_{distribution}"
+        self.container_image = self._get_image_uri()
 
     @property
     def name(self):
@@ -49,11 +52,10 @@ class OpenFOAM(simulators.Simulator):
 
     def run(self,
             input_dir: Optional[str],
-            commands: types.Commands,
             *,
+            commands: Optional[List[types.Commands]] = None,
+            bash_script: Optional[str] = None,
             on: types.ComputationalResources,
-            n_vcpus: Optional[int] = None,
-            use_hwthread: bool = True,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
@@ -64,11 +66,8 @@ class OpenFOAM(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
             commands: List of commands to run using the OpenFOAM simulator.
-            n_vcpus: Number of vCPUs to use in the simulation. If not provided
-            (default), all vCPUs will be used.
-            use_hwthread: If specified Open MPI will attempt to discover the
-            number of hardware threads on the node, and use that as the
-            number of slots available.
+            bash_script: Path to a bash script (relative to input_dir) to run
+                the simulation.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
@@ -77,12 +76,20 @@ class OpenFOAM(simulators.Simulator):
                 the simulation directory.
             other arguments: See the documentation of the base class.
         """
+        if not commands and not bash_script:
+            raise ValueError("Either 'commands' or 'bash_script'"
+                             " must be provided.")
+        if commands and bash_script:
+            raise ValueError("Only one of 'commands' or 'bash_script'"
+                             " must be provided.")
+
+        if bash_script:
+            commands = [f"bash {bash_script}"]
+
         return super().run(input_dir,
                            on=on,
                            commands=commands,
                            storage_dir=storage_dir,
-                           n_vcpus=n_vcpus,
-                           use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            **kwargs)

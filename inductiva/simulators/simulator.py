@@ -40,6 +40,7 @@ class Simulator(ABC):
         if version is not None and not isinstance(version, str):
             raise ValueError("Version must be a string or None.")
         self.simulator = ""
+        self.simulator_name_alias = None
         self._version = version
         self._use_dev = bool(use_dev)
         self._image_uri = self._get_image_uri()
@@ -173,6 +174,7 @@ class Simulator(ABC):
             container_image=container_image,
             resubmit_on_preemption=resubmit_on_preemption,
             input_resources=remote_assets,
+            simulator_name_alias=self.simulator_name_alias,
             **kwargs,
         )
 

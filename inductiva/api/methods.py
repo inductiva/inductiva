@@ -375,6 +375,7 @@ def submit_task(api_instance,
                 type_annotations,
                 resubmit_on_preemption: bool = False,
                 container_image: Optional[str] = None,
+                simulator_name_alias: Optional[str] = None,
                 simulator_obj=None,
                 input_resources: Optional[List[str]] = None):
     """Submit a task and send input files to the API."""
@@ -394,6 +395,7 @@ def submit_task(api_instance,
                                resource_pool=resource_pool_id,
                                container_image=container_image,
                                storage_path_prefix=storage_path_prefix,
+                               simulator_name_alias=simulator_name_alias,
                                resubmit_on_preemption=resubmit_on_preemption,
                                input_resources=input_resources)
 
@@ -432,6 +434,7 @@ def invoke_async_api(simulator: str,
                      container_image: Optional[str] = None,
                      resubmit_on_preemption: bool = False,
                      simulator_obj=None,
+                     simulator_name_alias=None,
                      input_resources: Optional[List[str]] = None) -> str:
     """Perform a task asyc and remotely via Inductiva's Web API.
 
@@ -476,6 +479,7 @@ def invoke_async_api(simulator: str,
 
         task_id = submit_task(api_instance=api_instance,
                               simulator=simulator,
+                              simulator_name_alias=simulator_name_alias,
                               request_params=request_params,
                               resource_pool=resource_pool,
                               storage_path_prefix=storage_path_prefix,

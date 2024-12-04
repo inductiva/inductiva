@@ -234,21 +234,18 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             args = ([],) * (len(args_spec) - 2)  # -2 for self and input_dir
 
             test_input_dir = Path(__file__).parent / "test_input_dir"
+            run_kwargs = {"on": mock_mg}
+            if resubmit_on_preemption is not None:
+                run_kwargs[resubmit_key] = resubmit_on_preemption
+            if sim_name == "OpenFOAM":
+                run_kwargs["commands"] = ["ls"]
+
+            sim_obj.run(test_input_dir, *args, **run_kwargs)
+
+            req_arg = submit_mock.call_args[1]["request"]
             if resubmit_on_preemption is None:
-                # test that the default value of
-                # `resubmit_on_preemption` is False
-                sim_obj.run(test_input_dir, *args, on=mock_mg)
-                req_arg = submit_mock.call_args[1]["request"]
                 assert not req_arg[resubmit_key]
             else:
-                # test that the value of `resubmit_on_preemption` is passed
-                # correctly to the final api call
-                sim_obj.run(test_input_dir,
-                            *args,
-                            on=mock_mg,
-                            resubmit_on_preemption=resubmit_on_preemption)
-                req_arg = submit_mock.call_args[1]["request"]
-                assert bool(req_arg[resubmit_key]) == \
-                    resubmit_on_preemption
+                assert bool(req_arg[resubmit_key]) == resubmit_on_preemption
 
             submit_mock.assert_called_once()

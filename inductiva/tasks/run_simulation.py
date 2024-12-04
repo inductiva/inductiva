@@ -18,6 +18,7 @@ def run_simulation(
     api_invoker=None,
     simulator_obj=None,
     input_resources: Optional[List[str]] = None,
+    simulator_name_alias: Optional[str] = None,
     **kwargs: Any,
 ) -> tasks.Task:
     """Run a simulation via Inductiva Web API."""
@@ -43,6 +44,7 @@ def run_simulation(
                           type_annotations,
                           computational_resources,
                           resubmit_on_preemption=resubmit_on_preemption,
+                          simulator_name_alias=simulator_name_alias,
                           container_image=container_image,
                           storage_path_prefix=storage_dir,
                           simulator_obj=simulator_obj,
