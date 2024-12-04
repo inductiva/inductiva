@@ -99,7 +99,7 @@ class FVCOM(simulators.Simulator):
         if model:
             model = f"_{model.lower()}"
 
-        cmd = f"cd {working_dir} && fvcom{model} {case_name} {create_namelist} --dbg={debug}"
+        cmd = f"fvcom{model} {case_name} {create_namelist} --dbg={debug}"
 
         mpi_config = MPIConfig(version="4.1.6",
                                np=n_vcpus,
@@ -111,8 +111,8 @@ class FVCOM(simulators.Simulator):
         return super().run(input_dir,
                            on=on,
                            commands=commands,
-                           working_dir=working_dir,
                            storage_dir=storage_dir,
+                           run_subprocess_dir=working_dir,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            **kwargs)
