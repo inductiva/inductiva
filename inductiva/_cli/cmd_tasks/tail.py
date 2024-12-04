@@ -12,8 +12,7 @@ def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
     logging.getLogger().setLevel(level=logging.WARNING)
     task_id = args.id
     task = tasks.Task(task_id)
-    lines = asyncio.run(
-        task.tail_file(args.filename))
+    lines = asyncio.run(task.tail_file(args.filename))
     print(lines, file=fout)
     return 0
 
