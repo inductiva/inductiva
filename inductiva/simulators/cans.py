@@ -62,7 +62,7 @@ class CaNS(simulators.Simulator):
         commands = [
             Command(f"cans {sim_config_filename}", mpi_config=mpi_config)
         ]
-        
+
         return super().run(input_dir,
                            on=on,
                            commands=commands,

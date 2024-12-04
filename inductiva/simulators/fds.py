@@ -60,7 +60,10 @@ class FDS(simulators.Simulator):
                                np=n_vcpus,
                                use_hwthread_cpus=use_hwthread)
         commands = [
-            Command(f"/opt/fds/Build/ompi_gnu_linux/fds_ompi_gnu_linux {sim_config_filename}", mpi_config=mpi_config)
+            Command(
+                "/opt/fds/Build/ompi_gnu_linux/fds_ompi_gnu_linux "
+                f"{sim_config_filename}",
+                mpi_config=mpi_config)
         ]
 
         return super().run(input_dir,

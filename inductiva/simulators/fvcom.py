@@ -89,7 +89,7 @@ class FVCOM(simulators.Simulator):
         if model != "" and model.lower() != "estuary":
             raise ValueError(
                 f"Invalid model: {model}. Valid options are None or 'estuary'.")
-        
+
         if case_name:
             case_name = f"--CASENAME={case_name}"
 
@@ -104,9 +104,7 @@ class FVCOM(simulators.Simulator):
         mpi_config = MPIConfig(version="4.1.6",
                                np=n_vcpus,
                                use_hwthread_cpus=use_hwthread)
-        commands = [
-            Command(cmd, mpi_config=mpi_config)
-        ]
+        commands = [Command(cmd, mpi_config=mpi_config)]
 
         return super().run(input_dir,
                            on=on,
