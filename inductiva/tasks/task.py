@@ -1129,7 +1129,7 @@ class Task:
             download_task_files=self._api.download_task_input,
         )
 
-    async def file_operation(self, operation: Operations, **kwargs) -> str:
+    async def _file_operation(self, operation: Operations, **kwargs) -> str:
         """Perform file operations on the task that is currently running.
 
         Args:
@@ -1153,6 +1153,17 @@ class Task:
                                                  sep="\n",
                                                  endl="")
         return message
+    
+    async def list_files(self) -> str:
+        message =  await self.file_operation(Operations.LIST)
+        return self._format_directory_listing(message)
+    
+    async def tail_file(self, filename: str) -> str:
+        message = await self.file_operation(Operations.TAIL, filename=filename)
+        return self._format_list_of_lines(message,
+                                                 filename,
+                                                 sep="\n",
+                                                 endl="")
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""

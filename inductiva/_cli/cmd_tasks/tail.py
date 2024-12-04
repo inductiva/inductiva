@@ -13,7 +13,7 @@ def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
     lines = asyncio.run(
-        task.file_operation(tasks.Operations.TAIL, filename=args.filename))
+        task.tail_file(args.filename))
     print(lines, file=fout)
     return 0
 

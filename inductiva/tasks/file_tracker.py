@@ -32,8 +32,8 @@ class FileTracker:
         def on_open():
             request = operation.value
             if kwargs:
-                request += ":" + json.dumps(",".join(
-                    kwargs.values())).strip("\"")
+                request += ":" + ",".join(
+                    kwargs.values()).strip("\"")
             channel.send(request)
 
         @channel.on("message")

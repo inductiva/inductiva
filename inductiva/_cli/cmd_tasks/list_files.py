@@ -12,7 +12,7 @@ def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
     logging.getLogger().setLevel(level=logging.WARNING)
     task_id = args.id
     task = tasks.Task(task_id)
-    directories = asyncio.run(task.file_operation(tasks.Operations.LIST))
+    directories = asyncio.run(task.list_files())
     print(directories, file=fout)
     return 0
 
