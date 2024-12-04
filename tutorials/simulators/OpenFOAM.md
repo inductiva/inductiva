@@ -218,6 +218,29 @@ much more.
     task.print_summary()
     ```
 
+   ```bash
+   inductiva tasks info j416r4dv5u461ys7ovghp7so1
+
+   Task status: Success
+
+   Timeline:
+      Waiting for Input         at 25/09, 06:38:51      15.627 s
+      In Queue                  at 25/09, 06:39:06      18.72 s
+      Preparing to Compute      at 25/09, 06:39:25      2.45 s
+      In Progress               at 25/09, 06:39:28      145200.342 s
+      Finalizing                at 26/09, 22:59:28      1037.572 s
+      Success                   at 26/09, 23:16:46      
+
+   Data:
+      Size of zipped output:    24.76 GB
+      Size of unzipped output:  30.83 GB
+      Number of output files:   25585
+
+   Estimated computation cost (US$): 162.19 US$
+
+   Go to https://console.inductiva.ai/tasks/j416r4dv5u461ys7ovghp7so1 for more details.
+   ```
+
 ### Conclusion
 
 Running your simulation on a high-performance cloud machine can significantly
