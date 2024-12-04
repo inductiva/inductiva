@@ -21,7 +21,8 @@ class FileTracker:
     """File Tracker class for connecting to a running task via WebRTC."""
 
     def __init__(self):
-        self.pc = aiortc.RTCPeerConnection(aiortc.RTCConfiguration(iceServers=ICE_SERVERS))
+        self.pc = aiortc.RTCPeerConnection(
+            aiortc.RTCConfiguration(iceServers=ICE_SERVERS))
         self._message = None
 
     async def setup_channel(self, operation, **kwargs):
@@ -32,8 +33,7 @@ class FileTracker:
         def on_open():
             request = operation.value
             if kwargs:
-                request += ":" + ",".join(
-                    kwargs.values()).strip("\"")
+                request += ":" + ",".join(kwargs.values())
             channel.send(request)
 
         @channel.on("message")
@@ -65,7 +65,8 @@ class FileTracker:
         data = resp.body
         if data["type"] == "answer":
             await self.pc.setRemoteDescription(
-                aiortc.RTCSessionDescription(sdp=data["sdp"], type=data["type"]))
+                aiortc.RTCSessionDescription(sdp=data["sdp"],
+                                             type=data["type"]))
 
     async def cleanup(self):
         await self.pc.close()

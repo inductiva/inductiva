@@ -1144,26 +1144,17 @@ class Task:
         await file_tracker.connect_to_task(self._api, self.id)
         message = await future_message
         await file_tracker.cleanup()
-
-        if operation == Operations.LIST:
-            message = self._format_directory_listing(message)
-        elif operation == Operations.TAIL:
-            message = self._format_list_of_lines(message,
-                                                 kwargs.get("filename"),
-                                                 sep="\n",
-                                                 endl="")
         return message
-    
+
     async def list_files(self) -> str:
-        message =  await self.file_operation(Operations.LIST)
+        """List the files in the task's working directory."""
+        message = await self._file_operation(Operations.LIST)
         return self._format_directory_listing(message)
-    
+
     async def tail_file(self, filename: str) -> str:
-        message = await self.file_operation(Operations.TAIL, filename=filename)
-        return self._format_list_of_lines(message,
-                                                 filename,
-                                                 sep="\n",
-                                                 endl="")
+        """Get the last 10 lines of a file in the task's working directory."""
+        message = await self._file_operation(Operations.TAIL, filename=filename)
+        return self._format_list_of_lines(message, filename, sep="\n", endl="")
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
