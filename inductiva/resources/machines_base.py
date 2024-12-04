@@ -39,7 +39,7 @@ class BaseMachineGroup(ABC):
         provider: Union[machine_types.ProviderType, str] = "GCP",
         threads_per_core: int = 2,
         data_disk_gb: int = 10,
-        auto_resize_disk_max_gb: Optional[int] = None,
+        auto_resize_disk_max_gb: int = 500,
         max_idle_time: Optional[datetime.timedelta] = None,
         auto_terminate_ts: Optional[datetime.datetime] = None,
         register: bool = True,
