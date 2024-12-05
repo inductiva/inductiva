@@ -368,6 +368,20 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-virtualenv-or-venv-to-isolate-dependencies">Use virtualenv or venv to isolate dependencies</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unable-to-create-inductiva-exe">Unable to Create <code class="docutils literal notranslate"><span class="pre">inductiva.exe</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva-is-not-recognized"><code class="docutils literal notranslate"><span class="pre">inductiva</span></code> is Not Recognized</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Solution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#on-windows">On Windows:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#on-macos">On macOS:</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -389,6 +403,7 @@ some issues.</p>
 <p>If you find bugs, need help, or want to talk to the developers, reach out to us on
 support&#64;inductiva.ai</p>
 <p>If you find any security issues, please report to security&#64;inductiva.ai</p>
+<hr class="docutils" />
 <section id="installation-failures">
 <h2>Installation Failures<a class="headerlink" href="#installation-failures" title="Link to this heading">#</a></h2>
 <p>If you encounter issues installing the Inductiva API package, there are several
@@ -428,6 +443,114 @@ below:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">inductiva</span>
 </pre></div>
 </div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="unable-to-create-inductiva-exe">
+<h2>Unable to Create <code class="docutils literal notranslate"><span class="pre">inductiva.exe</span></code><a class="headerlink" href="#unable-to-create-inductiva-exe" title="Link to this heading">#</a></h2>
+<section id="problem">
+<h3>Problem<a class="headerlink" href="#problem" title="Link to this heading">#</a></h3>
+<p>You receive an error message like <code class="docutils literal notranslate"><span class="pre">unable</span> <span class="pre">to</span> <span class="pre">create</span> <span class="pre">inductiva.exe</span></code> when running
+<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">inductiva</span></code>. This issue is most common on Windows systems and
+typically occurs due to insufficient permissions to create the executable file.</p>
+</section>
+<section id="solution">
+<h3>Solution<a class="headerlink" href="#solution" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p><strong>Run the Command Prompt as Administrator</strong>:</p>
+<ul class="simple">
+<li><p>Right-click the Command Prompt application.</p></li>
+<li><p>Select <strong>Run as Administrator</strong> from the context menu.</p></li>
+</ul>
+</li>
+<li><p><strong>Retry the Installation</strong>:</p>
+<ul>
+<li><p>Once the Command Prompt is running with administrative privileges, rerun
+the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>inductiva
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="inductiva-is-not-recognized">
+<h2><code class="docutils literal notranslate"><span class="pre">inductiva</span></code> is Not Recognized<a class="headerlink" href="#inductiva-is-not-recognized" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>Problem<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>When attempting to run <code class="docutils literal notranslate"><span class="pre">inductiva</span></code>, you see the error:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;inductiva&#39;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">recognized</span> <span class="k">as</span> <span class="n">an</span> <span class="n">internal</span> <span class="ow">or</span> <span class="n">external</span> <span class="n">command</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>This happens for one of two reasons:</p>
+<ol class="arabic">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">inductiva.exe</span></code> file was not created successfully. (Refer to <a class="reference internal" href="#unable-to-create-inductiva-exe">Unable to Create <code class="docutils literal notranslate"><span class="pre">inductiva.exe</span></code></a>).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Scripts</span></code> folder from your Python installation directory is missing from
+your PATH environment variable. You might also see a warning like this during
+installation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">WARNING</span><span class="p">:</span> <span class="n">The</span> <span class="n">script</span> <span class="n">inductiva</span><span class="o">.</span><span class="n">exe</span> <span class="ow">is</span> <span class="n">installed</span> <span class="ow">in</span> <span class="s1">&#39;C:\path</span><span class="se">\t</span><span class="s1">o\python\Scripts&#39;</span> <span class="n">which</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">on</span> <span class="n">PATH</span><span class="o">.</span>
+  <span class="n">Consider</span> <span class="n">adding</span> <span class="n">this</span> <span class="n">directory</span> <span class="n">to</span> <span class="n">PATH</span> <span class="ow">or</span><span class="p">,</span> <span class="k">if</span> <span class="n">you</span> <span class="n">prefer</span> <span class="n">to</span> <span class="n">suppress</span> <span class="n">this</span> <span class="n">warning</span><span class="p">,</span> <span class="n">use</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">warn</span><span class="o">-</span><span class="n">script</span><span class="o">-</span><span class="n">location</span><span class="o">.</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="id2">
+<h3>Solution<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<section id="on-windows">
+<h4>On Windows:<a class="headerlink" href="#on-windows" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p><strong>Open System Properties</strong>:</p>
+<ul class="simple">
+<li><p>Press <code class="docutils literal notranslate"><span class="pre">Windows</span> <span class="pre">+</span> <span class="pre">R</span></code> to open the Run dialog.</p></li>
+<li><p>Type <code class="docutils literal notranslate"><span class="pre">sysdm.cpl</span></code> and click <strong>OK</strong>.</p></li>
+</ul>
+</li>
+<li><p><strong>Edit Environment Variables</strong>:</p>
+<ul class="simple">
+<li><p>Go to the <strong>Advanced</strong> tab and click <strong>Environment Variables</strong>.</p></li>
+<li><p>Under <strong>System variables</strong>, find the <code class="docutils literal notranslate"><span class="pre">PATH</span></code> variable and click <strong>Edit</strong>.</p></li>
+<li><p>Click <strong>New</strong> and add the path to the <code class="docutils literal notranslate"><span class="pre">Scripts</span></code> folder in your Python installation directory.<br />
+Example: <code class="docutils literal notranslate"><span class="pre">C:\path\to\python\Scripts</span></code></p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="on-macos">
+<h4>On macOS:<a class="headerlink" href="#on-macos" title="Link to this heading">#</a></h4>
+<ol class="arabic">
+<li><p><strong>Open Your Shell Profile</strong>:</p>
+<ul>
+<li><p>Open Terminal and edit your shell profile (e.g., <code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>nano<span class="w"> </span>~/.zshrc
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><strong>Add the Scripts Folder to the PATH Variable</strong>:</p>
+<ul>
+<li><p>Add the following line to the end of the file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;/path/to/python/Scripts:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p><strong>Restart Terminal</strong>:</p>
+<ul class="simple">
+<li><p>Restart your terminal for the changes to take effect.</p></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<div><p><strong>Note:</strong> Replace <code class="docutils literal notranslate"><span class="pre">/path/to/python/Scripts</span></code> with the actual path to the
+<code class="docutils literal notranslate"><span class="pre">Scripts</span></code> folder on your system. The actual path can be seen in the warning message.</p>
+</div></blockquote>
+</section>
 </section>
 </section>
 </section>
@@ -481,6 +604,20 @@ below:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation-failures">Installation Failures</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ensure-you-have-a-working-pip">Ensure you have a working pip</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-virtualenv-or-venv-to-isolate-dependencies">Use virtualenv or venv to isolate dependencies</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unable-to-create-inductiva-exe">Unable to Create <code class="docutils literal notranslate"><span class="pre">inductiva.exe</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inductiva-is-not-recognized"><code class="docutils literal notranslate"><span class="pre">inductiva</span></code> is Not Recognized</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Solution</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#on-windows">On Windows:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#on-macos">On macOS:</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
