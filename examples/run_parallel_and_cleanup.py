@@ -37,7 +37,7 @@ def run_script(file_path):
                                 capture_output=True,
                                 text=True,
                                 check=True)
-        # Write logs to the log file
+        # Write logs
         with open(log_file, "w", encoding="utf-8") as log:
             log.write(f"--- Output for {script_name} ---\n")
             log.write("STDOUT:\n")
