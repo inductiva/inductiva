@@ -1,31 +1,13 @@
 """Script to run all example files"""
 import os
-import subprocess
-import shutil
 import sys
+import shutil
+import argparse
+import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-#checks if we are in the examples directory
-if not os.path.basename(os.getcwd()) == "examples":
-    print("Run this script from the examples directory.")
-    sys.exit(1)
-# Parse command-line arguments
-if len(sys.argv) > 2:
-    print("Usage: python run_parallel_and_cleanup.py [max_threads]")
-    sys.exit(1)
 
-# Default to 2 threads if no argument is provided
-max_threads = int(sys.argv[1]) if len(sys.argv) == 2 else 4
-if max_threads <= 0:
-    print("Maximum number of threads must be a positive integer.")
-    sys.exit(1)
-
-# Define the log directory
-log_dir = "logs"
-os.makedirs(log_dir, exist_ok=True)
-
-
-def run_script(file_path):
+def run_script(file_path, log_dir="logs"):
     """Run a Python script and log its output to a file."""
     script_name = os.path.basename(file_path)
     log_file = os.path.join(log_dir, f"{script_name}.log")
@@ -80,9 +62,7 @@ def gather_python_files(path):
 def run_python_files(python_files, max_working_threads):
     """Run all Python files in parallel with a limit on active threads."""
     with ThreadPoolExecutor(max_workers=max_working_threads) as executor:
-        futures = [executor.submit(run_script, file) for file in python_files]
-        for future in as_completed(futures):
-            future.result()  # Wait for each script to complete
+        _ = list(executor.map(run_script, python_files))
 
 
 def delete_input_examples_from_folder(path):
@@ -95,20 +75,50 @@ def delete_input_examples_from_folder(path):
                 shutil.rmtree(dir_path)
 
 
-all_python_files = gather_python_files(".")
+def main():
 
-run_python_files(all_python_files, max_threads)
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(
+        description="Run scripts in parallel and clean up.")
+    parser.add_argument("max_threads",
+                        nargs="?",
+                        type=int,
+                        help="Maximum number of threads to use (default: 4)")
 
-delete_input_examples_from_folder(".")
+    args = parser.parse_args()
 
-shutil.rmtree("inductiva_output")
+    #checks if we are in the examples directory
+    if not os.path.basename(os.getcwd()) == "examples":
+        print("Run this script from the examples directory.")
+        sys.exit(1)
 
-print("All Python files have been executed with a thread limit of"
-      f" {max_threads}, and matching directories have been deleted.")
+    max_threads = args.max_threads
+    if max_threads is not None and max_threads <= 0:
+        print("Maximum number of threads must be a positive integer.")
+        sys.exit(1)
 
-#write this in red
-print("\033[91m"
-      "IMPORTANT: This script only runs the examples.\n"
-      "It does not check if the examples ended with success or failure.\n"
-      "Please check your tasks manually to ensure they completed successfully."
-      "\033[0m")
+    # Define the log directory
+    log_dir = "logs"
+    os.makedirs(log_dir, exist_ok=True)
+
+    all_python_files = gather_python_files(".")
+
+    run_python_files(all_python_files, max_threads)
+
+    delete_input_examples_from_folder(".")
+
+    shutil.rmtree("inductiva_output")
+
+    print("All Python files have been executed with a thread limit of"
+          f" {max_threads}, and matching directories have been deleted.")
+
+    #write this in red
+    print("\033[91m"
+          "IMPORTANT: This script only runs the examples.\n"
+          "It does not check if the examples ended with success or failure.\n"
+          "Please check your tasks manually to ensure they completed "
+          "successfully.\033[0m")
+
+
+if __name__ == "__main__":
+    sys.exit(main())
