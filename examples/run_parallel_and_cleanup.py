@@ -71,9 +71,9 @@ def gather_python_files(path):
     return python_files
 
 
-def run_python_files(python_files, max_threads):
+def run_python_files(python_files, max_working_threads):
     """Run all Python files in parallel with a limit on active threads."""
-    with ThreadPoolExecutor(max_workers=max_threads) as executor:
+    with ThreadPoolExecutor(max_workers=max_working_threads) as executor:
         futures = [executor.submit(run_script, file) for file in python_files]
         for future in as_completed(futures):
             future.result()  # Wait for each script to complete
