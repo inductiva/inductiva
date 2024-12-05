@@ -54,7 +54,7 @@ class OpenFOAM(simulators.Simulator):
             input_dir: Optional[str],
             *,
             commands: Optional[List[types.Commands]] = None,
-            bash_script: Optional[str] = None,
+            shell_script: Optional[str] = None,
             on: types.ComputationalResources,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
@@ -66,7 +66,7 @@ class OpenFOAM(simulators.Simulator):
             input_dir: Path to the directory of the simulation input files.
             on: The computational resource to launch the simulation on.
             commands: List of commands to run using the OpenFOAM simulator.
-            bash_script: Path to a bash script (relative to input_dir) to run
+            shell_script: Path to a shell script (relative to input_dir) to run
                 the simulation.
             resubmit_on_preemption (bool): Resubmit task for execution when
                 previous execution attempts were preempted. Only applicable when
@@ -76,15 +76,15 @@ class OpenFOAM(simulators.Simulator):
                 the simulation directory.
             other arguments: See the documentation of the base class.
         """
-        if not commands and not bash_script:
-            raise ValueError("Either 'commands' or 'bash_script'"
+        if not commands and not shell_script:
+            raise ValueError("Either 'commands' or 'shell_script'"
                              " must be provided.")
-        if commands and bash_script:
-            raise ValueError("Only one of 'commands' or 'bash_script'"
+        if commands and shell_script:
+            raise ValueError("Only one of 'commands' or 'shell_script'"
                              " must be provided.")
 
-        if bash_script:
-            commands = [f"bash {bash_script}"]
+        if shell_script:
+            commands = [f"bash {shell_script}"]
 
         return super().run(input_dir,
                            on=on,
