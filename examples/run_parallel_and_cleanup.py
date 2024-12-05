@@ -14,7 +14,6 @@ if len(sys.argv) > 2:
     print("Usage: python run_parallel_and_cleanup.py [max_threads]")
     sys.exit(1)
 
-
 # Default to 2 threads if no argument is provided
 max_threads = int(sys.argv[1]) if len(sys.argv) == 2 else 4
 if max_threads <= 0:
@@ -25,20 +24,19 @@ if max_threads <= 0:
 log_dir = "logs"
 os.makedirs(log_dir, exist_ok=True)
 
+
 # Function to run a Python script and log its output
 def run_script(file_path):
     script_name = os.path.basename(file_path)
     log_file = os.path.join(log_dir, f"{script_name}.log")
     print(f"Running {file_path}...")
-    
+
     try:
         # Run the script and capture stdout/stderr
-        result = subprocess.run(
-            ["python3", file_path],
-            capture_output=True,
-            text=True,
-            check=True
-        )
+        result = subprocess.run(["python3", file_path],
+                                capture_output=True,
+                                text=True,
+                                check=True)
         # Write logs to the log file
         with open(log_file, "w", encoding="utf-8") as log:
             log.write(f"--- Output for {script_name} ---\n")
@@ -57,12 +55,14 @@ def run_script(file_path):
             log.write(e.stderr + "\n")
         print(f"Error logs for {script_name} saved to {log_file}")
 
+
 # Step 1: Find all Python files, excluding this script
 current_script = os.path.basename(__file__)
 python_files = [
     os.path.join(root, file)
     for root, _, files in os.walk(".")
-    for file in files if file.endswith(".py") and file != current_script
+    for file in files
+    if file.endswith(".py") and file != current_script
 ]
 
 # Step 2: Run all scripts in parallel with a limit on active threads
