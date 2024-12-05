@@ -25,8 +25,8 @@ log_dir = "logs"
 os.makedirs(log_dir, exist_ok=True)
 
 
-# Function to run a Python script and log its output
 def run_script(file_path):
+    """Run a Python script and log its output to a file."""
     script_name = os.path.basename(file_path)
     log_file = os.path.join(log_dir, f"{script_name}.log")
     print(f"Running {file_path}...")
@@ -56,30 +56,45 @@ def run_script(file_path):
         print(f"Error logs for {script_name} saved to {log_file}")
 
 
-# Step 1: Find all Python files, excluding this script
-current_script = os.path.basename(__file__)
-python_files = [
-    os.path.join(root, file)
-    for root, _, files in os.walk(".")
-    for file in files
-    if file.endswith(".py") and file != current_script
-]
+def gather_python_files(path):
+    """Find all Python files in the given directory and its subdirectories.
+    
+    Excludes the current script from the list of files.
+    """
+    current_script = os.path.basename(__file__)
+    python_files = [
+        os.path.join(root, file)
+        for root, _, files in os.walk(path)
+        for file in files
+        if file.endswith(".py") and file != current_script
+    ]
+    return python_files
 
-# Step 2: Run all scripts in parallel with a limit on active threads
-with ThreadPoolExecutor(max_workers=max_threads) as executor:
-    futures = [executor.submit(run_script, file) for file in python_files]
-    for future in as_completed(futures):
-        future.result()  # Wait for each script to complete
 
-# Step 3: Delete folders matching "*input-example"
-for root, dirs, _ in os.walk(".", topdown=False):
-    for dir_name in dirs:
-        if dir_name.endswith("input-example"):
-            dir_path = os.path.join(root, dir_name)
-            print(f"Deleting directory {dir_path}...")
-            shutil.rmtree(dir_path)
+def run_python_files(python_files, max_threads):
+    """Run all Python files in parallel with a limit on active threads."""
+    with ThreadPoolExecutor(max_workers=max_threads) as executor:
+        futures = [executor.submit(run_script, file) for file in python_files]
+        for future in as_completed(futures):
+            future.result()  # Wait for each script to complete
 
-# Step 4: Delete inductiva_output folder
+
+def delete_input_examples_from_folder(path):
+    """Delete all directories named 'input-example' from the given path."""
+    for root, dirs, _ in os.walk(path, topdown=False):
+        for dir_name in dirs:
+            if dir_name.endswith("input-example"):
+                dir_path = os.path.join(root, dir_name)
+                print(f"Deleting directory {dir_path}...")
+                shutil.rmtree(dir_path)
+
+
+all_python_files = gather_python_files(".")
+
+run_python_files(all_python_files, max_threads)
+
+delete_input_examples_from_folder(".")
+
 shutil.rmtree("inductiva_output")
 
 print("All Python files have been executed with a thread limit of"
