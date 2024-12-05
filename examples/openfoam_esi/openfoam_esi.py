@@ -16,7 +16,7 @@ openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
 
 # Run simulation with config files in the input directory
 task = openfoam.run(input_dir=input_dir,
-                    bash_script="./Allrun",
+                    shell_script="./Allrun",
                     on=machine_group)
 
 task.wait()
