@@ -4,7 +4,7 @@ import sys
 import shutil
 import argparse
 import subprocess
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 
 
 def run_script(file_path, log_dir="logs"):
