@@ -37,23 +37,25 @@ def run_script(file_path):
                                 capture_output=True,
                                 text=True,
                                 check=True)
+        stdout = result.stdout
+        stderr = result.stderr
+        success = True
+    except subprocess.CalledProcessError as e:
+        stdout = e.stdout
+        stderr = e.stderr
+        success = False
+    finally:
         # Write logs
         with open(log_file, "w", encoding="utf-8") as log:
             log.write(f"--- Output for {script_name} ---\n")
             log.write("STDOUT:\n")
-            log.write(result.stdout + "\n")
+            log.write(stdout + "\n")
             log.write("STDERR:\n")
-            log.write(result.stderr + "\n")
-        print(f"Logs for {script_name} saved to {log_file}")
-    except subprocess.CalledProcessError as e:
-        # Handle errors and write to log
-        with open(log_file, "w", encoding="utf-8") as log:
-            log.write(f"--- Error running {script_name} ---\n")
-            log.write("STDOUT:\n")
-            log.write(e.stdout + "\n")
-            log.write("STDERR:\n")
-            log.write(e.stderr + "\n")
-        print(f"Error logs for {script_name} saved to {log_file}")
+            log.write(stderr + "\n")
+
+        status = "\033[92m✔" if success else "\033[91m✘"
+
+        print(f"{status} Logs for {script_name} saved to {log_file}\033[0m")
 
 
 def gather_python_files(path):
@@ -99,3 +101,10 @@ shutil.rmtree("inductiva_output")
 
 print("All Python files have been executed with a thread limit of"
       f" {max_threads}, and matching directories have been deleted.")
+
+#write this in red
+print("\033[91m"
+      "IMPORTANT: This script only runs the examples.\n"
+      "It does not check if the examples ended with success or failure.\n"
+      "Please check your tasks manually to ensure they completed successfully."
+      "\033[0m")
