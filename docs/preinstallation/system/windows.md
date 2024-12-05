@@ -13,6 +13,8 @@ If it’s missing, we’ll go over how to install it on Windows.
 1. **Open the Command Prompt** 
 	
     Click on the Windows icon in the bottom-left corner, type `Command Prompt`, and press **Enter** to open the Command Prompt app.
+
+    > **Note:** Open the Command Prompt as an administrator to avoid any permission issues. To do this, right-click on the Command Prompt app and select **Run as administrator**.
      
 2. **Check for Python 3**
     
