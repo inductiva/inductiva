@@ -31,6 +31,10 @@ def run_script(file_path):
     log_file = os.path.join(log_dir, f"{script_name}.log")
     print(f"Running {file_path}...")
 
+    stdout = ""
+    stderr = ""
+    success = False
+
     try:
         # Run the script and capture stdout/stderr
         result = subprocess.run(["python3", file_path],
