@@ -82,7 +82,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         For a mpi cluster with 2 machines, each with 4 vCPUs, this will
         return 8.
         """
-        
+
         return self.n_vcpus.total
 
     @classmethod

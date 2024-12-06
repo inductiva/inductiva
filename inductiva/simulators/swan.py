@@ -23,7 +23,7 @@ class SWAN(simulators.Simulator):
         """
         super().__init__(version=version, use_dev=use_dev)
         self.simulator = "arbitrary_commands"
-        self.simulator_name_alias = f"swan"
+        self.simulator_name_alias = "swan"
         self.container_image = self._get_image_uri()
 
     def run(
@@ -71,36 +71,50 @@ class SWAN(simulators.Simulator):
                              "(sim_config_filename) not provided.\n"
                              "When using 'swanrun' it is mandatory to provide "
                              "sim_config_filename.")
-        
+
         commands = []
+
+        path_config_filename = Path(sim_config_filename)
+        working_dir = path_config_filename.parent
+        config_file_only = path_config_filename.name
 
         # Swanrun uses internal MPI
         # we call apptainer run ... swanrun ... -mpi np
         if command == "swanrun":
-            machinefile_command = Command(f"echo 'localhost slots={on.available_vcpus}' > machinefile ")
-            commands.append(machinefile_command)
-            swanrun_command = Command(f"swanrun -input {sim_config_filename} -mpi {n_vcpus}")
+
+            
+            # machinefile_command = Command("dd if=/dev/stdin of=machinefile",f"localhostsdasda slots={on.available_vcpus}")
+            
+            # commands.append(machinefile_command)
+
+            commands.append(Command("ls"))
+            commands.append(Command("env"))
+
+            mpi_flag = f"-mpi {n_vcpus}" if n_vcpus else ""
+
+            swanrun_command = Command(
+                f"swanrun -input {config_file_only} {mpi_flag}")
             commands.append(swanrun_command)
 
         # we call mpirun ... apptainer ... Swan.exe
         # works with clusters
         elif command == "swan.exe":
 
-            mpi_config = MPIConfig(version="4.1.6",
-                               np=n_vcpus,
-                               use_hwthread_cpus=use_hwthread)
-            swan_exe_command = Command(f"amr_wind {sim_config_filename}", mpi_config=mpi_config)
+            kwargs = {}
+            if n_vcpus is not None:
+                kwargs['np'] = n_vcpus
+            kwargs['use_hwthread_cpus'] = use_hwthread
+
+            mpi_config = MPIConfig(version="4.1.6", **kwargs)
+            swan_exe_command = Command(f"swan.exe {sim_config_filename}",
+                                       mpi_config=mpi_config)
             commands.append(swan_exe_command)
-
-        path_config_filename = Path(sim_config_filename)
-
-        working_dir = path_config_filename.parent
 
         return super().run(input_dir,
                            on=on,
                            storage_dir=storage_dir,
-                           run_subprocess_dir=working_dir,
-                           use_hwthread=use_hwthread,
+                           commands=commands,
+                           run_subprocess_dir=str(working_dir),
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            **kwargs)

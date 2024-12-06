@@ -146,7 +146,7 @@ class BaseMachineGroup(ABC):
             cores_per_machine = (max_vcpus // max_instances) // 2
 
         return VCPUCount(max_vcpus, cores_per_machine)
-    
+
     @property
     def available_vcpus(self):
         """Returns the maximum number of vCPUs that can be used on a task.
