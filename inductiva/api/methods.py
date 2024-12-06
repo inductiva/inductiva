@@ -107,14 +107,11 @@ def get_upload_url(
 
 
 def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
-                file_server_available: bool, progress_bar: tqdm):
+                progress_bar: tqdm):
     """
     Handles the upload of a file, updating the provided progress bar.
     """
     headers = {"Content-Type": "application/octet-stream"}
-    if not file_server_available:
-        headers["X-API-Key"] = api_instance.api_client.configuration.api_key[
-            "APIKeyHeader"]
 
     with open(input_path, "rb") as zip_fp:
         wrapped_file = tqdm.utils.CallbackIOWrapper(progress_bar.update, zip_fp,
@@ -170,10 +167,8 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
 
         method = api_response["method"]
         url = api_response["url"]
-        file_server_available = bool(api_response["file_server_available"])
 
-        upload_file(api_instance, input_zip_path, method, url,
-                    file_server_available, progress_bar)
+        upload_file(api_instance, input_zip_path, method, url, progress_bar)
 
         notify_upload_complete(
             api_instance.notify_input_uploaded,
