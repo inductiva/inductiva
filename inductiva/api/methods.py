@@ -8,11 +8,10 @@ import time
 import tqdm
 import tqdm.utils
 import signal
-import pathlib
 import urllib3
 import decimal
 from contextlib import contextmanager
-from typing import Any, Dict, List, Optional, Tuple, Type
+from typing import Any, Dict, List, Optional, Type
 
 import logging
 
@@ -21,8 +20,7 @@ from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import TaskRequest, TaskStatus, TaskSubmittedInfo
 from inductiva import types, constants
-from inductiva.utils.data import (extract_output, get_validate_request_params,
-                                  pack_input)
+from inductiva.utils.data import (get_validate_request_params, pack_input)
 from inductiva.utils import format_utils, files
 
 
