@@ -655,9 +655,12 @@ class Task:
             status_start_time = datetime.datetime.fromisoformat(
                 task_info.status_history[-1]["timestamp"])
             description = task_info.status_history[-1].get("description", "")
+
             now_time = datetime.datetime.now(datetime.timezone.utc)
-            duration = format_utils.short_timedelta_formatter(now_time -
-                                                              status_start_time)
+            duration_timedelta = now_time - status_start_time
+            duration_timedelta = max(duration_timedelta, datetime.timedelta(0))
+            duration = format_utils.short_timedelta_formatter(
+                duration_timedelta)
 
             if status != prev_status:
                 if requires_newline:

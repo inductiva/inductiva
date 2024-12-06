@@ -55,7 +55,7 @@ Inductiva bucket.
 the OpenFOAM Foundation distribution.
 
 4. **Run the Simulation**: In the final step, we run the simulation using the
-`run` method, specifying the `bash_script` responsible for running the process.
+`run` method, specifying the `shell_script` responsible for running the process.
 
 The last three lines handle post-simulation tasks: waiting for the simulation
 to finish, downloading the outputs, and terminating the machine, in that order.
@@ -123,7 +123,7 @@ openfoam = inductiva.simulators.OpenFOAM(distribution="esi")
 
 task = openfoam.run(
             input_dir=input_dir,
-            bash_script="./Allrun",
+            shell_script="./Allrun",
             n_vcpus=180,
             use_hwthread=True,
             on=machine_group)
@@ -176,7 +176,7 @@ folder where all your simulation files are located.
 To run this simulation, simply execute the `Allrun` file by pointing to it like
 so:
    ```python
-    bash_script = "./Allrun"
+    shell_script = "./Allrun"
    ```
 
 #### c. Run your simulation
@@ -189,7 +189,7 @@ We now have all we need to run our simulation.
 
    task = openfoam.run(
                input_dir=input_dir,
-               bash_script="./Allrun",
+               shell_script="./Allrun",
                on=machine_group)
    ```
 
