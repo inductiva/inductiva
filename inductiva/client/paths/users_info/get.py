@@ -24,14 +24,14 @@ import frozendict  # noqa: F401
 
 from inductiva.client import schemas  # noqa: F401
 
-from inductiva.client.model.user_detail import UserDetail
+from inductiva.client.model.user import User
 
 from . import path
 
 _auth = [
     'APIKeyHeader',
 ]
-SchemaFor200ResponseBodyApplicationJson = UserDetail
+SchemaFor200ResponseBodyApplicationJson = User
 
 
 @dataclass

@@ -111,6 +111,7 @@ how_to/set-up-mpi-cluster
 how_to/manage-remote-storage
 how_to/manage_tasks
 how_to/manage_and_retrieve_results
+how_to/reuse-input-files
 
 ```
 
