@@ -185,42 +185,6 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     os.remove(input_zip_path)
 
 
-def download_output(
-        api_instance: TasksApi,
-        task_id,
-        output_dir: Optional[str] = None) -> Tuple[List, pathlib.Path]:
-    """Downloads the output of a given task from the API.
-
-    Args:
-        api_instance: Instance of TasksApi used to send necessary requests.
-        task_id: ID of the task.
-
-    Return:
-        Downloads and extracts the data to the client.
-    """
-
-    if output_dir is None:
-        output_dir = os.path.join(inductiva.get_output_dir(), task_id)
-
-    logging.info("Downloading the task %s outputs to %s...", task_id,
-                 output_dir)
-    try:
-        api_response = api_instance.download_task_output(
-            path_params={"task_id": task_id},
-            stream=True,
-        )
-    except ApiException as e:
-        raise e
-
-    logging.debug("Downloaded output to %s", api_response.body.name)
-
-    result_list = extract_output(api_response.body.name, output_dir)
-    logging.info("Task %s output successfully downloaded to %s.", task_id,
-                 output_dir)
-
-    return result_list, pathlib.Path(output_dir)
-
-
 def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
     """Block until a task executing remotely finishes execution.
 
