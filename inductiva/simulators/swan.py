@@ -100,8 +100,8 @@ class SWAN(simulators.Simulator):
 
             kwargs = {}
             if n_vcpus is not None:
-                kwargs['np'] = n_vcpus
-            kwargs['use_hwthread_cpus'] = use_hwthread
+                kwargs["np"] = n_vcpus
+            kwargs["use_hwthread_cpus"] = use_hwthread
 
             mpi_config = MPIConfig(version="4.1.6", **kwargs)
             swan_exe_command = Command(f"swan.exe {sim_config_filename}",
