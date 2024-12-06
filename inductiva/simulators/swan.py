@@ -82,13 +82,11 @@ class SWAN(simulators.Simulator):
         # we call apptainer run ... swanrun ... -mpi np
         if command == "swanrun":
 
-            
-            # machinefile_command = Command("dd if=/dev/stdin of=machinefile",f"localhostsdasda slots={on.available_vcpus}")
-            
-            # commands.append(machinefile_command)
+            machinefile_command = Command(
+                "dd if=/dev/stdin of=machinefile",
+                f"localhostsdasda slots={on.available_vcpus}")
 
-            commands.append(Command("ls"))
-            commands.append(Command("env"))
+            commands.append(machinefile_command)
 
             mpi_flag = f"-mpi {n_vcpus}" if n_vcpus else ""
 
