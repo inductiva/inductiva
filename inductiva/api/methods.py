@@ -8,11 +8,10 @@ import time
 import tqdm
 import tqdm.utils
 import signal
-import pathlib
 import urllib3
 import decimal
 from contextlib import contextmanager
-from typing import Any, Dict, List, Optional, Tuple, Type
+from typing import Any, Dict, List, Optional, Type
 
 import logging
 
@@ -21,8 +20,7 @@ from inductiva.client import ApiClient, ApiException, Configuration
 from inductiva.client.apis.tags.tasks_api import TasksApi
 from inductiva.client.models import TaskRequest, TaskStatus, TaskSubmittedInfo
 from inductiva import types, constants
-from inductiva.utils.data import (extract_output, get_validate_request_params,
-                                  pack_input)
+from inductiva.utils.data import (get_validate_request_params, pack_input)
 from inductiva.utils import format_utils, files
 
 
@@ -107,14 +105,11 @@ def get_upload_url(
 
 
 def upload_file(api_instance: ApiClient, input_path: str, method: str, url: str,
-                file_server_available: bool, progress_bar: tqdm):
+                progress_bar: tqdm):
     """
     Handles the upload of a file, updating the provided progress bar.
     """
     headers = {"Content-Type": "application/octet-stream"}
-    if not file_server_available:
-        headers["X-API-Key"] = api_instance.api_client.configuration.api_key[
-            "APIKeyHeader"]
 
     with open(input_path, "rb") as zip_fp:
         wrapped_file = tqdm.utils.CallbackIOWrapper(progress_bar.update, zip_fp,
@@ -170,10 +165,8 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
 
         method = api_response["method"]
         url = api_response["url"]
-        file_server_available = bool(api_response["file_server_available"])
 
-        upload_file(api_instance, input_zip_path, method, url,
-                    file_server_available, progress_bar)
+        upload_file(api_instance, input_zip_path, method, url, progress_bar)
 
         notify_upload_complete(
             api_instance.notify_input_uploaded,
@@ -183,42 +176,6 @@ def upload_input(api_instance: TasksApi, task_id, original_params,
     logging.info("Local input directory successfully uploaded.")
     logging.info("")
     os.remove(input_zip_path)
-
-
-def download_output(
-        api_instance: TasksApi,
-        task_id,
-        output_dir: Optional[str] = None) -> Tuple[List, pathlib.Path]:
-    """Downloads the output of a given task from the API.
-
-    Args:
-        api_instance: Instance of TasksApi used to send necessary requests.
-        task_id: ID of the task.
-
-    Return:
-        Downloads and extracts the data to the client.
-    """
-
-    if output_dir is None:
-        output_dir = os.path.join(inductiva.get_output_dir(), task_id)
-
-    logging.info("Downloading the task %s outputs to %s...", task_id,
-                 output_dir)
-    try:
-        api_response = api_instance.download_task_output(
-            path_params={"task_id": task_id},
-            stream=True,
-        )
-    except ApiException as e:
-        raise e
-
-    logging.debug("Downloaded output to %s", api_response.body.name)
-
-    result_list = extract_output(api_response.body.name, output_dir)
-    logging.info("Task %s output successfully downloaded to %s.", task_id,
-                 output_dir)
-
-    return result_list, pathlib.Path(output_dir)
 
 
 def block_until_finish(api_instance: TasksApi, task_id: str) -> str:
