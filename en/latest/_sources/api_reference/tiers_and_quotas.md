@@ -91,8 +91,7 @@ are only applicable to each item individually.
 
 > Tier basically defines which of the API functionalities are available to users, and which limits (quotas) are the users subject to.
 > There are multiple capabilities available in the Inductiva API, as well as several limits (quotas) on multiple computational aspects. 
-> These capabilities and quotas may change when you enroll in a certain campaign, such as Genesis.
-> Users can be enrolled in multiple campaigns, but they are assigned to just one Tier.
+> Users are assigned to just one Tier.
 
 ***What happens if a user tries accessing capabilities or resources that are not within their tier’s limits?***
 
@@ -113,17 +112,7 @@ Username: <username here>
 
 ■ Tier: Power-User
 
-■ Credits
-
-  Power-User (tier)               0.00
-  pioneer (campaign)          10000.00
-  ------------------------------------
-  Total                       10000.00
-
-■ Campaigns
-
- NAME      ENROLLMENT DATE     EXPIRY DATE        AVAILABLE CREDITS     INITIAL CREDITS
- pioneer   2024-02-06 11:40    2024-07-31 01:00   10000                 10000
+■ Credits: 1000.00 US$
 
 ■ Global User quotas
                                                                  CURRENT USAGE     MAX ALLOWED
