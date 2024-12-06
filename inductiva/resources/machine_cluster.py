@@ -83,7 +83,7 @@ class MPICluster(machines_base.BaseMachineGroup):
         return 8.
         """
 
-        return int(self.quota_usage["max_vcpus"])
+        return self.n_vcpus.total
 
     @classmethod
     def from_api_response(cls, resp: dict):
