@@ -1,7 +1,10 @@
 """SWAN module of the API."""
 from typing import List, Optional
+from pathlib import Path
 
 from inductiva import types, tasks, simulators
+from inductiva.commands.commands import Command
+from inductiva.commands.mpiconfig import MPIConfig
 
 
 @simulators.simulator.mpi_enabled
@@ -19,7 +22,9 @@ class SWAN(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.simulator = "swan"
+        self.simulator = "arbitrary_commands"
+        self.simulator_name_alias = f"swan"
+        self.container_image = self._get_image_uri()
 
     def run(
         self,
@@ -66,13 +71,35 @@ class SWAN(simulators.Simulator):
                              "(sim_config_filename) not provided.\n"
                              "When using 'swanrun' it is mandatory to provide "
                              "sim_config_filename.")
+        
+        commands = []
+
+        # Swanrun uses internal MPI
+        # we call apptainer run ... swanrun ... -mpi np
+        if command == "swanrun":
+            machinefile_command = Command(f"echo 'localhost slots={on.available_vcpus}' > machinefile ")
+            commands.append(machinefile_command)
+            swanrun_command = Command(f"swanrun -input {sim_config_filename} -mpi {n_vcpus}")
+            commands.append(swanrun_command)
+
+        # we call mpirun ... apptainer ... Swan.exe
+        # works with clusters
+        elif command == "swan.exe":
+
+            mpi_config = MPIConfig(version="4.1.6",
+                               np=n_vcpus,
+                               use_hwthread_cpus=use_hwthread)
+            swan_exe_command = Command(f"amr_wind {sim_config_filename}", mpi_config=mpi_config)
+            commands.append(swan_exe_command)
+
+        path_config_filename = Path(sim_config_filename)
+
+        working_dir = path_config_filename.parent
 
         return super().run(input_dir,
                            on=on,
-                           input_filename=sim_config_filename,
                            storage_dir=storage_dir,
-                           command=command,
-                           n_vcpus=n_vcpus,
+                           run_subprocess_dir=working_dir,
                            use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,

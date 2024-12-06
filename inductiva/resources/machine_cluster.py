@@ -82,8 +82,8 @@ class MPICluster(machines_base.BaseMachineGroup):
         For a mpi cluster with 2 machines, each with 4 vCPUs, this will
         return 8.
         """
-
-        return int(self.quota_usage["max_vcpus"])
+        
+        return self.n_vcpus.total
 
     @classmethod
     def from_api_response(cls, resp: dict):

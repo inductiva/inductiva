@@ -709,6 +709,18 @@ class Task:
                         " the kill command. Please try again later.") from exc
                 time.sleep(constants.TASK_KILL_RETRY_SLEEP_SEC)
 
+    def get_remote_output_path(self, file_path: str = None):
+        """Get the remote path for the output directory or a file in it.
+        Args:
+            file_path (str): Optional - the path to a file in the output dir.
+            If not provided, the output dir is returned. Used to point to a file
+            inside the output dir.
+        Returns:
+            The remote path to the output directory or file inside the output.
+        """
+        
+        return f"{self.id/{file_path}}"
+
     def _check_if_pending_kill(
             self,
             wait_timeout: Union[float,
