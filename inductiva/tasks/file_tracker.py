@@ -4,12 +4,16 @@ import json
 import uuid
 import enum
 import aiortc
+import logging
 
 # STUN/TURN server configuration
 ICE_SERVERS = [
     aiortc.RTCIceServer("stun:webrtc.inductiva.ai:3478"),
     aiortc.RTCIceServer("turn:webrtc.inductiva.ai:3478")
 ]
+
+aiortc_logger = logging.getLogger("aioice")
+aiortc_logger.setLevel(logging.WARNING)
 
 
 class Operations(enum.Enum):

@@ -9,7 +9,6 @@ from inductiva import _cli, tasks
 
 
 def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
-    logging.getLogger().setLevel(level=logging.WARNING)
     task_id = args.id
     task = tasks.Task(task_id)
     directories = asyncio.run(task.list_files())
