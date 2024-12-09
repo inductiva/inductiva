@@ -438,13 +438,9 @@ class Task:
 
         This method issues a request to the API.
         """
-        try:
-            resp = self._api.get_task_position_in_queue(self._get_path_params())
-            self._tasks_ahead = resp.body.get("tasks_ahead", None)
-            return self._tasks_ahead
-        except exceptions.ApiException as exc:
-            if exc.status == 404:
-                return None
+        _ = self.get_status()
+
+        return self._tasks_ahead
 
     def _get_last_n_lines_from_file(self, file_path: pathlib.Path,
                                     n: int) -> List[str]:
