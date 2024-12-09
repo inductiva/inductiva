@@ -237,8 +237,10 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
             run_kwargs = {"on": mock_mg}
             if resubmit_on_preemption is not None:
                 run_kwargs[resubmit_key] = resubmit_on_preemption
-            if sim_name == "OpenFOAM":
+            if sim_name == "OpenFOAM" or sim_name == "SWASH":
                 run_kwargs["commands"] = ["ls"]
+            if sim_name == "SWAN":
+                args = ("test_folder",)
 
             sim_obj.run(test_input_dir, *args, **run_kwargs)
 
