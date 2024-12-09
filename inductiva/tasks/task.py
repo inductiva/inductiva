@@ -1141,7 +1141,7 @@ class Task:
         """
         file_tracker = FileTracker()
         future_message = await file_tracker.setup_channel(operation, **kwargs)
-        if not (await file_tracker.connect_to_task(self._api, self.id)):
+        if not await file_tracker.connect_to_task(self._api, self.id):
             return "Failed to connect to the task."
         message = await future_message
         await file_tracker.cleanup()
