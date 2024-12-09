@@ -66,11 +66,17 @@ class FileTracker:
 
         resp = api.get_message(query_params={"client": connection_id},
                                path_params=path_params)
+
+        if resp.response.status == 204:
+            return False
+
         data = resp.body
         if data["type"] == "answer":
             await self.pc.setRemoteDescription(
                 aiortc.RTCSessionDescription(sdp=data["sdp"],
                                              type=data["type"]))
+
+        return True
 
     async def cleanup(self):
         await self.pc.close()

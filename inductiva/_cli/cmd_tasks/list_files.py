@@ -3,7 +3,6 @@ from typing import TextIO
 import argparse
 import sys
 import asyncio
-import logging
 
 from inductiva import _cli, tasks
 
