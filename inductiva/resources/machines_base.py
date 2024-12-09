@@ -140,7 +140,25 @@ class BaseMachineGroup(ABC):
         max_vcpus = int(self.quota_usage["max_vcpus"])
         max_instances = int(self.quota_usage["max_instances"])
 
-        return VCPUCount(max_vcpus, max_vcpus // max_instances)
+        # if threads per core is 2
+        cores_per_machine = max_vcpus // max_instances
+
+        if self.threads_per_core == 1:
+            cores_per_machine //= 2
+
+        return VCPUCount(cores_per_machine * max_instances, cores_per_machine)
+
+    @property
+    def available_vcpus(self):
+        """Returns the maximum number of vCPUs that can be used on a task.
+        
+        On a machine group with 2 machines, each with 4 vCPUs, this will return
+        4.
+        On an elastic machine group, this will also return 4.
+        On an MPI cluster this will return the total number of vcpus because
+        we can run on the total number of vcpus.
+        """
+        return self.n_vcpus.per_machine
 
     @property
     def name(self):
