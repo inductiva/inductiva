@@ -8,7 +8,6 @@ import inductiva.client
 from inductiva.client.model.task_status_code import TaskStatusCode
 
 import inductiva.client.paths
-from inductiva.client.paths.tasks_task_id_input.put import ApiResponseFor200
 
 import inductiva.client.paths.tasks_task_id_kill
 import inductiva.client.paths.tasks_task_id_kill.post
