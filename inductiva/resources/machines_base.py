@@ -140,12 +140,13 @@ class BaseMachineGroup(ABC):
         max_vcpus = int(self.quota_usage["max_vcpus"])
         max_instances = int(self.quota_usage["max_instances"])
 
-        if self.threads_per_core == 2:
-            cores_per_machine = max_vcpus // max_instances
-        else:
-            cores_per_machine = (max_vcpus // max_instances) // 2
+        # if threads per core is 2
+        cores_per_machine = max_vcpus // max_instances
 
-        return VCPUCount(max_vcpus, cores_per_machine)
+        if self.threads_per_core == 1:
+            cores_per_machine //= 2
+
+        return VCPUCount(cores_per_machine * max_instances, cores_per_machine)
 
     @property
     def available_vcpus(self):
