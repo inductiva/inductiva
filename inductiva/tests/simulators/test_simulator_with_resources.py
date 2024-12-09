@@ -180,6 +180,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
     # Some Mock classes
     class TaskApiMock:
         """Mock class for the TasksApi class."""
+
         def __init__(self, *_args, **_kwargs):
             pass
 
