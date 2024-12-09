@@ -5,7 +5,6 @@ from inductiva.client.apis.paths.tasks_auth import TasksAuth
 from inductiva.client.apis.paths.tasks_submit import TasksSubmit
 from inductiva.client.apis.paths.tasks_task_id_input_upload_url import TasksTaskIdInputUploadUrl
 from inductiva.client.apis.paths.tasks_task_id_input_uploaded import TasksTaskIdInputUploaded
-from inductiva.client.apis.paths.tasks_task_id_input import TasksTaskIdInput
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
@@ -13,7 +12,6 @@ from inductiva.client.apis.paths.tasks_task_id_position_in_queue import TasksTas
 from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
 from inductiva.client.apis.paths.tasks_task_id_download_input_url import TasksTaskIdDownloadInputUrl
 from inductiva.client.apis.paths.tasks_task_id_download_output_url import TasksTaskIdDownloadOutputUrl
-from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_resubmit import TasksTaskIdResubmit
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
@@ -66,7 +64,6 @@ from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
-from inductiva.client.apis.paths.storage_input import StorageInput
 from inductiva.client.apis.paths.storage_input_url import StorageInputUrl
 from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
@@ -99,8 +96,6 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdInputUploadUrl,
         PathValues.TASKS_TASK_ID_INPUT_UPLOADED:
             TasksTaskIdInputUploaded,
-        PathValues.TASKS_TASK_ID_INPUT:
-            TasksTaskIdInput,
         PathValues.TASKS_TASK_ID:
             TasksTaskId,
         PathValues.TASKS:
@@ -115,8 +110,6 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdDownloadInputUrl,
         PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
             TasksTaskIdDownloadOutputUrl,
-        PathValues.TASKS_TASK_ID_OUTPUT:
-            TasksTaskIdOutput,
         PathValues.TASKS_TASK_ID_RESUBMIT:
             TasksTaskIdResubmit,
         PathValues.TASKS_TASK_ID_KILL:
@@ -221,8 +214,6 @@ PathToApi = typing_extensions.TypedDict(
             StorageCost,
         PathValues.STORAGE_CONTENTS:
             StorageContents,
-        PathValues.STORAGE_INPUT:
-            StorageInput,
         PathValues.STORAGE_INPUT_URL:
             StorageInputUrl,
         PathValues.STORAGE_INPUT_NOTIFY:
@@ -276,8 +267,6 @@ path_to_api = PathToApi({
         TasksTaskIdInputUploadUrl,
     PathValues.TASKS_TASK_ID_INPUT_UPLOADED:
         TasksTaskIdInputUploaded,
-    PathValues.TASKS_TASK_ID_INPUT:
-        TasksTaskIdInput,
     PathValues.TASKS_TASK_ID:
         TasksTaskId,
     PathValues.TASKS:
@@ -292,8 +281,6 @@ path_to_api = PathToApi({
         TasksTaskIdDownloadInputUrl,
     PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
         TasksTaskIdDownloadOutputUrl,
-    PathValues.TASKS_TASK_ID_OUTPUT:
-        TasksTaskIdOutput,
     PathValues.TASKS_TASK_ID_RESUBMIT:
         TasksTaskIdResubmit,
     PathValues.TASKS_TASK_ID_KILL:
@@ -398,8 +385,6 @@ path_to_api = PathToApi({
         StorageCost,
     PathValues.STORAGE_CONTENTS:
         StorageContents,
-    PathValues.STORAGE_INPUT:
-        StorageInput,
     PathValues.STORAGE_INPUT_URL:
         StorageInputUrl,
     PathValues.STORAGE_INPUT_NOTIFY:
