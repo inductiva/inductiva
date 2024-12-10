@@ -18,7 +18,9 @@ class SplishSplash(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.simulator = "splishsplash"
+        self.simulator = "arbitrary_commands"
+        self.simulator_name_alias = "splishsplash"
+        self.container_image = self._get_image_uri()
 
     def run(
         self,
@@ -48,9 +50,15 @@ class SplishSplash(simulators.Simulator):
         Returns:
             Task object representing the simulation task.
         """
+
+        commands = [
+            "cp /SPlisHSPlasH_CPU/bin/SPHSimulator .",
+            f"./SPHSimulator {sim_config_filename} --no-gui --output-dir .",
+            "rm SPHSimulator"
+        ]
         return super().run(
             input_dir,
-            input_filename=sim_config_filename,
+            commands=commands,
             storage_dir=storage_dir,
             on=on,
             resubmit_on_preemption=resubmit_on_preemption,

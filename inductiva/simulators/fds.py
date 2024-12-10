@@ -3,6 +3,8 @@
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators
+from inductiva.commands.commands import Command
+from inductiva.commands.mpiconfig import MPIConfig
 
 
 class FDS(simulators.Simulator):
@@ -19,7 +21,9 @@ class FDS(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.simulator = "fds"
+        self.simulator = "arbitrary_commands"
+        self.simulator_name_alias = "fds"
+        self.container_image = self._get_image_uri()
 
     def run(self,
             input_dir: Optional[str],
@@ -28,7 +32,6 @@ class FDS(simulators.Simulator):
             on: types.ComputationalResources,
             n_vcpus: Optional[int] = None,
             use_hwthread: bool = True,
-            post_processing_filename: Optional[str] = None,
             storage_dir: Optional[str] = "",
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
@@ -52,13 +55,23 @@ class FDS(simulators.Simulator):
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
         """
+
+        kwargs["use_hwthread_cpus"] = use_hwthread
+        if n_vcpus is not None:
+            kwargs["np"] = n_vcpus
+
+        mpi_config = MPIConfig(version="4.1.6", **kwargs)
+        commands = [
+            Command(
+                "/opt/fds/Build/ompi_gnu_linux/fds_ompi_gnu_linux "
+                f"{sim_config_filename}",
+                mpi_config=mpi_config)
+        ]
+
         return super().run(input_dir,
                            on=on,
-                           input_filename=sim_config_filename,
-                           post_processing_config=post_processing_filename,
+                           commands=commands,
                            storage_dir=storage_dir,
-                           n_vcpus=n_vcpus,
-                           use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            **kwargs)
