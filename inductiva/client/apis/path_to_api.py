@@ -8,7 +8,6 @@ from inductiva.client.apis.paths.tasks_task_id_input_uploaded import TasksTaskId
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
-from inductiva.client.apis.paths.tasks_task_id_position_in_queue import TasksTaskIdPositionInQueue
 from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
 from inductiva.client.apis.paths.tasks_task_id_download_input_url import TasksTaskIdDownloadInputUrl
 from inductiva.client.apis.paths.tasks_task_id_download_output_url import TasksTaskIdDownloadOutputUrl
@@ -32,13 +31,26 @@ from inductiva.client.apis.paths.admin_groups_active import AdminGroupsActive
 from inductiva.client.apis.paths.admin_providers import AdminProviders
 from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvidersProviderId
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
-from inductiva.client.apis.paths.admin_executer_tracker_token import AdminExecuterTrackerToken
 from inductiva.client.apis.paths.admin_groups_machine_group_id_terminate import AdminGroupsMachineGroupIdTerminate
 from inductiva.client.apis.paths.admin_organizations import AdminOrganizations
 from inductiva.client.apis.paths.admin_organizations_organization_id import AdminOrganizationsOrganizationId
 from inductiva.client.apis.paths.admin_organizations_billing_report import AdminOrganizationsBillingReport
 from inductiva.client.apis.paths.admin_organizations_costs import AdminOrganizationsCosts
 from inductiva.client.apis.paths.admin_tiers import AdminTiers
+from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
+from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
+from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_message import TaskRunnerMachineIdTaskTaskIdMessage
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_message_unblock import TaskRunnerMachineIdTaskTaskIdMessageUnblock
+from inductiva.client.apis.paths.task_runner_machine_id_event import TaskRunnerMachineIdEvent
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_operation import TaskRunnerMachineIdTaskTaskIdOperation
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_operation_operation_id_done import TaskRunnerMachineIdTaskTaskIdOperationOperationIdDone
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_download_input_url import TaskRunnerMachineIdTaskTaskIdDownloadInputUrl
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_upload_output_url import TaskRunnerMachineIdTaskTaskIdUploadOutputUrl
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_metric import TaskRunnerMachineIdTaskTaskIdMetric
+from inductiva.client.apis.paths.task_runner_machine_id_resize_disk import TaskRunnerMachineIdResizeDisk
+from inductiva.client.apis.paths.task_runner_machine_id_resize_disk_done import TaskRunnerMachineIdResizeDiskDone
+from inductiva.client.apis.paths.task_runner_machine_id_download_urls import TaskRunnerMachineIdDownloadUrls
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
 from inductiva.client.apis.paths.executer_tracker_machine_id_task import ExecuterTrackerMachineIdTask
@@ -102,8 +114,6 @@ PathToApi = typing_extensions.TypedDict(
             Tasks,
         PathValues.TASKS_TASK_ID_STATUS:
             TasksTaskIdStatus,
-        PathValues.TASKS_TASK_ID_POSITION_IN_QUEUE:
-            TasksTaskIdPositionInQueue,
         PathValues.TASKS_TASK_ID_OUTPUT_LIST:
             TasksTaskIdOutputList,
         PathValues.TASKS_TASK_ID_DOWNLOAD_INPUT_URL:
@@ -150,8 +160,6 @@ PathToApi = typing_extensions.TypedDict(
             AdminProvidersProviderId,
         PathValues.ADMIN_ACTIVE_TASKS:
             AdminActiveTasks,
-        PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
-            AdminExecuterTrackerToken,
         PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
             AdminGroupsMachineGroupIdTerminate,
         PathValues.ADMIN_ORGANIZATIONS:
@@ -164,6 +172,34 @@ PathToApi = typing_extensions.TypedDict(
             AdminOrganizationsCosts,
         PathValues.ADMIN_TIERS:
             AdminTiers,
+        PathValues.TASKRUNNER_REGISTER:
+            TaskRunnerRegister,
+        PathValues.TASKRUNNER_MACHINE_ID:
+            TaskRunnerMachineId,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK:
+            TaskRunnerMachineIdTask,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_MESSAGE:
+            TaskRunnerMachineIdTaskTaskIdMessage,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
+            TaskRunnerMachineIdTaskTaskIdMessageUnblock,
+        PathValues.TASKRUNNER_MACHINE_ID_EVENT:
+            TaskRunnerMachineIdEvent,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_OPERATION:
+            TaskRunnerMachineIdTaskTaskIdOperation,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_OPERATION_OPERATION_ID_DONE:
+            TaskRunnerMachineIdTaskTaskIdOperationOperationIdDone,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
+            TaskRunnerMachineIdTaskTaskIdDownloadInputUrl,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
+            TaskRunnerMachineIdTaskTaskIdUploadOutputUrl,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_METRIC:
+            TaskRunnerMachineIdTaskTaskIdMetric,
+        PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK:
+            TaskRunnerMachineIdResizeDisk,
+        PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK_DONE:
+            TaskRunnerMachineIdResizeDiskDone,
+        PathValues.TASKRUNNER_MACHINE_ID_DOWNLOAD_URLS:
+            TaskRunnerMachineIdDownloadUrls,
         PathValues.EXECUTERTRACKER_REGISTER:
             ExecuterTrackerRegister,
         PathValues.EXECUTERTRACKER_MACHINE_ID:
@@ -273,8 +309,6 @@ path_to_api = PathToApi({
         Tasks,
     PathValues.TASKS_TASK_ID_STATUS:
         TasksTaskIdStatus,
-    PathValues.TASKS_TASK_ID_POSITION_IN_QUEUE:
-        TasksTaskIdPositionInQueue,
     PathValues.TASKS_TASK_ID_OUTPUT_LIST:
         TasksTaskIdOutputList,
     PathValues.TASKS_TASK_ID_DOWNLOAD_INPUT_URL:
@@ -321,8 +355,6 @@ path_to_api = PathToApi({
         AdminProvidersProviderId,
     PathValues.ADMIN_ACTIVE_TASKS:
         AdminActiveTasks,
-    PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
-        AdminExecuterTrackerToken,
     PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
         AdminGroupsMachineGroupIdTerminate,
     PathValues.ADMIN_ORGANIZATIONS:
@@ -335,6 +367,34 @@ path_to_api = PathToApi({
         AdminOrganizationsCosts,
     PathValues.ADMIN_TIERS:
         AdminTiers,
+    PathValues.TASKRUNNER_REGISTER:
+        TaskRunnerRegister,
+    PathValues.TASKRUNNER_MACHINE_ID:
+        TaskRunnerMachineId,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK:
+        TaskRunnerMachineIdTask,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_MESSAGE:
+        TaskRunnerMachineIdTaskTaskIdMessage,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
+        TaskRunnerMachineIdTaskTaskIdMessageUnblock,
+    PathValues.TASKRUNNER_MACHINE_ID_EVENT:
+        TaskRunnerMachineIdEvent,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_OPERATION:
+        TaskRunnerMachineIdTaskTaskIdOperation,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_OPERATION_OPERATION_ID_DONE:
+        TaskRunnerMachineIdTaskTaskIdOperationOperationIdDone,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
+        TaskRunnerMachineIdTaskTaskIdDownloadInputUrl,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
+        TaskRunnerMachineIdTaskTaskIdUploadOutputUrl,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_METRIC:
+        TaskRunnerMachineIdTaskTaskIdMetric,
+    PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK:
+        TaskRunnerMachineIdResizeDisk,
+    PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK_DONE:
+        TaskRunnerMachineIdResizeDiskDone,
+    PathValues.TASKRUNNER_MACHINE_ID_DOWNLOAD_URLS:
+        TaskRunnerMachineIdDownloadUrls,
     PathValues.EXECUTERTRACKER_REGISTER:
         ExecuterTrackerRegister,
     PathValues.EXECUTERTRACKER_MACHINE_ID:
