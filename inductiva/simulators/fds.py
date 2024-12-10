@@ -56,9 +56,11 @@ class FDS(simulators.Simulator):
                 `spot=True`.
         """
 
-        mpi_config = MPIConfig(version="4.1.6",
-                               np=n_vcpus,
-                               use_hwthread_cpus=use_hwthread)
+        kwargs["use_hwthread_cpus"] = use_hwthread
+        if n_vcpus is not None:
+            kwargs["np"] = n_vcpus
+
+        mpi_config = MPIConfig(version="4.1.6", **kwargs)
         commands = [
             Command(
                 "/opt/fds/Build/ompi_gnu_linux/fds_ompi_gnu_linux "

@@ -101,9 +101,11 @@ class FVCOM(simulators.Simulator):
 
         cmd = f"fvcom{model} {case_name} {create_namelist} --dbg={debug}"
 
-        mpi_config = MPIConfig(version="4.1.6",
-                               np=n_vcpus,
-                               use_hwthread_cpus=use_hwthread)
+        kwargs["use_hwthread_cpus"] = use_hwthread
+        if n_vcpus is not None:
+            kwargs["np"] = n_vcpus
+
+        mpi_config = MPIConfig(version="4.1.6", **kwargs)
         commands = [Command(cmd, mpi_config=mpi_config)]
 
         return super().run(input_dir,
