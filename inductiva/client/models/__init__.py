@@ -26,9 +26,6 @@ from inductiva.client.model.currency_code import CurrencyCode
 from inductiva.client.model.disk_resize_request import DiskResizeRequest
 from inductiva.client.model.dynamic_disk_resize_config import DynamicDiskResizeConfig
 from inductiva.client.model.executer import Executer
-from inductiva.client.model.executer_tracker_api_connection_info import ExecuterTrackerAPIConnectionInfo
-from inductiva.client.model.executer_tracker_register_info import ExecuterTrackerRegisterInfo
-from inductiva.client.model.executer_tracker_token import ExecuterTrackerToken
 from inductiva.client.model.file_download_details import FileDownloadDetails
 from inductiva.client.model.file_download_url import FileDownloadUrl
 from inductiva.client.model.file_info import FileInfo
@@ -71,6 +68,8 @@ from inductiva.client.model.task_operation import TaskOperation
 from inductiva.client.model.task_operation_name import TaskOperationName
 from inductiva.client.model.task_position_in_queue import TaskPositionInQueue
 from inductiva.client.model.task_request import TaskRequest
+from inductiva.client.model.task_runner_api_connection_info import TaskRunnerAPIConnectionInfo
+from inductiva.client.model.task_runner_register_info import TaskRunnerRegisterInfo
 from inductiva.client.model.task_status import TaskStatus
 from inductiva.client.model.task_status_code import TaskStatusCode
 from inductiva.client.model.task_status_info import TaskStatusInfo
