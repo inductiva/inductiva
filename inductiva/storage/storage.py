@@ -207,7 +207,6 @@ def upload(
         for response in api_response:
             method = response["method"]
             url = response["url"]
-            file_server_available = bool(response["file_server_available"])
             remote_file_path = response["file_path"]
 
             file_path = remote_file_path.removeprefix(f"{remote_dir}/")
@@ -215,7 +214,7 @@ def upload(
 
             try:
                 methods.upload_file(api_instance, local_file_path, method, url,
-                                    file_server_available, progress_bar)
+                                    progress_bar)
 
                 methods.notify_upload_complete(
                     api_instance.notify_upload_file,

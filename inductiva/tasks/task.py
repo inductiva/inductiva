@@ -438,13 +438,9 @@ class Task:
 
         This method issues a request to the API.
         """
-        try:
-            resp = self._api.get_task_position_in_queue(self._get_path_params())
-            self._tasks_ahead = resp.body.get("tasks_ahead", None)
-            return self._tasks_ahead
-        except exceptions.ApiException as exc:
-            if exc.status == 404:
-                return None
+        _ = self.get_status()
+
+        return self._tasks_ahead
 
     def _get_last_n_lines_from_file(self, file_path: pathlib.Path,
                                     n: int) -> List[str]:
@@ -655,9 +651,12 @@ class Task:
             status_start_time = datetime.datetime.fromisoformat(
                 task_info.status_history[-1]["timestamp"])
             description = task_info.status_history[-1].get("description", "")
+
             now_time = datetime.datetime.now(datetime.timezone.utc)
-            duration = format_utils.short_timedelta_formatter(now_time -
-                                                              status_start_time)
+            duration_timedelta = now_time - status_start_time
+            duration_timedelta = max(duration_timedelta, datetime.timedelta(0))
+            duration = format_utils.short_timedelta_formatter(
+                duration_timedelta)
 
             if status != prev_status:
                 if requires_newline:
@@ -933,7 +932,6 @@ class Task:
         zip_name: str,
         request_download_url: Callable,
         download_partial_files: Callable,
-        download_task_files: Callable,
     ) -> pathlib.Path:
         self._status = self.get_status()
 
@@ -947,12 +945,6 @@ class Task:
                 "The API did not return a download URL for the task files.")
 
         logging.debug("\nDownload URL: %s\n", download_url)
-
-        # If the file server (GCP, etc.) is not available, the Web API
-        # returns a fallback URL and returns the following flag as False.
-        # In this case, the output donwload will be provided by the Web API
-        # itself.
-        file_server_available = bool(response_body.get("file_server_available"))
 
         if dest_dir is None:
             dest_dir = self.id
@@ -970,11 +962,8 @@ class Task:
             download_message = "Downloading stdout and stderr files to %s..."
 
         if filenames:
-            if file_server_available:
-                logging.info(download_message, dir_path)
-                download_partial_files(download_url, filenames, dir_path)
-            else:
-                logging.error("Partial download is not available.")
+            logging.info(download_message, dir_path)
+            download_partial_files(download_url, filenames, dir_path)
 
             # If the user requested a partial download, the full download
             # will be skipped.
@@ -985,23 +974,13 @@ class Task:
         zip_path = dir_path.joinpath(zip_name)
         logging.info(download_message, zip_path)
 
-        if file_server_available:
-            pool_manager: urllib3.PoolManager = (
-                self._api.api_client.rest_client.pool_manager)
-            response = pool_manager.request(
-                "GET",
-                download_url,
-                preload_content=False,
-            )
-        # If the file server is not available, the download will be provided
-        # by the Web API. Therefore the standard method is used.
-        else:
-            api_response = download_task_files(
-                path_params=self._get_path_params(),
-                stream=True,
-                skip_deserialization=True,
-            )
-            response = api_response.response
+        pool_manager: urllib3.PoolManager = (
+            self._api.api_client.rest_client.pool_manager)
+        response = pool_manager.request(
+            "GET",
+            download_url,
+            preload_content=False,
+        )
 
         # use raw urllib3 response instead of the generated client response, to
         # implement our own download logic (with progress bar, first checking
@@ -1059,7 +1038,6 @@ class Task:
             zip_name="output.zip",
             request_download_url=self._request_download_output_url,
             download_partial_files=data.download_partial_outputs,
-            download_task_files=self._api.download_task_output,
         )
 
     def download_inputs(
@@ -1096,7 +1074,6 @@ class Task:
             zip_name="input.zip",
             request_download_url=self._request_download_input_url,
             download_partial_files=data.download_partial_inputs,
-            download_task_files=self._api.download_task_input,
         )
 
     class _PathParams(TypedDict):

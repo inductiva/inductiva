@@ -32,22 +32,22 @@ class FileDownloadDetails(schemas.DictSchema):
     class MetaOapg:
         required = {
             "file_path",
-            "file_server_available",
+            "unzip",
             "url",
         }
 
         class properties:
             url = schemas.StrSchema
-            file_server_available = schemas.BoolSchema
             file_path = schemas.StrSchema
+            unzip = schemas.BoolSchema
             __annotations__ = {
                 "url": url,
-                "file_server_available": file_server_available,
                 "file_path": file_path,
+                "unzip": unzip,
             }
 
     file_path: MetaOapg.properties.file_path
-    file_server_available: MetaOapg.properties.file_server_available
+    unzip: MetaOapg.properties.unzip
     url: MetaOapg.properties.url
 
     @typing.overload
@@ -58,14 +58,14 @@ class FileDownloadDetails(schemas.DictSchema):
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["file_server_available"]
-    ) -> MetaOapg.properties.file_server_available:
+        self, name: typing_extensions.Literal["file_path"]
+    ) -> MetaOapg.properties.file_path:
         ...
 
     @typing.overload
     def __getitem__(
-        self, name: typing_extensions.Literal["file_path"]
-    ) -> MetaOapg.properties.file_path:
+            self, name: typing_extensions.Literal["unzip"]
+    ) -> MetaOapg.properties.unzip:
         ...
 
     @typing.overload
@@ -74,8 +74,8 @@ class FileDownloadDetails(schemas.DictSchema):
 
     def __getitem__(self, name: typing.Union[typing_extensions.Literal[
         "url",
-        "file_server_available",
         "file_path",
+        "unzip",
     ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
@@ -88,14 +88,14 @@ class FileDownloadDetails(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["file_server_available"]
-    ) -> MetaOapg.properties.file_server_available:
+        self, name: typing_extensions.Literal["file_path"]
+    ) -> MetaOapg.properties.file_path:
         ...
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["file_path"]
-    ) -> MetaOapg.properties.file_path:
+            self, name: typing_extensions.Literal["unzip"]
+    ) -> MetaOapg.properties.unzip:
         ...
 
     @typing.overload
@@ -106,8 +106,8 @@ class FileDownloadDetails(schemas.DictSchema):
 
     def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
         "url",
-        "file_server_available",
         "file_path",
+        "unzip",
     ], str]):
         return super().get_item_oapg(name)
 
@@ -121,8 +121,8 @@ class FileDownloadDetails(schemas.DictSchema):
             MetaOapg.properties.file_path,
             str,
         ],
-        file_server_available: typing.Union[
-            MetaOapg.properties.file_server_available,
+        unzip: typing.Union[
+            MetaOapg.properties.unzip,
             bool,
         ],
         url: typing.Union[
@@ -139,7 +139,7 @@ class FileDownloadDetails(schemas.DictSchema):
             cls,
             *_args,
             file_path=file_path,
-            file_server_available=file_server_available,
+            unzip=unzip,
             url=url,
             _configuration=_configuration,
             **kwargs,

@@ -69,11 +69,6 @@ def main():
     parser = get_main_parser()
     args = parser.parse_args()
 
-    if _cli.utils.check_running_for_first_time():
-        answer = _cli.utils.user_autocompletion_install_prompt()
-        if answer:
-            _cli.utils.setup_zsh_autocompletion()
-
     exit_code = 0
     # Call the function associated with the subcommand
     if getattr(args, "watchable", False) and args.watch is not None:
