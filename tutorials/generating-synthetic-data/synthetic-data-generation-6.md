@@ -1,3 +1,14 @@
+---
+myst:
+  html_meta:
+    description: "This tutorial provides a step-by-step guide for benchmarking the synthetic data 
+    generation simulation using the Inductiva API. Learn how to configure and run benchmarks on various 
+    machine types from Google Cloud, analyze results, and visualize performance metrics for different 
+    computational setups."
+    keywords: "Inductiva API, Benchmarking, Performance, Metrics, Computation Time, Computation Cost,
+    Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH"
+---
+
 ## Steps for Benchmarking the Synthetic Data Generation Tutorial
 
 ### 1. Download the input files to your local directory (```download.py```)
