@@ -265,6 +265,6 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
 
 - Open [CSVPlot](https://www.csvplot.com/) and upload the exported CSV file containing the benchmark data.
 
-![plot](https://github.com/user-attachments/assets/3c67c387-e5ff-4745-9c9b-e39290d61ac5)
+![plot](../_static/how_to/plot-benchmark-results.png)
 
 - The best machine in terms of both computation time and cost is the ```c3-standard-44```, located at the bottom-left of the plot. This machine takes around 35 seconds and costs about $0.01, while the second-fastest machine, ```c3-standard-88```, takes the same amount of time but costs twice as much.
