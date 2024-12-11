@@ -127,6 +127,7 @@ generating-synthetic-data/synthetic-data-generation-2.md
 generating-synthetic-data/synthetic-data-generation-3.md
 generating-synthetic-data/synthetic-data-generation-4.md
 generating-synthetic-data/synthetic-data-generation-5.md
+generating-synthetic-data/synthetic-data-generation-6.md
 ```
 
 ```{toctree}
