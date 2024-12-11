@@ -9,9 +9,9 @@ myst:
     Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH"
 ---
 
-## Steps for Benchmarking the Synthetic Data Generation Tutorial
+# Steps for Benchmarking the Synthetic Data Generation Tutorial
 
-### 1. Download the input files to your local directory (```download.py```)
+## 1. Download the input files to your local directory (```download.py```)
 
 ```python
 import inductiva
@@ -22,7 +22,7 @@ inductiva.utils.files.download_from_url(
     unzip=True)
 ```
 
-### 2. Upload the input files to reuse them across multiple benchmark runs and avoid repeated input uploads (```upload.py``)
+## 2. Upload the input files to reuse them across multiple benchmark runs and avoid repeated input uploads (```upload.py``)
 
 ```python
 import inductiva
@@ -31,7 +31,7 @@ inductiva.storage.upload(local_path="splishsplash-base-dir",
                          remote_dir="splishsplash-input-dir")
 ```
 
-### 3. Configure and run the benchmark named ```Benchmark-SPlisHSPlasH-WaterCube``` across multiple machine groups from the ```c3``` and ```c2``` families, with varying numbers of vCPUs, and repeat each run twice (```run.py```)
+## 3. Configure and run the benchmark named ```Benchmark-SPlisHSPlasH-WaterCube``` across multiple machine groups from the ```c3``` and ```c2``` families, with varying numbers of vCPUs, and repeat each run twice (```run.py```)
 
 ```python
 import datetime
@@ -58,7 +58,7 @@ for machine_type in machine_types:
 benchmark.run(num_repeats=num_repeats)
 ```
 
-### 4. Export the benchmark data and metrics to a CSV file named ```Benchmark-SPlisHSPlasH-WaterCube.csv``` after ensuring all tasks have completed and all resources used for the benchmark have been terminated (```export.py```)
+## 4. Export the benchmark data and metrics to a CSV file named ```Benchmark-SPlisHSPlasH-WaterCube.csv``` after ensuring all tasks have completed and all resources used for the benchmark have been terminated (```export.py```)
 
 ```python
 from inductiva import benchmarks
@@ -69,9 +69,9 @@ benchmarks.Benchmark(name="Benchmark-SPlisHSPlasH-WaterCube") \
     .export(fmt="csv")
 ```
 
-### 5. Visualize the benchmark results:
+## 5. Visualize the benchmark results:
 
-#### 5.1. Markdown table: I used [this](https://tableconvert.com/csv-to-markdown) online tool to convert the CSV file into a Markdown table format.
+### 5.1. Markdown table: I used [this](https://tableconvert.com/csv-to-markdown) online tool to convert the CSV file into a Markdown table format.
 
 ```
 | machine_type    | estimated_computation_cost (US$) | computation_time (s) | task_id                   |
@@ -100,7 +100,7 @@ benchmarks.Benchmark(name="Benchmark-SPlisHSPlasH-WaterCube") \
 | c2-standard-16  | 0.004314695679                   | 55.172               | c6f0bbbcdpcb88eorsyvwvms2 |
 ```
 
-#### 5.2 Plot graph: I used [this](https://www.csvplot.com/) online tool to plot the benchmark results from the CSV file on a graph.
+### 5.2 Plot graph: I used [this](https://www.csvplot.com/) online tool to plot the benchmark results from the CSV file on a graph.
 
 <img width="1466" alt="plot-splishsplash-benchmark" src="https://github.com/user-attachments/assets/ca24639b-d0fc-4c0c-83b5-e8d96b9e587b">
 
