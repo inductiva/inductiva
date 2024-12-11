@@ -15,6 +15,9 @@ from inductiva.client.apis.paths.tasks_task_id_resubmit import TasksTaskIdResubm
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
 from inductiva.client.apis.paths.tasks_task_id_files import TasksTaskIdFiles
+from inductiva.client.apis.paths.tasks_task_id_register import TasksTaskIdRegister
+from inductiva.client.apis.paths.tasks_task_id_offer import TasksTaskIdOffer
+from inductiva.client.apis.paths.tasks_task_id_message import TasksTaskIdMessage
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
 from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
@@ -28,8 +31,6 @@ from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUse
 from inductiva.client.apis.paths.admin_users_username_capabilities import AdminUsersUsernameCapabilities
 from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.admin_groups_active import AdminGroupsActive
-from inductiva.client.apis.paths.admin_providers import AdminProviders
-from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvidersProviderId
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
 from inductiva.client.apis.paths.admin_groups_machine_group_id_terminate import AdminGroupsMachineGroupIdTerminate
 from inductiva.client.apis.paths.admin_organizations import AdminOrganizations
@@ -128,6 +129,12 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdDisableLogs,
         PathValues.TASKS_TASK_ID_FILES:
             TasksTaskIdFiles,
+        PathValues.TASKS_TASK_ID_REGISTER:
+            TasksTaskIdRegister,
+        PathValues.TASKS_TASK_ID_OFFER:
+            TasksTaskIdOffer,
+        PathValues.TASKS_TASK_ID_MESSAGE:
+            TasksTaskIdMessage,
         PathValues.ADMIN_USERS:
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -154,10 +161,6 @@ PathToApi = typing_extensions.TypedDict(
             AdminGroups,
         PathValues.ADMIN_GROUPS_ACTIVE:
             AdminGroupsActive,
-        PathValues.ADMIN_PROVIDERS:
-            AdminProviders,
-        PathValues.ADMIN_PROVIDERS_PROVIDER_ID:
-            AdminProvidersProviderId,
         PathValues.ADMIN_ACTIVE_TASKS:
             AdminActiveTasks,
         PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
@@ -323,6 +326,12 @@ path_to_api = PathToApi({
         TasksTaskIdDisableLogs,
     PathValues.TASKS_TASK_ID_FILES:
         TasksTaskIdFiles,
+    PathValues.TASKS_TASK_ID_REGISTER:
+        TasksTaskIdRegister,
+    PathValues.TASKS_TASK_ID_OFFER:
+        TasksTaskIdOffer,
+    PathValues.TASKS_TASK_ID_MESSAGE:
+        TasksTaskIdMessage,
     PathValues.ADMIN_USERS:
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -349,10 +358,6 @@ path_to_api = PathToApi({
         AdminGroups,
     PathValues.ADMIN_GROUPS_ACTIVE:
         AdminGroupsActive,
-    PathValues.ADMIN_PROVIDERS:
-        AdminProviders,
-    PathValues.ADMIN_PROVIDERS_PROVIDER_ID:
-        AdminProvidersProviderId,
     PathValues.ADMIN_ACTIVE_TASKS:
         AdminActiveTasks,
     PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
