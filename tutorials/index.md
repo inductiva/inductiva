@@ -8,7 +8,7 @@ by providing more detailed step-by-step explanations and instructions.
 
 ## Available Tutorials
 
-* [**Introduction to Inductiva API**](intro_to_api/how_it_works.md).
+* [**Introduction to Inductiva API**](https://docs.inductiva.ai/en/latest/intro_to_api/how_it_works.html).
 In this tutorial, we will give you a comprehensive overview of how
 the API works, explaining key concepts and how different components
 play together. If you never used the API before, we recommend you
