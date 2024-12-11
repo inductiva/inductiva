@@ -53,7 +53,6 @@ from inductiva.client.model.organization_users import OrganizationUsers
 from inductiva.client.model.output_archive_info import OutputArchiveInfo
 from inductiva.client.model.project import Project
 from inductiva.client.model.project_create import ProjectCreate
-from inductiva.client.model.provider import Provider
 from inductiva.client.model.providers import Providers
 from inductiva.client.model.quota import Quota
 from inductiva.client.model.quota_scope import QuotaScope
@@ -61,6 +60,7 @@ from inductiva.client.model.storage_cost import StorageCost
 from inductiva.client.model.storage_file_info import StorageFileInfo
 from inductiva.client.model.storage_sort_by import StorageSortBy
 from inductiva.client.model.task import Task
+from inductiva.client.model.task_connection import TaskConnection
 from inductiva.client.model.task_machine_operation import TaskMachineOperation
 from inductiva.client.model.task_metric_create import TaskMetricCreate
 from inductiva.client.model.task_metrics import TaskMetrics
