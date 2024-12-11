@@ -102,7 +102,7 @@ benchmarks.Benchmark(name="Benchmark-SPlisHSPlasH-WaterCube") \
 
 ### 5.2 Plot graph: I used [this](https://www.csvplot.com/) online tool to plot the benchmark results from the CSV file on a graph.
 
-<img width="1466" alt="plot-splishsplash-benchmark" src="https://github.com/user-attachments/assets/ca24639b-d0fc-4c0c-83b5-e8d96b9e587b">
+<img width="1466" alt="plot-splishsplash-benchmark" src="../_static/benchmark-machine-groups-performance-plot.png">
 
 #### 5.3 Analysis:
 
