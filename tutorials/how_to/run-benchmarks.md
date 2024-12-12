@@ -180,16 +180,19 @@ for machine_type in machine_types:
 benchmark.run(num_repeats=2)
 ```
 
-### Optimize the Benchmark Program
+### Optimizing the Benchmark Program
 
-Additionally, to reduce computation time and cost, we can optimize how 
-the benchmark program manages input files, machine resources, and execution 
-parameters. This step ensures the program runs efficiently while avoiding 
-unnecessary resource usage.
+We can optimize how the benchmark program manages input files, machine resources, 
+and execution parameters to reduce computation time and cost. This step ensures 
+the program runs efficiently while avoiding unnecessary resource usage.
 
 **1. Reuse Input Files Across Runs**
 
-Uploading input files for every run can waste time and resources. Instead, we upload the files once to a GCP bucket and reuse them for all subsequent runs. We’ve already covered this feature in detail in a tutorial on [How to Reuse Input Files Across Runs](reuse-input-files.md), so feel free to check it out for a detailed walkthrough.
+Uploading input files for every run can waste time and resources. Instead, we 
+upload the files once to a GCP bucket and reuse them for all subsequent runs. 
+We’ve already covered this feature in detail in a tutorial 
+on [How to Reuse Input Files Across Runs](reuse-input-files.md), so feel free 
+to check it out for a detailed walkthrough.
 
 **Upload Files to a GCP Bucket**
 
@@ -201,7 +204,8 @@ import inductiva
 inductiva.storage.upload(local_path="splishsplash-base-dir",
                          remote_dir="splishsplash-input-dir")
 ```
-This stores the input files in the `splishsplash-input-dir` bucket, making them accessible to all runs.
+This stores the input files in the `splishsplash-input-dir` bucket, making them 
+accessible to all runs.
 
 **Configure the Benchmark to Use Remote Files**
 
@@ -377,4 +381,5 @@ benchmark = benchmarks.Benchmark(name="splishsplash-fluid-cube") \
 
 ----
 
-With this step, your benchmark analysis is complete, and you now have the tools to continuously refine and expand your benchmarking experiments.
+With this step, your benchmark analysis is complete, and you now have the tools 
+to continuously refine and expand your benchmarking experiments.
