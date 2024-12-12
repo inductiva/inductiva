@@ -8,12 +8,6 @@ In this tutorial, we’ll show you how to use Inductiva’s API to run a benchma
 We’ll use the [SPlisHSPlasH simulator](https://tutorials.inductiva.ai/simulators/SPlisHSPlasH.html) 
 as an example, so you can follow along and learn the process step by step.
 
-We’ll benchmark the SPlisHSPlasH simulator across different machine types 
-available on Google Cloud Platform (GCP). Specifically, we’ll test the 
-performance of the `c2-standard` and `c3-standard` machine families with varying 
-numbers of vCPUs. We’ll also compare these results to other configurations, 
-such as `n2-standard-32`.
-
 The goal is to find the best machine that balances computation time and cost. 
 After running the benchmarks, we’ll analyze and visualize the results to make an 
 informed choice.
@@ -23,9 +17,9 @@ informed choice.
 In this tutorial, you’ll learn how to:
 
 - Download and prepare the necessary input files for the simulation.
-- Set up the benchmark, add multiple machine configurations, and execute the runs efficiently.
-- Reduce redundant uploads, parallelize runs, and minimize idle time to save computation time and costs.
-- Export the benchmark results to a CSV file, ensuring all resources are terminated before exporting.
+- Set up the benchmark.
+- Refine the code to reduce code redundancy and save benchmark costs.
+- Export the benchmark results.
 - Visualize and analyze results.
 
 Let’s dive in!
