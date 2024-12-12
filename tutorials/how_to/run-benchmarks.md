@@ -47,11 +47,35 @@ inductiva.utils.download_from_url(
 
 Now you’re set to proceed with setting up the benchmark!
 
-## Step 2: Configure and run the benchmark (```run.py```)
+## Step 2: Configure and Run the Benchmark
 
-- When initializing a benchmark, assign a name to the benchmark (e.g., ```splishsplash-fluid-cube```).
-- Add new runs by calling ```add_run```.
-- Execute the benchmark by calling ```run```, repeating each added run twice (i.e., ```num_repeats=2```).
+Now that we have the necessary input files, let’s set up and execute the benchmark. 
+We need to configure the benchmarking parameters, specify the machine types, and 
+run the benchmark multiple times to ensure reliable results.
+
+Here's a look at the process:
+
+**1- Identify the Benchmark** 
+
+Use ```benchmarks.Benchmark()``` to assign a name to the benchmark (e.g., ```splishsplash-fluid-cube```) *This name helps you track the benchmark results.*
+
+**2- Add Simulation Runs**
+
+Add individual runs using the ```.add_run()``` method.
+
+For each run, specify:
+- Simulator: The `simulators.SplishSplash()` simulator for fluid dynamics.
+- Input Directory: Path to the input files ("splishsplash-base-dir") downloaded in Step 1.
+- Configuration File: Use the `config.json` file to define simulation parameters.
+- Machine Type: Specify the machine type and configuration (e.g., `c2-standard-4`, `c3-standard-44`) using `resources.MachineGroup`.
+
+**3- Run the Benchmark** 
+
+Use `.run(num_repeats=2)` to execute all added runs, repeating each one twice. 
+*Repeating runs helps ensure consistent and reliable performance metrics.*
+
+The following code example demonstrates the setup for testing `c2-standard` and 
+`c3-standard` machines:
 
 ```python
 from inductiva import benchmarks, simulators, resources
@@ -104,9 +128,15 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
     .run(num_repeats=2)
 ```
 
-### Enhance the **readability** of the benchmark program
+## Step 3: Enhance Data Readability
 
-- Reduce lines of code, improve readability, and avoid code duplication by calling ```set_default```.
+As we add more machine types to the benchmark, the code can become repetitive and overwhelming. We need to sort the data out to make it easier to read and to ensure the benchmark setup remains concise, clear, and adaptable.
+
+### Simplifying the Code with `set_default`
+
+To make it cleaner and easier to manage, we can use the `set_default` method to define shared parameters like the simulator, input directory, and configuration file in one place. This reduces duplication and improves readability.
+
+Here’s the updated code:
 
 ```python
 from inductiva import benchmarks, simulators, resources
@@ -129,7 +159,11 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
     .run(num_repeats=2)
 ```
 
-- Create a list of machine types, then use a ```for``` loop to initialize the machine groups and add the new runs to the benchmark.
+### Using a `for` Loop for Machine Types
+
+To simplify even further, we can define a list of machine types and use a `for` loop to programmatically add runs. This not only reduces the number of lines but also makes it easier to scale if more machine types are added later.
+
+Here’s the updated code with a loop:
 
 ```python
 from inductiva import benchmarks, simulators, resources
@@ -150,10 +184,17 @@ for machine_type in machine_types:
 benchmark.run(num_repeats=2)
 ```
 
-### Optimize the benchmark program to minimize computation time and cost
+## Step 4: Optimize the Benchmark Program
 
-- Avoid uploading the input files to each run by uploading them only once using the ```remote_assets``` parameter. This way, the input files are stored in a GCP bucket and reused on every simulation added to the benchmark.
-- Begin by uploading the input files to a GCP bucket.
+To reduce computation time and cost, we can optimize how the benchmark program manages input files, machine resources, and execution parameters. This step ensures the program runs efficiently while avoiding unnecessary resource usage.
+
+**1. Reuse Input Files Across Runs**
+
+Uploading input files for every run can waste time and resources. Instead, we upload the files once to a GCP bucket and reuse them for all subsequent runs.
+
+**Upload Files to a GCP Bucket**
+
+Use the `inductiva.storage.upload` function to upload the input files to a GCP bucket:
 
 ```python
 import inductiva
@@ -161,9 +202,11 @@ import inductiva
 inductiva.storage.upload(local_path="splishsplash-base-dir",
                          remote_dir="splishsplash-input-dir")
 ```
+This stores the input files in the `splishsplash-input-dir` bucket, making them accessible to all runs.
 
-- Next, reuse the uploaded files on each run by passing the ```remote_assets``` argument to the ```set_default``` method.
-- Remove the ```input_dir``` parameter from the ```set_default``` method.
+**Configure the Benchmark to Use Remote Files**
+
+Update the benchmark configuration to use the uploaded files by specifying the `remote_assets` parameter in `set_default`. Remove the `input_dir` parameter since the files are now accessed remotely:
 
 ```python
 from inductiva import benchmarks, simulators, resources
@@ -184,9 +227,9 @@ for machine_type in machine_types:
 benchmark.run(num_repeats=2)
 ```
 
-- Speed up the benchmark execution by parallelizing the repetitions on each machine.
-- For each machine group, set the number of machines to the number of repetitions (i.e., ```num_machines=num_repeats```)
-- The repetitions of the simulations on each machine group will then run in parallel.
+**2. Parallelize Benchmark Execution**
+
+To speed up benchmark execution, run multiple repetitions in parallel by setting the `num_machines` parameter equal to the number of repetitions (`num_repeats`). Each machine in the group will handle one repetition:
 
 ```python
 from inductiva import benchmarks, simulators, resources
@@ -209,9 +252,11 @@ for machine_type in machine_types:
 
 benchmark.run(num_repeats=num_repeats)
 ```
+This ensures simulations are distributed across multiple machines, significantly reducing runtime.
 
-- Reduce the maximum idle time of each resource to avoid wasting computational resources and, as a result, decrease the benchmark cost (i.e., ```max_idle_time = datetime.timedelta(seconds=30)```).
-- Be aware that decreasing the maximum idle time may cause an error if there isn't enough time to submit the simulations.
+**3. Minimize Idle Time**
+
+Idle resources increase costs. To avoid this, set a maximum idle time for each machine to avoid wasting computational resources and, as a result, decrease the benchmark cost. Here’s how to configure it with `max_idle_time`:
 
 ```python
 import datetime
@@ -238,6 +283,7 @@ for machine_type in machine_types:
 
 benchmark.run(num_repeats=num_repeats)
 ```
+**Note:** Reducing idle time too much may cause errors if the simulations cannot be submitted quickly enough. Adjust the value based on your setup.
 
 ## Step 3: Export the benchmark data to a file (```export.py```)
 
