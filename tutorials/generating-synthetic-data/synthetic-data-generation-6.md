@@ -9,7 +9,24 @@ myst:
     Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH"
 ---
 
-# Steps for Benchmarking the Synthetic Data Generation Tutorial
+# Benchmark Computational Resources
+
+In the previous step of this tutorial, we used Inductiva’s templating mechanism to 
+transform the configuration files for our base case simulation into a generalized 
+file, allowing programmatic changes to key parameters. These parameters included 
+dimensions, initial position and velocity of the fluid block, as well as the density 
+and viscosity of the fluid itself, essential elements that define the core physical 
+properties of the simulation. 
+
+Additionally, we generalized certain hyperparameters, such as the ***particle radius***, 
+which influence the simulation’s fidelity and performance.
+
+So, besides the need to assess the impact of the hyperparameters in the 
+computational cost of the simulation, we will also need to see if we can 
+optimize the machine type. When selecting the right machine types for 
+computational tasks, balancing speed and cost is crucial. In this step, 
+we explore the performance and cost-efficiency of various machine types, 
+focusing on how computation time scales with the number of virtual CPUs (vCPUs).
 
 ## 1. Download the input files to your local directory (```download.py```)
 
