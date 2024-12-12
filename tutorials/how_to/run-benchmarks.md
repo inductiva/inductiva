@@ -285,10 +285,29 @@ benchmark.run(num_repeats=num_repeats)
 ```
 **Note:** Reducing idle time too much may cause errors if the simulations cannot be submitted quickly enough. Adjust the value based on your setup.
 
-## Step 3: Export the benchmark data to a file (```export.py```)
+## Step 5: Export the Benchmark Data to a File
 
-- Export the metrics for the benchmark called ```"splishsplash-fluid-cube"``` into a CSV file named ```"benchmark.csv"```, filtering for only the successful tasks (```status="success"```) and selecting only the attributes and metrics that vary with each run (```select="distinct"```).
-- To ensure that all benchmark-related tasks are completed and all resources used during the benchmark are terminated, call ```wait()``` and ```terminate()```, in that order.
+Once the benchmark is complete, you’ll want to save the results for analysis. In this step, we’ll export the benchmark data to a CSV file. Additionally, we’ll ensure all benchmark-related tasks are finished and resources are properly terminated.
+
+**2- Exporting the Benchmark Data**
+
+The benchmark results can be exported to a file using the `export` method. This allows you to filter the data and customize the output format. 
+
+For this example, we’ll:
+
+1. Export the results of the benchmark named `splishsplash-fluid-cube`.
+2. Save only successful tasks (`status="success"`).
+3. Include only attributes and metrics that vary between runs (`select="distinct"`).
+4. Save the results in a file named `benchmark.csv`.
+
+**2- Completing the Benchmark Process**
+
+Before exporting the data, it’s important to ensure:
+
+1. All benchmark-related tasks are completed using the `wait()` method.
+2. All resources used during the benchmark are terminated to avoid unnecessary charges by calling `terminate()`.
+
+Here’s the full code:
 
 ```python
 from inductiva import benchmarks
