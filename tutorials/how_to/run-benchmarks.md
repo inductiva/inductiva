@@ -20,11 +20,14 @@ informed choice.
 
 ## What You’ll Learn
 
-1. How to set up a benchmark using Inductiva’s API.
-2. How to configure and execute benchmarks with different machine types.
-3. How to analyze the results to optimize your simulations.
+In this tutorial, you’ll learn how to:
 
-By the end, you’ll know how to use benchmarks to optimize your computational resources. 
+1. Download and prepare the necessary input files for the simulation.
+2. Set up the benchmark, add multiple machine configurations, and execute the runs efficiently.
+3. Reduce redundant uploads, parallelize runs, and minimize idle time to save computation time and costs.
+4. Export the benchmark results to a CSV file, ensuring all resources are terminated before exporting.
+5. Visualize and analyze results.
+6. Extend the benchmark by testing additional machine types for further optimization.
 
 Let’s dive in!
 
@@ -128,7 +131,7 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
     .run(num_repeats=2)
 ```
 
-## Step 3: Enhance Data Readability
+## Step 3: Refine the Code to Improve Data Readability
 
 As we add more machine types to the benchmark, the code can become repetitive and overwhelming. We need to sort the data out to make it easier to read and to ensure the benchmark setup remains concise, clear, and adaptable.
 
@@ -190,7 +193,7 @@ To reduce computation time and cost, we can optimize how the benchmark program m
 
 **1. Reuse Input Files Across Runs**
 
-Uploading input files for every run can waste time and resources. Instead, we upload the files once to a GCP bucket and reuse them for all subsequent runs.
+Uploading input files for every run can waste time and resources. Instead, we upload the files once to a GCP bucket and reuse them for all subsequent runs. We’ve already covered this feature in detail in a tutorial on [How to Reuse Input Files Across Runs](reuse-input-files.md), so feel free to check it out for a detailed walkthrough.
 
 **Upload Files to a GCP Bucket**
 
