@@ -22,12 +22,11 @@ informed choice.
 
 In this tutorial, you’ll learn how to:
 
-1. Download and prepare the necessary input files for the simulation.
-2. Set up the benchmark, add multiple machine configurations, and execute the runs efficiently.
-3. Reduce redundant uploads, parallelize runs, and minimize idle time to save computation time and costs.
-4. Export the benchmark results to a CSV file, ensuring all resources are terminated before exporting.
-5. Visualize and analyze results.
-6. Extend the benchmark by testing additional machine types for further optimization.
+- Download and prepare the necessary input files for the simulation.
+- Set up the benchmark, add multiple machine configurations, and execute the runs efficiently.
+- Reduce redundant uploads, parallelize runs, and minimize idle time to save computation time and costs.
+- Export the benchmark results to a CSV file, ensuring all resources are terminated before exporting.
+- Visualize and analyze results.
 
 Let’s dive in!
 
@@ -131,7 +130,7 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
     .run(num_repeats=2)
 ```
 
-## Step 3: Refine the Code to Improve Data Readability
+## Step 3: Refine the Code
 
 As we add more machine types to the benchmark, the code can become repetitive and overwhelming. We need to sort the data out to make it easier to read and to ensure the benchmark setup remains concise, clear, and adaptable.
 
@@ -187,9 +186,12 @@ for machine_type in machine_types:
 benchmark.run(num_repeats=2)
 ```
 
-## Step 4: Optimize the Benchmark Program
+### Optimize the Benchmark Program
 
-To reduce computation time and cost, we can optimize how the benchmark program manages input files, machine resources, and execution parameters. This step ensures the program runs efficiently while avoiding unnecessary resource usage.
+Additionally, to reduce computation time and cost, we can optimize how 
+the benchmark program manages input files, machine resources, and execution 
+parameters. This step ensures the program runs efficiently while avoiding 
+unnecessary resource usage.
 
 **1. Reuse Input Files Across Runs**
 
@@ -288,13 +290,17 @@ benchmark.run(num_repeats=num_repeats)
 ```
 **Note:** Reducing idle time too much may cause errors if the simulations cannot be submitted quickly enough. Adjust the value based on your setup.
 
-## Step 5: Export the Benchmark Data to a File
+## Step 4: Export the Benchmark Data to a File
 
-Once the benchmark is complete, you’ll want to save the results for analysis. In this step, we’ll export the benchmark data to a CSV file. Additionally, we’ll ensure all benchmark-related tasks are finished and resources are properly terminated.
+Once the benchmark is complete, you’ll want to save the results for analysis. 
+In this step, we’ll export the benchmark data to a CSV file. Additionally, 
+we’ll ensure all benchmark-related tasks are finished and resources are properly 
+terminated.
 
-**2- Exporting the Benchmark Data**
+**1- Exporting the Benchmark Data**
 
-The benchmark results can be exported to a file using the `export` method. This allows you to filter the data and customize the output format. 
+The benchmark results can be exported to a file using the `export` method. 
+This allows you to filter the data and customize the output format. 
 
 For this example, we’ll:
 
@@ -308,7 +314,8 @@ For this example, we’ll:
 Before exporting the data, it’s important to ensure:
 
 1. All benchmark-related tasks are completed using the `wait()` method.
-2. All resources used during the benchmark are terminated to avoid unnecessary charges by calling `terminate()`.
+2. All resources used during the benchmark are terminated to avoid unnecessary 
+charges by calling `terminate()`.
 
 Here’s the full code:
 
@@ -324,7 +331,7 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
             filename="benchmark.csv")
 ```
 
-## Step 6: Visualize and Analyze the Benchmark Results
+## Step 5: Visualize and Analyze the Benchmark Results
 
 After exporting the benchmark results, the next step is to analyze the data to determine the best machine configuration based on computation time and cost.
 
