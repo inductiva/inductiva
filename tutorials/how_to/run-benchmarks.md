@@ -8,6 +8,16 @@ In this tutorial, we’ll show you how to use Inductiva’s API to run a benchma
 We’ll use the [SPlisHSPlasH simulator](https://tutorials.inductiva.ai/simulators/SPlisHSPlasH.html) 
 as an example, so you can follow along and learn the process step by step.
 
+We’ll benchmark the SPlisHSPlasH simulator across different machine types 
+available on Google Cloud Platform (GCP). Specifically, we’ll test the 
+performance of the `c2-standard` and `c3-standard` machine families with varying 
+numbers of vCPUs. We’ll also compare these results to other configurations, 
+such as `n2-standard-32`.
+
+The goal is to find the best machine that balances computation time and cost. 
+After running the benchmarks, we’ll analyze and visualize the results to make an 
+informed choice.
+
 ## What You’ll Learn
 
 1. How to set up a benchmark using Inductiva’s API.
@@ -18,11 +28,14 @@ By the end, you’ll know how to use benchmarks to optimize your computational r
 
 Let’s dive in!
 
-## Use Case:
+## Step 1: Download the Files
 
-The user wants to benchmark the **SplishSplash** simulator across different machine types available on GCP. The simulation is explained [here](https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-1.html#learning-complex-physics-a-practical-study). Specifically, the user plans to benchmark the ```c2-standard``` and ```c3-standard``` machine families with varying numbers of vCPUs. Later, the user decides to explore whether there's a significant performance difference with other machine types, such as ```n2-standard-32```. The goal is to identify the best machine, balancing the trade-off between computation time and cost. After completing the benchmark, the user intends to visualize the results to select the most optimal machine based on this trade-off.
+Before we start benchmarking, we need to download the necessary input files 
+for the SPlisHSPlasH simulator. These files include the configuration and 
+assets required to run the simulations.
 
-## Step 1: Download the files (```download.py```)
+The code snippet below downloads the required simulation files to your working 
+directory: 
 
 ```python3
 import inductiva
@@ -31,6 +44,8 @@ inductiva.utils.download_from_url(
     url="https://tutorials.inductiva.ai/_static/generating-synthetic-data/splishsplash-base-dir.zip",
     unzip=True)
 ```
+
+Now you’re set to proceed with setting up the benchmark!
 
 ## Step 2: Configure and run the benchmark (```run.py```)
 
