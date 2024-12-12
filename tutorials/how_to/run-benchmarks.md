@@ -33,7 +33,7 @@ assets required to run the simulations.
 The code snippet below downloads the required simulation files to your working 
 directory: 
 
-```python3
+```python
 import inductiva
 
 inductiva.utils.download_from_url(
