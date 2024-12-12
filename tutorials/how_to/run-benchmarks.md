@@ -321,19 +321,37 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
             filename="benchmark.csv")
 ```
 
-## Step 4: Choose a visualization tool to analyze the benchmark results
+## Step 6: Visualize and Analyze the Benchmark Results
 
-- Open [CSVPlot](https://www.csvplot.com/) and upload the exported CSV file containing the benchmark data.
+After exporting the benchmark results, the next step is to analyze the data to determine the best machine configuration based on computation time and cost.
+
+### Visualizing the Results
+
+You can use a tool like [CSVPlot](https://www.csvplot.com/) to upload and visualize the exported CSV file. Follow these steps:
+
+1. Open the [CSVPlot](https://www.csvplot.com/) website.
+2. Upload the benchmark.csv file containing the results.
+3. Generate a plot to compare computation time and cost for each machine type.
+
+### Key Insights from the Plot
 
 ![plot](../_static/how_to/plot-benchmark-results.png)
 
-- The best machine in terms of both computation time and cost is the ```c3-standard-44```, located at the bottom-left of the plot. This machine takes around 35 seconds and costs about $0.01, while the second-fastest machine, ```c3-standard-88```, takes the same amount of time but costs twice as much.
+- The `c3-standard-44` machine is the best in terms of both computation time and cost.
+- It takes approximately 35 seconds and costs $0.01.
+- The `c3-standard-88` machine takes the same amount of time but costs twice as much.
 
-## Extra: Add another GCP instance to the benchmark for comparison with the previously added instances
+## Bonus: Adding a New Machine for Comparison
 
-- The user can add new runs later if desired.
-- Recreate the benchmark using the same name (i.e., ```splishsplash-fluid-cube```).
-- Add a new run execution for the ```n2-standard-32``` machine type (i.e., ```machine_type="n2-standard-32"```) and execute only this run twice.
+You may decide to test additional machines after completing the initial benchmark. For instance, let’s add the `n2-standard-32` machine to the existing benchmark and execute only this run.
+
+**Steps to Add a New Machine**
+
+1. Recreate the benchmark using the same name (`splishsplash-fluid-cube`).
+2. Add a new run for the `n2-standard-32` machine type.
+3. Set `num_repeats=2` to execute the run twice.
+
+Here’s the code:
 
 ```python
 import datetime
@@ -352,3 +370,7 @@ benchmark = benchmarks.Benchmark(name="splishsplash-fluid-cube") \
                                        max_idle_time=max_idle_time)) \
     .run(num_repeats=num_repeats)
 ```
+
+----
+
+With this step, your benchmark analysis is complete, and you now have the tools to continuously refine and expand your benchmarking experiments.
