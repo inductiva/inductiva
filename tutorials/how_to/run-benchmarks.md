@@ -128,7 +128,9 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
 
 As we add more machine types to the benchmark, the code can become repetitive and overwhelming. We need to sort the data out to make it easier to read and to ensure the benchmark setup remains concise, clear, and adaptable.
 
-### Simplifying the Code with `set_default`
+### Improve Data Readability
+
+#### 1. Simplifying the Code with `set_default`
 
 To make it cleaner and easier to manage, we can use the `set_default` method to define shared parameters like the simulator, input directory, and configuration file in one place. This reduces duplication and improves readability.
 
@@ -155,7 +157,7 @@ benchmarks.Benchmark(name="splishsplash-fluid-cube") \
     .run(num_repeats=2)
 ```
 
-### Using a `for` Loop for Machine Types
+#### 2. Using a `for` Loop for Machine Types
 
 To simplify even further, we can define a list of machine types and use a `for` loop to programmatically add runs. This not only reduces the number of lines but also makes it easier to scale if more machine types are added later.
 
@@ -208,22 +210,14 @@ This stores the input files in the `splishsplash-input-dir` bucket, making them 
 Update the benchmark configuration to use the uploaded files by specifying the `remote_assets` parameter in `set_default`. Remove the `input_dir` parameter since the files are now accessed remotely:
 
 ```python
-from inductiva import benchmarks, simulators, resources
+# ...
 
 benchmark = benchmarks.Benchmark(name="splishsplash-fluid-cube") \
     .set_default(simulator=simulators.SplishSplash(),
                  sim_config_filename="config.json",
                  remote_assets=["splishsplash-input-dir"])
 
-machine_types = ["c2-standard-4", "c2-standard-8", "c2-standard-16",
-                 "c2-standard-30", "c2-standard-60", "c3-standard-4",
-                 "c3-standard-8", "c3-standard-22", "c3-standard-44",
-                 "c3-standard-88", "c3-standard-176"]
-
-for machine_type in machine_types:
-    benchmark.add_run(on=resources.MachineGroup(machine_type))
-
-benchmark.run(num_repeats=2)
+# ...
 ```
 
 **2. Parallelize Benchmark Execution**
@@ -231,17 +225,7 @@ benchmark.run(num_repeats=2)
 To speed up benchmark execution, run multiple repetitions in parallel by setting the `num_machines` parameter equal to the number of repetitions (`num_repeats`). Each machine in the group will handle one repetition:
 
 ```python
-from inductiva import benchmarks, simulators, resources
-
-benchmark = benchmarks.Benchmark(name="splishsplash-fluid-cube") \
-    .set_default(simulator=simulators.SplishSplash(),
-                 sim_config_filename="config.json",
-                 remote_assets=["splishsplash-input-dir"])
-
-machine_types = ["c2-standard-4", "c2-standard-8", "c2-standard-16",
-                 "c2-standard-30", "c2-standard-60", "c3-standard-4",
-                 "c3-standard-8", "c3-standard-22", "c3-standard-44",
-                 "c3-standard-88", "c3-standard-176"]
+# ...
 
 num_repeats = 2
 
@@ -249,13 +233,31 @@ for machine_type in machine_types:
     benchmark.add_run(on=resources.MachineGroup(machine_type=machine_type,
                                                 num_machines=num_repeats))
 
-benchmark.run(num_repeats=num_repeats)
+
+# ...
 ```
 This ensures simulations are distributed across multiple machines, significantly reducing runtime.
 
 **3. Minimize Idle Time**
 
 Idle resources increase costs. To avoid this, set a maximum idle time for each machine to avoid wasting computational resources and, as a result, decrease the benchmark cost. Here’s how to configure it with `max_idle_time`:
+
+```python
+# ...
+
+max_idle_time = datetime.timedelta(seconds=30)
+
+for machine_type in machine_types:
+    benchmark.add_run(on=resources.MachineGroup(machine_type=machine_type,
+                                                num_machines=num_repeats,
+                                                max_idle_time=max_idle_time))
+
+# ...
+```
+
+**Note:** Reducing idle time too much may cause errors if the simulations cannot be submitted quickly enough. Adjust the value based on your setup.
+
+Here is the final, optimized, and refactored version of the benchmark program:
 
 ```python
 import datetime
@@ -282,7 +284,6 @@ for machine_type in machine_types:
 
 benchmark.run(num_repeats=num_repeats)
 ```
-**Note:** Reducing idle time too much may cause errors if the simulations cannot be submitted quickly enough. Adjust the value based on your setup.
 
 ## Step 4: Export the Benchmark Data to a File
 
