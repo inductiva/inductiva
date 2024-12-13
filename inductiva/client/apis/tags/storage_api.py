@@ -9,6 +9,9 @@
 """
 
 from inductiva.client.paths.storage_.delete import DeleteFile
+from inductiva.client.paths.storage_export.post import ExportFiles
+from inductiva.client.paths.storage_operations_operation_id.get import GetOperation
+from inductiva.client.paths.storage_operations.get import GetOperationsByUser
 from inductiva.client.paths.storage_cost.get import GetStorageMonthlyCost
 from inductiva.client.paths.storage_size.get import GetStorageSize
 from inductiva.client.paths.storage_input_url.get import GetUploadUrl
@@ -19,6 +22,9 @@ from inductiva.client.paths.storage_input_remote.post import UploadFromUrl
 
 class StorageApi(
         DeleteFile,
+        ExportFiles,
+        GetOperation,
+        GetOperationsByUser,
         GetStorageMonthlyCost,
         GetStorageSize,
         GetUploadUrl,
