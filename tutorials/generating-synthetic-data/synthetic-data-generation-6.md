@@ -28,7 +28,12 @@ computational tasks, balancing speed and cost is crucial. In this step,
 we explore the performance and cost-efficiency of various machine types, 
 focusing on how computation time scales with the number of virtual CPUs (vCPUs).
 
-## 1. Download the input files to your local directory (```download.py```)
+## 1. Download the Input Files (```download.py```)
+
+First, we need to download the necessary input files. This step is needed because the benchmark requires specific data to 
+simulate the **WaterCube** environment. The code snippet uses the ```download_from_url``` method to download and unzip the 
+required files directly into your local directory. You can skip this step if you already have the input files in your local 
+directory.
 
 ```python
 import inductiva
