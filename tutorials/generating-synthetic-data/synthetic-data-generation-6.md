@@ -58,7 +58,13 @@ inductiva.storage.upload(local_path="splishsplash-base-dir",
                          remote_dir="splishsplash-input-dir")
 ```
 
-## 3. Configure and run the benchmark named ```Benchmark-SPlisHSPlasH-WaterCube``` across multiple machine groups from the ```c3``` and ```c2``` families, with varying numbers of vCPUs, and repeat each run twice (```run.py```)
+## 3. Configure and Run the Benchmark (```run.py```)
+
+Now comes the core of the benchmarking process: configuring the benchmark with the desired settings and running it across 
+multiple machine types. In this step, you will define the benchmark parameters, such as the simulator used, the simulation 
+configuration file, and the remote assets (i.e., the input files you just uploaded). The benchmark is configured to run 
+across a range of machine families, from the less powerful ```c2-standard``` machine types to the more powerful ```c3``` 
+machine types, each with varying numbers of vCPUs. Each run is repeated twice to ensure reliable and consistent results.
 
 ```python
 import datetime
