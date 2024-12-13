@@ -44,7 +44,12 @@ inductiva.utils.files.download_from_url(
     unzip=True)
 ```
 
-## 2. Upload the input files to reuse them across multiple benchmark runs and avoid repeated input uploads (```upload.py``)
+## 2. Upload the Input Files (```upload.py``)
+
+Once the input files are downloaded, it's a good idea to upload them to a remote storage location. This step prevents you 
+from having to re-upload the input files every time you execute a run during the benchmark, which can save time (e.g., 
+reduces setup time) when you're executing multiple runs (i.e., simulations). In other words, uploading the files ensures that 
+they can be accessed across different benchmark runs and it also helps manage resources more efficiently.
 
 ```python
 import inductiva
