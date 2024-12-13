@@ -24,9 +24,24 @@ which influence the simulation’s fidelity and performance.
 So, besides the need to assess the impact of the hyperparameters in the 
 computational cost of the simulation, we will also need to see if we can 
 optimize the machine type. When selecting the right machine types for 
-computational tasks, balancing speed and cost is crucial. In this step, 
-we explore the performance and cost-efficiency of various machine types, 
-focusing on how computation time scales with the number of virtual CPUs (vCPUs).
+computational tasks, balancing speed and cost is crucial.
+
+Inductiva’s computation is currently on Google Cloud VMs, and there are dozens of options available at different costs. 
+GCP makes available VMs from multiple family types, e.g. ```c2```, ```c2d```, ```c3```, etc . Different VM families run on
+different physical hardware, with different CPUs, RAM specs, motherboards, etc.
+
+Some simulation software was written to benefit from running on some specific hardware types, so their performance may change
+significantly from one VM family to another. In some cases, running simulations on less expensive VMs may actually lead to
+better performance than using more expensive VMs, as we'll see later in this benchmark.
+
+Also, VMs come with a configurable number of vCPUs, which can go from mere 4 vCPUs to several dozens or hundreds as is the 
+case of ```c2d``` and ```c3d``` machines. Typically, the more vCPUs you use the faster your simulation runs, but obviously, 
+since scaling is never linear, there is a sweet spot. Again, using a machine with a a larger number of vCPU may not pay off 
+since the efficiency of the parallelization decreases and, so the price you pay rises faster than the speed up benefits you 
+collect, as demonstrated later in the benchmark results.
+
+Here, we explore the performance and cost-efficiency of various machine types, focusing on how computation time 
+scales with the number of virtual CPUs (vCPUs). Follow these steps using the Inductiva API to reproduce the benchmark results.
 
 ## 1. Download the Input Files (```download.py```)
 
