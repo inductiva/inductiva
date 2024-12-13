@@ -93,6 +93,11 @@ benchmark.run(num_repeats=num_repeats)
 
 ## 4. Export the benchmark data and metrics to a CSV file named ```Benchmark-SPlisHSPlasH-WaterCube.csv``` after ensuring all tasks have completed and all resources used for the benchmark have been terminated (```export.py```)
 
+After running the benchmark program, the next step is to export the results for analysis. This step stores a record of the 
+benchmark performance in a structured format, such as CSV, which can be easily analyzed, shared, and visualized -- essential 
+for future comparisons or optimizations. Before exporting the results, you can also wait for any running tasks and ensure 
+that any resources used during the benchmark are properly terminated, avoiding unnecessary costs.
+
 ```python
 from inductiva import benchmarks
 
