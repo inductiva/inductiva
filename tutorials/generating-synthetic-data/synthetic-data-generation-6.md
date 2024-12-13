@@ -102,9 +102,15 @@ benchmarks.Benchmark(name="Benchmark-SPlisHSPlasH-WaterCube") \
     .export(fmt="csv")
 ```
 
-## 5. Visualize the benchmark results:
+## 5. Visualize the Benchmark Results
 
-### 5.1. Markdown table: I used [this](https://tableconvert.com/csv-to-markdown) online tool to convert the CSV file into a Markdown table format.
+Finally, the benchmark results are ready to be analyzed and visualized. In this step, we turn the raw CSV data into a more 
+readable format, either as a table or a plot, to better understand the performance metrics.
+
+### 5.1. Markdown Table:
+
+The first way to visualize the data is by converting the CSV into a Markdown table. This provides a clean, readable summary 
+of the results, helping you compare different machine types side-by-side. You can use [this](https://tableconvert.com/csv-to-markdown) online tool to convert the CSV file into a Markdown table format.
 
 ```
 | machine_type    | estimated_computation_cost (US$) | computation_time (s) | task_id                   |
@@ -133,14 +139,29 @@ benchmarks.Benchmark(name="Benchmark-SPlisHSPlasH-WaterCube") \
 | c2-standard-16  | 0.004314695679                   | 55.172               | c6f0bbbcdpcb88eorsyvwvms2 |
 ```
 
-### 5.2 Plot graph: I used [this](https://www.csvplot.com/) online tool to plot the benchmark results from the CSV file on a graph.
+### 5.2 Plot Graph
+
+In addition to the table, you may also want to visualize the data in the form of a plot. This graph makes it easier to 
+analyze the performance across different machine groups, such as which machine type delivers the best cost-to-performance 
+ratio or which configuration takes the longest time to execute. You can use [this](https://www.csvplot.com/) online tool to 
+plot the benchmark results from the CSV file on a graph.
 
 <img width="1466" alt="plot-splishsplash-benchmark" src="../_static/benchmark-machine-groups-performance-plot.png">
 
-#### 5.3 Analysis:
+### 5.3 Analysis:
 
-- The best machine types in terms of computation cost and computation time are ```c3-standard-44``` and ```c3-standard-22```, with the latter being slightly slower but more cost-effective -- positioned in the leftmost bottom corner of the plot. They take 35 and 40 seconds, respectively, and cost $0.01 and $0.005 each.
+Finally, by observing the graph, we can easily identify which machine types provide the best balance between computation time 
+and cost for this specific simulation use case. Here are the key takeaways:
 
-- The speedup in terms of execution time levels off at 44 vCPUs. The ```c3-standard-88``` takes the same computation time as the ```c3-standard-44``` (around 36 seconds) but costs twice as much ($0.02 compared to $0.01, respectively). An even clearer indication of this plateau in speedup is that the most powerful machine, the ```c3-standard-176```, is actually slower than an older-generation machine with far fewer vCPUs, the ```c2-standard-30``` (around 49 seconds vs. 45 seconds, respectively). Moreover, it costs 10 times more ($0.06 vs. $0.006).
+- The best machine types in terms of computation cost and computation time are ```c3-standard-44``` and ```c3-standard-22```, 
+with the latter being slightly slower but more cost-effective -- positioned in the leftmost bottom corner of the plot. They 
+take 35 and 40 seconds, respectively, and cost $0.01 and $0.005 each.
 
-- The computation time starts to increase more rapidly when the number of vCPUs is reduced below 16 (from 50 seconds to 100 seconds), while the cost remains relatively constant at around $0.002.
+- The speedup in terms of execution time levels off at 44 vCPUs. The ```c3-standard-88``` takes the same computation time as 
+the ```c3-standard-44``` (around 36 seconds) but costs twice as much ($0.02 compared to $0.01, respectively). An even clearer 
+indication of this plateau in speedup is that the most powerful machine, the ```c3-standard-176```, is actually slower than 
+an older-generation machine with far fewer vCPUs, the ```c2-standard-30``` (around 49 seconds vs. 45 seconds, respectively). 
+Moreover, it costs 10 times more ($0.06 vs. $0.006).
+
+- The computation time starts to increase more rapidly when the number of vCPUs is reduced below 16 (from 50 seconds to 100 
+seconds), while the cost remains relatively constant at around $0.002.
