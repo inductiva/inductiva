@@ -26,6 +26,7 @@ from inductiva.client.paths.tasks_task_id_download_input_url import get \
     as get_tasks_task_id_download_input_url
 from inductiva.utils import files, format_utils, data
 from inductiva.tasks import output_info
+from inductiva.tasks.file_tracker import Operations, FileTracker
 
 import warnings
 
@@ -438,13 +439,9 @@ class Task:
 
         This method issues a request to the API.
         """
-        try:
-            resp = self._api.get_task_position_in_queue(self._get_path_params())
-            self._tasks_ahead = resp.body.get("tasks_ahead", None)
-            return self._tasks_ahead
-        except exceptions.ApiException as exc:
-            if exc.status == 404:
-                return None
+        _ = self.get_status()
+
+        return self._tasks_ahead
 
     def _get_last_n_lines_from_file(self, file_path: pathlib.Path,
                                     n: int) -> List[str]:
@@ -507,7 +504,11 @@ class Task:
             return s.ljust(max_line_length, " ")
         return s
 
-    def _format_list_of_lines(self, lines: List[str], file: str) -> str:
+    def _format_list_of_lines(self,
+                              lines: List[str],
+                              file: str,
+                              sep: Optional[str] = "",
+                              endl: Optional[str] = "\n") -> str:
         """Formats a list of lines with color.
 
         This method formats a list of lines with a color and adds a header and
@@ -527,8 +528,6 @@ class Task:
             lines: A list of strings to format.
             file: The name of the file. Must be "stdout.txt" or "stderr.txt".
         """
-        if file not in ("stdout.txt", "stderr.txt"):
-            raise ValueError("File must be stdout.txt or stderr.txt")
 
         color_code = "\033[31m" if file == "stderr.txt" else "\033[34m"
         reset_color = "\033[0m"
@@ -542,10 +541,37 @@ class Task:
         new_lst = [f"{color_code}│{reset_color}{line}" for line in lines]
 
         new_lst.insert(
-            0, f"{color_code}┌ (last {n} lines from {file}){reset_color}\n")
-        new_lst.append(f"{color_code}└{reset_color}\n")
+            0, f"{color_code}┌ (last {n} lines from {file}){reset_color}{endl}")
+        new_lst.append(f"{color_code}└{reset_color}{endl}")
 
-        return "".join(new_lst)
+        return sep.join(new_lst)
+
+    def _format_directory_listing(self, directories: list, indent=0) -> str:
+        """Formats a dictionary with directory information.
+
+        This method formats a dictionary with directory information and
+        returns a string with the formatted data.
+
+        Args:
+            directories: A dictionary with directory information.
+        """
+        color_code = "\033[34m"
+        reset_color = "\033[0m"
+        contents = (f"{color_code}Directory contents:{reset_color}\n"
+                    if indent == 0 else "")
+
+        for item in directories:
+            if isinstance(item, dict):
+                for dir_name, dir_contents in item.items():
+                    contents += ("  " * indent +
+                                 f"{color_code}[DIR]{reset_color} {dir_name}\n")
+                    contents += self._format_directory_listing(
+                        dir_contents, indent + 1)
+            else:
+                contents += ("  " * indent +
+                             f"{color_code}[FILE]{reset_color} {item}\n")
+
+        return contents
 
     def _print_failed_message(self, out_dir: str) -> None:
         """Prints the messages when a task fails.
@@ -655,9 +681,12 @@ class Task:
             status_start_time = datetime.datetime.fromisoformat(
                 task_info.status_history[-1]["timestamp"])
             description = task_info.status_history[-1].get("description", "")
+
             now_time = datetime.datetime.now(datetime.timezone.utc)
-            duration = format_utils.short_timedelta_formatter(now_time -
-                                                              status_start_time)
+            duration_timedelta = now_time - status_start_time
+            duration_timedelta = max(duration_timedelta, datetime.timedelta(0))
+            duration = format_utils.short_timedelta_formatter(
+                duration_timedelta)
 
             if status != prev_status:
                 if requires_newline:
@@ -933,7 +962,6 @@ class Task:
         zip_name: str,
         request_download_url: Callable,
         download_partial_files: Callable,
-        download_task_files: Callable,
     ) -> pathlib.Path:
         self._status = self.get_status()
 
@@ -947,12 +975,6 @@ class Task:
                 "The API did not return a download URL for the task files.")
 
         logging.debug("\nDownload URL: %s\n", download_url)
-
-        # If the file server (GCP, etc.) is not available, the Web API
-        # returns a fallback URL and returns the following flag as False.
-        # In this case, the output donwload will be provided by the Web API
-        # itself.
-        file_server_available = bool(response_body.get("file_server_available"))
 
         if dest_dir is None:
             dest_dir = self.id
@@ -970,11 +992,8 @@ class Task:
             download_message = "Downloading stdout and stderr files to %s..."
 
         if filenames:
-            if file_server_available:
-                logging.info(download_message, dir_path)
-                download_partial_files(download_url, filenames, dir_path)
-            else:
-                logging.error("Partial download is not available.")
+            logging.info(download_message, dir_path)
+            download_partial_files(download_url, filenames, dir_path)
 
             # If the user requested a partial download, the full download
             # will be skipped.
@@ -985,23 +1004,13 @@ class Task:
         zip_path = dir_path.joinpath(zip_name)
         logging.info(download_message, zip_path)
 
-        if file_server_available:
-            pool_manager: urllib3.PoolManager = (
-                self._api.api_client.rest_client.pool_manager)
-            response = pool_manager.request(
-                "GET",
-                download_url,
-                preload_content=False,
-            )
-        # If the file server is not available, the download will be provided
-        # by the Web API. Therefore the standard method is used.
-        else:
-            api_response = download_task_files(
-                path_params=self._get_path_params(),
-                stream=True,
-                skip_deserialization=True,
-            )
-            response = api_response.response
+        pool_manager: urllib3.PoolManager = (
+            self._api.api_client.rest_client.pool_manager)
+        response = pool_manager.request(
+            "GET",
+            download_url,
+            preload_content=False,
+        )
 
         # use raw urllib3 response instead of the generated client response, to
         # implement our own download logic (with progress bar, first checking
@@ -1059,7 +1068,6 @@ class Task:
             zip_name="output.zip",
             request_download_url=self._request_download_output_url,
             download_partial_files=data.download_partial_outputs,
-            download_task_files=self._api.download_task_output,
         )
 
     def download_inputs(
@@ -1096,8 +1104,35 @@ class Task:
             zip_name="input.zip",
             request_download_url=self._request_download_input_url,
             download_partial_files=data.download_partial_inputs,
-            download_task_files=self._api.download_task_input,
         )
+
+    async def _file_operation(self, operation: Operations, **kwargs) -> str:
+        """Perform file operations on the task that is currently running.
+
+        Args:
+            operation: The operation to perform on the task files.
+            **kwargs: Additional arguments for the operation.
+
+        Returns:
+            The result of the operation.
+        """
+        file_tracker = FileTracker()
+        future_message = await file_tracker.setup_channel(operation, **kwargs)
+        if not await file_tracker.connect_to_task(self._api, self.id):
+            return "Failed to connect to the task."
+        message = await future_message
+        await file_tracker.cleanup()
+        return message
+
+    async def list_files(self) -> str:
+        """List the files in the task's working directory."""
+        message = await self._file_operation(Operations.LIST)
+        return self._format_directory_listing(message)
+
+    async def tail_file(self, filename: str) -> str:
+        """Get the last 10 lines of a file in the task's working directory."""
+        message = await self._file_operation(Operations.TAIL, filename=filename)
+        return self._format_list_of_lines(message, filename, sep="\n", endl="")
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""

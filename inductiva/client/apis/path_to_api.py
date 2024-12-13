@@ -5,19 +5,19 @@ from inductiva.client.apis.paths.tasks_auth import TasksAuth
 from inductiva.client.apis.paths.tasks_submit import TasksSubmit
 from inductiva.client.apis.paths.tasks_task_id_input_upload_url import TasksTaskIdInputUploadUrl
 from inductiva.client.apis.paths.tasks_task_id_input_uploaded import TasksTaskIdInputUploaded
-from inductiva.client.apis.paths.tasks_task_id_input import TasksTaskIdInput
 from inductiva.client.apis.paths.tasks_task_id import TasksTaskId
 from inductiva.client.apis.paths.tasks import Tasks
 from inductiva.client.apis.paths.tasks_task_id_status import TasksTaskIdStatus
-from inductiva.client.apis.paths.tasks_task_id_position_in_queue import TasksTaskIdPositionInQueue
 from inductiva.client.apis.paths.tasks_task_id_output_list import TasksTaskIdOutputList
 from inductiva.client.apis.paths.tasks_task_id_download_input_url import TasksTaskIdDownloadInputUrl
 from inductiva.client.apis.paths.tasks_task_id_download_output_url import TasksTaskIdDownloadOutputUrl
-from inductiva.client.apis.paths.tasks_task_id_output import TasksTaskIdOutput
 from inductiva.client.apis.paths.tasks_task_id_resubmit import TasksTaskIdResubmit
 from inductiva.client.apis.paths.tasks_task_id_kill import TasksTaskIdKill
 from inductiva.client.apis.paths.tasks_task_id_disable_logs import TasksTaskIdDisableLogs
 from inductiva.client.apis.paths.tasks_task_id_files import TasksTaskIdFiles
+from inductiva.client.apis.paths.tasks_task_id_register import TasksTaskIdRegister
+from inductiva.client.apis.paths.tasks_task_id_offer import TasksTaskIdOffer
+from inductiva.client.apis.paths.tasks_task_id_message import TasksTaskIdMessage
 from inductiva.client.apis.paths.admin_users import AdminUsers
 from inductiva.client.apis.paths.admin_users_email_terms_and_conditions import AdminUsersEmailTermsAndConditions
 from inductiva.client.apis.paths.admin_users_username_organization import AdminUsersUsernameOrganization
@@ -31,16 +31,27 @@ from inductiva.client.apis.paths.admin_users_username_tasks import AdminUsersUse
 from inductiva.client.apis.paths.admin_users_username_capabilities import AdminUsersUsernameCapabilities
 from inductiva.client.apis.paths.admin_groups import AdminGroups
 from inductiva.client.apis.paths.admin_groups_active import AdminGroupsActive
-from inductiva.client.apis.paths.admin_providers import AdminProviders
-from inductiva.client.apis.paths.admin_providers_provider_id import AdminProvidersProviderId
 from inductiva.client.apis.paths.admin_active_tasks import AdminActiveTasks
-from inductiva.client.apis.paths.admin_executer_tracker_token import AdminExecuterTrackerToken
 from inductiva.client.apis.paths.admin_groups_machine_group_id_terminate import AdminGroupsMachineGroupIdTerminate
 from inductiva.client.apis.paths.admin_organizations import AdminOrganizations
 from inductiva.client.apis.paths.admin_organizations_organization_id import AdminOrganizationsOrganizationId
 from inductiva.client.apis.paths.admin_organizations_billing_report import AdminOrganizationsBillingReport
 from inductiva.client.apis.paths.admin_organizations_costs import AdminOrganizationsCosts
 from inductiva.client.apis.paths.admin_tiers import AdminTiers
+from inductiva.client.apis.paths.task_runner_register import TaskRunnerRegister
+from inductiva.client.apis.paths.task_runner_machine_id import TaskRunnerMachineId
+from inductiva.client.apis.paths.task_runner_machine_id_task import TaskRunnerMachineIdTask
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_message import TaskRunnerMachineIdTaskTaskIdMessage
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_message_unblock import TaskRunnerMachineIdTaskTaskIdMessageUnblock
+from inductiva.client.apis.paths.task_runner_machine_id_event import TaskRunnerMachineIdEvent
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_operation import TaskRunnerMachineIdTaskTaskIdOperation
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_operation_operation_id_done import TaskRunnerMachineIdTaskTaskIdOperationOperationIdDone
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_download_input_url import TaskRunnerMachineIdTaskTaskIdDownloadInputUrl
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_upload_output_url import TaskRunnerMachineIdTaskTaskIdUploadOutputUrl
+from inductiva.client.apis.paths.task_runner_machine_id_task_task_id_metric import TaskRunnerMachineIdTaskTaskIdMetric
+from inductiva.client.apis.paths.task_runner_machine_id_resize_disk import TaskRunnerMachineIdResizeDisk
+from inductiva.client.apis.paths.task_runner_machine_id_resize_disk_done import TaskRunnerMachineIdResizeDiskDone
+from inductiva.client.apis.paths.task_runner_machine_id_download_urls import TaskRunnerMachineIdDownloadUrls
 from inductiva.client.apis.paths.executer_tracker_register import ExecuterTrackerRegister
 from inductiva.client.apis.paths.executer_tracker_machine_id import ExecuterTrackerMachineId
 from inductiva.client.apis.paths.executer_tracker_machine_id_task import ExecuterTrackerMachineIdTask
@@ -66,11 +77,13 @@ from inductiva.client.apis.paths.compute_group_name import ComputeGroupName
 from inductiva.client.apis.paths.storage_size import StorageSize
 from inductiva.client.apis.paths.storage_cost import StorageCost
 from inductiva.client.apis.paths.storage_contents import StorageContents
-from inductiva.client.apis.paths.storage_input import StorageInput
 from inductiva.client.apis.paths.storage_input_url import StorageInputUrl
 from inductiva.client.apis.paths.storage_input_notify import StorageInputNotify
 from inductiva.client.apis.paths.storage_input_remote import StorageInputRemote
 from inductiva.client.apis.paths.storage_ import Storage
+from inductiva.client.apis.paths.storage_export import StorageExport
+from inductiva.client.apis.paths.storage_operations_operation_id import StorageOperationsOperationId
+from inductiva.client.apis.paths.storage_operations import StorageOperations
 from inductiva.client.apis.paths.version import Version
 from inductiva.client.apis.paths.version_check import VersionCheck
 from inductiva.client.apis.paths.users_quotas import UsersQuotas
@@ -99,24 +112,18 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdInputUploadUrl,
         PathValues.TASKS_TASK_ID_INPUT_UPLOADED:
             TasksTaskIdInputUploaded,
-        PathValues.TASKS_TASK_ID_INPUT:
-            TasksTaskIdInput,
         PathValues.TASKS_TASK_ID:
             TasksTaskId,
         PathValues.TASKS:
             Tasks,
         PathValues.TASKS_TASK_ID_STATUS:
             TasksTaskIdStatus,
-        PathValues.TASKS_TASK_ID_POSITION_IN_QUEUE:
-            TasksTaskIdPositionInQueue,
         PathValues.TASKS_TASK_ID_OUTPUT_LIST:
             TasksTaskIdOutputList,
         PathValues.TASKS_TASK_ID_DOWNLOAD_INPUT_URL:
             TasksTaskIdDownloadInputUrl,
         PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
             TasksTaskIdDownloadOutputUrl,
-        PathValues.TASKS_TASK_ID_OUTPUT:
-            TasksTaskIdOutput,
         PathValues.TASKS_TASK_ID_RESUBMIT:
             TasksTaskIdResubmit,
         PathValues.TASKS_TASK_ID_KILL:
@@ -125,6 +132,12 @@ PathToApi = typing_extensions.TypedDict(
             TasksTaskIdDisableLogs,
         PathValues.TASKS_TASK_ID_FILES:
             TasksTaskIdFiles,
+        PathValues.TASKS_TASK_ID_REGISTER:
+            TasksTaskIdRegister,
+        PathValues.TASKS_TASK_ID_OFFER:
+            TasksTaskIdOffer,
+        PathValues.TASKS_TASK_ID_MESSAGE:
+            TasksTaskIdMessage,
         PathValues.ADMIN_USERS:
             AdminUsers,
         PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -151,14 +164,8 @@ PathToApi = typing_extensions.TypedDict(
             AdminGroups,
         PathValues.ADMIN_GROUPS_ACTIVE:
             AdminGroupsActive,
-        PathValues.ADMIN_PROVIDERS:
-            AdminProviders,
-        PathValues.ADMIN_PROVIDERS_PROVIDER_ID:
-            AdminProvidersProviderId,
         PathValues.ADMIN_ACTIVE_TASKS:
             AdminActiveTasks,
-        PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
-            AdminExecuterTrackerToken,
         PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
             AdminGroupsMachineGroupIdTerminate,
         PathValues.ADMIN_ORGANIZATIONS:
@@ -171,6 +178,34 @@ PathToApi = typing_extensions.TypedDict(
             AdminOrganizationsCosts,
         PathValues.ADMIN_TIERS:
             AdminTiers,
+        PathValues.TASKRUNNER_REGISTER:
+            TaskRunnerRegister,
+        PathValues.TASKRUNNER_MACHINE_ID:
+            TaskRunnerMachineId,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK:
+            TaskRunnerMachineIdTask,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_MESSAGE:
+            TaskRunnerMachineIdTaskTaskIdMessage,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
+            TaskRunnerMachineIdTaskTaskIdMessageUnblock,
+        PathValues.TASKRUNNER_MACHINE_ID_EVENT:
+            TaskRunnerMachineIdEvent,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_OPERATION:
+            TaskRunnerMachineIdTaskTaskIdOperation,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_OPERATION_OPERATION_ID_DONE:
+            TaskRunnerMachineIdTaskTaskIdOperationOperationIdDone,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
+            TaskRunnerMachineIdTaskTaskIdDownloadInputUrl,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
+            TaskRunnerMachineIdTaskTaskIdUploadOutputUrl,
+        PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_METRIC:
+            TaskRunnerMachineIdTaskTaskIdMetric,
+        PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK:
+            TaskRunnerMachineIdResizeDisk,
+        PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK_DONE:
+            TaskRunnerMachineIdResizeDiskDone,
+        PathValues.TASKRUNNER_MACHINE_ID_DOWNLOAD_URLS:
+            TaskRunnerMachineIdDownloadUrls,
         PathValues.EXECUTERTRACKER_REGISTER:
             ExecuterTrackerRegister,
         PathValues.EXECUTERTRACKER_MACHINE_ID:
@@ -221,8 +256,6 @@ PathToApi = typing_extensions.TypedDict(
             StorageCost,
         PathValues.STORAGE_CONTENTS:
             StorageContents,
-        PathValues.STORAGE_INPUT:
-            StorageInput,
         PathValues.STORAGE_INPUT_URL:
             StorageInputUrl,
         PathValues.STORAGE_INPUT_NOTIFY:
@@ -231,6 +264,12 @@ PathToApi = typing_extensions.TypedDict(
             StorageInputRemote,
         PathValues.STORAGE_:
             Storage,
+        PathValues.STORAGE_EXPORT:
+            StorageExport,
+        PathValues.STORAGE_OPERATIONS_OPERATION_ID:
+            StorageOperationsOperationId,
+        PathValues.STORAGE_OPERATIONS:
+            StorageOperations,
         PathValues.VERSION:
             Version,
         PathValues.VERSIONCHECK:
@@ -276,24 +315,18 @@ path_to_api = PathToApi({
         TasksTaskIdInputUploadUrl,
     PathValues.TASKS_TASK_ID_INPUT_UPLOADED:
         TasksTaskIdInputUploaded,
-    PathValues.TASKS_TASK_ID_INPUT:
-        TasksTaskIdInput,
     PathValues.TASKS_TASK_ID:
         TasksTaskId,
     PathValues.TASKS:
         Tasks,
     PathValues.TASKS_TASK_ID_STATUS:
         TasksTaskIdStatus,
-    PathValues.TASKS_TASK_ID_POSITION_IN_QUEUE:
-        TasksTaskIdPositionInQueue,
     PathValues.TASKS_TASK_ID_OUTPUT_LIST:
         TasksTaskIdOutputList,
     PathValues.TASKS_TASK_ID_DOWNLOAD_INPUT_URL:
         TasksTaskIdDownloadInputUrl,
     PathValues.TASKS_TASK_ID_DOWNLOAD_OUTPUT_URL:
         TasksTaskIdDownloadOutputUrl,
-    PathValues.TASKS_TASK_ID_OUTPUT:
-        TasksTaskIdOutput,
     PathValues.TASKS_TASK_ID_RESUBMIT:
         TasksTaskIdResubmit,
     PathValues.TASKS_TASK_ID_KILL:
@@ -302,6 +335,12 @@ path_to_api = PathToApi({
         TasksTaskIdDisableLogs,
     PathValues.TASKS_TASK_ID_FILES:
         TasksTaskIdFiles,
+    PathValues.TASKS_TASK_ID_REGISTER:
+        TasksTaskIdRegister,
+    PathValues.TASKS_TASK_ID_OFFER:
+        TasksTaskIdOffer,
+    PathValues.TASKS_TASK_ID_MESSAGE:
+        TasksTaskIdMessage,
     PathValues.ADMIN_USERS:
         AdminUsers,
     PathValues.ADMIN_USERS_EMAIL_TERMS_AND_CONDITIONS:
@@ -328,14 +367,8 @@ path_to_api = PathToApi({
         AdminGroups,
     PathValues.ADMIN_GROUPS_ACTIVE:
         AdminGroupsActive,
-    PathValues.ADMIN_PROVIDERS:
-        AdminProviders,
-    PathValues.ADMIN_PROVIDERS_PROVIDER_ID:
-        AdminProvidersProviderId,
     PathValues.ADMIN_ACTIVE_TASKS:
         AdminActiveTasks,
-    PathValues.ADMIN_EXECUTERTRACKER_TOKEN:
-        AdminExecuterTrackerToken,
     PathValues.ADMIN_GROUPS_MACHINE_GROUP_ID_TERMINATE:
         AdminGroupsMachineGroupIdTerminate,
     PathValues.ADMIN_ORGANIZATIONS:
@@ -348,6 +381,34 @@ path_to_api = PathToApi({
         AdminOrganizationsCosts,
     PathValues.ADMIN_TIERS:
         AdminTiers,
+    PathValues.TASKRUNNER_REGISTER:
+        TaskRunnerRegister,
+    PathValues.TASKRUNNER_MACHINE_ID:
+        TaskRunnerMachineId,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK:
+        TaskRunnerMachineIdTask,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_MESSAGE:
+        TaskRunnerMachineIdTaskTaskIdMessage,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_MESSAGE_UNBLOCK:
+        TaskRunnerMachineIdTaskTaskIdMessageUnblock,
+    PathValues.TASKRUNNER_MACHINE_ID_EVENT:
+        TaskRunnerMachineIdEvent,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_OPERATION:
+        TaskRunnerMachineIdTaskTaskIdOperation,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_OPERATION_OPERATION_ID_DONE:
+        TaskRunnerMachineIdTaskTaskIdOperationOperationIdDone,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_DOWNLOAD_INPUT_URL:
+        TaskRunnerMachineIdTaskTaskIdDownloadInputUrl,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_UPLOAD_OUTPUT_URL:
+        TaskRunnerMachineIdTaskTaskIdUploadOutputUrl,
+    PathValues.TASKRUNNER_MACHINE_ID_TASK_TASK_ID_METRIC:
+        TaskRunnerMachineIdTaskTaskIdMetric,
+    PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK:
+        TaskRunnerMachineIdResizeDisk,
+    PathValues.TASKRUNNER_MACHINE_ID_RESIZE_DISK_DONE:
+        TaskRunnerMachineIdResizeDiskDone,
+    PathValues.TASKRUNNER_MACHINE_ID_DOWNLOAD_URLS:
+        TaskRunnerMachineIdDownloadUrls,
     PathValues.EXECUTERTRACKER_REGISTER:
         ExecuterTrackerRegister,
     PathValues.EXECUTERTRACKER_MACHINE_ID:
@@ -398,8 +459,6 @@ path_to_api = PathToApi({
         StorageCost,
     PathValues.STORAGE_CONTENTS:
         StorageContents,
-    PathValues.STORAGE_INPUT:
-        StorageInput,
     PathValues.STORAGE_INPUT_URL:
         StorageInputUrl,
     PathValues.STORAGE_INPUT_NOTIFY:
@@ -408,6 +467,12 @@ path_to_api = PathToApi({
         StorageInputRemote,
     PathValues.STORAGE_:
         Storage,
+    PathValues.STORAGE_EXPORT:
+        StorageExport,
+    PathValues.STORAGE_OPERATIONS_OPERATION_ID:
+        StorageOperationsOperationId,
+    PathValues.STORAGE_OPERATIONS:
+        StorageOperations,
     PathValues.VERSION:
         Version,
     PathValues.VERSIONCHECK:

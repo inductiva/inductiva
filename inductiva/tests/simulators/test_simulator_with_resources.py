@@ -179,12 +179,25 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
 
     # Some Mock classes
     class TaskApiMock:
+        """Mock class for the TasksApi class."""
 
         def __init__(self, *_args, **_kwargs):
             pass
 
-        def get_task_position_in_queue(self, *_args, **_kwargs):
-            return Namespace(body={"tasks_ahead": 0})
+        def get_task_status(self, *_args, **_kwargs):
+            self._tasks_ahead = 0
+            return Namespace(
+                body={
+                    "status": "pending-input",
+                    "position_in_queue": {
+                        "tasks_ahead": 0
+                    },
+                    "is_terminated": True
+                })
+
+        def get_task(self, *_args, **_kwargs):
+            return Namespace(response=Namespace(
+                data=('{"status":"pending-input"}').encode("utf-8")))
 
     class DefaultDictMock(dict):
 
@@ -239,6 +252,8 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
                 run_kwargs[resubmit_key] = resubmit_on_preemption
             if sim_name == "OpenFOAM":
                 run_kwargs["commands"] = ["ls"]
+            if sim_name in ("SWAN", "SWASH"):
+                args = ("test_folder",)
 
             sim_obj.run(test_input_dir, *args, **run_kwargs)
 

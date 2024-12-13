@@ -8,7 +8,6 @@ import inductiva.client
 from inductiva.client.model.task_status_code import TaskStatusCode
 
 import inductiva.client.paths
-from inductiva.client.paths.tasks_task_id_input.put import ApiResponseFor200
 
 import inductiva.client.paths.tasks_task_id_kill
 import inductiva.client.paths.tasks_task_id_kill.post
@@ -80,7 +79,7 @@ def test_task_kill__positive_timeout__success(pending_kill_success,
     """
     task = inductiva.tasks.Task("123")
     # pylint: disable=W0212
-    task._send_kill_request = Mock(return_value=ApiResponseFor200)
+    task._send_kill_request = Mock()
     # pylint: disable=W0212
     task._check_if_pending_kill = Mock(return_value=(pending_kill_success,
                                                      pending_kill_status))

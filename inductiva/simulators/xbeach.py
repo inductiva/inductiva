@@ -2,6 +2,8 @@
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators
+from inductiva.commands.commands import Command
+from inductiva.commands.mpiconfig import MPIConfig
 
 
 @simulators.simulator.mpi_enabled
@@ -19,7 +21,9 @@ class XBeach(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.simulator = "xbeach"
+        self.simulator = "arbitrary_commands"
+        self.simulator_name_alias = "xbeach"
+        self.container_image = self._get_image_uri()
 
     def run(self,
             input_dir: Optional[str],
@@ -52,12 +56,19 @@ class XBeach(simulators.Simulator):
                 the simulation directory.
             other arguments: See the documentation of the base class.
         """
+        kwargs["use_hwthread_cpus"] = use_hwthread
+        if n_vcpus is not None:
+            kwargs["np"] = n_vcpus
+
+        mpi_config = MPIConfig(version="4.1.6", **kwargs)
+        commands = [
+            Command(f"xbeach {sim_config_filename}", mpi_config=mpi_config)
+        ]
+
         return super().run(input_dir,
-                           input_filename=sim_config_filename,
                            on=on,
+                           commands=commands,
                            storage_dir=storage_dir,
-                           n_vcpus=n_vcpus,
-                           use_hwthread=use_hwthread,
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            **kwargs)

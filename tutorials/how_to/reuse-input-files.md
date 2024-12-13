@@ -1,4 +1,4 @@
-# Reuse Input Files Across Multiple Simulations with Inductiva
+# Reuse Input Files Across Multiple Simulations
 
 Running multiple simulations often involves reusing large input files, 
 such as the bathymetry of a coastal area or object geometries for computational 
