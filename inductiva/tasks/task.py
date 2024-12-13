@@ -1106,7 +1106,7 @@ class Task:
             download_partial_files=data.download_partial_inputs,
         )
 
-    async def _file_operation(self, operation: Operations, **kwargs) -> str:
+    async def _file_operation(self, operation: Operations, formatter: function, **kwargs) -> str:
         """Perform file operations on the task that is currently running.
 
         Args:
@@ -1122,17 +1122,23 @@ class Task:
             return "Failed to connect to the task."
         message = await future_message
         await file_tracker.cleanup()
-        return message
+
+        if message["status"] != "success":
+            return message["message"]
+
+        return formatter(message)
 
     async def list_files(self) -> str:
         """List the files in the task's working directory."""
-        message = await self._file_operation(Operations.LIST)
-        return self._format_directory_listing(message)
+        return await self._file_operation(Operations.LIST, self._format_directory_listing)
+
 
     async def tail_file(self, filename: str) -> str:
         """Get the last 10 lines of a file in the task's working directory."""
-        message = await self._file_operation(Operations.TAIL, filename=filename)
-        return self._format_list_of_lines(message, filename, sep="\n", endl="")
+        formatter = lambda message : self._format_list_of_lines(
+            message, filename, sep="", endl="")
+        return await self._file_operation(Operations.TAIL, filename=filename, formatter=formatter)
+
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
