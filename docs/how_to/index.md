@@ -8,6 +8,7 @@ orphan: true
 ---
 maxdepth: 1
 ---
+access_simulation_output
 manage_and_retrieve_results
 manage_computational_resources
 manage-remote-storage
