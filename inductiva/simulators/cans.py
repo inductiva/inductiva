@@ -56,12 +56,12 @@ class CaNS(simulators.Simulator):
                 the simulation directory.
             other arguments: See the documentation of the base class.
         """
-
-        kwargs["use_hwthread_cpus"] = use_hwthread
+        mpi_kwargs = {}
+        mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:
-            kwargs["np"] = n_vcpus
+            mpi_kwargs["np"] = n_vcpus
 
-        mpi_config = MPIConfig(version="4.1.6", **kwargs)
+        mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
         commands = [
             Command(f"cans {sim_config_filename}", mpi_config=mpi_config)
         ]

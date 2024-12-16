@@ -55,12 +55,12 @@ class FDS(simulators.Simulator):
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
         """
-
-        kwargs["use_hwthread_cpus"] = use_hwthread
+        mpi_kwargs = {}
+        mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:
-            kwargs["np"] = n_vcpus
+            mpi_kwargs["np"] = n_vcpus
 
-        mpi_config = MPIConfig(version="4.1.6", **kwargs)
+        mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
         commands = [
             Command(
                 "/opt/fds/Build/ompi_gnu_linux/fds_ompi_gnu_linux "
