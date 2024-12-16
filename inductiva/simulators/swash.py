@@ -95,12 +95,12 @@ class SWASH(simulators.Simulator):
         # works with clusters
         elif command == "swash.exe":
 
-            kwargs = {}
+            mpi_kwargs = {}
             if n_vcpus is not None:
-                kwargs["np"] = n_vcpus
-            kwargs["use_hwthread_cpus"] = use_hwthread
+                mpi_kwargs["np"] = n_vcpus
+            mpi_kwargs["use_hwthread_cpus"] = use_hwthread
 
-            mpi_config = MPIConfig(version="4.1.6", **kwargs)
+            mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
             swash_exe_command = Command(f"swash.exe {sim_config_filename}",
                                         mpi_config=mpi_config)
             commands.append(swash_exe_command)
