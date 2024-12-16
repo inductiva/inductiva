@@ -58,7 +58,7 @@ class AmrWind(simulators.Simulator):
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
         """
-        mpi_kwargs={}
+        mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:
             mpi_kwargs["np"] = n_vcpus

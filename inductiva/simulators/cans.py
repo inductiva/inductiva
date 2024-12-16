@@ -56,7 +56,7 @@ class CaNS(simulators.Simulator):
                 the simulation directory.
             other arguments: See the documentation of the base class.
         """
-        mpi_kwargs={}
+        mpi_kwargs = {}
         mpi_kwargs["use_hwthread_cpus"] = use_hwthread
         if n_vcpus is not None:
             mpi_kwargs["np"] = n_vcpus
