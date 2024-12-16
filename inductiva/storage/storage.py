@@ -270,9 +270,11 @@ def remove_workspace(remote_dir) -> bool:
 
 
 class StorageOperation():
-    def __init__(self, api, id):
+    """Represents a storage operation running remotely via Inductiva API."""
+
+    def __init__(self, api, id_):
         self._api = api
-        self.id = id
+        self.id = id_
 
     def _update_from_api_response(self, response):
         self._name = response["name"]
@@ -287,31 +289,47 @@ class StorageOperation():
 
         op = cls(api, response["id"])
 
-        op._update_from_api_response(
-            response,
-        )
+        op._update_from_api_response(response,)
         return op
 
     def _refresh(self):
-        resp = self._api.get_operation(
-            path_params={"operation_id": self.id}).body
+        resp = self._api.get_operation(path_params={
+            "operation_id": self.id
+        }).body
 
         self._update_from_api_response(resp)
 
-    def wait(self):
+    def wait(self, poll_s: int = 2):
+        """Wait for the operation to complete.
+
+        Args:
+            poll_s: Time in seconds between calls to the API to update
+                the status of the operation.
+        """
+
         while self._status == models.OperationStatus.RUNNING:
             self._refresh()
-            time.sleep(2)
+            time.sleep(poll_s)
 
         if self._status == models.OperationStatus.FAILED:
-            logging.error(f"Operation failed: {self._error_message}")
+            logging.error("Operation failed: %s", self._error_message)
         else:
-            logging.info(f"Operation completed successfully.")
+            logging.info("Operation completed successfully.")
 
         return self._status
 
 
 def export(path: str, dest_url: str) -> StorageOperation:
+    """Export files from the API's storage to a remote storage location.
+
+    Args:
+        path: Path in the API's remote storage to the files.
+        dest_url: URL to upload the output files.
+
+    Returns:
+        Instance of StorageOperation. Call `wait` on the resulting object
+        to block until the operation finishes.
+    """
     api = storage_api.StorageApi(inductiva.api.get_client())
     resp = api.export_files(body={
         "path": path,
@@ -322,4 +340,3 @@ def export(path: str, dest_url: str) -> StorageOperation:
     operation = StorageOperation.from_api_response(api, resp.body)
 
     return operation
-

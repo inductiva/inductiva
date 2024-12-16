@@ -1275,14 +1275,24 @@ class Task:
     def print_summary(self, fhandle=sys.stdout):
         print(self._get_summary(), file=fhandle)
 
-    def export_output(self, dest_url: str, wait: bool = True) -> storage.StorageOperation:
-        """Export the output files of the task to a remote storage location.
+    def export_output(
+        self,
+        dest_url: str,
+        wait: bool = True,
+    ) -> storage.StorageOperation:
+        """Export the output files ZIP of the task to a remote storage location.
 
         Args:
-            dest_url: URL of the location to store the output files.
+            dest_url: URL to upload the output files. The output ZIP will be
+                uploaded via an HTTP PUT request.
             wait: Whether to wait for the operation to complete.
         """
-        operation = inductiva.storage.export(self.get_info().storage_output_path, dest_url)
+        output_path = self.get_info().storage_output_path
+        if output_path is None:
+            raise RuntimeError(
+                "Can't determine the path to the output files to export task.")
+
+        operation = inductiva.storage.export(output_path, dest_url)
 
         if wait:
             operation.wait()
