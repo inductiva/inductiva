@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from ..localization import translator as __
 
 import inductiva
+from inductiva import storage
 from inductiva import constants
 from inductiva.client import exceptions, models
 from inductiva import api
@@ -90,6 +91,8 @@ class TaskInfo:
         self.status_alias = None
         self.simulator = None
         self.storage_path = None
+        self.storage_input_path = None
+        self.storage_output_path = None
         self.container_image = None
         self.project = None
         self.create_time = None
@@ -1242,7 +1245,7 @@ class Task:
 
     def remove_remote_files(self, verbose: bool = True) -> bool:
         """Removes all files associated with the task from remote storage.
-        
+
         Returns:
             True if the files were removed successfully, False otherwise.
         """
@@ -1284,3 +1287,27 @@ class Task:
 
     def print_summary(self, fhandle=sys.stdout):
         print(self._get_summary(), file=fhandle)
+
+    def export_output(
+        self,
+        dest_url: str,
+        wait: bool = True,
+    ) -> storage.StorageOperation:
+        """Export the output files ZIP of the task to a remote storage location.
+
+        Args:
+            dest_url: URL to upload the output files. The output ZIP will be
+                uploaded via an HTTP PUT request.
+            wait: Whether to wait for the operation to complete.
+        """
+        output_path = self.get_info().storage_output_path
+        if output_path is None:
+            raise RuntimeError(
+                "Can't determine the path to the output files to export task.")
+
+        operation = inductiva.storage.export(output_path, dest_url)
+
+        if wait:
+            operation.wait()
+
+        return operation

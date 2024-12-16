@@ -1,4 +1,5 @@
 """Methods to interact with the user storage resources."""
+import time
 import logging
 import os
 import tqdm
@@ -8,14 +9,14 @@ import urllib
 import inductiva
 from inductiva import constants
 from inductiva.api import methods
-from inductiva.client import exceptions
+from inductiva.client import exceptions, models
 from inductiva.client.apis.tags import storage_api
 from inductiva.utils import format_utils
 
 
 def _print_storage_size_and_cost() -> int:
     """ Print the storage size and cost.
-    
+
     return the storage size in bytes.
     """
     api = storage_api.StorageApi(inductiva.api.get_client())
@@ -134,12 +135,12 @@ def upload_from_url(
     Upload a file from a given URL to a specified remote directory.
 
     If no file name is provided, the function extracts the name from the URL.
-    
+
     Args:
-        url (str): The URL of the file to be uploaded. 
+        url (str): The URL of the file to be uploaded.
         remote_dir (str): The path to the remote directory where the file will
             be stored.
-        file_name (str, optional): The name to save the uploaded file as. 
+        file_name (str, optional): The name to save the uploaded file as.
             If not specified, the name will be extracted from the URL.
     """
     api_instance = storage_api.StorageApi(inductiva.api.get_client())
@@ -266,3 +267,76 @@ def remove_workspace(remote_dir) -> bool:
         remote_dir = remote_dir + "/"
     api.delete_file(query_params={"path": remote_dir},)
     logging.info("Workspace file(s) removed successfully.")
+
+
+class StorageOperation():
+    """Represents a storage operation running remotely via Inductiva API."""
+
+    def __init__(self, api, id_):
+        self._api = api
+        self.id = id_
+
+    def _update_from_api_response(self, response):
+        self._name = response["name"]
+        self._status = response["status"]
+        self._attributes = response["attributes"]
+        self._start_time = response["start_time"]
+        self._end_time = response["end_time"]
+        self._error_message = response["error_message"]
+
+    @classmethod
+    def from_api_response(cls, api, response):
+
+        op = cls(api, response["id"])
+
+        op._update_from_api_response(response,)
+        return op
+
+    def _refresh(self):
+        resp = self._api.get_operation(path_params={
+            "operation_id": self.id
+        }).body
+
+        self._update_from_api_response(resp)
+
+    def wait(self, poll_s: int = 2):
+        """Wait for the operation to complete.
+
+        Args:
+            poll_s: Time in seconds between calls to the API to update
+                the status of the operation.
+        """
+
+        while self._status == models.OperationStatus.RUNNING:
+            self._refresh()
+            time.sleep(poll_s)
+
+        if self._status == models.OperationStatus.FAILED:
+            logging.error("Operation failed: %s", self._error_message)
+        else:
+            logging.info("Operation completed successfully.")
+
+        return self._status
+
+
+def export(path: str, dest_url: str) -> StorageOperation:
+    """Export files from the API's storage to a remote storage location.
+
+    Args:
+        path: Path in the API's remote storage to the files.
+        dest_url: URL to upload the output files.
+
+    Returns:
+        Instance of StorageOperation. Call `wait` on the resulting object
+        to block until the operation finishes.
+    """
+    api = storage_api.StorageApi(inductiva.api.get_client())
+    resp = api.export_files(body={
+        "path": path,
+        "dest_url": dest_url,
+    })
+
+    logging.info("Started export operation ...")
+    operation = StorageOperation.from_api_response(api, resp.body)
+
+    return operation
