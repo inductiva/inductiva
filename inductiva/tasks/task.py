@@ -1136,9 +1136,9 @@ class Task:
 
     async def tail_file(self, filename: str) -> str:
         """Get the last 10 lines of a file in the task's working directory."""
-        # pylint: disable=C3001
-        formatter = lambda message: self._format_list_of_lines(
-            message, filename, sep="\n", endl="")
+        def formatter(message):
+            return self._format_list_of_lines(
+                message, filename, sep="\n", endl="\n")
         return await self._file_operation(Operations.TAIL,
                                           formatter=formatter,
                                           filename=filename)
