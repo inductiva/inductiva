@@ -7,7 +7,7 @@ import asyncio
 from inductiva import _cli, tasks
 
 
-def _list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
+def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
     directories = asyncio.run(task._list_files())  # pylint: disable=protected-access
@@ -28,4 +28,4 @@ def register(parser):
 
     _cli.utils.add_watch_argument(subparser)
     subparser.add_argument("id", type=str, help="ID of the task to list files.")
-    subparser.set_defaults(func=_list_files)
+    subparser.set_defaults(func=list_files)
