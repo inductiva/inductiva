@@ -10,6 +10,7 @@ from inductiva.client.configuration import Configuration
 from inductiva.client.exceptions import ApiException
 from inductiva._cli.cmd_user.info import get_info
 from inductiva.client.api_client import ApiClient
+from inductiva.api.methods import get_client
 
 from . import simulators
 from . import resources
@@ -92,6 +93,11 @@ def _set_key_and_check_version():
 _check_for_available_package_update()
 
 
+def get_api_agent():
+    if logs.is_cli():
+        return f"CLI/{__version__}/python"
+    return f"Client/{__version__}/python"
+
 def compare_client_and_backend_versions(client_version: str):
     """ Compares the provided client version 7with the backend API version.
 
@@ -108,10 +114,12 @@ def compare_client_and_backend_versions(client_version: str):
     - RuntimeError: If the API cannot be reached, or if the client version is
       incompatible with the backend version, or for other general failures.
     """
+    
     api_config = Configuration(host=api_url)
 
-    with ApiClient(api_config) as client:
+    with get_client(api_config) as client:
         api_instance = VersionApi(client)
+        client.user_agent = get_api_agent()
         query_params = {"client_version": client_version}
 
         try:

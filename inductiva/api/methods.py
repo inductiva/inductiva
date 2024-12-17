@@ -34,12 +34,17 @@ def get_api_config() -> Configuration:
     return api_config
 
 
-def get_client() -> ApiClient:
+def get_client(api_config: Configuration = None) -> ApiClient:
     """Returns an ApiClient instance."""
-    api_config = get_api_config()
 
-    return ApiClient(api_config)
+    if api_config is None:
+        api_config = get_api_config()
 
+    client = ApiClient(api_config)
+
+    client.user_agent = inductiva.get_api_agent()
+
+    return client
 
 def submit_request(api_instance: TasksApi,
                    request: TaskRequest) -> TaskSubmittedInfo:
@@ -424,14 +429,12 @@ def invoke_async_api(simulator: str,
         Returns the task id.
     """
 
-    api_config = get_api_config()
-
     request_params = get_validate_request_params(
         original_params=params,
         type_annotations=type_annotations,
     )
-
-    with ApiClient(api_config) as client:
+    
+    with get_client() as client:
         api_instance = TasksApi(client)
 
         task_id = submit_task(api_instance=api_instance,
