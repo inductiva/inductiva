@@ -34,7 +34,7 @@ def get_api_config() -> Configuration:
     return api_config
 
 
-def get_client(api_config: Configuration = None) -> ApiClient:
+def get_client(api_config: Optional[Configuration] = None) -> ApiClient:
     """Returns an ApiClient instance."""
 
     if api_config is None:
