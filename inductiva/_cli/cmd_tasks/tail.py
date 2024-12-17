@@ -10,7 +10,7 @@ from inductiva import _cli, tasks
 def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
-    lines = asyncio.run(task._tail_file(args.filename)) # pylint: disable=protected-access
+    lines = asyncio.run(task._tail_file(args.filename))  # pylint: disable=protected-access
     print(lines, file=fout)
     return 0
 
