@@ -193,7 +193,7 @@ the program runs efficiently while avoiding unnecessary resource usage.
 Uploading input files for every run can waste time and resources. Instead, we 
 upload the files once to a GCP bucket and reuse them for all subsequent runs. 
 We’ve already covered this feature in detail in a tutorial 
-on [How to Reuse Input Files Across Runs](reuse-input-files.md), so feel free 
+on [How to Reuse Input Files Across Runs](reuse-files.md), so feel free 
 to check it out for a detailed walkthrough.
 
 **Upload Files to a GCP Bucket**
