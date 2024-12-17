@@ -1137,7 +1137,7 @@ class Task:
         return await self._file_operation(
             Operations.LIST, formatter=self._format_directory_listing)
 
-    async def _tail_file(self, filename: str) -> str:
+    async def _tail_file(self, filename: str, lines: int) -> str:
         """Get the last 10 lines of a file in the task's working directory."""
 
         def formatter(message):
@@ -1148,7 +1148,8 @@ class Task:
 
         return await self._file_operation(Operations.TAIL,
                                           formatter=formatter,
-                                          filename=filename)
+                                          filename=filename,
+                                          lines=lines)
 
     class _PathParams(TypedDict):
         """Util class for type checking path params."""
