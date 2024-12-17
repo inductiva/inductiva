@@ -47,7 +47,7 @@ Below is an example of running a SWAN simulation via the Inductiva API:
 
 ## SWAN limitation with reused files across multiple simulations
 
-With respect to [this](https://tutorials.inductiva.ai/how_to/reuse-input-files.html)
+With respect to [this](https://tutorials.inductiva.ai/how_to/reuse-files.html)
 feature.
 
 SWAN has constraints when reusing simulation outputs as inputs for subsequent
