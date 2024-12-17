@@ -1,22 +1,25 @@
-# Reuse Input Files Across Multiple Simulations
+# Reuse Files Across Multiple Simulations
 
-Running multiple simulations often involves reusing large input files, 
+Running multiple simulations often involves reusing large files, 
 such as the bathymetry of a coastal area or object geometries for computational 
 fluid dynamics (CFD). 
 
 Instead of uploading these large files repeatedly for every simulation, 
-Inductiva now offers a way to upload input files once and reuse them 
+Inductiva now offers a way to upload files once and reuse them 
 across multiple tasks. This not only saves time but also reduces costs.
 
+Additionally, you can use the outputs of one task as inputs for another, 
+enabling easy checkpointing and reducing unnecessary data transfers.
+
 In this tutorial, we’ll guide you through:
-1. [Uploading input files to a remote directory.](#step-1-upload-input-files-to-remote-storage)
-2. [Using these files in simulations.](#step-2-use-the-uploaded-files-in-simulations)
-3. [Managing and maintaining remote files.](#step-3-maintain-and-manage-remote-files)
+1. [Uploading input files to a remote directory.](#upload-input-files-to-remote-storage)
+2. [Managing and maintaining remote files.](#maintain-and-manage-remote-files)
+3. [Reusing task outputs in simulations.](#reuse-task-outputs-in-simulations)
 
 We've also included an [FAQ section](#faqs) to address common questions 
 and help you get started quickly.
 
-## Step 1: Upload Input Files to Remote Storage
+## Upload Input Files to Remote Storage
 
 You can upload files from either a local directory or a remote URL.
 
@@ -44,7 +47,7 @@ inductiva.storage.upload_from_url(url="https://storage.googleapis.com/inductiva-
 ```
 The `remote_dir` parameter specifies where the files will be stored remotely.
 
-## Step 2: Use the Uploaded Files in Simulations
+### Use the Uploaded Files in Simulations
 
 Once your files are uploaded, you can reference them in your simulations using 
 the `remote_assets` parameter in the `simulator.run` method.
@@ -103,7 +106,7 @@ task = gromacs.run(
     remote_assets=["gromacs_bucket/file1.txt", "gromacs_bucket/file2.txt"])
 ```
 
-## Step 3: Maintain and Manage Remote Files
+## Maintain and Manage Remote Files
 
 You can list, clean, or manage your remote files directly through the 
 Inductiva API or CLI.
@@ -117,7 +120,42 @@ Inductiva API or CLI.
 - Remove an entire directory: `inductiva.storage.remove_workspace(remote_dir="gromacs_bucket")`
 - Remove a single file from a remote directory: `inductiva.storage.remove_workspace(remote_dir="gromacs_bucket/file1.txt")`
 
-### FAQs
+## Reuse Task Outputs in Simulations
+
+To reuse task outputs, simply include the task’s `storage_path` in the remote_assets parameter.
+
+```python
+previous_task = inductiva.tasks.Task("<task_id>")
+task = gromacs.run(
+    input_dir=None,
+    commands=commands,
+    on=machine_group,
+    remote_assets=[previous_task.info.storage_path])
+```
+
+You can also reference multiple tasks:
+
+```python
+
+task = gromacs.run(
+    input_dir=None,
+    commands=commands,
+    on=machine_group,
+    remote_assets=[previous_task_1.info.storage_path, previous_task_2.info.storage_path])
+```
+
+All task output files are stored in the <task_id> path. For example, if you want 
+to use the file `topol.top` from a specific task `<task_id>`, you need to update 
+the path in your command as follows:
+
+```python
+commands = [
+    "gmx solvate -cs tip4p -box 2.3 -o conf.gro -p <task_id>/topol.top",
+    ...
+]
+```
+
+## FAQs
 
 **1. What file types can I upload?** 
 
@@ -206,3 +244,10 @@ input_dir="local_folder/",
 **13. Can I use remote files directly in `remote_assets` without uploading them first?**
 
 *Not yet, but we’re planning to add this feature soon.*
+
+
+---
+
+**14. Can I reuse a single file from another task output?**
+
+*Yes, just add the `storage_path` of the task to the `remote_assets` list to reuse the output file.*
