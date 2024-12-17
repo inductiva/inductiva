@@ -9,7 +9,7 @@ myst:
     Programming, HPC, Simulation, Tutorial, Synthetic Data Generation, Physics-ML, SPH"
 ---
 
-# Benchmark Computational Resources
+# Benchmarking Computational Resources
 
 In the previous step of this tutorial, we used Inductiva’s templating mechanism to 
 transform the configuration files for our base case simulation into a generalized 
@@ -21,29 +21,46 @@ properties of the simulation.
 Additionally, we generalized certain hyperparameters, such as the ***particle radius***, 
 which influence the simulation’s fidelity and performance.
 
-So, besides the need to assess the impact of the hyperparameters in the 
-computational cost of the simulation, we will also need to see if we can 
-optimize the machine type. When selecting the right machine types for 
-computational tasks, balancing speed and cost is crucial.
+When running simulations, balancing speed and cost is critical to achieving 
+efficient workflows. In this step, we focus on benchmarking various computational 
+resources to identify the best machine type for our simulations.
 
-Inductiva’s computation is currently on Google Cloud VMs, and there are dozens of options available at different costs. 
-GCP makes available VMs from multiple family types, e.g. ```c2```, ```c2d```, ```c3```, etc . Different VM families run on
-different physical hardware, with different CPUs, RAM specs, motherboards, etc.
+## Why Benchmark?
 
-Some simulation software was written to benefit from running on some specific hardware types, so their performance may change
-significantly from one VM family to another. In some cases, running simulations on less expensive VMs may actually lead to
-better performance than using more expensive VMs, as we'll see later in this benchmark.
+Inductiva’s computations currently run on Google Cloud VMs (Virtual Machines), 
+which offer a wide variety of options at different price points. Google Cloud 
+provides VMs from multiple machine families—such as `c2`, `c2d`, and `c3`—each 
+designed for specific performance needs.
 
-Also, VMs come with a configurable number of vCPUs, which can go from mere 4 vCPUs to several dozens or hundreds as is the 
-case of ```c2d``` and ```c3d``` machines. Typically, the more vCPUs you use the faster your simulation runs, but obviously, 
-since scaling is never linear, there is a sweet spot. Again, using a machine with a a larger number of vCPU may not pay off 
-since the efficiency of the parallelization decreases and, so the price you pay rises faster than the speed up benefits you 
-collect, as demonstrated later in the benchmark results.
+These VM families differ in their underlying physical hardware:
 
-Here, we explore the performance and cost-efficiency of various machine types, focusing on how computation time 
-scales with the number of virtual CPUs (vCPUs). Follow these steps using the Inductiva API to reproduce the benchmark results.
+- CPUs: Different processor generations and architectures
+- RAM: Memory capacity and bandwidth.
+- Performance: Hardware optimizations that affect speed, parallelization, and latency.
 
-## 1. Download the Input Files (```download.py```)
+Some simulation software is optimized to take advantage of specific hardware 
+configurations, meaning their performance can vary significantly across 
+different VM families. Surprisingly, in some cases, simulations may perform 
+better on less expensive VMs compared to pricier alternatives. As we’ll 
+demonstrate later in this benchmark, choosing the right machine type isn’t 
+always about cost, it’s about finding the best match for your software’s needs.
+
+VMs also allow you to configure the number of virtual CPUs (vCPUs), ranging 
+from as few as 4 to several dozen, or even hundreds, on machine families 
+like `c2d` and `c3d`. While increasing the number of vCPUs generally speeds 
+up simulations, scaling is rarely linear. 
+
+There’s often a “sweet spot” where performance gains flatten out as parallelization 
+efficiency decreases. Beyond this point, using more vCPUs may result in 
+diminishing returns, where costs rise faster than the benefits of additional 
+speed. We’ll explore this tradeoff in detail in the benchmark results later.
+
+## Defining the Benchmark Parameters
+
+To benchmark the performance and cost-efficiency of different machine types, we 
+need to evaluate computation times and scalability without unnecessary overhead.
+
+
 
 First, we need to download the necessary input files. This step is needed because the benchmark requires specific data to 
 simulate the **WaterCube** environment. The code snippet uses the ```download_from_url``` method to download and unzip the 
@@ -59,8 +76,6 @@ inductiva.utils.files.download_from_url(
     unzip=True)
 ```
 
-## 2. Upload the Input Files (```upload.py``)
-
 Once the input files are downloaded, it's a good idea to upload them to a remote storage location. This step prevents you 
 from having to re-upload the input files every time you execute a run during the benchmark, which can save time (e.g., 
 reduces setup time) when you're executing multiple runs (i.e., simulations). In other words, uploading the files ensures that 
@@ -72,8 +87,6 @@ import inductiva
 inductiva.storage.upload(local_path="splishsplash-base-dir",
                          remote_dir="splishsplash-input-dir")
 ```
-
-## 3. Configure and Run the Benchmark (```run.py```)
 
 Now comes the core of the benchmarking process: configuring the benchmark with the desired settings and running it across 
 multiple machine types. In this step, you will define the benchmark parameters, such as the simulator used, the simulation 
@@ -106,12 +119,13 @@ for machine_type in machine_types:
 benchmark.run(num_repeats=num_repeats)
 ```
 
-## 4. Export the Benchmark Results (```export.py```)
+## Exporting and Visualizing Results
 
-After running the benchmark program, the next step is to export the results for analysis. This step stores a record of the 
-benchmark performance in a structured format, such as CSV, which can be easily analyzed, shared, and visualized -- essential 
-for future comparisons or optimizations. Before exporting the results, you can also wait for any running tasks and ensure 
-that any resources used during the benchmark are properly terminated, avoiding unnecessary costs.
+Once the benchmarking runs are complete, it’s time to analyze the data and extract 
+insights. To make this process straightforward, we stored the benchmark results 
+in a structured format (CSV), which makes it easy to share, analyze, and visualize 
+the findings.
+
 
 ```python
 from inductiva import benchmarks
@@ -122,12 +136,8 @@ benchmarks.Benchmark(name="Benchmark-SPlisHSPlasH-WaterCube") \
     .export(fmt="csv")
 ```
 
-## 5. Visualize the Benchmark Results
-
 Finally, the benchmark results are ready to be analyzed and visualized. In this step, we turn the raw CSV data into a more 
 readable format, either as a table or a plot, to better understand the performance metrics.
-
-### 5.1. Markdown Table:
 
 The first way to visualize the data is by converting the CSV into a Markdown table. This provides a clean, readable summary 
 of the results, helping you compare different machine types side-by-side. You can use [this](https://tableconvert.com/csv-to-markdown) online tool to convert the CSV file into a Markdown table format.
@@ -159,7 +169,7 @@ of the results, helping you compare different machine types side-by-side. You ca
 | c2-standard-16  | 0.004314695679                   | 55.172               | c6f0bbbcdpcb88eorsyvwvms2 |
 ```
 
-### 5.2 Plot Graph
+## The Results Are In: Our Simulation's "Sweet Spot" for Speed and Cost
 
 In addition to the table, you may also want to visualize the data in the form of a plot. This graph makes it easier to 
 analyze the performance across different machine groups, such as which machine type delivers the best cost-to-performance 
@@ -167,8 +177,6 @@ ratio or which configuration takes the longest time to execute. You can use [thi
 plot the benchmark results from the CSV file on a graph.
 
 <img width="1466" alt="plot-splishsplash-benchmark" src="../_static/benchmark-machine-groups-performance-plot.png">
-
-### 5.3 Analysis:
 
 Finally, by observing the graph, we can easily identify which machine types provide the best balance between computation time 
 and cost for this specific simulation use case. Here are the key takeaways:
