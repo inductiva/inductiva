@@ -10,7 +10,7 @@ from inductiva import _cli, tasks
 def list_files(args: argparse.Namespace, fout: TextIO = sys.stdout):
     task_id = args.id
     task = tasks.Task(task_id)
-    directories = asyncio.run(task.list_files())
+    directories = asyncio.run(task._list_files())  # pylint: disable=protected-access
     print(directories, file=fout)
     return 0
 

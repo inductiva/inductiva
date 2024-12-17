@@ -1132,12 +1132,12 @@ class Task:
 
         return formatter(message["message"])
 
-    async def list_files(self) -> str:
+    async def _list_files(self) -> str:
         """List the files in the task's working directory."""
         return await self._file_operation(
             Operations.LIST, formatter=self._format_directory_listing)
 
-    async def tail_file(self, filename: str) -> str:
+    async def _tail_file(self, filename: str) -> str:
         """Get the last 10 lines of a file in the task's working directory."""
 
         def formatter(message):
