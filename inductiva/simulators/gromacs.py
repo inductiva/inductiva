@@ -19,7 +19,9 @@ class GROMACS(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.simulator = "gromacs"
+        self.simulator = "arbitrary_commands"
+        self.simulator_name_alias = "gromacs"
+        self.container_image = self._get_image_uri()
 
     def run(
         self,

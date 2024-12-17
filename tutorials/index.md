@@ -8,7 +8,7 @@ by providing more detailed step-by-step explanations and instructions.
 
 ## Available Tutorials
 
-* [**Introduction to Inductiva API**](intro_to_api/how_it_works.md).
+* [**Introduction to Inductiva API**](https://docs.inductiva.ai/en/latest/intro_to_api/how_it_works.html).
 In this tutorial, we will give you a comprehensive overview of how
 the API works, explaining key concepts and how different components
 play together. If you never used the API before, we recommend you
@@ -83,23 +83,6 @@ simulators/CustomImage
 
 ```{toctree}
 ---
-caption: Introduction to Inductiva API
-maxdepth: 1 
-hidden: true
----
-intro_to_api/how_it_works
-intro_to_api/tasks
-intro_to_api/shared_dedicated_resources
-intro_to_api/data_flow
-intro_to_api/computational-infrastructure
-intro_to_api/templating
-intro_to_api/configuring-simulators
-intro_to_api/projects
-
-```
-
-```{toctree}
----
 caption: Quick Recipes
 maxdepth: 1
 hidden: true
@@ -112,6 +95,7 @@ how_to/manage-remote-storage
 how_to/manage_tasks
 how_to/manage_and_retrieve_results
 how_to/reuse-input-files
+how_to/run-benchmarks
 
 ```
 

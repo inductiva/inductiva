@@ -31,19 +31,15 @@ class FileDownloadUrl(schemas.DictSchema):
 
     class MetaOapg:
         required = {
-            "file_server_available",
             "url",
         }
 
         class properties:
             url = schemas.StrSchema
-            file_server_available = schemas.BoolSchema
             __annotations__ = {
                 "url": url,
-                "file_server_available": file_server_available,
             }
 
-    file_server_available: MetaOapg.properties.file_server_available
     url: MetaOapg.properties.url
 
     @typing.overload
@@ -53,19 +49,13 @@ class FileDownloadUrl(schemas.DictSchema):
         ...
 
     @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["file_server_available"]
-    ) -> MetaOapg.properties.file_server_available:
-        ...
-
-    @typing.overload
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "url",
-        "file_server_available",
-    ], str]):
+    def __getitem__(self,
+                    name: typing.Union[typing_extensions.Literal[
+                        "url",
+                    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -77,20 +67,14 @@ class FileDownloadUrl(schemas.DictSchema):
 
     @typing.overload
     def get_item_oapg(
-        self, name: typing_extensions.Literal["file_server_available"]
-    ) -> MetaOapg.properties.file_server_available:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
             self, name: str
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "url",
-        "file_server_available",
-    ], str]):
+    def get_item_oapg(self,
+                      name: typing.Union[typing_extensions.Literal[
+                          "url",
+                      ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -98,10 +82,6 @@ class FileDownloadUrl(schemas.DictSchema):
         *_args: typing.Union[
             dict,
             frozendict.frozendict,
-        ],
-        file_server_available: typing.Union[
-            MetaOapg.properties.file_server_available,
-            bool,
         ],
         url: typing.Union[
             MetaOapg.properties.url,
@@ -116,7 +96,6 @@ class FileDownloadUrl(schemas.DictSchema):
         return super().__new__(
             cls,
             *_args,
-            file_server_available=file_server_available,
             url=url,
             _configuration=_configuration,
             **kwargs,

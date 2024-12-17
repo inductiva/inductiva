@@ -20,7 +20,9 @@ class OpenFAST(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.simulator = "openfast"
+        self.simulator = "arbitrary_commands"
+        self.simulator_name_alias = "openfast"
+        self.container_image = self._get_image_uri()
 
     def run(self,
             input_dir: Optional[str],

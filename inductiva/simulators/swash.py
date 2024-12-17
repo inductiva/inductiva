@@ -1,7 +1,10 @@
 """SWASH module of the API."""
+from pathlib import Path
 from typing import List, Optional
 
 from inductiva import types, tasks, simulators
+from inductiva.commands.commands import Command
+from inductiva.commands.mpiconfig import MPIConfig
 
 
 @simulators.simulator.mpi_enabled
@@ -19,16 +22,19 @@ class SWASH(simulators.Simulator):
                 is used.
         """
         super().__init__(version=version, use_dev=use_dev)
-        self.simulator = "swash"
+        self.simulator = "arbitrary_commands"
+        self.simulator_name_alias = "swash"
+        self.container_image = self._get_image_uri()
 
     def run(self,
             input_dir: Optional[str],
             sim_config_filename: str,
             *,
-            on: types.ComputationalResources,
-            n_vcpus: Optional[int] = None,
+            command: str = "swashrun",
             use_hwthread: bool = True,
+            n_vcpus: Optional[int] = None,
             storage_dir: Optional[str] = "",
+            on: types.ComputationalResources,
             resubmit_on_preemption: bool = False,
             remote_assets: Optional[List[str]] = None,
             **kwargs) -> tasks.Task:
@@ -47,16 +53,63 @@ class SWASH(simulators.Simulator):
                 previous execution attempts were preempted. Only applicable when
                 using a preemptible resource, i.e., resource instantiated with
                 `spot=True`.
+            command: The command to run the simulation. Default is 'swashrun'.
+                The user can also specify 'swash.exe'.
             storage_dir: Directory for storing simulation results.
             remote_assets: Additional remote files that will be copied to
                 the simulation directory.
         """
+
+        if command not in ("swashrun", "swash.exe"):
+            raise ValueError("Invalid command. Use 'swashrun' or 'swash.exe'.")
+
+        if sim_config_filename is None and command == "swashrun":
+            raise ValueError("Simulation configuration file "
+                             "(sim_config_filename) not provided.\n"
+                             "When using 'swashrun' it is mandatory to provide "
+                             "sim_config_filename.")
+
+        commands = []
+
+        path_config_filename = Path(sim_config_filename)
+        working_dir = path_config_filename.parent
+        config_file_only = path_config_filename.name
+
+        # swashrun uses internal MPI
+        # we call apptainer run ... swashrun ... -mpi np
+        if command == "swashrun":
+
+            machinefile_command = Command(
+                "dd if=/dev/stdin of=machinefile",
+                f"localhostsdasda slots={on.available_vcpus}")
+
+            commands.append(machinefile_command)
+
+            mpi_flag = f"-mpi {n_vcpus}" if n_vcpus else ""
+
+            swashrun_command = Command(
+                f"swashrun -input {config_file_only} {mpi_flag}")
+            commands.append(swashrun_command)
+
+        # we call mpirun ... apptainer ... swash.exe
+        # works with clusters
+        elif command == "swash.exe":
+
+            mpi_kwargs = {}
+            if n_vcpus is not None:
+                mpi_kwargs["np"] = n_vcpus
+            mpi_kwargs["use_hwthread_cpus"] = use_hwthread
+
+            mpi_config = MPIConfig(version="4.1.6", **mpi_kwargs)
+            swash_exe_command = Command(f"swash.exe {sim_config_filename}",
+                                        mpi_config=mpi_config)
+            commands.append(swash_exe_command)
+
         return super().run(input_dir,
                            on=on,
-                           input_filename=sim_config_filename,
+                           commands=commands,
                            storage_dir=storage_dir,
-                           n_vcpus=n_vcpus,
-                           use_hwthread=use_hwthread,
+                           run_subprocess_dir=str(working_dir),
                            resubmit_on_preemption=resubmit_on_preemption,
                            remote_assets=remote_assets,
                            **kwargs)

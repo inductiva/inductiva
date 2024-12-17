@@ -32,34 +32,24 @@ class FileUploadUrl(schemas.DictSchema):
     class MetaOapg:
         required = {
             "method",
-            "file_server_available",
             "url",
         }
 
         class properties:
             url = schemas.StrSchema
-            file_server_available = schemas.BoolSchema
             method = schemas.StrSchema
             __annotations__ = {
                 "url": url,
-                "file_server_available": file_server_available,
                 "method": method,
             }
 
     method: MetaOapg.properties.method
-    file_server_available: MetaOapg.properties.file_server_available
     url: MetaOapg.properties.url
 
     @typing.overload
     def __getitem__(
             self,
             name: typing_extensions.Literal["url"]) -> MetaOapg.properties.url:
-        ...
-
-    @typing.overload
-    def __getitem__(
-        self, name: typing_extensions.Literal["file_server_available"]
-    ) -> MetaOapg.properties.file_server_available:
         ...
 
     @typing.overload
@@ -72,11 +62,11 @@ class FileUploadUrl(schemas.DictSchema):
     def __getitem__(self, name: str) -> schemas.UnsetAnyTypeSchema:
         ...
 
-    def __getitem__(self, name: typing.Union[typing_extensions.Literal[
-        "url",
-        "file_server_available",
-        "method",
-    ], str]):
+    def __getitem__(self,
+                    name: typing.Union[typing_extensions.Literal[
+                        "url",
+                        "method",
+                    ], str]):
         # dict_instance[name] accessor
         return super().__getitem__(name)
 
@@ -84,12 +74,6 @@ class FileUploadUrl(schemas.DictSchema):
     def get_item_oapg(
             self,
             name: typing_extensions.Literal["url"]) -> MetaOapg.properties.url:
-        ...
-
-    @typing.overload
-    def get_item_oapg(
-        self, name: typing_extensions.Literal["file_server_available"]
-    ) -> MetaOapg.properties.file_server_available:
         ...
 
     @typing.overload
@@ -104,11 +88,11 @@ class FileUploadUrl(schemas.DictSchema):
     ) -> typing.Union[schemas.UnsetAnyTypeSchema, schemas.Unset]:
         ...
 
-    def get_item_oapg(self, name: typing.Union[typing_extensions.Literal[
-        "url",
-        "file_server_available",
-        "method",
-    ], str]):
+    def get_item_oapg(self,
+                      name: typing.Union[typing_extensions.Literal[
+                          "url",
+                          "method",
+                      ], str]):
         return super().get_item_oapg(name)
 
     def __new__(
@@ -120,10 +104,6 @@ class FileUploadUrl(schemas.DictSchema):
         method: typing.Union[
             MetaOapg.properties.method,
             str,
-        ],
-        file_server_available: typing.Union[
-            MetaOapg.properties.file_server_available,
-            bool,
         ],
         url: typing.Union[
             MetaOapg.properties.url,
@@ -139,7 +119,6 @@ class FileUploadUrl(schemas.DictSchema):
             cls,
             *_args,
             method=method,
-            file_server_available=file_server_available,
             url=url,
             _configuration=_configuration,
             **kwargs,
