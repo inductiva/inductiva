@@ -69,7 +69,6 @@ def _fetch_tasks_from_api(
 
     Tags can be filtered by a status. Results are paginated indexed from 1.
     """
-    
 
     with inductiva.api.methods.get_client() as client:
         api_instance = TasksApi(client)

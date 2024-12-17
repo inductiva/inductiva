@@ -46,6 +46,7 @@ def get_client(api_config: Configuration = None) -> ApiClient:
 
     return client
 
+
 def submit_request(api_instance: TasksApi,
                    request: TaskRequest) -> TaskSubmittedInfo:
     """Submits a task request to the API.
@@ -433,7 +434,7 @@ def invoke_async_api(simulator: str,
         original_params=params,
         type_annotations=type_annotations,
     )
-    
+
     with get_client() as client:
         api_instance = TasksApi(client)
 

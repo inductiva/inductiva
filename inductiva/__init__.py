@@ -98,6 +98,7 @@ def get_api_agent():
         return f"CLI/{__version__}/python"
     return f"Client/{__version__}/python"
 
+
 def compare_client_and_backend_versions(client_version: str):
     """ Compares the provided client version 7with the backend API version.
 
@@ -114,12 +115,11 @@ def compare_client_and_backend_versions(client_version: str):
     - RuntimeError: If the API cannot be reached, or if the client version is
       incompatible with the backend version, or for other general failures.
     """
-    
+
     api_config = Configuration(host=api_url)
 
     with get_client(api_config) as client:
         api_instance = VersionApi(client)
-        client.user_agent = get_api_agent()
         query_params = {"client_version": client_version}
 
         try:
