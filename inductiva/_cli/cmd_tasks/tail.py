@@ -17,9 +17,8 @@ def tail(args: argparse.Namespace, fout: TextIO = sys.stdout):
 
 def register(parser):
     """Register the info tasks command."""
-    subparser = parser.add_parser(
-        "tail",
-        formatter_class=argparse.RawTextHelpFormatter)
+    subparser = parser.add_parser("tail",
+                                  formatter_class=argparse.RawTextHelpFormatter)
 
     subparser.description = ("The `inductiva tasks tail` command allows"
                              "to tail a file in a task that is running.")
