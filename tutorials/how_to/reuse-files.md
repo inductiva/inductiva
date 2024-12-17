@@ -64,7 +64,7 @@ inductiva.storage.upload_from_url(url="https://storage.googleapis.com/inductiva-
 
 - The `remote_assets` parameter specifies the remote storage location 
 where the input files are stored. This must match one of the directories 
-you set as `remote_dir` in [previous step](#reuse-task-outputs-in-simulations).
+you set as `remote_dir` in [previous step](#upload-input-files-to-remote-storage).
 - The `input_dir` parameter can still be used for local files. If no `remote_assets` 
 are provided, the input files will be read from the local `input_dir`.
 - If both `remote_assets` and `input_dir` are provided, and files with 
