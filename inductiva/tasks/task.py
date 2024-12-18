@@ -1138,7 +1138,8 @@ class Task:
             Operations.LIST, formatter=self._format_directory_listing)
 
     async def _tail_file(self, filename: str, n_lines: int) -> str:
-        """Get the last n_lines lines of a file in the task's working directory."""
+        """Get the last n_lines lines of a 
+        file in the task's working directory."""
 
         def formatter(message):
             return self._format_list_of_lines(message,
