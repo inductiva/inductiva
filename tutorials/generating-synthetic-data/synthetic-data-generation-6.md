@@ -190,7 +190,7 @@ with the latter being slightly slower but more cost-effective -- positioned in t
 take 35 and 40 seconds, respectively, and cost $0.01 and $0.005 each.
 
 - The speedup in terms of execution time levels off at 44 vCPUs. The ```c3-standard-88``` takes the same computation time as 
-the ```c3-standard-44``` (around 36 seconds) but costs twice as much ($0.02 compared to $0.01, respectively). An even clearer 
+the ```c3-standard-44``` (around 36 seconds) but costs twice as much to execute the simulation ($0.02 compared to $0.01, respectively). An even clearer 
 indication of this plateau in speedup is that the most powerful machine, the ```c3-standard-176```, is actually slower than 
 an older-generation machine with far fewer vCPUs, the ```c2-standard-30``` (around 49 seconds vs. 45 seconds, respectively). 
 Moreover, it costs 10 times more ($0.06 vs. $0.006).
