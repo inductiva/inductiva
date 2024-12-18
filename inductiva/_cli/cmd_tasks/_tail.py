@@ -31,6 +31,7 @@ def register(parser):
                            help="ID of the task to list directories.")
     subparser.add_argument("filename", type=str, help="File to tail.")
     subparser.add_argument("--lines",
+                           "-l",
                            type=int,
                            default=10,
                            help="Number of lines to show.")
