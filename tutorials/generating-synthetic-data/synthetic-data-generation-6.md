@@ -27,7 +27,10 @@ The second hyperparameter is the ***particle radius***. While this parameter is 
 
 When running simulations, balancing speed and cost is critical to achieving 
 efficient workflows. In this step, we focus on benchmarking various computational 
-resources to identify the best machine type for our simulations.
+resources to identify the best machine type for our simulations. To ensure consistency, we fixed the parameters related to 
+the ***period of time*** and ***particle radius*** (i.e., ```"stopAt": 4```, ```"timeStepSize": 0.01```, and 
+```"particleRadius": 0.01```, as described [here](https://tutorials.inductiva.ai/generating-synthetic-data/synthetic-data-generation-2.html#preparing-the-configuration-files)). These settings allowed us to evaluate performance across different machine types under the 
+same conditions.
 
 ## Why Benchmark?
 
