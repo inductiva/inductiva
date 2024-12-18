@@ -189,7 +189,9 @@ plot the benchmark results from the CSV file on a graph.
 
 <img width="1466" alt="plot-splishsplash-benchmark" src="../_static/benchmark-machine-groups-performance-plot.png">
 
-Finally, by observing the graph, we can easily identify which machine types provide the best balance between computation time 
+When observing the graph, we easily identified which machine types provide the best balance between computation time and cost for our simulation. 
+
+**Here are the key takeaways:**
 and cost for this specific simulation use case. Here are the key takeaways:
 
 - The best machine types in terms of computation cost and computation time are ```c3-standard-44``` and ```c3-standard-22```, 
