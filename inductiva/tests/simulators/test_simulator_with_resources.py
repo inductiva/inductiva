@@ -75,7 +75,7 @@ def test_mpi_enabled__dummy_simulator():
 
 @mark.parametrize("simulator", [
     simulators.GROMACS, simulators.SplishSplash, simulators.FEniCSx,
-    simulators.FDS, simulators.DualSPHysics, simulators.SIMSOPT
+    simulators.FDS, simulators.DualSPHysics
 ])
 def test_valid_resources__non_mpi_simulators(simulator):
     """Validate  decorator  in non-MPI simulators.
@@ -211,7 +211,7 @@ def test_resubmit_on_preemption__is_correctly_handled(resubmit_on_preemption):
 
     for sim_name, simcls in sim_classes:
         # these 2 classes are not wrappers around the simulators in the backend
-        if sim_name in ("FEniCSx", "SIMSOPT"):
+        if sim_name in ("FEniCSx"):
             continue
 
         print(f"Testing simulator: {sim_name}")

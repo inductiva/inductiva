@@ -8,7 +8,6 @@ from .openfoam import OpenFOAM
 from .openfast import OpenFAST
 from .amr_wind import AmrWind
 from .gromacs import GROMACS
-from .simsopt import SIMSOPT
 from .fenicsx import FEniCSx
 from .reef3d import REEF3D
 from .xbeach import XBeach
