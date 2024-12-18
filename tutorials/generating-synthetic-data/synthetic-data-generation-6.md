@@ -18,8 +18,12 @@ dimensions, initial position and velocity of the fluid block, as well as the den
 and viscosity of the fluid itself, essential elements that define the core physical 
 properties of the simulation. 
 
-Additionally, we generalized certain hyperparameters, such as the ***particle radius***, 
-which influence the simulation’s fidelity and performance.
+Additionally, we generalized certain hyperparameters that influence the simulation’s fidelity and performance.
+For example, we adjusted the ***period of time*** and the ***particle radius*** to control both the computational effort and the execution time of the simulation.
+
+The first hyperparameter, the ***period of time***, determines how long we want the simulation to run. For example, do we want 5 seconds or 10 seconds of fluid splashing? Naturally, the longer the ***period of time***, the more computational time it will require, with this relationship expected to be linear.
+
+The second hyperparameter is the ***particle radius***. While this parameter is not directly related to the physical properties of the fluid being simulated, it significantly affects the numerical stability and resolution of the underlying SPH algorithm, and plays a crucial role in the physical fidelity of the simulation results. As the ***particle radius*** decreases, more particles are needed to represent the fluid, making the simulation more computationally expensive. Unlike the ***period of time***, this relationship **is not linear**; the number of particles required to represent the same fluid's volume increases in `O(n³)` as the particle radius decreases.
 
 When running simulations, balancing speed and cost is critical to achieving 
 efficient workflows. In this step, we focus on benchmarking various computational 
