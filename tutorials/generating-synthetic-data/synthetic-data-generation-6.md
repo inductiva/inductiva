@@ -67,7 +67,7 @@ speed. We’ll explore this tradeoff in detail in the benchmark results later.
 To benchmark the performance and cost-efficiency of different machine types, we 
 need to evaluate computation times and scalability without unnecessary overhead.
 
-
+Let's see how to benchmark the water fluid simulation on multiple cloud machines using the Inductiva API!
 
 First, we need to download the necessary input files. This step is needed because the benchmark requires specific data to 
 simulate the **WaterCube** environment. The code snippet uses the ```download_from_url``` method to download and unzip the 
