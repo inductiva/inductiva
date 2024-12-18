@@ -182,7 +182,7 @@ of the results, helping you compare different machine types side-by-side. You ca
 
 ## The Results Are In: Our Simulation's "Sweet Spot" for Speed and Cost
 
-Finally, our results are in! We used [CSV pilot]((https://www.csvplot.com/), an online tool, to plot the benchmark results on a graph and have a better visual of the data. 
+Finally, our results are in! We used [CSV pilot](https://www.csvplot.com/), an online tool, to plot the benchmark results on a graph and have a better visual of the data. 
 
 <img width="1466" alt="plot-splishsplash-benchmark" src="../_static/benchmark-machine-groups-performance-plot.png">
 
