@@ -119,6 +119,10 @@ for machine_type in machine_types:
 benchmark.run(num_repeats=num_repeats)
 ```
 
+An important point to note is that the **SPlisHSPlasH** simulator automatically handles parallelization, taking full 
+advantage of the increased number of vCPUs on a machine without requiring additional configuration. This is not true for all 
+simulators, such as **Reef3D**, which requires updating certain parameters in the configuration files.
+
 ## Exporting and Visualizing Results
 
 Once the benchmarking runs are complete, it’s time to analyze the data and extract 
