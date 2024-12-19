@@ -1,8 +1,10 @@
-# **Benchmarking Tool \- Python API Documentation**
+# **Benchmarking**
 
 ## **Overview**
 
-The **Benchmarking Tool** is designed to help users run and evaluate simulations, measuring their performance, cost, and execution time. It allows you to configure benchmarking runs, export results, and manage resources. The tool supports different export formats, handles the execution of multiple simulations in parallel, and provides mechanisms to gather and present performance metrics.
+The **Benchmarking API** is designed to help users run and evaluate simulations, measuring their performance, cost, and execution time. It allows you to configure benchmarking runs, export results, and manage resources. The tool supports different export formats, handles the execution of multiple simulations in parallel, and provides mechanisms to gather and present performance metrics.
+
+Here you can find documentation on the benchmarking features of our Inductiva API in Python.
 
 ## **Key Classes and Concepts**
 
