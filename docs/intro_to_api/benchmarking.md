@@ -1,4 +1,4 @@
-# **Benchmarking**
+# Benchmarking
 
 The **Benchmarking API** is designed to help users run and evaluate simulations, 
 measuring their performance, cost, and execution time. It allows you to configure 
@@ -11,14 +11,14 @@ metrics.
 Here you can find documentation on the benchmarking features of our Inductiva API 
 in Python.
 
-## **Key Classes and Concepts**
+## Key Classes and Concepts
 
 ### **`Benchmark`**
 
 The `Benchmark` class is the core of the benchmarking tool. It manages benchmarking 
 runs, including specifying simulation parameters, running simulations, and exporting results.
 
-#### **Constructor**
+#### Constructor
 
 ```py
 Benchmark(name: str, append: bool = True)
@@ -27,9 +27,9 @@ Benchmark(name: str, append: bool = True)
 * **name (str)**: The name of the benchmark. This will be used for identification and in output filenames.  
 * **append (bool)**: Indicates whether to allow adding runs to the existing benchmark (default is `True`).
 
-#### **Methods**
+#### Methods
 
-##### **`set_default`**
+##### `set_default`
 
 ```py
 set_default(simulator: Optional[simulators.Simulator] = None, 
@@ -106,7 +106,7 @@ Terminates all active machine groups associated with the benchmark.
 
 ---
 
-## **Available Enums**
+## Available Enums
 
 ### **`ExportFormat`**
 
@@ -136,9 +136,9 @@ class SelectMode(enum.Enum):
 
 ---
 
-## **Code Examples**
+## Code Examples
 
-### **Example 1: Creating a Basic Benchmark**
+### Example 1: Creating a Basic Benchmark
 
 ```py
 from inductiva import simulators, resources, benchmarks
@@ -161,7 +161,7 @@ benchmark.add_run(input_dir="/path/to/another/input",
 benchmark.run(num_repeats=3)
 ```
 
-### **Example 2: Adding Multiple Runs with Different Parameters**
+### Example 2: Adding Multiple Runs with Different Parameters
 
 ```py
 # Add multiple runs with different simulators and parameters
@@ -177,7 +177,7 @@ benchmark.add_run(simulator=simulators.MySimulator(),
 benchmark.run(num_repeats=2)
 ```
 
-### **Example 3: Waiting for Tasks and Terminating Resources**
+### Example 3: Waiting for Tasks and Terminating Resources
 
 ```py
 # Wait for tasks to finish
@@ -187,7 +187,7 @@ benchmark.wait()
 benchmark.terminate()
 ```
 
-### **Example 4: Exporting Benchmark Results**
+### Example 4: Exporting Benchmark Results
 
 ```py
 # Export the benchmark results in CSV format
